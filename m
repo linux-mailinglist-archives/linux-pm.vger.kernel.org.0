@@ -2,77 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550BC54D2C0
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 22:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA2154D2DF
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 22:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345719AbiFOUgs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 16:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S1345717AbiFOUs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 16:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244033AbiFOUgr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 16:36:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB9BF54F96
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 13:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655325405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RB6TQNLl0itlFPHhjRDfMRu2PM1eAH0nIvIMTuza6x8=;
-        b=E7WZ4NAzkHLv2s8z3iBi4xe9vCNDRU7/4+sjpgI1U0Jq/hDF41f9n3k/Xqkd+Bspn2POpO
-        G1I2yquy4qCpFtddpN7qknTEZtC3iPStXANHH/xvBmXx17lc6e26UDN5GOTC6jSAS8Km2o
-        deV4iEfl+32qE6S16rJ/cAV3+aEhDQk=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659-bE659BkjMvSwFAzX1bcb9A-1; Wed, 15 Jun 2022 16:36:44 -0400
-X-MC-Unique: bE659BkjMvSwFAzX1bcb9A-1
-Received: by mail-qk1-f198.google.com with SMTP id u8-20020a05620a454800b006a74e6b39eeso10967719qkp.12
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 13:36:44 -0700 (PDT)
+        with ESMTP id S1346327AbiFOUs1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 16:48:27 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18DC54F97
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 13:48:23 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id f65so12431324pgc.7
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 13:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=c6+/MuYjgyn2udQAyYO1pcnAtH6vCX68BZVqdL6DnAM=;
+        b=cJX06OPiClEPKrxTiXas7HB6WtJRm9cySIHWVKh7Ki7j3H9kK2AFdp8Q1FguyRd58x
+         PaH1GoWdRDWmWvYK9aq02GYuLKlyPzPCiC/A0hNAHqw7XoGK2cbIiqa5oZeG98GmK33G
+         UvBGwf064e/kjFJVo8x/gssDvQGs6OtC4xZmpdY5EjSujvGQnLOhOe75SGsnbn6onlRZ
+         vCGCrcmmmIxGQ9v42+lPxCFsATzzGwavFuWZ2Q82aqm5WNb790TbSc1A6Y9wo3QK/QYf
+         19tRPPJ/Ai6gLmB9FsTwmcKiy6kaFR+c7wJs2RyhK8Ehe2mSkB/wRHeqe5IOAr3jotKW
+         fPMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=RB6TQNLl0itlFPHhjRDfMRu2PM1eAH0nIvIMTuza6x8=;
-        b=JUS5tWdTyR/QvPQ3XWvIn4uyhYRg5P+bgObjM80BaogW9D20zXByScj1FWjq7KypeG
-         SrIMRhP4mfoKsHmUFSQg5ryJ4fPJAxMwvh8/ak0lgFVBp8iu4OAy4efWcSfviCGiqDAP
-         RIwbdaCQWFrtwkRVv5tUJkVAa01OZrpgqQWWP2HmJ/A0fIyqvQZ9U7C5W+72wBfPA/N0
-         SE+qbrbqmS69He2q3KJEavGMb7B+gFAFh8qsM+bz5W71tu/fWd6Pfl6E02xkao+ERsIS
-         QKacAtgWdBmrWj2lzemDWjGGVsU4JSkVPuoZ48OLqTgyt9mkQF6j6ZonHoSW+Wg7Ms9c
-         Y1Kg==
-X-Gm-Message-State: AJIora+sIZKGRmrtSzLu+1mRcgNztvT3KRnRylx2MmHHX3ftMewigDi8
-        M/69nMnFCeywnPfVDcbrX4kiELg0BdyffCsMG/lPkRhQB9PvQ8WTrkrUHBWrWFcALnrgPGK8rhc
-        zxw4j03c1npOSsrE3Flw=
-X-Received: by 2002:a05:6214:c4b:b0:46a:66a2:d72a with SMTP id r11-20020a0562140c4b00b0046a66a2d72amr1326569qvj.21.1655325404208;
-        Wed, 15 Jun 2022 13:36:44 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tTm9O3WNkdaEAfX+yCS/EJ8hWAYUskqsJ9zF93svhFsfEPw/9Wc73ANgm7cNp3iujo0noG0A==
-X-Received: by 2002:a05:6214:c4b:b0:46a:66a2:d72a with SMTP id r11-20020a0562140c4b00b0046a66a2d72amr1326550qvj.21.1655325404016;
-        Wed, 15 Jun 2022 13:36:44 -0700 (PDT)
-Received: from fedora.hitronhub.home (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id v16-20020a05622a145000b00304f55e56e4sm178541qtx.40.2022.06.15.13.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 13:36:43 -0700 (PDT)
-From:   Adrien Thierry <athierry@redhat.com>
-To:     linux-rt-users@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>,
-        Eric Chanudet <echanude@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Adrien Thierry <athierry@redhat.com>, linux-pm@vger.kernel.org
-Subject: [PATCH RFC] base: power: replace generic_pm_domain spinlock by raw spinlock
-Date:   Wed, 15 Jun 2022 16:36:05 -0400
-Message-Id: <20220615203605.1068453-1-athierry@redhat.com>
-X-Mailer: git-send-email 2.35.3
+        bh=c6+/MuYjgyn2udQAyYO1pcnAtH6vCX68BZVqdL6DnAM=;
+        b=NVKnDw1pX0QfSMqNFWUj9KfukvuFfW88p+qaT/2E6i5nqrbhYqy17ZAfrZnmM8R80M
+         zL+J2ltjysSmwXF51ZezPSCeVQBEWuFzL+Q3+mzNi30lXBHWLc+Cz0rktUe69lwGxRJl
+         0SsJ+LSYgFlfihuYBLuHZjELVWUlGdTJqcC4CIiU2g9wub2er+2PPZLaNsUew5sMMTBm
+         5gK4hKoFlmrm/RTNHs2ZwE2vruewGNrbp9FlSU6xh6hL7IYl7L8hd3i9AWwE0LMMOL+2
+         yTbOPawVYjl5c4aIBjBiMvFi0QaS9WQ0evoJ8hSieeJZE+N+0HCaTdrR1ZlYhmBvitdn
+         wzIg==
+X-Gm-Message-State: AJIora+Ca7LqFjhTId0D8U+fUSm+iBCHoEmP7joXVdWIIDwtnMc2aFwK
+        GQBLhE4WIOSiwtmKZiyegrQnJQ==
+X-Google-Smtp-Source: AGRyM1vxUFh649IvXZavkwFGw+qBXaVL9n4KDXt80qmiBlcu4flgIbvfKkajNW5wqADIULcUT58ZmA==
+X-Received: by 2002:a05:6a00:26cf:b0:4f6:fc52:7b6a with SMTP id p15-20020a056a0026cf00b004f6fc527b6amr1389852pfw.39.1655326103240;
+        Wed, 15 Jun 2022 13:48:23 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id p18-20020a17090a931200b001e8875e3326sm2225563pjo.47.2022.06.15.13.48.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 13:48:22 -0700 (PDT)
+Message-ID: <b21dab64-1e5b-eaab-2e74-e95a22ca6e82@linaro.org>
+Date:   Wed, 15 Jun 2022 13:48:20 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+Content-Language: en-US
+To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>
+Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "khilman@kernel.org" <khilman@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>
+References: <20220609150851.23084-1-max.oss.09@gmail.com>
+ <20220613191549.GA4092455-robh@kernel.org>
+ <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
+ <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
+ <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
+ <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
+ <df432e88-8688-c229-5ef0-8ba001b72908@linaro.org>
+ <8decc5b6d1f0bc028d60d444d939da4408e756d3.camel@toradex.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8decc5b6d1f0bc028d60d444d939da4408e756d3.camel@toradex.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,123 +108,103 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We've been encountering a BUG: scheduling while atomic while running the
-5.18.0-rt11 kernel on a Qualcomm SoC (see stacktrace below).
+On 15/06/2022 11:13, Marcel Ziswiler wrote:
+> On Wed, 2022-06-15 at 10:37 -0700, Krzysztof Kozlowski wrote:
+>> On 15/06/2022 10:31, Marcel Ziswiler wrote:
+>>> Hi
+>>>
+>>> On Wed, 2022-06-15 at 10:15 -0700, Krzysztof Kozlowski wrote:
+>>>> On 15/06/2022 09:10, Max Krummenacher wrote:
+>>>>> Hi
+>>>>>
+>>>>> On Tue, Jun 14, 2022 at 9:22 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>>>>
+>>>>>> Hi Rob,
+>>>>>>
+>>>>>> On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
+>>>>>>> On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
+>>>>>>>> From: Max Krummenacher <max.krummenacher@toradex.com>
+>>>>>>>>
+>>>>>>>> its power enable by using a regulator.
+>>>>>>>>
+>>>>>>>> The currently implemented PM domain providers are all specific to
+>>>>>>>> a particular system on chip.
+>>>>>>>
+>>>>>>> Yes, power domains tend to be specific to an SoC... 'power-domains' is
+>>>>>>> supposed to be power islands in a chip. Linux 'PM domains' can be
+>>>>>>> anything...
+>>>>>
+>>>>> I don't see why such power islands should be restricted to a SoC. You can
+>>>>> build the exact same idea on a PCB or even more modular designs.
+>>>>
+>>>> In the SoC these power islands are more-or-less defined. These are real
+>>>> regions gated by some control knob.
+>>>>
+>>>> Calling few devices on a board "power domain" does not make it a power
+>>>> domain. There is no grouping, there is no control knob.
+>>>>
+>>>> Aren't you now re-implementing regulator supplies? How is this different
+>>>> than existing supplies?
+>>>
+>>> I believe the biggest difference between power-domains and regulator-supplies lays in the former being
+>>> driver
+>>> agnostic while the later is driver specific. 
+>>
+>> That's one way to look, but the other way (matching the bindings
+>> purpose) is to look at hardware. You have physical wire / voltage rail
+>> supply - use regulator supply. In the terms of the hardware - what is
+>> that power domain? It's a concept, not a physical object.
+> 
+> Well, but how can that concept then exist within the SoC but not outside? I don't get it. Isn't it just the
+> exact same physical power gating thingy whether inside the SoC or on a PCB?
+> 
+>>> Meaning with power-domains one can just add such arbitrary
+>>> structure to the device tree without any further driver specific changes/handling required. While with
+>>> regulator-supplies each and every driver actually needs to have driver specific handling thereof added. Or
+>>> do I
+>>> miss anything?
+>>
+>> Thanks for clarification but I am not sure if it matches the purpose of
+>> bindings and DTS. You can change the implementation as well to have
+>> implicit regulators. No need for new bindings for that.
+> 
+> Okay, maybe that would also work, of course. So basically add a new binding 
 
-It seems to occur because a spinlock is taken in the PSCI idle code path
-in the idle loop. With the RT patchset applied and CONFIG_PREEMPT_RT
-enabled, spinlocks can sleep, thus triggering the bug.
+That I did not propose. :) We have a binding for regulator supplies so
+you do no need a new one.
 
-In order to prevent this, replace the generic_pm_domain spinlock by a
-raw spinlock.
+> which allows adding regulators to
+> arbitrary nodes which then will be generically handled by e.g. runtime PM. Almost something like assigned-
+> clocks [1] you mean? I guess that could work. Remember that's why Max posted it as an RFC to get such feedback.
+> Thanks for further refining those ideas.
 
-[    2.994433] BUG: scheduling while atomic: swapper/6/0/0x00000002
-[    2.994439] Modules linked in:
-[    2.994447] [<ffff80000810b0ec>] migrate_enable+0x3c/0x160
-[    2.994461] CPU: 6 PID: 0 Comm: swapper/6 Not tainted 5.18.0-rt11+ #1
-[    2.994464] Hardware name: Qualcomm SA8295P ADP (DT)
-[    2.994466] Call trace:
-[    2.994467]  dump_backtrace+0xb0/0x120
-[    2.994473]  show_stack+0x1c/0x6c
-[    2.994477]  dump_stack_lvl+0x64/0x7c
-[    2.994483]  dump_stack+0x14/0x2c
-[    2.994487]  __schedule_bug+0xa8/0xc0
-[    2.994489]  schedule_debug.constprop.0+0x154/0x170
-[    2.994492]  __schedule+0x58/0x520
-[    2.994496]  schedule_rtlock+0x20/0x44
-[    2.994499]  rtlock_slowlock_locked+0x110/0x260
-[    2.994503]  rt_spin_lock+0x74/0x94
-[    2.994505]  genpd_lock_nested_spin+0x20/0x30
-[    2.994509]  genpd_power_off.part.0.isra.0+0x248/0x2cc
-[    2.994512]  genpd_runtime_suspend+0x1a0/0x300
-[    2.994515]  __rpm_callback+0x4c/0x16c
-[    2.994518]  rpm_callback+0x6c/0x80
-[    2.994520]  rpm_suspend+0x10c/0x63c
-[    2.994523]  __pm_runtime_suspend+0x54/0xa4
-[    2.994526]  __psci_enter_domain_idle_state.constprop.0+0x64/0x10c
-[    2.994532]  psci_enter_domain_idle_state+0x1c/0x24
-[    2.994534]  cpuidle_enter_state+0x8c/0x3f0
-[    2.994539]  cpuidle_enter+0x3c/0x50
-[    2.994543]  cpuidle_idle_call+0x158/0x1d4
-[    2.994548]  do_idle+0xa8/0xfc
-[    2.994551]  cpu_startup_entry+0x28/0x30
-[    2.994556]  secondary_start_kernel+0xe4/0x140
-[    2.994563]  __secondary_switched+0x54/0x58
+DTS and bindings describe here the hardware, so focus on that. Device is
+supplied by some regulator which I assume can be controlled by GPIO. I
+don't think you need new bindings for that.
 
-Signed-off-by: Adrien Thierry <athierry@redhat.com>
----
+Implementation of bindings, so Linux driver, is different thing.
 
-This patch fixes the bug but I'm not sure if this is the proper way to do
-so. Suggestions for other ways to fix this are very welcome. 
+> 
+>>> We are really trying to model something where a single GPIO pin (via a GPIO regulator or whatever) can
+>>> control
+>>> power to a variety of on-board peripherals. And, of course, we envision runtime PM actually making use of
+>>> it
+>>> e.g. when doing suspend/resume.
+>>
+>> And this GPIO pin controls what? Some power switch which cuts the power
+>> of one regulator or many?
+> 
+> Well, that doesn't really matter. Resp. this part one should be able to sufficiently model using whatever
+> available regulator lore we already have (e.g. whatever delays/times).
+> 
+>> If many different regulators, how do you
+>> handle small differences in ramp up time?
+> 
+> Well, I don't think this is any different to any other regulator(s), not? Them HW folks will just need to tell
+> us some reasonable numbers for those delays/times.
 
- drivers/base/power/domain.c | 10 +++++-----
- include/linux/pm_domain.h   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Probably... I just wonder how that would work in practice.
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 739e52cd4aba..9378decb58cf 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -82,7 +82,7 @@ static void genpd_lock_spin(struct generic_pm_domain *genpd)
- {
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&genpd->slock, flags);
-+	raw_spin_lock_irqsave(&genpd->slock, flags);
- 	genpd->lock_flags = flags;
- }
- 
-@@ -92,7 +92,7 @@ static void genpd_lock_nested_spin(struct generic_pm_domain *genpd,
- {
- 	unsigned long flags;
- 
--	spin_lock_irqsave_nested(&genpd->slock, flags, depth);
-+	raw_spin_lock_irqsave_nested(&genpd->slock, flags, depth);
- 	genpd->lock_flags = flags;
- }
- 
-@@ -101,7 +101,7 @@ static int genpd_lock_interruptible_spin(struct generic_pm_domain *genpd)
- {
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&genpd->slock, flags);
-+	raw_spin_lock_irqsave(&genpd->slock, flags);
- 	genpd->lock_flags = flags;
- 	return 0;
- }
-@@ -109,7 +109,7 @@ static int genpd_lock_interruptible_spin(struct generic_pm_domain *genpd)
- static void genpd_unlock_spin(struct generic_pm_domain *genpd)
- 	__releases(&genpd->slock)
- {
--	spin_unlock_irqrestore(&genpd->slock, genpd->lock_flags);
-+	raw_spin_unlock_irqrestore(&genpd->slock, genpd->lock_flags);
- }
- 
- static const struct genpd_lock_ops genpd_spin_ops = {
-@@ -2022,7 +2022,7 @@ static void genpd_free_data(struct generic_pm_domain *genpd)
- static void genpd_lock_init(struct generic_pm_domain *genpd)
- {
- 	if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
--		spin_lock_init(&genpd->slock);
-+		raw_spin_lock_init(&genpd->slock);
- 		genpd->lock_ops = &genpd_spin_ops;
- 	} else {
- 		mutex_init(&genpd->mlock);
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index ebc351698090..80166a915b0d 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -159,7 +159,7 @@ struct generic_pm_domain {
- 	union {
- 		struct mutex mlock;
- 		struct {
--			spinlock_t slock;
-+			raw_spinlock_t slock;
- 			unsigned long lock_flags;
- 		};
- 	};
 
-base-commit: 979086f5e0066b4eff66e1eee123da228489985c
--- 
-2.35.3
-
+Best regards,
+Krzysztof
