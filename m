@@ -2,139 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8667454D162
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 21:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994E854D185
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 21:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349648AbiFOTMj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 15:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
+        id S1344979AbiFOTZd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 15:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345414AbiFOTMh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 15:12:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAEC65E3;
-        Wed, 15 Jun 2022 12:12:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A88760BAF;
-        Wed, 15 Jun 2022 19:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3635C34115;
-        Wed, 15 Jun 2022 19:12:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655320355;
-        bh=aBOcucEGYvvvWUKMiG7ck3GFTJH/y+rjo3oRAZKefCs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L3qN7bWAFQSKXjkYhc9TwspKC2crGuSj7nyK7rS9UK1FSHsdpgcIogd/ldeF9WXP0
-         0KQuUQB2krRWqicXjNKySrPbr9t+einpWC6Tqmb+IOLPXNp1cphF1eXAUiXdrbZDhG
-         pbL3HAmeqwMKoCe2WtSkfeUGfHFCqgoGbmKDjtlLyFqPQd6j9li2KYRPKGFlixyW37
-         LB8W56550jbrJnJH0+tXAWw+0xDH6ToBnw2WmjQEY70bvhRoe9HCL2V3jxORBWnEy3
-         okXzIdOXzKzFXiBg5yWMUVNRoufipEpnCTPBI/vlVVM114mRep+SDp6D1miBbqxqn6
-         TijqHGg7j1xsA==
-Date:   Wed, 15 Jun 2022 20:12:26 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        with ESMTP id S232127AbiFOTZd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 15:25:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFE138780;
+        Wed, 15 Jun 2022 12:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655321132; x=1686857132;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=905LNegFOW2Um8P9BhrIgjmYf09bgpnjZEvFsBQqfkM=;
+  b=gwusj9sZpsIpz+tNBp32Qu3Ncx3DhvzXEFSfLeVDlk+/SALsm4pTlFr3
+   /Gf3raRXrxJJu+x4fvg40siFTVDdsMAkZiQLcbPFTa9tnQn3lTugqA3fr
+   snb+vMSsCI9xRWd81KcX1Oim0+Barxe5J+gcSlefCGXs7wvWKQSdxE52X
+   fxd7NOkssGYoqFi8mZkTXMAUUbWucCPDmunt6N/oOePBsIdz/iamPoeS0
+   OTAhy8+SevWZSzELiJJ5qtAjRCoRJ+ysf1sFZrfxM7eApdzng9A61ozmQ
+   +29hdFcJ0Ek6563z1sfm0NvHmHAHU3SrsoqXaeXFikL59h7FBR1EgK89w
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="262104554"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="262104554"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 12:25:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="727566773"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Jun 2022 12:25:27 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1Ydq-000N85-W6;
+        Wed, 15 Jun 2022 19:25:26 +0000
+Date:   Thu, 16 Jun 2022 03:24:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Anson Huang <Anson.Huang@nxp.com>
+Cc:     kbuild-all@lists.01.org,
         Francesco Dolcini <francesco.dolcini@toradex.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "khilman@kernel.org" <khilman@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain
- provider which controls
-Message-ID: <YqovGo+ozPMeUERo@sirena.org.uk>
-References: <20220609150851.23084-1-max.oss.09@gmail.com>
- <20220613191549.GA4092455-robh@kernel.org>
- <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
- <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
- <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
- <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
- <dacd4a2d-a2b9-d2c2-4d47-f030dd01ee25@arm.com>
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 2/9] thermal: thermal: Export OF trip helper function
+Message-ID: <202206160331.en1dbvYm-lkp@intel.com>
+References: <20220615094804.388280-3-francesco.dolcini@toradex.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zB2UHw7muFO3meeO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dacd4a2d-a2b9-d2c2-4d47-f030dd01ee25@arm.com>
-X-Cookie: byob, v:
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220615094804.388280-3-francesco.dolcini@toradex.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Francesco,
 
---zB2UHw7muFO3meeO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patch! Yet something to improve:
 
-On Wed, Jun 15, 2022 at 07:24:50PM +0100, Robin Murphy wrote:
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on rafael-pm/thermal krzk/for-next krzk-mem-ctrl/for-next v5.19-rc2 next-20220615]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> Multiple consumers sharing a voltage rail provided by a single regulator =
-is
-> so standard and well-supported that it barely seems worth pointing out, b=
-ut
-> for the avoidance of doubt I shall. Adding a new non-standard way to hide=
- a
-> specific subset of regulator functionality behind behind a magic driver
-> because it seems like slightly less work than handling it the well-known
-> established way sounds like a great recipe for technical debt and future
-> compatibility headaches. What if down the line you end up with a situation
-> where if device A is suspended, devices B and C are happy to save some po=
-wer
-> by running the "domain" at a lower voltage? Do we stubbornly start
-> duplicating more of the regulator framework in the magic power domain
-> driver, or is that the point where we have to switch all the consumers to
-> explicit supplies, and get to regret having "saved" that effort in the fi=
-rst
-> place...
+url:    https://github.com/intel-lab-lkp/linux/commits/Francesco-Dolcini/imx-thermal-Allow-trip-point-configuration-from-DT/20220615-175857
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20220616/202206160331.en1dbvYm-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/e68c5a0d2b91a47a9df63a6309c0ed9e905fc20a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Francesco-Dolcini/imx-thermal-Allow-trip-point-configuration-from-DT/20220615-175857
+        git checkout e68c5a0d2b91a47a9df63a6309c0ed9e905fc20a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
-We also loose the runtime validation that the supplies being described
-in the DT correspond to the hardware in any meaningful way which would
-also make it harder to transition to explicit control of the supplies
-further down the line. =20
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
---zB2UHw7muFO3meeO
-Content-Type: application/pgp-signature; name="signature.asc"
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+   In file included from drivers/thermal/thermal_core.c:27:
+   drivers/thermal/thermal_core.h: In function 'thermal_of_populate_trip':
+>> drivers/thermal/thermal_core.h:179:17: error: 'ENOTSUP' undeclared (first use in this function); did you mean 'ENOTSUPP'?
+     179 |         return -ENOTSUP;
+         |                 ^~~~~~~
+         |                 ENOTSUPP
+   drivers/thermal/thermal_core.h:179:17: note: each undeclared identifier is reported only once for each function it appears in
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKqLxkACgkQJNaLcl1U
-h9A8oQf/Qy+hNv0kHNOoFGSq8IZn9KhUnfZ1urDwa0BVgVd9o3gGVjfyGo2DRi4w
-C1+ssj8EA61LDsquEBRULVokHyU9usYmXKfRJRHweArlWyZvbxoHvRfgk+kjCBhZ
-A/VYrv2LvZHpYzrAVeviYllJs+ZGCq2Y1wMw8cFP558j8z2o5tEAFMdbpJRJvPNy
-WeFvgrixx2yNQr0VgkCWr/RJ+vCY+80hgrhEWvJj6wEtIpGRqgoYbDw6LM9EU4Gu
-hmSPorQNZbFBVQ8Dk597Ffq90RK8Y9axZGn1FvqXx07s2CYdS/wn1QiZLWdrLOf8
-vpJIHU0pSsKo+plFfCiboC9PItlMLw==
-=ratS
------END PGP SIGNATURE-----
 
---zB2UHw7muFO3meeO--
+vim +179 drivers/thermal/thermal_core.h
+
+   150	
+   151	/* device tree support */
+   152	#ifdef CONFIG_THERMAL_OF
+   153	int of_parse_thermal_zones(void);
+   154	int of_thermal_get_ntrips(struct thermal_zone_device *);
+   155	bool of_thermal_is_trip_valid(struct thermal_zone_device *, int);
+   156	const struct thermal_trip *
+   157	of_thermal_get_trip_points(struct thermal_zone_device *);
+   158	int thermal_of_populate_trip(struct device_node *np,
+   159				     struct thermal_trip *trip);
+   160	#else
+   161	static inline int of_parse_thermal_zones(void) { return 0; }
+   162	static inline int of_thermal_get_ntrips(struct thermal_zone_device *tz)
+   163	{
+   164		return 0;
+   165	}
+   166	static inline bool of_thermal_is_trip_valid(struct thermal_zone_device *tz,
+   167						    int trip)
+   168	{
+   169		return false;
+   170	}
+   171	static inline const struct thermal_trip *
+   172	of_thermal_get_trip_points(struct thermal_zone_device *tz)
+   173	{
+   174		return NULL;
+   175	}
+   176	static inline int thermal_of_populate_trip(struct device_node *np,
+   177						   struct thermal_trip *trip)
+   178	{
+ > 179		return -ENOTSUP;
+   180	}
+   181	#endif
+   182	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
