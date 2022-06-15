@@ -2,32 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF98554C50B
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 11:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6A854C503
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 11:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347627AbiFOJsp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 15 Jun 2022 05:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S240591AbiFOJsl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 15 Jun 2022 05:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347641AbiFOJs0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 05:48:26 -0400
+        with ESMTP id S1347613AbiFOJsW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 05:48:22 -0400
 Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3600F46CA5
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 02:48:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DE6F46CA5
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 02:48:21 -0700 (PDT)
 Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2042.outbound.protection.outlook.com [104.47.22.42]) by
+ (mail-gv0che01lp2047.outbound.protection.outlook.com [104.47.22.47]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-25-b2yI8NakMo67c_ZUP3cFQg-3; Wed, 15 Jun 2022 11:48:16 +0200
-X-MC-Unique: b2yI8NakMo67c_ZUP3cFQg-3
+ de-mta-23-e5qwAzegMKaNs9kcs8tfJg-3; Wed, 15 Jun 2022 11:48:18 +0200
+X-MC-Unique: e5qwAzegMKaNs9kcs8tfJg-3
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
  GVAP278MB0392.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:3d::9) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5332.13; Wed, 15 Jun 2022 09:48:14 +0000
+ 15.20.5332.13; Wed, 15 Jun 2022 09:48:15 +0000
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5353.013; Wed, 15 Jun 2022
- 09:48:13 +0000
+ 09:48:15 +0000
 From:   Francesco Dolcini <francesco.dolcini@toradex.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,75 +45,75 @@ CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 4/9] imx: thermal: Configure trip point from DT
-Date:   Wed, 15 Jun 2022 11:47:59 +0200
-Message-ID: <20220615094804.388280-5-francesco.dolcini@toradex.com>
+Subject: [PATCH v1 5/9] ARM: dts: imx[67]: Add trips points
+Date:   Wed, 15 Jun 2022 11:48:00 +0200
+Message-ID: <20220615094804.388280-6-francesco.dolcini@toradex.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220615094804.388280-1-francesco.dolcini@toradex.com>
 References: <20220615094804.388280-1-francesco.dolcini@toradex.com>
-X-ClientProxiedBy: MRXP264CA0043.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:14::31) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-ClientProxiedBy: MRXP264CA0041.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:14::29) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  (2603:10a6:910:2e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7c196331-b62b-4bdc-87da-08da4eb429d2
+X-MS-Office365-Filtering-Correlation-Id: 0e6731c5-2c10-4079-bf19-08da4eb42a42
 X-MS-TrafficTypeDiagnostic: GVAP278MB0392:EE_
-X-Microsoft-Antispam-PRVS: <GVAP278MB039249D62465F813FD5818F9E2AD9@GVAP278MB0392.CHEP278.PROD.OUTLOOK.COM>
+X-Microsoft-Antispam-PRVS: <GVAP278MB03923F115D8F9CF44CB8B0CEE2AD9@GVAP278MB0392.CHEP278.PROD.OUTLOOK.COM>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: 3khyPStUl7MH7vt17yO2T0Gb+npu4U+Ecyq6vLdeqSTAZ3fBzgCuIa5PIRUxveUCGcp74hC5TE1m90pPEjomPv3sbwdv43yt4Hl//1CnN7bLkZKcjYnQmZwOd2Q24/n+BJIxB0yQ3wHeBtJ8b8d6sFROGRXWca7iYIIBtAd5YUTulnt/J4f99kgJamllLbkt4es1mlPSX1JHXHcDL5Cqf4x7w7gJB8KPbQ8DcBH963gKvmqXm66/wkOp4uCdCmO/Dsw3MzyoFI8cpGva612fmXK1oAuToGyeuf0DJKPx5WVeVPkPJqC42uYhlYpfXO9gUjeCrHz/6MdjVx6pluwUo7Dr4IO5K5iOXG4EtcHCQ2bEoV8LD2tcVRUklIQ+SOw6gecO1HRz9M2o+qUG1FbyLpa8JWC3fcIDUAGqctIQrXLTwZ974AFKiAqH+HzWcMi0+BqbgFP0B3AeZFjH7+lhPAspXPv85zKWO/pHAdXqWgLw9iwhLVpUHbMF+TJChbiI+yJjzfDU3J6NDhIAk4LKwkp0WdyMq/Z8FMivPVswxqu2XjEK7Tu/am7mZZm90DPUgcd6iWlG9upNo6rav2jpkdWGmsXppkbr9LwIlYSPXOMj2ZhCu2voB47h3bkoRmy6uFf8x9LNfwXGKQAHnD94uPc2h1sCA/vWwc1liYTIOKl4v9b8qrHtq/pHp63J6K4NN30DHbJoeoOeKayX+uVoHg==
+X-Microsoft-Antispam-Message-Info: bikdPB/ss76ooXRr9j4j2K16ioG2SBb9ab4GY8PnLGuuYN1gmjLSvIGmd3jPc/LmU7/eM2qo/9sTHCoZflRr526ja3C8KrHb1erFpNvsKH7YEYRc0qNX+gyM1hP505ackmoh6x6BuJOI13AgfYgcabWVbNJTFgbmu2LnOG7cbESV+2mbiYD3+vHC1Za488BogY4zw5XvSYa6nWWTTjzUDpPoO3DOMy8S0dvP9ZVgOemrcWGqWGUzLP3JCnN3fjUsowLSN+tE4SGJSs9yegTAqOcXXtRQ8RoP46vWPcLD0lgZ1sH62ZF5e7TwBxDUVm24/so+xYJPJ8sBUn8C5AutQGjGd8ChOLxqNqyHF0gJ7SOlA7VaPQu7A53y0jgB3AZVINKcR1Q6nCAZZOmXfFZ8EoA/5BuoKfhkmQ/BTdld1fqXoFs8x/ZTJ9VRzxVUQY1mOIkviJyzZM7yLwuXHb0uNtgDgplY/pP5PgN47uvrymtFv5MTVFM6I+u7IlxyGn9NYPx43skGUUvP7gIME/ZfliaQlYw/SS6Wro+ASUAPSDC1JGKHEOXrOahvcOufj2Ds7A3ejBKhw/1NJWrpzaAw5BlG6INGpZJVg84fOOymdJ1KG23kBCkdlfu6agMh/mNaBM6/r05yYij1lbY/HPN0PCtIyUWInbJgEuqDdh3s3Pe6B+INfj5QAYn+/8KVIMswpsz5FtyAbRTxeou9PDAgRA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39850400004)(346002)(366004)(1076003)(41300700001)(2616005)(8676002)(110136005)(8936002)(6666004)(316002)(66946007)(508600001)(4326008)(86362001)(66556008)(54906003)(66476007)(26005)(52116002)(6512007)(6506007)(36756003)(2906002)(38350700002)(83380400001)(38100700002)(44832011)(5660300002)(6486002)(186003)(7416002);DIR:OUT;SFP:1102
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GCPrv6sUnpYLMhvQK9IQnNxQPVO0YHavV695Q+D7F7RH4C+LdcYW7+VtJFbo?=
- =?us-ascii?Q?4xrJzmBmnlafJiFlmk3oXcyS4fOx2OK1Z81peLrK6LY0L33eDHEdjYuDXuDf?=
- =?us-ascii?Q?khWsr495COvtCQrcq4yglmB4Z+f3h3+TJmUshisio8YgSXAaE13ZBB7U06O0?=
- =?us-ascii?Q?ZJiTa4EnQzTeZxwRFougyM6EazPdWQmJSkPPWAPtx6TcFCJnV9dUWyzlKLJ+?=
- =?us-ascii?Q?itw+XcdIuu7GwngzSIkOZYIpLCSPcQd4KM8tLYIumXFi9hbTAfna4EH9jXqK?=
- =?us-ascii?Q?CZMR4VsUUicPbh2HbklqPu0WBBY1zpcv0NHg+R91yqV0I3aUllZ+YSoh72pI?=
- =?us-ascii?Q?HsjVCyRKhB6psayJCZjBkYYgWeO4CSTclNO4eX/dvzZ+fWezAUfRyii+TwTH?=
- =?us-ascii?Q?N69mAGZT2WCWU/PLQ/1FvpxEWHA7zLUTffqlLVU/onjSj3LQpMfBYhoUy7ur?=
- =?us-ascii?Q?1xFdbWkjWRr6ymcYOJM+jlzAaDkn1h6D3gu18C3kIyhn3LLnMiAJn85K1Y36?=
- =?us-ascii?Q?KpTy95zzGZXczZGfUrBXUBy4yHYopkixl+LEHYmN89b06M95ptWuhdGS/RBI?=
- =?us-ascii?Q?KzG4JGPZuLxHSVZLGLeMpDk1VqGHQkdHW1ulQRZZz+C/TmjcGwIsQASNJPdd?=
- =?us-ascii?Q?n+XWsKXez4qXcjFCh2q9JlRuVJ9IHfF03jxxFc/EwZxIuPPAhFeQ6iRQ0GXa?=
- =?us-ascii?Q?U/FKonUSbi/VCdoIj9Dgt4dzvXeFfCZcC3dxQlL9HcLfsTxnJC9Y0tZi7JVe?=
- =?us-ascii?Q?KPu18GAQMt0M+Dug8ZKZmEbkLXPJtVhgeKPGWbA21NfZ6QFiZ7bN95zi+Y/8?=
- =?us-ascii?Q?X4L6enQ2UYRy9+3KFDVovhrSFAbH2t2mgSRb4i9MuNjkQTCkTe1V4EDteQtX?=
- =?us-ascii?Q?Sl/1ZtppVxE2UH9sMjbO+kJIubjI439kdQke7JjpGXVz4W4q/80AB3jC+oTG?=
- =?us-ascii?Q?TLyRHEjdolTpwR+H8MrexUi6GFxnDrjpBpGxf1lrqPSyxvs/aepC1I4NVsBy?=
- =?us-ascii?Q?xzrTnNyxRnDgB++kfEXFjh7RScwwdHcftg6qn+XbIVSLVnSXr3O4J/L/IjDG?=
- =?us-ascii?Q?igNjR6uwvrynEENO9EykaFe0Dpz3jlnJXx6mOIGDUNSndmqGjU/+uURP8mkN?=
- =?us-ascii?Q?/IRYZzNxM6p1ZavkwqVz+7ZvOzhB03hkfR3ZEMFsoBpJ+P446+45yx8d11qX?=
- =?us-ascii?Q?dv11rPvoo52PWjR3byqdlfLBViHbgV5VW9TBhFXLjDxfwAzVKjPA2a0htScG?=
- =?us-ascii?Q?OfVClX2DNfBIOmDvXpcgNo3sWDFXx5P3FT5HyvIm5YFB8NhCm4OddxYKJKV3?=
- =?us-ascii?Q?ZXjQKvHcRlyyeUllNTtAa7hgDH7ZmtsHqans4uM0EMRx1KQfxtTvws/Jzb/I?=
- =?us-ascii?Q?rvMCbvyEueorHtoqD5BMuMDLBi0se5/LBerE+xF6MDFFBqBrO40UZv4QhO3o?=
- =?us-ascii?Q?6cmgs7SW+/Mp8iEFUSpP/S2legS96SWdB/foYBTaUngI8fjoCBXqOI95kJYl?=
- =?us-ascii?Q?jjmGCiU3Is2Bqfoabe+K7d93EvY2iFrKWPuU06nJv4UdAdLMeHuK3c+spqa7?=
- =?us-ascii?Q?LEvJHZDpV8WnSWxEr8eyETqjlMrr/m+oi2xLmBA0A7U/8fEl6bia2unP4cMx?=
- =?us-ascii?Q?Poz5aYlIQBpjVD4X336hh5t4xP2fhsMSqJ32o6XOmjN0MHsvsXr/fYedmzsM?=
- =?us-ascii?Q?QIeJifcZ6gAy4pBwcy28vTP9bwXZKE7oWrgdQGi9FqrKCe25ng6HUSMlA7RD?=
- =?us-ascii?Q?DtbDrkjCuYHggsAQE8hPK4BzeN1fxHo=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GA28BUAxn4zKm02/fjCEOXN4tpeZiRAHlRj6nRmqzOn1zsgWyJVmypq7MqNf?=
+ =?us-ascii?Q?i+jkxg8Z8731aCIAZWKB2/NxHpHRZUcAWkc2twiA04jA6R/BHq7QQmxIGofI?=
+ =?us-ascii?Q?bXHT9MprFhxL1a280i0QCM6LF8HYrr65M6UqQSetRwz9SXRGjDSgFaapXu1+?=
+ =?us-ascii?Q?0IZzNmakyE3P93HXv7tMS0QOKRO3aHkNdu438ZRCpyq3YI/i2bGyQs4yWeV1?=
+ =?us-ascii?Q?hwp1a0W2T2KFCbY75wziZ0f+Z/GCCYO/LQjV9z94+MLnGb0YrNYBR9p7ffEd?=
+ =?us-ascii?Q?fl35fMLiImvOWFQFUl+PDnDGM+hs9QGriCYILvG0hbl1d2DEYZpQRpWk/hHx?=
+ =?us-ascii?Q?K3bXNY/aiPmpoFF9CGaRuA0FJSxU3u+UVrfqkTL43lQxed+nv468S4bufZbS?=
+ =?us-ascii?Q?SthZ9yAok2SV4P6u0k8wg6Z/0NK2GtHdgF9FrwgmoN19RoK2gFrDsvtMkzlb?=
+ =?us-ascii?Q?S9JM1OYSp+xIKs0WMf2QP9iA/v+bD0WGgnybSKp0uaQ8xuROXf8rt8+XZUum?=
+ =?us-ascii?Q?T1UyqfIQRiNfdV2K5jsicn1WCzSjtvMoprtB8IX4cbox1rFImKaYNFgGE8Xa?=
+ =?us-ascii?Q?LEgTYDlk0GWZg0dp1YCsR20oFar6B1VvDdGymyGPWxkVozA8TsX+RnNBRh59?=
+ =?us-ascii?Q?7pNM4T8y1Ep4/kswPUad8x2+YktCdph4iDJqawT6NxqowM6X80oLs/eXk4YG?=
+ =?us-ascii?Q?TCKZldrHoVite/MB1R142UtOOwx/m8ADLylUoClj9Utf8hzi9Q8pIS+q1KEm?=
+ =?us-ascii?Q?L2HHuigoB+ointh9bgu9xfChtcrxyAD5VtPtC8aKkO8aoBd61gcDg3Lz2B5s?=
+ =?us-ascii?Q?qW72dl3Gxk431TO/r272WPj7+xUvRFt+1GnH2FouL1jmS9TTNsOCKc66JDws?=
+ =?us-ascii?Q?HQASRjfWyYig/uAqfiFq+Yk0ujcJbqcif3v/XShcv+l4w6POL9dju8xl1mOr?=
+ =?us-ascii?Q?55vlPyiRoU1a4rJDFL2NplCaoatCw1KJQ3ZdsGQSMBp6BUKNlAgbyWZn1FJ+?=
+ =?us-ascii?Q?NX1vfbVm0O8wfXcVm1B/M4IbsdC83aEBwchWwlSYxkQO6dVQNeWLwS70FD0K?=
+ =?us-ascii?Q?mXOQXhGMMCiOEWLqNEwpPGHMbZedftsc8TieDnYUriwP5tAUOuvEJeZN4jeb?=
+ =?us-ascii?Q?oUS/y3USY00ArOJ1UDA+vJkG59jn7yCRPmMtn33028QSZ1cdyeHOUmoRqbei?=
+ =?us-ascii?Q?EpGh8dWmpzhCsntsUQec4kptlFFL0skLjsZHI5FyqgskqdkPNIgaRlnjT5mN?=
+ =?us-ascii?Q?KYog4afedQ3QUTB9JE5PX7AiVkMUcduZlsRBML+qO4c1dyP/PmgBt1ToIcrL?=
+ =?us-ascii?Q?QvGbmNUpG8Vq/SNxJdp8feNnI4nKH5AaFip5IjsxLIaPfNH9VvoVioBf2CWa?=
+ =?us-ascii?Q?NMg/eHoqoFVbYzJEiJQ2dZ7LaF3bA83CD95L/hkqfCci9dGAvGQAdoCeR3kv?=
+ =?us-ascii?Q?5JVKtnhPtnUG+tzlL47+DSXW2NWdL2CPyTbTQmxkY1ImZ1pg9X6DGTF8Ojc0?=
+ =?us-ascii?Q?cCxNgO9J0TzG4flrBEZeKco2VkXv24EtwACLT9j90BH7Am1tgqlZLkHEss9w?=
+ =?us-ascii?Q?YGVfzy1qPnIPVtUB3/vloW3JHm0nxIm69stmM7sznEBz4p1S7Jxx8YXAR9qK?=
+ =?us-ascii?Q?COZoiRyuKS3eYlb8UAcFFINpsBGOYa6tby/7ywBJX2ksQBQeJi5hqZplz5KI?=
+ =?us-ascii?Q?OtzWFPV4h8ZTJnOcHXjWuNrHQFMS3RgajKIWruaaFfPGR9kSrvrxZvIvZjP4?=
+ =?us-ascii?Q?MRlGuyLCmXFoNpHHLCXDRNxtr9aWB9k=3D?=
 X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c196331-b62b-4bdc-87da-08da4eb429d2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e6731c5-2c10-4079-bf19-08da4eb42a42
 X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 09:48:13.0183
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 09:48:13.7224
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PNMRwWF5mzgD0m5CF4BhENtefFdWToRJA8l2hcl21WoPC2UOF0JDNymNEPoknA2wYF0t2vCRzlzQvBV3gPGhpc63vz/XJxuvDnAn+xl4+O0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: U3ZgLhgsM4RzdhuRXGEi7IOSIszT8lQdPSM3U/IZzsBpvFYAdcdDwTe7s5FO61M97ymka6rQvyRplYWS00jKY9g2yg83eJLRZvp3Y+DvEqQ=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0392
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,117 +121,166 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allow over-writing critical and passive trip point for each
-temperature grade from the device tree, by default the pre-existing
-hard-coded trip points are used.
-
-This change enables configuring the system thermal characteristics into
-the system-specific device tree instead of relying on global hard-coded
-temperature thresholds that does not take into account the specific
-system thermal design.
+Add thermal trip point to the i.MX[67]* dtsi for each available
+temperature grade.
 
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
- drivers/thermal/imx_thermal.c | 49 +++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ arch/arm/boot/dts/imx-thermal.dtsi | 61 ++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/imx6qdl.dtsi     |  2 +
+ arch/arm/boot/dts/imx6sl.dtsi      |  2 +
+ arch/arm/boot/dts/imx6sll.dtsi     |  2 +
+ arch/arm/boot/dts/imx6sx.dtsi      |  2 +
+ arch/arm/boot/dts/imx6ul.dtsi      |  2 +
+ arch/arm/boot/dts/imx7s.dtsi       |  2 +
+ 7 files changed, 73 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx-thermal.dtsi
 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index 16663373b682..ef3e152b5ee2 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -17,6 +17,8 @@
- #include <linux/nvmem-consumer.h>
- #include <linux/pm_runtime.h>
- 
-+#include "thermal_core.h"
+diff --git a/arch/arm/boot/dts/imx-thermal.dtsi b/arch/arm/boot/dts/imx-thermal.dtsi
+new file mode 100644
+index 000000000000..2303f1a99d84
+--- /dev/null
++++ b/arch/arm/boot/dts/imx-thermal.dtsi
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0+ OR MIT
++//
++// Copyright 2022 Toradex
 +
- #define REG_SET		0x4
- #define REG_CLR		0x8
- #define REG_TOG		0xc
-@@ -479,36 +481,83 @@ static int imx_init_calib(struct platform_device *pdev, u32 ocotp_ana1)
- 	return 0;
- }
- 
-+static void imx_init_temp_from_of(struct platform_device *pdev, const char *name)
-+{
-+	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-+	struct device_node *thermal, *trips, *trip_point;
-+
-+	thermal = of_get_child_by_name(pdev->dev.of_node, name);
-+	trips = of_get_child_by_name(thermal, "trips");
-+
-+	for_each_child_of_node(trips, trip_point) {
-+		struct thermal_trip t;
-+
-+		if (thermal_of_populate_trip(trip_point, &t))
-+			continue;
-+
-+		switch (t.type) {
-+		case THERMAL_TRIP_PASSIVE:
-+			data->temp_passive = t.temperature;
-+			break;
-+		case THERMAL_TRIP_CRITICAL:
-+			data->temp_critical = t.temperature;
-+			break;
-+		default:
-+			dev_dbg(&pdev->dev, "Ignoring trip type %d\n", t.type);
-+			break;
-+		}
++automotive-thermal {
++	trips {
++		temp_trip_passive_automotive: trip-point0 {
++			temperature = <115000>;
++			hysteresis = <0>;
++			type = "passive";
++		};
++		temp_trip_crit_automotive: trip-point1 {
++			temperature = <120000>;
++			hysteresis = <0>;
++			type = "critical";
++		};
 +	};
++};
++commercial-thermal {
++	trips {
++		temp_trip_passive_commercial: trip-point0 {
++			temperature = <85000>;
++			hysteresis = <0>;
++			type = "passive";
++		};
++		temp_trip_crit_commercial: trip-point1 {
++			temperature = <90000>;
++			hysteresis = <0>;
++			type = "critical";
++		};
++	};
++};
++extended-commercial-thermal {
++	trips {
++		temp_trip_passive_ecommercial: trip-point0 {
++			temperature = <95000>;
++			hysteresis = <0>;
++			type = "passive";
++		};
++		temp_trip_crit_ecommercial: trip-point1 {
++			temperature = <100000>;
++			hysteresis = <0>;
++			type = "critical";
++		};
++	};
++};
++industrial-thermal {
++	trips {
++		temp_trip_passive_industrial: trip-point0 {
++			temperature = <95000>;
++			hysteresis = <0>;
++			type = "passive";
++		};
++		temp_trip_crit_industrial: trip-point1 {
++			temperature = <100000>;
++			hysteresis = <0>;
++			type = "critical";
++		};
++	};
++};
 +
-+	of_node_put(trips);
-+	of_node_put(thermal);
+diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
+index d27beb47f9a3..0a492d9750dd 100644
+--- a/arch/arm/boot/dts/imx6qdl.dtsi
++++ b/arch/arm/boot/dts/imx6qdl.dtsi
+@@ -800,6 +800,8 @@ tempmon: tempmon {
+ 					nvmem-cell-names = "calib", "temp_grade";
+ 					clocks = <&clks IMX6QDL_CLK_PLL3_USB_OTG>;
+ 					#thermal-sensor-cells = <0>;
 +
-+	if (data->temp_passive >= data->temp_critical) {
-+		dev_warn(&pdev->dev,
-+			 "passive trip point must be lower than critical, fixing it up\n");
-+		data->temp_passive = data->temp_critical - (1000 * 5);
-+	}
-+}
-+
- static void imx_init_temp_grade(struct platform_device *pdev, u32 ocotp_mem0)
- {
- 	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-+	const char *thermal_node_name;
++					#include "imx-thermal.dtsi"
+ 				};
+ 			};
  
- 	/* The maximum die temp is specified by the Temperature Grade */
- 	switch ((ocotp_mem0 >> 6) & 0x3) {
- 	case 0: /* Commercial (0 to 95 °C) */
-+		thermal_node_name = "commercial-thermal";
- 		data->temp_grade = "Commercial";
- 		data->temp_max = 95000;
- 		break;
- 	case 1: /* Extended Commercial (-20 °C to 105 °C) */
-+		thermal_node_name = "extended-commercial-thermal";
- 		data->temp_grade = "Extended Commercial";
- 		data->temp_max = 105000;
- 		break;
- 	case 2: /* Industrial (-40 °C to 105 °C) */
-+		thermal_node_name = "industrial-thermal";
- 		data->temp_grade = "Industrial";
- 		data->temp_max = 105000;
- 		break;
- 	case 3: /* Automotive (-40 °C to 125 °C) */
-+		thermal_node_name = "automotive-thermal";
- 		data->temp_grade = "Automotive";
- 		data->temp_max = 125000;
- 		break;
- 	}
- 
- 	/*
-+	 * Set defaults trips
-+	 *
- 	 * Set the critical trip point at 5 °C under max
- 	 * Set the passive trip point at 10 °C under max (changeable via sysfs)
- 	 */
- 	data->temp_critical = data->temp_max - (1000 * 5);
- 	data->temp_passive = data->temp_max - (1000 * 10);
+diff --git a/arch/arm/boot/dts/imx6sl.dtsi b/arch/arm/boot/dts/imx6sl.dtsi
+index 06a515121dfc..3719225126d0 100644
+--- a/arch/arm/boot/dts/imx6sl.dtsi
++++ b/arch/arm/boot/dts/imx6sl.dtsi
+@@ -628,6 +628,8 @@ tempmon: tempmon {
+ 					nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
+ 					nvmem-cell-names = "calib", "temp_grade";
+ 					clocks = <&clks IMX6SL_CLK_PLL3_USB_OTG>;
 +
-+	/* Override critical/passive temperature from devicetree */
-+	imx_init_temp_from_of(pdev, thermal_node_name);
- }
++					#include "imx-thermal.dtsi"
+ 				};
+ 			};
  
- static int imx_init_from_tempmon_data(struct platform_device *pdev)
+diff --git a/arch/arm/boot/dts/imx6sll.dtsi b/arch/arm/boot/dts/imx6sll.dtsi
+index d4a000c3dde7..3192dae452fd 100644
+--- a/arch/arm/boot/dts/imx6sll.dtsi
++++ b/arch/arm/boot/dts/imx6sll.dtsi
+@@ -530,6 +530,8 @@ tempmon: temperature-sensor {
+ 					nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
+ 					nvmem-cell-names = "calib", "temp_grade";
+ 					clocks = <&clks IMX6SLL_CLK_PLL3_USB_OTG>;
++
++					#include "imx-thermal.dtsi"
+ 				};
+ 			};
+ 
+diff --git a/arch/arm/boot/dts/imx6sx.dtsi b/arch/arm/boot/dts/imx6sx.dtsi
+index fc6334336b3d..d88c89696554 100644
+--- a/arch/arm/boot/dts/imx6sx.dtsi
++++ b/arch/arm/boot/dts/imx6sx.dtsi
+@@ -718,6 +718,8 @@ tempmon: tempmon {
+ 					nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
+ 					nvmem-cell-names = "calib", "temp_grade";
+ 					clocks = <&clks IMX6SX_CLK_PLL3_USB_OTG>;
++
++					#include "imx-thermal.dtsi"
+ 				};
+ 			};
+ 
+diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
+index afeec01f6522..70d503c74e73 100644
+--- a/arch/arm/boot/dts/imx6ul.dtsi
++++ b/arch/arm/boot/dts/imx6ul.dtsi
+@@ -639,6 +639,8 @@ tempmon: tempmon {
+ 					nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
+ 					nvmem-cell-names = "calib", "temp_grade";
+ 					clocks = <&clks IMX6UL_CLK_PLL3_USB_OTG>;
++
++					#include "imx-thermal.dtsi"
+ 				};
+ 			};
+ 
+diff --git a/arch/arm/boot/dts/imx7s.dtsi b/arch/arm/boot/dts/imx7s.dtsi
+index 008e3da460f1..887b3618d20e 100644
+--- a/arch/arm/boot/dts/imx7s.dtsi
++++ b/arch/arm/boot/dts/imx7s.dtsi
+@@ -604,6 +604,8 @@ tempmon: tempmon {
+ 					nvmem-cells = <&tempmon_calib>,	<&fuse_grade>;
+ 					nvmem-cell-names = "calib", "temp_grade";
+ 					clocks = <&clks IMX7D_PLL_SYS_MAIN_CLK>;
++
++					#include "imx-thermal.dtsi"
+ 				};
+ 			};
+ 
 -- 
 2.25.1
 
