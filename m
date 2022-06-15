@@ -2,177 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F2354D08F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 20:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6087254D0A8
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 20:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357787AbiFOSAx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 14:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S1350241AbiFOSHD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 14:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243972AbiFOSAx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 14:00:53 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E6E532C1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 11:00:51 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so2746176pjb.3
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 11:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=aKVoJG94TlRK1lO5EtxaMQBi2kCbacnBTEUYcvXReYs=;
-        b=FNCP2oYfZ40CEmxTy0qRZfyApcZ+1R96el63F2TOp0qXRzJnR18YS28i4ComAHwniE
-         NzTpAhKsSs6GfhSpMAsAxbNJupjAtzYcPojh6rHDREBCcik6J0UGscpWefqG+eMOycrr
-         aNexRCGLHPIzOHCw8RDDtF/Fgo2OCR6YPINhDQDEeoxo8cbnCZpBaY+kr2yrXknY/y1Z
-         zfx+ItNutvYmKUljGz5VBNfeGRdgaNZ+CJnsAfAr6ZB+wBvlE7tz22gcnBLKKfCg1Vig
-         RWkN5AS2C0LgtERETqvsbgVx5ftTRmODp8vNncg5KxCNG3Nyopz/Rx/p6HlmPiHQzMF9
-         OMBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aKVoJG94TlRK1lO5EtxaMQBi2kCbacnBTEUYcvXReYs=;
-        b=aZGCpdVNiwGJYNbj9otnmuud+RsSpyCP/D1BceOgc7EMkzcWP9IsHDlk5jKLP0/g8H
-         LhWeV7VxwKQeoh0N7WWT0Cwp5r0/+j8Fzeevmm+WGptuFSjnZ59yZ8vvdbA1lofSGluB
-         rW0BbLegxGJa2ex48LkvdlpmsN4FOZ2T0015id1KHCn3yeEh2K4uhDPw3ZWzq6IWFouC
-         NibXk/bq9DYitLjykJZUmaxO4apqAfquwLZQt0VIKb32Xxlrd+IJFdfApRGSN/wfspPv
-         XL1D/lFxu+vHiZ7XuKibeNUBz3i9uoo0rh02nz3rn76R2ZTHIov+te6SXJjHFCVBLd61
-         Z/vQ==
-X-Gm-Message-State: AJIora8Ih0Ob7i1RiAUlTvhB9RCV4YzBUON7c4CIe7I1LuBg0ZJjHFLs
-        /jBateRX/70L0N0wAVZqAKBNYJE+SsTdk8F36xY/UA==
-X-Google-Smtp-Source: AGRyM1sMkrDeId7x/50KkjN7iA2jK8X0btO6512sJN4xGHhvO2BWqk0v85/hMP7+RYjUk3yjrmwAVc2SnFWgd5AdlWU=
-X-Received: by 2002:a17:90b:2247:b0:1e8:9f24:269a with SMTP id
- hk7-20020a17090b224700b001e89f24269amr11622697pjb.14.1655316051101; Wed, 15
- Jun 2022 11:00:51 -0700 (PDT)
+        with ESMTP id S1346928AbiFOSHC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 14:07:02 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC30D50B25;
+        Wed, 15 Jun 2022 11:07:00 -0700 (PDT)
+Received: from [127.0.0.1] (nyx.walle.cc [158.255.213.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id B221F221D4;
+        Wed, 15 Jun 2022 20:06:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1655316417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X31Y0rQlpQau1yeSY1ewrfTTggu40SW7YZpoP18Nyc4=;
+        b=OYz6MguMMV3tV9zA8VtMkNpupo/XoNdrSezibyu9AwYYzlewf9Hez4YMuVDHDz4Cds2khU
+        plTm2VquklTTvnLjD4bam0yzvWGufT3IaxfwAJRrzVOCljFuIYwhYLGBkrw5337vST1zxN
+        IRtqmDNFGhS9FxsTaSwFM2BTvxXYEBo=
+Date:   Wed, 15 Jun 2022 20:06:49 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+CC:     brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/10] pinctrl: Add AXP192 pin control driver
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CACRpkdbObQ5WrzVC_xYobJPSBVSMyaz0HHXesLP+g1HCzCGJtQ@mail.gmail.com>
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com> <20220603135714.12007-11-aidanmacdonald.0x0@gmail.com> <CACRpkdbObQ5WrzVC_xYobJPSBVSMyaz0HHXesLP+g1HCzCGJtQ@mail.gmail.com>
+Message-ID: <A3444B9B-FDCD-4292-9DE4-D7DBC9DFA597@walle.cc>
 MIME-Version: 1.0
-References: <20220609110337.1238762-1-jaz@semihalf.com> <20220609110337.1238762-2-jaz@semihalf.com>
- <f62ab257-b2e0-3097-e394-93a9e7a0d2bf@intel.com> <CAH76GKPo6VL33tBaZyszL8wvjpzJ7hjOg3o1JddaEnuGbwk=dQ@mail.gmail.com>
- <2854ae00-e965-ab0f-80dd-6012ae36b271@intel.com> <7eb5313e-dea0-c73e-5467-d01f0ca0fc2d@amd.com>
-In-Reply-To: <7eb5313e-dea0-c73e-5467-d01f0ca0fc2d@amd.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Wed, 15 Jun 2022 20:00:39 +0200
-Message-ID: <CAH76GKO-X-DrR=yAh3NpvAC_Spd_aJ8+yLTATm+c34iPShNttQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle state
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Peter Fang <peter.fang@intel.corp-partner.google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sachi King <nakato@nakato.io>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Dunn <daviddunn@google.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pon., 13 cze 2022 o 07:03 Mario Limonciello
-<mario.limonciello@amd.com> napisa=C5=82(a):
+Am 15=2E Juni 2022 15:44:04 OEZ schrieb Linus Walleij <linus=2Ewalleij@lina=
+ro=2Eorg>:
+>On Fri, Jun 3, 2022 at 3:56 PM Aidan MacDonald
+><aidanmacdonald=2E0x0@gmail=2Ecom> wrote:
 >
-> On 6/10/22 07:49, Dave Hansen wrote:
-> > On 6/10/22 04:36, Grzegorz Jaszczyk wrote:
-> >> czw., 9 cze 2022 o 16:27 Dave Hansen <dave.hansen@intel.com> napisa=C5=
-=82(a):
-> >>> On 6/9/22 04:03, Grzegorz Jaszczyk wrote:
-> >>>> Co-developed-by: Peter Fang <peter.fang@intel.corp-partner.google.co=
-m>
-> >>>> Signed-off-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
-> >>>> Co-developed-by: Tomasz Nowicki <tn@semihalf.com>
-> >>>> Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
-> >>>> Signed-off-by: Zide Chen <zide.chen@intel.corp-partner.google.com>
-> >>>> Co-developed-by: Grzegorz Jaszczyk <jaz@semihalf.com>
-> >>>> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
-> >>>> ---
-> >>>>   Documentation/virt/kvm/x86/hypercalls.rst | 7 +++++++
-> >>>>   arch/x86/kvm/x86.c                        | 3 +++
-> >>>>   drivers/acpi/x86/s2idle.c                 | 8 ++++++++
-> >>>>   include/linux/suspend.h                   | 1 +
-> >>>>   include/uapi/linux/kvm_para.h             | 1 +
-> >>>>   kernel/power/suspend.c                    | 4 ++++
-> >>>>   6 files changed, 24 insertions(+)
-> >>> What's the deal with these emails?
-> >>>
-> >>>          zide.chen@intel.corp-partner.google.com
-> >>>
-> >>> I see a smattering of those in the git logs, but never for Intel folk=
-s.
-> >> I've kept emails as they were in the original patch and I do not think
-> >> I should change them. This is what Zide and Peter originally used.
-> >
-> > "Original patch"?  Where did you get this from?
+>> The AXP192 PMIC's GPIO registers are much different from the GPIO
+>> registers of the AXP20x and AXP813 PMICs supported by the existing
+>> pinctrl-axp209 driver=2E It makes more sense to add a new driver for
+>> the AXP192, rather than add support in the existing axp20x driver=2E
+>>
+>> The pinctrl-axp192 driver is considerably more flexible in terms of
+>> register layout and should be able to support other X-Powers PMICs=2E
+>> Interrupts and pull down resistor configuration are supported too=2E
+>>
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald=2E0x0@gmail=2Ecom>
 >
-> Is this perhaps coming from Chromium Gerrit?  If so, I think you should
-> include a link to the Gerrit code review discussion.
-
-Yes, the original patch comes from chromium gerrit:
-https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
-3482475/4
-and after reworking but before sending to the mailing list, I've asked
-all involved guys for ack and it was done internally on gerrit:
-https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
-3666997
-
+>Looks good to me (TM) but I'd like Michael Walle to take a look
+>to check if this is one of those drivers that could make use of
+>gpio-regmap=2Ec CONFIG_GPIO_REGMAP to make it even
+>simpler=2E
 >
-> If it's not a public discussion/patch originally perhaps Suggested-by:
-> might be a better tag to use.
->
-> >
-> >>> I'll also say that I'm a bit suspicious of a patch that includes 5
-> >>> authors for 24 lines of code.  Did it really take five of you to writ=
-e
-> >>> 24 lines of code?
-> >> This patch was built iteratively: original patch comes from Zide and
-> >> Peter, I've squashed it with Tomasz later changes and reworked by
-> >> myself for upstream. I didn't want to take credentials from any of the
-> >> above so ended up with Zide as an author and 3 co-developers. Please
-> >> let me know if that's an issue.
-> >
-> > It just looks awfully fishy.
-> >
-> > If it were me, and I'd put enough work into it to believe I deserved
-> > credit as an *author* (again, of ~13 lines of actual code), I'd probabl=
-y
-> > just zap all the other SoB's and mention them in the changelog.  I'd
-> > also explain where the code came from.
-> >
-> > Your text above wouldn't be horrible context to add to a cover letter.
+>Yours,
+>Linus Walleij
 
-Actually it may not be an issue for the next version since the
-suggested by Sean approach is quite different so I would most likely
-end up with reduced SoB/Co-dev-by in the next version.
+FWIW, I can look at it at the end of next week=2E I'm on vacation=2E
 
-Best regards,
-Grzegorz
+-michael 
