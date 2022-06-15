@@ -2,142 +2,258 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C32854C3DE
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 10:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C94754C43E
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 11:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237194AbiFOIqE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 04:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S241191AbiFOJGq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 05:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241370AbiFOIqD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 04:46:03 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564D94B841
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 01:46:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XhlKKHWf54HsIuhAxBI+Grv33kU8zPBcQ8x5XhjkR9KVhg8rT6UOBKO3A0Fl2fBGAVeAiW6VWJkYSt7UzULyANWzNOGczeisjUHVmQurZcBQBR/3lz5TtHR1u1ym8nXWRINK589DHpNJ0RseB+S3Mu2i5n0UR/fv4h9W5u0vbpY0ImPQejFZNf3wnlaGGuTpozT+uRqJPN81vjke73rWDLOyjpDvOuTU+gZf2lw4ZfbwJI2+gR5223IYRteCV9k7sJoGcviqIHUG242D457D2mbW/fHdK9qeNNrFllsxko+t6eTt8+v6iRmVfz08aPpOkrYLl6IuUqx4HxYVxPwkwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NDBUUY59FaaOMVGxItpc4YaHpKgD2bEU5hz5qETnIGU=;
- b=BHjjRSOoktLtNCWjKf81HSHa6RrB0o4nFXzaCCPyx4XOsL+NjiKXHA1ypG2bQvQ0Q5FOokTgcbc31rBfcYhHaa8vA/aXcfMYDvvEKxBnQZBAaZaw+Ge3oMLBymevUCass1rzPToHR0xkKIq9wAubT2ZRm41eItFWSJWXpHwpWJTG+rkmSk/CayD1coAUnLLqhmopTj+tegMzQ8z3icAx0cLLNnM03EJ6GyboWE33hY7GkcB0BHanDeGGe1/A13oEi6LjV07BPDv8BUEjtxZZf/KHDZDv+dpRqOp3vmIzHb0I6lOjJChvUiKlTTCpv03wLl9K+az08wv5u7FOcTRAjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=rjwysocki.net smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NDBUUY59FaaOMVGxItpc4YaHpKgD2bEU5hz5qETnIGU=;
- b=Kfq5rMYgVZh8yHpgcZTxb7peaGJVfEHEuusLceOTSbygOvf6tav4QVjf+nPZijI0n7OwKNHO4PiaW0QE0bqXWOjTRYivL0QdFqL0eezPBrHb/YHYC1Z+x7H556bu7Nlyqq63exdVRmZa6xZL+ysr1z2VfsUdoIossA0RwRHidrw=
-Received: from MWHPR08CA0060.namprd08.prod.outlook.com (2603:10b6:300:c0::34)
- by MN2PR12MB3279.namprd12.prod.outlook.com (2603:10b6:208:105::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Wed, 15 Jun
- 2022 08:45:59 +0000
-Received: from CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:c0:cafe::11) by MWHPR08CA0060.outlook.office365.com
- (2603:10b6:300:c0::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14 via Frontend
- Transport; Wed, 15 Jun 2022 08:45:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT014.mail.protection.outlook.com (10.13.175.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5332.12 via Frontend Transport; Wed, 15 Jun 2022 08:45:58 +0000
-Received: from jinzhosu-System-Product-Name.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 15 Jun 2022 03:45:51 -0500
-From:   Jinzhou Su <Jinzhou.Su@amd.com>
-To:     <rjw@rjwysocki.net>, <linux-pm@vger.kernel.org>
-CC:     <ray.huang@amd.com>, <alexander.deucher@amd.com>,
-        <xiaojian.du@amd.com>, <perry.yuan@amd.com>, <li.meng@amd.com>,
-        <jinzhou.su@amd.com>, <richardqi.liang@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>
-Subject: [PATCH] cpufreq: amd-pstate: Add resume callback for amd-pstate
-Date:   Wed, 15 Jun 2022 16:45:26 +0800
-Message-ID: <20220615084526.54685-1-Jinzhou.Su@amd.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S238189AbiFOJGp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 05:06:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DB23A5DD
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 02:06:43 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o1Oyo-0002y9-9c; Wed, 15 Jun 2022 11:06:26 +0200
+Message-ID: <9cc8d2d2ca9ff2ee71d976b2b0210ce144298c46.camel@pengutronix.de>
+Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "djakov@kernel.org" <djakov@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>, Abel Vesa <abel.vesa@nxp.com>,
+        "abailon@baylibre.com" <abailon@baylibre.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
+        "aford173@gmail.com" <aford173@gmail.com>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Date:   Wed, 15 Jun 2022 11:06:23 +0200
+In-Reply-To: <DU0PR04MB94173B94950965B7DB3BA4CB88AA9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
+         <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+         <c2034c030333f89e0ac7d86c906dd222cc151d52.camel@pengutronix.de>
+         <DU0PR04MB94173B94950965B7DB3BA4CB88AA9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9d5f7dbf-9197-4b8b-9ace-08da4eab77e6
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3279:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB3279AF28867EE72C12D58B2090AD9@MN2PR12MB3279.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BsNZ19Oa50VYfIK5GGZ+nu4aNwkDZrXNV99YCgqwgNWaCNJ47ScH+vpyd+sw40a+wFo54Fh6ICBTcE2pN5dW+JMqWH/d6w5XZtLhPkZRiWNI7jIdfIEqBeGF8tNHC/0M1SZgsQMWLEk5DDedd0ze8a6vP7UZXV3d/6HKWNXkjwyQqRP/PrnbpEaqDOk8XlE/hlx/IsRcCS6aAai476B5KmhA/g4bjO1zXlvNehIgM6k0nbN1QEH8bKpPuxISHDlbsxf/qZ8nDUulqM4H3YDH3vrR3pBjgdtcGWEAlhpB8f2ikZRMezl6iK42f0+c8PZSzrhs2rDdaWgSm3wIXxGkTPNpEOuG1iDi5wZOUOCEL/vcO8XcSASipQcjeGBm+4D8BLVNU5X3PRmSDlI9RGqWLVKItm1OfD2BUf3W3j2GLq3+SAOPMCiNL43DIea1BBX552F4G1Aj26zYhYb87ptQe4ugv9rk+qXlwN9UtnMTrcSwq3ilfoBNuMcClLGE5qlQVDaFRYOqRrSyE3AVhI2XABRO3IMh6hjO9Zau8Oi/afKBqFJifANXYBog+j0imcJk2MswW490yxuv94qimyrZNro7q08YTZ+6lo7O5AN3ZGRqm6nLrQgO7qMvTPIXKj1U8bGlXHuL0feiiHmWoHnSBqdJ6PvVcse1VSkdgE7h+emqVe6wMjPg0401klANi9t9Fnfsy34sHYYsiDfhqUcaKQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(46966006)(36840700001)(5660300002)(186003)(16526019)(508600001)(8936002)(7696005)(86362001)(1076003)(2616005)(26005)(336012)(47076005)(81166007)(356005)(6666004)(2906002)(54906003)(70206006)(316002)(70586007)(426003)(36860700001)(82310400005)(36756003)(8676002)(40460700003)(110136005)(4326008)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 08:45:58.2447
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d5f7dbf-9197-4b8b-9ace-08da4eab77e6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3279
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When system resumes from S3, the CPPC enable register will be
-cleared and reset to 0. So set this bit to enable CPPC
-interface by writing 1 to this register.
+Hi Peng,
 
-Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Am Dienstag, dem 14.06.2022 um 23:38 +0000 schrieb Peng Fan:
+> Hi Lucas,
+> 
+> > Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
+> > 
+> > Hi Peng,
+> > 
+> > Am Montag, dem 13.06.2022 um 01:23 +0000 schrieb Peng Fan:
+> > > All,
+> > > 
+> > > > Subject: [PATCH 0/8] interconnect: support i.MX8MP
+> > > 
+> > > I am going to send out V2 this week to address the comments until now.
+> > > But before that I would like to see if any one has any comments on the
+> > > design here.
+> > > 
+> > > Georgi, do you have comments on Patch 2 " interconnect: add device
+> > > managed bulk API"
+> > > 
+> > > Lucas, since you had comments when I first use syscon to configure
+> > > NoC, are you ok with the design to use interconnect in this patchset?
+> > > 
+> > I'm still not 100% convinced that the blk-ctrl is the right consumer for the
+> > interconnect, since it doesn't do any busmastering. However, the design looks
+> > much better than the syscon based one.
+> > 
+> > I mostly worry about being able to extend this to do more than the current
+> > static configuration if/when NXP decides to release more information about the
+> > NoC configuration options or someone reverse engineers this part of the SoC. 
+> 
+> I have asked internally, NoC documentation for i.MX8M* is not allowed to public.
+> 
+Yea, sadly I've heard this many times from NXP.
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 7be38bc6a673..e60dd51264a7 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -566,6 +566,17 @@ static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
- 	return 0;
- }
- 
-+static int amd_pstate_cpu_resume(struct cpufreq_policy *policy)
-+{
-+	int ret;
-+
-+	ret = amd_pstate_enable(true);
-+	if (ret)
-+		pr_err("failed to enable amd-pstate during resume, return %d\n", ret);
-+
-+	return ret;
-+}
-+
- /* Sysfs attributes */
- 
- /*
-@@ -636,6 +647,7 @@ static struct cpufreq_driver amd_pstate_driver = {
- 	.target		= amd_pstate_target,
- 	.init		= amd_pstate_cpu_init,
- 	.exit		= amd_pstate_cpu_exit,
-+	.resume		= amd_pstate_cpu_resume,
- 	.set_boost	= amd_pstate_set_boost,
- 	.name		= "amd-pstate",
- 	.attr           = amd_pstate_attr,
--- 
-2.32.0
+> I
+> > still hope that we could optimize NoC usage by setting real bandwidth and
+> > latency limits for the devices connected to the NoC. As the blk-ctrl doesn't have
+> > any clue about this right now, we can't really set any more specific requests
+> > than the current INT_MAX ones.
+> 
+> Actually looking at ATF NoC settings, the values are suggested by Design team,
+> Design team give SW team such a group of value and not suggest SW team
+> to change it. And the value in ATF not touch bandwidth registers, as you
+> could see from the patchset, only mode,priority,ext_control are configured.
+> 
+> Similar to qcom using static settings:
+> ./drivers/interconnect/qcom/qcm2290.c:668.
+> .qos.qos_mode = NOC_QOS_MODE_FIXED,
+> 
+> I understand that people wanna tune the settings at runtime on demand.
+> 
+Right. We had the same situation with QoS settings on the i.MX6, where
+Freescale/NXP claimed that the values from the design team are optimal
+and should not be changed, but we actually had some cases where tuning
+those values to the specific use-case of a board was beneficial. With
+the i.MX6 we could do this on our own, as things were documented, at
+least partially.
+
+I don't request you or anyone from the NXP open source team to do
+something here, as I understand that the no documentation policy is an
+outside decision that you can not really change. I just want to make
+sure that if someone was to do something about this situation, we don't
+make that change harder than necessary by locking us into a DT binding
+and design that might be hard to change later on.
+
+> > I guess we could extend things in this way by making the blk-ctrl not only be a
+> > simple consumer of the interconnect, but aggregate requests from the devices
+> > in the blk-ctrl domain and forward them to the NOC provider, right?
+> 
+> I am not sure. This patchset is actually only for init NoC settings after
+> power on, because the initial value is invalid.
+> 
+> I could think how to resolve the INT_MAX settings in next version,
+> For your upper suggestion, could we start after this version approved for land
+> in tree?
+> 
+I just want you to think about how we could extend the design laid down
+in this patchset if/when the peripheral drivers are starting to request
+their actual bandwidth usage. If the answer to this question is "we'll
+simply make the blk-ctl part of the interconnect hierarchy and let it
+aggregate the bandwidth requests and forward them to the NoC driver"
+then I'm fine with this patchset landing in upstream as-is. I'm just
+not sure if I'm overlooking something here which would prevent such an
+extension of the design, as I'm not a expert in the interconnect
+framework.
+
+Regards,
+Lucas
+
+> 
+> Thanks,
+> Peng
+> 
+> 
+> > 
+> > Regards,
+> > Lucas
+> > 
+> > > Thanks,
+> > > Peng.
+> > > 
+> > > > 
+> > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > 
+> > > > This patchset is to support i.MX8MP NoC settings, i.MX8MP NoC
+> > > > initial value after power up is invalid, need set a valid value after related
+> > power domain up.
+> > > > 
+> > > > This patchset also includes two patch[1,2] during my development to
+> > > > enable the ICC feature for i.MX8MP.
+> > > > 
+> > > > I not include ddrc DVFS in this patchset, ths patchset is only to
+> > > > support NoC value mode/priority/ext_control being set to a valid
+> > > > value that suggested by i.MX Chip Design Team. The value is same as
+> > > > NXP downstream one inside Arm Trusted Firmware:
+> > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fso
+> > > > 
+> > urce.codeaurora.org%2Fexternal%2Fimx%2Fimx-atf%2Ftree%2Fplat%2Fimx%2
+> > > > 
+> > Fimx8m%2Fimx&amp;data=05%7C01%7Cpeng.fan%40nxp.com%7C6cfad0fcec
+> > 0d472
+> > > > 
+> > 408a208da4e2cd96d%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7
+> > C63790
+> > > > 
+> > 8251778425186%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ
+> > QIjoiV2
+> > > > 
+> > luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=U
+> > vIx%
+> > > > 
+> > 2BAz9rx3Z8Oy7VSCRB90O8M5VICIUaUOiTmYw%2FeI%3D&amp;reserved=0
+> > > > 8mp/gpc.c?h=lf_v2.4#n97
+> > > > 
+> > > > A repo created here:
+> > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgi
+> > > > 
+> > thub.com%2FMrVan%2Flinux%2Ftree%2Fimx8mp-interconnect&amp;data=05
+> > %7C
+> > > > 
+> > 01%7Cpeng.fan%40nxp.com%7C6cfad0fcec0d472408a208da4e2cd96d%7C68
+> > 6ea1d
+> > > > 
+> > 3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637908251778425186%7CUnkn
+> > own%7CT
+> > > > 
+> > WFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJX
+> > V
+> > > > 
+> > CI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=W2iYPMJ6dn%2F4OTalTD2yqB
+> > Hx%2Bo3%
+> > > > 2BuBTuP%2BAe4bBz2Gc%3D&amp;reserved=0
+> > > > 
+> > > > Peng Fan (8):
+> > > >   dt-bindings: interconnect: imx8m: Add bindings for imx8mp noc
+> > > >   interconnect: add device managed bulk API
+> > > >   interconnect: imx: fix max_node_id
+> > > >   interconnect: imx: set src node
+> > > >   interconnect: imx: introduce imx_icc_provider
+> > > >   interconnect: imx: set of_node for interconnect provider
+> > > >   interconnect: imx: configure NoC mode/prioriry/ext_control
+> > > >   interconnect: imx: Add platform driver for imx8mp
+> > > > 
+> > > >  .../bindings/interconnect/fsl,imx8m-noc.yaml  |   6 +
+> > > >  drivers/interconnect/bulk.c                   |  34 +++
+> > > >  drivers/interconnect/imx/Kconfig              |   4 +
+> > > >  drivers/interconnect/imx/Makefile             |   2 +
+> > > >  drivers/interconnect/imx/imx.c                |  68 +++--
+> > > >  drivers/interconnect/imx/imx.h                |  25 +-
+> > > >  drivers/interconnect/imx/imx8mm.c             |   2 +-
+> > > >  drivers/interconnect/imx/imx8mn.c             |   2 +-
+> > > >  drivers/interconnect/imx/imx8mp.c             | 232
+> > > > ++++++++++++++++++
+> > > >  drivers/interconnect/imx/imx8mq.c             |   2 +-
+> > > >  include/dt-bindings/interconnect/fsl,imx8mp.h |  59 +++++
+> > > >  include/linux/interconnect.h                  |   6 +
+> > > >  12 files changed, 424 insertions(+), 18 deletions(-)  create mode
+> > > > 100644 drivers/interconnect/imx/imx8mp.c  create mode 100644
+> > > > include/dt-bindings/interconnect/fsl,imx8mp.h
+> > > > 
+> > > > --
+> > > > 2.25.1
+> > > 
+> > 
+> 
+
 
