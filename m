@@ -2,102 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF21654D01C
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 19:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F2354D08F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 20:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357107AbiFORhu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 13:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S1357787AbiFOSAx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 14:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343541AbiFORht (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 13:37:49 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC62534BB3
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 10:37:47 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id f65so11999113pgc.7
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 10:37:47 -0700 (PDT)
+        with ESMTP id S243972AbiFOSAx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 14:00:53 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E6E532C1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 11:00:51 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so2746176pjb.3
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 11:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WpP5cddAnzLQriZlTTuX+6gvB2Px39O6hhSX8MW8+gU=;
-        b=YjWBPN8mSJgpHLhvdszIjnqA3e+WeuiYvKwQZbmckwJ3KWcPwx5dLMJcUlB68hyYe/
-         4IgyE8adJ8aIUsD+HRBRpKG/uQ52PlesL1JCaKtYjh5Dc1Sk5zcJJz1aRLgM/WKu9hzX
-         Uu/86aXV006x3egv/udG74jrC+aB30v3DWYsaabwhV9Q0Pv8F3RdGU8Ibm9XQ5TkrfHy
-         sNXuQzpd4SSNIg+XL05h3yYlsJxrZSJBycqJW0vvJztjoZFkKR2Bujf6X75/p44FUYsQ
-         8SlgZRg7nBmPqCWA1ET3W1khR7I23jVa4mULToeqkmUaWzTZ9c5z9QFmEGUJKGcOgri5
-         WWlQ==
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aKVoJG94TlRK1lO5EtxaMQBi2kCbacnBTEUYcvXReYs=;
+        b=FNCP2oYfZ40CEmxTy0qRZfyApcZ+1R96el63F2TOp0qXRzJnR18YS28i4ComAHwniE
+         NzTpAhKsSs6GfhSpMAsAxbNJupjAtzYcPojh6rHDREBCcik6J0UGscpWefqG+eMOycrr
+         aNexRCGLHPIzOHCw8RDDtF/Fgo2OCR6YPINhDQDEeoxo8cbnCZpBaY+kr2yrXknY/y1Z
+         zfx+ItNutvYmKUljGz5VBNfeGRdgaNZ+CJnsAfAr6ZB+wBvlE7tz22gcnBLKKfCg1Vig
+         RWkN5AS2C0LgtERETqvsbgVx5ftTRmODp8vNncg5KxCNG3Nyopz/Rx/p6HlmPiHQzMF9
+         OMBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WpP5cddAnzLQriZlTTuX+6gvB2Px39O6hhSX8MW8+gU=;
-        b=jbYTkmfH9FtOtWfN+EIpTZva58V9lOmtLACTPMa6C0dYfoAOEB+bkClvhW3x0EMhnV
-         fm9tZ/jE8kZNOFqrDFicYzCZw2a/0+ZcLL1c5yDue41VPSrg9Rp9UM7wxX0lm9aBoXow
-         pFH+QOpZGo/UEB/2kkofhJM4gZngmW3cGd/9ZRFQjC6SEssMHEakNueT5N1iDAPqtnLh
-         NwSttxbIP7dhJkTj9HZFCOAeYD0D9lHymtuF1uGxrBYKR08vAgTA6UwoIz5/jEa8DvIs
-         iY5FJrNVgCmzFXFPdLv9LcJjPh3aRAdrJk94KPVhkRXVLJN/xaYGJQD4RvJ51LlLcqdE
-         9OeA==
-X-Gm-Message-State: AJIora9gE0eqdPiuuQyzEnfDCO653k4T5sODBIhpCKpiKNXqV5897Zub
-        Sc6pHBBkoTJGYHZCkLYUKHORpw==
-X-Google-Smtp-Source: AGRyM1vO1+DsFXrNV2KKyNHTu86bP04ojHE1FtzY96f3NSmEr7TeCbAHnmFgRhkpgujD7eDzkV9y0Q==
-X-Received: by 2002:a63:6947:0:b0:3fe:22d6:dfae with SMTP id e68-20020a636947000000b003fe22d6dfaemr754310pgc.185.1655314667388;
-        Wed, 15 Jun 2022 10:37:47 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id cd25-20020a056a00421900b0050dc76281f0sm10094269pfb.202.2022.06.15.10.37.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 10:37:47 -0700 (PDT)
-Message-ID: <df432e88-8688-c229-5ef0-8ba001b72908@linaro.org>
-Date:   Wed, 15 Jun 2022 10:37:45 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aKVoJG94TlRK1lO5EtxaMQBi2kCbacnBTEUYcvXReYs=;
+        b=aZGCpdVNiwGJYNbj9otnmuud+RsSpyCP/D1BceOgc7EMkzcWP9IsHDlk5jKLP0/g8H
+         LhWeV7VxwKQeoh0N7WWT0Cwp5r0/+j8Fzeevmm+WGptuFSjnZ59yZ8vvdbA1lofSGluB
+         rW0BbLegxGJa2ex48LkvdlpmsN4FOZ2T0015id1KHCn3yeEh2K4uhDPw3ZWzq6IWFouC
+         NibXk/bq9DYitLjykJZUmaxO4apqAfquwLZQt0VIKb32Xxlrd+IJFdfApRGSN/wfspPv
+         XL1D/lFxu+vHiZ7XuKibeNUBz3i9uoo0rh02nz3rn76R2ZTHIov+te6SXJjHFCVBLd61
+         Z/vQ==
+X-Gm-Message-State: AJIora8Ih0Ob7i1RiAUlTvhB9RCV4YzBUON7c4CIe7I1LuBg0ZJjHFLs
+        /jBateRX/70L0N0wAVZqAKBNYJE+SsTdk8F36xY/UA==
+X-Google-Smtp-Source: AGRyM1sMkrDeId7x/50KkjN7iA2jK8X0btO6512sJN4xGHhvO2BWqk0v85/hMP7+RYjUk3yjrmwAVc2SnFWgd5AdlWU=
+X-Received: by 2002:a17:90b:2247:b0:1e8:9f24:269a with SMTP id
+ hk7-20020a17090b224700b001e89f24269amr11622697pjb.14.1655316051101; Wed, 15
+ Jun 2022 11:00:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-Content-Language: en-US
-To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>
-Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "khilman@kernel.org" <khilman@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-References: <20220609150851.23084-1-max.oss.09@gmail.com>
- <20220613191549.GA4092455-robh@kernel.org>
- <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
- <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
- <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
- <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220609110337.1238762-1-jaz@semihalf.com> <20220609110337.1238762-2-jaz@semihalf.com>
+ <f62ab257-b2e0-3097-e394-93a9e7a0d2bf@intel.com> <CAH76GKPo6VL33tBaZyszL8wvjpzJ7hjOg3o1JddaEnuGbwk=dQ@mail.gmail.com>
+ <2854ae00-e965-ab0f-80dd-6012ae36b271@intel.com> <7eb5313e-dea0-c73e-5467-d01f0ca0fc2d@amd.com>
+In-Reply-To: <7eb5313e-dea0-c73e-5467-d01f0ca0fc2d@amd.com>
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+Date:   Wed, 15 Jun 2022 20:00:39 +0200
+Message-ID: <CAH76GKO-X-DrR=yAh3NpvAC_Spd_aJ8+yLTATm+c34iPShNttQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle state
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Dunn <daviddunn@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -106,69 +99,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/06/2022 10:31, Marcel Ziswiler wrote:
-> Hi
-> 
-> On Wed, 2022-06-15 at 10:15 -0700, Krzysztof Kozlowski wrote:
->> On 15/06/2022 09:10, Max Krummenacher wrote:
->>> Hi
->>>
->>> On Tue, Jun 14, 2022 at 9:22 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>>>
->>>> Hi Rob,
->>>>
->>>> On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
->>>>> On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
->>>>>> From: Max Krummenacher <max.krummenacher@toradex.com>
->>>>>>
->>>>>> its power enable by using a regulator.
->>>>>>
->>>>>> The currently implemented PM domain providers are all specific to
->>>>>> a particular system on chip.
->>>>>
->>>>> Yes, power domains tend to be specific to an SoC... 'power-domains' is
->>>>> supposed to be power islands in a chip. Linux 'PM domains' can be
->>>>> anything...
->>>
->>> I don't see why such power islands should be restricted to a SoC. You can
->>> build the exact same idea on a PCB or even more modular designs.
->>
->> In the SoC these power islands are more-or-less defined. These are real
->> regions gated by some control knob.
->>
->> Calling few devices on a board "power domain" does not make it a power
->> domain. There is no grouping, there is no control knob.
->>
->> Aren't you now re-implementing regulator supplies? How is this different
->> than existing supplies?
-> 
-> I believe the biggest difference between power-domains and regulator-supplies lays in the former being driver
-> agnostic while the later is driver specific. 
+pon., 13 cze 2022 o 07:03 Mario Limonciello
+<mario.limonciello@amd.com> napisa=C5=82(a):
+>
+> On 6/10/22 07:49, Dave Hansen wrote:
+> > On 6/10/22 04:36, Grzegorz Jaszczyk wrote:
+> >> czw., 9 cze 2022 o 16:27 Dave Hansen <dave.hansen@intel.com> napisa=C5=
+=82(a):
+> >>> On 6/9/22 04:03, Grzegorz Jaszczyk wrote:
+> >>>> Co-developed-by: Peter Fang <peter.fang@intel.corp-partner.google.co=
+m>
+> >>>> Signed-off-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
+> >>>> Co-developed-by: Tomasz Nowicki <tn@semihalf.com>
+> >>>> Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
+> >>>> Signed-off-by: Zide Chen <zide.chen@intel.corp-partner.google.com>
+> >>>> Co-developed-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+> >>>> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+> >>>> ---
+> >>>>   Documentation/virt/kvm/x86/hypercalls.rst | 7 +++++++
+> >>>>   arch/x86/kvm/x86.c                        | 3 +++
+> >>>>   drivers/acpi/x86/s2idle.c                 | 8 ++++++++
+> >>>>   include/linux/suspend.h                   | 1 +
+> >>>>   include/uapi/linux/kvm_para.h             | 1 +
+> >>>>   kernel/power/suspend.c                    | 4 ++++
+> >>>>   6 files changed, 24 insertions(+)
+> >>> What's the deal with these emails?
+> >>>
+> >>>          zide.chen@intel.corp-partner.google.com
+> >>>
+> >>> I see a smattering of those in the git logs, but never for Intel folk=
+s.
+> >> I've kept emails as they were in the original patch and I do not think
+> >> I should change them. This is what Zide and Peter originally used.
+> >
+> > "Original patch"?  Where did you get this from?
+>
+> Is this perhaps coming from Chromium Gerrit?  If so, I think you should
+> include a link to the Gerrit code review discussion.
 
-That's one way to look, but the other way (matching the bindings
-purpose) is to look at hardware. You have physical wire / voltage rail
-supply - use regulator supply. In the terms of the hardware - what is
-that power domain? It's a concept, not a physical object.
+Yes, the original patch comes from chromium gerrit:
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
+3482475/4
+and after reworking but before sending to the mailing list, I've asked
+all involved guys for ack and it was done internally on gerrit:
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
+3666997
 
-> Meaning with power-domains one can just add such arbitrary
-> structure to the device tree without any further driver specific changes/handling required. While with
-> regulator-supplies each and every driver actually needs to have driver specific handling thereof added. Or do I
-> miss anything?
+>
+> If it's not a public discussion/patch originally perhaps Suggested-by:
+> might be a better tag to use.
+>
+> >
+> >>> I'll also say that I'm a bit suspicious of a patch that includes 5
+> >>> authors for 24 lines of code.  Did it really take five of you to writ=
+e
+> >>> 24 lines of code?
+> >> This patch was built iteratively: original patch comes from Zide and
+> >> Peter, I've squashed it with Tomasz later changes and reworked by
+> >> myself for upstream. I didn't want to take credentials from any of the
+> >> above so ended up with Zide as an author and 3 co-developers. Please
+> >> let me know if that's an issue.
+> >
+> > It just looks awfully fishy.
+> >
+> > If it were me, and I'd put enough work into it to believe I deserved
+> > credit as an *author* (again, of ~13 lines of actual code), I'd probabl=
+y
+> > just zap all the other SoB's and mention them in the changelog.  I'd
+> > also explain where the code came from.
+> >
+> > Your text above wouldn't be horrible context to add to a cover letter.
 
-Thanks for clarification but I am not sure if it matches the purpose of
-bindings and DTS. You can change the implementation as well to have
-implicit regulators. No need for new bindings for that.
-
-> 
-> We are really trying to model something where a single GPIO pin (via a GPIO regulator or whatever) can control
-> power to a variety of on-board peripherals. And, of course, we envision runtime PM actually making use of it
-> e.g. when doing suspend/resume.
-
-And this GPIO pin controls what? Some power switch which cuts the power
-of one regulator or many? If many different regulators, how do you
-handle small differences in ramp up time?
-
-
+Actually it may not be an issue for the next version since the
+suggested by Sean approach is quite different so I would most likely
+end up with reduced SoB/Co-dev-by in the next version.
 
 Best regards,
-Krzysztof
+Grzegorz
