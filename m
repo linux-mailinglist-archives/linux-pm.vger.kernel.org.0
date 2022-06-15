@@ -2,82 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E4C54D372
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 23:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B77454D3E9
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 23:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349490AbiFOVPQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 17:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S241445AbiFOVpG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 17:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349417AbiFOVPG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 17:15:06 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419C05536C
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 14:15:05 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id a2so20811990lfg.5
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 14:15:05 -0700 (PDT)
+        with ESMTP id S1344083AbiFOVpF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 17:45:05 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B532338BA
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 14:45:04 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t25so20864098lfg.7
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 14:45:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=U4zrudTfpKSMt98XR2iufEyV1+uGBR6wStGeT3BqOFk=;
-        b=iSjexz3mLcG79lRlUUZPUPkq8OBBprdOmNRAGkZEcmvAa4eQvTfbPk9WmCpbFPVpE/
-         5IjIW1VvqnyWQIMo4gprntm+LphtyDdc7pa9pxQhRyYNbQ3sPypQpGvpVm2goTEqjXnD
-         ZWIHzr9ALIdL8uSDepi8JGqdaUGJ9KO81GTDeglZtZzld+OdfsO6ivUoTALFkKTPaPle
-         EBAdyCHjtkfqlSTu21w/CG11XS8bx7jqZO9mTphBt3RNJEys+Eq0Az+zPC92rLlqpnL4
-         piH0IU2/m0Nc8T/9Edrwj9ROFMNSzW+SSvqduVjOVc0ysz3DV4UTT7udJAo7v4Z2HhU6
-         Ud3g==
+        bh=BxKotNlIQUP1TJrIgSLaFJNRK8CsQneLEY5gHhwVYxA=;
+        b=huxt0c1nC3YkXAqw1K2QAvkiB7XN0YUWmZX348cQLCUb1nGebShMTqR0OjyvMp04ar
+         5Q9MhQ0ulo6lXzwprHNI+HaG1QdOmK4mfrOcXmQ7H23jcW69jjdPLm2HfNBH6NnDH6tp
+         TOrrVUFNhtSd/8UR3/61ZWIHf50UXf/HkUed6I4HgSXtFvpJEFMavJeB9mwW4nl6kk/e
+         o4EB9uCIORMxAjMKS+PJgmq0NqvnL78WH2skPNJUOPZ8lREZRRfKRZkDTGc8OdfW62Dh
+         eBUisnlxlGhqbHJcRnT2hjX8na1Br2Wc9L5xr75dSIanlrNKH+uQQaGzjSfCMeJe2C10
+         hnvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=U4zrudTfpKSMt98XR2iufEyV1+uGBR6wStGeT3BqOFk=;
-        b=MLlK5ScqT30xRQNwleNtAkO/zfE9rho83hFuniNIZt0QO5pziqh7wEgopArQ0tsZvu
-         yqFgZHfv1hEp6kuCvEtXVp2t0GyOWnFD/XZQ/vIyok6DPPq7qaQsWM0J1XcxcfeQK677
-         sYST6SqglTVkUDzrqMAn1yMRz9rCrIo4UkJ4Tja8ihWAgOL3dXxX/0WuBrwKwudVV49K
-         FJtZcycuVphwn1lqDaNJsnKwTkP5VH4mN2jNayItCMS3H4/YVF3k+UWwGIi0RpvgyY50
-         hfLg+tui63qPfk1C07Eb6V51JbQQM3D4emib3+/7Kj2jCCWagjXWd2d+gjdktndUqbOj
-         gk2w==
-X-Gm-Message-State: AJIora+Cg07yPRW0XvJir3B7yjWntX4GaEcMnfJczoh4LUkp/DHAKoi7
-        WZWVF3WDx8I5pVVHnRPWXRMItCg/HjcLFjcv0MpVOA==
-X-Google-Smtp-Source: AGRyM1t5MyamwiCz7PoSdPQ8gjW8OM+EpbSRQMqDHUOoS9LUKaLFPkP4lLu+GObfpyOlL4mcqFgvi/WGO0uAYN5JDkg=
-X-Received: by 2002:a05:6512:3085:b0:479:3986:1d23 with SMTP id
- z5-20020a056512308500b0047939861d23mr799565lfd.373.1655327703359; Wed, 15 Jun
- 2022 14:15:03 -0700 (PDT)
+        bh=BxKotNlIQUP1TJrIgSLaFJNRK8CsQneLEY5gHhwVYxA=;
+        b=1VTGG+dMy2ftReKJpCWhIvHfOvrkB5YtZhgHHtWvuL+wt04cvHNMUhZ9KYX1NDtcjH
+         yPBjMpixsUxBgtfprgmGj9i0WYZQwaKlcHgXtre9v0sHQoplQjzY9R6QqSvWsV4ro2Tb
+         SxSfTTDizgagNlhBzN7vpY7iu7sVJxDCEtv+8nJE/Y9SxG7D501LzWdPl538/vfX486Y
+         XrpbPFFBysejN2rvzyRNb2cacsbx0Iv0UNqad5waJkz4qYDy5FoBzImoJBPM0idoQQQd
+         jYBYgevFzq9yjNaiz7mgioI8zJHvzsvk4ga5YLyv0Eptped0k2K5xUi2Rng714Ly13n8
+         KfKg==
+X-Gm-Message-State: AJIora+fv+wFYEQ0HPIREt5WLKb9nGFJs1z6bcnfY7eSIbeNCrgAWLVb
+        J3K5mW/qIo93KK1zhAQH0PQgnGrL7hlb9CSyT6fk6w==
+X-Google-Smtp-Source: AGRyM1tuDNI/QxNEJKWQ5nsViTUyLPF0UL0iKabgUZdgwWime1hc6LNXk9arOz+lRhXm5eJt8RFAMEAeGA8ksOwDbBE=
+X-Received: by 2002:a05:6512:1047:b0:479:2308:ac0b with SMTP id
+ c7-20020a056512104700b004792308ac0bmr898006lfb.167.1655329502392; Wed, 15 Jun
+ 2022 14:45:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com>
-In-Reply-To: <20220609150851.23084-1-max.oss.09@gmail.com>
+References: <20220615203605.1068453-1-athierry@redhat.com>
+In-Reply-To: <20220615203605.1068453-1-athierry@redhat.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 15 Jun 2022 14:14:27 -0700
-Message-ID: <CAPDyKFow5yxgCa-PTpNsiHzr3kCPCcOn-FVWdHCG9dx54cS=pA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     max.krummenacher@toradex.com, linux-pm@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+Date:   Wed, 15 Jun 2022 14:44:25 -0700
+Message-ID: <CAPDyKFrLbNsdxfoWRfYBUfijLF0m7XjtH5_aY7LLmzbW5pkn9A@mail.gmail.com>
+Subject: Re: [PATCH RFC] base: power: replace generic_pm_domain spinlock by
+ raw spinlock
+To:     Adrien Thierry <athierry@redhat.com>
+Cc:     linux-rt-users@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Eric Chanudet <echanude@redhat.com>,
+        Brian Masney <bmasney@redhat.com>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,57 +72,138 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 9 Jun 2022 at 08:09, Max Krummenacher <max.oss.09@gmail.com> wrote:
+On Wed, 15 Jun 2022 at 13:36, Adrien Thierry <athierry@redhat.com> wrote:
 >
-> From: Max Krummenacher <max.krummenacher@toradex.com>
+> We've been encountering a BUG: scheduling while atomic while running the
+> 5.18.0-rt11 kernel on a Qualcomm SoC (see stacktrace below).
 >
-> its power enable by using a regulator.
+> It seems to occur because a spinlock is taken in the PSCI idle code path
+> in the idle loop. With the RT patchset applied and CONFIG_PREEMPT_RT
+> enabled, spinlocks can sleep, thus triggering the bug.
 >
-> The currently implemented PM domain providers are all specific to
-> a particular system on chip.
+> In order to prevent this, replace the generic_pm_domain spinlock by a
+> raw spinlock.
 >
-> This series adds a PM domain provider driver which enables/disables
-> a regulator to control its power state. Additionally, marked with RFC,
-> it adds two commits which actually make use of the new driver to
-> instantiate a power domain provider and have a number of power
-> domain consumers use the power domain.
+> [    2.994433] BUG: scheduling while atomic: swapper/6/0/0x00000002
+> [    2.994439] Modules linked in:
+> [    2.994447] [<ffff80000810b0ec>] migrate_enable+0x3c/0x160
+> [    2.994461] CPU: 6 PID: 0 Comm: swapper/6 Not tainted 5.18.0-rt11+ #1
+> [    2.994464] Hardware name: Qualcomm SA8295P ADP (DT)
+> [    2.994466] Call trace:
+> [    2.994467]  dump_backtrace+0xb0/0x120
+> [    2.994473]  show_stack+0x1c/0x6c
+> [    2.994477]  dump_stack_lvl+0x64/0x7c
+> [    2.994483]  dump_stack+0x14/0x2c
+> [    2.994487]  __schedule_bug+0xa8/0xc0
+> [    2.994489]  schedule_debug.constprop.0+0x154/0x170
+> [    2.994492]  __schedule+0x58/0x520
+> [    2.994496]  schedule_rtlock+0x20/0x44
+> [    2.994499]  rtlock_slowlock_locked+0x110/0x260
+> [    2.994503]  rt_spin_lock+0x74/0x94
+> [    2.994505]  genpd_lock_nested_spin+0x20/0x30
+> [    2.994509]  genpd_power_off.part.0.isra.0+0x248/0x2cc
+> [    2.994512]  genpd_runtime_suspend+0x1a0/0x300
+> [    2.994515]  __rpm_callback+0x4c/0x16c
+> [    2.994518]  rpm_callback+0x6c/0x80
+> [    2.994520]  rpm_suspend+0x10c/0x63c
+> [    2.994523]  __pm_runtime_suspend+0x54/0xa4
+> [    2.994526]  __psci_enter_domain_idle_state.constprop.0+0x64/0x10c
+> [    2.994532]  psci_enter_domain_idle_state+0x1c/0x24
+> [    2.994534]  cpuidle_enter_state+0x8c/0x3f0
+> [    2.994539]  cpuidle_enter+0x3c/0x50
+> [    2.994543]  cpuidle_idle_call+0x158/0x1d4
+> [    2.994548]  do_idle+0xa8/0xfc
+> [    2.994551]  cpu_startup_entry+0x28/0x30
+> [    2.994556]  secondary_start_kernel+0xe4/0x140
+> [    2.994563]  __secondary_switched+0x54/0x58
 >
-> The perceived use case is to control a common power domain used by
-> several devices for which not all device drivers nessesarily have
-> a means to control a regulator.
+> Signed-off-by: Adrien Thierry <athierry@redhat.com>
+> ---
 >
-> It also handles the suspend / resume use case for such devices,
-> the generic power domain framework will disable the domain once the
-> last device has been suspend and will enable it again before resuming
-> the first device.
->
-> The generic power domain code handles a power domain consumer
-> generically outside of the driver's code. (assuming the 'power-domains'
-> property references exactly one power domain).
-> This allows to use the "regulator-pm-pd" driver with an arbitrary
-> device just by adding the 'power-domains' property to the devices
-> device tree node. However the device's dt-bindings schema likely does
-> not allow the property 'power-domains'.
-> One way to solve this would be to allow 'power-domains' globally
-> similarly how 'status' and other common properties are allowed as
-> implicit properties.
+> This patch fixes the bug but I'm not sure if this is the proper way to do
+> so. Suggestions for other ways to fix this are very welcome.
 
-I don't want to interrupt the discussion, but I still wanted to share
-my overall thoughts around the suggested approach.
+Honestly, I am not so sure about this either.
 
-Rather than adding some new DT bindings and a new generic DT
-compatible, I think the current power-domains bindings are sufficient
-to describe these types of HWs.
-
-To me, it looks rather like you are striving towards avoiding open
-coding for power domain providers that make use of a regulator. Right?
-
-To address that problem, I think a better option is to consider
-introducing a helper library with a set of functions that can be used
-by these types of power domain providers, in a way to simplify the
-code.
-
-[...]
+Turning the lock into spinlock_t into a raw_spinlock_t, may have the
+effect of spreading into constraints on the genpd providers. Thus
+those may need to be converted to use raw_spinlock_t too (assuming
+they use a spinlock_t and GENPD_FLAG_IRQ_SAFE). On the other hand,
+there are a limited number of genpd providers that this can become a
+problem for, if any, so maybe it would not be a big problem after all.
 
 Kind regards
 Uffe
+
+>
+>  drivers/base/power/domain.c | 10 +++++-----
+>  include/linux/pm_domain.h   |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 739e52cd4aba..9378decb58cf 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -82,7 +82,7 @@ static void genpd_lock_spin(struct generic_pm_domain *genpd)
+>  {
+>         unsigned long flags;
+>
+> -       spin_lock_irqsave(&genpd->slock, flags);
+> +       raw_spin_lock_irqsave(&genpd->slock, flags);
+>         genpd->lock_flags = flags;
+>  }
+>
+> @@ -92,7 +92,7 @@ static void genpd_lock_nested_spin(struct generic_pm_domain *genpd,
+>  {
+>         unsigned long flags;
+>
+> -       spin_lock_irqsave_nested(&genpd->slock, flags, depth);
+> +       raw_spin_lock_irqsave_nested(&genpd->slock, flags, depth);
+>         genpd->lock_flags = flags;
+>  }
+>
+> @@ -101,7 +101,7 @@ static int genpd_lock_interruptible_spin(struct generic_pm_domain *genpd)
+>  {
+>         unsigned long flags;
+>
+> -       spin_lock_irqsave(&genpd->slock, flags);
+> +       raw_spin_lock_irqsave(&genpd->slock, flags);
+>         genpd->lock_flags = flags;
+>         return 0;
+>  }
+> @@ -109,7 +109,7 @@ static int genpd_lock_interruptible_spin(struct generic_pm_domain *genpd)
+>  static void genpd_unlock_spin(struct generic_pm_domain *genpd)
+>         __releases(&genpd->slock)
+>  {
+> -       spin_unlock_irqrestore(&genpd->slock, genpd->lock_flags);
+> +       raw_spin_unlock_irqrestore(&genpd->slock, genpd->lock_flags);
+>  }
+>
+>  static const struct genpd_lock_ops genpd_spin_ops = {
+> @@ -2022,7 +2022,7 @@ static void genpd_free_data(struct generic_pm_domain *genpd)
+>  static void genpd_lock_init(struct generic_pm_domain *genpd)
+>  {
+>         if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
+> -               spin_lock_init(&genpd->slock);
+> +               raw_spin_lock_init(&genpd->slock);
+>                 genpd->lock_ops = &genpd_spin_ops;
+>         } else {
+>                 mutex_init(&genpd->mlock);
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index ebc351698090..80166a915b0d 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -159,7 +159,7 @@ struct generic_pm_domain {
+>         union {
+>                 struct mutex mlock;
+>                 struct {
+> -                       spinlock_t slock;
+> +                       raw_spinlock_t slock;
+>                         unsigned long lock_flags;
+>                 };
+>         };
+>
+> base-commit: 979086f5e0066b4eff66e1eee123da228489985c
+> --
+> 2.35.3
+>
