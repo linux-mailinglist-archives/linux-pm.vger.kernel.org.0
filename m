@@ -2,69 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D94C54C0F2
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 06:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDEE54C0FF
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 07:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242436AbiFOE4P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 00:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S242825AbiFOFAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 01:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242442AbiFOE4N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 00:56:13 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB0E3A180
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 21:56:12 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id x4so10377693pfj.10
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 21:56:12 -0700 (PDT)
+        with ESMTP id S237310AbiFOFAB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 01:00:01 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433D942496
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 22:00:00 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so1012276pjm.2
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 22:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=6x1p/cHxOzHrXaTiqFWMaZjgSTu7MFxfKrtukk0Ctcc=;
-        b=FgH88KSnMz7Lni9M9mJ+gpGZvHZufaDlqff3aEelp0mrqNatoTJFWHAoMOm0MqP4OD
-         LD5I0POzKL1dSXFNwurSJFp1XWfZgyk1kBYMDhOqy/pflpKBZHZ9u0T/d+kNP//30ms4
-         C+7ixsTdShgBVwUOEglxjnxRrjEAAaaWDNl3/QcWS7IyuJa/59yaJ1FxXpvXojZEr6d9
-         RHOMKh+TYKLC9UEs/UjzX4OfM2vJHHIuIXF8YWv29z54xQ6mDxni5Vi9D0jcZAcTtbLz
-         WyIEz1QVuTmZ2KB/gj8zmumGE6jINtdP7EZpLZ3GtmCBM3bkQZflanp+ay2xtUTAQZaP
-         Hu3A==
+        bh=sx5jo/gbFVJjPOu+uKpvsodcdaX5x99B9E4XzLwdmWE=;
+        b=OQ8sG8CIkLtszKiLLTbek6gsfIzVYrVUnGvHrzhqIDwP1bxZlqzHk9XdeP8wt0c/Yo
+         w7T145mRWtwh46Siau1jtn/tXHZ5BvJkUFRHuU4sd9Z1mQn+9yzZ0uxsLTlMOwVR/MmJ
+         eXnAJ4qILZOQRhwW3RZhCXP00VewUqcKlZoq8iKpqds4bqmNwDRnWnrWfPlo3rMoXwnP
+         8IZ912AjBBZVMJbCQi9boHwjt/ndymi58Ov+67xEO9O4bFc3efq/9axTkfpw+ZalR/qI
+         Wiy7locTtxA2D+9KrzK50zSxCqDd2+OjPPwNBRMZrs4dzGEF98HXoJN93j/PTi01RiN6
+         NoJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6x1p/cHxOzHrXaTiqFWMaZjgSTu7MFxfKrtukk0Ctcc=;
-        b=TzsXm5KKvzQLkDums1CAgDimckuv6mj9HDZsVF3XEJDYMuEnBqk8IsABePfQXbgRF8
-         g/W1tKvtGCclO5+7XHw1EghrWkxFQ5cYiDB96hVtwpvsjVgDXDQgSVUuGJ8hSnqBimys
-         bSl/xvVUlgiQcWEe4bPjxIh2Xv08vvOVoTZ31zJtc71XIDJdE/LxVYZxDlDyxChFE5BM
-         BWGCTv5rugq4s/yCRmifByyV6gvr6oYKKX455VC6UKeZB9FWZaUeBGWf674LBfLMFktN
-         zdiSNmNPQL5ykCkzPu/b88sxrq1zWWgqI+fgD7ABC8SeEDeluHZZfsjt6ZfKjguk1wgP
-         BO6Q==
-X-Gm-Message-State: AOAM533WN30vuI2SIUm0XCeP3FL9gZK/zKlwGg8+LssoerKllrQhwJm4
-        +sQGTIv883QRhvbhsvMvrEf0hw==
-X-Google-Smtp-Source: ABdhPJwu24Nqyc94Rp20DIAhF45O/DYl99akByKaRyIrjnaeH6YZTymTppQh5tNgyehnPcZJihUJhA==
-X-Received: by 2002:a05:6a00:814:b0:51c:1878:4943 with SMTP id m20-20020a056a00081400b0051c18784943mr8129630pfk.62.1655268971775;
-        Tue, 14 Jun 2022 21:56:11 -0700 (PDT)
+        bh=sx5jo/gbFVJjPOu+uKpvsodcdaX5x99B9E4XzLwdmWE=;
+        b=TYwA8x4OgVxdQinr33N+FuffNbDBvmTYfE1B5SaDwiqrOEjfkQwrpb+tVzVtHGUnYk
+         7jGncXsq0qBKWpgblAAtpgHxhEsXWgIJ6vBpDIm0IRY2Yx8dVKzMj/mQIVbWgqc6733g
+         sB5Bbx3aONdkryi8dRvVAj5EzZugkrQqgQ96u6ydDUu/ryT/16uKWsnXKB8Qe51ODqTx
+         VJb9CuEOmzL+7qfrmiiPk+kLrWXXaW5wU/VX2AfvMlSrz0S0XUiJAeDkp2wViGIRKOYS
+         rsNT2sWZ5TfxV8xfI5kr2NmE5ZhR4NyN3aGubS7QGaxnHrIl1nm2Hjqxv9+qrp2/EpRu
+         pgUQ==
+X-Gm-Message-State: AJIora/yqOXrnEhnAcoxlMr5TzVQCf+eE5badDrnIzV7EMNiZQe5icKX
+        QcNS0QNFPGI2smnHBNPOzF5gfQ==
+X-Google-Smtp-Source: AGRyM1u2vA9N4bZpg7V9qLUF19XkH2La7QrUIbQA654KDtyevtqXUBfRbeaRFA6ZFNCrblKGfgwQxg==
+X-Received: by 2002:a17:902:8e8b:b0:168:a135:d636 with SMTP id bg11-20020a1709028e8b00b00168a135d636mr7343989plb.140.1655269199764;
+        Tue, 14 Jun 2022 21:59:59 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id a11-20020a170902900b00b00168b113f222sm8127431plp.173.2022.06.14.21.56.10
+        by smtp.gmail.com with ESMTPSA id f13-20020a170902684d00b0015e8d4eb26csm8154990pln.182.2022.06.14.21.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 21:56:11 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 10:26:08 +0530
+        Tue, 14 Jun 2022 21:59:59 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 10:29:57 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Yi Yang <yiyang13@huawei.com>, Linux PM <linux-pm@vger.kernel.org>,
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel test robot <oliver.sang@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] cpufreq: Fix reserved space in cpufreq_show_cpus()
-Message-ID: <20220615045608.pwranz6b633xmymf@vireshk-i7>
-References: <20220521063534.138930-1-yiyang13@huawei.com>
- <20220524071041.4aw3cfo3x5wphziy@vireshk-i7>
- <CAJZ5v0jCx0v-Q2=aW4nSSAHHajUnLdVtQMe3w1cX1w-o=mSesg@mail.gmail.com>
- <CAJZ5v0g-rCSd+S4YPBR8Jv2PqePhjQd0K97Rj2+TX3OrWAP0NA@mail.gmail.com>
+Subject: Re: [PATCH V2 2/3] cpufreq: Panic if policy is active in
+ cpufreq_policy_free()
+Message-ID: <20220615045957.55ocdyddcac3vwct@vireshk-i7>
+References: <8c3d50faf8811e86136fb3f9c459e43fc3c50bc0.1653565641.git.viresh.kumar@linaro.org>
+ <426bf6edc80b2e944d459fa7b8dffbe8b73bb3d9.1653623526.git.viresh.kumar@linaro.org>
+ <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g-rCSd+S4YPBR8Jv2PqePhjQd0K97Rj2+TX3OrWAP0NA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,60 +74,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14-06-22, 15:48, Rafael J. Wysocki wrote:
-> On Tue, Jun 14, 2022 at 3:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On 14-06-22, 15:59, Rafael J. Wysocki wrote:
+> On Fri, May 27, 2022 at 5:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 > >
-> > On Tue, May 24, 2022 at 9:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > On 21-05-22, 14:35, Yi Yang wrote:
-> > > > Function scnprintf() would reserve space for the trailing '\0' and return
-> > > > value is the number of characters written into buf not including the
-> > > > trailing '\0'. internally meaning the next scnprintf() would write begin
-> > > > the trailing '\0'. The code specifying "PAGE_SIZE - i - 2" here is trying
-> > > > to reserve space for "\n\0" which would cause scnprintf() to reserve an
-> > > > additional byte making the tail of the buf looks like this: "\n\0\0".
-> > > > Thus. we should reserve only the space for one '\0'. passing in
-> > > > "PAGE_SIZE - i - 1".
-> > > >
-> > > > Additionally, each iteration would replace the trailing '\0' from the last
-> > > > iteration with a space, and append 4 additional bytes to the string making
-> > > > it a total of 5 additional bytes. That means we should stop printing into
-> > > > the buffer if the remaining size is less than 7 bytes(1 for the ' ', 4 for
-> > > > the %u and 2 for the tailing "\n\0")
-> > > >
-> > > > Signed-off-by: Yi Yang <yiyang13@huawei.com>
-> > > > ---
-> > > >  drivers/cpufreq/cpufreq.c | 6 +++---
-> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > > index 1f6667ce43bd..60c005c9961e 100644
-> > > > --- a/drivers/cpufreq/cpufreq.c
-> > > > +++ b/drivers/cpufreq/cpufreq.c
-> > > > @@ -844,9 +844,9 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf)
-> > > >
-> > > >       for_each_cpu(cpu, mask) {
-> > > >               if (i)
-> > > > -                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), " ");
-> > > > -             i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), "%u", cpu);
-> > > > -             if (i >= (PAGE_SIZE - 5))
-> > > > +                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), " ");
-> > > > +             i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), "%u", cpu);
-> > > > +             if (i >= (PAGE_SIZE - 6))
-> > > >                       break;
-> > > >       }
-> > > >       i += sprintf(&buf[i], "\n");
-> > >
-> > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > With the new design in place, to avoid potential races show() and
+> > store() callbacks check if the policy is active or not before proceeding
+> > any further. And in order to guarantee that cpufreq_policy_free() must
+> > be called after clearing the policy->cpus mask, i.e. by marking it
+> > inactive.
 > >
-> > Applied as 5.20 material, thanks!
+> > Lets make sure we don't get a bug around this later and catch this early
+> > by putting a BUG_ON() within cpufreq_policy_free().
+> >
+> > Also update cpufreq_online() a bit to make sure we clear the cpus mask
+> > for each error case before calling cpufreq_policy_free().
+> >
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > ---
+> > V2: Update cpufreq_online() and changelog.
+> >
+> >  drivers/cpufreq/cpufreq.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index e24aa5d4bca5..0f8245731783 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1284,6 +1284,12 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+> >         unsigned long flags;
+> >         int cpu;
+> >
+> > +       /*
+> > +        * The callers must ensure the policy is inactive by now, to avoid any
+> > +        * races with show()/store() callbacks.
+> > +        */
+> > +       BUG_ON(!policy_is_inactive(policy));
 > 
-> And dropped, because it has been superseded by this one:
+> I'm not a super-big fan of this change.
 > 
-> https://patchwork.kernel.org/project/linux-pm/patch/b9fa08171c09343ace94a7343553a4bee4695c90.1653565641.git.viresh.kumar@linaro.org/
+> First off, crashing the kernel outright here because of possible races
+> appears a bit excessive to me.
+> 
+> Second, it looks like we are worrying about the code running before
+> the wait_for_completion() call in cpufreq_policy_put_kobj(), because
+> after that call no one can be running show() or store().  So why don't
+> we reorder the wait_for_completion() call with respect to the code in
+> question instead?
 
-The $Subject patch is still required AFAICT, it is fixing a different problem.
-Though it needs to be rebased on top of your branch now.
+No, I am not worrying about that race. I am just trying to make sure some change
+in future doesn't break this assumption (that policy should be inactive by this
+point). That's all. It all looks good for now.
+
+May be a WARN instead of BUG if we don't want to crash.
 
 -- 
 viresh
