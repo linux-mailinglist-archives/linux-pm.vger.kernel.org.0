@@ -2,97 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFD254C2DC
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 09:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4142D54C2E1
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 09:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241426AbiFOHrz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 03:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S236361AbiFOHtg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 03:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241113AbiFOHrw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 03:47:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC8D5E004;
-        Wed, 15 Jun 2022 00:47:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74B81153B;
-        Wed, 15 Jun 2022 00:47:48 -0700 (PDT)
-Received: from [10.57.38.196] (unknown [10.57.38.196])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CB3A3F66F;
-        Wed, 15 Jun 2022 00:47:46 -0700 (PDT)
-Message-ID: <21eb45a4-de6c-58f4-6649-4491c00cc464@arm.com>
-Date:   Wed, 15 Jun 2022 08:47:43 +0100
+        with ESMTP id S236475AbiFOHtQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 03:49:16 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEAF3FBC1;
+        Wed, 15 Jun 2022 00:49:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655279354; x=1686815354;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TsvfqySFBOOtkbcV9wmU48iaSI7/s1Hm9iaZc/71HFc=;
+  b=OjTIvm/8tklHqDXagYjHnecIfrUK4/GUokJzq8h1tCLYe0EawAJUR4ER
+   UsU/rvP+OurmvG/8lURixitMqi0IQyT5zTeM4+3o9U0UWjTqH6qaXRTcI
+   p84Dqeo1bmH53IE17K9arj7L7teGj6B/hTLxq6rspPp3WMkwsv3rCyLKF
+   xmfSzf9qlqnHniuCnXnnnnwpzM7inpwThfaDFKb7czSKMsrpTkCz8gFuZ
+   9zwVVzHq57gjEyHwXqKTJtUo7SWiErnz4IIA1K8LtbjYLdVETCFLgFKxA
+   5igUYdEsOV0/bxewEzRjHsz8iGtV2xbL74ai2Qwe0p+mlFy1UIbgFR+rp
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="279588926"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="279588926"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 00:49:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="535934298"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 15 Jun 2022 00:49:06 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1Nlx-000Mg3-Bb;
+        Wed, 15 Jun 2022 07:49:05 +0000
+Date:   Wed, 15 Jun 2022 15:48:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 3904c06c5e7dd1494d2feb6cdcd850cf2e832432
+Message-ID: <62a98eb9.R+wTNppuvg2Y8zxN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 0/4] Thermal cpufreq & devfreq cooling minor clean-ups
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220613124327.30766-1-lukasz.luba@arm.com>
- <92f56aed-e6cd-c65b-f42f-5bd1e07b90c5@arm.com>
- <80516a8d-80b2-9c96-3ac8-4f2e6e6e851d@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <80516a8d-80b2-9c96-3ac8-4f2e6e6e851d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 3904c06c5e7dd1494d2feb6cdcd850cf2e832432  Merge branch 'thermal-core' into bleeding-edge
 
+elapsed time: 721m
 
-On 6/14/22 19:26, Daniel Lezcano wrote:
-> On 14/06/2022 14:51, Lukasz Luba wrote:
->> Hi Daniel,
->>
->>
->> On 6/13/22 13:43, Lukasz Luba wrote:
->>> Hi all,
->>>
->>> This is v2 of some minor clean-ups for the thermal cpufreq and devfreq
->>> cooling code.
->>>
->>> Changes:
->>> v2:
->>> - extened the cpufreq_cooling_device with private ops field, to not 
->>> waste
->>>    memory and simplify allocation/free code (Viresh)
->>> - added devfreq_cooling clean-up to align with cpufreq cooling code
->>> - added ACKs from Viresh for patch 2/4 and path 3/4
->>> - added missing maintainers of tracing to CC list
->>>
->>> Regards,
->>> Lukasz
->>>
->>> Lukasz Luba (4):
->>>    thermal: cpufreq_cooling: Use private callback ops for each cooling
->>>      device
->>>    thermal: cpufreq_cooling : Refactor thermal_power_cpu_get_power
->>>      tracing
->>>    thermal: cpufreq_cooling: Update outdated comments
->>>    thermal: devfreq_cooling: Extend the devfreq_cooling_device with ops
->>>
->>>   drivers/thermal/cpufreq_cooling.c | 77 ++++++++++---------------------
->>>   drivers/thermal/devfreq_cooling.c | 27 ++++-------
->>>   include/trace/events/thermal.h    | 28 ++++-------
->>>   3 files changed, 42 insertions(+), 90 deletions(-)
->>>
->>
->> Could you have a look and take the patches into your tree, please?
->> The 3 of 4 patches got ACKs, the last one is devfreq cooling, which
->> is pretty minor change.
-> 
-> Applied, thanks
-> 
-> 
+configs tested: 83
+configs skipped: 3
 
-Thanks Daniel!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                               defconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+alpha                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+arc                                 defconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+parisc64                            defconfig
+s390                             allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a014-20220613
+x86_64               randconfig-a012-20220613
+x86_64               randconfig-a011-20220613
+x86_64               randconfig-a013-20220613
+x86_64               randconfig-a016-20220613
+x86_64               randconfig-a015-20220613
+i386                 randconfig-a013-20220613
+i386                 randconfig-a011-20220613
+i386                 randconfig-a014-20220613
+i386                 randconfig-a012-20220613
+i386                 randconfig-a016-20220613
+i386                 randconfig-a015-20220613
+arc                  randconfig-r043-20220613
+riscv                randconfig-r042-20220613
+s390                 randconfig-r044-20220613
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+x86_64               randconfig-a002-20220613
+x86_64               randconfig-a004-20220613
+x86_64               randconfig-a001-20220613
+x86_64               randconfig-a003-20220613
+x86_64               randconfig-a005-20220613
+x86_64               randconfig-a006-20220613
+i386                 randconfig-a002-20220613
+i386                 randconfig-a003-20220613
+i386                 randconfig-a001-20220613
+i386                 randconfig-a005-20220613
+i386                 randconfig-a004-20220613
+i386                 randconfig-a006-20220613
+hexagon              randconfig-r041-20220613
+hexagon              randconfig-r045-20220613
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
