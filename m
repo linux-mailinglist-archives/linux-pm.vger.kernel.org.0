@@ -2,155 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994E854D185
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 21:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C0154D18A
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 21:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344979AbiFOTZd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 15:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S1345771AbiFOT0Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 15:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiFOTZd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 15:25:33 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFE138780;
-        Wed, 15 Jun 2022 12:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655321132; x=1686857132;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=905LNegFOW2Um8P9BhrIgjmYf09bgpnjZEvFsBQqfkM=;
-  b=gwusj9sZpsIpz+tNBp32Qu3Ncx3DhvzXEFSfLeVDlk+/SALsm4pTlFr3
-   /Gf3raRXrxJJu+x4fvg40siFTVDdsMAkZiQLcbPFTa9tnQn3lTugqA3fr
-   snb+vMSsCI9xRWd81KcX1Oim0+Barxe5J+gcSlefCGXs7wvWKQSdxE52X
-   fxd7NOkssGYoqFi8mZkTXMAUUbWucCPDmunt6N/oOePBsIdz/iamPoeS0
-   OTAhy8+SevWZSzELiJJ5qtAjRCoRJ+ysf1sFZrfxM7eApdzng9A61ozmQ
-   +29hdFcJ0Ek6563z1sfm0NvHmHAHU3SrsoqXaeXFikL59h7FBR1EgK89w
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="262104554"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="262104554"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 12:25:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="727566773"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Jun 2022 12:25:27 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1Ydq-000N85-W6;
-        Wed, 15 Jun 2022 19:25:26 +0000
-Date:   Thu, 16 Jun 2022 03:24:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Anson Huang <Anson.Huang@nxp.com>
-Cc:     kbuild-all@lists.01.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 2/9] thermal: thermal: Export OF trip helper function
-Message-ID: <202206160331.en1dbvYm-lkp@intel.com>
-References: <20220615094804.388280-3-francesco.dolcini@toradex.com>
+        with ESMTP id S244033AbiFOT0X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 15:26:23 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BA93B56D
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 12:26:22 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id e184so22215421ybf.8
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 12:26:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+7ap878U9WJiqZiLJtB8+WDoIVBGF2CyyeANmhqBwmc=;
+        b=KtA+QsE4mywVenk5Gy1ER0/poJuM4+WHV2wmlEIamfsUNz3E2CsoWt3w0Iyctc7xJZ
+         x7KBpuIuC1qg7FsAwX7Vhwx6S5DExH4A8OQn4MVmzx5fD4HUKu+tt/AYxmc1pYXf0dHo
+         F+kMNtE3HrY3F+iYbkNSP6exnXcLXMXDKgqkk5X44eFrGHqgney3cPXC6Ax9vnHi756j
+         t+E076K7D4yVrNA155k1K3Ke/v7Mb90yeD3jbz0rGTDAFDZZwJxmRjCY5TbEoYqU5UKe
+         RLt4TRmayzVNLcEll4soeaPO2Y7Iqy7HMbxYAdBL5sawr/b4CEjnlsjf43KZcI0Pukyb
+         Yg4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+7ap878U9WJiqZiLJtB8+WDoIVBGF2CyyeANmhqBwmc=;
+        b=LR8PSMIf8QmiLeLdupQvQY8ZQxOXKbx6vTGogNkJAitsPJgbefzQUBlpy0N3Xaw/te
+         7aBLwdRBJDC1ijwe0uvwfV0uvYDxdRV73BXX8NgASYx42BDmVaIo7vrsi+7ofETQNFiP
+         uGlRWWaYAR5bLbNzeVecsTuod2jO8s7Tu+ttYAllUn4WgUoTFCd53v5bqqT97+jSat+F
+         Kf8Y1oiRiPu8VLYD714M24BNreNPSyCIsHthvGmfRTKbvEnkEjGvpgeE+xjY3Yjz+8m8
+         RADZhp11IqbbKuPOxX1ePfTEgXd7dlgPeVAKl7gzcLsgfXZ8DP4qIcCnG1qHuZe5K2eT
+         1Q3g==
+X-Gm-Message-State: AJIora8v1KUaOAlM5x/jexSLQbXtXoqyH/KX8cTMJI+XVXmpAhLipxLb
+        GGAWbENWg5AH52Hxk5elAPS1oYkozahmA1hEOSGLrA==
+X-Google-Smtp-Source: AGRyM1tvrcUsHTOVHdrJSj+Bv5J/r8X/AQcZj0tTScEAnnW9cIKrg6CY2Nf/BMod6r2Ss+T6SGurUcC9KPzrigBne9Q=
+X-Received: by 2002:a25:b51:0:b0:663:4ff1:d20d with SMTP id
+ 78-20020a250b51000000b006634ff1d20dmr1499507ybl.608.1655321181295; Wed, 15
+ Jun 2022 12:26:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615094804.388280-3-francesco.dolcini@toradex.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
+ <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
+In-Reply-To: <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 16 Jun 2022 00:56:10 +0530
+Message-ID: <CA+G9fYvifz5xDDNjoJBt2MRfdqwDtNf53teWXUs5QCOn2uhbfw@mail.gmail.com>
+Subject: Re: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at
+ drivers/opp/core.c:2265 dev_pm_opp_clear_config+0x174/0x17c
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nicolas Dechesne <nicolas.dechesne@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Francesco,
+Hi Viresh,
 
-Thank you for the patch! Yet something to improve:
+On Wed, 15 Jun 2022 at 10:55, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 15-06-22, 02:49, Naresh Kamboju wrote:
+> > Following kernel crash reported while booting arm64 db410c board with
+> > Linux next-20220614 [1] kfence enabled on this kernel.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Boot log:
+> > ---------
+> > [    0.850420] WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
+>
+> A print like this normally comes when we hit a WARN or something.
+>
+> Here is the line 2265 from above tag
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/opp/core.c?h=next-20220614#n2265
+>
+> which doesn't have any such WARNs there. I wonder where exactly we hit the WARN
+> here and why it isn't showing up properly.
+>
+> > dev_pm_opp_clear_config+0x174/0x17c
+> > [    0.850447] Modules linked in:
+> > [    0.850459] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> > 5.19.0-rc1-next-20220610 #1
+> > [    0.850470] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> > [    0.850477] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > [    0.850489] pc : dev_pm_opp_clear_config+0x174/0x17c
+> > [    0.850501] lr : dt_cpufreq_probe+0x1e4/0x4a0
+> > [    0.850513] sp : ffff80000802bb00
+> > [    0.850518] x29: ffff80000802bb00 x28: ffff80000ada1c30 x27: 0000000000000000
+> > [    0.850538] x26: 00000000fffffdfb x25: ffff00000311f410 x24: ffff00000389ec90
+> > [    0.850557] x23: ffff80000a9eea98 x22: ffff80000a9eed00 x21: ffff80000ada1b68
+> > [    0.850576] x20: ffff00000389ec80 x19: ffff00003fc41308 x18: ffffffffffffffff
+> > [    0.850595] x17: ffff800009f21700 x16: ffff8000080955c0 x15: ffff0000031c2a1c
+> > [    0.850614] x14: 0000000000000001 x13: 0a6b636f6c632064 x12: 6e69662074276e64
+> > [    0.850632] x11: 0000000000000040 x10: 0000000000000020 x9 : ffff800009006964
+> > [    0.850650] x8 : 0000000000000020 x7 : ffffffffffffffff x6 : 0000000000000000
+> > [    0.850668] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+> > [    0.850686] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
+> > [    0.850704] Call trace:
+> > [    0.850708]  dev_pm_opp_clear_config+0x174/0x17c
+> > [    0.850722]  platform_probe+0x74/0xf0
+>
+> Nevertheless, I see one place from where such a WARN can be hit, which can be
+> fixed with:
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 58eae9de4b91..c3d4058d33fc 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2437,7 +2437,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_set_config);
+>   */
+>  void dev_pm_opp_clear_config(struct opp_table *opp_table)
+>  {
+> -       if (WARN_ON(!opp_table))
+> +       if (!opp_table)
+>                 return;
+>
+>         _opp_detach_genpd(opp_table);
+>
+> Not sure it fixes the issue you reported here though.
+>
+> Can you run the tests for my branch once, it has the updated fix as well.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on rafael-pm/thermal krzk/for-next krzk-mem-ctrl/for-next v5.19-rc2 next-20220615]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+As per your suggestion, I have tested [1] this tree and branch and it worked.
+The reported kernel warning has been fixed.
+Thank you.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Francesco-Dolcini/imx-thermal-Allow-trip-point-configuration-from-DT/20220615-175857
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20220616/202206160331.en1dbvYm-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/e68c5a0d2b91a47a9df63a6309c0ed9e905fc20a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Francesco-Dolcini/imx-thermal-Allow-trip-point-configuration-from-DT/20220615-175857
-        git checkout e68c5a0d2b91a47a9df63a6309c0ed9e905fc20a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+>
+> --
+> viresh
 
-All errors (new ones prefixed by >>):
+[1] https://lkft.validation.linaro.org/scheduler/job/5179605
 
-   In file included from drivers/thermal/thermal_core.c:27:
-   drivers/thermal/thermal_core.h: In function 'thermal_of_populate_trip':
->> drivers/thermal/thermal_core.h:179:17: error: 'ENOTSUP' undeclared (first use in this function); did you mean 'ENOTSUPP'?
-     179 |         return -ENOTSUP;
-         |                 ^~~~~~~
-         |                 ENOTSUPP
-   drivers/thermal/thermal_core.h:179:17: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +179 drivers/thermal/thermal_core.h
-
-   150	
-   151	/* device tree support */
-   152	#ifdef CONFIG_THERMAL_OF
-   153	int of_parse_thermal_zones(void);
-   154	int of_thermal_get_ntrips(struct thermal_zone_device *);
-   155	bool of_thermal_is_trip_valid(struct thermal_zone_device *, int);
-   156	const struct thermal_trip *
-   157	of_thermal_get_trip_points(struct thermal_zone_device *);
-   158	int thermal_of_populate_trip(struct device_node *np,
-   159				     struct thermal_trip *trip);
-   160	#else
-   161	static inline int of_parse_thermal_zones(void) { return 0; }
-   162	static inline int of_thermal_get_ntrips(struct thermal_zone_device *tz)
-   163	{
-   164		return 0;
-   165	}
-   166	static inline bool of_thermal_is_trip_valid(struct thermal_zone_device *tz,
-   167						    int trip)
-   168	{
-   169		return false;
-   170	}
-   171	static inline const struct thermal_trip *
-   172	of_thermal_get_trip_points(struct thermal_zone_device *tz)
-   173	{
-   174		return NULL;
-   175	}
-   176	static inline int thermal_of_populate_trip(struct device_node *np,
-   177						   struct thermal_trip *trip)
-   178	{
- > 179		return -ENOTSUP;
-   180	}
-   181	#endif
-   182	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--
+Linaro LKFT
+https://lkft.linaro.org
