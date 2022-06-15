@@ -2,59 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EE754CCFD
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 17:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1F254CDDD
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 18:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbiFOPc6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 11:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
+        id S1348173AbiFOQLE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 12:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiFOPc5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 11:32:57 -0400
+        with ESMTP id S230236AbiFOQLD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 12:11:03 -0400
 Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A243CE3C;
-        Wed, 15 Jun 2022 08:32:56 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id h23so19523304lfe.4;
-        Wed, 15 Jun 2022 08:32:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D237534B91;
+        Wed, 15 Jun 2022 09:11:01 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id a29so19702439lfk.2;
+        Wed, 15 Jun 2022 09:11:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sDmJ/1hH1Y7P0JPg/pBSMltfD0etiGQmhyhqG4Y659s=;
-        b=WZSiAgrTPdJWnSQsprhjOtMAW9x0/89CYUZm658X4gAh00Bgmui+kAIB5ifmDiTA4W
-         4vkkITzB10/9xlS5pOdSjkEtSxghcrBwW1eojcx2cy0TUZEh7RiYzPM9VP2gss4IUtaq
-         HO0+DfNgBCFDQIKxcsPxrn4OL0lIu3mM2I12t+1C17SzW1kOIW5hckqAmhss5xSXHWE9
-         G/hNBehy6nd8SV+tGJl11bJhccW5JpDsANDa7DlCWmrrgelabJvmO2FPaa1v9M3gk8TL
-         Zl5libbYG739FoWfQgfPt354GCW+ospzDSVi6r8JT+ena5yoeKNLDOjr5wz07fz++4Ir
-         +MfA==
+        bh=wvgXMUe19+tnC/niWqva2BYC9twBwMOusfC9xJToLc0=;
+        b=cACKFlgk0vAjggeOqDqPolXWI9jqe1mUvzJqF/4ZKnk8BJWFIT/PaEHnCC0SYy56Ap
+         nvSqh2iOZTc0A0gC7AATZVDIRIHTKX90DiHuGuJcrkq51uUmoVRmelpSD5ERp+tg+zxP
+         yMwlSu9O5T/7K4zw4TYs54hMoUDNTtjlJ88BPrZIbJajlzAp16Ygw/+iLgySCp4+Glro
+         48pFhIqHYpTN53/PcYy4/Qs5Ns3OfzD/D7QbKTYakwKoOP2wBFR/Q9zoLnISoKaaPtpN
+         fMXmgFvuKcfhW5akq2llkc7KM2jHRsKoFWu9VQxqOckQ+8flI2EV/K6DwpLg2qoDFZaB
+         4NxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sDmJ/1hH1Y7P0JPg/pBSMltfD0etiGQmhyhqG4Y659s=;
-        b=mix0XkGDRfofw6I/pOY+J5OJrVKnMzzo+0imAvnuh+SNbqtQTfbyhnncHjiQskN/NK
-         dGuWuJtWJNLAgiM4ELabIa4K/2F9sym4awEepZs4RgY4U38WdC0IywvbFwzP18WSslvf
-         mzG3y0N+dyQquuStJ5WZDL5GATHatgulzFXCJ4lpBpRvrCdQvFVmQGzECQX1XsMiZA5B
-         BBWO00kT9ZcoCo7JDrCzZytaAKQWcU4mfYjD9Ly7nMbDTnECV6SqkHr5ZEfuMRWLdWhO
-         fgvBp7lOpt95ueg2As3aafKGVO8wW1MJ0byIJCa5sb85scF9m9S53XdIE34cCQ09d9jy
-         uFtA==
-X-Gm-Message-State: AJIora+IZmkuWihSKQvw/xKN7OWU3AgPMRCheK8HXyouU1NlgxlvSQ2d
-        2k/bMPgP+qjjATU3lsa4UetIDKjdhAso4eyhGEU=
-X-Google-Smtp-Source: AGRyM1tG1+t0l4Tw3Ckll7X3C6ctah44JTSkdCmL6yK6uylgTgTXwvdzDr0mEdzwcTP3/GXA2CosJRFvobfIvlqak0c=
-X-Received: by 2002:a05:6512:68b:b0:479:40e9:2940 with SMTP id
- t11-20020a056512068b00b0047940e92940mr30622lfe.381.1655307174922; Wed, 15 Jun
- 2022 08:32:54 -0700 (PDT)
+        bh=wvgXMUe19+tnC/niWqva2BYC9twBwMOusfC9xJToLc0=;
+        b=FU/b/LfBB0AyqZBy4XfcAss+F8YrFt02qUmfwxAu+rTz8H33aW5Ij5W68x7bvuw4ys
+         Bj5W3kQkV/362etbONFhrrxzLH+WgE2SHlWZVtW9F9E79dmk9qERezwzJgp2fusWlaOS
+         rxRuYm0eWJdIqAUtWIFW+M9X0bp5lGM4h5f9NSgPj1bXjbnWzjn8FUp1AVvRqtBJg7pt
+         QVneKshm0LG3+Wu8U9o0ikoAXCcAiw1iHIX9crZQNpjdA0FKhob3dEaTx4477PmrB4kK
+         KKE8mh0ooyO8AlZYmdgizhw4ONgwILgYJgBeTian5MZy0Idesufhder0K/kGBQ5ICF/A
+         ndBQ==
+X-Gm-Message-State: AJIora/5Dn0kVPaVqlZm9T8rEaVEyzFnl3cm20+L/0VyHCXyj5MV9EYQ
+        aOSJ7O92UWpljFiduNz2YZ0ku0eebKr6155FiOk=
+X-Google-Smtp-Source: AGRyM1toftMNLI+bMk64j8iSZzr0cxrrxwAj4tiO2+SyjcwnLTdWx7aNT3elpx26GbmD++Ti33aZvgxhE2LTFoe48Ts=
+X-Received: by 2002:a19:9117:0:b0:47a:300:7506 with SMTP id
+ t23-20020a199117000000b0047a03007506mr138552lfd.235.1655309460230; Wed, 15
+ Jun 2022 09:11:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220609150851.23084-6-max.oss.09@gmail.com>
- <CAMuHMdUf=VnqePKB=0eJC4GxZipQLD8BKMiv5PBW8Fz+zUv6-Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdUf=VnqePKB=0eJC4GxZipQLD8BKMiv5PBW8Fz+zUv6-Q@mail.gmail.com>
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220613191549.GA4092455-robh@kernel.org>
+ <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
+In-Reply-To: <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
 From:   Max Krummenacher <max.oss.09@gmail.com>
-Date:   Wed, 15 Jun 2022 17:32:43 +0200
-Message-ID: <CAEHkU3U+Ahk1eyw-dWYM2Egt8xvhyM6piEHbSSq=dyZstomHcg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 5/5] ARM64: verdin-imx8mm: use regulator power
- domain to model sleep-moci
+Date:   Wed, 15 Jun 2022 18:10:48 +0200
+Message-ID: <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
 To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+Cc:     Rob Herring <robh@kernel.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
         Francesco Dolcini <francesco.dolcini@toradex.com>,
@@ -62,14 +63,19 @@ Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
@@ -87,75 +93,52 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi
 
-On Tue, Jun 14, 2022 at 9:29 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Tue, Jun 14, 2022 at 9:22 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> Hi Max,
+> Hi Rob,
 >
-> On Thu, Jun 9, 2022 at 5:16 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
-> > From: Max Krummenacher <max.krummenacher@toradex.com>
+> On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
+> > On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
+> > > From: Max Krummenacher <max.krummenacher@toradex.com>
+> > >
+> > > its power enable by using a regulator.
+> > >
+> > > The currently implemented PM domain providers are all specific to
+> > > a particular system on chip.
 > >
-> > The Verdin CTRL_SLEEP_MOCI# pin signals the carrier board that the module
-> > is in sleep and it may switch off unneeded power.
-> >
-> > Control this pin with a regulator power domain controller which uses a
-> > fixed regulator with a gpio enable.
-> >
-> > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
->
-> Thanks for your patch!
->
-> > --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
-> > @@ -92,6 +92,7 @@
-> >
-> >  /* Verdin PCIE_1 */
-> >  &pcie0 {
-> > +       power-domains = <&pd_sleep_moci>;
->
-> This overrides "power-domains = <&pgc_pcie>;" from imx8mm.dtsi...
->
-> >         status = "okay";
-> >  };
->
-> > --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> > @@ -53,6 +53,14 @@
-> >                 };
-> >         };
-> >
-> > +       pd_sleep_moci: power-domain-sleep-moci {
-> > +               compatible = "regulator-pm-pd";
-> > +               label = "pd_sleep_moci";
-> > +               power-domains = <&pgc_pcie>;
->
-> ... and here you work around that by re-binding <&pgc_pcie>.
->
-> I think you:
->   1. must not override the power-domains property for pcie0, as
->      conceptually, the PCIe bus is still in the on-SoC power
->      domain. What if some lanes are connected to devices in
->      pd_sleep_moci, but other lanes are not?
->   2. should only use pd_sleep_moci for the off-chip devices that
->       are actually controlled by the corresponding regulator.
+> > Yes, power domains tend to be specific to an SoC... 'power-domains' is
+> > supposed to be power islands in a chip. Linux 'PM domains' can be
+> > anything...
 
-I fully agree.
-I wanted to send along the implementation commits for the power
-domain controller something which actually uses it and which
-did work in my testing.
-That is why I marked this as RFC and I know that more
-work is needed.
-
-Cheers
-Max
+I don't see why such power islands should be restricted to a SoC. You can
+build the exact same idea on a PCB or even more modular designs.
 
 >
-> > +               power-supply = <&reg_sleep_moci>;
-> > +               #power-domain-cells = <0>;
-> > +       };
-> > +
-> >         /* Carrier Board Supplies */
-> >         reg_1p8v: regulator-1p8v {
-> >                 compatible = "regulator-fixed";
+> > > This allows to use the "regulator-pm-pd" driver with an arbitrary
+> > > device just by adding the 'power-domains' property to the devices
+> > > device tree node. However the device's dt-bindings schema likely does
+> > > not allow the property 'power-domains'.
+> > > One way to solve this would be to allow 'power-domains' globally
+> > > similarly how 'status' and other common properties are allowed as
+> > > implicit properties.
+> >
+> > No. For 'power-domains' bindings have to define how many there are and
+> > what each one is.
+>
+> IMO "power-domains" are an integration feature, i.e. orthogonal to the
+> actual device that is part of the domain.  Hence the "power-domains"
+> property may appear everywhere.
+>
+> It is actually the same for on-chip devices, as an IP core may be
+> reused on a new SoC that does have power or clock domains.  For
+> these, we managed to handle that fine because most devices do have
+> some form of family- or SoC-specific compatible values to control if
+> the power-domains property can be present/is required or not.
+>
+> But for off-chip devices, the integrator (board designed) can do
+> whatever he wants.  Off-chip devices do have the advantage that it
+> is usually well documented which power supply (if there are multiple)
+> serves which purpose, which is not always clear for on-chip devices.
 >
 > Gr{oetje,eeting}s,
 >
