@@ -2,109 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF8554CBD5
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 16:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E4254CC87
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 17:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344360AbiFOOyL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 10:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S1348683AbiFOPTJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 11:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344116AbiFOOyK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 10:54:10 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEDA2A713;
-        Wed, 15 Jun 2022 07:54:09 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z7so16509457edm.13;
-        Wed, 15 Jun 2022 07:54:09 -0700 (PDT)
+        with ESMTP id S1347617AbiFOPTJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 11:19:09 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE8A2E09B;
+        Wed, 15 Jun 2022 08:19:07 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 20so19420013lfz.8;
+        Wed, 15 Jun 2022 08:19:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6Clv+JrvN5xAcPquJt0P4YgFaBe3M0B8HPlEXIs7o5U=;
-        b=HrtHARPp1Xww8CBJG9O4NBrrfnhmef+9FXRkvUyzllK9op+K9cZGY1fehxk9grKgHY
-         GXG8hbFJmnK1xu6+2TrgrSAG+cB24FJfiAfYcRiwqWkj93oaOlOQqXuMVjpVunw42Eh9
-         Ic01ViH0sn0OgIrXBmb8MLUd+fSF/U+W/2yweKyF/YHyYD4tqXI5TqM2RNiaSZ7HyAGE
-         LhvJfMTrdPlcViZc1fR8Vog7zFnv1USEDDM/EHuikEP0KxjT28VAOXnok/WMudsIIFPe
-         okjTVnGvKusxFqBBd8C8vPywNotJLvPbxzNfUfkack9T4AHjFsmz+LTgoOBacXGwC5dc
-         QzxA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rxmL7VaieafuZ6quU52kIVB4lyDd5PT6tuLwul05VPc=;
+        b=eDd+GB9xWpKXivIdy2gmo9fuwqLcBWKPc8BfczR/uUamhxb1rVI7w7DM1KAjO1OxXy
+         2++nHjCfTMjc2X/HhvDRlwlcJMI/0yk6t8S6slTGw8b+0Sj2RS/DH9Nc4A+pty4DbnX0
+         jzMOJtkxKns89wT26VSA7npXXthASfWZd0i9YloAKxRP7D3KSfvLMjwVyUSxSdMNGX5P
+         EdC1fkW7uY+Kv22aJMXe/QGYFZSp5rPJ93KFxGanGx5tW/XRO2bAINFaPXaguLgFYCsU
+         cXf7PSdkt9D5xk6PJ8bMCaRKHoZhsPrfAjzrGq6X7mYMdQV1eq4azoqIKiiwZMiDVJWY
+         y9eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6Clv+JrvN5xAcPquJt0P4YgFaBe3M0B8HPlEXIs7o5U=;
-        b=rESDyNqitKt9DVc3tJQHg08ZM2pQCR13Znn4XzQSAUXoy3Zv3ZWl78v25nVzvLaj/W
-         JqI+Tvy8SY0AcYcewMN1eDnxu8UpuD5ARZuONwe5R8sCwbEHfiSg7jklqYTrHoMgIW+M
-         V2EBW7NY67MUtqHPY1Ay/KvTHrTfQX5y/NyrSRXC++dsOepgPozrvPKgF1HZUZy38ilb
-         jKztQAbv8k/JmUXYhMcJ1tI4cAgifFJt/dDD9gGpx+7oVOhV32xk2/NuWFJ1rWjVC4al
-         X69apCMDuNt1JDoi+ydKn2JtHnp70LBQgoKRV3+O1lo8inBKeQEjU4ZQQlfWH1l8pz0U
-         BGIw==
-X-Gm-Message-State: AJIora+SoCENK6tjuysj1qCh2ASUih1+7zCp9TGoq98d7SKNdQKXxP7C
-        p5x60LuWc6eYjymcP484TwI=
-X-Google-Smtp-Source: AGRyM1ujs1HeXOasq6DHF83w4PPcRH7kW5sgTud79flC34uP4Hx/vJhKCSdoYRUWd1SFHAiZyCK7Fw==
-X-Received: by 2002:a05:6402:51d4:b0:42f:b38d:dbb9 with SMTP id r20-20020a05640251d400b0042fb38ddbb9mr100501edd.255.1655304848997;
-        Wed, 15 Jun 2022 07:54:08 -0700 (PDT)
-Received: from localhost.localdomain (p5dcfe5fe.dip0.t-ipconnect.de. [93.207.229.254])
-        by smtp.gmail.com with ESMTPSA id y2-20020a1709063a8200b00706287ba061sm6341665ejd.180.2022.06.15.07.54.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 07:54:08 -0700 (PDT)
-From:   Saravanan Sekar <sravanhome@gmail.com>
-To:     sre@kernel.org, lee.jones@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
-        lars@metafoo.de, andy.shevchenko@gmail.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, Saravanan Sekar <sravanhome@gmail.com>
-Subject: [PATCH v3 6/6] power: supply: mp2629: Add USB fast charge settings
-Date:   Wed, 15 Jun 2022 16:53:57 +0200
-Message-Id: <20220615145357.2370044-7-sravanhome@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220615145357.2370044-1-sravanhome@gmail.com>
-References: <20220615145357.2370044-1-sravanhome@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rxmL7VaieafuZ6quU52kIVB4lyDd5PT6tuLwul05VPc=;
+        b=USK80m7g4WB0rTUtelhRcAh7XbDdi5gRQIjBHxImFB7cJ8gaz4OxRBsiJK6evFu6CM
+         M2nOiKdguBkzmUgwll8NXwL0VeMgDvnZtyoDtuiX2x2eGnRvGUhZrGkUWrP03ESIPPBE
+         +EgZJ30TAvt1Gw/PCr/QvZlvz53fy+JF6Bh1k+l31l7cE1ehpRIWRTMR/l6qchNO4Dms
+         lqpy1wXOtUEF782oEcLW0PU87cM7okcQIDKE6n87EYjh5u31Hl1V9FNAx8hzJNWMFdJR
+         dUbBG2msDj4MoK8bViecNTEb+34V+OK5e+9OMDae4WTt4kcUINx4tRuA1s3pjbEWdRln
+         vDog==
+X-Gm-Message-State: AJIora+/CZCDwWEJK/WRAtnH8M9anyrhjm/FlwT/lzzs+1AwtOaMBkdv
+        XGk8lw9MIyHX66RKsF17w316YSFudyw9M5xWrg8=
+X-Google-Smtp-Source: AGRyM1tIVRm/39MptkbLVKBy49NSklljQ82n+xmsnIJa7nbocpR7rEVrKlPaIUmUunQHP0jLv+bO+LOC4SWPpVeUIns=
+X-Received: by 2002:a05:6512:234e:b0:479:3bb1:8d3c with SMTP id
+ p14-20020a056512234e00b004793bb18d3cmr19378lfu.478.1655306345755; Wed, 15 Jun
+ 2022 08:19:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220609150851.23084-2-max.oss.09@gmail.com>
+ <CAMuHMdWm5WV7L=HJnysw76ObG_QPWicSH1kGg4k-GL8nNHd_SQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWm5WV7L=HJnysw76ObG_QPWicSH1kGg4k-GL8nNHd_SQ@mail.gmail.com>
+From:   Max Krummenacher <max.oss.09@gmail.com>
+Date:   Wed, 15 Jun 2022 17:18:54 +0200
+Message-ID: <CAEHkU3Vw-Yt6COpJ=K-98CA5dH-iD6AnSHwuBFmQg8yfNsgb-w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/5] dt-bindings: power: Add bindings for a power
+ domain controlled by a regulator
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allows the user to change the USB device fast charge setting to advertise
-host on enumeration helps to accelerate the charging cycle. Altering this
-value resets USB existing connection.
+Hi
 
-Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
- .../ABI/testing/sysfs-class-power-mp2629         | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+On Tue, Jun 14, 2022 at 9:24 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Max,
+>
+> On Thu, Jun 9, 2022 at 5:16 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
+> > From: Max Krummenacher <max.krummenacher@toradex.com>
+> >
+> > Adds binding for a power domain provider which uses a regulator to control
+> > the power domain.
+> >
+> > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+>
+> Thanks for your patch!
+>
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/regulator-power-domain.yaml
+> > @@ -0,0 +1,58 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/regulator-power-domain.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Power domain controlled by a regulator
+> > +
+> > +maintainers:
+> > +  - Max Krummenacher <max.krummenacher@toradex.com>
+> > +
+> > +description: |+
+> > +  Power domain provider which uses a regulator to control
+> > +  the power domain.
+> > +
+> > +allOf:
+> > +  - $ref: "power-domain.yaml#"
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - regulator-pm-pd
+> > +
+> > +  power-supply:
+> > +    description: The regulator used to control the power domain.
+>
+> I guess there can be more than one?
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power-mp2629 b/Documentation/ABI/testing/sysfs-class-power-mp2629
-index 914d67caac0d..b386d02cb010 100644
---- a/Documentation/ABI/testing/sysfs-class-power-mp2629
-+++ b/Documentation/ABI/testing/sysfs-class-power-mp2629
-@@ -1,3 +1,19 @@
-+What:		/sys/class/power_supply/mp2629_battery/usb_fast_charge
-+Date:		June 2022
-+KernelVersion:	5.20
-+Description:
-+		Represents a USB device fast charge settings.Altering this
-+		value resets USB existing connection
-+		USB DP:DM[0:0] 0.6V : Hi-Z
-+		USB DP:DM[0:1] 3.3V : 0.6V
-+		USB DP:DM[1:0] 0.6V : 0.6V
-+		USB DP:DM[1:1] 0.6V : 3.3V
-+
-+                Access: Read, Write
-+
-+                Valid values: Represented in bit DP & DM setting. Valid
-+			      range is [0, 3].
-+
- What:		/sys/class/power_supply/mp2629_battery/batt_impedance_compen
- Date:		April 2020
- KernelVersion:	5.7
--- 
-2.25.1
+The proposed implementation currently only uses one.
 
+When I did it I considered more than one regulator a rare use case and
+I was under the impression that the generic power domain code
+can handle multiple power domains. With that in mind I assumed that
+one would create multiple regulator-pm-pd instances each controlling
+one regulator and add all of them to the power-domains property of
+the power domain consumer.
+
+But it seems the implementation requires the power domain consumer
+to handle that case in its code rather than relying on the generic code. [1]
+
+Do you see a real world use case to handle multiple regulators?
+
+Max
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/domain.c?id=8cb1cbd644d5bba5b72eedd632f249c1c677b792#n2290
+
+
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
