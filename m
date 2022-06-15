@@ -2,144 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A77B54D3FB
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 23:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3626A54D414
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 23:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346937AbiFOVx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 17:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S1350181AbiFOV7z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 17:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245104AbiFOVx6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 17:53:58 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2102633349
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 14:53:56 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id l18so14733807lje.13
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 14:53:56 -0700 (PDT)
+        with ESMTP id S1349889AbiFOV7n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 17:59:43 -0400
+Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-ve1eur02hn2201.outbound.protection.outlook.com [52.100.10.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3725F54BFA
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 14:59:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MH8nkg/IUodr0iRTFBUn6wmoSFnRj4z1JPAWds+7l6J7uO763FrOL/0I0oZA/TAvOrs4RXviLwq99qxvRYP80ofaHbP2H0pRxP+X+tiBxEjuCnLNVQQ8svrgc1BgYTd42fy9M+UW0L/KfpJtiRCV7AGo8M22Zc18hxAgKnVS6uW5owuCSkGYD1608Oip+11ZgmYoWcMv8eeN4pOALuT/5wGxZ1fqRux3pSbhr6pgdLsN6IMG+f5nBWD1mNdS9q51GbeNKVBzAzQzy7DneZX/GHWpw5GCCSw2MR8bjPPAZ/APOrgDfWettzrJ3BRRrEmSFp+xm0hyigXWQ1Nb1vCg1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lQsm62DnO3DRMaTO7/AWxijWtNxIrL/VW/Qe6xhipJU=;
+ b=XGgypmEHy4uWDDIY4TCejAXQLvmzIl3vCgXFtFE8nbzPLQ4nPdssDIm2IgstPENYQHtcMyDDcOK0OEkYI6SVYq+bsoL7Y2fAeOC/UTncfCw2rccFUfDb6gwOMMjxP20+rKRqo6kfpK+80TrbhQbo6OHaRXZhwEtvukPZ61meXSwfCcwNexHBCEDjYERadUAyBldzJ6Sj/wYjK1nNw7afc67mkW9w4O7pt/DuMCr2oo96vOgrh3PiFWfHIgWQzu9t8IW4kKMUBBNV4+4tiBPBLT17POGfrzdNLhCP9IE8f0dFb9HqkrbWSygwjZoSYVsRc83BgDDuHJZ07JIbGU9e3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=permerror (sender ip
+ is 91.151.71.70) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=solairedirect.co.za; dmarc=none action=none
+ header.from=solairedirect.co.za; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iDVg/FA0pYo41spuROBgnDvSwaRGKSPT5P3fJJ2BRE8=;
-        b=MKK7fdiA02lh91kUWcFomPfAYzD439YFS5if+A5yoJRQTfPiB2he3HQs9P2LyTXay8
-         5cbDmFk0HwO2gLoFflOESfo4m1l1dtTsFVsxTqfdeXd8ssTonS3ecfwsuXEZFLgMFSrv
-         z2xTSKgAuTNs3kRoDUUAe0kwstm+YnL+/uEONkJUvyOM4MG0S15ZCbBNfoCk8LhUecL8
-         9mup20brXoYO0GaFoESehVo0DfbuKOF4BHtXlxRruclV71Ib8elzCZXZBNMeN/Anvq3Y
-         XlgkXI242oRP3LW7yofnUcLseZg0b3j9skjFxdExIq1aGCbvOPAkWVetIiN1AC7jN4QI
-         1IAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iDVg/FA0pYo41spuROBgnDvSwaRGKSPT5P3fJJ2BRE8=;
-        b=FpWYrwsqT/xrNH4eSXuCGEkV0DzOMyzmuUo75AB8liKaf0PQxqHGeiy0IkoR/HTFGe
-         gyDJi+Dtp2wFDhQ0X2ipUN3BPopG95QRdq0Oh/m7zKAnu5zAwJKEq0t4mBKMx3ER1tvL
-         M8DnS05dj64HSpayUE9hHuN5ae79gMzCdGsS2Vf6vpeiZBVEygf9iNS9MLpMZ/W3T8Sv
-         AFzfe5dzHTK9CjwGxB+NvdiF3gi9i1iF/bZ7aEgv0oGak7+d9BRGoLEMBFtDw6Zcb8Ci
-         /WJ9OQlQOOrRzhYaugOxG6od+xUcmQ6Totd+5XGED1j5rsmVatKx19Vr8iil6wSB5Dg0
-         6YGg==
-X-Gm-Message-State: AJIora9k6+T8b0KrRr3J+gOzuCoiQB3IMNAo+wSshpUP3Tljt4+IcJWt
-        AvOh/uyhLDFeHmpXo7kBUZ0kr26dT1zh8bEnoX6doQ==
-X-Google-Smtp-Source: AGRyM1vOL4LUrKEzNwVxPL1XJb7vkDMLUxYNns3++dlDw+6192WV7aeknRNHvyyF/yMzKG4BFZJ240kSVxHoM7FtTwY=
-X-Received: by 2002:a2e:818c:0:b0:255:a6c5:4304 with SMTP id
- e12-20020a2e818c000000b00255a6c54304mr893444ljg.367.1655330034492; Wed, 15
- Jun 2022 14:53:54 -0700 (PDT)
+ d=solairdirect.onmicrosoft.com; s=selector1-solairdirect-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lQsm62DnO3DRMaTO7/AWxijWtNxIrL/VW/Qe6xhipJU=;
+ b=QIDFLLW96SG6XTwJpZJF5P+FAwhJ8oMYrxoiUoBjnBaoE94YfhHZbhK4CgWnNx5URv1giukIE63oot9SLktHeCq2NymIZdoqJrv9vqzCgkTqkcx8ySfuf96Blj0JyDOFFwVPrBUaM9s/pb3h5v8ernOUmw1PEvjZKuqwwih1D48=
+Received: from DB6PR0601CA0013.eurprd06.prod.outlook.com (2603:10a6:4:7b::23)
+ by AM6PR06MB5015.eurprd06.prod.outlook.com (2603:10a6:20b:6b::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16; Wed, 15 Jun
+ 2022 21:59:40 +0000
+Received: from DB5EUR01FT086.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:4:7b:cafe::56) by DB6PR0601CA0013.outlook.office365.com
+ (2603:10a6:4:7b::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14 via Frontend
+ Transport; Wed, 15 Jun 2022 21:59:40 +0000
+X-MS-Exchange-Authentication-Results: spf=permerror (sender IP is
+ 91.151.71.70) smtp.mailfrom=solairedirect.co.za; dkim=none (message not
+ signed) header.d=none;dmarc=none action=none header.from=solairedirect.co.za;
+Received-SPF: PermError (protection.outlook.com: domain of solairedirect.co.za
+ used an invalid SPF mechanism)
+Received: from SDSV152-VM.solairedirect.lan (91.151.71.70) by
+ DB5EUR01FT086.mail.protection.outlook.com (10.152.5.118) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5353.14 via Frontend Transport; Wed, 15 Jun 2022 21:59:39 +0000
+Received: from [206.72.197.122] ([206.72.197.122] unverified) by SDSV152-VM.solairedirect.lan with Microsoft SMTPSVC(8.5.9600.16384);
+         Thu, 16 Jun 2022 00:00:12 +0200
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20220615203605.1068453-1-athierry@redhat.com> <CAPDyKFrLbNsdxfoWRfYBUfijLF0m7XjtH5_aY7LLmzbW5pkn9A@mail.gmail.com>
-In-Reply-To: <CAPDyKFrLbNsdxfoWRfYBUfijLF0m7XjtH5_aY7LLmzbW5pkn9A@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 15 Jun 2022 14:53:18 -0700
-Message-ID: <CAPDyKFqk4ngQ+DAMt=wKAqfJBHN3+bx3dTJURztwgNeEP-Ow_A@mail.gmail.com>
-Subject: Re: [PATCH RFC] base: power: replace generic_pm_domain spinlock by
- raw spinlock
-To:     Adrien Thierry <athierry@redhat.com>
-Cc:     linux-rt-users@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Eric Chanudet <echanude@redhat.com>,
-        Brian Masney <bmasney@redhat.com>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hi
+To:     linux-pm@vger.kernel.org
+From:   "Emerald Johansson" <marketing@solairedirect.co.za>
+Date:   Wed, 15 Jun 2022 17:59:34 -0400
+Reply-To: emjo680@gmail.com
+Message-ID: <SDSV152-VM3uPpSixFo0004701b@SDSV152-VM.solairedirect.lan>
+X-OriginalArrivalTime: 15 Jun 2022 22:00:12.0526 (UTC) FILETIME=[497D40E0:01D88103]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7faf092b-5d5c-4ad4-409e-08da4f1a586a
+X-MS-TrafficTypeDiagnostic: AM6PR06MB5015:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR06MB5015578A3B1ABA9D1EE77405EBAD9@AM6PR06MB5015.eurprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?N+vJtQRUiPuwh1bI50NgRJk+61+ZJ35u9UJnadKJ7+nZ01hG2jAL5GMDql?=
+ =?iso-8859-1?Q?+xe3+JYoQAA1R5fkSXBEdYv3BnHOv3hV/+2k163KtCr2v/LMYFCaw5pORl?=
+ =?iso-8859-1?Q?ArbVZTyvyhhfIVh5kBLhhuloOyoj7LSTwW0td3h3FVuTVVsuxXiATm6478?=
+ =?iso-8859-1?Q?q/CiK/ywMBkQ2iuGvzjV472IdCovZULqtW3+p9S+bOxisw4db8lfLtik22?=
+ =?iso-8859-1?Q?LM8gMBSR9Dd1ZL35XjXpouhnAQqeGOwOA49wggxctTcU81Q08f0gClaFAp?=
+ =?iso-8859-1?Q?dmt7X2mvz1YKmeEv+0QcnwSSwExz5xKr9iJVhqY2Z5H4W0qQMt6X2aHdcf?=
+ =?iso-8859-1?Q?CKqWZDbWAqyJ1YTm984+LoKoY3QVGYqQGsU+Zez+2LtO+oUcMmgkDyBHl3?=
+ =?iso-8859-1?Q?xIm8rp8+p332DYeQzXmLqCpVJJZjXU2THqIY1SnbmCe7GKsNzMBdVH0xyQ?=
+ =?iso-8859-1?Q?Mh6461HAd1i09FZm2tGYMUxn4VICqRw+qoah2E5yFX+lgdTYeUfnXkvGv2?=
+ =?iso-8859-1?Q?h0GDdRNkFlbxXfpc4anPNcaZjb0iLsmOfcLVwvYlDIXQVe5UdRLaAyL4xN?=
+ =?iso-8859-1?Q?y7VugH4oEcGSj6Y4cZ98YckFh8NwTHs0fU6U1ePDKaPyC7DNkDHQv6nEi8?=
+ =?iso-8859-1?Q?sGZgimwSOLYpsgQ5hMxIG2AzVMc2WrsCD8thd72IszGOMSvMbBBFd0XCiS?=
+ =?iso-8859-1?Q?MfpZ2gTeE3uNtYnBQ8RGO187LXkbAh6BpL+hYdXgri6VXrungxQwi0Q4L2?=
+ =?iso-8859-1?Q?+1aIe2XvpBylZnDAiGAVSfLgj7ja+XQ/puYJX9JiC5lhMrfrynNqcaqlqS?=
+ =?iso-8859-1?Q?5En6J7x3lztHq+w5GhKzvJ2wEf3q0cGn4tWglRm11VCo4qhTGfJvoj7OLS?=
+ =?iso-8859-1?Q?FL+4g95RFNxPBnBgOV/LYgMRt5O7s/qJsQH5YiYc0MGH6EWoZY2R5icVrl?=
+ =?iso-8859-1?Q?FXGBwPFsrrEbRHIrinfOw4ZOI5Pq+Aa3tfUpLW3blPqLM8K5ai/73wHH56?=
+ =?iso-8859-1?Q?lod2HfXXgQuCBTMIrtluZOkKI0aFwFBcKfzx8d5R9/OIDIw8Eat87nSFWg?=
+ =?iso-8859-1?Q?KyYVjwMe4mz6FaEqHmF5Y4Y=3D?=
+X-Forefront-Antispam-Report: CIP:91.151.71.70;CTRY:FR;LANG:en;SCL:5;SRV:;IPV:CAL;SFV:SPM;H:SDSV152-VM.solairedirect.lan;PTR:undef-71-70.c-si.fr;CAT:OSPM;SFS:(13230016)(346002)(396003)(39860400002)(136003)(46966006)(40470700004)(36840700001)(6666004)(26005)(36860700001)(6916009)(508600001)(186003)(70586007)(336012)(3480700007)(956004)(41300700001)(47076005)(9686003)(5660300002)(356005)(7116003)(40460700003)(4744005)(82310400005)(86362001)(40480700001)(2906002)(8676002)(8936002)(316002)(70206006)(81166007)(2860700004)(16900700008);DIR:OUT;SFP:1501;
+X-OriginatorOrg: solairedirect.co.za
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 21:59:39.6355
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7faf092b-5d5c-4ad4-409e-08da4f1a586a
+X-MS-Exchange-CrossTenant-Id: 1c138fa9-0b91-4473-baea-5be5feac0f7e
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1c138fa9-0b91-4473-baea-5be5feac0f7e;Ip=[91.151.71.70];Helo=[SDSV152-VM.solairedirect.lan]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT086.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR06MB5015
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 15 Jun 2022 at 14:44, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Wed, 15 Jun 2022 at 13:36, Adrien Thierry <athierry@redhat.com> wrote:
-> >
-> > We've been encountering a BUG: scheduling while atomic while running the
-> > 5.18.0-rt11 kernel on a Qualcomm SoC (see stacktrace below).
-> >
-> > It seems to occur because a spinlock is taken in the PSCI idle code path
-> > in the idle loop. With the RT patchset applied and CONFIG_PREEMPT_RT
-> > enabled, spinlocks can sleep, thus triggering the bug.
-> >
-> > In order to prevent this, replace the generic_pm_domain spinlock by a
-> > raw spinlock.
-> >
-> > [    2.994433] BUG: scheduling while atomic: swapper/6/0/0x00000002
-> > [    2.994439] Modules linked in:
-> > [    2.994447] [<ffff80000810b0ec>] migrate_enable+0x3c/0x160
-> > [    2.994461] CPU: 6 PID: 0 Comm: swapper/6 Not tainted 5.18.0-rt11+ #1
-> > [    2.994464] Hardware name: Qualcomm SA8295P ADP (DT)
-> > [    2.994466] Call trace:
-> > [    2.994467]  dump_backtrace+0xb0/0x120
-> > [    2.994473]  show_stack+0x1c/0x6c
-> > [    2.994477]  dump_stack_lvl+0x64/0x7c
-> > [    2.994483]  dump_stack+0x14/0x2c
-> > [    2.994487]  __schedule_bug+0xa8/0xc0
-> > [    2.994489]  schedule_debug.constprop.0+0x154/0x170
-> > [    2.994492]  __schedule+0x58/0x520
-> > [    2.994496]  schedule_rtlock+0x20/0x44
-> > [    2.994499]  rtlock_slowlock_locked+0x110/0x260
-> > [    2.994503]  rt_spin_lock+0x74/0x94
-> > [    2.994505]  genpd_lock_nested_spin+0x20/0x30
-> > [    2.994509]  genpd_power_off.part.0.isra.0+0x248/0x2cc
-> > [    2.994512]  genpd_runtime_suspend+0x1a0/0x300
-> > [    2.994515]  __rpm_callback+0x4c/0x16c
-> > [    2.994518]  rpm_callback+0x6c/0x80
-> > [    2.994520]  rpm_suspend+0x10c/0x63c
-> > [    2.994523]  __pm_runtime_suspend+0x54/0xa4
-> > [    2.994526]  __psci_enter_domain_idle_state.constprop.0+0x64/0x10c
-> > [    2.994532]  psci_enter_domain_idle_state+0x1c/0x24
-> > [    2.994534]  cpuidle_enter_state+0x8c/0x3f0
-> > [    2.994539]  cpuidle_enter+0x3c/0x50
-> > [    2.994543]  cpuidle_idle_call+0x158/0x1d4
-> > [    2.994548]  do_idle+0xa8/0xfc
-> > [    2.994551]  cpu_startup_entry+0x28/0x30
-> > [    2.994556]  secondary_start_kernel+0xe4/0x140
-> > [    2.994563]  __secondary_switched+0x54/0x58
-> >
-> > Signed-off-by: Adrien Thierry <athierry@redhat.com>
-> > ---
-> >
-> > This patch fixes the bug but I'm not sure if this is the proper way to do
-> > so. Suggestions for other ways to fix this are very welcome.
->
-> Honestly, I am not so sure about this either.
->
-> Turning the lock into spinlock_t into a raw_spinlock_t, may have the
-> effect of spreading into constraints on the genpd providers. Thus
-> those may need to be converted to use raw_spinlock_t too (assuming
-> they use a spinlock_t and GENPD_FLAG_IRQ_SAFE). On the other hand,
-> there are a limited number of genpd providers that this can become a
-> problem for, if any, so maybe it would not be a big problem after all.
+I hope that you are at your best and doing well. The purpose of this letter=
+ is seeking for a pen pal like friendship and I'd love to and be honored to=
+ be friends with you if you do not mind.. If the Idea sounds OK with you, j=
+ust say yes and we can take it on from there. I look forward to hear hearin=
+g from you.. My name is Emerald From Sweden 36 years , this will mean a lot=
+ to me to hear back from you.
 
-Ohh, one more thing. For cpuidle-psci in the idle path, we call
-pm_runtime_get|put_sync(). Those calls end up using another spinlock_t
-(dev->power.lock). That seems like a similar problem, but may be
-harder to solve.
+Warm Regards.
 
-[...]
-
-Kind regards
-Uffe
+Emerald
