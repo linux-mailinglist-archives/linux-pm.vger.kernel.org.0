@@ -2,38 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1C454CFF9
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 19:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF21654D01C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 19:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242433AbiFORci (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 13:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S1357107AbiFORhu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 13:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357457AbiFORcV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 13:32:21 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 10:32:14 PDT
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 236914C418
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 10:32:13 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2049.outbound.protection.outlook.com [104.47.22.49]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-34-Q9-7JXeJNvGGUxgK2OMg-A-2; Wed, 15 Jun 2022 19:31:04 +0200
-X-MC-Unique: Q9-7JXeJNvGGUxgK2OMg-A-2
-Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
- ZRAP278MB0303.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2c::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.14; Wed, 15 Jun 2022 17:31:02 +0000
-Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
- ([fe80::c52f:2a3f:8cf5:6144]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
- ([fe80::c52f:2a3f:8cf5:6144%4]) with mapi id 15.20.5353.014; Wed, 15 Jun 2022
- 17:31:02 +0000
-From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
-To:     "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S1343541AbiFORht (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 13:37:49 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC62534BB3
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 10:37:47 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id f65so11999113pgc.7
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 10:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WpP5cddAnzLQriZlTTuX+6gvB2Px39O6hhSX8MW8+gU=;
+        b=YjWBPN8mSJgpHLhvdszIjnqA3e+WeuiYvKwQZbmckwJ3KWcPwx5dLMJcUlB68hyYe/
+         4IgyE8adJ8aIUsD+HRBRpKG/uQ52PlesL1JCaKtYjh5Dc1Sk5zcJJz1aRLgM/WKu9hzX
+         Uu/86aXV006x3egv/udG74jrC+aB30v3DWYsaabwhV9Q0Pv8F3RdGU8Ibm9XQ5TkrfHy
+         sNXuQzpd4SSNIg+XL05h3yYlsJxrZSJBycqJW0vvJztjoZFkKR2Bujf6X75/p44FUYsQ
+         8SlgZRg7nBmPqCWA1ET3W1khR7I23jVa4mULToeqkmUaWzTZ9c5z9QFmEGUJKGcOgri5
+         WWlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WpP5cddAnzLQriZlTTuX+6gvB2Px39O6hhSX8MW8+gU=;
+        b=jbYTkmfH9FtOtWfN+EIpTZva58V9lOmtLACTPMa6C0dYfoAOEB+bkClvhW3x0EMhnV
+         fm9tZ/jE8kZNOFqrDFicYzCZw2a/0+ZcLL1c5yDue41VPSrg9Rp9UM7wxX0lm9aBoXow
+         pFH+QOpZGo/UEB/2kkofhJM4gZngmW3cGd/9ZRFQjC6SEssMHEakNueT5N1iDAPqtnLh
+         NwSttxbIP7dhJkTj9HZFCOAeYD0D9lHymtuF1uGxrBYKR08vAgTA6UwoIz5/jEa8DvIs
+         iY5FJrNVgCmzFXFPdLv9LcJjPh3aRAdrJk94KPVhkRXVLJN/xaYGJQD4RvJ51LlLcqdE
+         9OeA==
+X-Gm-Message-State: AJIora9gE0eqdPiuuQyzEnfDCO653k4T5sODBIhpCKpiKNXqV5897Zub
+        Sc6pHBBkoTJGYHZCkLYUKHORpw==
+X-Google-Smtp-Source: AGRyM1vO1+DsFXrNV2KKyNHTu86bP04ojHE1FtzY96f3NSmEr7TeCbAHnmFgRhkpgujD7eDzkV9y0Q==
+X-Received: by 2002:a63:6947:0:b0:3fe:22d6:dfae with SMTP id e68-20020a636947000000b003fe22d6dfaemr754310pgc.185.1655314667388;
+        Wed, 15 Jun 2022 10:37:47 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id cd25-20020a056a00421900b0050dc76281f0sm10094269pfb.202.2022.06.15.10.37.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 10:37:47 -0700 (PDT)
+Message-ID: <df432e88-8688-c229-5ef0-8ba001b72908@linaro.org>
+Date:   Wed, 15 Jun 2022 10:37:45 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+Content-Language: en-US
+To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
         "geert@linux-m68k.org" <geert@linux-m68k.org>
-CC:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
+Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
         Francesco Dolcini <francesco.dolcini@toradex.com>,
         "robh@kernel.org" <robh@kernel.org>,
         "krzysztof.kozlowski+dt@linaro.org" 
@@ -60,94 +86,19 @@ CC:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
         "festevam@gmail.com" <festevam@gmail.com>,
         Max Krummenacher <max.krummenacher@toradex.com>,
         "broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-Thread-Topic: [PATCH v1 0/5] power: domain: Add driver for a PM domain
- provider which controls
-Thread-Index: AQHYfBLxjDqdjV5f9kmE6LEx7lVJ7a1Nu9WAgADK8ACAAiYIAIAAEgKAgAAEZgA=
-Date:   Wed, 15 Jun 2022 17:31:01 +0000
-Message-ID: <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
 References: <20220609150851.23084-1-max.oss.09@gmail.com>
-         <20220613191549.GA4092455-robh@kernel.org>
-         <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
-         <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
-         <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
-In-Reply-To: <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8f53f238-f9dd-4895-142e-08da4ef4d17b
-x-ms-traffictypediagnostic: ZRAP278MB0303:EE_
-x-microsoft-antispam-prvs: <ZRAP278MB03036257D1B225AF8FA850A8FBAD9@ZRAP278MB0303.CHEP278.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0
-x-microsoft-antispam-message-info: CSHSg1YmKLVel/moaEGTPduQCazYos12OdNyDmT+vBJ23jZ7wB7ELYCbh+u4cayt26hnrU/4dDhO9m6U5gl0+jjiwUDIcpJfP1c6UhKNPWdxZuD0Fl6Gc9xea6yZ96wn8tLRZinn38NXutJz9xKtJwhpqxQBhpgOEhXb/kubrR9jLVurH+M+7JdxiReLk7um6TnfwzNC3mhW5lAjcnFJiJmNRPh/ODSTOSapvTek0/Ydwo8WsTXD6vYtaItrN1Dcvv/grUimUMvcMseToc4STVzkNxbYIkwTAfetBb5hNFFdmzvknpF6rymebtJHz3+XKykJCdH/fMvQ4EA/sdCbiEGyqIg/s6yzO8mPSpF80N9M4GlXlNEss4KsSBHGsGDGZu5A9f+sb3x1RClcGvnH1RVRzYsIwl+pFgKuwvyogToApfkZv0ScdZe7xY97u8jAOoJaH/IuC/XwtkTCkaZMjl7MYxrrJl79JreQXxxKU5u6p/tnIqMToO6E7L4SeOaz+0hJ+zhPimHCJM4BmX1ur+cmoQ99BEpd8xtiPHgW0iD6ahWutMZALm2gMkmhoabdTLfXxrxDqkwOrNclgBdvq1ADqWFwy3NpqAeBoV2EAkmyGW7nlBl7SqVslwRjLokamWk2Dx6asdAI5tTasXKDWJp1edpvNtMByPnxLPCTcQk7Gjai625mFqf4zDVzaYnzqOPYIHpTloKB27brKmuQ6Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(396003)(366004)(136003)(346002)(26005)(53546011)(4326008)(66946007)(66556008)(66476007)(66446008)(64756008)(6506007)(6512007)(2906002)(2616005)(86362001)(8676002)(38070700005)(91956017)(41300700001)(38100700002)(316002)(110136005)(76116006)(36756003)(54906003)(5660300002)(44832011)(508600001)(83380400001)(186003)(71200400001)(8936002)(7416002)(122000001)(6486002);DIR:OUT;SFP:1102
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YWwwMnNXSkZud0lneUxPeFB0M1VQMXc1MmhhYVFGNlh6aVhtaENWcVg4NnhU?=
- =?utf-8?B?Wm5nTWZFcHd6ZnFNYmUwWXgwQTFBcE1CVlRqQTdWeHJnZjQwZ0pGM2dPdlVp?=
- =?utf-8?B?eDdQWlRkcC9FU0VrY094TllwdkJ2R0xxQlR3RVBJdmhPZnlrNjNQSG55M2Ns?=
- =?utf-8?B?STl0cCs4V1RJS2cwUFFxSzJmTU1tdnZOVEZJZDNHM0gwKzRaTXRvVndMMldv?=
- =?utf-8?B?bjljcFFqM0lRT01aZkx5aUZ4aTVKeHc4VGVGVEU5L1p3bjRLZnhrSTR0eFlT?=
- =?utf-8?B?MVBrRE1ZSHJEWFNGLzJVWlpqNHZKZjd5NUI3SGF6SW1xdzF6c0ZRaEw1d2hP?=
- =?utf-8?B?WmxQRGk4TU5MbUJoMjdiSlo0RDJwUlNka2lCL2p6SFRwdVYrSHhBa3U2T1NG?=
- =?utf-8?B?MHlUa3VMZGtQZW9UYmdiRC9NeWNQbENCd1pZQjY1NHB6RWJMOE9ZalJIeEZT?=
- =?utf-8?B?SmEva2doUVZqc0NDZFRHbEp1eFJ2MnJySlZiS04wRzBUUnBlMlduT2Y0bTN4?=
- =?utf-8?B?ekNDM0U2Vzdpak1wQnBNQ29jZm5yK0paN1YzSEtOOUcyWlJ4OUZxRTJnNEpF?=
- =?utf-8?B?c1JpS2N5cS9HT3hJSHFKY3VSaGIzWWRpZGUxNnFlaUlGS1dQUW1OQ1hPYUJs?=
- =?utf-8?B?QnBtTHdxRjRzRmFiMTBwbU9WdmtIeDRWUm9FZ1JzZ29zbkMyOEN6ZHp3RzJC?=
- =?utf-8?B?cS91bGVLdU9IaDNFSUlmRVJRY0xKVzQwYzNOOUpCWjZFR0hNbE9KMTBtSDI3?=
- =?utf-8?B?ZmFmMldGRG5Sb2RCZkpHUEVhZmNZQ2VtaFE3bkVlaFRrMC9zclpEc2twUU52?=
- =?utf-8?B?ZEhEYXcxVXU1RmVoSjdaNjlkUlJVVzNIamFWSzFnVVF0aHg1Y2hDWndRUVNE?=
- =?utf-8?B?WHNpNHpCNlYzcjkvSThTWTJ2NERpYW42Zkt6TlU1Ryt6T2dTZzcyVGpIUDNT?=
- =?utf-8?B?a3N5RUY0cFo1cG1wRElaZ3FRMjJwRGJVYmVhTC93SEZZOXQ0aXNLR3BzeFlG?=
- =?utf-8?B?eUFCdGRTdU9SVzI5VVdNM3RlU3ROekpDMlc3bS90eXN2emtHNHdocG1MSENs?=
- =?utf-8?B?RTJiOEorNjZ5Q09mTm5oZGppS1NtVUNHdUZQcEZOSGU0Z0RSenhCVC9YVVk2?=
- =?utf-8?B?amphNXJpWU45aCsxUmduYkkrVm1JSGwzb1dNaE1UbUpOc1VpeG9nSTY2NmNl?=
- =?utf-8?B?SFROYnBrWUpjdXErYVVSTi82cGQvazZXMEJzUzdZUFJlRDgzN2tZSm01TzJn?=
- =?utf-8?B?Z1Zndy9jenJzODZMeWVyNGc0TnRwalVhZmpaemR1bWt0T3VoTm5RWG9pai83?=
- =?utf-8?B?ZHdYckRBSUtjNWU5ZDBRcG51VzQva3kwa0I1YU95YUJxR3l5YmNHa25vUkd1?=
- =?utf-8?B?WGQ3c0VMczQ4eTJhUEY4emJ3T1pGUitTNjhCYURhWkZiM2R5Zjc0dk9oUElq?=
- =?utf-8?B?RFZTVklEZXVxb1BUUzlrZk0rSU9aUVlxZTlENEREQktDNWdKa294WW1HdzRz?=
- =?utf-8?B?WlRqNEM2djNZVDVwUlMrWDFHdEFYQnZHSkRuWWIxT3d3eWpKZVdqNXlpK0tL?=
- =?utf-8?B?dStBRENrNVZ0WUJ5SVNCRjhIMEY3b1JxekladExKR2l0THJUbVZqMEF3YnNn?=
- =?utf-8?B?Vk92cVZSLzdXM3dBckNScmN1TjNzTHFpVHVqYzcrZjA4aU5YMUVQYXpGbXZT?=
- =?utf-8?B?ek92VE9YWTZDNVpJZnA4RGF6NDZ4TmtDeWJjTE5ZVFBkMkJBcDZvS0QwMG9u?=
- =?utf-8?B?TzBqaDdYQkRrV2kxL1FTYzY3eUMwci9IdEhsZmt2MEx1WnhXZldiMzB2N2Qx?=
- =?utf-8?B?K2l6MmVQcXNzWkV6bkFLdjNlVStGT1dSWCt0SUVNOUlGdW9GeWpvYU9VdEpJ?=
- =?utf-8?B?eHB0MXpaMmpJaVlvT0ZkQURHN3RuNklTemhnMVZvd29OR3ZWdUNoTkNRVGpz?=
- =?utf-8?B?NEJnL05RRkV2Yng2anliaEs4MkVjN0V3Y2JDZnRxLzV5QWRYOU8xbEM4SFNo?=
- =?utf-8?B?YTIxRnIyNzdzbTl1RUpyWWdqaW84NTVXellVZC9vV1gxT1NWYWJzK0tMRGVL?=
- =?utf-8?B?MTNhTm55cW1mTGpWSWtOUGhZQXBpcElOYmdHL1I5ekpYbkQwYVpab080L1VM?=
- =?utf-8?B?cWZHNFlaUlVmYVI4K3pvOHJtNkw1MHVGcVA4NTdWQnlBSG1KSW5Bc0o2eTRp?=
- =?utf-8?B?RVdqeGFNdC8ycXhWampYQW9KMWxNcGlSRnptcFNWY2tWMkgxL2JQMWduNUdk?=
- =?utf-8?B?SGhkMm81MG1xaFBxK0trQ051MVNOdGFuZi9UeVVkVjBON0Z2bFVIVGlpL0Ex?=
- =?utf-8?B?ZWRoMHFKV0p0QXByaVJoNk1LeDZZL2d5RzdNc1lTanRFb2QxN2xtWVpyVG9Q?=
- =?utf-8?Q?s5lD8EeXVTBClMD7lHoYaq/i9Sw/4yPnVnj5Y?=
-MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f53f238-f9dd-4895-142e-08da4ef4d17b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2022 17:31:01.9837
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gr2ZZDyRFljqugyi885McS9XOhtHA1k4LjIEw2btbLPu1koP4qDkY8r3+9GezSiFjxtNkqrMd7CuE09VfwWi09ETLNbZBOk3pUK016vqaSo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0303
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=marcel.ziswiler@toradex.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Language: en-US
+ <20220613191549.GA4092455-robh@kernel.org>
+ <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
+ <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
+ <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
+ <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
 Content-Type: text/plain; charset=UTF-8
-Content-ID: <FFA0C073F802F548AC368D436243384E@CHEP278.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,42 +106,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkNCg0KT24gV2VkLCAyMDIyLTA2LTE1IGF0IDEwOjE1IC0wNzAwLCBLcnp5c3p0b2YgS296bG93
-c2tpIHdyb3RlOg0KPiBPbiAxNS8wNi8yMDIyIDA5OjEwLCBNYXggS3J1bW1lbmFjaGVyIHdyb3Rl
-Og0KPiA+IEhpDQo+ID4gDQo+ID4gT24gVHVlLCBKdW4gMTQsIDIwMjIgYXQgOToyMiBBTSBHZWVy
-dCBVeXR0ZXJob2V2ZW4gPGdlZXJ0QGxpbnV4LW02OGsub3JnPiB3cm90ZToNCj4gPiA+IA0KPiA+
-ID4gSGkgUm9iLA0KPiA+ID4gDQo+ID4gPiBPbiBNb24sIEp1biAxMywgMjAyMiBhdCA5OjE1IFBN
-IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+IHdyb3RlOg0KPiA+ID4gPiBPbiBUaHUsIEp1
-biAwOSwgMjAyMiBhdCAwNTowODo0NlBNICswMjAwLCBNYXggS3J1bW1lbmFjaGVyIHdyb3RlOg0K
-PiA+ID4gPiA+IEZyb206IE1heCBLcnVtbWVuYWNoZXIgPG1heC5rcnVtbWVuYWNoZXJAdG9yYWRl
-eC5jb20+DQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gaXRzIHBvd2VyIGVuYWJsZSBieSB1c2luZyBh
-IHJlZ3VsYXRvci4NCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBUaGUgY3VycmVudGx5IGltcGxlbWVu
-dGVkIFBNIGRvbWFpbiBwcm92aWRlcnMgYXJlIGFsbCBzcGVjaWZpYyB0bw0KPiA+ID4gPiA+IGEg
-cGFydGljdWxhciBzeXN0ZW0gb24gY2hpcC4NCj4gPiA+ID4gDQo+ID4gPiA+IFllcywgcG93ZXIg
-ZG9tYWlucyB0ZW5kIHRvIGJlIHNwZWNpZmljIHRvIGFuIFNvQy4uLiAncG93ZXItZG9tYWlucycg
-aXMNCj4gPiA+ID4gc3VwcG9zZWQgdG8gYmUgcG93ZXIgaXNsYW5kcyBpbiBhIGNoaXAuIExpbnV4
-ICdQTSBkb21haW5zJyBjYW4gYmUNCj4gPiA+ID4gYW55dGhpbmcuLi4NCj4gPiANCj4gPiBJIGRv
-bid0IHNlZSB3aHkgc3VjaCBwb3dlciBpc2xhbmRzIHNob3VsZCBiZSByZXN0cmljdGVkIHRvIGEg
-U29DLiBZb3UgY2FuDQo+ID4gYnVpbGQgdGhlIGV4YWN0IHNhbWUgaWRlYSBvbiBhIFBDQiBvciBl
-dmVuIG1vcmUgbW9kdWxhciBkZXNpZ25zLg0KPiANCj4gSW4gdGhlIFNvQyB0aGVzZSBwb3dlciBp
-c2xhbmRzIGFyZSBtb3JlLW9yLWxlc3MgZGVmaW5lZC4gVGhlc2UgYXJlIHJlYWwNCj4gcmVnaW9u
-cyBnYXRlZCBieSBzb21lIGNvbnRyb2wga25vYi4NCj4gDQo+IENhbGxpbmcgZmV3IGRldmljZXMg
-b24gYSBib2FyZCAicG93ZXIgZG9tYWluIiBkb2VzIG5vdCBtYWtlIGl0IGEgcG93ZXINCj4gZG9t
-YWluLiBUaGVyZSBpcyBubyBncm91cGluZywgdGhlcmUgaXMgbm8gY29udHJvbCBrbm9iLg0KPiAN
-Cj4gQXJlbid0IHlvdSBub3cgcmUtaW1wbGVtZW50aW5nIHJlZ3VsYXRvciBzdXBwbGllcz8gSG93
-IGlzIHRoaXMgZGlmZmVyZW50DQo+IHRoYW4gZXhpc3Rpbmcgc3VwcGxpZXM/DQoNCkkgYmVsaWV2
-ZSB0aGUgYmlnZ2VzdCBkaWZmZXJlbmNlIGJldHdlZW4gcG93ZXItZG9tYWlucyBhbmQgcmVndWxh
-dG9yLXN1cHBsaWVzIGxheXMgaW4gdGhlIGZvcm1lciBiZWluZyBkcml2ZXINCmFnbm9zdGljIHdo
-aWxlIHRoZSBsYXRlciBpcyBkcml2ZXIgc3BlY2lmaWMuIE1lYW5pbmcgd2l0aCBwb3dlci1kb21h
-aW5zIG9uZSBjYW4ganVzdCBhZGQgc3VjaCBhcmJpdHJhcnkNCnN0cnVjdHVyZSB0byB0aGUgZGV2
-aWNlIHRyZWUgd2l0aG91dCBhbnkgZnVydGhlciBkcml2ZXIgc3BlY2lmaWMgY2hhbmdlcy9oYW5k
-bGluZyByZXF1aXJlZC4gV2hpbGUgd2l0aA0KcmVndWxhdG9yLXN1cHBsaWVzIGVhY2ggYW5kIGV2
-ZXJ5IGRyaXZlciBhY3R1YWxseSBuZWVkcyB0byBoYXZlIGRyaXZlciBzcGVjaWZpYyBoYW5kbGlu
-ZyB0aGVyZW9mIGFkZGVkLiBPciBkbyBJDQptaXNzIGFueXRoaW5nPw0KDQpXZSBhcmUgcmVhbGx5
-IHRyeWluZyB0byBtb2RlbCBzb21ldGhpbmcgd2hlcmUgYSBzaW5nbGUgR1BJTyBwaW4gKHZpYSBh
-IEdQSU8gcmVndWxhdG9yIG9yIHdoYXRldmVyKSBjYW4gY29udHJvbA0KcG93ZXIgdG8gYSB2YXJp
-ZXR5IG9mIG9uLWJvYXJkIHBlcmlwaGVyYWxzLiBBbmQsIG9mIGNvdXJzZSwgd2UgZW52aXNpb24g
-cnVudGltZSBQTSBhY3R1YWxseSBtYWtpbmcgdXNlIG9mIGl0DQplLmcuIHdoZW4gZG9pbmcgc3Vz
-cGVuZC9yZXN1bWUuDQoNCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YNCg0KQ2hlZXJzDQoN
-Ck1hcmNlbA0K
+On 15/06/2022 10:31, Marcel Ziswiler wrote:
+> Hi
+> 
+> On Wed, 2022-06-15 at 10:15 -0700, Krzysztof Kozlowski wrote:
+>> On 15/06/2022 09:10, Max Krummenacher wrote:
+>>> Hi
+>>>
+>>> On Tue, Jun 14, 2022 at 9:22 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>>
+>>>> Hi Rob,
+>>>>
+>>>> On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
+>>>>> On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
+>>>>>> From: Max Krummenacher <max.krummenacher@toradex.com>
+>>>>>>
+>>>>>> its power enable by using a regulator.
+>>>>>>
+>>>>>> The currently implemented PM domain providers are all specific to
+>>>>>> a particular system on chip.
+>>>>>
+>>>>> Yes, power domains tend to be specific to an SoC... 'power-domains' is
+>>>>> supposed to be power islands in a chip. Linux 'PM domains' can be
+>>>>> anything...
+>>>
+>>> I don't see why such power islands should be restricted to a SoC. You can
+>>> build the exact same idea on a PCB or even more modular designs.
+>>
+>> In the SoC these power islands are more-or-less defined. These are real
+>> regions gated by some control knob.
+>>
+>> Calling few devices on a board "power domain" does not make it a power
+>> domain. There is no grouping, there is no control knob.
+>>
+>> Aren't you now re-implementing regulator supplies? How is this different
+>> than existing supplies?
+> 
+> I believe the biggest difference between power-domains and regulator-supplies lays in the former being driver
+> agnostic while the later is driver specific. 
 
+That's one way to look, but the other way (matching the bindings
+purpose) is to look at hardware. You have physical wire / voltage rail
+supply - use regulator supply. In the terms of the hardware - what is
+that power domain? It's a concept, not a physical object.
+
+> Meaning with power-domains one can just add such arbitrary
+> structure to the device tree without any further driver specific changes/handling required. While with
+> regulator-supplies each and every driver actually needs to have driver specific handling thereof added. Or do I
+> miss anything?
+
+Thanks for clarification but I am not sure if it matches the purpose of
+bindings and DTS. You can change the implementation as well to have
+implicit regulators. No need for new bindings for that.
+
+> 
+> We are really trying to model something where a single GPIO pin (via a GPIO regulator or whatever) can control
+> power to a variety of on-board peripherals. And, of course, we envision runtime PM actually making use of it
+> e.g. when doing suspend/resume.
+
+And this GPIO pin controls what? Some power switch which cuts the power
+of one regulator or many? If many different regulators, how do you
+handle small differences in ramp up time?
+
+
+
+Best regards,
+Krzysztof
