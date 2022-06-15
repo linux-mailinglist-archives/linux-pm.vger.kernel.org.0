@@ -2,70 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E4254CC87
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 17:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D64054CC8C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 17:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348683AbiFOPTJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 11:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
+        id S1349193AbiFOPTY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 11:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347617AbiFOPTJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 11:19:09 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE8A2E09B;
-        Wed, 15 Jun 2022 08:19:07 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 20so19420013lfz.8;
-        Wed, 15 Jun 2022 08:19:07 -0700 (PDT)
+        with ESMTP id S1349227AbiFOPTX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 11:19:23 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B6C24956;
+        Wed, 15 Jun 2022 08:19:22 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id e4so13681698ljl.1;
+        Wed, 15 Jun 2022 08:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rxmL7VaieafuZ6quU52kIVB4lyDd5PT6tuLwul05VPc=;
-        b=eDd+GB9xWpKXivIdy2gmo9fuwqLcBWKPc8BfczR/uUamhxb1rVI7w7DM1KAjO1OxXy
-         2++nHjCfTMjc2X/HhvDRlwlcJMI/0yk6t8S6slTGw8b+0Sj2RS/DH9Nc4A+pty4DbnX0
-         jzMOJtkxKns89wT26VSA7npXXthASfWZd0i9YloAKxRP7D3KSfvLMjwVyUSxSdMNGX5P
-         EdC1fkW7uY+Kv22aJMXe/QGYFZSp5rPJ93KFxGanGx5tW/XRO2bAINFaPXaguLgFYCsU
-         cXf7PSdkt9D5xk6PJ8bMCaRKHoZhsPrfAjzrGq6X7mYMdQV1eq4azoqIKiiwZMiDVJWY
-         y9eA==
+        bh=jtDLXWranri9SO0ungbK/rfZfrPvocRl+VfvQBvGjo8=;
+        b=f0HQ1vv+o5fTCQrso/rD+FdM1EuNryosCq4xi7a9dblyGF8itOuVz/ArZ2rBPrReQi
+         QRhKSEYCSaKboZzrI+WtJayBbQSMgjtMBUY07ud/MZv9f20xWM9YBOMDGNpmJPGnVfZn
+         209azDbGMveKEJsAAVbxLirdJBZkLvA7r0SeKTECZwNIhOsNeB9wXNJcIS5PQTRxObbC
+         lboCdrIwtKAz+hwRVHeKGX60bbi2aqKw7L+H1b0OJ2V4yTLxgUAtjCexprm0GQtmMybV
+         2IAahrCiVwtuRg95F/zWS8qMTAuCJspW/+smwGj3Z9mDHdDRJ5C1lrqdwI2JQFYkTKV3
+         ciWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rxmL7VaieafuZ6quU52kIVB4lyDd5PT6tuLwul05VPc=;
-        b=USK80m7g4WB0rTUtelhRcAh7XbDdi5gRQIjBHxImFB7cJ8gaz4OxRBsiJK6evFu6CM
-         M2nOiKdguBkzmUgwll8NXwL0VeMgDvnZtyoDtuiX2x2eGnRvGUhZrGkUWrP03ESIPPBE
-         +EgZJ30TAvt1Gw/PCr/QvZlvz53fy+JF6Bh1k+l31l7cE1ehpRIWRTMR/l6qchNO4Dms
-         lqpy1wXOtUEF782oEcLW0PU87cM7okcQIDKE6n87EYjh5u31Hl1V9FNAx8hzJNWMFdJR
-         dUbBG2msDj4MoK8bViecNTEb+34V+OK5e+9OMDae4WTt4kcUINx4tRuA1s3pjbEWdRln
-         vDog==
-X-Gm-Message-State: AJIora+/CZCDwWEJK/WRAtnH8M9anyrhjm/FlwT/lzzs+1AwtOaMBkdv
-        XGk8lw9MIyHX66RKsF17w316YSFudyw9M5xWrg8=
-X-Google-Smtp-Source: AGRyM1tIVRm/39MptkbLVKBy49NSklljQ82n+xmsnIJa7nbocpR7rEVrKlPaIUmUunQHP0jLv+bO+LOC4SWPpVeUIns=
-X-Received: by 2002:a05:6512:234e:b0:479:3bb1:8d3c with SMTP id
- p14-20020a056512234e00b004793bb18d3cmr19378lfu.478.1655306345755; Wed, 15 Jun
- 2022 08:19:05 -0700 (PDT)
+        bh=jtDLXWranri9SO0ungbK/rfZfrPvocRl+VfvQBvGjo8=;
+        b=xyG4fWuy7Q9rh4nOn+cnzm9lleplXk1aZ9ZF11cGLsSxbAoxOkEjQQq28/PedDRu5y
+         OxlVGA7KiMXztUj3Cpm/7obIOOgP8rOIy4WfLAbmQvtHFm6C9Bkn+uIVHEZAcXKxZcrb
+         Bl85SriGczwwzt2oa769rpj5BBy9Hv0TJpNsKxuVXpYqdilWGdEHXSNUPcS1whhXQ+az
+         PA5b8D4v/6+yo8HhXbHB1FAA42Y/S0gGnNosD3iC5SUNAPDDULh4yu3wSzouQOlWxSwH
+         hNBw+BjV+d+Vs5qV/UY9qt1B8b3y2uFlzbIAz+0VULm88G076fmYns5mj9gIF0KvKHAf
+         KpEw==
+X-Gm-Message-State: AJIora+mw5oCyHepgNLO1RvIsMljk4cAOvbWrKlQyAMfMKfp8pq7PXOq
+        RHX3pQSHClUg0dxtS/0/xM6/DZHXMjHSD4nUso4=
+X-Google-Smtp-Source: AGRyM1s3Wkd6PJq3so/0xApmm+/Ezzsnk7JGMgg9Ouusxj+OYaPM8DZ979+vYb4QeZlGOTCPIUZcr+weDB4mqcGTDxQ=
+X-Received: by 2002:a05:651c:54f:b0:255:9ea4:ae79 with SMTP id
+ q15-20020a05651c054f00b002559ea4ae79mr146008ljp.122.1655306360512; Wed, 15
+ Jun 2022 08:19:20 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220609150851.23084-2-max.oss.09@gmail.com>
- <CAMuHMdWm5WV7L=HJnysw76ObG_QPWicSH1kGg4k-GL8nNHd_SQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdWm5WV7L=HJnysw76ObG_QPWicSH1kGg4k-GL8nNHd_SQ@mail.gmail.com>
+ <1654829855.220248.560616.nullmailer@robh.at.kernel.org>
+In-Reply-To: <1654829855.220248.560616.nullmailer@robh.at.kernel.org>
 From:   Max Krummenacher <max.oss.09@gmail.com>
-Date:   Wed, 15 Jun 2022 17:18:54 +0200
-Message-ID: <CAEHkU3Vw-Yt6COpJ=K-98CA5dH-iD6AnSHwuBFmQg8yfNsgb-w@mail.gmail.com>
+Date:   Wed, 15 Jun 2022 17:19:09 +0200
+Message-ID: <CAEHkU3W0wRDWvEVwgjoeAQaTSr-V=0J2L-FtwJA78EHkaED4YA@mail.gmail.com>
 Subject: Re: [PATCH v1 1/5] dt-bindings: power: Add bindings for a power
  domain controlled by a regulator
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
+To:     Rob Herring <robh@kernel.org>
+Cc:     Kevin Hilman <khilman@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        <devicetree@vger.kernel.org>, linux-pm@vger.kernel.org,
+        Max Krummenacher <max.krummenacher@toradex.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -79,78 +78,49 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi
 
-On Tue, Jun 14, 2022 at 9:24 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Fri, Jun 10, 2022 at 4:57 AM Rob Herring <robh@kernel.org> wrote:
 >
-> Hi Max,
->
-> On Thu, Jun 9, 2022 at 5:16 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
+> On Thu, 09 Jun 2022 17:08:47 +0200, Max Krummenacher wrote:
 > > From: Max Krummenacher <max.krummenacher@toradex.com>
 > >
 > > Adds binding for a power domain provider which uses a regulator to control
 > > the power domain.
 > >
 > > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> > ---
+> >
+> >  .../power/regulator-power-domain.yaml         | 58 +++++++++++++++++++
+> >  1 file changed, 58 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/power/regulator-power-domain.yaml
+> >
 >
-> Thanks for your patch!
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 >
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/power/regulator-power-domain.yaml
-> > @@ -0,0 +1,58 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/power/regulator-power-domain.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Power domain controlled by a regulator
-> > +
-> > +maintainers:
-> > +  - Max Krummenacher <max.krummenacher@toradex.com>
-> > +
-> > +description: |+
-> > +  Power domain provider which uses a regulator to control
-> > +  the power domain.
-> > +
-> > +allOf:
-> > +  - $ref: "power-domain.yaml#"
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - regulator-pm-pd
-> > +
-> > +  power-supply:
-> > +    description: The regulator used to control the power domain.
+> yamllint warnings/errors:
 >
-> I guess there can be more than one?
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/regulator-power-domain.example.dtb: power-sleep-moci: $nodename:0: 'power-sleep-moci' does not match '^(power-controller|power-domain)([@-].*)?$'
+>         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/regulator-power-domain.yaml
 
-The proposed implementation currently only uses one.
+Will change to 'power-domain-sleep-moci' in V2.
 
-When I did it I considered more than one regulator a rare use case and
-I was under the impression that the generic power domain code
-can handle multiple power domains. With that in mind I assumed that
-one would create multiple regulator-pm-pd instances each controlling
-one regulator and add all of them to the power-domains property of
-the power domain consumer.
-
-But it seems the implementation requires the power domain consumer
-to handle that case in its code rather than relying on the generic code. [1]
-
-Do you see a real world use case to handle multiple regulators?
-
+Regards
 Max
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/domain.c?id=8cb1cbd644d5bba5b72eedd632f249c1c677b792#n2290
-
-
 >
-> Gr{oetje,eeting}s,
+> doc reference errors (make refcheckdocs):
 >
->                         Geert
+> See https://patchwork.ozlabs.org/patch/
 >
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
 >
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit.
+>
