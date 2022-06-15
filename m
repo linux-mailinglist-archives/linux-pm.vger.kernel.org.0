@@ -2,122 +2,329 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4834954C580
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 12:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11DE54C637
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 12:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347186AbiFOKJn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 06:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S1348589AbiFOKbJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 06:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239629AbiFOKJn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 06:09:43 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5542B39816
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 03:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=ONJnBXu6t4zF8NFHPUMTOY/c4b3k
-        CKbK/S/MH3jepMo=; b=zvrfXKeOW4l0ubRQcvx6RZ39t/9w00DZSEy6CJn8yqWl
-        e8uJf8AUcamd7DZCpbuEawNVFPUXhkuj1ukGv2fkdFZT/+TGkPtdGXKYw6xA2U3a
-        TcRNXgb593WpgGlaNpSgtkgZhAmAbwKzsParp/WzdTxhYwKHDO6qlcgycwGS1KE=
-Received: (qmail 2072654 invoked from network); 15 Jun 2022 12:09:39 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jun 2022 12:09:39 +0200
-X-UD-Smtp-Session: l3s3148p1@0cYUuHnhYW1ZD+7R
-Date:   Wed, 15 Jun 2022 12:09:39 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a779f0 support
-Message-ID: <Yqmv4/zZrCM3PCns@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
- <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
- <CAMuHMdW3uxQHk6SBX5MqnZsYqwY8p+0wmD6gHwS3ESUrkmpWkQ@mail.gmail.com>
- <YqjtBQdzexzCRrmq@shikoro>
- <CAMuHMdUTR8+8TbM_AaMXk96adHvdp_Oof8v48_zCY+R5FsOLnQ@mail.gmail.com>
+        with ESMTP id S1348571AbiFOKa4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 06:30:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9565007A
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 03:30:26 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o1QHr-0007Ou-CL; Wed, 15 Jun 2022 12:30:11 +0200
+Message-ID: <e433fc81d6e1340f463e45af54be16296a2deaf2.camel@pengutronix.de>
+Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "djakov@kernel.org" <djakov@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>, Abel Vesa <abel.vesa@nxp.com>,
+        "abailon@baylibre.com" <abailon@baylibre.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
+        "aford173@gmail.com" <aford173@gmail.com>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Date:   Wed, 15 Jun 2022 12:30:09 +0200
+In-Reply-To: <DU0PR04MB94172B0EE6455C43B4B0364088AD9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
+         <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+         <c2034c030333f89e0ac7d86c906dd222cc151d52.camel@pengutronix.de>
+         <DU0PR04MB94173B94950965B7DB3BA4CB88AA9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+         <9cc8d2d2ca9ff2ee71d976b2b0210ce144298c46.camel@pengutronix.de>
+         <DU0PR04MB94172B0EE6455C43B4B0364088AD9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Wx79W/Vpvtk065FE"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUTR8+8TbM_AaMXk96adHvdp_Oof8v48_zCY+R5FsOLnQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Am Mittwoch, dem 15.06.2022 um 09:28 +0000 schrieb Peng Fan:
+> Hi Lucas,
+> 
+> > Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
+> > 
+> > Hi Peng,
+> > 
+> > Am Dienstag, dem 14.06.2022 um 23:38 +0000 schrieb Peng Fan:
+> > > Hi Lucas,
+> > > 
+> > > > Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
+> > > > 
+> > > > Hi Peng,
+> > > > 
+> > > > Am Montag, dem 13.06.2022 um 01:23 +0000 schrieb Peng Fan:
+> > > > > All,
+> > > > > 
+> > > > > > Subject: [PATCH 0/8] interconnect: support i.MX8MP
+> > > > > 
+> > > > > I am going to send out V2 this week to address the comments until now.
+> > > > > But before that I would like to see if any one has any comments on
+> > > > > the design here.
+> > > > > 
+> > > > > Georgi, do you have comments on Patch 2 " interconnect: add device
+> > > > > managed bulk API"
+> > > > > 
+> > > > > Lucas, since you had comments when I first use syscon to configure
+> > > > > NoC, are you ok with the design to use interconnect in this patchset?
+> > > > > 
+> > > > I'm still not 100% convinced that the blk-ctrl is the right consumer
+> > > > for the interconnect, since it doesn't do any busmastering. However,
+> > > > the design looks much better than the syscon based one.
+> > > > 
+> > > > I mostly worry about being able to extend this to do more than the
+> > > > current static configuration if/when NXP decides to release more
+> > > > information about the NoC configuration options or someone reverse
+> > engineers this part of the SoC.
+> > > 
+> > > I have asked internally, NoC documentation for i.MX8M* is not allowed to
+> > public.
+> > > 
+> > Yea, sadly I've heard this many times from NXP.
+> > 
+> > > I
+> > > > still hope that we could optimize NoC usage by setting real
+> > > > bandwidth and latency limits for the devices connected to the NoC.
+> > > > As the blk-ctrl doesn't have any clue about this right now, we can't
+> > > > really set any more specific requests than the current INT_MAX ones.
+> > > 
+> > > Actually looking at ATF NoC settings, the values are suggested by
+> > > Design team, Design team give SW team such a group of value and not
+> > > suggest SW team to change it. And the value in ATF not touch bandwidth
+> > > registers, as you could see from the patchset, only mode,priority,ext_control
+> > are configured.
+> > > 
+> > > Similar to qcom using static settings:
+> > > ./drivers/interconnect/qcom/qcm2290.c:668.
+> > > .qos.qos_mode = NOC_QOS_MODE_FIXED,
+> > > 
+> > > I understand that people wanna tune the settings at runtime on demand.
+> > > 
+> > Right. We had the same situation with QoS settings on the i.MX6, where
+> > Freescale/NXP claimed that the values from the design team are optimal and
+> > should not be changed, but we actually had some cases where tuning those
+> > values to the specific use-case of a board was beneficial. With the i.MX6 we
+> > could do this on our own, as things were documented, at least partially.
+> > 
+> > I don't request you or anyone from the NXP open source team to do something
+> > here, as I understand that the no documentation policy is an outside decision
+> > that you can not really change. I just want to make sure that if someone was to
+> > do something about this situation, we don't make that change harder than
+> > necessary by locking us into a DT binding and design that might be hard to
+> > change later on.
+> 
+> Hope I could help on this if you have suggestion on technical direction without
+> breaking NXP policy.
+> 
+> > 
+> > > > I guess we could extend things in this way by making the blk-ctrl
+> > > > not only be a simple consumer of the interconnect, but aggregate
+> > > > requests from the devices in the blk-ctrl domain and forward them to the
+> > NOC provider, right?
+> > > 
+> > > I am not sure. This patchset is actually only for init NoC settings
+> > > after power on, because the initial value is invalid.
+> > > 
+> > > I could think how to resolve the INT_MAX settings in next version, For
+> > > your upper suggestion, could we start after this version approved for
+> > > land in tree?
+> > > 
+> > I just want you to think about how we could extend the design laid down in this
+> > patchset if/when the peripheral drivers are starting to request their actual
+> > bandwidth usage. If the answer to this question is "we'll simply make the blk-ctl
+> > part of the interconnect hierarchy and let it aggregate the bandwidth requests
+> > and forward them to the NoC driver"
+> > then I'm fine with this patchset landing in upstream as-is. I'm just not sure if I'm
+> > overlooking something here which would prevent such an extension of the
+> > design, as I'm not a expert in the interconnect framework.
+> 
+> There is only priority level as I write in the driver, the priority level is not suggested
+> to runtime change according to i.MX design team.
+> For media related settings, there is GPR hurry level settings which is written
+> in RM and ATF code.
+> 
+> In normal case, if you really wanna change priority level, you could use
+> other value. I'll update driver to describe priority bit mask.
+> In some heavy load mode, you could pre-set a GPR hurry level value to boost
+> the transaction.
+> 
+> But since design team not suggest SW to runtime update the value, also no
+> idea to match priority level with SW bandwidth. from driver debug, what
+> I could improve is the describe the priority register, then people wanna
+> to change, could update it.
 
---Wx79W/Vpvtk065FE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+But we all know that you could do more interesting things in regulator
+mode with bandwidth setting changed according to use-case, right? ;)
+
+> 
+> Is this ok?
+> 
+I don't worry too much about the specific implementation in the drivers
+right now, as this is something we can change later on. What I'm
+worried about is more the DT description. With the description in this
+patchset we put the blk-ctrl in charge of requesting the bandwidth
+limits, as it's the consumer of the interconnect. But it doesn't really
+have any information about the real bandwidth/latency/whatever other
+QoS settings of the peripherals, so it can't do a proper request.
+
+If it is possible to extend the current design in the future by making
+the blk-ctrl be a interconnect provider to the peripherals in the power
+domains _without_ changing the DT description between the blk-ctrl and
+NoC node, then I'm fine with the design in this patchset.
+
+Regards,
+Lucas
+
+> Thanks,
+> Peng.
+> 
+> > 
+> > Regards,
+> > Lucas
+> > 
+> > > 
+> > > Thanks,
+> > > Peng
+> > > 
+> > > 
+> > > > 
+> > > > Regards,
+> > > > Lucas
+> > > > 
+> > > > > Thanks,
+> > > > > Peng.
+> > > > > 
+> > > > > > 
+> > > > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > > > 
+> > > > > > This patchset is to support i.MX8MP NoC settings, i.MX8MP NoC
+> > > > > > initial value after power up is invalid, need set a valid value
+> > > > > > after related
+> > > > power domain up.
+> > > > > > 
+> > > > > > This patchset also includes two patch[1,2] during my development
+> > > > > > to enable the ICC feature for i.MX8MP.
+> > > > > > 
+> > > > > > I not include ddrc DVFS in this patchset, ths patchset is only
+> > > > > > to support NoC value mode/priority/ext_control being set to a
+> > > > > > valid value that suggested by i.MX Chip Design Team. The value
+> > > > > > is same as NXP downstream one inside Arm Trusted Firmware:
+> > > > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%
+> > > > > > 2Fso
+> > > > > > 
+> > > > 
+> > urce.codeaurora.org%2Fexternal%2Fimx%2Fimx-atf%2Ftree%2Fplat%2Fimx%2
+> > > > > > 
+> > > > 
+> > Fimx8m%2Fimx&amp;data=05%7C01%7Cpeng.fan%40nxp.com%7C6cfad0fcec
+> > > > 0d472
+> > > > > > 
+> > > > 
+> > 408a208da4e2cd96d%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7
+> > > > C63790
+> > > > > > 
+> > > > 
+> > 8251778425186%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ
+> > > > QIjoiV2
+> > > > > > 
+> > > > 
+> > luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=U
+> > > > vIx%
+> > > > > > 
+> > > > 
+> > 2BAz9rx3Z8Oy7VSCRB90O8M5VICIUaUOiTmYw%2FeI%3D&amp;reserved=0
+> > > > > > 8mp/gpc.c?h=lf_v2.4#n97
+> > > > > > 
+> > > > > > A repo created here:
+> > > > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%
+> > > > > > 2Fgi
+> > > > > > 
+> > > > 
+> > thub.com%2FMrVan%2Flinux%2Ftree%2Fimx8mp-interconnect&amp;data=05
+> > > > %7C
+> > > > > > 
+> > > > 
+> > 01%7Cpeng.fan%40nxp.com%7C6cfad0fcec0d472408a208da4e2cd96d%7C68
+> > > > 6ea1d
+> > > > > > 
+> > > > 
+> > 3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637908251778425186%7CUnkn
+> > > > own%7CT
+> > > > > > 
+> > > > 
+> > WFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJX
+> > > > V
+> > > > > > 
+> > > > 
+> > CI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=W2iYPMJ6dn%2F4OTalTD2yqB
+> > > > Hx%2Bo3%
+> > > > > > 2BuBTuP%2BAe4bBz2Gc%3D&amp;reserved=0
+> > > > > > 
+> > > > > > Peng Fan (8):
+> > > > > >   dt-bindings: interconnect: imx8m: Add bindings for imx8mp noc
+> > > > > >   interconnect: add device managed bulk API
+> > > > > >   interconnect: imx: fix max_node_id
+> > > > > >   interconnect: imx: set src node
+> > > > > >   interconnect: imx: introduce imx_icc_provider
+> > > > > >   interconnect: imx: set of_node for interconnect provider
+> > > > > >   interconnect: imx: configure NoC mode/prioriry/ext_control
+> > > > > >   interconnect: imx: Add platform driver for imx8mp
+> > > > > > 
+> > > > > >  .../bindings/interconnect/fsl,imx8m-noc.yaml  |   6 +
+> > > > > >  drivers/interconnect/bulk.c                   |  34 +++
+> > > > > >  drivers/interconnect/imx/Kconfig              |   4 +
+> > > > > >  drivers/interconnect/imx/Makefile             |   2 +
+> > > > > >  drivers/interconnect/imx/imx.c                |  68 +++--
+> > > > > >  drivers/interconnect/imx/imx.h                |  25 +-
+> > > > > >  drivers/interconnect/imx/imx8mm.c             |   2 +-
+> > > > > >  drivers/interconnect/imx/imx8mn.c             |   2 +-
+> > > > > >  drivers/interconnect/imx/imx8mp.c             | 232
+> > > > > > ++++++++++++++++++
+> > > > > >  drivers/interconnect/imx/imx8mq.c             |   2 +-
+> > > > > >  include/dt-bindings/interconnect/fsl,imx8mp.h |  59 +++++
+> > > > > >  include/linux/interconnect.h                  |   6 +
+> > > > > >  12 files changed, 424 insertions(+), 18 deletions(-)  create
+> > > > > > mode
+> > > > > > 100644 drivers/interconnect/imx/imx8mp.c  create mode 100644
+> > > > > > include/dt-bindings/interconnect/fsl,imx8mp.h
+> > > > > > 
+> > > > > > --
+> > > > > > 2.25.1
+> > > > > 
+> > > > 
+> > > 
+> > 
+> 
 
 
-> > > What about splitting this in two separate checks at the top level:
-> > >   - one for regs (R-Car V3U vs. the world), and
-> > >   - a second for interrupts (R-Car V3U+S4-8 vs. the world)?
-> >
-> > This task seems too much for my YAML-foo :( I couldn't get it to work.
-> > Can we leave it as-is for now?
->=20
-> You just need an allOf with two if statements, cfr. e.g.
-> Documentation/devicetree/bindings/media/renesas,vin.yaml?
-
-First, I don't think the negative logic is as bad here because there is
-no 'else' block which is far away. Second, I think we need a 'not'
-anyhow because the condition is:
-	'if not r8a779f0 then required interrupts'
-
-Third, I still think we can fix it incrementally later if we want. The
-new board has enough issues to take care of. For now, I'd rather
-investigate those than YAML ;)
-
-
---Wx79W/Vpvtk065FE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKpr98ACgkQFA3kzBSg
-KbZS3A//Vv1st2Dr/K5iI3fgTRG5fR5kAvsNf1rSb2Oa6Vfr0qL2KNeWKOhVwnFH
-n8R4myFDto8c5Exs3p9vuyVDGizGQlPfBxk6C2QX0kVW/AA0QDgbxFStfvkEQr64
-SubiEf0eGY3ds+7PG+nk21GBqn//sna1k0SdOxKpEADj5R3HCJRqaN1v4FPiwZ23
-74GbZsbns997EW5XjU6FwrTQV6TidTGjLTl5+DnnR9OVOV8WVsSBnphShl0RdOv1
-Gs7i3JqKRKG7iN6xU+4ZfPhyNBB7iW0VaXBpcCOikhMxwD5QzBCim7vx5HPRIjCm
-HAGSgSnBSbnRcnGkEEiAP+2LIif9g9nn9ST1QSQYUS57iIuZIGw2G+5kXABem4LB
-OwcUMUAnrMxnrjYA2L43qDjHQVxT4Na0CI+qtxShvrGgTWTB7zX54AI02FMUiQcM
-12RwN+Jy8tnd1bSKPSAzqQaxe5BQpPPJjK7YAe8hr24lJpXxdZmz0HsCWDCNCbw7
-fNFcB3i7CWDr3U+QXjQbuupHCrD/CL/SHkB//N+cx/UqqFGyIIf7en6HZJl1+fB7
-cfUHZQg25PcpVh3dER5SvWysS+fhfO18Lja4xxVP+G3EtStY01rQm9kSUHHFQbJy
-ZB89mXAo5b/wiDYHqKd6nHEZhlxeTOegKbHA4J3kf2MTWSOvHRQ=
-=9reG
------END PGP SIGNATURE-----
-
---Wx79W/Vpvtk065FE--
