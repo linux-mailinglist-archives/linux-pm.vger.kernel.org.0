@@ -2,103 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD3A54C51E
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 11:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1936654C521
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 11:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245648AbiFOJwO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 05:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S241711AbiFOJwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 05:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244334AbiFOJwO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 05:52:14 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9624E49931;
-        Wed, 15 Jun 2022 02:52:13 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id m20so22070137ejj.10;
-        Wed, 15 Jun 2022 02:52:13 -0700 (PDT)
+        with ESMTP id S243811AbiFOJwk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 05:52:40 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2005F7F
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 02:52:39 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id e11so10970969pfj.5
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 02:52:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2d94UGsGvMGNq3E5FlbqsEwX5l7DPXjVnfOqe97Myh4=;
-        b=nUq5wRtuiPL5DfL+y3mSe9/eaTVnLo07rrQp+8nbW05xvzKCo8XcNt867JClW6Xfrv
-         p981As4aLxeRx4oe23iJDcNczy7kysJ0O+ThPla1s/2LufWljTu0QEFw+oDNzu1GgQFt
-         BohAPFTwwpjg0g6oXcxL1uW7yYQgi1pKPlACC4EXuV+i462HyOsbD+ZGc6d3NaycxS3S
-         DwVgwAYGnpz/EfoeTekCFpLYL7modzG9bDmL//SwZibgPaescfj6Zmaos/aXwWYfp+6e
-         +Vq7ATIE117a959CUlRevBhxqHAS7hpg/t2F/NSmEUskR+Gg/+odiebitTnpxUG80FKr
-         eTYw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=58jiycaIoF5FYY78PZA6fUJClkpQXYZtisx8ZOZslzw=;
+        b=j9QqM9A2kpjvfW8lU2O5uiEURw3T9QaeBU3v6ruA0LfZbo5F8VEBV3KxNi6cmJ2Kak
+         E+Fx/FGSkoD16sgFhKuzC5c4U8A9SootUUObslbLjOZHWqISZLCQDY2S+5LLjMf7xYas
+         H7/rOVGaL3XxYJ7SPDW/dGfCcawzszflPrfvRwrlM0zxi0xDsDorCo1fZfRzq2jEa6hw
+         q08aJTmz76Cp0Sh197ZY3tUyGrouXw3XrRt90SwoHI+xCDbhA6GBl9vhN58gJZOFxehS
+         iGthg40CYAj0QM0BZwM+NXmQs//1PJHA+ZC4X+fPqtF9A6t+OXbUKUFEJiHyUJuaXexr
+         lEsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2d94UGsGvMGNq3E5FlbqsEwX5l7DPXjVnfOqe97Myh4=;
-        b=ZUyDHYoxNv1uJLt+6AxbgHsETbdrd/mOgGQ9hPkb9SWEivUpsE3Ua2KyrGBllDYIkg
-         Kf+MByLO3/+7UXMqU8z+m2I+A60w/Zr77sDeMlsn4yZbWkEEYJnuvmSpYJxHnVrVwFYr
-         XlEiy/+6FNfcoPuVL7gt/fUD13ypujwgQFe0u4tlFS04mksW8EnhNAfa4ZOmgTUaoQUB
-         Jroay8J3HlLuVvdTWYHt9opXqZVtN6elcm0p/lLTZH565SqnLvc/SeQDpRiKnkFtQ+sy
-         /ZADhXzEeG3kD6hjHj9tC8VxB3VDlAHug9o9XWuyaezsA1HtE22vSe5B9lpLnvZe+jne
-         OtZQ==
-X-Gm-Message-State: AOAM532AW+yV79G9z2OQE8p6bs56esQfYwNgLjq/OYK5vktLHfngN3Vz
-        x3KsD1BmJEyA5aonPpKa9otEvPsg2a2F3tHBckrI1G4AZkkKBw==
-X-Google-Smtp-Source: ABdhPJxSHsie5MrccfhGp2VK2b5KuzAP6yBzxUWuyelTh0jGk8Aai0SqNKINfIA8xwNXsjSBS5pH3HDHd9ZL1uWbLSU=
-X-Received: by 2002:a17:906:d9d9:b0:710:f2ae:b455 with SMTP id
- qk25-20020a170906d9d900b00710f2aeb455mr8043815ejb.77.1655286732107; Wed, 15
- Jun 2022 02:52:12 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=58jiycaIoF5FYY78PZA6fUJClkpQXYZtisx8ZOZslzw=;
+        b=JKBer4d4UFAA80oha8E8EaZoec85ysTlJA5nag1lq9/T3nKUsyvgFNM88i8OQqKd0d
+         umV+XgN7SG+XVmmxJXsphZ0L0KoI4Mp282vlX2BLVEhpKjGP72XYJs2CbwN5e1CDlKI6
+         g7pF2kCGU5i+AlkbIbgGBRV1Jh198x1KtTjw8yeJS7MLHRccGIn1vwBI3S+lYeZ/XNQq
+         9jkWRynIU4SMb6XlLQq2ZxFbTb7/K1relBWzSmmPD4E/GCLgHZarlCqTyZIVIvwUe0mK
+         Mxc7h6ikCQBoRDc2s/WafrRlhEPcY/ZEfnrM2iNq7f/MEOgv/06FALS5F+gX2nuekwlB
+         tFGA==
+X-Gm-Message-State: AOAM5333iM9+ssvqi0rHJsJvHhV2abF/9x3m+AKkzPqdNd79YtZsjD4+
+        TfCYSzl6F6qq5ghaxZu7lc9o2Q==
+X-Google-Smtp-Source: ABdhPJxpQGpTs3AoWtsya7eQ9ZbJElWmUTHca/dgBaqbWAO8WnldFcx0ersNOfHlGwJ6lA9GLlh2mg==
+X-Received: by 2002:a05:6a00:842:b0:51b:f289:7354 with SMTP id q2-20020a056a00084200b0051bf2897354mr9178778pfk.75.1655286759193;
+        Wed, 15 Jun 2022 02:52:39 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id z22-20020aa79496000000b0051bf9159d2dsm9310765pfk.208.2022.06.15.02.52.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 02:52:38 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 15:22:37 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     heliang <windhl@126.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: cpufreq: Add missing of_node_put() in
+ qoriq-cpufreq.c
+Message-ID: <20220615095237.6eefqhab4p2bbftt@vireshk-i7>
+References: <20220615094807.3962918-1-windhl@126.com>
 MIME-Version: 1.0
-References: <20220614194225.2226447-1-sravanhome@gmail.com> <20220614194225.2226447-6-sravanhome@gmail.com>
-In-Reply-To: <20220614194225.2226447-6-sravanhome@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 15 Jun 2022 11:51:34 +0200
-Message-ID: <CAHp75Vc1PTJ-u6uMqQnCipbC1Dihx4fftc92rXRKGSeaZVZPfw@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] power: supply: mp2629: Add usb fast charge settings
-To:     Saravanan Sekar <sravanhome@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615094807.3962918-1-windhl@126.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 9:42 PM Saravanan Sekar <sravanhome@gmail.com> wrote:
->
-> Allows the user to change the usb device fast charge setting to advertise
-> host on enumeration helps to accelerate the charging cycle. Altering this
-> value resets USB existing connection.
+On 15-06-22, 17:48, heliang wrote:
+> In qoriq_cpufreq_probe(), of_find_matching_node() will return a
+> node pointer with refcount incremented. We should use of_node_put()
+> when it is not used anymore.
+> 
+> Signed-off-by: heliang <windhl@126.com>
+> ---
+>  drivers/cpufreq/qoriq-cpufreq.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/qoriq-cpufreq.c b/drivers/cpufreq/qoriq-cpufreq.c
+> index 6b6b20da2bcf..573b417e1483 100644
+> --- a/drivers/cpufreq/qoriq-cpufreq.c
+> +++ b/drivers/cpufreq/qoriq-cpufreq.c
+> @@ -275,6 +275,7 @@ static int qoriq_cpufreq_probe(struct platform_device *pdev)
+>  
+>  	np = of_find_matching_node(NULL, qoriq_cpufreq_blacklist);
+>  	if (np) {
+> +		of_node_put(np);
+>  		dev_info(&pdev->dev, "Disabling due to erratum A-008083");
+>  		return -ENODEV;
+>  	}
 
-...
-
-> +Description:
-> +               Represents a usb device fast charge settings.Altering this
-
-USB
-
-> +               value resets usb existing connection
-
-USB
-
-> +               USB DP:DM[0:0] 0.6V : Hi-Z
-> +               USB DP:DM[0:1] 3.3V : 0.6V
-> +               USB DP:DM[1:0] 0.6V : 0.6V
-> +               USB DP:DM[1:1] 0.6V : 3.3V
-> +
-> +                Access: Read, Write
-> +
-> +                Valid values: Represented in bit DP & DM setting. Valid
-> +                             range is [0, 3].
+Applied with fixes tag. Thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+viresh
