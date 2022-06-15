@@ -2,68 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDEE54C0FF
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 07:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBA454C122
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 07:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242825AbiFOFAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 01:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S1345776AbiFOFZI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 01:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237310AbiFOFAB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 01:00:01 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433D942496
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 22:00:00 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so1012276pjm.2
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 22:00:00 -0700 (PDT)
+        with ESMTP id S232204AbiFOFZH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 01:25:07 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C921D48E5D
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 22:25:06 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso2848563pjb.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 22:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=sx5jo/gbFVJjPOu+uKpvsodcdaX5x99B9E4XzLwdmWE=;
-        b=OQ8sG8CIkLtszKiLLTbek6gsfIzVYrVUnGvHrzhqIDwP1bxZlqzHk9XdeP8wt0c/Yo
-         w7T145mRWtwh46Siau1jtn/tXHZ5BvJkUFRHuU4sd9Z1mQn+9yzZ0uxsLTlMOwVR/MmJ
-         eXnAJ4qILZOQRhwW3RZhCXP00VewUqcKlZoq8iKpqds4bqmNwDRnWnrWfPlo3rMoXwnP
-         8IZ912AjBBZVMJbCQi9boHwjt/ndymi58Ov+67xEO9O4bFc3efq/9axTkfpw+ZalR/qI
-         Wiy7locTtxA2D+9KrzK50zSxCqDd2+OjPPwNBRMZrs4dzGEF98HXoJN93j/PTi01RiN6
-         NoJw==
+        bh=pGeqO4UYbPjEpueFQQzkGuJa78VBFe2OGHm+1nShac0=;
+        b=DNajTQmeSO+SYkqEP2ISK2l0hgbr8KRNFEXaQ8NnViOlc3F5D94YL/OLjpnDBQJwwP
+         xSHTJqkXvi4GTvke57PM7+VB9BOXiRgP4SyyiK3uEzMhFgjvnG9xPcInHE2Aeu9ExNVV
+         s9gTBcBlQK7K6S1Rr35C6fUVBpbgP5h+3pA8paeHgw+dEmQuE+wmT5Rg7Ez5zIybWvJ0
+         x/1+9UfAwqed2j374GtIXVET+jlOh+ZloJp6a2QMGEqJHgYWY6mudi8jvygCga/cHaKa
+         ueVqoewdaXnWCSHodRxQU4bPPbHsYYiIRHpvsbQQVCYYI0Cn1NbjUWmH9dOMf4yq+k9o
+         2Mtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sx5jo/gbFVJjPOu+uKpvsodcdaX5x99B9E4XzLwdmWE=;
-        b=TYwA8x4OgVxdQinr33N+FuffNbDBvmTYfE1B5SaDwiqrOEjfkQwrpb+tVzVtHGUnYk
-         7jGncXsq0qBKWpgblAAtpgHxhEsXWgIJ6vBpDIm0IRY2Yx8dVKzMj/mQIVbWgqc6733g
-         sB5Bbx3aONdkryi8dRvVAj5EzZugkrQqgQ96u6ydDUu/ryT/16uKWsnXKB8Qe51ODqTx
-         VJb9CuEOmzL+7qfrmiiPk+kLrWXXaW5wU/VX2AfvMlSrz0S0XUiJAeDkp2wViGIRKOYS
-         rsNT2sWZ5TfxV8xfI5kr2NmE5ZhR4NyN3aGubS7QGaxnHrIl1nm2Hjqxv9+qrp2/EpRu
-         pgUQ==
-X-Gm-Message-State: AJIora/yqOXrnEhnAcoxlMr5TzVQCf+eE5badDrnIzV7EMNiZQe5icKX
-        QcNS0QNFPGI2smnHBNPOzF5gfQ==
-X-Google-Smtp-Source: AGRyM1u2vA9N4bZpg7V9qLUF19XkH2La7QrUIbQA654KDtyevtqXUBfRbeaRFA6ZFNCrblKGfgwQxg==
-X-Received: by 2002:a17:902:8e8b:b0:168:a135:d636 with SMTP id bg11-20020a1709028e8b00b00168a135d636mr7343989plb.140.1655269199764;
-        Tue, 14 Jun 2022 21:59:59 -0700 (PDT)
+        bh=pGeqO4UYbPjEpueFQQzkGuJa78VBFe2OGHm+1nShac0=;
+        b=sTtFS/TqnryIPLnFuOJzs9KluDCkv6efgf6w+EHGlytM0regirYKg1wEXYIZa1fQd/
+         Us7+cfg+mqACoLKFn97APqHRwy9hP2p85g/I34PnGSP+zrMtVVy/CIYXqGJeh5lHPXEK
+         Q2RVzzsnPZ/a6TWsEw5wwZ9ma+RfQpehBDxa6pCFmZGnJkIyOyFGSIiKzCMzvjW19AE1
+         cwkQVDd0FhldCQlxhrxMO78+MaJMro3ScMfAz7y7qSBn2nzHtGvVP2ikW3NOrsa2YHst
+         rbDkCM1wJM5TWr0ueK251HkMTXs8EuaB47drPNd74caVdbXhUS/b9R7lASrhu/VTv95B
+         vTug==
+X-Gm-Message-State: AJIora8nlrU1T71IrcsAMCIJUwKJtTc8r6cmmSPAD8DKidOwE51dYOD5
+        nPZn0JBIUWzCXH+m1x44Jqrd1g==
+X-Google-Smtp-Source: AGRyM1ti86Qt00H0607v2/YgsHCgzhTX2lNkz2oGZq+mJRwXwRtPq1rCzO3pJcstWnHsxogh8xIWOg==
+X-Received: by 2002:a17:902:c94c:b0:168:f73b:f824 with SMTP id i12-20020a170902c94c00b00168f73bf824mr1033345pla.103.1655270706262;
+        Tue, 14 Jun 2022 22:25:06 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170902684d00b0015e8d4eb26csm8154990pln.182.2022.06.14.21.59.58
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b0016362da9a03sm8128077pli.245.2022.06.14.22.25.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 21:59:59 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 10:29:57 +0530
+        Tue, 14 Jun 2022 22:25:05 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 10:55:03 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 2/3] cpufreq: Panic if policy is active in
- cpufreq_policy_free()
-Message-ID: <20220615045957.55ocdyddcac3vwct@vireshk-i7>
-References: <8c3d50faf8811e86136fb3f9c459e43fc3c50bc0.1653565641.git.viresh.kumar@linaro.org>
- <426bf6edc80b2e944d459fa7b8dffbe8b73bb3d9.1653623526.git.viresh.kumar@linaro.org>
- <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nicolas Dechesne <nicolas.dechesne@linaro.org>
+Subject: Re: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at
+ drivers/opp/core.c:2265 dev_pm_opp_clear_config+0x174/0x17c
+Message-ID: <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
+References: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
+In-Reply-To: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -74,58 +75,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14-06-22, 15:59, Rafael J. Wysocki wrote:
-> On Fri, May 27, 2022 at 5:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > With the new design in place, to avoid potential races show() and
-> > store() callbacks check if the policy is active or not before proceeding
-> > any further. And in order to guarantee that cpufreq_policy_free() must
-> > be called after clearing the policy->cpus mask, i.e. by marking it
-> > inactive.
-> >
-> > Lets make sure we don't get a bug around this later and catch this early
-> > by putting a BUG_ON() within cpufreq_policy_free().
-> >
-> > Also update cpufreq_online() a bit to make sure we clear the cpus mask
-> > for each error case before calling cpufreq_policy_free().
-> >
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> > V2: Update cpufreq_online() and changelog.
-> >
-> >  drivers/cpufreq/cpufreq.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index e24aa5d4bca5..0f8245731783 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -1284,6 +1284,12 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> >         unsigned long flags;
-> >         int cpu;
-> >
-> > +       /*
-> > +        * The callers must ensure the policy is inactive by now, to avoid any
-> > +        * races with show()/store() callbacks.
-> > +        */
-> > +       BUG_ON(!policy_is_inactive(policy));
+On 15-06-22, 02:49, Naresh Kamboju wrote:
+> Following kernel crash reported while booting arm64 db410c board with
+> Linux next-20220614 [1] kfence enabled on this kernel.
 > 
-> I'm not a super-big fan of this change.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
-> First off, crashing the kernel outright here because of possible races
-> appears a bit excessive to me.
-> 
-> Second, it looks like we are worrying about the code running before
-> the wait_for_completion() call in cpufreq_policy_put_kobj(), because
-> after that call no one can be running show() or store().  So why don't
-> we reorder the wait_for_completion() call with respect to the code in
-> question instead?
+> Boot log:
+> ---------
+> [    0.850420] WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
 
-No, I am not worrying about that race. I am just trying to make sure some change
-in future doesn't break this assumption (that policy should be inactive by this
-point). That's all. It all looks good for now.
+A print like this normally comes when we hit a WARN or something.
 
-May be a WARN instead of BUG if we don't want to crash.
+Here is the line 2265 from above tag
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/opp/core.c?h=next-20220614#n2265
+
+which doesn't have any such WARNs there. I wonder where exactly we hit the WARN
+here and why it isn't showing up properly.
+
+> dev_pm_opp_clear_config+0x174/0x17c
+> [    0.850447] Modules linked in:
+> [    0.850459] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> 5.19.0-rc1-next-20220610 #1
+> [    0.850470] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [    0.850477] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    0.850489] pc : dev_pm_opp_clear_config+0x174/0x17c
+> [    0.850501] lr : dt_cpufreq_probe+0x1e4/0x4a0
+> [    0.850513] sp : ffff80000802bb00
+> [    0.850518] x29: ffff80000802bb00 x28: ffff80000ada1c30 x27: 0000000000000000
+> [    0.850538] x26: 00000000fffffdfb x25: ffff00000311f410 x24: ffff00000389ec90
+> [    0.850557] x23: ffff80000a9eea98 x22: ffff80000a9eed00 x21: ffff80000ada1b68
+> [    0.850576] x20: ffff00000389ec80 x19: ffff00003fc41308 x18: ffffffffffffffff
+> [    0.850595] x17: ffff800009f21700 x16: ffff8000080955c0 x15: ffff0000031c2a1c
+> [    0.850614] x14: 0000000000000001 x13: 0a6b636f6c632064 x12: 6e69662074276e64
+> [    0.850632] x11: 0000000000000040 x10: 0000000000000020 x9 : ffff800009006964
+> [    0.850650] x8 : 0000000000000020 x7 : ffffffffffffffff x6 : 0000000000000000
+> [    0.850668] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+> [    0.850686] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
+> [    0.850704] Call trace:
+> [    0.850708]  dev_pm_opp_clear_config+0x174/0x17c
+> [    0.850722]  platform_probe+0x74/0xf0
+
+Nevertheless, I see one place from where such a WARN can be hit, which can be
+fixed with:
+
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 58eae9de4b91..c3d4058d33fc 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2437,7 +2437,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_set_config);
+  */
+ void dev_pm_opp_clear_config(struct opp_table *opp_table)
+ {
+-       if (WARN_ON(!opp_table))
++       if (!opp_table)
+                return;
+
+        _opp_detach_genpd(opp_table);
+
+Not sure it fixes the issue you reported here though.
+
+Can you run the tests for my branch once, it has the updated fix as well.
+
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
 
 -- 
 viresh
