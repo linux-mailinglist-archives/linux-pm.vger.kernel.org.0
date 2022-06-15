@@ -2,104 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6640C54D123
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 20:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB6D54D135
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 20:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344643AbiFOSs5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 14:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S1358492AbiFOSyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 14:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243742AbiFOSs4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 14:48:56 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565F7488B5
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 11:48:55 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id a2so20293300lfg.5
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 11:48:55 -0700 (PDT)
+        with ESMTP id S244398AbiFOSyK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 14:54:10 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C7837003
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 11:54:08 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id s6so20259027lfo.13
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 11:54:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8AzuTqR/VhmKHqBcSBp3616lfq5fmK4NXiS/cbscqQo=;
-        b=FtmPeXneVF60SDS/p0NbQJ9R/tZ9AFJWKhYXNUMwLOx24m3cNE7XPWo5GEvQrf/RaR
-         WkZH7Dhpd3vMIQoObhBAr7tf0G4PwNzkjkjIRCQAsmydTZmCq3TKFkR6nuiMC0jXivRo
-         73yyPRFm0x+ee6MPpm0FegiDdzLpcSeV8YrdnNrP3/9BWLbirbD6IrzQUxV7XGgckjpI
-         JYvltv0K8vwN7XoA6UDcGfUMobAti79mF2PnZaTLpIq4g+SS9DT1LSMv94K0JhVzfhpJ
-         gMaLb/qMUqmm/fR50wkrr64P6P5N2heucbZMbNAsqtQOdJ3vv4q/S/BCgP8ITNR74FIA
-         uO+g==
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=R/+J1Y9yB1sPzolzla9qc2fDqAKL6OPTM1OdQs0CRno=;
+        b=abcd5znL1a7ok4I0g4GWuTjmiANg0iKDQGwuE8doxfsT9kdULYDdRiGccgJroEls8X
+         5xxZ8c5rwhA/zDqfvtRxTYIP5tKxBkenLEJWpclHtYqcMmHK2uWBV5hfIs0kRo7LEfbt
+         tMGhhPywkfqrfCOHEVHsbf6UtAOSJVXPOkoy4/k2815rrk9vAmRWXWK2HhxteiU/wkww
+         44eCjmP4UoMmiJFizXetKCX9q31AmKP1NgwtXf+uNkb1VeyaQ1V0Hct4EyPLVHQNq+wd
+         0QF+UxZGiWL2qZCF4My/2/U9LTnK3jD4sVBeSS9XopFiK2K4V6xWIYuWYAcSfFSMU5l2
+         BWBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8AzuTqR/VhmKHqBcSBp3616lfq5fmK4NXiS/cbscqQo=;
-        b=oK6aYltHAAinYhWcYFdv5xsURRFKYIH8xFLuEE/9atZhgRkkPxaxVKnCX4ymLs3MdR
-         AowO1BooEPugS7Jx76Hx3N9G3TU2QkJpgKHoPQ7N2mOjzNIO3t9BT5i3Wg67pEAEdsCr
-         ucFF+OFGH8rHx3ArbLPzL/WpdqQTjfJPoa22ykd/tP1ZbD2+JDYc44fmgUrVFmXzAn3O
-         b9B2hl61A8J4SCTek0GvDvgOdgqUBzsKLcJEeBwXxKHIRzP7lWiAi9PETO75XKZ5SRjL
-         UM0pW/lcsZmWRgkrdrTbJAoRLJuyx2pSlUgdonMe7WY1AAgzqasqnCArEtoL84c4kfs2
-         LZ5Q==
-X-Gm-Message-State: AJIora+fPi5UzkpQKBvhs2AtQz2nFzyun01CF5sj7uDHqmlN8jIl5nLj
-        XGQjifcvpDxT04Xzqzgy6A0YOA==
-X-Google-Smtp-Source: AGRyM1s4UBOS8t1hJJU2SerMWRYbqyQ/JWetrtXp0IgwjDpJoptNZXuWeyHZEYQNUlzPTfr8mYsc0w==
-X-Received: by 2002:a19:ca0c:0:b0:479:46c:2917 with SMTP id a12-20020a19ca0c000000b00479046c2917mr527488lfg.160.1655318933653;
-        Wed, 15 Jun 2022 11:48:53 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id t7-20020a2e9547000000b0024f3d1dae84sm1793516ljh.12.2022.06.15.11.48.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 11:48:53 -0700 (PDT)
-Message-ID: <07fdc72f-1581-f683-5b60-1c38186512f5@linaro.org>
-Date:   Wed, 15 Jun 2022 21:48:52 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=R/+J1Y9yB1sPzolzla9qc2fDqAKL6OPTM1OdQs0CRno=;
+        b=0cOx2SIHDZIqfm4oYGPczXCGaZxifEjkehbmXgpBdeBKV34KX9AS4B5MYXL5xULz1x
+         Pfjlgkrib0nl9YeM64gH7xFdLT4W3llhry8tWLLhcH/KNf7CR6frD6jk196V6WattUZG
+         IsXLlGFeGKha4+Y8IEtaOS/3odi1Mhshy7zalihMp5J28xdgxfjxtf9/TeIOPMtvuU3O
+         k4iYKk1ZzMb7hJXdO7Cb1vsCIbqNohMPsZ7XIJiXF8YLRtGVjN9Z1scEfHOVHqT0csg4
+         PRXbN+DKH0+YoSkLOwt6SwFk/xC7YjE35j+OYkKMZpfaIOLq7jLMlx4xneO2zKnqeQDZ
+         x/PA==
+X-Gm-Message-State: AJIora+3ZfZ7XPWgVBtycdsWxpaJYjWD1MKkeqD67su9em/IrkCQWtiX
+        lPfNHsVGzFlj83iyKn9zr8GqFxSSlIedqlvD79/18g==
+X-Google-Smtp-Source: AGRyM1vZyfNc9JAgC9nEBUVD0Y6H2PaXy7vuk+wdCfIJrdMLJd38EgjmEGlXRwPi+0wxDf1+ARhAiqhg2XaBUYJM7vo=
+X-Received: by 2002:a05:6512:2087:b0:479:1615:3afe with SMTP id
+ t7-20020a056512208700b0047916153afemr509273lfr.114.1655319247144; Wed, 15 Jun
+ 2022 11:54:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-Content-Language: en-GB
-To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>
-Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "khilman@kernel.org" <khilman@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>
-References: <20220609150851.23084-1-max.oss.09@gmail.com>
- <20220613191549.GA4092455-robh@kernel.org>
- <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
- <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
- <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
- <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
- <df432e88-8688-c229-5ef0-8ba001b72908@linaro.org>
- <8decc5b6d1f0bc028d60d444d939da4408e756d3.camel@toradex.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <8decc5b6d1f0bc028d60d444d939da4408e756d3.camel@toradex.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220609110337.1238762-1-jaz@semihalf.com> <20220609110337.1238762-2-jaz@semihalf.com>
+ <YqIJ8HtdqnoVzfQD@google.com> <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
+ <YqNVYz4+yVbWnmNv@google.com>
+In-Reply-To: <YqNVYz4+yVbWnmNv@google.com>
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+Date:   Wed, 15 Jun 2022 20:53:56 +0200
+Message-ID: <CAH76GKNSfaHwpy46r1WWTVgnsuijqcHe=H5nvUTUUs1UbdZvkQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle state
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Dunn <daviddunn@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>, Dominik Behr <dbehr@google.com>,
+        Dmitry Torokhov <dtor@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -108,84 +97,103 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/06/2022 21:13, Marcel Ziswiler wrote:
-> On Wed, 2022-06-15 at 10:37 -0700, Krzysztof Kozlowski wrote:
->> On 15/06/2022 10:31, Marcel Ziswiler wrote:
->>> Hi
->>>
->>> On Wed, 2022-06-15 at 10:15 -0700, Krzysztof Kozlowski wrote:
->>>> On 15/06/2022 09:10, Max Krummenacher wrote:
->>>>> Hi
->>>>>
->>>>> On Tue, Jun 14, 2022 at 9:22 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>>>>>
->>>>>> Hi Rob,
->>>>>>
->>>>>> On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
->>>>>>> On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
->>>>>>>> From: Max Krummenacher <max.krummenacher@toradex.com>
->>>>>>>>
->>>>>>>> its power enable by using a regulator.
->>>>>>>>
->>>>>>>> The currently implemented PM domain providers are all specific to
->>>>>>>> a particular system on chip.
->>>>>>>
->>>>>>> Yes, power domains tend to be specific to an SoC... 'power-domains' is
->>>>>>> supposed to be power islands in a chip. Linux 'PM domains' can be
->>>>>>> anything...
->>>>>
->>>>> I don't see why such power islands should be restricted to a SoC. You can
->>>>> build the exact same idea on a PCB or even more modular designs.
->>>>
->>>> In the SoC these power islands are more-or-less defined. These are real
->>>> regions gated by some control knob.
->>>>
->>>> Calling few devices on a board "power domain" does not make it a power
->>>> domain. There is no grouping, there is no control knob.
->>>>
->>>> Aren't you now re-implementing regulator supplies? How is this different
->>>> than existing supplies?
->>>
->>> I believe the biggest difference between power-domains and regulator-supplies lays in the former being
->>> driver
->>> agnostic while the later is driver specific.
->>
->> That's one way to look, but the other way (matching the bindings
->> purpose) is to look at hardware. You have physical wire / voltage rail
->> supply - use regulator supply. In the terms of the hardware - what is
->> that power domain? It's a concept, not a physical object.
-> 
-> Well, but how can that concept then exist within the SoC but not outside? I don't get it. Isn't it just the
-> exact same physical power gating thingy whether inside the SoC or on a PCB?
-> 
->>> Meaning with power-domains one can just add such arbitrary
->>> structure to the device tree without any further driver specific changes/handling required. While with
->>> regulator-supplies each and every driver actually needs to have driver specific handling thereof added. Or
->>> do I
->>> miss anything?
->>
->> Thanks for clarification but I am not sure if it matches the purpose of
->> bindings and DTS. You can change the implementation as well to have
->> implicit regulators. No need for new bindings for that.
-> 
-> Okay, maybe that would also work, of course. So basically add a new binding which allows adding regulators to
-> arbitrary nodes which then will be generically handled by e.g. runtime PM. Almost something like assigned-
-> clocks [1] you mean? I guess that could work. Remember that's why Max posted it as an RFC to get such feedback.
-> Thanks for further refining those ideas.
+pt., 10 cze 2022 o 16:30 Sean Christopherson <seanjc@google.com> napisa=C5=
+=82(a):
+>
+> On Fri, Jun 10, 2022, Grzegorz Jaszczyk wrote:
+> > czw., 9 cze 2022 o 16:55 Sean Christopherson <seanjc@google.com> napisa=
+=C5=82(a):
+> > Above could be actually prevented if the VMM had control over the
+> > guest resumption. E.g. after VMM receives notification about guest
+> > entering s2idle state, it would park the vCPU actually preventing it
+> > from exiting s2idle without VMM intervention.
+>
+> Ah, so you avoid races by assuming the VM wakes itself from s2idle any ti=
+me a vCPU
+> is run, even if the vCPU doesn't actually have a wake event.  That would =
+be very
+> useful info to put in the changelog.
 
-Please do not do this. You have an external device. It has some input 
-voltage rails. Please define -supply properties for each of the voltage 
-rails. Explicitly power them on and off. Use fixed-regulator for your 
-GPIO regulators. Other boards might have other ways to control the power 
-supply.
+Just to clarify: I assumed that the VM may wake from s2idle any time a
+vCPU is running and got a wake event. So going back to the previous
+example:
+1. VM0 enters s2idle
+2. VMM gets notification about VM0 is in s2idle and during this
+notification handling, the vCPU notifying about s2idle is not running
+(we are in the middle of handling vCPU exit in VMM). So even if some
+wakeup event will arrive it couldn't allow that vCPU to exit the
+s2idle. This pending wakeup event wouldn't wakeup the VM0 until VMM
+unpark the vCPU and VMM has control over it.
 
-Then define the pm_runtime callbacks doing proper work for you. If you 
-wish to do the magic, consider looking on the pm_clock.h interface (and 
-adding the pm_regulators.h). But this approach can also be frowned upon 
-by the PM maintainers. Nevertheless, this is the driver/core issue. The 
-DT interface should be the same: a set of regulators and a set of 
--supply properties.
+>
+> > > > +static void s2idle_hypervisor_notify(void)
+> > > > +{
+> > > > +     if (static_cpu_has(X86_FEATURE_HYPERVISOR))
+> > > > +             kvm_hypercall0(KVM_HC_SYSTEM_S2IDLE);
+> > >
+> > > Checking the HYPERVISOR flag is not remotely sufficient.  The hypervi=
+sor may not
+> > > be KVM, and if it is KVM, it may be an older version of KVM that does=
+n't support
+> > > the hypercall.  The latter scenario won't be fatal unless KVM has bee=
+n modified,
+> > > but blindly doing a hypercall for a different hypervisor could have d=
+isastrous
+> > > results, e.g. the registers ABIs are different, so the above will mak=
+e a random
+> > > request depending on what is in other GPRs.
+> >
+> > Good point: we've actually thought about not confusing/breaking VMMs
+> > so I've introduced KVM_CAP_X86_SYSTEM_S2IDLE VM capability in the
+> > second patch, but not breaking different hypervisors is another story.
+> > Would hiding it under new 's2idle_notify_kvm' module parameter work
+> > for upstream?:
+>
+> No, enumerating support via KVM_CPUID_FEATURES is the correct way to do s=
+omething
+> like this, e.g. see KVM_FEATURE_CLOCKSOURCE2.  But honestly I wouldn't sp=
+end too
+> much time understanding how all of that works, because I still feel quite=
+ strongly
+> that getting KVM involved is completely unnecessary.  A solution that isn=
+'t KVM
+> specific is preferable as it can then be implemented by any VMM that enum=
+erates
+> s2idle support to the guest.
 
--- 
-With best wishes
-Dmitry
+Sure, thank you for the explanation and an example.
+
+>
+> > > The bigger question is, why is KVM involved at all?  KVM is just a du=
+mb pipe out
+> > > to userspace, and not a very good one at that.  There are multiple we=
+ll established
+> > > ways to communicate with the VMM without custom hypercalls.
+> >
+> > Could you please kindly advise about the recommended way of
+> > communication with VMM, taking into account that we want to send this
+> > notification just before entering s2idle state (please see also answer
+> > to next comment), which is at a very late stage of the suspend process
+> > with a lot of functionality already suspended?
+>
+> MMIO or PIO for the actual exit, there's nothing special about hypercalls=
+.  As for
+> enumerating to the guest that it should do something, why not add a new A=
+CPI_LPS0_*
+> function?  E.g. something like
+>
+> static void s2idle_hypervisor_notify(void)
+> {
+>         if (lps0_dsm_func_mask > 0)
+>                 acpi_sleep_run_lps0_dsm(ACPI_LPS0_EXIT_HYPERVISOR_NOTIFY
+>                                         lps0_dsm_func_mask, lps0_dsm_guid=
+);
+> }
+
+Great, thank you for your suggestion! I will try this approach and
+come back. Since this will be the main change in the next version,
+will it be ok for you to add Suggested-by: Sean Christopherson
+<seanjc@google.com> tag?
+
+Best regards,
+Grzegorz
