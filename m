@@ -2,120 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D7D54C969
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 15:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D9D54C999
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 15:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348658AbiFONE4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 15 Jun 2022 09:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
+        id S1348894AbiFONQP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 09:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346889AbiFONEz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 09:04:55 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CC2727146
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 06:04:54 -0700 (PDT)
-Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
- (mail-zr0che01lp2112.outbound.protection.outlook.com [104.47.22.112]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-23-b2UX0rR3MNGe61fVk8qMLQ-2; Wed, 15 Jun 2022 15:04:50 +0200
-X-MC-Unique: b2UX0rR3MNGe61fVk8qMLQ-2
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- ZRAP278MB0061.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:14::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.14; Wed, 15 Jun 2022 13:04:48 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5353.013; Wed, 15 Jun 2022
- 13:04:48 +0000
-Date:   Wed, 15 Jun 2022 15:04:47 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        with ESMTP id S1349298AbiFONQK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 09:16:10 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D7B2A97D;
+        Wed, 15 Jun 2022 06:16:07 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id z11so8719731ilq.6;
+        Wed, 15 Jun 2022 06:16:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=zvLI0BlmqNbISbXhThShkWXXEhNvQvDes/xEcvuVD+s=;
+        b=JLg11JyEn7BHbZA7oRtVt6E6aZ0TOTVq77P1W3Mffnpdi1B0gZMVmIpFbK+agGuFqV
+         aIkVB3AyFoXl6XwmqvzYmV4z5L+bIngbhflKI1fiGPS3AwJxQy3XYz01XDsZuQAjkIfB
+         Bh4h0An41dlpB0AqvLinyk7yY2c7828ywzZr/2QlOE3Jt8h4sn6SqZYmFkdG7U1wy7oE
+         Jf6ffUL6vmfQvr7i0hco0PkTADByH16V3cT8iLj3nmsxLQQeNqMz5YIPZoVEqNMPlaNp
+         rAYYX3m3I3NwSlIgOigJqxQxbXQxXquzY13Nk8zdS2LyerfHD41IWYmex/Plb+5nCgqu
+         nLWQ==
+X-Gm-Message-State: AJIora+8QW4eHCHR1fgUmNCZUneOQZHx91Uyou62eyZDAhBesEbrhTPQ
+        cVBL9lbnGICDn0rUGGnUTg==
+X-Google-Smtp-Source: AGRyM1vlw8kiV5ITb9w8FLndwz/Q07d6wIyZQeUvhjl1bM49oCMY4Qo39rEhpsgn1K+F5SUXB9WI0Q==
+X-Received: by 2002:a05:6e02:2161:b0:2d3:d5e4:1574 with SMTP id s1-20020a056e02216100b002d3d5e41574mr5907967ilv.1.1655298966098;
+        Wed, 15 Jun 2022 06:16:06 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id r13-20020a6b2b0d000000b00669bcd058dcsm6843061ior.36.2022.06.15.06.16.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 06:16:05 -0700 (PDT)
+Received: (nullmailer pid 662454 invoked by uid 1000);
+        Wed, 15 Jun 2022 13:16:02 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 4/9] imx: thermal: Configure trip point from DT
-Message-ID: <20220615130447.GD388464@francesco-nb.int.toradex.com>
-References: <20220615094804.388280-1-francesco.dolcini@toradex.com>
- <20220615094804.388280-5-francesco.dolcini@toradex.com>
- <20220615103956.qm3o45n2hyuylgwf@pengutronix.de>
-In-Reply-To: <20220615103956.qm3o45n2hyuylgwf@pengutronix.de>
-X-ClientProxiedBy: MR2P264CA0080.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:32::20) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 168ca7a6-26ac-4546-885f-08da4ecfa08a
-X-MS-TrafficTypeDiagnostic: ZRAP278MB0061:EE_
-X-Microsoft-Antispam-PRVS: <ZRAP278MB0061D50859A3C4103BB32A20E2AD9@ZRAP278MB0061.CHEP278.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: OAzTrNYb316YomGINh0b2xxAFyFVVRRb8yTrF3s2Fz2KDhjBY+thEd9M7dki76MlSguwmscWW2yRsg49RMtkbZ8rcaRlFYXsdoBtSH0j9x0Pva6897TKECc8Mp7NAKwAXqWF4x5gB0JOnx8f3Y44uSZ5W5jIyrCmBrjkIWeTfIFX6ZBFdDeaRPS4RsYuDRGTuypsnfq3/kn1gnDIjJILkfXhaBG61HIWsz0Hrp/3V6RrQDUWBmPKxUd05/lhTBUwqanZ8rSKAONrVFqXh+fo8u+mYhHWecChIlUZ458HamccSsElFs6uQyeUs0pHBnF3rBGgs6360ewa3rbiQgghHAI6HrZ3VSWrK1kVlz20iB/r0Lq9//FuAUTQD6N0QClPIr6l5Fg1EJEz+dSzssyBANOdu4IgN4hWOMjazzgl9GDKSMIaPZsOqiMbgxnf2Pp6UERIv9SNzSc+PzR9nTjkYu/eaPOOglpk6DCz0dqmbWcyLJR7jDQGi2E/1p6K/aIwsPxCwsM3Z1czbPOCbrtDYKMdtMnEwGVrhUYDFuGshnGMYADUBjZo/p5PWUetBLr3iDXQdUK4dBFqEdLOsbuxCQfJ+S83YSJYMKRHhL9WjbD3Y7eBxBAbCXI69gAQf4xabTDFfLT51N9iYvAT9Kte41tSi0cI01yMIQkzohASOkKXaYfPDDmmXnM86v7OvzYbgn74GO8RCIiMFommRfX9cA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(39850400004)(366004)(33656002)(8936002)(38100700002)(316002)(4326008)(5660300002)(8676002)(38350700002)(52116002)(6506007)(6486002)(6512007)(7416002)(66476007)(508600001)(66946007)(66556008)(54906003)(2906002)(26005)(6916009)(4744005)(44832011)(186003)(1076003)(86362001)(41300700001);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kBdAyLJuKW4xgI6oEiaHHi05Df01FSN9SzbPqp2Cn7nJ9GSOX8HvCHqD73YA?=
- =?us-ascii?Q?tbXUquy5tGBpGmexdy8hKvR6hAzvA85qIPHT14t9GzDLQETnymNxMG+T/lw7?=
- =?us-ascii?Q?YL0eYGJOrcvZj6eapUecc9V2Qlx2X08fLrbMp8J+DwosCjYn7IOpZzAsgCYB?=
- =?us-ascii?Q?yfLm5DomxgYz0XKYc2WONFk8k/Mm1syPrs1HDI+rBggmjSrQmH5YgjdNUwHI?=
- =?us-ascii?Q?JJFMN2Rg0uHLOsS/1YuZ+GF76p+FinFHKqvlrkDIdjN8sXqZ0NNnP+T2bHMC?=
- =?us-ascii?Q?ErppmRK4yizBXr7ozeUj8mn626CK5JKE879jJuuizn18GUTkyPqXItUHaHyN?=
- =?us-ascii?Q?piSUhbyL5LyWQUXQoigc+Uhchc5O6lhsFVUpx3aSPOBVwEhZVpd1oIFMXSni?=
- =?us-ascii?Q?Oc0HO2YPAsAl8/9ut5JQxvuv7cnVS6EqFeLFZ9X2XOnlmVJ1uOzRP8bCUxK9?=
- =?us-ascii?Q?sRacdmzqsXkBKO5X6F+wtiRiiK0vNa8kSKMdeWT1Yp1fVnV2KpD9qJ20wiO7?=
- =?us-ascii?Q?jK21wvQFIXYJSkw4nU80xRRIZ1Ze1hzzqGemWaOxTF5V5QfgrCZS1yOQaFTX?=
- =?us-ascii?Q?FeYi7kc0cAGvZY99MVJ2WibqRgFilPosmWo82ziXeCbDvENjx4eyNPCvMbK4?=
- =?us-ascii?Q?JbNDfQWcS3X+JGeKhocQMXbl6fuRQ8oKFf3HHwFHaCUigay+4YoWqCMcKwnO?=
- =?us-ascii?Q?8PisPZgXRZbRo5/JNaLHoNUi+ruuxdZHW4pDmlwxNniWqjBs/SJDuFZ1nyVv?=
- =?us-ascii?Q?1i3qFfNSmC8yENuD6khXe0foj17ku2QEg657vALGXu1m1zXn4EFQCgCt/rL9?=
- =?us-ascii?Q?rlc8udqSt9fsbgzp61WGEeh9QTzmV3vQVnzrZvVXXbtZRjRdym+wGk6HmGMS?=
- =?us-ascii?Q?BJPpk+zjnka5DU/8A+Th9wV2BWI0SRxQWTiFvGgvsZHOuaoddZppB6SZeiy9?=
- =?us-ascii?Q?j2/WxK8aOjdvc/qGlhO8pu7W4FJSCQjOFjxPIS0YubjtEfRNkmlvy6JXHe7e?=
- =?us-ascii?Q?0WgmLZ8buOiUBq1qnQof1vc3S+YYjcIUzFMqff5Z4qgVBQmmJ6S23y9Vd4RZ?=
- =?us-ascii?Q?teylIC77QNBLT2gXWJlA1azQdsJuFHtoPf2mlp+NrBhzg03HmLx7a54CqlU+?=
- =?us-ascii?Q?H5/8BunnElJfLfG5QAvWGc1T1AqUlELhc/8nLE7LJUURQgePSCo8StQ3p0Jk?=
- =?us-ascii?Q?2EepffUHp+Qx3BpG9hgrp8ZoSfKqL1V0OMLbCwyC/KSpILr3rE0IxeYYxgLw?=
- =?us-ascii?Q?Qv9paHtO0GpxjuWyQWHbFLAvEdC4LE29MP5a5GAeAfZ8Rm2gRvPerX8vm44W?=
- =?us-ascii?Q?UqaLh5Zv8E9c0m9pSzCz7Lw/M2oNkxPe0VVYKGoUD1BhTGHPqVfVATle8szQ?=
- =?us-ascii?Q?YqkxPTVMLOrOunaNHo7KSDbvHbnd8Zknyo0sm4BPDYJf/sDXeYOfRsZfXX4v?=
- =?us-ascii?Q?PTrZIKdC7VkKiojromH+HzLpyJoNMzLMJYKFtaT+6CE/5donSnqPtnrQhhW/?=
- =?us-ascii?Q?pIlzAcxCa3RReMJ4Z0lGIMoVp/gvhDGsCHm4e9YVl387hJ90pEe38EwmfmCi?=
- =?us-ascii?Q?NF57X4twRhAPJ9vXzjS4JeNmw1jNH42YkNI6/3eP+1gnCILmJZBFy9GpotQQ?=
- =?us-ascii?Q?gvkGM7epFCTqNaxysl0jlGghJSMx3K7DxeGB8b+sd46U7KBhI2QdPY3IddaF?=
- =?us-ascii?Q?RGB6dZJov9jja7wxN0e7gVq6O9H+C+E2utiJj93AqNpE5dDRDZGNZqwTGBgz?=
- =?us-ascii?Q?3BTIiPpZ1X/2AyM5mmXW4LiiT77M9Rc=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 168ca7a6-26ac-4546-885f-08da4ecfa08a
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 13:04:48.5914
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zk/sf+VairS6Uoa3EJrq8fjVnA3xcBnKVecLoFRyFtfLxsFlu2LR+iC3MaG5NfD3qgJzmIwe2rCk61SNFW0tvXyOxwC1KuG2MIlqM+BVskU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0061
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Zhang Rui <rui.zhang@intel.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20220615094804.388280-4-francesco.dolcini@toradex.com>
+References: <20220615094804.388280-1-francesco.dolcini@toradex.com> <20220615094804.388280-4-francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v1 3/9] dt-bindings: thermal: imx: Add trips point
+Date:   Wed, 15 Jun 2022 07:16:02 -0600
+Message-Id: <1655298962.409974.662453.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,26 +71,356 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 12:39:56PM +0200, Marco Felsch wrote:
-> On 22-06-15, Francesco Dolcini wrote:
-> > +static void imx_init_temp_from_of(struct platform_device *pdev, const char *name)
-> > +{
-> > +	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-> > +	struct device_node *thermal, *trips, *trip_point;
-> > +
-> > +	thermal = of_get_child_by_name(pdev->dev.of_node, name);
+On Wed, 15 Jun 2022 11:47:58 +0200, Francesco Dolcini wrote:
+> Add trips point to i.MX Thermal bindings for each temperature grade
+> (automotive, commercial, extended-commercial and industrial) to enable
+> specifying a different trip point than the hard-coded value.
 > 
-> here I would do:
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> ---
+>  .../bindings/thermal/imx-thermal.yaml         | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
 > 
-> 	if (!thermal)
-> 		return;
-> 
-> since the thermal node is only available with your dt-changes in place.
 
-I didn't do it since from my understanding both `of_get_child_by_name`
-and `for_each_child_of_node` just handle correctly NULL as an input
-parameter. Anyway, I agree that your suggested change would make
-crystal clear that this is optional, I'll do it.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-Francesco
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/
+
+
+temperature-sensor: compatible:0: 'fsl,imx6sll-tempmon' is not one of ['fsl,imx6q-tempmon', 'fsl,imx6sx-tempmon', 'fsl,imx7d-tempmon']
+	arch/arm/boot/dts/imx6sll-evk.dtb
+	arch/arm/boot/dts/imx6sll-kobo-clarahd.dtb
+	arch/arm/boot/dts/imx6sll-kobo-librah2o.dtb
+
+temperature-sensor: compatible: ['fsl,imx6sll-tempmon', 'fsl,imx6sx-tempmon'] is too long
+	arch/arm/boot/dts/imx6sll-evk.dtb
+	arch/arm/boot/dts/imx6sll-kobo-clarahd.dtb
+	arch/arm/boot/dts/imx6sll-kobo-librah2o.dtb
+
+tempmon: compatible:0: 'fsl,imx6ul-tempmon' is not one of ['fsl,imx6q-tempmon', 'fsl,imx6sx-tempmon', 'fsl,imx7d-tempmon']
+	arch/arm/boot/dts/imx6ul-14x14-evk.dtb
+	arch/arm/boot/dts/imx6ul-ccimx6ulsbcexpress.dtb
+	arch/arm/boot/dts/imx6ul-ccimx6ulsbcpro.dtb
+	arch/arm/boot/dts/imx6ul-geam.dtb
+	arch/arm/boot/dts/imx6ul-isiot-emmc.dtb
+	arch/arm/boot/dts/imx6ul-isiot-nand.dtb
+	arch/arm/boot/dts/imx6ul-kontron-n6310-s-43.dtb
+	arch/arm/boot/dts/imx6ul-kontron-n6310-s.dtb
+	arch/arm/boot/dts/imx6ull-14x14-evk.dtb
+	arch/arm/boot/dts/imx6ull-colibri-aster.dtb
+	arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dtb
+	arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dtb
+	arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dtb
+	arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dtb
+	arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtb
+	arch/arm/boot/dts/imx6ull-colibri-iris.dtb
+	arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtb
+	arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dtb
+	arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dtb
+	arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dtb
+	arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dtb
+	arch/arm/boot/dts/imx6ul-liteboard.dtb
+	arch/arm/boot/dts/imx6ull-jozacp.dtb
+	arch/arm/boot/dts/imx6ull-myir-mys-6ulx-eval.dtb
+	arch/arm/boot/dts/imx6ull-opos6uldev.dtb
+	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-emmc.dtb
+	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb
+	arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb
+	arch/arm/boot/dts/imx6ull-phytec-tauri-emmc.dtb
+	arch/arm/boot/dts/imx6ull-phytec-tauri-nand.dtb
+	arch/arm/boot/dts/imx6ull-tqma6ull2l-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ull-tqma6ull2-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ul-opos6uldev.dtb
+	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-emmc.dtb
+	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb
+	arch/arm/boot/dts/imx6ul-pico-dwarf.dtb
+	arch/arm/boot/dts/imx6ul-pico-hobbit.dtb
+	arch/arm/boot/dts/imx6ul-pico-pi.dtb
+	arch/arm/boot/dts/imx6ul-prti6g.dtb
+	arch/arm/boot/dts/imx6ul-tqma6ul1-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ul-tqma6ul2l-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ul-tqma6ul2-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ul-tx6ul-0010.dtb
+	arch/arm/boot/dts/imx6ul-tx6ul-0011.dtb
+	arch/arm/boot/dts/imx6ul-tx6ul-mainboard.dtb
+	arch/arm/boot/dts/imx6ulz-14x14-evk.dtb
+	arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dtb
+
+tempmon: compatible: ['fsl,imx6sx-tempmon', 'fsl,imx6q-tempmon'] is too long
+	arch/arm/boot/dts/imx6sx-nitrogen6sx.dtb
+	arch/arm/boot/dts/imx6sx-sabreauto.dtb
+	arch/arm/boot/dts/imx6sx-sdb.dtb
+	arch/arm/boot/dts/imx6sx-sdb-mqs.dtb
+	arch/arm/boot/dts/imx6sx-sdb-reva.dtb
+	arch/arm/boot/dts/imx6sx-sdb-sai.dtb
+	arch/arm/boot/dts/imx6sx-softing-vining-2000.dtb
+	arch/arm/boot/dts/imx6sx-udoo-neo-basic.dtb
+	arch/arm/boot/dts/imx6sx-udoo-neo-extended.dtb
+	arch/arm/boot/dts/imx6sx-udoo-neo-full.dtb
+
+tempmon: compatible: ['fsl,imx6ul-tempmon', 'fsl,imx6sx-tempmon'] is too long
+	arch/arm/boot/dts/imx6ul-14x14-evk.dtb
+	arch/arm/boot/dts/imx6ul-ccimx6ulsbcexpress.dtb
+	arch/arm/boot/dts/imx6ul-ccimx6ulsbcpro.dtb
+	arch/arm/boot/dts/imx6ul-geam.dtb
+	arch/arm/boot/dts/imx6ul-isiot-emmc.dtb
+	arch/arm/boot/dts/imx6ul-isiot-nand.dtb
+	arch/arm/boot/dts/imx6ul-kontron-n6310-s-43.dtb
+	arch/arm/boot/dts/imx6ul-kontron-n6310-s.dtb
+	arch/arm/boot/dts/imx6ull-14x14-evk.dtb
+	arch/arm/boot/dts/imx6ull-colibri-aster.dtb
+	arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dtb
+	arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dtb
+	arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dtb
+	arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dtb
+	arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtb
+	arch/arm/boot/dts/imx6ull-colibri-iris.dtb
+	arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtb
+	arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dtb
+	arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dtb
+	arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dtb
+	arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dtb
+	arch/arm/boot/dts/imx6ul-liteboard.dtb
+	arch/arm/boot/dts/imx6ull-jozacp.dtb
+	arch/arm/boot/dts/imx6ull-myir-mys-6ulx-eval.dtb
+	arch/arm/boot/dts/imx6ull-opos6uldev.dtb
+	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-emmc.dtb
+	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb
+	arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb
+	arch/arm/boot/dts/imx6ull-phytec-tauri-emmc.dtb
+	arch/arm/boot/dts/imx6ull-phytec-tauri-nand.dtb
+	arch/arm/boot/dts/imx6ull-tqma6ull2l-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ull-tqma6ull2-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ul-opos6uldev.dtb
+	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-emmc.dtb
+	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb
+	arch/arm/boot/dts/imx6ul-pico-dwarf.dtb
+	arch/arm/boot/dts/imx6ul-pico-hobbit.dtb
+	arch/arm/boot/dts/imx6ul-pico-pi.dtb
+	arch/arm/boot/dts/imx6ul-prti6g.dtb
+	arch/arm/boot/dts/imx6ul-tqma6ul1-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ul-tqma6ul2l-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ul-tqma6ul2-mba6ulx.dtb
+	arch/arm/boot/dts/imx6ul-tx6ul-0010.dtb
+	arch/arm/boot/dts/imx6ul-tx6ul-0011.dtb
+	arch/arm/boot/dts/imx6ul-tx6ul-mainboard.dtb
+	arch/arm/boot/dts/imx6ulz-14x14-evk.dtb
+	arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dtb
+
+tempmon: '#thermal-sensor-cells' does not match any of the regexes: '^(automotive|commercial|extended-commercial|industrial)-thermal$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/imx6dl-alti6p.dtb
+	arch/arm/boot/dts/imx6dl-apf6dev.dtb
+	arch/arm/boot/dts/imx6dl-aristainetos2_4.dtb
+	arch/arm/boot/dts/imx6dl-aristainetos2_7.dtb
+	arch/arm/boot/dts/imx6dl-aristainetos_4.dtb
+	arch/arm/boot/dts/imx6dl-aristainetos_7.dtb
+	arch/arm/boot/dts/imx6dl-b105pv2.dtb
+	arch/arm/boot/dts/imx6dl-b105v2.dtb
+	arch/arm/boot/dts/imx6dl-b125pv2.dtb
+	arch/arm/boot/dts/imx6dl-b125v2.dtb
+	arch/arm/boot/dts/imx6dl-b155v2.dtb
+	arch/arm/boot/dts/imx6dl-colibri-aster.dtb
+	arch/arm/boot/dts/imx6dl-colibri-eval-v3.dtb
+	arch/arm/boot/dts/imx6dl-colibri-iris.dtb
+	arch/arm/boot/dts/imx6dl-colibri-iris-v2.dtb
+	arch/arm/boot/dts/imx6dl-cubox-i.dtb
+	arch/arm/boot/dts/imx6dl-cubox-i-emmc-som-v15.dtb
+	arch/arm/boot/dts/imx6dl-cubox-i-som-v15.dtb
+	arch/arm/boot/dts/imx6dl-dfi-fs700-m60.dtb
+	arch/arm/boot/dts/imx6dl-dhcom-picoitx.dtb
+	arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dtb
+	arch/arm/boot/dts/imx6dl-emcon-avari.dtb
+	arch/arm/boot/dts/imx6dl-gw51xx.dtb
+	arch/arm/boot/dts/imx6dl-gw52xx.dtb
+	arch/arm/boot/dts/imx6dl-gw53xx.dtb
+	arch/arm/boot/dts/imx6dl-gw54xx.dtb
+	arch/arm/boot/dts/imx6dl-gw551x.dtb
+	arch/arm/boot/dts/imx6dl-gw552x.dtb
+	arch/arm/boot/dts/imx6dl-gw553x.dtb
+	arch/arm/boot/dts/imx6dl-gw560x.dtb
+	arch/arm/boot/dts/imx6dl-gw5903.dtb
+	arch/arm/boot/dts/imx6dl-gw5904.dtb
+	arch/arm/boot/dts/imx6dl-gw5907.dtb
+	arch/arm/boot/dts/imx6dl-gw5910.dtb
+	arch/arm/boot/dts/imx6dl-gw5912.dtb
+	arch/arm/boot/dts/imx6dl-gw5913.dtb
+	arch/arm/boot/dts/imx6dl-hummingboard2.dtb
+	arch/arm/boot/dts/imx6dl-hummingboard2-emmc-som-v15.dtb
+	arch/arm/boot/dts/imx6dl-hummingboard2-som-v15.dtb
+	arch/arm/boot/dts/imx6dl-hummingboard.dtb
+	arch/arm/boot/dts/imx6dl-hummingboard-emmc-som-v15.dtb
+	arch/arm/boot/dts/imx6dl-hummingboard-som-v15.dtb
+	arch/arm/boot/dts/imx6dl-icore.dtb
+	arch/arm/boot/dts/imx6dl-icore-mipi.dtb
+	arch/arm/boot/dts/imx6dl-icore-rqs.dtb
+	arch/arm/boot/dts/imx6dl-lanmcu.dtb
+	arch/arm/boot/dts/imx6dl-mamoj.dtb
+	arch/arm/boot/dts/imx6dl-mba6a.dtb
+	arch/arm/boot/dts/imx6dl-mba6b.dtb
+	arch/arm/boot/dts/imx6dl-nit6xlite.dtb
+	arch/arm/boot/dts/imx6dl-nitrogen6x.dtb
+	arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dtb
+	arch/arm/boot/dts/imx6dl-phytec-pbab01.dtb
+	arch/arm/boot/dts/imx6dl-pico-dwarf.dtb
+	arch/arm/boot/dts/imx6dl-pico-hobbit.dtb
+	arch/arm/boot/dts/imx6dl-pico-nymph.dtb
+	arch/arm/boot/dts/imx6dl-pico-pi.dtb
+	arch/arm/boot/dts/imx6dl-plybas.dtb
+	arch/arm/boot/dts/imx6dl-plym2m.dtb
+	arch/arm/boot/dts/imx6dl-prtmvt.dtb
+	arch/arm/boot/dts/imx6dl-prtrvt.dtb
+	arch/arm/boot/dts/imx6dl-prtvt7.dtb
+	arch/arm/boot/dts/imx6dl-rex-basic.dtb
+	arch/arm/boot/dts/imx6dl-riotboard.dtb
+	arch/arm/boot/dts/imx6dl-sabreauto.dtb
+	arch/arm/boot/dts/imx6dl-sabrelite.dtb
+	arch/arm/boot/dts/imx6dl-sabresd.dtb
+	arch/arm/boot/dts/imx6dl-savageboard.dtb
+	arch/arm/boot/dts/imx6dl-skov-revc-lt2.dtb
+	arch/arm/boot/dts/imx6dl-skov-revc-lt6.dtb
+	arch/arm/boot/dts/imx6dl-solidsense.dtb
+	arch/arm/boot/dts/imx6dl-ts4900.dtb
+	arch/arm/boot/dts/imx6dl-ts7970.dtb
+	arch/arm/boot/dts/imx6dl-tx6dl-comtft.dtb
+	arch/arm/boot/dts/imx6dl-tx6s-8034.dtb
+	arch/arm/boot/dts/imx6dl-tx6s-8034-mb7.dtb
+	arch/arm/boot/dts/imx6dl-tx6s-8035.dtb
+	arch/arm/boot/dts/imx6dl-tx6s-8035-mb7.dtb
+	arch/arm/boot/dts/imx6dl-tx6u-801x.dtb
+	arch/arm/boot/dts/imx6dl-tx6u-8033.dtb
+	arch/arm/boot/dts/imx6dl-tx6u-8033-mb7.dtb
+	arch/arm/boot/dts/imx6dl-tx6u-80xx-mb7.dtb
+	arch/arm/boot/dts/imx6dl-tx6u-811x.dtb
+	arch/arm/boot/dts/imx6dl-tx6u-81xx-mb7.dtb
+	arch/arm/boot/dts/imx6dl-udoo.dtb
+	arch/arm/boot/dts/imx6dl-victgo.dtb
+	arch/arm/boot/dts/imx6dl-vicut1.dtb
+	arch/arm/boot/dts/imx6dl-wandboard.dtb
+	arch/arm/boot/dts/imx6dl-wandboard-revb1.dtb
+	arch/arm/boot/dts/imx6dl-wandboard-revd1.dtb
+	arch/arm/boot/dts/imx6dl-yapp4-draco.dtb
+	arch/arm/boot/dts/imx6dl-yapp4-hydra.dtb
+	arch/arm/boot/dts/imx6dl-yapp4-orion.dtb
+	arch/arm/boot/dts/imx6dl-yapp4-ursa.dtb
+	arch/arm/boot/dts/imx6q-apalis-eval.dtb
+	arch/arm/boot/dts/imx6q-apalis-ixora.dtb
+	arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dtb
+	arch/arm/boot/dts/imx6q-apf6dev.dtb
+	arch/arm/boot/dts/imx6q-arm2.dtb
+	arch/arm/boot/dts/imx6q-b450v3.dtb
+	arch/arm/boot/dts/imx6q-b650v3.dtb
+	arch/arm/boot/dts/imx6q-b850v3.dtb
+	arch/arm/boot/dts/imx6q-bosch-acc.dtb
+	arch/arm/boot/dts/imx6q-cm-fx6.dtb
+	arch/arm/boot/dts/imx6q-cubox-i.dtb
+	arch/arm/boot/dts/imx6q-cubox-i-emmc-som-v15.dtb
+	arch/arm/boot/dts/imx6q-cubox-i-som-v15.dtb
+	arch/arm/boot/dts/imx6q-dfi-fs700-m60.dtb
+	arch/arm/boot/dts/imx6q-dhcom-pdk2.dtb
+	arch/arm/boot/dts/imx6q-display5-tianma-tm070-1280x768.dtb
+	arch/arm/boot/dts/imx6q-dmo-edmqmx6.dtb
+	arch/arm/boot/dts/imx6q-dms-ba16.dtb
+	arch/arm/boot/dts/imx6q-ds.dtb
+	arch/arm/boot/dts/imx6q-emcon-avari.dtb
+	arch/arm/boot/dts/imx6q-evi.dtb
+	arch/arm/boot/dts/imx6q-gk802.dtb
+	arch/arm/boot/dts/imx6q-gw51xx.dtb
+	arch/arm/boot/dts/imx6q-gw52xx.dtb
+	arch/arm/boot/dts/imx6q-gw53xx.dtb
+	arch/arm/boot/dts/imx6q-gw5400-a.dtb
+	arch/arm/boot/dts/imx6q-gw54xx.dtb
+	arch/arm/boot/dts/imx6q-gw551x.dtb
+	arch/arm/boot/dts/imx6q-gw552x.dtb
+	arch/arm/boot/dts/imx6q-gw553x.dtb
+	arch/arm/boot/dts/imx6q-gw560x.dtb
+	arch/arm/boot/dts/imx6q-gw5903.dtb
+	arch/arm/boot/dts/imx6q-gw5904.dtb
+	arch/arm/boot/dts/imx6q-gw5907.dtb
+	arch/arm/boot/dts/imx6q-gw5910.dtb
+	arch/arm/boot/dts/imx6q-gw5912.dtb
+	arch/arm/boot/dts/imx6q-gw5913.dtb
+	arch/arm/boot/dts/imx6q-h100.dtb
+	arch/arm/boot/dts/imx6q-hummingboard2.dtb
+	arch/arm/boot/dts/imx6q-hummingboard2-emmc-som-v15.dtb
+	arch/arm/boot/dts/imx6q-hummingboard2-som-v15.dtb
+	arch/arm/boot/dts/imx6q-hummingboard.dtb
+	arch/arm/boot/dts/imx6q-hummingboard-emmc-som-v15.dtb
+	arch/arm/boot/dts/imx6q-hummingboard-som-v15.dtb
+	arch/arm/boot/dts/imx6q-icore.dtb
+	arch/arm/boot/dts/imx6q-icore-mipi.dtb
+	arch/arm/boot/dts/imx6q-icore-ofcap10.dtb
+	arch/arm/boot/dts/imx6q-icore-ofcap12.dtb
+	arch/arm/boot/dts/imx6q-icore-rqs.dtb
+	arch/arm/boot/dts/imx6q-kp-tpc.dtb
+	arch/arm/boot/dts/imx6q-logicpd.dtb
+	arch/arm/boot/dts/imx6q-marsboard.dtb
+	arch/arm/boot/dts/imx6q-mba6a.dtb
+	arch/arm/boot/dts/imx6q-mba6b.dtb
+	arch/arm/boot/dts/imx6q-mccmon6.dtb
+	arch/arm/boot/dts/imx6q-nitrogen6_max.dtb
+	arch/arm/boot/dts/imx6q-nitrogen6_som2.dtb
+	arch/arm/boot/dts/imx6q-nitrogen6x.dtb
+	arch/arm/boot/dts/imx6q-novena.dtb
+	arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dtb
+	arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dtb
+	arch/arm/boot/dts/imx6q-phytec-pbab01.dtb
+	arch/arm/boot/dts/imx6q-pico-dwarf.dtb
+	arch/arm/boot/dts/imx6q-pico-hobbit.dtb
+	arch/arm/boot/dts/imx6q-pico-nymph.dtb
+	arch/arm/boot/dts/imx6q-pico-pi.dtb
+	arch/arm/boot/dts/imx6q-pistachio.dtb
+	arch/arm/boot/dts/imx6qp-mba6b.dtb
+	arch/arm/boot/dts/imx6qp-nitrogen6_max.dtb
+	arch/arm/boot/dts/imx6qp-nitrogen6_som2.dtb
+	arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dtb
+	arch/arm/boot/dts/imx6qp-prtwd3.dtb
+	arch/arm/boot/dts/imx6q-prti6q.dtb
+	arch/arm/boot/dts/imx6q-prtwd2.dtb
+	arch/arm/boot/dts/imx6qp-sabreauto.dtb
+	arch/arm/boot/dts/imx6qp-sabresd.dtb
+	arch/arm/boot/dts/imx6qp-tx6qp-8037.dtb
+	arch/arm/boot/dts/imx6qp-tx6qp-8037-mb7.dtb
+	arch/arm/boot/dts/imx6qp-tx6qp-8137.dtb
+	arch/arm/boot/dts/imx6qp-tx6qp-8137-mb7.dtb
+	arch/arm/boot/dts/imx6qp-vicutp.dtb
+	arch/arm/boot/dts/imx6qp-wandboard-revd1.dtb
+	arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dtb
+	arch/arm/boot/dts/imx6qp-zii-rdu2.dtb
+	arch/arm/boot/dts/imx6q-rex-pro.dtb
+	arch/arm/boot/dts/imx6q-sabreauto.dtb
+	arch/arm/boot/dts/imx6q-sabrelite.dtb
+	arch/arm/boot/dts/imx6q-sabresd.dtb
+	arch/arm/boot/dts/imx6q-savageboard.dtb
+	arch/arm/boot/dts/imx6q-sbc6x.dtb
+	arch/arm/boot/dts/imx6q-skov-revc-lt2.dtb
+	arch/arm/boot/dts/imx6q-skov-revc-lt6.dtb
+	arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dtb
+	arch/arm/boot/dts/imx6q-solidsense.dtb
+	arch/arm/boot/dts/imx6q-tbs2910.dtb
+	arch/arm/boot/dts/imx6q-ts4900.dtb
+	arch/arm/boot/dts/imx6q-ts7970.dtb
+	arch/arm/boot/dts/imx6q-tx6q-1010-comtft.dtb
+	arch/arm/boot/dts/imx6q-tx6q-1010.dtb
+	arch/arm/boot/dts/imx6q-tx6q-1020-comtft.dtb
+	arch/arm/boot/dts/imx6q-tx6q-1020.dtb
+	arch/arm/boot/dts/imx6q-tx6q-1036.dtb
+	arch/arm/boot/dts/imx6q-tx6q-1036-mb7.dtb
+	arch/arm/boot/dts/imx6q-tx6q-10x0-mb7.dtb
+	arch/arm/boot/dts/imx6q-tx6q-1110.dtb
+	arch/arm/boot/dts/imx6q-tx6q-11x0-mb7.dtb
+	arch/arm/boot/dts/imx6q-udoo.dtb
+	arch/arm/boot/dts/imx6q-utilite-pro.dtb
+	arch/arm/boot/dts/imx6q-var-dt6customboard.dtb
+	arch/arm/boot/dts/imx6q-vicut1.dtb
+	arch/arm/boot/dts/imx6q-wandboard.dtb
+	arch/arm/boot/dts/imx6q-wandboard-revb1.dtb
+	arch/arm/boot/dts/imx6q-wandboard-revd1.dtb
+	arch/arm/boot/dts/imx6q-yapp4-crux.dtb
+	arch/arm/boot/dts/imx6q-zii-rdu2.dtb
+	arch/arm/boot/dts/imx6s-dhcom-drc02.dtb
 
