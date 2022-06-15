@@ -2,143 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBA454C122
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 07:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7FE54C148
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 07:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345776AbiFOFZI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 01:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S240797AbiFOFfp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 01:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbiFOFZH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 01:25:07 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C921D48E5D
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 22:25:06 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso2848563pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 22:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pGeqO4UYbPjEpueFQQzkGuJa78VBFe2OGHm+1nShac0=;
-        b=DNajTQmeSO+SYkqEP2ISK2l0hgbr8KRNFEXaQ8NnViOlc3F5D94YL/OLjpnDBQJwwP
-         xSHTJqkXvi4GTvke57PM7+VB9BOXiRgP4SyyiK3uEzMhFgjvnG9xPcInHE2Aeu9ExNVV
-         s9gTBcBlQK7K6S1Rr35C6fUVBpbgP5h+3pA8paeHgw+dEmQuE+wmT5Rg7Ez5zIybWvJ0
-         x/1+9UfAwqed2j374GtIXVET+jlOh+ZloJp6a2QMGEqJHgYWY6mudi8jvygCga/cHaKa
-         ueVqoewdaXnWCSHodRxQU4bPPbHsYYiIRHpvsbQQVCYYI0Cn1NbjUWmH9dOMf4yq+k9o
-         2Mtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pGeqO4UYbPjEpueFQQzkGuJa78VBFe2OGHm+1nShac0=;
-        b=sTtFS/TqnryIPLnFuOJzs9KluDCkv6efgf6w+EHGlytM0regirYKg1wEXYIZa1fQd/
-         Us7+cfg+mqACoLKFn97APqHRwy9hP2p85g/I34PnGSP+zrMtVVy/CIYXqGJeh5lHPXEK
-         Q2RVzzsnPZ/a6TWsEw5wwZ9ma+RfQpehBDxa6pCFmZGnJkIyOyFGSIiKzCMzvjW19AE1
-         cwkQVDd0FhldCQlxhrxMO78+MaJMro3ScMfAz7y7qSBn2nzHtGvVP2ikW3NOrsa2YHst
-         rbDkCM1wJM5TWr0ueK251HkMTXs8EuaB47drPNd74caVdbXhUS/b9R7lASrhu/VTv95B
-         vTug==
-X-Gm-Message-State: AJIora8nlrU1T71IrcsAMCIJUwKJtTc8r6cmmSPAD8DKidOwE51dYOD5
-        nPZn0JBIUWzCXH+m1x44Jqrd1g==
-X-Google-Smtp-Source: AGRyM1ti86Qt00H0607v2/YgsHCgzhTX2lNkz2oGZq+mJRwXwRtPq1rCzO3pJcstWnHsxogh8xIWOg==
-X-Received: by 2002:a17:902:c94c:b0:168:f73b:f824 with SMTP id i12-20020a170902c94c00b00168f73bf824mr1033345pla.103.1655270706262;
-        Tue, 14 Jun 2022 22:25:06 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b0016362da9a03sm8128077pli.245.2022.06.14.22.25.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 22:25:05 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 10:55:03 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>
-Subject: Re: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at
- drivers/opp/core.c:2265 dev_pm_opp_clear_config+0x174/0x17c
-Message-ID: <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
-References: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
+        with ESMTP id S239980AbiFOFfm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 01:35:42 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 283F649FA0;
+        Tue, 14 Jun 2022 22:35:41 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 6EE2B80AE;
+        Wed, 15 Jun 2022 05:30:54 +0000 (UTC)
+Date:   Wed, 15 Jun 2022 08:35:38 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org, Peter Vasil <petervasil@gmail.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>
+Subject: Re: [PATCH 34.5/36] cpuidle,omap4: Push RCU-idle into
+ omap4_enter_lowpower()
+Message-ID: <YqlvqhdlFsNvUBeG@atomide.com>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144518.073801916@infradead.org>
+ <Yqcv6crSNKuSWoTu@atomide.com>
+ <YqkHto+zgAPs4kQI@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YqkHto+zgAPs4kQI@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-06-22, 02:49, Naresh Kamboju wrote:
-> Following kernel crash reported while booting arm64 db410c board with
-> Linux next-20220614 [1] kfence enabled on this kernel.
+Hi,
+
+Adding Aaro Koskinen and Peter Vasil for pm24xx for n800 and n810 related
+idle.
+
+* Peter Zijlstra <peterz@infradead.org> [220614 22:07]:
+> On Mon, Jun 13, 2022 at 03:39:05PM +0300, Tony Lindgren wrote:
+> > OMAP4 uses full SoC suspend modes as idle states, as such it needs the
+> > whole power-domain and clock-domain code from the idle path.
+> > 
+> > All that code is not suitable to run with RCU disabled, as such push
+> > RCU-idle deeper still.
+> > 
+> > Signed-off-by: Tony Lindgren <tony@atomide.com>
+> > ---
+> > 
+> > Peter here's one more for your series, looks like this is needed to avoid
+> > warnings similar to what you did for omap3.
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Thanks Tony!
 > 
-> Boot log:
-> ---------
-> [    0.850420] WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
+> I've had a brief look at omap2_pm_idle() and do I understand it right
+> that something like the below patch would reduce it to a simple 'WFI'?
 
-A print like this normally comes when we hit a WARN or something.
+Yes that should do for omap2_do_wfi().
 
-Here is the line 2265 from above tag
+> What do I do with the rest of that code, because I don't think this
+> thing has a cpuidle driver to take over, effectively turning it into
+> dead code.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/opp/core.c?h=next-20220614#n2265
+As we are establishing a policy where deeper idle states must be
+handled by cpuidle, and for most part that has been the case for at least
+10 years, I'd just drop the unused functions with an explanation in the
+patch why we're doing it. Or the functions could be tagged with
+__maybe_unused if folks prefer that.
 
-which doesn't have any such WARNs there. I wonder where exactly we hit the WARN
-here and why it isn't showing up properly.
+In the pm24xx case we are not really causing a regression for users as
+there are still pending patches to make n800 and n810 truly usable with
+the mainline kernel. At least the PMIC and LCD related patches need some
+work [0]. The deeper idle states can be added back later using cpuidle
+as needed so we have a clear path.
 
-> dev_pm_opp_clear_config+0x174/0x17c
-> [    0.850447] Modules linked in:
-> [    0.850459] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-> 5.19.0-rc1-next-20220610 #1
-> [    0.850470] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> [    0.850477] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    0.850489] pc : dev_pm_opp_clear_config+0x174/0x17c
-> [    0.850501] lr : dt_cpufreq_probe+0x1e4/0x4a0
-> [    0.850513] sp : ffff80000802bb00
-> [    0.850518] x29: ffff80000802bb00 x28: ffff80000ada1c30 x27: 0000000000000000
-> [    0.850538] x26: 00000000fffffdfb x25: ffff00000311f410 x24: ffff00000389ec90
-> [    0.850557] x23: ffff80000a9eea98 x22: ffff80000a9eed00 x21: ffff80000ada1b68
-> [    0.850576] x20: ffff00000389ec80 x19: ffff00003fc41308 x18: ffffffffffffffff
-> [    0.850595] x17: ffff800009f21700 x16: ffff8000080955c0 x15: ffff0000031c2a1c
-> [    0.850614] x14: 0000000000000001 x13: 0a6b636f6c632064 x12: 6e69662074276e64
-> [    0.850632] x11: 0000000000000040 x10: 0000000000000020 x9 : ffff800009006964
-> [    0.850650] x8 : 0000000000000020 x7 : ffffffffffffffff x6 : 0000000000000000
-> [    0.850668] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-> [    0.850686] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
-> [    0.850704] Call trace:
-> [    0.850708]  dev_pm_opp_clear_config+0x174/0x17c
-> [    0.850722]  platform_probe+0x74/0xf0
+Aaro & Peter V, do you have any better suggestions here as this will
+mostly affect you guys currently?
 
-Nevertheless, I see one place from where such a WARN can be hit, which can be
-fixed with:
+Regards,
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 58eae9de4b91..c3d4058d33fc 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2437,7 +2437,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_set_config);
-  */
- void dev_pm_opp_clear_config(struct opp_table *opp_table)
- {
--       if (WARN_ON(!opp_table))
-+       if (!opp_table)
-                return;
+Tony
 
-        _opp_detach_genpd(opp_table);
+[0] https://lore.kernel.org/linux-omap/20211224214512.1583430-1-peter.vasil@gmail.com/
 
-Not sure it fixes the issue you reported here though.
 
-Can you run the tests for my branch once, it has the updated fix as well.
-
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
-
--- 
-viresh
+> --- a/arch/arm/mach-omap2/pm24xx.c
+> +++ b/arch/arm/mach-omap2/pm24xx.c
+> @@ -126,10 +126,20 @@ static int omap2_allow_mpu_retention(voi
+>  	return 1;
+>  }
+>  
+> -static void omap2_enter_mpu_retention(void)
+> +static void omap2_do_wfi(void)
+>  {
+>  	const int zero = 0;
+>  
+> +	/* WFI */
+> +	asm("mcr p15, 0, %0, c7, c0, 4" : : "r" (zero) : "memory", "cc");
+> +}
+> +
+> +#if 0
+> +/*
+> + * possible cpuidle implementation between WFI and full_retention above
+> + */
+> +static void omap2_enter_mpu_retention(void)
+> +{
+>  	/* The peripherals seem not to be able to wake up the MPU when
+>  	 * it is in retention mode. */
+>  	if (omap2_allow_mpu_retention()) {
+> @@ -146,8 +157,7 @@ static void omap2_enter_mpu_retention(vo
+>  		pwrdm_set_next_pwrst(mpu_pwrdm, PWRDM_POWER_ON);
+>  	}
+>  
+> -	/* WFI */
+> -	asm("mcr p15, 0, %0, c7, c0, 4" : : "r" (zero) : "memory", "cc");
+> +	omap2_do_wfi();
+>  
+>  	pwrdm_set_next_pwrst(mpu_pwrdm, PWRDM_POWER_ON);
+>  }
+> @@ -161,6 +171,7 @@ static int omap2_can_sleep(void)
+>  
+>  	return 1;
+>  }
+> +#endif
+>  
+>  static void omap2_pm_idle(void)
+>  {
+> @@ -169,6 +180,7 @@ static void omap2_pm_idle(void)
+>  	if (omap_irq_pending())
+>  		return;
+>  
+> +#if 0
+>  	error = cpu_cluster_pm_enter();
+>  	if (error || !omap2_can_sleep()) {
+>  		omap2_enter_mpu_retention();
+> @@ -179,6 +191,9 @@ static void omap2_pm_idle(void)
+>  
+>  out_cpu_cluster_pm:
+>  	cpu_cluster_pm_exit();
+> +#else
+> +	omap2_do_wfi();
+> +#endif
+>  }
+>  
+>  static void __init prcm_setup_regs(void)
