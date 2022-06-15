@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E3F54C659
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 12:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA06454C665
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 12:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346297AbiFOKkK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 06:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S235185AbiFOKmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 06:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238993AbiFOKkI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 06:40:08 -0400
+        with ESMTP id S229590AbiFOKmn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 06:42:43 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FED5506FD
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 03:40:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655DF14081
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 03:42:42 -0700 (PDT)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1o1QRJ-000199-KQ; Wed, 15 Jun 2022 12:39:57 +0200
+        id 1o1QTp-0001hu-Pd; Wed, 15 Jun 2022 12:42:33 +0200
 Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1o1QRI-0004FZ-SO; Wed, 15 Jun 2022 12:39:56 +0200
-Date:   Wed, 15 Jun 2022 12:39:56 +0200
+        id 1o1QTp-0004OZ-3o; Wed, 15 Jun 2022 12:42:33 +0200
+Date:   Wed, 15 Jun 2022 12:42:33 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     Francesco Dolcini <francesco.dolcini@toradex.com>
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -39,15 +39,14 @@ Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 4/9] imx: thermal: Configure trip point from DT
-Message-ID: <20220615103956.qm3o45n2hyuylgwf@pengutronix.de>
+Subject: Re: [PATCH v1 0/9] imx: thermal: Allow trip point configuration from
+ DT
+Message-ID: <20220615104233.gxwsi3bhzyj2rry7@pengutronix.de>
 References: <20220615094804.388280-1-francesco.dolcini@toradex.com>
- <20220615094804.388280-5-francesco.dolcini@toradex.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220615094804.388280-5-francesco.dolcini@toradex.com>
+In-Reply-To: <20220615094804.388280-1-francesco.dolcini@toradex.com>
 User-Agent: NeoMutt/20180716
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
 X-SA-Exim-Mail-From: mfe@pengutronix.de
@@ -64,138 +63,71 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Francesco,
 
-nice patch, only a few nits.
+nice work :)
 
 On 22-06-15, Francesco Dolcini wrote:
-> Allow over-writing critical and passive trip point for each
-> temperature grade from the device tree, by default the pre-existing
-> hard-coded trip points are used.
+> This series allows to specify the imx thermal drivers trip point from the device tree,
+> without this change the threshold are hard-coded and this might not be correct given the
+> thermal design of the final system.
 > 
-> This change enables configuring the system thermal characteristics into
-> the system-specific device tree instead of relying on global hard-coded
-> temperature thresholds that does not take into account the specific
-> system thermal design.
+> This change is backward compatible with the existing device tree, and even
+> with this change in by default the thresholds are the same as before.
 > 
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> ---
->  drivers/thermal/imx_thermal.c | 49 +++++++++++++++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
+> Toradex board are also updated to use a system-specific thresholds.
 > 
-> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> index 16663373b682..ef3e152b5ee2 100644
-> --- a/drivers/thermal/imx_thermal.c
-> +++ b/drivers/thermal/imx_thermal.c
-> @@ -17,6 +17,8 @@
->  #include <linux/nvmem-consumer.h>
->  #include <linux/pm_runtime.h>
->  
-> +#include "thermal_core.h"
-> +
->  #define REG_SET		0x4
->  #define REG_CLR		0x8
->  #define REG_TOG		0xc
-> @@ -479,36 +481,83 @@ static int imx_init_calib(struct platform_device *pdev, u32 ocotp_ana1)
->  	return 0;
->  }
->  
-> +static void imx_init_temp_from_of(struct platform_device *pdev, const char *name)
-> +{
-> +	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-> +	struct device_node *thermal, *trips, *trip_point;
-> +
-> +	thermal = of_get_child_by_name(pdev->dev.of_node, name);
+> Discussion on the current design is here:
+> https://lore.kernel.org/all/4ba1d7d2-3e8c-ba60-37fd-9598f415c076@linaro.org/
 
-here I would do:
-
-	if (!thermal)
-		return;
-
-since the thermal node is only available with your dt-changes in place.
-
-> +	trips = of_get_child_by_name(thermal, "trips");
-> +
-> +	for_each_child_of_node(trips, trip_point) {
-> +		struct thermal_trip t;
-> +
-> +		if (thermal_of_populate_trip(trip_point, &t))
-> +			continue;
-> +
-> +		switch (t.type) {
-> +		case THERMAL_TRIP_PASSIVE:
-> +			data->temp_passive = t.temperature;
-> +			break;
-> +		case THERMAL_TRIP_CRITICAL:
-> +			data->temp_critical = t.temperature;
-> +			break;
-> +		default:
-> +			dev_dbg(&pdev->dev, "Ignoring trip type %d\n", t.type);
-			  ^
-Maybe it is worth to use dev_info() since this never should happen and
-if it happen, it is a bug/misconfiguration/misusage.
-
-> +			break;
-> +		}
-> +	};
-> +
-> +	of_node_put(trips);
-> +	of_node_put(thermal);
-> +
-> +	if (data->temp_passive >= data->temp_critical) {
-> +		dev_warn(&pdev->dev,
-> +			 "passive trip point must be lower than critical, fixing it up\n");
-> +		data->temp_passive = data->temp_critical - (1000 * 5);
-								^
-			Magic number? Maybe it would be worth a comment.
+Thanks for thanking our abbroaches and forming this patchset. I added
+only a few comments.
 
 Regards,
   Marco
 
-> +	}
-> +}
-> +
->  static void imx_init_temp_grade(struct platform_device *pdev, u32 ocotp_mem0)
->  {
->  	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-> +	const char *thermal_node_name;
->  
->  	/* The maximum die temp is specified by the Temperature Grade */
->  	switch ((ocotp_mem0 >> 6) & 0x3) {
->  	case 0: /* Commercial (0 to 95 °C) */
-> +		thermal_node_name = "commercial-thermal";
->  		data->temp_grade = "Commercial";
->  		data->temp_max = 95000;
->  		break;
->  	case 1: /* Extended Commercial (-20 °C to 105 °C) */
-> +		thermal_node_name = "extended-commercial-thermal";
->  		data->temp_grade = "Extended Commercial";
->  		data->temp_max = 105000;
->  		break;
->  	case 2: /* Industrial (-40 °C to 105 °C) */
-> +		thermal_node_name = "industrial-thermal";
->  		data->temp_grade = "Industrial";
->  		data->temp_max = 105000;
->  		break;
->  	case 3: /* Automotive (-40 °C to 125 °C) */
-> +		thermal_node_name = "automotive-thermal";
->  		data->temp_grade = "Automotive";
->  		data->temp_max = 125000;
->  		break;
->  	}
->  
->  	/*
-> +	 * Set defaults trips
-> +	 *
->  	 * Set the critical trip point at 5 °C under max
->  	 * Set the passive trip point at 10 °C under max (changeable via sysfs)
->  	 */
->  	data->temp_critical = data->temp_max - (1000 * 5);
->  	data->temp_passive = data->temp_max - (1000 * 10);
-> +
-> +	/* Override critical/passive temperature from devicetree */
-> +	imx_init_temp_from_of(pdev, thermal_node_name);
->  }
->  
->  static int imx_init_from_tempmon_data(struct platform_device *pdev)
+> 
+> One side note, after this change the dtbs checker starts complaining with this message
+> 
+> ```
+> linux/arch/arm/boot/dts/imx6dl-alti6p.dtb: tempmon: '#thermal-sensor-cells' does not match any of the regexes: '^(automotive|commercial|extended-commercial|industrial)-thermal$', 'pinctrl-[0-9]+'
+> 	From schema: linux/Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+> ```
+> 
+> to my understanding this is just a side effect, '#thermal-sensor-cells' is not changed in
+> any way by this series. I can fix that, I wonder if I should remove the property from the
+> imx dtsi files or add it to the binding yaml definition, not sure about it.
+> Anybody can advise?
+> 
+> 
+> Francesco Dolcini (9):
+>   dt-bindings: thermal: Define trips node in $defs
+>   thermal: thermal: Export OF trip helper function
+>   dt-bindings: thermal: imx: Add trips point
+>   imx: thermal: Configure trip point from DT
+>   ARM: dts: imx[67]: Add trips points
+>   ARM: dts: imx6qdl-apalis: Set CPU critical trip point
+>   ARM: dts: imx7-colibri: Set CPU critical trip point
+>   ARM: dts: imx6ull-colibri: Set CPU critical trip point
+>   ARM: dts: imx6qdl-colibri: Set CPU critical trip point
+> 
+>  .../bindings/thermal/imx-thermal.yaml         |  27 ++++
+>  .../bindings/thermal/thermal-zones.yaml       | 130 +++++++++---------
+>  arch/arm/boot/dts/imx-thermal.dtsi            |  61 ++++++++
+>  arch/arm/boot/dts/imx6qdl-apalis.dtsi         |  12 ++
+>  arch/arm/boot/dts/imx6qdl-colibri.dtsi        |  12 ++
+>  arch/arm/boot/dts/imx6qdl.dtsi                |   2 +
+>  arch/arm/boot/dts/imx6sl.dtsi                 |   2 +
+>  arch/arm/boot/dts/imx6sll.dtsi                |   2 +
+>  arch/arm/boot/dts/imx6sx.dtsi                 |   2 +
+>  arch/arm/boot/dts/imx6ul.dtsi                 |   2 +
+>  arch/arm/boot/dts/imx6ull-colibri.dtsi        |  12 ++
+>  arch/arm/boot/dts/imx7-colibri.dtsi           |  12 ++
+>  arch/arm/boot/dts/imx7s.dtsi                  |   2 +
+>  drivers/thermal/imx_thermal.c                 |  49 +++++++
+>  drivers/thermal/thermal_core.h                |   7 +
+>  drivers/thermal/thermal_of.c                  |   5 +-
+>  16 files changed, 274 insertions(+), 65 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/imx-thermal.dtsi
+> 
 > -- 
 > 2.25.1
 > 
