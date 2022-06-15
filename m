@@ -2,258 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C94754C43E
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 11:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3381F54C54E
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 12:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241191AbiFOJGq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 05:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        id S231861AbiFOKBR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 06:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238189AbiFOJGp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 05:06:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DB23A5DD
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jun 2022 02:06:43 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1o1Oyo-0002y9-9c; Wed, 15 Jun 2022 11:06:26 +0200
-Message-ID: <9cc8d2d2ca9ff2ee71d976b2b0210ce144298c46.camel@pengutronix.de>
-Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "djakov@kernel.org" <djakov@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>, Abel Vesa <abel.vesa@nxp.com>,
-        "abailon@baylibre.com" <abailon@baylibre.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "marex@denx.de" <marex@denx.de>,
-        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
-        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
-        "aford173@gmail.com" <aford173@gmail.com>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Date:   Wed, 15 Jun 2022 11:06:23 +0200
-In-Reply-To: <DU0PR04MB94173B94950965B7DB3BA4CB88AA9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
-         <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-         <c2034c030333f89e0ac7d86c906dd222cc151d52.camel@pengutronix.de>
-         <DU0PR04MB94173B94950965B7DB3BA4CB88AA9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        with ESMTP id S229519AbiFOKBQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 06:01:16 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39563B023;
+        Wed, 15 Jun 2022 03:01:15 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id v14so14649266wra.5;
+        Wed, 15 Jun 2022 03:01:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+o+NJBHdLQtZQM+UxtBaEFTjpeaUrX4loLW3tV0gO1s=;
+        b=QVeMBRfG3BUToGU1v1XZ7CJ9QLI63+40lCKkSLmLQXfgGTHxyMFt0n7AjX+Pz3N9Wx
+         knxlRQIuqPkudGPlE/XLxxZhB3bi25I2J5P+4dJQzflaD7kiUK3N2R17+TT6B7RGaJSw
+         mMLMOSSviRGDemiKOknuGtP6El5Egxsx1ievkQlfC+/twjNRd96r9BDHhHsCUpdGyM4P
+         1U7iMfi+0HIu8YXy5ouyZ2oH/tL2d8d52ey4CFoBaYHC2EX5p5cCik32mN8d6HlhJx1U
+         XNdgVYmsvHYog0ib8Djdms/nLQ9NFPqvNrtOaT390NEiKeMPJEqN227Vjs0IKnCr6SCV
+         42Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+o+NJBHdLQtZQM+UxtBaEFTjpeaUrX4loLW3tV0gO1s=;
+        b=jziw+Bw1/3Mu9HTU6XLNOF7h6mF8h4owHDuSdrszGunt9ZwTGU8665wORSuRTuqUOc
+         SxBLvP6RKFj9IEl5T2fjE1a4B0xiLPQvZJqNjrqe8lfjQ1WFyxur2WJMqH0+3OkVvv4J
+         zNwjWHCcs/Qhnt1Oz6hSnRmcIvNrpDZXxZ0zVSwkZ8DQg8rCdw8q8lLyyHRsynqglt0k
+         PjKBfxHTQ55WSS5y7HKqhdHDMdIdJZ1N5VeF4vDRtTB5SVW4+ZhwBCQoEttn25DJRFWU
+         UBlOVRej5+5dv+G5gT8Hh/bOaH0g0Dh7BBYUZkOaQ1a2mKxq/lmaZ1Y++tkLV3jf9A6B
+         OQZg==
+X-Gm-Message-State: AJIora/g7E/8/ppXR34Gm3DA+uRVlm17HMTssoVNDwIJS+GIfjGYVKzO
+        uYaHUMSeJqY6Fuk29AdnbDkhZBIks5o=
+X-Google-Smtp-Source: AGRyM1tQN1gJfHu+PZG/moVgWglZwZbQYl52t6+KVwB4qjaP/q9GL6bkGYVnT877dLBWWwECh55HwA==
+X-Received: by 2002:a05:6000:244:b0:210:cc02:889a with SMTP id m4-20020a056000024400b00210cc02889amr9398786wrz.141.1655287273944;
+        Wed, 15 Jun 2022 03:01:13 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id j20-20020adfa554000000b002100316b126sm14655002wrb.6.2022.06.15.03.01.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 03:01:12 -0700 (PDT)
+Message-ID: <62a9ade8.1c69fb81.76bfd.ae0b@mx.google.com>
+X-Google-Original-Message-ID: <YqmioratM4EzT582@Ansuel-xps.>
+Date:   Wed, 15 Jun 2022 11:13:06 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <skannan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] PM / devfreq: Fix cpufreq passive unregister
+ erroring on PROBE_DEFER
+References: <20220614230950.426-1-ansuelsmth@gmail.com>
+ <20220614230950.426-2-ansuelsmth@gmail.com>
+ <17cb21c6-317a-3f70-8c4d-4d8fe20604d4@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <17cb21c6-317a-3f70-8c4d-4d8fe20604d4@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peng,
-
-Am Dienstag, dem 14.06.2022 um 23:38 +0000 schrieb Peng Fan:
-> Hi Lucas,
-> 
-> > Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
+On Wed, Jun 15, 2022 at 03:48:03PM +0900, Chanwoo Choi wrote:
+> On 22. 6. 15. 08:09, Christian 'Ansuel' Marangi wrote:
+> > With the passive governor, the cpu based scaling can PROBE_DEFER due to
+> > the fact that CPU policy are not ready.
+> > The cpufreq passive unregister notifier is called both from the
+> > GOV_START errors and for the GOV_STOP and assume the notifier is
+> > successfully registred every time. With GOV_START failing it's wrong to
+> > loop over each possible CPU since the register path has failed for
+> > some CPU policy not ready. Change the logic and unregister the notifer
+> > based on the current allocated parent_cpu_data list to correctly handle
+> > errors and the governor unregister path.
 > > 
-> > Hi Peng,
+> > Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
+> > Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/devfreq/governor_passive.c | 39 +++++++++++++-----------------
+> >  1 file changed, 17 insertions(+), 22 deletions(-)
 > > 
-> > Am Montag, dem 13.06.2022 um 01:23 +0000 schrieb Peng Fan:
-> > > All,
-> > > 
-> > > > Subject: [PATCH 0/8] interconnect: support i.MX8MP
-> > > 
-> > > I am going to send out V2 this week to address the comments until now.
-> > > But before that I would like to see if any one has any comments on the
-> > > design here.
-> > > 
-> > > Georgi, do you have comments on Patch 2 " interconnect: add device
-> > > managed bulk API"
-> > > 
-> > > Lucas, since you had comments when I first use syscon to configure
-> > > NoC, are you ok with the design to use interconnect in this patchset?
-> > > 
-> > I'm still not 100% convinced that the blk-ctrl is the right consumer for the
-> > interconnect, since it doesn't do any busmastering. However, the design looks
-> > much better than the syscon based one.
-> > 
-> > I mostly worry about being able to extend this to do more than the current
-> > static configuration if/when NXP decides to release more information about the
-> > NoC configuration options or someone reverse engineers this part of the SoC. 
+> > diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> > index 72c67979ebe1..95de336f20d5 100644
+> > --- a/drivers/devfreq/governor_passive.c
+> > +++ b/drivers/devfreq/governor_passive.c
+> > @@ -34,6 +34,20 @@ get_parent_cpu_data(struct devfreq_passive_data *p_data,
+> >  	return NULL;
+> >  }
+> >  
+> > +static void delete_parent_cpu_data(struct devfreq_passive_data *p_data)
+> > +{
+> > +	struct devfreq_cpu_data *parent_cpu_data, *tmp;
+> > +
 > 
-> I have asked internally, NoC documentation for i.MX8M* is not allowed to public.
+> Need to add the validation checking of argument as following:
 > 
-Yea, sadly I've heard this many times from NXP.
+> 	if (!p_data)
+> 		return;
+>
 
-> I
-> > still hope that we could optimize NoC usage by setting real bandwidth and
-> > latency limits for the devices connected to the NoC. As the blk-ctrl doesn't have
-> > any clue about this right now, we can't really set any more specific requests
-> > than the current INT_MAX ones.
-> 
-> Actually looking at ATF NoC settings, the values are suggested by Design team,
-> Design team give SW team such a group of value and not suggest SW team
-> to change it. And the value in ATF not touch bandwidth registers, as you
-> could see from the patchset, only mode,priority,ext_control are configured.
-> 
-> Similar to qcom using static settings:
-> ./drivers/interconnect/qcom/qcm2290.c:668.
-> .qos.qos_mode = NOC_QOS_MODE_FIXED,
-> 
-> I understand that people wanna tune the settings at runtime on demand.
-> 
-Right. We had the same situation with QoS settings on the i.MX6, where
-Freescale/NXP claimed that the values from the design team are optimal
-and should not be changed, but we actually had some cases where tuning
-those values to the specific use-case of a board was beneficial. With
-the i.MX6 we could do this on our own, as things were documented, at
-least partially.
+Considering this is called only by cpufreq_passive_unregister_notifier
+and cpufreq_passive_unregister_notifier is called only by devfreq_passive_event_handler
+where the check is already done, isn't that redundant.
+We should never reach delete_parent_cpu_data with no p_data.
+(Unless you want to use that function somewhere else)
 
-I don't request you or anyone from the NXP open source team to do
-something here, as I understand that the no documentation policy is an
-outside decision that you can not really change. I just want to make
-sure that if someone was to do something about this situation, we don't
-make that change harder than necessary by locking us into a DT binding
-and design that might be hard to change later on.
+> > +	list_for_each_entry_safe(parent_cpu_data, tmp, &p_data->cpu_data_list, node) {
+> > +		list_del(&parent_cpu_data->node);
+> > +
+> > +		if (parent_cpu_data->opp_table)
+> > +			dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
+> > +
+> > +		kfree(parent_cpu_data);
+> > +	}
+> > +}
+> > +
+> >  static unsigned long get_target_freq_by_required_opp(struct device *p_dev,
+> >  						struct opp_table *p_opp_table,
+> >  						struct opp_table *opp_table,
+> > @@ -222,8 +236,7 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
+> >  {
+> >  	struct devfreq_passive_data *p_data
+> >  			= (struct devfreq_passive_data *)devfreq->data;
+> > -	struct devfreq_cpu_data *parent_cpu_data;
+> > -	int cpu, ret = 0;
+> > +	int ret;
+> >  
+> >  	if (p_data->nb.notifier_call) {
+> >  		ret = cpufreq_unregister_notifier(&p_data->nb,
+> > @@ -232,27 +245,9 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
+> >  			return ret;
+> >  	}
+> >  
+> > -	for_each_possible_cpu(cpu) {
+> > -		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> > -		if (!policy) {
+> > -			ret = -EINVAL;
+> > -			continue;
+> > -		}
+> > -
+> > -		parent_cpu_data = get_parent_cpu_data(p_data, policy);
+> > -		if (!parent_cpu_data) {
+> > -			cpufreq_cpu_put(policy);
+> > -			continue;
+> > -		}
+> > -
+> > -		list_del(&parent_cpu_data->node);
+> > -		if (parent_cpu_data->opp_table)
+> > -			dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
+> > -		kfree(parent_cpu_data);
+> > -		cpufreq_cpu_put(policy);
+> > -	}
+> > +	delete_parent_cpu_data(p_data);
+> >  
+> > -	return ret;
+> > +	return 0;
+> >  }
+> >  
+> >  static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
+> 
+> 
+> -- 
+> Best Regards,
+> Samsung Electronics
+> Chanwoo Choi
 
-> > I guess we could extend things in this way by making the blk-ctrl not only be a
-> > simple consumer of the interconnect, but aggregate requests from the devices
-> > in the blk-ctrl domain and forward them to the NOC provider, right?
-> 
-> I am not sure. This patchset is actually only for init NoC settings after
-> power on, because the initial value is invalid.
-> 
-> I could think how to resolve the INT_MAX settings in next version,
-> For your upper suggestion, could we start after this version approved for land
-> in tree?
-> 
-I just want you to think about how we could extend the design laid down
-in this patchset if/when the peripheral drivers are starting to request
-their actual bandwidth usage. If the answer to this question is "we'll
-simply make the blk-ctl part of the interconnect hierarchy and let it
-aggregate the bandwidth requests and forward them to the NoC driver"
-then I'm fine with this patchset landing in upstream as-is. I'm just
-not sure if I'm overlooking something here which would prevent such an
-extension of the design, as I'm not a expert in the interconnect
-framework.
-
-Regards,
-Lucas
-
-> 
-> Thanks,
-> Peng
-> 
-> 
-> > 
-> > Regards,
-> > Lucas
-> > 
-> > > Thanks,
-> > > Peng.
-> > > 
-> > > > 
-> > > > From: Peng Fan <peng.fan@nxp.com>
-> > > > 
-> > > > This patchset is to support i.MX8MP NoC settings, i.MX8MP NoC
-> > > > initial value after power up is invalid, need set a valid value after related
-> > power domain up.
-> > > > 
-> > > > This patchset also includes two patch[1,2] during my development to
-> > > > enable the ICC feature for i.MX8MP.
-> > > > 
-> > > > I not include ddrc DVFS in this patchset, ths patchset is only to
-> > > > support NoC value mode/priority/ext_control being set to a valid
-> > > > value that suggested by i.MX Chip Design Team. The value is same as
-> > > > NXP downstream one inside Arm Trusted Firmware:
-> > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fso
-> > > > 
-> > urce.codeaurora.org%2Fexternal%2Fimx%2Fimx-atf%2Ftree%2Fplat%2Fimx%2
-> > > > 
-> > Fimx8m%2Fimx&amp;data=05%7C01%7Cpeng.fan%40nxp.com%7C6cfad0fcec
-> > 0d472
-> > > > 
-> > 408a208da4e2cd96d%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7
-> > C63790
-> > > > 
-> > 8251778425186%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ
-> > QIjoiV2
-> > > > 
-> > luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=U
-> > vIx%
-> > > > 
-> > 2BAz9rx3Z8Oy7VSCRB90O8M5VICIUaUOiTmYw%2FeI%3D&amp;reserved=0
-> > > > 8mp/gpc.c?h=lf_v2.4#n97
-> > > > 
-> > > > A repo created here:
-> > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgi
-> > > > 
-> > thub.com%2FMrVan%2Flinux%2Ftree%2Fimx8mp-interconnect&amp;data=05
-> > %7C
-> > > > 
-> > 01%7Cpeng.fan%40nxp.com%7C6cfad0fcec0d472408a208da4e2cd96d%7C68
-> > 6ea1d
-> > > > 
-> > 3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637908251778425186%7CUnkn
-> > own%7CT
-> > > > 
-> > WFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJX
-> > V
-> > > > 
-> > CI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=W2iYPMJ6dn%2F4OTalTD2yqB
-> > Hx%2Bo3%
-> > > > 2BuBTuP%2BAe4bBz2Gc%3D&amp;reserved=0
-> > > > 
-> > > > Peng Fan (8):
-> > > >   dt-bindings: interconnect: imx8m: Add bindings for imx8mp noc
-> > > >   interconnect: add device managed bulk API
-> > > >   interconnect: imx: fix max_node_id
-> > > >   interconnect: imx: set src node
-> > > >   interconnect: imx: introduce imx_icc_provider
-> > > >   interconnect: imx: set of_node for interconnect provider
-> > > >   interconnect: imx: configure NoC mode/prioriry/ext_control
-> > > >   interconnect: imx: Add platform driver for imx8mp
-> > > > 
-> > > >  .../bindings/interconnect/fsl,imx8m-noc.yaml  |   6 +
-> > > >  drivers/interconnect/bulk.c                   |  34 +++
-> > > >  drivers/interconnect/imx/Kconfig              |   4 +
-> > > >  drivers/interconnect/imx/Makefile             |   2 +
-> > > >  drivers/interconnect/imx/imx.c                |  68 +++--
-> > > >  drivers/interconnect/imx/imx.h                |  25 +-
-> > > >  drivers/interconnect/imx/imx8mm.c             |   2 +-
-> > > >  drivers/interconnect/imx/imx8mn.c             |   2 +-
-> > > >  drivers/interconnect/imx/imx8mp.c             | 232
-> > > > ++++++++++++++++++
-> > > >  drivers/interconnect/imx/imx8mq.c             |   2 +-
-> > > >  include/dt-bindings/interconnect/fsl,imx8mp.h |  59 +++++
-> > > >  include/linux/interconnect.h                  |   6 +
-> > > >  12 files changed, 424 insertions(+), 18 deletions(-)  create mode
-> > > > 100644 drivers/interconnect/imx/imx8mp.c  create mode 100644
-> > > > include/dt-bindings/interconnect/fsl,imx8mp.h
-> > > > 
-> > > > --
-> > > > 2.25.1
-> > > 
-> > 
-> 
-
-
+-- 
+	Ansuel
