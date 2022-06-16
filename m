@@ -2,95 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153B454E8A9
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jun 2022 19:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C542B54EB13
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jun 2022 22:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233749AbiFPRbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jun 2022 13:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S1378628AbiFPU0I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jun 2022 16:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiFPRbe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jun 2022 13:31:34 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C4F2AE0E;
-        Thu, 16 Jun 2022 10:31:33 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id t1so3330397ybd.2;
-        Thu, 16 Jun 2022 10:31:33 -0700 (PDT)
+        with ESMTP id S1378681AbiFPU0D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jun 2022 16:26:03 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21345D1AB
+        for <linux-pm@vger.kernel.org>; Thu, 16 Jun 2022 13:25:58 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id z14so2260873pgh.0
+        for <linux-pm@vger.kernel.org>; Thu, 16 Jun 2022 13:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bbDBGGsEK1jYVvzMKav/qd1WKubS1sd2Uxf8fAcgTzE=;
+        b=SzuOeAxrAHt0py68MK2MIKGmUae4mH1tPgKxoBU+O3Ad0mZeCj815Hr2gdTa4Z0eEd
+         fkCdCCHFucZ/fZ+epsJHDTv5Uk/wbPgKxpai4ch9DpoNH5rh2BxbBWwIlsVgvD9oT3Oa
+         2D50jvtsAeqfvD5tV5+1iIBNFIwJ7+pgqCtt0KmdEQXT6Ekrb8r6mHZcSV5cjIaByWq0
+         +LyEXmySiRwAedVixgeFjDRG4LmjXVdR1h2wFbBAdf18rlII+TYY/302odDf3SH1qHMm
+         4+8p8KHwBp64v+PYypFeZxI0EJ2eRzk/JCdRLZ3IDSGd7AaEMWry0OsTg3CNZ6lOfVsK
+         K5eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=irnPXDDs9giqZixb3bVvb0MoUIRIDyuwHiNhzsO5+C4=;
-        b=4hK5hLrqQ3HzQqlkrFWj7oCH/NdTeQ1ZX9JZ07dXs3AwQ/gW9hckpNmXOrva4I6M+h
-         /WEC45HQdR8QFbgo9v/yqIGmkrVI6GCUH3mCsDK6X6myYVCKeMBhXWYqE92MFZ2o5b6i
-         xwOBjO6yi5Ew0R6OEn35FKDRuE+HHMoUYUXJANQk7u2MLjPZvcu3uHK/cz+hxIAFimBh
-         wZh/VJYQUSDCYaafxEI7+O3//WPwZyQFqb5nNVcY4r0KFW97ooT2DEsXAEf+WGLKo+s+
-         sa7RnKoZOllMnKBS/uXgsBbjX9aEzj+lNCwGnDsmC8gMK0s6OzlNv+LGkifBDqt1JhNY
-         skhw==
-X-Gm-Message-State: AJIora+DimyjG8F+2rpWBxR99sArFv9vZWjwY3PhzXONS5qDTCD9o/+J
-        SA6NNn8JY0Oi+R8KEHKVk1+NWADIdkTxs86atsU=
-X-Google-Smtp-Source: AGRyM1vOEjiPb25k6E6zUt4jvZQIEK/MmQe5h6fqDF85t8MOVMtMD693ctQIewxPENLk6VF/02yz4vAev58TJ4Ji1qQ=
-X-Received: by 2002:a25:84ca:0:b0:65c:b5a4:3d0a with SMTP id
- x10-20020a2584ca000000b0065cb5a43d0amr6539892ybm.137.1655400692553; Thu, 16
- Jun 2022 10:31:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bbDBGGsEK1jYVvzMKav/qd1WKubS1sd2Uxf8fAcgTzE=;
+        b=zn3VbgAYkMkZWhejuEmX2EO6/JZucun8gQsnjGkBFa/7a+Hf71GCSxpnrX1UyUuCnd
+         qTU9kWQ0gqyEmWKUVoh3A2RyJKfgwV1QkrHn3Kb/YfXVFHqOdGeqyN7RIgDCFTeUX0ZG
+         /JLy0trCreOvoegVXFXzZIdiClEHmrnZcUJADXuTuzwp284YxhoNRJGzf6q6VfEqklZf
+         g7fvDbDqDPlBvIuCpCjdVmat0y/oo4+H75mTJbk4nDYMouiW+zfv9mw7+ZjrO0V0Beaq
+         kB/QgVqPcMwSlW/TI7shf68hHZL91rjQXwXZCijPMk8YH7HsfYOYh2Q4RD5kVhf6Xho5
+         i6cA==
+X-Gm-Message-State: AJIora9dkpWikbXHj1VhT7VVX7KSShJPFfergWvfqY0SoYqdPilFNaly
+        K8N/oHs1rv62Bo3074xByk9eUw==
+X-Google-Smtp-Source: AGRyM1tlCYvbmuJBdptri1XDWzKflhHxLGFw/IhDdS1HUrdh8pPFurAGKffCF5X93axKER/tI3VlyQ==
+X-Received: by 2002:a05:6a00:1a48:b0:522:9716:4e0a with SMTP id h8-20020a056a001a4800b0052297164e0amr6452320pfv.22.1655411157949;
+        Thu, 16 Jun 2022 13:25:57 -0700 (PDT)
+Received: from mai.imgcgcw.net ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id a5-20020aa79705000000b0051bb0be7109sm2182960pfg.78.2022.06.16.13.25.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 13:25:57 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-msm@vger.kernel.org (open list:QUALCOMM TSENS THERMAL DRIVER)
+Subject: [PATCH 1/3] thermal/drivers/qcom: Remove get_trend function
+Date:   Thu, 16 Jun 2022 22:25:35 +0200
+Message-Id: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1843211.tdWV9SEqCh@kreacher> <2653857.mvXUDI8C0e@kreacher>
- <2726954.BEx9A2HvPv@kreacher> <Yqpfj5sa3x/gmZmM@google.com>
-In-Reply-To: <Yqpfj5sa3x/gmZmM@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 16 Jun 2022 19:31:21 +0200
-Message-ID: <CAJZ5v0gFjgWbxVLe63Xfc+kfmfPzRkZ+72eLqiKDm68agT-ugA@mail.gmail.com>
-Subject: Re: [PATCH v2 13/16] mfd: core: Use acpi_dev_for_each_child()
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 12:39 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Mon, 13 Jun 2022, Rafael J. Wysocki wrote:
->
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Instead of walking the list of children of an ACPI device directly,
-> > use acpi_dev_for_each_child() to carry out an action for all of
-> > the given ACPI device's children.
-> >
-> > This will help to eliminate the children list head from struct
-> > acpi_device as it is redundant and it is used in questionable ways
-> > in some places (in particular, locking is needed for walking the
-> > list pointed to it safely, but it is often missing).
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >
-> > v1 -> v2:
-> >    * Add R-by from Andy.
-> >
-> > ---
-> >  drivers/mfd/mfd-core.c |   31 ++++++++++++++++++++++++-------
-> >  1 file changed, 24 insertions(+), 7 deletions(-)
->
-> Applied, thanks.
+There is a get_trend function which is a wrapper to call a private
+get_trend function. However, this private get_trend function is not
+assigned anywhere.
 
-Thank you!
+Remove this dead code.
 
-Can you please expose a branch containing it for integration?
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/qcom/tsens.c | 12 ------------
+ drivers/thermal/qcom/tsens.h |  2 --
+ 2 files changed, 14 deletions(-)
 
-The last patch in the series depends on this one.
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 7963ee33bf75..e49f58e83513 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -933,17 +933,6 @@ static int tsens_get_temp(void *data, int *temp)
+ 	return priv->ops->get_temp(s, temp);
+ }
+ 
+-static int tsens_get_trend(void *data, int trip, enum thermal_trend *trend)
+-{
+-	struct tsens_sensor *s = data;
+-	struct tsens_priv *priv = s->priv;
+-
+-	if (priv->ops->get_trend)
+-		return priv->ops->get_trend(s, trend);
+-
+-	return -ENOTSUPP;
+-}
+-
+ static int  __maybe_unused tsens_suspend(struct device *dev)
+ {
+ 	struct tsens_priv *priv = dev_get_drvdata(dev);
+@@ -1004,7 +993,6 @@ MODULE_DEVICE_TABLE(of, tsens_table);
+ 
+ static const struct thermal_zone_of_device_ops tsens_of_ops = {
+ 	.get_temp = tsens_get_temp,
+-	.get_trend = tsens_get_trend,
+ 	.set_trips = tsens_set_trips,
+ };
+ 
+diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+index 1471a2c00f15..ba05c8233356 100644
+--- a/drivers/thermal/qcom/tsens.h
++++ b/drivers/thermal/qcom/tsens.h
+@@ -65,7 +65,6 @@ struct tsens_sensor {
+  * @disable: Function to disable the tsens device
+  * @suspend: Function to suspend the tsens device
+  * @resume: Function to resume the tsens device
+- * @get_trend: Function to get the thermal/temp trend
+  */
+ struct tsens_ops {
+ 	/* mandatory callbacks */
+@@ -77,7 +76,6 @@ struct tsens_ops {
+ 	void (*disable)(struct tsens_priv *priv);
+ 	int (*suspend)(struct tsens_priv *priv);
+ 	int (*resume)(struct tsens_priv *priv);
+-	int (*get_trend)(struct tsens_sensor *s, enum thermal_trend *trend);
+ };
+ 
+ #define REG_FIELD_FOR_EACH_SENSOR11(_name, _offset, _startbit, _stopbit) \
+-- 
+2.25.1
+
