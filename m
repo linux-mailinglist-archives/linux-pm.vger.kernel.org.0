@@ -2,32 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5956454F1B6
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 09:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACEA54F1AF
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 09:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380531AbiFQHOh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 17 Jun 2022 03:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S1380543AbiFQHOd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 17 Jun 2022 03:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380557AbiFQHOX (ORCPT
+        with ESMTP id S1380555AbiFQHOX (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 03:14:23 -0400
 Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3884E64D34
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 00:14:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5392764D33
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 00:14:22 -0700 (PDT)
 Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
- (mail-zr0che01lp2112.outbound.protection.outlook.com [104.47.22.112]) by
+ (mail-zr0che01lp2104.outbound.protection.outlook.com [104.47.22.104]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-11-kr8K9Y_-OVy8Xr5IL6v1ZA-3; Fri, 17 Jun 2022 09:14:19 +0200
-X-MC-Unique: kr8K9Y_-OVy8Xr5IL6v1ZA-3
+ de-mta-13-3GkfPEIeOEKpj6nYUFmeog-2; Fri, 17 Jun 2022 09:14:17 +0200
+X-MC-Unique: 3GkfPEIeOEKpj6nYUFmeog-2
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- GVAP278MB0438.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:3e::6) with Microsoft
+ ZR0P278MB0347.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:33::10) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.15; Fri, 17 Jun 2022 07:14:15 +0000
+ 15.20.5353.14; Fri, 17 Jun 2022 07:14:16 +0000
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
- 07:14:15 +0000
+ 07:14:16 +0000
 From:   Francesco Dolcini <francesco.dolcini@toradex.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,67 +45,66 @@ CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: [RESEND PATCH v2 8/9] ARM: dts: imx6ull-colibri: Set CPU critical trip point
-Date:   Fri, 17 Jun 2022 09:14:10 +0200
-Message-ID: <20220617071411.187542-9-francesco.dolcini@toradex.com>
+Subject: [RESEND PATCH v2 9/9] ARM: dts: imx6qdl-colibri: Set CPU critical trip point
+Date:   Fri, 17 Jun 2022 09:14:11 +0200
+Message-ID: <20220617071411.187542-10-francesco.dolcini@toradex.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220617071411.187542-1-francesco.dolcini@toradex.com>
 References: <20220617071411.187542-1-francesco.dolcini@toradex.com>
-X-ClientProxiedBy: MR2P264CA0136.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:30::28) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+X-ClientProxiedBy: MR2P264CA0179.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501::18)
+ To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f642753b-293b-4bfa-0e50-08da5030fbc0
-X-MS-TrafficTypeDiagnostic: GVAP278MB0438:EE_
-X-Microsoft-Antispam-PRVS: <GVAP278MB04389E823D99D82819740085E2AF9@GVAP278MB0438.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Office365-Filtering-Correlation-Id: 249b8380-29b7-452d-5fd6-08da5030fbe6
+X-MS-TrafficTypeDiagnostic: ZR0P278MB0347:EE_
+X-Microsoft-Antispam-PRVS: <ZR0P278MB0347234C3995322D7CD9998BE2AF9@ZR0P278MB0347.CHEP278.PROD.OUTLOOK.COM>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: 66j8AAIcqEpxJ0f7CdWdipkebCd8dD60CMTUg37/6K39xYhXLlIQYFloNrO5PV0/v/zoYhOKbWh1/MC75hRL9nYNsMNVbtpggvycKYartGZud63jR/HAo85njPIzERTUNSt/BBnrBd3lXciEF6jKWNdmppG0ieiTJTMJ0TVsjG6WCdpXXWdosG6UQNctrvDTDZDlEehkFv2a+y35p6XVR+02YfL1rf7yCZvMSjUNg2Tlwrxa4AgXanFb85m1cVPx5RWTKDzg63wkvijArqa+r+288BCVpzVBUjRti5bcKXpPVYmYcy5j4DXDDLxJVnbFvxB3uJKhScy0Z3qq94HB7r/Hq/8bCdPfnMiq2YytBUiHRDLfOc2pi+ZDvzlz0K6wkjB+WYPm9BTMjVnobZo2dB6+xN9qyiDz9AaEX0eiYig43viFinlYTk5pcQlYz+V/ItvCQM0K6F8UTGYfUSQIXhDVbJAIXNzeCGK+TKcmfn4Ht6i7quAvE2Wx7u4BntK7zXBBsuRXf59rhUsivzjOdySjjAzJqSUE/TWFiyTxX0fn4mdSgvC/1dWmedAhJxq47elzpNXZSLZiPf9JEJrelypMq9i5DCkZlZBmmK+JlqiNLAvp0e/JFO+x44IdFXH2IySbRB1ih9xhhWhoad4Myx5Sqav4JN/sP+8RKWr1f3mH/NOEmKZXtL9rKW93K7UqlpzWD++22ZxsEymBHayn7DBtNBDBHaezdHstpF0ga1w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(39850400004)(346002)(52116002)(38100700002)(38350700002)(6506007)(2906002)(8676002)(8936002)(6666004)(6486002)(316002)(66946007)(86362001)(7416002)(508600001)(5660300002)(4744005)(44832011)(83380400001)(110136005)(41300700001)(2616005)(26005)(6512007)(36756003)(66556008)(54906003)(4326008)(66476007)(186003)(1076003)(32563001);DIR:OUT;SFP:1102
+X-Microsoft-Antispam-Message-Info: Zq8t3IAnX//xpP1sdnezoxxzn7M1j5WnSdQ2PVkV3yUvawrseyLdXyeQC4VqsNQ9MpvXAxg9JdSI104XbdNRuHuhWFKU5MP2AaY4w3l3yt6cP2xmoc5Y2ngBr1vKk+AjAn2v6BbIqS0v5uNU/9ybA2cRJs2PVB+MhJcV3zEUruXSEnuXBSNqRvIO67+EmgV68Lni341hcx003H0PVrB9SxSFcasj3oZdFiQjsd7qzEBO+HBGzvPDGul1g6HgVFjP/e85renDYjMgkGLRXqHDMDkFbO1qqlgrp90oOx8qkaG4LCOG52riQa/j3Ys/mOVwSbK22TQqIpjBhevmEuHPE9d2uSR9i/K7iYZGddr5qMpig8uDWC2CL5LD4YNSKpjXoBrVF1J8ggmyW5wv1LulBrPoImDn4EWPPe4kJlyBR2Hcoy/z/BtfTbENQb9RQTusecof9fIJ615QgrQiFa3ne7OKbxOuA2Brw/WBHNXPQffZIM5doGJEKgGKtPh5wim6w5HPDhWSvxkeIxaCofN+QldST+FC7qH5dltBE/61v13SiTsKGh5Q6W4NuO6KVq4eqW20izHpddcHcDrKa/OWSiiIZQyUHPyTLeFCjGcQDwyHjdS2y55WRCkUfq1ZRe8J+oIzzwrlP2LzWuljgAiQzxYe+rhqW/Ctd4T4g+Bk7evam24mbB34+f8lxU8pggihQrAueEvqJHWalFCpuUoj2P9icFZunqrNOGT0wYLsF04=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(39840400004)(346002)(396003)(66556008)(2906002)(36756003)(66946007)(8936002)(4326008)(8676002)(5660300002)(86362001)(6512007)(52116002)(44832011)(38350700002)(4744005)(6506007)(6486002)(38100700002)(41300700001)(2616005)(7416002)(186003)(66476007)(508600001)(6666004)(110136005)(1076003)(316002)(54906003)(26005)(32563001);DIR:OUT;SFP:1102
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?scI5x1UqLnLE6NkVod/HCB52nKxfs3+4OH0jHsKpg8qbAby77mrAaZeRIQD1?=
- =?us-ascii?Q?6zHJZvaemUAxnFfwZqk6t+lSHsO/pmoVwyTu6tKP8bLVMJyWvKggQwZWGBjY?=
- =?us-ascii?Q?wi7iez8L44ZlLMwh5Jl5Pn8JGpGXSL6x0SV0nwSaXGjm6YXXEbdpNk0vlnoO?=
- =?us-ascii?Q?sGT4svQ0ChTqlUAH2F5NbH+/HZhGDvBEbw1xR4/2EkTxHeyJ1NrTitanaX3B?=
- =?us-ascii?Q?MfE3u/en4jeRrQwBbKNNHeTUKk5ePawEew22MwRxf7qPWhqOzzZoBGpo8JLu?=
- =?us-ascii?Q?ukbNBgcHA0B6eergY5d6dval7TMWibuultEaqJsfSiBMdh5UFZ3Yc9NLbijU?=
- =?us-ascii?Q?ZSghYdVK5q/yXq9ocWoT/pjSn6DnKR07A0MTb1F66zi5SJAav5el8aRnlUbj?=
- =?us-ascii?Q?M8N1cAXNzzK8fPxNW/AUYf+U8qAXCpjhGzrjAG9FtDo3EdcsKPY/nIWpKnHe?=
- =?us-ascii?Q?fiFZVkJWC1rsAmcM/WsvAbAv3WtAPqs2528Xi6Mr/rYawZn35CmgYuhW3coR?=
- =?us-ascii?Q?Z6pXDU/ahsi3tNU4Hk56jOPr54YV2zSArs8SPfqSD72yP6SCKTonUNkL66q/?=
- =?us-ascii?Q?GGrQPpWks00Lc5s/dtxaYNz8ocqvjVVx8IgZuN1LFQG0JFWep9o5avUNTPG6?=
- =?us-ascii?Q?3NtO9278Hr3ydnVuYFAmXsxSoORluQqDkihjY3s4bSAqPWaktSd7fbM0qNSq?=
- =?us-ascii?Q?ZN5Qzgwp66n2gPh3WsubYEFpLNwJbcSTjzXHf5mt5kUgRfZmcGjzKpB48yT6?=
- =?us-ascii?Q?0bdoAqUOhC1dGfsHjDKLEcB7TFjTnnakEyvDgHcpRECt2q9Rp+UIcRkZf7pG?=
- =?us-ascii?Q?muYjo6EB8jRSF3aoFezUbQoLi5/iHAdfUTNv8s7zhNiGLZMrz1RbWN+2uAur?=
- =?us-ascii?Q?FpXMMv3SBE4+q8F/c5YOBXkRZ/mfJ5in/HXsGX7lmHdYts//kNrrt/dJKhL7?=
- =?us-ascii?Q?3i6TKMsu4CNXosKGPosV3DJz9BEaU0e6WuLeFtTJ5vTVtY8PY7sE3oDNkOTY?=
- =?us-ascii?Q?EQFEgRYgwo9oB27y1Hal6K2o443LhVlsZRxXJH60Fiu/puNs92pHkxZz9fcg?=
- =?us-ascii?Q?Axv1n59qbRwi9wR0IcmFpFcxcl/6B6Vav9ItYpB7SbIyDbuDTDbTAy/2U8pt?=
- =?us-ascii?Q?8PGUPeCauGZGUEdHwyPDAVV6+t9MCDTHKUYgcMZwRF/+xedHMA82RJOJVowG?=
- =?us-ascii?Q?Rft29rck+z9SCyKQdC0+KvkrijT8QBZKa5cjg3eUq/YTMfNoj46uN9hqE3yk?=
- =?us-ascii?Q?zqBwtlw2hKlb4dHAWJdplifCRAPXnisrl7VUsg4GdaQYv6qX0Kz/a+AcRW1R?=
- =?us-ascii?Q?yknWZWzVxGlawoL1sO04bUzBVeCUF0lonhbsx4lcPOqVesLmYLfMCfWvmKjR?=
- =?us-ascii?Q?zpxzSQQbrl48BpNhLUSd5d0G5uzU8mTN6X4zW60cZwj4Jh08A3NgOtSB+Pav?=
- =?us-ascii?Q?49Tyf//Jr/wCzPxDE6XawCRjS308mwfR+Rh4VFF6vD3ZJDr5TT+TyGFCCebK?=
- =?us-ascii?Q?Js5if3MKEOaUojZQppsrTqVLx7NUjc7rN7rckxeI6vTuqZRn0l1SiB27nBvV?=
- =?us-ascii?Q?HiKOSvv7P9JCkWt3awRFIHdjjpcO6+ogrQKUCoth2NBkFbrmB8h+ISJ80H2O?=
- =?us-ascii?Q?56KXSxFOySoeVPQpL+C1ne8xt478ZKRw+3/CywNjiCvG7uPw1bzgpOjUuNAf?=
- =?us-ascii?Q?ZH65IynW/OAcc7unZsVmd+b/t/pIVOKqzhxB/RobsRXKXvaCRxrKVqrY8u5W?=
- =?us-ascii?Q?OUMopeD8cUZENtr1vSfbXe6+lzSmgJE=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ENE6wqM1pDkTRAEyWRcLmnFUVOMx+Xaw09I9fi7kTErAJ79yn5iilDUZhmiq?=
+ =?us-ascii?Q?DQjAA8KDq5X3Y4zFXHf6S005i8YdRC/FG7+UQhWB868byv0tQsyY9SLaq/8q?=
+ =?us-ascii?Q?Nf3oHHS7KsJ20r3DhJ05i3hoOKvuzHFx0XtYWBT2BxUFumUhLRU8gW5O6WZh?=
+ =?us-ascii?Q?UBmOZpLLOpWcZtQOtRX+yNCfu+f/gMyL7qTp3cJT9azY27qzaslXf0g1ewb1?=
+ =?us-ascii?Q?mye/1czPoIzRH7+zZU85wOvCb0AiwbYRoSrLvog5fy/ECxEIzI9AQvmJsUnq?=
+ =?us-ascii?Q?7IgHmHwunMTXHuUhvNlHfaO7jGaWdV6nxfuz6bXBHp3RdSP3ljZ3kbsBbkxI?=
+ =?us-ascii?Q?TU4vEsVkQ/B1vOZweGWoCuQhh3vBk+YDy6l/mCVpgfbwHXK8xHvWowMj3Z1W?=
+ =?us-ascii?Q?o11IxEat7leO7nagDnqGlZ/qFc4keRgwtC9j2ZUvXGLOs71goE1fFb9hEYL+?=
+ =?us-ascii?Q?m1xhBukFrqZVC+sneDUZWibASFGUaZvky/4Ra89OYt5wi12H2lMZuIstIBam?=
+ =?us-ascii?Q?qkxUi7zqiJAO45kF9CZ9ylAOLvgu1eUEtNda1GShf8FLT7sYKZY20E/mvrMq?=
+ =?us-ascii?Q?xsE57UXErmJ8Njnl63disxBynyube41lBa6Yko4wXXGde0pwjhdy5xOk8oNj?=
+ =?us-ascii?Q?aTm7D4RPZlPOPs9uiELah7GAv1xm9CUd11Y8F9WqQexPmGLbHXm2XZ3sfG8x?=
+ =?us-ascii?Q?G00IBGiYrr30DKqzNOS+DgG9GiGE+Dj7rjonO4xR3az2VhRke4cmDhTNXt8g?=
+ =?us-ascii?Q?6UBDRa1rmCJdHXoEmStj+Kk5DjiBEcdZlESFK8/3d/ED+GDmPkopWX5LWoIP?=
+ =?us-ascii?Q?8iTzEFtsprdjz9sFDDKz/VIR8iuSyvAJEXM0QiEp8o6zMhkpUlAmSYV+kfF7?=
+ =?us-ascii?Q?lE4o69WrKVVgEK8lOtRZWs/d4Ud5AEq+NUc3+4yZI6vShpE8q1v+CAX1epd9?=
+ =?us-ascii?Q?p9Kr+OIhnZ5SS4BqPiH+hXAtEEKTNyQCEQXJNsgRMnniA+XAoLhhkH8j/CJO?=
+ =?us-ascii?Q?WztcruqQNEaSV/8RVyghYJEDvq5UDKlrCtp0HXQ5Tw0Tdp8+AGWRns9uI+rr?=
+ =?us-ascii?Q?h7O+RjCahrzXAkSLQoZSaCjwg51BoDjmfwbxVnLoX00yVF6GRCi7i8xGpQ6d?=
+ =?us-ascii?Q?2Q5vwcKfyMOftzVGjdCQiQcFlLJmmJvr5CQElGVMigrzWAoM34pm35iCp1Uz?=
+ =?us-ascii?Q?EExJdRewZMyLeCsF/9L5bkEdJ4j4l3a05vXvrLFCi22vXRpPhWdCs0dLzSpV?=
+ =?us-ascii?Q?Gm9EpqyJ/A467F7v9ca9De0TgLsAVQj89JVnlK4gNJtiROvvZ3DnqfyQ8q7y?=
+ =?us-ascii?Q?Q0tslsFzDjx7HlwSfgQO6jO/F95nhUczA08SOX1gPf5ktKTa4lXrzv8/1FsZ?=
+ =?us-ascii?Q?Abzx5Y9fmlabxVuBwhlFVlGfNsv9F/1QHSuE8n3irIMcFBYZuxkIDjoB6rsV?=
+ =?us-ascii?Q?o52J+BDQFcXoB8QcPQxFjfiEMq6kNuiQ3hUiHB1q6tb1mSj53ySFw1qGvbMS?=
+ =?us-ascii?Q?vocqqwpWy7+MKYbOA4k41J48Lq5fIvf+CswoEolCdbiTRznjizFgYX13a9Ds?=
+ =?us-ascii?Q?Ivu24d/4RKKv+qr46Jv3mksUCl9iEeBEU8SyutPva4OSztuUUcPE4ipv9yir?=
+ =?us-ascii?Q?+e7DunsFhELw4fUEwNsDqWcOex8OzHkREPCcU11DCItb0GP8xotAb3Q3Au3L?=
+ =?us-ascii?Q?H2Tg7OJCDYPpcV1FJcyTHeJ1M5JVk91sr0jq5zc8bO0mbDxzahVSAydsk2uo?=
+ =?us-ascii?Q?e0lBRND4aXfgXgu5XriQRzmNfRIwz6Y=3D?=
 X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f642753b-293b-4bfa-0e50-08da5030fbc0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 249b8380-29b7-452d-5fd6-08da5030fbe6
 X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 07:14:13.9605
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 07:14:14.2115
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GS7W8aZpdEb2oCMYq0bQHkAXbWr2Eng6ysFnRKcj10E+8A+8KVa99uuLeffR0elwO6EL3R+ZLKPHF2bjUwOH0m8srKTs/YjFiFSJnrBe4Gk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0438
+X-MS-Exchange-CrossTenant-UserPrincipalName: EtVhXgbWM6+pxs8T8VVZTeL98pseiMwV6KqeCWSkweuRoGf0d4zrOxniKUEkkeSGQqt7Wy2RT88KB/mxssDqTdaizcaddfn1QpER3+NrqrE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0347
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
 X-Mimecast-Spam-Score: 0
@@ -113,7 +112,7 @@ X-Mimecast-Originator: toradex.com
 Content-Transfer-Encoding: 8BIT
 Content-Type: text/plain; charset=WINDOWS-1252
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,15 +128,15 @@ Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
 v2: no changes
 ---
- arch/arm/boot/dts/imx6ull-colibri.dtsi | 12 ++++++++++++
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 15621e03fa4d..6d8e1ef0315b 100644
---- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -250,6 +250,18 @@ &snvs_pwrkey {
- 	status = "disabled";
+diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+index c383e0e4110c..fb7bdf65a0bd 100644
+--- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+@@ -642,6 +642,18 @@ &ssi1 {
+ 	status = "okay";
  };
  
 +&temp_trip_crit_commercial {
@@ -154,7 +153,7 @@ index 15621e03fa4d..6d8e1ef0315b 100644
 +
  /* Colibri UART_A */
  &uart1 {
- 	pinctrl-names = "default";
+ 	fsl,dte-mode;
 -- 
 2.25.1
 
