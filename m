@@ -2,32 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2B254F1A9
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 09:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B702D54F1A4
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 09:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiFQHOa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 17 Jun 2022 03:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
+        id S1380523AbiFQHO1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 17 Jun 2022 03:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380524AbiFQHOV (ORCPT
+        with ESMTP id S1380537AbiFQHOV (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 03:14:21 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CF4C66202
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 00:14:20 -0700 (PDT)
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E765465D21
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 00:14:18 -0700 (PDT)
 Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
  (mail-zr0che01lp2112.outbound.protection.outlook.com [104.47.22.112]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-11-vtkNLl0MNjWlE6NYCSBtCw-2; Fri, 17 Jun 2022 09:14:17 +0200
-X-MC-Unique: vtkNLl0MNjWlE6NYCSBtCw-2
+ de-mta-34-GHOpG-1qOf6KL5FIBHnXfg-1; Fri, 17 Jun 2022 09:14:15 +0200
+X-MC-Unique: GHOpG-1qOf6KL5FIBHnXfg-1
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
  GVAP278MB0438.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:3e::6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.15; Fri, 17 Jun 2022 07:14:14 +0000
+ 15.20.5353.15; Fri, 17 Jun 2022 07:14:13 +0000
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
- 07:14:14 +0000
+ 07:14:13 +0000
 From:   Francesco Dolcini <francesco.dolcini@toradex.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,66 +45,66 @@ CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: [RESEND PATCH v2 1/9] dt-bindings: thermal: Define trips node in $defs
-Date:   Fri, 17 Jun 2022 09:14:03 +0200
-Message-ID: <20220617071411.187542-2-francesco.dolcini@toradex.com>
+Subject: [RESEND PATCH v2 2/9] thermal: thermal: Export OF trip helper function
+Date:   Fri, 17 Jun 2022 09:14:04 +0200
+Message-ID: <20220617071411.187542-3-francesco.dolcini@toradex.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220617071411.187542-1-francesco.dolcini@toradex.com>
 References: <20220617071411.187542-1-francesco.dolcini@toradex.com>
-X-ClientProxiedBy: MR1P264CA0168.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:55::16) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-ClientProxiedBy: MR2P264CA0142.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:30::34) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  (2603:10a6:910:2e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a6310d4b-ea5b-484d-2608-08da5030fb95
+X-MS-Office365-Filtering-Correlation-Id: c3518745-29dd-4b3c-19dc-08da5030fb44
 X-MS-TrafficTypeDiagnostic: GVAP278MB0438:EE_
-X-Microsoft-Antispam-PRVS: <GVAP278MB043876F807BDB11886FE760DE2AF9@GVAP278MB0438.CHEP278.PROD.OUTLOOK.COM>
+X-Microsoft-Antispam-PRVS: <GVAP278MB0438BF7073AC8AB93F32B59EE2AF9@GVAP278MB0438.CHEP278.PROD.OUTLOOK.COM>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: GEh68tqCZjv/A5tLd9S2V345v+Qu+jQmHP90H12m38Qwv3FUkEuBq4GM0+/8ycRbAqCPLTd54w4tIABs9NkktEvLky7T8tQg5EmNJ0VmTTaK3e+QDlUan1rXRvnyQk2+hrvarS72h0GqMF5thw8RJlGu7/EqemHFdcRdAFSgHyskGA8s0LKpuHXVVjGeRLVrNVrdia5to7E8KUyEK8yORZbB5EOjQRlJdIRleWp07A1QWcAhOCybnfgWVJlDH4Hrg4/Qt6KaXTLlWsRWoG9bDvpG181jogx6C5YvYIwAJziPJdzcC8QobFkjIE3pnhTwvnfBy0dbIgBGJmpNglR/tGQJPJQjZZxVCO0v3etSNI9ztWE68c11gkyEafGm/KIQcb32MpNGx76/FQvibKWMBRnoDAaOVLpcacMUQ2pqRKBQrUUluuYv2RjAQCSdVslFCUGSt1+/zZpsAYFv5GddgwxssavEcDXbQVDYhh+S4Ppuc2c41GxXngPokQqPY9N2a/HVZxv5cTgad2GKSls0JdLtjBwZx7tjFKkcaAIWU69UwYUxDjIpsoenH19uI7yPUzpiKLU3ZltEocRKS60YP+buQezfviIvDHw40CA1jYkqcsIpFGfe7NuWhBQCEfYRlimXUv8SsVoqkCVcGcebmwSntFyBYvsFQdwyUdfaNzKmd7b0DWYmVOeY3npNSoXW0FHVjtQjZgAT+f3j2i42Bw==
+X-Microsoft-Antispam-Message-Info: txDlX4ieZlW0vXDXCkgTRWhOCxsivL+rTIycqZusuXiDgnb14AcCJ+q2MSRFMTnRE5cyEGbEiAoBLY/kSx0eLF3OA3Z9DVXh5FVrOQ0bu57vRXtexW4xG12gBCMgGuk9i4UsXh4+G2cDtQT+7MMWI98HdeMa36f2m1Gixrvr/90ocW7S8fx/9D9RUOHjxj4e1bRsMERWb2Gfof4xTxQPIUPsfAAAd+xVZ0PX/NhCic/m80YCsUcZEsvndtT2Onz5F3q2cl8i3G//Cycdlqbwg8cLUGEtEfjLI9rEnJakIlU2Yz3GSowmkIsULogn8bCNcLKbRGwDyrULZ991q85Y6QK446Onbj5aoo+DP5YBdrggjczZ6mjI+lg8XLhZgjcerdbrl9SjgNVNwh7Gb15+j4efSZ6Iwqm7GFqlbEoe1uF9MZSeh+5OJmHR2ggTj4O0pTtCA1tYK0DeMbZtXVyyjtLenfg4Jln215sBmzb2oZBLt8hJxhDHgcOPqaPu23qibbGhDzpO2JRuU0KTUPqw9RyrEbS2IBQGDFwuGEfJBS7nyoXY2QBhCqqC/3HpZY8q498JPsK15s7PwarqSYd1HQnD9upFGTrJj81SN4/TyqHeecpEaZhgT41ICQraiAhZqrvo8ivHLj2hE6uR696H8qg7GX4o0muykrrZvS7WY8kf5XPnM7642+O+50OdfQM7qSWiYbrv3IzBet1RYT+XPA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(39850400004)(346002)(52116002)(38100700002)(38350700002)(6506007)(2906002)(8676002)(8936002)(6666004)(6486002)(316002)(66946007)(86362001)(7416002)(508600001)(5660300002)(44832011)(83380400001)(110136005)(41300700001)(2616005)(26005)(6512007)(36756003)(66556008)(54906003)(4326008)(66476007)(186003)(1076003);DIR:OUT;SFP:1102
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?u2i6Et2EgTj1S8/WtUZoDD3lyR+eLgORnjJ+j+dY4E9Q1GXFv2AGt5QjqCqo?=
- =?us-ascii?Q?KZEVHh4qUCe9p6K3zfw0nzWr3xmD+hSP8bxo1NbWU4BrqYOckwoRfjN04tJu?=
- =?us-ascii?Q?/mqPfwhToMGnNSHy4cz121xAryJ9+ZvAiCHBJhEkpz1h6qzxkFnlrn2VJDtx?=
- =?us-ascii?Q?unUH5xDjEvFSXbUMcFR9v631Qo7VcJ2a6bfqnD5RLI/XXjbmowgqjfQxjyjL?=
- =?us-ascii?Q?r5iBpSF3ix3I4waQrS2vQOGhaPZlQdRu174dwJq0EB0tX8Z0XUFUeNdFBMhY?=
- =?us-ascii?Q?S3fthpz+6ho7rzZwsoBXjo+jBr+fm0r/qP5wh0OSnkh9uY3MU5sCO3AmrHoz?=
- =?us-ascii?Q?/VmuD+uLf+ZSr8zqZhO2qZwjIpLGV86G/Twy56+7J5OiprcizSVUEllM5FE3?=
- =?us-ascii?Q?DERLMHp0P4MXySk9XvzDj3oJOI4qatHZ/UsOGJWlkqES3i/2Q4HLToNh1Yw+?=
- =?us-ascii?Q?qCbJWAjsTYesjk5mMGSF/iN3QDJ7TheSEm3ik2BZJXfVq9VVMuAVNb3EKQCa?=
- =?us-ascii?Q?iqw4qHFgnnYwUJ0B0rjRvVDfp4LOeax2QRyGxA/NKnivOm5qY/HYKXWyXHMC?=
- =?us-ascii?Q?o4fXCQsEb+34RMzoNMEjWiggWoT0Ithu/6X7vg+PHQ6TCa4fFVoqrIXYX2bV?=
- =?us-ascii?Q?LuFuXLIMhlJXPwKclAoIWBdqRIHvRClTMzx/yMJnG2sXz224TxQoMG4+Afoa?=
- =?us-ascii?Q?PzkSOHvRbe+FPl/wGWDMcf9cnmXEPQL64H4pIalwq7p35u7dpXfmhS+R9vOd?=
- =?us-ascii?Q?6yYxL308+8y3HBlOFpOvFsDzRROljhTv8pdQm7Dr0SjKnMum8Kp5aF//1RcI?=
- =?us-ascii?Q?slTuUteflmdxxyFj2ZLlMb+SoNdt68JkZEu7anTcGuC8GldjCbjpqN9T2Kpw?=
- =?us-ascii?Q?mUMHquX17TevB4E2L8CpofSpKXAxlMCABCK9nfijmDDnaTZFB4tak/QT6ftG?=
- =?us-ascii?Q?vCp+nnlw0JoYeAK7dr2vV85Qgq2qmOigqFnsmkatTDPbwp4CBCqBxUYPi/Xa?=
- =?us-ascii?Q?7/G17W+ZAccooiC+OOXlJMvkGf3DpM3qUZJ3S3oVljGc4lDm47QIn6UhggxQ?=
- =?us-ascii?Q?UcN6bKiziBYYCZXl4z47qWZlpbbezKMNrS0Zn9TRzXlBTyDMz9HtI5my6frr?=
- =?us-ascii?Q?HJ4PYgXAdmLcOZPXcYEywSrM/t/WY9Ev0EIJNGTJOkOLJjX9xdWYeUO9f/gR?=
- =?us-ascii?Q?MI88XtNt/AL9s2loC690Rfv2cyt76ZGx02XhV85mHvaWQkkZYXOTVVvzmmBB?=
- =?us-ascii?Q?qbxkWyo6Q64R4QGCloBap7l1lrr0R647s8ehWmCD4w5eCOvnDy4T3ztvdcng?=
- =?us-ascii?Q?tHgRHvcfHR19iQZ/vFrcwhs9XrXMkanRsRsLImrZjvzk7shDc34hM/wwnpI8?=
- =?us-ascii?Q?dJC31nMbWKYCne//P4fSsaawprycjicDEy5LMd6uVThbNVPCPbK2kQtnPhgy?=
- =?us-ascii?Q?GEK2luWfK2szOVj1KRlxK/Lz+M2yj1X7d+vRunv0bBGecrtGh/2RhhMmHRsd?=
- =?us-ascii?Q?kjKHSfFgxX4CFLSj73GDqyjeboI3B8DiPTNgyUgLSQTZazV7jJx6/Zd3w4mL?=
- =?us-ascii?Q?i+RijFFmh5ZgbDoIGcBNXV1a1qf1IqCq/Mf1TiSoW/MlnUMM9g3FQDlNKICB?=
- =?us-ascii?Q?8oxajUfkK1vRWMhCC0o46ZvWo3W5n0pc4nps08tKfnu1CUATG1FlcEUP0atO?=
- =?us-ascii?Q?vcaeBtXX4sc7E+4Kx6I64qk0rN+eUzL5dTmA5psPRIRaQl+w1dYEab/5MMsj?=
- =?us-ascii?Q?sdQsg7ioCq7TmwFiO5T4NtIVv56HyoY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cqpGMR6/vrwmQMFlFoaOVX2ukogGuOsGFFNYIsUkwQWwS0t5UckZqbMn7K26?=
+ =?us-ascii?Q?L3BjAbtRsuSU+7r5JkmJCNGeAjM6oEOTpq2VHzAxDrSOXUzI9yoru6uBrXbs?=
+ =?us-ascii?Q?CEv+y/AtTGrrcrf8qYpJgzwrauD6BnJ8RkYcEAz4WXQqheZkRiuxfTFUKQRn?=
+ =?us-ascii?Q?jslWroPzIvl6IWvLbiaJvMCo70zTwFGDQyQQGLk/BQlaOSb/q2k90Lk36boH?=
+ =?us-ascii?Q?eQ9w38WEQDHNatdEFplYrn7y6EOupixFoIiCo/H9zfwUQ9jy3An4afqCx9rE?=
+ =?us-ascii?Q?gMun5sC3b1vil33a2BEEXrzNTCyrCvO78+xU8RyB3AbYSRopfNhmKxEDmbci?=
+ =?us-ascii?Q?eqoVLzxU8N6ZABtiZjxfx+J5/lgNQRE3xPegSHce3org+yKrJgsP0EQNF/+D?=
+ =?us-ascii?Q?iWGGlEn1wiO+8U9TjCSHm5BCRLx85rabiD5qF2dwai8bbcLcPeGZg8aBpFCk?=
+ =?us-ascii?Q?V69Ce3f0mGwIRW+aAXGHxUZee+caOetlTDfZplXFNA1yuDJZwn3va6VjxgGn?=
+ =?us-ascii?Q?EnKo2A7Rd4zUBGXZnL5WfCbVl9/iP26pbOXVo9lsulb6MJB7nJjme8v1TL2E?=
+ =?us-ascii?Q?p+sP92atTxT6pZxIqR4OTZHFgnL+SRJQIct7TNtE/Z+3+STiAE8lc905rg/y?=
+ =?us-ascii?Q?Ez7JRjWg6i+G9ZWLoU8DakuNYWFIULia6VX7hba9D/eTIrspfNLnptVI3Fva?=
+ =?us-ascii?Q?XuvoqhIF7Gcs2lq8VZ3BjqHkQ/jrBMBWFbZbyvbJoKtiPLApGxdig9+GdO6X?=
+ =?us-ascii?Q?lxwBdKuuG4tvsqRqYfVB+Hhn4BdDsF8YoSkndLGNK7mNrBqMczfha49JhzQY?=
+ =?us-ascii?Q?S1bZdOYzSHfJji3mFkZHXtOymB8JuVQDjAreR4d6m2BLtZ53IxNu+T/1HFwk?=
+ =?us-ascii?Q?B5q2+upDdCCglAde6DQ2XaDafSXYOc2AsSz+eg7GfOP0ZvFvYKdETdt4jwlB?=
+ =?us-ascii?Q?oyscYwe7ZxPdUK3dxV4huAUWcxKiX46corbwXSMCgnGum+hVlynsYylnSqV7?=
+ =?us-ascii?Q?WMS6e8kDX3+vKTIJV80DibHfBNwXxQ8KBcLhQpzNPsYlK9aFSVR/HQRSyp8v?=
+ =?us-ascii?Q?AvTrPKl9vjmcrFO64KH5HDtfTsTgWjTqeB5732CvgwicTb9aVhp0cDi++6e6?=
+ =?us-ascii?Q?VVg37xVWj2ATXxZtcOvcG0yBrztZVxPfNuJm784Mzgsy2+ksSxGNkyw+GSXL?=
+ =?us-ascii?Q?rTko4TmeL4ByL/qdsUoJroRRQjGcBJiQ263UgxVbFTI6WCXKty4MCIiD6qt6?=
+ =?us-ascii?Q?QVWQKjyj1ojwuJfUbaJQSWkvXIv/AclgyyDUQ/CDV+ZDol62vl3raGKcV3zd?=
+ =?us-ascii?Q?IfYAPrsGAP3UjEtUSi0hZNJ6pVbDboIvlgRjdTPQxe/c0rCCe4BulUYU3SXC?=
+ =?us-ascii?Q?sXF5lnD/+P/F5/D7dbnDjtIO9bmovcCpg/qpT44OBV5cwSuYuZbz9Zoc6xs+?=
+ =?us-ascii?Q?DmUPCXCBCvUqsiEFg2Ouzo2RM7Ge3BOVxvL3XwiReCH16KCwmPrKN/ffeEIL?=
+ =?us-ascii?Q?U9UPDV3wMGydM9FXDtAIJCWkYVegHCxGHLNJyUrJ5pMUTqvCqqsL/ImmXtth?=
+ =?us-ascii?Q?SVUBmcFtstOViU+L8GyJDxp6XYzJKwR/htgisOX34HumHY4icButoIvk2VBU?=
+ =?us-ascii?Q?nMq4ZCNPNP3cN6dxxQNbExY0oa1SCa9B8hZdMmhSi7soUll3soDykhoJnUdF?=
+ =?us-ascii?Q?aDpsnfj7pB6bo2IVIbmt+L5/XMRm2VRyj2VpU/+FQZF24jtSJfquCyLWpFlf?=
+ =?us-ascii?Q?PAvvhqYlzqO8I1JwB3RRhx7rUg/qzzw=3D?=
 X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6310d4b-ea5b-484d-2608-08da5030fb95
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3518745-29dd-4b3c-19dc-08da5030fb44
 X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 07:14:13.6948
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 07:14:13.1949
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WLNgkCT6eXpwBoZsQ8zSmmE5Z6bhl4tRxJLCbV7/EgegYwy9YPuR43HLGHdJVRwDeu25f+UC/fO9JNp2jiPefrTf18Z2IMr/Sr055zHmmfw=
+X-MS-Exchange-CrossTenant-UserPrincipalName: xymG69DaySbuhFDtTrU3o/NdvRaWizLH+H0t5/OyasY1Q2kNjbYk/YSOsZbZfUvTnchnSrqDuOkla/hSIYvYnIHqfeqrUVvOS5lIMoZNi10=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0438
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
@@ -121,167 +121,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Move `trips` definition to `#/$defs/trips-base` and just reference it
-from the trips node. This allows to easily re-use this binding from
-another binding file.
-
-No functional changes expected.
+Export function that populate thermal trip struct from a of node to be
+able to re-use it in thermal drivers different from thermal_of.
 
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
-v2: no changes
+v2: fix build error, use EOPNOTSUPP
 ---
- .../bindings/thermal/thermal-zones.yaml       | 130 +++++++++---------
- 1 file changed, 67 insertions(+), 63 deletions(-)
+ drivers/thermal/thermal_core.h | 7 +++++++
+ drivers/thermal/thermal_of.c   | 5 +++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-index 2d34f3ccb257..ba84233d20b7 100644
---- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-+++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-@@ -10,6 +10,72 @@ title: Thermal zone binding
- maintainers:
-   - Amit Kucheria <amitk@kernel.org>
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index 726e327b4205..7d429d299d82 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -155,6 +155,8 @@ int of_thermal_get_ntrips(struct thermal_zone_device *);
+ bool of_thermal_is_trip_valid(struct thermal_zone_device *, int);
+ const struct thermal_trip *
+ of_thermal_get_trip_points(struct thermal_zone_device *);
++int thermal_of_populate_trip(struct device_node *np,
++			     struct thermal_trip *trip);
+ #else
+ static inline int of_parse_thermal_zones(void) { return 0; }
+ static inline int of_thermal_get_ntrips(struct thermal_zone_device *tz)
+@@ -171,6 +173,11 @@ of_thermal_get_trip_points(struct thermal_zone_device *tz)
+ {
+ 	return NULL;
+ }
++static inline int thermal_of_populate_trip(struct device_node *np,
++					   struct thermal_trip *trip)
++{
++	return -EOPNOTSUPP;
++}
+ #endif
  
-+$defs:
-+  trips-base:
-+    type: object
-+    description:
-+      This node describes a set of points in the temperature domain at
-+      which the thermal framework needs to take action. The actions to
-+      be taken are defined in another node called cooling-maps.
-+
-+    patternProperties:
-+      "^[a-zA-Z][a-zA-Z0-9\\-_]{0,63}$":
-+        type: object
-+
-+        properties:
-+          temperature:
-+            $ref: /schemas/types.yaml#/definitions/int32
-+            minimum: -273000
-+            maximum: 200000
-+            description:
-+              An integer expressing the trip temperature in millicelsius.
-+
-+          hysteresis:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description:
-+              An unsigned integer expressing the hysteresis delta with
-+              respect to the trip temperature property above, also in
-+              millicelsius. Any cooling action initiated by the framework is
-+              maintained until the temperature falls below
-+              (trip temperature - hysteresis). This potentially prevents a
-+              situation where the trip gets constantly triggered soon after
-+              cooling action is removed.
-+
-+          type:
-+            $ref: /schemas/types.yaml#/definitions/string
-+            enum:
-+              - active   # enable active cooling e.g. fans
-+              - passive  # enable passive cooling e.g. throttling cpu
-+              - hot      # send notification to driver
-+              - critical # send notification to driver, trigger shutdown
-+            description: |
-+              There are four valid trip types: active, passive, hot,
-+              critical.
-+
-+              The critical trip type is used to set the maximum
-+              temperature threshold above which the HW becomes
-+              unstable and underlying firmware might even trigger a
-+              reboot. Hitting the critical threshold triggers a system
-+              shutdown.
-+
-+              The hot trip type can be used to send a notification to
-+              the thermal driver (if a .notify callback is registered).
-+              The action to be taken is left to the driver.
-+
-+              The passive trip type can be used to slow down HW e.g. run
-+              the CPU, GPU, bus at a lower frequency.
-+
-+              The active trip type can be used to control other HW to
-+              help in cooling e.g. fans can be sped up or slowed down
-+
-+        required:
-+          - temperature
-+          - hysteresis
-+          - type
-+        additionalProperties: false
-+
-+    additionalProperties: false
-+
- description: |
-   Thermal management is achieved in devicetree by describing the sensor hardware
-   and the software abstraction of cooling devices and thermal zones required to
-@@ -105,69 +171,7 @@ patternProperties:
-           10-inch tablet is around 4500mW.
+ int thermal_zone_device_is_enabled(struct thermal_zone_device *tz);
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index b65d435cb92f..dcd6571a3871 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -817,8 +817,8 @@ static int thermal_of_get_trip_type(struct device_node *np,
+  *
+  * Return: 0 on success, proper error code otherwise
+  */
+-static int thermal_of_populate_trip(struct device_node *np,
+-				    struct thermal_trip *trip)
++int thermal_of_populate_trip(struct device_node *np,
++			     struct thermal_trip *trip)
+ {
+ 	int prop;
+ 	int ret;
+@@ -849,6 +849,7 @@ static int thermal_of_populate_trip(struct device_node *np,
  
-       trips:
--        type: object
--        description:
--          This node describes a set of points in the temperature domain at
--          which the thermal framework needs to take action. The actions to
--          be taken are defined in another node called cooling-maps.
--
--        patternProperties:
--          "^[a-zA-Z][a-zA-Z0-9\\-_]{0,63}$":
--            type: object
--
--            properties:
--              temperature:
--                $ref: /schemas/types.yaml#/definitions/int32
--                minimum: -273000
--                maximum: 200000
--                description:
--                  An integer expressing the trip temperature in millicelsius.
--
--              hysteresis:
--                $ref: /schemas/types.yaml#/definitions/uint32
--                description:
--                  An unsigned integer expressing the hysteresis delta with
--                  respect to the trip temperature property above, also in
--                  millicelsius. Any cooling action initiated by the framework is
--                  maintained until the temperature falls below
--                  (trip temperature - hysteresis). This potentially prevents a
--                  situation where the trip gets constantly triggered soon after
--                  cooling action is removed.
--
--              type:
--                $ref: /schemas/types.yaml#/definitions/string
--                enum:
--                  - active   # enable active cooling e.g. fans
--                  - passive  # enable passive cooling e.g. throttling cpu
--                  - hot      # send notification to driver
--                  - critical # send notification to driver, trigger shutdown
--                description: |
--                  There are four valid trip types: active, passive, hot,
--                  critical.
--
--                  The critical trip type is used to set the maximum
--                  temperature threshold above which the HW becomes
--                  unstable and underlying firmware might even trigger a
--                  reboot. Hitting the critical threshold triggers a system
--                  shutdown.
--
--                  The hot trip type can be used to send a notification to
--                  the thermal driver (if a .notify callback is registered).
--                  The action to be taken is left to the driver.
--
--                  The passive trip type can be used to slow down HW e.g. run
--                  the CPU, GPU, bus at a lower frequency.
--
--                  The active trip type can be used to control other HW to
--                  help in cooling e.g. fans can be sped up or slowed down
--
--            required:
--              - temperature
--              - hysteresis
--              - type
--            additionalProperties: false
--
--        additionalProperties: false
-+        $ref: "#/$defs/trips-base"
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(thermal_of_populate_trip);
  
-       cooling-maps:
-         type: object
+ /**
+  * thermal_of_build_thermal_zone - parse and fill one thermal zone data
 -- 
 2.25.1
 
