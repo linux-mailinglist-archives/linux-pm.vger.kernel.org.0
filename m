@@ -2,69 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA64C54F367
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 10:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5487454F336
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 10:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381268AbiFQIon (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 04:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S1380352AbiFQIkd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 04:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381272AbiFQIoh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 04:44:37 -0400
-X-Greylist: delayed 491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Jun 2022 01:44:31 PDT
-Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528916970C;
-        Fri, 17 Jun 2022 01:44:31 -0700 (PDT)
-Received: from [10.1.8.252] (unknown [10.1.8.252])
-        by uho.ysoft.cz (Postfix) with ESMTP id 3431AA02A1;
-        Fri, 17 Jun 2022 10:36:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
-        s=20160406-ysoft-com; t=1655454977;
-        bh=P9SsROK1piUBycTfz5CAL2bjuDVk9jOnqysDli5yILI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NKd47B8Nb5QPetXhvZ9t/FDQLHL72xPSR1aeGo2k8dc0d/sDRW6aj9Fts1APj0bU+
-         a+0vfE0YsOmN25NoL7SUzd5xKrqSq3QWrVnWwJ0esR/fZm+WoDYq1tRHiX3zlYlDLt
-         o2r1/WmPHiCUxEOIsPVoNukf8V3wJXNFqPAW7PUk=
-Message-ID: <854d5705-93a3-18f2-a16d-b2245cf2c085@ysoft.com>
-Date:   Fri, 17 Jun 2022 10:36:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RESEND PATCH v2 0/9] imx: thermal: Allow trip point
- configuration from DT
-Content-Language: en-US
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Jacky Bai <ping.bai@nxp.com>
+        with ESMTP id S1345195AbiFQIkd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 04:40:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D1B674D2
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 01:40:31 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1o27Wd-0001WX-FV; Fri, 17 Jun 2022 10:40:19 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1o27Wb-0000uc-7i; Fri, 17 Jun 2022 10:40:17 +0200
+Date:   Fri, 17 Jun 2022 10:40:17 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        Marco Felsch <m.felsch@pengutronix.de>,
         Anson Huang <Anson.Huang@nxp.com>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RESEND PATCH v2 4/9] imx: thermal: Configure trip point from DT
+Message-ID: <20220617084017.54psumosr6p3a6qt@pengutronix.de>
 References: <20220617071411.187542-1-francesco.dolcini@toradex.com>
- <DB9PR04MB84123FC6272AF3C2DAE306D687AF9@DB9PR04MB8412.eurprd04.prod.outlook.com>
- <20220617074220.GA187629@francesco-nb.int.toradex.com>
- <DB9PR04MB84128DBB45B29B7BD6ED001287AF9@DB9PR04MB8412.eurprd04.prod.outlook.com>
- <20220617075533.GA190158@francesco-nb.int.toradex.com>
-From:   =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
-In-Reply-To: <20220617075533.GA190158@francesco-nb.int.toradex.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <20220617071411.187542-5-francesco.dolcini@toradex.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220617071411.187542-5-francesco.dolcini@toradex.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,35 +64,145 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Francesco,
 
-On 17. 06. 22 9:55, Francesco Dolcini wrote:
-> On Fri, Jun 17, 2022 at 07:51:53AM +0000, Jacky Bai wrote:
->>> On Fri, Jun 17, 2022 at 07:31:25AM +0000, Jacky Bai wrote:
->>>>> Subject: [RESEND PATCH v2 0/9] imx: thermal: Allow trip point
->>>>> configuration from DT
->>>>>
->>>>> This series allows to specify the imx thermal drivers trip point
->>>>> from the device tree, without this change the threshold are
->>>>> hard-coded and this might not be correct given the thermal design of the
->>> final system.
->>>>>
->>>>
->>>> The threshold is set dynamically based on the part market temp grade.
->>>> I am little confused why need to specify it in DT?  I saw in 'PATCH
->>>> 5/9', you provide a threshold table based temp grade, why not use the
->>>> threshold from ' imx_init_temp_grade'?
->>>
->>> The problem with the existing temperature thresholds is that they are
->>> hard-coded into the driver, there is no way to change those to match the
->>> actual final system thermal design.
+thanks for your patch.
 
-AFAIK you can change the trip point from user space if you build
-with THERMAL_WRITABLE_TRIPS so in fact you can adapt it to the final
-system design.
+On 22-06-17, Francesco Dolcini wrote:
+> Allow over-writing critical and passive trip point for each
+> temperature grade from the device tree, by default the pre-existing
+> hard-coded trip points are used.
+> 
+> This change enables configuring the system thermal characteristics into
+> the system-specific device tree instead of relying on global hard-coded
+> temperature thresholds that does not take into account the specific
+> system thermal design.
+> 
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> ---
+> v2:
+>  - return immediately if no thermal node present in the dts
+>  - use dev_info instead of dev_dbg if there is an invalid trip
+>  - additional comment in case passive trip point is higher than critical
+> ---
+>  drivers/thermal/imx_thermal.c | 58 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+> 
+> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> index 16663373b682..a964baf802fc 100644
+> --- a/drivers/thermal/imx_thermal.c
+> +++ b/drivers/thermal/imx_thermal.c
+> @@ -17,6 +17,8 @@
+>  #include <linux/nvmem-consumer.h>
+>  #include <linux/pm_runtime.h>
+>  
+> +#include "thermal_core.h"
+> +
+>  #define REG_SET		0x4
+>  #define REG_CLR		0x8
+>  #define REG_TOG		0xc
+> @@ -479,36 +481,92 @@ static int imx_init_calib(struct platform_device *pdev, u32 ocotp_ana1)
+>  	return 0;
+>  }
+>  
+> +static void imx_init_temp_from_of(struct platform_device *pdev, const char *name)
+> +{
+> +	struct imx_thermal_data *data = platform_get_drvdata(pdev);
+> +	struct device_node *thermal, *trips, *trip_point;
+> +
+> +	thermal = of_get_child_by_name(pdev->dev.of_node, name);
+> +	if (!thermal)
+> +		return;
+> +
+> +	trips = of_get_child_by_name(thermal, "trips");
+> +
+> +	for_each_child_of_node(trips, trip_point) {
+> +		struct thermal_trip t;
+> +
+> +		if (thermal_of_populate_trip(trip_point, &t))
+> +			continue;
+> +
+> +		switch (t.type) {
+> +		case THERMAL_TRIP_PASSIVE:
+> +			data->temp_passive = t.temperature;
+> +			break;
+> +		case THERMAL_TRIP_CRITICAL:
 
-We did exactly that when we swapped imx6 dual for imx6 quad but did not
-have enough space for adequate heat sink.
+Should we check also the temp_critical and temp_passive not exceeding
+the temp_max? Sry. that it came not earlier in my mind. So system damage
+is avoided.
 
-I do not want to question usefulness of this series though, I agree with the idea.
+Apart of this note, the patch is lgtm.
 
-Michal
+Regards,
+  Marco
 
+> +			data->temp_critical = t.temperature;
+> +			break;
+> +		default:
+> +			dev_info(&pdev->dev, "Ignoring trip type %d\n", t.type);
+> +			break;
+> +		}
+> +	};
+> +
+> +	of_node_put(trips);
+> +	of_node_put(thermal);
+> +
+> +	if (data->temp_passive >= data->temp_critical) {
+> +		dev_warn(&pdev->dev,
+> +			 "passive trip point must be lower than critical, fixing it up\n");
+> +		/*
+> +		 * In case of misconfiguration set passive temperature to
+> +		 * 5°C less than critical, this seems like a reasonable
+> +		 * default and the same is done when no thermal trips are
+> +		 * available in the device tree.
+> +		 */
+> +		data->temp_passive = data->temp_critical - (1000 * 5);
+> +	}
+> +}
+> +
+>  static void imx_init_temp_grade(struct platform_device *pdev, u32 ocotp_mem0)
+>  {
+>  	struct imx_thermal_data *data = platform_get_drvdata(pdev);
+> +	const char *thermal_node_name;
+>  
+>  	/* The maximum die temp is specified by the Temperature Grade */
+>  	switch ((ocotp_mem0 >> 6) & 0x3) {
+>  	case 0: /* Commercial (0 to 95 °C) */
+> +		thermal_node_name = "commercial-thermal";
+>  		data->temp_grade = "Commercial";
+>  		data->temp_max = 95000;
+>  		break;
+>  	case 1: /* Extended Commercial (-20 °C to 105 °C) */
+> +		thermal_node_name = "extended-commercial-thermal";
+>  		data->temp_grade = "Extended Commercial";
+>  		data->temp_max = 105000;
+>  		break;
+>  	case 2: /* Industrial (-40 °C to 105 °C) */
+> +		thermal_node_name = "industrial-thermal";
+>  		data->temp_grade = "Industrial";
+>  		data->temp_max = 105000;
+>  		break;
+>  	case 3: /* Automotive (-40 °C to 125 °C) */
+> +		thermal_node_name = "automotive-thermal";
+>  		data->temp_grade = "Automotive";
+>  		data->temp_max = 125000;
+>  		break;
+>  	}
+>  
+>  	/*
+> +	 * Set defaults trips
+> +	 *
+>  	 * Set the critical trip point at 5 °C under max
+>  	 * Set the passive trip point at 10 °C under max (changeable via sysfs)
+>  	 */
+>  	data->temp_critical = data->temp_max - (1000 * 5);
+>  	data->temp_passive = data->temp_max - (1000 * 10);
+> +
+> +	/* Override critical/passive temperature from devicetree */
+> +	imx_init_temp_from_of(pdev, thermal_node_name);
+>  }
+>  
+>  static int imx_init_from_tempmon_data(struct platform_device *pdev)
+> -- 
+> 2.25.1
+> 
+> 
