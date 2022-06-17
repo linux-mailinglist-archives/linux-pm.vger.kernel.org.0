@@ -2,66 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF6754F812
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 15:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B693154F85C
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 15:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382185AbiFQNEs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 09:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S235556AbiFQNd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 09:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236617AbiFQNEs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 09:04:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FDB1C125
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 06:04:46 -0700 (PDT)
+        with ESMTP id S1381974AbiFQNd6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 09:33:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2232AB483
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 06:33:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C5A8B82682
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 13:04:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10032C341C6
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 13:04:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2B8062002
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 13:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1DC7C3411B;
+        Fri, 17 Jun 2022 13:33:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655471084;
-        bh=IMfxbm0cTlFK5BlhM1fmc8WFH4sMYQn7s1vFXzBCQ7k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hMIaiEcHjLuPobXTOkwBO365MTl2Wcr5ds/x6lsZKilL95DXFbZdV9GJP8fDUmSJI
-         DFzuYe+6viwwpOILYmwnuz4zOkhc2rN0sFrAOgw+bOG5SA53FvhtLTA69wHKpmA+y1
-         /VjflyoI/NeNqBjSE9FcLaWwHR3f5CDXaKL5BKJAhDf/Chmv2GtasIs0EYFOfTmFiU
-         ZXqd8wXngdY48bP11uKX6kWcrdyRZ5JtO0iVfuXDjyNaYyC7kvQtQ2NvteOyAqfSRb
-         FjZJQOYxbKDmdqvERgqtsdsKSoeHp7Kc+r6gjrlYClJsBMmIgvVLNUumZsDXtBYFHG
-         o11zQrF0nXN7w==
-Received: by mail-lf1-f42.google.com with SMTP id h23so6853262lfe.4
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 06:04:43 -0700 (PDT)
-X-Gm-Message-State: AJIora8u+RbXt9to5Ixh7ACdyWyCrtbjpgu5GPQ/HvaKr1O8ygy/7VoX
-        4QVvLURMKGkENK43Ssh6bZ4seL331XN2eOu+2aj78Q==
-X-Google-Smtp-Source: AGRyM1sXXKODhqZBKnGTevwM92wMCdZAtlL9XXBrakBrjMza10rWnzK9JjzUXofKG3yb8RDaf0JrQrVnGobeS4Rw2c8=
-X-Received: by 2002:a05:6512:a88:b0:479:1d61:a6da with SMTP id
- m8-20020a0565120a8800b004791d61a6damr5493140lfu.471.1655471081989; Fri, 17
- Jun 2022 06:04:41 -0700 (PDT)
+        s=k20201202; t=1655472836;
+        bh=TUnzWPiJVms4vJ/5uPUiec9lpdYuPGzgrucHaS8uTLA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ACCw52riL+V8t6gppRrS6724V4KU95suPQTTscVBTTpBelg4q1pDbZ/JbHDR0eF4V
+         WWaUQeSKLPcFtVUO2r3Ys2mz/MC/ERvSqkLf62qJSKrGuVlCpUDGBSK/MqKDLwXqGj
+         T6jC25z5zQImtR/tmBdu97X0+9b0fCwMMgJ5/STSfRljZKnAPiaTat7Dfd/rfxWcLH
+         7QYsQSE6EMJ7Ar9K3b4t4dS6rRjjZzb5zH+YxQubtHWmWl2Dfip1tGfWsqwVihcPSB
+         s6LftU8eTrpHkIyxyrlfjrKMjlwoonG+6QpW0I51JI6H1eXfNYHPAS5JKFEcYCYc11
+         YKIhq+WKJUieA==
+From:   matthias.bgg@kernel.org
+To:     dan.carpenter@oracle.com, johnson.wang@mediatek.com
+Cc:     linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [PATCH] PM / devfreq: mediatek: Fix possible dereference of null pointer
+Date:   Fri, 17 Jun 2022 15:33:31 +0200
+Message-Id: <20220617133330.6510-1-matthias.bgg@kernel.org>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20220521111145.81697-34-Julia.Lawall@inria.fr>
-In-Reply-To: <20220521111145.81697-34-Julia.Lawall@inria.fr>
-From:   Amit Kucheria <amitk@kernel.org>
-Date:   Fri, 17 Jun 2022 18:34:30 +0530
-X-Gmail-Original-Message-ID: <CAHLCerOfr-qo50tLLJNqYPMGP3jQQYmFxLHy8a3Ug1U+TGHnOw@mail.gmail.com>
-Message-ID: <CAHLCerOfr-qo50tLLJNqYPMGP3jQQYmFxLHy8a3Ug1U+TGHnOw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/tsens: fix typo in comment
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +51,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 21, 2022 at 4:42 PM Julia Lawall <Julia.Lawall@inria.fr> wrote:
->
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+From: Matthias Brugger <matthias.bgg@gmail.com>
 
-Acked-by: Amit Kucheria <amitk@kernel.org>
+We dereference the driver data before checking of it's valid.
+This patch fixes this, by accessing the PLL data struct after cheching
+the pointer
 
+Fixes: 07dc787be231 ("Add linux-next specific files for 20220617")
+Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+---
+ drivers/devfreq/mtk-cci-devfreq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
->
-> ---
->  drivers/thermal/qcom/tsens.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 7963ee33bf75..c96a188b73e1 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -26,7 +26,7 @@
->   * @up_viol:        upper threshold violated
->   * @up_thresh:      upper threshold temperature value
->   * @up_irq_mask:    mask register for upper threshold irqs
-> - * @up_irq_clear:   clear register for uppper threshold irqs
-> + * @up_irq_clear:   clear register for upper threshold irqs
->   * @low_viol:       lower threshold violated
->   * @low_thresh:     lower threshold temperature value
->   * @low_irq_mask:   mask register for lower threshold irqs
->
+diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
+index 71abb3fbd042..77522f16c878 100644
+--- a/drivers/devfreq/mtk-cci-devfreq.c
++++ b/drivers/devfreq/mtk-cci-devfreq.c
+@@ -127,7 +127,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
+ 			      u32 flags)
+ {
+ 	struct mtk_ccifreq_drv *drv = dev_get_drvdata(dev);
+-	struct clk *cci_pll = clk_get_parent(drv->cci_clk);
++	struct clk *cci_pll;
+ 	struct dev_pm_opp *opp;
+ 	unsigned long opp_rate;
+ 	int voltage, pre_voltage, inter_voltage, target_voltage, ret;
+@@ -138,6 +138,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
+ 	if (drv->pre_freq == *freq)
+ 		return 0;
+ 
++	cci_pll = clk_get_parent(drv->cci_clk);
+ 	inter_voltage = drv->inter_voltage;
+ 
+ 	opp_rate = *freq;
+-- 
+2.36.0
+
