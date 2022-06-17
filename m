@@ -2,176 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7961254F6A8
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 13:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D188854F6BA
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 13:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381678AbiFQL1N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 07:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S1381463AbiFQLbY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 07:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381290AbiFQL1J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 07:27:09 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ABD6BFD1;
-        Fri, 17 Jun 2022 04:27:06 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id y12so4219890ior.7;
-        Fri, 17 Jun 2022 04:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cIita4Mx/OZl+X+VeaS6ACjFa0zy1JtZ/wxGcvDjX4M=;
-        b=cBnghZ9dK8jQypp2zWcU1IJmfJ9ib0azbSO3a6CUrQ6p7k8MqcOEu38UcGE/ELnbTj
-         H8ijRkJPVfwZkD66BARfJX9oqGp5ge7C/Qw3DlQbZsvEEWj/J9mBU7bCEKxQwlnlHY9M
-         SBloAA7m7tmnhDjWeMSIY/T7PARhocjfJGPxhzOeODLK3cPap+SSyb4kH1Z//ZuD4l8v
-         x9YVQQnDeCAKKsgUNQMFXKyMOFvhFCJyKXsnWZg4h4AFQs9m8271FmL3Oc4bhBIDrys2
-         AKhbEKwxmxTk/45W3UpXfGJzK42rRBHh7djKKQ7LrLGqFCSjNEcYTb/10k6Q8kliAaAJ
-         T0AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cIita4Mx/OZl+X+VeaS6ACjFa0zy1JtZ/wxGcvDjX4M=;
-        b=OW06Ppzody8xhgFYSzr1WtIbLRoJ+Jj1vA6a1Fw9sNPPpKxDF0CtTsx7IUVFGEfgVD
-         4iSdJGRBbsWE8EOFoYPhFK6t1pQ8t+fZ5s+DKCMJcukEnxFkOe/5dXqfciaWEQAHitu2
-         fY5VV9C3iNqY/jUbSwkACv6bKPP4xnU05/dG40bJnMZIbXVLuT3FnGbbCGNmPk9JJu5X
-         HBd+lmB0zIEb/xOjtrTQ9SEndgu6HbpcWRC86jyDtce9BZWbK3Wpp5bkSeW6p1Dt5FLs
-         UtBMQ1znIfmdE17SG0/lHV6mqwI29ZVp337uf1oM2mVJEEKUWVMUbbTh0Zf2GUYSQTmZ
-         s1Qg==
-X-Gm-Message-State: AJIora9twcC8lcid0wmNWgWpIkb7ju6Vm3srqdGyk0cXyz0QW+lzbpg2
-        GbWI9ul1BcJ1WgPOa5lmzAMXur3ZdiXnudfylRwwNuBzDa4=
-X-Google-Smtp-Source: AGRyM1v+uOPPKXH5BGj0nN0XZL/uXw8K7soKzPUvo/hXYcZRuyA8S1WlggM3NtZdIqlhGxZxIj4Std5tTPlwSTv8/pI=
-X-Received: by 2002:a05:6638:d01:b0:331:d29a:8e60 with SMTP id
- q1-20020a0566380d0100b00331d29a8e60mr5201134jaj.254.1655465225916; Fri, 17
- Jun 2022 04:27:05 -0700 (PDT)
+        with ESMTP id S233326AbiFQLbY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 07:31:24 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F225D6CAB2
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 04:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=jefMjbgczLCC5ZgjzWRovraHzwRQY6Wrol6OOhFMrGg=; t=1655465483; x=1656675083; 
+        b=R1uQIsdKmxSUQ7WeAN8N5oY89+GBo1lj5c5jo94fBr+8QQcdAAsOO9cjgD6dQBwi/UDHAQyxWzk
+        OrtzNbNMq3XV9lPJBGlApdecLL8/qJq39UwL32OCFBA9hCbR4MRmrifOn7AB6DJ7GsA5Ta4wfPFsS
+        kyskQSD7eNVnUaKiCedPSoWS5NjChFqKCRDjG2Km0ltrtiMgn9jHD+TisTtqjCXSW/Odgkeh71xvW
+        +tlJ3Kf3Q+cPv0kGYO3bIhD7wV7+bYEiZ1jVLbw8AVKqWQu64LybM/Mn2BMAE8tXGitltp4U5ybex
+        DwCQvPUHus3SFnvziLDxqWSYLB4OvUk1M+Yg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1o2AC6-008QBa-S0;
+        Fri, 17 Jun 2022 13:31:19 +0200
+Message-ID: <e2f00afe78432a13adc23fc879f0631ada49e122.camel@sipsolutions.net>
+Subject: Re: How to identify the primary battery (for Wine)
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     Alex Henrie <alexhenrie24@gmail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Huw Davies <huw@codeweavers.com>, linux-pm@vger.kernel.org,
+        Wine Devel <wine-devel@winehq.org>
+Date:   Fri, 17 Jun 2022 13:31:13 +0200
+In-Reply-To: <CAMMLpeSRQ4T=_J0uwjoh=NNeuO43-Nb3PkzfSoDdUhOfU8_TqQ@mail.gmail.com>
+References: <CAMMLpeTRZnpQ8b6puhHeKaDgzW12ZM_g3nAWjVP71HbSaeHktQ@mail.gmail.com>
+         <20220614141742.j7lrj2q5b3suebb2@mercury.elektranox.org>
+         <CAMMLpeSRQ4T=_J0uwjoh=NNeuO43-Nb3PkzfSoDdUhOfU8_TqQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-5wajEyz9QuFVuGgvIWQj"
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-7-peterwu.pub@gmail.com>
- <28b73da7-d97c-5ea5-0b22-724fa971aeb0@linaro.org>
-In-Reply-To: <28b73da7-d97c-5ea5-0b22-724fa971aeb0@linaro.org>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Fri, 17 Jun 2022 19:26:55 +0800
-Message-ID: <CABtFH5LTpHyaJvwr6WHWx89gdGmsD-inWJa_LidyJzSL5bxowg@mail.gmail.com>
-Subject: Re: [PATCH v2 06/15] dt-bindings: mfd: Add Mediatek MT6370
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
-        lee.jones@linaro.org, Daniel Thompson <daniel.thompson@linaro.org>,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-malware-bazaar: not-scanned
+X-malware-bazaar-2: OK
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B46=E6=9C=8817=E6=97=A5 =E9=80=B1=E4=BA=94 =E6=B8=85=E6=99=A85:15=E5=AF=AB=
-=E9=81=93=EF=BC=9A
->
-> On 13/06/2022 04:11, ChiaEn Wu wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add Mediatek MT6370 binding documentation.
-> >
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> >  .../bindings/mfd/mediatek,mt6370.yaml         | 279 ++++++++++++++++++
-> >  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
-> >  2 files changed, 297 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt63=
-70.yaml
-> >  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> >
-> > diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml=
- b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > new file mode 100644
-> > index 000000000000..6c2639e81e50
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > @@ -0,0 +1,279 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mfd/mediatek,mt6370.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mediatek MT6370 SubPMIC
-> > +
-> > +maintainers:
-> > +  - ChiYuan Huang <cy_huang@richtek.com>
-> > +
-> > +description: |
-> > +  MT6370 is a highly-integrated smart power management IC, which inclu=
-des a
-> > +  single cell Li-Ion/Li-Polymer switching battery charger, a USB Type-=
-C &
-> > +  Power Delivery (PD) controller, dual flash LED current sources, a RG=
-B LED
-> > +  driver, a backlight WLED driver, a display bias driver and a general=
- LDO for
-> > +  portable devices.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: mediatek,mt6370
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  wakeup-source: true
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  interrupt-controller: true
-> > +
-> > +  '#interrupt-cells':
-> > +    const: 1
-> > +
-> > +  adc:
-> > +    type: object
-> > +    description: |
-> > +      Provides 9 channels for system monitoring, including vbusdiv5, v=
-busdiv2,
-> > +      vbat, vsys, chg_vddp, ts_bat, ibus, ibat, and temp_jc.
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        const: mediatek,mt6370-adc
-> > +
-> > +      "#io-channel-cells":
-> > +        const: 1
-> > +
-> > +    required:
-> > +      - compatible
-> > +      - '#io-channel-cells'
->
-> Decide in your entire patchset whether you use ' or ". Don't mix.
+--=-5wajEyz9QuFVuGgvIWQj
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your comments.
-We apologize for doing these mistakes...
-We will use the same symbol in the entire patchset and check again
-before the next submission.
+On Tue, 2022-06-14 at 09:17 -0600, Alex Henrie wrote:
+> On Tue, Jun 14, 2022 at 8:17 AM Sebastian Reichel
+> <sebastian.reichel@collabora.com> wrote:
+> > On Tue, Jun 14, 2022 at 2:05 AM Benjamin Berg <benjamin@sipsolutions.ne=
+t> wrote:
+> >=20
+> > > Wouldn't it make sense for Wine to use the UPower provided
+> > > DisplayDevice that can be queried through DBus?
+> >=20
+> > UPower does the required data aggregation for the 'DisplayDevice'.
+> > I don't know enough about the Wine codebase to recommend for or
+> > against using UPower.
+>=20
+> I also don't know if D-Bus would be a good choice here. It would
+> certainly be a bigger change than the patch that I've proposed. What
+> are the advantages and disadvantages of querying the battery through
+> D-Bus, besides it doing battery aggregation for us?
 
->
-> Since you did not test your bindings, I am not reviewing it. First, test
-> them. No need for me to do the job of a automated tool, right?
->
-> Best regards,
-> Krzysztof
+Well, depends on what you need, it will:
+ 1. Calculate a energy/power values if the HW reports charge/current
+ 2. Try to generate a proper state (charging/discharging, etc.) if the
+    hardware does not provide it
+ 3. Aggregate multiple batteries
 
-Best regards,
-ChiaEn Wu
+Actually, I think using UPower likely fixes bugs:
+ * You are currently not supporting modern hardware that reports
+   energy/power values (rather than charge/current).
+ * You are only reading one battery
+ * You are not estimating a rate if the HW does not provide one
+   (and not smoothing it which might be desirable).
+
+And, well, it should be easy. You can just query properties on a fixed
+DBus path. And if it fails, just assume you don't have a battery.
+
+Benjamin
+
+--=-5wajEyz9QuFVuGgvIWQj
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmKsZgIACgkQq6ZWhpmF
+Y3B98Q//c6DPf+GwS5QsjcgbZ6tC3z1emZTB5adhgfPwXjBrczBv66SfgBaitASz
+3gtGIuQAF+Q7lhe5PVqufBHpbNHaxs1rwDYa6QvfYO3SIBUGf34A1mN+FnjXT0cv
+Dmd6vXGHawK3/bM5i0rqSXa1Uezzkuj8Y4JHh+fdRxgfYyLA3V7LzR9OZP1EmR18
+x6pxFPrSBcXXWq6amgGnMz7Pcxbn5nXR0QE1c6zfxQI/QO18Wu29zyozQx0iqseC
+V6hf3P2JN2NFrL+gkptTcLMzEK3wzCJfst/HKH1HD8ZT8zPSsAuEJoY5j3IsXfCK
+4DFCpgsaoyaDFypvd9Oa1Ous46aJOSXc4+leTsY9vaGYB8m23n5GjdwJRxVTu72l
+U0QKclv5kN8daq7rzqJclDchgyNbbGg0YMnwbbQsuewfqPgJZL+WeXQ/OHFRtENx
+ZAFnD0amRcfoDX/6RXIiGvntFjO5SJn+bhhk+JSEmkBafWrqS+0na2nONYgdvxnN
+INK4m14caPTRcV+Gq49eInIwZ0ejInqtyqmqJfXy+cQNRHZTLD5xo54DzomClMTW
+aihXdUWoj2XD2eifPdCPl1ZpH1UoJHi5/jAzqQwuWUzYMcWlEbphvbHw9Is+jxdQ
+atqgfOUPYVv9x24zZix5fU6goGCmUJOZy9JRljFpd31CM1VbYZ4=
+=QQox
+-----END PGP SIGNATURE-----
+
+--=-5wajEyz9QuFVuGgvIWQj--
