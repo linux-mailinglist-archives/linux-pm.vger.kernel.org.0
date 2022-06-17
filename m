@@ -2,171 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F52B54F3EF
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 11:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1F054F406
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 11:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379989AbiFQJKQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 17 Jun 2022 05:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S233270AbiFQJPo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 05:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbiFQJKP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 05:10:15 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 231E655499
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 02:10:13 -0700 (PDT)
-Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
- (mail-zr0che01lp2111.outbound.protection.outlook.com [104.47.22.111]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-44-vqT5NVwiM9SHPcK9mFq5sg-2; Fri, 17 Jun 2022 11:10:11 +0200
-X-MC-Unique: vqT5NVwiM9SHPcK9mFq5sg-2
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- ZR0P278MB0266.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:32::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.13; Fri, 17 Jun 2022 09:10:09 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5353.016; Fri, 17 Jun 2022
- 09:10:09 +0000
-Date:   Fri, 17 Jun 2022 11:10:08 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>
-CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RESEND PATCH v2 0/9] imx: thermal: Allow trip point
- configuration from DT
-Message-ID: <20220617091008.GA193066@francesco-nb.int.toradex.com>
-References: <20220617071411.187542-1-francesco.dolcini@toradex.com>
- <DB9PR04MB84123FC6272AF3C2DAE306D687AF9@DB9PR04MB8412.eurprd04.prod.outlook.com>
- <20220617074220.GA187629@francesco-nb.int.toradex.com>
- <DB9PR04MB84128DBB45B29B7BD6ED001287AF9@DB9PR04MB8412.eurprd04.prod.outlook.com>
- <20220617075533.GA190158@francesco-nb.int.toradex.com>
- <854d5705-93a3-18f2-a16d-b2245cf2c085@ysoft.com>
-In-Reply-To: <854d5705-93a3-18f2-a16d-b2245cf2c085@ysoft.com>
-X-ClientProxiedBy: MR2P264CA0094.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:32::34) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        with ESMTP id S230200AbiFQJPm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 05:15:42 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56DF49B43;
+        Fri, 17 Jun 2022 02:15:40 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id m16so1083854ilf.6;
+        Fri, 17 Jun 2022 02:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Rwjg/1YINzqxKrc7KAD/i4G4OnLWc8a5sJgC2L1EvV8=;
+        b=T7RlZkRmUrk1uPWymyVaIYEm2USnc/kiRpW1DN7Cx2fgKOPadbLJ9hDWp330pVll0b
+         nVbSUAeOw0ind5aX2DvD+qJ8edzVQwQd3vVZJpL8lsPgf97MamIi1jYUacpEmf4yt4Nv
+         8RRQrqnZlA+v/EIUq3IJoumZPhS6kWTzFZg2DF9GNU3fnbSMCbrE+BajwsAUMooWjcpt
+         9mPv6dhXPsyKfQqvI+pMgreCD1G0ZEiRwMHTufp3vlcXKkuxk6+kqTFh4zOAP+G5b4Na
+         EpWtKBRqGJyZrmKT1ZeI3lx3hOwvQwReCYUJPQvQLh44wdub2G8emdWusMIolDoHXPjN
+         eScA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Rwjg/1YINzqxKrc7KAD/i4G4OnLWc8a5sJgC2L1EvV8=;
+        b=DFHz0V+njVCqn++GopoXSIjoI4VxbsFEh5/4qwEMCZEjBVNJ3Lhb5v+URmiwVFpBma
+         vemd/YAALBb9kpSqZkEwYlX7hvPtRUtbBftO7csKdaA3RyJ0/KaY2+Cxq6UMfMhw2OxZ
+         A95a0trAzOOmnlbWLoSfmb7WYdcECw4XUwSGsDsUpQlP8P11cmYBYu5O9DFgAY//IHAu
+         HZ2hgNQAf2TALwCldHR4gmotfZuyYkkXNCwUdsPQJzW6Q8LB8YZI3buD7qr+4FD4D/2E
+         yAJOwAqpXvIh3cBM0S9r4OEzs/bozxHNBfqo9dxll8YNQB5V4NQaT9ILHDgCTstI5Qdb
+         2rng==
+X-Gm-Message-State: AJIora8h7SYXV93x2WHwrMmf0EHB+j+Pofg9wYBD61Fq7WtsKoka7why
+        nzqUJCiC6hzMdTqVF3B3ZT03yu6Ah7zcmrExi9A=
+X-Google-Smtp-Source: AGRyM1ulXgBKYwRX4sDQBTJgY1sJ1HQy/qNt3KPa2+zyrl3Y4yDe7BzlO+x/VaU+eUVa36+znFzZdfjPq6R82D89JK0=
+X-Received: by 2002:a05:6e02:144f:b0:2d1:90c9:9047 with SMTP id
+ p15-20020a056e02144f00b002d190c99047mr5212028ilo.211.1655457340207; Fri, 17
+ Jun 2022 02:15:40 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c6dd53a8-15ff-4dce-2c39-08da50412d5b
-X-MS-TrafficTypeDiagnostic: ZR0P278MB0266:EE_
-X-Microsoft-Antispam-PRVS: <ZR0P278MB02666DA97C42B03F807220A0E2AF9@ZR0P278MB0266.CHEP278.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: kdz4mIh8dt7VUVIFH7ZR39pVQlNgY9T4mvCJcH32mM3m5m8ZnZfydWQ+1HHQFOdk0wcBWJtxtBQwHu8D4jVuM0sU+tqFeeky+Hs9DqkV/7w6H9IN2PeBWK3+yMaMWzbKw80Vb46Rqc7nfiYpaqRZ2D8kbBvq/s/VGqk/zjKiLh+rQAr1o7dflD5mxQU012EiRiOXiK3i/ksWf1nWrvNS6KSl6iRr1WsNjmCcAXZ8qjtm8znZ06m6q8xC3y37+m1XVWfKxgMrlxzkS/UW0OfSsK8TpGlfboQZ82jl+/gDAH0WkJTt0a0zBAWURmFLLEuo7qNV8QraycrsTNvHxrh+oB8LuidgctAFXdQGQ0kwg7kJHVOS/Lzz3XJYOExlYSs+txYjb2FUUrKqgHnETjd5HVdOVetIJQlXsbZR84lAjzDzqBCDeViPgJjmV8yAQV8TAGO2HJeR9sGq1sO3Dk5QArj6uApY5Q5oTmCr0MA7rO+qZgOkYY2LUb3nEIGVvuGR0a7V8x/LQNjGAk6G+nkMCjvzinNnqNGkgnaZwiwTZA2aRVrzS8KkbYHEvO2Wn/t2zk2Dj67mtMOIUGorKup2OaRNrmfxP92z7M+YYpChTHa4g3lzT6o9ujnD51ksmMOIn0oQOc7+jXzOfAsRycl0XehxlalJ1D+UuDwP/Vlml7IhUiPERxc+f+mIFgcgqRjX+PImtYXg3A0iPWxDR5yGkA6pxnLNVv3st7IUk5herETylqCNmtCUxKiLzaWHAPiPCJ6shXBkHlVGaHhBjSe7m0CP3kSv1z+GqPd41j7x3Z4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(346002)(39840400004)(366004)(41300700001)(316002)(26005)(6512007)(38100700002)(38350700002)(33656002)(8936002)(2906002)(52116002)(6506007)(7416002)(44832011)(508600001)(5660300002)(66476007)(66556008)(86362001)(6486002)(8676002)(4326008)(966005)(186003)(1076003)(66946007)(6916009)(54906003);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Uo2dux7VJV8kgcXXebTbgDHp0biQnq5jV1ethrOEUghK1iF5KKr/A9a8V3ke?=
- =?us-ascii?Q?XSGkxatar/rWG2zSoezFRPoX+MG4dHvwp5Vb43Wdk/LU7jNDEAw8HIvg6eLs?=
- =?us-ascii?Q?nUrp5ATtf7oxcRt8Fe96wQVRMKhBtCzlpRkI25R4guR+/OSx/2zKAR30KSss?=
- =?us-ascii?Q?lR14vEX7iBlZnYvdNu9aAMQmWlVS3Jhkwqg3YrDq3W6zdIETSji978sWEfT0?=
- =?us-ascii?Q?xHBet1p/xDveI1qzGYAxS0LhnxS7mjffwtYRRT2FClEncl8r7TGM3jL36/kN?=
- =?us-ascii?Q?gZH6GZWHOi5ZSr3Wx/RIwNmATWn/Kb8Pu9febmV6i8TkYwohSqS3Ql+tXVR/?=
- =?us-ascii?Q?0hfuSym4X07HdLqUxHS0O7+BRfCJZ312BM2ZNRt3nskhClb84yEkcIE1K3FP?=
- =?us-ascii?Q?XZxTEwFJA3iB+16AuTMwjcyJaRE1PJurHR1EgsYrxTOz6Q1ZB0XlrejSRv38?=
- =?us-ascii?Q?NeCUzXUM7A6KqC+E9cgWiF11KDvydkLu63GY4FsUHMvfNJ/uWc7f1L+7Rx1j?=
- =?us-ascii?Q?zNHsgkD/zHPqRBIWx0eEurT6pbbCkll/O8DAxjWIKL1fZ/ChOQl2IFp0KNVI?=
- =?us-ascii?Q?y7iW+kS186sfr207oI+GG5mv3WdSeEWyPSYEW5kUgaPZw2mDvzc1bGUXP7Kc?=
- =?us-ascii?Q?py5rVJfSPT+DauJmqohaLxjh+6F7Pe2avpP9i2jkO4dHSRji218VGk+bIAd4?=
- =?us-ascii?Q?iJOt6WKUHKPdEAPCU681Gi5+pXwp/IgTFR1YS1FDEsYrzR3DuY8D+mGyganp?=
- =?us-ascii?Q?/gwHRcXddQz0J2L5+Vpckxo9xjDEb/+Vv2nHaEdSMwCsDazVqx7OfWVCAFCJ?=
- =?us-ascii?Q?df/bUUXYGGZH4Jw4ToXZiWS+JR/cHs8KVtZ5Xkf+zvwDckW248SY9GI2FRgS?=
- =?us-ascii?Q?2OHpws639ugyV1I5dHOZcYkq2/xbPBxetvkM9yjrOsVEv9BebygDPpBt8lG5?=
- =?us-ascii?Q?qWocDWZOhf+9yRROIcULIT+EDLGkMHNAIsR6ZPYqVF2ZZZwkeCiiR1dUFcs6?=
- =?us-ascii?Q?NpaW77ToGgINQzybNfcB3RxkYDlTni+0hlQ+3+sysmolinIz52S2fUOkss7g?=
- =?us-ascii?Q?n8TV+1xNTFv1/ajYm4ttpZ5wfXHfoPWcCqGqaGpWRMsn50xVMhpoSginkhwN?=
- =?us-ascii?Q?yj8CWoazGPOHBgXRdk/Vp50U1Mm4+kBfs6o5ZwHXh/+1FYNHmYPNlp+nEpSp?=
- =?us-ascii?Q?TGiZpsKZ2jI58f9k9NzruG8o5ioi7ZUcnQX2QWjpHs7ernWGZRAlZkkRmf39?=
- =?us-ascii?Q?kx/cQAoEl1I9J1eKkQR+7EWLaFnachiOLqpgXcTCxV56SHHDe0qjpg4GPlDW?=
- =?us-ascii?Q?VKuRC9eCq1RrNeQoK3SyY8e4X0thZ4rTfu21hM8/Uyg7LPhDoJAwfWIqnQmW?=
- =?us-ascii?Q?fQKkdAS9Vo8KMnXY39rReV/yW2F2FM1LsaYr85rtnUnbv51h6w0GQFNs+ECy?=
- =?us-ascii?Q?0A7/YRQH/Q4jMOc8ZKq8QWqkNLk8HxaSx+T8u6aQwHISKnOJjqiWgmJdBAxP?=
- =?us-ascii?Q?HxqX5GQw2WP5zJ9o5xLsgkPqr4U53zJKqV4kyLGmXJuFcjg5v+XDTE6oMAMC?=
- =?us-ascii?Q?LKqljIQ4nh76/x+eKdpNnnWqeV48rQviNMmLFlr5VEo5+R/A97vfWkHgYbbR?=
- =?us-ascii?Q?PHbG7tZvqLrPzNlL9bXr0BywYT/YdSKbMdJ5+01WR3r3zxwfZVnpTlzagz3k?=
- =?us-ascii?Q?tOQcez3Ta4iUKOJqPK014rF3B2orqAUK6QNVvasIVwEdAKY3XbvoEVTlr0nA?=
- =?us-ascii?Q?BxVRm9yAHrl1Y36webhNIGA4PB10UHc=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6dd53a8-15ff-4dce-2c39-08da50412d5b
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 09:10:09.1173
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WAGl1n1uk1BwzRLFpknl5Hb8tIc2Rb50QdKzK1MqP9LfBTVvA2bQCDp7eDiuSCDS7Jf5LgcMkx4s8Fv5gt6RxkI1XRiyoZSCTE+vDABQdws=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0266
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-12-peterwu.pub@gmail.com>
+ <915871e4-b156-ab19-043f-b719e03a5711@infradead.org>
+In-Reply-To: <915871e4-b156-ab19-043f-b719e03a5711@infradead.org>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Fri, 17 Jun 2022 17:15:29 +0800
+Message-ID: <CABtFH5JyESUuMkDuRSKdc7pf5M4Zah2eZ_LG1RMbMVYxYkcBxA@mail.gmail.com>
+Subject: Re: [PATCH v2 11/15] iio: adc: mt6370: Add Mediatek MT6370 support
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
+        lee.jones@linaro.org, Daniel Thompson <daniel.thompson@linaro.org>,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Michal,
+Hi Randy,
 
-On Fri, Jun 17, 2022 at 10:36:17AM +0200, Michal Vokáč wrote:
-> On 17. 06. 22 9:55, Francesco Dolcini wrote:
-> > On Fri, Jun 17, 2022 at 07:51:53AM +0000, Jacky Bai wrote:
-> > > > On Fri, Jun 17, 2022 at 07:31:25AM +0000, Jacky Bai wrote:
-> > > > > > Subject: [RESEND PATCH v2 0/9] imx: thermal: Allow trip point
-> > > > > > configuration from DT
-> > > > > > 
-> > > > > > This series allows to specify the imx thermal drivers trip point
-> > > > > > from the device tree, without this change the threshold are
-> > > > > > hard-coded and this might not be correct given the thermal design of the
-> > > > final system.
-> > > > > > 
-> > > > > 
-> > > > > The threshold is set dynamically based on the part market temp grade.
-> > > > > I am little confused why need to specify it in DT?  I saw in 'PATCH
-> > > > > 5/9', you provide a threshold table based temp grade, why not use the
-> > > > > threshold from ' imx_init_temp_grade'?
-> > > > 
-> > > > The problem with the existing temperature thresholds is that they are
-> > > > hard-coded into the driver, there is no way to change those to match the
-> > > > actual final system thermal design.
-> 
-> AFAIK you can change the trip point from user space if you build
-> with THERMAL_WRITABLE_TRIPS so in fact you can adapt it to the final
-> system design.
-> 
-> We did exactly that when we swapped imx6 dual for imx6 quad but did not
-> have enough space for adequate heat sink.
+Thanks for your comment!
+I apologize for any inconvenience caused when you decoded this help text.
+I will refine this in the next patch, thanks!
 
-When I investigated this only the passive threshold was writeable from
-user-space/sysfs, and Daniel was against any patch to allow changing
-also the critical one [0].
+Randy Dunlap <rdunlap@infradead.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=8814=E6=
+=97=A5 =E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A84:17=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Hi,
+>
+> On 6/13/22 04:11, ChiaEn Wu wrote:
+> > diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> > index 71ab0a06aa82..09576fb478ad 100644
+> > --- a/drivers/iio/adc/Kconfig
+> > +++ b/drivers/iio/adc/Kconfig
+> > @@ -737,6 +737,15 @@ config MEDIATEK_MT6360_ADC
+> >         is used in smartphones and tablets and supports a 11 channel
+> >         general purpose ADC.
+> >
+> > +config MEDIATEK_MT6370_ADC
+> > +     tristate "Mediatek MT6370 ADC driver"
+> > +     depends on MFD_MT6370
+> > +     help
+> > +       Say Y here to enable MT6370 ADC support.
+> > +
+> > +       Integrated for System Monitoring includes is used in smartphone=
+s
+>
+> Please try again on the help text. I can't decode that.
+>
+> > +       and tablets and supports a 9 channel general purpose ADC.
+>
+> --
+> ~Randy
 
-Francesco
-
-[0] https://lore.kernel.org/all/4de41b5e-1fa6-ece4-9d9a-2656d399b452@linaro.org/
-
+Best Regards,
+ChiaEn Wu
