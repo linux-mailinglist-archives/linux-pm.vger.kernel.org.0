@@ -2,152 +2,253 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF0654F442
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 11:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7424054F46E
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 11:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235673AbiFQJ3B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 05:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
+        id S1381174AbiFQJet (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 05:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380568AbiFQJ3B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 05:29:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685906338C
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 02:29:00 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1o28Ha-0001dP-Db; Fri, 17 Jun 2022 11:28:50 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1o28HY-0003ke-Kd; Fri, 17 Jun 2022 11:28:48 +0200
-Date:   Fri, 17 Jun 2022 11:28:48 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RESEND PATCH v2 4/9] imx: thermal: Configure trip point from DT
-Message-ID: <20220617092848.nzwjjh3gqgbtoyod@pengutronix.de>
-References: <20220617071411.187542-1-francesco.dolcini@toradex.com>
- <20220617071411.187542-5-francesco.dolcini@toradex.com>
- <20220617084017.54psumosr6p3a6qt@pengutronix.de>
- <20220617090442.GB190158@francesco-nb.int.toradex.com>
+        with ESMTP id S1379989AbiFQJer (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 05:34:47 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C9562106;
+        Fri, 17 Jun 2022 02:34:46 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id s1so2644344ilj.0;
+        Fri, 17 Jun 2022 02:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DE+zQZQcyF759AJuVRCgUw1QrZjmmIkS9SVF/uua3CY=;
+        b=TDYeLEaQ+IkQCFwsN5ZQ3F+UqxbwCBkt2zAq1tT7vFaTl9fJAuS6YerABjtHK4mOxb
+         TrWcAGr6YdcXb4ALZYnuW0EpzY4enIB9a/N3rtcIPVVz4H1oggG/gQz0f3KJwQbFOZs+
+         ZDCH0HPt5AB9qRpQyELl2+owWkOE4MPyxjEyB1griWQ0FRFlaxna+kw6cHUIvotV2buP
+         qGa7xwHI7l3QT8uJSCUU0PAsReT6s7CYfX0V77qw7CtMyEcqx6Q0ejjLwWvhsopT7FxJ
+         em13cvYi2AvF5IlY6VaJ05xly218vuCyMNqAGbLG4d8okAD+4yvBpXEn1shR0HMx1yLK
+         ISlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DE+zQZQcyF759AJuVRCgUw1QrZjmmIkS9SVF/uua3CY=;
+        b=oHaMYD7fJVGzTCVgqnosNsPIxorQl8/Ti3z8ZuCVZNVc8r4Lre9AfzgVG0Wbys/noh
+         vpnsRLBYQr4Vjac/kIL/ANXeVv6qD6bsOZ/sY69t6zTIU+/xp4TbMvoCfdgS6aUDOfaH
+         w71zxoWbwP0vUp40/4oqojpcKVk9wAVsqhUREtMjA3xvm03ujnpxVBfBijMCbcGZHsUu
+         9YkX398bjuPzJ58WsjJWDgqSLV2ArpmXRGGkMjGvdPzHQpThjz/+WlRS3aAWk1FYrbFp
+         Nx0iHVgsU9aVlBeTkKBsQ1FX9WblkuBYmmrhJ/SHd91o1O3RD2+n1BCRqwxMJv187X5n
+         SeLg==
+X-Gm-Message-State: AJIora9+QLRIdb7oaLqEk7n4q0jk0AdlI1QPcoPyxQEIvxTicCYsbr6q
+        E9c6vbdyWoXzKwSqd05WrqzItQKWxXmr/uZAJABmNoLQnEM=
+X-Google-Smtp-Source: AGRyM1ubwnEFy3CYAH9fHWaontZ0WgA5WaEtmBHPaT66gte2AsL67svPaO35GdaGEkb9HpkJB7x7C2X7WR6oIGxmrjk=
+X-Received: by 2002:a05:6e02:4a1:b0:2d3:a778:f0f1 with SMTP id
+ e1-20020a056e0204a100b002d3a778f0f1mr5168320ils.212.1655458485946; Fri, 17
+ Jun 2022 02:34:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617090442.GB190158@francesco-nb.int.toradex.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-16-peterwu.pub@gmail.com>
+ <20220613170853.bffuwkcmflfgg4gt@ash.lan>
+In-Reply-To: <20220613170853.bffuwkcmflfgg4gt@ash.lan>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Fri, 17 Jun 2022 17:34:35 +0800
+Message-ID: <CABtFH5JKnxF5TqV=9EiAZEm4Un0npNo-GX8xLD4W5+S+pA+ysg@mail.gmail.com>
+Subject: Re: [PATCH v2 15/15] video: backlight: mt6370: Add Mediatek MT6370 support
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
+        lee.jones@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-06-17, Francesco Dolcini wrote:
-> On Fri, Jun 17, 2022 at 10:40:17AM +0200, Marco Felsch wrote:
-> > On 22-06-17, Francesco Dolcini wrote:
-> > > Allow over-writing critical and passive trip point for each
-> > > temperature grade from the device tree, by default the pre-existing
-> > > hard-coded trip points are used.
-> > > 
-> > > This change enables configuring the system thermal characteristics into
-> > > the system-specific device tree instead of relying on global hard-coded
-> > > temperature thresholds that does not take into account the specific
-> > > system thermal design.
-> > > 
-> > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > ---
-> > > v2:
-> > >  - return immediately if no thermal node present in the dts
-> > >  - use dev_info instead of dev_dbg if there is an invalid trip
-> > >  - additional comment in case passive trip point is higher than critical
-> > > ---
-> > >  drivers/thermal/imx_thermal.c | 58 +++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 58 insertions(+)
-> > > 
-> > > diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> > > index 16663373b682..a964baf802fc 100644
-> > > --- a/drivers/thermal/imx_thermal.c
-> > > +++ b/drivers/thermal/imx_thermal.c
-> > > @@ -17,6 +17,8 @@
-> > >  #include <linux/nvmem-consumer.h>
-> > >  #include <linux/pm_runtime.h>
-> > >  
-> > > +#include "thermal_core.h"
-> > > +
-> > >  #define REG_SET		0x4
-> > >  #define REG_CLR		0x8
-> > >  #define REG_TOG		0xc
-> > > @@ -479,36 +481,92 @@ static int imx_init_calib(struct platform_device *pdev, u32 ocotp_ana1)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +static void imx_init_temp_from_of(struct platform_device *pdev, const char *name)
-> > > +{
-> > > +	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-> > > +	struct device_node *thermal, *trips, *trip_point;
-> > > +
-> > > +	thermal = of_get_child_by_name(pdev->dev.of_node, name);
-> > > +	if (!thermal)
-> > > +		return;
-> > > +
-> > > +	trips = of_get_child_by_name(thermal, "trips");
-> > > +
-> > > +	for_each_child_of_node(trips, trip_point) {
-> > > +		struct thermal_trip t;
-> > > +
-> > > +		if (thermal_of_populate_trip(trip_point, &t))
-> > > +			continue;
-> > > +
-> > > +		switch (t.type) {
-> > > +		case THERMAL_TRIP_PASSIVE:
-> > > +			data->temp_passive = t.temperature;
-> > > +			break;
-> > > +		case THERMAL_TRIP_CRITICAL:
-> > 
-> > Should we check also the temp_critical and temp_passive not exceeding
-> > the temp_max? Sry. that it came not earlier in my mind. So system damage
-> > is avoided.
-> 
-> I would not add such kind of restriction in the code. I can think of
-> multiple situations in which a system designer would prefer to take the
-> chances of burning a silicon (or more likely just age it a little bit
-> faster) than to just shut down the system.
-> 
-> In the end whoever is building the system should be empowered to do
-> something like that and it's no different from what it's already possible
-> with thermal_of driver for example. 
-> 
-> In addition to that from a system debug prospective all the threshold
-> (max, passive, critical) are already available in the kernel logs.
+Hi Daniel,
 
-Okay, fine with me since you provided dt-snippets with the correct
-temperature. But we should really print a warning since this is a
-abnormal usage and the user should be warned.
+Thanks for your helpful feedback!
 
-Regards,
-  Marco
-> 
-> Francesco
-> 
-> 
+Daniel Thompson <daniel.thompson@linaro.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=
+=8814=E6=97=A5 =E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A81:08=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On Mon, Jun 13, 2022 at 07:11:46PM +0800, ChiaEn Wu wrote:
+> > +static int mt6370_init_backlight_properties(struct mt6370_priv *priv,
+> > +                                         struct backlight_properties *=
+props)
+>
+> Most of the changes in this version looks good... but it looks the new
+> code in this function has a number of problems. See below...
+>
+>
+> > +{
+> > +     struct device *dev =3D priv->dev;
+> > +     u8 prop_val;
+> > +     u32 brightness;
+> > +     unsigned int mask, val;
+> > +     int ret;
+> > +
+> > +     /* Vendor optional properties
+> > +      * if property not exist, keep value in default.
+> > +      */
+>
+> That's not the right strategy for booleans. Not existing means false
+> (e.g. flags should actively be unset).
+>
+
+I am so sorry for making these mistakes...
+I will try to refine them in the right strategy in the next patch!
+
+>
+> > +     if (device_property_read_bool(dev, "mediatek,bled-pwm-enable")) {
+> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_PW=
+M,
+> > +                                      MT6370_BL_PWM_EN_MASK,
+> > +                                      MT6370_BL_PWM_EN_MASK);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+>
+> As above comment... all of the boolean properties are now being read
+> incorrectly.
+>
+>
+> > +
+> > +     if (device_property_read_bool(dev, "mediatek,bled-pwm-hys-enable"=
+)) {
+> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_PW=
+M,
+> > +                                      MT6370_BL_PWM_HYS_EN_MASK,
+> > +                                      MT6370_BL_PWM_HYS_EN_MASK);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +
+> > +     ret =3D device_property_read_u8(dev, "mediatek,bled-pwm-hys-input=
+-bit",
+> > +                                   &prop_val);
+> > +     if (!ret) {
+> > +             val =3D min_t(u8, prop_val, 3)
+> > +                   << (ffs(MT6370_BL_PWM_HYS_SEL_MASK) - 1);
+> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_PW=
+M,
+> > +                                      MT6370_BL_PWM_HYS_SEL_MASK, val)=
+;
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +
+> > +     ret =3D device_property_read_u8(dev, "mediatek,bled-ovp-microvolt=
+",
+> > +                                   &prop_val);
+> > +     if (!ret) {
+> > +             val =3D min_t(u8, prop_val, 3)
+> > +                   << (ffs(MT6370_BL_OVP_SEL_MASK) - 1);
+>
+> This has been renamed but still seems to the using 0, 1, 2, 3 rather
+> than an actual value in microvolts.
+
+I=E2=80=99m so sorry for using the not actual value in microvolts and micro=
+amps.
+I will refine these mistakes along with DT in the next patch. Thank you!
+
+>
+>
+> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_BS=
+TCTRL,
+> > +                                      MT6370_BL_OVP_SEL_MASK, val);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +
+> > +     if (device_property_read_bool(dev, "mediatek,bled-ovp-shutdown"))=
+ {
+> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_BS=
+TCTRL,
+> > +                                      MT6370_BL_OVP_EN_MASK,
+> > +                                      MT6370_BL_OVP_EN_MASK);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +
+> > +     ret =3D device_property_read_u8(dev, "mediatek,bled-ocp-microamp"=
+,
+> > +                                   &prop_val);
+> > +     if (!ret) {
+> > +             val =3D min_t(u8, prop_val, 3)
+> > +                   << (ffs(MT6370_BL_OC_SEL_MASK) - 1);
+>
+> Likewise, should this be accepting a value in microamps?
+>
+>
+> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_BS=
+TCTRL,
+> > +                                      MT6370_BL_OC_SEL_MASK, val);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +
+> > +     if (device_property_read_bool(dev, "mediatek,bled-ocp-shutdown"))=
+ {
+> > +             ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_BS=
+TCTRL,
+> > +                                      MT6370_BL_OC_EN_MASK,
+> > +                                      MT6370_BL_OC_EN_MASK);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+> > +
+> > +     /* Common properties */
+> > +     ret =3D device_property_read_u32(dev, "max-brightness", &brightne=
+ss);
+> > +     if (ret)
+> > +             brightness =3D MT6370_BL_MAX_BRIGHTNESS;
+> > +
+> > +     props->max_brightness =3D min_t(u32, brightness,
+> > +                                   MT6370_BL_MAX_BRIGHTNESS);
+> > +
+> > +     ret =3D device_property_read_u32(dev, "default-brightness", &brig=
+htness);
+> > +     if (ret)
+> > +             brightness =3D props->max_brightness;
+> > +
+> > +     props->brightness =3D min_t(u32, brightness, props->max_brightnes=
+s);
+> > +
+> > +
+> > +     ret =3D device_property_read_u8(dev, "mediatek,bled-channel-use",
+> > +                                   &prop_val);
+> > +     if (ret) {
+> > +             dev_err(dev, "mediatek,bled-channel-use DT property missi=
+ng\n");
+> > +             return ret;
+> > +     }
+> > +
+> > +     if (!prop_val || prop_val > MT6370_BL_MAX_CH) {
+> > +             dev_err(dev, "No channel specified (ch_val:%d)\n", prop_v=
+al);
+>
+> Error string has not been updated to match condition that triggers it.
+>
+
+I will refine this wrong error string in the next patch, thanks!
+
+>
+> > +             return -EINVAL;
+> > +     }
+>
+>
+> Daniel.
+
+Best regards,
+ChiaEn Wu
