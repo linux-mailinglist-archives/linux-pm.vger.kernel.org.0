@@ -2,80 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7736B54F770
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 14:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E60254F7F7
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 14:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381177AbiFQMYd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 08:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S1382414AbiFQM6v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 08:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381190AbiFQMYa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 08:24:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CBE50B1E;
-        Fri, 17 Jun 2022 05:24:29 -0700 (PDT)
-Received: from dimapc.. (109-252-136-92.dynamic.spd-mgts.ru [109.252.136.92])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S1382460AbiFQM6h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 08:58:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D183D5403A
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 05:58:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B571B660179A;
-        Fri, 17 Jun 2022 13:24:27 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655468668;
-        bh=1lWpdp3cnfKdrU5D6f5ZdxAw3Yb16msYqFdidiHaCIw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bRiz/GGKtPMQSJnbjubjCyPewoA2RiugLa3pqAdwPuIfFFWSOo7cBlAQocAt0+oXQ
-         vJZMlDbLX+3n12hDJad9m5/U0xfcS9Ivv0x7ONLYqDqt9+cY0DucX9bLS0tmoLH1ds
-         FsRQMxdG7UTNSQVShMUjcEJiebtQGjKvHRh5WsteaA5dcPhQtMAsudtHKyLW3hbGEE
-         9UOJhzserUguEidfPBZW3PO4RGmiflvCt3LZo4CVboRuhRDJi8WjsDW5+p9bJDTDzv
-         9JyBgSsGun9p//BI0xrHom78ykBWkFP97fx2fgBiIzlOV9rg5yFsO6EPXhBtoXSEfH
-         zOEk7kezN6P+g==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ken Moffat <zarniwhoop@ntlworld.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v1] PM: hibernate: Use kernel_can_power_off()
-Date:   Fri, 17 Jun 2022 15:24:02 +0300
-Message-Id: <20220617122402.151782-1-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.35.3
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84D85B829D7
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 12:58:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43EFEC341C6
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 12:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655470714;
+        bh=aJe/IuNfbjZ9EniMI2KMI/OYNV3Ky7QaQrPqbpHqWEU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YceFDQKz6Qp3semAVSe6go/03+fq5w2gdDcUhzRXBfGfw6Ck0mm2h1bKcOkDCqSE1
+         LXx0To+qfIBp/c1sr/dS4FDhi/Bc2BNaQZ8kgH/SmwPzsepWIwsuWH3z2AYqlVIi5W
+         /wrAEbkctqOvhA3FUpQ8+2dC1DpLULN/r+3b+uSJXvJXAkyQI2j5SRwyqlg6iDW6VV
+         wBzGl0XmWM4AWBd0zSb68+xsRmah96Oh0e79gl+48h6rG3GWm3OxeqoLmYNboook0C
+         g4eFIahW5BQQoVgtZtpKZW2dk0p7iAlXYmmbDrGZ8gT0D64qumRJZlBahLyw/m7zjR
+         n3v6InWaJwKug==
+Received: by mail-lj1-f171.google.com with SMTP id r24so4666459ljn.2
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 05:58:34 -0700 (PDT)
+X-Gm-Message-State: AJIora/x5OtSK5OKY2237kp59+uTCBUEjmEt022nyFZwldl+jPVpdVq/
+        /jUxmwWTmA0bdeyWabHLDEeMaBrda5iDn0gpGXdx8Q==
+X-Google-Smtp-Source: AGRyM1uqosFaBOhZZC5A81VpQaFlEvVkSB4BPtOu6MTbFLXMRKLMCZXs1CEtapjf6SQr5wJTaVMHzlCzz1PP2y5pmko=
+X-Received: by 2002:a2e:8609:0:b0:255:6eb1:46a0 with SMTP id
+ a9-20020a2e8609000000b002556eb146a0mr4963421lji.336.1655470712245; Fri, 17
+ Jun 2022 05:58:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Fri, 17 Jun 2022 18:28:21 +0530
+X-Gmail-Original-Message-ID: <CAHLCerNcat-uvXYA4jHK9_wQR1HFYXisXD2Pj+TuGWcgM0u=-g@mail.gmail.com>
+Message-ID: <CAHLCerNcat-uvXYA4jHK9_wQR1HFYXisXD2Pj+TuGWcgM0u=-g@mail.gmail.com>
+Subject: Re: [PATCH 1/3] thermal/drivers/qcom: Remove get_trend function
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "open list:QUALCOMM TSENS THERMAL DRIVER" 
+        <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use new kernel_can_power_off() API instead of legacy pm_power_off global
-variable to fix regressed hibernation to disk where machine no longer
-powers off when it should because ACPI power driver transitioned to the
-new sys-off based API and it doesn't use pm_power_off anymore.
+On Fri, Jun 17, 2022 at 1:56 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> There is a get_trend function which is a wrapper to call a private
+> get_trend function. However, this private get_trend function is not
+> assigned anywhere.
+>
+> Remove this dead code.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Fixes: 98f30d0ecf79 ("ACPI: power: Switch to sys-off handler API")
-Tested-by: Ken Moffat <zarniwhoop@ntlworld.com>
-Reported-by: Ken Moffat <zarniwhhop@ntlworld.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- kernel/power/hibernate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Amit Kucheria <amitk@kernel.org>
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 20a66bf9f465..89c71fce225d 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -665,7 +665,7 @@ static void power_down(void)
- 		hibernation_platform_enter();
- 		fallthrough;
- 	case HIBERNATION_SHUTDOWN:
--		if (pm_power_off)
-+		if (kernel_can_power_off())
- 			kernel_power_off();
- 		break;
- 	}
--- 
-2.35.3
-
+> ---
+>  drivers/thermal/qcom/tsens.c | 12 ------------
+>  drivers/thermal/qcom/tsens.h |  2 --
+>  2 files changed, 14 deletions(-)
+>
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 7963ee33bf75..e49f58e83513 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -933,17 +933,6 @@ static int tsens_get_temp(void *data, int *temp)
+>         return priv->ops->get_temp(s, temp);
+>  }
+>
+> -static int tsens_get_trend(void *data, int trip, enum thermal_trend *trend)
+> -{
+> -       struct tsens_sensor *s = data;
+> -       struct tsens_priv *priv = s->priv;
+> -
+> -       if (priv->ops->get_trend)
+> -               return priv->ops->get_trend(s, trend);
+> -
+> -       return -ENOTSUPP;
+> -}
+> -
+>  static int  __maybe_unused tsens_suspend(struct device *dev)
+>  {
+>         struct tsens_priv *priv = dev_get_drvdata(dev);
+> @@ -1004,7 +993,6 @@ MODULE_DEVICE_TABLE(of, tsens_table);
+>
+>  static const struct thermal_zone_of_device_ops tsens_of_ops = {
+>         .get_temp = tsens_get_temp,
+> -       .get_trend = tsens_get_trend,
+>         .set_trips = tsens_set_trips,
+>  };
+>
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index 1471a2c00f15..ba05c8233356 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -65,7 +65,6 @@ struct tsens_sensor {
+>   * @disable: Function to disable the tsens device
+>   * @suspend: Function to suspend the tsens device
+>   * @resume: Function to resume the tsens device
+> - * @get_trend: Function to get the thermal/temp trend
+>   */
+>  struct tsens_ops {
+>         /* mandatory callbacks */
+> @@ -77,7 +76,6 @@ struct tsens_ops {
+>         void (*disable)(struct tsens_priv *priv);
+>         int (*suspend)(struct tsens_priv *priv);
+>         int (*resume)(struct tsens_priv *priv);
+> -       int (*get_trend)(struct tsens_sensor *s, enum thermal_trend *trend);
+>  };
+>
+>  #define REG_FIELD_FOR_EACH_SENSOR11(_name, _offset, _startbit, _stopbit) \
+> --
+> 2.25.1
+>
