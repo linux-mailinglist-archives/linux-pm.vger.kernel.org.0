@@ -2,59 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F0D54F6F6
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 13:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25AB54F73E
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 14:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379340AbiFQLsd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 07:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S1381751AbiFQMJj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 08:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382020AbiFQLs2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 07:48:28 -0400
+        with ESMTP id S239096AbiFQMJi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 08:09:38 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2A66B0B6;
-        Fri, 17 Jun 2022 04:48:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5754517598;
+        Fri, 17 Jun 2022 05:09:36 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru [109.252.136.92])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 54683660179A;
-        Fri, 17 Jun 2022 12:48:21 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2A982660179A;
+        Fri, 17 Jun 2022 13:09:34 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655466501;
-        bh=4OnJ9LkHQ8ZP/4JtbxesRqqZ1hb4x6FRCrAnAmr9L3c=;
+        s=mail; t=1655467775;
+        bh=i83+JJRH3W4qGEUUYF7SQgp3g5O/kI5O54Jr6yQ71BE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H0Txa8h4uFkIpa0KNjruM/jHtFUz/3rg9QT8hHSr3Dguwy+53Z+3fw7CUKxxoCPFg
-         wshZjl6TbqzD3vfejcfJMWRvnLyjS8bKsUoZQDctLCpu511x7LUIZrhH9nbk3GLqlg
-         la5uR2QB9fomh44ML1mb4LC4rSo8YCb8BaWbp/odS/SHxoxIlVLsYrN1DHOrH+YhSe
-         hi/LcWaCF4IZTcVXz80j0jJDmHgso5TkFqX2ap6P1Ic7IuxrGDP6qRCEK8fjoS8VK7
-         pmqTNaVonBqqv2IRvGOIsSsoB5oIchCjwCZT2dU2gKON35k/tieXpldSdL4xFVY0Le
-         XCzaej71XQRgA==
-Message-ID: <33d5028e-20f9-e133-b41c-9ea789052069@collabora.com>
-Date:   Fri, 17 Jun 2022 14:48:18 +0300
+        b=XIolfYkv5wCh7FeJg7jAXVgOWno+AIsYz2EAAkTSiosvk+Zk6BZE97kOvD8Y3jxIc
+         gJ6mIOFP6jopreRU78cYaOG1ksMT5d9sfuvpTdJqozYEKZazAHBPeBzJMQxMm2QFdb
+         /eW6AT6ci5okv6oddXQcLPOAVV2b4YXjYui2rvZBtPeIhcMvEo1UGuAftRnuK1aaSh
+         fgunC+t7IEtZyroUMbpsy315Y5f3fBwgdWFy6nyo8HK3y14/UkRcN+PVvJfHJxayLh
+         lHGQKhTmNhRbLd4LJMBF/f0+6fw1V0HtcxbbzvzH8CvWDdhwTwFNXRo5cVNAnuEtJG
+         InSQmD26Arhiw==
+Message-ID: <223d33be-4c73-8605-e2bb-33e4a14682d2@collabora.com>
+Date:   Fri, 17 Jun 2022 15:09:31 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: regression, 5.19.0-rc1 not powering off when hibernated
+Subject: Re: [PATCH 08/31] cpufreq: tegra20: Migrate to
+ dev_pm_opp_set_config()
 Content-Language: en-US
-To:     Ken Moffat <zarniwhoop@ntlworld.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <YqE22nS9k2+AldI6@llamedos.localdomain>
- <84d01637-febb-f602-2d03-fe1600e85ae3@leemhuis.info>
- <YqTPlGM9KQ0FqHdc@llamedos.localdomain>
- <YqeUDpo+8RLVKH8r@llamedos.localdomain>
- <YqoLjk8P+fChJ04m@llamedos.localdomain>
- <Yqo4ZTrRZXEvxS36@llamedos.localdomain>
- <65fbe95b-241a-c5c5-4eca-d6932e0fd59d@collabora.com>
- <YqtjBdEY59P9JQsx@llamedos.localdomain>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
+ <793e49ea-aeb0-a47a-9fe8-742a6397bb35@collabora.com>
+ <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
+ <20220530075256.lpw6bhupejy2dnqi@vireshk-i7>
+ <20220607084351.i4s5veww6irmaf3t@vireshk-i7>
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <YqtjBdEY59P9JQsx@llamedos.localdomain>
+In-Reply-To: <20220607084351.i4s5veww6irmaf3t@vireshk-i7>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,58 +69,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/16/22 20:06, Ken Moffat wrote:
-> On Thu, Jun 16, 2022 at 05:59:10PM +0300, Dmitry Osipenko wrote:
->> Hi,
+On 6/7/22 11:43, Viresh Kumar wrote:
+> On 30-05-22, 13:22, Viresh Kumar wrote:
+>> On 29-05-22, 19:59, Dmitry Osipenko wrote:
+>>>> Please keep the PTR_ERR_OR_ZERO.
 >>
->> On 6/15/22 22:52, Ken Moffat wrote:
->>> On Wed, Jun 15, 2022 at 05:40:46PM +0100, Ken Moffat wrote:
->>>> On Mon, Jun 13, 2022 at 08:46:22PM +0100, Ken Moffat wrote:
->>>>
->>>>>>>> But with 5.19.0-rc1 the screen is blank throughtout the hibernation,
->>>>>>>> and briefly when restoring (no complaint about that), but when
->>>>>>>> hibernating it no longer powers off and I have to hold the on/off
->>>>>>>> switch to power off.
->>>>>>>>
->>>>>>>> Is this a known problem ?
->>>>>>>
->>> [...]
->>>> Indeed, on the second attempt I've got a much more likely commit to
->>>> blame:
->>>>
->>>> 98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71 is the first bad commit
->>>> commit 98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71
->>>> Author: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>>> Date:   Tue May 10 02:32:30 2022 +0300
->>>>
->>>>     ACPI: power: Switch to sys-off handler API
->>>>     
->>>>     Switch to sys-off API that replaces legacy pm_power_off callbacks,
->>>>     allowing us to remove global pm_* variables and support chaining of
->>>>     all restart and power-off modes consistently.
->>>>     
->>>>     Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>>>     Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>
->>>> Unsurprisingly, with this reverted 5.19-rc2 fails to build.
->>>>
->>> It occurs to me that maybe I'm missing something in my .config.
->>> Since that is 117K, here is the gzipped config from the version that
->>> git blamed (apart from not powering off, it appears to work ok).
+>> Ahh, sorry about that. Fixed.
 >>
->> The patch below likely should fix the problem, please give it a try on
->> top of the 5.19-rc2.
+>>>> tegra20-cpufreq tegra20-cpufreq: failed to set OPP config: -1042688000
+>>>
+>>> With that fixed, now there is another error:
+>>>
+>>> [    1.761945] cpu cpu0: _of_add_opp_table_v2: no supported OPPs
+>>> [    1.761960] cpu cpu0: OPP table can't be empty
+>>
+>> So we failed to find any OPPs which work with the hardware version of
+>> updated with dev_pm_opp_set_config(). I tried to follow the path and
+>> see if there is something wrong here. Failed to find that :(
+>>
+>>> I see this on Tegra30, but not on Tegra20. Apparently OPP table
+>>> refcounting is broken on Tegra30 by this patchset. To make it clear,
+>>> there are no error without these OPP patches applied. I may take a
+>>> closer look if will be needed, just ping me.
+>>
+>> Yes, it would be very helpful as I don't have the necessary hardware.
 > 
-> Thanks, works like a charm.
+> Hey, any updates on this ? I am looking to resend the series soon, would be nice
+> to fix this before that.
 > 
-> Feel free to add
-> 
-> Reported-by: Ken Moffat <zarniwhhop@ntlworld.com>
-> Tested-by: Ken Moffat <zarniwhoop@ntlworld.com>
-> 
-> if you wish.
 
-Nice, thank you!
+I'll take a look over this weekend. Sorry for the delay.
 
 -- 
 Best regards,
