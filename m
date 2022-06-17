@@ -2,73 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9CF54FD53
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 21:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E31A54FDB6
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 21:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbiFQTIr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 15:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S233207AbiFQTdd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 15:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237770AbiFQTIq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 15:08:46 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3A5562D8;
-        Fri, 17 Jun 2022 12:08:44 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id f65so4782519pgc.7;
-        Fri, 17 Jun 2022 12:08:44 -0700 (PDT)
+        with ESMTP id S242313AbiFQTd0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 15:33:26 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA88411441;
+        Fri, 17 Jun 2022 12:33:24 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id z14so4865404pgh.0;
+        Fri, 17 Jun 2022 12:33:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=j41E/BYoRqjAFP436187RxcFJdtJLeDsuRyt74Icg5Y=;
-        b=KAt/ZwIW6GKOk2RApSdAlLE9w/HUp3vrGRdYs6vuAfZyTRi008JVB0cQOEnfvn4GfV
-         EfZaBz2oup74Sbuv+ci8AjajLNlStT4KI74+q8hh6GcNfH14P6EA4fqLQhNFErCnxcI4
-         mnWMYhvPo63tmos4CoENDr/K+TJ8rvQiFdDtW81B9CQvWqJ4IUXP63QrblMccCHavw5D
-         2G/gMYyKW0AvKJfWAWH26w286QKQPPfSbdJhtib2r3E5lZod7kFFiU4wAyTtBb6R8Mm1
-         qehpuyTAF/AYJgwXTQF49T407noTHjRhS+ZSfUUk7lxVgVncOStzn4rh3uui/1Cm9ihK
-         SPOg==
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=ZBfsCeFHa7qdrvuP6qUnqaXyZVzCHTMNQZo7kaThjTg=;
+        b=WQtkgRxTDNopse1zjTcHlNC2cLnG+XAu8rC2CcRr/g+k4zueI4AReJ2iDI2k2vjOnS
+         FcXU6E1SoHfqqlhJR8PVLcUjN7kzWsgLL7qQg6vsmsHjAvMdsToqUtSIRBQi/2s6L1ss
+         FZN+M8Vns547qIllNJmH0ERsfq1ZhCQmAGhfHSuwpo/zcdmL+BTMpcHm9HaI0Uo7yFTf
+         pLFS3Zwn4Xi5IVFEwAo0hs5Icd0K73KwLm3QNXVn9tud3oKx+O0RLqyX/dAgdwDQSyUe
+         Kn1MaxTaTYSn6MymDVFkrAGts58yg3IUnLLJArr+PD2Zo1+YDF4XOVLanXAlR48hbtMF
+         S2SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=j41E/BYoRqjAFP436187RxcFJdtJLeDsuRyt74Icg5Y=;
-        b=N6RinlXpzus7smzOJTit1HO0+1IQh5fkpOcC0n6taEYLIwr611NwRJCPsLR37tFCo7
-         Gg3u+4nVxvY2LZ2CejNbkvmFE2DHVZ1tHSRQch64QdXcaLb9D2A598OGX3MuymJbvEni
-         qEzt6+jIWswe5aFHmClDgBophzJLP1FgpuyplpFOjfioI2hyanEADWYIRaX+v/iKH55J
-         9Wr9fjCl2lukE/wUVuKImQqdf9LfKo3cieUEumKHOTqgb2P1GsYwOCdJ1daakhkzXOfp
-         iCztGqkhjx4jEiCkmlRP8b+/+ju+bJDDcqYKU8AcKdnhUWbrOuLjL4LXSFjMpUHdii/C
-         BLbA==
-X-Gm-Message-State: AJIora8lnpDZc7oBCCjTwnkiQSO1YQFj+/KBE+ogOYIe8WoI4irBJpOC
-        D6QrDx6xvgiQniV6bnY3TUovWyYDlrg=
-X-Google-Smtp-Source: AGRyM1ttAZVg0K9w9XHm96HKWsCLC6j8iniymytPCQmXG79ZrpEgSUP/964Q9fbkjz0kHvDC/xMRZg==
-X-Received: by 2002:aa7:92d2:0:b0:51b:4d60:6475 with SMTP id k18-20020aa792d2000000b0051b4d606475mr11560802pfa.73.1655492924171;
-        Fri, 17 Jun 2022 12:08:44 -0700 (PDT)
+        bh=ZBfsCeFHa7qdrvuP6qUnqaXyZVzCHTMNQZo7kaThjTg=;
+        b=QARFdNp/eZLU89Yh2/ecliFBfrNn7NmmauqTTgAR3WMJw+8BkbFaJXWLuqt+9ceBLx
+         MDBjIoOBNclcIcHouUc9PFyqg0hjqLfFZNedqwtr0K+bS84TUJ1V6NKlQ/rm2RfI8TYZ
+         X94DughMPpIjJMiP1PVB2MO1DqYG4WTDIRJxZ2ZcOAcS0fkFVjOv+zqJDsQUhIqavky7
+         WDETvXyFrT9cOrX731GSUfU6KVwPow6XI7JsgeMtOKbwrLZC/pwY+pmaaSBnP0s36NRL
+         fccE3FJGIuaPtWGxIvJF9XqSXaaIgDpzk6DhSOXVuRJUjc/6NDUyPUPTALP7K641lxyU
+         +urQ==
+X-Gm-Message-State: AJIora/CMEDWN0An30pNaGZK4CGJWv21xRJ9717Z3VAUIUUdQe7jMb/r
+        y9YL1osEPmmvjK+BDOOiofM=
+X-Google-Smtp-Source: AGRyM1sdOjVSEYCvdzauTVaYwwoARnKDlcikLMcJhahvbAhSe9j+id0eO70E0KNYn/So6GXo727ONA==
+X-Received: by 2002:a65:6499:0:b0:3fc:dcaa:ad62 with SMTP id e25-20020a656499000000b003fcdcaaad62mr10494897pgv.63.1655494404195;
+        Fri, 17 Jun 2022 12:33:24 -0700 (PDT)
 Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id g4-20020a17090a67c400b001ec7ba41fe7sm1302753pjm.48.2022.06.17.12.08.41
+        by smtp.gmail.com with ESMTPSA id mm21-20020a17090b359500b001ec86a0490csm82442pjb.32.2022.06.17.12.33.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 12:08:43 -0700 (PDT)
-Message-ID: <8ec38d8c-2ece-dfbb-8435-5963d7e80049@gmail.com>
-Date:   Sat, 18 Jun 2022 04:08:35 +0900
+        Fri, 17 Jun 2022 12:33:23 -0700 (PDT)
+Message-ID: <02753520-ad02-7658-c117-a4c2febb059b@gmail.com>
+Date:   Sat, 18 Jun 2022 04:33:19 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v4 2/4] PM / devfreq: Fix kernel warning with cpufreq
- passive register fail
+Subject: Re: [PATCH v4 3/4] PM / devfreq: Rework freq_table to be local to
+ devfreq struct
 Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Sibi Sankar <sibis@codeaurora.org>,
         Saravana Kannan <skannan@codeaurora.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220614230950.426-1-ansuelsmth@gmail.com>
- <20220614230950.426-3-ansuelsmth@gmail.com>
- <5848a10e-e5bf-108f-3e3e-15e16332922d@gmail.com>
- <62a9af8f.1c69fb81.56ead.2c48@mx.google.com>
+ <20220614230950.426-4-ansuelsmth@gmail.com>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <62a9af8f.1c69fb81.56ead.2c48@mx.google.com>
+In-Reply-To: <20220614230950.426-4-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,119 +79,296 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22. 6. 15. 18:20, Ansuel Smith wrote:
-> On Wed, Jun 15, 2022 at 04:11:13PM +0900, Chanwoo Choi wrote:
->> On 22. 6. 15. 08:09, Christian 'Ansuel' Marangi wrote:
->>> When the cpufreq passive register path from the passive governor fails,
->>> the cpufreq_passive_unregister is called and a kernel WARNING is always
->>> reported.
+Hi,
 
->>> This is caused by the fact that the devfreq driver already call the
->>> governor unregister with the GOV_STOP, for this reason the second
->>> cpufreq_passive_unregister always return error and a WARN is printed
->>> from the WARN_ON function.
+Thanks for the good catch. 
 
->>> Remove the unregister call from the error handling of the cpufreq register
->>> notifier as it's fundamentally wrong and already handled by the devfreq
->>> core code.
 
-If possible, could you make the patch description more simply?
+I think that this patch fixes issue of commit 0ec09ac2cebe
+("PM / devfreq: Set the freq_table of devfreq device").
 
->>>
->>> Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
->>> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
->>> ---
->>>  drivers/devfreq/governor_passive.c | 1 -
->>>  1 file changed, 1 deletion(-)
->>>
->>> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
->>> index 95de336f20d5..dcc9dd518197 100644
->>> --- a/drivers/devfreq/governor_passive.c
->>> +++ b/drivers/devfreq/governor_passive.c
->>> @@ -331,7 +331,6 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
->>>  err_put_policy:
->>>  	cpufreq_cpu_put(policy);
->>>  err:
->>> -	WARN_ON(cpufreq_passive_unregister_notifier(devfreq));
->>>  
->>>  	return ret;
->>>  }
->>
->> I think that it is necessary to free the resource when error happen.
+When some devfreq driver without using passive governor
+faces on the all errors including PROBE_DEFER
+after executing devfreq_add_device, this issue will happen.
+
+Also need to check the devfreq device driver using freq_table
+which was allocated dynamically. In case of devfreq/drivers/exynos-bus.c
+used the devfreq->profile->freq_table after devfreq_add_device.
+
+On 22. 6. 15. 08:09, Christian 'Ansuel' Marangi wrote:
+> Currently we reference the freq_table to the profile defined one and we
+> make changes on it. Devfreq never supported PROBE_DEFER before the cpu
+> based scaling support to the passive governor and assumed that a devfreq
+> device could only had error and be done with it.
+> Now that a device can PROBE_DEFER a rework to the freq_table logic is
+> required.
 > 
-> Thing is that it should not be done in the register. Following the flow
-> of the devfreq core code, if a gov fails to START, the gov STOP is
-> called and we correctly free our resources. In the current
-> implementation we call the free 2 times and the second time will always
-> print error as the notifier is already unregistered.
+> If a device PROBE_DEFER on the GOV_START, the freq_table is already set
+> in the device profile struct and its init is skipped. This is due to the
+> fact that it's common for devs to declare this kind of struct static.
+> This cause the devfreq logic to find a freq table declared (freq_table
+> not NULL) with random data and poiting to the old addrs freed by devm.
+ > This problem CAN be solved by devs by clearing the freq_table in their
+> profile struct on driver exit path but it should not be trusted and it
+> looks to use a flawed logic.
 > 
->> Also, after merging the your patch1, I think that cpufreq_passive_unregister_notifier(devfreq)
->> will not return error. Instead, just 0 for success.
+> A better solution is to move the freq_table and max_state to the
+> devfreq struct and never change the profile struct.
+> This permit to correctly handle PROBE_DEFER since the devfreq struct is
+> reallocated and contains new values.
+> Also the profile struct should only be used to init the driver and should
+> not be used by the devfreq to write the freq_table if it's not provided
+> by the driver.
 > 
-> With path1 we removed the error with the parent_cpu_data deletion but
-> the unregister error is still there.
-> 
->>
->> Instead, 'err_free_cpu_data' and 'err_put_policy' goto statement are wrong exception
->> handling. If fix the exception handling code in cpufreq_passive_register_notifier
->> as following and with your patch1, I'll handle the resource for free/un-registration
->> when error happen during cpufreq_passive_register_notifier.
->>
-> 
-> Don't know the main problem here is calling unregister 2 times.
 
-Ah. I understood. To fix the error path handling with unregister function
-is called twice, I think that need to to fix it as following:
+If possible, could you explain the patch description more simply?
+Maybe, just focus on the 'freq_table' issue by device managed functions (devs).
 
 
-diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-index a35b39ac656c..8f38a63beefc 100644
---- a/drivers/devfreq/governor_passive.c
-+++ b/drivers/devfreq/governor_passive.c
-@@ -289,22 +289,25 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
-                parent_cpu_data = kzalloc(sizeof(*parent_cpu_data),
-                                                GFP_KERNEL);
-                if (!parent_cpu_data) {
-+                       cpufreq_cpu_put(policy);
-                        ret = -ENOMEM;
--                       goto err_put_policy;
-+                       goto err;
-                }
- 
-                cpu_dev = get_cpu_device(cpu);
-                if (!cpu_dev) {
-                        dev_err(dev, "failed to get cpu device\n");
-+                       cpufreq_cpu_put(policy);
-                        ret = -ENODEV;
--                       goto err_free_cpu_data;
-+                       goto err;
-                }
- 
-                opp_table = dev_pm_opp_get_opp_table(cpu_dev);
-                if (IS_ERR(opp_table)) {
-                        dev_err(dev, "failed to get opp_table of cpu%d\n", cpu);
-+                       cpufreq_cpu_put(policy);
-                        ret = PTR_ERR(opp_table);
--                       goto err_free_cpu_data;
-+                       goto err;
-                }
- 
-                parent_cpu_data->dev = cpu_dev;
-@@ -324,15 +327,7 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
-        if (ret)
-                dev_err(dev, "failed to update the frequency\n");
- 
--       return ret;
--
--err_free_cpu_data:
--       kfree(parent_cpu_data);
--err_put_policy:
--       cpufreq_cpu_put(policy);
- err:
--       WARN_ON(cpufreq_passive_unregister_notifier(devfreq));
--
-        return ret;
- }
+> Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
+> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+> ---
+>  drivers/devfreq/devfreq.c          | 71 ++++++++++++++----------------
+>  drivers/devfreq/governor_passive.c | 14 +++---
+>  include/linux/devfreq.h            |  4 ++
+>  3 files changed, 45 insertions(+), 44 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 01474daf4548..2e2b3b414d67 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -123,7 +123,7 @@ void devfreq_get_freq_range(struct devfreq *devfreq,
+>  			    unsigned long *min_freq,
+>  			    unsigned long *max_freq)
+>  {
+> -	unsigned long *freq_table = devfreq->profile->freq_table;
+> +	unsigned long *freq_table = devfreq->freq_table;
+>  	s32 qos_min_freq, qos_max_freq;
+>  
+>  	lockdep_assert_held(&devfreq->lock);
+> @@ -133,11 +133,11 @@ void devfreq_get_freq_range(struct devfreq *devfreq,
+>  	 * The devfreq drivers can initialize this in either ascending or
+>  	 * descending order and devfreq core supports both.
+>  	 */
+> -	if (freq_table[0] < freq_table[devfreq->profile->max_state - 1]) {
+> +	if (freq_table[0] < freq_table[devfreq->max_state - 1]) {
+>  		*min_freq = freq_table[0];
+> -		*max_freq = freq_table[devfreq->profile->max_state - 1];
+> +		*max_freq = freq_table[devfreq->max_state - 1];
+>  	} else {
+> -		*min_freq = freq_table[devfreq->profile->max_state - 1];
+> +		*min_freq = freq_table[devfreq->max_state - 1];
+>  		*max_freq = freq_table[0];
+>  	}
+>  
+> @@ -169,8 +169,8 @@ static int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq)
+>  {
+>  	int lev;
+>  
+> -	for (lev = 0; lev < devfreq->profile->max_state; lev++)
+> -		if (freq == devfreq->profile->freq_table[lev])
+> +	for (lev = 0; lev < devfreq->max_state; lev++)
+> +		if (freq == devfreq->freq_table[lev])
+>  			return lev;
+>  
+>  	return -EINVAL;
+> @@ -178,7 +178,6 @@ static int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq)
+>  
+>  static int set_freq_table(struct devfreq *devfreq)
+>  {
+> -	struct devfreq_dev_profile *profile = devfreq->profile;
+>  	struct dev_pm_opp *opp;
+>  	unsigned long freq;
+>  	int i, count;
+> @@ -188,25 +187,22 @@ static int set_freq_table(struct devfreq *devfreq)
+>  	if (count <= 0)
+>  		return -EINVAL;
+>  
+> -	profile->max_state = count;
+> -	profile->freq_table = devm_kcalloc(devfreq->dev.parent,
+> -					profile->max_state,
+> -					sizeof(*profile->freq_table),
+> -					GFP_KERNEL);
+> -	if (!profile->freq_table) {
+> -		profile->max_state = 0;
+> +	devfreq->max_state = count;
+> +	devfreq->freq_table = devm_kcalloc(devfreq->dev.parent,
+> +					   devfreq->max_state,
+> +					   sizeof(*devfreq->freq_table),
+> +					   GFP_KERNEL);
+> +	if (!devfreq->freq_table)
+>  		return -ENOMEM;
+> -	}
+>  
+> -	for (i = 0, freq = 0; i < profile->max_state; i++, freq++) {
+> +	for (i = 0, freq = 0; i < devfreq->max_state; i++, freq++) {
+>  		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
+>  		if (IS_ERR(opp)) {
+> -			devm_kfree(devfreq->dev.parent, profile->freq_table);
+> -			profile->max_state = 0;
+> +			devm_kfree(devfreq->dev.parent, devfreq->freq_table);
+>  			return PTR_ERR(opp);
+>  		}
+>  		dev_pm_opp_put(opp);
+> -		profile->freq_table[i] = freq;
+> +		devfreq->freq_table[i] = freq;
+>  	}
+>  
+>  	return 0;
+> @@ -246,7 +242,7 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
+>  
+>  	if (lev != prev_lev) {
+>  		devfreq->stats.trans_table[
+> -			(prev_lev * devfreq->profile->max_state) + lev]++;
+> +			(prev_lev * devfreq->max_state) + lev]++;
+>  		devfreq->stats.total_trans++;
+>  	}
+>  
+> @@ -835,6 +831,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  		if (err < 0)
+>  			goto err_dev;
+>  		mutex_lock(&devfreq->lock);
+> +	} else {
+> +		devfreq->freq_table = devfreq->profile->freq_table;
+> +		devfreq->max_state = devfreq->profile->max_state;
+>  	}
+>  
+>  	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
+> @@ -870,8 +869,8 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  
+>  	devfreq->stats.trans_table = devm_kzalloc(&devfreq->dev,
+>  			array3_size(sizeof(unsigned int),
+> -				    devfreq->profile->max_state,
+> -				    devfreq->profile->max_state),
+> +				    devfreq->max_state,
+> +				    devfreq->max_state),
+>  			GFP_KERNEL);
+>  	if (!devfreq->stats.trans_table) {
+>  		mutex_unlock(&devfreq->lock);
+> @@ -880,7 +879,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	}
+>  
+>  	devfreq->stats.time_in_state = devm_kcalloc(&devfreq->dev,
+> -			devfreq->profile->max_state,
+> +			devfreq->max_state,
+>  			sizeof(*devfreq->stats.time_in_state),
+>  			GFP_KERNEL);
+>  	if (!devfreq->stats.time_in_state) {
+> @@ -1665,9 +1664,9 @@ static ssize_t available_frequencies_show(struct device *d,
+>  
+>  	mutex_lock(&df->lock);
+>  
+> -	for (i = 0; i < df->profile->max_state; i++)
+> +	for (i = 0; i < df->max_state; i++)
+>  		count += scnprintf(&buf[count], (PAGE_SIZE - count - 2),
+> -				"%lu ", df->profile->freq_table[i]);
+> +				"%lu ", df->freq_table[i]);
+>  
+>  	mutex_unlock(&df->lock);
+>  	/* Truncate the trailing space */
+> @@ -1690,7 +1689,7 @@ static ssize_t trans_stat_show(struct device *dev,
+>  
+>  	if (!df->profile)
+>  		return -EINVAL;
+> -	max_state = df->profile->max_state;
+> +	max_state = df->max_state;
+>  
+>  	if (max_state == 0)
+>  		return sprintf(buf, "Not Supported.\n");
+> @@ -1707,19 +1706,17 @@ static ssize_t trans_stat_show(struct device *dev,
+>  	len += sprintf(buf + len, "           :");
+>  	for (i = 0; i < max_state; i++)
+>  		len += sprintf(buf + len, "%10lu",
+> -				df->profile->freq_table[i]);
+> +				df->freq_table[i]);
+>  
+>  	len += sprintf(buf + len, "   time(ms)\n");
+>  
+>  	for (i = 0; i < max_state; i++) {
+> -		if (df->profile->freq_table[i]
+> -					== df->previous_freq) {
+> +		if (df->freq_table[i] == df->previous_freq)
+>  			len += sprintf(buf + len, "*");
+> -		} else {
+> +		else
+>  			len += sprintf(buf + len, " ");
+> -		}
+> -		len += sprintf(buf + len, "%10lu:",
+> -				df->profile->freq_table[i]);
+> +
+> +		len += sprintf(buf + len, "%10lu:", df->freq_table[i]);
+>  		for (j = 0; j < max_state; j++)
+>  			len += sprintf(buf + len, "%10u",
+>  				df->stats.trans_table[(i * max_state) + j]);
+> @@ -1743,7 +1740,7 @@ static ssize_t trans_stat_store(struct device *dev,
+>  	if (!df->profile)
+>  		return -EINVAL;
+>  
+> -	if (df->profile->max_state == 0)
+> +	if (df->max_state == 0)
+>  		return count;
+>  
+>  	err = kstrtoint(buf, 10, &value);
+> @@ -1751,11 +1748,11 @@ static ssize_t trans_stat_store(struct device *dev,
+>  		return -EINVAL;
+>  
+>  	mutex_lock(&df->lock);
+> -	memset(df->stats.time_in_state, 0, (df->profile->max_state *
+> +	memset(df->stats.time_in_state, 0, (df->max_state *
+>  					sizeof(*df->stats.time_in_state)));
+>  	memset(df->stats.trans_table, 0, array3_size(sizeof(unsigned int),
+> -					df->profile->max_state,
+> -					df->profile->max_state));
+> +					df->max_state,
+> +					df->max_state));
+>  	df->stats.total_trans = 0;
+>  	df->stats.last_update = get_jiffies_64();
+>  	mutex_unlock(&df->lock);
+> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> index dcc9dd518197..1810966fd61d 100644
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -145,18 +145,18 @@ static int get_target_freq_with_devfreq(struct devfreq *devfreq,
+>  		goto out;
+>  
+>  	/* Use interpolation if required opps is not available */
+> -	for (i = 0; i < parent_devfreq->profile->max_state; i++)
+> -		if (parent_devfreq->profile->freq_table[i] == *freq)
+> +	for (i = 0; i < parent_devfreq->max_state; i++)
+> +		if (parent_devfreq->freq_table[i] == *freq)
+>  			break;
+>  
+> -	if (i == parent_devfreq->profile->max_state)
+> +	if (i == parent_devfreq->max_state)
+>  		return -EINVAL;
+>  
+> -	if (i < devfreq->profile->max_state) {
+> -		child_freq = devfreq->profile->freq_table[i];
+> +	if (i < devfreq->max_state) {
+> +		child_freq = devfreq->freq_table[i];
+>  	} else {
+> -		count = devfreq->profile->max_state;
+> -		child_freq = devfreq->profile->freq_table[count - 1];
+> +		count = devfreq->max_state;
+> +		child_freq = devfreq->freq_table[count - 1];
+>  	}
+>  
+>  out:
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index dc10bee75a72..770a7532655c 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -185,6 +185,10 @@ struct devfreq {
+>  	struct notifier_block nb;
+>  	struct delayed_work work;
+>  
+> +	/* devfreq local freq_table */
+> +	unsigned long *freq_table;
+> +	unsigned int max_state;
+> +
+>  	unsigned long previous_freq;
+>  	struct devfreq_dev_status last_status;
+>  
 
 
 -- 
