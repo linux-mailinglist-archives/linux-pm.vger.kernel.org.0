@@ -2,121 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D188854F6BA
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 13:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F0D54F6F6
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 13:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381463AbiFQLbY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 07:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
+        id S1379340AbiFQLsd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 07:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbiFQLbY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 07:31:24 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F225D6CAB2
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 04:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=jefMjbgczLCC5ZgjzWRovraHzwRQY6Wrol6OOhFMrGg=; t=1655465483; x=1656675083; 
-        b=R1uQIsdKmxSUQ7WeAN8N5oY89+GBo1lj5c5jo94fBr+8QQcdAAsOO9cjgD6dQBwi/UDHAQyxWzk
-        OrtzNbNMq3XV9lPJBGlApdecLL8/qJq39UwL32OCFBA9hCbR4MRmrifOn7AB6DJ7GsA5Ta4wfPFsS
-        kyskQSD7eNVnUaKiCedPSoWS5NjChFqKCRDjG2Km0ltrtiMgn9jHD+TisTtqjCXSW/Odgkeh71xvW
-        +tlJ3Kf3Q+cPv0kGYO3bIhD7wV7+bYEiZ1jVLbw8AVKqWQu64LybM/Mn2BMAE8tXGitltp4U5ybex
-        DwCQvPUHus3SFnvziLDxqWSYLB4OvUk1M+Yg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <benjamin@sipsolutions.net>)
-        id 1o2AC6-008QBa-S0;
-        Fri, 17 Jun 2022 13:31:19 +0200
-Message-ID: <e2f00afe78432a13adc23fc879f0631ada49e122.camel@sipsolutions.net>
-Subject: Re: How to identify the primary battery (for Wine)
-From:   Benjamin Berg <benjamin@sipsolutions.net>
-To:     Alex Henrie <alexhenrie24@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Huw Davies <huw@codeweavers.com>, linux-pm@vger.kernel.org,
-        Wine Devel <wine-devel@winehq.org>
-Date:   Fri, 17 Jun 2022 13:31:13 +0200
-In-Reply-To: <CAMMLpeSRQ4T=_J0uwjoh=NNeuO43-Nb3PkzfSoDdUhOfU8_TqQ@mail.gmail.com>
-References: <CAMMLpeTRZnpQ8b6puhHeKaDgzW12ZM_g3nAWjVP71HbSaeHktQ@mail.gmail.com>
-         <20220614141742.j7lrj2q5b3suebb2@mercury.elektranox.org>
-         <CAMMLpeSRQ4T=_J0uwjoh=NNeuO43-Nb3PkzfSoDdUhOfU8_TqQ@mail.gmail.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-5wajEyz9QuFVuGgvIWQj"
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        with ESMTP id S1382020AbiFQLs2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 07:48:28 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2A66B0B6;
+        Fri, 17 Jun 2022 04:48:23 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru [109.252.136.92])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 54683660179A;
+        Fri, 17 Jun 2022 12:48:21 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655466501;
+        bh=4OnJ9LkHQ8ZP/4JtbxesRqqZ1hb4x6FRCrAnAmr9L3c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=H0Txa8h4uFkIpa0KNjruM/jHtFUz/3rg9QT8hHSr3Dguwy+53Z+3fw7CUKxxoCPFg
+         wshZjl6TbqzD3vfejcfJMWRvnLyjS8bKsUoZQDctLCpu511x7LUIZrhH9nbk3GLqlg
+         la5uR2QB9fomh44ML1mb4LC4rSo8YCb8BaWbp/odS/SHxoxIlVLsYrN1DHOrH+YhSe
+         hi/LcWaCF4IZTcVXz80j0jJDmHgso5TkFqX2ap6P1Ic7IuxrGDP6qRCEK8fjoS8VK7
+         pmqTNaVonBqqv2IRvGOIsSsoB5oIchCjwCZT2dU2gKON35k/tieXpldSdL4xFVY0Le
+         XCzaej71XQRgA==
+Message-ID: <33d5028e-20f9-e133-b41c-9ea789052069@collabora.com>
+Date:   Fri, 17 Jun 2022 14:48:18 +0300
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-malware-bazaar-2: OK
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: regression, 5.19.0-rc1 not powering off when hibernated
+Content-Language: en-US
+To:     Ken Moffat <zarniwhoop@ntlworld.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <YqE22nS9k2+AldI6@llamedos.localdomain>
+ <84d01637-febb-f602-2d03-fe1600e85ae3@leemhuis.info>
+ <YqTPlGM9KQ0FqHdc@llamedos.localdomain>
+ <YqeUDpo+8RLVKH8r@llamedos.localdomain>
+ <YqoLjk8P+fChJ04m@llamedos.localdomain>
+ <Yqo4ZTrRZXEvxS36@llamedos.localdomain>
+ <65fbe95b-241a-c5c5-4eca-d6932e0fd59d@collabora.com>
+ <YqtjBdEY59P9JQsx@llamedos.localdomain>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <YqtjBdEY59P9JQsx@llamedos.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 6/16/22 20:06, Ken Moffat wrote:
+> On Thu, Jun 16, 2022 at 05:59:10PM +0300, Dmitry Osipenko wrote:
+>> Hi,
+>>
+>> On 6/15/22 22:52, Ken Moffat wrote:
+>>> On Wed, Jun 15, 2022 at 05:40:46PM +0100, Ken Moffat wrote:
+>>>> On Mon, Jun 13, 2022 at 08:46:22PM +0100, Ken Moffat wrote:
+>>>>
+>>>>>>>> But with 5.19.0-rc1 the screen is blank throughtout the hibernation,
+>>>>>>>> and briefly when restoring (no complaint about that), but when
+>>>>>>>> hibernating it no longer powers off and I have to hold the on/off
+>>>>>>>> switch to power off.
+>>>>>>>>
+>>>>>>>> Is this a known problem ?
+>>>>>>>
+>>> [...]
+>>>> Indeed, on the second attempt I've got a much more likely commit to
+>>>> blame:
+>>>>
+>>>> 98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71 is the first bad commit
+>>>> commit 98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71
+>>>> Author: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>> Date:   Tue May 10 02:32:30 2022 +0300
+>>>>
+>>>>     ACPI: power: Switch to sys-off handler API
+>>>>     
+>>>>     Switch to sys-off API that replaces legacy pm_power_off callbacks,
+>>>>     allowing us to remove global pm_* variables and support chaining of
+>>>>     all restart and power-off modes consistently.
+>>>>     
+>>>>     Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>>     Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>
+>>>> Unsurprisingly, with this reverted 5.19-rc2 fails to build.
+>>>>
+>>> It occurs to me that maybe I'm missing something in my .config.
+>>> Since that is 117K, here is the gzipped config from the version that
+>>> git blamed (apart from not powering off, it appears to work ok).
+>>
+>> The patch below likely should fix the problem, please give it a try on
+>> top of the 5.19-rc2.
+> 
+> Thanks, works like a charm.
+> 
+> Feel free to add
+> 
+> Reported-by: Ken Moffat <zarniwhhop@ntlworld.com>
+> Tested-by: Ken Moffat <zarniwhoop@ntlworld.com>
+> 
+> if you wish.
 
---=-5wajEyz9QuFVuGgvIWQj
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Nice, thank you!
 
-On Tue, 2022-06-14 at 09:17 -0600, Alex Henrie wrote:
-> On Tue, Jun 14, 2022 at 8:17 AM Sebastian Reichel
-> <sebastian.reichel@collabora.com> wrote:
-> > On Tue, Jun 14, 2022 at 2:05 AM Benjamin Berg <benjamin@sipsolutions.ne=
-t> wrote:
-> >=20
-> > > Wouldn't it make sense for Wine to use the UPower provided
-> > > DisplayDevice that can be queried through DBus?
-> >=20
-> > UPower does the required data aggregation for the 'DisplayDevice'.
-> > I don't know enough about the Wine codebase to recommend for or
-> > against using UPower.
->=20
-> I also don't know if D-Bus would be a good choice here. It would
-> certainly be a bigger change than the patch that I've proposed. What
-> are the advantages and disadvantages of querying the battery through
-> D-Bus, besides it doing battery aggregation for us?
-
-Well, depends on what you need, it will:
- 1. Calculate a energy/power values if the HW reports charge/current
- 2. Try to generate a proper state (charging/discharging, etc.) if the
-    hardware does not provide it
- 3. Aggregate multiple batteries
-
-Actually, I think using UPower likely fixes bugs:
- * You are currently not supporting modern hardware that reports
-   energy/power values (rather than charge/current).
- * You are only reading one battery
- * You are not estimating a rate if the HW does not provide one
-   (and not smoothing it which might be desirable).
-
-And, well, it should be easy. You can just query properties on a fixed
-DBus path. And if it fails, just assume you don't have a battery.
-
-Benjamin
-
---=-5wajEyz9QuFVuGgvIWQj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmKsZgIACgkQq6ZWhpmF
-Y3B98Q//c6DPf+GwS5QsjcgbZ6tC3z1emZTB5adhgfPwXjBrczBv66SfgBaitASz
-3gtGIuQAF+Q7lhe5PVqufBHpbNHaxs1rwDYa6QvfYO3SIBUGf34A1mN+FnjXT0cv
-Dmd6vXGHawK3/bM5i0rqSXa1Uezzkuj8Y4JHh+fdRxgfYyLA3V7LzR9OZP1EmR18
-x6pxFPrSBcXXWq6amgGnMz7Pcxbn5nXR0QE1c6zfxQI/QO18Wu29zyozQx0iqseC
-V6hf3P2JN2NFrL+gkptTcLMzEK3wzCJfst/HKH1HD8ZT8zPSsAuEJoY5j3IsXfCK
-4DFCpgsaoyaDFypvd9Oa1Ous46aJOSXc4+leTsY9vaGYB8m23n5GjdwJRxVTu72l
-U0QKclv5kN8daq7rzqJclDchgyNbbGg0YMnwbbQsuewfqPgJZL+WeXQ/OHFRtENx
-ZAFnD0amRcfoDX/6RXIiGvntFjO5SJn+bhhk+JSEmkBafWrqS+0na2nONYgdvxnN
-INK4m14caPTRcV+Gq49eInIwZ0ejInqtyqmqJfXy+cQNRHZTLD5xo54DzomClMTW
-aihXdUWoj2XD2eifPdCPl1ZpH1UoJHi5/jAzqQwuWUzYMcWlEbphvbHw9Is+jxdQ
-atqgfOUPYVv9x24zZix5fU6goGCmUJOZy9JRljFpd31CM1VbYZ4=
-=QQox
------END PGP SIGNATURE-----
-
---=-5wajEyz9QuFVuGgvIWQj--
+-- 
+Best regards,
+Dmitry
