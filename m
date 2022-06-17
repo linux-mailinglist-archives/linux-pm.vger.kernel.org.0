@@ -2,226 +2,371 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F3854F3A3
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 10:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EAA54F3CC
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jun 2022 11:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381369AbiFQIxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 04:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S1380565AbiFQJEH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 05:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381372AbiFQIxV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 04:53:21 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973742E9DA;
-        Fri, 17 Jun 2022 01:53:19 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id a15so4884889wrh.2;
-        Fri, 17 Jun 2022 01:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gzno2+UMSPzeUiuH0V0E3QHw7X1mIe+1a38n8YPlzzs=;
-        b=htpjKOv+cUAcFhSb8uzRM4f/VVAGBAV/4fPCC+PGDdpnwxyFasPJWCzgmxsKbY8h51
-         JdOCvug4h0S961xAo4tV2R7ky274vrqR/+7kx3QPvlTHfbgbB/yFmAn6roil6qVzgfV/
-         o2BUDdevG3/N4upBX5REDXUneNt10kWivEUYmeJb2sWpTggy9vv3Ld/PQYxX72gRdNx2
-         +uVQ1YJAY0BzdRhskFTcELYdquPnel4lZYNATnBHk5CL0VdkZXofsBYfvY83KvDeqE31
-         2MnSxVq6wCnVSfqySU4lcxxnE0zA4xpt+FnTnJ887AFf3/fSaMLS3tG3G9ux471XgkrA
-         7Ztw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gzno2+UMSPzeUiuH0V0E3QHw7X1mIe+1a38n8YPlzzs=;
-        b=Om89cmUBocpicmxY9wy9TPURjU2waqa+A2oihRor4A7LFCy3cd9qO0BfClPr98iIt3
-         OCCQudwydiyaCorHZS3R8vOIisXr3Qs4aJ4VagbJ2T8dyB7vrCNwvnv4pdRHJhbtD1HU
-         V0/THh25/CeihmvesT4x8SpVErTs0TzpYTXXtCn88OAdlzWoHdTmQCHGcPJ5h2mNgniC
-         giy3UCprXNZcoPzObRF5sFw85EJL6kF6Y31lpi5jA00Yd3v+SRe9/mQKQI3jgYU0ZgXg
-         eGzPGov1pjTBqyXuhe7fe0iLvgspweK7yYU0puILU3pnmlwpLsUewwGtz1gJMogoQWhs
-         Nihg==
-X-Gm-Message-State: AJIora8GgjNNeSLa23dzbot75DrcKnOuq63wGNz6WGTgRkdBdWgl1qMu
-        YtoHAgZOgNv3zH8f2eFTAU4=
-X-Google-Smtp-Source: AGRyM1um/H/nXHILgiFN/6qPVO0lqFfVT4StCCLzrKKD49ms8qOl03k7kDuLnM3SHPk91f86D3DGQw==
-X-Received: by 2002:a05:6000:154c:b0:219:bee5:6b76 with SMTP id 12-20020a056000154c00b00219bee56b76mr8327393wry.194.1655455997966;
-        Fri, 17 Jun 2022 01:53:17 -0700 (PDT)
-Received: from [192.168.0.24] (80.174.78.229.dyn.user.ono.com. [80.174.78.229])
-        by smtp.gmail.com with ESMTPSA id n26-20020a1c721a000000b0039482d95ab7sm4731557wmc.24.2022.06.17.01.53.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 01:53:16 -0700 (PDT)
-Message-ID: <5eaf1c4d-5fb7-bc70-f424-a23410a3c9f6@gmail.com>
-Date:   Fri, 17 Jun 2022 10:53:14 +0200
+        with ESMTP id S1380282AbiFQJEG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 05:04:06 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB8823143
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 02:04:04 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220617090402euoutp02f9400d979b1af5780ee4402e34adebd7~5XQuYGn342886028860euoutp02R
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 09:04:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220617090402euoutp02f9400d979b1af5780ee4402e34adebd7~5XQuYGn342886028860euoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1655456642;
+        bh=hbO+KUwerHLxtm6KlcfV7OPWErgphtZYtPCSkEyC3g8=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=IDzBMYHvWg4WUA33jUCVnA2FImtixgRrVemb6YSROKiCtFqG8czz3ObpgSBbysNW+
+         pIYT2gCSJ0bEyJ0EnyZY7lJac8y2sQSJE+2+1zOXpcIfXfEiivZTWg+a+J9S3BsdDj
+         yRjGIySAzSyDopV5bt+EsYYSUIX/bBXO/UhzJxuk=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220617090401eucas1p2b7fca481fb60731001b602c7f8d95dcd~5XQtyxdRZ2271722717eucas1p2B;
+        Fri, 17 Jun 2022 09:04:01 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id C1.37.09664.1834CA26; Fri, 17
+        Jun 2022 10:04:01 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220617090401eucas1p1ec8e4421c1b72b2b69202850e5839185~5XQtKG4640994409944eucas1p1l;
+        Fri, 17 Jun 2022 09:04:01 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220617090401eusmtrp27777d698fc23bd7f671d019689b41346~5XQtJOO8l0063500635eusmtrp2F;
+        Fri, 17 Jun 2022 09:04:01 +0000 (GMT)
+X-AuditID: cbfec7f2-d81ff700000025c0-0e-62ac43819948
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id DC.61.09038.0834CA26; Fri, 17
+        Jun 2022 10:04:00 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220617090359eusmtip2d9bfb7e46929bfd21a4448487c44cc9e~5XQsBO5Gg2476424764eusmtip2G;
+        Fri, 17 Jun 2022 09:03:59 +0000 (GMT)
+Message-ID: <d5796286-ec24-511a-5910-5673f8ea8b10@samsung.com>
+Date:   Fri, 17 Jun 2022 11:03:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: Default async probing for DT based systems
 Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
+To:     Saravana Kannan <saravanak@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>
-References: <20220516004311.18358-1-roger.lu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220516004311.18358-1-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <CAGETcx8z4dn1j05Za6nfDeC3v4r1yo30Nqu=1K2BEsvLcqqybQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIKsWRmVeSWpSXmKPExsWy7djPc7qNzmuSDB7v07GYdnESs8Xc2ZMY
+        LZoXr2ez2LFdxOLp5sdMFlP+LGey2PT4GqvF5V1z2Cw+9x5htNg55ySrxdwvU5ktWvceYbfo
+        OvSXzeL42nCLljumDvwe23ZvY/WYeFbXY8GmUo9NqzrZPO5c28Pm8e7cOXaP/XPXsHtsXlLv
+        8XmTXABnFJdNSmpOZllqkb5dAldGy7qrzAWdQRVT/z1ma2Cc59HFyMEhIWAicfCSdhcjF4eQ
+        wApGiW/P7jNBOF8YJR7d28EO4XxmlFi4ajJQhhOs49ylLYwQieWMEjNmzGSFcD4ySqxe8IcV
+        pIpXwE5i8+6FbCA2i4CqxL2OL2wQcUGJkzOfsIDYogJJEvO3tYLVCwuYS8xZ/QYsziwgLnHr
+        yXywO0QElrFIbGidDpWIkHhz/A6YzSZgKNH1tosN5AlOgUCJNx0qECXyEs1bZzOD9EoIrOaU
+        6N55lBHibBeJVctOQr0gLPHq+BZ2CFtG4v9OkGWgwMiX+DvDGCJcIXHt9RpmCNta4s65X2Cr
+        mAU0Jdbv0ocIO0oc/ruAEaKTT+LGW0GIC/gkJm2bzgwR5pXoaBOCqFaTmHV8HdzOgxcuMU9g
+        VJqFFCazkPw+C8kvsxD2LmBkWcUonlpanJueWmyYl1quV5yYW1yal66XnJ+7iRGY6k7/O/5p
+        B+PcVx/1DjEycTAeYpTgYFYS4TULXpkkxJuSWFmVWpQfX1Sak1p8iFGag0VJnDc5c0OikEB6
+        YklqdmpqQWoRTJaJg1OqgcmA365CTEaY8c/KO4sbPti2ScS+OxRzvrOmO1qhuDKG50PRvk9+
+        lxTTrK8tWT5jhaGFEXNWsv4k+YbmLffTi/tmFpXdefhdd0f7QuaG4k/X3692PDnFo3SSZ7Hj
+        3rcqcW8fLk+wa9ux62LLjYv3Zv7dcU1z9UfWfCnFVI2KO6zLd6w83p1bnpf2xujn9ZudJ3kT
+        jS55JInuXPlFPeTsTbNTghL6ysvTXMof54q/1t3+l5un7WXQfse3PKsDH6QGdvo+rZGKkjS1
+        lPtkmjGVeXHNnfRmL7FHbjVm664FbqjNeC7s98ryX4bxWf8zOs61yS4sG/0Xn/5TlNcQW2q8
+        vf7sqwBrx8NB/09K7ph7WomlOCPRUIu5qDgRAGurTSjkAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGIsWRmVeSWpSXmKPExsVy+t/xe7oNzmuSDNZ9tbKYdnESs8Xc2ZMY
+        LZoXr2ez2LFdxOLp5sdMFlP+LGey2PT4GqvF5V1z2Cw+9x5htNg55ySrxdwvU5ktWvceYbfo
+        OvSXzeL42nCLljumDvwe23ZvY/WYeFbXY8GmUo9NqzrZPO5c28Pm8e7cOXaP/XPXsHtsXlLv
+        8XmTXABnlJ5NUX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1NSmpOZllqkb5d
+        gl5Gy7qrzAWdQRVT/z1ma2Cc59HFyMkhIWAice7SFsYuRi4OIYGljBJNOycxQiRkJE5Oa2CF
+        sIUl/lzrYoMoes8o0XEYoohXwE5i8+6FbCA2i4CqxL2OL2wQcUGJkzOfsIDYogJJEvP2rgar
+        FxYwl5iz+g1YnFlAXOLWk/lMIENFBFaxSGw7doK9i5EDKBEh8eqeG8SyJYwS+992MIM0sAkY
+        SnS9BbmCg4NTIFDiTYcKxBwzia6tXYwQtrxE89bZzBMYhWYhOWMWknWzkLTMQtKygJFlFaNI
+        amlxbnpusZFecWJucWleul5yfu4mRmCEbzv2c8sOxpWvPuodYmTiYDzEKMHBrCTCaxa8MkmI
+        NyWxsiq1KD++qDQntfgQoykwLCYyS4km5wNTTF5JvKGZgamhiZmlgamlmbGSOK9nQUeikEB6
+        YklqdmpqQWoRTB8TB6dUA5OawzZ/AVkj7biwG5/v/ZMU1+Y7F1VfzrXT+5zvjya28K5fNQZu
+        xq4c59pXfo06+VY0V9YxoFN02bkD3d5apV8qfnZf9jMLk7owX6D1RE3vHffCk3/nnsnetua3
+        6IrawyZB07Y7fH4iyTXt08X9KZk1G61jdylZ99tKRWi2Gnxp+H56MtMMI8sZtXPqZgoGBsuH
+        XA1zZjsvJH0/NLtmS/eZn1M2qTpzrQiWagnJTLl7vtHU+fxukydRNY9m1t5rtA486ih1y+f8
+        0YWyG7uvqf+Ie/Cr88OEPJEXd6tizEr6j4Ys0BIOWv84/cTdVZPjTzS9+17qWS6xU2hFyXcm
+        jdqGRTpKco/WJH+8GRaeo8RSnJFoqMVcVJwIABoTJDR5AwAA
+X-CMS-MailID: 20220617090401eucas1p1ec8e4421c1b72b2b69202850e5839185
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220616032522eucas1p19a6c8718f01fa61c2fee795fb8945a92
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220616032522eucas1p19a6c8718f01fa61c2fee795fb8945a92
+References: <CGME20220616032522eucas1p19a6c8718f01fa61c2fee795fb8945a92@eucas1p1.samsung.com>
+        <CAGETcx8z4dn1j05Za6nfDeC3v4r1yo30Nqu=1K2BEsvLcqqybQ@mail.gmail.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Saravana,
+
+On 16.06.2022 05:24, Saravana Kannan wrote:
+> Hi,
+>
+> TL;DR: I want to improve boot times by enabling async probing by
+> default for DT based systems. Can you give it a shot please?
+
+Yes, I've gave it a try on my test systems. It looks that there are a 
+few issues. The first one, the most obvious to notice, is related to 
+__request_module() calls from various drivers and frameworks. Here are 
+some examples:
+
+------------[ cut here ]------------
+WARNING: CPU: 3 PID: 73 at kernel/kmod.c:136 __request_module+0x230/0x600
+Modules linked in:
+CPU: 3 PID: 73 Comm: kworker/u12:5 Not tainted 5.19.0-rc2-next-20220615+ 
+#5203
+Hardware name: ARM Juno development board (r1) (DT)
+Workqueue: events_unbound async_run_entry_fn
+pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+UDC core: g_ether: couldn't find an available UDC
+pc : __request_module+0x230/0x600
+lr : __request_module+0x228/0x600
+...
+Call trace:
+  __request_module+0x230/0x600
+  phy_request_driver_module+0x118/0x164
+  phy_device_create+0x210/0x23c
+  get_phy_device+0x8c/0x160
+  mdiobus_scan+0x40/0x1cc
+  __mdiobus_register+0x184/0x36c
+  smsc911x_drv_probe+0x648/0xa84
+  platform_probe+0x68/0xe0
+  really_probe+0xbc/0x2e0
+  __driver_probe_device+0x78/0xe0
+  driver_probe_device+0xa8/0x140
+  __driver_attach_async_helper+0x50/0xbc
+  async_run_entry_fn+0x34/0xd0
+  process_one_work+0x288/0x6bc
+  worker_thread+0x74/0x450
+  kthread+0x118/0x11c
+  ret_from_fork+0x10/0x20
+irq event stamp: 2032
+hardirqs last  enabled at (2031): [<ffff8000091b91dc>] 
+_raw_spin_unlock_irqrestore+0x98/0x9c
+hardirqs last disabled at (2032): [<ffff8000091ac844>] el1_dbg+0x24/0x90
+softirqs last  enabled at (2018): [<ffff800008010470>] _stext+0x470/0x5e8
+softirqs last disabled at (2007): [<ffff8000080a5214>] 
+__irq_exit_rcu+0x180/0x1ac
+---[ end trace 0000000000000000 ]---
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 54 at kernel/kmod.c:136 __request_module+0x230/0x600
+Modules linked in: rng_core(+) rtc_meson_vrtc(+) mdio_mux_meson_g12a(+) 
+meson_ir pcs_xpcs meson_canvas(+) meson_dw_hdmi dw_hdmi 
+snd_soc_meson_axg_tdm_interface di
+xg_tdm_formatter nvmem_meson_efuse
+CPU: 0 PID: 54 Comm: kworker/u8:3 Not tainted 5.19.0-rc2-next-20220615+ 
+#5203
+Hardware name: Hardkernel ODROID-C4 (DT)
+Workqueue: events_unbound async_run_entry_fn
+pstate: 00400009 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __request_module+0x230/0x600
+lr : __request_module+0x228/0x600
+...
+Call trace:
+  __request_module+0x230/0x600
+  rc_map_get+0xa8/0x134
+  rc_register_device+0x10c/0x600
+  devm_rc_register_device+0x4c/0x170
+  meson_ir_probe+0x160/0x2bc [meson_ir]
+  platform_probe+0x68/0xe0
+  really_probe+0xbc/0x2e0
+  __driver_probe_device+0x78/0xe0
+  driver_probe_device+0x3c/0x140
+  __driver_attach_async_helper+0x50/0xbc
+  async_run_entry_fn+0x34/0xd0
+  process_one_work+0x288/0x6bc
+  worker_thread+0x74/0x450
+  kthread+0x118/0x11c
+  ret_from_fork+0x10/0x20
+irq event stamp: 62052
+hardirqs last  enabled at (62051): [<ffff800008329c08>] 
+___slab_alloc+0x734/0x82c
+hardirqs last disabled at (62052): [<ffff8000091ac844>] el1_dbg+0x24/0x90
+softirqs last  enabled at (61920): [<ffff800008010470>] _stext+0x470/0x5e8
+softirqs last disabled at (61859): [<ffff8000080a5214>] 
+__irq_exit_rcu+0x180/0x1ac
+---[ end trace 0000000000000000 ]---
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 46 at kernel/kmod.c:136 __request_module+0x230/0x600
+Modules linked in:
+CPU: 0 PID: 46 Comm: kworker/u4:4 Not tainted 5.19.0-rc2-next-20220615+ 
+#5203
+Hardware name: linux,dummy-virt (DT)
+Workqueue: events_unbound async_run_entry_fn
+pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __request_module+0x230/0x600
+lr : __request_module+0x228/0x600
+...
+Call trace:
+  __request_module+0x230/0x600
+  parse_mtd_partitions+0x2b4/0x490
+  mtd_device_parse_register+0x90/0x2bc
+  physmap_flash_probe+0x4c8/0x7b0
+  platform_probe+0x68/0xe0
+  really_probe+0xbc/0x2e0
+  __driver_probe_device+0x78/0xe0
+  driver_probe_device+0xa8/0x140
+  __driver_attach_async_helper+0x50/0xbc
+  async_run_entry_fn+0x34/0xd0
+  process_one_work+0x288/0x6bc
+  worker_thread+0x74/0x450
+  kthread+0x118/0x11c
+  ret_from_fork+0x10/0x20
+irq event stamp: 674
+hardirqs last  enabled at (673): [<ffffddb219125380>] 
+vprintk_store+0x440/0x4a0
+hardirqs last disabled at (674): [<ffffddb21a1ac844>] el1_dbg+0x24/0x90
+softirqs last  enabled at (618): [<ffffddb219010470>] _stext+0x470/0x5e8
+softirqs last disabled at (613): [<ffffddb2190a5214>] 
+__irq_exit_rcu+0x180/0x1ac
+---[ end trace 0000000000000000 ]---
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 63 at kernel/kmod.c:136 __request_module+0x23c/0x42c
+Modules linked in: exynos_bus soundcore s5p_mfc lima brcmutil 
+drm_shmem_helper exynos_adc gpu_sched sha256_generic libsha256 
+sha256_arm cfg80211 phy_exynos_usb2 s
+dma_contig videobuf2_memops videobuf2_v4l2 videobuf2_common videodev 
+exynosdrm analogix_dp mc exynos_ppmu rtc_s3c i2c_gpio
+CPU: 0 PID: 63 Comm: kworker/u4:5 Not tainted 
+5.19.0-rc2-next-20220615-00040-g868471ca3680-dirty #5205
+Hardware name: Samsung Exynos (Flattened Device Tree)
+Workqueue: events_unbound async_run_entry_fn
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x40/0x4c
+  dump_stack_lvl from __warn+0xcc/0x144
+  __warn from warn_slowpath_fmt+0x5c/0xb4
+  warn_slowpath_fmt from __request_module+0x23c/0x42c
+  __request_module from try_then_request_governor+0x60/0xb0
+  try_then_request_governor from devfreq_add_device+0x498/0x5c8
+  devfreq_add_device from devm_devfreq_add_device+0x58/0x94
+  devm_devfreq_add_device from exynos_bus_probe+0x1b4/0x6bc [exynos_bus]
+  exynos_bus_probe [exynos_bus] from platform_probe+0x5c/0xb8
+  platform_probe from really_probe+0xc8/0x2f0
+  really_probe from __driver_probe_device+0x84/0xe4
+  __driver_probe_device from driver_probe_device+0x30/0x104
+  driver_probe_device from __driver_attach_async_helper+0x48/0x98
+  __driver_attach_async_helper from async_run_entry_fn+0x24/0xb0
+  async_run_entry_fn from process_one_work+0x1ec/0x4d0
+  process_one_work from worker_thread+0x58/0x54c
+  worker_thread from kthread+0xd0/0xec
+  kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xe0349fb0 to 0xe0349ff8)
+...
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 63 at kernel/kmod.c:136 __request_module+0x23c/0x42c
+Modules linked in: exynos_bus soundcore s5p_mfc lima brcmutil 
+drm_shmem_helper exynos_adc gpu_sched sha256_generic libsha256 
+sha256_arm cfg80211 phy_exynos_usb2 s
+dma_contig videobuf2_memops videobuf2_v4l2 videobuf2_common videodev 
+exynosdrm analogix_dp mc exynos_ppmu rtc_s3c i2c_gpio
+CPU: 0 PID: 63 Comm: kworker/u4:5 Not tainted 
+5.19.0-rc2-next-20220615-00040-g868471ca3680-dirty #5205
+Hardware name: Samsung Exynos (Flattened Device Tree)
+Workqueue: events_unbound async_run_entry_fn
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x40/0x4c
+  dump_stack_lvl from __warn+0xcc/0x144
+  __warn from warn_slowpath_fmt+0x5c/0xb4
+  warn_slowpath_fmt from __request_module+0x23c/0x42c
+  __request_module from try_then_request_governor+0x60/0xb0
+  try_then_request_governor from devfreq_add_device+0x498/0x5c8
+  devfreq_add_device from devm_devfreq_add_device+0x58/0x94
+  devm_devfreq_add_device from exynos_bus_probe+0x1b4/0x6bc [exynos_bus]
+  exynos_bus_probe [exynos_bus] from platform_probe+0x5c/0xb8
+  platform_probe from really_probe+0xc8/0x2f0
+  really_probe from __driver_probe_device+0x84/0xe4
+  __driver_probe_device from driver_probe_device+0x30/0x104
+  driver_probe_device from __driver_attach_async_helper+0x48/0x98
+  __driver_attach_async_helper from async_run_entry_fn+0x24/0xb0
+  async_run_entry_fn from process_one_work+0x1ec/0x4d0
+  process_one_work from worker_thread+0x58/0x54c
+  worker_thread from kthread+0xd0/0xec
+  kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xe0349fb0 to 0xe0349ff8)
+...
+---[ end trace 0000000000000000 ]---
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 23 at kernel/kmod.c:136 __request_module+0x23c/0x42c
+Modules linked in: g_ether usb_f_rndis u_ether libcomposite brcmfmac 
+brcmutil sha256_generic libsha256 snd_soc_hdmi_codec snd_soc_core 
+sha256_arm ac97_bus snd_pcm
+_timer snd soundcore panel_samsung_ld9040 hci_uart btbcm bluetooth 
+s5p_csis s5p_fimc exynos4_is_common v4l2_fwnode ecdh_generic ecc 
+v4l2_async spi_gpio phy_exynos
+x8998 pwm_samsung max8952 drm_shmem_helper libaes s5p_mfc gpu_sched 
+s5p_jpeg v4l2_mem2mem videobuf2_dma_contig videobuf2_memops 
+videobuf2_v4l2 phy_exynos_usb2 vid
+m ohci_exynos ehci_exynos analogix_dp mc s5p_sss exynos_rng rtc_s3c 
+s3c2410_wdt i2c_gpio
+CPU: 0 PID: 23 Comm: kworker/u4:7 Not tainted 
+5.19.0-rc2-next-20220615-00040-g868471ca3680-dirty #5205
+Hardware name: Samsung Exynos (Flattened Device Tree)
+Workqueue: events_unbound async_run_entry_fn
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x40/0x4c
+  dump_stack_lvl from __warn+0xcc/0x144
+  __warn from warn_slowpath_fmt+0x5c/0xb4
+  warn_slowpath_fmt from __request_module+0x23c/0x42c
+  __request_module from usb_get_function_instance+0x3c/0x58 [libcomposite]
+  usb_get_function_instance [libcomposite] from eth_bind+0x3c/0x334 
+[g_ether]
+  eth_bind [g_ether] from composite_bind+0x78/0x18c [libcomposite]
+  composite_bind [libcomposite] from gadget_bind_driver+0x8c/0x1d0
+  gadget_bind_driver from really_probe+0xc8/0x2f0
+  really_probe from __driver_probe_device+0x84/0xe4
+  __driver_probe_device from driver_probe_device+0x30/0x104
+  driver_probe_device from __driver_attach_async_helper+0x48/0x98
+  __driver_attach_async_helper from async_run_entry_fn+0x24/0xb0
+  async_run_entry_fn from process_one_work+0x1ec/0x4d0
+  process_one_work from worker_thread+0x58/0x54c
+  worker_thread from kthread+0xd0/0xec
+  kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xe08ddfb0 to 0xe08ddff8)
+...
+---[ end trace 0000000000000000 ]---
 
 
-On 16/05/2022 02:43, Roger Lu wrote:
-> The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> which calculates suitable SVS bank voltages to OPP voltage table.
-> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
-> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+Some Exynos-based boards also freeze quite early, after the 'EXYNOS5420 
+PMU initialized' message. I will investigate this later once I find some 
+spare time.
 
-Whole series applied to v5.19-next/soc and v5.19-next/dts64
+ > ...
 
-Thanks to all people involved!
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-> 
-> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
-> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
-> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
-> 
-> Change since v24:
-> - Rebase to Linux 5.18-rc6
-> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
-> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
-> 
-> Test in below environment:
-> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
-> HW: mt8183-Krane
-> 
-> [4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
-> [5] https://patchwork.kernel.org/project/linux-pm/patch/20210820095206.30981-1-ben.tseng@mediatek.com
-> 
-> Boots up log:
-> [    4.447369]  SVSB_CPU_LITTLE: svs_init01_isr_handler: VDN74~30:0x141e262e~0x33373c42, DC:0x02f3010b
-> [    4.447623]  SVSB_CPU_BIG: svs_init01_isr_handler: VDN74~30:0x151f2830~0x363a4046, DC:0x02f90141
-> [    4.447872]  SVSB_CCI: svs_init01_isr_handler: VDN74~30:0x141a232b~0x30363d42, DC:0x02ed00d5
-> [    4.448119]  SVSB_GPU: svs_init01_isr_handler: VDN74~30:0x1416171a~0x1d202327, DC:0x02f7012f
-> [    4.448239]  SVSB_CPU_LITTLE: svs_init02_isr_handler: VOP74~30:0x1b252d35~0x3a3e4349, DC:0x02f30000
-> [    4.448343]  SVSB_CPU_BIG: svs_init02_isr_handler: VOP74~30:0x1c262f37~0x3d41474d, DC:0x02f90000
-> [    4.448400]  SVSB_CCI: svs_init02_isr_handler: VOP74~30:0x1b212a32~0x373d4449, DC:0x02ed0000
-> [    4.448499]  SVSB_GPU: svs_init02_isr_handler: VOP74~30:0x1618191c~0x1f222529, DC:0x02f70000
-> 
-> SVS commands log:
-> localhost ~ # cat /sys/kernel/debug/svs/*/*
-> init2
-> SVSB_CCI: temperature ignore, turn_pt = 0
-> opp_freq[00]: 1196000000, opp_volt[00]: 968750, svsb_volt[00]: 0x4b, freq_pct[00]: 100
-> opp_freq[01]: 1144000000, opp_volt[01]: 956250, svsb_volt[01]: 0x49, freq_pct[01]: 96
-> opp_freq[02]: 1092000000, opp_volt[02]: 937500, svsb_volt[02]: 0x46, freq_pct[02]: 92
-> opp_freq[03]: 1027000000, opp_volt[03]: 918750, svsb_volt[03]: 0x43, freq_pct[03]: 86
-> opp_freq[04]: 962000000, opp_volt[04]: 893750, svsb_volt[04]: 0x3f, freq_pct[04]: 81
-> opp_freq[05]: 923000000, opp_volt[05]: 881250, svsb_volt[05]: 0x3d, freq_pct[05]: 78
-> opp_freq[06]: 871000000, opp_volt[06]: 856250, svsb_volt[06]: 0x39, freq_pct[06]: 73
-> opp_freq[07]: 845000000, opp_volt[07]: 850000, svsb_volt[07]: 0x38, freq_pct[07]: 71
-> opp_freq[08]: 767000000, opp_volt[08]: 825000, svsb_volt[08]: 0x34, freq_pct[08]: 65
-> opp_freq[09]: 689000000, opp_volt[09]: 800000, svsb_volt[09]: 0x30, freq_pct[09]: 58
-> opp_freq[10]: 624000000, opp_volt[10]: 775000, svsb_volt[10]: 0x2c, freq_pct[10]: 53
-> opp_freq[11]: 546000000, opp_volt[11]: 750000, svsb_volt[11]: 0x28, freq_pct[11]: 46
-> opp_freq[12]: 463000000, opp_volt[12]: 718750, svsb_volt[12]: 0x23, freq_pct[12]: 39
-> opp_freq[13]: 403000000, opp_volt[13]: 700000, svsb_volt[13]: 0x20, freq_pct[13]: 34
-> opp_freq[14]: 338000000, opp_volt[14]: 681250, svsb_volt[14]: 0x1d, freq_pct[14]: 29
-> opp_freq[15]: 273000000, opp_volt[15]: 650000, svsb_volt[15]: 0x1a, freq_pct[15]: 23
-> init2
-> SVSB_CPU_BIG: temperature ignore, turn_pt = 0
-> opp_freq[00]: 1989000000, opp_volt[00]: 1050000, svsb_volt[00]: 0x59, freq_pct[00]: 100
-> opp_freq[01]: 1924000000, opp_volt[01]: 1025000, svsb_volt[01]: 0x57, freq_pct[01]: 97
-> opp_freq[02]: 1846000000, opp_volt[02]: 1000000, svsb_volt[02]: 0x53, freq_pct[02]: 93
-> opp_freq[03]: 1781000000, opp_volt[03]: 975000, svsb_volt[03]: 0x50, freq_pct[03]: 90
-> opp_freq[04]: 1716000000, opp_volt[04]: 950000, svsb_volt[04]: 0x4d, freq_pct[04]: 87
-> opp_freq[05]: 1677000000, opp_volt[05]: 931250, svsb_volt[05]: 0x4c, freq_pct[05]: 85
-> opp_freq[06]: 1625000000, opp_volt[06]: 912500, svsb_volt[06]: 0x49, freq_pct[06]: 82
-> opp_freq[07]: 1586000000, opp_volt[07]: 900000, svsb_volt[07]: 0x47, freq_pct[07]: 80
-> opp_freq[08]: 1508000000, opp_volt[08]: 875000, svsb_volt[08]: 0x43, freq_pct[08]: 76
-> opp_freq[09]: 1417000000, opp_volt[09]: 850000, svsb_volt[09]: 0x40, freq_pct[09]: 72
-> opp_freq[10]: 1326000000, opp_volt[10]: 825000, svsb_volt[10]: 0x3b, freq_pct[10]: 67
-> opp_freq[11]: 1248000000, opp_volt[11]: 800000, svsb_volt[11]: 0x38, freq_pct[11]: 63
-> opp_freq[12]: 1131000000, opp_volt[12]: 775000, svsb_volt[12]: 0x32, freq_pct[12]: 57
-> opp_freq[13]: 1014000000, opp_volt[13]: 750000, svsb_volt[13]: 0x2d, freq_pct[13]: 51
-> opp_freq[14]: 910000000, opp_volt[14]: 725000, svsb_volt[14]: 0x28, freq_pct[14]: 46
-> opp_freq[15]: 793000000, opp_volt[15]: 700000, svsb_volt[15]: 0x23, freq_pct[15]: 40
-> init2
-> SVSB_CPU_LITTLE: temperature ignore, turn_pt = 0
-> opp_freq[00]: 1989000000, opp_volt[00]: 968750, svsb_volt[00]: 0x4b, freq_pct[00]: 100
-> opp_freq[01]: 1924000000, opp_volt[01]: 956250, svsb_volt[01]: 0x49, freq_pct[01]: 97
-> opp_freq[02]: 1846000000, opp_volt[02]: 931250, svsb_volt[02]: 0x45, freq_pct[02]: 93
-> opp_freq[03]: 1781000000, opp_volt[03]: 918750, svsb_volt[03]: 0x43, freq_pct[03]: 90
-> opp_freq[04]: 1716000000, opp_volt[04]: 900000, svsb_volt[04]: 0x40, freq_pct[04]: 87
-> opp_freq[05]: 1677000000, opp_volt[05]: 893750, svsb_volt[05]: 0x3f, freq_pct[05]: 85
-> opp_freq[06]: 1625000000, opp_volt[06]: 875000, svsb_volt[06]: 0x3c, freq_pct[06]: 82
-> opp_freq[07]: 1586000000, opp_volt[07]: 868750, svsb_volt[07]: 0x3b, freq_pct[07]: 80
-> opp_freq[08]: 1508000000, opp_volt[08]: 843750, svsb_volt[08]: 0x37, freq_pct[08]: 76
-> opp_freq[09]: 1417000000, opp_volt[09]: 825000, svsb_volt[09]: 0x34, freq_pct[09]: 72
-> opp_freq[10]: 1326000000, opp_volt[10]: 793750, svsb_volt[10]: 0x2f, freq_pct[10]: 67
-> opp_freq[11]: 1248000000, opp_volt[11]: 775000, svsb_volt[11]: 0x2c, freq_pct[11]: 63
-> opp_freq[12]: 1131000000, opp_volt[12]: 743750, svsb_volt[12]: 0x27, freq_pct[12]: 57
-> opp_freq[13]: 1014000000, opp_volt[13]: 712500, svsb_volt[13]: 0x22, freq_pct[13]: 51
-> opp_freq[14]: 910000000, opp_volt[14]: 681250, svsb_volt[14]: 0x1d, freq_pct[14]: 46
-> opp_freq[15]: 793000000, opp_volt[15]: 650000, svsb_volt[15]: 0x18, freq_pct[15]: 40
-> mon mode
-> SVSB_GPU: temperature = 33492, turn_pt = 0
-> opp_freq[00]: 800000000, opp_volt[00]: 743750, svsb_volt[00]: 0x27, freq_pct[00]: 100
-> opp_freq[01]: 743000000, opp_volt[01]: 731250, svsb_volt[01]: 0x25, freq_pct[01]: 93
-> opp_freq[02]: 698000000, opp_volt[02]: 718750, svsb_volt[02]: 0x23, freq_pct[02]: 88
-> opp_freq[03]: 653000000, opp_volt[03]: 712500, svsb_volt[03]: 0x22, freq_pct[03]: 82
-> opp_freq[04]: 620000000, opp_volt[04]: 700000, svsb_volt[04]: 0x20, freq_pct[04]: 78
-> opp_freq[05]: 580000000, opp_volt[05]: 693750, svsb_volt[05]: 0x1f, freq_pct[05]: 73
-> opp_freq[06]: 540000000, opp_volt[06]: 681250, svsb_volt[06]: 0x1d, freq_pct[06]: 68
-> opp_freq[07]: 500000000, opp_volt[07]: 675000, svsb_volt[07]: 0x1c, freq_pct[07]: 63
-> opp_freq[08]: 460000000, opp_volt[08]: 662500, svsb_volt[08]: 0x1a, freq_pct[08]: 58
-> opp_freq[09]: 420000000, opp_volt[09]: 656250, svsb_volt[09]: 0x19, freq_pct[09]: 53
-> opp_freq[10]: 400000000, opp_volt[10]: 643750, svsb_volt[10]: 0x17, freq_pct[10]: 50
-> opp_freq[11]: 380000000, opp_volt[11]: 643750, svsb_volt[11]: 0x17, freq_pct[11]: 48
-> opp_freq[12]: 360000000, opp_volt[12]: 637500, svsb_volt[12]: 0x16, freq_pct[12]: 45
-> opp_freq[13]: 340000000, opp_volt[13]: 637500, svsb_volt[13]: 0x16, freq_pct[13]: 43
-> opp_freq[14]: 320000000, opp_volt[14]: 625000, svsb_volt[14]: 0x14, freq_pct[14]: 40
-> opp_freq[15]: 300000000, opp_volt[15]: 625000, svsb_volt[15]: 0x14, freq_pct[15]: 38
-> 
-> Roger Lu (7):
->    [v25,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
->    [v25,2/7] arm64: dts: mt8183: add svs device information
->    [v25,3/7] soc: mediatek: SVS: introduce MTK SVS engine
->    [v25,4/7] soc: mediatek: SVS: add monitor mode
->    [v25,5/7] soc: mediatek: SVS: add debug commands
->    [v25,6/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
->    [v25,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
-> 
->   .../bindings/soc/mediatek/mtk-svs.yaml        |   91 +
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   16 +
->   drivers/soc/mediatek/Kconfig                  |   10 +
->   drivers/soc/mediatek/Makefile                 |    1 +
->   drivers/soc/mediatek/mtk-svs.c                | 2399 +++++++++++++++++
->   5 files changed, 2517 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
->   create mode 100644 drivers/soc/mediatek/mtk-svs.c
-> 
-> 
