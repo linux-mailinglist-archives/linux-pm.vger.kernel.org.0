@@ -2,54 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FD8550405
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Jun 2022 12:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B155504D1
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Jun 2022 14:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbiFRKce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Jun 2022 06:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        id S236772AbiFRMo3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Jun 2022 08:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiFRKcd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jun 2022 06:32:33 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEA021248;
-        Sat, 18 Jun 2022 03:32:32 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LQBwP4pS9zBrJs;
-        Sat, 18 Jun 2022 18:29:09 +0800 (CST)
-Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 18 Jun 2022 18:32:30 +0800
-Received: from [10.67.110.164] (10.67.110.164) by
- kwepemm600014.china.huawei.com (7.193.23.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 18 Jun 2022 18:32:29 +0800
-Subject: Re: [PATCH -next] cpufreq: Fix reserved space in cpufreq_show_cpus()
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220521063534.138930-1-yiyang13@huawei.com>
- <20220524071041.4aw3cfo3x5wphziy@vireshk-i7>
- <CAJZ5v0jCx0v-Q2=aW4nSSAHHajUnLdVtQMe3w1cX1w-o=mSesg@mail.gmail.com>
- <CAJZ5v0g-rCSd+S4YPBR8Jv2PqePhjQd0K97Rj2+TX3OrWAP0NA@mail.gmail.com>
- <20220615045608.pwranz6b633xmymf@vireshk-i7>
-From:   "yiyang (D)" <yiyang13@huawei.com>
-Message-ID: <0af83072-9aef-14fd-f52f-a3230f6df148@huawei.com>
-Date:   Sat, 18 Jun 2022 18:32:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        with ESMTP id S233710AbiFRMoR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jun 2022 08:44:17 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAFE11801;
+        Sat, 18 Jun 2022 05:44:15 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id g12so1264988ljk.11;
+        Sat, 18 Jun 2022 05:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=b447jOYXFdxyC5KLKr4cT1iaWa3YtDHOE19FUkUZFxI=;
+        b=Y09/U+3h7GblcidI+246WuwzVXexOkGoPXfX1PNsq3sMJbAdG1fNyVgv1C17Z5SbJu
+         AgVYtvcUhb9wqZumwwcTdoB+xcyopGEJRiVmwrnIClhvERJib8L17f04eUqmOuBi2BrH
+         1YPOJ2iptquUetsJY79ef+SpWYxeqb5YFwqLrseDnDf/UyeY3b7CY9+r331tq0iMrBWV
+         MYi59h0oWdQQWzgY75Wp13lqUnv4B83Fb2WULYMi+ybDm1qnKKZ/9aE+EKdQqQmcyKac
+         EaUwlnQmmB6g4w0YnoqVU7Oa+NxAeZinL3jZEAaJbx7TX1w9bJyYvkh0RSjKI+fXe8oO
+         JBUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b447jOYXFdxyC5KLKr4cT1iaWa3YtDHOE19FUkUZFxI=;
+        b=uOXo2HAvbzvcH7dL/VRWtQQSjzmvKBpi6nexpXBEG3oz6PfdDBWjv10izt9lEajwkK
+         RIq2uPJpSmffuCw9GE+A0n8ArsQzu2zYvBgQz+2abYcmTFzvS9fGmsdMI982j0MCCzPR
+         DVMEnSXAh82+a4eZeqkZZzXDb7oZPvm5ak+j9KWSI7WC4TID/S7ul2y28Far6XvtdoM7
+         qW7t0IAwLIDmIAI8VyA46/poK0VgaZk6+Mz0u4M1nh5U1VjtOGXnKXzswCNuUmWNkUvX
+         sUL3YMW5qxyMcy5jl0W51ERLsRXmAxXD9o75Ewlw00FYkCKrb7pWhL9+Dumj7BYV+jhN
+         N62Q==
+X-Gm-Message-State: AJIora9SbgfsfBhsNLpBkXZiRh+JHE15iSboYgGQSnQrhA/jm0sEf9Qp
+        NaDl87IOeXuQSoCqUTO18WC1F8LSgYM=
+X-Google-Smtp-Source: AGRyM1uNGyupmSNC5LwN280DtpS+8PQAJv6zujwqVJTkDeIuZq4jJjVNUWOka2yF8oBdz8mKpDlh+g==
+X-Received: by 2002:a2e:b1c8:0:b0:258:642d:98b0 with SMTP id e8-20020a2eb1c8000000b00258642d98b0mr7410361lja.447.1655556254103;
+        Sat, 18 Jun 2022 05:44:14 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru. [109.252.136.92])
+        by smtp.googlemail.com with ESMTPSA id a25-20020a05651c031900b002554dde32bfsm931096ljp.47.2022.06.18.05.44.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Jun 2022 05:44:13 -0700 (PDT)
+Message-ID: <6d5b2bfc-f449-668c-8c97-638eb806cb66@gmail.com>
+Date:   Sat, 18 Jun 2022 15:44:07 +0300
 MIME-Version: 1.0
-In-Reply-To: <20220615045608.pwranz6b633xmymf@vireshk-i7>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.164]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600014.china.huawei.com (7.193.23.54)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+ <20220616202537.303655-2-daniel.lezcano@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220616202537.303655-2-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,65 +78,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 2022/6/15 12:56, Viresh Kumar wrote:
-> On 14-06-22, 15:48, Rafael J. Wysocki wrote:
->> On Tue, Jun 14, 2022 at 3:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>>
->>> On Tue, May 24, 2022 at 9:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->>>>
->>>> On 21-05-22, 14:35, Yi Yang wrote:
->>>>> Function scnprintf() would reserve space for the trailing '\0' and return
->>>>> value is the number of characters written into buf not including the
->>>>> trailing '\0'. internally meaning the next scnprintf() would write begin
->>>>> the trailing '\0'. The code specifying "PAGE_SIZE - i - 2" here is trying
->>>>> to reserve space for "\n\0" which would cause scnprintf() to reserve an
->>>>> additional byte making the tail of the buf looks like this: "\n\0\0".
->>>>> Thus. we should reserve only the space for one '\0'. passing in
->>>>> "PAGE_SIZE - i - 1".
->>>>>
->>>>> Additionally, each iteration would replace the trailing '\0' from the last
->>>>> iteration with a space, and append 4 additional bytes to the string making
->>>>> it a total of 5 additional bytes. That means we should stop printing into
->>>>> the buffer if the remaining size is less than 7 bytes(1 for the ' ', 4 for
->>>>> the %u and 2 for the tailing "\n\0")
->>>>>
->>>>> Signed-off-by: Yi Yang <yiyang13@huawei.com>
->>>>> ---
->>>>>   drivers/cpufreq/cpufreq.c | 6 +++---
->>>>>   1 file changed, 3 insertions(+), 3 deletions(-)
->>>>>
->>>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->>>>> index 1f6667ce43bd..60c005c9961e 100644
->>>>> --- a/drivers/cpufreq/cpufreq.c
->>>>> +++ b/drivers/cpufreq/cpufreq.c
->>>>> @@ -844,9 +844,9 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf)
->>>>>
->>>>>        for_each_cpu(cpu, mask) {
->>>>>                if (i)
->>>>> -                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), " ");
->>>>> -             i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), "%u", cpu);
->>>>> -             if (i >= (PAGE_SIZE - 5))
->>>>> +                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), " ");
->>>>> +             i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), "%u", cpu);
->>>>> +             if (i >= (PAGE_SIZE - 6))
->>>>>                        break;
->>>>>        }
->>>>>        i += sprintf(&buf[i], "\n");
->>>>
->>>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->>>
->>> Applied as 5.20 material, thanks!
->>
->> And dropped, because it has been superseded by this one:
->>
->> https://patchwork.kernel.org/project/linux-pm/patch/b9fa08171c09343ace94a7343553a4bee4695c90.1653565641.git.viresh.kumar@linaro.org/
+16.06.2022 23:25, Daniel Lezcano пишет:
+> The get_trend function does already what the generic framework does.
 > 
-> The $Subject patch is still required AFAICT, it is fixing a different problem.
-> Though it needs to be rebased on top of your branch now.
+> Remove it.
 > 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/tegra/soctherm.c | 32 --------------------------------
+>  1 file changed, 32 deletions(-)
+> 
+> diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
+> index 210325f92559..825eab526619 100644
+> --- a/drivers/thermal/tegra/soctherm.c
+> +++ b/drivers/thermal/tegra/soctherm.c
+> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void *data, int trip, int temp)
+>  	return 0;
+>  }
+>  
+> -static int tegra_thermctl_get_trend(void *data, int trip,
+> -				    enum thermal_trend *trend)
+> -{
+> -	struct tegra_thermctl_zone *zone = data;
+> -	struct thermal_zone_device *tz = zone->tz;
+> -	int trip_temp, temp, last_temp, ret;
+> -
+> -	if (!tz)
+> -		return -EINVAL;
+> -
+> -	ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
+> -	if (ret)
+> -		return ret;
+> -
+> -	temp = READ_ONCE(tz->temperature);
+> -	last_temp = READ_ONCE(tz->last_temperature);
+> -
+> -	if (temp > trip_temp) {
+> -		if (temp >= last_temp)
+> -			*trend = THERMAL_TREND_RAISING;
+> -		else
+> -			*trend = THERMAL_TREND_STABLE;
+> -	} else if (temp < trip_temp) {
+> -		*trend = THERMAL_TREND_DROPPING;
+> -	} else {
+> -		*trend = THERMAL_TREND_STABLE;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
+>  {
+>  	u32 r;
+> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data, int lo, int hi)
+>  static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
+>  	.get_temp = tegra_thermctl_get_temp,
+>  	.set_trip_temp = tegra_thermctl_set_trip_temp,
+> -	.get_trend = tegra_thermctl_get_trend,
+>  	.set_trips = tegra_thermctl_set_trips,
+>  };
+>  
 
-What can i do for this patch?
-
---
-Yi
+The framework doesn't use the trip temperature, is it really the same?
+Previously, if temperature was above the trip and was dropping, then it
+was THERMAL_TREND_STABLE instead of THERMAL_TREND_DROPPING.
