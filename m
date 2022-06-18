@@ -2,76 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836A3550578
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Jun 2022 16:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A302455059D
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Jun 2022 17:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiFROTd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Jun 2022 10:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        id S234449AbiFRPEA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Jun 2022 11:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233376AbiFROSL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jun 2022 10:18:11 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A62DF19;
-        Sat, 18 Jun 2022 07:18:08 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id f65so6396013pgc.7;
-        Sat, 18 Jun 2022 07:18:08 -0700 (PDT)
+        with ESMTP id S234440AbiFRPD7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jun 2022 11:03:59 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C5D95B4
+        for <linux-pm@vger.kernel.org>; Sat, 18 Jun 2022 08:03:58 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id w20so10950647lfa.11
+        for <linux-pm@vger.kernel.org>; Sat, 18 Jun 2022 08:03:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=QiBFbh7JSAwKD6sJ1nf5U4eu547oJ+ADx+EKgoymxCI=;
-        b=ViprWoK4uqnklWzTQk+fvnLaUqne0Zd90H9MixB7tRue3RXJ8Lq9n5syAfKrS3dKEA
-         HT9z787Xt3UAxhy1S57GgN8644M/bc8r4HbbCn0alGy0UzCj3DFJA1T/Ib9R/pOANPpD
-         JEsZ9EU88xvA6ikZqDoFXIXdh9FSFoCuW2IvlKMA3sH/8/OtpizRHSwwmGCZD40FJel+
-         yPC0/gi37K8AK2vvZ9a4XDCnlRfqukBCue2IC14lDDNquYrNeKvjLkY6IeQ6lZRcNUCn
-         kBjUOoESkgxJ2s2k7cHQTPgYxvOaK1XAtlHrK415aY/0iBlK8oX853OJJXj/Judkpbfd
-         yk3Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+IwEUucAXc9IRTosFn5vUfyqLZxY1Y2rjjUJJfMlBqk=;
+        b=DkLeR798ijXB2mnUZ5DHNGkbC7MuEX8lnpWr8npSAdm8oxijRZwHDLmvP30GfSZnff
+         CyFuoySrjteA3yOxR2khTmrRHqYtfa9jJhQWceXeNrw2WlfNSdj6sOsON+MLwiZIUZ3K
+         4DAJ2MqJJsg8yLq5dz+DrTDd9c3AKP+MQjz025+yuPzSinuTifArYStlEBydmswva/Zp
+         Y01hPy7IPvLbepOYPmXhNayI6OBxIF4p9KLT8gVYYbrhSipB64Ch+tFjnVpmwO23MnFb
+         IhZrbO18WSscRtsVgKEGhIXSTTwk7BrH9ahKNtrZMK666+IBZOGzOj68OuVzeBanq2SW
+         oNQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QiBFbh7JSAwKD6sJ1nf5U4eu547oJ+ADx+EKgoymxCI=;
-        b=VRHAsyu8zMJ0vr1+F+smH2ZCaiiSFd6siwTQrapNIA9cXkqAAORULsYyveg1FHvcew
-         RTkW/kYftnheI/u1OU4wH7RLJBvyVWUdOZ9ykCjRZzr5m8fH9NEfscvA8BvxbpFNhmzY
-         oCkIkpiwZgRpwySWM/uW29X5Y6HFnAvpuM1EhIqOToWiE1CuJ9t/MCFrDmU0XQ+mDHgt
-         hjqLHmqlqCD89ppCMRTDVjOz0AoaP8BUED5bGzjXJ8avffsMdQfp7Mfe/COtla/cKHSj
-         J+R0Xf1NWaNGoaEZCERgOOvYXKlu/6kjWfYN3JvlTo6u2d7k1VwPVZCqiOviXlaz60sY
-         wQCQ==
-X-Gm-Message-State: AJIora+2v3Mn2xnnHCedznRn9kqC4neNwKLrdZrqOF0CRwxndssRacOi
-        AeDQ984hWP0m6Yv4Wq5riZE=
-X-Google-Smtp-Source: AGRyM1u2mGmi1JJfkT6ExmYQ2dFty+U+or8nDWjHbWZLfPVYWKM8Lx0xSixycdUe6IskWv1L1zV22Q==
-X-Received: by 2002:a05:6a00:7d3:b0:51e:740f:8d10 with SMTP id n19-20020a056a0007d300b0051e740f8d10mr15348069pfu.4.1655561887511;
-        Sat, 18 Jun 2022 07:18:07 -0700 (PDT)
-Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170902650900b00168ba5ac8adsm5425678plk.163.2022.06.18.07.18.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jun 2022 07:18:07 -0700 (PDT)
-Message-ID: <7bffaa3c-dda8-44f5-8190-9fb5142925bc@gmail.com>
-Date:   Sat, 18 Jun 2022 23:18:02 +0900
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+IwEUucAXc9IRTosFn5vUfyqLZxY1Y2rjjUJJfMlBqk=;
+        b=4DABjmObmCA0rTj/ZumLgRG0Wr2uaWW1aEm5xxc7xPFfQ4X13e1fXOBwbd3W7l1z+r
+         sC4RD2fLX5YJta9tdSG3qHmB8G9OSK9hOpklKCvCKaTFDKtFNJMrkOpGL1A/HOeHr4tg
+         rhlnbum3kJlW6X/RRYmYqfKYk8XUxXnGPXrjhlLeMBNhuGa4S6USbdtYc54XlNQ4u0TB
+         nZYaQtDSdA7ck87ZT9DW9X9CPW0zRHjBX0olO6cW1shosnvawD3439zHcMKxJ2PCH/kR
+         QPUNebYaZCzUI4YiNeRzz7tJcHkMOFfnFVGqbcNyjBzrjwocQvm0Jy/UC6izE9KWFlch
+         QU3Q==
+X-Gm-Message-State: AJIora+4X4MoIjcmPVezwY33KPnf0rVkv4xdm8zasqd/m3iPpK0E79is
+        OQ4UkuVOXUsSCMIo5qPoFP+FnTKemyp22DgD/0utjhdJ
+X-Google-Smtp-Source: AGRyM1sD20wgr8rxIu0wBwUl4Tum6Zp2MfmAfNIzkZMHyCFMdKL4nX17stg27X7elLIy69T5rTYD9LDdqqaVwPcIcWs=
+X-Received: by 2002:a19:4914:0:b0:479:52ea:af4b with SMTP id
+ w20-20020a194914000000b0047952eaaf4bmr8225303lfa.544.1655564636211; Sat, 18
+ Jun 2022 08:03:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] devfreq: exynos-ppmu: Fix refcount leak in
- of_get_devfreq_events
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220526082856.37594-1-linmq006@gmail.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220526082856.37594-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <CAMMLpeTRZnpQ8b6puhHeKaDgzW12ZM_g3nAWjVP71HbSaeHktQ@mail.gmail.com>
+ <20220614141742.j7lrj2q5b3suebb2@mercury.elektranox.org> <CAMMLpeSRQ4T=_J0uwjoh=NNeuO43-Nb3PkzfSoDdUhOfU8_TqQ@mail.gmail.com>
+ <e2f00afe78432a13adc23fc879f0631ada49e122.camel@sipsolutions.net>
+In-Reply-To: <e2f00afe78432a13adc23fc879f0631ada49e122.camel@sipsolutions.net>
+From:   Alex Henrie <alexhenrie24@gmail.com>
+Date:   Sat, 18 Jun 2022 09:03:42 -0600
+Message-ID: <CAMMLpeSEJbChCHm9bWmpvo58RpM7HaNggQHAp4PQ3X4pZT05zg@mail.gmail.com>
+Subject: Re: How to identify the primary battery (for Wine)
+To:     Benjamin Berg <benjamin@sipsolutions.net>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Huw Davies <huw@codeweavers.com>, linux-pm@vger.kernel.org,
+        Wine Devel <wine-devel@winehq.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,53 +68,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22. 5. 26. 17:28, Miaoqian Lin wrote:
-> of_get_child_by_name() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when done.
-> This function only calls of_node_put() in normal path,
-> missing it in error paths.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> Fixes: f262f28c1470 ("PM / devfreq: event: Add devfreq_event class")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/devfreq/event/exynos-ppmu.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-> index 9b849d781116..a443e7c42daf 100644
-> --- a/drivers/devfreq/event/exynos-ppmu.c
-> +++ b/drivers/devfreq/event/exynos-ppmu.c
-> @@ -519,15 +519,19 @@ static int of_get_devfreq_events(struct device_node *np,
->  
->  	count = of_get_child_count(events_np);
->  	desc = devm_kcalloc(dev, count, sizeof(*desc), GFP_KERNEL);
-> -	if (!desc)
-> +	if (!desc) {
-> +		of_node_put(events_np);
->  		return -ENOMEM;
-> +	}
->  	info->num_events = count;
->  
->  	of_id = of_match_device(exynos_ppmu_id_match, dev);
->  	if (of_id)
->  		info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
-> -	else
-> +	else {
-> +		of_node_put(events_np);
->  		return -EINVAL;
-> +	}
->  
->  	j = 0;
->  	for_each_child_of_node(events_np, node) {
+On Fri, Jun 17, 2022 at 5:31 AM Benjamin Berg <benjamin@sipsolutions.net> wrote:
+>
+> On Tue, 2022-06-14 at 09:17 -0600, Alex Henrie wrote:
+> > On Tue, Jun 14, 2022 at 8:17 AM Sebastian Reichel
+> > <sebastian.reichel@collabora.com> wrote:
+> > > On Tue, Jun 14, 2022 at 2:05 AM Benjamin Berg <benjamin@sipsolutions.net> wrote:
+> > >
+> > > > Wouldn't it make sense for Wine to use the UPower provided
+> > > > DisplayDevice that can be queried through DBus?
+> > >
+> > > UPower does the required data aggregation for the 'DisplayDevice'.
+> > > I don't know enough about the Wine codebase to recommend for or
+> > > against using UPower.
+> >
+> > I also don't know if D-Bus would be a good choice here. It would
+> > certainly be a bigger change than the patch that I've proposed. What
+> > are the advantages and disadvantages of querying the battery through
+> > D-Bus, besides it doing battery aggregation for us?
+>
+> Well, depends on what you need, it will:
+>  1. Calculate a energy/power values if the HW reports charge/current
+>  2. Try to generate a proper state (charging/discharging, etc.) if the
+>     hardware does not provide it
+>  3. Aggregate multiple batteries
+>
+> Actually, I think using UPower likely fixes bugs:
+>  * You are currently not supporting modern hardware that reports
+>    energy/power values (rather than charge/current).
+>  * You are only reading one battery
+>  * You are not estimating a rate if the HW does not provide one
+>    (and not smoothing it which might be desirable).
+>
+> And, well, it should be easy. You can just query properties on a fixed
+> DBus path. And if it fails, just assume you don't have a battery.
 
-I edited the patch title with 'PM / ' prefix 
-in order to keep the consistent style of title as following:
+Thanks for the information! It looks like we're sticking with reading
+from /sys directly for now, but it's good to know what we can get over
+D-Bus for if we have more problems in the future.
 
-PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
-
-
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+-Alex
