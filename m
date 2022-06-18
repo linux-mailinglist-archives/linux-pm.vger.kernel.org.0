@@ -2,79 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE0F5501F8
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Jun 2022 04:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044435501FD
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Jun 2022 04:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiFRC0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jun 2022 22:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S1383861AbiFRCaN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jun 2022 22:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiFRC0h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 22:26:37 -0400
-Received: from mail-m964.mail.126.com (mail-m964.mail.126.com [123.126.96.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48D374EA19;
-        Fri, 17 Jun 2022 19:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=W9BI6
-        P0wZUTOeM9TLmKa8PQCi7xOpiT0T54lCxRxPbc=; b=ibVG8KPwq/8c02tvikycl
-        pOIqVmCmLOfty7N3F6ILGT6B2d+3IX8TYRbMEnGrKe/jtvpaRjWAL5CQ7oM+X8Hd
-        pJAi3rFuP1tzaiiYolrycWkWeDhx1z20LDn4kKsiwQknmkoCBEr5KFmIFPk12j6X
-        jzqPwT8YJ8hCfmhALecgiU=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp9 (Coremail) with SMTP id NeRpCgCXm7CqN61iMTL+Ew--.45752S2;
-        Sat, 18 Jun 2022 10:25:47 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     rafael@kernel.org, viresh.kumar@linaro.org, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org
-Cc:     windhl@126.com, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: pmac32-cpufreq: Fix refcount leak bug
-Date:   Sat, 18 Jun 2022 10:25:45 +0800
-Message-Id: <20220618022545.4056299-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S234497AbiFRCaN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jun 2022 22:30:13 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F34A69B64
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 19:30:12 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3176b6ed923so57128217b3.11
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jun 2022 19:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=dcwrPtXldcZQuaUTRubP/TsWaJ05MpxYEGzdke58B18=;
+        b=iWiJy7mjAoRvps48O4V/9DuAgx2o5BPbyBagNL1VmNJFyJxQJbuuRBMokOqy0xljz1
+         qmJ6CbCW+emPjBYvX3+O3hIP69NT724nLvN4ifcCDrcQFXS0boENKH6OKh/GaG7bp5aW
+         uSQH8PjQ1bSEe4JEMPfEpjEK+6OPWWZCxChdlqyVVE6I59Dmv3JS7CH/biPLGzObdWHm
+         WZu7Azns1PXJ7npjsyJbdqzqO5vJgRgbW1OHAQ1P92ZUpVV2uDviFLGCk14pywaiI1q2
+         lzmkqJ/5sdxUf/AY3h2XebT/LgbiWByYxAyUjWwqEuX0VDb72+0bI67cQS2B6ovYqRqK
+         FZBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=dcwrPtXldcZQuaUTRubP/TsWaJ05MpxYEGzdke58B18=;
+        b=HtBEpYRKw599bQlwClSY4PO1YbCAzYYOn/BGrzRgVlkkxoVq85ZDZ4tRVwHNIsarGu
+         96pYqlE/To8JYHTcB47YZzYENjUx0AdHIQjYJxlwg/bRyX+4kV/LkwBN/oHsCAwHeg5G
+         xGpPI6mKoxlgfGyTffiHCXMsPqLWu5CkKmyNnWQ7Tu9CqHTSkE5efpmItT/Dkl58b9Fw
+         RHyswp185EJHfDXpbGY8gZ2Qb84ly8CqIQXrX/wJHBTeeUakwR6qbc9ZYPuk1LmJExda
+         NVaxzEOzelzKZKllnpxSy0PHblRZE5VOAwCpsnmS7N5O+lsqDoL6mNKfZ2H4qJhoDYH/
+         hF2Q==
+X-Gm-Message-State: AJIora+hdunE51YDylTcgleCWVu+ALMtshvOTw2FZs5umNYlWKOzd0E6
+        mZA/3/W4iftt64H+x1WFj+c4QkSsk329apvk/HQ=
+X-Google-Smtp-Source: AGRyM1tBUR8gtZ8zPk9JAJh0JPDEfE8ITJMoNoMKLp8SAdot4FO3bSmGPS0DNM6cQDoyb6LY/AFbBP4sEYSGqGo5lqE=
+X-Received: by 2002:a81:1184:0:b0:317:7768:3050 with SMTP id
+ 126-20020a811184000000b0031777683050mr10554858ywr.368.1655519411273; Fri, 17
+ Jun 2022 19:30:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NeRpCgCXm7CqN61iMTL+Ew--.45752S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZry8GFWDuw1fur17urW7urg_yoWfCwc_ur
-        n5WFy7Zw4UC3WIgr43Cr1Sq3sIv34fWF1FyFn2qF98Aw15Zr9Ivr48WrnrX3929w4Utw43
-        Xw4qya1fuw47AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRMXo2UUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgskF1-HZUmuEQAAsp
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:b381:0:0:0:0 with HTTP; Fri, 17 Jun 2022 19:30:10
+ -0700 (PDT)
+Reply-To: mrscecillelettytanm@gmail.com
+From:   "Mrs.cecille Letty Tan" <smcpeterrobert@gmail.com>
+Date:   Fri, 17 Jun 2022 19:30:10 -0700
+Message-ID: <CAGzzBQ_MjWN8+xBCT-Rtbzutkdckjvv=Of=cP2BWuUim2PYGQA@mail.gmail.com>
+Subject: Hello
+To:     smcpeterrobert@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In pmac_cpufreq_init_MacRISC3(), we need to add corresponding
-of_node_put() for the three node pointers whose refcount have
-been incremented by of_find_node_by_name().
-
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/cpufreq/pmac32-cpufreq.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
-index 20f64a8b0a35..4b8ee2014da6 100644
---- a/drivers/cpufreq/pmac32-cpufreq.c
-+++ b/drivers/cpufreq/pmac32-cpufreq.c
-@@ -470,6 +470,10 @@ static int pmac_cpufreq_init_MacRISC3(struct device_node *cpunode)
- 	if (slew_done_gpio_np)
- 		slew_done_gpio = read_gpio(slew_done_gpio_np);
- 
-+	of_node_put(volt_gpio_np);
-+	of_node_put(freq_gpio_np);
-+	of_node_put(slew_done_gpio_np);
-+
- 	/* If we use the frequency GPIOs, calculate the min/max speeds based
- 	 * on the bus frequencies
- 	 */
--- 
-2.25.1
-
+How are you doing today, I hope you get my message urgently, please.
