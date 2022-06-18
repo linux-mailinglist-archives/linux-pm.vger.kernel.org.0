@@ -2,109 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A302455059D
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Jun 2022 17:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68055505D0
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Jun 2022 17:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbiFRPEA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Jun 2022 11:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        id S235203AbiFRPjN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Jun 2022 11:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234440AbiFRPD7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jun 2022 11:03:59 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C5D95B4
-        for <linux-pm@vger.kernel.org>; Sat, 18 Jun 2022 08:03:58 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id w20so10950647lfa.11
-        for <linux-pm@vger.kernel.org>; Sat, 18 Jun 2022 08:03:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+IwEUucAXc9IRTosFn5vUfyqLZxY1Y2rjjUJJfMlBqk=;
-        b=DkLeR798ijXB2mnUZ5DHNGkbC7MuEX8lnpWr8npSAdm8oxijRZwHDLmvP30GfSZnff
-         CyFuoySrjteA3yOxR2khTmrRHqYtfa9jJhQWceXeNrw2WlfNSdj6sOsON+MLwiZIUZ3K
-         4DAJ2MqJJsg8yLq5dz+DrTDd9c3AKP+MQjz025+yuPzSinuTifArYStlEBydmswva/Zp
-         Y01hPy7IPvLbepOYPmXhNayI6OBxIF4p9KLT8gVYYbrhSipB64Ch+tFjnVpmwO23MnFb
-         IhZrbO18WSscRtsVgKEGhIXSTTwk7BrH9ahKNtrZMK666+IBZOGzOj68OuVzeBanq2SW
-         oNQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+IwEUucAXc9IRTosFn5vUfyqLZxY1Y2rjjUJJfMlBqk=;
-        b=4DABjmObmCA0rTj/ZumLgRG0Wr2uaWW1aEm5xxc7xPFfQ4X13e1fXOBwbd3W7l1z+r
-         sC4RD2fLX5YJta9tdSG3qHmB8G9OSK9hOpklKCvCKaTFDKtFNJMrkOpGL1A/HOeHr4tg
-         rhlnbum3kJlW6X/RRYmYqfKYk8XUxXnGPXrjhlLeMBNhuGa4S6USbdtYc54XlNQ4u0TB
-         nZYaQtDSdA7ck87ZT9DW9X9CPW0zRHjBX0olO6cW1shosnvawD3439zHcMKxJ2PCH/kR
-         QPUNebYaZCzUI4YiNeRzz7tJcHkMOFfnFVGqbcNyjBzrjwocQvm0Jy/UC6izE9KWFlch
-         QU3Q==
-X-Gm-Message-State: AJIora+4X4MoIjcmPVezwY33KPnf0rVkv4xdm8zasqd/m3iPpK0E79is
-        OQ4UkuVOXUsSCMIo5qPoFP+FnTKemyp22DgD/0utjhdJ
-X-Google-Smtp-Source: AGRyM1sD20wgr8rxIu0wBwUl4Tum6Zp2MfmAfNIzkZMHyCFMdKL4nX17stg27X7elLIy69T5rTYD9LDdqqaVwPcIcWs=
-X-Received: by 2002:a19:4914:0:b0:479:52ea:af4b with SMTP id
- w20-20020a194914000000b0047952eaaf4bmr8225303lfa.544.1655564636211; Sat, 18
- Jun 2022 08:03:56 -0700 (PDT)
+        with ESMTP id S230133AbiFRPjL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jun 2022 11:39:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95FFDEAD;
+        Sat, 18 Jun 2022 08:39:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7543060B1E;
+        Sat, 18 Jun 2022 15:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC6AC3411A;
+        Sat, 18 Jun 2022 15:39:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655566746;
+        bh=McuYUPbcTogh0Yrn7FSYihqEAcvdIVNBBIDilpwKOpE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dSnD0FK661SnooSn7Z/CDSOX3C3M6TplRlQ+BdTAy3J5UoTF1ZJhfy0liHIx9LLKJ
+         MmOBy6sUSheDILDX/FclyJ2ODmVSkJuDFnMF9EcDwWOK0MMT7rSQl26Krt7XqdvqGH
+         1ULRRVdc6QRCMSLjBZYYrmNqffXtEeuxOm9uPjF2u1F1Vqa3EQc2N58FHFgSv/NvSE
+         0gBc87cgiNXnUcjPnNOILCd+NQ1oVQDTlP3VULDcsL6ZpPWAwY2t8+39JcivJuquhJ
+         vVRYNmRbCwYBRuOwqx3C78E8ZqVCAyRz5L7XP3svJYw32ZsjUiJbfJih8B78n6II/1
+         HYiaISZCY5RRQ==
+Date:   Sat, 18 Jun 2022 16:48:20 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+Subject: Re: [PATCH v2 07/15] Documentation: ABI: testing: mt6370: Add ADC
+ sysfs guideline
+Message-ID: <20220618164820.2eeb8ae8@jic23-huawei>
+In-Reply-To: <20220613111146.25221-8-peterwu.pub@gmail.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+        <20220613111146.25221-8-peterwu.pub@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <CAMMLpeTRZnpQ8b6puhHeKaDgzW12ZM_g3nAWjVP71HbSaeHktQ@mail.gmail.com>
- <20220614141742.j7lrj2q5b3suebb2@mercury.elektranox.org> <CAMMLpeSRQ4T=_J0uwjoh=NNeuO43-Nb3PkzfSoDdUhOfU8_TqQ@mail.gmail.com>
- <e2f00afe78432a13adc23fc879f0631ada49e122.camel@sipsolutions.net>
-In-Reply-To: <e2f00afe78432a13adc23fc879f0631ada49e122.camel@sipsolutions.net>
-From:   Alex Henrie <alexhenrie24@gmail.com>
-Date:   Sat, 18 Jun 2022 09:03:42 -0600
-Message-ID: <CAMMLpeSEJbChCHm9bWmpvo58RpM7HaNggQHAp4PQ3X4pZT05zg@mail.gmail.com>
-Subject: Re: How to identify the primary battery (for Wine)
-To:     Benjamin Berg <benjamin@sipsolutions.net>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Huw Davies <huw@codeweavers.com>, linux-pm@vger.kernel.org,
-        Wine Devel <wine-devel@winehq.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 5:31 AM Benjamin Berg <benjamin@sipsolutions.net> wrote:
->
-> On Tue, 2022-06-14 at 09:17 -0600, Alex Henrie wrote:
-> > On Tue, Jun 14, 2022 at 8:17 AM Sebastian Reichel
-> > <sebastian.reichel@collabora.com> wrote:
-> > > On Tue, Jun 14, 2022 at 2:05 AM Benjamin Berg <benjamin@sipsolutions.net> wrote:
-> > >
-> > > > Wouldn't it make sense for Wine to use the UPower provided
-> > > > DisplayDevice that can be queried through DBus?
-> > >
-> > > UPower does the required data aggregation for the 'DisplayDevice'.
-> > > I don't know enough about the Wine codebase to recommend for or
-> > > against using UPower.
-> >
-> > I also don't know if D-Bus would be a good choice here. It would
-> > certainly be a bigger change than the patch that I've proposed. What
-> > are the advantages and disadvantages of querying the battery through
-> > D-Bus, besides it doing battery aggregation for us?
->
-> Well, depends on what you need, it will:
->  1. Calculate a energy/power values if the HW reports charge/current
->  2. Try to generate a proper state (charging/discharging, etc.) if the
->     hardware does not provide it
->  3. Aggregate multiple batteries
->
-> Actually, I think using UPower likely fixes bugs:
->  * You are currently not supporting modern hardware that reports
->    energy/power values (rather than charge/current).
->  * You are only reading one battery
->  * You are not estimating a rate if the HW does not provide one
->    (and not smoothing it which might be desirable).
->
-> And, well, it should be easy. You can just query properties on a fixed
-> DBus path. And if it fails, just assume you don't have a battery.
+On Mon, 13 Jun 2022 19:11:38 +0800
+ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 
-Thanks for the information! It looks like we're sticking with reading
-from /sys directly for now, but it's good to know what we can get over
-D-Bus for if we have more problems in the future.
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> Add ABI documentation for mt6370 non-standard ADC sysfs interfaces.
+> 
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../ABI/testing/sysfs-bus-iio-adc-mt6370      | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370 b/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> new file mode 100644
+> index 000000000000..039b3381176a
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> @@ -0,0 +1,36 @@
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage0_raw
 
--Alex
+Unfortunately the kernel documentation build scripts do no support duplicating
+standard ABI for particular devices so as to provide more information.
+Hence you can't have anything in this file.
+
+
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 VBUS ADC with lower accuracy(+-75mA)
+Curious though, voltage with a mA accuracy range?
+This scale should be presented directly to userspace anyway so no need
+for this doc.
+
+> +		higher measure range(1~22V)
+> +		Calculating with scale returns voltage in uV
+
+No. All channels return in mV. That's the ABI requirement as
+in sysfs-bus-iio and we cannot vary if for particular drivers.  If we did
+no generic tooling would work.
+
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage1_raw
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 VBUS ADC with higher accuracy(+-30mA)
+> +		lower measure range(1~9.76V)
+> +		Calculating with scale offset returns voltage in uV
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage4_raw
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 TS_BAT ADC
+> +		Calculating with scale returns voltage in uV
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage7_raw
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 CHG_VDDP ADC
+> +		Calculating with scale returns voltage in mV
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_temp8_raw
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 IC junction temperature
+> +		Calculating with scale and offset returns temperature in degree
+
