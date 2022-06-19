@@ -2,145 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB09C5509EA
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jun 2022 12:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488D65509E4
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jun 2022 12:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiFSK4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Jun 2022 06:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S235621AbiFSKwQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Jun 2022 06:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbiFSK4V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jun 2022 06:56:21 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527A69594;
-        Sun, 19 Jun 2022 03:56:19 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id fd6so8724204edb.5;
-        Sun, 19 Jun 2022 03:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m0ywi20rvMwf+A69ukm4ilfE8YyNyi5FpOBHrhUncaw=;
-        b=GgDe22l8dWchMEZivxKCfNnrK3RMHQzpIOUH/cLZX99uGyOuj9FedzgCkDKtnzCAgL
-         PPIpPLnjvAjJjF5tXNw70id9LeCLdDuJgovbQ9c8/FhEdFgda4ca+CjuqXFgaMlQLVEc
-         t8zW3pdf8llLHbVepVISWOJrgYY8/LWQa69pyu3Z0ja78Khz7AtV4te8thHdld7xfa9U
-         DOxG0WyksvGVrqDWi7LP55yTbAXi0oTEuc79yCfT9Nmnu2EZe3cdXMWN/DcbGplCWmWS
-         LVpmYK6NJdiM27S23BwdzKpMrwNmgCBWSUaCxaOxFKwIJztxgw6kSBuyZCmHE3/C4JOu
-         oaLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m0ywi20rvMwf+A69ukm4ilfE8YyNyi5FpOBHrhUncaw=;
-        b=JcnavkxbAHHFac7EMECKvcDAWIwdL2ImbzlOQgpFanBezI7vMKaazhK3aEBNk5QllS
-         vgebwnGFHkL/ErteJ8IwrZIYY3BCNxRb5bvc49v7JsiENIiIRNjk8sQPEhRwOjDa3qCP
-         n4CkXCQLpBDXBq6zoa2wnW6PScZCUVPNlQ7In9q61Zy8FfS8xokoRknn0EZTYugdu0iw
-         QwhAsH0jG/g+h5yoYV2b1+fTzpoohwy3LGfKl5HzkwI0sM5o0TdboD/bpcRB1hw0zy5I
-         l1R1PullBafkBhQvrWcActxoy6KaImdb3//hgOieqx1i/NJ5gkBo4+IS2iFnQBa0broy
-         /QWw==
-X-Gm-Message-State: AJIora8IveTRoxvlAPgRznP52Y922Svzx+rvndMOXXRVpveYg+CHD1da
-        RjQyMQkk250ZPr7boH4i8ATsln1Yrtt69hrDFRY=
-X-Google-Smtp-Source: AGRyM1vCcmOfOZAgJE26JBD8dmE46Cj5ydNVR6OxyHO+aHgXjsRm1kFNmffTCwGvPKiUW6RcSC4gi6npztthWeg2oB8=
-X-Received: by 2002:a05:6402:11d2:b0:42d:e68a:eae0 with SMTP id
- j18-20020a05640211d200b0042de68aeae0mr23095268edw.111.1655636177910; Sun, 19
- Jun 2022 03:56:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com> <20220618214009.2178567-12-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220618214009.2178567-12-aidanmacdonald.0x0@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 19 Jun 2022 12:55:41 +0200
-Message-ID: <CAHp75VcMRAijXYGwVx8OPzMeafjT4Xa8rx_pRqRTs66Puw8qMA@mail.gmail.com>
-Subject: Re: [PATCH v3 11/16] iio: adc: axp20x_adc: Add support for AXP192
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        with ESMTP id S232316AbiFSKwP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jun 2022 06:52:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEB510FE1;
+        Sun, 19 Jun 2022 03:52:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DF4AB80D22;
+        Sun, 19 Jun 2022 10:52:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14CB1C34114;
+        Sun, 19 Jun 2022 10:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655635932;
+        bh=7OWf8G0jMiKkIOyazPpTYHLvbZq8teEs+PZVbvDwI6Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rVQRKLTdruRR6l4WvRrlC19nxkgW8EIkCQ2gqqYtXUUhFJiH1zLJwD6vbS//J8kC9
+         44D/E1gNGoxLsOgXOvx+MiE1CN+Y+r6FtHtkIVD8xoC48AFFXYLATO6VzXx/4dYDSy
+         DCdoxxbLUKoFriC43ZMHV9Asit/4Lr9bCgl4B8w+sh3HIwdjK1u5RL9sUPDkuuMF0j
+         idn0/fCc560VvXDkdCoAf47ghxKd+fgqtC/q4RKc7yhglIHtY+Np+LLTtcxPauJMxt
+         wXJK5FbTrlA8UQVzC56+25tCg9ofu9tHQfbpV9jn2869QABEU+uGtTx462oCqgkbsH
+         142+V6S9BsF1Q==
+Date:   Sun, 19 Jun 2022 12:01:26 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Chen-Yu Tsai <wens@csie.org>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan Cameron <jic23@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
         Lee Jones <lee.jones@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
         Mark Brown <broonie@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Walle <michael@walle.cc>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
+        sebastian.reichel@collabora.com,
+        Andy Shevchenko <andy.shevchenko@gmail.com>, michael@walle.cc,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3 10/16] iio: adc: axp20x_adc: Minor code cleanups
+Message-ID: <20220619120126.54d0b586@jic23-huawei>
+In-Reply-To: <CAGb2v65PLTcy53zjHA83qAaNq4y-Mmxfv4xvSuwqRLGBiwgjDQ@mail.gmail.com>
+References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
+        <20220618214009.2178567-11-aidanmacdonald.0x0@gmail.com>
+        <CAGb2v65PLTcy53zjHA83qAaNq4y-Mmxfv4xvSuwqRLGBiwgjDQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 11:40 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
->
-> The AXP192 is identical to the AXP20x, except for the addition of
-> two more GPIO ADC channels.
+On Sun, 19 Jun 2022 11:56:56 +0800
+Chen-Yu Tsai <wens@csie.org> wrote:
 
-...
+> On Sun, Jun 19, 2022 at 5:40 AM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
+> >
+> > The code may be clearer if parameters are not re-purposed to hold
+> > temporary results like register values, so introduce local variables
+> > as necessary to avoid that. Also, use the common FIELD_PREP macro
+> > instead of a hand-rolled version.
+> >
+> > Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> > ---
+> >  drivers/iio/adc/axp20x_adc.c | 61 +++++++++++++++++++-----------------
+> >  1 file changed, 33 insertions(+), 28 deletions(-)
+> >
+> > diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
+> > index 53bf7d4899d2..041511280e1e 100644
+> > --- a/drivers/iio/adc/axp20x_adc.c
+> > +++ b/drivers/iio/adc/axp20x_adc.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/property.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/thermal.h>
+> > +#include <linux/bitfield.h>  
+> 
+> Sort this group of headers alphabetically please.
+> 
+> >
+> >  #include <linux/iio/iio.h>
+> >  #include <linux/iio/driver.h>
+> > @@ -22,20 +23,20 @@
+> >  #include <linux/mfd/axp20x.h>
+> >
+> >  #define AXP20X_ADC_EN1_MASK                    GENMASK(7, 0)
+> > -
+> >  #define AXP20X_ADC_EN2_MASK                    (GENMASK(3, 2) | BIT(7))
+> > +
+> >  #define AXP22X_ADC_EN1_MASK                    (GENMASK(7, 5) | BIT(0))
+> >
+> >  #define AXP20X_GPIO10_IN_RANGE_GPIO0           BIT(0)
+> >  #define AXP20X_GPIO10_IN_RANGE_GPIO1           BIT(1)
+> > -#define AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(x)    ((x) & BIT(0))
+> > -#define AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(x)    (((x) & BIT(0)) << 1)
+> >
+> >  #define AXP20X_ADC_RATE_MASK                   GENMASK(7, 6)
+> > -#define AXP813_V_I_ADC_RATE_MASK               GENMASK(5, 4)
+> > -#define AXP813_ADC_RATE_MASK                   (AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
+> >  #define AXP20X_ADC_RATE_HZ(x)                  ((ilog2((x) / 25) << 6) & AXP20X_ADC_RATE_MASK)
+> > +
+> >  #define AXP22X_ADC_RATE_HZ(x)                  ((ilog2((x) / 100) << 6) & AXP20X_ADC_RATE_MASK)
+> > +
+> > +#define AXP813_V_I_ADC_RATE_MASK               GENMASK(5, 4)
+> > +#define AXP813_ADC_RATE_MASK                   (AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)  
+> 
+> Please also mention "grouping macros based on chip type" in the commit log.
+> 
+> Otherwise,
+> 
+> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+With Chen-Yu's suggested changes,
 
-> +static int axp192_write_raw(struct iio_dev *indio_dev,
-> +                           struct iio_chan_spec const *chan, int val, int val2,
-> +                           long mask)
-> +{
-> +       struct axp20x_adc_iio *info = iio_priv(indio_dev);
-> +       unsigned int regmask, regval;
-> +
-> +       /*
-> +        * The AXP192 PMIC allows the user to choose between 0V and 0.7V offsets
-> +        * for (independently) GPIO0-3 when in ADC mode.
-> +        */
-> +       if (mask != IIO_CHAN_INFO_OFFSET)
-> +               return -EINVAL;
-> +
-> +       if (val != 0 && val != 700000)
-> +               return -EINVAL;
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-> +       regval = val ? 1 : 0;
-> +
+Thanks,
 
-As per comment against the previous patch use !!val directly?
+Jonathan
 
-> +       switch (chan->channel) {
-> +       case AXP192_GPIO0_V:
-> +               regmask = AXP192_GPIO30_IN_RANGE_GPIO0;
-> +               regval = FIELD_PREP(AXP192_GPIO30_IN_RANGE_GPIO0, regval);
-> +               break;
-> +
-> +       case AXP192_GPIO1_V:
-> +               regmask = AXP192_GPIO30_IN_RANGE_GPIO1;
-> +               regval = FIELD_PREP(AXP192_GPIO30_IN_RANGE_GPIO1, regval);
-> +               break;
-> +
-> +       case AXP192_GPIO2_V:
-> +               regmask = AXP192_GPIO30_IN_RANGE_GPIO2;
-> +               regval = FIELD_PREP(AXP192_GPIO30_IN_RANGE_GPIO2, regval);
-> +               break;
-> +
-> +       case AXP192_GPIO3_V:
-> +               regmask = AXP192_GPIO30_IN_RANGE_GPIO3;
-> +               regval = FIELD_PREP(AXP192_GPIO30_IN_RANGE_GPIO3, regval);
-> +               break;
-> +
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +
-> +       return regmap_update_bits(info->regmap, AXP192_GPIO30_IN_RANGE, regmask, regval);
-> +}
 
--- 
-With Best Regards,
-Andy Shevchenko
