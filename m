@@ -2,140 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60737551FBD
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jun 2022 17:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F86551FF9
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jun 2022 17:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242349AbiFTPGr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jun 2022 11:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
+        id S231474AbiFTPMN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 20 Jun 2022 11:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242374AbiFTPGU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jun 2022 11:06:20 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071D4100E;
-        Mon, 20 Jun 2022 07:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1655736219;
-  x=1687272219;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Na3GHwh2nPIlcEioUu2L4Q9Qk2l1gWyv/bLyqBui10c=;
-  b=a3j1NuVif+KCfAl5geHnr21ipGQbuWuSPp8uuXwGnlUIX8r8db8NqC7s
-   WBm4+pPbPUmroALH5cjuORJLZ0rtWSQana0N04Ef34DlUqMSQ8cu1XXZc
-   HMYXpak+gyqbVnAgL/36TArkSNS/o+oH7VJdCr+nisE2/AjjmccQ893nm
-   +LVmzJSB2seAJObTdTejeWGgQuPDqU+maVx0kMmP4GwN7XKSF2r/DC7Jf
-   ZfkUhL/jMa74DfNl4yxw7fUV5j4kuB9x+6Gtx0O7yl180jCQaGALCoZwL
-   b+Kl6UK3ND2oaqymSkfPBPcy5A2X+Gj2fW7PY9UAVfOQ59kenYPm7LI/Z
-   w==;
-Date:   Mon, 20 Jun 2022 16:42:31 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <rafael.j.wysocki@intel.com>, <jic23@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>
-Subject: PM runtime_error handling missing in many drivers?
-Message-ID: <20220620144231.GA23345@axis.com>
+        with ESMTP id S243321AbiFTPMD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jun 2022 11:12:03 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5797F639B
+        for <linux-pm@vger.kernel.org>; Mon, 20 Jun 2022 08:02:31 -0700 (PDT)
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
+ (mail-zr0che01lp2113.outbound.protection.outlook.com [104.47.22.113]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-19-7O_Nn76jM2WrZpdXUOgBFA-2; Mon, 20 Jun 2022 17:02:24 +0200
+X-MC-Unique: 7O_Nn76jM2WrZpdXUOgBFA-2
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ ZRAP278MB0333.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2a::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5353.15; Mon, 20 Jun 2022 15:02:22 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
+ 15:02:22 +0000
+Date:   Mon, 20 Jun 2022 17:02:21 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RESEND PATCH v2 0/9] imx: thermal: Allow trip point
+ configuration from DT
+Message-ID: <20220620150221.GA23829@francesco-nb.int.toradex.com>
+References: <20220617071411.187542-1-francesco.dolcini@toradex.com>
+ <268a2d44-8bd4-158a-41d8-b41dfc15cd88@linaro.org>
+In-Reply-To: <268a2d44-8bd4-158a-41d8-b41dfc15cd88@linaro.org>
+X-ClientProxiedBy: LO4P265CA0116.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c3::16) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8beb7bab-b769-4afb-edb7-08da52cde0dc
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0333:EE_
+X-Microsoft-Antispam-PRVS: <ZRAP278MB0333CE6037B24D1D51712876E2B09@ZRAP278MB0333.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: QHEwnmNcup+0DLiHi59H5eRmqowv/yHfgu5hLbSqHBSmoYz+5i+lEeFc+AislMA/stYn9oDfic6HXPpPUC6PhAaJ2aNeCPxPmrpDB8RVLrAlNaMXZ06UZ2QoW4G0JItu7XRKN0RVHpJjEbS4xAVc70M/uatMka9Yek+6aJMB98NwtgAe6FF3ZthuwOJo7Ybv5tzco4nq5rJa60ucm6EPYi0hC/18ORNbdvKcb8J/Hxju+iKU6JGVHtKq34C6KUWMOawZO78kkq11uNxoOYgNKlgIucv6IXPdDvKMU3rUDkoD/Eg43Sgr8tpR10FBsgb+wo8oGJF+yBgVPHzz/gJZdCQTg5FG/v4PTs+l6+X42bMU5j6zXGISuSo3mhkB6pqt1CPL4PbBvqqNVWNcd2K8mRLhnbjmskveefdz8PWQ0cuZkuSK5UKCeACEQaLxk8hHFbPVraziUQxMj0K7OOkAq/zTWRMFnnPOd4mpDddhFqSUP+QMc2OQ09UDH2HYlzwKpN1rzCSBYICnSJpeAAw+a/Kf1He/xMjEeVIcr9UI/6Ben/I6BIGJ5Y0Yk4OcHaWgm8SMpV5KXW5e5iwLUpKC1jpipilxTmf9ocNfvOPtpAIgDFwtXdeR8vmf/xFTomMdnWuSukAnUB8ZSlpKT3mkaSd4uR+Frvpt51Qb8kR65AjGOidQUQkd84qaHORi0jHMYD3z7ptrZLTD6PN6aBQEfw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(136003)(366004)(39840400004)(346002)(66556008)(66946007)(66476007)(8676002)(4326008)(6486002)(54906003)(316002)(8936002)(478600001)(1076003)(5660300002)(7416002)(186003)(6916009)(6512007)(38100700002)(4744005)(33656002)(44832011)(26005)(38350700002)(52116002)(53546011)(86362001)(6506007)(41300700001)(2906002);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZCw3jwbp3cbGwjMAOzt1SZCSOxeE3xiWH+wO3NpR7F0OAdX7THzzJobY6WxT?=
+ =?us-ascii?Q?9c48C2pldFWJpTExUA6zBDD1vdCX1gyz0jsvaolXkZj4bHpGHwh0cmGBUynp?=
+ =?us-ascii?Q?vC83srJlIeO6oPHmcElRNTjxRYStLu/a4wlb+Qrk07UAi6KCsKrXDQyND2bO?=
+ =?us-ascii?Q?H3X+Q9FoofbJ5o0aysErcCUezjA8FS+GnxrA2Uq4LE2JIzPlMMQfzcnqrfn7?=
+ =?us-ascii?Q?VqHA3Z2tLhQgnucAyeSlOCS4yBVMsiwLw5arMBHHdoPTaR+QYAE+oHNx2bac?=
+ =?us-ascii?Q?/zFX+E4RFz5vJ1T3F6DGaVfAuoSD/ZghqpG/h66OotmheyTXHysVyjzIsvGI?=
+ =?us-ascii?Q?oChrpzLHE4Ew8Sg0F6bCkwYG5MdoCg9X39YPmLaJRrM8bKLM0QDhLSkJ551/?=
+ =?us-ascii?Q?W/NokafPLayFtYvVA6virZnUNM+Ct6yGZpef7ZVr78kd/4xpUeAqxGe2cUaR?=
+ =?us-ascii?Q?/wUfb+kY69NUGsfpB7B5LYhzfgLylhohxE6rkUhdSUjcIzWAAsL0JHwWvFlh?=
+ =?us-ascii?Q?yIDXJEPIBPtyDUN6xOYuX7vK9z1v5iehmQsH/ENRdrdSgsQ8L+6y5C2k2U60?=
+ =?us-ascii?Q?OPos5eeKaxh2LGKGxd6csqArkYc5zKg5sTG/ambV4tMO3sgSjz5JYiAhpxb+?=
+ =?us-ascii?Q?zZnti4GppbylXH0vaygIAI88BnaT3rLINhRRQj4gCrivHyvwzhJmIIJBua62?=
+ =?us-ascii?Q?aoVyRUTGTmcRZ2h0scbtRr/v1kW7vmIKBqoE6g8yO+xAXjr+JVWjRWlHLcv8?=
+ =?us-ascii?Q?/foKd0fT0JW65tGFo0D9duVDEHxzF2qsV3KTMxlByllquju1+x1PZoWbXuTh?=
+ =?us-ascii?Q?GwbgM4fzSCQSV5FsQA5vAtcaDQ20c6SGqL/MKIH4ozkEXQE1hSAFZR6KD3R0?=
+ =?us-ascii?Q?F+eyzMcyIYTJFX8YiD1FulcfrZTI/r955W5R6jN1d/aAx19AgWVZkH0931Tj?=
+ =?us-ascii?Q?PEyXoD4VUU+XlLLebFLqC8zq6G26mfRm2YBcRi+DVItQhzBTQ81SAMOgE/hR?=
+ =?us-ascii?Q?KwaPv4t5Tzmg+Byx+k1K7mnFuryQz2U30f0M8h1VwdDgE5GaDnMTM8hmdOwI?=
+ =?us-ascii?Q?+oHACiV1cCubHp37JkkyC9tPs4OKfTctK77AEzT+4zlYRENPMh/0g3Xz0TPJ?=
+ =?us-ascii?Q?MmqC8ydWph8pATAFpoZXtSVpfj5KZCRJZDdZws5PdQ9WCM6dakKNfSNL9xkc?=
+ =?us-ascii?Q?8XOGQXrSKjzWWeHd/ZogQevI2PP70oSGtYrdzlMDK4aBalhOYFSt7BkJbu+w?=
+ =?us-ascii?Q?qjRzCATIQr2fP4J0rh3cflH+FjD0N+a+mKV71NUl7BkQZbarGzuSaBDdiJdz?=
+ =?us-ascii?Q?hAEWl9EQ3UQXI+a12RZLtHl2e9nXUSWfZpMZ6K14mu4rGerQ6ObxMfSr/sfk?=
+ =?us-ascii?Q?8rf+ABazt/IkZZj1lmccoPZP2Hq1c8ZuXQyAxJCelp3k6BtsF3IRR3ThJ3Vr?=
+ =?us-ascii?Q?YLc+AObONCbOXyYO0X+sCYsSudoLPDa87GLT1kCk3G4ZrlGCFYibzKDR7Nfa?=
+ =?us-ascii?Q?d3JoEKEw60/Yb9gfiG41n9UrWaF1P+CAzkvmt4GYDeCRz8f4P+yYKsOikGxZ?=
+ =?us-ascii?Q?liJLEJUQ32CzS2CBZvykaPccMUB0pmlCF2Him1w/t/Z7AXIdu/oyOsOxa2nz?=
+ =?us-ascii?Q?7wrimxt9am/Q0BcR/lYKgYkpVbKGNU8FzUNfLOc3rIZQfuzZTUeRyNtHnHVx?=
+ =?us-ascii?Q?yPPJew1TXm42YFXlMt+SePlXY5CIwiGC29183qLnxU925jSF620IsU+lObvr?=
+ =?us-ascii?Q?Vdi6lfwkFNUE6dAVfmJQLMIgOVxnD+Q=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8beb7bab-b769-4afb-edb7-08da52cde0dc
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 15:02:22.1476
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WFbxkwNlvyPBUeJ4hW7sbLDQuLIB/r+ht7JWLToCtuiIprOaHMNvIO6fBstjuXfEJPkiRMYT5OqAbwwAA/ZUwThiPHTheYO5E0wVzjw6sSs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0333
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Many drivers do something like the following to resume their hardware
-before performing some hardware access when user space ask for it:
+On Fri, Jun 17, 2022 at 06:06:40PM -0700, Krzysztof Kozlowski wrote:
+> On 17/06/2022 00:14, Francesco Dolcini wrote:
+> > This series allows to specify the imx thermal drivers trip point from the device tree,
+> > without this change the threshold are hard-coded and this might not be correct given the
+> > thermal design of the final system.
+> 
+> Why resending? What was wrong with your v2 to which I replied?
 
-	ret = pm_runtime_resume_and_get(dev);
-	if (ret)
-		return ret;
+Wrong subject in the cover letter, I had v1 instead of v2.
+I thought this was going to confuse people, therefore I resent.
 
-But if the ->runtime_resume() callback fails, then the
-power.runtime_error is set and any further attempts to use
-pm_runtime_resume_and_get() will fail, as documented in
-Documentation/power/runtime_pm.rst.
+My mistake to not have explicitly written the reason of the resend.
 
-This means that if a driver sees an error even once from, say, an I2C
-transaction in its ->runtime_resume() callback, then the driver will
-permanently stop to work.  My guess is that this is *not* the behaviour
-intended by driver writers.  I would expect that the driver re-attempts
-to access the hardware the next time user space tries to use the device,
-so that the driver is resilient against temporary failures.
+Francesco
 
-I noticed this with drivers/iio/light/vcnl4000.c.
-
-During a read of iio:device0/in_illuminance_raw, an error is injected
-into the I2C transaction (the dump_stack() indicates the location) and
-the I2C transaction fails:
-
-[110190.730000][   T27] rpm_resume: 0-0009 flags-4 cnt-1  dep-0  auto-1 p-0 irq-0 child-0
-[110190.730000][   T27] i2c_write: i2c-0 #0 a=009 f=0000 l=3 [00-00-00]
-[110778.040000][   T27] i2c_result: i2c-0 n=1 ret=0
-[110778.040000][   T27] CPU: 0 PID: 27 Comm: python3 Not tainted 5.19.0-rc3+ #71
-[110778.040000][   T27] Stack:
-[110778.040000][   T27]  60a27dc6 60a27dc6 688af710 61085fc0
-[110778.040000][   T27]  61085f90 60a27dc6 60069bf0 00000001
-[110778.040000][   T27]  688af750 60905626 609055b3 61085fe0
-[110778.040000][   T27] Call Trace:
-[110778.040000][   T27]  [<608d05dc>] show_stack.cold+0x166/0x2a7
-[110778.040000][   T27]  [<60905626>] dump_stack_lvl+0x73/0x92
-[110778.040000][   T27]  [<6090566e>] dump_stack+0x29/0x31
-[110778.040000][   T27]  [<6092463e>] __i2c_transfer.cold+0x28/0x49
-[110778.040000][   T27]  [<607445dd>] i2c_smbus_xfer_emulated+0x28d/0xc60
-[110778.040000][   T27]  [<607452c2>] __i2c_smbus_xfer+0x312/0x8e0
-[110778.040000][   T27]  [<60745a40>] i2c_smbus_xfer+0x1b0/0x2e0
-[110778.040000][   T27]  [<60745e76>] i2c_smbus_write_word_data+0x46/0x60
-[110778.040000][   T27]  [<68968755>] vcnl4200_set_power_state+0x45/0x160 [vcnl4000]
-[110778.040000][   T27]  [<689680ee>] vcnl4000_runtime_resume+0x2e/0x40 [vcnl4000]
-[110778.040000][   T27]  [<606d262f>] __rpm_callback+0x5f/0x3e0
-[110778.040000][   T27]  [<606d2b44>] rpm_callback+0x194/0x1e0
-[110778.040000][   T27]  [<606d48fb>] rpm_resume+0xd5b/0x11d0
-[110778.040000][   T27]  [<606d5a77>] __pm_runtime_resume+0xb7/0x120
-[110778.040000][   T27]  [<68969903>] vcnl4000_set_pm_runtime_state.isra.0+0x43/0x1f0 [vcnl4000]
-[110778.040000][   T27]  [<68969b36>] vcnl4000_read_raw+0x86/0x250 [vcnl4000]
-[110778.040000][   T27]  [<607794fd>] iio_read_channel_info+0x10d/0x130
-[110778.040000][   T27]  [<60698553>] dev_attr_show+0x23/0x80
-[110778.040000][   T27]  [<60441174>] sysfs_kf_seq_show+0x144/0x2d0
-[110778.040000][   T27]  [<6043ce9e>] kernfs_seq_show+0x2e/0x40
-[110778.040000][   T27]  [<6033fe40>] seq_read_iter+0x310/0xb20
-[110778.040000][   T27]  [<6043e0ea>] kernfs_fop_read_iter+0x2da/0x520
-[110778.040000][   T27]  [<602cd46e>] new_sync_read+0x1ae/0x2f0
-[110778.040000][   T27]  [<602d1e84>] vfs_read+0x344/0x4a0
-[110778.040000][   T27]  [<602d2885>] ksys_read+0xb5/0x270
-[110778.040000][   T27]  [<602d2a63>] sys_read+0x23/0x30
-[110778.040000][   T27]  [<60051aea>] handle_syscall+0x1ba/0x250
-[110778.040000][   T27]  [<6006be9b>] userspace+0x3bb/0x600
-[110778.040000][   T27]  [<60047c8b>] fork_handler+0xcb/0xe0
-[110778.040000][   T27] rpm_idle: i2c-0 flags-5 cnt-0  dep-0  auto-1 p-0 irq-0 child-0
-[110778.040000][   T27] rpm_return_int: rpm_idle+0x250/0x970:i2c-0 ret=-11
-[110778.040000][   T27] rpm_return_int: rpm_resume+0x24d/0x11d0:0-0009 ret=-5
-
-The above is OK, the read of the file naturally fails since
-pm_runtime_resume_and_get() fails.  But all further reads of the file
-from user space fail even before getting to any register access, due to
-the behaviour described above.
-
-[110778.050000][   T27] rpm_resume: 0-0009 flags-4 cnt-1  dep-0  auto-1 p-0 irq-0 child-0
-[110778.050000][   T27] rpm_return_int: rpm_resume+0x24d/0x11d0:0-0009 ret=-22
-
-The following patch fixes the issue on vcnl4000, but is this the right
-fix?  And, unless I'm missing something, there are dozens of drivers
-with the same problem.
-
-diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
-index e02e92bc2928..082b8969fe2f 100644
---- a/drivers/iio/light/vcnl4000.c
-+++ b/drivers/iio/light/vcnl4000.c
-@@ -414,6 +414,8 @@ static int vcnl4000_set_pm_runtime_state(struct vcnl4000_data *data, bool on)
- 
- 	if (on) {
- 		ret = pm_runtime_resume_and_get(dev);
-+		if (ret)
-+			pm_runtime_set_suspended(dev);
- 	} else {
- 		pm_runtime_mark_last_busy(dev);
- 		ret = pm_runtime_put_autosuspend(dev);
