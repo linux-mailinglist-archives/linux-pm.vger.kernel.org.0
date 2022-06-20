@@ -2,43 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5404551E48
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jun 2022 16:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924CD551F82
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jun 2022 16:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236502AbiFTOBV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jun 2022 10:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S231474AbiFTO65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jun 2022 10:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352465AbiFTN4d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jun 2022 09:56:33 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548A43632A;
-        Mon, 20 Jun 2022 06:22:29 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 25KDKAgo049381
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Mon, 20 Jun 2022 21:20:11 +0800 (CST)
-        (envelope-from Di.Shen@unisoc.com)
-Received: from bj10906pcu1.spreadtrum.com (10.0.74.51) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Mon, 20 Jun 2022 21:20:12 +0800
-From:   Di Shen <di.shen@unisoc.com>
-To:     <rafael@kernel.org>, <rui.zhang@intel.com>
-CC:     <xuewen.yan@unisoc.com>, <cindygm567@gmail.com>,
-        <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lukasz.luba@arm.com>
-Subject: [PATCH 1/1] thermal/sysfs: Clear the slot left in cooling_device_attr_groups
-Date:   Mon, 20 Jun 2022 21:19:53 +0800
-Message-ID: <20220620131953.16575-1-di.shen@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S242726AbiFTO6e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jun 2022 10:58:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2567201AB
+        for <linux-pm@vger.kernel.org>; Mon, 20 Jun 2022 07:21:13 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 997DD660159D;
+        Mon, 20 Jun 2022 15:21:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655734871;
+        bh=1IzybNISo/qb6ajNmb/E3/HYWTJnWgW68XVLtKxjpQw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=R+Zk4qEZVjVF10Y0lFJzWvE1/eed+MdfL/c3tDFkgtrZX38tOIjJd1c0QMXwToIaC
+         uE1XLJ/nHZd95PXP8CzGxccUfszQWWoSnM8RnbHYc+x34QabPELyrevasvliIFGch8
+         GNHwPT+f3LiQQGOe5OnWPyapchfVR2QY+f7gSg4xIJKP6T+cwiMlQP2dy+QOtLKAxO
+         FbN6trgIEWvQtDucS4hATU3oPsPFqd8uNlExwFbgJ7wTmuU66tvFPdPObEu29ocKe1
+         m+ehzep8YZlO3DjSQuuy/eTBih8ycSU30gOfHx2F5a90Ksxc+ML7zRRlIXKsEljAwE
+         NufvhcuMZ4xmA==
+Message-ID: <25da54a7-3fc1-39c2-ed93-0ad72ce54e11@collabora.com>
+Date:   Mon, 20 Jun 2022 16:21:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.51]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 25KDKAgo049381
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] PM / devfreq: mediatek: Fix possible dereference of null
+ pointer
+Content-Language: en-US
+To:     matthias.bgg@kernel.org, dan.carpenter@oracle.com,
+        johnson.wang@mediatek.com
+Cc:     linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+References: <20220617133330.6510-1-matthias.bgg@kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220617133330.6510-1-matthias.bgg@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,64 +59,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There's a space allocated for cooling_device_stats_attr_group within co-
-oling_device_attr_groups. This space is shared by all cooling devices.
+Il 17/06/22 15:33, matthias.bgg@kernel.org ha scritto:
+> From: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> We dereference the driver data before checking of it's valid.
+> This patch fixes this, by accessing the PLL data struct after cheching
+> the pointer
+> 
 
-If not clear this space before cooling_device_stats_attr_group is initi-
-alized, the next cooling device will still create stats sysfs file node.
-At this time, read or write related nodes will cause kernel crash.
+Hello Matthias,
 
-[exception_reboot_reason]: kernel_crash
-[exception_panic_reason]: Fatal exception
-[exception_time]: 2022-06-07_06-32-25
-[exception_file_info]: not-bugon
-[exception_task_id]: 3154
-[exception_task_family]: [cat, 3154][sh, 2597][sh, 2362][adbd, 1804]
-[exception_pc_symbol]: [<747516ae>] _raw_spin_lock+0x20/0x60
-[exception_stack_info]: [<4cbe9ac1>] prepare_exception_info+0x19c/0x1a4
-[<03041be7>] sysdump_panic_event+0x57c/0x6f4
-[<b16f865e>] atomic_notifier_call_chain+0x48/0x7c
-[<5baac8d4>] panic+0x1b4/0x3c8
-[<9d287b0f>] arm_notify_die+0x0/0x78
-[<094fc22c>] __do_kernel_fault+0x94/0xa4
-[<3b4b69a4>] do_page_fault+0xd4/0x364
-[<23793e7a>] do_translation_fault+0x38/0xc0
-[<6e5cc52a>] do_DataAbort+0x4c/0xd0
-[<a28c16b8>] __dabt_svc+0x5c/0xa0
-[<747516ae>] _raw_spin_lock+0x20/0x60
-[<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
-[<cb78325e>] dev_attr_show+0x38/0x64
-[<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
-[<c0a843ab>] seq_read+0x244/0x620
-[<b316b374>] vfs_read+0xd8/0x218
-[<3aebf5fa>] sys_read+0x80/0xe4
-[<7cf100f5>] ret_fast_syscall+0x0/0x28
-[<08cbe22f>] 0xbe8c1198
+honestly, I don't think that this commit is right: mtk_ccifreq_target() is the
+devfreq_dev_profile's .target() callback!
 
-So clear the slot left in cooling_device_attr_groups before cooling_dev-
-ice_stats_attr_group is initialized to avoid kernel crash.
+Checking mtk_ccifreq_probe(), we are setting drvdata long before adding the
+devfreq device so, actually, it's impossible for dev_get_drvdata(dev) to return
+NULL, or whatever invalid pointer.
 
-Signed-off-by: Di Shen <di.shen@unisoc.com>
----
- drivers/thermal/thermal_sysfs.c | 5 +++++
- 1 file changed, 5 insertions(+)
+This means that the right thing to do in mtk_ccifreq_target() is to simply remove
+the `drv` NULL check, as this can never happen! :-)
 
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 1c4aac8464a7..fbc3dbc85841 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -817,6 +817,11 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
- 	unsigned long states;
- 	int var;
- 
-+	/* Clear the slot left in cooling_device_attr_groups */
-+	var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
-+	if (cooling_device_attr_groups[var])
-+		cooling_device_attr_groups[var] = NULL;
-+
- 	if (cdev->ops->get_max_state(cdev, &states))
- 		return;
- 
--- 
-2.17.1
+Cheers,
+Angelo
+
+> Fixes: 07dc787be231 ("Add linux-next specific files for 20220617")
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+>   drivers/devfreq/mtk-cci-devfreq.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
+> index 71abb3fbd042..77522f16c878 100644
+> --- a/drivers/devfreq/mtk-cci-devfreq.c
+> +++ b/drivers/devfreq/mtk-cci-devfreq.c
+> @@ -127,7 +127,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
+>   			      u32 flags)
+>   {
+>   	struct mtk_ccifreq_drv *drv = dev_get_drvdata(dev);
+> -	struct clk *cci_pll = clk_get_parent(drv->cci_clk);
+> +	struct clk *cci_pll;
+>   	struct dev_pm_opp *opp;
+>   	unsigned long opp_rate;
+>   	int voltage, pre_voltage, inter_voltage, target_voltage, ret;
+> @@ -138,6 +138,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
+>   	if (drv->pre_freq == *freq)
+>   		return 0;
+>   
+> +	cci_pll = clk_get_parent(drv->cci_clk);
+>   	inter_voltage = drv->inter_voltage;
+>   
+>   	opp_rate = *freq;
+> 
+
 
