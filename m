@@ -2,124 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38115523BF
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jun 2022 20:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78FC5523F6
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jun 2022 20:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbiFTSTy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 20 Jun 2022 14:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S245579AbiFTSfO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jun 2022 14:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245269AbiFTSTx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jun 2022 14:19:53 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36EBB1DA67
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jun 2022 11:19:51 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2047.outbound.protection.outlook.com [104.47.22.47]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-24-JEro624tP7e9hNgQmSR-ow-2; Mon, 20 Jun 2022 20:19:49 +0200
-X-MC-Unique: JEro624tP7e9hNgQmSR-ow-2
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- ZR0P278MB0331.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:35::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.14; Mon, 20 Jun 2022 18:19:47 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
- 18:19:47 +0000
-Date:   Mon, 20 Jun 2022 20:19:44 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        l.stach@pengutronix.de, Marco Felsch <m.felsch@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/9] dt-bindings: thermal: Define trips node in $defs
-Message-ID: <20220620181944.GA34760@francesco-nb.int.toradex.com>
-References: <20220617070847.186876-1-francesco.dolcini@toradex.com>
- <20220617070847.186876-2-francesco.dolcini@toradex.com>
- <b3311560-bbba-7fd9-7cda-65cfbd33458f@linaro.org>
- <20220620154810.GB23829@francesco-nb.int.toradex.com>
- <66ba39e3-5462-59c7-3831-20ba3ceed43b@linaro.org>
- <20220620174323.GC23829@francesco-nb.int.toradex.com>
- <54971435-aa26-acbf-7539-8484ee7e6b99@linaro.org>
-In-Reply-To: <54971435-aa26-acbf-7539-8484ee7e6b99@linaro.org>
-X-ClientProxiedBy: ZR0P278CA0151.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:41::12) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        with ESMTP id S245555AbiFTSfM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jun 2022 14:35:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274FD1EC6C;
+        Mon, 20 Jun 2022 11:35:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA4B8B812AB;
+        Mon, 20 Jun 2022 18:35:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C0EC3411B;
+        Mon, 20 Jun 2022 18:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655750108;
+        bh=3mSgNT10b4IjzPgWigmKhCRzl+Ti+EYL/1+uQFwMp0Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YvLC0E9QtvNI2VOwXPiBN5gXjqLr5rXxoHEMOQ5sUWXijZHmHqlZZoWVN+2mGVmI5
+         EP/BOzf3vOI83Nawe3EQM58nzxZAe6m0FgdZ/DpWODRGH6Cl5/dPjtx+o4oAnzLIe+
+         vLUBc4kyvZpN9kK3lF4+sU0CqlKEfutvlSARgTIOtq+LXAz47jazByohylHteahUL9
+         GvRGmi+FKujuIbhBWASw1vLw0pkSfwU5G6iFYlht1leiC50pXx4jiMfj9TBX8+yLXS
+         aAQGL6ZkuYyzt59Xj0R0hgJ8s3YfDEkKxYFZGovzaJGKdKQKHWXfeSG+Uq/2fOKYAW
+         v/wxDubWF0gSA==
+Date:   Mon, 20 Jun 2022 19:35:00 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+Subject: Re: [PATCH v2 07/15] Documentation: ABI: testing: mt6370: Add ADC
+ sysfs guideline
+Message-ID: <20220620193500.145f05b9@jic23-huawei>
+In-Reply-To: <CABtFH5+R761Tyd4yaWg-foSC4K=_aeYiVaTf37KvVH1Z4z9Jhw@mail.gmail.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+        <20220613111146.25221-8-peterwu.pub@gmail.com>
+        <20220618164820.2eeb8ae8@jic23-huawei>
+        <CABtFH5+R761Tyd4yaWg-foSC4K=_aeYiVaTf37KvVH1Z4z9Jhw@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 83c50e51-a8fa-4092-d823-08da52e9750f
-X-MS-TrafficTypeDiagnostic: ZR0P278MB0331:EE_
-X-Microsoft-Antispam-PRVS: <ZR0P278MB0331F64A5C28B14FB8AB9657E2B09@ZR0P278MB0331.CHEP278.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: VhuzH/Gy7RpYdIlNSXq7vE+8jSbx2CjQMhjwheEiKQ8CG+E5AaOMf8UmANTLmwp27Y0ado5rN8y2sX9pV6cfrvyv08Y8OglHKAr6CJLGbZfvCod9G/RUDEmoRT2zdreGbEK8CzSoFrnc7EDic75AnwJroyOpQASn0roVfg2wzCUAQtdJdiNxnrp4LeukCk06LTDw1mnZvnSTgSffYALZQOmtiD0fGePskTVK3DKonXkXXAHlUw7AGDfpv3Pr9k9QF0qSCcODUUVg6k6jjPAJp91upaBljrFuDAC/Su0lNPte9N1Y+NmleJJxbBeId5buw7JJHdVx4o9BImG8n5vgi8hK6bHCeafVukGbctp+t2hT4/it1LFpSG2sJpisi6VQW3qv7dfGf0Kbv2X0pWvrNAnPepAakBQp9InTfbzr70u3c+GN3Ny63aQYl7c98Npz9DeLrHndYKB/HkTg/oXdSf8ffYY6X0Q+NC//y7KwC46umeubnpWVCxDwcgq5tu4Cn71zomec/2ODEwnfldHpgwISMwbYtncg+2VBGbXhC0wClSoE4PCjkfObwDJshVSOiOkJqGewLzxEmAQeMvk2ERP/nr2AS9FV+JfyzcPlAXbU6iv21dm+lZwMpZj29i4NyCJqTWO1SGSUb/+0XYLyPdh+Kp057h6/K6tb0RUCIKdgW+T+mS3U4zi0/aWdNth57i/skm3zBwH4qX5vBeQGSezSMtGefckk1RqbYqkJ34cRd4wfLpMN2xULrqWRjaoCOe7WUFkKgeOxb8AzaulxF3eBLaJxvJ1wgrSu40quFvo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39840400004)(396003)(346002)(136003)(376002)(366004)(1076003)(53546011)(186003)(33656002)(6506007)(38350700002)(52116002)(26005)(6666004)(6512007)(41300700001)(38100700002)(86362001)(8676002)(966005)(8936002)(54906003)(6486002)(478600001)(44832011)(7416002)(316002)(66946007)(2906002)(66476007)(66556008)(5660300002)(6916009)(4326008);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0NGf4IChnO9DKsdvJN39BIX7yV11XvmXgQU7xq1UFNmjEX8AWWOtXMjADJCk?=
- =?us-ascii?Q?Bpg4UsD4Hj/dfuki4nG0XgqOZSIkzq+EmEO/vjynHci4T1y8jn57Fb8/Ntnp?=
- =?us-ascii?Q?94E8vIRXaQh978q/n8BJHbAxvfPw2ZFpLoz2FYwA+jiCGMkzJOUFv632EhOv?=
- =?us-ascii?Q?okS76PWEfdZMHIMtmL8MEDl8XwQSbk+tYwhxAUMtmazVPFB7klGBmFY/yxqg?=
- =?us-ascii?Q?brGcFSlcB95YJdxWzq0HyStNOQ8IUhPxlQvT5myvPwselHqxSitt/Qtkmytt?=
- =?us-ascii?Q?7+oxDItygE8pdGQr8gprt4ZBPchUAdVEjYNxratvzvgBYeAVpT8Iuf87moc3?=
- =?us-ascii?Q?TjMC+ETDNibva2wT/3+PJWWpDWQFrpcnBkfLHhK3qZTHhU7BZRXOPC2Wc3OZ?=
- =?us-ascii?Q?uM0FEh1xjEve8E/pOKd5O2d6Q6VLMH5GXI9HiWk96h6t+l7SuJLvkbR5vxWq?=
- =?us-ascii?Q?gBd9uIrAqSR/LSDyzvoPhvJctGrm6kODVK8tAscYb6RUHdakb1RzkKKZghe5?=
- =?us-ascii?Q?3eKWKHl3FivvXRajTJT6uuxCzmTeaA50jaes3DbWzPr5ojV614o30Nefic3e?=
- =?us-ascii?Q?USBOkPtfzlOf11sD2J2B0vLipdG404Yp+kCpIBuLAA04vVk07KF9mrNewQRb?=
- =?us-ascii?Q?XVHNp6dllZoyj21Xt9G8AaBKG0P4cT1tsmTba+ZZqSK90ZW2vQQnaw8kLm5R?=
- =?us-ascii?Q?DTW0aV7nFC9gbOMmfcDDxXoTpf2Qg7e3KMMww8VCQEwQ1k5fOtNZ+EiSUlFI?=
- =?us-ascii?Q?5ZGk3cUjZ6rm+eZMfqqc4nCapdkfaB9X/99pvxp4WL9yY5shOPP1MXeOCEGR?=
- =?us-ascii?Q?T6DFRRAt93NZBhggpXaHXQxhSYvG5Pubc+A/5/WWMqF9n+ccB0Q8jgSC545V?=
- =?us-ascii?Q?+1qZLEVevVRLarhCsWAx3p98xIkmCKDgL96/p7oLK7VH5G5Vim6YvK8A0SpX?=
- =?us-ascii?Q?tdmywnCiz2sMstiyq4uYuVnz1pvyU0rcuUPV2cVpKVCNGnVik4hMRMJcSTVg?=
- =?us-ascii?Q?wBV7ob1IcyBmEjXF73Ehfkd07DkdMmlgeGQUmZpkSsdDMrMUe1fhqS91bxHe?=
- =?us-ascii?Q?TxE8eQfztgJNVh8C1t6luUTCpdtSeoX6nCvvEqW8x5BUqcbUcZSZHyLCO4xl?=
- =?us-ascii?Q?epG6zxpRp1iGttx+JevqeK5q/k7guY1ZEcaqU98qDRsHkoOdqfWdwpkX6bKG?=
- =?us-ascii?Q?KNDNEee9sgYVV9AwxQv1STrgYqqN3ra8r1NumcIGmgJERCaWUnfHEHsDkFiK?=
- =?us-ascii?Q?eTQvW99MuzYK1yDAiJYDG2d64e9CwhCkYK9Ydq90ccQ9TuK9SsbevwysZERf?=
- =?us-ascii?Q?RAxRM0bN+CsvEEOOWAYVTd/XToBBESjoeGhvRudDQkm7vDHdfEx7FDb/6nI0?=
- =?us-ascii?Q?7tpG/HEl/y0Zama0is7CYu4Mc30Z0aES9mnXPNchmWQ6+0ZBMqciLOK4Brpt?=
- =?us-ascii?Q?ERnJIbZz0fL9Apzv5jhbjcFynkZWPxLDgpvLFl0i6lhhYW0r2vpkdGMpbi5t?=
- =?us-ascii?Q?QrBjGnG74oAuC3V1PVBPfh9rVGiW726RtHozbaPAbHM2faVGXzRj6CVZuz3Y?=
- =?us-ascii?Q?v96vuhvPmjrHqZqZw8lZgcD5w+lrU5+hkHdnM5LKZN2Kl10q1+2QYYJheeHz?=
- =?us-ascii?Q?pBg+8duUx+FbtuikGu0ubZ4RuJk8A5a5vnWFTwBFOuGgkGHltTRv4xkMGtaF?=
- =?us-ascii?Q?9+qtOPOitodwqG4qkcSFnVzT+uJCOWryuIxuao/CzcaNBepH8JJGCnwsKxI0?=
- =?us-ascii?Q?trgSHVLS+1YkSThwwp03Geb3oFQURG7xZedxSRY0eXhf9tzI6s+8?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83c50e51-a8fa-4092-d823-08da52e9750f
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 18:19:47.1957
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kmPUgayWVCozJ0qTD2sdQwxEszDrVK7Qp6av2jPI7fBfV+z7br2C8nd4/zCc27j2Vxij4SLaCBJA++TooQfYis1dDSBPRUd5oDPFs2i5Ma4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0331
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -128,44 +66,127 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Krzysztof,
-thanks for the discussion and the review.
+On Mon, 20 Jun 2022 14:00:43 +0800
+ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 
-On Mon, Jun 20, 2022 at 08:05:48PM +0200, Krzysztof Kozlowski wrote:
-> On 20/06/2022 19:43, Francesco Dolcini wrote:
-> > On Mon, Jun 20, 2022 at 06:44:23PM +0200, Krzysztof Kozlowski wrote:
-> >> On 20/06/2022 17:48, Francesco Dolcini wrote:
-> >>> Ideally one could just implement the imx6/7 thermal sensor reading and
-> >>> just make use of the thermal_of driver, however that would break
-> >>> compatibility with a lot of existing system ... to me this is just a
-> >>> no-go.
-> >>
-> >> This I did not understand...  What is not implemented in thermal sensor
-> >> which would solve the issue? And why it cannot be implemented in
-> >> backwards compatible way?
-> > 
-> > Currently the imx_thermal driver defines its own trip points. How would
-> > you change the code to work with old device tree binaries using the
-> > generic thermal_of driver? imx_thermal would need to be changed to be a
-> > thermal sensor device, all the thermal trip point code removed.
-> > The driver is using thermal_zone_device_register().
-> > 
-> > Maybe I am missing an obvious solution, just correct me if I am wrong.
-> 
-> Probably you would need to support both solutions in the same driver,
-> based on presence of thermal-sensor-cells property. It won't be
-> particularly easy code, but maybe it is worth anyway... I am quite
-> surprised to see that IMX thermal driver does not use generic framework
-> and does not support generic bindings.
+> Hi Jonathan,
+>=20
+> Thanks for your helpful comments, and I have some questions want to
+> ask you below.
+>=20
+> Jonathan Cameron <jic23@kernel.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=8818=
+=E6=97=A5 =E9=80=B1=E5=85=AD =E6=99=9A=E4=B8=8A11:39=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >
+> > On Mon, 13 Jun 2022 19:11:38 +0800
+> > ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> > =20
+> > > From: ChiaEn Wu <chiaen_wu@richtek.com>
+> > >
+> > > Add ABI documentation for mt6370 non-standard ADC sysfs interfaces.
+> > >
+> > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > > ---
+> > >  .../ABI/testing/sysfs-bus-iio-adc-mt6370      | 36 +++++++++++++++++=
+++
+> > >  1 file changed, 36 insertions(+)
+> > >  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> > >
+> > > diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370 b/Doc=
+umentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> > > new file mode 100644
+> > > index 000000000000..039b3381176a
+> > > --- /dev/null
+> > > +++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> > > @@ -0,0 +1,36 @@
+> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage0_ra=
+w =20
+> >
+> > Unfortunately the kernel documentation build scripts do no support dupl=
+icating
+> > standard ABI for particular devices so as to provide more information.
+> > Hence you can't have anything in this file.
+> > =20
+>=20
+> I want to confirm with you again,
+> because my ABI file duplicates with standard sysfs-bus-iio (voltage,
+> current, and temperature channels),
+> Should I just remove this ABI file and modify the code of mt6370-adc
+> to meet your expectations??
 
-#thermal-sensor-cells is already present in all dtsi using the
-imx_thermal driver without reason (see my previous comment on the
-topic [0]).
+yes.
 
-From my point of view the situation is somehow a mess, not sure how to
-proceed to be honest.
+>=20
+> > =20
+> > > +KernelVersion:       5.18
+> > > +Contact:     chiaen_wu@richtek.com
+> > > +Description:
+> > > +             Indicated MT6370 VBUS ADC with lower accuracy(+-75mA) =
+=20
+> > Curious though, voltage with a mA accuracy range? =20
+>=20
+> Yes, this description is based on the data sheet.
 
-Francesco
+Weird :)=20
 
-[0] https://lore.kernel.org/all/acbf8ed3-0b8c-a0b2-88ef-7b13ad0908d5@linaro.org/
+>=20
+> > This scale should be presented directly to userspace anyway so no need
+> > for this doc.
+> > =20
+> > > +             higher measure range(1~22V)
+> > > +             Calculating with scale returns voltage in uV =20
+> >
+> > No. All channels return in mV. That's the ABI requirement as
+> > in sysfs-bus-iio and we cannot vary if for particular drivers.  If we d=
+id
+> > no generic tooling would work. =20
+>=20
+> Ok, I got it!
+>=20
+> > =20
+> > > +
+> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage1_raw
+> > > +KernelVersion:       5.18
+> > > +Contact:     chiaen_wu@richtek.com
+> > > +Description:
+> > > +             Indicated MT6370 VBUS ADC with higher accuracy(+-30mA)
+> > > +             lower measure range(1~9.76V)
+> > > +             Calculating with scale offset returns voltage in uV
+> > > +
+> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage4_raw
+> > > +KernelVersion:       5.18
+> > > +Contact:     chiaen_wu@richtek.com
+> > > +Description:
+> > > +             Indicated MT6370 TS_BAT ADC
+> > > +             Calculating with scale returns voltage in uV
+> > > +
+> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage7_raw
+> > > +KernelVersion:       5.18
+> > > +Contact:     chiaen_wu@richtek.com
+> > > +Description:
+> > > +             Indicated MT6370 CHG_VDDP ADC
+> > > +             Calculating with scale returns voltage in mV
+> > > +
+> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_temp8_raw
+> > > +KernelVersion:       5.18
+> > > +Contact:     chiaen_wu@richtek.com
+> > > +Description:
+> > > +             Indicated MT6370 IC junction temperature
+> > > +             Calculating with scale and offset returns temperature i=
+n degree =20
+>=20
+> Shall I modify the scale of temperature to milli degrees in
+> mt6370-adc.c and remove this item??
+
+yes.
+
+Thanks,
+
+Jonathan
+
+>=20
+> > =20
+>=20
+> Best regards,
+> ChiaEn Wu
 
