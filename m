@@ -2,230 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305A2551372
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jun 2022 10:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C029655191E
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jun 2022 14:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240242AbiFTIya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jun 2022 04:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S242528AbiFTMkz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jun 2022 08:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240036AbiFTIy3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jun 2022 04:54:29 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECDE2AD8;
-        Mon, 20 Jun 2022 01:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655715268; x=1687251268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=SaZZWvTNEcpiYPz8/0JPj5e9vtDhJYHI5dAzFFEmZBE=;
-  b=BBdRHcKHa3pPT+BBpoNW3Chkc54tRenNwFbnZ2+FmQsod91ICdWG1o7R
-   QlB3mUlsIkY3X6Aeo2mYtwr5qJsBIOkihwiu8O66MRYVU9A3XzMWzhePd
-   81d2IrGkcXZiDS+Wk14IZIEmnqiYRzdvhuRgctoqkTdFO7RlEXGPUkhLy
-   w=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 20 Jun 2022 01:54:27 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 01:54:27 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 20 Jun 2022 01:54:25 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 20 Jun 2022 01:54:19 -0700
-Date:   Mon, 20 Jun 2022 14:24:15 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com>
- <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com>
- <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
- <YqtlRQOwb3t6Xtd0@google.com>
+        with ESMTP id S239184AbiFTMkz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jun 2022 08:40:55 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EEA7666;
+        Mon, 20 Jun 2022 05:40:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1655728843;
+        bh=KrVmb1xepHJ/Pzbfeisty0gKJhBZD1PGHrbEMv3MWpE=;
+        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
+        b=OFohnXD3oQUdewpBCd88CsFYJB0h2Uy9sbJsqevrEQy6ZrLMemiMrQNpPzkTeZ12x
+         kuCbjN+GS68fpEiIRY/+R26pW2Yd11cEQqI6RRw2+ThMzL8V9wklJL952Etl93ZUpr
+         wNalXpekHob7C2oHjBySGMxsmxE9W/4HsywR+8u8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.174.149]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MS3mz-1oEyo41FXv-00TUH3; Mon, 20
+ Jun 2022 14:40:43 +0200
+Message-ID: <e49b8686-6546-3b7f-dda3-6b4efb53d66c@gmx.de>
+Date:   Mon, 20 Jun 2022 14:40:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YqtlRQOwb3t6Xtd0@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/2] video: fbdev: Convert from PCI to generic power
+ management
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-fbdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220608180956.GA407517@bhelgaas>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220608180956.GA407517@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:vj69s28dYdlp0K+pnq7qPonjf1zFbLqtRxTYLMIW3rnIz64pO0K
+ GPro7+3Nk+TZXXbyqEDrpEeWKDeh1pazM91MBS6eDW/NULUOgMuFG0BrwPTOvIxgTCfJrw7
+ cEO5qGh9+JrpeYB9NsDOx4Ql10Ly5RZ7Q9lWSywgjiC/0U4nVOh2MsaIe3kPxN4dnMD/R25
+ JEhcKlgjDeLTMW5op8/8A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZfI1ovxhKS4=:ICLoC3mKUmlhejdepfRPK4
+ NvXiS9bgLm/qImY/psBb/kSI1M8w0FSG9t9TG/y/hSEkGOsLXP8kg3AjXEFVIZr23Gd0y+9Zm
+ P4qDBwEjqjc3AJOeOMx8NU0yDJVkJ5TMju9bkmf377wPjv/6voayPgZL+Apbnr9f0262/JuVu
+ raS95bjMEWP0PadIfiwDC6VPPUzhRnyt/KnXPyp7nwcAxKc6mKufp005hNlmzb4atyhjY3i42
+ bIMrvqU9TR03xempBUFe3CiFz9wdKEfFwFGxWHGDWgJn+JYw282nJ4ewDZ9wXI6hdNFcYprwx
+ 864h/bsxlM/cFnIflK0QnGDeuoNbuATolEe63eBP3aD/L4Dsv2oUnVx6qCX9Py+mQhf30jn/W
+ 4HyDcnAU1bPGMNLO01oq7ateN+IjXpQSqOIRZDkC/xfr4A6Vg37q08CxB0rXNGMMNblCgbo6q
+ VK8dij1RT4Hzpktb4GqEkE7EsPSVBWQv1V1y4Q/hLJLTmvw0UDOgJeVs0V8x7VM4mmhcNE0sO
+ H+vWTXdSHvVbHPzFn4m+aUCrXPFqgyA7JlpLhddhUbTGzFVimKlwrv6/HNsESnBkvdA3Hx0RP
+ 3bDTgtrhQSDmPTFr2lS/o6iTJINP0n1sZqcuDLXh2UGXcHODKFGMaDKqRNjW1ytkXNAq06fAy
+ 4PHlNaqRkxtAma5WbXgQubbtRJ+57ri0vX8SxG/Fb2ydaY5CqhThi+AVh3ErPQ77rCUBHz0wD
+ 7fJtvWyXkOOhRlvHjFXzEib0/INKydLkFlbU6M59i0fOAJmSP4hvrrTtURu5o3Fp3525YDnbW
+ +iTzhz++W8st9zOU/LB3RnpNsw6fIZkadMmjYK7iNYWkE140SSMl2d21SSgo7KZbxM049EXD/
+ mdxeXshOFOH6QZare0AMC7h2d0jIwOzPxSiWXd5zAsp3wFomsp5SLjIg5EkpMmW1lgCI/wT8n
+ 8AUrDnyo6NXxIrr0HRUgQjgSI9cxBZ4Qpa05egXeakQBohdVz75IS/QvdZRuo7nswJk3sK/it
+ JurjlrY3arwpEAaUy+E+OvP0TIvcIITBRax6CrmvD841dXNJvQJnMQ+YcKPZeqmK+Oi5ssuyN
+ p2pAhU0OOYWC54xoyaIMG1kxIAM30kHYkbQMtBvsO20FLE1yDH0EhzNjA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+Felipe, Bjorn
+On 6/8/22 20:09, Bjorn Helgaas wrote:
+> On Wed, Jun 08, 2022 at 06:26:34PM +0200, Daniel Vetter wrote:
+>> On Tue, Jun 07, 2022 at 06:11:10PM -0500, Bjorn Helgaas wrote:
+>>> From: Bjorn Helgaas <bhelgaas@google.com>
+>>>
+>>> PCI-specific power management (pci_driver.suspend and pci_driver.resum=
+e) is
+>>> deprecated.  If drivers implement power management, they should use th=
+e
+>>> generic power management framework, not the PCI-specific hooks.
+>>>
+>>> No fbdev drivers actually implement PCI power management, but there ar=
+e a
+>>> cirrusfb has some commented-out references to it and skeletonfb has
+>>> examples of it.  Remove these.
+>>
+>> Is this holding up some cleanup on your side and so would be easier to
+>> merge these through the pci tree? If so
+>>
+>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>
+>> for merging through your tree. Otherwise I guess Helge will get around =
+to
+>> pile them up for 5.20 (or 6.0) eventually.
+>
+> No particular rush and nothing depending on these.
+>
+> I added your ack to my local branch and if nothing happens for a
+> while, I'll merge them via my tree.
 
-On Thu, Jun 16, 2022 at 10:15:49AM -0700, Matthias Kaehlcke wrote:
-> On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
-> > Hi Matthias/Krishna,
-> > 
-> > On Tue, Jun 14, 2022 at 10:53:35AM -0700, Matthias Kaehlcke wrote:
-> > > On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
-> > > > On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
-> > > > > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
-> > > > > > Hi Krishna,
-> > > > > > 
-> > > > > > with this version I see xHCI errors on my SC7180 based system, like
-> > > > > > these:
-> > > > > > 
-> > > > > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
-> > > > > > 
-> > > > > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
-> > > > > > 
-> > > > > > After resume a downstream hub isn't enumerated again.
-> > > > > > 
-> > > > > > So far I didn't see those with v13, but I aso saw the first error with
-> > > > > > v16.
-> > > > > 
-> > > > > It also happens with v13, but only when a wakeup capable vUSB <= 2
-> > > > > device is plugged in. Initially I used a wakeup capable USB3 to
-> > > > > Ethernet adapter to trigger the wakeup case, however older versions
-> > > > > of this series that use usb_wakeup_enabled_descendants() to check
-> > > > > for wakeup capable devices didn't actually check for vUSB > 2
-> > > > > devices.
-> > > > > 
-> > > > > So the case were the controller/PHYs is powered down works, but
-> > > > > the controller is unhappy when the runtime PM path is used during
-> > > > > system suspend.
-> > > > 
-> > > > The issue isn't seen on all systems using dwc3-qcom and the problem starts
-> > > > during probe(). The expected probe sequence is something like this:
-> > > > 
-> > > > dwc3_qcom_probe
-> > > >   dwc3_qcom_of_register_core
-> > > >     dwc3_probe
-> > > > 
-> > > >   if (device_can_wakeup(&qcom->dwc3->dev))
-> > > >     ...
-> > > > 
-> > > > The important part is that device_can_wakeup() is called after dwc3_probe()
-> > > > has completed. That's what I see on a QC SC7280 system, where wakeup is
-> > > > generally working with these patches.
-> > > > 
-> > > > However on a QC SC7180 system dwc3_probe() is deferred and only executed after
-> > > > dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
-> > > > With that the controller/driver ends up in an unhappy state after system
-> > > > suspend.
-> > > > 
-> > > > Probing is deferred on SC7180 because device_links_check_suppliers() finds
-> > > > that '88e3000.phy' isn't ready yet.
-> > > 
-> > > It seems device links could be used to make sure the dwc3 core is present:
-> > > 
-> > >   Another example for an inconsistent state would be a device link that
-> > >   represents a driver presence dependency, yet is added from the consumer’s
-> > >   ->probe callback while the supplier hasn’t probed yet: Had the driver core
-> > >   known about the device link earlier, it wouldn’t have probed the consumer
-> > >   in the first place. The onus is thus on the consumer to check presence of
-> > >   the supplier after adding the link, and defer probing on non-presence.
-> > > 
-> > >   https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
-> > > 
-> > > 
-> > > You could add something like this to dwc3_qcom_of_register_core():
-> > > 
-> > > 
-> > >   device_link_add(dev, &qcom->dwc3->dev,
-> > >   		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
-> > > 
-> > >   if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
-> > >       ret = -EPROBE_DEFER;
-> > > 
-> > > 
-> > I am not very sure how the device_link_add() API works. we are the parent and
-> > creating a depdency on child probe. That does not sound correct to me.
-> 
-> The functional dependency is effectively there, the driver already assumes that
-> the dwc3 core was probed when of_platform_populate() returns.
-> 
-> The device link itself doesn't create the dependency on the probe(), the check
-> of the link status below does.
-> 
-> Another option would be to add a link to the PHYs to the dwc3-qcom node in
-> the device tree, but I don't think that would be a better solution (and I
-> expect Rob would oppose this).
-> 
-> I'm open to other solutions, so far the device link is the cleanest that came
-> to my mind.
-> 
-> I think the root issue is the driver architecture, with two interdependent
-> drivers for the same IP block, instead of a single framework driver with a
-> common part (dwc3 core) and vendor specific hooks/data.
-> 
-> > Any ways, I have another question.
-> > 
-> > When dwc3_qcom_of_register_core() returns error back to dwc3_qcom_probe(), we
-> > goto depopulate label which calls of_platform_depopulate() which destroy the
-> > child devices that are populated. how does that ensure that child probe is
-> > completed by the time, our probe is called again. The child device it self is
-> > gone. Is this working because when our probe is called next time, the child
-> > probe depenencies are resolved?
-> 
-> Good point! It doesn't really ensure that the child is probed (actually it
-> won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
-> could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
-> the PHYs should be ready and dwc3_probe() be invoked through
-> of_platform_populate().
+I've been on vacation, but picked them up now.
 
-This is a generic problem i.e if a parent can only proceed after the child
-devices are bounded (i.e probed successfully), how to ensure this behavior
-from the parent's probe? Since we can't block the parent probe (async probe is
-not the default behavior), we have to identify the condition that the children
-are deferring probe, so that parent also can do that.
+Thanks!
 
-Can we add a API in drivers core to tell if a device probe is deferred or
-not? This can be done by testing list_empty(&dev->p->deferred_probe) under
-deferred_probe_mutex mutex. The parent can return EPROBE_DEFER based on this
-API return value.
-
-Another alternative would be explicitly checking if the child device suppliers
-are ready or not before adding child device. That would require decoupling
-of_platform_populate() to creating devices and adding devices.
-
-Note that this problem is not just limited to suppliers not ready. if the
-dwc3-qcom is made asynchronous probe, then its child also probed
-asynchronously and there is no guarantee that child would be probed by the
-time of_platform_populate() is returned.  The bus notifier might come handy
-in this case. The parent can register for this notifier and waiting for
-the children device's BUS_NOTIFY_BOUND_DRIVER/BUS_NOTIFY_DRIVER_NOT_BOUND
-notifications. This would also work in our case, if we move to
-of_platform_populate() outside the probe().
-
-Would like to hear other people thoughts on this.
-
-Thanks,
-Pavan
+Helge
