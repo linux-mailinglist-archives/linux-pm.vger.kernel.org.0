@@ -2,238 +2,273 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072B3553540
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 17:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8755535C0
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 17:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352204AbiFUPJN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jun 2022 11:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S243753AbiFUPS6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jun 2022 11:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351813AbiFUPJN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 11:09:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0521838F;
-        Tue, 21 Jun 2022 08:09:11 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru [109.252.136.92])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8638A6601688;
-        Tue, 21 Jun 2022 16:09:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655824150;
-        bh=yKy10fDX54YCxEXJXL79y5iJPRtvTIKAxsv4we0n0gM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jhlSZIQwj7YbqFfDJecLZBGilYxdq01bn1UglhX+ppksvvE2oCGLoyDEV+26Spq8I
-         LA9bzGLWEmIz/sIfdrkH9pRj5uq3H3rQ3gT8hu5eAkFBtUEq525YDwtPu5tr77yQPN
-         dps2l2p7DkF5xz3g6T5Ot+HSskVGcCSmy+gDnqKIZI6oaN3uVNPmq5Mmt/aPFKoypS
-         gy+4TWKA5Rq1Mq/QNYcE6tIxTFT9OLqCWGHiiEvZJ9+J9+HyUW6NvzqRE5oVE/mlSc
-         DIeUxz3n0M4Q2F9J+Uz324cHOBEb0EJsX84dURVAwdJ2W1nVt2D2s5GnK7aGnHl2PR
-         CEgLzJz5I/duw==
-Message-ID: <da2f1552-6896-5ae8-4837-28f31f3031a9@collabora.com>
-Date:   Tue, 21 Jun 2022 18:09:06 +0300
+        with ESMTP id S1352650AbiFUPSZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 11:18:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B472720;
+        Tue, 21 Jun 2022 08:18:24 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LEsZK6001310;
+        Tue, 21 Jun 2022 15:15:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=sFLFw+BKj342kHxB0ScRZy4YnJ9mxAqKjzp3VRkzRvY=;
+ b=YTYhO9QKYofD0qg/XJDhjFoQWDZrPNIZ85E1iSc4oVK/eQAroG/bek0CR+llv10GAhjY
+ COHKbSHnEzzrQ8A7sF7PiYMddGf1hAykb89vWu6HMgnO7Hgv7ucp+ZRTL7948ZgQ1m4X
+ VkjFCSbLeZqeQIkcCzwXPga7VHSWALmYYNpqItMrgiP4DsKKYHQzn0yalESv+Kns7rbL
+ tusMegR4UWucPYwPYf0f/1apYXOnQiBfcXG8e7YWw2Emq5PqPK2o4A5ZDlqWPrbtabzv
+ XMZPgv52Vm3g39cqxIsLFEBPTClKDnRdsrj9UyLhnbK7WZEWoGLp7utzZtF1+Sp2nkJb Bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gug5t0pjg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jun 2022 15:15:55 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25LF6wDP008159;
+        Tue, 21 Jun 2022 15:15:54 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gug5t0ph6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jun 2022 15:15:54 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25LF6pHa017543;
+        Tue, 21 Jun 2022 15:15:52 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gs5yhm8jw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jun 2022 15:15:52 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25LFFonZ22479266
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Jun 2022 15:15:50 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1DD23AE051;
+        Tue, 21 Jun 2022 15:15:50 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CEF8FAE045;
+        Tue, 21 Jun 2022 15:15:48 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.144.178])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 21 Jun 2022 15:15:48 +0000 (GMT)
+Date:   Tue, 21 Jun 2022 17:15:47 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+Message-ID: <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+ <20220505182645.497868-12-ebiederm@xmission.com>
+ <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <877d5ajesi.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877d5ajesi.fsf@email.froward.int.ebiederm.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rJMiJBfBjWWdvb3mtiPQ-gnOYpFaD8J9
+X-Proofpoint-ORIG-GUID: cSNjQG5_nEXNScHXpWdbu8FUjZnN09QQ
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 02/31] OPP: Add dev_pm_opp_set_config() and friends
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <9c4b2bfe628bf7a583a96cee7cc3539e2e66245e.1653564321.git.viresh.kumar@linaro.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <9c4b2bfe628bf7a583a96cee7cc3539e2e66245e.1653564321.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-21_08,2022-06-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 spamscore=0 mlxlogscore=970 lowpriorityscore=0
+ clxscore=1015 adultscore=0 suspectscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2206210065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Tue, Jun 21, 2022 at 09:02:05AM -0500, Eric W. Biederman wrote:
+> Alexander Gordeev <agordeev@linux.ibm.com> writes:
+> 
+> > On Thu, May 05, 2022 at 01:26:45PM -0500, Eric W. Biederman wrote:
+> >> From: Peter Zijlstra <peterz@infradead.org>
+> >> 
+> >> Currently ptrace_stop() / do_signal_stop() rely on the special states
+> >> TASK_TRACED and TASK_STOPPED resp. to keep unique state. That is, this
+> >> state exists only in task->__state and nowhere else.
+> >> 
+> >> There's two spots of bother with this:
+> >> 
+> >>  - PREEMPT_RT has task->saved_state which complicates matters,
+> >>    meaning task_is_{traced,stopped}() needs to check an additional
+> >>    variable.
+> >> 
+> >>  - An alternative freezer implementation that itself relies on a
+> >>    special TASK state would loose TASK_TRACED/TASK_STOPPED and will
+> >>    result in misbehaviour.
+> >> 
+> >> As such, add additional state to task->jobctl to track this state
+> >> outside of task->__state.
+> >> 
+> >> NOTE: this doesn't actually fix anything yet, just adds extra state.
+> >> 
+> >> --EWB
+> >>   * didn't add a unnecessary newline in signal.h
+> >>   * Update t->jobctl in signal_wake_up and ptrace_signal_wake_up
+> >>     instead of in signal_wake_up_state.  This prevents the clearing
+> >>     of TASK_STOPPED and TASK_TRACED from getting lost.
+> >>   * Added warnings if JOBCTL_STOPPED or JOBCTL_TRACED are not cleared
+> >
+> > Hi Eric, Peter,
+> >
+> > On s390 this patch triggers warning at kernel/ptrace.c:272 when
+> > kill_child testcase from strace tool is repeatedly used (the source
+> > is attached for reference):
+> >
+> > while :; do
+> > 	strace -f -qq -e signal=none -e trace=sched_yield,/kill ./kill_child
+> > done
+> >
+> > It normally takes few minutes to cause the warning in -rc3, but FWIW
+> > it hits almost immediately for ptrace_stop-cleanup-for-v5.19 tag of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.
+> >
+> > Commit 7b0fe1367ef2 ("ptrace: Document that wait_task_inactive can't
+> > fail") suggests this WARN_ON_ONCE() is not really expected, yet we
+> > observe a child in __TASK_TRACED state. Could you please comment here?
+> >
+> 
+> For clarity the warning is that the child is not in __TASK_TRACED state.
+> 
+> The code is waiting for the code to stop in the scheduler in the
+> __TASK_TRACED state so that it can safely read and change the
+> processes state.  Some of that state is not even saved until the
+> process is scheduled out so we have to wait until the process
+> is stopped in the scheduler.
 
-On 5/26/22 14:42, Viresh Kumar wrote:
-> +/**
-> + * dev_pm_opp_clear_config() - Releases resources blocked for OPP configuration.
-> + * @opp_table: OPP table returned from dev_pm_opp_set_config().
-> + *
-> + * This allows all device OPP configurations to be cleared at once. This must be
-> + * called once for each call made to dev_pm_opp_set_config(), in order to free
-> + * the OPPs properly.
-> + *
-> + * Currently the first call itself ends up freeing all the OPP configurations,
-> + * while the later ones only drop the OPP table reference. This works well for
-> + * now as we would never want to use an half initialized OPP table and want to
-> + * remove the configurations together.
-> + */
-> +void dev_pm_opp_clear_config(struct opp_table *opp_table)
-> +{
-> +	if (opp_table->genpd_virt_devs)
-> +		dev_pm_opp_detach_genpd(opp_table);
-> +
-> +	if (opp_table->regulators)
-> +		dev_pm_opp_put_regulators(opp_table);
-> +
-> +	if (opp_table->supported_hw)
-> +		dev_pm_opp_put_supported_hw(opp_table);
-> +
-> +	if (opp_table->set_opp)
-> +		dev_pm_opp_unregister_set_opp_helper(opp_table);
-> +
-> +	if (opp_table->prop_name)
-> +		dev_pm_opp_put_prop_name(opp_table);
-> +
-> +	if (opp_table->clk_configured)
-> +		dev_pm_opp_put_clkname(opp_table);
-> +
-> +	dev_pm_opp_put_opp_table(opp_table);
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_opp_clear_config);
+So I assume (checked actually) the return 0 below from kernel/sched/core.c:
+wait_task_inactive() is where it bails out:
 
-1. I started to look at the Tegra regressions caused by these OPP
-patches and this one looks wrong to me because dev_pm_opp_set_config()
-could be invoked multiple times by different drivers for the same device
-and then you're putting table not in accordance to the config that was
-used by a particular driver.
+3303                 while (task_running(rq, p)) {
+3304                         if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
+3305                                 return 0;
+3306                         cpu_relax();
+3307                 }
 
-For example, if parent tegra-cpufreq driver sets supported_hw for
-cpu_dev and then cpufreq-dt also does dev_pm_opp_set_config(cpu_dev),
-then dev_pm_opp_clear_config(cpu_dev) of cpufreq-dt will put
-supported_hw(cpu_dev) of tegra-cpufreq. Hence this
-dev_pm_opp_set/clear_config() approach isn't viable, unless I'm missing
-something.
+Yet, the child task is always found in __TASK_TRACED state (as seen
+in crash dumps):
 
-2. Patches aren't bisectable, please make sure that all patches compile
-individually and without warnings.
+> 101447  11342  13      ce3a8100      RU   0.0   10040   4412  strace
+  101450  101447   0      bb04b200      TR   0.0    2272   1136  kill_child
+  108261  101447   2      d0b10100      TR   0.0    2272    532  kill_child
+crash> task bb04b200 __state
+PID: 101450  TASK: bb04b200          CPU: 0   COMMAND: "kill_child"
+  __state = 8,
 
-3. There is a new NULL dereference in the recent linux-next on Tegra in
-_set_opp() of the gpu/host1x driver. I'll take a closer look at this
-crash a bit later.
+crash> task d0b10100 __state
+PID: 108261  TASK: d0b10100          CPU: 2   COMMAND: "kill_child"
+  __state = 8,
 
-Unable to handle kernel NULL pointer dereference at virtual address 00000000
-[00000000] *pgd=00000000
-Internal error: Oops: 80000005 [#1] SMP ARM
-Modules linked in:
-CPU: 3 PID: 38 Comm: kworker/u8:1 Not tainted
-5.19.0-rc3-next-20220621-00013-g0f8bc1c418c4-dirty #18
-Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
-Workqueue: events_unbound deferred_probe_work_func
-PC is at 0x0
-LR is at _set_opp+0x15c/0x414
-pc : [<00000000>]    lr : [<c0afa928>]    psr: 20000013
-sp : df989b60  ip : df989b60  fp : df989ba4
-r10: 00000000  r9 : c21e4b40  r8 : c2861e34
-r7 : c21b3010  r6 : c28a5080  r5 : c2861e00  r4 : 00000000
-r3 : 00000000  r2 : c28a5080  r1 : c2861e00  r0 : c21b3010
-Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 10c5387d  Table: 8000404a  DAC: 00000051
-Register r0 information: slab kmalloc-1k start c21b3000 pointer offset
-16 size 1024
-Register r1 information: slab kmalloc-512 start c2861e00 pointer offset
-0 size 512
-Register r2 information: slab kmalloc-128 start c28a5080 pointer offset
-0 size 128
-Register r3 information: NULL pointer
-Register r4 information: NULL pointer
-Register r5 information: slab kmalloc-512 start c2861e00 pointer offset
-0 size 512
-Register r6 information: slab kmalloc-128 start c28a5080 pointer offset
-0 size 128
-Register r7 information: slab kmalloc-1k start c21b3000 pointer offset
-16 size 1024
-Register r8 information: slab kmalloc-512 start c2861e00 pointer offset
-52 size 512
-Register r9 information: slab task_struct start c21e4b40 pointer offset 0
-Register r10 information: NULL pointer
-Register r11 information: 2-page vmalloc region starting at 0xdf988000
-allocated at kernel_clone+0x64/0x43c
-Register r12 information: 2-page vmalloc region starting at 0xdf988000
-allocated at kernel_clone+0x64/0x43c
-Process kworker/u8:1 (pid: 38, stack limit = 0x(ptrval))
-Stack: (0xdf989b60 to 0xdf98a000)
-...
-Backtrace:
-_set_opp from dev_pm_opp_set_opp+0x70/0xd8
-r10:00000001 r9:000f4240 r8:c2848440 r7:c2848440 r6:c28a5080 r5:c21b3010
-r4:c2861e00
-dev_pm_opp_set_opp from tegra_pmc_core_pd_set_performance_state+0x50/0xb8
-r6:c2848440 r5:c1807654 r4:c28a5080
-tegra_pmc_core_pd_set_performance_state from
-_genpd_set_performance_state+0x1fc/0x288
-r6:c2848690 r5:c2848680 r4:000f4240
-_genpd_set_performance_state from _genpd_set_performance_state+0xb8/0x288
-r10:00000001 r9:000f4240 r8:c284a000 r7:c2848440 r6:c284a250 r5:c28a7180
-r4:000f4240
-_genpd_set_performance_state from genpd_set_performance_state+0xb8/0xd4
-r10:c0185b00 r9:c28a7580 r8:00000000 r7:00000000 r6:c284a000 r5:00000000
-r4:c28a7580
-genpd_set_performance_state from genpd_runtime_resume+0x228/0x29c
-r5:c21b3810 r4:c284a1d0
-genpd_runtime_resume from __rpm_callback+0x68/0x1a0
-r10:c0185b00 r9:00000004 r8:00000000 r7:c08dd55c r6:c2173800 r5:c08dd55c
-r4:c21b3810
-__rpm_callback from rpm_callback+0x60/0x64
-r9:00000004 r8:c21b3894 r7:c08dd55c r6:c2173800 r5:c21e4b40 r4:c21b3810
-rpm_callback from rpm_resume+0x608/0x83c
-r7:c08dd55c r6:c2173800 r5:c21e4b40 r4:c21b3810
-rpm_resume from __pm_runtime_resume+0x58/0xb4
-r10:c21e4b40 r9:c21b3810 r8:c21b3800 r7:00000000 r6:c21b3894 r5:60000013
-r4:c21b3810
-__pm_runtime_resume from host1x_probe+0x48c/0x700
-r7:00000000 r6:c2862504 r5:00000000 r4:c2862440
-host1x_probe from platform_probe+0x6c/0xcc
-r10:c202c00d r9:c21e4b40 r8:00000001 r7:00000000 r6:c1812420 r5:c21b3810
-r4:00000000
-platform_probe from really_probe+0xd8/0x300
-r7:00000000 r6:c1812420 r5:00000000 r4:c21b3810
-really_probe from __driver_probe_device+0x94/0xf4
-r7:0000000b r6:c21b3810 r5:c1812420 r4:c21b3810
-__driver_probe_device from driver_probe_device+0x40/0x114
-r5:df989e84 r4:c1901580
-driver_probe_device from __device_attach_driver+0xc4/0x108
-r9:c21e4b40 r8:00000001 r7:c08c0fb4 r6:c21b3810 r5:df989e84 r4:c1812420
-__device_attach_driver from bus_for_each_drv+0x8c/0xd0
-r7:c08c0fb4 r6:c21e4b40 r5:df989e84 r4:00000000
-bus_for_each_drv from __device_attach+0xb8/0x1e8
-r7:c21b3854 r6:c21e4b40 r5:c21b3810 r4:c21b3810
-__device_attach from device_initial_probe+0x1c/0x20
-r8:c1882620 r7:00000000 r6:c1814e90 r5:c21b3810 r4:c21b3810
-device_initial_probe from bus_probe_device+0x94/0x9c
-bus_probe_device from deferred_probe_work_func+0x88/0xb4
-r7:00000000 r6:c1814c00 r5:c1814bec r4:c21b3810
-deferred_probe_work_func from process_one_work+0x21c/0x548
-r7:c202c000 r6:c2006a00 r5:c23e8380 r4:c1814c14
-process_one_work from worker_thread+0x27c/0x5ac
-r10:00000088 r9:c2006a00 r8:c1703d40 r7:c2006a1c r6:c23e8398 r5:c2006a00
-r4:c23e8380
-worker_thread from kthread+0x100/0x120
-r10:00000000 r9:df831e7c r8:c23ed0c0 r7:c23e8380 r6:c014bcfc r5:c23ed000
-r4:c21e4b40
-kthread from ret_from_fork+0x14/0x2c
-Exception stack(0xdf989fb0 to 0xdf989ff8)
-9fa0:                                     00000000 00000000 00000000
-00000000
-9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-00000000
-9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c01539f4 r4:c23ed000
-Code: bad PC value
----[ end trace 0000000000000000 ]---
+> At least on s390 it looks like there is a race between SIGKILL and
+> ptrace_check_attach.  That isn't good.
+>
+> Reading the code below there is something missing because I don't see
+> anything making ptrace calls, and ptrace_check_attach (which contains
+> the warning) only happens in the ptrace syscall.
 
+That is what I believe strace does when calling that code:
 
--- 
-Best regards,
-Dmitry
+ 	strace -f -qq -e signal=none -e trace=sched_yield,/kill ./kill_child
+
+> Eric
+> 
+> 
+> 
+> > Thanks!
+> >
+> > /*
+> >  * Check for the corner case that previously lead to segfault
+> >  * due to an attempt to access unitialised tcp->s_ent.
+> >  *
+> >  * 13994 ????( <unfinished ...>
+> >  * ...
+> >  * 13994 <... ???? resumed>) = ?
+> >  *
+> >  * Copyright (c) 2019 The strace developers.
+> >  * All rights reserved.
+> >  *
+> >  * SPDX-License-Identifier: GPL-2.0-or-later
+> >  */
+> >
+> > #include "tests.h"
+> >
+> > #include <sched.h>
+> > #include <signal.h>
+> > #include <unistd.h>
+> > #include <sys/mman.h>
+> > #include <sys/wait.h>
+> >
+> > #define ITERS    10000
+> > #define SC_ITERS 10000
+> >
+> > int
+> > main(void)
+> > {
+> > 	volatile sig_atomic_t *const mem =
+> > 		mmap(NULL, get_page_size(), PROT_READ | PROT_WRITE,
+> > 		     MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> > 	if (mem == MAP_FAILED)
+> > 		perror_msg_and_fail("mmap");
+> >
+> > 	for (unsigned int i = 0; i < ITERS; ++i) {
+> > 		mem[0] = mem[1] = 0;
+> >
+> > 		const pid_t pid = fork();
+> > 		if (pid < 0)
+> > 			perror_msg_and_fail("fork");
+> >
+> > 		if (!pid) {
+> > 			/* wait for the parent */
+> > 			while (!mem[0])
+> > 				;
+> > 			/* let the parent know we are running */
+> > 			mem[1] = 1;
+> >
+> > 			for (unsigned int j = 0; j < SC_ITERS; j++)
+> > 				sched_yield();
+> >
+> > 			pause();
+> > 			return 0;
+> > 		}
+> >
+> > 		/* let the child know we are running */
+> > 		mem[0] = 1;
+> > 		/* wait for the child */
+> > 		while (!mem[1])
+> > 			;
+> >
+> > 		if (kill(pid, SIGKILL))
+> > 			perror_msg_and_fail("kill");
+> > 		if (wait(NULL) != pid)
+> > 			perror_msg_and_fail("wait");
+> > 	}
+> >
+> > 	return 0;
+> > }
