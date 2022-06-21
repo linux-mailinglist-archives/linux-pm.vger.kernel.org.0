@@ -2,89 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DF55535B9
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 17:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670BE553629
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 17:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352439AbiFUPRq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jun 2022 11:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S232449AbiFUPep (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jun 2022 11:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352464AbiFUPRp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 11:17:45 -0400
-Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA0E6B1D4
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 08:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=874mi
-        Ft/EXWqwThsbW0J9BjN7pqOHV57xpu59rNwMhE=; b=IgwSvuURY834b0ODJVgXQ
-        ++9vTjxDM2ddwYKf86Zp6va2cfhscRQep5xXnYPaST85O3uxqXCo3/MamRZd9VgK
-        jLAqwe+yJWhaHCBiTSUnUaexf5iNmJitqAL394Io7VsCcyv/2LLutYdbDikekYm4
-        K54euhnKjJGLCyWxa2FGxc=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp8 (Coremail) with SMTP id NORpCgCnXZID4bFifZRyGA--.42361S2;
-        Tue, 21 Jun 2022 23:17:24 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     sre@kernel.org, linux-pm@vger.kernel.org, windhl@126.com
-Subject: [PATCH v2] power/supply/olpc_battery: Hold the reference returned by of_find_compatible_node
-Date:   Tue, 21 Jun 2022 23:17:20 +0800
-Message-Id: <20220621151720.4083639-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229821AbiFUPeo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 11:34:44 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3FA13EA4
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 08:34:44 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id l6so4701108plg.11
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 08:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/V/+YYZrFlvtCdfb2sUBNlJeIodua+DE/MZpzGTItj0=;
+        b=EN5iNriTOwjp0S9DUzAk99diMPSRYxFc/YdvcYFmXhfaRnFbklR/2EQSSFRjZjSzI/
+         wvKb1rLBI3rT7bbvdEmJffWILQJb6oCRUiGSTqAnS+lthnXJbkBtyYy15Mxy5pQP1P8X
+         D7b4fUqEiIgGTxyzHUxAuyeO+Ft3E8DfMSaQlpKXXj7n2RDMnImOCowE/vCOlrBGL1kb
+         qx3rZQ7eaqAuLHIjiJ8vFiPyrvIRyYsGfy3xh7D4mgmlRa+aX0n1XTxMi6p8cnUPjRTH
+         2EqhTzUeYQijwJLopCODr46hf/95qJ0bVau6MgtNE7PSWt543N8Q+wXyNI3AWHabBlRk
+         q9Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/V/+YYZrFlvtCdfb2sUBNlJeIodua+DE/MZpzGTItj0=;
+        b=zXdjTZdO56aco0zd0KI9A7hMDAOPRl6PEyl8zHK37Zew0vnjZgY5If670y/UXQ9+ig
+         py0C6qyZSEz8NwSq0c4KNXmBaBIu5A1zJ67jI2jpq3TWYZ+pwP/a2iMyEUpVB6eV054z
+         74oaCB7VaqXhL1nIXZ/yxOxdtZ7F3EK4tfjd7fFAWTrXvqTGDwungOSnzR9aTVYb9Qw6
+         IwscEzrbHNpk+csb+ED0funx3TI1r/QMUhIdn+zL8RNg6sCkH51ULHbxb02jHt0mqKdv
+         jvHAhylfBw+SvQYqz2ZymGTvBU4YPisNmbbRpqKUSbOWrGIUbj3GkB9tnTohCY72giAd
+         pyjw==
+X-Gm-Message-State: AJIora+ppjrpJAfdZw1GFDTouSzzKHH8KvxRGQxBsat0FSvTuREeXEok
+        401YA4IM3QNznTRg9oCOLn3yzA==
+X-Google-Smtp-Source: AGRyM1uRAdNlEE4ncewgTKXm3tHw89Dn6NW6okZTTfjqi1GF5bAvxsdZ1dQo8KKj41BGI5sUbEDZyg==
+X-Received: by 2002:a17:903:1cb:b0:16a:3a9d:4813 with SMTP id e11-20020a17090301cb00b0016a3a9d4813mr3223207plh.158.1655825683573;
+        Tue, 21 Jun 2022 08:34:43 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902a3c500b0016a38fa3f95sm1693856plb.118.2022.06.21.08.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 08:34:43 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 21:04:40 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/31] OPP: Add dev_pm_opp_set_config() and friends
+Message-ID: <20220621153440.aazq7cjiq5vgkvxy@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <9c4b2bfe628bf7a583a96cee7cc3539e2e66245e.1653564321.git.viresh.kumar@linaro.org>
+ <da2f1552-6896-5ae8-4837-28f31f3031a9@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NORpCgCnXZID4bFifZRyGA--.42361S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Xr1UAry5AF1kuF4DZF4DCFg_yoW8JF1UpF
-        Z8CrWY9FWrJFWrGa1IyF18CFy3Kw42yFW3JFy3A34j9347XFWkJr10qryY9rn8JFWFkF4r
-        trn3tw1rZF1akwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0p_5l15UUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgwnF1-HZWTqrwAAs6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <da2f1552-6896-5ae8-4837-28f31f3031a9@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In olpc_battery_probe(), we should hold the reference returned by
-of_find_compatible_node() and use it to call of_node_put() for
-refcount balance.
+Hi Dmitry,
 
-Signed-off-by: Liang He <windhl@126.com>
----
- changelog:
+On 21-06-22, 18:09, Dmitry Osipenko wrote:
+> 1. I started to look at the Tegra regressions caused by these OPP
+> patches and this one looks wrong to me because dev_pm_opp_set_config()
+> could be invoked multiple times by different drivers for the same device
+> and then you're putting table not in accordance to the config that was
+> used by a particular driver.
+> 
+> For example, if parent tegra-cpufreq driver sets supported_hw for
+> cpu_dev and then cpufreq-dt also does dev_pm_opp_set_config(cpu_dev),
+> then dev_pm_opp_clear_config(cpu_dev) of cpufreq-dt will put
+> supported_hw(cpu_dev) of tegra-cpufreq. Hence this
+> dev_pm_opp_set/clear_config() approach isn't viable, unless I'm missing
+> something.
 
- v2: fix bug intro-ed by v1, reported by lkp.
- v1: add hold-ref code.
+Yeah, I know that and I didn't put a lot of effort into it because of multiple
+reasons:
 
- drivers/power/supply/olpc_battery.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+- That is partially the existing behavior. For example, we can call the
+  set-supported-hw interface right now for each CPU of a policy, which many
+  drivers do right now btw, and then while putting them back we drop the
+  resource on the first call itself and not on the last CPU.
 
-diff --git a/drivers/power/supply/olpc_battery.c b/drivers/power/supply/olpc_battery.c
-index e0476ec06601..a5da20ffd685 100644
---- a/drivers/power/supply/olpc_battery.c
-+++ b/drivers/power/supply/olpc_battery.c
-@@ -635,6 +635,7 @@ static int olpc_battery_probe(struct platform_device *pdev)
- 	struct power_supply_config bat_psy_cfg = {};
- 	struct power_supply_config ac_psy_cfg = {};
- 	struct olpc_battery_data *data;
-+	struct device_node *np;
- 	uint8_t status;
- 	uint8_t ecver;
- 	int ret;
-@@ -649,7 +650,9 @@ static int olpc_battery_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	if (of_find_compatible_node(NULL, NULL, "olpc,xo1.75-ec")) {
-+	np = of_find_compatible_node(NULL, NULL, "olpc,xo1.75-ec");
-+	if (np) {
-+		of_node_put(np);
- 		/* XO 1.75 */
- 		data->new_proto = true;
- 		data->little_endian = true;
+- Yes, with the new patchset we will drop the resources even for an unrelated
+  resource call, I will think again about it though and maybe add a flag field
+  to notify which all resources to clean, but even in the current case it should
+  be fine as we won't be able to use a half initialized OPP table anyway (which
+  may actually be harmful). What I mean is, if you set regulators and
+  supported-hw in the beginning, then on un-init, we won't want to work with
+  only one of them in place. We always want all of them.
+
+> 2. Patches aren't bisectable, please make sure that all patches compile
+> individually and without warnings.
+
+That is strange. I will try build over each and every patch (again). Also I
+think the kernel bots (from LKP) test individual patches and I haven't got any
+failure messages yet. Which patch broke the build for you ?
+
+> 3. There is a new NULL dereference in the recent linux-next on Tegra in
+> _set_opp() of the gpu/host1x driver. I'll take a closer look at this
+> crash a bit later.
+
+I just fixed a bug for devices which don't have the clock property, but just
+level or bandwidth. Not sure if that is the one that caused trouble for you. It
+is pushed to opp/linux-next.
+
 -- 
-2.25.1
-
+viresh
