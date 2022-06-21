@@ -2,128 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAE3552CB3
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 10:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27562552CF8
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 10:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348105AbiFUIU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jun 2022 04:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S236616AbiFUI1I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jun 2022 04:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348367AbiFUITN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 04:19:13 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9223D201A9;
-        Tue, 21 Jun 2022 01:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655799552; x=1687335552;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VnOb25EE+Xbwm3fJVJkXzX3ptStChGTjWuHiXzYZZDY=;
-  b=VUctaRUxW05Wr3yf71nMshUEFI1tnrCjBzFvbbt/w0TuYf1HNHvdilvY
-   sj7UFAK4+hM0NS7taMPGo+iwCE9jDZ3joU8rGF18G2rMD6nbsgAFMQYdV
-   fffh0HdKQreTBaZzagicsRnxPZcyXGKI/EhzE4tNICrkwQcHD6+sMzHbU
-   4pDa1+OJu74nxt8QNRXr9Zcj6SbsuwB2Rhioy9ausDjPJeUGDD68yMHta
-   fGC9sFB3VHVB0tzfbyUZ1NtVbnNLN5TZrY+l6KBzMbR2WA5t72uvCUjNB
-   a9T/QPX8CNaMnavgs4P24HM81NzX61F0GGq2oI+m97uIlkC+cAuiAsMjs
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="263094907"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="263094907"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 01:19:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="676894865"
-Received: from lkp-server01.sh.intel.com (HELO e0735e231192) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 01:19:09 -0700
-Received: from kbuild by e0735e231192 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3Z6L-00004d-1e;
-        Tue, 21 Jun 2022 08:19:09 +0000
-Date:   Tue, 21 Jun 2022 16:18:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [rafael-pm:bleeding-edge 20/24] drivers/acpi/scan.c:2449:5: warning:
- no previous prototype for function 'acpi_bus_trim_one'
-Message-ID: <202206211629.ncqadywd-lkp@intel.com>
+        with ESMTP id S1348243AbiFUI0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 04:26:53 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9760620F6E
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 01:26:41 -0700 (PDT)
+X-UUID: ad798b01dc17493091eaec5238e0e9bd-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:3deda79b-99fe-49e1-af61-c963d26803cd,OB:10,L
+        OB:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:56
+X-CID-INFO: VERSION:1.1.6,REQID:3deda79b-99fe-49e1-af61-c963d26803cd,OB:10,LOB
+        :0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:56
+X-CID-META: VersionHash:b14ad71,CLOUDID:57c40d38-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:2c42c87310f4,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: ad798b01dc17493091eaec5238e0e9bd-20220621
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1387115645; Tue, 21 Jun 2022 16:26:36 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 21 Jun 2022 16:26:35 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 16:26:35 +0800
+Message-ID: <1b58a827f2b7a4798091c785a845465ed18e331a.camel@mediatek.com>
+Subject: Re: [PATCH] PM / devfreq: mediatek: Fix unnecessary check of drvdata
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     <matthias.bgg@kernel.org>, <dan.carpenter@oracle.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Date:   Tue, 21 Jun 2022 16:26:35 +0800
+In-Reply-To: <20220620154347.14756-1-matthias.bgg@kernel.org>
+References: <20220620154347.14756-1-matthias.bgg@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   ef9088c776e0c49411bfb413ad43d110a9de1519
-commit: e511ff6b4174fa81ca7ee16f8c17f7362c08fadf [20/24] ACPI: scan: Walk ACPI device's children using driver core
-config: x86_64-randconfig-a013-20220620 (https://download.01.org/0day-ci/archive/20220621/202206211629.ncqadywd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=e511ff6b4174fa81ca7ee16f8c17f7362c08fadf
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout e511ff6b4174fa81ca7ee16f8c17f7362c08fadf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
+On Mon, 2022-06-20 at 17:43 +0200, matthias.bgg@kernel.org wrote:
+> From: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> Probe function will error out if drvdata 'mtk_ccifreq_drv' is null.
+> So when mtk_ccifreq_target get's called, the drv pointer will never
+> be
+> NULL. This fixes a static checker warning.
+> 
+> Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+>  drivers/devfreq/mtk-cci-devfreq.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-
+> cci-devfreq.c
+> index 71abb3fbd042..ad05b152071d 100644
+> --- a/drivers/devfreq/mtk-cci-devfreq.c
+> +++ b/drivers/devfreq/mtk-cci-devfreq.c
+> @@ -132,9 +132,6 @@ static int mtk_ccifreq_target(struct device *dev,
+> unsigned long *freq,
+>  	unsigned long opp_rate;
+>  	int voltage, pre_voltage, inter_voltage, target_voltage, ret;
+>  
+> -	if (!drv)
+> -		return -EINVAL;
+> -
+>  	if (drv->pre_freq == *freq)
+>  		return 0;
+>  
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Matthias,
 
-All warnings (new ones prefixed by >>):
+Thank you for improving this driver.
+I've tested this patch on the MT8183 and MT8186 platforms.
 
->> drivers/acpi/scan.c:2449:5: warning: no previous prototype for function 'acpi_bus_trim_one' [-Wmissing-prototypes]
-   int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
-       ^
-   drivers/acpi/scan.c:2449:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
-   ^
-   static 
-   1 warning generated.
+Tested-by: Johnson Wang <johnson.wang@mediatek.com>
 
+BRs,
+Johnson Wang
 
-vim +/acpi_bus_trim_one +2449 drivers/acpi/scan.c
-
-  2448	
-> 2449	int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
-  2450	{
-  2451		struct acpi_scan_handler *handler = adev->handler;
-  2452	
-  2453		acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
-  2454	
-  2455		adev->flags.match_driver = false;
-  2456		if (handler) {
-  2457			if (handler->detach)
-  2458				handler->detach(adev);
-  2459	
-  2460			adev->handler = NULL;
-  2461		} else {
-  2462			device_release_driver(&adev->dev);
-  2463		}
-  2464		/*
-  2465		 * Most likely, the device is going away, so put it into D3cold before
-  2466		 * that.
-  2467		 */
-  2468		acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
-  2469		adev->flags.initialized = false;
-  2470		acpi_device_clear_enumerated(adev);
-  2471	
-  2472		return 0;
-  2473	}
-  2474	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
