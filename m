@@ -2,234 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCFD5532D5
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 15:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8E85533EC
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 15:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiFUNB5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jun 2022 09:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
+        id S230088AbiFUNoJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jun 2022 09:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345250AbiFUNBh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 09:01:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804012A73B;
-        Tue, 21 Jun 2022 06:01:33 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LCgBBv008724;
-        Tue, 21 Jun 2022 13:00:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=INIoxh3uB/g84CnlKEVK7DkW60H3xY6l/Dj67LAzEhU=;
- b=d5wnwulCcQfGxdcD2fd3NLhuX5nfTX/9Tv38VbiMlXBWUr1sebIhxyCPZabwGW9JNyYK
- AgnaliH6U98/Z9p/Cx3OCsIwCXCXJ5wZOj+QkeOUW+sDV1axiAbeT1FCesecY8KiDuhx
- ClvwWnnLC5vTqSu1/0IuliYM1PCGJmydsvquNnpFQgME3SVhAjdnpv/2CUNRO8kYZbtN
- dqlPh9/xUyKeQWwQq8mdSpWdRnZ2AtLViKQlQD/AA7A4oOoH4KCQl6MNAVEYYlQft1Dg
- 7c9YEjCo9JEZMDbacwKZ1MaWhR7kSLnwQHfEOVjpQIulYUAwcZJQm7Se/PyjPa9P7Zbu 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gue7n8h5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 13:00:30 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25LCgIkg008927;
-        Tue, 21 Jun 2022 13:00:29 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gue7n8h3b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 13:00:29 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25LCpm6Q023948;
-        Tue, 21 Jun 2022 13:00:27 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gs6b9429v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 13:00:27 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25LD0O3e15008038
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jun 2022 13:00:24 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C48BB42054;
-        Tue, 21 Jun 2022 13:00:24 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C64842045;
-        Tue, 21 Jun 2022 13:00:23 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.144.178])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 21 Jun 2022 13:00:23 +0000 (GMT)
-Date:   Tue, 21 Jun 2022 15:00:21 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <20220505182645.497868-12-ebiederm@xmission.com>
-Content-Type: multipart/mixed; boundary="N4j0vMBA8JArVaRj"
-Content-Disposition: inline
-In-Reply-To: <20220505182645.497868-12-ebiederm@xmission.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: DvpD6a9DpHAX-uGDu1YH6gtZIsnZ5-px
-X-Proofpoint-ORIG-GUID: j2ZkUQPeXm04GYSgMt7nlbITLz7lQeFc
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S1351315AbiFUNoI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 09:44:08 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450CC245AE
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 06:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655819047; x=1687355047;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9dSekwQqCfDA8BJtDMzg9DHmAGTfHg0I7RjcFIpduZY=;
+  b=Zldo3K/L7KSRM+jTGQmFyZaAhIrY+g6Cpf6ueHHuAEF70ZqIY6HQuaF0
+   OSHeOxCRjU5HQNor5mtYBzv6hz87eP+Pt1Dg7vMkyU7Zps0vRkCZLIfUK
+   KLWkD0aF+flFRm9gw2nlDNcCMhalgxiBDePF6zSGyXauo8TSzaO2aCU8P
+   VfdcLR18pR6LUeAVoZM86Ta1UQai/RpTnDFbvZxz5LnyjbuyMr6WdeDBg
+   hA+CMxHejj/jhWN2CLO/Jlzz7KwvVsmNPrpiOwb5y7nL4xDb0+Q+Qy0Vz
+   tjgqs4gNTBpaUsIteT6bOX8uRqMnXUdAwIotZEnmvpwllMoYj+RMbjiYH
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="259942011"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="259942011"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 06:44:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="591655381"
+Received: from lkp-server02.sh.intel.com (HELO 08b4593be841) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Jun 2022 06:44:05 -0700
+Received: from kbuild by 08b4593be841 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3eAm-00002H-Tp;
+        Tue, 21 Jun 2022 13:44:04 +0000
+Date:   Tue, 21 Jun 2022 21:43:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liang He <windhl@126.com>, sre@kernel.org, linux-pm@vger.kernel.org
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH] power/supply/olpc_battery: Hold the reference returned
+ by of_find_compatible_node
+Message-ID: <202206212112.5idCYSI1-lkp@intel.com>
+References: <20220621072408.4080461-1-windhl@126.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-21_05,2022-06-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- phishscore=0 priorityscore=1501 clxscore=1011 adultscore=0 impostorscore=0
- mlxlogscore=999 mlxscore=0 suspectscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206210055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621072408.4080461-1-windhl@126.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Liang,
 
---N4j0vMBA8JArVaRj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 
+Thank you for the patch! Perhaps something to improve:
 
-On Thu, May 05, 2022 at 01:26:45PM -0500, Eric W. Biederman wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
-> 
-> Currently ptrace_stop() / do_signal_stop() rely on the special states
-> TASK_TRACED and TASK_STOPPED resp. to keep unique state. That is, this
-> state exists only in task->__state and nowhere else.
-> 
-> There's two spots of bother with this:
-> 
->  - PREEMPT_RT has task->saved_state which complicates matters,
->    meaning task_is_{traced,stopped}() needs to check an additional
->    variable.
-> 
->  - An alternative freezer implementation that itself relies on a
->    special TASK state would loose TASK_TRACED/TASK_STOPPED and will
->    result in misbehaviour.
-> 
-> As such, add additional state to task->jobctl to track this state
-> outside of task->__state.
-> 
-> NOTE: this doesn't actually fix anything yet, just adds extra state.
-> 
-> --EWB
->   * didn't add a unnecessary newline in signal.h
->   * Update t->jobctl in signal_wake_up and ptrace_signal_wake_up
->     instead of in signal_wake_up_state.  This prevents the clearing
->     of TASK_STOPPED and TASK_TRACED from getting lost.
->   * Added warnings if JOBCTL_STOPPED or JOBCTL_TRACED are not cleared
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on linus/master v5.19-rc3 next-20220621]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Hi Eric, Peter,
+url:    https://github.com/intel-lab-lkp/linux/commits/Liang-He/power-supply-olpc_battery-Hold-the-reference-returned-by-of_find_compatible_node/20220621-152751
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220621/202206212112.5idCYSI1-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/911b0892099263f0acd11bd5ae75509f9ac677db
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liang-He/power-supply-olpc_battery-Hold-the-reference-returned-by-of_find_compatible_node/20220621-152751
+        git checkout 911b0892099263f0acd11bd5ae75509f9ac677db
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/power/supply/
 
-On s390 this patch triggers warning at kernel/ptrace.c:272 when
-kill_child testcase from strace tool is repeatedly used (the source
-is attached for reference):
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-while :; do
-	strace -f -qq -e signal=none -e trace=sched_yield,/kill ./kill_child
-done
+All warnings (new ones prefixed by >>):
 
-It normally takes few minutes to cause the warning in -rc3, but FWIW
-it hits almost immediately for ptrace_stop-cleanup-for-v5.19 tag of
-git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.
+   drivers/power/supply/olpc_battery.c: In function 'olpc_battery_probe':
+   drivers/power/supply/olpc_battery.c:653:67: error: expected ';' before 'if'
+     653 |         np = of_find_compatible_node(NULL, NULL, "olpc,xo1.75-ec")
+         |                                                                   ^
+         |                                                                   ;
+     654 |         if (np) {
+         |         ~~                                                         
+>> drivers/power/supply/olpc_battery.c:639:17: warning: unused variable 'status' [-Wunused-variable]
+     639 |         uint8_t status;
+         |                 ^~~~~~
+   drivers/power/supply/olpc_battery.c:638:29: warning: variable 'np' set but not used [-Wunused-but-set-variable]
+     638 |         struct device_node *np;
+         |                             ^~
 
-Commit 7b0fe1367ef2 ("ptrace: Document that wait_task_inactive can't
-fail") suggests this WARN_ON_ONCE() is not really expected, yet we
-observe a child in __TASK_TRACED state. Could you please comment here?
 
-Thanks!
+vim +/status +639 drivers/power/supply/olpc_battery.c
 
---N4j0vMBA8JArVaRj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="kill_child.c"
+cae659af87288a drivers/power/olpc_battery.c        Daniel Drake        2011-08-10  632  
+c8afa6406e60ae drivers/power/olpc_battery.c        Bill Pemberton      2012-11-19  633  static int olpc_battery_probe(struct platform_device *pdev)
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  634  {
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  635  	struct power_supply_config bat_psy_cfg = {};
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  636  	struct power_supply_config ac_psy_cfg = {};
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  637  	struct olpc_battery_data *data;
+911b0892099263 drivers/power/supply/olpc_battery.c Liang He            2022-06-21  638  	struct device_node *np;
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04 @639  	uint8_t status;
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  640  	uint8_t ecver;
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  641  	int ret;
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  642  
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  643  	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  644  	if (!data)
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  645  		return -ENOMEM;
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  646  	platform_set_drvdata(pdev, data);
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  647  
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  648  	/* See if the EC is already there and get the EC revision */
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  649  	ret = olpc_ec_cmd(EC_FIRMWARE_REV, NULL, 0, &ecver, 1);
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  650  	if (ret)
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  651  		return ret;
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  652  
+911b0892099263 drivers/power/supply/olpc_battery.c Liang He            2022-06-21  653  	np = of_find_compatible_node(NULL, NULL, "olpc,xo1.75-ec")
+911b0892099263 drivers/power/supply/olpc_battery.c Liang He            2022-06-21  654  	if (np) {
+911b0892099263 drivers/power/supply/olpc_battery.c Liang He            2022-06-21  655  		of_node_put(np);
+76311b9a329554 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  656  		/* XO 1.75 */
+76311b9a329554 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  657  		data->new_proto = true;
+76311b9a329554 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  658  		data->little_endian = true;
+76311b9a329554 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  659  	} else if (ecver > 0x44) {
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  660  		/* XO 1 or 1.5 with a new EC firmware. */
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  661  		data->new_proto = true;
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  662  	} else if (ecver < 0x44) {
+484d6d50cca394 drivers/power/olpc_battery.c        Andres Salomon      2008-05-02  663  		/*
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  664  		 * We've seen a number of EC protocol changes; this driver
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  665  		 * requires the latest EC protocol, supported by 0x44 and above.
+484d6d50cca394 drivers/power/olpc_battery.c        Andres Salomon      2008-05-02  666  		 */
+484d6d50cca394 drivers/power/olpc_battery.c        Andres Salomon      2008-05-02  667  		printk(KERN_NOTICE "OLPC EC version 0x%02x too old for "
+8ecefda2226203 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  668  			"battery driver.\n", ecver);
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  669  		return -ENXIO;
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  670  	}
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  671  
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  672  	ret = olpc_ec_cmd(EC_BAT_STATUS, NULL, 0, &status, 1);
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  673  	if (ret)
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  674  		return ret;
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  675  
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  676  	/* Ignore the status. It doesn't actually matter */
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  677  
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  678  	ac_psy_cfg.of_node = pdev->dev.of_node;
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  679  	ac_psy_cfg.drv_data = data;
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  680  
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  681  	data->olpc_ac = devm_power_supply_register(&pdev->dev, &olpc_ac_desc,
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  682  								&ac_psy_cfg);
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  683  	if (IS_ERR(data->olpc_ac))
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  684  		return PTR_ERR(data->olpc_ac);
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  685  
+f7a228eaf4f8aa drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  686  	if (of_device_is_compatible(pdev->dev.of_node, "olpc,xo1.5-battery")) {
+f7a228eaf4f8aa drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  687  		/* XO-1.5 */
+297d716f6260cc drivers/power/olpc_battery.c        Krzysztof Kozlowski 2015-03-12  688  		olpc_bat_desc.properties = olpc_xo15_bat_props;
+297d716f6260cc drivers/power/olpc_battery.c        Krzysztof Kozlowski 2015-03-12  689  		olpc_bat_desc.num_properties = ARRAY_SIZE(olpc_xo15_bat_props);
+f7a228eaf4f8aa drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  690  	} else {
+f7a228eaf4f8aa drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  691  		/* XO-1 */
+297d716f6260cc drivers/power/olpc_battery.c        Krzysztof Kozlowski 2015-03-12  692  		olpc_bat_desc.properties = olpc_xo1_bat_props;
+297d716f6260cc drivers/power/olpc_battery.c        Krzysztof Kozlowski 2015-03-12  693  		olpc_bat_desc.num_properties = ARRAY_SIZE(olpc_xo1_bat_props);
+c566d299f91bdb drivers/power/olpc_battery.c        Daniel Drake        2010-12-29  694  	}
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  695  
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  696  	bat_psy_cfg.of_node = pdev->dev.of_node;
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  697  	bat_psy_cfg.drv_data = data;
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  698  	bat_psy_cfg.attr_grp = olpc_bat_sysfs_groups;
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  699  
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  700  	data->olpc_bat = devm_power_supply_register(&pdev->dev, &olpc_bat_desc,
+31e220877981d0 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  701  								&bat_psy_cfg);
+b0280d05804ae8 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  702  	if (IS_ERR(data->olpc_bat))
+b0280d05804ae8 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  703  		return PTR_ERR(data->olpc_bat);
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  704  
+cae659af87288a drivers/power/olpc_battery.c        Daniel Drake        2011-08-10  705  	if (olpc_ec_wakeup_available()) {
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  706  		device_set_wakeup_capable(&data->olpc_ac->dev, true);
+33554d818a9562 drivers/power/supply/olpc_battery.c Lubomir Rintel      2019-04-18  707  		device_set_wakeup_capable(&data->olpc_bat->dev, true);
+cae659af87288a drivers/power/olpc_battery.c        Daniel Drake        2011-08-10  708  	}
+cae659af87288a drivers/power/olpc_battery.c        Daniel Drake        2011-08-10  709  
+c3503fd0255824 drivers/power/olpc_battery.c        Daniel Drake        2011-08-10  710  	return 0;
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  711  }
+fb972873a76722 drivers/power/olpc_battery.c        David Woodhouse     2007-05-04  712  
 
-/*
- * Check for the corner case that previously lead to segfault
- * due to an attempt to access unitialised tcp->s_ent.
- *
- * 13994 ????( <unfinished ...>
- * ...
- * 13994 <... ???? resumed>) = ?
- *
- * Copyright (c) 2019 The strace developers.
- * All rights reserved.
- *
- * SPDX-License-Identifier: GPL-2.0-or-later
- */
-
-#include "tests.h"
-
-#include <sched.h>
-#include <signal.h>
-#include <unistd.h>
-#include <sys/mman.h>
-#include <sys/wait.h>
-
-#define ITERS    10000
-#define SC_ITERS 10000
-
-int
-main(void)
-{
-	volatile sig_atomic_t *const mem =
-		mmap(NULL, get_page_size(), PROT_READ | PROT_WRITE,
-		     MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	if (mem == MAP_FAILED)
-		perror_msg_and_fail("mmap");
-
-	for (unsigned int i = 0; i < ITERS; ++i) {
-		mem[0] = mem[1] = 0;
-
-		const pid_t pid = fork();
-		if (pid < 0)
-			perror_msg_and_fail("fork");
-
-		if (!pid) {
-			/* wait for the parent */
-			while (!mem[0])
-				;
-			/* let the parent know we are running */
-			mem[1] = 1;
-
-			for (unsigned int j = 0; j < SC_ITERS; j++)
-				sched_yield();
-
-			pause();
-			return 0;
-		}
-
-		/* let the child know we are running */
-		mem[0] = 1;
-		/* wait for the child */
-		while (!mem[1])
-			;
-
-		if (kill(pid, SIGKILL))
-			perror_msg_and_fail("kill");
-		if (wait(NULL) != pid)
-			perror_msg_and_fail("wait");
-	}
-
-	return 0;
-}
-
---N4j0vMBA8JArVaRj--
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
