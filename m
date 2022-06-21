@@ -2,107 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4125552EAA
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 11:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC24553199
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 14:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349442AbiFUJkO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jun 2022 05:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
+        id S1350387AbiFUMDs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jun 2022 08:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349351AbiFUJkH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 05:40:07 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C00327CDF
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 02:39:55 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id u8-20020a4ae688000000b0041b8dab7f71so2594884oot.7
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 02:39:55 -0700 (PDT)
+        with ESMTP id S1350389AbiFUMDq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 08:03:46 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426EA2B1BE
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 05:03:43 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id e40so6491229eda.2
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 05:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=NKhg6kSkfnglJlsPDVUWhCY3Iibudx7OhZC5CePFgeNekYJKNrcmU8wB8gkktmjPqY
-         f0o4DET3nwW7oGb1WQAmWVCm6yLISrVrQXMY/9qoCppMNLX7K/jA/JZ+JMs1mNT38j+N
-         qSlM2vTiSOIkQo5cZ6oY4dkMVda7fWn0vzKRT295Q67AStI8u0BTanvw38uSxo4IMvFm
-         mtbeFJOQugEk6bmbrSLJZHxNWvSEoU0AT9TQz59V3jAGDZbWiI6U0Fx8UlroTYMr9wGQ
-         +xC78kHT5AZK7k/f6wmWhdDj3ThC5Cy20ctCKCcYvb/idPExEpgvQXB/UX/ziCu3vO07
-         Q2/g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=20hOXgHS4fSMKzf2+VEVhuMt/xTY7rwW+BkuR688jQI=;
+        b=G0fDoM6iYkilX2J2us0oDAnu2OXLTFoGwQGcIQ61gW+KroUP3F34RD4BJ1IlsFeOKi
+         8f8+8bvCxI+BjoQhqGDC8Bmih/uM2UMNh0HfP5LHcTP5thFbXw57Wl/JjRk3EIaphPgC
+         /r9iH8r0MZLQ/ZiseG3jh/J+adm1eZ8inUGHNLerNsDK1bRyGyI9t7y5tTAvDDVdeB1B
+         xwLgffZMmNEJhBSsXCtiJaQ53o6MWqYnFwBx1ozBtod/JlyyMz+pR8DZEdtPNbe/8IO5
+         pZskEbg504lpOOtekPsnMcsUaoBfJ2WNfNfE5rDxevNShYsJWXp++OGVY0izxGKuJIRl
+         k4pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=Xf8e6PSiwSSuN26BFK6tPMq9jEQfkIyhwZSnZO3aayoMBoDt8t/f2i+q6ih2y9poIC
-         m3fCszSaV2aBn6CPqFbAzLNIxIbEg3TVGkFUnoeejKMyjNdSWbXFlk60gKJlz/qJ14TL
-         oQ1ZaDoxm6TjS+TLTtTp+aT1VJycB2xDu8ChE+BF6/VhsDuVtVlvta5c+gyQN/V+Bn/M
-         JT6htdoNS4bZWWQKv/aB1DLLFEDJkITzl6iAwarYuY5s2hfnSN6uy8M9tbGrXSqWKTRR
-         60rgSkrCGJrPM56ede0cpuLZxz751V8fqFypG2oOLJeM/rvJfbVr1SPX09vPUX7i49YQ
-         zN0w==
-X-Gm-Message-State: AJIora/Stw0WEywTxHckF2n3QK49Y1YkFMDeTJHm5qR54MCggDHzKiDE
-        ZrcN89wmytEstJwH+dJiRzUMM6H2ZANfNCsKdeZQZgdsW2uJtTX/
-X-Google-Smtp-Source: AGRyM1sTF/SvvxCyraPE52znD36ZX02jNmxmam87lP8bWzXT3yTfChS1a9JgJI9LjBXh9tpS4qLO5E/t+5efudcEruY=
-X-Received: by 2002:a0d:d7c7:0:b0:317:bfe8:4f2 with SMTP id
- z190-20020a0dd7c7000000b00317bfe804f2mr12417910ywd.276.1655804384555; Tue, 21
- Jun 2022 02:39:44 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=20hOXgHS4fSMKzf2+VEVhuMt/xTY7rwW+BkuR688jQI=;
+        b=z6jAiWwiKP2vmYZIwpSqeMCwzHlVzePO8ipHwffEuTQBMV2xvvZ3LR+6GmngAGiJce
+         YWtZ8IJBlrnMu/NVnNWTX4+xpdSd1g7dTA1agZtU/xEcAvxdtEZo9LQfqH1DGJbTsdXL
+         tFCwCjun3Pn/7jRLgZ1S7MZbZ2O4lBHVwP+C9iRG97qCKwOLXxdp1SaOdeMcFvgoT4Io
+         vCJ6MlFcWWs0eoFFyhFjipVakt/AIokuJo12OAnHXaBOe3iqr/2xOt/naXW4bjSXmdve
+         UnxThXdxU6FaydTw/D6fZG7vv6L0B3KJzfihvkQgaJailBhJyV1yMm0eC2oXUfXXoVk6
+         GsjQ==
+X-Gm-Message-State: AJIora/BwuM1CxELDIdho1aADHMKCRddyO4VGM6xtiN5/JdQdyVGpw/t
+        0mH9iV8fQyEC5573ovijjSYucw==
+X-Google-Smtp-Source: AGRyM1vuqpi73lfGfP1AhQV/V6GZDUbkiFuWxRqJMB+M0pVkbVaH3yMP1muhb8X6319Kpo4FNFG3DQ==
+X-Received: by 2002:a05:6402:3689:b0:435:95b0:edf2 with SMTP id ej9-20020a056402368900b0043595b0edf2mr3480378edb.279.1655813021696;
+        Tue, 21 Jun 2022 05:03:41 -0700 (PDT)
+Received: from [192.168.0.220] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170906840c00b00706c50870a0sm7470520ejx.194.2022.06.21.05.03.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 05:03:41 -0700 (PDT)
+Message-ID: <3e02909d-131a-7899-f02b-fa0afcbef1d9@linaro.org>
+Date:   Tue, 21 Jun 2022 14:03:39 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:7010:e10a:b0:2d9:e631:94d0 with HTTP; Tue, 21 Jun 2022
- 02:39:44 -0700 (PDT)
-Reply-To: dimitryedik@gmail.com
-From:   Dimitry Edik <lsbthdwrds@gmail.com>
-Date:   Tue, 21 Jun 2022 02:39:44 -0700
-Message-ID: <CAGrL05aBO8rbFuij24J-APa+Luis69gEjhj35iv_GZfkHCVYDQ@mail.gmail.com>
-Subject: Dear Partner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:c30 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lsbthdwrds[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 03/15] dt-bindings: leds: mt6370: Add Mediatek mt6370
+ current sink type LED indicator
+Content-Language: en-US
+To:     szuni chen <szunichen@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        ChiYuan Huang <cy_huang@richtek.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-4-peterwu.pub@gmail.com>
+ <91e9e3af-8208-7535-1864-08744f934593@linaro.org>
+ <CA+hk2fZbh0=8gurGS95XpXrYyF3NbwFbFMcygcrW_q10m0zinA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CA+hk2fZbh0=8gurGS95XpXrYyF3NbwFbFMcygcrW_q10m0zinA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Dear,
+On 20/06/2022 05:07, szuni chen wrote:
+> Dear Krzysztof,
+> 
+> Thank you for the valuable command.
+> 
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年6月17日 週五 清晨5:09寫道：
+>>
+>> On 13/06/2022 04:11, ChiaEn Wu wrote:
+>>> From: ChiYuan Huang <cy_huang@richtek.com>
+>>>
+>>> Add Mediatek mt6370 current sink type LED indicator binding documentation.
+>>>
+>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+>>> ---
+>>>  .../leds/mediatek,mt6370-indicator.yaml       | 48 +++++++++++++++++++
+>>>  1 file changed, 48 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
+>>> new file mode 100644
+>>> index 000000000000..42b96c8047a3
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
+>>> @@ -0,0 +1,48 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/leds/mediatek,mt6370-indicator.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: LED driver for MT6370 PMIC from MediaTek Integrated.
+>>> +
+>>> +maintainers:
+>>> +  - Alice Chen <alice_chen@richtek.com>
+>>> +
+>>> +description: |
+>>> +  This module is part of the MT6370 MFD device.
+>>> +  Add MT6370 LED driver include 4-channel RGB LED support Register/PWM/Breath Mode
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: mediatek,mt6370-indicator
+>>> +
+>>> +  "#address-cells":
+>>> +    const: 1
+>>> +
+>>> +  "#size-cells":
+>>> +    const: 0
+>>> +
+>>> +patternProperties:
+>>> +  "^(multi-)?led@[0-3]$":
+>>
+>> If this is multi-led, then you should reference
+>> /schemas/leds/leds-pwm-multicolor.yaml
+>>
+>> See other examples using it.
+> 
+> In my opinion, leds-pwm-multicolor.yaml is used for external pwm
+> signals, and needs to assign an external pwm property.
+> But our pwm leds use an internal clock to generate the pwm signal. Is
+> leds-class-multicolor.yaml more appropriate?
 
-My Name is Dimitry Edik from Russia A special assistance to my Russia
-boss who deals in oil import and export He was killed by the Ukraine
-soldiers at the border side. He supplied
-oil to the Philippines company and he was paid over 90 per cent of the
-transaction and the remaining $18.6 Million dollars have been paid into a
-Taiwan bank in the Philippines..i want a partner that will assist me
-with the claims. Is a (DEAL ) 40% for you and 60% for me
-I have all information for the claims.
-Kindly read and reply to me back is 100 per cent risk-free
+Yeah, I meant the latter but pasted wrong file.
+/schemas/leds/leds-class-multicolor.yaml#
 
-Yours Sincerely
-Dimitry Edik
+Best regards,
+Krzysztof
