@@ -2,155 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DABFC554A02
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 14:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FF25549FF
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 14:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235799AbiFVMSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jun 2022 08:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
+        id S232954AbiFVMUb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jun 2022 08:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235564AbiFVMSt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 08:18:49 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708BA1A3AF;
-        Wed, 22 Jun 2022 05:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655900328; x=1687436328;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mR40RNTUMjCQ478CK8Zd1sWFPAqPydu8In9LHm/65dY=;
-  b=ZGlJH5YsQofq26S+iqDgIj/ICf5ug8tDlbCVTwG+1Go+NH6Uh+kdS6BS
-   XRZSoUgceyiAZ6zi+fi29UE6e3D+3NwdOWSEWBEQV3ER/AqeMbP/D0euv
-   8X+kJ7Z36CrYY1xY/GH8Cnwc7ahJFlSaYGTmwKf2QRs2kUUq8u6JmBfWO
-   1p/RqbkiHg79/Ta/LvODemMS7gPO3A9jfiq2sOt+DxJr0p/xFNTwSXQk/
-   Uk/D8AzDynZNGDloXw4dRVjRObayQ9UkTIdEd5FhLtODdEhVOc9T5LQ6s
-   SuGfMz4oaPUmydyQVQp1GNCnalXGkQle5F2R+l77PTmKRJ85YkSBNyoyj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="263434679"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="263434679"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 05:18:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="690472618"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Jun 2022 05:18:46 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3zJl-0001FT-RA;
-        Wed, 22 Jun 2022 12:18:45 +0000
-Date:   Wed, 22 Jun 2022 20:17:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- e99b82b65ff24df6e5c2d1403251e82ef9971ec6
-Message-ID: <62b3086d.odJv5l8iAlTSexUE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S234442AbiFVMU3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 08:20:29 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E003369CC
+        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 05:20:28 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id cw10so10096749ejb.3
+        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 05:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YqZl55YlnzKJuZvnAvOYUqgqzVWeklNXo8K4BWb79NY=;
+        b=K+vUm9h4zeZ2BY+AkhsLxdTYyhJwqnMXqQq77ZRQfWdtzXQwazdV7BvakFNKvQJxGb
+         YbZqFHNUdhLZ5rkfeG9GzWzmy0i05jF+yiQg8vU/hKgJvaCCmROqzo1ePUT0nW3nKGUb
+         awSUdhmwMFCXKWFnTe0GlnC6o/TV/UIx84e8QJEZjXf+qSo/JH9yEfluwL4JpjwyP6lJ
+         C3v6aS4CbXAKHBZ3u0eWXDUTiz5mZLZLDle3Ex5Cr41wSJ3Ouze7STBZxmb+C++WIMaz
+         YkGxZucrMsZHESuItdlF4xdJ5T7GkNi5dtvrDtaLfu+1DR9q6wJLUUJbdkozGT3mKCLX
+         mILg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YqZl55YlnzKJuZvnAvOYUqgqzVWeklNXo8K4BWb79NY=;
+        b=S0/MCFUBJpPX5nH/bSUTnT9r/pUt1jTKUIQDEMtdKl/mEXUNxPupxeFI9DiUr0FyzF
+         B/yYYag8GZpDPuHvBnHPLq6kTdqcz640uYMukWOsPGncU/ZAD1NcvNKqSSGylRKWxErB
+         xdQFORUijaWlEfTeKFch+AZLEq3p2y09EI313li66xdP0kWfS5sD5jSKYqGwJguvhXul
+         zu93ZP/m9oTZDU0EywZxk3rXAY0QV6XXu1bwu9Bh1yEEwxegFBpZ9KKD5YkV9eWrDntP
+         ReFSi5HZvtzRNLKZT6KtGr8tlkpDPPJllvPm3roOohnTQcKGMCwG9UluKrc/3f0S6lkb
+         f2rQ==
+X-Gm-Message-State: AJIora9dTnoFI1s1yWB+QS3DhQg8t2XnthvlAERKz4saz5m09aDMu5zX
+        q8QLf42qZ6cR2oAVH882KOPE9w==
+X-Google-Smtp-Source: AGRyM1tRaVprGVLQKE51VKBB6prua/fQyAH18plkrLguHseuDTTg9AZY0HC40TSxd49AsE/GzfvZTQ==
+X-Received: by 2002:a17:907:d0d:b0:711:d554:1c8f with SMTP id gn13-20020a1709070d0d00b00711d5541c8fmr2878279ejc.223.1655900426586;
+        Wed, 22 Jun 2022 05:20:26 -0700 (PDT)
+Received: from [192.168.0.224] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p6-20020a17090653c600b00722e0b1fa8esm3077762ejo.164.2022.06.22.05.20.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 05:20:25 -0700 (PDT)
+Message-ID: <be7fafdb-5553-1b64-e7f1-5909aced3ba5@linaro.org>
+Date:   Wed, 22 Jun 2022 14:20:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 1/4] dt-bindings: interconnect: qcom,sdm845-cpu-bwmon:
+ add BWMON device
+Content-Language: en-US
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh@kernel.org>
+References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
+ <20220601101140.170504-2-krzysztof.kozlowski@linaro.org>
+ <Yp5tjUICIEUptKSx@ripper> <3e4e504c-5a38-43cd-ea8d-afbbb72eacad@linaro.org>
+ <dbfe1e7c-19dc-2d20-700a-c26f0bf721e5@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <dbfe1e7c-19dc-2d20-700a-c26f0bf721e5@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: e99b82b65ff24df6e5c2d1403251e82ef9971ec6  Merge branch 'pm-sleep' into bleeding-edge
+On 22/06/2022 13:58, Rajendra Nayak wrote:
+> 
+> 
+> On 6/7/2022 12:20 PM, Krzysztof Kozlowski wrote:
+>> On 06/06/2022 23:11, Bjorn Andersson wrote:
+>>> On Wed 01 Jun 03:11 PDT 2022, Krzysztof Kozlowski wrote:
+>>>
+>>>> Add bindings for the Qualcomm Bandwidth Monitor device providing
+>>>> performance data on interconnects.  The bindings describe only BWMON
+>>>> version 4, e.g. the instance on SDM845 between CPU and Last Level Cache
+>>>> Controller.
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Reviewed-by: Rob Herring <robh@kernel.org>
+>>>> Acked-by: Georgi Djakov <djakov@kernel.org>
+>>>> ---
+>>>>   .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 97 +++++++++++++++++++
+>>>>   1 file changed, 97 insertions(+)
+>>>>   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..8c82e06ee432
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+>>>> @@ -0,0 +1,97 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/interconnect/qcom,sdm845-cpu-bwmon.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Qualcomm Interconnect Bandwidth Monitor
+>>>> +
+>>>> +maintainers:
+>>>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> +
+>>>> +description:
+>>>> +  Bandwidth Monitor measures current throughput on buses between various NoC
+>>>> +  fabrics and provides information when it crosses configured thresholds.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - qcom,sdm845-cpu-bwmon       # BWMON v4
+>>>
+>>> It seems the thing that's called bwmon v4 is compatible with a number of
+>>> different platforms, should we add a generic compatible to the binding
+>>> as well, to avoid having to update the implementation for each SoC?
+>>>
+>>> (I.e. "qcom,sdm845-cpu-bwmon", "qcom,bwmon-v4")
+> 
+> it seems pretty useful to have the "qcom,bwmon-v4" and "qcom,bwmon-v5"
+> compatibles, I tried these patches on a sc7280 device which has a bwmon4
+> between the cpu and caches (and also has a bwmon5 between the caches and DDR)
+> and the driver works with zero changes.
 
-elapsed time: 990m
+The trouble with naming it v4 is that such versioning does not exist in
+documentation. At least I failed to find it. Neither there is clear
+mapping between SoC and block version.
 
-configs tested: 73
-configs skipped: 2
+The only indication about BWMON versioning comes from downstream
+sources, which I find not enough to justify usage of versions for blocks.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Therefore as per DT recommendation (which I am enforcing on others) I am
+not planning put there bwmon-v4.
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-m68k                       m5249evb_defconfig
-ia64                         bigsur_defconfig
-openrisc                 simple_smp_defconfig
-powerpc                      bamboo_defconfig
-arm                           stm32_defconfig
-mips                            ar7_defconfig
-ia64                      gensparse_defconfig
-powerpc                      ppc6xx_defconfig
-riscv                               defconfig
-ia64                             allmodconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                              debian-10.3
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220622
-riscv                             allnoconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-
-clang tested configs:
-arm                       cns3420vb_defconfig
-s390                             alldefconfig
-arm                           sama7_defconfig
-arm                          moxart_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                      acadia_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220622
-hexagon              randconfig-r045-20220622
-riscv                randconfig-r042-20220622
-s390                 randconfig-r044-20220622
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof
