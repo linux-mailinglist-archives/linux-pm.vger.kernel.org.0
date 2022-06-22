@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4616555507E
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 17:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A6F555090
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 17:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359769AbiFVP5h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jun 2022 11:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S1376300AbiFVP7y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jun 2022 11:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359858AbiFVP4I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 11:56:08 -0400
+        with ESMTP id S1359817AbiFVP7m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 11:59:42 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9EC73F899;
-        Wed, 22 Jun 2022 08:54:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22561427EF;
+        Wed, 22 Jun 2022 08:56:19 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2888712FC;
-        Wed, 22 Jun 2022 08:54:37 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E385D12FC;
+        Wed, 22 Jun 2022 08:56:18 -0700 (PDT)
 Received: from bogus (unknown [10.57.36.82])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F15B53F792;
-        Wed, 22 Jun 2022 08:54:33 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 16:53:22 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F00FA3F792;
+        Wed, 22 Jun 2022 08:56:15 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 16:55:04 +0100
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -31,15 +31,15 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Sudeep Holla <sudeep.holla@arm.com>,
         linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/4] firmware: arm_scmi: Get detailed power scale from
- perf
-Message-ID: <20220622155322.g2idz2623nxi6mu3@bogus>
+Subject: Re: [PATCH 4/4] cpufreq: scmi: Support the power scale in
+ micro-Watts in SCMI v3.1
+Message-ID: <20220622155504.bcggz7spw4n2ehyj@bogus>
 References: <20220622145802.13032-1-lukasz.luba@arm.com>
- <20220622145802.13032-4-lukasz.luba@arm.com>
+ <20220622145802.13032-5-lukasz.luba@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220622145802.13032-4-lukasz.luba@arm.com>
+In-Reply-To: <20220622145802.13032-5-lukasz.luba@arm.com>
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -49,15 +49,12 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 03:58:01PM +0100, Lukasz Luba wrote:
-> In SCMI v3.1 the power scale can be in micro-Watts. The upper layers, e.g.
-> cpufreq and EM should handle received power values properly (upscale when
-> needed). Thus, provide an interface which allows to check what is the
-> scale for power values. The old interface allowed to distinguish between
-> bogo-Watts and milli-Watts only (which was good for older SCMI spec).
+On Wed, Jun 22, 2022 at 03:58:02PM +0100, Lukasz Luba wrote:
+> The SCMI v3.1 adds support for power values in micro-Watts. They are not
+> always in milli-Watts anymore (ignoring the bogo-Watts). Thus, the power
+> must be converted conditionally before sending to Energy Model. Add the
+> logic which handles the needed checks and conversions.
 >
-
-Assuming you will take this as a series,
 
 Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
