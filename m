@@ -2,35 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578CF5540F9
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 05:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAB55540FD
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 05:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbiFVDo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jun 2022 23:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        id S1356650AbiFVDo5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jun 2022 23:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiFVDo0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 23:44:26 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 20:44:25 PDT
+        with ESMTP id S1356633AbiFVDou (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 23:44:50 -0400
 Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [210.0.225.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051E519C03;
-        Tue, 21 Jun 2022 20:44:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A0E3055C;
+        Tue, 21 Jun 2022 20:44:48 -0700 (PDT)
 Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
  (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Wed, 22 Jun
- 2022 11:29:10 +0800
+ 2022 11:29:44 +0800
 Received: from [10.32.56.37] (10.32.56.37) by zxbjmbx1.zhaoxin.com
  (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Wed, 22 Jun
- 2022 11:29:09 +0800
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+ 2022 11:29:42 +0800
+To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
         <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
         <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>
 From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-Subject: [PATCH] cpufreq: Add Zhaoxin turbo boost control interface support
-Message-ID: <8b748cc6-09c9-081c-c0c5-2e75f017b032@zhaoxin.com>
-Date:   Wed, 22 Jun 2022 11:29:08 +0800
+Subject: [PATCH] x86/cstate: Add Zhaoxin ACPI Cx FFH MWAIT support
+Message-ID: <bccae278-e735-4681-cb3a-41359e42032b@zhaoxin.com>
+Date:   Wed, 22 Jun 2022 11:29:41 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
@@ -49,36 +50,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Recent Zhaoxin CPUs support X86_FEATURE_IDA and the turbo boost can
-be dynamically enabled or disabled through MSR 0x1a0[38] in the same
-way as Intel. So add turbo boost control support for Zhaoxin too.
+Recent Zhaoxin CPUs support X86_FEATURE_MWAIT that implies the
+MONITOR/MWAIT instructions can be used for ACPI Cx state. The BIOS
+declares Cx state in _CST object to use FFH on Zhaoxin systems. So
+let function ffh_cstate_init() support Zhaoxin too.
 
 Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 ---
-  drivers/cpufreq/acpi-cpufreq.c | 4 ++++
-  1 file changed, 4 insertions(+)
+  arch/x86/kernel/acpi/cstate.c | 4 +++-
+  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 3d514b8..1bb2b90 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -78,6 +78,8 @@ static bool boost_state(unsigned int cpu)
+diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+index 7945eae..d4185e1 100644
+--- a/arch/x86/kernel/acpi/cstate.c
++++ b/arch/x86/kernel/acpi/cstate.c
+@@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
 
-  	switch (boot_cpu_data.x86_vendor) {
-  	case X86_VENDOR_INTEL:
-+	case X86_VENDOR_CENTAUR:
-+	case X86_VENDOR_ZHAOXIN:
-  		rdmsr_on_cpu(cpu, MSR_IA32_MISC_ENABLE, &lo, &hi);
-  		msr = lo | ((u64)hi << 32);
-  		return !(msr & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
-@@ -97,6 +99,8 @@ static int boost_set_msr(bool enable)
+  	if (c->x86_vendor != X86_VENDOR_INTEL &&
+  	    c->x86_vendor != X86_VENDOR_AMD &&
+-	    c->x86_vendor != X86_VENDOR_HYGON)
++	    c->x86_vendor != X86_VENDOR_HYGON &&
++	    c->x86_vendor != X86_VENDOR_CENTAUR &&
++	    c->x86_vendor != X86_VENDOR_ZHAOXIN)
+  		return -1;
 
-  	switch (boot_cpu_data.x86_vendor) {
-  	case X86_VENDOR_INTEL:
-+	case X86_VENDOR_CENTAUR:
-+	case X86_VENDOR_ZHAOXIN:
-  		msr_addr = MSR_IA32_MISC_ENABLE;
-  		msr_mask = MSR_IA32_MISC_ENABLE_TURBO_DISABLE;
-  		break;
+  	cpu_cstate_entry = alloc_percpu(struct cstate_entry);
 -- 
 2.7.4
