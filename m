@@ -2,29 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43C75543F0
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 10:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E3455472D
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 14:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351363AbiFVHtp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jun 2022 03:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S1355558AbiFVIoR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jun 2022 04:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354016AbiFVHtZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 03:49:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BE837AAC
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 00:49:05 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1o3v5s-0000nJ-UD; Wed, 22 Jun 2022 09:48:08 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1o3v5g-0000yF-8I; Wed, 22 Jun 2022 09:47:56 +0200
-Date:   Wed, 22 Jun 2022 09:47:56 +0200
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S1345195AbiFVIoP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 04:44:15 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7BA393CF
+        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 01:44:13 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id u9so18834739ybq.3
+        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 01:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kp81BI1YGsRbTuF4u1pZcpKCs6UI8Y55+4798O1CWVk=;
+        b=T+Y6FO8pX4ioyAi81ZJh+H3jqqKbrzeylZwpyEPnZQ2fKXlT+k8zNUyacEsjt5Isvj
+         9cQPAjzfg9a1d+IzZv5DgMGCjW1C2owU1i5Z2wFf0ZushObCV4Fgi/MJaklP1XMjKhz7
+         XNB0oEghcMbSalXUZ7bJWHduPIDUXmXgr8otxxk5vlGkL88lww2X366J7JHxVXB+fOlL
+         VHnTuHLGCpLb/S2eDPJCKCgHjFPBZZ4yI8h40AIngWqoipfSxqA5d/LTpOd8fL1aqhM8
+         397Z4g9oWPb9NicHsMVy99lSPW7lwd4qailMrmu1dsK8Y71wF0alGOcCVYQKc2oM55P4
+         zGFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kp81BI1YGsRbTuF4u1pZcpKCs6UI8Y55+4798O1CWVk=;
+        b=3N6iAqypRoSXgHlKiYe6aci+p1YqTU6m0ztdOGgGeZ4QZSnlifGAFF4xJln/i6DMYl
+         FwYxkMVg+EI7b29/LGSY78t4CY3xl2arYBKxwyzswUnqsknILb6Kri4CqUhZpXqqGLtP
+         hpaDWfmYib5QUziXDlMm1ontZIom8xw0lZzfztw7zgCuMW2aetsUVtANk/ztUOW9mUCe
+         OvHMjt7UL4XXhyAn/5ibvySba7yBjVzi2fs18M5l53PDt1N44vyv9KpGVU5URWQHQojq
+         WHrjcvntCCO2pb6K9nfAayXqRUNZajjo5/RWbfXOqq/PC0SUu4NtR4X3yVyM1q9K37v+
+         ShlA==
+X-Gm-Message-State: AJIora+egV+djS+osgpSR/9J4H84TnR10Gya6we9oxjy4KtAFKdQi8Us
+        61tbhao7i4ipmIvqjkjLT2lpUMyCZMZrhVtn2yQFog==
+X-Google-Smtp-Source: AGRyM1skbX81eTWmx6oS9meEepf1lQ4R1N0UrNlFhHcSYFyL8Map6cXN+y6MD6tuATRRVquGHtXlFiJYYBINvtWwFds=
+X-Received: by 2002:a25:7255:0:b0:668:a372:b433 with SMTP id
+ n82-20020a257255000000b00668a372b433mr2433058ybc.626.1655887452923; Wed, 22
+ Jun 2022 01:44:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-8-saravanak@google.com> <20220622074756.GA1647@pengutronix.de>
+In-Reply-To: <20220622074756.GA1647@pengutronix.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 22 Jun 2022 10:44:01 +0200
+Message-ID: <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] driver core: Set fw_devlink.strict=1 by default
+To:     Sascha Hauer <sha@pengutronix.de>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
@@ -37,31 +67,14 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         David Ahern <dsahern@kernel.org>, kernel-team@android.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-gpio@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v2 7/9] driver core: Set fw_devlink.strict=1 by default
-Message-ID: <20220622074756.GA1647@pengutronix.de>
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-8-saravanak@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601070707.3946847-8-saravanak@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-From:   Sascha Hauer <sha@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,53 +83,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 12:07:03AM -0700, Saravana Kannan wrote:
-> Now that deferred_probe_timeout is non-zero by default, fw_devlink will
-> never permanently block the probing of devices. It'll try its best to
-> probe the devices in the right order and then finally let devices probe
-> even if their suppliers don't have any drivers.
-> 
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  drivers/base/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Jun 22, 2022 at 9:48 AM Sascha Hauer <sha@pengutronix.de> wrote:
 
-As mentioned here:
+> This patch has the effect that console UART devices which have "dmas"
+> properties specified in the device tree get deferred for 10 to 20
+> seconds. This happens on i.MX and likely on other SoCs as well. On i.MX
+> the dma channel is only requested at UART startup time and not at probe
+> time. dma is not used for the console. Nevertheless with this driver probe
+> defers until the dma engine driver is available.
+>
+> It shouldn't go in as-is.
 
-https://lore.kernel.org/lkml/20220622062027.994614-1-peng.fan@oss.nxp.com/
+This affects all machines with the PL011 UART and DMAs specified as
+well.
 
-This patch has the effect that console UART devices which have "dmas"
-properties specified in the device tree get deferred for 10 to 20
-seconds. This happens on i.MX and likely on other SoCs as well. On i.MX
-the dma channel is only requested at UART startup time and not at probe
-time. dma is not used for the console. Nevertheless with this driver probe
-defers until the dma engine driver is available.
+It would be best if the console subsystem could be treated special and
+not require DMA devlink to be satisfied before probing.
 
-It shouldn't go in as-is.
+It seems devlink is not quite aware of the concept of resources that are
+necessary to probe vs resources that are nice to have and might be
+added after probe. We need a strong devlink for the first category
+and maybe a weak devlink for the latter category.
 
-Sascha
+I don't know if this is a generic hardware property for all operating
+systems so it could be a DT property such as dma-weak-dependency?
+Or maybe compromize and add a linux,dma-weak-dependency;
+property?
 
-> 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 61fdfe99b348..977b379a495b 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -1613,7 +1613,7 @@ static int __init fw_devlink_setup(char *arg)
->  }
->  early_param("fw_devlink", fw_devlink_setup);
->  
-> -static bool fw_devlink_strict;
-> +static bool fw_devlink_strict = true;
->  static int __init fw_devlink_strict_setup(char *arg)
->  {
->  	return strtobool(arg, &fw_devlink_strict);
-> -- 
-> 2.36.1.255.ge46751e96f-goog
-> 
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Yours,
+Linus Walleij
