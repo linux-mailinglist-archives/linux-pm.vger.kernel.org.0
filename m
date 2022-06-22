@@ -2,56 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781AD55494C
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 14:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABFC554A02
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 14:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357220AbiFVL7W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jun 2022 07:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        id S235799AbiFVMSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jun 2022 08:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357248AbiFVL7P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 07:59:15 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14983DA7D;
-        Wed, 22 Jun 2022 04:59:09 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 34FE622238;
-        Wed, 22 Jun 2022 13:59:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1655899148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JKfrtHY3354YagDaD5kDsTZTk+EPmD9d+R0Xe29+ymE=;
-        b=TMWtsnTu675Ke7jhoWKinpET6mkMw3GxbvwZPy+RJb/N7650dxCLHy8TJI62vQx8NsuP+3
-        13UAvuN/Ll/kM0jOnq8U5f/IikGlGZGk03szh/WvESctM5MHmNiUzv2jlHRBsuzKkkwAO+
-        vHuqL3JC90M0SeGGqQGyXG20fiwvxHc=
+        with ESMTP id S235564AbiFVMSt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 08:18:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708BA1A3AF;
+        Wed, 22 Jun 2022 05:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655900328; x=1687436328;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mR40RNTUMjCQ478CK8Zd1sWFPAqPydu8In9LHm/65dY=;
+  b=ZGlJH5YsQofq26S+iqDgIj/ICf5ug8tDlbCVTwG+1Go+NH6Uh+kdS6BS
+   XRZSoUgceyiAZ6zi+fi29UE6e3D+3NwdOWSEWBEQV3ER/AqeMbP/D0euv
+   8X+kJ7Z36CrYY1xY/GH8Cnwc7ahJFlSaYGTmwKf2QRs2kUUq8u6JmBfWO
+   1p/RqbkiHg79/Ta/LvODemMS7gPO3A9jfiq2sOt+DxJr0p/xFNTwSXQk/
+   Uk/D8AzDynZNGDloXw4dRVjRObayQ9UkTIdEd5FhLtODdEhVOc9T5LQ6s
+   SuGfMz4oaPUmydyQVQp1GNCnalXGkQle5F2R+l77PTmKRJ85YkSBNyoyj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="263434679"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="263434679"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 05:18:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="690472618"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Jun 2022 05:18:46 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3zJl-0001FT-RA;
+        Wed, 22 Jun 2022 12:18:45 +0000
+Date:   Wed, 22 Jun 2022 20:17:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ e99b82b65ff24df6e5c2d1403251e82ef9971ec6
+Message-ID: <62b3086d.odJv5l8iAlTSexUE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 22 Jun 2022 13:59:07 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/2] arm64: remove generic ARM cpuidle support
-In-Reply-To: <20220529181329.2345722-1-michael@walle.cc>
-References: <20220529181329.2345722-1-michael@walle.cc>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <09f392794c815cbfb38e5103d92310da@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +63,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am 2022-05-29 20:13, schrieb Michael Walle:
-> Playing with an own PSCI implementation, I've noticed that the 
-> cpuidle-arm
-> driver doesn't work on arm64. It doesn't probe because since commit
-> 788961462f34 ("ARM: psci: cpuidle: Enable PSCI CPUidle driver") the
-> arm_cpuidle_init() can only return -EOPNOTSUPP, because the commit 
-> removed
-> the cpu_idle_init and cpu_suspend ops.
-> 
-> It left me puzzled for quite some time. It seems that the cpuidle-psci 
-> is
-> the preferred one and this has been the case for quite some time. The
-> mentioned commit first appeared in v5.4.
-> 
-> Remove the ARM64 support for the cpuidle-arm driver, which then let us
-> remove all the supporting arch code.
-> 
-> Michael Walle (2):
->   cpuidle: cpuidle-arm: remove arm64 support
->   arm64: cpuidle: remove generic cpuidle support
-> 
->  arch/arm64/include/asm/cpu_ops.h |  9 ---------
->  arch/arm64/include/asm/cpuidle.h | 15 ---------------
->  arch/arm64/kernel/cpuidle.c      | 29 -----------------------------
->  drivers/cpuidle/Kconfig.arm      |  3 ++-
->  4 files changed, 2 insertions(+), 54 deletions(-)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: e99b82b65ff24df6e5c2d1403251e82ef9971ec6  Merge branch 'pm-sleep' into bleeding-edge
 
-Through which tree should this patchset go? I've seen it is marked as
-"Handled Elsewere" in the linux pm patchwork [1].
+elapsed time: 990m
 
--michael
+configs tested: 73
+configs skipped: 2
 
-[1] 
-https://patchwork.kernel.org/project/linux-pm/patch/20220529181329.2345722-2-michael@walle.cc/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+m68k                       m5249evb_defconfig
+ia64                         bigsur_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                      bamboo_defconfig
+arm                           stm32_defconfig
+mips                            ar7_defconfig
+ia64                      gensparse_defconfig
+powerpc                      ppc6xx_defconfig
+riscv                               defconfig
+ia64                             allmodconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                              debian-10.3
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220622
+riscv                             allnoconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+
+clang tested configs:
+arm                       cns3420vb_defconfig
+s390                             alldefconfig
+arm                           sama7_defconfig
+arm                          moxart_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                      acadia_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220622
+hexagon              randconfig-r045-20220622
+riscv                randconfig-r042-20220622
+s390                 randconfig-r044-20220622
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
