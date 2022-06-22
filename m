@@ -2,169 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACEE553AA6
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jun 2022 21:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578CF5540F9
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 05:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354029AbiFUTet (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jun 2022 15:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
+        id S233449AbiFVDo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jun 2022 23:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354022AbiFUTes (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 15:34:48 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0FC2D1DC
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 12:34:41 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id u9so16092281ybq.3
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jun 2022 12:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GXndJbSr9Ys4cj6udGMJGPkAdQ+tLqQg3olnN64ieEQ=;
-        b=hs0LBDjDT9OlV72N7fBe49gCxiWYUZOxcBIws2Wgn8BN3WqTsnKUdVz0Q6ampLmXSV
-         5NkiSMbN9ezJtAmWUjyXVIOyvmB3tJWzCQSXBR+AO4tHEKCswdhBhhSG3vkBJZtJUVht
-         3JKyU0RJ2Ra5mCUJKBEJL8bG3wIYavBkn/AC2/Ch3FvXau57I9pfQARkPbGSgaJEoyGe
-         lTYcqa0zN/847nKzFl1WJjYqvmR1XHqpgkTYKwx4e2Qa8R6Ns1pVO3swtmqqCxrKN2V9
-         Bfty4fIeIEEKkVxTaMUi8q3bxkgjiWSJm0iXnvkRaHi2W0O9dPMwDc0y+T+TfR/UJ6Ei
-         2AEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GXndJbSr9Ys4cj6udGMJGPkAdQ+tLqQg3olnN64ieEQ=;
-        b=SjDuEdOmI1LE6Qs9js2uEeTIM7QC07jbXq5p5kcBr7TUCBooqx5s0ogiYMFwdvrwZp
-         n4h7eq4eLeht3oo3rNJDFfTAF5JvEyfeFoQlCQRGiQ8d8E/n0Vd4/BWrbzhNP80wvAND
-         L01U4ecC1t6a8qWwmgy7FRiBFkZDkPgBHwgojgrhM5xy585hDNztAcHqJS/9ibHZ87Tz
-         1Dr520++r6ccfzgApoGshoq5cGCcQ0zP1uwe+WykqNth9e4h6tW6Fbsya4VhK7DPs9/z
-         sqTf0/TjKp/dH5OKEUmOoo+fmVtN2dpJC4HFL3pW+RZBlVPTyUdSoHck8tuCSwf27UN3
-         2pOw==
-X-Gm-Message-State: AJIora8BFLg1OKW+Cjgxw4L0biL1LsNAgndOKraO+5urVAdEPXt7cQr3
-        1n30yn3ZMwNSejD7srnm3/wT3CdHR9sCJravJFCkQQ==
-X-Google-Smtp-Source: AGRyM1u+tZKGrSW1cGi362mrQj+GEMsoaxrv0rYK4Hl9mC2GWlTK9NyKv5qqlRv1HupVfSdChNkUORkFSlefFHsLXRY=
-X-Received: by 2002:a25:9947:0:b0:663:ec43:61eb with SMTP id
- n7-20020a259947000000b00663ec4361ebmr32241009ybo.115.1655840080076; Tue, 21
- Jun 2022 12:34:40 -0700 (PDT)
+        with ESMTP id S232276AbiFVDo0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jun 2022 23:44:26 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 20:44:25 PDT
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [210.0.225.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051E519C03;
+        Tue, 21 Jun 2022 20:44:24 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Wed, 22 Jun
+ 2022 11:29:10 +0800
+Received: from [10.32.56.37] (10.32.56.37) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Wed, 22 Jun
+ 2022 11:29:09 +0800
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Subject: [PATCH] cpufreq: Add Zhaoxin turbo boost control interface support
+Message-ID: <8b748cc6-09c9-081c-c0c5-2e75f017b032@zhaoxin.com>
+Date:   Wed, 22 Jun 2022 11:29:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
-In-Reply-To: <YrFzK6EiVvXmzVG6@atomide.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 21 Jun 2022 12:34:03 -0700
-Message-ID: <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.32.56.37]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 12:28 AM Tony Lindgren <tony@atomide.com> wrote:
->
-> Hi,
->
-> * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > Now that fw_devlink=on by default and fw_devlink supports
-> > "power-domains" property, the execution will never get to the point
-> > where driver_deferred_probe_check_state() is called before the supplier
-> > has probed successfully or before deferred probe timeout has expired.
-> >
-> > So, delete the call and replace it with -ENODEV.
->
-> Looks like this causes omaps to not boot in Linux next.
+Recent Zhaoxin CPUs support X86_FEATURE_IDA and the turbo boost can
+be dynamically enabled or disabled through MSR 0x1a0[38] in the same
+way as Intel. So add turbo boost control support for Zhaoxin too.
 
-Can you please point me to an example DTS I could use for debugging
-this? I'm assuming you are leaving fw_devlink=on and not turning it
-off or putting it in permissive mode.
+Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+---
+  drivers/cpufreq/acpi-cpufreq.c | 4 ++++
+  1 file changed, 4 insertions(+)
 
-> With this
-> simple-pm-bus fails to probe initially as the power-domain is not
-> yet available.
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index 3d514b8..1bb2b90 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -78,6 +78,8 @@ static bool boost_state(unsigned int cpu)
 
-Before we get to late_initcall(), I'd expect this series to not have
-any impact because both fw_devlink and
-driver_deferred_probe_check_state() should be causing the device's
-probe to get deferred until the PM domain device comes up.
+  	switch (boot_cpu_data.x86_vendor) {
+  	case X86_VENDOR_INTEL:
++	case X86_VENDOR_CENTAUR:
++	case X86_VENDOR_ZHAOXIN:
+  		rdmsr_on_cpu(cpu, MSR_IA32_MISC_ENABLE, &lo, &hi);
+  		msr = lo | ((u64)hi << 32);
+  		return !(msr & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
+@@ -97,6 +99,8 @@ static int boost_set_msr(bool enable)
 
-To double check this, without this series, can you give me the list of
-"supplier:*" symlinks under a simple-pm-bus device's sysfs folder
-that's having problems with this series? And for all those symlinks,
-cat the "status" file under that directory?
-
-In the system where this is failing, is the PM domain driver loaded as
-a module at a later point?
-
-Couple of other things to try (with the patches) to narrow this down:
-* Can you set driver_probe_timeout=0 in the command line and see if that helps?
-* Can you set it to something high like 30 or even larger and see if it helps?
-
-> On platform_probe() genpd_get_from_provider() returns
-> -ENOENT.
-
-This error is with the series I assume?
-
-> Seems like other stuff is potentially broken too, any ideas on
-> how to fix this?
-
-I'll want to understand the issue first. It's not yet clear to me why
-fw_devlink isn't blocking the probe of the simple-pm-bus device until
-the PM domain device shows up. And if it is not blocking, then why and
-at what point in boot it's giving up and letting the probe get to this
-point where there's an error.
-
--Saravana
-
->
->
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> >  drivers/base/power/domain.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 739e52cd4aba..3e86772d5fac 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >               mutex_unlock(&gpd_list_lock);
-> >               dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
-> >                       __func__, PTR_ERR(pd));
-> > -             return driver_deferred_probe_check_state(base_dev);
-> > +             return -ENODEV;
-> >       }
-> >
-> >       dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-> > --
-> > 2.36.1.255.ge46751e96f-goog
-> >
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+  	switch (boot_cpu_data.x86_vendor) {
+  	case X86_VENDOR_INTEL:
++	case X86_VENDOR_CENTAUR:
++	case X86_VENDOR_ZHAOXIN:
+  		msr_addr = MSR_IA32_MISC_ENABLE;
+  		msr_mask = MSR_IA32_MISC_ENABLE_TURBO_DISABLE;
+  		break;
+-- 
+2.7.4
