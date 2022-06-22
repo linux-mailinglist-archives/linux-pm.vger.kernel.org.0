@@ -2,168 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A6F554BD6
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 15:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FB4554BE4
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 15:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357682AbiFVNw7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jun 2022 09:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S231184AbiFVNzO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jun 2022 09:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357661AbiFVNw7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 09:52:59 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4379B9B
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 06:52:52 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id lw20so12071189ejb.4
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 06:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=i58AvAf3xFLhQ/L4OE2PIGkyGZEELgf2pk8ePev6kB4=;
-        b=ZkBEZC+r/wMombXRguzU+DolPji+n50SYFb6A0PR3PacPtUpGCNYgvsZVodwBvhB+Y
-         HrormOXJ+myRBnLX1j5uZOwGsLSXr9ktsBD6s6AwWO/tz+1mPzzjLyQgYzQID2Rj43GW
-         OPbZM2TqykrzmCbZcIYyQpswfX0SbmVk21uxtoCDAriIIcSFrEnyXqlH7+vQ3o4S/FMW
-         iiHreXsvl9piaIunAUaUmlNdw39EhsXKLbw+UBzxjHCUtuvb6c/sxy9Vd0L9F+jg2O1r
-         /CroBhvjd8bv0uW0EjJE5ocqOhWF9BeMROOIPhEnMlYVCH0HypyoKfUAdyiBvH6ynf/H
-         w7hg==
+        with ESMTP id S1357744AbiFVNzN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 09:55:13 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5296434641;
+        Wed, 22 Jun 2022 06:55:12 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id t1so30318853ybd.2;
+        Wed, 22 Jun 2022 06:55:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i58AvAf3xFLhQ/L4OE2PIGkyGZEELgf2pk8ePev6kB4=;
-        b=zFN3OCXeiCJkLTB6Ltmjr4vwmd984wvqjuQkQDlQZNlECWziSzOc9E9fUOppcqStcD
-         7rcoEPstlrgJYKZb+dQRP0IgOwoY5Q06z38y2fAPWvKjRxIQcxrTKQzvC7LLgdToVM7l
-         pbS9YjLcFV/7ksZwTcY1vz1ywdSJMuyzGIXhLl+rpAHYcJgT30FuAEUo42DCQasTegqU
-         suY9yoFUs9qP4uBPfcb6c7+y1x1mWwHdZ9w7uAwHDQB+X2s+KhBeJZNI28UFUxgn63lY
-         Yug1JnoaHgNkvsWeKfS7iJl4ZsM5/aDNYPwHMfsFwnSe4yDUi2hwl4/oQJjLpGBAdoHj
-         v0zw==
-X-Gm-Message-State: AJIora/BbvQjaeFwEDZVpSSZ+bU5muJt6kyiDUXDkxkHoVf9FwWdcUDR
-        uYxpAyyIotVy+ZgtDYUjzgC6bQ==
-X-Google-Smtp-Source: AGRyM1vah6C9m/j0HXJ9FZUYU4HSpCWgqDbDo7mMu1bIGnoxi3GAUHrMtda/2yQgJJS6TrXv5OUtPA==
-X-Received: by 2002:a17:906:33db:b0:70f:12c0:4ade with SMTP id w27-20020a17090633db00b0070f12c04ademr3286585eja.320.1655905971223;
-        Wed, 22 Jun 2022 06:52:51 -0700 (PDT)
-Received: from [192.168.0.224] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kx10-20020a170907774a00b00722df6db8f3sm3296099ejc.115.2022.06.22.06.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 06:52:50 -0700 (PDT)
-Message-ID: <64eb52ee-b3ac-3d94-cfce-ceb1c88dddb6@linaro.org>
-Date:   Wed, 22 Jun 2022 15:52:49 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l+Te2BnivL/GDh47o/VHeU0l1HC9J0+Yk21/+4/HIRE=;
+        b=bd+szFrvexwX4QF3e367hnx8NGTV/mWXSaeOcmfsedAiRMEs8rvhv8EKyt7f+/wDsT
+         WFaAGUpcyDa6TZERpP2NGGJL2whYEvfZuhY0W/eqsapWKDMsOE/TNKZVqpMucTDEMwxS
+         MEfQknukqDPaXSSdlG4ypsyybbyM3af90mmkjdYUM4SCuciwlY0Cs5rhDHrdhztNuIW3
+         TJaIiH2r4hlrDTMQq1NE5vSZl/btBU079kRHVcP6mY0fgL4iacPLmXqPhBvzx1gPLwU5
+         yelxGjagk/cRyrrxEWJO69TLYDA6/ata3zliMAdg54dfZLmjiSaVUfpx5EkTAGNpu9ip
+         FXKg==
+X-Gm-Message-State: AJIora9Rk1dTPkJ7SjwGWTqAy0Bmn+/w1p+mamWSH8vD4/GmhQDZfLrp
+        Z/W82ZSokj4Bp5UZbg6ekcV23iCtOrHr7UnmLnk=
+X-Google-Smtp-Source: AGRyM1tvapLMkiK2jTWM8/8nhIRYdhtY7A1W5pRXs/vQD0eLsIOlkR/goPIutaoplkt+REApSulMtqh7Id6MzyM+6aI=
+X-Received: by 2002:a25:d841:0:b0:668:ab2f:7b01 with SMTP id
+ p62-20020a25d841000000b00668ab2f7b01mr3854953ybg.482.1655906111500; Wed, 22
+ Jun 2022 06:55:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
-Content-Language: en-US
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
- <bc423d7b-df03-d4e2-2898-0873db710943@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bc423d7b-df03-d4e2-2898-0873db710943@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220620131953.16575-1-di.shen@unisoc.com>
+In-Reply-To: <20220620131953.16575-1-di.shen@unisoc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Jun 2022 15:55:00 +0200
+Message-ID: <CAJZ5v0j380_UEsy6qJ_KuRf8YbL3KtiY-h+RdkSsfd8SRCLy_A@mail.gmail.com>
+Subject: Re: [PATCH 1/1] thermal/sysfs: Clear the slot left in cooling_device_attr_groups
+To:     Di Shen <di.shen@unisoc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>, xuewen.yan@unisoc.com,
+        cindygm567@gmail.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/06/2022 13:46, Rajendra Nayak wrote:
-> 
-> On 6/1/2022 3:41 PM, Krzysztof Kozlowski wrote:
->> Add device node for CPU-memory BWMON device (bandwidth monitoring) on
->> SDM845 measuring bandwidth between CPU (gladiator_noc) and Last Level
->> Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
->> votes from cpufreq (CPU nodes) thus achieve high memory throughput even
->> with lower CPU frequencies.
->>
->> Performance impact (SDM845-MTP RB3 board, linux next-20220422):
->> 1. No noticeable impact when running with schedutil or performance
->>     governors.
->>
->> 2. When comparing to customized kernel with synced interconnects and
->>     without bandwidth votes from CPU freq, the sysbench memory tests
->>     show significant improvement with bwmon for blocksizes past the L3
->>     cache.  The results for such superficial comparison:
->>
->> sysbench memory test, results in MB/s (higher is better)
->>   bs kB |  type |    V  | V+no bw votes | bwmon | benefit %
->>       1 | W/seq | 14795 |          4816 |  4985 |      3.5%
->>      64 | W/seq | 41987 |         10334 | 10433 |      1.0%
->>    4096 | W/seq | 29768 |          8728 | 32007 |    266.7%
->>   65536 | W/seq | 17711 |          4846 | 18399 |    279.6%
->> 262144 | W/seq | 16112 |          4538 | 17429 |    284.1%
->>      64 | R/seq | 61202 |         67092 | 66804 |     -0.4%
->>    4096 | R/seq | 23871 |          5458 | 24307 |    345.4%
->>   65536 | R/seq | 18554 |          4240 | 18685 |    340.7%
->> 262144 | R/seq | 17524 |          4207 | 17774 |    322.4%
->>      64 | W/rnd |  2663 |          1098 |  1119 |      1.9%
->>   65536 | W/rnd |   600 |           316 |   610 |     92.7%
->>      64 | R/rnd |  4915 |          4784 |  4594 |     -4.0%
->>   65536 | R/rnd |   664 |           281 |   678 |    140.7%
->>
->> Legend:
->> bs kB: block size in KB (small block size means only L1-3 caches are
->>        used
->> type: R - read, W - write, seq - sequential, rnd - random
->> V: vanilla (next-20220422)
->> V + no bw votes: vanilla without bandwidth votes from CPU freq
->> bwmon: bwmon without bandwidth votes from CPU freq
->> benefit %: difference between vanilla without bandwidth votes and bwmon
->>             (higher is better)
->>
->> Co-developed-by: Thara Gopinath <thara.gopinath@linaro.org>
->> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sdm845.dtsi | 54 ++++++++++++++++++++++++++++
->>   1 file changed, 54 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->> index 83e8b63f0910..adffb9c70566 100644
->> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
->>   			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->>   		};
->>   
->> +		pmu@1436400 {
->> +			compatible = "qcom,sdm845-cpu-bwmon";
->> +			reg = <0 0x01436400 0 0x600>;
->> +
->> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
->> +
->> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
->> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->> +			interconnect-names = "ddr", "l3c";
-> 
-> Is this the pmu/bwmon instance between the cpu and caches or the one between the caches and DDR?
+On Mon, Jun 20, 2022 at 3:20 PM Di Shen <di.shen@unisoc.com> wrote:
+>
+> There's a space allocated for cooling_device_stats_attr_group within co-
 
-To my understanding this is the one between CPU and caches.
+Please don't break words in the changelog (and variable names in
+particular) like this.
 
-> Depending on which one it is, shouldn;t we just be scaling either one and not both the interconnect paths?
+> oling_device_attr_groups. This space is shared by all cooling devices.
+>
+> If not clear this space before cooling_device_stats_attr_group is initi-
+> alized, the next cooling device will still create stats sysfs file node.
+> At this time, read or write related nodes will cause kernel crash.
 
-The interconnects are the same as ones used for CPU nodes, therefore if
-we want to scale both when scaling CPU, then we also want to scale both
-when seeing traffic between CPU and cache.
+A bit more of an explanation here wouldn't hurt IMV.  In particular,
+what does "the next cooling device" mean and what are "related nodes"?
 
-Maybe the assumption here is not correct, so basically the two
-interconnects in CPU nodes are also not proper?
+> [exception_reboot_reason]: kernel_crash
+> [exception_panic_reason]: Fatal exception
+> [exception_time]: 2022-06-07_06-32-25
+> [exception_file_info]: not-bugon
+> [exception_task_id]: 3154
+> [exception_task_family]: [cat, 3154][sh, 2597][sh, 2362][adbd, 1804]
+> [exception_pc_symbol]: [<747516ae>] _raw_spin_lock+0x20/0x60
+> [exception_stack_info]: [<4cbe9ac1>] prepare_exception_info+0x19c/0x1a4
+> [<03041be7>] sysdump_panic_event+0x57c/0x6f4
+> [<b16f865e>] atomic_notifier_call_chain+0x48/0x7c
+> [<5baac8d4>] panic+0x1b4/0x3c8
+> [<9d287b0f>] arm_notify_die+0x0/0x78
+> [<094fc22c>] __do_kernel_fault+0x94/0xa4
+> [<3b4b69a4>] do_page_fault+0xd4/0x364
+> [<23793e7a>] do_translation_fault+0x38/0xc0
+> [<6e5cc52a>] do_DataAbort+0x4c/0xd0
+> [<a28c16b8>] __dabt_svc+0x5c/0xa0
+> [<747516ae>] _raw_spin_lock+0x20/0x60
+> [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
+> [<cb78325e>] dev_attr_show+0x38/0x64
+> [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
+> [<c0a843ab>] seq_read+0x244/0x620
+> [<b316b374>] vfs_read+0xd8/0x218
+> [<3aebf5fa>] sys_read+0x80/0xe4
+> [<7cf100f5>] ret_fast_syscall+0x0/0x28
+> [<08cbe22f>] 0xbe8c1198
+>
+> So clear the slot left in cooling_device_attr_groups before cooling_dev-
+> ice_stats_attr_group is initialized to avoid kernel crash.
+>
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> ---
+>  drivers/thermal/thermal_sysfs.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 1c4aac8464a7..fbc3dbc85841 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -817,6 +817,11 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+>         unsigned long states;
+>         int var;
+>
+> +       /* Clear the slot left in cooling_device_attr_groups */
 
+The comment is a bit too vague IMO.  In particular, what slot do you mean?
 
-Best regards,
-Krzysztof
+> +       var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
+> +       if (cooling_device_attr_groups[var])
+> +               cooling_device_attr_groups[var] = NULL;
+
+The NULL check above is redundant (it can be cleared even if it is
+NULL already) and it all can be done in one code line.
+
+> +
+>         if (cdev->ops->get_max_state(cdev, &states))
+>                 return;
+>
+> --
