@@ -2,165 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5F4555402
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 21:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29053555490
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 21:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377710AbiFVTKL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jun 2022 15:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
+        id S1357243AbiFVTdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jun 2022 15:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377692AbiFVTKK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 15:10:10 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4843914033
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 12:10:08 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-317741c86fdso170739757b3.2
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 12:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m2EKhR0TRoyufPiu9Flo4efSG9iVQ7Sr7NIfxXnG//E=;
-        b=q0iBpeFzXmVjuV9RJ2U0tO6ECKKIgXqLxhTrd/XuqGhMkas+He99laUPoyLdnfoNFL
-         +PttCvM62NPrGDH6bN6Tam5nPc4Jt6Lhqq9iRLcdZDXmODHt/VANxFARtdqBpIOWNqbl
-         AatF7ctiFGf72C+0OC82zliefxVYa8dtkAaYmnq0JCPtTgfz1cWUVQ87m5452KZkW/cW
-         SPNNeBKYphGmdKaYImVx82HxgMYh2fon8Z8I1JzFAAU0CLZraMDpT8R9qd8YGH1YLF5l
-         z+/MLbNzdLViy90RdBW0wFmvw6BnGUFs9HZsF90abo3WhbF4Ja8pDA24KBOpYxV847T2
-         I7ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m2EKhR0TRoyufPiu9Flo4efSG9iVQ7Sr7NIfxXnG//E=;
-        b=Tvv5+ZXPb7Z8QvzYQtlqpjuU/TEz33QGQzRNPIbhUjCugKP4Mk+zdmezXANyuZXpg7
-         jw9vuWPklFWN7lTgy+yVBmbEv4wKBIEVUDPfDuW51U/4AV3Coj2Jo4Vqb8lJLSCqBQwM
-         Jzdk2zKb9lL9334JYrTqbwkYZswnzdiNuh6ZBaHhD1RPfiiX7dtLN22G4RWCygdFvqsK
-         vVYpURRFog8B8lGZS4QWAol2xcjVitd8gAVxJxY32q6+O6YL+pOBPRoWINFG8qcdfyQb
-         uX+Ys0+mH/y/HkRCUMrkVJXO6EzfEHr5X9lRzcq/A1CelyjvKjSaXtGh5oxQCNvM3PTr
-         bELw==
-X-Gm-Message-State: AJIora/umHIoR2dBdZK16YIXDwcZaWLg/3tL+C4KWBbO4jLH0VxHW+W3
-        T4L3JDLlvKJrlmxjI+yrnbCoxR5oQEDuwn6xTx4faQ==
-X-Google-Smtp-Source: AGRyM1solygMwSWCkiPF1NFwzx5BeilY1scDMXVDLNy5qaonwBsI4xn5J0zOBjmp0RWdt2LaZxnizqSGP3n3TRaTEKc=
-X-Received: by 2002:a0d:eace:0:b0:317:87ac:b3a8 with SMTP id
- t197-20020a0deace000000b0031787acb3a8mr6074480ywe.126.1655925007151; Wed, 22
- Jun 2022 12:10:07 -0700 (PDT)
+        with ESMTP id S1359276AbiFVTdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 15:33:14 -0400
+Received: from sonic309-14.consmr.mail.bf2.yahoo.com (sonic309-14.consmr.mail.bf2.yahoo.com [74.6.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D303B545
+        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 12:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1655926230; bh=My38NqwsCxcoiXxWm9l4ZnV9by95K4weZv9w6pn24H4=; h=Date:From:To:Subject:References:From:Subject:Reply-To; b=iTAgUXGN6qVElQMRrxzjTuf12R3Wq422ulb2uWYf5tChNoHl7rIF3VSViYBSEhACRP+c8oBlQSkTgK6x+4kCzoyqHlHtOKD29ovDBm5ro9pjf4isT30O+SwKhqWu8OpQ55B2tZV9P6wvH0fh6Yiv3b7ycGOHGZBmemZKfWdmfjsn7NxqvxEmFYeXPR5tE1pOm3ixftUMKPtBlvbBqN4ZCkeqEfD25ovFDlM4BjoZJ8cRqer8ehPRnBh6xDZPZIEpC792siNiyFZQgUcuSN2+EW/3SEPrsemaJz+ddDOxEx/p41We9OyWxXxz8KF0+sbL5OVXScVzAfKm3vveQx9SqA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655926230; bh=WpAGTe1cpGxV6CRxSq0toBIEmpcYDwuP2I3VRVF8es0=; h=X-Sonic-MF:Date:From:To:Subject:From:Subject; b=AYLUZdU+KKx7MLZfyrkCOcRnvV4172e9XvH1/VZH9QDv70k/vnknCfdBDitLuZd6jnlk7vE00c0yWvLl/YX5wwT5gv41/3lLFoNdvpS1Ag5PPNv/z3iWv5Y9hFunYYKLUqdhGWP/pHTZhj+c2MbOIILlI6woHI6MerDM4NZ3Ih1yvhU4sJfVE2O8Y2gW3NYOsHoQdylXP4G0L2cJQKfl3+8bQgd2ftKz/g07+jJI5GSBFNv7OoR3LdqBGS/DIvJtfzOPq1XK+5pWIkDizbqQcf8klwncAwSLXAnyMQ9PEub3+qKAJhmKdmkQVF9aHtNV70gliA1EapH2xbvS52VvMg==
+X-YMail-OSG: CSHGYfoVM1kpvDH34HHVMDMHkQJYiccnz1OsEFjnYJBRfUPXLXnD6MMyfe9He.e
+ rSZvwl05ngr80520JEwJJK90YN6RxdHHKV9t4yXbUwX2cLwG9cVvHmPYCQZnTEcUbctxETWWJClo
+ 7RCsoyGR7eU4aBJ.PbBSEQvppHMHxZFhklBvu8pMk23tSFaBx2.MMV9QsqCtt2r4S3qiB77I1Vpv
+ PprQrVol7oqWxzQLB_fvAhCGaZfoqBd7Q5uhFz_UCHLDyLu63fcCajiKKVL2TujQv9gO9Wv4VhEs
+ yD6eQYXsJm4kHJPD_gC_wAYD5Da.MYeH4Doryg7KC0FDaBpWZr9n2fvB9XGl3wJUN6KZlnTtwTS1
+ _xKZIYOebMafsc0Rr3sxaf.MNDTqxq05_aNU6l1YKcHSdtDQwMWVnZx.uN4jdv8BWyoCbgH1UiV.
+ B0SLTbylBbXUC8810hb.AGSsP1BJXfPcXupLgfUHhBS5Ks5a5FIOBzKsJYoaJhwJtRmspN9rkqgg
+ 9fA2BsWYLQo3ble0FGmlBuYYdAUZeYt5TjseJ2NbVlda3aV2zHKBblnInTRshsmyzsvEq8wBs.cn
+ 3ncPJBg4GiOUxoT2jhMPRPErGHCN7s0wvODZZUo2CTqAvwKrZUe2IbUFbPDRn.x8vwTb1QZ8kEm.
+ _DhbF.n.N0bxMJfrrEAcYlBaKyeWl_f7mD6PPjkDDnrnmWmAn4_XXpDUFJ2c1BXIbmhwOgCjA8Ic
+ V.JED48LxG1CyTHeX4ekKHwGRzBzVy.8UIh5cvtOWDhUo4a5pEAarUq005OzrZv_w_GOqIlsA1Qk
+ KcJj2T8s8whD3NFBVcSHkDQ4h46cgbB3L7WE7yxWAmdx.MdpQxfdwmBHuSGa2zOeSLSL4aXu3CtB
+ xXjFUpJT6nJYGccf8S8Ck8NOyIehmKVBzBn1TcGnpTb7rElwAwbxcdPuJqhjBFEqt6uZZ9mGitWK
+ nVQQeG8Lu3u.ZDKTuDe1ttVYKLok2Sq3sg2feGeU.8xI9ekYMQiS1YSyY115i2ZFg18D92srbf7K
+ 61fSB2o5rB7MsZwyJeT8.eHhqfBQXJ1Puz1X30B58xYgrwRpi80.7pPIICAzAUR3tOTqWjTfc8G3
+ 1NiPbXzT_u4x8rZU9tJ4mrXf4.imditX4Kr.jVDEP0byHBmPKigZgpnb5DsB2gsrwqNSQqDynQe1
+ EIyxmqc8TpVmPjYpzO0VtSzIkuQKMPZlpAuFroiY99sawcRGvI7mYqDDpIAU6U9qpomCzRlFY2tO
+ Vbgwqq.QXaUKd61ALIxAVajAjAfxJDtFhzCCxADYfSyK8yxXdmkLb2D55OLeqcGTqmJnt22zBXz2
+ 6nYnQ9D5lLMzpncawCwrCYnU98xIrp1OyiSr4_GD5r0LyoucAFnK2WOEbwCF40_J8Ascr_jRgicD
+ TMoi3FWsmB7aUJlPCCdVjSFvfziDlbbZgV.17hMWoXHjkuxqCsqTIH4FlMfGxPWgnho4wIu5df71
+ 7wPlcFWFxcxtq8lHsQB8vanKdD0I5EAF07EH_7jdosZKndR2efK8FVqM1UQHKrvyCWYJZkYm6tl2
+ _OfC528qf5N5NwopK4GlVOuDUs_DVy5EYi915vnjzWwlftfQbK2_ekcOBMfjHzR1fTI0fsejchzt
+ ASH4lpQshVanurrF1h8fCnjbtsYs3ph7n6F4obDl5b0NqkO1cJqCheEIXUMpNqF4yBG2O4CitTKy
+ zCYxZO7b.NYYrgNprhXMOCzaqr3iBo3E2Id0VJbVVxAXfkG2ZU3ZZHS3N.AeE7EroiEL1l5wMNgv
+ vG98NSgZmW4DPVuQBxMZUP.6zM5kpKMFHBIkUzZhG8uaTmPqcNm1g5EbDQ3DgGOkRN6tOig0red2
+ zhg1jnz__wfONmGsdmY.uW0ue2BlMBVJh5BPPwShF2wG_qqM_HNzXEyiywzKIgTeLao7MtaaZMg.
+ .Ug7H8hLWkhgAs36k.Vr__AwRuqnfWe3GXylloHZvc2DvHMPLqZzsGNN0ZL3rtYSziWiedgfKGba
+ sXaiqeRfx8cOt5jmKWtznjqoRbblnMXV573QoOS1x_qwkIgJ0h4UOl3F3pZ19XmlpJpXnMK.8Gix
+ 57gh4KA_qaFo_wgVjRTnvKxOvREvOWewblxfB6J6x8yjM.89LmOZHg2DJY2MDUOopcW8pPWQ1RfT
+ Fm6Q.s4gqCOdu2yd7Mtv53r7IfT0..K2Ergs9iT3WpFptf.q6btye9mepKNrXsblqJJeCb6nLjlN
+ YVg--
+X-Sonic-MF: <tonystark1291@aol.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.bf2.yahoo.com with HTTP; Wed, 22 Jun 2022 19:30:30 +0000
+Received: by hermes--canary-production-sg3-559fcd5995-l2nq9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a691c7493404d35352aa6f0f6725004e;
+          Wed, 22 Jun 2022 19:30:27 +0000 (UTC)
+Date:   Thu, 23 Jun 2022 01:00:22 +0530 (GMT+05:30)
+From:   tonystark1291@aol.com
+To:     linux-pm@vger.kernel.org
+Message-ID: <130546557.109.1655926222706@localhost>
+Subject: According to analysts
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
- <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com> <YrKhkmj3jCQA39X/@atomide.com>
-In-Reply-To: <YrKhkmj3jCQA39X/@atomide.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 22 Jun 2022 12:09:31 -0700
-Message-ID: <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <130546557.109.1655926222706.ref@localhost>
+X-Mailer: WebService/1.1.20280 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
->
-> Hi,
->
-> * Saravana Kannan <saravanak@google.com> [220621 19:29]:
-> > On Tue, Jun 21, 2022 at 12:28 AM Tony Lindgren <tony@atomide.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > > > Now that fw_devlink=on by default and fw_devlink supports
-> > > > "power-domains" property, the execution will never get to the point
-> > > > where driver_deferred_probe_check_state() is called before the supplier
-> > > > has probed successfully or before deferred probe timeout has expired.
-> > > >
-> > > > So, delete the call and replace it with -ENODEV.
-> > >
-> > > Looks like this causes omaps to not boot in Linux next.
-> >
-> > Can you please point me to an example DTS I could use for debugging
-> > this? I'm assuming you are leaving fw_devlink=on and not turning it
-> > off or putting it in permissive mode.
->
-> Sure, this seems to happen at least with simple-pm-bus as the top
-> level interconnect with a configured power-domains property:
->
-> $ git grep -A10 "ocp {" arch/arm/boot/dts/*.dtsi | grep -B3 -A4 simple-pm-bus
-
-Thanks for the example. I generally start looking from dts (not dtsi)
-files in case there are some DT property override/additions after the
-dtsi files are included in the dts file. But I'll assume for now
-that's not the case. If there's a specific dts file for a board I can
-look from that'd be helpful to rule out those kinds of issues.
-
-For now, I looked at arch/arm/boot/dts/omap4.dtsi.
-
->
-> This issue is no directly related fw_devlink. It is a side effect of
-> removing driver_deferred_probe_check_state(). We no longer return
-> -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
-
-Yes, I understand the issue. But driver_deferred_probe_check_state()
-was deleted because fw_devlink=on should have short circuited the
-probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
-probe function and hitting this -ENOENT failure. That's why I was
-asking the other questions.
-
-> > > On platform_probe() genpd_get_from_provider() returns
-> > > -ENOENT.
-> >
-> > This error is with the series I assume?
->
-> On the first probe genpd_get_from_provider() will return -ENOENT in
-> both cases. The list is empty on the first probe and there are no
-> genpd providers at this point.
->
-> Earlier with driver_deferred_probe_check_state(), the initial -ENOENT
-> ends up getting changed to -EPROBE_DEFER at the end of
-> driver_deferred_probe_check_state(), we are now missing that.
-
-Right, I was aware -ENOENT would be returned if we got this far. But
-the point of this series is that you shouldn't have gotten that far
-before your pm domain device is ready. Hence my questions from the
-earlier reply.
-
-Can I get answers to rest of my questions in the first reply please?
-That should help us figure out why fw_devlink let us get this far.
-Summarize them here to make it easy:
-* Are you running with fw_devlink=on?
-* Is the"ti,omap4-prm-inst"/"ti,omap-prm-inst" built-in in this case?
-* If it's not built-in, can you please try deferred_probe_timeout=0
-and deferred_probe_timeout=30 and see if either one of them help?
-* Can I get the output of "ls -d supplier:*" and "cat
-supplier:*/status" output from the sysfs dir for the ocp device
-without this series where it boots properly.
-
-Thanks,
-Saravana
+Good day and here=E2=80=99s to a stable and prosperous calendar year.
+Many groups will be remaining at home in spite of loosened travel and commu=
+te restrictions through the rest of this year and possibly beyond. Are you =
+planning to increase your investment in accounts payable solutions to addre=
+ss this development?
