@@ -2,153 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FF25549FF
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 14:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC34554B74
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jun 2022 15:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbiFVMUb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jun 2022 08:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S230189AbiFVNjo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jun 2022 09:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234442AbiFVMU3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 08:20:29 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E003369CC
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 05:20:28 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id cw10so10096749ejb.3
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 05:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YqZl55YlnzKJuZvnAvOYUqgqzVWeklNXo8K4BWb79NY=;
-        b=K+vUm9h4zeZ2BY+AkhsLxdTYyhJwqnMXqQq77ZRQfWdtzXQwazdV7BvakFNKvQJxGb
-         YbZqFHNUdhLZ5rkfeG9GzWzmy0i05jF+yiQg8vU/hKgJvaCCmROqzo1ePUT0nW3nKGUb
-         awSUdhmwMFCXKWFnTe0GlnC6o/TV/UIx84e8QJEZjXf+qSo/JH9yEfluwL4JpjwyP6lJ
-         C3v6aS4CbXAKHBZ3u0eWXDUTiz5mZLZLDle3Ex5Cr41wSJ3Ouze7STBZxmb+C++WIMaz
-         YkGxZucrMsZHESuItdlF4xdJ5T7GkNi5dtvrDtaLfu+1DR9q6wJLUUJbdkozGT3mKCLX
-         mILg==
+        with ESMTP id S1356463AbiFVNik (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 09:38:40 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A764F6579;
+        Wed, 22 Jun 2022 06:38:39 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31780ad7535so136828197b3.8;
+        Wed, 22 Jun 2022 06:38:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YqZl55YlnzKJuZvnAvOYUqgqzVWeklNXo8K4BWb79NY=;
-        b=S0/MCFUBJpPX5nH/bSUTnT9r/pUt1jTKUIQDEMtdKl/mEXUNxPupxeFI9DiUr0FyzF
-         B/yYYag8GZpDPuHvBnHPLq6kTdqcz640uYMukWOsPGncU/ZAD1NcvNKqSSGylRKWxErB
-         xdQFORUijaWlEfTeKFch+AZLEq3p2y09EI313li66xdP0kWfS5sD5jSKYqGwJguvhXul
-         zu93ZP/m9oTZDU0EywZxk3rXAY0QV6XXu1bwu9Bh1yEEwxegFBpZ9KKD5YkV9eWrDntP
-         ReFSi5HZvtzRNLKZT6KtGr8tlkpDPPJllvPm3roOohnTQcKGMCwG9UluKrc/3f0S6lkb
-         f2rQ==
-X-Gm-Message-State: AJIora9dTnoFI1s1yWB+QS3DhQg8t2XnthvlAERKz4saz5m09aDMu5zX
-        q8QLf42qZ6cR2oAVH882KOPE9w==
-X-Google-Smtp-Source: AGRyM1tRaVprGVLQKE51VKBB6prua/fQyAH18plkrLguHseuDTTg9AZY0HC40TSxd49AsE/GzfvZTQ==
-X-Received: by 2002:a17:907:d0d:b0:711:d554:1c8f with SMTP id gn13-20020a1709070d0d00b00711d5541c8fmr2878279ejc.223.1655900426586;
-        Wed, 22 Jun 2022 05:20:26 -0700 (PDT)
-Received: from [192.168.0.224] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p6-20020a17090653c600b00722e0b1fa8esm3077762ejo.164.2022.06.22.05.20.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 05:20:25 -0700 (PDT)
-Message-ID: <be7fafdb-5553-1b64-e7f1-5909aced3ba5@linaro.org>
-Date:   Wed, 22 Jun 2022 14:20:24 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SWQHo4/Ll0U0MjHnO1yt+1E/OpL+I/MzfVL3cp/Dgl4=;
+        b=bZ8egskKF1xMps8RZY/NhbRj+jYJx5az6SEnJkGDk+gBDfNbKROyAiI5fV/u2v6GHK
+         SGUa2Rv+jwJ2qTaVeS2dxpfzGmL+TI0mxFqhCLCilo2Wv5aiiTlJ0rtvSHf9OfvKWren
+         UyXXEu+hJCxHKBWeI0bv5sDM+A15578MhdXvFEPzbkXiKuYi0MS4MnUneylB2S1wWS/1
+         sj3d2LJmINdGvyTA+zKjGEpuEg9NfBBkiu6u/enxFe5jwBemwp++bF5Gd4VVFncqKA1s
+         Xd4l8q7i8VdMm4P/WK5XynBxrc71WUJGbtWAgk0P1Xl0UfSlYmqD2Y+UJm95dK+Q6q91
+         RLPw==
+X-Gm-Message-State: AJIora8yw0HDa58CGmtUKRHKLGBWvsiNLUgunE7sM2KtT9kQrcOiTy74
+        p6WKfdkhjExEQwwO52FyDPSywI4/u0flPO+F4uU=
+X-Google-Smtp-Source: AGRyM1vk7tKbl15XHzt37qDEAfj9o5qy9tpX7zdLtm/RWDK0PLTgSAq3saIwSXfd1oxViFMM8knkflnaLNY2oHXWeGg=
+X-Received: by 2002:a81:68d7:0:b0:318:11df:a40d with SMTP id
+ d206-20020a8168d7000000b0031811dfa40dmr4453973ywc.196.1655905118755; Wed, 22
+ Jun 2022 06:38:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 1/4] dt-bindings: interconnect: qcom,sdm845-cpu-bwmon:
- add BWMON device
-Content-Language: en-US
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh@kernel.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-2-krzysztof.kozlowski@linaro.org>
- <Yp5tjUICIEUptKSx@ripper> <3e4e504c-5a38-43cd-ea8d-afbbb72eacad@linaro.org>
- <dbfe1e7c-19dc-2d20-700a-c26f0bf721e5@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dbfe1e7c-19dc-2d20-700a-c26f0bf721e5@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <bccae278-e735-4681-cb3a-41359e42032b@zhaoxin.com>
+In-Reply-To: <bccae278-e735-4681-cb3a-41359e42032b@zhaoxin.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Jun 2022 15:38:27 +0200
+Message-ID: <CAJZ5v0i78UPYpc9epEOndigxAsj3YVXJJTrQDoX0Dw5p-zpgaQ@mail.gmail.com>
+Subject: Re: [PATCH] x86/cstate: Add Zhaoxin ACPI Cx FFH MWAIT support
+To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, LindaChai@zhaoxin.com,
+        LeoLiu@zhaoxin.com,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/06/2022 13:58, Rajendra Nayak wrote:
-> 
-> 
-> On 6/7/2022 12:20 PM, Krzysztof Kozlowski wrote:
->> On 06/06/2022 23:11, Bjorn Andersson wrote:
->>> On Wed 01 Jun 03:11 PDT 2022, Krzysztof Kozlowski wrote:
->>>
->>>> Add bindings for the Qualcomm Bandwidth Monitor device providing
->>>> performance data on interconnects.  The bindings describe only BWMON
->>>> version 4, e.g. the instance on SDM845 between CPU and Last Level Cache
->>>> Controller.
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Reviewed-by: Rob Herring <robh@kernel.org>
->>>> Acked-by: Georgi Djakov <djakov@kernel.org>
->>>> ---
->>>>   .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 97 +++++++++++++++++++
->>>>   1 file changed, 97 insertions(+)
->>>>   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
->>>> new file mode 100644
->>>> index 000000000000..8c82e06ee432
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
->>>> @@ -0,0 +1,97 @@
->>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/interconnect/qcom,sdm845-cpu-bwmon.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Qualcomm Interconnect Bandwidth Monitor
->>>> +
->>>> +maintainers:
->>>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> +
->>>> +description:
->>>> +  Bandwidth Monitor measures current throughput on buses between various NoC
->>>> +  fabrics and provides information when it crosses configured thresholds.
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - qcom,sdm845-cpu-bwmon       # BWMON v4
->>>
->>> It seems the thing that's called bwmon v4 is compatible with a number of
->>> different platforms, should we add a generic compatible to the binding
->>> as well, to avoid having to update the implementation for each SoC?
->>>
->>> (I.e. "qcom,sdm845-cpu-bwmon", "qcom,bwmon-v4")
-> 
-> it seems pretty useful to have the "qcom,bwmon-v4" and "qcom,bwmon-v5"
-> compatibles, I tried these patches on a sc7280 device which has a bwmon4
-> between the cpu and caches (and also has a bwmon5 between the caches and DDR)
-> and the driver works with zero changes.
+Please CC linux-acpi@vger.kernel.org on ACPI-related changes (added now).
 
-The trouble with naming it v4 is that such versioning does not exist in
-documentation. At least I failed to find it. Neither there is clear
-mapping between SoC and block version.
+On Wed, Jun 22, 2022 at 5:29 AM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
+>
+> Recent Zhaoxin CPUs support X86_FEATURE_MWAIT that implies the
+> MONITOR/MWAIT instructions can be used for ACPI Cx state. The BIOS
+> declares Cx state in _CST object to use FFH on Zhaoxin systems. So
+> let function ffh_cstate_init() support Zhaoxin too.
+>
+> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+> ---
+>   arch/x86/kernel/acpi/cstate.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> index 7945eae..d4185e1 100644
+> --- a/arch/x86/kernel/acpi/cstate.c
+> +++ b/arch/x86/kernel/acpi/cstate.c
+> @@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
+>
+>         if (c->x86_vendor != X86_VENDOR_INTEL &&
+>             c->x86_vendor != X86_VENDOR_AMD &&
+> -           c->x86_vendor != X86_VENDOR_HYGON)
+> +           c->x86_vendor != X86_VENDOR_HYGON &&
+> +           c->x86_vendor != X86_VENDOR_CENTAUR &&
+> +           c->x86_vendor != X86_VENDOR_ZHAOXIN)
 
-The only indication about BWMON versioning comes from downstream
-sources, which I find not enough to justify usage of versions for blocks.
+Centaur is not mentioned in the changelog and it should be.
 
-Therefore as per DT recommendation (which I am enforcing on others) I am
-not planning put there bwmon-v4.
-
-Best regards,
-Krzysztof
+>                 return -1;
+>
+>         cpu_cstate_entry = alloc_percpu(struct cstate_entry);
+> --
