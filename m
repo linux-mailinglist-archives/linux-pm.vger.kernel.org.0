@@ -2,66 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FFE55742D
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 09:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4BF557477
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 09:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbiFWHpv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 03:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
+        id S229766AbiFWHuS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 03:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiFWHpu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 03:45:50 -0400
-Received: from mail.onlinesuccesses.pl (mail.onlinesuccesses.pl [198.244.150.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E27546B24
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 00:45:50 -0700 (PDT)
-Received: by mail.onlinesuccesses.pl (Postfix, from userid 1002)
-        id A1DC7A8C65; Thu, 23 Jun 2022 07:42:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onlinesuccesses.pl;
-        s=mail; t=1655970171;
-        bh=nE8HqilgMh4dy7+Z8ksfg7Bc9rmPeQtYFq3/3YR2ODU=;
-        h=Date:From:To:Subject:From;
-        b=Tl+a0ZFBBq2vqMjID8YRFfhYR6y07gxhMzTDrXEktFArX8nhbR5Bi8WSuPZgyITw1
-         5YdU2OkwtEav3bGoj2HrH4SJ5vAjANOksMUeXIrCA7XwyGFqtpshJuMJRxPHZwTlhG
-         afl3jKgTd0AyE2Y9mF+uAtphAPc/LCfuIKM91SiU6p1rk64PdURxa/UpJ8P2zxYSUG
-         Euk00s6vT9yC06+MMy8mbF18Txc6/ZlzWtDmvHwXRgwhdNI3OiurKbObPUcGvANw/g
-         GnsiqqijeTT9G4j4fXD/kQ22KqeKSYtO7/qiv3WAVAZ+MWd8g2LBW6PHXSj1SvQHzx
-         kZCm+XFuwNzJg==
-Received: by mail.onlinesuccesses.pl for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 07:41:20 GMT
-Message-ID: <20220623064501-0.1.51.1mrl6.0.2rkj2oar3h@onlinesuccesses.pl>
-Date:   Thu, 23 Jun 2022 07:41:20 GMT
-From:   "Wiktor Zielonko" <wiktor.zielonko@onlinesuccesses.pl>
-To:     <linux-pm@vger.kernel.org>
-Subject: Ruch z pierwszej pozycji w Google
-X-Mailer: mail.onlinesuccesses.pl
+        with ESMTP id S229643AbiFWHuR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 03:50:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0D15BDD;
+        Thu, 23 Jun 2022 00:50:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FAD612FC;
+        Thu, 23 Jun 2022 00:50:15 -0700 (PDT)
+Received: from [192.168.33.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E0FFB3F792;
+        Thu, 23 Jun 2022 00:50:12 -0700 (PDT)
+Message-ID: <e9dc0752-269f-bdfc-1036-17f5bfd95680@arm.com>
+Date:   Thu, 23 Jun 2022 08:50:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 3/4] firmware: arm_scmi: Get detailed power scale from
+ perf
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        viresh.kumar@linaro.org, rafael@kernel.org,
+        dietmar.eggemann@arm.com, nm@ti.com, sboyd@kernel.org,
+        cristian.marussi@arm.com, matthias.bgg@gmail.com,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220622145802.13032-1-lukasz.luba@arm.com>
+ <20220622145802.13032-4-lukasz.luba@arm.com>
+ <20220622155322.g2idz2623nxi6mu3@bogus>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220622155322.g2idz2623nxi6mu3@bogus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
-
-jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
-j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
-e Google.=20
-
-Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
-=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
-w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
-owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
-dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
-
-Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
-edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
-edstawi=C4=87 ofert=C4=99?=20
 
 
-Pozdrawiam serdecznie,
-Wiktor Zielonko
+On 6/22/22 16:53, Sudeep Holla wrote:
+> On Wed, Jun 22, 2022 at 03:58:01PM +0100, Lukasz Luba wrote:
+>> In SCMI v3.1 the power scale can be in micro-Watts. The upper layers, e.g.
+>> cpufreq and EM should handle received power values properly (upscale when
+>> needed). Thus, provide an interface which allows to check what is the
+>> scale for power values. The old interface allowed to distinguish between
+>> bogo-Watts and milli-Watts only (which was good for older SCMI spec).
+>>
+> 
+> Assuming you will take this as a series,
+> 
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> 
+
+Thanks Sudeep for the ACKs!
+
+Regards,
+Lukasz
