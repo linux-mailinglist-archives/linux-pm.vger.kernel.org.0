@@ -2,107 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCE0557F15
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 17:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C392B557F87
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 18:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbiFWP4M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 11:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S231699AbiFWQOw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 12:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiFWP4K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 11:56:10 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A705E443D7;
-        Thu, 23 Jun 2022 08:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655999769; x=1687535769;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2sQkvPgRrN3KPlpmOwqAcm6EAu1OjxyKTvt647C45Gw=;
-  b=Zfx/u8fUriZFilCefwheZHtrDW/bmFNAyo+aEef2lNneYVZMk1hrtAvw
-   nzG+B6sFvtnQCvh9WU3XsZCYDgZTPEpX7doh4dfpelYSBKhV3+GX5nNkP
-   nPtDx/pSSPQtOuogcJb5jcUNCBl9ioZfDBim/MC4a9Klmo0DniV0y9nbV
-   Dtve7GjYT0N8IjUMaEEKwcUJnOFFt3T28h+RhSb1TkQrKA2zL7NeNsJf4
-   VkFrlvvaRer0LF1o3g4zEC4D4wm9yHzHI9ohAHOepObAj8jfCJf75r3fI
-   bOL2+HQySBd7Hraw99DOP/vu/1+OTQjSiVNbpomqDCVvH008iBn9lhsUr
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="261190292"
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="261190292"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 08:56:09 -0700
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="563500760"
-Received: from ckeane-mobl1.amr.corp.intel.com (HELO [10.209.81.98]) ([10.209.81.98])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 08:56:08 -0700
-Message-ID: <ec121630-1ee5-1336-1ed4-04506f0c4129@intel.com>
-Date:   Thu, 23 Jun 2022 08:55:42 -0700
+        with ESMTP id S231651AbiFWQOv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 12:14:51 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17692F649;
+        Thu, 23 Jun 2022 09:14:49 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id j22so17277869ljg.0;
+        Thu, 23 Jun 2022 09:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=chAW9yXxTwtCayPDN2K4p2x7rb0AVI/k5FO9A88UkBY=;
+        b=iepp750f1IXDFnBvhK4HM5vyqZCuV/H9B+98+C6wYTafYO5h+NkfZkl1dxzQEBVmyB
+         FaXWPAUHYp0NuDlM31aN6KreHiZ5gKyAy3tRZV2MFtpveYk+Oyx+vkg15GoG1gVj6KLx
+         /KJ44R/NvwfBg2J5gU5GX4FpHFF9uXWXRHyqFCNZTsxPysn+bxGy/2mPl5tyyRF4zCu6
+         uqSQEG4NhhADABXUy98hg/xetXQgQpEUqCXYuMCXt4WyceOTcq0tbov8gMPr693Jn5iR
+         blCa5AUgMxBXUYv/UZb2N01ZjcT2fZjVJ4UmLn2GN5EYcUftX2R+0QcFvlZ6fwjUq+DT
+         p5/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=chAW9yXxTwtCayPDN2K4p2x7rb0AVI/k5FO9A88UkBY=;
+        b=vQdMuy7cK+2sdsC9KyrQn6vUNKHHdbd+4fJzJQ0zgJL9aQfutlJc3A8UIxeerQw28M
+         xSOvVqM+JS7n1xnQbnV0A6/AOKtzUbZHHk2o/xR0cN2Vemx4xqJafODw81b5eiXXj/OZ
+         52SQUuSo3iWoz35LLzvNU/BOUQrB83HeQJSKP6wo48lGzKgUuxuAcku8Rk/AnLgwXaYH
+         BZMZvkh+Ug4M+zJowoaGHyIrWi0tuLCwXUuhNxQmbAzxpS8Url3c+pYCixIqGV8TmNA9
+         yHKssm57mgJG1u5pVzsful3VYcOaSOIy0V1aRvHkEjIDCHikJlASY6WcrB0eJekfmsqc
+         wb5Q==
+X-Gm-Message-State: AJIora8x57NoP+N48YCVL0BWi1VR0NT/UY2FqDr6kREzx6c9lTBs3lVz
+        oyeGmgTes+o4pFaUvcN/C2x4Ol0U0meAeBxfVmA=
+X-Google-Smtp-Source: AGRyM1uaOZs3XcqnApOZWDYeXACNwy3jox6uESty97oe5gc4bwE/M1cCoRJ23ADElhT0XKwR5RsMcZQXTxqHpm4Pvco=
+X-Received: by 2002:a2e:990:0:b0:25a:7c03:eb70 with SMTP id
+ 138-20020a2e0990000000b0025a7c03eb70mr4983157ljj.350.1656000887671; Thu, 23
+ Jun 2022 09:14:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V1] x86/cstate: Add Zhaoxin/Centaur ACPI Cx FFH MWAIT
- support
-Content-Language: en-US
-To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+In-Reply-To: <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+From:   Max Krummenacher <max.oss.09@gmail.com>
+Date:   Thu, 23 Jun 2022 18:14:36 +0200
+Message-ID: <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, LindaChai@zhaoxin.com,
-        LeoLiu@zhaoxin.com,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <0b583b7e-dcd3-be51-f367-1c12ac841d3f@zhaoxin.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <0b583b7e-dcd3-be51-f367-1c12ac841d3f@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/22/22 18:26, Tony W Wang-oc wrote:
-> Recent Zhaoxin/Centaur CPUs support X86_FEATURE_MWAIT that implies
-> the MONITOR/MWAIT instructions can be used for ACPI Cx state.
-> The BIOS declares Cx state in _CST object to use FFH on Zhaoxin/Centaur
-> systems. So let function ffh_cstate_init() support These CPUs too.
-> 
-> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-> ---
->  arch/x86/kernel/acpi/cstate.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-> index 7945eae..d4185e1 100644
-> --- a/arch/x86/kernel/acpi/cstate.c
-> +++ b/arch/x86/kernel/acpi/cstate.c
-> @@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
-> 
->      if (c->x86_vendor != X86_VENDOR_INTEL &&
->          c->x86_vendor != X86_VENDOR_AMD &&
-> -        c->x86_vendor != X86_VENDOR_HYGON)
-> +        c->x86_vendor != X86_VENDOR_HYGON &&
-> +        c->x86_vendor != X86_VENDOR_CENTAUR &&
-> +        c->x86_vendor != X86_VENDOR_ZHAOXIN)
->          return -1;
+Hi all
 
-Many of the changelogs that add new vendors here go on about particular
-C states declared in the _CST object and contents of CPUID leaf 5.
+On Thu, Jun 16, 2022 at 2:51 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Thu, Jun 9, 2022 at 5:10 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
+>
+> > This series adds a PM domain provider driver which enables/disables
+> > a regulator to control its power state.
+>
+> Actually, we did this on the U8500 in 2011.
+>
+> IIRC this led to problems because we had to invent "atomic regulators"
+> because regulators use kernel abstractions that assume slowpath
+> (process context) and power domains does not, i.e. they execute in
+> fastpath, such as an interrupt handler.
+>
+> The atomic regulator was a subset of regulator that only handled
+> regulators that would result in something like an atomic register write.
+>
+> In the end it was not worth trying to upstream this approach, and
+> as I remember it, Ulf Hansson intended to let the power domains poke
+> these registers directly, which was easier. (It's on Ulfs TODO list to
+> actually implement this, hehe.)
+>
+> Yours,
+> Linus Walleij
 
-Why do we even _have_ a vendor check here?  Shouldn't the code just be
-going and doing the validation of the _CST object and CPUID that the
-changelogs blather on about?
+Thanks for all the feedback.
 
-Intel certainly made the original sin on this one (see 991528d7348), but
-I hope _something_ changed in the 16 years since that patch went in.
+The approach taken with the patchset seems to be architecturally wrong
+and as Linus pointed out has additionally the flaw that the regulator
+would need to be controllable in atomic context which depending on
+the regulator driver / configuration may not be fulfilled.
+
+So our plan is to explicitly handle a (shared) regulator in every
+driver involved, adding that regulator capability for drivers not
+already having one.
+
+
+The question which remains is on how one would model functionality
+which by itself does not need a driver but would need regulator
+support to switch its supply on in run state and off in suspend
+states and poweroff, like for example a simple level shifter.
+Any suggestions on this topic? Thanks.
+
+Cheers
+Max
