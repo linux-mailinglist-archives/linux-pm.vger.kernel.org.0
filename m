@@ -2,135 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37C155891E
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 21:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B7C558972
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 21:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiFWThm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 15:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S231964AbiFWTot (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 15:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiFWThP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 15:37:15 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1D32D1CE;
-        Thu, 23 Jun 2022 12:24:55 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-317710edb9dso4732607b3.0;
-        Thu, 23 Jun 2022 12:24:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QhlK/YJnZQeAv5E4yCNpLUiuZLQywWAhQUI+Q4Vp0+o=;
-        b=6Ush0fIA8DvnuZfE1fM3b9QNQ13eJ5RxlocOlhHxV5VO46c67SOTfIaUIK/2XhfIHs
-         fg4ReyYaz+FYPYFmzAcp8JfYGgKUKstNKxqqrbAtt405699rrmDRNoaWe8CRmrOjxs35
-         Qb6b5MMrvYKe+rmO5EZpBPHphFcS3G5UDcgOyi69/NYnVa4m8xE6VAMQNn8Xr/4/cfE1
-         Xc0WY1CWFgR5rhJr5VSvkGSrq5v6cBzKzSbwzjbFUbJz/ojdS+Z3lFTyfUNonlrRWm0Z
-         zDFoZ/zOrRt1GsI+2oZND+i/hKVuSaAWI+Qc/smrWZrRWV5yURdJKXNuda02pUD3tEM5
-         JQig==
-X-Gm-Message-State: AJIora9HAXbz9kozwm4QGZHwf1kddgnGdcIrTDUD/lv2LR2G1PsVc4+m
-        bLYJrOBW2De/0vd/wMmasXrIS3JwwcFBNJEcElpGEBey
-X-Google-Smtp-Source: AGRyM1s/CzlAf52iBA8Dw4sOVjz6mvyhybudD2ImBh7j8RyoQGrGueJuJ+HMZyddeqaWsf/Ougr75V+Q6Mr+9BaurD0=
-X-Received: by 2002:a81:a049:0:b0:318:8da9:4f with SMTP id x70-20020a81a049000000b003188da9004fmr533276ywg.515.1656012294900;
- Thu, 23 Jun 2022 12:24:54 -0700 (PDT)
+        with ESMTP id S231548AbiFWToY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 15:44:24 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA7AA4;
+        Thu, 23 Jun 2022 12:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=9CGM3MAz5VIB06lBzNjGngOQOoE0/I7wEi8Zke9gm+w=; b=eQsA4dsC7zy0gZGxnWzQsATNue
+        4RNWA+fhmA3erPfzk5dxeMQCaD5Lf11f9oQOKkk8CzdloSz0KwOEP+HRM4wMgGPP8ofcZCZ2qDmwT
+        xfiupW9UG4h8v6ZC3HM8LRHIplQ2b0UahGQFsyNwJUOONvAmQaW+GT7DlYixlYzdJoIae9dvTqpeU
+        gy/FAvkyHsCJjzMv7Un5R+xfx0R5N1LCz8GpdTxJ5A4fM7tBl8UkLYkl8Zu3L9BNeakPSWLUWDFoM
+        lRie2OS7t8onKtNzBXKfM4zQiHwHss/qcyL+N+8jD2XviMbsj2Yz1eEDOSE48nGWdf9/GLVllbreJ
+        XSnwtsig==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o4SWU-00Bssw-NX; Thu, 23 Jun 2022 19:30:38 +0000
+Message-ID: <bcc5b395-7fd8-f1a0-1b9f-62c9948287af@infradead.org>
+Date:   Thu, 23 Jun 2022 12:29:27 -0700
 MIME-Version: 1.0
-References: <20220623031509.555269-1-Jinzhou.Su@amd.com> <YrQbxvyl6ZT2T3wh@amd.com>
-In-Reply-To: <YrQbxvyl6ZT2T3wh@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Jun 2022 21:24:43 +0200
-Message-ID: <CAJZ5v0jnur-2vejKT-b9NMXp1qhh0CSL4-yLRK786TfL0nb8AQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: amd-pstate: Add resume and suspend callback for amd-pstate
-To:     Huang Rui <ray.huang@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "Liang, Richard qi" <Richardqi.Liang@amd.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 12/14] leds: mt6370: Add Mediatek MT6370 current sink
+ type LED Indicator support
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+References: <20220623115631.22209-1-peterwu.pub@gmail.com>
+ <20220623115631.22209-13-peterwu.pub@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220623115631.22209-13-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 9:53 AM Huang Rui <ray.huang@amd.com> wrote:
->
-> On Thu, Jun 23, 2022 at 11:15:09AM +0800, Su, Jinzhou (Joe) wrote:
-> > When system resumes from S3, the CPPC enable register will be
-> > cleared and reset to 0. So sets this bit to enable CPPC
-> > interface by writing 1 to this register.
-> >
-> > Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
->
-> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
-> Cc: stable@vger.kernel.org
->
-> You can add one line below your commit description to Cc stable mailing
-> list. And next time in V2, it's better to use subject-prefix optional to
-> mark it as v2 like below:
->
-> git format-patch --subject-prefix="PATCH v2" HEAD~
->
-> Other looks good for me, patch is
->
-> Acked-by: Huang Rui <ray.huang@amd.com>
->
-> > ---
-> >  drivers/cpufreq/amd-pstate.c | 24 ++++++++++++++++++++++++
-> >  1 file changed, 24 insertions(+)
-> >
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > index 7be38bc6a673..9ac75c1cde9c 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -566,6 +566,28 @@ static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
-> >       return 0;
-> >  }
-> >
-> > +static int amd_pstate_cpu_resume(struct cpufreq_policy *policy)
-> > +{
-> > +     int ret;
-> > +
-> > +     ret = amd_pstate_enable(true);
-> > +     if (ret)
-> > +             pr_err("failed to enable amd-pstate during resume, return %d\n", ret);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int amd_pstate_cpu_suspend(struct cpufreq_policy *policy)
-> > +{
-> > +     int ret;
-> > +
-> > +     ret = amd_pstate_enable(false);
-> > +     if (ret)
-> > +             pr_err("failed to disable amd-pstate during suspend, return %d\n", ret);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> >  /* Sysfs attributes */
-> >
-> >  /*
-> > @@ -636,6 +658,8 @@ static struct cpufreq_driver amd_pstate_driver = {
-> >       .target         = amd_pstate_target,
-> >       .init           = amd_pstate_cpu_init,
-> >       .exit           = amd_pstate_cpu_exit,
-> > +     .suspend        = amd_pstate_cpu_suspend,
-> > +     .resume         = amd_pstate_cpu_resume,
-> >       .set_boost      = amd_pstate_set_boost,
-> >       .name           = "amd-pstate",
-> >       .attr           = amd_pstate_attr,
-> > --
 
-Applied with some edits in the subject and changelog, and a CC:stable
-tag added, as 5.19-rc material.
 
-Thanks!
+On 6/23/22 04:56, ChiaEn Wu wrote:
+> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+> index a49979f..a8c58c3 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -244,6 +244,17 @@ config LEDS_MT6323
+>  	  This option enables support for on-chip LED drivers found on
+>  	  Mediatek MT6323 PMIC.
+>  
+> +config LEDS_MT6370_RGB
+> +	tristate "LED Support for Mediatek MT6370 PMIC"
+> +	depends on LEDS_CLASS
+> +	depends on MFD_MT6370
+> +	select LINEAR_RANGE
+> +	help
+> +	  Say Y here to enable support for MT6370_RGB LED device.
+> +	  In MT6370, there are four channel current-sink LED drivers that
+> +	  support hardware pattern for const current, PWM, and breath mode.
+
+Spell out "constant" (if that is what "const" means here). ?
+
+> +	  Isink4 channel can also be used as a CHG_VIN power good indicator.
+
+-- 
+~Randy
