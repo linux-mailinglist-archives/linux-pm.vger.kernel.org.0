@@ -2,214 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E041557541
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 10:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0247E5575F8
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 10:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbiFWIWY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 04:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S230235AbiFWIys (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 04:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiFWIWX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 04:22:23 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73A34832B
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 01:22:21 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id n144so30443638ybf.12
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 01:22:21 -0700 (PDT)
+        with ESMTP id S230281AbiFWIyp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 04:54:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCBC37BC9;
+        Thu, 23 Jun 2022 01:54:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ge10so8060802ejb.7;
+        Thu, 23 Jun 2022 01:54:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9PjNiNhLCuh9WhzT1AaONPfu5Pj4HpLdf/1QRxDQ9sQ=;
-        b=pzqGfXQLba3va5/8Sml5dTqasBd22VtMC6LsIY9XM86NydlS9zpVJnL7w7xX6iuDe8
-         X7CBtL21Xt/roY99vHIUugx0rcpAIZr/MRxvyoGKpsUZLiqAk//S2jlQpBwrNnHk7wGm
-         RQTEw34L8DZMyPfA1AsauTTsxDs05tA56d4f5svcOAWjw1Odk+3DTByfTvJrYBNr/zRF
-         iPbOdMh47ENO95zTpdz/17l4CgcdpExtT5e0NypAQFBQc/j/g67fTa8i40rOqRH7rdeC
-         +qNvOlp6pV5Z2uaLHf2Y3ZncmyJaUhr6W/xXlsYAJCLg8Ts5Y0LhOT8aCUZsWexiZHkk
-         67Ww==
+         :cc:content-transfer-encoding;
+        bh=9ewocLK4QQe9PxZjCCcv8MwH3fNq/SZdcCp141CybdY=;
+        b=Kqjw6Rve6l85j+tA8aUQq34+hQ66vEsjrz7vZgWhz7Ljx6vlzB/s0S3zyfFQUH/3BT
+         ZkoVvbpAQT0P8iWwpcGzSap2PCc40eq4cSfiuq4QCtmnpAzDkPt+fMI4DBgkA+27LIrI
+         eN16lc3f2jh7/ppkiKXiryX6aWvVb0L2f3CHOBu2BLisB23B+Mm+9+WAoyze/eNLdB86
+         cQ6NsCSLdUsv8Nw+QsCT03NjVe4ZnUmWMNojoAUVbeFNtjfDZOzVbiJhuskuAzLjqHS8
+         udz2ZBV/V0Phaa/vIIg9iK+PVwKhCxdnuv2P+h5O+NOvgH+8yzA4YG26sHiAhVavWVzX
+         /36Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9PjNiNhLCuh9WhzT1AaONPfu5Pj4HpLdf/1QRxDQ9sQ=;
-        b=jRsaTu4Ly/IFJbvuwu8akeiOD9zDCqqxHC6lUQGhovFzHFak26s+FdJc+BfBXNsbyi
-         AfXOwoUHkLCO/60gLF8I27micKnpeIpOeokCX8I3y194x8FnrepHljmdcqTUTbpm04RD
-         LGd/mbAVARDpc5FCWST4wPEXT3LTFLwZ0RAjW51X9hCV+3p74M+eaKvvE/9vbVBzYTb7
-         gRLLk4cdIW8NqAp59NbV83QqAPdJTEnQfsIzgmxh3jLnDRXkrwCCgAJjgIqJC5K5zO7T
-         Uj+FOBO6jP35wLbgnHsUj2VKXbijLMMtg9EAvPCbqI5r/oC7vxR9D9hImZrrfD5g90UZ
-         QeBw==
-X-Gm-Message-State: AJIora84zbdNuVuSQ7Nefxj22aLMOs5tGPQUTwyWUdGqQNLw8DlliSCD
-        8N0wJzZNCkt+GtzSkC4GaGKEHbmdQuywS+DLX5O8jA==
-X-Google-Smtp-Source: AGRyM1vxaAj9yCr/MgE5OXOPyoZP2NZubFdKuQ3kk1yDt2x8rBApcAn2+N11GLiK2OWn/arC4N2rlY0DEOynYw1Ms08=
-X-Received: by 2002:a25:9e82:0:b0:669:b38d:e93e with SMTP id
- p2-20020a259e82000000b00669b38de93emr775933ybq.242.1655972540895; Thu, 23 Jun
- 2022 01:22:20 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9ewocLK4QQe9PxZjCCcv8MwH3fNq/SZdcCp141CybdY=;
+        b=Bq4CLLAM2UA13887kT4CGcFu3bjt9+1YYLlygNQk2c7KBl2dNhKVbhlkSccynjusvk
+         5koI9pZKZJjhFhaqcQJW5rqCvbgkZZkfqr2dgiOpHLnRfjnsiC94rutEsNTcMJTAYeMv
+         vkteWGfMRjhlHxnSIsa6blnvZQj70+Tuz5lm7JdPng2WV5b9E0VYq2bsM0UGWB4AP/rR
+         0QiqWiBzqkyM9k8P9d/tcozA4VO7QhPsubfwp8ATRdNcwxY8lVF5NR+PDKG1SuWHMuyu
+         6iU7VrBkv6fxbmLfa8VKFtCXGx8tHa9ek7yFid5xd/67pfKZVxE6Gus3iwj+ten850Rk
+         eyNA==
+X-Gm-Message-State: AJIora+pukWAxqt3wxjVn8X5WkbIPS/dudzhqWLwFFzRK77zxyXHqBG2
+        wVeJhOuXYhLKmqELjcCHrS7z2z1uOwyv7bFv5jw=
+X-Google-Smtp-Source: AGRyM1s/cuwwgO+0Sp2pW/dYpZ5m/GlC8Pm/9k9OqASIANcWAar3Aq5myyz+KQKUvdUTygA/txrImEaGpacIQGqXKII=
+X-Received: by 2002:a17:907:6295:b0:703:92b8:e113 with SMTP id
+ nd21-20020a170907629500b0070392b8e113mr7172323ejc.594.1655974482584; Thu, 23
+ Jun 2022 01:54:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
- <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
- <YrKhkmj3jCQA39X/@atomide.com> <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
- <YrQP3OZbe8aCQxKU@atomide.com>
-In-Reply-To: <YrQP3OZbe8aCQxKU@atomide.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 23 Jun 2022 01:21:43 -0700
-Message-ID: <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+ <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com> <YqDLflKTsYaupArl@sirena.org.uk>
+ <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
+In-Reply-To: <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Date:   Thu, 23 Jun 2022 11:54:29 +0300
+Message-ID: <CANhJrGMqUmnSvyNRgRyp40YnGQkD3N_2AZLn94NDp+4RG0_x5w@mail.gmail.com>
+Subject: Re: [PATCH v2 02/17] regmap-irq: Add get_irq_reg to support unusual
+ register layouts
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Chen-Yu Tsai <wens@csie.org>,
+        jic23@kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, lars@metafoo.de,
+        "Rafael J . Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 12:01 AM Tony Lindgren <tony@atomide.com> wrote:
+Hi dee Ho peeps!
+
+Sorry for the late reply.
+
+pe 10. kes=C3=A4k. 2022 klo 18.43 Aidan MacDonald
+(aidanmacdonald.0x0@gmail.com) kirjoitti:
 >
-> * Saravana Kannan <saravanak@google.com> [220622 19:05]:
-> > On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > * Saravana Kannan <saravanak@google.com> [220621 19:29]:
-> > > > On Tue, Jun 21, 2022 at 12:28 AM Tony Lindgren <tony@atomide.com> wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > > > > > Now that fw_devlink=on by default and fw_devlink supports
-> > > > > > "power-domains" property, the execution will never get to the point
-> > > > > > where driver_deferred_probe_check_state() is called before the supplier
-> > > > > > has probed successfully or before deferred probe timeout has expired.
-> > > > > >
-> > > > > > So, delete the call and replace it with -ENODEV.
-> > > > >
-> > > > > Looks like this causes omaps to not boot in Linux next.
-> > > >
-> > > > Can you please point me to an example DTS I could use for debugging
-> > > > this? I'm assuming you are leaving fw_devlink=on and not turning it
-> > > > off or putting it in permissive mode.
-> > >
-> > > Sure, this seems to happen at least with simple-pm-bus as the top
-> > > level interconnect with a configured power-domains property:
-> > >
-> > > $ git grep -A10 "ocp {" arch/arm/boot/dts/*.dtsi | grep -B3 -A4 simple-pm-bus
+> Mark Brown <broonie@kernel.org> writes:
+>
+> > On Tue, Jun 07, 2022 at 04:53:09PM +0100, Aidan MacDonald wrote:
 > >
-> > Thanks for the example. I generally start looking from dts (not dtsi)
-> > files in case there are some DT property override/additions after the
-> > dtsi files are included in the dts file. But I'll assume for now
-> > that's not the case. If there's a specific dts file for a board I can
-> > look from that'd be helpful to rule out those kinds of issues.
+> >> -    if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
+> >> +    if (chip->get_irq_reg) {
+> >> +            reg =3D chip->get_irq_reg(base_reg, i);
+> >> +    } else if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
 > >
-> > For now, I looked at arch/arm/boot/dts/omap4.dtsi.
+> > It seems like it would be cleaner and clearer to refactor things so tha=
+t
+> > we always have a get_irq_reg() with standard chips getting given a
+> > default implementation which implements the current behaviour.
 >
-> OK it should be very similar for all the affected SoCs.
+> I don't think that is a good way to clean things up. I only intended
+> get_irq_reg() to be a quick hack to solve a problem; in my opinion it
+> would be a poor abstraction to base the API around.
 >
-> > > This issue is no directly related fw_devlink. It is a side effect of
-> > > removing driver_deferred_probe_check_state(). We no longer return
-> > > -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
-> >
-> > Yes, I understand the issue. But driver_deferred_probe_check_state()
-> > was deleted because fw_devlink=on should have short circuited the
-> > probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
-> > probe function and hitting this -ENOENT failure. That's why I was
-> > asking the other questions.
+> What I'd suggest is something that will simplify regmap-irq. Instead of
+> defining the base registers, etc. in the chip, introduce a new struct
+> to describe a register group:
 >
-> OK. So where is the -EPROBE_DEFER supposed to happen without
-> driver_deferred_probe_check_state() then?
+>     struct regmap_irq_reg_group {
+>         unsigned int status_base;
+>         unsigned int mask_base;
+>         ...
+>
+>         unsigned int irq_reg_stride;
+>
+>         int num_regs;
+>     };
+>
+> The idea is that the registers in a group are linearly mapped using the
+> formula "base + (i * irq_reg_stride)". Then it's possible to allow for
+> multiple register groups in regmap_irq_chip:
+>
+>     struct regmap_irq_chip {
+>         const struct regmap_irq_reg_group *groups;
+>         unsigned int num_groups;
+>
+>         unsigned int main_status_base;
+>         unsigned int num_main_status_bits;
+>         int num_main_regs;
+>
+>         ...
+>     };
+>
+> It should be straightforward to fit existing chips into this model.
+>
+> - Chips that use a main status + sub-block IRQ layout will define
+>   one register group for each sub-block and continue to describe the
+>   location of the main status registers inside of regmap_irq_chip.
+>   A group will only get polled if the corresponding main status bit
+>   is set -- n'th group is polled if n'th bit is set.
 
-device_links_check_suppliers() call inside really_probe() would short
-circuit and return an -EPROBE_DEFER if the device links are created as
-expected.
+Does this work for devices where a single main status bit can flag
+IRQs in more than one sub-registers?
 
->
-> > > > > On platform_probe() genpd_get_from_provider() returns
-> > > > > -ENOENT.
-> > > >
-> > > > This error is with the series I assume?
-> > >
-> > > On the first probe genpd_get_from_provider() will return -ENOENT in
-> > > both cases. The list is empty on the first probe and there are no
-> > > genpd providers at this point.
-> > >
-> > > Earlier with driver_deferred_probe_check_state(), the initial -ENOENT
-> > > ends up getting changed to -EPROBE_DEFER at the end of
-> > > driver_deferred_probe_check_state(), we are now missing that.
-> >
-> > Right, I was aware -ENOENT would be returned if we got this far. But
-> > the point of this series is that you shouldn't have gotten that far
-> > before your pm domain device is ready. Hence my questions from the
-> > earlier reply.
->
-> OK
->
-> > Can I get answers to rest of my questions in the first reply please?
-> > That should help us figure out why fw_devlink let us get this far.
-> > Summarize them here to make it easy:
-> > * Are you running with fw_devlink=on?
->
-> Yes with the default with no specific kernel params so looks like
-> FW_DEVLINK_FLAGS_ON.
->
-> > * Is the"ti,omap4-prm-inst"/"ti,omap-prm-inst" built-in in this case?
->
-> Yes
->
-> > * If it's not built-in, can you please try deferred_probe_timeout=0
-> > and deferred_probe_timeout=30 and see if either one of them help?
->
-> It's built in so I did not try these.
->
-> > * Can I get the output of "ls -d supplier:*" and "cat
-> > supplier:*/status" output from the sysfs dir for the ocp device
-> > without this series where it boots properly.
->
-> Hmm so I'm not seeing any supplier for the top level ocp device in
-> the booting case without your patches. I see the suppliers for the
-> ocp child device instances only.
+Best Regards
+ -- Matti
 
-Hmmm... this is strange (that the device link isn't there), but this
-is what I suspected.
+--=20
 
-Now we need to figure out why it's missing. There are only a few
-things that could cause this and I don't see any of those. I already
-checked to make sure the power domain in this instance had a proper
-driver with a probe() function -- if it didn't, then that's one thing
-that'd could have caused the missing device link. The device does seem
-to have a proper driver, so looks like I can rule that out.
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-Can you point me to the dts file that corresponds to the specific
-board you are testing this one? I probably won't find anything, but I
-want to rule out some of the possibilities.
+~~ When things go utterly wrong vim users can always type :help! ~~
 
-All the device link creation logic is inside drivers/base/core.c. So
-if you can look at the existing messages or add other stuff to figure
-out why the device link isn't getting created, that'd be handy. In
-either case, I'll continue staring at the DT and code to see what
-might be happening here.
-
--Saravana
+Discuss - Estimate - Plan - Report and finally accomplish this:
+void do_work(int time) __attribute__ ((const));
