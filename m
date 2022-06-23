@@ -2,208 +2,248 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291C3558895
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 21:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949C55588AA
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 21:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiFWTWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 15:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S230261AbiFWTZ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 15:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiFWTVr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 15:21:47 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B258B6F7AA;
-        Thu, 23 Jun 2022 11:26:26 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id y32so411183lfa.6;
-        Thu, 23 Jun 2022 11:26:26 -0700 (PDT)
+        with ESMTP id S230301AbiFWTZS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 15:25:18 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B7514D2E
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 11:38:08 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so3449543pjg.3
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 11:38:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WFXpnCRvpVBhsuNFE1ahfBGJsqNDQt8dQxVvfN6MrL0=;
-        b=DalKGI6li9osCh4k7iO37g3v5OUCWoMlA9lcg8wxp3/qi5HIMenhTTdp7lkfmkxaFO
-         5i56DaW7feuRINiq2kOC05AY8brpkmge87NEOdDGkcHQCABHBrM/lR06xLa/uYNXD2JN
-         HByhcVabc+qx2jAze76QRQrmHqJQ43fznNb6YOxVQdupQu3sbTr5FFXwdhK74fJl0jvb
-         eciLddbEjTkpfnvpSmNtkeUy899xl8kuFlza0mCjMLlY6mqMYFafWfL0HXdzY9mmrBbl
-         tiYMDiQrKJpSB3DVDSB21zZOwwu+OGmacE6r0lbpRpEmfZUo1aV2LD7kFZYuIORe47QB
-         7iCg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=eVp8FQoB9Ya05mhSC/1JWB3NP7Z+oQHFDaIPb5/+300=;
+        b=X60xoP/aTtoyst0wTd+PWujVCxHkVNY8XAFhplusmrcaoI8R28Pl5VTh0VdRq2Xfxo
+         u5E6pWsCmiNq5SLJc0TNIzaKrUW6k82XPVc5NQEkv7Yu4a8rEq90Aoq5143sPUWQ6uTS
+         AXFETfGqfbZGIeeoTzQVQQ5HCKzk1JrljQnio=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WFXpnCRvpVBhsuNFE1ahfBGJsqNDQt8dQxVvfN6MrL0=;
-        b=Pk4aFqbqHFxJM4s7fjWgDh/2A56Pbgd7uqPafsCkYc+YREYX+rofmacP899CZnHNpw
-         tCavvCU03cURBjJ7shDSXIzbfVsY0L15A2kLBR8okQd141s8/Xyja+x3KgT2YAhOXC38
-         q+6gjpJxRPL0DLxrBvwYufDhbGHapX/zcZ2lX9SCtFK1LvGxizGNaIGQ7N/Rvn52wCha
-         417ZlrOfUKgDzsr7ZDOdh1eILtCGAevLaOyIK5t20z7k4lh0w4d44TcCJRbR8yXIno8R
-         KUsfJCpd5ldiB13AGH1e/krhZcsmAIdjg9KDlr3DDTzke+djVtLIlXQSdDDs1ZxlZ39M
-         a2Lg==
-X-Gm-Message-State: AJIora+diopr+Nkvc+HhJFbovcYlqqVGen9hytmQZGqtbGeRdC8IqGpF
-        yTIORdhemwgh7T2aCDG83IoaonO45W0rjyx5I4I=
-X-Google-Smtp-Source: AGRyM1v7QBH+pV6lYrEVLjv5TY6/p8FX2jSroN/uPAnqjFf8QnXVnznfAY6JW5aADd3D+pMmLcYkM8NpE0OLf3DC0nc=
-X-Received: by 2002:a05:6512:348f:b0:47f:8b25:e9f9 with SMTP id
- v15-20020a056512348f00b0047f8b25e9f9mr6543451lfr.512.1656008785046; Thu, 23
- Jun 2022 11:26:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-11-peterwu.pub@gmail.com>
-In-Reply-To: <20220623115631.22209-11-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 23 Jun 2022 20:25:48 +0200
-Message-ID: <CAHp75VexwvAVeY4MtwKfpNY96eJ1C9eqadd-L+20O2sg2+gYNg@mail.gmail.com>
-Subject: Re: [PATCH v3 10/14] iio: adc: mt6370: Add Mediatek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=eVp8FQoB9Ya05mhSC/1JWB3NP7Z+oQHFDaIPb5/+300=;
+        b=ftkJcnCXnBk1LDWp2N8RFz0nHVozsJ8GBKukFVHpeoMAKyoNqVNcTnZwLU9fCwcKqP
+         uxyJ+4BwulGoTV5tfzII3q77vJyDelciEvU6GC/XhOTTki+IVGLEXoMS4BvVt6G7ZmJb
+         MdaIDMjueQCynOsEl6yXkr+pj4UgZXuP7mQpfdIrLxRV+P6pJw5GEP6TjvMWO55XAC+l
+         7H1Hh+PhcxDMkOQFTNLBGySp56fCxLVUAp/7G9lfGTXYF9MJn1RdyLPtZoTvJPqQhCm7
+         UhdlUuV1Zm/zpz4wbhO1i86YwW9rBPyKWHgOkye+VSJifMO3KxtJiwH7zpGxK7peefdG
+         AH3w==
+X-Gm-Message-State: AJIora+SfUOgYpLNyMTQaj7RzJbwdA5bdlrO0NrER7yJqcpBeDzAJywf
+        BrKPAAgt+lEgHtwO7SZkJVWlTA==
+X-Google-Smtp-Source: AGRyM1twkUARsx68os7RRPBG/tykIifd20D/Xtcu7G7VRIakXKkvcP8g9leSX4Fm1it8MgB+xPUflA==
+X-Received: by 2002:a17:90a:7e86:b0:1ec:8606:b3c4 with SMTP id j6-20020a17090a7e8600b001ec8606b3c4mr5407957pjl.186.1656009488247;
+        Thu, 23 Jun 2022 11:38:08 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:3cb9:498e:158b:4935])
+        by smtp.gmail.com with UTF8SMTPSA id b5-20020a170902e94500b0016a0f4af4b1sm114927pll.183.2022.06.23.11.38.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 11:38:07 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 11:38:06 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YrSzDhgAvMx4TwD2@google.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+ <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com>
+ <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
+ <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 2:00 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
->
-> Add Mediatek MT6370 ADC support.
+On Mon, Jun 20, 2022 at 02:24:15PM +0530, Pavan Kondeti wrote:
+> +Felipe, Bjorn
+> 
+> On Thu, Jun 16, 2022 at 10:15:49AM -0700, Matthias Kaehlcke wrote:
+> > On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
+> > > Hi Matthias/Krishna,
+> > > 
+> > > On Tue, Jun 14, 2022 at 10:53:35AM -0700, Matthias Kaehlcke wrote:
+> > > > On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
+> > > > > On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
+> > > > > > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
+> > > > > > > Hi Krishna,
+> > > > > > > 
+> > > > > > > with this version I see xHCI errors on my SC7180 based system, like
+> > > > > > > these:
+> > > > > > > 
+> > > > > > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
+> > > > > > > 
+> > > > > > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
+> > > > > > > 
+> > > > > > > After resume a downstream hub isn't enumerated again.
+> > > > > > > 
+> > > > > > > So far I didn't see those with v13, but I aso saw the first error with
+> > > > > > > v16.
+> > > > > > 
+> > > > > > It also happens with v13, but only when a wakeup capable vUSB <= 2
+> > > > > > device is plugged in. Initially I used a wakeup capable USB3 to
+> > > > > > Ethernet adapter to trigger the wakeup case, however older versions
+> > > > > > of this series that use usb_wakeup_enabled_descendants() to check
+> > > > > > for wakeup capable devices didn't actually check for vUSB > 2
+> > > > > > devices.
+> > > > > > 
+> > > > > > So the case were the controller/PHYs is powered down works, but
+> > > > > > the controller is unhappy when the runtime PM path is used during
+> > > > > > system suspend.
+> > > > > 
+> > > > > The issue isn't seen on all systems using dwc3-qcom and the problem starts
+> > > > > during probe(). The expected probe sequence is something like this:
+> > > > > 
+> > > > > dwc3_qcom_probe
+> > > > >   dwc3_qcom_of_register_core
+> > > > >     dwc3_probe
+> > > > > 
+> > > > >   if (device_can_wakeup(&qcom->dwc3->dev))
+> > > > >     ...
+> > > > > 
+> > > > > The important part is that device_can_wakeup() is called after dwc3_probe()
+> > > > > has completed. That's what I see on a QC SC7280 system, where wakeup is
+> > > > > generally working with these patches.
+> > > > > 
+> > > > > However on a QC SC7180 system dwc3_probe() is deferred and only executed after
+> > > > > dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
+> > > > > With that the controller/driver ends up in an unhappy state after system
+> > > > > suspend.
+> > > > > 
+> > > > > Probing is deferred on SC7180 because device_links_check_suppliers() finds
+> > > > > that '88e3000.phy' isn't ready yet.
+> > > > 
+> > > > It seems device links could be used to make sure the dwc3 core is present:
+> > > > 
+> > > >   Another example for an inconsistent state would be a device link that
+> > > >   represents a driver presence dependency, yet is added from the consumer’s
+> > > >   ->probe callback while the supplier hasn’t probed yet: Had the driver core
+> > > >   known about the device link earlier, it wouldn’t have probed the consumer
+> > > >   in the first place. The onus is thus on the consumer to check presence of
+> > > >   the supplier after adding the link, and defer probing on non-presence.
+> > > > 
+> > > >   https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
+> > > > 
+> > > > 
+> > > > You could add something like this to dwc3_qcom_of_register_core():
+> > > > 
+> > > > 
+> > > >   device_link_add(dev, &qcom->dwc3->dev,
+> > > >   		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
+> > > > 
+> > > >   if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
+> > > >       ret = -EPROBE_DEFER;
+> > > > 
+> > > > 
+> > > I am not very sure how the device_link_add() API works. we are the parent and
+> > > creating a depdency on child probe. That does not sound correct to me.
+> > 
+> > The functional dependency is effectively there, the driver already assumes that
+> > the dwc3 core was probed when of_platform_populate() returns.
+> > 
+> > The device link itself doesn't create the dependency on the probe(), the check
+> > of the link status below does.
+> > 
+> > Another option would be to add a link to the PHYs to the dwc3-qcom node in
+> > the device tree, but I don't think that would be a better solution (and I
+> > expect Rob would oppose this).
+> > 
+> > I'm open to other solutions, so far the device link is the cleanest that came
+> > to my mind.
+> > 
+> > I think the root issue is the driver architecture, with two interdependent
+> > drivers for the same IP block, instead of a single framework driver with a
+> > common part (dwc3 core) and vendor specific hooks/data.
+> > 
+> > > Any ways, I have another question.
+> > > 
+> > > When dwc3_qcom_of_register_core() returns error back to dwc3_qcom_probe(), we
+> > > goto depopulate label which calls of_platform_depopulate() which destroy the
+> > > child devices that are populated. how does that ensure that child probe is
+> > > completed by the time, our probe is called again. The child device it self is
+> > > gone. Is this working because when our probe is called next time, the child
+> > > probe depenencies are resolved?
+> > 
+> > Good point! It doesn't really ensure that the child is probed (actually it
+> > won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
+> > could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
+> > the PHYs should be ready and dwc3_probe() be invoked through
+> > of_platform_populate().
+> 
+> This is a generic problem i.e if a parent can only proceed after the child
+> devices are bounded (i.e probed successfully), how to ensure this behavior
+> from the parent's probe? Since we can't block the parent probe (async probe is
+> not the default behavior), we have to identify the condition that the children
+> are deferring probe, so that parent also can do that.
+> 
+> Can we add a API in drivers core to tell if a device probe is deferred or
+> not? This can be done by testing list_empty(&dev->p->deferred_probe) under
+> deferred_probe_mutex mutex. The parent can return EPROBE_DEFER based on this
+> API return value.
 
-...
+That could be an option.
 
-> +config MEDIATEK_MT6370_ADC
-> +       tristate "Mediatek MT6370 ADC driver"
-> +       depends on MFD_MT6370
-> +       help
-> +         Say yes here to enable Mediatek MT6370 ADC support.
-> +
-> +         This ADC driver provides 9 channels for system monitoring (charger
-> +         current, voltage, and temperature).
+> Another alternative would be explicitly checking if the child device suppliers
+> are ready or not before adding child device. That would require decoupling
+> of_platform_populate() to creating devices and adding devices.
 
-What will be the module name?
+It might require a new API since there are plenty of users of
+of_platform_populate() that rely on the current behavior.
 
-...
+> Note that this problem is not just limited to suppliers not ready. if the
+> dwc3-qcom is made asynchronous probe, then its child also probed
+> asynchronously and there is no guarantee that child would be probed by the
+> time of_platform_populate() is returned.  The bus notifier might come handy
+> in this case. The parent can register for this notifier and waiting for
+> the children device's BUS_NOTIFY_BOUND_DRIVER/BUS_NOTIFY_DRIVER_NOT_BOUND
+> notifications. This would also work in our case, if we move to
+> of_platform_populate() outside the probe().
 
-> +#include <dt-bindings/iio/adc/mediatek,mt6370_adc.h>
+If I understand correctly the outcome would be a probe() in two stages. The
+first does as much as it can do without the dwc3 core and leaves the device
+in a state where it isn't really functional, and the second stage does the
+rest when BUS_NOTIFY_BOUND_DRIVER is received for the dwc3 core device.
 
-Usually this goes after linux/* asm/* as it's not so generic.
+A concern could be the need for additional conditions in some code paths to
+deal with the half-initialized device.
 
-> +#include <linux/bits.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
+Why would of_platform_populate() be moved outside of probe()?
 
-> +#include <linux/mod_devicetable.h>
-
-I believe the order should be otherwise, this is first followed by module.h.
-
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-
-...
-
-> +#define ADC_CONV_POLLING_TIME          1000
-
-If it's time, add a unit suffix, if it's a counter, make it clear.
-
-...
-
-> +       msleep(ADC_CONV_TIME_US / 1000);
-
-Why define microseconds if milliseconds are in use?
-
-...
-
-> +       ret = regmap_read_poll_timeout(priv->regmap,
-> +                                      MT6370_REG_CHG_ADC, reg_val,
-> +                                      !(reg_val & MT6370_ADC_START_MASK),
-> +                                      ADC_CONV_POLLING_TIME,
-> +                                      ADC_CONV_TIME_US * 3);
-> +       if (ret) {
-> +               if (ret == -ETIMEDOUT)
-> +                       dev_err(priv->dev, "Failed to wait ADC conversion\n");
-
-wait for
-
-> +               else
-> +                       dev_err(priv->dev,
-> +                               "Failed to read ADC register (%d)\n", ret);
-
-Do you really need to differentiate the errors here? I believe the
-latter one covers all cases.
-
-> +               goto adc_unlock;
-> +       }
-
-...
-
-> +#define MT6370_ADC_CHAN(_idx, _type, _addr, _extra_info) {     \
-> +       .type = _type,                                          \
-> +       .channel = MT6370_CHAN_##_idx,                          \
-> +       .address = _addr,                                       \
-> +       .scan_index = MT6370_CHAN_##_idx,                       \
-> +       .indexed = 1,                                           \
-> +       .info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |          \
-> +                             BIT(IIO_CHAN_INFO_SCALE) |        \
-> +                             _extra_info                       \
-
-Leave a comma after the last member as well.
-
-> +}
-
-...
-
-> +       regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +       if (!regmap) {
-
-> +               dev_err(&pdev->dev, "Failed to get regmap\n");
-> +               return -ENODEV;
-
-return dev_err_probe(...);
-
-> +       }
-
-...
-
-> +       ret = regmap_write(priv->regmap, MT6370_REG_CHG_ADC, 0);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "Failed to reset ADC\n");
-> +               return ret;
-> +       }
-
-Ditto.
-
--- 
-With Best Regards,
-Andy Shevchenko
+To avoid the half-initialized device probe() could block until
+BUS_NOTIFY_BOUND_DRIVER is received. Probably that should be done with a
+timeout to avoid blocking forever in case of a problem with probing the
+dwc3 core.
