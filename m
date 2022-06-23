@@ -2,69 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494D85587E7
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 20:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D49D558843
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 21:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbiFWS4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 14:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S231244AbiFWTCw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 15:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiFWSzz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 14:55:55 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB951037CC;
-        Thu, 23 Jun 2022 11:00:57 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v14so29037073wra.5;
-        Thu, 23 Jun 2022 11:00:57 -0700 (PDT)
+        with ESMTP id S232625AbiFWTC3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 15:02:29 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4C2F54;
+        Thu, 23 Jun 2022 11:07:55 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id by38so46868ljb.10;
+        Thu, 23 Jun 2022 11:07:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dRJQoHw1UG1x5dNKh7G6ADZfil6pTNVqaifRMO6ggF0=;
-        b=MLfROjT9/wqnuFpNELvplnXAfdW9jH48Eqh1salfv/Iekdf/56jqn/sNuyZRUiEz10
-         LOcxnnmDfEqCQ5Un9E78BJU/fWmqt5NBklAScqUPcry29uRuvK/keaXyz2Ow/qdOk2iV
-         A9oYQFcNBZWZNTxTamiLRbqZ79v6n4ZM+3JkdRjUm95FXoEKfU1rvz5O3+emNoF1KwPk
-         bvUWyACqMfwaBX/P1MvNDnUpBY2MDdGZ4E31GS4iQDWIZlRo1xPsjWcEUSoNIB+IVqv0
-         7fVsBU9TCuMwQA49LZMGOWZqLYkTEMabyIML70inShUXE3twRqxjpWjWXHZ5YOVsmYtZ
-         LevA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pVm8MjXTsJMX8WBaTQ/Z/W23uteGk2WgxtylOJuMvn4=;
+        b=ROMSf98OAyUaa6eEUsFo3GNphishFltifgt5QEQzrZNe7sjAM+HfSxcOzzy9W6RXT/
+         G9dAp8BarXJwUQv1+UFIl9pO6g0/KNAziFw8OQyNNA2F7tBBoJs6F4EVswlaZ/mtrOUr
+         QkvM84BF5zxaVCCNT37WNd2okHNEk6IyyAzwEh1EwAophtbnp7iFhuLKO8Z/XOD1lnUl
+         suS5mf6pbLbWkjRhB9QoLtb2LLY0TBOsJTxfjC7JtzRG8wnlujGjvT+fxjiuxQ7n37lq
+         7hRGbeT6p1p4iK5XNA2XXK6FCYcJpRLpc3dd/qxtlN637sF3jF8kcCu0NSjABQOuH24p
+         9Wcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dRJQoHw1UG1x5dNKh7G6ADZfil6pTNVqaifRMO6ggF0=;
-        b=llWtAVIj7hQv67rCdnFS5oCvyP1c0pU1R9mZ2DtzheE3FfJeiAXVrbn8iA49Mvcv/3
-         O//AcrEusc3bZoqkJeH8npxRAB2JfHG2QIlIG7IRsXCnzDeOQGNFoH9YtbFFUVBG7nxj
-         w1U7+SQo/l5AD5gXRF32h9rUaQI9CWAt1jsdDXnvpBrCFSQAigLS3QDrr3hRozjhF8W6
-         hXZPh5cIEtR7spyS5stn1OmNQZQTd8FJ92PbzWqn31NxU1YJGdx0ikUQsy+ROHGYckn0
-         8x29TQ+aG3WjExGcEpbO3dtEcNn7X2qBqxIA3ckZAheSGxWfmkeueZtKWAyTPPlgVEvC
-         pjmw==
-X-Gm-Message-State: AJIora8//T6m6iiyk8FfXjPkfobyvRdXi47l/BSQaB8JobuMdaaVwdok
-        k8s+xWUb7I6roKxfKKDr8qI=
-X-Google-Smtp-Source: AGRyM1toobZl5B1XzSCHMlvHvQl5Nai3QbUhmgtQcRWFRH+ixEaJocohOwMe9KH9e6aUg3VghL2QrQ==
-X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id c18-20020adffb12000000b0020c79b2a200mr9789991wrr.617.1656007255590;
-        Thu, 23 Jun 2022 11:00:55 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05600c4e8b00b0039c4945c753sm4678551wmq.39.2022.06.23.11.00.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 11:00:55 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PM / devfreq: imx-bus: use NULL to pass a null pointer rather than zero
-Date:   Thu, 23 Jun 2022 19:00:54 +0100
-Message-Id: <20220623180054.79687-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pVm8MjXTsJMX8WBaTQ/Z/W23uteGk2WgxtylOJuMvn4=;
+        b=Xb9S7b6fWd7xdXqlJcaHZ0mN17UuzdgLETMyfyPsOzbSIXeOQp6+/iVwws+I/pefop
+         YcHw1CKz4Wo2P4daG0W7JuC4bCRa9tQ3/Kp/WD9ir4CRFVpYZK5Cx2SZcfOvoDeq58n4
+         9ZE4n4RLSqhMpKARkRgMBfO7Kk/rueh80F+Te8a5ENYNVm9n0UcSuoyhok6twjCJBrgX
+         VILSfPtueDbgzl1ae6o95PI4CW5/VFIhPT0fznaggIeo0G/iMqPkLUSyR9Uk6wZOLZIy
+         +Vehxpy7U3qB8k/yDn+behcjHHAMIWYru0OazYS9tvHY++fCsxudiXd/l6R3MtImeDTd
+         xSWw==
+X-Gm-Message-State: AJIora/4EMHvFVNY1W+j/OE5O81wWrc1KWYvL9KDKMZCDUrdO/vZ44Vm
+        q54jlfjIFPPU16SgrrQrIcolAmhoikiLyezzux0=
+X-Google-Smtp-Source: AGRyM1vZgKzYKINQvL/hjv/QKJoSpgQjofBcH1c6rGieXJWJEFKaIjpnuwM4pmWPjKf5o83t+GJsAhFvgJCR3nJUMSQ=
+X-Received: by 2002:a2e:b8d2:0:b0:255:93e3:6fb2 with SMTP id
+ s18-20020a2eb8d2000000b0025593e36fb2mr5737201ljp.334.1656007673996; Thu, 23
+ Jun 2022 11:07:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-9-peterwu.pub@gmail.com>
+In-Reply-To: <20220623115631.22209-9-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 23 Jun 2022 20:07:17 +0200
+Message-ID: <CAHp75Vchspgg_VaM+7JHD+2x+-JPkJXSdtLoqQGAx=kg5uAdSg@mail.gmail.com>
+Subject: Re: [PATCH v3 08/14] usb: typec: tcpci_mt6370: Add Mediatek MT6370
+ tcpci driver
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,30 +93,131 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The 3rd argument to the function of_get_property is a pointer and it is
-being passed using 0. Use NULL instead.
+On Thu, Jun 23, 2022 at 2:00 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> Add chip level mt6370 tcpci driver.
 
-Cleans up sparse warning:
-warning: Using plain integer as NULL pointer
+...
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/devfreq/imx-bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +config TYPEC_TCPCI_MT6370
+> +       tristate "Mediatek MT6370 Type-C driver"
+> +       depends on MFD_MT6370
+> +       help
+> +         Mediatek MT6370 is a multi-functional IC that includes
+> +         USB Type-C. It works with Type-C Port Controller Manager
+> +         to provide USB PD and USB Type-C functionalities.
 
-diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
-index f3f6e25053ed..f87067fc574d 100644
---- a/drivers/devfreq/imx-bus.c
-+++ b/drivers/devfreq/imx-bus.c
-@@ -59,7 +59,7 @@ static int imx_bus_init_icc(struct device *dev)
- 	struct imx_bus *priv = dev_get_drvdata(dev);
- 	const char *icc_driver_name;
- 
--	if (!of_get_property(dev->of_node, "#interconnect-cells", 0))
-+	if (!of_get_property(dev->of_node, "#interconnect-cells", NULL))
- 		return 0;
- 	if (!IS_ENABLED(CONFIG_INTERCONNECT_IMX)) {
- 		dev_warn(dev, "imx interconnect drivers disabled\n");
+What will be the module name?
+
+...
+
+> +#include <linux/bits.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+
+> +#include <linux/of.h>
+
+No user of this header is found in this file.
+
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_wakeup.h>
+> +#include <linux/pm_wakeirq.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/usb/tcpm.h>
+> +#include "tcpci.h"
+
+...
+
+> +       if (did == MT6370_TCPC_DID_A) {
+> +               ret = regmap_write(data->regmap, TCPC_FAULT_CTRL, 0x80);
+> +               if (ret)
+> +                       return ret;
+
+return regmap_write(...);
+
+> +       }
+> +
+> +       return 0;
+
+...
+
+> +       if (ret && !source)
+> +               ret = regulator_disable(priv->vbus);
+> +       else if (!ret && source)
+> +               ret = regulator_enable(priv->vbus);
+> +       else
+> +               ret = 0;
+> +
+> +       return ret;
+
+Can it be
+
+  if (ret && ...)
+    return regulator_disable(...);
+  if (!ret && ...)
+    return regulator_enable(...);
+
+  return 0;
+
+?
+
+...
+
+> +       if (!priv->tcpci_data.regmap) {
+> +               dev_err(&pdev->dev, "Failed to init regmap\n");
+> +               return -ENODEV;
+> +       }
+
+return dev_err_probe(...); ?
+
+...
+
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "Failed to check vendor info (%d)\n", ret);
+> +               return ret;
+> +       }
+
+Ditto.
+
+...
+
+> +       priv->irq = platform_get_irq(pdev, 0);
+> +       if (priv->irq < 0) {
+
+> +               dev_err(&pdev->dev, "Failed to get TCPC irq (%d)\n", priv->irq);
+
+The message like this is printed in case of error inside
+platform_get_irq(), no need to duplicate.
+
+> +               return priv->irq;
+> +       }
+
+...
+
+> +       priv->tcpci = tcpci_register_port(&pdev->dev, &priv->tcpci_data);
+> +       if (IS_ERR(priv->tcpci)) {
+> +               dev_err(&pdev->dev, "Failed to register tcpci port\n");
+> +               return PTR_ERR(priv->tcpci);
+
+return dev_err_probe(); ?
+
+> +       }
+
+...
+
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "Failed to allocate irq (%d)\n", ret);
+> +               tcpci_unregister_port(priv->tcpci);
+> +               return ret;
+
+Ditto.
+
+> +       }
+
 -- 
-2.35.3
-
+With Best Regards,
+Andy Shevchenko
