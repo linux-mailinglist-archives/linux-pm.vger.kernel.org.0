@@ -2,76 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D837D557760
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 12:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6909E557806
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 12:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiFWKGP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 06:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S229493AbiFWKjl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 06:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiFWKGJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 06:06:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EAF3336B
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 03:06:07 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1o4JhK-0001s4-PU; Thu, 23 Jun 2022 12:04:26 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1o4JhF-0006Dc-DA; Thu, 23 Jun 2022 12:04:21 +0200
-Date:   Thu, 23 Jun 2022 12:04:21 +0200
-From:   sascha hauer <sha@pengutronix.de>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        russell king <linux@armlinux.org.uk>,
-        "david s. miller" <davem@davemloft.net>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when
- fw_devlink.strict=1
-Message-ID: <20220623100421.GY1615@pengutronix.de>
-References: <20220623080344.783549-1-saravanak@google.com>
- <20220623080344.783549-3-saravanak@google.com>
+        with ESMTP id S229937AbiFWKjh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 06:39:37 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7A83153F
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 03:39:36 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25NAdSvb065733;
+        Thu, 23 Jun 2022 19:39:28 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Thu, 23 Jun 2022 19:39:28 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 25NAdRIL065728
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 23 Jun 2022 19:39:28 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e2eb6f36-3660-26fc-4aca-b1412affbf7c@I-love.SAKURA.ne.jp>
+Date:   Thu, 23 Jun 2022 19:39:26 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623080344.783549-3-saravanak@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] power: ab8500: Remove flush_scheduled_work() call.
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <50d84193-a933-1301-b9d9-bf6cc01ee126@I-love.SAKURA.ne.jp>
+ <20220609194329.bkvnxmxovnbqxuxg@mercury.elektranox.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20220609194329.bkvnxmxovnbqxuxg@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,63 +53,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
-> Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> enabled iommus and dmas dependency enforcement by default. On some
-> systems, this caused the console device's probe to get delayed until the
-> deferred_probe_timeout expires.
+Linus, is this patch OK?
+
+On 2022/06/10 4:43, Sebastian Reichel wrote:
+> Hi,
 > 
-> We need consoles to work as soon as possible, so mark the console device
-> node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
-> the probe of the console device for suppliers without drivers. The
-> driver can then make the decision on where it can probe without those
-> suppliers or defer its probe.
+> On Thu, Jun 09, 2022 at 01:58:04PM +0900, Tetsuo Handa wrote:
+>> It seems to me that ab8500 driver is using dedicated workqueues and
+>> is not calling schedule{,_delayed}_work{,_on}(). Then, there will be
+>> no work to flush using flush_scheduled_work().
+>>
+>> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>> ---
+>> Please see commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue()
+>> using a macro") for background.
 > 
-> Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> Reported-by: Sascha Hauer <sha@pengutronix.de>
-> Reported-by: Peng Fan <peng.fan@nxp.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Tested-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/of/base.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Looks sensible to me. Adding Linus to Cc and waiting a bit so that
+> he has time to review/test.
 > 
-> diff --git a/drivers/of/base.c b/drivers/of/base.c
-> index d4f98c8469ed..a19cd0c73644 100644
-> --- a/drivers/of/base.c
-> +++ b/drivers/of/base.c
-> @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
->  			of_property_read_string(of_aliases, "stdout", &name);
->  		if (name)
->  			of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
-> +		if (of_stdout)
-> +			of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
-
-The device given in the stdout-path property doesn't necessarily have to
-be consistent with the console= parameter. The former is usually
-statically set in the device trees contained in the kernel while the
-latter is dynamically set by the bootloader. So if you change the
-console uart in the bootloader then you'll still run into this trap.
-
-It's problematic to consult only the device tree for dependencies. I
-found several examples of drivers in the tree for which dma support
-is optional. They use it if they can, but continue without it when
-not available. "hwlock" is another property which consider several
-drivers as optional. Also consider SoCs in early upstreaming phases
-when the device tree is merged with "dmas" or "hwlock" properties,
-but the corresponding drivers are not yet upstreamed. It's not nice
-to defer probing of all these devices for a long time.
-
-I wonder if it wouldn't be a better approach to just probe all devices
-and record the device(node) they are waiting on. Then you know that you
-don't need to probe them again until the device they are waiting for
-is available.
-
-Sascha
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> @Linus I think it makes sense to add something like this to
+> MAINTAINERS or add the files to the "ARM/NOMADIK/Ux500 ARCHITECTURES"
+> entry, so that you will be CC'd.
+> 
+> AB8500 BATTERY AND CHARGER DRIVERS
+> M:	Linus Walleij <linus.walleij@linaro.org>
+> S:	Maintained
+> F:	Documentation/devicetree/bindings/power/supply/*ab8500*
+> F:	Documentation/devicetree/bindings/power/supply/*ab8500*
+> 
+> -- Sebastian
+> 
+>>  drivers/power/supply/ab8500_btemp.c    | 1 -
+>>  drivers/power/supply/ab8500_chargalg.c | 1 -
+>>  drivers/power/supply/ab8500_charger.c  | 2 --
+>>  drivers/power/supply/ab8500_fg.c       | 1 -
+>>  4 files changed, 5 deletions(-)
+>>
