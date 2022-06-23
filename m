@@ -2,160 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA14C5587A5
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 20:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65DF5587FA
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 20:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiFWSgK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 14:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S231996AbiFWS44 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 14:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234861AbiFWSgA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 14:36:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95280D7E13
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 10:36:55 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1o4QkO-00079c-Ee; Thu, 23 Jun 2022 19:36:04 +0200
-Message-ID: <ec4168b6-36f1-0183-b1ed-6a33d9fa1bbc@pengutronix.de>
-Date:   Thu, 23 Jun 2022 19:35:53 +0200
+        with ESMTP id S230170AbiFWS4d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 14:56:33 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72977104EE8;
+        Thu, 23 Jun 2022 11:01:27 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id y32so298702lfa.6;
+        Thu, 23 Jun 2022 11:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=htpW4KO87Pa3rfVeMc6d2EASyy2GIlidpaFdVmoZj4s=;
+        b=Mccp92zjcX1919GaiWQ+VcL44gQ1EA9AwWWZhvKCZACiwpUQzrT5asRNoyYMMeJKeC
+         yy/NqYIyPtk0agQcs5WsY9lJn2YR5/tQ19F7LTwOI6teZ09YI+MJW+vrfMnml19eJH9W
+         StZkhocl5dtWKAdtG5QOWy4AoGTqZajadCgPjbh8vbjw3qjfrBxQFGbGKG1S1eFika4f
+         iz3UbI46YvLKErei68dWMmN2PQPtZXRGKO8UnvCMrqWl1yG1JjteJCCwXoerzr0t2A1N
+         VjVir3hJ6EXhYzrkJ65P/LA8tcdSLX4Y6vsnbVAIdq9UTFeXC3SdGD4c7gIFoLF41/ya
+         hC4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=htpW4KO87Pa3rfVeMc6d2EASyy2GIlidpaFdVmoZj4s=;
+        b=1JanYD5U8FjT6zhVreDEfABf9swN/dQrp6QqHvhGxxXjXHxRXS1M8sUZpB81EEwIIC
+         /C6f7lK1h0AwNUjdfIgz5MIT4RXC4yTcEAhLTIAhCdQunD1T1JZ0vUlhguSWqmuqWK2T
+         BSY8oNQ1j/RoynHGgBih0YJ9oRFg9JK0H/V7gysNCvUqy1Yvn7NrEfw5QOMbWbQcKAWo
+         +eig0Tw+WjUFg/ftDYwavXPDMCrlXsHI8DZF9eD8HCpvlOcEBI62FGWSd8xSCLLJoAuk
+         /yNn3Js7PYw+5sgvDV7KzURNCKjbFDrPO1dJjAfMsIUmLrvhS3q88/HWvXv3HGBuf00Y
+         N3pQ==
+X-Gm-Message-State: AJIora+DOQkJKLtTDeVbDjU/6obtMlmj4h/SzbDPriAaEEOZrAl5te1M
+        3cxZSV5INFiR/2WM/2Odu8zt6CrIzP0Lo1iGWpqvPe2g0Y0zA/3h
+X-Google-Smtp-Source: AGRyM1tGbyFaN7xD4syfsOma3gUoWvRL9AeKqEpXbVc0stZoknt2cnh9AdCxTQhuI7/2pxW4uHg+rH97OEElrDn8l58=
+X-Received: by 2002:a05:6512:3183:b0:47f:79f3:af9a with SMTP id
+ i3-20020a056512318300b0047f79f3af9amr6025265lfe.182.1656007284378; Thu, 23
+ Jun 2022 11:01:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when
- fw_devlink.strict=1
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>,
-        sascha hauer <sha@pengutronix.de>
-Cc:     andrew lunn <andrew@lunn.ch>, peng fan <peng.fan@nxp.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linus walleij <linus.walleij@linaro.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        eric dumazet <edumazet@google.com>,
-        pavel machek <pavel@ucw.cz>, will deacon <will@kernel.org>,
-        kevin hilman <khilman@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        joerg roedel <joro@8bytes.org>,
-        russell king <linux@armlinux.org.uk>,
-        linux-acpi@vger.kernel.org, jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>, kernel-team@android.com,
-        Len Brown <lenb@kernel.org>, len brown <len.brown@intel.com>,
-        kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-8-peterwu.pub@gmail.com>
+In-Reply-To: <20220623115631.22209-8-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 23 Jun 2022 20:00:47 +0200
+Message-ID: <CAHp75Vd95sEQz8y4ZcviUKaC9ic27yitR+VCwkfb38MTTe0mkg@mail.gmail.com>
+Subject: Re: [PATCH v3 07/14] mfd: mt6370: Add Mediatek MT6370 support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        david ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        iommu@lists.linux-foundation.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        netdev@vger.kernel.org, "david s. miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, heiner kallweit <hkallweit1@gmail.com>
-References: <20220623080344.783549-1-saravanak@google.com>
- <20220623080344.783549-3-saravanak@google.com>
- <20220623100421.GY1615@pengutronix.de>
- <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Saravana,
+On Thu, Jun 23, 2022 at 1:59 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> Add Mediatek MT6370 MFD support.
 
-On 23.06.22 19:26, Saravana Kannan wrote:
-> On Thu, Jun 23, 2022 at 3:05 AM sascha hauer <sha@pengutronix.de> wrote:
->>
->> On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
->>> Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
->>> enabled iommus and dmas dependency enforcement by default. On some
->>> systems, this caused the console device's probe to get delayed until the
->>> deferred_probe_timeout expires.
->>>
->>> We need consoles to work as soon as possible, so mark the console device
->>> node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
->>> the probe of the console device for suppliers without drivers. The
->>> driver can then make the decision on where it can probe without those
->>> suppliers or defer its probe.
->>>
->>> Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
->>> Reported-by: Sascha Hauer <sha@pengutronix.de>
->>> Reported-by: Peng Fan <peng.fan@nxp.com>
->>> Signed-off-by: Saravana Kannan <saravanak@google.com>
->>> Tested-by: Peng Fan <peng.fan@nxp.com>
->>> ---
->>>  drivers/of/base.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/of/base.c b/drivers/of/base.c
->>> index d4f98c8469ed..a19cd0c73644 100644
->>> --- a/drivers/of/base.c
->>> +++ b/drivers/of/base.c
->>> @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
->>>                       of_property_read_string(of_aliases, "stdout", &name);
->>>               if (name)
->>>                       of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
->>> +             if (of_stdout)
->>> +                     of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
->>
->> The device given in the stdout-path property doesn't necessarily have to
->> be consistent with the console= parameter. The former is usually
->> statically set in the device trees contained in the kernel while the
->> latter is dynamically set by the bootloader. So if you change the
->> console uart in the bootloader then you'll still run into this trap.
->>
->> It's problematic to consult only the device tree for dependencies. I
->> found several examples of drivers in the tree for which dma support
->> is optional. They use it if they can, but continue without it when
->> not available. "hwlock" is another property which consider several
->> drivers as optional. Also consider SoCs in early upstreaming phases
->> when the device tree is merged with "dmas" or "hwlock" properties,
->> but the corresponding drivers are not yet upstreamed. It's not nice
->> to defer probing of all these devices for a long time.
->>
->> I wonder if it wouldn't be a better approach to just probe all devices
->> and record the device(node) they are waiting on. Then you know that you
->> don't need to probe them again until the device they are waiting for
->> is available.
-> 
-> That actually breaks things in a worse sense. There are cases where
-> the consumer driver is built in and the optional supplier driver is
-> loaded at boot. Without fw_devlink and the deferred probe timeout, we
-> end up probing the consumer with limited functionality. With the
-> current setup, sure we delay some probes a bit but at least everything
-> works with the right functionality. And you can reduce or remove the
-> delay if you want to optimize it.
+...
 
-I have a system that doesn't use stdout-path and has the bootloader
-set console= either to ttynull when secure booting or to an UART
-when booting normally. How would I optimize the kernel to avoid
-my UART being loaded after DMA controller probe without touching
-the bootloader?
+> +config MFD_MT6370
+> +       tristate "Mediatek MT6370 SubPMIC"
+> +       select MFD_CORE
+> +       select REGMAP_I2C
+> +       select REGMAP_IRQ
+> +       depends on I2C
+> +       help
+> +         Say Y here to enable MT6370 SubPMIC functional support.
+> +         It consists of a single cell battery charger with ADC monitoring, RGB
+> +         LEDs, dual channel flashlight, WLED backlight driver, display bias
+> +         voltage supply, one general purpose LDO, and the USB Type-C & PD
+> +         controller complies with the latest USB Type-C and PD standards.
 
-Cheers,
-Ahmad
+What will be the module name in case it's chosen to be built as a module?
 
-> 
-> -Saravana
-> 
-> 
+...
 
+>  obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)  += intel_soc_pmic_bxtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)     += intel_soc_pmic_chtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)  += intel_soc_pmic_chtdc_ti.o
+>  obj-$(CONFIG_MFD_MT6360)       += mt6360-core.o
+> +obj-$(CONFIG_MFD_MT6370)       += mt6370.o
+>  mt6397-objs                    := mt6397-core.o mt6397-irq.o mt6358-irq.o
+>  obj-$(CONFIG_MFD_MT6397)       += mt6397.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)     += intel_soc_pmic_mrfld.o
+
+This whole bunch of drivers is in the wrong place in Makefile.
+
+https://lore.kernel.org/all/20220616182524.7956-2-andriy.shevchenko@linux.intel.com/
+
+...
+
+> +#define MT6370_REG_MAXADDR     0x1FF
+
+Wondering if (BIT(10) - 1) gives a better hint on how hardware limits
+this (so it will be clear it's 10-bit address).
+
+...
+
+> +static int mt6370_check_vendor_info(struct mt6370_info *info)
+> +{
+> +       unsigned int devinfo;
+> +       int ret;
+> +
+> +       ret = regmap_read(info->regmap, MT6370_REG_DEV_INFO, &devinfo);
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (FIELD_GET(MT6370_VENID_MASK, devinfo)) {
+> +       case MT6370_VENID_RT5081:
+> +       case MT6370_VENID_RT5081A:
+> +       case MT6370_VENID_MT6370:
+> +       case MT6370_VENID_MT6371:
+> +       case MT6370_VENID_MT6372P:
+> +       case MT6370_VENID_MT6372CP:
+
+return 0;
+
+> +               break;
+> +       default:
+> +               dev_err(info->dev, "Unknown Vendor ID 0x%02x\n", devinfo);
+> +               return -ENODEV;
+> +       }
+> +
+> +       return 0;
+
+...and drop these two lines?
+
+> +}
+
+...
+
+> +       bank_idx = *(u8 *)reg_buf;
+> +       bank_addr = *(u8 *)(reg_buf + 1);
+
+Why not
+
+  const u8 *u8_buf = reg_buf;
+
+  bank_idx = u8_buf[0];
+  bank_addr = u8_buf[1];
+
+?
+
+...
+
+> +       if (ret < 0)
+> +               return ret;
+> +       else if (ret != val_size)
+
+Redundant 'else'.
+
+> +               return -EIO;
+
+...
+
+> +       bank_idx = *(u8 *)data;
+> +       bank_addr = *(u8 *)(data + 1);
+
+As per above.
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+With Best Regards,
+Andy Shevchenko
