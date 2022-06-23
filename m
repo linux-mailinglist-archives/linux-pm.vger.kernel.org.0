@@ -2,62 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44386557731
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 11:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D837D557760
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 12:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiFWJzv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 05:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S231302AbiFWKGP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 06:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiFWJzt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 05:55:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE21C2E9C3;
-        Thu, 23 Jun 2022 02:55:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63F23B82236;
-        Thu, 23 Jun 2022 09:55:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63210C3411B;
-        Thu, 23 Jun 2022 09:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655978144;
-        bh=3tgSj2b7F5bqM8rHpJ7bzxzD2TUoAE/bbCKa8uujIzc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZgvzyZeua6gp2AlwNoBJJfJCKKDtkcP0jOcabqo4Ve6xzhfqozU3hvrBwzHaUJyql
-         Kn69u/AcTlTOq4NG6WmG9HOBfZc+myqE7DJETCuRE9/61tGz20fCKrR3Vc/Re7eWk2
-         YKVg1yFopUitiP8xoZYB171/fITa9+k7OIhhtfos=
-Date:   Thu, 23 Jun 2022 11:55:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S230313AbiFWKGJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 06:06:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EAF3336B
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 03:06:07 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1o4JhK-0001s4-PU; Thu, 23 Jun 2022 12:04:26 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1o4JhF-0006Dc-DA; Thu, 23 Jun 2022 12:04:21 +0200
+Date:   Thu, 23 Jun 2022 12:04:21 +0200
+From:   sascha hauer <sha@pengutronix.de>
 To:     Saravana Kannan <saravanak@google.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kevin Hilman <khilman@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Default async probing for DT based systems
-Message-ID: <YrQ4naL9SJGbh+yJ@kroah.com>
-References: <CGME20220616032522eucas1p19a6c8718f01fa61c2fee795fb8945a92@eucas1p1.samsung.com>
- <CAGETcx8z4dn1j05Za6nfDeC3v4r1yo30Nqu=1K2BEsvLcqqybQ@mail.gmail.com>
- <d5796286-ec24-511a-5910-5673f8ea8b10@samsung.com>
- <CAGETcx8e0QDbaqHGm1O8y6zwrBCwRitsRFXeUPt0w6uFx9k6+g@mail.gmail.com>
- <CAGETcx-MHwex8tHLB1d71MAP01-3OPDZSNCUBb3iT+BtrugJmQ@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        russell king <linux@armlinux.org.uk>,
+        "david s. miller" <davem@davemloft.net>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when
+ fw_devlink.strict=1
+Message-ID: <20220623100421.GY1615@pengutronix.de>
+References: <20220623080344.783549-1-saravanak@google.com>
+ <20220623080344.783549-3-saravanak@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGETcx-MHwex8tHLB1d71MAP01-3OPDZSNCUBb3iT+BtrugJmQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220623080344.783549-3-saravanak@google.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,62 +79,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 07:36:24PM -0700, Saravana Kannan wrote:
-> On Fri, Jun 17, 2022 at 11:04 AM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Fri, Jun 17, 2022 at 2:04 AM Marek Szyprowski
-> > <m.szyprowski@samsung.com> wrote:
-> > >
-> > > Hi Saravana,
-> > >
-> > > On 16.06.2022 05:24, Saravana Kannan wrote:
-> > > > Hi,
-> > > >
-> > > > TL;DR: I want to improve boot times by enabling async probing by
-> > > > default for DT based systems. Can you give it a shot please?
-> > >
-> > > Yes, I've gave it a try on my test systems. It looks that there are a
-> > > few issues. The first one, the most obvious to notice, is related to
-> > > __request_module() calls from various drivers and frameworks. Here are
-> > > some examples:
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 3 PID: 73 at kernel/kmod.c:136 __request_module+0x230/0x600
-> > > Modules linked in:
-> > > CPU: 3 PID: 73 Comm: kworker/u12:5 Not tainted 5.19.0-rc2-next-20220615+
-> > > #5203
-> > > Hardware name: ARM Juno development board (r1) (DT)
-> > > Workqueue: events_unbound async_run_entry_fn
-> > > pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > UDC core: g_ether: couldn't find an available UDC
-> > > pc : __request_module+0x230/0x600
-> > > lr : __request_module+0x228/0x600
-> >
-> > Ah, I think I know what these might be. Going by memory,
-> > __request_module() from asyc thread context has some issues for module
-> > loading. So I think a check was added like this. And I think the check
-> > is triggering when it shouldn't (this isn't module context here).
+On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
+> Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+> enabled iommus and dmas dependency enforcement by default. On some
+> systems, this caused the console device's probe to get delayed until the
+> deferred_probe_timeout expires.
 > 
-> My memory was right and this is indeed the spurious warning that was
-> meant to cover a potential deadlock in a module load path. I was
-> trying to disable this warning till we hit the point in the boot flow
-> where request_module() can actually succeed. But I got stuck trying to
-> figure it out.
+> We need consoles to work as soon as possible, so mark the console device
+> node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
+> the probe of the console device for suppliers without drivers. The
+> driver can then make the decision on where it can probe without those
+> suppliers or defer its probe.
 > 
-> It looks like the usermode helper that's used for module loading
-> triggered by request_module() is enabled in populate_rootfs() that
-> runs well before most of the initcalls are done. I was under the
-> impression that init with pid 0 would be the first userspace thread
-> that can start. But I don't see anything obvious that prevents the
-> usermode helper from running and loading a module before init process
-> has been exec'ed after we set system_state to SYSTEM_RUNNING.
+> Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+> Reported-by: Sascha Hauer <sha@pengutronix.de>
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Tested-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/of/base.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Can someone clarify when is the earliest request_module() can succeed?
+> diff --git a/drivers/of/base.c b/drivers/of/base.c
+> index d4f98c8469ed..a19cd0c73644 100644
+> --- a/drivers/of/base.c
+> +++ b/drivers/of/base.c
+> @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
+>  			of_property_read_string(of_aliases, "stdout", &name);
+>  		if (name)
+>  			of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
+> +		if (of_stdout)
+> +			of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
 
-It can succeed very very early, when we have the initial ramfs mounted
-before init runs as you sometimes need the modules there to be able to
-load the device that init is on.
+The device given in the stdout-path property doesn't necessarily have to
+be consistent with the console= parameter. The former is usually
+statically set in the device trees contained in the kernel while the
+latter is dynamically set by the bootloader. So if you change the
+console uart in the bootloader then you'll still run into this trap.
 
-thanks,
+It's problematic to consult only the device tree for dependencies. I
+found several examples of drivers in the tree for which dma support
+is optional. They use it if they can, but continue without it when
+not available. "hwlock" is another property which consider several
+drivers as optional. Also consider SoCs in early upstreaming phases
+when the device tree is merged with "dmas" or "hwlock" properties,
+but the corresponding drivers are not yet upstreamed. It's not nice
+to defer probing of all these devices for a long time.
 
-greg k-h
+I wonder if it wouldn't be a better approach to just probe all devices
+and record the device(node) they are waiting on. Then you know that you
+don't need to probe them again until the device they are waiting for
+is available.
+
+Sascha
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
