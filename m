@@ -2,160 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3647C556E8C
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 00:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504A0556FBD
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 03:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239736AbiFVWee (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jun 2022 18:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S230245AbiFWBKo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jun 2022 21:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359629AbiFVWec (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 18:34:32 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875D128E3B
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 15:34:27 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id l66so31248427ybl.10
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jun 2022 15:34:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WKylA8pYtIvxwg5/dZiB/uZdIVVN/P980vi4sBmsa8g=;
-        b=J4pi/aKDOGnb+AER5hiC/Ur9ZSPqxLhl9mnB71A7+WIlfY2oiT/T5y5JfIyXfOCApX
-         pLilMQlV84wpeyWcdPvtM97nw68tnuZyysLqMtJ7DRRJ6ajeonNGzDXJprWOIg8xBf0y
-         NTH6Wl1a1nlYUaFdI4qtAMzn8cW7xPEjL5f7QJ94kT2HJ1ci6OAaAPqD1UX+0NL/zHh7
-         304JDEDsF/c/vE8OS7ScZ5S8psqurQ00bjxfdujGxOif8q+MEh1dX6y/brQOOJs5BypF
-         iAv8odstd+qJJe5X1KPMo+1qvBAD62prH31qb5OR0/0XW3vKz526q1m+3AN2s9rHhIps
-         PBRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WKylA8pYtIvxwg5/dZiB/uZdIVVN/P980vi4sBmsa8g=;
-        b=BWMAY9SHQQNRUgwL6zYcnNsQY+BTitqifReKfAIY2YA21HZrte1rUt6eWtdp9OGpr+
-         yhfc4vWyBlpdpDWPRWi68ssPqtmQ5HPcHEqBXzsVUObVBkB9wS2a7hHyhCuXeJzPg88v
-         RdiZlGZgahmbL1k3wQ830Tu/WC/KqRx/D9g17HBygjBofYPb9GmvpPE6UCxQyfgIsQPV
-         d/nCiBaXRqKobXqwPNkxQhi46FaBlgLbj29y/gSuk9Zzar+GPpwCXfH5RzRIGMJ5k3Qy
-         VFVWRDK4lKJiarjJvpcg5PrJgnUtwCmOk9F92oMB7t5+I3FY987WsCZb0LH6cjxPyGCk
-         u2Ew==
-X-Gm-Message-State: AJIora/JUVorZ3BvsoogvejhdAe+vJw9PDarRt+RHKG9jbIzYUJ8N945
-        zB/cR0WI32Xc0jlMojjSQZSP6Rig5n9Urd/5tK643A==
-X-Google-Smtp-Source: AGRyM1vtP8cTHTShZ6uWcl+OVMszNehOV5bCtDdbKW/msmtH+Wdf1HHxNjR1QJIjKUG41gGaaaYuCgB7moTXz8XY7EE=
-X-Received: by 2002:a25:d112:0:b0:669:17:8d98 with SMTP id i18-20020a25d112000000b0066900178d98mr6124766ybg.447.1655937266678;
- Wed, 22 Jun 2022 15:34:26 -0700 (PDT)
+        with ESMTP id S230101AbiFWBKo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jun 2022 21:10:44 -0400
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [210.0.225.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFF230F68;
+        Wed, 22 Jun 2022 18:10:41 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 23 Jun
+ 2022 09:10:38 +0800
+Received: from [10.32.64.1] (10.32.64.1) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 23 Jun
+ 2022 09:10:36 +0800
+Subject: Re: [PATCH] x86/cstate: Add Zhaoxin ACPI Cx FFH MWAIT support
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <bccae278-e735-4681-cb3a-41359e42032b@zhaoxin.com>
+ <CAJZ5v0i78UPYpc9epEOndigxAsj3YVXJJTrQDoX0Dw5p-zpgaQ@mail.gmail.com>
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Message-ID: <61d5a117-c0d8-8752-5d70-b383530aef86@zhaoxin.com>
+Date:   Thu, 23 Jun 2022 09:10:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220622215912.550419-1-saravanak@google.com> <DU0PR04MB941733BFD323D3542B7F75A888B29@DU0PR04MB9417.eurprd04.prod.outlook.com>
-In-Reply-To: <DU0PR04MB941733BFD323D3542B7F75A888B29@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 22 Jun 2022 15:33:50 -0700
-Message-ID: <CAGETcx-h4iDx+WG+HnN0_ej0qtLOp66oOXvkppm060TRCG3_Jg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] Fix console probe delay due to fw_devlink
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Sascha Hauer <sha@pengutronix.de>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0i78UPYpc9epEOndigxAsj3YVXJJTrQDoX0Dw5p-zpgaQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.32.64.1]
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 3:32 PM Peng Fan <peng.fan@nxp.com> wrote:
->
-> > Subject: [PATCH v1 0/2] Fix console probe delay due to fw_devlink
-> >
-> > fw_devlink.strict=1 has been enabled by default. This was delaying the probe
-> > of console devices. This series fixes that.
-> >
-> > Sasha/Peng,
-> >
-> > Can you test this please?
->
-> Thanks, just give a test on i.MX8MP-EVK, works well now.
->
-> Tested-by: Peng Fan <peng.fan@nxp.com> #i.MX8MP-EVK
 
-Lol, that was quick! Thanks!
 
--Saravana
+On 22/6/2022 21:38, Rafael J. Wysocki wrote:
+> Please CC linux-acpi@vger.kernel.org on ACPI-related changes (added now).
 
->
-> Thanks,
-> Peng.
->
-> >
-> > -Saravana
-> >
-> > Cc: Sascha Hauer <sha@pengutronix.de>
-> > Cc: Peng Fan <peng.fan@nxp.com>
-> > Cc: Kevin Hilman <khilman@kernel.org>
-> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Pavel Machek <pavel@ucw.cz>
-> > Cc: Joerg Roedel <joro@8bytes.org>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Andrew Lunn <andrew@lunn.ch>
-> > Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> > Cc: Russell King <linux@armlinux.org.uk>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-> > Cc: David Ahern <dsahern@kernel.org>
-> > Cc: kernel-team@android.com
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: iommu@lists.linux-foundation.org
-> > Cc: netdev@vger.kernel.org
-> > Cc: linux-gpio@vger.kernel.org
-> > Cc: kernel@pengutronix.de
-> >
-> > Saravana Kannan (2):
-> >   driver core: fw_devlink: Allow firmware to mark devices as best effort
-> >   of: base: Avoid console probe delay when fw_devlink.strict=1
-> >
-> >  drivers/base/core.c    | 3 ++-
-> >  drivers/of/base.c      | 2 ++
-> >  include/linux/fwnode.h | 4 ++++
-> >  3 files changed, 8 insertions(+), 1 deletion(-)
-> >
-> > --
-> > 2.37.0.rc0.161.g10f37bed90-goog
->
+Ok.
+
+> 
+> On Wed, Jun 22, 2022 at 5:29 AM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
+>>
+>> Recent Zhaoxin CPUs support X86_FEATURE_MWAIT that implies the
+>> MONITOR/MWAIT instructions can be used for ACPI Cx state. The BIOS
+>> declares Cx state in _CST object to use FFH on Zhaoxin systems. So
+>> let function ffh_cstate_init() support Zhaoxin too.
+>>
+>> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+>> ---
+>>    arch/x86/kernel/acpi/cstate.c | 4 +++-
+>>    1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+>> index 7945eae..d4185e1 100644
+>> --- a/arch/x86/kernel/acpi/cstate.c
+>> +++ b/arch/x86/kernel/acpi/cstate.c
+>> @@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
+>>
+>>          if (c->x86_vendor != X86_VENDOR_INTEL &&
+>>              c->x86_vendor != X86_VENDOR_AMD &&
+>> -           c->x86_vendor != X86_VENDOR_HYGON)
+>> +           c->x86_vendor != X86_VENDOR_HYGON &&
+>> +           c->x86_vendor != X86_VENDOR_CENTAUR &&
+>> +           c->x86_vendor != X86_VENDOR_ZHAOXIN)
+> 
+> Centaur is not mentioned in the changelog and it should be.
+
+Will add Centaur in the changelog. Thanks a lot.
+
+> 
+>>                  return -1;
+>>
+>>          cpu_cstate_entry = alloc_percpu(struct cstate_entry);
+>> --
+> .
+> 
+
+-- 
+Sincerely
+TonyWWang-oc
