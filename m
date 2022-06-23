@@ -2,172 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057AB558A32
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 22:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BC8558A40
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 22:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiFWUer (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 16:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S230280AbiFWUiR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 16:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiFWUeq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 16:34:46 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E9960C7E;
-        Thu, 23 Jun 2022 13:34:44 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id r20so437836wra.1;
-        Thu, 23 Jun 2022 13:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=IK/XCGAwWKhc4dZa86Nh3vaAkVdDBZoCXA0duTVjqDQ=;
-        b=gYaWWKTLbWBMByASORPVMc8CxPoGbr8pioEUymVhlmvBZLN8LoSARszNyJgfFej41z
-         rnPlmHOZPjROJg9n411VO4Y6wY9fP65bGZf/Gq1IrOIKeDeXUabzFF7CJXjxqn/cTIln
-         2uSL38+TGWqC9kSQqvJz/Qy8+ck4c47dcfF32Uc5Sf5Y6NG5chuVM1PGpMzJl3J8atW3
-         B8VkCVATtmfUC6xfEKL9DX1YYTSLiE+z8KPUCx7AOZItbp1Nl+DkliPvDEcE7ctf57Qi
-         lJUtws9CIIgQV7SaxLuCtAi0k1ERnxXrGSQW6OJGPyqk7M4jCys5SxkVaQ2lloXz/R/Z
-         ThYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=IK/XCGAwWKhc4dZa86Nh3vaAkVdDBZoCXA0duTVjqDQ=;
-        b=hRcA5qm3ZkFNBso5NPaEDe5vZL4J0Z+u75KN+n5MBGl8iMECqABWdQu3KAzUnVVGCt
-         2pkrliJn7g4qFQZajKbqSY9qZueumGwu4BUNsadE3qiWWyHQmjggBeyb8GrFdar6/FNW
-         xXsbsTuB/N3kBhn5IFpwYc2E8Vgi9r93IIM6fqwmt3UY9i1FHBJaqoRRNl/XwEPS+/pK
-         I4a0whFbNiVBng3Mw1LXxCf9N+10HTPy55tk/2xjIp5Sc9qMkIoKSfpJ9utrfQLXqNNs
-         RGANs3o3mT/Cc3UNAWU1cm/ywavK2QOrlpjCoobC2Jp6+1H+9Uwy3lI52T5+/v1FoWJ+
-         bq4w==
-X-Gm-Message-State: AJIora8kSYO1BYVWGAcNhgZ+V1Bv+yVtvuI9jFykJmLXCX5B/ymjQp6E
-        /z7/UrTFEzpSW3L5vvQG1DE=
-X-Google-Smtp-Source: AGRyM1snb1laNeZAsPIQd3dxnawiGNhk+UGfN5ihQx8QZ4cdi8LYJtk5LQihHXV1jMBUlcrHVvmA6A==
-X-Received: by 2002:adf:df09:0:b0:21b:8a8d:99c8 with SMTP id y9-20020adfdf09000000b0021b8a8d99c8mr9696887wrl.152.1656016482596;
-        Thu, 23 Jun 2022 13:34:42 -0700 (PDT)
-Received: from localhost (92.40.171.44.threembb.co.uk. [92.40.171.44])
-        by smtp.gmail.com with ESMTPSA id h6-20020adffd46000000b0021b96cdf68fsm312754wrs.97.2022.06.23.13.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 13:34:42 -0700 (PDT)
-References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
- <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com>
- <YqDLflKTsYaupArl@sirena.org.uk>
- <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
- <CANhJrGMqUmnSvyNRgRyp40YnGQkD3N_2AZLn94NDp+4RG0_x5w@mail.gmail.com>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        with ESMTP id S230073AbiFWUiR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 16:38:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3827C4EDF1
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 13:38:15 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1o4TZo-0005zb-EL; Thu, 23 Jun 2022 22:37:20 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1o4TZk-0004Od-6x; Thu, 23 Jun 2022 22:37:16 +0200
+Date:   Thu, 23 Jun 2022 22:37:16 +0200
+From:   sascha hauer <sha@pengutronix.de>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, Chen-Yu Tsai <wens@csie.org>,
-        jic23@kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, lars@metafoo.de,
-        "Rafael J . Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org, Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 02/17] regmap-irq: Add get_irq_reg to support unusual
- register layouts
-In-reply-to: <CANhJrGMqUmnSvyNRgRyp40YnGQkD3N_2AZLn94NDp+4RG0_x5w@mail.gmail.com>
-Date:   Thu, 23 Jun 2022 21:35:47 +0100
-Message-ID: <AX8g6eUgSrGJYBxU1YYNt2559CtK9b5G@localhost>
+        Frank Rowand <frowand.list@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        russell king <linux@armlinux.org.uk>,
+        "david s. miller" <davem@davemloft.net>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when
+ fw_devlink.strict=1
+Message-ID: <20220623203716.GA1615@pengutronix.de>
+References: <20220623080344.783549-1-saravanak@google.com>
+ <20220623080344.783549-3-saravanak@google.com>
+ <20220623100421.GY1615@pengutronix.de>
+ <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Jun 23, 2022 at 10:26:46AM -0700, Saravana Kannan wrote:
+> On Thu, Jun 23, 2022 at 3:05 AM sascha hauer <sha@pengutronix.de> wrote:
+> >
+> > On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
+> > > Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+> > > enabled iommus and dmas dependency enforcement by default. On some
+> > > systems, this caused the console device's probe to get delayed until the
+> > > deferred_probe_timeout expires.
+> > >
+> > > We need consoles to work as soon as possible, so mark the console device
+> > > node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
+> > > the probe of the console device for suppliers without drivers. The
+> > > driver can then make the decision on where it can probe without those
+> > > suppliers or defer its probe.
+> > >
+> > > Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+> > > Reported-by: Sascha Hauer <sha@pengutronix.de>
+> > > Reported-by: Peng Fan <peng.fan@nxp.com>
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > Tested-by: Peng Fan <peng.fan@nxp.com>
+> > > ---
+> > >  drivers/of/base.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/drivers/of/base.c b/drivers/of/base.c
+> > > index d4f98c8469ed..a19cd0c73644 100644
+> > > --- a/drivers/of/base.c
+> > > +++ b/drivers/of/base.c
+> > > @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
+> > >                       of_property_read_string(of_aliases, "stdout", &name);
+> > >               if (name)
+> > >                       of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
+> > > +             if (of_stdout)
+> > > +                     of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
+> >
+> > The device given in the stdout-path property doesn't necessarily have to
+> > be consistent with the console= parameter. The former is usually
+> > statically set in the device trees contained in the kernel while the
+> > latter is dynamically set by the bootloader. So if you change the
+> > console uart in the bootloader then you'll still run into this trap.
+> >
+> > It's problematic to consult only the device tree for dependencies. I
+> > found several examples of drivers in the tree for which dma support
+> > is optional. They use it if they can, but continue without it when
+> > not available. "hwlock" is another property which consider several
+> > drivers as optional. Also consider SoCs in early upstreaming phases
+> > when the device tree is merged with "dmas" or "hwlock" properties,
+> > but the corresponding drivers are not yet upstreamed. It's not nice
+> > to defer probing of all these devices for a long time.
+> >
+> > I wonder if it wouldn't be a better approach to just probe all devices
+> > and record the device(node) they are waiting on. Then you know that you
+> > don't need to probe them again until the device they are waiting for
+> > is available.
+> 
+> That actually breaks things in a worse sense. There are cases where
+> the consumer driver is built in and the optional supplier driver is
+> loaded at boot. Without fw_devlink and the deferred probe timeout, we
+> end up probing the consumer with limited functionality. With the
+> current setup, sure we delay some probes a bit but at least everything
+> works with the right functionality. And you can reduce or remove the
+> delay if you want to optimize it.
 
-Matti Vaittinen <mazziesaccount@gmail.com> writes:
+We have optional and mandatory resources. In this situation a driver has
+to decide what to do. Either it continues with limited resources or it
+defers probing. Some drivers try to allocate the optional resources at
+open time so that they are able to use them once they are available.  We
+could even think of an asynchronous callback into a driver when a
+resource becomes available. Whether we put this decision what is
+optional or not into the driver or in the framework doesn't make a
+difference to the problem, it is still the same: When a resource is not
+yet available we have no idea if and when it becomes available, if it's
+worth waiting for it or not.
 
-> Hi dee Ho peeps!
->
-> Sorry for the late reply.
->
-> pe 10. kes=C3=A4k. 2022 klo 18.43 Aidan MacDonald
-> (aidanmacdonald.0x0@gmail.com) kirjoitti:
->>
->> Mark Brown <broonie@kernel.org> writes:
->>
->> > On Tue, Jun 07, 2022 at 04:53:09PM +0100, Aidan MacDonald wrote:
->> >
->> >> -    if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
->> >> +    if (chip->get_irq_reg) {
->> >> +            reg =3D chip->get_irq_reg(base_reg, i);
->> >> +    } else if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
->> >
->> > It seems like it would be cleaner and clearer to refactor things so th=
-at
->> > we always have a get_irq_reg() with standard chips getting given a
->> > default implementation which implements the current behaviour.
->>
->> I don't think that is a good way to clean things up. I only intended
->> get_irq_reg() to be a quick hack to solve a problem; in my opinion it
->> would be a poor abstraction to base the API around.
->>
->> What I'd suggest is something that will simplify regmap-irq. Instead of
->> defining the base registers, etc. in the chip, introduce a new struct
->> to describe a register group:
->>
->>     struct regmap_irq_reg_group {
->>         unsigned int status_base;
->>         unsigned int mask_base;
->>         ...
->>
->>         unsigned int irq_reg_stride;
->>
->>         int num_regs;
->>     };
->>
->> The idea is that the registers in a group are linearly mapped using the
->> formula "base + (i * irq_reg_stride)". Then it's possible to allow for
->> multiple register groups in regmap_irq_chip:
->>
->>     struct regmap_irq_chip {
->>         const struct regmap_irq_reg_group *groups;
->>         unsigned int num_groups;
->>
->>         unsigned int main_status_base;
->>         unsigned int num_main_status_bits;
->>         int num_main_regs;
->>
->>         ...
->>     };
->>
->> It should be straightforward to fit existing chips into this model.
->>
->> - Chips that use a main status + sub-block IRQ layout will define
->>   one register group for each sub-block and continue to describe the
->>   location of the main status registers inside of regmap_irq_chip.
->>   A group will only get polled if the corresponding main status bit
->>   is set -- n'th group is polled if n'th bit is set.
->
-> Does this work for devices where a single main status bit can flag
-> IRQs in more than one sub-registers?
->
-> Best Regards
->  -- Matti
+The difference is that with my proposal (which isn't actually mine but
+from my collegue Lucas) a driver can decide very fine grained how it
+wants to deal with the situation. With fw_devlink we try to put this
+intelligence into the framework and it seems there are quite some quirks
+necessary to get that running for everyone.
 
-No, I realized once I got into the refactor that what I outlined here
-wouldn't fit that use case well, which is what rohm-bd71828 needs.
+Anyway, we have fw_devlink now and actually I think the dependency graph
+that we have with fw_devlink is quite nice to resolve the natural probe
+order. But why do we have to put an extra penalty on drivers whose
+resources are not yet available?  Probe devices with complete resources
+as long as you find them, execute more initcalls as long as there are
+any, but when there are no more left, you could start probing devices
+with incomplete resources, why wait for another ten seconds?
 
-There are some other complications with this approach, like how to
-go between IRQs and register groups efficiently, and it's generally
-a rather heavyweight solution. It might be useful for handling very
-hierarchical chips, but I couldn't justify the added complexity when
-most chips don't need it -- after all most chips behind slow busses
-will have a small number of interrupts and a fairly flat structure.
+For me it's no problem when the UART probes late, we have earlycon which
+can be used to debug problems that arise before the UART probes, but
+what nags is the ten seconds delay. zero would be a much saner value for
+me.
 
-In the end I went with Mark's suggestion to factor things out around
-->get_irq_reg(). At first I thought there might be too many "gotchas"
-that'd limit its usefulness, but in the end it proved to be a better
-option and a lot easier to implement.
+Sascha
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
