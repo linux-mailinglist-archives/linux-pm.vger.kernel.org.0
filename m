@@ -2,88 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8524B558953
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 21:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 057AB558A32
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 22:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiFWTll (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 15:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S230217AbiFWUer (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 16:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiFWTlI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 15:41:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2BE4F1F8;
-        Thu, 23 Jun 2022 12:32:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6210B82506;
-        Thu, 23 Jun 2022 19:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648C9C341C8;
-        Thu, 23 Jun 2022 19:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656012734;
-        bh=ZdmigUbppH2BlsyCjxD6GHpDlci7DR7Vnz7cHYwiTk8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I5DIS2LTmt+/GgHw5VG62eMk7RrpspOglhZJN8Rff9zK7AK66U8Js9+9gZBse5qX+
-         ExyUuAXgAQg49+vIIrIwAKDeByUlsFauqHSh/Oux5Rhh1UqZnukl/A8+3Q9UuES3ja
-         kD7RQlMtFbOlZY+51dMILfmT1aWzUb4rmaFwcFvXH4Az6vcwWwIQ83e+TmYFVQkSoF
-         Xibf7HcTozTVLvmDJzwW7iz3ghBcxs6BMnKuV4kBE8fuTAP5+fTSgNucf3Dybs383O
-         OQWW6UH5aLdMjb6DKXMtkzWgGvXwBNnufCCnnBh42azusSUhdeiQRdpq35yfdoBoe7
-         ry2A126MNxngQ==
-From:   Will Deacon <will@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Michael Walle <michael@walle.cc>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/2] arm64: remove generic ARM cpuidle support
-Date:   Thu, 23 Jun 2022 20:31:42 +0100
-Message-Id: <165599037407.2971163.13182128360037725255.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220529181329.2345722-1-michael@walle.cc>
-References: <20220529181329.2345722-1-michael@walle.cc>
+        with ESMTP id S230140AbiFWUeq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 16:34:46 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E9960C7E;
+        Thu, 23 Jun 2022 13:34:44 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id r20so437836wra.1;
+        Thu, 23 Jun 2022 13:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=IK/XCGAwWKhc4dZa86Nh3vaAkVdDBZoCXA0duTVjqDQ=;
+        b=gYaWWKTLbWBMByASORPVMc8CxPoGbr8pioEUymVhlmvBZLN8LoSARszNyJgfFej41z
+         rnPlmHOZPjROJg9n411VO4Y6wY9fP65bGZf/Gq1IrOIKeDeXUabzFF7CJXjxqn/cTIln
+         2uSL38+TGWqC9kSQqvJz/Qy8+ck4c47dcfF32Uc5Sf5Y6NG5chuVM1PGpMzJl3J8atW3
+         B8VkCVATtmfUC6xfEKL9DX1YYTSLiE+z8KPUCx7AOZItbp1Nl+DkliPvDEcE7ctf57Qi
+         lJUtws9CIIgQV7SaxLuCtAi0k1ERnxXrGSQW6OJGPyqk7M4jCys5SxkVaQ2lloXz/R/Z
+         ThYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=IK/XCGAwWKhc4dZa86Nh3vaAkVdDBZoCXA0duTVjqDQ=;
+        b=hRcA5qm3ZkFNBso5NPaEDe5vZL4J0Z+u75KN+n5MBGl8iMECqABWdQu3KAzUnVVGCt
+         2pkrliJn7g4qFQZajKbqSY9qZueumGwu4BUNsadE3qiWWyHQmjggBeyb8GrFdar6/FNW
+         xXsbsTuB/N3kBhn5IFpwYc2E8Vgi9r93IIM6fqwmt3UY9i1FHBJaqoRRNl/XwEPS+/pK
+         I4a0whFbNiVBng3Mw1LXxCf9N+10HTPy55tk/2xjIp5Sc9qMkIoKSfpJ9utrfQLXqNNs
+         RGANs3o3mT/Cc3UNAWU1cm/ywavK2QOrlpjCoobC2Jp6+1H+9Uwy3lI52T5+/v1FoWJ+
+         bq4w==
+X-Gm-Message-State: AJIora8kSYO1BYVWGAcNhgZ+V1Bv+yVtvuI9jFykJmLXCX5B/ymjQp6E
+        /z7/UrTFEzpSW3L5vvQG1DE=
+X-Google-Smtp-Source: AGRyM1snb1laNeZAsPIQd3dxnawiGNhk+UGfN5ihQx8QZ4cdi8LYJtk5LQihHXV1jMBUlcrHVvmA6A==
+X-Received: by 2002:adf:df09:0:b0:21b:8a8d:99c8 with SMTP id y9-20020adfdf09000000b0021b8a8d99c8mr9696887wrl.152.1656016482596;
+        Thu, 23 Jun 2022 13:34:42 -0700 (PDT)
+Received: from localhost (92.40.171.44.threembb.co.uk. [92.40.171.44])
+        by smtp.gmail.com with ESMTPSA id h6-20020adffd46000000b0021b96cdf68fsm312754wrs.97.2022.06.23.13.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 13:34:42 -0700 (PDT)
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+ <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com>
+ <YqDLflKTsYaupArl@sirena.org.uk>
+ <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
+ <CANhJrGMqUmnSvyNRgRyp40YnGQkD3N_2AZLn94NDp+4RG0_x5w@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Chen-Yu Tsai <wens@csie.org>,
+        jic23@kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, lars@metafoo.de,
+        "Rafael J . Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 02/17] regmap-irq: Add get_irq_reg to support unusual
+ register layouts
+In-reply-to: <CANhJrGMqUmnSvyNRgRyp40YnGQkD3N_2AZLn94NDp+4RG0_x5w@mail.gmail.com>
+Date:   Thu, 23 Jun 2022 21:35:47 +0100
+Message-ID: <AX8g6eUgSrGJYBxU1YYNt2559CtK9b5G@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 29 May 2022 20:13:27 +0200, Michael Walle wrote:
-> Playing with an own PSCI implementation, I've noticed that the cpuidle-arm
-> driver doesn't work on arm64. It doesn't probe because since commit
-> 788961462f34 ("ARM: psci: cpuidle: Enable PSCI CPUidle driver") the
-> arm_cpuidle_init() can only return -EOPNOTSUPP, because the commit removed
-> the cpu_idle_init and cpu_suspend ops.
-> 
-> It left me puzzled for quite some time. It seems that the cpuidle-psci is
-> the preferred one and this has been the case for quite some time. The
-> mentioned commit first appeared in v5.4.
-> 
-> [...]
 
-Applied to arm64 (for-next/cpuidle), thanks!
+Matti Vaittinen <mazziesaccount@gmail.com> writes:
 
-[1/2] cpuidle: cpuidle-arm: remove arm64 support
-      https://git.kernel.org/arm64/c/51280acad855
-[2/2] arm64: cpuidle: remove generic cpuidle support
-      https://git.kernel.org/arm64/c/471f80db9ef1
+> Hi dee Ho peeps!
+>
+> Sorry for the late reply.
+>
+> pe 10. kes=C3=A4k. 2022 klo 18.43 Aidan MacDonald
+> (aidanmacdonald.0x0@gmail.com) kirjoitti:
+>>
+>> Mark Brown <broonie@kernel.org> writes:
+>>
+>> > On Tue, Jun 07, 2022 at 04:53:09PM +0100, Aidan MacDonald wrote:
+>> >
+>> >> -    if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
+>> >> +    if (chip->get_irq_reg) {
+>> >> +            reg =3D chip->get_irq_reg(base_reg, i);
+>> >> +    } else if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
+>> >
+>> > It seems like it would be cleaner and clearer to refactor things so th=
+at
+>> > we always have a get_irq_reg() with standard chips getting given a
+>> > default implementation which implements the current behaviour.
+>>
+>> I don't think that is a good way to clean things up. I only intended
+>> get_irq_reg() to be a quick hack to solve a problem; in my opinion it
+>> would be a poor abstraction to base the API around.
+>>
+>> What I'd suggest is something that will simplify regmap-irq. Instead of
+>> defining the base registers, etc. in the chip, introduce a new struct
+>> to describe a register group:
+>>
+>>     struct regmap_irq_reg_group {
+>>         unsigned int status_base;
+>>         unsigned int mask_base;
+>>         ...
+>>
+>>         unsigned int irq_reg_stride;
+>>
+>>         int num_regs;
+>>     };
+>>
+>> The idea is that the registers in a group are linearly mapped using the
+>> formula "base + (i * irq_reg_stride)". Then it's possible to allow for
+>> multiple register groups in regmap_irq_chip:
+>>
+>>     struct regmap_irq_chip {
+>>         const struct regmap_irq_reg_group *groups;
+>>         unsigned int num_groups;
+>>
+>>         unsigned int main_status_base;
+>>         unsigned int num_main_status_bits;
+>>         int num_main_regs;
+>>
+>>         ...
+>>     };
+>>
+>> It should be straightforward to fit existing chips into this model.
+>>
+>> - Chips that use a main status + sub-block IRQ layout will define
+>>   one register group for each sub-block and continue to describe the
+>>   location of the main status registers inside of regmap_irq_chip.
+>>   A group will only get polled if the corresponding main status bit
+>>   is set -- n'th group is polled if n'th bit is set.
+>
+> Does this work for devices where a single main status bit can flag
+> IRQs in more than one sub-registers?
+>
+> Best Regards
+>  -- Matti
 
-Cheers,
--- 
-Will
+No, I realized once I got into the refactor that what I outlined here
+wouldn't fit that use case well, which is what rohm-bd71828 needs.
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+There are some other complications with this approach, like how to
+go between IRQs and register groups efficiently, and it's generally
+a rather heavyweight solution. It might be useful for handling very
+hierarchical chips, but I couldn't justify the added complexity when
+most chips don't need it -- after all most chips behind slow busses
+will have a small number of interrupts and a fairly flat structure.
+
+In the end I went with Mark's suggestion to factor things out around
+->get_irq_reg(). At first I thought there might be too many "gotchas"
+that'd limit its usefulness, but in the end it proved to be a better
+option and a lot easier to implement.
