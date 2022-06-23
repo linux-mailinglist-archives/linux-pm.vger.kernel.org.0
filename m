@@ -2,59 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2CA557DA4
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 16:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8175B557DB2
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jun 2022 16:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbiFWOVG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 10:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
+        id S231315AbiFWOYW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 10:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbiFWOVF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 10:21:05 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF9D43EFE
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 07:21:03 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3178ea840easo157510757b3.13
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 07:21:03 -0700 (PDT)
+        with ESMTP id S231283AbiFWOYW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 10:24:22 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500DA35262
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 07:24:21 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso195560277b3.9
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 07:24:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rf5HiTVNrAIpJ0wokKeVeR89HA4WWdGGZS0VF8ik5kA=;
-        b=pHtzpwCFlcK7eZL0a0b+EMhrPeNO8dYdsArNWv+GTsGJybwWOjkmyIynWIffqTInGp
-         4oRZuEcpRnZjazyZBAL6cMH/wlnCUmqI2aNtmEZMBxNENwridYiD2Hw6VPWI3VWV389A
-         CfLIXL8H8rdT9mufa2aObCB1WwEMkuV9Kmpx54Y52OZtSm2vcvS6oDhjGPSPtG6ipoEo
-         SlCTrlNACRyIlkNgkkeAiPoM+QYujOcUGKnXKeZxWW7L9R9+CALv6fZFDbn7rF/KU/hF
-         2loapSIR5f5OB/D2VZctVQVvtFTz5jqxJgM3VTR+nWYZfOBKln3+tyIEnOYK32exNV5S
-         JOdg==
+        bh=OJeQhOK1Ff5tvH4oib0FqXJ18QJZjDsQotId8PDGCZc=;
+        b=L1ePpkTAA3qCERmKFqo35BT5ANmq34Yl1f90l93GGRcfTCJR4PpjmhLo+6zkhM6JTv
+         xRshOrzDQn3di9d1KyUUTYGA+erMuzUY/79hjVcEttKVNZYRBN2uaOSP8uSkB2/YdgJI
+         ojnVNmfSXf4zSlSgxX5B54w/jS0bWvRaWgxWtzgmz9sY+eBjKDfOi5ojxp1EErXdY0md
+         xK3V2SlYivtmPlmwo9T3y6pyaG/eT5ogKc4ZTIRIthLCegGLPXekcOTbegqz1jlpcJWA
+         S/8M+kj6HiBTn1iBfjiqtnUwpvUGA1ocsDddoITWQKfL7DPW2MDqFTgKayeX4oCxfbNp
+         rmXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rf5HiTVNrAIpJ0wokKeVeR89HA4WWdGGZS0VF8ik5kA=;
-        b=nDCjZ/t+NyxvItE+Wx3pQEZe0ZQqKQYcNbVUAr8tOz353PKBJnmd/1jN/Ox2o4Z0WD
-         nemWasWBizlO+y/8ear7FA5eCA+Z+eAxmTJjsq10BVCzRsg9hItZws1BLej9gwV6lhpI
-         yTgwITwMVfRdRke8IRdCxYIlQgpccdX2JUyALpIVc3CrpB5JJNVS8oMF7nZj2h3ajwlk
-         JAEkfUGm34yE9QnRi917n9QTOMaNIkMBmuwDf3dfmovyyBIECYYSgqCM9UyjMX4Fjfa+
-         laYV18VLByJ/TR4oEQvtUlGpgFSYo0OQ9E4x//Tkhk6icOH32H1E/lHkG8Pe47VYh9o3
-         kL2g==
-X-Gm-Message-State: AJIora9OdluVsVJQwIllrUCEkWNhQPzdi9dGupcALIls6BvDP8O/ozQS
-        2o0DQVct9fkAnAI/RkxgRxBbFmw4sZhwdRtWhboVAA==
-X-Google-Smtp-Source: AGRyM1uPE21ir/K+p82s2CyfHc4N4q09ryX43oPv1c8VFXsWoUkqO1Ru3sifHRUbZvOEM1QVtmSBp1ub/kdZShGRWg0=
-X-Received: by 2002:a81:d05:0:b0:317:76a1:9507 with SMTP id
- 5-20020a810d05000000b0031776a19507mr11305724ywn.151.1655994063125; Thu, 23
- Jun 2022 07:21:03 -0700 (PDT)
+        bh=OJeQhOK1Ff5tvH4oib0FqXJ18QJZjDsQotId8PDGCZc=;
+        b=jSzkB5qEjc5Loqze4mR8WU9NTqTRcqO19WYub/nNRAPRgcomAm2r97bA3MC5+Rmw9x
+         /bJqe4IHo6ikgYDlZQLl6Nq3BSOoGXI267DuJNbkj6CQNf+7tqGLlMBgj9H9Ip9rnDpx
+         IHo5Agb6eGoZTQ5E218j7XcMh6juK97NlR5yXe+UtHkfqHuAbSfuXybr+3qQqqQHBwxr
+         gk8foVBSL8baujbC+kqETQ3YDJySuCl9JNBCX6wjl0VMcBJ9UEnCQUM3TFRC6N4nHeOM
+         vKdInLgG5qz86aM/hK42vnkJhpmNjd0T+MyOFm3QF5w8abi414nNWslNxfR7TJtlCJ+b
+         zNig==
+X-Gm-Message-State: AJIora9f7qb83WT6xt5xWjScEal9amtKO9dttHRrKo6rxvKD1xStb5IK
+        uSs4pYpQP787FDQWEjiwhWPKR3WVyamjV3O1VNiF749ZBdI=
+X-Google-Smtp-Source: AGRyM1u3JII37Q3B4+Q8OpzB06OpakUrrBTlutREtHbBsdnm3f8RWqIzk7M0C3AIE5aSZPAEd8MaEEMcEjt0B/QCagQ=
+X-Received: by 2002:a81:6587:0:b0:318:38c2:2fb1 with SMTP id
+ z129-20020a816587000000b0031838c22fb1mr10788372ywb.118.1655994260430; Thu, 23
+ Jun 2022 07:24:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512093844.1109923-1-zhengbin13@huawei.com> <20220609222239.5fssqczkdqy4inoz@mercury.elektranox.org>
-In-Reply-To: <20220609222239.5fssqczkdqy4inoz@mercury.elektranox.org>
+References: <50d84193-a933-1301-b9d9-bf6cc01ee126@I-love.SAKURA.ne.jp> <20220609194329.bkvnxmxovnbqxuxg@mercury.elektranox.org>
+In-Reply-To: <20220609194329.bkvnxmxovnbqxuxg@mercury.elektranox.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 23 Jun 2022 16:20:52 +0200
-Message-ID: <CACRpkdY=BY09fRb+SCTCbb=Nd6i-hD4LznjtOg10VivMbLb2ew@mail.gmail.com>
-Subject: Re: [PATCH -next] power: supply: ab8500: add missing
- destroy_workqueue in ab8500_charger_bind
+Date:   Thu, 23 Jun 2022 16:24:09 +0200
+Message-ID: <CACRpkdaGAXvSEgR_k3obRv+yjaEDeaKfsYk1R9bvjQ9MY=WHBg@mail.gmail.com>
+Subject: Re: [PATCH] power: ab8500: Remove flush_scheduled_work() call.
 To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Zheng Bin <zhengbin13@huawei.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gaochao49@huawei.com
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -66,21 +65,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:22 AM Sebastian Reichel
+On Thu, Jun 9, 2022 at 9:43 PM Sebastian Reichel
 <sebastian.reichel@collabora.com> wrote:
-> On Thu, May 12, 2022 at 05:38:44PM +0800, Zheng Bin wrote:
-> > ab8500_charger_bind misses destroy_workqueue in error path,
-> > this patch fixes that.
+> On Thu, Jun 09, 2022 at 01:58:04PM +0900, Tetsuo Handa wrote:
+> > It seems to me that ab8500 driver is using dedicated workqueues and
+> > is not calling schedule{,_delayed}_work{,_on}(). Then, there will be
+> > no work to flush using flush_scheduled_work().
 > >
-> > Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+> > Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 > > ---
+> > Please see commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue()
+> > using a macro") for background.
 >
-> LGTM, but adding Linus to Cc and waiting a bit to give him time to
-> react.
+> Looks sensible to me. Adding Linus to Cc and waiting a bit so that
+> he has time to review/test.
 
-Don't have the original patch in my inbox so can't test it, but looks
-reasonable so:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Makes perfect sense.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+> @Linus I think it makes sense to add something like this to
+> MAINTAINERS or add the files to the "ARM/NOMADIK/Ux500 ARCHITECTURES"
+> entry, so that you will be CC'd.
+>
+> AB8500 BATTERY AND CHARGER DRIVERS
+> M:      Linus Walleij <linus.walleij@linaro.org>
+> S:      Maintained
+> F:      Documentation/devicetree/bindings/power/supply/*ab8500*
+> F:      Documentation/devicetree/bindings/power/supply/*ab8500*
+
+OK I fix something.
 
 Yours,
 Linus Walleij
