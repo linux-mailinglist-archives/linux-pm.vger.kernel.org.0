@@ -2,75 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D62558C3F
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 02:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2409F558C6A
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 02:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiFXA2N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 20:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S230080AbiFXAsh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 20:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiFXA2M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 20:28:12 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F80D11C02
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 17:28:09 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 68so908977pgb.10
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 17:28:09 -0700 (PDT)
+        with ESMTP id S229852AbiFXAsf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 20:48:35 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D200D3A722
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 17:48:34 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id dw10-20020a17090b094a00b001ed00a16eb4so1293813pjb.2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 17:48:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=P4Yje83rZYDRwuL9uo9EpMh58B6jkiYDBp8jSKu+8xU=;
-        b=IUqbXQUyFPdxLRIJZ1sfcGFJ6lHDyH0SdlPGW96Ps+WO1W4m4JbAiwTZdMkKacl+MM
-         D5DjVbMguKKKfOEV6Yl7t72SfBwhAbK41aGj+mBhVLVvxmMIHEFzk4sjh5+rBvGALNqO
-         S8Gh5ygMb3xtpnxKqjFVqaOSvF9ykpbsXzfCOPU5EUZ0FlEC4iAXFhvTstnDtI1yLm+M
-         xr+F1GL0yzIohwkliEUKWoxjNr9v+ywYg/NrPryFnFrmULKs5kAeouQDX+51rEAxuH3s
-         ukYigjwuqbpal/SjKujJSmPK9uKTCEV6aWpTqgK24biQzsVZP6+UYL/wqYWc4g+StEYW
-         xi5w==
+        bh=vT7SI/0dq3kYi1YzDx+CNQqO5F2TeEBjziGGhkphlR0=;
+        b=cJK7kkGYzkuw1/SMY2wrCvbdnAA4eaCFG1FuVGxZGs1fHVRTmGorCsHXrrOGBGjwR8
+         HH5ZMjkqmmvHoEeVk4dNympY3ENzxIHGQPRmEBCBpLNTWzi4VW03eyjmqZxK6eDCJ6xk
+         DXKZ9uxeHt63pNKkUTSv150YrhtkEwcKakQySLlrG9st7iGaYOUVmP4xhlVyWv6PZfm3
+         uyRAh53qApCMUazud1hMCTyVjemqWauOm5sh00/i66o6Jab47HFJpT/23lhhiEUlGdDG
+         0+wNHdxWYOkmIrUhYLy7k6z0E26LpsLTOhRBBOk8evt9vb1s1Tx8bvSg4iaoOO+PsQD3
+         9kyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=P4Yje83rZYDRwuL9uo9EpMh58B6jkiYDBp8jSKu+8xU=;
-        b=Vragt+ZUjzVsJvJRztMZQcWd6PQSr3O2lnKAFbvPZ/11/lrvZDgWF61+A44rJrAPXV
-         ssi4K01T+Jg5+zCckNPuB5MW4nJMXbaYQVeRan+VFtGSDomof+f2tOJBiIn/xgF+tCbn
-         ZMCEzUMN3UpDpAJumVVshfjzejPXZkFY60NU5jCBMoWeqef0QKHmCjwn/kbomxdFUt70
-         +UUHAH99EHGXkgQMs1n/C366r82qHbRfH7RNvTanZBG5k4UNJspJaTMOoq4/pUaKm+sN
-         /ojgssa8pEYwU8z3KBgW71p/0BaxPQU870EpggXCSQGorj46jEOiqIjangmOBQVjDN2c
-         7dTw==
-X-Gm-Message-State: AJIora9RAXkB0iF3EasuuTqm1Jg6/IgP1rhjOzDW4rkJ0uQ+L9GLavuc
-        UmHW+fVEjUuFs2VQ5EaUPqJu+w==
-X-Google-Smtp-Source: AGRyM1s4tA8aTDDu3gGkINrxoWIx2aC28XlcSQwcSIGGo+MPKiMLb03umdr2bcjVfA21s3ZLy9ye1w==
-X-Received: by 2002:a63:7046:0:b0:40c:af8d:a6 with SMTP id a6-20020a637046000000b0040caf8d00a6mr9703157pgn.38.1656030488471;
-        Thu, 23 Jun 2022 17:28:08 -0700 (PDT)
+        bh=vT7SI/0dq3kYi1YzDx+CNQqO5F2TeEBjziGGhkphlR0=;
+        b=hywlB1drQWukA9+uYFJChfEY2OQCfi7nuhAIROxoCkArCXQXRfUKhgrpXVxYIHYGjN
+         ffVJKorzZTgRgo0zMAJMyoOr6lEM9PrXEOXDLKu6p8R6B5Q/Cs6xG5WDq1mB9kyqgheZ
+         FwBXl9WvA+27pEZjH380K4PRGZeERamrVrSOlexD4YCEyYoBtMcCi0y4QEQiZcgO8S3Z
+         P7yRB9qnzjsl9/3UwMbvP1HwUbP09myweOux8eBZmgD6CmA3KpIH/lf5BpqwmvSLuvZQ
+         tLgDoNiSodKvkCDWy7VFyEMybQKvMXoZFdYxjVvTCpa81tTZr/ctRNLgRMWSPwTlX5Yy
+         9Zxw==
+X-Gm-Message-State: AJIora9QTLhDFIiN62ZiJ4n070E+rUqtBiFWgpfRDTyAIbb7Hn7PjDI1
+        Zqq9C7NLzofbzfn954bHRAAQBqf0nuMtWQ==
+X-Google-Smtp-Source: AGRyM1t3QeybUXk5i3agF3ozxrpy/i3taBdUtkZxi6rAqUowX/nFrq0JKwSCErThiOduLvCrhKq53g==
+X-Received: by 2002:a17:90b:3ec6:b0:1ec:ac25:ce6f with SMTP id rm6-20020a17090b3ec600b001ecac25ce6fmr741120pjb.203.1656031714364;
+        Thu, 23 Jun 2022 17:48:34 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170902a50b00b001620eb3a2d6sm374708plq.203.2022.06.23.17.28.07
+        by smtp.gmail.com with ESMTPSA id cp2-20020a170902e78200b0015e8d4eb1d7sm412917plb.33.2022.06.23.17.48.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 17:28:07 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 05:58:05 +0530
+        Thu, 23 Jun 2022 17:48:33 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 06:18:31 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Dmitry Osipenko <digetx@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/31] soc/tegra: Remove the call to
- devm_pm_opp_set_clkname()
-Message-ID: <20220624002805.anv62ufihdrncwus@vireshk-i7>
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220624004831.po35sowzfo4c47b3@vireshk-i7>
 References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
- <12c085af-1202-95cf-e9ad-ddcfbdadf0d6@nvidia.com>
+ <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <12c085af-1202-95cf-e9ad-ddcfbdadf0d6@nvidia.com>
+In-Reply-To: <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,79 +76,130 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-06-22, 22:15, Jon Hunter wrote:
-> On 26/05/2022 12:42, Viresh Kumar wrote:
-> > diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-> > index 32c346b72635..49a5360f4507 100644
-> > --- a/drivers/soc/tegra/common.c
-> > +++ b/drivers/soc/tegra/common.c
-> > @@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
-> >   	u32 hw_version;
-> >   	int err;
-> > -	err = devm_pm_opp_set_clkname(dev, NULL);
-> > -	if (err) {
-> > -		dev_err(dev, "failed to set OPP clk: %d\n", err);
-> > -		return err;
-> > -	}
-> > -
-> >   	/* Tegra114+ doesn't support OPP yet */
-> >   	if (!of_machine_is_compatible("nvidia,tegra20") &&
-> >   	    !of_machine_is_compatible("nvidia,tegra30"))
+On 26-05-22, 17:12, Viresh Kumar wrote:
+> The OPP core now provides a unified API for setting all configuration
+> types, i.e. dev_pm_opp_set_config().
 > 
+> Lets start using it.
 > 
-> This appears to be breaking a few Tegra drivers. For example, on Tegra210
-> Jetson TX1 I am seeing the following and the eMMC is no longer working ...
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/soc/tegra/common.c | 8 ++++++--
+>  drivers/soc/tegra/pmc.c    | 8 ++++++--
+>  2 files changed, 12 insertions(+), 4 deletions(-)
 > 
-> [    0.526729] sdhci-tegra 700b0600.mmc: dev_pm_opp_set_rate: device's opp table doesn't exist
-> [    0.526733] sdhci-tegra 700b0600.mmc: failed to set clk rate to 400000Hz: -19
-> [    0.528830] sdhci-tegra 700b0600.mmc: dev_pm_opp_set_rate: device's opp table doesn't exist
-> [    0.528833] sdhci-tegra 700b0600.mmc: failed to set clk rate to 400000Hz: -19
-> 
-> I have seen another instance of this on Jetson Xavier NX ...
-> 
-> [   12.301336] tegra-pwm 32d0000.pwm: dev_pm_opp_set_rate: device's opp table doesn't exist
-> [   12.301350] tegra-pwm 32d0000.pwm: Failed to set max frequency: -19
-> 
-> Bisect is point to this commit and so something is not working as
-> expected.
+> diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+> index 49a5360f4507..7ba15cb836e8 100644
+> --- a/drivers/soc/tegra/common.c
+> +++ b/drivers/soc/tegra/common.c
+> @@ -107,6 +107,10 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+>  {
+>  	u32 hw_version;
+>  	int err;
+> +	struct dev_pm_opp_config config = {
+> +		.supported_hw = &hw_version,
+> +		.supported_hw_count = 1,
+> +	};
+>  
+>  	/* Tegra114+ doesn't support OPP yet */
+>  	if (!of_machine_is_compatible("nvidia,tegra20") &&
+> @@ -118,9 +122,9 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+>  	else
+>  		hw_version = BIT(tegra_sku_info.soc_speedo_id);
+>  
+> -	err = devm_pm_opp_set_supported_hw(dev, &hw_version, 1);
+> +	err = devm_pm_opp_set_config(dev, &config);
+>  	if (err) {
+> -		dev_err(dev, "failed to set OPP supported HW: %d\n", err);
+> +		dev_err(dev, "failed to set OPP config: %d\n", err);
+>  		return err;
+>  	}
 
-Thanks again Jon.
+Jon/Dmitry,
 
-This is what happens when the special code doesn't have a comment
-attached with it. Neither the reviewer, nor the author remember why
-the special piece was required :)
-
-I had to go through the whole sequence, along with DT to understand
-what might have broken this stuff :)
-
-I will drop this patch and add this comment in its place:
+Because of the update [1] to previous patch 21/31, I am updating this
+file as (fresh diff):
 
 diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-index 32c346b72635..9f3fdeb1a11c 100644
+index 9f3fdeb1a11c..cd53e46c4058 100644
 --- a/drivers/soc/tegra/common.c
 +++ b/drivers/soc/tegra/common.c
-@@ -108,6 +108,13 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+@@ -107,36 +107,42 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+ {
         u32 hw_version;
         int err;
+-
+-       /*
+-        * For some devices we don't have any OPP table in the DT, and in order
+-        * to use the same code path for all the devices, we create a dummy OPP
+-        * table for them via this call. The dummy OPP table is only capable of
+-        * doing clk_set_rate() on invocation of dev_pm_opp_set_rate() and
+-        * doesn't provide any other functionality.
+-        */
+-       err = devm_pm_opp_set_clkname(dev, NULL);
+-       if (err) {
+-               dev_err(dev, "failed to set OPP clk: %d\n", err);
+-               return err;
+-       }
+-
+-       /* Tegra114+ doesn't support OPP yet */
+-       if (!of_machine_is_compatible("nvidia,tegra20") &&
+-           !of_machine_is_compatible("nvidia,tegra30"))
+-               return -ENODEV;
+-
+-       if (of_machine_is_compatible("nvidia,tegra20"))
++       struct dev_pm_opp_config config = {
++               /*
++                * For some devices we don't have any OPP table in the DT, and
++                * in order to use the same code path for all the devices, we
++                * create a dummy OPP table for them via this. The dummy OPP
++                * table is only capable of doing clk_set_rate() on invocation
++                * of dev_pm_opp_set_rate() and doesn't provide any other
++                * functionality.
++                */
++               .clk_names = NULL,
++               .clk_count = 1,
++       };
++
++       if (of_machine_is_compatible("nvidia,tegra20")) {
+                hw_version = BIT(tegra_sku_info.soc_process_id);
+-       else
++               config.supported_hw = &hw_version;
++               config.supported_hw_count = 1;
++       } else if (of_machine_is_compatible("nvidia,tegra30")) {
+                hw_version = BIT(tegra_sku_info.soc_speedo_id);
++               config.supported_hw = &hw_version;
++               config.supported_hw_count = 1;
++       }
+
+-       err = devm_pm_opp_set_supported_hw(dev, &hw_version, 1);
++       err = devm_pm_opp_set_config(dev, &config);
+        if (err) {
+-               dev_err(dev, "failed to set OPP supported HW: %d\n", err);
++               dev_err(dev, "failed to set OPP config: %d\n", err);
+                return err;
+        }
 
 +       /*
-+        * For some devices we don't have any OPP table in the DT, and in order
-+        * to use the same code path for all the devices, we create a dummy OPP
-+        * table for them via this call. The dummy OPP table is only capable of
-+        * doing clk_set_rate() on invocation of dev_pm_opp_set_rate() and
-+        * doesn't provide any other functionality.
++        * Tegra114+ doesn't support OPP yet, return early for non tegra20/30
++        * case.
 +        */
-        err = devm_pm_opp_set_clkname(dev, NULL);
-        if (err) {
-                dev_err(dev, "failed to set OPP clk: %d\n", err);
++       if (!config.supported_hw)
++               return -ENODEV;
++
+        /*
+         * Older device-trees have an empty OPP table, we will get
+         * -ENODEV from devm_pm_opp_of_add_table() in this case.
 
+-------------------------8<-------------------------
 
-Though there will still be a problem here with my changes, we don't
-accept NULL clkname anymore for the set-clkname API. And tegra does
-this to pick the first clock available in DT (at index 0) I think.
-Other drivers (mostly qcom) who need such dummy OPP table, provide a
-real clock name instead. Will it be possible to pass that here somehow
-?
+The idea here is to always set the clk name (to NULL) and skip other
+stuff for SoCs other than tegra 20/30.
+
+Just see if you can find something odd with the review of it, I will
+resend it properly later once the issues are settled.
 
 -- 
 viresh
+
+[1] https://lore.kernel.org/lkml/20220624002805.anv62ufihdrncwus@vireshk-i7/
