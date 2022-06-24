@@ -2,97 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C575597C9
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 12:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E758A5597D0
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 12:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiFXKZ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jun 2022 06:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S230388AbiFXK1v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jun 2022 06:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiFXKZy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 06:25:54 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC667C51A
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:25:48 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id cw10so3806593ejb.3
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:25:48 -0700 (PDT)
+        with ESMTP id S229632AbiFXK1t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 06:27:49 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C251E7C51F
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:27:46 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id pk21so3819644ejb.2
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CHttmF3yGSGx+TZUTVwg9kv22SlC4meEkXeiN/iN2v8=;
-        b=z7ATTMHw/uFuGMTH0cx/WUmez2cGoKvXN2RGic2tU6NQONge6izMZ6WAYMGWzduOWp
-         JWDhKgDR/MVsJX+70XppIMM4wZ8+AiIDjk7CAUxgScaYttqFNk+esnEw4Jrakkpc7EPx
-         v+5iwZ1jeuDfshxkaPQsByIECd1PIFX5RcvumpAa/nm6sZVxk2gHoCqnlZtKYpxWBmDS
-         0iYf4QHhB4e5m6l54EuFC7W3UOueSP8Lhln71JGbUMb8ORvik3KJQQaZZz7xhnwU9sgm
-         koPcWq7QohPq+EMTtzEUQaYx4TNywITpEwUqkucd7Mr6j+hvtSE07ltE1eC8hgyUcwy+
-         M/EQ==
+        bh=Nuxc36+s4sWQDaVadkc6oPNaa2rIDEmkVevDjA38UUQ=;
+        b=Lu/cMZDQbpDrvP88FBrvMyrvBoGMLxkakNs1O/w0KJCcIFSPOUBY6OryS/oCJ06YOn
+         GbDK7li6a4UHrHldXUyUMMOWrNS7pm9L5bfCAY7TmNWPkoDDJz8VXQFe9Fhpv3m1uc0L
+         t4Sa3S5fCj+Jep4qZr+X95xroO/Fz5Hy4UOnCnNBFg2IacvUZRBw/4DLZFBdZxUBHoUe
+         5PIG9v7XeqxkrKqcy2iOjNxequ8IQZPQLNBUYSNE3EU48hl1FQubHzyALQeSD5oD6gy4
+         XQLb1KUjFcLMpjEJx38RU1Cy1e+e8w6rEg3l9/raR6EjGfIkJCCDcDqn2DXE/qEDSWEt
+         gzVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=CHttmF3yGSGx+TZUTVwg9kv22SlC4meEkXeiN/iN2v8=;
-        b=IdtRT5rxtAR3RXKmVEXIIHmBsHoaU0mahk1Yv+Pa1JgOMZ//eVHMJD5RXYi8c8SYf9
-         4S95PtxMgDETHmsqg2uelWhC8VHOK5GaZ11XSRycTgqltQjl075mRlMkJ7pfzT7Oay3V
-         CHg4Wl4sH0mB8qXR0SAT0U9/kckNCpAQwJQ+JZiZEflXm3c0oD7XoBF4sHdxnN4Mdff0
-         FpJfEwWAMvd4x6NXH4IUGUQjqNO/nYSiW3jkiGZkPCw70XmD7qOKYNG34Yg0DG95o6I6
-         EwdHjAuIM//G1Zc9FfmgJT+ZoM46J/eGpk2M5fq9s9//8A0xThccgu2Cf+Z0SEpX6XQC
-         PVzg==
-X-Gm-Message-State: AJIora+9/ZdWybLo4US9aIjOMIlSmuj6fLYgw9BDofnYqbbGWTudCFkc
-        vLwuFCJS22anOcnFPjiVwnnL+g==
-X-Google-Smtp-Source: AGRyM1tJuZF3QgXNIjmCTm5JxpaOyY6m5vZGMqLZG9V/JEZvRn/GC7cwsOcwhASPRcGnwcf/5J5bBw==
-X-Received: by 2002:a17:906:7288:b0:722:da04:da51 with SMTP id b8-20020a170906728800b00722da04da51mr12547124ejl.316.1656066347402;
-        Fri, 24 Jun 2022 03:25:47 -0700 (PDT)
+        bh=Nuxc36+s4sWQDaVadkc6oPNaa2rIDEmkVevDjA38UUQ=;
+        b=cRz9NipMnni9Jm5lf3cuzhWhWxFMXNnreYzwGHCLUFEFdcgtgyq0JQqANDvtzZtrNc
+         S6vDQRcIydBEHDQAUdPWqKA51UqoLEKlfMP7dZGzMCCD9kEQtUk2KG+Sht9R6oVpRH6/
+         A9DZSnLLKLrBBQfotwlINqJRfu1NNEpxK8Kdt6/I9xlbZySROKf2bA+1JHDHVCg4jhAu
+         wV/COb+rc+g+Erq9hjb9iIzfKTiUBE4wvw0OcguHLPCvlJ2LQZ7/0EgYfENIuVWi3Dv0
+         2IErv487SIefFX+i6TF4BD/SfEKxcxisdjUA5s0umjGfsKgznXnztSyC9I4JMMrIYwnn
+         aCUw==
+X-Gm-Message-State: AJIora8E2uuKRWkFca8I3DHClfLOE/oO3HUxOPlHsFHlxHKAOnsPZwy1
+        YXrTP7PqamZ9ZtXFJBlHAnI3Jg==
+X-Google-Smtp-Source: AGRyM1t4wJC/XeeqGXInCg0idKMgknVDGZX7X/fQzRWF0oldACj/ylYne3Hz/Rt8agVjJawt7AOTzw==
+X-Received: by 2002:a17:907:94cb:b0:721:252c:d4bb with SMTP id dn11-20020a17090794cb00b00721252cd4bbmr12681930ejc.148.1656066465307;
+        Fri, 24 Jun 2022 03:27:45 -0700 (PDT)
 Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w13-20020a170906d20d00b00726298147b1sm851210ejz.161.2022.06.24.03.25.45
+        by smtp.gmail.com with ESMTPSA id o12-20020a056402038c00b0043561e0c9adsm1640034edv.52.2022.06.24.03.27.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 03:25:46 -0700 (PDT)
-Message-ID: <b653d7af-f846-abb2-d260-3ce615b070a4@linaro.org>
-Date:   Fri, 24 Jun 2022 12:25:44 +0200
+        Fri, 24 Jun 2022 03:27:44 -0700 (PDT)
+Message-ID: <06819889-2c00-83d8-0d25-ce6c2559105a@linaro.org>
+Date:   Fri, 24 Jun 2022 12:27:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v5 10/14] dt-bindings: firmware: Add fsl,scu yaml file
+Subject: Re: [PATCH v3 02/14] dt-bindings: power: supply: Add Mediatek MT6370
+ Charger
 Content-Language: en-US
-To:     Viorel Suman <viorel.suman@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Abel Vesa <abel.vesa@nxp.com>
-References: <20220616164303.790379-1-viorel.suman@nxp.com>
- <20220616164303.790379-11-viorel.suman@nxp.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+References: <20220623115631.22209-1-peterwu.pub@gmail.com>
+ <20220623115631.22209-3-peterwu.pub@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220616164303.790379-11-viorel.suman@nxp.com>
+In-Reply-To: <20220623115631.22209-3-peterwu.pub@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -105,206 +87,101 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/06/2022 18:42, Viorel Suman wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
+On 23/06/2022 13:56, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch adds the
-> fsl,scu.yaml in the firmware bindings folder. This one is only for
-> the main SCU node. The old txt file will be removed only after all
-> the child nodes have been properly switch to yaml.
+> Add Mediatek MT6370 Charger binding documentation.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 > ---
->  .../devicetree/bindings/firmware/fsl,scu.yaml | 170 ++++++++++++++++++
->  1 file changed, 170 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/firmware/fsl,scu.yaml b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+> v3
+> - Add items and remove maxItems of io-channels
+> - Add io-channel-names and describe each item
+> - Add "unevaluatedProperties: false" in "usb-otg-vbus-regulator"
+> - Rename "enable-gpio" to "enable-gpios" in "usb-otg-vbus-regulator"
+> ---
+>  .../power/supply/mediatek,mt6370-charger.yaml      | 87 ++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
 > new file mode 100644
-> index 000000000000..a28f729bfadb
+> index 0000000..f138db6
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
-> @@ -0,0 +1,170 @@
+> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> @@ -0,0 +1,87 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/firmware/fsl,scu.yaml#
+> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: NXP i.MX System Controller Firmware (SCFW)
+> +title: Mediatek MT6370 Battery Charger
 > +
 > +maintainers:
-> +  - Dong Aisheng <aisheng.dong@nxp.com>
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
 > +
-> +description: System Controller Device Node
-> +  The System Controller Firmware (SCFW) is a low-level system function
-> +  which runs on a dedicated Cortex-M core to provide power, clock, and
-> +  resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
-> +  (QM, QP), and i.MX8QX (QXP, DX).
-> +  The AP communicates with the SC using a multi-ported MU module found
-> +  in the LSIO subsystem. The current definition of this MU module provides
-> +  5 remote AP connections to the SC to support up to 5 execution environments
-> +  (TZ, HV, standard Linux, etc.). The SC side of this MU module interfaces
-> +  with the LSIO DSC IP bus. The SC firmware will communicate with this MU
-> +  using the MSI bus.
+> +description: |
+> +  This module is part of the MT6370 MFD device.
+> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
 > +
 > +properties:
-> +  $nodename:
-> +    const: 'scu'
-
-Why enforcing node name? Second point is that node names should be
-generic, so I wonder what "SCU" exactly means and whether it is generic?
-
-> +
 > +  compatible:
-> +    const: fsl,imx-scu
+> +    const: mediatek,mt6370-charger
 > +
-> +  clock-controller:
+> +  interrupts:
 > +    description: |
-> +      $ref: /schemas/clock/fsl,scu-clk.yaml
-
-That's not a valid syntax. ref is not part of description
-
-> +      Clock controller node that provides the clocks controlled by the SCU
+> +      Specify what irqs are needed to be handled by MT6370 Charger driver. IRQ
+> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL_UVP_D"
+> +      are required.
+> +    items:
+> +      - description: BC1.2 done irq
+> +      - description: usb plug in irq
+> +      - description: mivr irq
 > +
-> +  imx8qx-ocotp:
-> +    description: |
-> +      $ref: /schemas/nvmem/fsl,scu-ocotp.yaml
-> +      OCOTP controller node provided by the SCU
+> +  interrupt-names:
+> +    items:
+> +      - const: attach_i
+> +      - const: uvp_d_evt
+> +      - const: mivr
 > +
-> +  keys:
+> +  io-channels:
 > +    description: |
-> +      $ref: /schemas/input/fsl,scu-key.yaml
-> +      Keys provided by the SCU
-> +
-> +  mboxes:
-> +    description: |
-> +      $ref: /schemas/mailbox/fsl,mu.yaml
-> +      List of phandle of 4 MU channels for tx, 4 MU channels for
-> +      rx, and 1 optional MU channel for general interrupt.
-> +      All MU channels must be in the same MU instance.
-> +      Cross instances are not allowed. The MU instance can only
-> +      be one of LSIO MU0~M4 for imx8qxp and imx8qm. Users need
-> +      to make sure use the one which is not conflict with other
-> +      execution environments. e.g. ATF.
+> +      Use ADC channel to read VBUS, IBUS, IBAT, etc., info.
 > +    minItems: 1
-> +    maxItems: 10
+> +    items:
+> +      - description: |
+> +          VBUS voltage with lower accuracy (+-75mV) but higher measure
+> +          range (1~22V)
+> +      - description: |
+> +          VBUS voltage with higher accuracy (+-30mV) but lower measure
+> +          range (1~9.76V)
+> +      - description: the main system input voltage
+> +      - description: battery voltage
+> +      - description: battery temperature-sense input voltage
+> +      - description: IBUS current (required)
+> +      - description: battery current
+> +      - description: |
+> +          regulated output voltage to supply for the PWM low-side gate driver
+> +          and the bootstrap capacitor
+> +      - description: IC junction temperature
 > +
-> +  mbox-names:
-> +    description:
-> +      include "gip3" if want to support general MU interrupt.
-> +    minItems: 1
-> +    maxItems: 10
-> +
-> +  pinctrl:
-> +    description: |
-> +      $ref: /schemas/pinctrl/fsl,scu-pinctrl.yaml
-> +      Pin controller provided by the SCU
-> +
-> +  power-controller:
-> +    description: |
-> +      $ref: /schemas/power/fsl,scu-pd.yaml
-> +      Power domains controller node that provides the power domains
-> +      controlled by the SCU
-> +
-> +  rtc:
-> +    description: |
-> +      $ref: /schemas/rtc/fsl,scu-rtc.yaml
-> +      RTC controller provided by the SCU
-> +
-> +  thermal-sensor:
-> +    description: |
-> +      $ref: /schemas/thermal/fsl,scu-thermal.yaml
-> +      Thermal sensor provided by the SCU
-> +
-> +  watchdog:
-> +    description: |
-> +      $ref: /schemas/watchdog/fsl,scu-wdt.yaml
-> +      Watchdog controller provided by the SCU
-> +
-> +required:
-> +  - compatible
-> +  - mbox-names
-> +  - mboxes
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/firmware/imx/rsrc.h>
-> +    #include <dt-bindings/input/input.h>
-> +    #include <dt-bindings/pinctrl/pads-imx8qxp.h>
-> +
-> +    firmware {
-> +           scu {
-> +                   compatible = "fsl,imx-scu";
-> +                   mbox-names = "tx0", "tx1", "tx2", "tx3",
-> +                                "rx0", "rx1", "rx2", "rx3",
-> +                                "gip3";
-> +                   mboxes = <&lsio_mu1 0 0
-> +                            &lsio_mu1 0 1
-> +                            &lsio_mu1 0 2
-> +                            &lsio_mu1 0 3
-> +                            &lsio_mu1 1 0
-> +                            &lsio_mu1 1 1
-> +                            &lsio_mu1 1 2
-> +                            &lsio_mu1 1 3
-> +                            &lsio_mu1 3 3>;
-> +
-> +                   clock-controller {
-> +                            compatible = "fsl,imx8qxp-clk", "fsl,scu-clk";
-> +                            #clock-cells = <2>;
-> +                   };
-> +
-> +                   pinctrl {
-> +                            compatible = "fsl,imx8qxp-iomuxc";
-> +
-> +                            pinctrl_lpuart0: lpuart0grp {
-> +                                   fsl,pins = <
-> +                                           IMX8QXP_UART0_RX_ADMA_UART0_RX   0x06000020
-> +                                           IMX8QXP_UART0_TX_ADMA_UART0_TX   0x06000020
-> +                                   >;
-> +                            };
-> +                   };
-> +
-> +                   imx8qx-ocotp {
-> +                            compatible = "fsl,imx8qxp-scu-ocotp";
-> +                            #address-cells = <1>;
-> +                            #size-cells = <1>;
-> +
-> +                            fec_mac0: mac@2c4 {
-> +                                   reg = <0x2c4 6>;
-> +                            };
-> +                   };
-> +
-> +                   power-controller {
-> +                            compatible = "fsl,imx8qxp-scu-pd", "fsl,scu-pd";
-> +                            #power-domain-cells = <1>;
-> +                   };
-> +
-> +                   rtc {
-> +                            compatible = "fsl,imx8qxp-sc-rtc";
-> +                   };
-> +
-> +                   keys {
-> +                            compatible = "fsl,imx8qxp-sc-key", "fsl,imx-sc-key";
-> +                            linux,keycodes = <KEY_POWER>;
-> +                   };
-> +
-> +                   watchdog {
-> +                            compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
-> +                            timeout-sec = <60>;
-> +                   };
-> +
-> +                   thermal-sensor {
-> +                            compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
-> +                            #thermal-sensor-cells = <1>;
-> +                   };
-> +            };
-> +    };
+> +  io-channel-names:
 
+It does not match io-channels, you need minItems here as well.
+
+> +    items:
+> +      - const: vbusdiv5
+> +      - const: vbusdiv2
+> +      - const: vsys
+> +      - const: vbat
+> +      - const: ts_bat
+> +      - const: ibus
+> +      - const: ibat
+> +      - const: chg_vddp
+> +      - const: temp_jc
+> +
 
 Best regards,
 Krzysztof
