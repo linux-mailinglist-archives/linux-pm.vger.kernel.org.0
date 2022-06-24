@@ -2,57 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598DF558EBD
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 05:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905D5559265
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 07:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiFXDFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 23:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S229523AbiFXFi0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jun 2022 01:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiFXDFX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 23:05:23 -0400
-Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [210.0.225.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DBE33F;
-        Thu, 23 Jun 2022 20:05:17 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 24 Jun
- 2022 11:05:15 +0800
-Received: from [10.32.56.37] (10.32.56.37) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 24 Jun
- 2022 11:05:13 +0800
-Subject: Re: [PATCH V1] x86/cstate: Add Zhaoxin/Centaur ACPI Cx FFH MWAIT
- support
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-        <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <0b583b7e-dcd3-be51-f367-1c12ac841d3f@zhaoxin.com>
- <ec121630-1ee5-1336-1ed4-04506f0c4129@intel.com>
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-Message-ID: <e4fd583f-dafd-e2b5-7880-f12684f3e252@zhaoxin.com>
-Date:   Fri, 24 Jun 2022 11:05:12 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S229441AbiFXFiZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 01:38:25 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA452EA06
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id b12-20020a17090a6acc00b001ec2b181c98so4723477pjm.4
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y/SRxapVYozuhYMhBtEsKZgWVsRXORX77DHgWSqH9Xc=;
+        b=D0Rue8sUgpd0Oz2oDwADqo0yETl19CbGgl0NcxTFdcpLIfiidGTvMiEGSbHFZbcinq
+         baW0/Q++m/pcm5SiLWeU6l8prNwGUXlHPWd5JSYtBX0getqN+v508vHly1iMtuPTYIXh
+         B6xX9I3CXSVoN48uO0snxhaqwLgcVRhSnamxeHC/w7q0mpeGLV71d7ceAi4+WglCM/A2
+         bRbm9FlYjmMaZ/yFuL3plszZsIfsa0Q7d8qFjpb0gdvCv13Ulwbw5ZUT8ARVuUx5vTlm
+         dlAO/u8xtb/R2YRQydQQ7m8Klz1GWiE0uajAvw6EUH+zfN0U8DyZnXixMEN0LDwU2nNI
+         1xpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y/SRxapVYozuhYMhBtEsKZgWVsRXORX77DHgWSqH9Xc=;
+        b=uybnbX9iY7Bbcq2SkDMwv1XvqWhk23Kjt5+wXBb2aQ1lWuHB4chb/xF7lCRkrej2iM
+         5xcIyq91y2wQA2CprpbhxLyaJhG1zID6rbAYFP+4cvhf0l01goZuuqFnNllYDp/+13bg
+         UTLCVeva4TuvURTZcNzCG3r9TmjFCH9l2lyA8KhHLt5DVzcXFEFy+m6PcUQPZrY1xRhj
+         NJRF0c+mi7MMwXAy/OZ/PqALAGroTZrXqwmi60dIswFg8fsODJwZ8FhMFWuSYXwndoND
+         jhMV9dtVhVRnpwR1nqvivgi3JdRdo0BKvVx5G2MFIcdczx+f0iqbE2myTaXIvvGpmj8q
+         Jz/w==
+X-Gm-Message-State: AJIora/wSwjqcnqpGstkH/Lctgx9XGg5VzsdHyMTcEZNaKxGQMXI+wDO
+        y8MBT88/cPt/W6PIrIcE6tXcFw==
+X-Google-Smtp-Source: AGRyM1toya/YrdeGKw+SyYyN5TqtRXMFJanSddtA7xBFHFmaieaTouohS+OBViv/YKTrufCn4l1Evw==
+X-Received: by 2002:a17:90a:408f:b0:1e3:23a:2370 with SMTP id l15-20020a17090a408f00b001e3023a2370mr1959764pjg.84.1656049104303;
+        Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id 2-20020a056a00072200b00525217fe273sm641043pfm.187.2022.06.23.22.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 22:38:23 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 11:08:21 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/31] cpufreq: tegra20: Migrate to
+ dev_pm_opp_set_config()
+Message-ID: <20220624053821.e6emke6gortqn72a@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
+ <793e49ea-aeb0-a47a-9fe8-742a6397bb35@collabora.com>
+ <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <ec121630-1ee5-1336-1ed4-04506f0c4129@intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.32.56.37]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,58 +80,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/6/2022 23:55, Dave Hansen wrote:
-> On 6/22/22 18:26, Tony W Wang-oc wrote:
->> Recent Zhaoxin/Centaur CPUs support X86_FEATURE_MWAIT that implies
->> the MONITOR/MWAIT instructions can be used for ACPI Cx state.
->> The BIOS declares Cx state in _CST object to use FFH on Zhaoxin/Centaur
->> systems. So let function ffh_cstate_init() support These CPUs too.
->>
->> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
->> ---
->>   arch/x86/kernel/acpi/cstate.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
->> index 7945eae..d4185e1 100644
->> --- a/arch/x86/kernel/acpi/cstate.c
->> +++ b/arch/x86/kernel/acpi/cstate.c
->> @@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
->>
->>       if (c->x86_vendor != X86_VENDOR_INTEL &&
->>           c->x86_vendor != X86_VENDOR_AMD &&
->> -        c->x86_vendor != X86_VENDOR_HYGON)
->> +        c->x86_vendor != X86_VENDOR_HYGON &&
->> +        c->x86_vendor != X86_VENDOR_CENTAUR &&
->> +        c->x86_vendor != X86_VENDOR_ZHAOXIN)
->>           return -1;
+On 29-05-22, 19:59, Dmitry Osipenko wrote:
+> With that fixed, now there is another error:
 > 
-> Many of the changelogs that add new vendors here go on about particular
-> C states declared in the _CST object and contents of CPUID leaf 5.
+> [    1.761945] cpu cpu0: _of_add_opp_table_v2: no supported OPPs
+> [    1.761960] cpu cpu0: OPP table can't be empty
 > 
-> Why do we even _have_ a vendor check here?  Shouldn't the code just be
-> going and doing the validation of the _CST object and CPUID that the
-> changelogs blather on about?
-> 
+> I see this on Tegra30, but not on Tegra20. Apparently OPP table
+> refcounting is broken on Tegra30 by this patchset. To make it clear,
+> there are no error without these OPP patches applied. I may take a
+> closer look if will be needed, just ping me.
 
-Yes, agree!
+Hi Jon,
 
-Will change as below. Please help to check if it is OK. Thanks a lot.
-  static int __init ffh_cstate_init(void)
-  {
--       struct cpuinfo_x86 *c = &boot_cpu_data;
--
--       if (c->x86_vendor != X86_VENDOR_INTEL &&
--           c->x86_vendor != X86_VENDOR_AMD &&
--           c->x86_vendor != X86_VENDOR_HYGON)
-+       if (!boot_cpu_has(X86_FEATURE_MWAIT))
-                 return -1;
-
-> Intel certainly made the original sin on this one (see 991528d7348), but
-> I hope _something_ changed in the 16 years since that patch went in.
-> .
-> 
+Dmitry reported this on Tegra30 earlier, do you also see such a
+failure ? Would be helpful to get this fixed as well, if it still
+exists.
 
 -- 
-Sincerely
-TonyWWang-oc
+viresh
