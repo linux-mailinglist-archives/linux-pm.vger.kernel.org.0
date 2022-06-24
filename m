@@ -2,67 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73606558CC6
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 03:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598DF558EBD
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 05:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiFXBYR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 21:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
+        id S229996AbiFXDFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 23:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiFXBYQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 21:24:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8155676A
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 18:24:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9179D62002
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 01:24:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D0C77C341CE
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 01:24:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656033854;
-        bh=rae9EYvx42wYC+Mi60GF4sBbSjUpFm8ZYfLsXfKe9vs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=LlLgYu+dZXwSJAHivYJ7WU1kR9hzInzt2unP7gC4px/lUWGbcRKJ949QF6u9L/01z
-         BKx2X+RjWZWYLEOke8E6z2M6EywDCSSL3f11kV8upGEXlZsrBqw0DK7TmxwS9SC+eA
-         RRRfRxd9bvk2CbSk/x4GhdTkQLb6e2YhKCE5dRNrubh5E2OXj6yPWWlcwyMrqu0Y5/
-         CJQl/3NcHC+I9X1K7PfxXWdl2ISq4N3CoBwPCKE3QSxRKznirp9uRIMRgcZAS7jJxH
-         ec1cq4ur24ixRrlg0mMfQ3ZZjXh0NzeJlQLzzth7ZmV3pKf4TIB4cVGDTIFHON8wQe
-         C1VJ5c8/e8ZpA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id BC43ACC13B1; Fri, 24 Jun 2022 01:24:14 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215135] proposed cpufreq driver amd-pstate regresses wrt
- acpi-cpufreq on some AMD EPYC Zen3
-Date:   Fri, 24 Jun 2022 01:24:14 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: rui.zhang@intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc rep_platform
-Message-ID: <bug-215135-137361-0siqpn6RbR@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215135-137361@https.bugzilla.kernel.org/>
-References: <bug-215135-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229889AbiFXDFX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 23:05:23 -0400
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [210.0.225.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DBE33F;
+        Thu, 23 Jun 2022 20:05:17 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 24 Jun
+ 2022 11:05:15 +0800
+Received: from [10.32.56.37] (10.32.56.37) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 24 Jun
+ 2022 11:05:13 +0800
+Subject: Re: [PATCH V1] x86/cstate: Add Zhaoxin/Centaur ACPI Cx FFH MWAIT
+ support
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <0b583b7e-dcd3-be51-f367-1c12ac841d3f@zhaoxin.com>
+ <ec121630-1ee5-1336-1ed4-04506f0c4129@intel.com>
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Message-ID: <e4fd583f-dafd-e2b5-7880-f12684f3e252@zhaoxin.com>
+Date:   Fri, 24 Jun 2022 11:05:12 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <ec121630-1ee5-1336-1ed4-04506f0c4129@intel.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.32.56.37]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,17 +61,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215135
+On 23/6/2022 23:55, Dave Hansen wrote:
+> On 6/22/22 18:26, Tony W Wang-oc wrote:
+>> Recent Zhaoxin/Centaur CPUs support X86_FEATURE_MWAIT that implies
+>> the MONITOR/MWAIT instructions can be used for ACPI Cx state.
+>> The BIOS declares Cx state in _CST object to use FFH on Zhaoxin/Centaur
+>> systems. So let function ffh_cstate_init() support These CPUs too.
+>>
+>> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+>> ---
+>>   arch/x86/kernel/acpi/cstate.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+>> index 7945eae..d4185e1 100644
+>> --- a/arch/x86/kernel/acpi/cstate.c
+>> +++ b/arch/x86/kernel/acpi/cstate.c
+>> @@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
+>>
+>>       if (c->x86_vendor != X86_VENDOR_INTEL &&
+>>           c->x86_vendor != X86_VENDOR_AMD &&
+>> -        c->x86_vendor != X86_VENDOR_HYGON)
+>> +        c->x86_vendor != X86_VENDOR_HYGON &&
+>> +        c->x86_vendor != X86_VENDOR_CENTAUR &&
+>> +        c->x86_vendor != X86_VENDOR_ZHAOXIN)
+>>           return -1;
+> 
+> Many of the changelogs that add new vendors here go on about particular
+> C states declared in the _CST object and contents of CPUID leaf 5.
+> 
+> Why do we even _have_ a vendor check here?  Shouldn't the code just be
+> going and doing the validation of the _CST object and CPUID that the
+> changelogs blather on about?
+> 
 
-Zhang Rui (rui.zhang@intel.com) changed:
+Yes, agree!
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |rui.zhang@intel.com
-           Hardware|All                         |AMD
+Will change as below. Please help to check if it is OK. Thanks a lot.
+  static int __init ffh_cstate_init(void)
+  {
+-       struct cpuinfo_x86 *c = &boot_cpu_data;
+-
+-       if (c->x86_vendor != X86_VENDOR_INTEL &&
+-           c->x86_vendor != X86_VENDOR_AMD &&
+-           c->x86_vendor != X86_VENDOR_HYGON)
++       if (!boot_cpu_has(X86_FEATURE_MWAIT))
+                 return -1;
 
---=20
-You may reply to this email to add a comment.
+> Intel certainly made the original sin on this one (see 991528d7348), but
+> I hope _something_ changed in the 16 years since that patch went in.
+> .
+> 
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+-- 
+Sincerely
+TonyWWang-oc
