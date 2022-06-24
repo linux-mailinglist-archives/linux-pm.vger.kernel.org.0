@@ -2,130 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F805592BF
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 08:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE587559349
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 08:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiFXGCw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jun 2022 02:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        id S230417AbiFXGXk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jun 2022 02:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiFXGCv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 02:02:51 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F066926A
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 23:02:50 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id cf14so1948931edb.8
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 23:02:50 -0700 (PDT)
+        with ESMTP id S230404AbiFXGXj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 02:23:39 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424DA28E1E
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 23:23:38 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31780ad7535so15162457b3.8
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 23:23:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+LB609c/jYmQtqojEPch2ria3pGib1paFUkDRzDn6ac=;
-        b=I3bfm4XDkKJiTYM8lT+COphHeM4VHVojYTWh5p+4beMt3kfoXt+YHBeZJQeNt80HF5
-         8Xk/cS1yGnBWeaf81Cc6elRO1ziuf7/GHURaz5se1841pydRMxIXtSQEqPJUPPWF4S5B
-         3I4imrdorm/sWyCfPOtU8RPRYlvn94balDGiZYFuOqHXOHzeJ/HzfGPo5XgTb/2X2aD2
-         nkHKe3Q5e0djZyqTmIj4k5qwIaHBMb1TyVmHHzWTxEsVtr2VCSPlgJWAlJ+DRVBgprDe
-         KyIMi57snvs6H7uvYQCkLTF4+WGlzWEXu3APE57wqEfZ/dzaZ9VQQx/d9smbGiftYdm8
-         KXuw==
+         :cc;
+        bh=1pWYuiEty7n8qfKXbe+MlxripfjF42zMy4YaNonGDYE=;
+        b=LWlf67Kpn5DO70LzfZDzY/86k3RghUlz3LHvmFCRfp9vgWrB54PqfNu2vRF/Bdm7wc
+         ap99VK+4MQUQ+6cin3CVK00IbKjFwKj9hJY00FJWKZ+T6+Tsx1JzMXtnbwqHGT3mulUt
+         H0L5JKLz7ywUjS16o9iBqqT0TcachObVtQ0ucF3TSwp90e9HmJH9RNV0ZQ6J68d/kYAX
+         nEwFuUDUzDBezOwyq+6kVSYL3YCsnU3Px78klL9yrKaUWJlgIKUKeZJtWjG29iFkSFiR
+         pek0U91njY9MeCQ1UyKutB0l8JPIg8lysMDZ0xBMr3cTNS7GpTVSDFQe1FKYX2yHrOFZ
+         WIvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+LB609c/jYmQtqojEPch2ria3pGib1paFUkDRzDn6ac=;
-        b=SetsMWLRY79ON5j67jNARKxGYDO3mhfcsJ8JnifCgFfI5PJ0V7bkW2IEF/UsrLeeu7
-         LMUmg6HgGCLmiSbUs0CuuKsHj8zGodv2PiYOWplTXvTPixpl9/3sJ5UHMZIBq1Ta7BaL
-         VO3b+DuZBvppA0wG36QluYZIZdfoX+IO34qFi+tTS6galTgkIaIXpYwH/26Oshre9rL1
-         S1fFXd6KHqY3bVKpiKpTvmKGflvQpVEJNvCH27+bwKOpATkQLWNvxcHSCqmY/kn9Rjhs
-         jbXDAMYaVl5AT32H7Hc4pCHggWBBgJzY7QFoV1pBYqHYwsO4JkB7yeutpx64dzeCR5MU
-         RxMQ==
-X-Gm-Message-State: AJIora/znluJaT5qyx33hLnDEl3rHQ1lSjGBx/A0UJaydsqNhAHpsVqp
-        adFI16Fn/nL851+o/slDl8fC7eiXOCzAa+ZbcKwsrcae2wI=
-X-Google-Smtp-Source: AGRyM1sPCL4IZeRy5438DyfeOwib7ruP6F5Y3Lx776mw47yo3g1XQs4GIkwpZVNZO1pkqc30d6UM7TmeZwclwK7MMM4=
-X-Received: by 2002:a05:6402:354d:b0:435:93f9:fc0b with SMTP id
- f13-20020a056402354d00b0043593f9fc0bmr15474165edd.288.1656050568672; Thu, 23
- Jun 2022 23:02:48 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=1pWYuiEty7n8qfKXbe+MlxripfjF42zMy4YaNonGDYE=;
+        b=BxISuPebV5xnFF6O0AMQcHYMBDfgrLZwtk+RdC4DgSdBnK73YpBsR9Vm7nOt/iKkMO
+         yciojIbGPAPaWsT8T3Pj/yhNTG8jGNA09pi2bFGj+EeIu1nh+3IS7kDqVBKtNl7L1Ba+
+         GjOVrt6FqJnu5vnzPMim8B+eTrqeoJ/KTxWsaMt16G+a88KPygKjeYpO6Y7p1VF1yTpK
+         zSagW2Z4uTIEct3I1tXsoZHEcwoEaVf4urz+fQhfTn3UvSOYWmXZIVZSZ49cdz/9CKTm
+         LvM0B995g/8YBiPlDIC6o+nEaKTz2TXUPxf5AF0a1V+xpy6X0AJfqe5sqOZPPumBDYpO
+         WeAA==
+X-Gm-Message-State: AJIora8SdKazF9iwLbPoJ6MnyrPHTyksYt4VDgUd/yDfTcVEpew9aUvP
+        4NA+yJvE60aJARn4tpfULPa2/ajSzE5sAR9rtjOlxQ==
+X-Google-Smtp-Source: AGRyM1ugT6Af5nX5Ixp3Ow5c+O9Je/TdD9Y/945uEnJCiYAwQr3zWQy2YOg5odN0QU1EceYIiYefh3gmTCwAPJv1mBE=
+X-Received: by 2002:a81:6587:0:b0:318:38c2:2fb1 with SMTP id
+ z129-20020a816587000000b0031838c22fb1mr14986240ywb.118.1656051817552; Thu, 23
+ Jun 2022 23:23:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220601151441.9128-1-daniel.lezcano@linaro.org>
- <20220601151441.9128-3-daniel.lezcano@linaro.org> <be8395e3-98d7-7a8f-7153-c491b22d4463@arm.com>
- <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org> <eada018c-b857-7946-ae4b-2532e6866a45@arm.com>
- <CAHRSSEz9ExOgvByycztKYf1ncxCKeoy3uHuyQcnUC1r5nujc2w@mail.gmail.com> <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
-In-Reply-To: <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
-From:   Wei Wang <wvw@google.com>
-Date:   Thu, 23 Jun 2022 23:02:37 -0700
-Message-ID: <CAGXk5yqCNUpGpHkecVP8U=ys9NF6dJAMu6R0E+jpgvcSVFN+Ug@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thermal/sysfs: Remove cooling device sysfs statistics
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org
+References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-13-peterwu.pub@gmail.com>
+In-Reply-To: <20220623115631.22209-13-peterwu.pub@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 24 Jun 2022 08:23:26 +0200
+Message-ID: <CACRpkdZatfOFmeGXepTrjAk1or4W6KNUEaXnP+srRebfM=52AA@mail.gmail.com>
+Subject: Re: [PATCH v3 12/14] leds: mt6370: Add Mediatek MT6370 current sink
+ type LED Indicator support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lee.jones@linaro.org, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, alice_chen@richtek.com,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, cy_huang@richtek.com,
+        chiaen_wu@richtek.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 4:04 AM Daniel Lezcano <daniel.lezcano@linaro.org> w=
-rote:
->
->
-> Hi Todd,
->
-> [adding Wei]
->
-> On 02/06/2022 21:02, Todd Kjos wrote:
-> > On Thu, Jun 2, 2022 at 2:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> [ ... ]
->
-> >> I see, it makes sense. Let's see if Todd and Android folks don't
-> >> use this thermal sysfs stats, so we could remove them.
-> >
-> > Android HALs do use the thermal sysfs stats. debugfs isn't a viable
-> > replacement since debugfs must not be mounted during normal operation.
->
-> Thanks for your answer.
->
-> I'm curious, what is the purpose of getting the statistics, especially
-> the transitions stats from normal operation?
->
-> There were some complains about systems having a high number of cooling
-> devices with a lot of states. The state transitions are represented as a
-> matrix and result in up to hundred of megabytes of memory wasted.
->
-> Moreover, sysfs being limited a page size, the output is often truncated.
->
-> As it is automatically enabled for GKI, this waste of memory which is
-> not negligible for system with low memory can not be avoided.
->
-> I went through the thermal HAL but did not find an usage of these
-> statistics, do you have a pointer to the code using them ?
->
-> Thanks
->
->    -- Daniel
->
->
+Hi ChiaEn!
 
-Sorry for the late reply, trying to catch up on emails after sick
-recovery. We use it for stats collection to understand thermal
-residency, and it is not in the HAL code, we don't use the transition
-table heavily though. Are some of the devices having too many cooling
-devices? Can we have a config to enable stats for a given cooling
-device?
+Thanks for your patch!
 
-Thanks!
--Wei
+On Thu, Jun 23, 2022 at 1:58 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 
+> From: ChiYuan Huang <cy_huang@richtek.com>
 >
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
+> Add Mediatek MT6370 current sink type LED Indicator driver.
 >
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+(...)
+>  drivers/leds/Kconfig       |  11 +
+>  drivers/leds/Makefile      |   1 +
+>  drivers/leds/leds-mt6370.c | 989 +++++++++++++++++++++++++++++++++++++++++++++
+
+There is a drivers/leds/flash subdirectory these days, put the driver
+in that directory instead.
+
+Yours,
+Linus Walleij
