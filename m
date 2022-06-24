@@ -2,193 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F02559714
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 11:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4278855974C
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 12:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiFXJ47 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jun 2022 05:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S230431AbiFXKFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jun 2022 06:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiFXJ4z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 05:56:55 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2C67A19C;
-        Fri, 24 Jun 2022 02:56:52 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id k7so1144678ils.8;
-        Fri, 24 Jun 2022 02:56:52 -0700 (PDT)
+        with ESMTP id S230323AbiFXKFf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 06:05:35 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631F06F780
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:05:32 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id c65so2739945edf.4
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:05:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=M4nnsvgHgIi0r2ItWc5dFuhTU+zH2GcT6p/faSXA7jc=;
-        b=HsRYekV2sU4Xv613pAvXWZuwPyAd8ueafTN7t5ELrygCaBWqwnSFn/yimTyvXphliU
-         rk/k1nDNQ3ECBrZQCQibcC5/SXphAPug9oObZB9Femn+4ZMKO367Z07kbw302ugSier+
-         3u6Ie+cqpVmNjf+nVQ2o9wUhernyrputNPwEkW+iFxQ7yrQw609omGwbvjVllqqdkQlb
-         DFP5VJKZgPzIyttK1WQpTnymekzhmxmCFLdIDv+zhBnfs0Quw4/dsjyIWcL8P0Yv01Hh
-         HffrHojwf2vBBMXK+Xv5kciDDgUaOI7o+FqSBYVUB7RtJd64wGJ3mx0TRrsc6+x3jNA+
-         Uofw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vT/m4Tsbd8efm3hJuxbD4cqK3IhssJw6vrlwpvAa4b0=;
+        b=UakZorhpkKl5ALlrNDpU9jBka/t7cECYvhFhzj+zFDtScfLk4YgEeyOfo8DFWO15pX
+         acdIkWuEWtfqRecdqSXnO6RuScer29NgRYGQi6w2b3AevrhtqGV4PyqFV7a7iCvnY+sz
+         II+sI7Sn35mv1L55DCt78FSqkyddA8r13goTTMrWr2P/zMq2OgymKpeV3LuqffvPPV0c
+         gxsfp8H+kd9rdXlBWi6P+ycPP0PrQm9hqjXMR9R6ZkONPE3AWNqGgVc8xBeaoZoOqwa/
+         m2oC2JqyOnyHMotqqqMJK9RbyXsMfJD8qnSgV+hHzIj49dnboun3MfivtpYLc97L4VwU
+         ge9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=M4nnsvgHgIi0r2ItWc5dFuhTU+zH2GcT6p/faSXA7jc=;
-        b=4QDiFNuyHmWZ9g7JG7KiFjNCuKE0VSg4BJHi+DiYOHzJt/uoBbIVM9hFGCnvbvdVCh
-         mcCfzOV5cdTiu/nyBKtUk2rn94PXsuBaKcLIQvxlhOwa8Hjh2WfQnvioOUQUPd8jME1Q
-         lSBQZ7qEKfFqlrwpl/i2htzpPw7KvnSXQ+UzkUr9hBCZbcxra8iyK5dEL7tk4Oafxrdh
-         5AcBU2Z+Z+Pku+8dfcenyWlaZihS5FCZ6PiiR7fwrRe9TXgEstWY9EWd3rhQSiMeej47
-         b52MeYyucdragJiPypszqtb9qtORrIjpPKodKaSYK5ID4iHSLRLXFded5trEyyOBqRkB
-         /TFA==
-X-Gm-Message-State: AJIora/6KcZfLeHvLltf6HoUjQX3vWt/X+htkbzI/g9LMK4U4CcukgVa
-        QvgBC7wz3ztve1xxi0BbZs38WJPNpDB6FwM9wiQ=
-X-Google-Smtp-Source: AGRyM1u4tHhqAdEi5ogAeS0dS5voh35vGz3kiJUl5ktCSsYPoM0YYC7H2ztWgE2w6YlrhoWKAwKgDMijTEOWiU+6IC8=
-X-Received: by 2002:a05:6e02:10cf:b0:2d9:2310:e6b3 with SMTP id
- s15-20020a056e0210cf00b002d92310e6b3mr7601053ilj.212.1656064612053; Fri, 24
- Jun 2022 02:56:52 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vT/m4Tsbd8efm3hJuxbD4cqK3IhssJw6vrlwpvAa4b0=;
+        b=lu2XLT8MxhPniYOf423w/T6hV3HtSWrLg/rHXUkha2Prn2oLMD6W23E32Ee5VYsBZQ
+         mpk+6pAF3kELiiK7XrBWkXBxXcN5yjS/6OkQQa/YMFMTXKUYmbQVOBP56F3dJfSX6bli
+         5cs+1vvk6iZLT2+D2tDq19uxlpIjaJk3x3p+nOisujd4uJcyACflXy7ZvxJyNrzXFmIt
+         jI/GiVNEhobTqCPeG8F3XsDEvrhyS+AscBsQyD32fV1A1xU8WEVzugplCjhpfAfNsKkh
+         PMLuc76YbVsZZUP9A2zXvTew+3SCAwZIm1SXsk0EBe8daDfXR81U8j9pmQEv7Ouc71Gg
+         HgHQ==
+X-Gm-Message-State: AJIora/o5y7n7IEyZGwBwxgNLWoY4ZOddhyrXQdR8vJB7wOZt3vmSVrD
+        RdY2f44Ev6gZurIgp9fxuPgjlw==
+X-Google-Smtp-Source: AGRyM1uaOjXwhg5I8X289/Baaww5kJzfDpSLWW9kaNvjsU7L/qEOz6gkCuSWZSjiQSEuXlbmDZ+EFQ==
+X-Received: by 2002:a05:6402:11cb:b0:435:75ed:f12f with SMTP id j11-20020a05640211cb00b0043575edf12fmr16487090edw.305.1656065130928;
+        Fri, 24 Jun 2022 03:05:30 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm845519ejm.107.2022.06.24.03.05.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 03:05:30 -0700 (PDT)
+Message-ID: <3db6ca83-1fa0-0a6d-5af9-4dd0ba38b9a6@linaro.org>
+Date:   Fri, 24 Jun 2022 12:05:28 +0200
 MIME-Version: 1.0
-References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-15-peterwu.pub@gmail.com>
- <20220623134316.rg3adyobz3hkgflt@maple.lan>
-In-Reply-To: <20220623134316.rg3adyobz3hkgflt@maple.lan>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Fri, 24 Jun 2022 17:56:41 +0800
-Message-ID: <CABtFH5JnAAGh46i9yb1J6c2gAZfRHgTOhK19dOCdCuvdLW1ALg@mail.gmail.com>
-Subject: Re: [PATCH v3 14/14] video: backlight: mt6370: Add Mediatek MT6370 support
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, jingoohan1@gmail.com,
-        pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, Jonathan Cameron <jic23@kernel.org>,
-        lars@metafoo.de, lgirdwood@gmail.com, broonie@kernel.org,
-        linux@roeck-us.net, heikki.krogerus@linux.intel.com, deller@gmx.de,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 02/14] dt-bindings: clk: imx: Add fsl,scu-clk yaml file
+Content-Language: en-US
+To:     Viorel Suman <viorel.suman@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
+        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Abel Vesa <abel.vesa@nxp.com>
+References: <20220616164303.790379-1-viorel.suman@nxp.com>
+ <20220616164303.790379-3-viorel.suman@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616164303.790379-3-viorel.suman@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On 16/06/2022 18:42, Viorel Suman wrote:
+> From: Abel Vesa <abel.vesa@nxp.com>
+> 
+> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+> we need to split it between the right subsystems. This patch documents
+> separately the 'clock' child node of the SCU main node.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> ---
+>  .../bindings/clock/fsl,scu-clk.yaml           | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml b/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
+> new file mode 100644
+> index 000000000000..8b59758eee4a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/fsl,scu-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: i.MX SCU Client Device Node - Clock bindings based on SCU Message Protocol
+> +
+> +maintainers:
+> +  - Abel Vesa <abel.vesa@nxp.com>
+> +
+> +description: i.MX SCU Client Device Node
+> +  Client nodes are maintained as children of the relevant IMX-SCU device node.
+> +  This binding uses the common clock binding.
+> +  (Documentation/devicetree/bindings/clock/clock-bindings.txt)
+> +  The clock consumer should specify the desired clock by having the clock
+> +  ID in its "clocks" phandle cell.
+> +  See the full list of clock IDs from
+> +  include/dt-bindings/clock/imx8qxp-clock.h
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - fsl,imx8dxl-clk
+> +          - fsl,imx8qm-clk
+> +          - fsl,imx8qxp-clk
+> +      - const: fsl,scu-clk
+> +
+> +  '#clock-cells':
+> +    const: 2
+> +
+> +  clocks:
+> +    items:
+> +      - description: XTAL 32KHz
+> +      - description: XTAL 24MHz
+> +    minItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      enum:
+> +        - xtal_32KHz
+> +        - xtal_24Mhz
 
-Thanks for your comments!
+No, this does not match your clocks property and allow any combination.
+Are you sure that hardware can have entirely different clocks connected?
 
-Daniel Thompson <daniel.thompson@linaro.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=
-=8823=E6=97=A5 =E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A9:43=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Thu, Jun 23, 2022 at 07:56:31PM +0800, ChiaEn Wu wrote:
-> > From: ChiaEn Wu <chiaen_wu@richtek.com>
-> >
-> > Add Mediatek MT6370 Backlight support.
-> >
-> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
->
-> > diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/=
-Kconfig
-> > index a003e02..7cd823d 100644
-> > <snip>
-> > +static int mt6370_init_backlight_properties(struct mt6370_priv *priv,
-> > +                                         struct backlight_properties *=
-props)
-> > +{
-> > +     struct device *dev =3D priv->dev;
-> > +     u8 prop_val;
-> > +     u32 brightness, ovp_uV, ocp_uA;
-> > +     unsigned int mask, val;
-> > +     int ret;
-> > +
-> > +     /* Vendor optional properties */
-> > +     val =3D 0;
-> > +     if (device_property_read_bool(dev, "mediatek,bled-pwm-enable"))
-> > +             val |=3D MT6370_BL_PWM_EN_MASK;
-> > +
-> > +     if (device_property_read_bool(dev, "mediatek,bled-pwm-hys-enable"=
-))
-> > +             val |=3D MT6370_BL_PWM_HYS_EN_MASK;
-> > +
-> > +     ret =3D device_property_read_u8(dev,
-> > +                                   "mediatek,bled-pwm-hys-input-th-ste=
-ps",
-> > +                                   &prop_val);
-> > +     if (!ret) {
-> > +             prop_val =3D clamp_val(prop_val,
-> > +                                  MT6370_BL_PWM_HYS_TH_MIN_STEP,
-> > +                                  MT6370_BL_PWM_HYS_TH_MAX_STEP);
-> > +             /*
-> > +              * prop_val =3D  1      -->  1 steps --> 0x00
-> > +              * prop_val =3D  2 ~  4 -->  4 steps --> 0x01
-> > +              * prop_val =3D  5 ~ 16 --> 16 steps --> 0x10
-> > +              * prop_val =3D 17 ~ 64 --> 64 steps --> 0x11
->
->                                                       ^^^^^
-> These numbers are binary, not hex, right? If so, the comments
-> should be 0b00 to 0b03 .
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
 
-Ohh! Yes! These numbers are binary!
-I so apologize for making this mistake...
-I will revise the comments in the next patch!
-Thank you so much!
+Why the clocks are not required?
 
->
->
-> > +              */
-> > +             prop_val =3D (ilog2(roundup_pow_of_two(prop_val)) + 1) >>=
- 1;
-> > +             val |=3D prop_val << (ffs(MT6370_BL_PWM_HYS_SEL_MASK) - 1=
-);
-> > +     }
-> > +
-> > +     ret =3D regmap_update_bits(priv->regmap, MT6370_REG_BL_PWM,
-> > +                              val, val);
-> > +     if (ret)
-> > +             return ret;
->
-> Overall, I like this approach! Easy to read and understand.
->
->
-> > <snip>
-> > +static int mt6370_bl_probe(struct platform_device *pdev)
-> > +{
-> > +     struct mt6370_priv *priv;
-> > +     struct backlight_properties props =3D {
-> > +             .type =3D BACKLIGHT_RAW,
-> > +             .scale =3D BACKLIGHT_SCALE_LINEAR,
->
-> Sorry, I missed this before but the KConfig comment says that the
-> backlight can support both linear and exponential curves.
->
-> Is there a good reason to default to linear?
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    clock-controller {
+> +           compatible = "fsl,imx8qxp-clk", "fsl,scu-clk";
 
-Well...
-The customers who used this PMIC have very few or even no use exponential c=
-urve,
-so I set the default to linear.
+Wrong indentation. 4 spaces for DTS example.
 
-If you think this is inappropriate, I will add a DT property to
-control this feature in the next patch!
+> +           #clock-cells = <2>;
+> +    };
 
-By the way,
-I found some mistakes in my probe() function... I didn't use "return"
-when I use dev_err_probe()...
-I will refine it in the next patch!
-
->
->
-> Daniel.
-> >
 
 Best regards,
-ChiaEn Wu
+Krzysztof
