@@ -2,102 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4278855974C
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 12:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B194559758
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 12:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiFXKFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jun 2022 06:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S230032AbiFXKG5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jun 2022 06:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiFXKFf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 06:05:35 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631F06F780
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:05:32 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id c65so2739945edf.4
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vT/m4Tsbd8efm3hJuxbD4cqK3IhssJw6vrlwpvAa4b0=;
-        b=UakZorhpkKl5ALlrNDpU9jBka/t7cECYvhFhzj+zFDtScfLk4YgEeyOfo8DFWO15pX
-         acdIkWuEWtfqRecdqSXnO6RuScer29NgRYGQi6w2b3AevrhtqGV4PyqFV7a7iCvnY+sz
-         II+sI7Sn35mv1L55DCt78FSqkyddA8r13goTTMrWr2P/zMq2OgymKpeV3LuqffvPPV0c
-         gxsfp8H+kd9rdXlBWi6P+ycPP0PrQm9hqjXMR9R6ZkONPE3AWNqGgVc8xBeaoZoOqwa/
-         m2oC2JqyOnyHMotqqqMJK9RbyXsMfJD8qnSgV+hHzIj49dnboun3MfivtpYLc97L4VwU
-         ge9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vT/m4Tsbd8efm3hJuxbD4cqK3IhssJw6vrlwpvAa4b0=;
-        b=lu2XLT8MxhPniYOf423w/T6hV3HtSWrLg/rHXUkha2Prn2oLMD6W23E32Ee5VYsBZQ
-         mpk+6pAF3kELiiK7XrBWkXBxXcN5yjS/6OkQQa/YMFMTXKUYmbQVOBP56F3dJfSX6bli
-         5cs+1vvk6iZLT2+D2tDq19uxlpIjaJk3x3p+nOisujd4uJcyACflXy7ZvxJyNrzXFmIt
-         jI/GiVNEhobTqCPeG8F3XsDEvrhyS+AscBsQyD32fV1A1xU8WEVzugplCjhpfAfNsKkh
-         PMLuc76YbVsZZUP9A2zXvTew+3SCAwZIm1SXsk0EBe8daDfXR81U8j9pmQEv7Ouc71Gg
-         HgHQ==
-X-Gm-Message-State: AJIora/o5y7n7IEyZGwBwxgNLWoY4ZOddhyrXQdR8vJB7wOZt3vmSVrD
-        RdY2f44Ev6gZurIgp9fxuPgjlw==
-X-Google-Smtp-Source: AGRyM1uaOjXwhg5I8X289/Baaww5kJzfDpSLWW9kaNvjsU7L/qEOz6gkCuSWZSjiQSEuXlbmDZ+EFQ==
-X-Received: by 2002:a05:6402:11cb:b0:435:75ed:f12f with SMTP id j11-20020a05640211cb00b0043575edf12fmr16487090edw.305.1656065130928;
-        Fri, 24 Jun 2022 03:05:30 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm845519ejm.107.2022.06.24.03.05.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 03:05:30 -0700 (PDT)
-Message-ID: <3db6ca83-1fa0-0a6d-5af9-4dd0ba38b9a6@linaro.org>
-Date:   Fri, 24 Jun 2022 12:05:28 +0200
+        with ESMTP id S229480AbiFXKG4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 06:06:56 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49FD7A6D2;
+        Fri, 24 Jun 2022 03:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656065215; x=1687601215;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=owCO81vPyQw261oLlCMFQ3bvjpzNn/rVeycTtucQfrs=;
+  b=VgrTzasJwJ7arqhLhA5HRfLoXV3Tcz72XX8dEDII9KjdF1mJtcUz8tVM
+   D0+l1x5XCCVVb7AelOJI7p6dcWHfH2f/5jY1Hn5LpHi4O3Hcd0B8a9Eh3
+   qvn2Xq/QnqhQkoSmfeJhhfYR94m4p0tNnsYiAobUKEDZvGaaRJ1T90YOl
+   FvIGtPa1mMccW/yvGzasPKAMRcQD60BlIeq2evpkQzKkUax7SJ2WEBD50
+   qwWAsGefIBzsPFLRtSTZz/sj68ZeQDzf2hq04o72AJzz1aEhaI26Kll6J
+   VGpl+C68y6fKcKpnHp0M6OdfKSb3rmQa9m94DgpHKYYdx3Agotl2VvC+o
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="260785761"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="260785761"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 03:06:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="691464763"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jun 2022 03:06:53 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4gDE-0003yJ-Om;
+        Fri, 24 Jun 2022 10:06:52 +0000
+Date:   Fri, 24 Jun 2022 18:06:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 98ab5127f6cfed6a3cffe752b2ce80eb3bdc1da8
+Message-ID: <62b58c99.yhqqU9hi6tHhKIwb%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 02/14] dt-bindings: clk: imx: Add fsl,scu-clk yaml file
-Content-Language: en-US
-To:     Viorel Suman <viorel.suman@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Abel Vesa <abel.vesa@nxp.com>
-References: <20220616164303.790379-1-viorel.suman@nxp.com>
- <20220616164303.790379-3-viorel.suman@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220616164303.790379-3-viorel.suman@nxp.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,95 +63,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/06/2022 18:42, Viorel Suman wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
-> 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch documents
-> separately the 'clock' child node of the SCU main node.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> ---
->  .../bindings/clock/fsl,scu-clk.yaml           | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml b/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
-> new file mode 100644
-> index 000000000000..8b59758eee4a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/fsl,scu-clk.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: i.MX SCU Client Device Node - Clock bindings based on SCU Message Protocol
-> +
-> +maintainers:
-> +  - Abel Vesa <abel.vesa@nxp.com>
-> +
-> +description: i.MX SCU Client Device Node
-> +  Client nodes are maintained as children of the relevant IMX-SCU device node.
-> +  This binding uses the common clock binding.
-> +  (Documentation/devicetree/bindings/clock/clock-bindings.txt)
-> +  The clock consumer should specify the desired clock by having the clock
-> +  ID in its "clocks" phandle cell.
-> +  See the full list of clock IDs from
-> +  include/dt-bindings/clock/imx8qxp-clock.h
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - fsl,imx8dxl-clk
-> +          - fsl,imx8qm-clk
-> +          - fsl,imx8qxp-clk
-> +      - const: fsl,scu-clk
-> +
-> +  '#clock-cells':
-> +    const: 2
-> +
-> +  clocks:
-> +    items:
-> +      - description: XTAL 32KHz
-> +      - description: XTAL 24MHz
-> +    minItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      enum:
-> +        - xtal_32KHz
-> +        - xtal_24Mhz
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 98ab5127f6cfed6a3cffe752b2ce80eb3bdc1da8  Merge branch 'pm-cpufreq-fixes' into bleeding-edge
 
-No, this does not match your clocks property and allow any combination.
-Are you sure that hardware can have entirely different clocks connected?
+elapsed time: 722m
 
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +required:
-> +  - compatible
-> +  - '#clock-cells'
+configs tested: 63
+configs skipped: 2
 
-Why the clocks are not required?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clock-controller {
-> +           compatible = "fsl,imx8qxp-clk", "fsl,scu-clk";
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                              debian-10.3
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                             allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220622
+arc                  randconfig-r043-20220623
+riscv                randconfig-r042-20220623
+s390                 randconfig-r044-20220623
+riscv                             allnoconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
 
-Wrong indentation. 4 spaces for DTS example.
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220623
+hexagon              randconfig-r041-20220622
+s390                 randconfig-r044-20220622
+hexagon              randconfig-r045-20220622
+riscv                randconfig-r042-20220622
+hexagon              randconfig-r045-20220623
 
-> +           #clock-cells = <2>;
-> +    };
-
-
-Best regards,
-Krzysztof
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
