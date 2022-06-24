@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A566E55981F
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 12:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E95555987E
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 13:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiFXKpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jun 2022 06:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S231199AbiFXLWv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jun 2022 07:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbiFXKpN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 06:45:13 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6397660E36
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:45:11 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id t5so3914074eje.1
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 03:45:11 -0700 (PDT)
+        with ESMTP id S231157AbiFXLWs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 07:22:48 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D8F7A1AB
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 04:22:45 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id u12so4021448eja.8
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jun 2022 04:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=2t+7HTFw4Am9k5wfnt+zpTYwsim5TZ2i9yEsItPpeso=;
-        b=xcoXh7yCPrSwwOXsVEte8S9NR0zXlkpvvmSX4mcTWFeTdYGxCOjXXMGpaIaqsIAE1K
-         bp0d/k4GmQ8d8KFLm3LHJNOZx0WMiu4WZUX7HLNDAsZEJN1sptGsrLYyPxjY9ktKrSY+
-         anicQhYWBm83eN/+nf24xt/88s2e96BqLLMqqV5kNG1Cun51WNovucO46nd97ihvrKZF
-         dnLW7i1sNcOp3Mp4GU7oElU9RGuLLHZTaYOd/EiSoahcaoQ1ovR0ARSV/9WojV7BCFK1
-         Svcita+pSItq8jdZ6ZzrgytfqP0wj21BQU9Nqu6VjwpUbWuvEYZFpH+8A2yDStdJm384
-         PEnQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tgk54MZ41PYHuB/Q4rLG9CYyOFNJDlQyyrk8XZCCg1U=;
+        b=Oyq5vCrpAPNrAziFwKaF2lBkP2jNPRprPBFhuec6kn+YBvz5ss6Ytk/6xOrQO/eBwu
+         8UKDIPAUP6m6QKDwOkcCGfwGNqMMxj9Lv7iBjtxheUp1JumjXMSZ4zVxBlNGypmVpEqE
+         rkZQ2ZzxgmeGxcd64+Xm8PtvF/Gz27BFOwtrwgIu/RMjXfaTDMz9EPeA2d4u1lmmICyn
+         4KerevADvvaCxSCLcYbGGjd9pacaZOPd29c512UV7Arvp0wI01ZPoIHagcw9J526IEi1
+         /ltWhsiXxxeRXLwQk4upL1m46Xm4SElptteEJwp2Izm5+pob1ZNsb1mH67hFZj4mlfb4
+         sjAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2t+7HTFw4Am9k5wfnt+zpTYwsim5TZ2i9yEsItPpeso=;
-        b=4tXlIfqBwGWxrKzll7jy8s2uNMUmWGnVLdce4Y4Z7QpETqpsd4XY+LvOsR+5IZ1eWz
-         MY3pbFgrf9IhbcbibywIX6D6cjn8gYGkQSbE3n6Dprv6S8KeCdgJk1WHlWkdV5zmS4hg
-         Tws6iQNoITeUtQHpH+IDk7EsK3R95pSgK2RoLtS6TycJLpJwULhivS1l1L1R8E+X/rFN
-         5708EPEZPQqKFfjmPCg/7aOyPSaV1GJDLmgONb9F5gUTqEp4IXC/82WK458lnE0RYl5L
-         rtOfqVYefiHaU99921XprKbBQ348sE6ky6kBt52dFqT73oAzkE3ai2v0V872c+095uKl
-         jlXA==
-X-Gm-Message-State: AJIora82rvso484HfXp52WkdgC9JDY+DGlb558wj2CxArLok9d1/5D3d
-        MB3IjY0eJI1kEMBwRZYrYLcTsQ==
-X-Google-Smtp-Source: AGRyM1tk6j4mNtQk9qRRyVUy6ecFx8pKAt3xM74yrIfZScw1NM4v+j/hr8GYVIcM+2p5oRpQfs7mBA==
-X-Received: by 2002:a17:906:2dd:b0:712:1293:3dd8 with SMTP id 29-20020a17090602dd00b0071212933dd8mr12766549ejk.448.1656067509878;
-        Fri, 24 Jun 2022 03:45:09 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ci25-20020a170906c35900b006fe921fcb2dsm906732ejb.49.2022.06.24.03.45.08
+        bh=tgk54MZ41PYHuB/Q4rLG9CYyOFNJDlQyyrk8XZCCg1U=;
+        b=bX9AXdEXq3BBfCrtx/9hpGY5B8PgxJBRu1lYee5Tqr8ev+n03c+CCqIR6Lo/jsN7g/
+         j7TA86vNCnAVxpt5d4O7ie7rldPP9oIu0454w9Fns3w+wdfdtpofVAAq/x/1A47jivjb
+         /Y3cGv5ieXAcGqfRBz7AeBWpdUblTPJxXLH18hqZOBjOzuwqRIuoozSOFYFBqC6GmYqS
+         i5qO3JXI4w71qBsh7DatiibLE1cSUuvLyuYys00r2Cy0WpyaVRoEnPyMqiwOXbxQRuiE
+         b9qin7iSbbsNXgIRMnrZf5mG1onRg/q/USY8YiwLbwfaQTY99JOymlRhLpwQJvClXi3r
+         krkQ==
+X-Gm-Message-State: AJIora+FPNo1f8ag/X1ORtNreccGN3dH6NIqq6AJWPggfS1lCm8aim5z
+        jXJzB4bh3FV0Tm4BH+d8UTZ5Sw==
+X-Google-Smtp-Source: AGRyM1sYtcDa5bMUak2KZgL6+/Fc5vtdSfpUcIOTo5XhIbe5rtkcGY4Iq23VRgOKO7sKLDlaVq/HbA==
+X-Received: by 2002:a17:906:4c9a:b0:726:38df:6f6f with SMTP id q26-20020a1709064c9a00b0072638df6f6fmr495588eju.485.1656069764388;
+        Fri, 24 Jun 2022 04:22:44 -0700 (PDT)
+Received: from [192.168.0.235] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g10-20020aa7dc4a000000b0043567edac3csm1795392edu.61.2022.06.24.04.22.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 03:45:09 -0700 (PDT)
-Message-ID: <237b1ecc-9a87-b37f-46fd-4612a7ae56f6@linaro.org>
-Date:   Fri, 24 Jun 2022 12:45:07 +0200
+        Fri, 24 Jun 2022 04:22:44 -0700 (PDT)
+Message-ID: <5cfb502d-951e-2b5a-aaec-a2ef4c71d5e0@linaro.org>
+Date:   Fri, 24 Jun 2022 13:22:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 03/14] dt-bindings: leds: mt6370: Add Mediatek mt6370
- current sink type LED indicator
+Subject: Re: [PATCH v3 04/14] dt-bindings: leds: Add Mediatek MT6370
+ flashlight
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
         daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -73,9 +72,9 @@ Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
         linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
         szunichen@gmail.com
 References: <20220623115631.22209-1-peterwu.pub@gmail.com>
- <20220623115631.22209-4-peterwu.pub@gmail.com>
- <aec8ecdb-7c76-1261-216b-b40e450d1bf8@linaro.org>
-In-Reply-To: <aec8ecdb-7c76-1261-216b-b40e450d1bf8@linaro.org>
+ <20220623115631.22209-5-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220623115631.22209-5-peterwu.pub@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,65 +87,13 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/06/2022 12:35, Krzysztof Kozlowski wrote:
-> On 23/06/2022 13:56, ChiaEn Wu wrote:
->> From: ChiYuan Huang <cy_huang@richtek.com>
->>
->> Add Mediatek mt6370 current sink type LED indicator binding documentation.
->>
->> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
->> ---
->>
->> v3
->> - Use leds-class-multicolor.yaml instead of common.yaml.
->> - Split multi-led and led node.
->> - Add subdevice "led" in "multi-led".
->> ---
->>  .../bindings/leds/mediatek,mt6370-indicator.yaml   | 77 ++++++++++++++++++++++
->>  1 file changed, 77 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
->> new file mode 100644
->> index 0000000..45030f3
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
->> @@ -0,0 +1,77 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/leds/mediatek,mt6370-indicator.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: LED driver for MT6370 PMIC from MediaTek Integrated.
->> +
->> +maintainers:
->> +  - Alice Chen <alice_chen@richtek.com>
->> +
->> +description: |
->> +  This module is part of the MT6370 MFD device.
->> +  Add MT6370 LED driver include 4-channel RGB LED support Register/PWM/Breath Mode
->> +
->> +allOf:
->> +  - $ref: leds-class-multicolor.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    const: mediatek,mt6370-indicator
->> +
->> +  "#address-cells":
->> +    const: 1
->> +
->> +  "#size-cells":
->> +    const: 0
->> +
->> +patternProperties:
->> +  "^multi-led@[0-3]$":
->> +    type: object
+On 23/06/2022 13:56, ChiaEn Wu wrote:
+> From: Alice Chen <alice_chen@richtek.com>
 > 
-> Here as well unevaluatedProperties:false (on the type level)
-
-Ah, no, it does not work currently. Your code looks good.
+> Add Mediatek MT6370 flashlight binding documentation.
+> 
+> Signed-off-by: Alice Chen <alice_chen@richtek.com>
+> ---
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
