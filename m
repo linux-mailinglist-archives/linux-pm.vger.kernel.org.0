@@ -2,100 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905D5559265
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 07:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F805592BF
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 08:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiFXFi0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jun 2022 01:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S230202AbiFXGCw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jun 2022 02:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXFiZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 01:38:25 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA452EA06
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id b12-20020a17090a6acc00b001ec2b181c98so4723477pjm.4
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
+        with ESMTP id S230196AbiFXGCv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 02:02:51 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F066926A
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 23:02:50 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id cf14so1948931edb.8
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 23:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Y/SRxapVYozuhYMhBtEsKZgWVsRXORX77DHgWSqH9Xc=;
-        b=D0Rue8sUgpd0Oz2oDwADqo0yETl19CbGgl0NcxTFdcpLIfiidGTvMiEGSbHFZbcinq
-         baW0/Q++m/pcm5SiLWeU6l8prNwGUXlHPWd5JSYtBX0getqN+v508vHly1iMtuPTYIXh
-         B6xX9I3CXSVoN48uO0snxhaqwLgcVRhSnamxeHC/w7q0mpeGLV71d7ceAi4+WglCM/A2
-         bRbm9FlYjmMaZ/yFuL3plszZsIfsa0Q7d8qFjpb0gdvCv13Ulwbw5ZUT8ARVuUx5vTlm
-         dlAO/u8xtb/R2YRQydQQ7m8Klz1GWiE0uajAvw6EUH+zfN0U8DyZnXixMEN0LDwU2nNI
-         1xpw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+LB609c/jYmQtqojEPch2ria3pGib1paFUkDRzDn6ac=;
+        b=I3bfm4XDkKJiTYM8lT+COphHeM4VHVojYTWh5p+4beMt3kfoXt+YHBeZJQeNt80HF5
+         8Xk/cS1yGnBWeaf81Cc6elRO1ziuf7/GHURaz5se1841pydRMxIXtSQEqPJUPPWF4S5B
+         3I4imrdorm/sWyCfPOtU8RPRYlvn94balDGiZYFuOqHXOHzeJ/HzfGPo5XgTb/2X2aD2
+         nkHKe3Q5e0djZyqTmIj4k5qwIaHBMb1TyVmHHzWTxEsVtr2VCSPlgJWAlJ+DRVBgprDe
+         KyIMi57snvs6H7uvYQCkLTF4+WGlzWEXu3APE57wqEfZ/dzaZ9VQQx/d9smbGiftYdm8
+         KXuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Y/SRxapVYozuhYMhBtEsKZgWVsRXORX77DHgWSqH9Xc=;
-        b=uybnbX9iY7Bbcq2SkDMwv1XvqWhk23Kjt5+wXBb2aQ1lWuHB4chb/xF7lCRkrej2iM
-         5xcIyq91y2wQA2CprpbhxLyaJhG1zID6rbAYFP+4cvhf0l01goZuuqFnNllYDp/+13bg
-         UTLCVeva4TuvURTZcNzCG3r9TmjFCH9l2lyA8KhHLt5DVzcXFEFy+m6PcUQPZrY1xRhj
-         NJRF0c+mi7MMwXAy/OZ/PqALAGroTZrXqwmi60dIswFg8fsODJwZ8FhMFWuSYXwndoND
-         jhMV9dtVhVRnpwR1nqvivgi3JdRdo0BKvVx5G2MFIcdczx+f0iqbE2myTaXIvvGpmj8q
-         Jz/w==
-X-Gm-Message-State: AJIora/wSwjqcnqpGstkH/Lctgx9XGg5VzsdHyMTcEZNaKxGQMXI+wDO
-        y8MBT88/cPt/W6PIrIcE6tXcFw==
-X-Google-Smtp-Source: AGRyM1toya/YrdeGKw+SyYyN5TqtRXMFJanSddtA7xBFHFmaieaTouohS+OBViv/YKTrufCn4l1Evw==
-X-Received: by 2002:a17:90a:408f:b0:1e3:23a:2370 with SMTP id l15-20020a17090a408f00b001e3023a2370mr1959764pjg.84.1656049104303;
-        Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id 2-20020a056a00072200b00525217fe273sm641043pfm.187.2022.06.23.22.38.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 22:38:23 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 11:08:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/31] cpufreq: tegra20: Migrate to
- dev_pm_opp_set_config()
-Message-ID: <20220624053821.e6emke6gortqn72a@vireshk-i7>
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
- <793e49ea-aeb0-a47a-9fe8-742a6397bb35@collabora.com>
- <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+LB609c/jYmQtqojEPch2ria3pGib1paFUkDRzDn6ac=;
+        b=SetsMWLRY79ON5j67jNARKxGYDO3mhfcsJ8JnifCgFfI5PJ0V7bkW2IEF/UsrLeeu7
+         LMUmg6HgGCLmiSbUs0CuuKsHj8zGodv2PiYOWplTXvTPixpl9/3sJ5UHMZIBq1Ta7BaL
+         VO3b+DuZBvppA0wG36QluYZIZdfoX+IO34qFi+tTS6galTgkIaIXpYwH/26Oshre9rL1
+         S1fFXd6KHqY3bVKpiKpTvmKGflvQpVEJNvCH27+bwKOpATkQLWNvxcHSCqmY/kn9Rjhs
+         jbXDAMYaVl5AT32H7Hc4pCHggWBBgJzY7QFoV1pBYqHYwsO4JkB7yeutpx64dzeCR5MU
+         RxMQ==
+X-Gm-Message-State: AJIora/znluJaT5qyx33hLnDEl3rHQ1lSjGBx/A0UJaydsqNhAHpsVqp
+        adFI16Fn/nL851+o/slDl8fC7eiXOCzAa+ZbcKwsrcae2wI=
+X-Google-Smtp-Source: AGRyM1sPCL4IZeRy5438DyfeOwib7ruP6F5Y3Lx776mw47yo3g1XQs4GIkwpZVNZO1pkqc30d6UM7TmeZwclwK7MMM4=
+X-Received: by 2002:a05:6402:354d:b0:435:93f9:fc0b with SMTP id
+ f13-20020a056402354d00b0043593f9fc0bmr15474165edd.288.1656050568672; Thu, 23
+ Jun 2022 23:02:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601151441.9128-1-daniel.lezcano@linaro.org>
+ <20220601151441.9128-3-daniel.lezcano@linaro.org> <be8395e3-98d7-7a8f-7153-c491b22d4463@arm.com>
+ <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org> <eada018c-b857-7946-ae4b-2532e6866a45@arm.com>
+ <CAHRSSEz9ExOgvByycztKYf1ncxCKeoy3uHuyQcnUC1r5nujc2w@mail.gmail.com> <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
+In-Reply-To: <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
+From:   Wei Wang <wvw@google.com>
+Date:   Thu, 23 Jun 2022 23:02:37 -0700
+Message-ID: <CAGXk5yqCNUpGpHkecVP8U=ys9NF6dJAMu6R0E+jpgvcSVFN+Ug@mail.gmail.com>
+Subject: Re: [PATCH 3/3] thermal/sysfs: Remove cooling device sysfs statistics
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-05-22, 19:59, Dmitry Osipenko wrote:
-> With that fixed, now there is another error:
-> 
-> [    1.761945] cpu cpu0: _of_add_opp_table_v2: no supported OPPs
-> [    1.761960] cpu cpu0: OPP table can't be empty
-> 
-> I see this on Tegra30, but not on Tegra20. Apparently OPP table
-> refcounting is broken on Tegra30 by this patchset. To make it clear,
-> there are no error without these OPP patches applied. I may take a
-> closer look if will be needed, just ping me.
+On Fri, Jun 3, 2022 at 4:04 AM Daniel Lezcano <daniel.lezcano@linaro.org> w=
+rote:
+>
+>
+> Hi Todd,
+>
+> [adding Wei]
+>
+> On 02/06/2022 21:02, Todd Kjos wrote:
+> > On Thu, Jun 2, 2022 at 2:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> [ ... ]
+>
+> >> I see, it makes sense. Let's see if Todd and Android folks don't
+> >> use this thermal sysfs stats, so we could remove them.
+> >
+> > Android HALs do use the thermal sysfs stats. debugfs isn't a viable
+> > replacement since debugfs must not be mounted during normal operation.
+>
+> Thanks for your answer.
+>
+> I'm curious, what is the purpose of getting the statistics, especially
+> the transitions stats from normal operation?
+>
+> There were some complains about systems having a high number of cooling
+> devices with a lot of states. The state transitions are represented as a
+> matrix and result in up to hundred of megabytes of memory wasted.
+>
+> Moreover, sysfs being limited a page size, the output is often truncated.
+>
+> As it is automatically enabled for GKI, this waste of memory which is
+> not negligible for system with low memory can not be avoided.
+>
+> I went through the thermal HAL but did not find an usage of these
+> statistics, do you have a pointer to the code using them ?
+>
+> Thanks
+>
+>    -- Daniel
+>
+>
 
-Hi Jon,
+Sorry for the late reply, trying to catch up on emails after sick
+recovery. We use it for stats collection to understand thermal
+residency, and it is not in the HAL code, we don't use the transition
+table heavily though. Are some of the devices having too many cooling
+devices? Can we have a config to enable stats for a given cooling
+device?
 
-Dmitry reported this on Tegra30 earlier, do you also see such a
-failure ? Would be helpful to get this fixed as well, if it still
-exists.
+Thanks!
+-Wei
 
--- 
-viresh
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
