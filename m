@@ -2,225 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BB8558B92
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 01:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D62558C3F
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jun 2022 02:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiFWXOA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jun 2022 19:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
+        id S230129AbiFXA2N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jun 2022 20:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiFWXN7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 19:13:59 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B755638B
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 16:13:57 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-317741c86fdso9030607b3.2
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 16:13:57 -0700 (PDT)
+        with ESMTP id S229995AbiFXA2M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jun 2022 20:28:12 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F80D11C02
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 17:28:09 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 68so908977pgb.10
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jun 2022 17:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q4rQdhnWLSWo14RnjtXWJNi2g5jmxMvqoaFVDnX2E5Q=;
-        b=cmIBzn0GUySKMskyqJKDVgDVN/8vHWzNfjJ+BREUrbPM7OiFQy/ATX7aLRhZ8MANv1
-         DeCxgq5hoHNltsRta4mLMJ5CVkKh4hfP6LVOwSV/7ivHGPCIqDCrcZofNe4RU/N40PFA
-         084lsyuhYt6X1dulYD/2vojMLUtCUUuNjPCYYrjag+23v4QnctG6vuufvkN8P84KHpsZ
-         1smdglM09EjAq6n/VWxttVgTknSAAilZfUXcBMOYhadXU9RaXikEWNdJ2rEO52JTzByf
-         AZX6K773hR1jhsQBFWv6Jdd8yXumqgqHK9g5FERmM19ObNBe6obaPeOOW1hv8UESqekO
-         6hJw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P4Yje83rZYDRwuL9uo9EpMh58B6jkiYDBp8jSKu+8xU=;
+        b=IUqbXQUyFPdxLRIJZ1sfcGFJ6lHDyH0SdlPGW96Ps+WO1W4m4JbAiwTZdMkKacl+MM
+         D5DjVbMguKKKfOEV6Yl7t72SfBwhAbK41aGj+mBhVLVvxmMIHEFzk4sjh5+rBvGALNqO
+         S8Gh5ygMb3xtpnxKqjFVqaOSvF9ykpbsXzfCOPU5EUZ0FlEC4iAXFhvTstnDtI1yLm+M
+         xr+F1GL0yzIohwkliEUKWoxjNr9v+ywYg/NrPryFnFrmULKs5kAeouQDX+51rEAxuH3s
+         ukYigjwuqbpal/SjKujJSmPK9uKTCEV6aWpTqgK24biQzsVZP6+UYL/wqYWc4g+StEYW
+         xi5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q4rQdhnWLSWo14RnjtXWJNi2g5jmxMvqoaFVDnX2E5Q=;
-        b=d+qOMrrvcAEhmjWXrzyoKhccb9m8wZZ1Z/v5beK8EM4yl2OGAmwGBybIGIzamgKFLb
-         WBWSY8jvuafhdiBTkxsc4jU7JipI3bfXOUhdL5c2tQykOgGgtyzUcv7NdyGLMDZizpNC
-         DQX/ABNuAPmZ6av4hc2EP48unNK6w7YZIptfpW128Q8PdFYMAjxP7sxpcvA4geG/+25T
-         XCo4I6pR248o5AxusO+3YPmwPhTCllY2Cm+avUAFSjMucXzms6gm5ctgsdH4UKQW9L+G
-         9XD02Wga3LG8BY33lOn283ul4327rKBhviuRIGdQVpAXDd/KNrCKfTJBZS8HPZ9qUzEh
-         XINg==
-X-Gm-Message-State: AJIora+XYBBHeuudhROp/YBYtuncQV+TAnWxEQClRt8qdyCzBxAo9cWI
-        1oEgecHr86VvLV/f+u5bHdNbMQ5+m0EfV7+igkIiEw==
-X-Google-Smtp-Source: AGRyM1tmOAvKbstD4mNEDSzf5ARhyGW/aO0E7tWlKoUjb1ZKcoDOPfJmrPrA9mjxTsX3Z0whnYeMEFOcEVoRWtE94Ys=
-X-Received: by 2002:a0d:dfd5:0:b0:317:f0d4:505b with SMTP id
- i204-20020a0ddfd5000000b00317f0d4505bmr12968633ywe.518.1656026036778; Thu, 23
- Jun 2022 16:13:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P4Yje83rZYDRwuL9uo9EpMh58B6jkiYDBp8jSKu+8xU=;
+        b=Vragt+ZUjzVsJvJRztMZQcWd6PQSr3O2lnKAFbvPZ/11/lrvZDgWF61+A44rJrAPXV
+         ssi4K01T+Jg5+zCckNPuB5MW4nJMXbaYQVeRan+VFtGSDomof+f2tOJBiIn/xgF+tCbn
+         ZMCEzUMN3UpDpAJumVVshfjzejPXZkFY60NU5jCBMoWeqef0QKHmCjwn/kbomxdFUt70
+         +UUHAH99EHGXkgQMs1n/C366r82qHbRfH7RNvTanZBG5k4UNJspJaTMOoq4/pUaKm+sN
+         /ojgssa8pEYwU8z3KBgW71p/0BaxPQU870EpggXCSQGorj46jEOiqIjangmOBQVjDN2c
+         7dTw==
+X-Gm-Message-State: AJIora9RAXkB0iF3EasuuTqm1Jg6/IgP1rhjOzDW4rkJ0uQ+L9GLavuc
+        UmHW+fVEjUuFs2VQ5EaUPqJu+w==
+X-Google-Smtp-Source: AGRyM1s4tA8aTDDu3gGkINrxoWIx2aC28XlcSQwcSIGGo+MPKiMLb03umdr2bcjVfA21s3ZLy9ye1w==
+X-Received: by 2002:a63:7046:0:b0:40c:af8d:a6 with SMTP id a6-20020a637046000000b0040caf8d00a6mr9703157pgn.38.1656030488471;
+        Thu, 23 Jun 2022 17:28:08 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id s11-20020a170902a50b00b001620eb3a2d6sm374708plq.203.2022.06.23.17.28.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 17:28:07 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 05:58:05 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 21/31] soc/tegra: Remove the call to
+ devm_pm_opp_set_clkname()
+Message-ID: <20220624002805.anv62ufihdrncwus@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
+ <12c085af-1202-95cf-e9ad-ddcfbdadf0d6@nvidia.com>
 MIME-Version: 1.0
-References: <20220623080344.783549-1-saravanak@google.com> <20220623080344.783549-3-saravanak@google.com>
- <20220623100421.GY1615@pengutronix.de> <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
- <20220623203716.GA1615@pengutronix.de>
-In-Reply-To: <20220623203716.GA1615@pengutronix.de>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 23 Jun 2022 16:13:20 -0700
-Message-ID: <CAGETcx-mCu+M0HhhX+bTNpzEswviJj2U8eCefLv3ezr29Nd+wA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when fw_devlink.strict=1
-To:     sascha hauer <sha@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        russell king <linux@armlinux.org.uk>,
-        "david s. miller" <davem@davemloft.net>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12c085af-1202-95cf-e9ad-ddcfbdadf0d6@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 1:37 PM sascha hauer <sha@pengutronix.de> wrote:
->
-> On Thu, Jun 23, 2022 at 10:26:46AM -0700, Saravana Kannan wrote:
-> > On Thu, Jun 23, 2022 at 3:05 AM sascha hauer <sha@pengutronix.de> wrote:
-> > >
-> > > On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
-> > > > Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > > > enabled iommus and dmas dependency enforcement by default. On some
-> > > > systems, this caused the console device's probe to get delayed until the
-> > > > deferred_probe_timeout expires.
-> > > >
-> > > > We need consoles to work as soon as possible, so mark the console device
-> > > > node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
-> > > > the probe of the console device for suppliers without drivers. The
-> > > > driver can then make the decision on where it can probe without those
-> > > > suppliers or defer its probe.
-> > > >
-> > > > Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > > > Reported-by: Sascha Hauer <sha@pengutronix.de>
-> > > > Reported-by: Peng Fan <peng.fan@nxp.com>
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > Tested-by: Peng Fan <peng.fan@nxp.com>
-> > > > ---
-> > > >  drivers/of/base.c | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > >
-> > > > diff --git a/drivers/of/base.c b/drivers/of/base.c
-> > > > index d4f98c8469ed..a19cd0c73644 100644
-> > > > --- a/drivers/of/base.c
-> > > > +++ b/drivers/of/base.c
-> > > > @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
-> > > >                       of_property_read_string(of_aliases, "stdout", &name);
-> > > >               if (name)
-> > > >                       of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
-> > > > +             if (of_stdout)
-> > > > +                     of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
-> > >
-> > > The device given in the stdout-path property doesn't necessarily have to
-> > > be consistent with the console= parameter. The former is usually
-> > > statically set in the device trees contained in the kernel while the
-> > > latter is dynamically set by the bootloader. So if you change the
-> > > console uart in the bootloader then you'll still run into this trap.
-> > >
-> > > It's problematic to consult only the device tree for dependencies. I
-> > > found several examples of drivers in the tree for which dma support
-> > > is optional. They use it if they can, but continue without it when
-> > > not available. "hwlock" is another property which consider several
-> > > drivers as optional. Also consider SoCs in early upstreaming phases
-> > > when the device tree is merged with "dmas" or "hwlock" properties,
-> > > but the corresponding drivers are not yet upstreamed. It's not nice
-> > > to defer probing of all these devices for a long time.
-> > >
-> > > I wonder if it wouldn't be a better approach to just probe all devices
-> > > and record the device(node) they are waiting on. Then you know that you
-> > > don't need to probe them again until the device they are waiting for
-> > > is available.
-> >
-> > That actually breaks things in a worse sense. There are cases where
-> > the consumer driver is built in and the optional supplier driver is
-> > loaded at boot. Without fw_devlink and the deferred probe timeout, we
-> > end up probing the consumer with limited functionality. With the
-> > current setup, sure we delay some probes a bit but at least everything
-> > works with the right functionality. And you can reduce or remove the
-> > delay if you want to optimize it.
->
-> We have optional and mandatory resources. In this situation a driver has
-> to decide what to do. Either it continues with limited resources or it
-> defers probing. Some drivers try to allocate the optional resources at
-> open time so that they are able to use them once they are available.  We
-> could even think of an asynchronous callback into a driver when a
-> resource becomes available. Whether we put this decision what is
-> optional or not into the driver or in the framework doesn't make a
-> difference to the problem, it is still the same: When a resource is not
-> yet available we have no idea if and when it becomes available, if it's
-> worth waiting for it or not.
->
-> The difference is that with my proposal (which isn't actually mine but
-> from my collegue Lucas) a driver can decide very fine grained how it
-> wants to deal with the situation. With fw_devlink we try to put this
-> intelligence into the framework and it seems there are quite some quirks
-> necessary to get that running for everyone.
+On 23-06-22, 22:15, Jon Hunter wrote:
+> On 26/05/2022 12:42, Viresh Kumar wrote:
+> > diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+> > index 32c346b72635..49a5360f4507 100644
+> > --- a/drivers/soc/tegra/common.c
+> > +++ b/drivers/soc/tegra/common.c
+> > @@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+> >   	u32 hw_version;
+> >   	int err;
+> > -	err = devm_pm_opp_set_clkname(dev, NULL);
+> > -	if (err) {
+> > -		dev_err(dev, "failed to set OPP clk: %d\n", err);
+> > -		return err;
+> > -	}
+> > -
+> >   	/* Tegra114+ doesn't support OPP yet */
+> >   	if (!of_machine_is_compatible("nvidia,tegra20") &&
+> >   	    !of_machine_is_compatible("nvidia,tegra30"))
+> 
+> 
+> This appears to be breaking a few Tegra drivers. For example, on Tegra210
+> Jetson TX1 I am seeing the following and the eMMC is no longer working ...
+> 
+> [    0.526729] sdhci-tegra 700b0600.mmc: dev_pm_opp_set_rate: device's opp table doesn't exist
+> [    0.526733] sdhci-tegra 700b0600.mmc: failed to set clk rate to 400000Hz: -19
+> [    0.528830] sdhci-tegra 700b0600.mmc: dev_pm_opp_set_rate: device's opp table doesn't exist
+> [    0.528833] sdhci-tegra 700b0600.mmc: failed to set clk rate to 400000Hz: -19
+> 
+> I have seen another instance of this on Jetson Xavier NX ...
+> 
+> [   12.301336] tegra-pwm 32d0000.pwm: dev_pm_opp_set_rate: device's opp table doesn't exist
+> [   12.301350] tegra-pwm 32d0000.pwm: Failed to set max frequency: -19
+> 
+> Bisect is point to this commit and so something is not working as
+> expected.
 
-That's one possible solution, but for that to work, all drivers with
-optional suppliers would need to be changed to take advantage of this
-callback to work correctly when the optional suppliers become
-available. We could add this callback, but it would be a long time
-before the callback handles all/most cases of optional suppliers.
+Thanks again Jon.
 
-One of the goals of fw_devlink is so that people can stop having to
-play initcall chicken where they try to tune their initcall levels wrt
-to the chain of suppliers to avoid probe failures or minimize deferred
-probed. Technically with deferred probes and proper error handling,
-people shouldn't have to play initcall chicken, but we still have a
-lot of those. Adding this callback is just going to make writing
-drivers even harder. And there are tons of drivers that can't do
-proper clean up and some drivers can't even be unbound once they are
-bound.
+This is what happens when the special code doesn't have a comment
+attached with it. Neither the reviewer, nor the author remember why
+the special piece was required :)
 
-Also, if I'm not mistaken (I could be), stuff like pinctrl is setup
-before we even get to driver->probe(). So when the pinctrl supplier
-becomes available, the driver would need to unbind fully and rebind.
-What if there's a current user of the device?
+I had to go through the whole sequence, along with DT to understand
+what might have broken this stuff :)
 
-> Anyway, we have fw_devlink now and actually I think the dependency graph
-> that we have with fw_devlink is quite nice to resolve the natural probe
-> order. But why do we have to put an extra penalty on drivers whose
-> resources are not yet available?  Probe devices with complete resources
-> as long as you find them, execute more initcalls as long as there are
-> any, but when there are no more left, you could start probing devices
-> with incomplete resources, why wait for another ten seconds?
+I will drop this patch and add this comment in its place:
 
-The timeout is defining how long after the most recent module load
-that we give up waiting for more modules to be loaded. On a Pixel 6
-with serial console output, the timeout of 5 seconds would work
-because the worst case gap between two module loads is ~2.8 seconds
-(so 5 seconds for some margin). The default is this high to
-accommodate slow storage devices where mounting all the filesystems
-can take time (think HDD or network FS). The default is configured for
-correctness so that we can maximize functionality across systems, but
-people can optimize for the specific case.
+diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+index 32c346b72635..9f3fdeb1a11c 100644
+--- a/drivers/soc/tegra/common.c
++++ b/drivers/soc/tegra/common.c
+@@ -108,6 +108,13 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+        u32 hw_version;
+        int err;
 
-> For me it's no problem when the UART probes late, we have earlycon which
-> can be used to debug problems that arise before the UART probes, but
-> what nags is the ten seconds delay. zero would be a much saner value for
-> me.
++       /*
++        * For some devices we don't have any OPP table in the DT, and in order
++        * to use the same code path for all the devices, we create a dummy OPP
++        * table for them via this call. The dummy OPP table is only capable of
++        * doing clk_set_rate() on invocation of dev_pm_opp_set_rate() and
++        * doesn't provide any other functionality.
++        */
+        err = devm_pm_opp_set_clkname(dev, NULL);
+        if (err) {
+                dev_err(dev, "failed to set OPP clk: %d\n", err);
 
-Having said all that, I empathize with your annoyance at the delay.
-Open to ideas of making this better without making the default
-functionality worse.
 
--Saravana
+Though there will still be a problem here with my changes, we don't
+accept NULL clkname anymore for the set-clkname API. And tegra does
+this to pick the first clock available in DT (at index 0) I think.
+Other drivers (mostly qcom) who need such dummy OPP table, provide a
+real clock name instead. Will it be possible to pass that here somehow
+?
+
+-- 
+viresh
