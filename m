@@ -2,198 +2,386 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC01955A5A8
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Jun 2022 02:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 577C555A98C
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Jun 2022 13:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiFYAya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jun 2022 20:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S232628AbiFYLm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 25 Jun 2022 07:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiFYAy2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jun 2022 20:54:28 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740CE5001A;
-        Fri, 24 Jun 2022 17:54:26 -0700 (PDT)
-X-UUID: 780357f6997c455fb5477ca2b5b98988-20220625
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:de213be8-96b4-4f51-8d3f-3c2a1c709920,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:70
-X-CID-INFO: VERSION:1.1.6,REQID:de213be8-96b4-4f51-8d3f-3c2a1c709920,OB:0,LOB:
-        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:70
-X-CID-META: VersionHash:b14ad71,CLOUDID:99a476ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:4ca74c2c1c80,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 780357f6997c455fb5477ca2b5b98988-20220625
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1674105141; Sat, 25 Jun 2022 08:54:19 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 25 Jun 2022 08:54:18 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 25 Jun 2022 08:54:18 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Sat, 25 Jun 2022 08:54:18 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <peterwu.pub@gmail.com>
-CC:     <alice_chen@richtek.com>, <broonie@kernel.org>,
-        <chiaen_wu@richtek.com>, <chunfeng.yun@mediatek.com>,
-        <cy_huang@richtek.com>, <daniel.thompson@linaro.org>,
-        <deller@gmx.de>, <devicetree@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <gregkh@linuxfoundation.org>,
-        <heikki.krogerus@linux.intel.com>, <jic23@kernel.org>,
-        <jingoohan1@gmail.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <lars@metafoo.de>, <lee.jones@linaro.org>, <lgirdwood@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux@roeck-us.net>,
-        <matthias.bgg@gmail.com>, <pavel@ucw.cz>, <robh+dt@kernel.org>,
-        <sre@kernel.org>, <szunichen@gmail.com>
-Subject: Re: [PATCH v3 02/14] dt-bindings: power: supply: Add Mediatek MT6370 Charger
-Date:   Sat, 25 Jun 2022 08:54:18 +0800
-Message-ID: <20220625005418.7565-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220623115631.22209-3-peterwu.pub@gmail.com>
-References: <20220623115631.22209-3-peterwu.pub@gmail.com>
+        with ESMTP id S232542AbiFYLmZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Jun 2022 07:42:25 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB77F1DA62;
+        Sat, 25 Jun 2022 04:42:23 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id a11so5628617ljb.5;
+        Sat, 25 Jun 2022 04:42:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7RLaeJAcMzevXo6S5cuXT9EkaWQVtjtmRF8OQ1aZsmw=;
+        b=cPW7eonVFazhqeHbP3DDwJ8ZvNMDH9/wuG0LDUJKKjwmn0n/yZgQHrmW7PlnlkPY68
+         iE978Nqi6ko4TfhBXw28SKHOP9m0GuCnRMj3nI6b0tsL3aUgEV64rC/ZJVNXyuQNeO6N
+         HJlxT/QCFF5rTu8mBRZXQUJNRSuAYHS2y2BbFxOfHD4//5tzjowlzoFRY/A+PqTpbzAR
+         sId5Ltv6vDpV/+K2yuJnhn/viAs06uQAqcrd2HjpilHmk8TvxBGsHYwfQ72rzAI0WRvC
+         fVkBp/IPRx4ZJj6eJWJ2Sct0R9Xepc3POPaqIPDlFEUDZDePkSpR+DZqZa5nyyzW64U2
+         Bksw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7RLaeJAcMzevXo6S5cuXT9EkaWQVtjtmRF8OQ1aZsmw=;
+        b=3Ikyg/wY6w/DioG4JAVxw6w8iLvgbva0DyiiEnB8TvTBEofsDuC47zppCY0MYRodiA
+         YvsXNNIeouV/r40ZiepQqJBD4BmLQcU5+Y0BdX7K4sSDKw42PK9jnhazMMwLD5VPfU+a
+         G/M2JCIRe8qOJPaS/ZTE1f846jOZtFTfCL2vluSHd6h3FXo0MRIRZ3xmFVrVtW8nZUYU
+         wLybOiK8LYnyws/vtXmrw2DZWBR5FU0nSaVEYgY4kEVLl/0J95UKVG1yeXHD6QfVuKG7
+         TlE1ZRq94lbMkgODJoL2JTwJs1kKQTazqZR1uCgSYxFQ1UH4b947ESYfIzchQuh8aQ4I
+         x8Tg==
+X-Gm-Message-State: AJIora8/iBzdniU2UnYraOMSTi3BT+qInrmFfTPnhGM+DjerAKV+XXOr
+        EFELTzdTLCe3F8A16Ep7/rJS2CFlDrs=
+X-Google-Smtp-Source: AGRyM1tGmwALELYyesbJ/8S4e5EjJt8hWJvyI11otWJpcvJicDjJqxG5VdpGLTmlwEJxaFkxad/UAw==
+X-Received: by 2002:a05:651c:1202:b0:25a:6096:bd7e with SMTP id i2-20020a05651c120200b0025a6096bd7emr1737854lja.304.1656157341774;
+        Sat, 25 Jun 2022 04:42:21 -0700 (PDT)
+Received: from [192.168.2.145] ([109.252.118.164])
+        by smtp.googlemail.com with ESMTPSA id p7-20020a2eb987000000b00255526478f1sm626574ljp.88.2022.06.25.04.42.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jun 2022 04:42:21 -0700 (PDT)
+Message-ID: <565ff879-11e4-1ae4-08d8-1237a875ef12@gmail.com>
+Date:   Sat, 25 Jun 2022 14:42:15 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5/5] OPP: Remove custom OPP helper support
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>, Keerthy <j-keerthy@ti.com>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <cover.1653991004.git.viresh.kumar@linaro.org>
+ <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi ChiaEn,
-
-> Add Mediatek MT6370 Charger binding documentation.
-
-s/Mediatek/MediaTek/
-
-Would you mind fix that for the series?
-
-cheers,
-Miles
-
+31.05.2022 13:10, Viresh Kumar пишет:
+> The only user of the custom helper is migrated to use
+> config_regulators() interface. Remove the now unused custom OPP helper
+> support.
 > 
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> This cleans up _set_opp() and leaves a single code path to be used by
+> all users.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
+>  drivers/opp/core.c     | 126 +----------------------------------------
+>  drivers/opp/opp.h      |   7 ---
+>  include/linux/pm_opp.h |  35 ------------
+>  3 files changed, 2 insertions(+), 166 deletions(-)
 > 
-> v3
-> - Add items and remove maxItems of io-channels
-> - Add io-channel-names and describe each item
-> - Add "unevaluatedProperties: false" in "usb-otg-vbus-regulator"
-> - Rename "enable-gpio" to "enable-gpios" in "usb-otg-vbus-regulator"
-> ---
->  .../power/supply/mediatek,mt6370-charger.yaml      | 87 ++++++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
-> new file mode 100644
-> index 0000000..f138db6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek MT6370 Battery Charger
-> +
-> +maintainers:
-> +  - ChiaEn Wu <chiaen_wu@richtek.com>
-> +
-> +description: |
-> +  This module is part of the MT6370 MFD device.
-> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6370-charger
-> +
-> +  interrupts:
-> +    description: |
-> +      Specify what irqs are needed to be handled by MT6370 Charger driver. IRQ
-> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL_UVP_D"
-> +      are required.
-> +    items:
-> +      - description: BC1.2 done irq
-> +      - description: usb plug in irq
-> +      - description: mivr irq
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: attach_i
-> +      - const: uvp_d_evt
-> +      - const: mivr
-> +
-> +  io-channels:
-> +    description: |
-> +      Use ADC channel to read VBUS, IBUS, IBAT, etc., info.
-> +    minItems: 1
-> +    items:
-> +      - description: |
-> +          VBUS voltage with lower accuracy (+-75mV) but higher measure
-> +          range (1~22V)
-> +      - description: |
-> +          VBUS voltage with higher accuracy (+-30mV) but lower measure
-> +          range (1~9.76V)
-> +      - description: the main system input voltage
-> +      - description: battery voltage
-> +      - description: battery temperature-sense input voltage
-> +      - description: IBUS current (required)
-> +      - description: battery current
-> +      - description: |
-> +          regulated output voltage to supply for the PWM low-side gate driver
-> +          and the bootstrap capacitor
-> +      - description: IC junction temperature
-> +
-> +  io-channel-names:
-> +    items:
-> +      - const: vbusdiv5
-> +      - const: vbusdiv2
-> +      - const: vsys
-> +      - const: vbat
-> +      - const: ts_bat
-> +      - const: ibus
-> +      - const: ibat
-> +      - const: chg_vddp
-> +      - const: temp_jc
-> +
-> +  usb-otg-vbus-regulator:
-> +    type: object
-> +    description: OTG boost regulator.
-> +    unevaluatedProperties: false
-> +    $ref: /schemas/regulator/regulator.yaml#
-> +
-> +    properties:
-> +      enable-gpios:
-> +        maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - interrupt-names
-> +  - io-channels
-> +
-> +additionalProperties: false
-> +
-> +...
-> -- 
-> 2.7.4
-> 
-> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 58ce1240e808..554a043bc225 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -972,36 +972,6 @@ static int _set_opp_bw(const struct opp_table *opp_table,
+>  	return 0;
+>  }
+>  
+> -static int _set_opp_custom(const struct opp_table *opp_table,
+> -			   struct device *dev, struct dev_pm_opp *opp,
+> -			   unsigned long freq)
+> -{
+> -	struct dev_pm_set_opp_data *data = opp_table->set_opp_data;
+> -	struct dev_pm_opp *old_opp = opp_table->current_opp;
+> -	int size;
+> -
+> -	/*
+> -	 * We support this only if dev_pm_opp_set_config() was called
+> -	 * earlier to set regulators.
+> -	 */
+> -	if (opp_table->sod_supplies) {
+> -		size = sizeof(*old_opp->supplies) * opp_table->regulator_count;
+> -		memcpy(data->old_opp.supplies, old_opp->supplies, size);
+> -		memcpy(data->new_opp.supplies, opp->supplies, size);
+> -		data->regulator_count = opp_table->regulator_count;
+> -	} else {
+> -		data->regulator_count = 0;
+> -	}
+> -
+> -	data->regulators = opp_table->regulators;
+> -	data->clk = opp_table->clk;
+> -	data->dev = dev;
+> -	data->old_opp.rate = old_opp->rate;
+> -	data->new_opp.rate = freq;
+> -
+> -	return opp_table->set_opp(data);
+> -}
+> -
+>  static int _set_required_opp(struct device *dev, struct device *pd_dev,
+>  			     struct dev_pm_opp *opp, int i)
+>  {
+> @@ -1186,13 +1156,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+>  		}
+>  	}
+>  
+> -	if (opp_table->set_opp) {
+> -		ret = _set_opp_custom(opp_table, dev, opp, freq);
+> -	} else {
+> -		/* Only frequency scaling */
+> -		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+> -	}
+> -
+> +	ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -2054,7 +2018,6 @@ static void _opp_put_prop_name(struct opp_table *opp_table)
+>  static int _opp_set_regulators(struct opp_table *opp_table, struct device *dev,
+>  			       const char * const names[], unsigned int count)
+>  {
+> -	struct dev_pm_opp_supply *supplies;
+>  	struct regulator *reg;
+>  	int ret, i;
+>  
+> @@ -2082,20 +2045,8 @@ static int _opp_set_regulators(struct opp_table *opp_table, struct device *dev,
+>  
+>  	opp_table->regulator_count = count;
+>  
+> -	supplies = kmalloc_array(count * 2, sizeof(*supplies), GFP_KERNEL);
+> -	if (!supplies) {
+> -		ret = -ENOMEM;
+> -		goto free_regulators;
+> -	}
+> -
+> -	mutex_lock(&opp_table->lock);
+> -	opp_table->sod_supplies = supplies;
+> -	if (opp_table->set_opp_data) {
+> -		opp_table->set_opp_data->old_opp.supplies = supplies;
+> -		opp_table->set_opp_data->new_opp.supplies = supplies + count;
+> -	}
+> -
+>  	/* Set generic config_regulators() for single regulators here */
+> +	mutex_lock(&opp_table->lock);
+>  	if (count == 1)
+>  		opp_table->config_regulators = _opp_config_regulator_single;
+>  	mutex_unlock(&opp_table->lock);
+> @@ -2132,16 +2083,6 @@ static void _opp_put_regulators(struct opp_table *opp_table)
+>  	for (i = opp_table->regulator_count - 1; i >= 0; i--)
+>  		regulator_put(opp_table->regulators[i]);
+>  
+> -	mutex_lock(&opp_table->lock);
+> -	if (opp_table->set_opp_data) {
+> -		opp_table->set_opp_data->old_opp.supplies = NULL;
+> -		opp_table->set_opp_data->new_opp.supplies = NULL;
+> -	}
+> -
+> -	kfree(opp_table->sod_supplies);
+> -	opp_table->sod_supplies = NULL;
+> -	mutex_unlock(&opp_table->lock);
+> -
+>  	kfree(opp_table->regulators);
+>  	opp_table->regulators = NULL;
+>  	opp_table->regulator_count = -1;
+> @@ -2195,61 +2136,6 @@ static void _opp_put_clkname(struct opp_table *opp_table)
+>  	}
+>  }
+>  
+> -/**
+> - * _opp_register_set_opp_helper() - Register custom set OPP helper
+> - * @dev: Device for which the helper is getting registered.
+> - * @set_opp: Custom set OPP helper.
+> - *
+> - * This is useful to support complex platforms (like platforms with multiple
+> - * regulators per device), instead of the generic OPP set rate helper.
+> - *
+> - * This must be called before any OPPs are initialized for the device.
+> - */
+> -static int _opp_register_set_opp_helper(struct opp_table *opp_table,
+> -	struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data))
+> -{
+> -	struct dev_pm_set_opp_data *data;
+> -
+> -	/* Another CPU that shares the OPP table has set the helper ? */
+> -	if (opp_table->set_opp)
+> -		return 0;
+> -
+> -	data = kzalloc(sizeof(*data), GFP_KERNEL);
+> -	if (!data)
+> -		return -ENOMEM;
+> -
+> -	mutex_lock(&opp_table->lock);
+> -	opp_table->set_opp_data = data;
+> -	if (opp_table->sod_supplies) {
+> -		data->old_opp.supplies = opp_table->sod_supplies;
+> -		data->new_opp.supplies = opp_table->sod_supplies +
+> -					 opp_table->regulator_count;
+> -	}
+> -	mutex_unlock(&opp_table->lock);
+> -
+> -	opp_table->set_opp = set_opp;
+> -
+> -	return 0;
+> -}
+> -
+> -/**
+> - * _opp_unregister_set_opp_helper() - Releases resources blocked for set_opp helper
+> - * @opp_table: OPP table returned from _opp_register_set_opp_helper().
+> - *
+> - * Release resources blocked for platform specific set_opp helper.
+> - */
+> -static void _opp_unregister_set_opp_helper(struct opp_table *opp_table)
+> -{
+> -	if (opp_table->set_opp) {
+> -		opp_table->set_opp = NULL;
+> -
+> -		mutex_lock(&opp_table->lock);
+> -		kfree(opp_table->set_opp_data);
+> -		opp_table->set_opp_data = NULL;
+> -		mutex_unlock(&opp_table->lock);
+> -	}
+> -}
+> -
+>  /**
+>   * _opp_set_config_regulators_helper() - Register custom set regulator helper.
+>   * @dev: Device for which the helper is getting registered.
+> @@ -2447,13 +2333,6 @@ struct opp_table *dev_pm_opp_set_config(struct device *dev,
+>  			goto err;
+>  	}
+>  
+> -	/* Configure opp helper */
+> -	if (config->set_opp) {
+> -		ret = _opp_register_set_opp_helper(opp_table, dev, config->set_opp);
+> -		if (ret)
+> -			goto err;
+> -	}
+> -
+>  	/* Configure config_regulators helper */
+>  	if (config->config_regulators) {
+>  		ret = _opp_set_config_regulators_helper(opp_table, dev, config->config_regulators);
+> @@ -2516,7 +2395,6 @@ void dev_pm_opp_clear_config(struct opp_table *opp_table)
+>  	_opp_put_regulators(opp_table);
+>  	_opp_put_supported_hw(opp_table);
+>  	_opp_put_config_regulators_helper(opp_table);
+> -	_opp_unregister_set_opp_helper(opp_table);
+>  	_opp_put_prop_name(opp_table);
+>  	_opp_put_clkname(opp_table);
+>  
+> diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+> index 4695d315e7f9..407eee9f10ab 100644
+> --- a/drivers/opp/opp.h
+> +++ b/drivers/opp/opp.h
+> @@ -161,9 +161,6 @@ enum opp_table_access {
+>   * @enabled: Set to true if the device's resources are enabled/configured.
+>   * @genpd_performance_state: Device's power domain support performance state.
+>   * @is_genpd: Marks if the OPP table belongs to a genpd.
+> - * @set_opp: Platform specific set_opp callback
+> - * @sod_supplies: Set opp data supplies
+> - * @set_opp_data: Data to be passed to set_opp callback
+>   * @dentry:	debugfs dentry pointer of the real device directory (not links).
+>   * @dentry_name: Name of the real dentry.
+>   *
+> @@ -213,10 +210,6 @@ struct opp_table {
+>  	bool genpd_performance_state;
+>  	bool is_genpd;
+>  
+> -	int (*set_opp)(struct dev_pm_set_opp_data *data);
+> -	struct dev_pm_opp_supply *sod_supplies;
+> -	struct dev_pm_set_opp_data *set_opp_data;
+> -
+>  #ifdef CONFIG_DEBUG_FS
+>  	struct dentry *dentry;
+>  	char dentry_name[NAME_MAX];
+> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+> index 185503aab64d..c6d8f01ef9fd 100644
+> --- a/include/linux/pm_opp.h
+> +++ b/include/linux/pm_opp.h
+> @@ -57,39 +57,6 @@ struct dev_pm_opp_icc_bw {
+>  	u32 peak;
+>  };
+>  
+> -/**
+> - * struct dev_pm_opp_info - OPP freq/voltage/current values
+> - * @rate:	Target clk rate in hz
+> - * @supplies:	Array of voltage/current values for all power supplies
+> - *
+> - * This structure stores the freq/voltage/current values for a single OPP.
+> - */
+> -struct dev_pm_opp_info {
+> -	unsigned long rate;
+> -	struct dev_pm_opp_supply *supplies;
+> -};
+> -
+> -/**
+> - * struct dev_pm_set_opp_data - Set OPP data
+> - * @old_opp:	Old OPP info
+> - * @new_opp:	New OPP info
+> - * @regulators:	Array of regulator pointers
+> - * @regulator_count: Number of regulators
+> - * @clk:	Pointer to clk
+> - * @dev:	Pointer to the struct device
+> - *
+> - * This structure contains all information required for setting an OPP.
+> - */
+> -struct dev_pm_set_opp_data {
+> -	struct dev_pm_opp_info old_opp;
+> -	struct dev_pm_opp_info new_opp;
+> -
+> -	struct regulator **regulators;
+> -	unsigned int regulator_count;
+> -	struct clk *clk;
+> -	struct device *dev;
+> -};
+> -
+>  typedef int (*config_regulators_t)(struct device *dev, struct dev_pm_opp *old_opp,
+>  				   struct dev_pm_opp *new_opp, struct regulator **regulators,
+>  				   unsigned int count);
+> @@ -97,7 +64,6 @@ typedef int (*config_regulators_t)(struct device *dev, struct dev_pm_opp *old_op
+>   * struct dev_pm_opp_config - Device OPP configuration values
+>   * @clk_name: Clk name.
+>   * @prop_name: Name to postfix to properties.
+> - * @set_opp: Custom set OPP helper.
+>   * @config_regulators: Custom set regulator helper.
+>   * @supported_hw: Array of hierarchy of versions to match.
+>   * @supported_hw_count: Number of elements in the array.
+> @@ -111,7 +77,6 @@ typedef int (*config_regulators_t)(struct device *dev, struct dev_pm_opp *old_op
+>  struct dev_pm_opp_config {
+>  	const char *clk_name;
+>  	const char *prop_name;
+> -	int (*set_opp)(struct dev_pm_set_opp_data *data);
+>  	config_regulators_t config_regulators;
+>  	unsigned int *supported_hw;
+>  	unsigned int supported_hw_count;
+
+Hello Viresh,
+
+Unfortunately we can't remove the set_opp_helper(). It's terrible that
+this function is unused by Tegra 3d driver because it should be used.
+
+The patch that supposed to use the devm_pm_opp_register_set_opp_helper()
+[1] was merged a half year ago and just today I noticed that the merged
+code doesn't have devm_pm_opp_register_set_opp_helper() [2]. I think
+Thierry edited my patch before applying it, perhaps there was a merge
+conflict :/ This needs to be fixed now.
+
+[1] https://lore.kernel.org/all/20210817012754.8710-16-digetx@gmail.com/
+
+[2]
+https://elixir.bootlin.com/linux/v5.19-rc3/source/drivers/gpu/drm/tegra/gr3d.c#L535
