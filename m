@@ -2,386 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577C555A98C
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Jun 2022 13:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990FF55AB97
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Jun 2022 18:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbiFYLm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 25 Jun 2022 07:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S232952AbiFYQfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 25 Jun 2022 12:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbiFYLmZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Jun 2022 07:42:25 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB77F1DA62;
-        Sat, 25 Jun 2022 04:42:23 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id a11so5628617ljb.5;
-        Sat, 25 Jun 2022 04:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7RLaeJAcMzevXo6S5cuXT9EkaWQVtjtmRF8OQ1aZsmw=;
-        b=cPW7eonVFazhqeHbP3DDwJ8ZvNMDH9/wuG0LDUJKKjwmn0n/yZgQHrmW7PlnlkPY68
-         iE978Nqi6ko4TfhBXw28SKHOP9m0GuCnRMj3nI6b0tsL3aUgEV64rC/ZJVNXyuQNeO6N
-         HJlxT/QCFF5rTu8mBRZXQUJNRSuAYHS2y2BbFxOfHD4//5tzjowlzoFRY/A+PqTpbzAR
-         sId5Ltv6vDpV/+K2yuJnhn/viAs06uQAqcrd2HjpilHmk8TvxBGsHYwfQ72rzAI0WRvC
-         fVkBp/IPRx4ZJj6eJWJ2Sct0R9Xepc3POPaqIPDlFEUDZDePkSpR+DZqZa5nyyzW64U2
-         Bksw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7RLaeJAcMzevXo6S5cuXT9EkaWQVtjtmRF8OQ1aZsmw=;
-        b=3Ikyg/wY6w/DioG4JAVxw6w8iLvgbva0DyiiEnB8TvTBEofsDuC47zppCY0MYRodiA
-         YvsXNNIeouV/r40ZiepQqJBD4BmLQcU5+Y0BdX7K4sSDKw42PK9jnhazMMwLD5VPfU+a
-         G/M2JCIRe8qOJPaS/ZTE1f846jOZtFTfCL2vluSHd6h3FXo0MRIRZ3xmFVrVtW8nZUYU
-         wLybOiK8LYnyws/vtXmrw2DZWBR5FU0nSaVEYgY4kEVLl/0J95UKVG1yeXHD6QfVuKG7
-         TlE1ZRq94lbMkgODJoL2JTwJs1kKQTazqZR1uCgSYxFQ1UH4b947ESYfIzchQuh8aQ4I
-         x8Tg==
-X-Gm-Message-State: AJIora8/iBzdniU2UnYraOMSTi3BT+qInrmFfTPnhGM+DjerAKV+XXOr
-        EFELTzdTLCe3F8A16Ep7/rJS2CFlDrs=
-X-Google-Smtp-Source: AGRyM1tGmwALELYyesbJ/8S4e5EjJt8hWJvyI11otWJpcvJicDjJqxG5VdpGLTmlwEJxaFkxad/UAw==
-X-Received: by 2002:a05:651c:1202:b0:25a:6096:bd7e with SMTP id i2-20020a05651c120200b0025a6096bd7emr1737854lja.304.1656157341774;
-        Sat, 25 Jun 2022 04:42:21 -0700 (PDT)
-Received: from [192.168.2.145] ([109.252.118.164])
-        by smtp.googlemail.com with ESMTPSA id p7-20020a2eb987000000b00255526478f1sm626574ljp.88.2022.06.25.04.42.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jun 2022 04:42:21 -0700 (PDT)
-Message-ID: <565ff879-11e4-1ae4-08d8-1237a875ef12@gmail.com>
-Date:   Sat, 25 Jun 2022 14:42:15 +0300
+        with ESMTP id S229487AbiFYQfi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Jun 2022 12:35:38 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0E614032;
+        Sat, 25 Jun 2022 09:35:35 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:35330)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o58kr-008kAJ-Nv; Sat, 25 Jun 2022 10:35:29 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57546 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o58kq-009tMf-I3; Sat, 25 Jun 2022 10:35:29 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <20220505182645.497868-12-ebiederm@xmission.com>
+        <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        <877d5ajesi.fsf@email.froward.int.ebiederm.org>
+        <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+Date:   Sat, 25 Jun 2022 11:34:46 -0500
+In-Reply-To: <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        (Alexander Gordeev's message of "Tue, 21 Jun 2022 17:15:47 +0200")
+Message-ID: <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5/5] OPP: Remove custom OPP helper support
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>, Keerthy <j-keerthy@ti.com>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <cover.1653991004.git.viresh.kumar@linaro.org>
- <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1o58kq-009tMf-I3;;;mid=<87y1xk8zx5.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/ePAFA6q9C005iTa3Ih+Tk89HZHCvrB+c=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Alexander Gordeev <agordeev@linux.ibm.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 604 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 12 (2.0%), b_tie_ro: 11 (1.7%), parse: 1.24
+        (0.2%), extract_message_metadata: 15 (2.5%), get_uri_detail_list: 3.3
+        (0.6%), tests_pri_-1000: 12 (2.0%), tests_pri_-950: 1.43 (0.2%),
+        tests_pri_-900: 1.14 (0.2%), tests_pri_-90: 78 (12.9%), check_bayes:
+        76 (12.6%), b_tokenize: 16 (2.6%), b_tok_get_all: 15 (2.5%),
+        b_comp_prob: 4.7 (0.8%), b_tok_touch_all: 36 (5.9%), b_finish: 1.23
+        (0.2%), tests_pri_0: 462 (76.4%), check_dkim_signature: 1.17 (0.2%),
+        check_dkim_adsp: 3.6 (0.6%), poll_dns_idle: 0.64 (0.1%), tests_pri_10:
+        2.3 (0.4%), tests_pri_500: 15 (2.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-31.05.2022 13:10, Viresh Kumar пишет:
-> The only user of the custom helper is migrated to use
-> config_regulators() interface. Remove the now unused custom OPP helper
-> support.
-> 
-> This cleans up _set_opp() and leaves a single code path to be used by
-> all users.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/opp/core.c     | 126 +----------------------------------------
->  drivers/opp/opp.h      |   7 ---
->  include/linux/pm_opp.h |  35 ------------
->  3 files changed, 2 insertions(+), 166 deletions(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 58ce1240e808..554a043bc225 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -972,36 +972,6 @@ static int _set_opp_bw(const struct opp_table *opp_table,
->  	return 0;
->  }
->  
-> -static int _set_opp_custom(const struct opp_table *opp_table,
-> -			   struct device *dev, struct dev_pm_opp *opp,
-> -			   unsigned long freq)
-> -{
-> -	struct dev_pm_set_opp_data *data = opp_table->set_opp_data;
-> -	struct dev_pm_opp *old_opp = opp_table->current_opp;
-> -	int size;
-> -
-> -	/*
-> -	 * We support this only if dev_pm_opp_set_config() was called
-> -	 * earlier to set regulators.
-> -	 */
-> -	if (opp_table->sod_supplies) {
-> -		size = sizeof(*old_opp->supplies) * opp_table->regulator_count;
-> -		memcpy(data->old_opp.supplies, old_opp->supplies, size);
-> -		memcpy(data->new_opp.supplies, opp->supplies, size);
-> -		data->regulator_count = opp_table->regulator_count;
-> -	} else {
-> -		data->regulator_count = 0;
-> -	}
-> -
-> -	data->regulators = opp_table->regulators;
-> -	data->clk = opp_table->clk;
-> -	data->dev = dev;
-> -	data->old_opp.rate = old_opp->rate;
-> -	data->new_opp.rate = freq;
-> -
-> -	return opp_table->set_opp(data);
-> -}
-> -
->  static int _set_required_opp(struct device *dev, struct device *pd_dev,
->  			     struct dev_pm_opp *opp, int i)
->  {
-> @@ -1186,13 +1156,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
->  		}
->  	}
->  
-> -	if (opp_table->set_opp) {
-> -		ret = _set_opp_custom(opp_table, dev, opp, freq);
-> -	} else {
-> -		/* Only frequency scaling */
-> -		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
-> -	}
-> -
-> +	ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
->  	if (ret)
->  		return ret;
->  
-> @@ -2054,7 +2018,6 @@ static void _opp_put_prop_name(struct opp_table *opp_table)
->  static int _opp_set_regulators(struct opp_table *opp_table, struct device *dev,
->  			       const char * const names[], unsigned int count)
->  {
-> -	struct dev_pm_opp_supply *supplies;
->  	struct regulator *reg;
->  	int ret, i;
->  
-> @@ -2082,20 +2045,8 @@ static int _opp_set_regulators(struct opp_table *opp_table, struct device *dev,
->  
->  	opp_table->regulator_count = count;
->  
-> -	supplies = kmalloc_array(count * 2, sizeof(*supplies), GFP_KERNEL);
-> -	if (!supplies) {
-> -		ret = -ENOMEM;
-> -		goto free_regulators;
-> -	}
-> -
-> -	mutex_lock(&opp_table->lock);
-> -	opp_table->sod_supplies = supplies;
-> -	if (opp_table->set_opp_data) {
-> -		opp_table->set_opp_data->old_opp.supplies = supplies;
-> -		opp_table->set_opp_data->new_opp.supplies = supplies + count;
-> -	}
-> -
->  	/* Set generic config_regulators() for single regulators here */
-> +	mutex_lock(&opp_table->lock);
->  	if (count == 1)
->  		opp_table->config_regulators = _opp_config_regulator_single;
->  	mutex_unlock(&opp_table->lock);
-> @@ -2132,16 +2083,6 @@ static void _opp_put_regulators(struct opp_table *opp_table)
->  	for (i = opp_table->regulator_count - 1; i >= 0; i--)
->  		regulator_put(opp_table->regulators[i]);
->  
-> -	mutex_lock(&opp_table->lock);
-> -	if (opp_table->set_opp_data) {
-> -		opp_table->set_opp_data->old_opp.supplies = NULL;
-> -		opp_table->set_opp_data->new_opp.supplies = NULL;
-> -	}
-> -
-> -	kfree(opp_table->sod_supplies);
-> -	opp_table->sod_supplies = NULL;
-> -	mutex_unlock(&opp_table->lock);
-> -
->  	kfree(opp_table->regulators);
->  	opp_table->regulators = NULL;
->  	opp_table->regulator_count = -1;
-> @@ -2195,61 +2136,6 @@ static void _opp_put_clkname(struct opp_table *opp_table)
->  	}
->  }
->  
-> -/**
-> - * _opp_register_set_opp_helper() - Register custom set OPP helper
-> - * @dev: Device for which the helper is getting registered.
-> - * @set_opp: Custom set OPP helper.
-> - *
-> - * This is useful to support complex platforms (like platforms with multiple
-> - * regulators per device), instead of the generic OPP set rate helper.
-> - *
-> - * This must be called before any OPPs are initialized for the device.
-> - */
-> -static int _opp_register_set_opp_helper(struct opp_table *opp_table,
-> -	struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data))
-> -{
-> -	struct dev_pm_set_opp_data *data;
-> -
-> -	/* Another CPU that shares the OPP table has set the helper ? */
-> -	if (opp_table->set_opp)
-> -		return 0;
-> -
-> -	data = kzalloc(sizeof(*data), GFP_KERNEL);
-> -	if (!data)
-> -		return -ENOMEM;
-> -
-> -	mutex_lock(&opp_table->lock);
-> -	opp_table->set_opp_data = data;
-> -	if (opp_table->sod_supplies) {
-> -		data->old_opp.supplies = opp_table->sod_supplies;
-> -		data->new_opp.supplies = opp_table->sod_supplies +
-> -					 opp_table->regulator_count;
-> -	}
-> -	mutex_unlock(&opp_table->lock);
-> -
-> -	opp_table->set_opp = set_opp;
-> -
-> -	return 0;
-> -}
-> -
-> -/**
-> - * _opp_unregister_set_opp_helper() - Releases resources blocked for set_opp helper
-> - * @opp_table: OPP table returned from _opp_register_set_opp_helper().
-> - *
-> - * Release resources blocked for platform specific set_opp helper.
-> - */
-> -static void _opp_unregister_set_opp_helper(struct opp_table *opp_table)
-> -{
-> -	if (opp_table->set_opp) {
-> -		opp_table->set_opp = NULL;
-> -
-> -		mutex_lock(&opp_table->lock);
-> -		kfree(opp_table->set_opp_data);
-> -		opp_table->set_opp_data = NULL;
-> -		mutex_unlock(&opp_table->lock);
-> -	}
-> -}
-> -
->  /**
->   * _opp_set_config_regulators_helper() - Register custom set regulator helper.
->   * @dev: Device for which the helper is getting registered.
-> @@ -2447,13 +2333,6 @@ struct opp_table *dev_pm_opp_set_config(struct device *dev,
->  			goto err;
->  	}
->  
-> -	/* Configure opp helper */
-> -	if (config->set_opp) {
-> -		ret = _opp_register_set_opp_helper(opp_table, dev, config->set_opp);
-> -		if (ret)
-> -			goto err;
-> -	}
-> -
->  	/* Configure config_regulators helper */
->  	if (config->config_regulators) {
->  		ret = _opp_set_config_regulators_helper(opp_table, dev, config->config_regulators);
-> @@ -2516,7 +2395,6 @@ void dev_pm_opp_clear_config(struct opp_table *opp_table)
->  	_opp_put_regulators(opp_table);
->  	_opp_put_supported_hw(opp_table);
->  	_opp_put_config_regulators_helper(opp_table);
-> -	_opp_unregister_set_opp_helper(opp_table);
->  	_opp_put_prop_name(opp_table);
->  	_opp_put_clkname(opp_table);
->  
-> diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-> index 4695d315e7f9..407eee9f10ab 100644
-> --- a/drivers/opp/opp.h
-> +++ b/drivers/opp/opp.h
-> @@ -161,9 +161,6 @@ enum opp_table_access {
->   * @enabled: Set to true if the device's resources are enabled/configured.
->   * @genpd_performance_state: Device's power domain support performance state.
->   * @is_genpd: Marks if the OPP table belongs to a genpd.
-> - * @set_opp: Platform specific set_opp callback
-> - * @sod_supplies: Set opp data supplies
-> - * @set_opp_data: Data to be passed to set_opp callback
->   * @dentry:	debugfs dentry pointer of the real device directory (not links).
->   * @dentry_name: Name of the real dentry.
->   *
-> @@ -213,10 +210,6 @@ struct opp_table {
->  	bool genpd_performance_state;
->  	bool is_genpd;
->  
-> -	int (*set_opp)(struct dev_pm_set_opp_data *data);
-> -	struct dev_pm_opp_supply *sod_supplies;
-> -	struct dev_pm_set_opp_data *set_opp_data;
-> -
->  #ifdef CONFIG_DEBUG_FS
->  	struct dentry *dentry;
->  	char dentry_name[NAME_MAX];
-> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-> index 185503aab64d..c6d8f01ef9fd 100644
-> --- a/include/linux/pm_opp.h
-> +++ b/include/linux/pm_opp.h
-> @@ -57,39 +57,6 @@ struct dev_pm_opp_icc_bw {
->  	u32 peak;
->  };
->  
-> -/**
-> - * struct dev_pm_opp_info - OPP freq/voltage/current values
-> - * @rate:	Target clk rate in hz
-> - * @supplies:	Array of voltage/current values for all power supplies
-> - *
-> - * This structure stores the freq/voltage/current values for a single OPP.
-> - */
-> -struct dev_pm_opp_info {
-> -	unsigned long rate;
-> -	struct dev_pm_opp_supply *supplies;
-> -};
-> -
-> -/**
-> - * struct dev_pm_set_opp_data - Set OPP data
-> - * @old_opp:	Old OPP info
-> - * @new_opp:	New OPP info
-> - * @regulators:	Array of regulator pointers
-> - * @regulator_count: Number of regulators
-> - * @clk:	Pointer to clk
-> - * @dev:	Pointer to the struct device
-> - *
-> - * This structure contains all information required for setting an OPP.
-> - */
-> -struct dev_pm_set_opp_data {
-> -	struct dev_pm_opp_info old_opp;
-> -	struct dev_pm_opp_info new_opp;
-> -
-> -	struct regulator **regulators;
-> -	unsigned int regulator_count;
-> -	struct clk *clk;
-> -	struct device *dev;
-> -};
-> -
->  typedef int (*config_regulators_t)(struct device *dev, struct dev_pm_opp *old_opp,
->  				   struct dev_pm_opp *new_opp, struct regulator **regulators,
->  				   unsigned int count);
-> @@ -97,7 +64,6 @@ typedef int (*config_regulators_t)(struct device *dev, struct dev_pm_opp *old_op
->   * struct dev_pm_opp_config - Device OPP configuration values
->   * @clk_name: Clk name.
->   * @prop_name: Name to postfix to properties.
-> - * @set_opp: Custom set OPP helper.
->   * @config_regulators: Custom set regulator helper.
->   * @supported_hw: Array of hierarchy of versions to match.
->   * @supported_hw_count: Number of elements in the array.
-> @@ -111,7 +77,6 @@ typedef int (*config_regulators_t)(struct device *dev, struct dev_pm_opp *old_op
->  struct dev_pm_opp_config {
->  	const char *clk_name;
->  	const char *prop_name;
-> -	int (*set_opp)(struct dev_pm_set_opp_data *data);
->  	config_regulators_t config_regulators;
->  	unsigned int *supported_hw;
->  	unsigned int supported_hw_count;
+Alexander Gordeev <agordeev@linux.ibm.com> writes:
 
-Hello Viresh,
+> On Tue, Jun 21, 2022 at 09:02:05AM -0500, Eric W. Biederman wrote:
+>> Alexander Gordeev <agordeev@linux.ibm.com> writes:
+>> 
+>> > On Thu, May 05, 2022 at 01:26:45PM -0500, Eric W. Biederman wrote:
+>> >> From: Peter Zijlstra <peterz@infradead.org>
+>> >> 
+>> >> Currently ptrace_stop() / do_signal_stop() rely on the special states
+>> >> TASK_TRACED and TASK_STOPPED resp. to keep unique state. That is, this
+>> >> state exists only in task->__state and nowhere else.
+>> >> 
+>> >> There's two spots of bother with this:
+>> >> 
+>> >>  - PREEMPT_RT has task->saved_state which complicates matters,
+>> >>    meaning task_is_{traced,stopped}() needs to check an additional
+>> >>    variable.
+>> >> 
+>> >>  - An alternative freezer implementation that itself relies on a
+>> >>    special TASK state would loose TASK_TRACED/TASK_STOPPED and will
+>> >>    result in misbehaviour.
+>> >> 
+>> >> As such, add additional state to task->jobctl to track this state
+>> >> outside of task->__state.
+>> >> 
+>> >> NOTE: this doesn't actually fix anything yet, just adds extra state.
+>> >> 
+>> >> --EWB
+>> >>   * didn't add a unnecessary newline in signal.h
+>> >>   * Update t->jobctl in signal_wake_up and ptrace_signal_wake_up
+>> >>     instead of in signal_wake_up_state.  This prevents the clearing
+>> >>     of TASK_STOPPED and TASK_TRACED from getting lost.
+>> >>   * Added warnings if JOBCTL_STOPPED or JOBCTL_TRACED are not cleared
+>> >
+>> > Hi Eric, Peter,
+>> >
+>> > On s390 this patch triggers warning at kernel/ptrace.c:272 when
+>> > kill_child testcase from strace tool is repeatedly used (the source
+>> > is attached for reference):
+>> >
+>> > while :; do
+>> > 	strace -f -qq -e signal=none -e trace=sched_yield,/kill ./kill_child
+>> > done
+>> >
+>> > It normally takes few minutes to cause the warning in -rc3, but FWIW
+>> > it hits almost immediately for ptrace_stop-cleanup-for-v5.19 tag of
+>> > git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.
+>> >
+>> > Commit 7b0fe1367ef2 ("ptrace: Document that wait_task_inactive can't
+>> > fail") suggests this WARN_ON_ONCE() is not really expected, yet we
+>> > observe a child in __TASK_TRACED state. Could you please comment here?
+>> >
+>> 
+>> For clarity the warning is that the child is not in __TASK_TRACED state.
+>> 
+>> The code is waiting for the code to stop in the scheduler in the
+>> __TASK_TRACED state so that it can safely read and change the
+>> processes state.  Some of that state is not even saved until the
+>> process is scheduled out so we have to wait until the process
+>> is stopped in the scheduler.
+>
+> So I assume (checked actually) the return 0 below from kernel/sched/core.c:
+> wait_task_inactive() is where it bails out:
+>
+> 3303                 while (task_running(rq, p)) {
+> 3304                         if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
+> 3305                                 return 0;
+> 3306                         cpu_relax();
+> 3307                 }
+>
+> Yet, the child task is always found in __TASK_TRACED state (as seen
+> in crash dumps):
+>
+>> 101447  11342  13      ce3a8100      RU   0.0   10040   4412  strace
+>   101450  101447   0      bb04b200      TR   0.0    2272   1136  kill_child
+>   108261  101447   2      d0b10100      TR   0.0    2272    532  kill_child
+> crash> task bb04b200 __state
+> PID: 101450  TASK: bb04b200          CPU: 0   COMMAND: "kill_child"
+>   __state = 8,
+>
+> crash> task d0b10100 __state
+> PID: 108261  TASK: d0b10100          CPU: 2   COMMAND: "kill_child"
+>   __state = 8,
+>
 
-Unfortunately we can't remove the set_opp_helper(). It's terrible that
-this function is unused by Tegra 3d driver because it should be used.
+I haven't gotten as far as reproducing this but I have started giving
+this issue some thought.
 
-The patch that supposed to use the devm_pm_opp_register_set_opp_helper()
-[1] was merged a half year ago and just today I noticed that the merged
-code doesn't have devm_pm_opp_register_set_opp_helper() [2]. I think
-Thierry edited my patch before applying it, perhaps there was a merge
-conflict :/ This needs to be fixed now.
+This entire thing smells like a memory barrier is missing somewhere.
+However by definition the lock implementations in linux provide all the
+needed memory barriers, and in the ptrace_stop and ptrace_check_attach
+path I don't see cases where these values are sampled outside of a lock
+except in wait_task_inactive.  Does doing that perhaps require a
+barrier? 
 
-[1] https://lore.kernel.org/all/20210817012754.8710-16-digetx@gmail.com/
+The two things I can think of that could shed light on what is going on
+is enabling lockdep, to enable the debug check in signal_wake_up_state
+and verifying bits of state that should be constant while the task
+is frozen for ptrace are indeed constant when task is frozen for ptrace.
+Something like my patch below.
 
-[2]
-https://elixir.bootlin.com/linux/v5.19-rc3/source/drivers/gpu/drm/tegra/gr3d.c#L535
+If you could test that when you have a chance that would help narrow
+down what is going on.
+
+Thank you,
+Eric
+
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index 156a99283b11..6467a2b1c3bc 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -268,9 +268,13 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+ 	}
+ 	read_unlock(&tasklist_lock);
+ 
+-	if (!ret && !ignore_state &&
+-	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
++	if (!ret && !ignore_state) {
++		WARN_ON_ONCE(!(child->jobctl & JOBCTL_PTRACE_FROZEN));
++		WARN_ON_ONCE(!(child->joctctl & JOBCTL_TRACED));
++		WARN_ON_ONCE(READ_ONCE(child->__state) != __TASK_TRACED);
++		WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED));
+ 		ret = -ESRCH;
++	}
+ 
+ 	return ret;
+ }
