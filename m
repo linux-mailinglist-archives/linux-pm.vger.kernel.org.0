@@ -2,109 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B7E55D258
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E2C55CF93
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbiF0GGk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 02:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S232306AbiF0GKk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 02:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiF0GGk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 02:06:40 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC1C2ADC
-        for <linux-pm@vger.kernel.org>; Sun, 26 Jun 2022 23:06:39 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id x138so5337670pfc.3
-        for <linux-pm@vger.kernel.org>; Sun, 26 Jun 2022 23:06:39 -0700 (PDT)
+        with ESMTP id S232301AbiF0GKj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 02:10:39 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE2B2AC7
+        for <linux-pm@vger.kernel.org>; Sun, 26 Jun 2022 23:10:38 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31772f8495fso75198007b3.4
+        for <linux-pm@vger.kernel.org>; Sun, 26 Jun 2022 23:10:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=nOzyogr+Rqxif6Bc3eoSLTASJasFD2T5gl1RDId9+P0=;
-        b=n87I5HDSx7WDUkeuMKtzvPIOHGFxQ0Mkr3RWVP1PDENEhMk3OHfq6qh1E5fR99Z8xS
-         2cxK8Lu8tgYAfmFpdtRWBWP/iroFnnRPo6IRF4yLGNX+TJGdxwlSMkK9yODjDylD8SgL
-         evPGPmUKchB/BpPY6zlSqSpLgVAoBrFflKV1hoV1Exu1Ss7R5fZnm1TI3n925TUwnkR3
-         AS2c5migT+pksEAHzFdonWe6blFAQ4ZD9oq8uxCJn8km2kv/i0Ks3nAVKKfTunIQ/457
-         sKQryKqRDS5UclUpWdmBpzYer+wRk96ewpJSOjeAysBX/FfZjHu8ucoFsL1NMntdOz45
-         0XwA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nQ2Dxw++HMgq5p0HrLnSeRJ1jL6rntZ5qxteXg2OOsA=;
+        b=dEXd5WiksWqmXl/lRgw6xnYEf+8PEjb/4WQELkZ+8x4O0EOqM46NGu2wOyxUcoZwTp
+         kMy9svj4bMOzy+k82MOkAdS711RlUQsOICMVXAywlxGejFp9bZYowCrPo985KccGLuaZ
+         uzhth84DcNFUmZGfM4mHR1dE7Ny7hrRMfCHfxNkovDgdMN450oACHRqmAUZcHrPv5k/k
+         h0b2jOTDJDDolz+lw76m41iPBWQMLbOoYhN0vIa3/59h3GfM0TJUU4dOYdAsFzC3uLTr
+         SzAftX4tc8mWiroIozGlCGJGN+/GuDr47DggWDzrc77JcAW0Bz/fuWZJs9vIUbvAgV7l
+         bT/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nOzyogr+Rqxif6Bc3eoSLTASJasFD2T5gl1RDId9+P0=;
-        b=LN1kyMQBLICzHM5mPhieKn45v8gqWFZjGkFWlg+XObvkEsvjQgc3qEYv4Dx7vMD17e
-         i/J7jXryh4MWqNi9Hx70o0+h97oM1s5Cn6rBMzBEJns0NmpE1RWfoggKaeSl4NDCFIQZ
-         VJ0JaO8vujb73dMmjZ16vILEBjIqKRBhZ7HdVduveNO8fd40N7Ff6qGovY0/sZs532gW
-         YcGmEhiG3+yzeRp7xKbw3ez/aVllPNCiSvkgaWDrQm2nIc3fPA3mu04id/SBFhd5qnti
-         3UDoicDWNzz2B2IVHiXE9nu45K7xw32aT5EA8DipYjdfOBdxqkiOaQsXMHgo9Ht1k54f
-         OB+g==
-X-Gm-Message-State: AJIora8oz1dvMQ8ynfRjOEFo9G7R4tf79O02v901PFm/jhqSfqXOML8Y
-        Udz278nkam4iL9U6JUkJCuj65Q==
-X-Google-Smtp-Source: AGRyM1t8ECCXrJ0AGUUb9nKFNb9DNU8fTTgGyeurBJQU4fUL2u0Id05i62BkWPYyRDnqIR2gdyhxbQ==
-X-Received: by 2002:a63:6946:0:b0:40d:e26:f2e0 with SMTP id e67-20020a636946000000b0040d0e26f2e0mr11768466pgc.118.1656309998670;
-        Sun, 26 Jun 2022 23:06:38 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id l15-20020a63da4f000000b0040d0a57be02sm6068704pgj.31.2022.06.26.23.06.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 23:06:38 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 11:36:36 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Keerthy <j-keerthy@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5/5] OPP: Remove custom OPP helper support
-Message-ID: <20220627060636.rfpok75zydgcwwo6@vireshk-i7>
-References: <cover.1653991004.git.viresh.kumar@linaro.org>
- <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
- <565ff879-11e4-1ae4-08d8-1237a875ef12@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nQ2Dxw++HMgq5p0HrLnSeRJ1jL6rntZ5qxteXg2OOsA=;
+        b=4sQH942qOdHNPeA1fidaYQ9fZ2SsD694Nfir5ezXbPv6A3jfsH3YLjaOMpcwtEHK9+
+         rbgEG+utkMcd0snwBE48RveQXRoqqhbzfYOomryDL9jUyQmdHRt7rKTFPVPhZCixnsWi
+         LHTbhMJ7r9Atm7cNg1YFiEh45tA/i3MfFf35afhSZQDTnmSFSmkJnair3mGsDxZGXt2Q
+         2wkNDm0uy+o9NBKKFgqWpsJrsGLrQ+xkAdFMY+0Ie1nGHNsau4ktknYy32QVAWYySfG8
+         ofqtRItwDB8pBwNyejHsv1XCY2WOgbRUmKN5YtG/TZMvLg3FMUzEQJFbNOZlblmb/t13
+         Gi0A==
+X-Gm-Message-State: AJIora8yTObJWOOTdcn7rmqne4Qe9ZMSannq2td8aYKC1jPkajpVOr03
+        pvGLaPW41PW8s1v/iIWHvxs07kaz8DzLy+rVGH8cug==
+X-Google-Smtp-Source: AGRyM1tK81CS6l2XKH4wTftCJ5Z++dgb3CkETrOs5O/x2IoZczs8oVAR3bA8IsRKR8b1H5ReTXenoM9z/ZWinIx+Vf8=
+X-Received: by 2002:a0d:ca16:0:b0:31b:7adf:d91 with SMTP id
+ m22-20020a0dca16000000b0031b7adf0d91mr11086107ywd.455.1656310237874; Sun, 26
+ Jun 2022 23:10:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <565ff879-11e4-1ae4-08d8-1237a875ef12@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAGETcx8z4dn1j05Za6nfDeC3v4r1yo30Nqu=1K2BEsvLcqqybQ@mail.gmail.com>
+ <CACRpkdaXJh_Qc-DuD7SFsZPM9GBMUgnoufcFKsy3BPUYFHMHWQ@mail.gmail.com>
+ <CAGETcx-io_5tVbRBfuB-qOwm4tV0A5FR82Q21Z1dJcLbAOkd=A@mail.gmail.com> <CACRpkdb1-F1CP0AAbS5FHoDRFdX-bS2m0NOfQm9nVcery+cW4Q@mail.gmail.com>
+In-Reply-To: <CACRpkdb1-F1CP0AAbS5FHoDRFdX-bS2m0NOfQm9nVcery+cW4Q@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Sun, 26 Jun 2022 23:10:01 -0700
+Message-ID: <CAGETcx85JYX2ktGvEWTUn60-BQ40-5w0SwKjHtSePDAt=DA7kw@mail.gmail.com>
+Subject: Re: Default async probing for DT based systems
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+On Sat, Jun 25, 2022 at 11:09 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Fri, Jun 17, 2022 at 8:01 PM Saravana Kannan <saravanak@google.com> wrote:
+> > On Fri, Jun 17, 2022 at 1:21 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > > On Thu, Jun 16, 2022 at 5:25 AM Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > > Since fw_devlink=on is the default behavior and fw_devlink understands
+> > > > approximately 24 DT bindings,
+> > >
+> > > How can I see which these are, in the kernel tree?
+> >
+> > device/of/property.c has an array of these binding handling functions
+> > in of_supplier_bindings[].
+> >
+> > Most of the functions there are created using DEFINE_SIMPLE_PROP() or
+> > DEFINE_SUFFIX_PROP() that's also in the same file.
+>
+> Thanks!
+>
+> We already have some device links in pin control, it's an opt-in for
+> drivers, used e.g in drivers/pinctrl/stm32/pinctrl-stm32.c
+> where you see
+> pctl->pctl_desc.link_consumers = true;
+> how does that
+> play with this? Double device links at different levels?
 
-On 25-06-22, 14:42, Dmitry Osipenko wrote:
-> 31.05.2022 13:10, Viresh Kumar пишет:
-> > The only user of the custom helper is migrated to use
-> > config_regulators() interface. Remove the now unused custom OPP helper
-> > support.
-> > 
-> > This cleans up _set_opp() and leaves a single code path to be used by
-> > all users.
+Depends on what device you use for the supplier.
 
-> Unfortunately we can't remove the set_opp_helper(). It's terrible that
-> this function is unused by Tegra 3d driver because it should be used.
-> 
-> The patch that supposed to use the devm_pm_opp_register_set_opp_helper()
-> [1] was merged a half year ago and just today I noticed that the merged
-> code doesn't have devm_pm_opp_register_set_opp_helper() [2]. I think
-> Thierry edited my patch before applying it, perhaps there was a merge
-> conflict :/ This needs to be fixed now.
+If it's the true device that probes and registers with the pinctrl
+framework, then there won't be any double device links. It'll actually
+be helpful because fw_devlink uses these attempts initiated by the
+driver to confirm the dependencies it inferred from DT -- so when it
+infers a cycle, it'll keep the links that drivers have attempted and
+"ignore" the rest of the links in the cycle when it comes to probe
+ordering.
 
-As the commit log above says, we aren't removing the feature, but just
-changing the interface to cnofig_regulators(). That was the only
-special handling the drivers were required to do earlier as well, for
-which the helper interface was added.
+If you use the devices the pinctrl framework creates on the gpio-bus
+as the supplier for the device link, then yes, it'll be additional
+device links. I'm not sure how useful they are on top of the ones
+fw_devlink creates with the true device. If you don't need to do any
+special suspend sequence for each of the individual gpio-devices, then
+I'd recommend just creating one with the true device as the supplier.
 
--- 
-viresh
+-Saravana
+
+>
+> I had a patch to just enforce device links on all pinctrl resources,
+> but it seemed over the top:
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/commit/?h=consumer-link-enforce&id=73441cf773ed91bff0e7f66614d391b2514188bf
+>
+> Yours,
+> Linus Walleij
