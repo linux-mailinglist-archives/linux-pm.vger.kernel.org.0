@@ -2,237 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1A055DBC6
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABC255D0A4
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbiF0JtP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 05:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S237009AbiF0LnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 07:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiF0JtO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 05:49:14 -0400
-Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f236:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17A42735;
-        Mon, 27 Jun 2022 02:49:11 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by mailout3.hostsharing.net (Postfix) with ESMTPS id BB4E3101E1D9F;
-        Mon, 27 Jun 2022 11:49:09 +0200 (CEST)
-Received: from localhost (unknown [89.246.108.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 7985461B8672;
-        Mon, 27 Jun 2022 11:49:09 +0200 (CEST)
-X-Mailbox-Line: From c5595bdb20625382538816c2e6d917d95c62e09b Mon Sep 17 00:00:00 2001
-Message-Id: <c5595bdb20625382538816c2e6d917d95c62e09b.1656322883.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Mon, 27 Jun 2022 11:49:08 +0200
-Subject: [PATCH net v3] net: phy: Don't trigger state machine while in suspend
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     netdev@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S237464AbiF0Lmx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 07:42:53 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7B1B30
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 04:38:18 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id i25so7118473wrc.13
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 04:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6pvGGZaD1oTvFXpN6ftachY08Cd5AqxujCjHUCfc6vc=;
+        b=nNWDY3PjoyUAfo3JFCEPweVZN45kAO4FJmCz++XnV2gMusNLaZwqyHicnSW6ovjL7j
+         JC59MWCAvvw9199bn821CUtYgbJ1VDgQJ2pSXAvMOX97nyamB0+tanaWXJcBWf+AQuFu
+         RIwu/kxplbXL3l5O1dbb8FyCnKzKRNlmUa9XoMoI5Ho1H0eEKP2Xh1W85vOZunEP6qYQ
+         ZaPsVHFIYawk82olsBV+7ZpWKlD9/Ea9eAbtWrWQq6CJ4c65fua5GjkMdVnaqdeiceF3
+         qQqyse60dXLDqPW6aGAUklQTWKrD+WJ6+leF6rblpPBla3JPtXVHRZWEqZRW6hUefmcj
+         mwbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6pvGGZaD1oTvFXpN6ftachY08Cd5AqxujCjHUCfc6vc=;
+        b=ndUeSb0ca30AFGOtA1AgsIfqP3kKzA+uHEvgqfEjkEOitUR6+VPz6QIzoAAXknDhzG
+         YEir3MJd6baOSgcMN2TsW9AybroxF6n6SANMgD0EJtYjzaLxoAb4KoRIErSTJTbbIihq
+         vCwc+M4xlKtGiW54Y4vZN2Ms7M95W/I6b4mxX+d6vM1VuFX56Y/ZAFZTQWW3mDcDZ2pC
+         4nyuazzWFOL5sOqrKhrxVFZq+ALWI3U+SXzNFmcFmZQ2W87ZLV2ow63uiR/ioFcrMmgM
+         FZn54l5uqoWaHz8WFhXllmVgQiVrdZC496PgKadc7igbp42lhRQHCqf3ELPB2Gn8fu/w
+         JHoQ==
+X-Gm-Message-State: AJIora8F3ExHdRsy3cxk75YUDFBlIrpdCMbSbdMH/1QfH/TpmRPjO6Sp
+        IJ1s81GPUzt13W9QtfYSYRM82Q==
+X-Google-Smtp-Source: AGRyM1uXQLS8Q4aWycz3GihHCBPtSuHKP6mCc1QtRIrYhgNavIXv6w56zaZYob+9hvQxA8Jfw5/bXw==
+X-Received: by 2002:adf:fb84:0:b0:21a:10f2:1661 with SMTP id a4-20020adffb84000000b0021a10f21661mr12146464wrr.2.1656329896780;
+        Mon, 27 Jun 2022 04:38:16 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id o19-20020a1c7513000000b0039c18d3fe27sm12450076wmc.19.2022.06.27.04.38.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 04:38:16 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 12:38:14 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [GIT PULL] Immutable branch between MFD and ACPI due for the v5.20
+ merge window
+Message-ID: <YrmWpn03cys9WUK3@google.com>
+References: <1843211.tdWV9SEqCh@kreacher>
+ <2653857.mvXUDI8C0e@kreacher>
+ <2726954.BEx9A2HvPv@kreacher>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2726954.BEx9A2HvPv@kreacher>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Upon system sleep, mdio_bus_phy_suspend() stops the phy_state_machine(),
-but subsequent interrupts may retrigger it:
+Rafael,
 
-They may have been left enabled to facilitate wakeup and are not
-quiesced until the ->suspend_noirq() phase.  Unwanted interrupts may
-hence occur between mdio_bus_phy_suspend() and dpm_suspend_noirq(),
-as well as between dpm_resume_noirq() and mdio_bus_phy_resume().
+As requested.
 
-Retriggering the phy_state_machine() through an interrupt is not only
-undesirable for the reason given in mdio_bus_phy_suspend() (freezing it
-midway with phydev->lock held), but also because the PHY may be
-inaccessible after it's suspended:  Accesses to USB-attached PHYs are
-blocked once usb_suspend_both() clears the can_submit flag and PHYs on
-PCI network cards may become inaccessible upon suspend as well.
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-Amend phy_interrupt() to avoid triggering the state machine if the PHY
-is suspended.  Signal wakeup instead if the attached net_device or its
-parent has been configured as a wakeup source.  (Those conditions are
-identical to mdio_bus_phy_may_suspend().)  Postpone handling of the
-interrupt until the PHY has resumed.
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-Before stopping the phy_state_machine() in mdio_bus_phy_suspend(),
-wait for a concurrent phy_interrupt() to run to completion.  That is
-necessary because phy_interrupt() may have checked the PHY's suspend
-status before the system sleep transition commenced and it may thus
-retrigger the state machine after it was stopped.
+are available in the Git repository at:
 
-Likewise, after re-enabling interrupt handling in mdio_bus_phy_resume(),
-wait for a concurrent phy_interrupt() to complete to ensure that
-interrupts which it postponed are properly rerun.
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-acpi-for-rafael-v5.20
 
-The issue was exposed by commit 3873b20fd278 ("usbnet: smsc95xx: Forward
-PHY interrupts to PHY driver to avoid polling"), but has existed since
-forever.  Hence the stable designation.
+for you to fetch changes up to 0c9b9c2ac0df57b6b5949a51c45043b345698428:
 
-Link: https://lore.kernel.org/netdev/a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com/
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: stable@vger.kernel.org
----
- Resending as requested by Jakub.  No code changes since v1.
- 
- Changes v1 -> v2:
- * Extend rationale in commit message.
- * Drop Fixes tag, add Tested-by tag (Marek).
- 
- Changes v2 -> v3:
- * Add stable designation.
- * Add Acked-by tag (Rafael).
- 
- Link to v1:
- https://lore.kernel.org/netdev/688f559346ea747d3b47a4d16ef8277e093f9ebe.1653556322.git.lukas@wunner.de/
- 
- Link to v2:
- https://lore.kernel.org/netdev/cover.1654680790.git.lukas@wunner.de/
- 
- drivers/net/phy/phy.c        | 23 +++++++++++++++++++++++
- drivers/net/phy/phy_device.c | 23 +++++++++++++++++++++++
- include/linux/phy.h          |  6 ++++++
- 3 files changed, 52 insertions(+)
+  mfd: core: Use acpi_dev_for_each_child() (2022-06-27 12:22:06 +0100)
 
-diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-index ef62f357b76d..8d3ee3a6495b 100644
---- a/drivers/net/phy/phy.c
-+++ b/drivers/net/phy/phy.c
-@@ -31,6 +31,7 @@
- #include <linux/io.h>
- #include <linux/uaccess.h>
- #include <linux/atomic.h>
-+#include <linux/suspend.h>
- #include <net/netlink.h>
- #include <net/genetlink.h>
- #include <net/sock.h>
-@@ -976,6 +977,28 @@ static irqreturn_t phy_interrupt(int irq, void *phy_dat)
- 	struct phy_driver *drv = phydev->drv;
- 	irqreturn_t ret;
- 
-+	/* Wakeup interrupts may occur during a system sleep transition.
-+	 * Postpone handling until the PHY has resumed.
-+	 */
-+	if (IS_ENABLED(CONFIG_PM_SLEEP) && phydev->irq_suspended) {
-+		struct net_device *netdev = phydev->attached_dev;
-+
-+		if (netdev) {
-+			struct device *parent = netdev->dev.parent;
-+
-+			if (netdev->wol_enabled)
-+				pm_system_wakeup();
-+			else if (device_may_wakeup(&netdev->dev))
-+				pm_wakeup_dev_event(&netdev->dev, 0, true);
-+			else if (parent && device_may_wakeup(parent))
-+				pm_wakeup_dev_event(parent, 0, true);
-+		}
-+
-+		phydev->irq_rerun = 1;
-+		disable_irq_nosync(irq);
-+		return IRQ_HANDLED;
-+	}
-+
- 	mutex_lock(&phydev->lock);
- 	ret = drv->handle_interrupt(phydev);
- 	mutex_unlock(&phydev->lock);
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 431a8719c635..46acddd865a7 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -278,6 +278,15 @@ static __maybe_unused int mdio_bus_phy_suspend(struct device *dev)
- 	if (phydev->mac_managed_pm)
- 		return 0;
- 
-+	/* Wakeup interrupts may occur during the system sleep transition when
-+	 * the PHY is inaccessible. Set flag to postpone handling until the PHY
-+	 * has resumed. Wait for concurrent interrupt handler to complete.
-+	 */
-+	if (phy_interrupt_is_valid(phydev)) {
-+		phydev->irq_suspended = 1;
-+		synchronize_irq(phydev->irq);
-+	}
-+
- 	/* We must stop the state machine manually, otherwise it stops out of
- 	 * control, possibly with the phydev->lock held. Upon resume, netdev
- 	 * may call phy routines that try to grab the same lock, and that may
-@@ -315,6 +324,20 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
- 	if (ret < 0)
- 		return ret;
- no_resume:
-+	if (phy_interrupt_is_valid(phydev)) {
-+		phydev->irq_suspended = 0;
-+		synchronize_irq(phydev->irq);
-+
-+		/* Rerun interrupts which were postponed by phy_interrupt()
-+		 * because they occurred during the system sleep transition.
-+		 */
-+		if (phydev->irq_rerun) {
-+			phydev->irq_rerun = 0;
-+			enable_irq(phydev->irq);
-+			irq_wake_thread(phydev->irq, phydev);
-+		}
-+	}
-+
- 	if (phydev->attached_dev && phydev->adjust_link)
- 		phy_start_machine(phydev);
- 
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 508f1149665b..b09f7d36cff2 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -572,6 +572,10 @@ struct macsec_ops;
-  * @mdix_ctrl: User setting of crossover
-  * @pma_extable: Cached value of PMA/PMD Extended Abilities Register
-  * @interrupts: Flag interrupts have been enabled
-+ * @irq_suspended: Flag indicating PHY is suspended and therefore interrupt
-+ *                 handling shall be postponed until PHY has resumed
-+ * @irq_rerun: Flag indicating interrupts occurred while PHY was suspended,
-+ *             requiring a rerun of the interrupt handler after resume
-  * @interface: enum phy_interface_t value
-  * @skb: Netlink message for cable diagnostics
-  * @nest: Netlink nest used for cable diagnostics
-@@ -626,6 +630,8 @@ struct phy_device {
- 
- 	/* Interrupts are enabled */
- 	unsigned interrupts:1;
-+	unsigned irq_suspended:1;
-+	unsigned irq_rerun:1;
- 
- 	enum phy_state state;
- 
+----------------------------------------------------------------
+Immutable branch between MFD and ACPI due for the v5.20 merge window
+
+----------------------------------------------------------------
+Rafael J. Wysocki (1):
+      mfd: core: Use acpi_dev_for_each_child()
+
+ drivers/mfd/mfd-core.c | 31 ++++++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
+
 -- 
-2.36.1
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
