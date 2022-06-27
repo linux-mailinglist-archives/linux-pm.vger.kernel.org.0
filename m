@@ -2,70 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB8255D784
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB8D55DDC0
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236101AbiF0NYI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 09:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S235826AbiF0N31 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 09:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbiF0NYG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 09:24:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE3F6363
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 06:24:04 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:24:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1656336243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=Kg/N4ozm1cY0UCEXrhIi7QsDEZkJ0yuMescOin7QN3Q=;
-        b=orMm8rjFbJ5nC19PIn0s1F+olo0w0/WhToBOjbMzqGyNcjoBOqaMX2/py4C35xgLiY6Ymi
-        9CouWsFJemB1k7ytu3CH7gIzQiaYi0W2dgmAPBokXDhvMhq7onMW4OO1yjBj3HKYTucpKh
-        77j42bv/msJpy55DVpZJ8ycpEu4IZha5vY4WLOoNELsnAKIUnaedoiBHHepVYR0gx49F65
-        9RCt0czkSF2/Nl7T1Qwu29fpQ5MyRHA0MYpMy4+ge+BfmOlsnBWFZb6iX6ztGO2dbq+L/R
-        DctDs7T4xu4p788sFNcVYOKY8EH1fqBtXTO4PlacegfE2ZaLbSSw65w+zwD1eQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1656336243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=Kg/N4ozm1cY0UCEXrhIi7QsDEZkJ0yuMescOin7QN3Q=;
-        b=kgAVqBnJDvCLZS7c7895VSTyTT1lcfXufWBm8KucY1ED1Oyh4/xjXqyDkcmsIC04aNdEN7
-        Xyds1hITYoHuEFDA==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     linux-pm@vger.kernel.org
-cc:     rafael@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: cpufreq - powernv driver
-Message-ID: <4c99f34b-40f1-e6cc-2669-7854b615b5fd@linutronix.de>
+        with ESMTP id S235802AbiF0N3Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 09:29:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCCE6449;
+        Mon, 27 Jun 2022 06:29:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FA9E6131C;
+        Mon, 27 Jun 2022 13:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2776C341C7;
+        Mon, 27 Jun 2022 13:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656336562;
+        bh=koP0LmMICCW2tEjuoT240NQp9NWZVgkESEstwnzFVEU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pXnBwbGpnvLxDLqShZ45Xp/YVOroDAW49CNWQdsxNPxIhyY27pZATkEz9mZJTB9Qi
+         29xtzFsNQn9Lj21GILf/oW1JPd2t1mZBVxjmjr4Za84dXQ7Yu8aULEj1li0qYweuBY
+         Dk2jO43GpFnPDGTy3y9GycgUgtpOWHNQgwz6EZN1ZLt+mSvm8y50AB1IUUsJy9QcyQ
+         TiYLhHVrz3jDF6RUURmqC1VxbHtiOHkAVICXJ32T9VcMR1IRhZMKDGyx+6Y+MwRL3N
+         nUY8phHh+fKjjcIeiBTomavLUlzV4Lk4yvenffVzdWCq7Bdkfe2TMIdQZxvegpIdJw
+         ec88Sfv4dpIFQ==
+Received: by mail-ua1-f42.google.com with SMTP id k19so3443852uap.7;
+        Mon, 27 Jun 2022 06:29:22 -0700 (PDT)
+X-Gm-Message-State: AJIora9QWuOcJx/oBfjIaE+rsqwhcDBoNaK+6jCG5kT6VFEx4R+g32Iz
+        QUwDG6hJpbn3sIKiJ9QPJavPu3i5nm+q+OpfLw==
+X-Google-Smtp-Source: AGRyM1tOtcxuT6/x81UVoJBJzNeJo6UBAxDP1STaallBGDtYQjq4Xv5cpryqMvdjHDlsdwgzmLcQQu/RDxSCO35hOeU=
+X-Received: by 2002:a05:6130:3aa:b0:37f:26c0:e196 with SMTP id
+ az42-20020a05613003aa00b0037f26c0e196mr4580118uab.43.1656336561682; Mon, 27
+ Jun 2022 06:29:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220614151722.2194936-1-sravanhome@gmail.com>
+ <20220614151722.2194936-2-sravanhome@gmail.com> <YqpkXYAtXtvzX44J@google.com>
+In-Reply-To: <YqpkXYAtXtvzX44J@google.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 27 Jun 2022 07:29:10 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKg2rv5_ZKqRpNcxQVDqvETOrKXfvWMDvemDRgS57yFqQ@mail.gmail.com>
+Message-ID: <CAL_JsqKg2rv5_ZKqRpNcxQVDqvETOrKXfvWMDvemDRgS57yFqQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: mfd: Add mp2733 compatible
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Saravanan Sekar <sravanhome@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Wed, Jun 15, 2022 at 4:59 PM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Tue, 14 Jun 2022, Saravanan Sekar wrote:
+>
+> > Add new compatible for mp2733 mfd driver.
+> >
+> > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/mfd/mps,mp2629.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> Applied, thanks.
 
-during my work on a timer hierarchy I stumbled over powernv cpufreq driver
-which is using a timer which is deferrable and pinned. This is the only
-timer in kernel which uses this combination and I would like to get rid of
-it.
+This breaks linux-next. Please apply v3 instead.
 
-Only removing the pinned or deferrable flag could not be the proper
-solution, right?
-
-I'm not familiar with cpufreq. I was wondering if it's possible to rework
-the powernv cpufreq driver to use cpufreq infrastructure instead handling
-it's own timer for ramping down? I would be happy if someone could help me
-with some pointers how this could be solved.
-
-Thanks,
-
-      Anna-Maria
+Rob
