@@ -2,60 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EDFF55C465
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1A055DBC6
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233669AbiF0JK1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 05:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S233771AbiF0JtP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 05:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbiF0JK0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 05:10:26 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6419F2667;
-        Mon, 27 Jun 2022 02:10:22 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 310998106;
-        Mon, 27 Jun 2022 09:05:11 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 12:10:20 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        with ESMTP id S229561AbiF0JtO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 05:49:14 -0400
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f236:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17A42735;
+        Mon, 27 Jun 2022 02:49:11 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id BB4E3101E1D9F;
+        Mon, 27 Jun 2022 11:49:09 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 7985461B8672;
+        Mon, 27 Jun 2022 11:49:09 +0200 (CEST)
+X-Mailbox-Line: From c5595bdb20625382538816c2e6d917d95c62e09b Mon Sep 17 00:00:00 2001
+Message-Id: <c5595bdb20625382538816c2e6d917d95c62e09b.1656322883.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Mon, 27 Jun 2022 11:49:08 +0200
+Subject: [PATCH net v3] net: phy: Don't trigger state machine while in suspend
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of
- driver_deferred_probe_check_state()
-Message-ID: <Yrlz/P6Un2fACG98@atomide.com>
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-2-saravanak@google.com>
- <YrFzK6EiVvXmzVG6@atomide.com>
- <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
- <YrKhkmj3jCQA39X/@atomide.com>
- <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
- <YrQP3OZbe8aCQxKU@atomide.com>
- <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     netdev@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -65,74 +64,175 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Saravana Kannan <saravanak@google.com> [220623 08:17]:
-> On Thu, Jun 23, 2022 at 12:01 AM Tony Lindgren <tony@atomide.com> wrote:
-> >
-> > * Saravana Kannan <saravanak@google.com> [220622 19:05]:
-> > > On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
-> > > > This issue is no directly related fw_devlink. It is a side effect of
-> > > > removing driver_deferred_probe_check_state(). We no longer return
-> > > > -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
-> > >
-> > > Yes, I understand the issue. But driver_deferred_probe_check_state()
-> > > was deleted because fw_devlink=on should have short circuited the
-> > > probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
-> > > probe function and hitting this -ENOENT failure. That's why I was
-> > > asking the other questions.
-> >
-> > OK. So where is the -EPROBE_DEFER supposed to happen without
-> > driver_deferred_probe_check_state() then?
-> 
-> device_links_check_suppliers() call inside really_probe() would short
-> circuit and return an -EPROBE_DEFER if the device links are created as
-> expected.
+Upon system sleep, mdio_bus_phy_suspend() stops the phy_state_machine(),
+but subsequent interrupts may retrigger it:
 
-OK
+They may have been left enabled to facilitate wakeup and are not
+quiesced until the ->suspend_noirq() phase.  Unwanted interrupts may
+hence occur between mdio_bus_phy_suspend() and dpm_suspend_noirq(),
+as well as between dpm_resume_noirq() and mdio_bus_phy_resume().
 
-> > Hmm so I'm not seeing any supplier for the top level ocp device in
-> > the booting case without your patches. I see the suppliers for the
-> > ocp child device instances only.
-> 
-> Hmmm... this is strange (that the device link isn't there), but this
-> is what I suspected.
+Retriggering the phy_state_machine() through an interrupt is not only
+undesirable for the reason given in mdio_bus_phy_suspend() (freezing it
+midway with phydev->lock held), but also because the PHY may be
+inaccessible after it's suspended:  Accesses to USB-attached PHYs are
+blocked once usb_suspend_both() clears the can_submit flag and PHYs on
+PCI network cards may become inaccessible upon suspend as well.
 
-Yup, maybe it's because of the supplier being a device in the child
-interconnect for the ocp.
+Amend phy_interrupt() to avoid triggering the state machine if the PHY
+is suspended.  Signal wakeup instead if the attached net_device or its
+parent has been configured as a wakeup source.  (Those conditions are
+identical to mdio_bus_phy_may_suspend().)  Postpone handling of the
+interrupt until the PHY has resumed.
 
-> Now we need to figure out why it's missing. There are only a few
-> things that could cause this and I don't see any of those. I already
-> checked to make sure the power domain in this instance had a proper
-> driver with a probe() function -- if it didn't, then that's one thing
-> that'd could have caused the missing device link. The device does seem
-> to have a proper driver, so looks like I can rule that out.
-> 
-> Can you point me to the dts file that corresponds to the specific
-> board you are testing this one? I probably won't find anything, but I
-> want to rule out some of the possibilities.
+Before stopping the phy_state_machine() in mdio_bus_phy_suspend(),
+wait for a concurrent phy_interrupt() to run to completion.  That is
+necessary because phy_interrupt() may have checked the PHY's suspend
+status before the system sleep transition commenced and it may thus
+retrigger the state machine after it was stopped.
 
-You can use the beaglebone black dts for example, that's
-arch/arm/boot/dts/am335x-boneblack.dts and uses am33xx.dtsi for
-ocp interconnect with simple-pm-bus.
+Likewise, after re-enabling interrupt handling in mdio_bus_phy_resume(),
+wait for a concurrent phy_interrupt() to complete to ensure that
+interrupts which it postponed are properly rerun.
 
-> All the device link creation logic is inside drivers/base/core.c. So
-> if you can look at the existing messages or add other stuff to figure
-> out why the device link isn't getting created, that'd be handy. In
-> either case, I'll continue staring at the DT and code to see what
-> might be happening here.
+The issue was exposed by commit 3873b20fd278 ("usbnet: smsc95xx: Forward
+PHY interrupts to PHY driver to avoid polling"), but has existed since
+forever.  Hence the stable designation.
 
-In device_links_check_suppliers() I see these ocp suppliers:
+Link: https://lore.kernel.org/netdev/a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com/
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: stable@vger.kernel.org
+---
+ Resending as requested by Jakub.  No code changes since v1.
+ 
+ Changes v1 -> v2:
+ * Extend rationale in commit message.
+ * Drop Fixes tag, add Tested-by tag (Marek).
+ 
+ Changes v2 -> v3:
+ * Add stable designation.
+ * Add Acked-by tag (Rafael).
+ 
+ Link to v1:
+ https://lore.kernel.org/netdev/688f559346ea747d3b47a4d16ef8277e093f9ebe.1653556322.git.lukas@wunner.de/
+ 
+ Link to v2:
+ https://lore.kernel.org/netdev/cover.1654680790.git.lukas@wunner.de/
+ 
+ drivers/net/phy/phy.c        | 23 +++++++++++++++++++++++
+ drivers/net/phy/phy_device.c | 23 +++++++++++++++++++++++
+ include/linux/phy.h          |  6 ++++++
+ 3 files changed, 52 insertions(+)
 
-platform ocp: device_links_check_suppliers: 1024: supplier 44e00d00.prm: link->status: 0 link->flags: 000001c0
-platform ocp: device_links_check_suppliers: 1024: supplier 44e01000.prm: link->status: 0 link->flags: 000001c0
-platform ocp: device_links_check_suppliers: 1024: supplier 44e00c00.prm: link->status: 0 link->flags: 000001c0
-platform ocp: device_links_check_suppliers: 1024: supplier 44e00e00.prm: link->status: 0 link->flags: 000001c0
-platform ocp: device_links_check_suppliers: 1024: supplier 44e01100.prm: link->status: 0 link->flags: 000001c0
-platform ocp: device_links_check_suppliers: 1024: supplier fixedregulator0: link->status: 1 link->flags: 000001c0
+diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
+index ef62f357b76d..8d3ee3a6495b 100644
+--- a/drivers/net/phy/phy.c
++++ b/drivers/net/phy/phy.c
+@@ -31,6 +31,7 @@
+ #include <linux/io.h>
+ #include <linux/uaccess.h>
+ #include <linux/atomic.h>
++#include <linux/suspend.h>
+ #include <net/netlink.h>
+ #include <net/genetlink.h>
+ #include <net/sock.h>
+@@ -976,6 +977,28 @@ static irqreturn_t phy_interrupt(int irq, void *phy_dat)
+ 	struct phy_driver *drv = phydev->drv;
+ 	irqreturn_t ret;
+ 
++	/* Wakeup interrupts may occur during a system sleep transition.
++	 * Postpone handling until the PHY has resumed.
++	 */
++	if (IS_ENABLED(CONFIG_PM_SLEEP) && phydev->irq_suspended) {
++		struct net_device *netdev = phydev->attached_dev;
++
++		if (netdev) {
++			struct device *parent = netdev->dev.parent;
++
++			if (netdev->wol_enabled)
++				pm_system_wakeup();
++			else if (device_may_wakeup(&netdev->dev))
++				pm_wakeup_dev_event(&netdev->dev, 0, true);
++			else if (parent && device_may_wakeup(parent))
++				pm_wakeup_dev_event(parent, 0, true);
++		}
++
++		phydev->irq_rerun = 1;
++		disable_irq_nosync(irq);
++		return IRQ_HANDLED;
++	}
++
+ 	mutex_lock(&phydev->lock);
+ 	ret = drv->handle_interrupt(phydev);
+ 	mutex_unlock(&phydev->lock);
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 431a8719c635..46acddd865a7 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -278,6 +278,15 @@ static __maybe_unused int mdio_bus_phy_suspend(struct device *dev)
+ 	if (phydev->mac_managed_pm)
+ 		return 0;
+ 
++	/* Wakeup interrupts may occur during the system sleep transition when
++	 * the PHY is inaccessible. Set flag to postpone handling until the PHY
++	 * has resumed. Wait for concurrent interrupt handler to complete.
++	 */
++	if (phy_interrupt_is_valid(phydev)) {
++		phydev->irq_suspended = 1;
++		synchronize_irq(phydev->irq);
++	}
++
+ 	/* We must stop the state machine manually, otherwise it stops out of
+ 	 * control, possibly with the phydev->lock held. Upon resume, netdev
+ 	 * may call phy routines that try to grab the same lock, and that may
+@@ -315,6 +324,20 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
+ 	if (ret < 0)
+ 		return ret;
+ no_resume:
++	if (phy_interrupt_is_valid(phydev)) {
++		phydev->irq_suspended = 0;
++		synchronize_irq(phydev->irq);
++
++		/* Rerun interrupts which were postponed by phy_interrupt()
++		 * because they occurred during the system sleep transition.
++		 */
++		if (phydev->irq_rerun) {
++			phydev->irq_rerun = 0;
++			enable_irq(phydev->irq);
++			irq_wake_thread(phydev->irq, phydev);
++		}
++	}
++
+ 	if (phydev->attached_dev && phydev->adjust_link)
+ 		phy_start_machine(phydev);
+ 
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index 508f1149665b..b09f7d36cff2 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@ -572,6 +572,10 @@ struct macsec_ops;
+  * @mdix_ctrl: User setting of crossover
+  * @pma_extable: Cached value of PMA/PMD Extended Abilities Register
+  * @interrupts: Flag interrupts have been enabled
++ * @irq_suspended: Flag indicating PHY is suspended and therefore interrupt
++ *                 handling shall be postponed until PHY has resumed
++ * @irq_rerun: Flag indicating interrupts occurred while PHY was suspended,
++ *             requiring a rerun of the interrupt handler after resume
+  * @interface: enum phy_interface_t value
+  * @skb: Netlink message for cable diagnostics
+  * @nest: Netlink nest used for cable diagnostics
+@@ -626,6 +630,8 @@ struct phy_device {
+ 
+ 	/* Interrupts are enabled */
+ 	unsigned interrupts:1;
++	unsigned irq_suspended:1;
++	unsigned irq_rerun:1;
+ 
+ 	enum phy_state state;
+ 
+-- 
+2.36.1
 
-No -EPROBE_DEFER is returned in device_links_check_suppliers() for
-44e00c00.prm supplier for beaglebone black for example, 0 gets
-returned.
-
-Regards,
-
-Tony
