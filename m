@@ -2,64 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B67355DD38
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CE355C98B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240477AbiF0Tuo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 15:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S240780AbiF0UCy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 16:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238279AbiF0Tun (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 15:50:43 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378D31BE98;
-        Mon, 27 Jun 2022 12:50:43 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id y18so10700991iof.2;
-        Mon, 27 Jun 2022 12:50:43 -0700 (PDT)
+        with ESMTP id S240769AbiF0UCx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 16:02:53 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFFB1C925
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 13:02:50 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so5878910otb.5
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 13:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=32+pYyBzsUADZK/USZZWRdjG4+AC0lABRMoHRP/yr1M=;
+        b=nxV1pazrE3xVmh1LX/HlRMYNTdOjbKwW0RRCRVu9T6jkSNo72sz01NuioSXN637++Z
+         b2AmAuDtTrrhStoYWSiOXtpgTrLKdZeEkbwlHG4tCtrt1pXbnIQ8Sc3i5QhU0GyPpZW2
+         zh5xzrpaq2r4OY2ESHBGrWRJGNUk8oZYa/f3M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dtiCN8I266oCPG09ac417Y1pm08qNF7ctA3rQgmXy6w=;
-        b=6IEmjU/AC55yI3QxFFSWUMbqoaic2FDmdJNthyKIjQmblaV2W0zMjOBTxUALT6fzlW
-         21vZd5oqXo+23FWtLCA8vxSEycQS6S730OVNlZ97yc3FTXbeS+oGsY7m0nj5YVwUzmCl
-         1y4tPtEYBAWaRuB/ciXE3XTmDvu0Ue9pESWMNkzbW42YU4vfPNqpsVk929mt5AlKkrv2
-         o0RSEu0UD/u/P5H7YWPt77d1ZW+rG+9B2BRUinJGRQUHGFbLA5pp7xG21XdUlUTDDdsg
-         5BWwOFGGHCFC2dzgj9ExPuJVl0SgjSZOmhjxYZbI6vf/e1j88lk/4c1HM43lRBKfE5z5
-         3aEg==
-X-Gm-Message-State: AJIora/v2VlZXjBUgQqGjWiYLElF4P1tpNEyxfxrx+doxXyN0a8EWame
-        yJLuIDoxJdOLSFuiHGsHC7t9AvYh8w==
-X-Google-Smtp-Source: AGRyM1u2Q2iT/ikNcIKiYYcSDU3g/Sy7U/L7yOI0luMVJbKj7N/sIoRnPSlGBdj3RBojY2yZVpm85w==
-X-Received: by 2002:a05:6638:3727:b0:33c:98a9:9 with SMTP id k39-20020a056638372700b0033c98a90009mr4407071jav.84.1656359442513;
-        Mon, 27 Jun 2022 12:50:42 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id m28-20020a02a15c000000b00339e5e105a2sm5083795jah.117.2022.06.27.12.50.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 12:50:42 -0700 (PDT)
-Received: (nullmailer pid 2841583 invoked by uid 1000);
-        Mon, 27 Jun 2022 19:50:40 -0000
-Date:   Mon, 27 Jun 2022 13:50:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: cpufreq: qcom-cpufreq-nvmem: fix board
- compatible in example
-Message-ID: <20220627195040.GA2840123-robh@kernel.org>
-References: <20220627143340.477120-1-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=32+pYyBzsUADZK/USZZWRdjG4+AC0lABRMoHRP/yr1M=;
+        b=azKoGGwM+GVaKYTELJYevVqn/coYBoX7pZDRxntSmz+IQavsU0eEujaYPDxY0kof1P
+         jzKnPIZKTo44WzWWB1zeqH9RNTgzHll4Emde/lVwCY1cw7s36F7q1I8TZA4cgCwIEb0G
+         4JVeZbLQud+oRk1CheDbMjfpbRdAsbgkYFM85yZK24/dLC2vTRZWfUG/CsZRhzFtqG4R
+         xq/zWs1S692x9I7oJX6FH+1cv7LRIYz7o/IScb1kD9BayF8QbK+p8yv+6+O/jGT6wKiV
+         syoKPGYth2QuyyQ8FBjK38FnIlZWh6DJD+pebjNwXdB35SbOAu0/l0H10ljiV8ihlkgR
+         NJpQ==
+X-Gm-Message-State: AJIora8Zgu3bbq+AaBH/8mXGdnc1tFIn5mF565zm78s04GEQDllOYw2b
+        /zq2CkNZomFHUDR+HxSa4KnDPGUCS+M67YCsln6JfA==
+X-Google-Smtp-Source: AGRyM1sUw3aUn8cs+jsZnRLI9HEdw7aGdjxn3slIwtFmzZUccOZBZrgs+CFrxV/GByzKlfqxHxRNuOwt68VgnVijZA8=
+X-Received: by 2002:a9d:6484:0:b0:60b:eb0b:4054 with SMTP id
+ g4-20020a9d6484000000b0060beb0b4054mr6754340otl.159.1656360170138; Mon, 27
+ Jun 2022 13:02:50 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 27 Jun 2022 13:02:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627143340.477120-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com> <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 27 Jun 2022 13:02:49 -0700
+Message-ID: <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system suspend
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,23 +82,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 04:33:40PM +0200, Krzysztof Kozlowski wrote:
-> In the example, alone compatible "qcom,qcs404" is not correct.  Add
-> proper board compatibles for QCS404 Evaluation Board.
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Can be picked up independently, although the issue reported by Rob was
-> caused by:
-> https://lore.kernel.org/all/CAL_JsqKXDs=QHKob2Xy6vAFZfnkM9ggfmqf9TNA1hv8TScTmgQ@mail.gmail.com/
+Quoting Pavan Kondeti (2022-06-20 01:54:15)
+> +Felipe, Bjorn
+>
+> On Thu, Jun 16, 2022 at 10:15:49AM -0700, Matthias Kaehlcke wrote:
+> > On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
+> >
+> > Good point! It doesn't really ensure that the child is probed (actually it
+> > won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
+> > could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
+> > the PHYs should be ready and dwc3_probe() be invoked through
+> > of_platform_populate().
+>
+> This is a generic problem i.e if a parent can only proceed after the child
+> devices are bounded (i.e probed successfully), how to ensure this behavior
+> from the parent's probe? Since we can't block the parent probe (async probe is
+> not the default behavior), we have to identify the condition that the children
+> are deferring probe, so that parent also can do that.
+>
+> Can we add a API in drivers core to tell if a device probe is deferred or
+> not? This can be done by testing list_empty(&dev->p->deferred_probe) under
+> deferred_probe_mutex mutex. The parent can return EPROBE_DEFER based on this
+> API return value.
+>
+> Another alternative would be explicitly checking if the child device suppliers
+> are ready or not before adding child device. That would require decoupling
+> of_platform_populate() to creating devices and adding devices.
+>
+> Note that this problem is not just limited to suppliers not ready. if the
+> dwc3-qcom is made asynchronous probe, then its child also probed
+> asynchronously and there is no guarantee that child would be probed by the
+> time of_platform_populate() is returned.  The bus notifier might come handy
+> in this case. The parent can register for this notifier and waiting for
+> the children device's BUS_NOTIFY_BOUND_DRIVER/BUS_NOTIFY_DRIVER_NOT_BOUND
+> notifications. This would also work in our case, if we move to
+> of_platform_populate() outside the probe().
+>
+> Would like to hear other people thoughts on this.
+>
 
-Best to go in that tree unless it's going to take weeks...
-
-> ---
->  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml       | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-Acked-by: Rob Herring <robh@kernel.org>
+I'm not following very closely but it sounds like a problem that may be
+solved by using the component driver code (see
+include/linux/component.h). That would let you move anything that needs
+to be done once the child devices probe to the aggregate driver 'bind'
+function (see struct component_master_ops::bind).
