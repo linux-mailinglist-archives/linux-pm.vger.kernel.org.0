@@ -2,127 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EF055C143
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF8D55CC2B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237417AbiF0O2P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 10:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S237569AbiF0Odx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 10:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237439AbiF0O15 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 10:27:57 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3979B13F25;
-        Mon, 27 Jun 2022 07:27:57 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3177e60d980so86920387b3.12;
-        Mon, 27 Jun 2022 07:27:57 -0700 (PDT)
+        with ESMTP id S236340AbiF0Odw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 10:33:52 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5484FB7EF
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 07:33:51 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r20so13391875wra.1
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 07:33:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sWc3J/CV8Dtuzf2S0I8qVO7xqFOXn3NKNC59Q9TMvRQ=;
+        b=UbLPodrqAHIe1Am49Jl0smN4f299SAzH8V94mbM/HXZOKBMiT2tDFem+KKm5Z9ammZ
+         a8mtrRODvmxRvsGtyhAIntCA2XzmMpGhcnzQK6C05F8qCy7PsDKWEJJ0dBDu3i2TWhFI
+         wiqov+jDEEdzVOQREep9skMioOzRBFWRx+hzDvEjR+4lTOu7CZAYyNe18UjbJQZU1gug
+         yq7AvsAph5EqbHGwi/YIKou3IE5CVQ6bzw1wyBD4v9ndoZaBJ+jHgXzrXTU49pEF1JQe
+         8LWZYVRoqsWZHfoFEinAN9A7hkYmBKVxa5ejeJDRa5D2EsXPxs6hexOOHpYBKhQh777n
+         xQkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2ausyBxe1EwSltgsOW+aLx9gGKbI9xmb58xvni35q/8=;
-        b=E3F+qN3ybblO1Sdk2PcIXCCiVMZ9ThL/41UkX9xCJvW5Zqv4fQpwQwPmcxdv9c3mpp
-         uuJkNlQaqn/XIpKUdYZqWGi7VEFguj7JWH8ggz6zgbGBLsyWPr62O7nPszyXRARwnDf5
-         a35zTjdZzQDY7XJZ1PvXAsQskpMhlW8tkOvn/uB7Hsd5yDxkGBk2Eoc6QJwdo3WPLbPd
-         OVgD/18qclQ3qE02EUEEPy/exy+LdLcrOnehTIm2x75GUBRM02/HhHzAhqPZMONM1II2
-         N0eWhKIc0umy9xlGog+L0wf9jtskPgqVD+nxHoGIJExcwMwqwd1iR9dvNAP3F+ACPTCs
-         XHog==
-X-Gm-Message-State: AJIora9zdFXXRYj4dGDDMFq2ahL4utpsjo6WaZy68ELhaDHz2sqFOX5K
-        O6DUBkC4UGknArSK08DD9AbRCoPWyQ5+P4nvghQ=
-X-Google-Smtp-Source: AGRyM1vIcglL1E5IuPFyWS28U+Yjuq52Iosbfn31LhbYRsuDUhrfMrQfTgx6LXwcWn1lzMGswldF2MiwAQkGGvT1aJ8=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr14642063ywb.326.1656340076401; Mon, 27
- Jun 2022 07:27:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220613120755.14306-1-peter.wang@mediatek.com> <Yrm7QSRXKZg4/q7s@kroah.com>
-In-Reply-To: <Yrm7QSRXKZg4/q7s@kroah.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Jun 2022 16:27:45 +0200
-Message-ID: <CAJZ5v0iFyTXc8TfEq5vHZvRmi9YbW-OA_G3n4xULhsw7=gdZ5A@mail.gmail.com>
-Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release supplier
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     peter.wang@mediatek.com, Matthias Brugger <matthias.bgg@gmail.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sWc3J/CV8Dtuzf2S0I8qVO7xqFOXn3NKNC59Q9TMvRQ=;
+        b=uH8UYMAFJzD0uduKNbopc/k3BrNR6wO5OKVOeDPkVQng3U0J0VeLqi/Dbcir36Venp
+         dMgnR7j0kjktOvjgLLBv+pkDG9klbGgp6M8MJJHyB41hN696bx1oTPM1LZqVMPVUqKj8
+         xWhsZrxjcBgxMlPUrc5d7dl7HJt1Umo/YRKulHBGJdXIJVOv7jt10kbadXmS3Qsp3X/T
+         GUSWGgesff5EkzvppF8jMCCWB9vHcbBAmPcnicx+XTrof/I70T6n7ZuM8Tj4QuVFAvvi
+         8fV5SZmFy5AtEOehY9rP9+OiyYs/cLYGWPd2QfQ1lmOpX/ub1MAaiVAUPM/3KZcmPDZd
+         Jerg==
+X-Gm-Message-State: AJIora9fWlF2tqd7XIRk1b4sO8rrewu5ds3JYVJwpuvdhXRMMAE/Qz2S
+        AxA6xqxun0WVIwJHGvPLe3fsuA==
+X-Google-Smtp-Source: AGRyM1td5C3j6o9ZaJOP1OSfx0uzHnsd1SFmlzB3W+qSi+8mrcTsis3hcWPGR5bJVuGmc7yL4DdJtg==
+X-Received: by 2002:adf:e102:0:b0:21b:af5d:6f15 with SMTP id t2-20020adfe102000000b0021baf5d6f15mr12781924wrz.648.1656340429944;
+        Mon, 27 Jun 2022 07:33:49 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id r10-20020a05600c284a00b0039c41686421sm16890723wmb.17.2022.06.27.07.33.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 07:33:49 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>, chun-hung.wu@mediatek.com,
-        alice.chao@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
-        powen.kao@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, tun-yu.yu@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH] dt-bindings: cpufreq: qcom-cpufreq-nvmem: fix board compatible in example
+Date:   Mon, 27 Jun 2022 16:33:40 +0200
+Message-Id: <20220627143340.477120-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 4:14 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jun 13, 2022 at 08:07:55PM +0800, peter.wang@mediatek.com wrote:
-> > From: Peter Wang <peter.wang@mediatek.com>
-> >
-> > With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
-> > to prevent supplier enter suspend, pm_runtime_release_supplier should
-> > check supplier_preactivated before let supplier enter suspend.
-> >
-> > If the link is drop or release, bypass check supplier_preactivated.
-> >
-> > Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-> > ---
-> >  drivers/base/core.c          |  2 +-
-> >  drivers/base/power/runtime.c | 15 ++++++++++++---
-> >  include/linux/pm_runtime.h   |  5 +++--
-> >  3 files changed, 16 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index 7cd789c4985d..3b9cc559928f 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -486,7 +486,7 @@ static void device_link_release_fn(struct work_struct *work)
-> >       /* Ensure that all references to the link object have been dropped. */
-> >       device_link_synchronize_removal();
-> >
-> > -     pm_runtime_release_supplier(link, true);
-> > +     pm_runtime_release_supplier(link, true, true);
-> >
-> >       put_device(link->consumer);
-> >       put_device(link->supplier);
-> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > index 676dc72d912d..3c4f425937a1 100644
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -314,10 +314,19 @@ static int rpm_get_suppliers(struct device *dev)
-> >   * and if @check_idle is set, check if that device is idle (and so it can be
-> >   * suspended).
-> >   */
-> > -void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
-> > +void pm_runtime_release_supplier(struct device_link *link, bool check_idle,
-> > +     bool drop)
->
-> This is just making this horrible api even worse.  Now there are 2
-> boolean flags required, 2 more than really should even be here at all.
-> Every time you see this function being used, you will now have to look
-> up the definition  to see what it really does.
->
-> Please make a new function that calls the internal function with the
-> flag set properly, so that it is obvious what is happening when the call
-> is made.
->
-> and really, the same thing should be done for the check_idle flag,
-> that's not good either.
+In the example, alone compatible "qcom,qcs404" is not correct.  Add
+proper board compatibles for QCS404 Evaluation Board.
 
-Agreed, and let me take care of this.
+Reported-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+Can be picked up independently, although the issue reported by Rob was
+caused by:
+https://lore.kernel.org/all/CAL_JsqKXDs=QHKob2Xy6vAFZfnkM9ggfmqf9TNA1hv8TScTmgQ@mail.gmail.com/
+---
+ .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml       | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index a9a776da5505..10b3a7a4af36 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -63,8 +63,8 @@ additionalProperties: true
+ examples:
+   - |
+     / {
+-        model = "Qualcomm Technologies, Inc. QCS404";
+-        compatible = "qcom,qcs404";
++        model = "Qualcomm Technologies, Inc. QCS404 EVB 1000";
++        compatible = "qcom,qcs404-evb-1000", "qcom,qcs404-evb", "qcom,qcs404";
+         #address-cells = <2>;
+         #size-cells = <2>;
+ 
+-- 
+2.34.1
+
