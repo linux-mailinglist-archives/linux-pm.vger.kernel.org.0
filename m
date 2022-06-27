@@ -2,74 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73DA55C6AD
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1466055D306
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235146AbiF0NSi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 09:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
+        id S236449AbiF0NsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 09:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234978AbiF0NS3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 09:18:29 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD67CF0;
-        Mon, 27 Jun 2022 06:18:26 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z19so12935149edb.11;
-        Mon, 27 Jun 2022 06:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:date:in-reply-to:message-id
-         :mime-version;
-        bh=bYTHdHMf3jC1jHl9DPaG8LW+XxhPJYraR1ILnGyaWRE=;
-        b=f7txa/JvespsDWBSVg8Ll3tCX6K3cgmKj2lHck8JsGumPgcNxcfqJbch+A/UMBa4Sn
-         mUWOW5Rpz/SqzZaGRqMUi05ujw2jA3MImbffJFCiSIQdl+50++0mfL4sh5okGmDJ7Bx/
-         oCfMm9fKe+6lJt4PMnhjSB4VuJ5D8y5ApzQT1zVxl30i1jOMykW017Dw9qoux3qPQJVF
-         3juShRUsDYWYYKWBJzOWmMJ+jrRhF3lk9h6eEd0W7xcZLDK+9V1Bbq09XFETPfC2UGpP
-         J8MAl41OEORRjiElAHKikKzOjbCxPizi5JSBNYfxCtycR6gt7OJjJkRfJcNeQyF7ZoAh
-         fNJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=bYTHdHMf3jC1jHl9DPaG8LW+XxhPJYraR1ILnGyaWRE=;
-        b=IhPlyBoxTZ8nrVWUYm2xJ21GvbR0vrtmuPWNEGrHINu8OEmJDUoxzyk+DbtbbAPBRq
-         uaDi3d9dxtncBiHj1KJU8bxFxfvCfghPdbh8Bs0Na3uRiad24ocvFlOTGKcapUMLse+R
-         5OdUXd+We5Ogxg3ZuBFLKsERbOn1RBJgJ2L1N+PCXdFwE3/nPFenHfFPuhPfWbScZ38Z
-         b0LNaR/Rv0SDrV3YS/Zj7O7gJ/rg5ikuXOlMJJHHYBWmTwtS/hiLEtbu9OxDYO4KPUxT
-         2P7YT7nOzZ0P4Dn1U5bwssyMRf8CJuaKq/Hq2IsS6rShLYd2LAGu9Tf4wzcA7Ol/eKlD
-         WWXA==
-X-Gm-Message-State: AJIora9SOzTFWGf8WJI1BwOla1rB6cpDS47qLbRQCRMUwOC7HUXvqpfs
-        TOSrrjUK+Rr4uNs4av46iiw=
-X-Google-Smtp-Source: AGRyM1sOiuU691m9UNqKILrcF++Me1UMVhCLagzUfxoYS+ZZ9h9DjZQudKSBeU5wzuC1B2KMFg4l+A==
-X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id b10-20020a056402084a00b00426262d967emr16126132edz.286.1656335905115;
-        Mon, 27 Jun 2022 06:18:25 -0700 (PDT)
-Received: from localhost (92.40.170.45.threembb.co.uk. [92.40.170.45])
-        by smtp.gmail.com with ESMTPSA id g3-20020a170906594300b006f3ef214daesm5014147ejr.20.2022.06.27.06.18.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 06:18:24 -0700 (PDT)
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
- <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com>
- <cafd8a40ad35dcf8a35350261af6031c@walle.cc>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
-        rafael@kernel.org, quic_gurus@quicinc.com,
-        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 13/16] pinctrl: Add AXP192 pin control driver
-Date:   Mon, 27 Jun 2022 14:12:58 +0100
-In-reply-to: <cafd8a40ad35dcf8a35350261af6031c@walle.cc>
-Message-ID: <me4ummrWKIPseIG4ay7yCfrumN8sIdvc@localhost>
+        with ESMTP id S236504AbiF0Nrk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 09:47:40 -0400
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764B460C0;
+        Mon, 27 Jun 2022 06:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:Message-Id
+        :Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RaLW/vTZggRxBtrthi9D9DjaJGvkjLJCvLqTZlR4Mxs=; b=EN4kWiayfD/kHjAClOkkmbcEaU
+        hpzP+03G2n7RcVkrbVBtjb8kHhl26G86wzCscMGBJJANaSCtyumh2KliCIIOrWBaFKaBEzMrFvO5G
+        Y7AMz1zkUh+DCCQpb9uqu/IEte5HjvuubXWdeUN4Bc6dwg7tqkzqujMaXqJDP4OMo5SrvsbSPE2WZ
+        tKq5wy0SbC0kmadr0jRbk/QIx/nx/ljvJNAaH8NJ60FqMdiKD5/pBx+BFZ+4p3QC7TBRNs0ShXdtC
+        erKbj5zIBhx4X0NZCkLuROC+duqMYD/+9XdJuyQBYd/kYRwyhI3BjITfXsAFkOiJTfO5bJgWFCetQ
+        1sC1PVeQ==;
+Received: from [10.22.3.24] (helo=kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
+        id 1o5oa0-006Cqx-Ss; Mon, 27 Jun 2022 15:15:04 +0200
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Subject: [PATCH 0/3] thermal: qcom: tsens: Add data for MSM8909
+Date:   Mon, 27 Jun 2022 15:14:12 +0200
+Message-Id: <20220627131415.2868938-1-stephan.gerhold@kernkonzept.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,92 +57,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The MSM8909 SoC has 5 thermal sensors in a TSENS v0.1 block similar to
+MSM8916. Add the data for MSM8909 to the existing tsens-v0_1.c driver
+to make the thermal sensors work on MSM8909.
 
-Michael Walle <michael@walle.cc> writes:
+Stephan Gerhold (3):
+  dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
+  dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
+  thermal: qcom: tsens: Add data for MSM8909
 
-> Hi,
->
-> As Linus suggested you could have a look at devm_gpio_regmap_register()
-> with a custom xlate() callback and some improvements. But I've never
-> worked with pinctrl so I might be wrong. See below.
->
->> +static int axp192_gpio_get(struct gpio_chip *chip, unsigned int offset)
->> +{
->> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
->> +	const struct axp192_pctl_reg_info *reginfo = &pctl->desc->in_regs[offset];
->> +	unsigned int val;
->> +	int ret;
->> +
->> +	ret = regmap_read(pctl->regmap, reginfo->reg, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return !!(val & reginfo->mask);
->> +}
->
-> This should work.
->
->> +
->> +static int axp192_gpio_get_direction(struct gpio_chip *chip, unsigned
->> int offset)
->> +{
->> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
->> +	const struct axp192_pctl_reg_info *reginfo =
->> &pctl->desc->ctrl_regs[offset];
->> +	const u8 *input_muxvals = pctl->desc->functions[AXP192_FUNC_INPUT].muxvals;
->> +	unsigned int val;
->> +	int ret;
->> +
->> +	ret = regmap_read(pctl->regmap, reginfo->reg, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if ((val & reginfo->mask) == (input_muxvals[offset] <<
->> (ffs(reginfo->mask) - 1)))
->> +		return GPIO_LINE_DIRECTION_IN;
->
-> This isn't supported (yet) in gpio-regmap...
->
->> +
->> +	return GPIO_LINE_DIRECTION_OUT;
->> +}
->> +
->> +static void axp192_gpio_set(struct gpio_chip *chip, unsigned int
->> offset, int value)
->> +{
->> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
->> +	const struct axp192_pctl_reg_info *reginfo = &pctl->desc->out_regs[offset];
->> +
->> +	regmap_update_bits(pctl->regmap, reginfo->reg, reginfo->mask, value
->> ? reginfo->mask : 0);
->> +}
->> +
->> +static int axp192_gpio_direction_input(struct gpio_chip *chip,
->> unsigned int offset)
->> +{
->> +	return pinctrl_gpio_direction_input(chip->base + offset);
->> +}
->
-> ..as well as this.
->
->> +
->> +static int axp192_gpio_direction_output(struct gpio_chip *chip,
->> unsigned int offset, int value)
->> +{
->> +	chip->set(chip, offset, value);
->
-> Why don't you call pinctrl_gpio_direction_output() here?
+ .../bindings/thermal/qcom-tsens.yaml          |   6 +-
+ drivers/thermal/qcom/tsens-v0_1.c             | 119 +++++++++++++++++-
+ drivers/thermal/qcom/tsens.c                  |   3 +
+ drivers/thermal/qcom/tsens.h                  |   2 +-
+ 4 files changed, 123 insertions(+), 7 deletions(-)
 
-Probably because I copied this from pinctrl-axp209. I'll fix it in
-the next version.
+-- 
+2.30.2
 
->
->
-> I *think* what is needed for gpio-regmap to support this is:
->  - support values and masks for the direction, for now, we
->    only support single bits.
->  - support the pinctrl_gpio_direction_{input,output} calls
->
-> -michael
-
-That sounds about right, thanks for taking a look.
