@@ -2,78 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184AE55D715
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF9A55CB5F
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbiF0HJX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 03:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S232801AbiF0HOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 03:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbiF0HJV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 03:09:21 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17915F8C;
-        Mon, 27 Jun 2022 00:09:19 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t25so14966930lfg.7;
-        Mon, 27 Jun 2022 00:09:19 -0700 (PDT)
+        with ESMTP id S230329AbiF0HOd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 03:14:33 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596085F56;
+        Mon, 27 Jun 2022 00:14:32 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a4so1424483lfm.0;
+        Mon, 27 Jun 2022 00:14:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iCs6pLn8hT0XgzeDdl4O3hO03FQgcu4uIQD+eW26lwU=;
-        b=KwWPFHNH+XQBHdtaA1zl11WMHMfdvxbVPj74+Va2G5AwiJNxYbEu6htwbR1o79VM4j
-         VHgsbNLV4TyXyyHnZJMJJoSQfjMcHXFKPL7HKHyOFmrRiecIfHqL3PTb339MjSHYLvzi
-         W2l9/61IuDswJpVaq6+x3+6YKifWtWQH7AeNuRzlRkw12ai3EkdazF5oDlXJhFugV5Xc
-         dKi3T8KlH2/G9HtzeoA+hwdoRurjdHB/Tz0UzIYZr7YPE+6jBTCZ4yRpaIs0GeN6YzQ5
-         5wbnBzYSbLcSKPy/ROLC5obGsJJ79IT6wGppzCECOscjaWM5iUZ6NTbn4rMB/WInNhY2
-         lTnA==
+        bh=1vhD6QvwPb1Sk0ztcGCX9DIwPhwZXx+jWZOw6iM4IT4=;
+        b=BAIkya7n14RIykaoNgFlpV/r3TQL/WNsEaKH7PY7aa/oang0UBV1YhJSag35l0RO6w
+         VZ2j3uINQ3aQYfK8IMMSkPMQJQ3UxWe9/IB+/BxsB3XfbPFbvDwiiXtUMklAXqfefPC/
+         Ckk9RqlYgDteapU5sKgZGFIQ/ggZJCHmKQuT8LwizCUd7q1m/NDwW+lXsEhfTUbzOUDE
+         C5/gKwtALVMoIDRH8MQYaQr6N8BYuNvyuN7qcQA40dkTrEve4pDXkiBxmJmWr0z4TXOH
+         1rurxGuK7Ua8OvElU3uPCrKKQEawbYW6BP1wCPdLiz01Hzq6f31aRsMGKl00SwNXSVXe
+         XUUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iCs6pLn8hT0XgzeDdl4O3hO03FQgcu4uIQD+eW26lwU=;
-        b=6IaawhASj55uU6iAdxzFFrTzSX9AVNMfFN/YRZNFIKNHt4Emnq/OQejqCyNsOl0RhI
-         xYW44vl/Th1ROSLivlxx4hmB4FTAL4E7QAvUi5mYSa+JVK1wc4fAiYK5nC/9OV/vL5kI
-         xgRgMMvJUfHqgDbs+//aiyRL3zG06/j34hbKuJTOO3D5ZnqUtA0iRw006GfVc8Hlzp5V
-         BqGMbXOK06hXCgk9gZFzOzMmds9Z6iqwDnM/LZhzeBiEehlGDWZaRTNSvRpa2u8IN2fJ
-         X1/92Bx2NN/NBkJyP38ErCVr96PEU9wLWrujTpUMWbuM0DdSpWsbuCpUYetVpFsiWglo
-         COQQ==
-X-Gm-Message-State: AJIora8DrAnUeuv0KA//9lOGxJGuB8cTfRBf624L9hfynKqmk2kVVdD+
-        oLNjEs1VubCvayWALI+GaBw=
-X-Google-Smtp-Source: AGRyM1vH6333c+1uGKcseyiJYYdrdESGsGn8+yWZ/m7fFD06a6/eEo00s4JE7b5FRYzsqDURXb8Ghw==
-X-Received: by 2002:a05:6512:3043:b0:481:1b20:5860 with SMTP id b3-20020a056512304300b004811b205860mr2256891lfb.671.1656313758128;
-        Mon, 27 Jun 2022 00:09:18 -0700 (PDT)
+        bh=1vhD6QvwPb1Sk0ztcGCX9DIwPhwZXx+jWZOw6iM4IT4=;
+        b=tbBfzrONuyQqpIodRRsfhfeBbcrikKbOFWYS+coNEqG5fEB42nX+x8yjcbdKst758K
+         +Gd8HTbZ0F/cnnDKSnXTrPRbRtY/6a7hbJ+eloO44zYZWOKXMF/k373FkFlOje+XXKUa
+         owpDLPCN5eaLNH9MfWUvX52SRhDGelPRPiRmZ/czmMqjZinSQxISvFpOQ1x4gWgoQxSy
+         oecR/6tEoIK866PI5Q9SuskSqgOPH9D3A1RQHWFJyet2Rcm6mlNVpy+jIyMWBdUmqFUz
+         HFnX1Zfq2xghUshJVrFbmWIsLNfHiTu2lZ3lvS9wimxUoVqCwVhJYtLaCmvxy0uRsBFZ
+         93wg==
+X-Gm-Message-State: AJIora9cPa/DUUwX+txWZyeAiG7saMJL/6+8o9aWOeelYSBWlI82GwJ3
+        e7MQ8ZnJtQFOoZUA4wf3cTM=
+X-Google-Smtp-Source: AGRyM1s3ipXM6rHscQ0lTPauWlKgFP+yMT68KWO8w0OHs08H9fUOh/0tp6DBqhGuWsgzcwouWyQTDQ==
+X-Received: by 2002:a05:6512:3486:b0:47f:8790:85b with SMTP id v6-20020a056512348600b0047f8790085bmr8020143lfr.551.1656314070682;
+        Mon, 27 Jun 2022 00:14:30 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru. [109.252.118.164])
-        by smtp.googlemail.com with ESMTPSA id s28-20020a05651c049c00b002556b0cd5acsm1288477ljc.56.2022.06.27.00.09.16
+        by smtp.googlemail.com with ESMTPSA id h18-20020a05651c125200b0025a91928236sm1292403ljh.90.2022.06.27.00.14.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 00:09:17 -0700 (PDT)
-Message-ID: <d18a1f18-d78c-2db8-9b19-196dc88978c2@gmail.com>
-Date:   Mon, 27 Jun 2022 10:09:11 +0300
+        Mon, 27 Jun 2022 00:14:30 -0700 (PDT)
+Message-ID: <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
+Date:   Mon, 27 Jun 2022 10:14:24 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 5/5] OPP: Remove custom OPP helper support
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
 Content-Language: en-US
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Keerthy <j-keerthy@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <cover.1653991004.git.viresh.kumar@linaro.org>
- <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
- <565ff879-11e4-1ae4-08d8-1237a875ef12@gmail.com>
- <20220627060636.rfpok75zydgcwwo6@vireshk-i7>
- <4a8114f7-4ee6-a9ad-f5be-ceaf64be8a0e@gmail.com>
- <20220627064155.jo7iqz5h33l7a4vn@vireshk-i7>
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
 From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220627064155.jo7iqz5h33l7a4vn@vireshk-i7>
+In-Reply-To: <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,18 +84,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-27.06.2022 09:41, Viresh Kumar пишет:
-> On 27-06-22, 09:10, Dmitry Osipenko wrote:
->> Okay, but Tegra 3d driver doesn't need config_regulators(), it needs
->> customized set_opp() to set clock rate for both 3d engines.
-> 
-> What does that mean, you need to set two clocks ? There is separate
-> support added for that already [1].
+27.06.2022 09:45, Viresh Kumar пишет:
+>> Looks okay. If you'll solve the cpufreq problem where OPP config is set
+>> by two drivers for the same cpu device
+> This is supported, there is some early freeing of resources on the
+> removal path though, the reasoning for which I already gave in another
+> email. Though, I am open to sorting that out as well, but nothing
+> breaks the code for now AFAICT.
 > 
 
-Yes, I missed that multi-clock OPP patch, thanks.
-
-Seems _opp_compare_key() won't work properly for the multi-clocks since
-Tegra doesn't have bandwidth nor level for the 3d OPPs. Why does it need
-to check opp_table->clk_count == 1? Shouldn't it be opp_table->clk_count
-> 0?
+In case of Tegra, we use tegra-cpufreq driver that sets supported_hw and
+registers cpufreq-dt. If cpufreq-dt driver defers the probe, then the
+supported_hw will be lost on the re-probe. I haven't checked yet, but I
+suppose that cpufreq-dt driver defers on Tegra30 because of the CPU
+regulator and that's why we get the "OPP table is missing" error.
