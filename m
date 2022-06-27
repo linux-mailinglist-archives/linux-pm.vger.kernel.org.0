@@ -2,173 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BAB55C15D
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B67355DD38
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237391AbiF0TBG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 15:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S240477AbiF0Tuo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 15:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbiF0TBE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 15:01:04 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BD927A;
-        Mon, 27 Jun 2022 12:01:03 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id u20so10533908iob.8;
-        Mon, 27 Jun 2022 12:01:03 -0700 (PDT)
+        with ESMTP id S238279AbiF0Tun (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 15:50:43 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378D31BE98;
+        Mon, 27 Jun 2022 12:50:43 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id y18so10700991iof.2;
+        Mon, 27 Jun 2022 12:50:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mansG8D/+FHV5zKPQQEebcvobqiL0Z6byNaHC/Nv9l8=;
-        b=eNrE/aymDRsU7KURxePVHhuchGZGKOOBGvg/zaUmLHfHiPi4wa0340XzOF6ZXiSRSJ
-         DL/oYIpP4nlknVWV/V9JwBh5P45kYDe1MoE5+MwcAuJRo8gFXjVF0rgIwKOLSvWe2f2B
-         nBw07KctxLhIfNyHekdvjJEvagbRFqE15UED9hO5IINtxx81cDnTkUAY6HnxvW+NNAcC
-         R3RKqQyE32Jrl1CKiGb2jkJqi2qTwjYYMEJuyPQh/Bi7Zp17NoJcV/uDX43ntGP3rSaJ
-         adi/rnl0C/IHr6gE3Zz3pbCGFykh/5XbaiVMsj1G3scl5aCpe5KNzhSI1pfDnZaqP++M
-         8u6w==
-X-Gm-Message-State: AJIora+JBgmwK9wNqTjPGjqYfAp3wsr7Mfi2dmsIPF7Vi30+oZ7auw46
-        iiUqBRoOey7h7l3yAGGsWnWikpN/c3D/srH3tIE=
-X-Google-Smtp-Source: AGRyM1sCj0QgrRzCd2qoIY8dKEVPxjeocNnrlmC+yjIGUeOFa99tz5xaUDIkhmLdxAH5x2JaUOKfZxVqxpaCKduF1PI=
-X-Received: by 2002:a05:6638:1342:b0:33c:8cd9:3208 with SMTP id
- u2-20020a056638134200b0033c8cd93208mr5516066jad.301.1656356462460; Mon, 27
- Jun 2022 12:01:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220613120755.14306-1-peter.wang@mediatek.com>
-In-Reply-To: <20220613120755.14306-1-peter.wang@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Jun 2022 21:00:51 +0200
-Message-ID: <CAJZ5v0ipi5frHBGWWcFpGCYL7au=dF6vUG772h0r0pnCYsi5Zg@mail.gmail.com>
-Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release supplier
-To:     peter.wang@mediatek.com
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dtiCN8I266oCPG09ac417Y1pm08qNF7ctA3rQgmXy6w=;
+        b=6IEmjU/AC55yI3QxFFSWUMbqoaic2FDmdJNthyKIjQmblaV2W0zMjOBTxUALT6fzlW
+         21vZd5oqXo+23FWtLCA8vxSEycQS6S730OVNlZ97yc3FTXbeS+oGsY7m0nj5YVwUzmCl
+         1y4tPtEYBAWaRuB/ciXE3XTmDvu0Ue9pESWMNkzbW42YU4vfPNqpsVk929mt5AlKkrv2
+         o0RSEu0UD/u/P5H7YWPt77d1ZW+rG+9B2BRUinJGRQUHGFbLA5pp7xG21XdUlUTDDdsg
+         5BWwOFGGHCFC2dzgj9ExPuJVl0SgjSZOmhjxYZbI6vf/e1j88lk/4c1HM43lRBKfE5z5
+         3aEg==
+X-Gm-Message-State: AJIora/v2VlZXjBUgQqGjWiYLElF4P1tpNEyxfxrx+doxXyN0a8EWame
+        yJLuIDoxJdOLSFuiHGsHC7t9AvYh8w==
+X-Google-Smtp-Source: AGRyM1u2Q2iT/ikNcIKiYYcSDU3g/Sy7U/L7yOI0luMVJbKj7N/sIoRnPSlGBdj3RBojY2yZVpm85w==
+X-Received: by 2002:a05:6638:3727:b0:33c:98a9:9 with SMTP id k39-20020a056638372700b0033c98a90009mr4407071jav.84.1656359442513;
+        Mon, 27 Jun 2022 12:50:42 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id m28-20020a02a15c000000b00339e5e105a2sm5083795jah.117.2022.06.27.12.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 12:50:42 -0700 (PDT)
+Received: (nullmailer pid 2841583 invoked by uid 1000);
+        Mon, 27 Jun 2022 19:50:40 -0000
+Date:   Mon, 27 Jun 2022 13:50:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>, chun-hung.wu@mediatek.com,
-        alice.chao@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
-        powen.kao@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, tun-yu.yu@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: cpufreq: qcom-cpufreq-nvmem: fix board
+ compatible in example
+Message-ID: <20220627195040.GA2840123-robh@kernel.org>
+References: <20220627143340.477120-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627143340.477120-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 2:08 PM <peter.wang@mediatek.com> wrote:
->
-> From: Peter Wang <peter.wang@mediatek.com>
->
-> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
-> to prevent supplier enter suspend, pm_runtime_release_supplier should
-> check supplier_preactivated before let supplier enter suspend.
-
-Why?
-
-> If the link is drop or release, bypass check supplier_preactivated.
->
-> Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+On Mon, Jun 27, 2022 at 04:33:40PM +0200, Krzysztof Kozlowski wrote:
+> In the example, alone compatible "qcom,qcs404" is not correct.  Add
+> proper board compatibles for QCS404 Evaluation Board.
+> 
+> Reported-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
->  drivers/base/core.c          |  2 +-
->  drivers/base/power/runtime.c | 15 ++++++++++++---
->  include/linux/pm_runtime.h   |  5 +++--
->  3 files changed, 16 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 7cd789c4985d..3b9cc559928f 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -486,7 +486,7 @@ static void device_link_release_fn(struct work_struct *work)
->         /* Ensure that all references to the link object have been dropped. */
->         device_link_synchronize_removal();
->
-> -       pm_runtime_release_supplier(link, true);
-> +       pm_runtime_release_supplier(link, true, true);
->
->         put_device(link->consumer);
->         put_device(link->supplier);
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 676dc72d912d..3c4f425937a1 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -314,10 +314,19 @@ static int rpm_get_suppliers(struct device *dev)
->   * and if @check_idle is set, check if that device is idle (and so it can be
->   * suspended).
->   */
-> -void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
-> +void pm_runtime_release_supplier(struct device_link *link, bool check_idle,
-> +       bool drop)
->  {
->         struct device *supplier = link->supplier;
->
-> +       /*
-> +        * When consumer hold supplier, supplier cannot enter suspend.
-> +        * Driect release supplier and let supplier enter suspend is not allow.
-> +        * Unless the link is drop, direct relsease supplier should be okay.
-> +        */
-> +       if (link->supplier_preactivated && !drop)
-> +               return;
-> +
->         /*
->          * The additional power.usage_count check is a safety net in case
->          * the rpm_active refcount becomes saturated, in which case
-> @@ -338,7 +347,7 @@ static void __rpm_put_suppliers(struct device *dev, bool try_to_suspend)
->
->         list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
->                                 device_links_read_lock_held())
-> -               pm_runtime_release_supplier(link, try_to_suspend);
-> +               pm_runtime_release_supplier(link, try_to_suspend, false);
->  }
->
->  static void rpm_put_suppliers(struct device *dev)
-> @@ -1838,7 +1847,7 @@ void pm_runtime_drop_link(struct device_link *link)
->                 return;
->
->         pm_runtime_drop_link_count(link->consumer);
-> -       pm_runtime_release_supplier(link, true);
-> +       pm_runtime_release_supplier(link, true, true);
->  }
->
->  static bool pm_runtime_need_not_resume(struct device *dev)
-> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> index 9e4d056967c6..354ffb1eaec0 100644
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -88,7 +88,8 @@ extern void pm_runtime_get_suppliers(struct device *dev);
->  extern void pm_runtime_put_suppliers(struct device *dev);
->  extern void pm_runtime_new_link(struct device *dev);
->  extern void pm_runtime_drop_link(struct device_link *link);
-> -extern void pm_runtime_release_supplier(struct device_link *link, bool check_idle);
-> +extern void pm_runtime_release_supplier(struct device_link *link,
-> +       bool check_idle, bool drop);
->
->  extern int devm_pm_runtime_enable(struct device *dev);
->
-> @@ -315,7 +316,7 @@ static inline void pm_runtime_put_suppliers(struct device *dev) {}
->  static inline void pm_runtime_new_link(struct device *dev) {}
->  static inline void pm_runtime_drop_link(struct device_link *link) {}
->  static inline void pm_runtime_release_supplier(struct device_link *link,
-> -                                              bool check_idle) {}
-> +                                              bool check_idle, bool drop) {}
->
->  #endif /* !CONFIG_PM */
->
-> --
-> 2.18.0
->
+> 
+> Can be picked up independently, although the issue reported by Rob was
+> caused by:
+> https://lore.kernel.org/all/CAL_JsqKXDs=QHKob2Xy6vAFZfnkM9ggfmqf9TNA1hv8TScTmgQ@mail.gmail.com/
+
+Best to go in that tree unless it's going to take weeks...
+
+> ---
+>  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml       | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+Acked-by: Rob Herring <robh@kernel.org>
