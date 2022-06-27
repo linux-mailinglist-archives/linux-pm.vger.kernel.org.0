@@ -2,194 +2,325 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255C155C762
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3F655C59A
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239219AbiF0Lz0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 07:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
+        id S235312AbiF0L7C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 07:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238061AbiF0Lxd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 07:53:33 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140078.outbound.protection.outlook.com [40.107.14.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17469DFD5;
-        Mon, 27 Jun 2022 04:50:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZsuEEU405zu9dpeAY2r3/56uoQ6njmozL2DL+ULqyz0IVpvEUN76r4NYh8SBSaTgkwnv9GQbtcqW7aQ33LmpHLZByU4y5YmgNWwsI40K+CMLNqYyU20T84TNb5XWMzvSnbgZwkVP1kPARqKJ9nXzheN6wbB+J1KWajY70bcMoNbDbWoo9HFgjT4YlP9uHLbuUHdPjcAGaXfrO0doTtCbz8AxXx+w7bRveNUIGzoG6e1mQMtQAXpCBTfhkG9XUeyxtWU8Js2BMNw7ObWIvBZS4+Z65sMuVjuyrbfkgRQPv7nV0E4Y/rGApHbBQpWWP8csfjoDo/g2EV231Cpgbff7UA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lHge1mOZi7B52SFpKOWy5FFR1kjh/HiE0mYl8VY7Rp8=;
- b=HKQ/TKXg2VemiaK3T8LxXI/Ql0KqmUyP1sk8GrfXs61PllWN/LnUgW+fxSHUSV1c+ZN7F9rmk3j3FqsYmvkvlYKiUP3bONr5eKdBZqTBDNu3cylGEWPmbwNNpxy0oGbLkybZa1KgjmL9+appSmN9RFQ3VCMziKCFT2eqg/icLVCX3RL7L6qObEqNwSgfbJycstl1DAhSA3HIHeIv44pz3mWBO+Ozdd+y6HRBzL9/utBho0vqaFe0sdKf8KQUF6GGQoXXiV/2fPW8pc2oeL8WL9hmtGgrMLHdPfyvlwSlsMZdDMqcp8EMY8u928Pe9LsawiQRe5y7b1jbwVGzR3ffYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lHge1mOZi7B52SFpKOWy5FFR1kjh/HiE0mYl8VY7Rp8=;
- b=TayJQzofilL7hZsUc+w/2Fh45wAfpMCPOlRhtVWRzwjbLP7WfEwRb+ya1OR82Jwim+m4fbWpMWcGD9whGvMM11MQbBqZmqv0vbQfZB4pqdFwyNKIxnRgR47hwmM3Pbeq9hxfkYPvyDyRd3SkTf16AztqhGusnDvE22Fq91cPw0k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
- by DB7PR04MB5484.eurprd04.prod.outlook.com (2603:10a6:10:8a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
- 2022 11:50:05 +0000
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::6546:3ee1:5e6c:278f]) by VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::6546:3ee1:5e6c:278f%5]) with mapi id 15.20.5373.015; Mon, 27 Jun 2022
- 11:50:05 +0000
-Date:   Mon, 27 Jun 2022 14:49:49 +0300
-From:   Viorel Suman <viorel.suman@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
-Subject: Re: [PATCH v5 10/14] dt-bindings: firmware: Add fsl,scu yaml file
-Message-ID: <20220627114949.pg7az36fz4jrwebp@fsr-ub1664-116>
-References: <20220616164303.790379-1-viorel.suman@nxp.com>
- <20220616164303.790379-11-viorel.suman@nxp.com>
- <b653d7af-f846-abb2-d260-3ce615b070a4@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b653d7af-f846-abb2-d260-3ce615b070a4@linaro.org>
-X-ClientProxiedBy: AM3PR05CA0150.eurprd05.prod.outlook.com
- (2603:10a6:207:3::28) To VI1PR04MB5005.eurprd04.prod.outlook.com
- (2603:10a6:803:57::30)
+        with ESMTP id S239635AbiF0L54 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 07:57:56 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BB0DF60
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 04:54:11 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v65-20020a1cac44000000b003a03c76fa38so4709421wme.5
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 04:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=nNoaWz2DLfztpbfMaaOu9PND9CXL/stNC5CxyVcj8tw=;
+        b=s0FEU6AivObD1lzT2SuxslJpVSIXyDDsuFB0W7kASRDUlSFyBNXIGpEBrYgWxxbOLr
+         pADpmFpbeRHDXuUrloWKz+QrjRXV87KEleWiYHYpTRkMzZ3mbZk+pt04e5a3kVnMU6GZ
+         CZj+MLN0u+Cl0VoSCJPdrZDls00sd1/daPXrU5CXskGv8kFtkeALfEiWJi5e/hkjlABy
+         n4s9LX1uBbD5hvzmkV8vijcL7h5ep3jCVXzFrK9MTGQH/H+2viSJie24i/o8JhccnYUo
+         /cip9/pXsctWiRyYT31HX0pRTcNqmuS7XA/ddac5oBXR8bMFreniec+taVX+53lzpAPg
+         RALg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nNoaWz2DLfztpbfMaaOu9PND9CXL/stNC5CxyVcj8tw=;
+        b=Lzt9eE4N+EZbt2zUHJXkG38tqj6TdHActs4/LKT8SjYcjmvsAtkMjqPktO3Y27Mv8p
+         ZSdjVnrTqLgF61dk6KG8tkJyPicCT9QMqdijrwN6l6a7g+2ePPjVx302QePnb+Aw5Wnx
+         jJxeU5W3DXo0IOzigQPTkA87suEchJ4/+8XUuK9kl4JK1KmGk8VVT0lYbPb9cExiutfe
+         /9FiQDMX3OhZpV8clHBxrRrKZw4YATzeTvZGj1wB2rCvLEIf7woTlHWfTqgBhkQOUvLD
+         kwGTSd37NJ7C8yrqDR1hWne0AEXQHpZwJpMRL0TjAAryyG1v9wYsr3iaA+Vz8TMxhSic
+         up5g==
+X-Gm-Message-State: AJIora+aEvUMV9tMuR2yN8hbR92MQe6+lO3u2qKhZ71ijvvUxcG50QAl
+        EdQC1edGtnQhMZkvYF0OTOAy+w==
+X-Google-Smtp-Source: AGRyM1v2YCbjkUWS+vtyeJezfTvhqmE7y9nvKbHozDF85HWmhsPzgY7ui0/J/OUKoCoLxEqG21Y3Xw==
+X-Received: by 2002:a05:600c:a42:b0:39c:9166:5a55 with SMTP id c2-20020a05600c0a4200b0039c91665a55mr14839526wmq.141.1656330849806;
+        Mon, 27 Jun 2022 04:54:09 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id a7-20020adffb87000000b0021b89181863sm10331609wrr.41.2022.06.27.04.54.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 04:54:09 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 12:54:07 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        sre@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        lgirdwood@gmail.com, lars@metafoo.de, rafael@kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/10] mfd: axp20x: Add support for AXP192
+Message-ID: <YrmaX6/dbYKAFDQ4@google.com>
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
+ <20220603135714.12007-7-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0448d220-e139-44e5-1291-08da58332d0a
-X-MS-TrafficTypeDiagnostic: DB7PR04MB5484:EE_
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fPgC7Av1gG3RCcUKNTSd2+8WnY1V2XUBS1HW0tFJqMqyBwAMhsYlJnQMZn4fFss0zJ3jEGXBItqMcettNuiBf1poybjcRtSRghaEXtCSAEwdvfWTuEo2tbssK/bli/lNKpdGL2gW+1JNbClV+G8uLImV8fhRL76ErYDXK+ZgL8k+A99yicqQ6G+DbAraemHrIkks2spVPvYdJMj+AYkNjcHcT/IpsBW8rOf0CaaME9D+eOfkeSeCYy4Uye+4UD6Y33P4hVlIm4MAg34sBiKOq43CR6RPkdE/ufpTmiJLB9lgABHfgomdDhQc1HOHfmqDoGEb9avLS2G4Fhg/kYjDn0DP+qoTNZgpnTXoCE4tLtwHFA8/r3ObEPNcemkR8QBcUT23UE1/Y/FryPRIyJqxR2TFgnsgGFT07bJvxmiXOeDkCaTAsgROVIyh/PA1qmBx49OH/ZSVtAUz41LMNnhEzQLtnrT/s3MOtPmeprMCXKgNrCSWZHuuAYkyS0jvbYFpDQ4/jUx4K0k3dI7DUBg51R8zOBCjaFLvdOaCG5XWeYS7jbyhDwveuvUKPt64/AW5ZgoJVvLAAYmjxb5WrRPg+notEwOMo1NkVYueU/oh26mJXpT3Vl2GdxBEdWqDEe6xPuUi3MomcfAusMRfcz9/5OrUVsaduTrcv8OQ3oejs9xOZtXu3JSSfE5p40vjHM+AN2jxvxMtrfJmZ53dbHoSjKrXlfOKGvRutwKRm4fwvp8AJ8FnUzBOVCZPGodx/eQQNYDRaoxCDmark2XYjcM1Y7KvZV08CYqWUOzjLSJ7cKA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(39860400002)(136003)(366004)(376002)(346002)(396003)(6916009)(54906003)(83380400001)(41300700001)(86362001)(44832011)(316002)(7406005)(5660300002)(186003)(1076003)(4326008)(8936002)(38100700002)(6486002)(6666004)(7416002)(478600001)(8676002)(33716001)(53546011)(9686003)(52116002)(26005)(6512007)(6506007)(2906002)(66476007)(66946007)(38350700002)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k4GOIOj9KR0SmLgkAxygpLWtFlhX9zo5cS18dcl24GYoItxuKvWDtvDBt7jd?=
- =?us-ascii?Q?D6aAghnkXqJ3mwg+l9iTLdrZ2tOUJISeYQ3pLrL2BF9/6IDMI8yoSiTA/+SO?=
- =?us-ascii?Q?w8zxRCEEICGNW0r3XQdv8K8mYklhCLL5ijNPuq+pc7n7IXyf7G1/AF64vQYK?=
- =?us-ascii?Q?6+no8iz2yGFQHE79mDiBmyNsVa+eS5MQYWg0Ijp+RcxqGl27Uaq9RH7aOTS2?=
- =?us-ascii?Q?0G84nWG+0C/LJFbl6k21UTKNIu9uT8T+E+dGfZkoHLYjrsZDV7CXYBLT4hWO?=
- =?us-ascii?Q?gnVPjCJvWa0vDJg6aH2+UrPCGEeEvQeUeSVTDMsEO6a/losnMaZJXjOZuFyg?=
- =?us-ascii?Q?LzbsP+E/Wikp54frMrk0tTm4ngtm6YNhKtvccdSaz1dYyjeXgo0ignLEqVjv?=
- =?us-ascii?Q?IBmlCMh1We55iWWQL8L3Qt6y8/k+l7NR+Z7qN6GTWDvtZnBZVmSAwcY48a2p?=
- =?us-ascii?Q?Xt+upYS2Ble9kbTZ0fN39REFDoF45olZ4oUasyL+bcmS3MXdF6Zm2q+0VE+X?=
- =?us-ascii?Q?NDfutwV4PkkKxN5UpxlL/NnR7PO273lY7+scjT+w53mreQSU+oxKPSQzsTpd?=
- =?us-ascii?Q?A1Nixh0OB3tJYCZANx9mjgbMrQo5PJP1sczFaRvlH8xv2ULZsYJP2ZwasCCs?=
- =?us-ascii?Q?wN3/RjE2Y31TUtsIzdyMAB5PnzdhjCAS280DmAL4+PR5YdEnFGEHRbv1SSwj?=
- =?us-ascii?Q?7UHzOV6El67dfI0Q9MbY6hSnXV5ECTX6bf3LbvHNyGI7XXkMVWI5Vpz+1B0R?=
- =?us-ascii?Q?8jJOhKEJr2LyFTCa4uMKcWeGeCropp+0QpXZ8UUawopJ/C3+Yv6OBQ/LCsoV?=
- =?us-ascii?Q?WueDcRf7uN3t4cuHITSFpcaLCWXHcwKPNzmLGKwiSTl1QSgpUmNXjhpbHT1Y?=
- =?us-ascii?Q?fBUXhQ09WA/PsfGpy6VYJU0nYy1wkpjkneFCpbALNizcjPV1Mx1GGQRMPJ9B?=
- =?us-ascii?Q?P2HiRfFQuf8DtU96UFFozPtXZ/9MuSMIc9WiZT0KTZKrBZisfGLud2zr+3pb?=
- =?us-ascii?Q?4A7Q7hmd2Nx91pu4lAT1Qb9BlWlUFNCEvuhjeQeOAEFwaYDMM24UVx2mTlup?=
- =?us-ascii?Q?V+OJBhg+IRfsOlZ2Q7bx3LoSPG1VxtRmJ/hCvX9NMIbOwIZK1oz0Hwk9D+8v?=
- =?us-ascii?Q?GkO6MmTD0rbD0fGgpKIAkYbI/gVvq9AA4VfYDXsVgt56JigQSVDP/rrDWjqo?=
- =?us-ascii?Q?8KdbKXiC2XypZUbuO6kIYuYKxQdefXxBvuFl4LG4VjZj8VImk3ARAlDxWeGs?=
- =?us-ascii?Q?ZdlyiOl5AGlmoWIabgUf7o76q+aUXcItvfXkrO6iWUS0BXsUSnyGrvCijGjT?=
- =?us-ascii?Q?lPudeSRQnWv1XJSGwLO2mAndyjZZrhWk6PxFIgG8OFWTEcz6lGxUL/EUiJQX?=
- =?us-ascii?Q?9Uuq0bkB2oTkTUPC521GB/xZWrvsBBDV4VxCCgZcpXFnniod+u7sD1IDOZoK?=
- =?us-ascii?Q?aYyfp8K7ECQVUQq8h8NzEKojDbaumqwUBf7dFAZ7/+8/9161Cz8kHdpK65bM?=
- =?us-ascii?Q?N2ZqmX+e3s+LzN6OJRqHkbK8ixoKcsqOHWWWslR+zdOSfscs+6HOOtW+HDrW?=
- =?us-ascii?Q?KQh3rQs9WUOpBL9N3BB6EiBOk9yzGK/FHOpf5s0A?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0448d220-e139-44e5-1291-08da58332d0a
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 11:50:05.1994
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uxe8mnobozH6XABoZZHiGNnxa/aMVBz+N7ZWJxXfGM1kmvWTrzfxtASuPoS11u+MFyyvB1TV6GUOLzwFunZ4/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5484
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220603135714.12007-7-aidanmacdonald.0x0@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-06-24 12:25:44, Krzysztof Kozlowski wrote:
-> On 16/06/2022 18:42, Viorel Suman wrote:
-> > From: Abel Vesa <abel.vesa@nxp.com>
-> > 
-> > In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> > we need to split it between the right subsystems. This patch adds the
-> > fsl,scu.yaml in the firmware bindings folder. This one is only for
-> > the main SCU node. The old txt file will be removed only after all
-> > the child nodes have been properly switch to yaml.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> > Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> > ---
-> >  .../devicetree/bindings/firmware/fsl,scu.yaml | 170 ++++++++++++++++++
-> >  1 file changed, 170 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/firmware/fsl,scu.yaml b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+On Fri, 03 Jun 2022, Aidan MacDonald wrote:
 
-[...]
-
-> > +properties:
-> > +  $nodename:
-> > +    const: 'scu'
+> The AXP192 PMIC is similar to the AXP202/AXP209, but with different
+> regulators, additional GPIOs, and a different IRQ register layout.
 > 
-> Why enforcing node name? Second point is that node names should be
-> generic, so I wonder what "SCU" exactly means and whether it is generic?
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  drivers/mfd/axp20x-i2c.c   |   2 +
+>  drivers/mfd/axp20x.c       | 150 +++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/axp20x.h |  84 +++++++++++++++++++++
+>  3 files changed, 236 insertions(+)
 > 
+> diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
+> index 00ab48018d8d..9ada58fad77f 100644
+> --- a/drivers/mfd/axp20x-i2c.c
+> +++ b/drivers/mfd/axp20x-i2c.c
+> @@ -62,6 +62,7 @@ static int axp20x_i2c_remove(struct i2c_client *i2c)
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id axp20x_i2c_of_match[] = {
+>  	{ .compatible = "x-powers,axp152", .data = (void *)AXP152_ID },
+> +	{ .compatible = "x-powers,axp192", .data = (void *)AXP192_ID },
+>  	{ .compatible = "x-powers,axp202", .data = (void *)AXP202_ID },
+>  	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
+>  	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
+> @@ -75,6 +76,7 @@ MODULE_DEVICE_TABLE(of, axp20x_i2c_of_match);
+>  
+>  static const struct i2c_device_id axp20x_i2c_id[] = {
+>  	{ "axp152", 0 },
+> +	{ "axp192", 0 },
+>  	{ "axp202", 0 },
+>  	{ "axp209", 0 },
+>  	{ "axp221", 0 },
+> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+> index 8161a5dc68e8..7f64e5c83fe2 100644
+> --- a/drivers/mfd/axp20x.c
+> +++ b/drivers/mfd/axp20x.c
+> @@ -34,6 +34,7 @@
+>  
+>  static const char * const axp20x_model_names[] = {
+>  	"AXP152",
+> +	"AXP192",
+>  	"AXP202",
+>  	"AXP209",
+>  	"AXP221",
+> @@ -92,6 +93,35 @@ static const struct regmap_access_table axp20x_volatile_table = {
+>  	.n_yes_ranges	= ARRAY_SIZE(axp20x_volatile_ranges),
+>  };
+>  
+> +static const struct regmap_range axp192_writeable_ranges[] = {
+> +	regmap_reg_range(AXP192_DATACACHE(0), AXP192_DATACACHE(5)),
+> +	regmap_reg_range(AXP192_PWR_OUT_CTRL, AXP192_IRQ5_STATE),
+> +	regmap_reg_range(AXP20X_DCDC_MODE, AXP192_N_RSTO_CTRL),
+> +	regmap_reg_range(AXP20X_CC_CTRL, AXP20X_CC_CTRL),
+> +};
+> +
+> +static const struct regmap_range axp192_volatile_ranges[] = {
+> +	regmap_reg_range(AXP20X_PWR_INPUT_STATUS, AXP192_USB_OTG_STATUS),
+> +	regmap_reg_range(AXP192_IRQ1_STATE, AXP192_IRQ4_STATE),
+> +	regmap_reg_range(AXP192_IRQ5_STATE, AXP192_IRQ5_STATE),
+> +	regmap_reg_range(AXP20X_ACIN_V_ADC_H, AXP20X_IPSOUT_V_HIGH_L),
+> +	regmap_reg_range(AXP20X_TIMER_CTRL, AXP20X_TIMER_CTRL),
+> +	regmap_reg_range(AXP192_GPIO2_0_STATE, AXP192_GPIO2_0_STATE),
+> +	regmap_reg_range(AXP192_GPIO4_3_STATE, AXP192_GPIO4_3_STATE),
+> +	regmap_reg_range(AXP192_N_RSTO_CTRL, AXP192_N_RSTO_CTRL),
+> +	regmap_reg_range(AXP20X_CHRG_CC_31_24, AXP20X_CC_CTRL),
+> +};
+> +
+> +static const struct regmap_access_table axp192_writeable_table = {
+> +	.yes_ranges	= axp192_writeable_ranges,
+> +	.n_yes_ranges	= ARRAY_SIZE(axp192_writeable_ranges),
+> +};
+> +
+> +static const struct regmap_access_table axp192_volatile_table = {
+> +	.yes_ranges	= axp192_volatile_ranges,
+> +	.n_yes_ranges	= ARRAY_SIZE(axp192_volatile_ranges),
+> +};
+> +
+>  /* AXP22x ranges are shared with the AXP809, as they cover the same range */
+>  static const struct regmap_range axp22x_writeable_ranges[] = {
+>  	regmap_reg_range(AXP20X_DATACACHE(0), AXP20X_IRQ5_STATE),
+> @@ -173,6 +203,25 @@ static const struct resource axp152_pek_resources[] = {
+>  	DEFINE_RES_IRQ_NAMED(AXP152_IRQ_PEK_FAL_EDGE, "PEK_DBF"),
+>  };
+>  
+> +static const struct resource axp192_gpio_resources[] = {
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO0_INPUT, "GPIO0"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO1_INPUT, "GPIO1"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO2_INPUT, "GPIO2"),
+> +};
+> +
+> +static const struct resource axp192_ac_power_supply_resources[] = {
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_PLUGIN, "ACIN_PLUGIN"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_REMOVAL, "ACIN_REMOVAL"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_OVER_V, "ACIN_OVER_V"),
+> +};
+> +
+> +static const struct resource axp192_usb_power_supply_resources[] = {
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_PLUGIN, "VBUS_PLUGIN"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_REMOVAL, "VBUS_REMOVAL"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_VALID, "VBUS_VALID"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_NOT_VALID, "VBUS_NOT_VALID"),
+> +};
+> +
+>  static const struct resource axp20x_ac_power_supply_resources[] = {
+>  	DEFINE_RES_IRQ_NAMED(AXP20X_IRQ_ACIN_PLUGIN, "ACIN_PLUGIN"),
+>  	DEFINE_RES_IRQ_NAMED(AXP20X_IRQ_ACIN_REMOVAL, "ACIN_REMOVAL"),
+> @@ -245,6 +294,15 @@ static const struct regmap_config axp152_regmap_config = {
+>  	.cache_type	= REGCACHE_RBTREE,
+>  };
+>  
+> +static const struct regmap_config axp192_regmap_config = {
+> +	.reg_bits	= 8,
+> +	.val_bits	= 8,
+> +	.wr_table	= &axp192_writeable_table,
+> +	.volatile_table	= &axp192_volatile_table,
+> +	.max_register	= AXP20X_CC_CTRL,
+> +	.cache_type	= REGCACHE_RBTREE,
+> +};
+> +
+>  static const struct regmap_config axp20x_regmap_config = {
+>  	.reg_bits	= 8,
+>  	.val_bits	= 8,
+> @@ -304,6 +362,55 @@ static const struct regmap_irq axp152_regmap_irqs[] = {
+>  	INIT_REGMAP_IRQ(AXP152, GPIO0_INPUT,		2, 0),
+>  };
+>  
+> +static const struct regmap_irq axp192_regmap_irqs[] = {
+> +	INIT_REGMAP_IRQ(AXP192, ACIN_OVER_V,		0, 7),
+> +	INIT_REGMAP_IRQ(AXP192, ACIN_PLUGIN,		0, 6),
+> +	INIT_REGMAP_IRQ(AXP192, ACIN_REMOVAL,		0, 5),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_OVER_V,		0, 4),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_PLUGIN,		0, 3),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_REMOVAL,		0, 2),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_V_LOW,		0, 1),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_PLUGIN,		1, 7),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_REMOVAL,	        1, 6),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_ENT_ACT_MODE,	1, 5),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_EXIT_ACT_MODE,	1, 4),
+> +	INIT_REGMAP_IRQ(AXP192, CHARG,		        1, 3),
+> +	INIT_REGMAP_IRQ(AXP192, CHARG_DONE,		1, 2),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_TEMP_HIGH,	        1, 1),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_TEMP_LOW,	        1, 0),
+> +	INIT_REGMAP_IRQ(AXP192, DIE_TEMP_HIGH,	        2, 7),
+> +	INIT_REGMAP_IRQ(AXP192, CHARG_I_LOW,		2, 6),
+> +	INIT_REGMAP_IRQ(AXP192, DCDC1_V_LONG,	        2, 5),
+> +	INIT_REGMAP_IRQ(AXP192, DCDC2_V_LONG,	        2, 4),
+> +	INIT_REGMAP_IRQ(AXP192, DCDC3_V_LONG,	        2, 3),
+> +	INIT_REGMAP_IRQ(AXP192, PEK_SHORT,		2, 1),
+> +	INIT_REGMAP_IRQ(AXP192, PEK_LONG,		2, 0),
+> +	INIT_REGMAP_IRQ(AXP192, N_OE_PWR_ON,		3, 7),
+> +	INIT_REGMAP_IRQ(AXP192, N_OE_PWR_OFF,	        3, 6),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_VALID,		3, 5),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_NOT_VALID,	        3, 4),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_SESS_VALID,	3, 3),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_SESS_END,	        3, 2),
+> +	INIT_REGMAP_IRQ(AXP192, LOW_PWR_LVL,	        3, 0),
+> +	INIT_REGMAP_IRQ(AXP192, TIMER,			4, 7),
+> +	INIT_REGMAP_IRQ(AXP192, GPIO2_INPUT,		4, 2),
+> +	INIT_REGMAP_IRQ(AXP192, GPIO1_INPUT,		4, 1),
+> +	INIT_REGMAP_IRQ(AXP192, GPIO0_INPUT,		4, 0),
+> +};
+> +
+> +static int axp192_get_irq_reg(unsigned int base_reg, int i)
 
-It stands for "System Control Unit" - looks generic to me.
-I guess a reason to enforce it - need to check with Abel - might be
-the need to group multiple SCU implementations under a common known name.
+Nit: If you have to respin this set, please rename 'i'.
 
-> > +
-> > +  compatible:
-> > +    const: fsl,imx-scu
-> > +
-> > +  clock-controller:
-> > +    description: |
-> > +      $ref: /schemas/clock/fsl,scu-clk.yaml
-> 
-> That's not a valid syntax. ref is not part of description
-> 
+Unless used as an iterator, 'i' is a terrible variable name.
 
-Right, will fix that, thank you for review.
+> +{
+> +	/* linear mapping for IRQ1 to IRQ4 */
+> +	if (i < 4)
+> +		return base_reg + i;
+> +
+> +	/* handle IRQ5 separately */
+> +	if (base_reg == AXP192_IRQ1_EN)
+> +		return AXP192_IRQ5_EN;
+> +	else
+> +		return AXP192_IRQ5_STATE;
+> +}
+> +
+>  static const struct regmap_irq axp20x_regmap_irqs[] = {
+>  	INIT_REGMAP_IRQ(AXP20X, ACIN_OVER_V,		0, 7),
+>  	INIT_REGMAP_IRQ(AXP20X, ACIN_PLUGIN,		0, 6),
+> @@ -514,6 +621,19 @@ static const struct regmap_irq_chip axp152_regmap_irq_chip = {
+>  	.num_regs		= 3,
+>  };
+>  
+> +static const struct regmap_irq_chip axp192_regmap_irq_chip = {
+> +	.name			= "axp192_irq_chip",
+> +	.status_base		= AXP192_IRQ1_STATE,
+> +	.ack_base		= AXP192_IRQ1_STATE,
+> +	.mask_base		= AXP192_IRQ1_EN,
+> +	.mask_invert		= true,
+> +	.init_ack_masked	= true,
+> +	.irqs			= axp192_regmap_irqs,
+> +	.num_irqs		= ARRAY_SIZE(axp192_regmap_irqs),
+> +	.num_regs		= 5,
+> +	.get_irq_reg		= axp192_get_irq_reg,
+> +};
+> +
+>  static const struct regmap_irq_chip axp20x_regmap_irq_chip = {
+>  	.name			= "axp20x_irq_chip",
+>  	.status_base		= AXP20X_IRQ1_STATE,
+> @@ -588,6 +708,30 @@ static const struct regmap_irq_chip axp809_regmap_irq_chip = {
+>  	.num_regs		= 5,
+>  };
+>  
+> +static const struct mfd_cell axp192_cells[] = {
+> +	{
+> +		.name		= "axp192-gpio",
+> +		.of_compatible	= "x-powers,axp192-gpio",
+> +		.num_resources	= ARRAY_SIZE(axp192_gpio_resources),
+> +		.resources	= axp192_gpio_resources,
+> +	}, {
+> +		.name		= "axp20x-regulator",
 
-Regards,
-Viorel
+Nit: Is it possible to put one line entries at the bottom?
 
+And format like this:
+
+    { .name = "axp20x-regulator" }
+
+> +	}, {
+> +		.name		= "axp192-adc",
+> +		.of_compatible	= "x-powers,axp192-adc",
+> +	}, {
+> +		.name		= "axp20x-ac-power-supply",
+> +		.of_compatible	= "x-powers,axp202-ac-power-supply",
+> +		.num_resources	= ARRAY_SIZE(axp192_ac_power_supply_resources),
+> +		.resources	= axp192_ac_power_supply_resources,
+> +	}, {
+> +		.name		= "axp20x-usb-power-supply",
+> +		.of_compatible	= "x-powers,axp192-usb-power-supply",
+> +		.num_resources	= ARRAY_SIZE(axp192_usb_power_supply_resources),
+> +		.resources	= axp192_usb_power_supply_resources,
+> +	}
+> +};
+
+For my own reference (apply this as-is to your sign-off block):
+
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
