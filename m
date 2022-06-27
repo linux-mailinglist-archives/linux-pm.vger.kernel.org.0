@@ -2,184 +2,331 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BFC55C854
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D9D55C244
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiF0Mjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 08:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S234685AbiF0NHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 09:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236224AbiF0Mjq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 08:39:46 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E25CB7EC
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 05:39:45 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id q6so18798634eji.13
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 05:39:44 -0700 (PDT)
+        with ESMTP id S234890AbiF0NHa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 09:07:30 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22ADB53;
+        Mon, 27 Jun 2022 06:06:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id eq6so12907873edb.6;
+        Mon, 27 Jun 2022 06:06:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xmyY2TbGiQjUSbUXsv4bmxdmwb/1rWQHVm1rbAHDFtc=;
-        b=WgCMA45z7oXe99Kbi//PSjt233asrGWvSstR+do7+vDXHYbH9jE8DEWkHR2IR7+3VD
-         y1khmDOx6JyNs76tx30VI984zWqUWXybyXShrbzXKUuEp+MZ2KxcvqQVWnDuYrHqv3Au
-         b4lmIJGkdBdYipjIbS6xyBdXgpUzF9/nK8+4saPjtHrrE7zE1jIIKGHCBsJSHGJ70A2V
-         xMX59jFokLVHnb1zSWxhsf65P2+Vf/Ti+LC6zed1OWjgm2PcRrPQuXB9xwSZRJkhT1oW
-         RpDGu63bCEv1Ko8kMZXzNwyVmt3lOUZ3amOTKIUfq4OSSS2iCdXWG9OVt6UncEMPE+fM
-         YfAg==
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:date:in-reply-to:message-id
+         :mime-version;
+        bh=Og1be9n3VJuoYVVqYwwqw56Ub9H2bVsORIbJIIqf7K4=;
+        b=Wu0kXiCavC8JwpQyxs8T72mOivG0aXRYf6OdBKnDSewAVSltsIgFWVEFJlrCpCna9Z
+         oOSTX8uyHXnw0cjx7jk2AH6aecrCGvVIbEWZnB/fbY5eJz83TtOb155EpVZ/KDcTMPLX
+         /xYPuFq1YVZbCTYcxa67t+DmQvaXvx31fuCF3+JZyPgxDABNra8+IU/9BBkjk6hept0y
+         u1JejVQfdsuuqA14Op6Hoz6yEBjaAtbs6tiJSjGVIHBS6G3s+nue6XqOJ1/T02bsT/LL
+         I05veIdNcRpzlYCulHEmO+oJEdsuhWLY3gMl7VzC3gHNxjoF3hU3++myGGi8omPFAp8D
+         HZIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xmyY2TbGiQjUSbUXsv4bmxdmwb/1rWQHVm1rbAHDFtc=;
-        b=RdGrYuHW4kDjIVnqLXjZzg3SPh5577Kk4GA3ZzXmChWa0bDUcvHeuLsAWWE/HT4rrW
-         Uvxl5JHhjdPVsgVTwclR2udLve08e3SHdzvSP2KGvcfFTgfJUPG5xGZrC0CIXYjKOlr1
-         IXYtZqfY5nqo4nMB7Hp6hX+WUYGtbG+JlSrOANOnn64UFNkgPzsmFueQ4bDziVDd22F2
-         AgyUu2pbb+c3fwxVE5n4DpGjTvPfB0O13DWlAKXs+bgreSraomRGVd/fds3y3tQR2Xob
-         ma0VxO70KYS3uhsyf0laMjP0aAbFynnHiCTw2OY0d2iQ9TJpGk21rPhvroFvLBJyuQc3
-         ERiQ==
-X-Gm-Message-State: AJIora81a5fiqF6CFjLBVBIX18miBaQG2RvCXPQFLEkmuj1FLTlKSgkg
-        6f4+5CcD07f0AfsdtXoc8pe5hg==
-X-Google-Smtp-Source: AGRyM1tVT90h6/b8BA4X8bgZvAoehqjtWKBkZx2qsNMgdSgNwycwFWB/bXiCC/6GqZ24Lp0OXWDccA==
-X-Received: by 2002:a17:906:1c5:b0:715:7c69:870e with SMTP id 5-20020a17090601c500b007157c69870emr12665051ejj.348.1656333583617;
-        Mon, 27 Jun 2022 05:39:43 -0700 (PDT)
-Received: from [192.168.0.249] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y24-20020a1709060a9800b006fe8a4ec62fsm4987024ejf.4.2022.06.27.05.39.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 05:39:43 -0700 (PDT)
-Message-ID: <47e1fcb4-237b-b880-b1b2-3910cc19e727@linaro.org>
-Date:   Mon, 27 Jun 2022 14:39:41 +0200
+        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=Og1be9n3VJuoYVVqYwwqw56Ub9H2bVsORIbJIIqf7K4=;
+        b=Z9+JAMnyTQmH1km/OEwLbxuE4Lcl2rRMv0VUm+kmiVd+K3eiO2Mlgk5NVD3voKJTn5
+         67oXOYa+kfkIEOgCNQYUtEYq7AasMfSMVGI8tGKPcEu78j7RpO6UnxugX9ydqxrhqbqf
+         38EfuCN+CYunJ0Thi/Vy/dF5qVsPMrKCjiP6dGZC9dkpBU8BzHKXPcwow/VtOu80XQuB
+         SnIvO7ZUQfuD3Ln1ZfXxvBZCei4+ZgN+MhtqRxv51RJxXn255Etz7plS4SAiylXXUvln
+         DX7uOw5eTke4utiQJcU3X4okvjF4F2bEFaUVkLx4nT6uZGpgc1e25ff/3pBxYGegOdH1
+         6r6Q==
+X-Gm-Message-State: AJIora+IVj0qQsCCdGaqSmPMKCawsEt0Ilh4N5MYgDHGUVFidShWgbzY
+        nHl98oSgHL9I3nTSLhXLjaM=
+X-Google-Smtp-Source: AGRyM1sdFYw/gA/pvthK9nXJetTj9y/RKSK1qtU81NYUz/k7MhR0W/D9ce7h8b57luSzlQu8gXiccA==
+X-Received: by 2002:a05:6402:d05:b0:435:b2a6:94eb with SMTP id eb5-20020a0564020d0500b00435b2a694ebmr15985376edb.87.1656335213382;
+        Mon, 27 Jun 2022 06:06:53 -0700 (PDT)
+Received: from localhost (92.40.170.45.threembb.co.uk. [92.40.170.45])
+        by smtp.gmail.com with ESMTPSA id cb25-20020a0564020b7900b004359dafe822sm7578913edb.29.2022.06.27.06.06.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 06:06:52 -0700 (PDT)
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
+ <20220603135714.12007-7-aidanmacdonald.0x0@gmail.com>
+ <YrmaX6/dbYKAFDQ4@google.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        sre@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        lgirdwood@gmail.com, lars@metafoo.de, rafael@kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/10] mfd: axp20x: Add support for AXP192
+Date:   Mon, 27 Jun 2022 14:02:00 +0100
+In-reply-to: <YrmaX6/dbYKAFDQ4@google.com>
+Message-ID: <pA6goDL2KKtUckLScUkFqzlvRxCHYZaB@localhost>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Thara Gopinath <thara.gopinath@linaro.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
- <bc423d7b-df03-d4e2-2898-0873db710943@quicinc.com>
- <64eb52ee-b3ac-3d94-cfce-ceb1c88dddb6@linaro.org>
- <042cb765-113b-9335-edae-595addf50dd0@quicinc.com>
- <23320e3c-40c3-12bb-0a1c-7e659a1961f2@linaro.org>
- <YrfSWw9Wpq5TsRUt@builder.lan>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YrfSWw9Wpq5TsRUt@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/06/2022 05:28, Bjorn Andersson wrote:
-> On Thu 23 Jun 07:58 CDT 2022, Krzysztof Kozlowski wrote:
-> 
->> On 23/06/2022 08:48, Rajendra Nayak wrote:
->>>>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>> index 83e8b63f0910..adffb9c70566 100644
->>>>>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
->>>>>>    			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>    		};
->>>>>>    
->>>>>> +		pmu@1436400 {
->>>>>> +			compatible = "qcom,sdm845-cpu-bwmon";
->>>>>> +			reg = <0 0x01436400 0 0x600>;
->>>>>> +
->>>>>> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
->>>>>> +
->>>>>> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
->>>>>> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->>>>>> +			interconnect-names = "ddr", "l3c";
->>>>>
->>>>> Is this the pmu/bwmon instance between the cpu and caches or the one between the caches and DDR?
->>>>
->>>> To my understanding this is the one between CPU and caches.
->>>
->>> Ok, but then because the OPP table lists the DDR bw first and Cache bw second, isn't the driver
->>> ending up comparing the bw values thrown by the pmu against the DDR bw instead of the Cache BW?
->>
->> I double checked now and you're right.
->>
->>> Atleast with my testing on sc7280 I found this to mess things up and I always was ending up at
->>> higher OPPs even while the system was completely idle. Comparing the values against the Cache bw
->>> fixed it.(sc7280 also has a bwmon4 instance between the cpu and caches and a bwmon5 between the cache
->>> and DDR)
->>
->> In my case it exposes different issue - under performance. Somehow the
->> bwmon does not report bandwidth high enough to vote for high bandwidth.
->>
->> After removing the DDR interconnect and bandwidth OPP values I have for:
->> sysbench --threads=8 --time=60 --memory-total-size=20T --test=memory
->> --memory-block-size=4M run
->>
->> 1. Vanilla: 29768 MB/s
->> 2. Vanilla without CPU votes: 8728 MB/s
->> 3. Previous bwmon (voting too high): 32007 MB/s
->> 4. Fixed bwmon 24911 MB/s
->> Bwmon does not vote for maximum L3 speed:
->> bwmon report 9408 MB/s (thresholds set: <9216000 15052801>
->> )
->> osm l3 aggregate 14355 MBps -> 897 MHz, level 7, bw 14355 MBps
->>
->> Maybe that's just problem with missing governor which would vote for
->> bandwidth rounding up or anticipating higher needs.
->>
->>>>> Depending on which one it is, shouldn;t we just be scaling either one and not both the interconnect paths?
->>>>
->>>> The interconnects are the same as ones used for CPU nodes, therefore if
->>>> we want to scale both when scaling CPU, then we also want to scale both
->>>> when seeing traffic between CPU and cache.
->>>
->>> Well, they were both associated with the CPU node because with no other input to decide on _when_
->>> to scale the caches and DDR, we just put a mapping table which simply mapped a CPU freq to a L3 _and_
->>> DDR freq. So with just one input (CPU freq) we decided on what should be both the L3 freq and DDR freq.
->>>
->>> Now with 2 pmu's, we have 2 inputs, so we can individually scale the L3 based on the cache PMU
->>> counters and DDR based on the DDR PMU counters, no?
->>>
->>> Since you said you have plans to add the other pmu support as well (bwmon5 between the cache and DDR)
->>> how else would you have the OPP table associated with that pmu instance? Would you again have both the
->>> L3 and DDR scale based on the inputs from that bwmon too?
->>
->> Good point, thanks for sharing. I think you're right. I'll keep only the
->> l3c interconnect path.
->>
-> 
-> If I understand correctly, <&osm_l3 MASTER_OSM_L3_APPS &osm_l3
-> SLAVE_OSM_L3> relates to the L3 cache speed, which sits inside the CPU
-> subsystem. As such traffic hitting this cache will not show up in either
-> bwmon instance.
-> 
-> The path <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>
-> affects the DDR frequency. So the traffic measured by the cpu-bwmon
-> would be the CPU subsystems traffic that missed the L1/L2/L3 caches and
-> hits the memory bus towards DDR.
-> 
-> 
-> If this is the case it seems to make sense to keep the L3 scaling in the
-> opp-tables for the CPU and make bwmon only scale the DDR path. What do
-> you think?
 
-The reported data throughput by this bwmon instance is beyond the DDR
-OPP table bandwidth, e.g.: 16-22 GB/s, so it seems it measures still
-within cache controller, not the memory bus.
+Lee Jones <lee.jones@linaro.org> writes:
 
-Best regards,
-Krzysztof
+> On Fri, 03 Jun 2022, Aidan MacDonald wrote:
+>
+>> The AXP192 PMIC is similar to the AXP202/AXP209, but with different
+>> regulators, additional GPIOs, and a different IRQ register layout.
+>> 
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>  drivers/mfd/axp20x-i2c.c   |   2 +
+>>  drivers/mfd/axp20x.c       | 150 +++++++++++++++++++++++++++++++++++++
+>>  include/linux/mfd/axp20x.h |  84 +++++++++++++++++++++
+>>  3 files changed, 236 insertions(+)
+>> 
+>> diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
+>> index 00ab48018d8d..9ada58fad77f 100644
+>> --- a/drivers/mfd/axp20x-i2c.c
+>> +++ b/drivers/mfd/axp20x-i2c.c
+>> @@ -62,6 +62,7 @@ static int axp20x_i2c_remove(struct i2c_client *i2c)
+>>  #ifdef CONFIG_OF
+>>  static const struct of_device_id axp20x_i2c_of_match[] = {
+>>  	{ .compatible = "x-powers,axp152", .data = (void *)AXP152_ID },
+>> +	{ .compatible = "x-powers,axp192", .data = (void *)AXP192_ID },
+>>  	{ .compatible = "x-powers,axp202", .data = (void *)AXP202_ID },
+>>  	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
+>>  	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
+>> @@ -75,6 +76,7 @@ MODULE_DEVICE_TABLE(of, axp20x_i2c_of_match);
+>>  
+>>  static const struct i2c_device_id axp20x_i2c_id[] = {
+>>  	{ "axp152", 0 },
+>> +	{ "axp192", 0 },
+>>  	{ "axp202", 0 },
+>>  	{ "axp209", 0 },
+>>  	{ "axp221", 0 },
+>> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+>> index 8161a5dc68e8..7f64e5c83fe2 100644
+>> --- a/drivers/mfd/axp20x.c
+>> +++ b/drivers/mfd/axp20x.c
+>> @@ -34,6 +34,7 @@
+>>  
+>>  static const char * const axp20x_model_names[] = {
+>>  	"AXP152",
+>> +	"AXP192",
+>>  	"AXP202",
+>>  	"AXP209",
+>>  	"AXP221",
+>> @@ -92,6 +93,35 @@ static const struct regmap_access_table axp20x_volatile_table = {
+>>  	.n_yes_ranges	= ARRAY_SIZE(axp20x_volatile_ranges),
+>>  };
+>>  
+>> +static const struct regmap_range axp192_writeable_ranges[] = {
+>> +	regmap_reg_range(AXP192_DATACACHE(0), AXP192_DATACACHE(5)),
+>> +	regmap_reg_range(AXP192_PWR_OUT_CTRL, AXP192_IRQ5_STATE),
+>> +	regmap_reg_range(AXP20X_DCDC_MODE, AXP192_N_RSTO_CTRL),
+>> +	regmap_reg_range(AXP20X_CC_CTRL, AXP20X_CC_CTRL),
+>> +};
+>> +
+>> +static const struct regmap_range axp192_volatile_ranges[] = {
+>> +	regmap_reg_range(AXP20X_PWR_INPUT_STATUS, AXP192_USB_OTG_STATUS),
+>> +	regmap_reg_range(AXP192_IRQ1_STATE, AXP192_IRQ4_STATE),
+>> +	regmap_reg_range(AXP192_IRQ5_STATE, AXP192_IRQ5_STATE),
+>> +	regmap_reg_range(AXP20X_ACIN_V_ADC_H, AXP20X_IPSOUT_V_HIGH_L),
+>> +	regmap_reg_range(AXP20X_TIMER_CTRL, AXP20X_TIMER_CTRL),
+>> +	regmap_reg_range(AXP192_GPIO2_0_STATE, AXP192_GPIO2_0_STATE),
+>> +	regmap_reg_range(AXP192_GPIO4_3_STATE, AXP192_GPIO4_3_STATE),
+>> +	regmap_reg_range(AXP192_N_RSTO_CTRL, AXP192_N_RSTO_CTRL),
+>> +	regmap_reg_range(AXP20X_CHRG_CC_31_24, AXP20X_CC_CTRL),
+>> +};
+>> +
+>> +static const struct regmap_access_table axp192_writeable_table = {
+>> +	.yes_ranges	= axp192_writeable_ranges,
+>> +	.n_yes_ranges	= ARRAY_SIZE(axp192_writeable_ranges),
+>> +};
+>> +
+>> +static const struct regmap_access_table axp192_volatile_table = {
+>> +	.yes_ranges	= axp192_volatile_ranges,
+>> +	.n_yes_ranges	= ARRAY_SIZE(axp192_volatile_ranges),
+>> +};
+>> +
+>>  /* AXP22x ranges are shared with the AXP809, as they cover the same range */
+>>  static const struct regmap_range axp22x_writeable_ranges[] = {
+>>  	regmap_reg_range(AXP20X_DATACACHE(0), AXP20X_IRQ5_STATE),
+>> @@ -173,6 +203,25 @@ static const struct resource axp152_pek_resources[] = {
+>>  	DEFINE_RES_IRQ_NAMED(AXP152_IRQ_PEK_FAL_EDGE, "PEK_DBF"),
+>>  };
+>>  
+>> +static const struct resource axp192_gpio_resources[] = {
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO0_INPUT, "GPIO0"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO1_INPUT, "GPIO1"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO2_INPUT, "GPIO2"),
+>> +};
+>> +
+>> +static const struct resource axp192_ac_power_supply_resources[] = {
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_PLUGIN, "ACIN_PLUGIN"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_REMOVAL, "ACIN_REMOVAL"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_OVER_V, "ACIN_OVER_V"),
+>> +};
+>> +
+>> +static const struct resource axp192_usb_power_supply_resources[] = {
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_PLUGIN, "VBUS_PLUGIN"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_REMOVAL, "VBUS_REMOVAL"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_VALID, "VBUS_VALID"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_NOT_VALID, "VBUS_NOT_VALID"),
+>> +};
+>> +
+>>  static const struct resource axp20x_ac_power_supply_resources[] = {
+>>  	DEFINE_RES_IRQ_NAMED(AXP20X_IRQ_ACIN_PLUGIN, "ACIN_PLUGIN"),
+>>  	DEFINE_RES_IRQ_NAMED(AXP20X_IRQ_ACIN_REMOVAL, "ACIN_REMOVAL"),
+>> @@ -245,6 +294,15 @@ static const struct regmap_config axp152_regmap_config = {
+>>  	.cache_type	= REGCACHE_RBTREE,
+>>  };
+>>  
+>> +static const struct regmap_config axp192_regmap_config = {
+>> +	.reg_bits	= 8,
+>> +	.val_bits	= 8,
+>> +	.wr_table	= &axp192_writeable_table,
+>> +	.volatile_table	= &axp192_volatile_table,
+>> +	.max_register	= AXP20X_CC_CTRL,
+>> +	.cache_type	= REGCACHE_RBTREE,
+>> +};
+>> +
+>>  static const struct regmap_config axp20x_regmap_config = {
+>>  	.reg_bits	= 8,
+>>  	.val_bits	= 8,
+>> @@ -304,6 +362,55 @@ static const struct regmap_irq axp152_regmap_irqs[] = {
+>>  	INIT_REGMAP_IRQ(AXP152, GPIO0_INPUT,		2, 0),
+>>  };
+>>  
+>> +static const struct regmap_irq axp192_regmap_irqs[] = {
+>> +	INIT_REGMAP_IRQ(AXP192, ACIN_OVER_V,		0, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, ACIN_PLUGIN,		0, 6),
+>> +	INIT_REGMAP_IRQ(AXP192, ACIN_REMOVAL,		0, 5),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_OVER_V,		0, 4),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_PLUGIN,		0, 3),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_REMOVAL,		0, 2),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_V_LOW,		0, 1),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_PLUGIN,		1, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_REMOVAL,	        1, 6),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_ENT_ACT_MODE,	1, 5),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_EXIT_ACT_MODE,	1, 4),
+>> +	INIT_REGMAP_IRQ(AXP192, CHARG,		        1, 3),
+>> +	INIT_REGMAP_IRQ(AXP192, CHARG_DONE,		1, 2),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_TEMP_HIGH,	        1, 1),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_TEMP_LOW,	        1, 0),
+>> +	INIT_REGMAP_IRQ(AXP192, DIE_TEMP_HIGH,	        2, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, CHARG_I_LOW,		2, 6),
+>> +	INIT_REGMAP_IRQ(AXP192, DCDC1_V_LONG,	        2, 5),
+>> +	INIT_REGMAP_IRQ(AXP192, DCDC2_V_LONG,	        2, 4),
+>> +	INIT_REGMAP_IRQ(AXP192, DCDC3_V_LONG,	        2, 3),
+>> +	INIT_REGMAP_IRQ(AXP192, PEK_SHORT,		2, 1),
+>> +	INIT_REGMAP_IRQ(AXP192, PEK_LONG,		2, 0),
+>> +	INIT_REGMAP_IRQ(AXP192, N_OE_PWR_ON,		3, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, N_OE_PWR_OFF,	        3, 6),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_VALID,		3, 5),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_NOT_VALID,	        3, 4),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_SESS_VALID,	3, 3),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_SESS_END,	        3, 2),
+>> +	INIT_REGMAP_IRQ(AXP192, LOW_PWR_LVL,	        3, 0),
+>> +	INIT_REGMAP_IRQ(AXP192, TIMER,			4, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, GPIO2_INPUT,		4, 2),
+>> +	INIT_REGMAP_IRQ(AXP192, GPIO1_INPUT,		4, 1),
+>> +	INIT_REGMAP_IRQ(AXP192, GPIO0_INPUT,		4, 0),
+>> +};
+>> +
+>> +static int axp192_get_irq_reg(unsigned int base_reg, int i)
+>
+> Nit: If you have to respin this set, please rename 'i'.
+>
+> Unless used as an iterator, 'i' is a terrible variable name.
+>
+
+Ack. I had to rework the regmap changes and split them out to their
+own series, so I'll fix this when I rebase.
+
+>> +{
+>> +	/* linear mapping for IRQ1 to IRQ4 */
+>> +	if (i < 4)
+>> +		return base_reg + i;
+>> +
+>> +	/* handle IRQ5 separately */
+>> +	if (base_reg == AXP192_IRQ1_EN)
+>> +		return AXP192_IRQ5_EN;
+>> +	else
+>> +		return AXP192_IRQ5_STATE;
+>> +}
+>> +
+>>  static const struct regmap_irq axp20x_regmap_irqs[] = {
+>>  	INIT_REGMAP_IRQ(AXP20X, ACIN_OVER_V,		0, 7),
+>>  	INIT_REGMAP_IRQ(AXP20X, ACIN_PLUGIN,		0, 6),
+>> @@ -514,6 +621,19 @@ static const struct regmap_irq_chip axp152_regmap_irq_chip = {
+>>  	.num_regs		= 3,
+>>  };
+>>  
+>> +static const struct regmap_irq_chip axp192_regmap_irq_chip = {
+>> +	.name			= "axp192_irq_chip",
+>> +	.status_base		= AXP192_IRQ1_STATE,
+>> +	.ack_base		= AXP192_IRQ1_STATE,
+>> +	.mask_base		= AXP192_IRQ1_EN,
+>> +	.mask_invert		= true,
+>> +	.init_ack_masked	= true,
+>> +	.irqs			= axp192_regmap_irqs,
+>> +	.num_irqs		= ARRAY_SIZE(axp192_regmap_irqs),
+>> +	.num_regs		= 5,
+>> +	.get_irq_reg		= axp192_get_irq_reg,
+>> +};
+>> +
+>>  static const struct regmap_irq_chip axp20x_regmap_irq_chip = {
+>>  	.name			= "axp20x_irq_chip",
+>>  	.status_base		= AXP20X_IRQ1_STATE,
+>> @@ -588,6 +708,30 @@ static const struct regmap_irq_chip axp809_regmap_irq_chip = {
+>>  	.num_regs		= 5,
+>>  };
+>>  
+>> +static const struct mfd_cell axp192_cells[] = {
+>> +	{
+>> +		.name		= "axp192-gpio",
+>> +		.of_compatible	= "x-powers,axp192-gpio",
+>> +		.num_resources	= ARRAY_SIZE(axp192_gpio_resources),
+>> +		.resources	= axp192_gpio_resources,
+>> +	}, {
+>> +		.name		= "axp20x-regulator",
+>
+> Nit: Is it possible to put one line entries at the bottom?
+>
+> And format like this:
+>
+>     { .name = "axp20x-regulator" }
+>
+
+OK.
+
+>> +	}, {
+>> +		.name		= "axp192-adc",
+>> +		.of_compatible	= "x-powers,axp192-adc",
+>> +	}, {
+>> +		.name		= "axp20x-ac-power-supply",
+>> +		.of_compatible	= "x-powers,axp202-ac-power-supply",
+>> +		.num_resources	= ARRAY_SIZE(axp192_ac_power_supply_resources),
+>> +		.resources	= axp192_ac_power_supply_resources,
+>> +	}, {
+>> +		.name		= "axp20x-usb-power-supply",
+>> +		.of_compatible	= "x-powers,axp192-usb-power-supply",
+>> +		.num_resources	= ARRAY_SIZE(axp192_usb_power_supply_resources),
+>> +		.resources	= axp192_usb_power_supply_resources,
+>> +	}
+>> +};
+>
+> For my own reference (apply this as-is to your sign-off block):
+>
+>   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+Thanks!
+
+Regards, Aidan
