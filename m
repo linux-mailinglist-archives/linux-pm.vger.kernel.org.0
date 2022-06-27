@@ -2,80 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70D955C90A
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFE155C5F5
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiF0HTx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 03:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
+        id S232745AbiF0HVJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 03:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbiF0HTl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 03:19:41 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F8D5FF8
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 00:19:40 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id o18so7402132plg.2
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 00:19:40 -0700 (PDT)
+        with ESMTP id S232730AbiF0HVI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 03:21:08 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACE35FE4
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 00:21:07 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id m14so7394819plg.5
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 00:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JZxq3Li79Z5k+2Clzn+hx3pkrXwmS0AqWBIMTiHuigE=;
-        b=YoJk8KjRUA8HnE8CN4p7T8Au6cwFpQcElxQIPbmvUjEE1tFTsWDAk1BhEFOFyKvYc6
-         e6YRvvyJM01BQMco6OLnsGUYziE/XieXJI7An7VirI4K9J1J9+TTCt1qaM4FEiXwxZXb
-         7Ox/735AD+3WdwIXAdUwW3PUDQWYWXLOSmblgtFvmuKcEaRapx7PRIEHdAPqgsBQlu3F
-         ipUBzZtpU07AySCyq5JNDWu/2R4wn3b7iGglGjIClREk4V9p0NL7jND4mX7Y+OFFbiY1
-         042HsCB/6SoQRC0DZhWGiwtudG9toX5yfsygw7kllFBJcfDvGWbo9yfKCByqYmNkiiKb
-         m4Kw==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wyrrdp6ZR/KZgVEp5poQj+i3E9eGqReZcI/auQwwlWc=;
+        b=BkvnEDt4HcVPkd5HP+4U52Luwmi19snFvXLAI3jjaCiTljpncxTijrvpJKtOFk9e2x
+         psarxdf2qldfH3UYVc0sM/Ye8aPo25K/6yvFil341ahR/Nhsx9py9HvBTRPGRrN5+Nfw
+         msf1t57q1hxW2ll+l0hRhgfrF5l9AtyEQ5c6EhJVOre2nZqXMRd20IWNWlaB/dMHV+c4
+         /dM7/ugJHryhO81BSa1GNFat7PRSmkZYSr9dgrDunTalLaGSi5An4FBkApU/JG+0I/08
+         qv8Hw8VSbh7dRrQUwYWtiUwAYirhj24Bp6TFVDXnDqE7+djIpABRsmwLSMhAa1mvdbGr
+         5Bzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JZxq3Li79Z5k+2Clzn+hx3pkrXwmS0AqWBIMTiHuigE=;
-        b=5GzB5ervRqef9q6/3MbPMH30zMJ8ZtCxLpb1KCXYMtoXQZdw2VSf33RDxTvCpXuXXo
-         Tc5keDy1dxOP/J/8wxThIrwvOWuXDDTqtPUP4FfpQQ+4q8kuk45JIgfExmLHIOE88SIW
-         Mzn636J4wa0xIRRlMVaq/7pTkSlmHyqOVQxrKaSwERiBT2k5JKk3iAub5Z927zpcf4uy
-         NwLRR0quQd1N4Z0zGFknfkkjIUo02WieIqW7IBwqv2qa5imRxbrEkk8fEbR4zK45eSpI
-         qfoIGAF7wHJsENDGDnWEzvi+HU8x7dxhzKhulxp3Y/YwT1wwVpqUMSVNwgrdx2iX9J/r
-         /zng==
-X-Gm-Message-State: AJIora+bBf2qWo/cCjmJaGBgKo1+urqAwfNKKkK8QwPjG7YpCbajYDUu
-        uCyQ+/bOIu421+ox+QYiGzI3ZA==
-X-Google-Smtp-Source: AGRyM1uC/3nSEX8tCkOtmgtRPhmunty3WQGjgI1Keul6y/SKIEJq6JZw22D4MJswZuXm00T6VFIjIA==
-X-Received: by 2002:a17:90a:8d02:b0:1ec:a006:ea13 with SMTP id c2-20020a17090a8d0200b001eca006ea13mr18740749pjo.229.1656314380229;
-        Mon, 27 Jun 2022 00:19:40 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wyrrdp6ZR/KZgVEp5poQj+i3E9eGqReZcI/auQwwlWc=;
+        b=22/FDlQL0suJADUJGJZcnFbMfgYUpb6l8NCDG7mzycpK3ILeO500LNGGWkaVf7MxOx
+         zxQta1zP7hvJtsrSgPCvLCL62uSgLsv5rL5f3wlscxLiW48bgkURsYA0gxvCjLTuZwFA
+         WZBV1jNtDAYCWo0O2jg6MhHsjJA8dbap8t89GR0yRXm6MuLbpVTNsymWE1DIeD5K8fwp
+         +l8lD0wF9hRrt2zYjYlx4zflsjojlOPg/m33qukZ552tKDqBQS/9CWo65rW5vqxhdFF0
+         PBSVpzReogWV31B98H3VyP3Cm2DplvipnGrs9oSvcBgl61k/FPfUu/+obqOOanPYOJrr
+         hVAA==
+X-Gm-Message-State: AJIora+pyi+rmA4TdFoGD6NQ+Suy/BvPv9hWxLi3nVfsFxEpgN6LoV1D
+        076GjRYSe9ERFQdkeT4Q2GCTTQ==
+X-Google-Smtp-Source: AGRyM1v0kLQ6NUqZ0WLXEvX11q0gyO9xbbZoyOMKNqo7N/Tgq4JPecjgW9cSnG/95uoXrNrshqXMTg==
+X-Received: by 2002:a17:902:d48f:b0:16a:755f:86db with SMTP id c15-20020a170902d48f00b0016a755f86dbmr12899380plg.77.1656314466798;
+        Mon, 27 Jun 2022 00:21:06 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id p15-20020a635b0f000000b0040d180a3493sm6397589pgb.27.2022.06.27.00.19.39
+        by smtp.gmail.com with ESMTPSA id o7-20020a17090a55c700b001cd4989feebsm8573650pjm.55.2022.06.27.00.21.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 00:19:39 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 12:49:37 +0530
+        Mon, 27 Jun 2022 00:21:06 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 12:51:04 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Keerthy <j-keerthy@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5/5] OPP: Remove custom OPP helper support
-Message-ID: <20220627071937.uneeudaqzo2aa2me@vireshk-i7>
-References: <cover.1653991004.git.viresh.kumar@linaro.org>
- <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
- <565ff879-11e4-1ae4-08d8-1237a875ef12@gmail.com>
- <20220627060636.rfpok75zydgcwwo6@vireshk-i7>
- <4a8114f7-4ee6-a9ad-f5be-ceaf64be8a0e@gmail.com>
- <20220627064155.jo7iqz5h33l7a4vn@vireshk-i7>
- <d18a1f18-d78c-2db8-9b19-196dc88978c2@gmail.com>
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
+ <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d18a1f18-d78c-2db8-9b19-196dc88978c2@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,29 +83,24 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-06-22, 10:09, Dmitry Osipenko wrote:
-> Yes, I missed that multi-clock OPP patch, thanks.
+On 27-06-22, 10:14, Dmitry Osipenko wrote:
+> 27.06.2022 09:45, Viresh Kumar пишет:
+> >> Looks okay. If you'll solve the cpufreq problem where OPP config is set
+> >> by two drivers for the same cpu device
+> > This is supported, there is some early freeing of resources on the
+> > removal path though, the reasoning for which I already gave in another
+> > email. Though, I am open to sorting that out as well, but nothing
+> > breaks the code for now AFAICT.
+> > 
 > 
-> Seems _opp_compare_key() won't work properly for the multi-clocks since
-> Tegra doesn't have bandwidth nor level for the 3d OPPs. Why does it need
-> to check opp_table->clk_count == 1? Shouldn't it be opp_table->clk_count
-> > 0?
+> In case of Tegra, we use tegra-cpufreq driver that sets supported_hw and
+> registers cpufreq-dt. If cpufreq-dt driver defers the probe, then the
+> supported_hw will be lost on the re-probe. I haven't checked yet, but I
+> suppose that cpufreq-dt driver defers on Tegra30 because of the CPU
+> regulator and that's why we get the "OPP table is missing" error.
 
-The problem is that when we have multiple clocks, we can't assume any
-of them as primary. Its the combination of the clock frequencies that
-make them unique. Otherwise, what will happen if we have same
-frequency of the first clock in two OPPs, but different frequency of
-the second clock.
-
-Because of this, we won't also support multiple clocks in all freq
-finder APIs, like dev_pm_opp_find_freq_exact(). We can't do that from
-just one frequency.
-
-Ideally, the drivers should now be calling dev_pm_opp_set_opp() to set
-the OPP now.
-
-For your case, I think you can just add levels (like index) in the OPP
-table. So we can uniquely identify each OPP.
+Aha, I get it now. I see, this is a real problem. Will fix it. Give me
+some time to think. Thanks.
 
 -- 
 viresh
