@@ -2,147 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A1A55DA71
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867C855C611
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiF0IKv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 04:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S233470AbiF0ILu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 04:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233398AbiF0IKt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 04:10:49 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7457F6172;
-        Mon, 27 Jun 2022 01:10:48 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 1883C221D4;
-        Mon, 27 Jun 2022 10:10:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1656317445;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I2VAxSPrHm4atr5mS01AVBWDO/CW+jJR8HyKyYrpRcc=;
-        b=IQ9CJ6rL6muD5kAIpenW6vu4duRtV/uY1jpJR+9FHnUtrYXjRFqbEujuiw9KK28VMychXv
-        3rMq87zA2kMSWlVcS5++exhxs7ZSSEf6CMJZwZQrq0yav+HT6BInM4kf8fFhrSIxij5rTg
-        wQMmcsuRYGUet5hEW/5VwMi43GFjGNg=
+        with ESMTP id S233318AbiF0ILq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 04:11:46 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF316166
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 01:11:44 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z19so11755909edb.11
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 01:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=h3Mdp7WZpjNWUbLLF/KYYtNmAa+cGw6y3XcuLyzAU8g=;
+        b=q5zVoP5clcIVDrY6ERK2vmP9OZfarqRkGci7A4OY51STVO6GItSzvcoNw2yUOg1pzf
+         uWCwOYwOpqK2kdRRsLnqGOj1sRNqw86F532Mk6NKDwsmyjKnbAteN8GFce0kuHx8nTZS
+         +O1deikonijJCWXPURdyN9w2XbTMjfe/Z6Q198aSE/8tPdNYVo8ZJqXmPwWbDdgZavZ4
+         RF2/XAmi7XGqB675rtl3JAO8nbKSfvE/1dXXCCw3zpnwuk+FfgHgn67sRzv+vcoDzzr+
+         u4Gy5tGwrAZi1vRxNkeGBHnVLXrSXLYI6DBsUIyR4pKuJTJOJ6LD9V6NkO94CFludcuA
+         aSSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=h3Mdp7WZpjNWUbLLF/KYYtNmAa+cGw6y3XcuLyzAU8g=;
+        b=v1ah++NOgaHVldkWvv6hn1aGQZuuOmtHicxTb5OSam55HzGdPH+2g31pHNm+zatxO4
+         rKw6hB+35XWeC4+CnhjOZ7wIC/Ieu1INJSmYzF7EIoi2DfLwWUGqybDHItQI+Sa+q/wh
+         +XdsgaLBSXwwyGrm5ZXdRtkhJq2sh3g83960JeZD6NRFdKWav41eM43BNZvgKYEnswMc
+         iKvfBYKL3f9MOsn2nd80LDnVQzmjQew/D/hv/aQivOBMDD9IFcRdajYZh9ga74ICvNIg
+         HPx2rNFCjBLjj8rUHLK3RDUaPq1GNo6vggV9/jZHSzS6g1UJfEoEUlGLm2cf/+L6fXNm
+         CVbg==
+X-Gm-Message-State: AJIora+juTDr7y1ejWy98cwn6Y5wMMeACIN2vJ8NQxDkw+g4lZqpo13L
+        ivYvqDFII2IkmEMAF7SmnbkP9g==
+X-Google-Smtp-Source: AGRyM1sktl7RIZL1/G0JBzWDl6xiJ0SUDo+RA0dlLEqNiPs2faaTLxqZ1tas7kNDD7zvUSp224wxPw==
+X-Received: by 2002:a05:6402:5306:b0:437:8bbd:b313 with SMTP id eo6-20020a056402530600b004378bbdb313mr6563242edb.123.1656317503401;
+        Mon, 27 Jun 2022 01:11:43 -0700 (PDT)
+Received: from [192.168.0.246] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h18-20020a1709060f5200b006fe9e717143sm4726972ejj.94.2022.06.27.01.11.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 01:11:42 -0700 (PDT)
+Message-ID: <e1156747-e7ea-c35e-b24e-61f9318bf45f@linaro.org>
+Date:   Mon, 27 Jun 2022 10:11:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 1/2] dt-bindings: interconnect: Add MediaTek CCI
+ dt-bindings
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        cw00.choi@samsung.com, krzk+dt@kernel.org, robh+dt@kernel.org,
+        kyungmin.park@samsung.com
+Cc:     khilman@kernel.org, djakov@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220607140556.6278-1-johnson.wang@mediatek.com>
+ <20220607140556.6278-2-johnson.wang@mediatek.com>
+ <4e452af8-e96d-fb06-7800-707f3bf75155@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4e452af8-e96d-fb06-7800-707f3bf75155@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Date:   Mon, 27 Jun 2022 10:10:41 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
-        rafael@kernel.org, quic_gurus@quicinc.com,
-        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 13/16] pinctrl: Add AXP192 pin control driver
-In-Reply-To: <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com>
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
- <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <cafd8a40ad35dcf8a35350261af6031c@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 10/06/2022 12:43, AngeloGioacchino Del Regno wrote:
+> Il 07/06/22 16:05, Johnson Wang ha scritto:
+>> Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
+>>
+>> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Acked-by: Georgi Djakov <djakov@kernel.org>
+>> ---
+>>   .../bindings/interconnect/mediatek,cci.yaml   | 141 ++++++++++++++++++
+> 
+> Uhm, I've just noticed that this is being put in the bindings/interconnect folder.
+> The mediatek,cci is *not* an interconnect driver, but a devfreq one and is not
+> using any ICC APIs.
+> 
+> Shouldn't this go to bindings/devfreq/ instead?!
 
-As Linus suggested you could have a look at devm_gpio_regmap_register()
-with a custom xlate() callback and some improvements. But I've never
-worked with pinctrl so I might be wrong. See below.
+No, devfreq is not a hardware subsystem.
 
-> +static int axp192_gpio_get(struct gpio_chip *chip, unsigned int 
-> offset)
-> +{
-> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
-> +	const struct axp192_pctl_reg_info *reginfo = 
-> &pctl->desc->in_regs[offset];
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	ret = regmap_read(pctl->regmap, reginfo->reg, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return !!(val & reginfo->mask);
-> +}
-
-This should work.
-
-> +
-> +static int axp192_gpio_get_direction(struct gpio_chip *chip, unsigned
-> int offset)
-> +{
-> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
-> +	const struct axp192_pctl_reg_info *reginfo = 
-> &pctl->desc->ctrl_regs[offset];
-> +	const u8 *input_muxvals = 
-> pctl->desc->functions[AXP192_FUNC_INPUT].muxvals;
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	ret = regmap_read(pctl->regmap, reginfo->reg, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if ((val & reginfo->mask) == (input_muxvals[offset] <<
-> (ffs(reginfo->mask) - 1)))
-> +		return GPIO_LINE_DIRECTION_IN;
-
-This isn't supported (yet) in gpio-regmap...
-
-> +
-> +	return GPIO_LINE_DIRECTION_OUT;
-> +}
-> +
-> +static void axp192_gpio_set(struct gpio_chip *chip, unsigned int
-> offset, int value)
-> +{
-> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
-> +	const struct axp192_pctl_reg_info *reginfo = 
-> &pctl->desc->out_regs[offset];
-> +
-> +	regmap_update_bits(pctl->regmap, reginfo->reg, reginfo->mask, value
-> ? reginfo->mask : 0);
-> +}
-> +
-> +static int axp192_gpio_direction_input(struct gpio_chip *chip,
-> unsigned int offset)
-> +{
-> +	return pinctrl_gpio_direction_input(chip->base + offset);
-> +}
-
-..as well as this.
-
-> +
-> +static int axp192_gpio_direction_output(struct gpio_chip *chip,
-> unsigned int offset, int value)
-> +{
-> +	chip->set(chip, offset, value);
-
-Why don't you call pinctrl_gpio_direction_output() here?
-
-
-I *think* what is needed for gpio-regmap to support this is:
-  - support values and masks for the direction, for now, we
-    only support single bits.
-  - support the pinctrl_gpio_direction_{input,output} calls
-
--michael
+Best regards,
+Krzysztof
