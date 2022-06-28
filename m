@@ -2,95 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2A855E19C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA7855C54C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245062AbiF1FfP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 01:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S239763AbiF1GAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 02:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245043AbiF1FfM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 01:35:12 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5A627179;
-        Mon, 27 Jun 2022 22:35:08 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id i1so11465616wrb.11;
-        Mon, 27 Jun 2022 22:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=dTA90lOxgIQa7DSNgHRMqmr5kjIWrAUMbJ6Fyb/GRMc=;
-        b=bY5f5tFedfpsQKz1aQmaceJv6zFDOLQqCGAazVWhHE8Xn5Lll0Gc/8UIjvRUTJtwCY
-         QL2cX0G2hIpoz4mIRi7CLMBoqxXzr9oknenx16HBcihBdJWOQzak6zt6vRPj0WvRo6U0
-         LaejvQNs2AhEmMIb7YU+977cOzzwm5zrzb2TGtPr0DvoT1qQV34NsYJ9iKhVITO5x+LT
-         nZouZzinwoUqYQ8D3PlXeeayF3hGIhmQanrxScuUfJo4xcqU8jL91IBVbNHb4D9J6Hat
-         eAtc75xaKJm3kNxe1WfZLh0iJRFaZzF34Dvgr8cfr6rC503ZUkFz3NqvWMudTXd+SsYp
-         RHpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=dTA90lOxgIQa7DSNgHRMqmr5kjIWrAUMbJ6Fyb/GRMc=;
-        b=wPOOd9FcAkrGd/Aa5peXilvQ7Bi55xwsn+p7dllVzr3QoP80yNOlFRvxlHGUZIgW/B
-         XgBVA9OFxMyp/T8bVnb3LfkIvDNkPz1EihEfLWMYR241tYxx7ilQMPtbxurWmvN59MgX
-         ZYvdk3j3957abgiNLd1nRBrsz8Nnv8F4yl6AVCWJO8dgBg/ZGyZsUxASG2iGTVj0vKbT
-         ig6FA5A6NX9l7CABVBToDIhV0KortsZCRXwe90iPz3D85pIYsIaCDI1N6GltV8gOMoN1
-         h7IJvavxv5Y7BrBetYt4VAKRBf85x1o0/Sa2llaaAhlki+3NfrCZjozdwRu3K6z9vqmo
-         EDyg==
-X-Gm-Message-State: AJIora/MhCmRuIp8I70zwaTpzGoiS7XqodRYraSsdf9t6fjtvJqWRaGQ
-        zw+S3x2HJR3w20fS8FixvHlW2KvUxG8=
-X-Google-Smtp-Source: AGRyM1vLAMJ+61yUhFEg9AbQGG5npHVsKB5g4gkTqpyARgo8j4Sx5eAmyy4kf0WSC/KsZsOZioG+qQ==
-X-Received: by 2002:a5d:5581:0:b0:20f:fc51:7754 with SMTP id i1-20020a5d5581000000b0020ffc517754mr16224632wrv.413.1656394506441;
-        Mon, 27 Jun 2022 22:35:06 -0700 (PDT)
-Received: from felia.fritz.box (200116b8267a9e00e50a985511ee89f7.dip.versatel-1u1.de. [2001:16b8:267a:9e00:e50a:9855:11ee:89f7])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05600c441000b0039c4d022a44sm16293928wmn.1.2022.06.27.22.35.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 22:35:06 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] PM / devfreq: passive: revert an editing accident in SPDX-License line
-Date:   Tue, 28 Jun 2022 07:34:11 +0200
-Message-Id: <20220628053411.22438-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235044AbiF1GAc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 02:00:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015102C664;
+        Mon, 27 Jun 2022 23:00:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3131B81C17;
+        Tue, 28 Jun 2022 06:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A95C3411D;
+        Tue, 28 Jun 2022 06:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656396028;
+        bh=29k4Ow4oNcUSrFKMbJ2975+WfuAaRON14I7dvFBkeNk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xf0rToeQPRPfD7q0e5T5XQu9pKwLF7pDRLXgyaEYzuaBK16fJeClIa4pf1a1sWhh0
+         luqcSqGI0DFLr58g4XBuKzA21noZoyfcbXcnX5/arbeqjY2glJdlGbBnUy66SfKKVv
+         DF8hePeldvOKatR4dnty92To7g+ZqoLfkpss6sRY=
+Date:   Tue, 28 Jun 2022 08:00:25 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] PK: runtime: Redefine pm_runtime_release_supplier()
+Message-ID: <YrqY+c1NPQ+wEiUk@kroah.com>
+References: <2653259.mvXUDI8C0e@kreacher>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2653259.mvXUDI8C0e@kreacher>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 26984d9d581e ("PM / devfreq: passive: Keep cpufreq_policy for
-possible cpus") reworked governor_passive.c, and accidently added a
-tab in the first line, i.e., the SPDX-License-Identifier line.
+On Mon, Jun 27, 2022 at 08:42:18PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Instead of passing an extra bool argument to pm_runtime_release_supplier(),
+> make its callers take care of triggering a runtime-suspend of the
+> supplier device as needed.
+> 
+> No expected functional impact.
+> 
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The checkpatch script warns with the SPDX_LICENSE_TAG warning, and hence
-pointed this issue out while investigating checkpatch warnings.
+Nice, thanks for cleaning this up.
 
-Revert this editing accident. No functional change.
+If you want to take this through your tree:
+	Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Chanwoo, please pick this minor non-urgent fix to your latest change above.
+But if you want me to take it, please just let me know and I will.
 
- drivers/devfreq/governor_passive.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-index 72c67979ebe1..326482a68986 100644
---- a/drivers/devfreq/governor_passive.c
-+++ b/drivers/devfreq/governor_passive.c
-@@ -1,4 +1,4 @@
--	// SPDX-License-Identifier: GPL-2.0-only
-+// SPDX-License-Identifier: GPL-2.0-only
- /*
-  * linux/drivers/devfreq/governor_passive.c
-  *
--- 
-2.17.1
-
+greg k-h
