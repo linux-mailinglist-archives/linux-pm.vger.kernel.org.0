@@ -2,77 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F46B55C476
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EC155E4D9
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343984AbiF1Il7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 04:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        id S1346590AbiF1NfI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 09:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343975AbiF1Il5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 04:41:57 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240752CE02
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 01:41:56 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id n1so16548150wrg.12
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 01:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=v5dmV6m+y35m/OOgFUolVoYy95Ck77s85Hp4iBdnIEo=;
-        b=F59o5KjsPbQpgausMMqrm8CVGniwLPIxLhXpdIPg9kElTHzRRtcS6rV+FaKbuAUzQL
-         oam7mbVakexhVRbbFdHeg077hpaHbcaLLVqdf0tjINnn2Mn08k7UONIG8ZoYayHqk1cW
-         LG5tsALv7W0EizWuYg4Ud3aiFLXf1vYFUiy/WOd6pV3qw+O8SKpOMQPw7xV15t5506mi
-         oSa/dXScRlfrJRpbx3DP0BrlWUqXj2WXz4RNasGblvmzDZVoT1MXJK0XXT89FMNdJ6gA
-         OV0kleLs3VQn34z57rAFaUzh3vhWavHUp0NxOTsAgXvPwKbeJHrXNnaRD+5UO8ZaA5Lf
-         M15w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v5dmV6m+y35m/OOgFUolVoYy95Ck77s85Hp4iBdnIEo=;
-        b=5yvN/yTG+tZ/zvjL0p4QLPh/zMqF16ncTInS+5kikYgEbgs9oUFkYMYYCY9lJLctQq
-         6QoypR/pX+Vl/PMkcIou5oa+ni2D6LLR23TyuC6wnkQedMorzXmna1H3FxNS/Wb50L6o
-         8EcJghNChuX7iq8mlVpCO4QsGkyr99C1IkUL75x/jTQyZXqD7vAnuFxEqH94IQSQ2UnD
-         wj/h7h0aDd7kyiBlofYZXFQGOjydlMsX4I9SWBshfqSsRYbLaIb9oKJgobaMNW14g4yF
-         vLTiatjwc+1LZN3BnIKbPrlye8aT1kPXwkf4IpBhqxDvPxBnDjNowUUmI7i9YLrvccDq
-         LhAg==
-X-Gm-Message-State: AJIora8STtnth2zllJa0G0qSE0cSaVYGpd46aann7NYvQgshTAqG6YM2
-        hPTyXS/msjBPmvGLn11hWxyO84U7VaEWWA==
-X-Google-Smtp-Source: AGRyM1smplhxwMTCxe8Jj9olr4VhTZF3JaobTkBOwjRs6XkCBFxFYEnEhd6dCwGrqiCtb/fwuwK2fQ==
-X-Received: by 2002:a5d:5887:0:b0:21b:ca70:f60d with SMTP id n7-20020a5d5887000000b0021bca70f60dmr11370211wrf.32.1656405714610;
-        Tue, 28 Jun 2022 01:41:54 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id z4-20020adfd0c4000000b0021bbf6687b1sm11098476wrh.81.2022.06.28.01.41.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 01:41:54 -0700 (PDT)
-Message-ID: <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
-Date:   Tue, 28 Jun 2022 10:41:52 +0200
+        with ESMTP id S1345541AbiF1NfF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 09:35:05 -0400
+X-Greylist: delayed 3567 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Jun 2022 06:35:01 PDT
+Received: from www2055.sakura.ne.jp (www2055.sakura.ne.jp [59.106.171.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBD27661;
+        Tue, 28 Jun 2022 06:35:00 -0700 (PDT)
+Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
+        by www2055.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25S97Gau026635;
+        Tue, 28 Jun 2022 18:07:16 +0900 (JST)
+        (envelope-from 1955@kkden.co.jp)
+Received: from www2055.sakura.ne.jp (59.106.171.65)
+ by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
+ Tue, 28 Jun 2022 18:07:16 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
+Received: from www2055.sakura.ne.jp (localhost [127.0.0.1])
+        by www2055.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25S97Dsm026581;
+        Tue, 28 Jun 2022 18:07:16 +0900 (JST)
+        (envelope-from 1955@kkden.co.jp)
+Received: (from kkden@localhost)
+        by www2055.sakura.ne.jp (8.15.2/8.15.2/Submit) id 25S97DN6026577;
+        Tue, 28 Jun 2022 18:07:13 +0900 (JST)
+        (envelope-from 1955@kkden.co.jp)
+Message-Id: <202206280907.25S97DN6026577@www2055.sakura.ne.jp>
+X-Authentication-Warning: www2055.sakura.ne.jp: kkden set sender to 1955@kkden.co.jp using -f
+Subject: THIS IS VERY CONFIDENTIAL
+From:   Steve Dibenedetto <1955@kkden.co.jp>
+To:     stevedibenedetto17@gmail.com
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
-Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
- <20220616202537.303655-2-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220616202537.303655-2-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Date:   Tue, 28 Jun 2022 18:07:13 +0900
+Content-Type: text/plain; charset="ISO-2022-JP"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_50,SPF_HELO_NONE,
+        SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,79 +51,18 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Thierry, Dmitry,
+Hello,
 
-are fine with this patch?
+My name is Steve Dibenedetto.
+I apologize to have contacted you this way without a direct relationship. There is an opportunity to collaborate with me in the sourcing of some materials needed by our company for production of the different medicines we are researching.
 
-Thanks
+I'm aware that this might be totally outside your professional specialization, but it will be a great source for generating extra revenue. I  discovered a manufacturer who can supply us at a lower rate than our company's previous purchases.
+I will give you more specific details when/if I receive feedback from you showing interest.
 
-   -- Daniel
-
-On 16/06/2022 22:25, Daniel Lezcano wrote:
-> The get_trend function does already what the generic framework does.
-> 
-> Remove it.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/thermal/tegra/soctherm.c | 32 --------------------------------
->   1 file changed, 32 deletions(-)
-> 
-> diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
-> index 210325f92559..825eab526619 100644
-> --- a/drivers/thermal/tegra/soctherm.c
-> +++ b/drivers/thermal/tegra/soctherm.c
-> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void *data, int trip, int temp)
->   	return 0;
->   }
->   
-> -static int tegra_thermctl_get_trend(void *data, int trip,
-> -				    enum thermal_trend *trend)
-> -{
-> -	struct tegra_thermctl_zone *zone = data;
-> -	struct thermal_zone_device *tz = zone->tz;
-> -	int trip_temp, temp, last_temp, ret;
-> -
-> -	if (!tz)
-> -		return -EINVAL;
-> -
-> -	ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
-> -	if (ret)
-> -		return ret;
-> -
-> -	temp = READ_ONCE(tz->temperature);
-> -	last_temp = READ_ONCE(tz->last_temperature);
-> -
-> -	if (temp > trip_temp) {
-> -		if (temp >= last_temp)
-> -			*trend = THERMAL_TREND_RAISING;
-> -		else
-> -			*trend = THERMAL_TREND_STABLE;
-> -	} else if (temp < trip_temp) {
-> -		*trend = THERMAL_TREND_DROPPING;
-> -	} else {
-> -		*trend = THERMAL_TREND_STABLE;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
->   {
->   	u32 r;
-> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data, int lo, int hi)
->   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
->   	.get_temp = tegra_thermctl_get_temp,
->   	.set_trip_temp = tegra_thermctl_set_trip_temp,
-> -	.get_trend = tegra_thermctl_get_trend,
->   	.set_trips = tegra_thermctl_set_trips,
->   };
->   
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Warm Regards  
+Steve Dibenedetto
+Production & Control Manager,
+Green Field Laboratories
+Gothic House, Barker Gate,
+Nottingham, NG1 1JU,
+United Kingdom.
