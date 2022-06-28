@@ -2,52 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9264D55D14E
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5508955C2D4
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245668AbiF1KIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 06:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S1344777AbiF1KLr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 06:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245666AbiF1KIo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 06:08:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9A22F393;
-        Tue, 28 Jun 2022 03:08:43 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0C21966015BF;
-        Tue, 28 Jun 2022 11:08:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656410921;
-        bh=4SmhwJ59cYNwGa9/uAOmjkCzl5Kwd4RkrU6slG6AY6c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gBcsZ9sToRUM8cKdvaAO72/zDI2G3Kl2iaVhdyvOxLtKDzWiVt3MBPV9oeKUhssOi
-         62COElRol0rewHQCq5aLavu4HrwWozFJA0T6/XTjCyKEGJI+BZDli/VzJ/hui00gjE
-         i/FI7Yx7Y+jHenRhurJ+RtU/QFwGVq7wnYmgmjSHrqM5yN1k4fsTdwktEDjORqgoab
-         +Ss7jDoo002EMMU0Nt/ZG8an7mVtncv4k0kIoBCjzpIcOpEqKrpMUPJTi8Ro6t7fV0
-         TCU3XOjLd6zZ66MOZUsfG9URyZSk/aebQQvUblK2QjoPpJH5CojSW3mctDn264kGhp
-         uiYWKUDHGukNw==
-Message-ID: <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
-Date:   Tue, 28 Jun 2022 13:08:38 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        with ESMTP id S1344746AbiF1KLm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 06:11:42 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D282FE42
+        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 03:11:41 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id p14so11576811pfh.6
+        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 03:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tbey03ru2tYxblJ016YqjV2Da/CXTfP99CuHPvnI5hI=;
+        b=bMFVF7a7mfXa02kwrInM5CuyTCpxlEtJm9MfoR/7bVBeCDo1Bjc/oxVup9khM+tDtd
+         6WLfZ60J9q1Uvn+6DWeV0Y8Vm2JsWqJGjOygA+VbqzlcvziW3+Xa7rFwsYXjYnl4YiE2
+         H2mXNAmb+CJfugOu1ayaJhp4NHLEitxK6CI59M5aN6NIZZ6NmPGkEsOZfacF4P2jrS9Z
+         RznjS9oS6Y1XQix99tNeL/2jhv/4QgyXDUGj6p2WX9d3XpGW7szVh41DWZz8EDBdyQiH
+         oywangJelRKLooUq/D4PuwoZn9BGn0pl5Mq/XqFWYpJB1tTYoJqbbIDw90lJ9EZk8LiX
+         Lcng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tbey03ru2tYxblJ016YqjV2Da/CXTfP99CuHPvnI5hI=;
+        b=OXoXbJljfsTSC9RIw9dTBZIb+V05rdi6VJlNNGt8hKcFeBCQCEjPHv/YUXZc1LB22m
+         uVhcRrJZ9jHtidxrTVp7paQWwZCwoEv4iIeG80laVnfNHMl4TyA8YGmZvN730w4xTCPy
+         780xVOvtJt5d6QAp3IDOMaVRBsTSZv2Bd2oU4lJExi/ZJgKswbAGqj5t5eQHA7qP73ee
+         NJhCmzUuIc2UeW8Htv/e/fsllnU+tG/lJf15l2zBuW3lMpe3LMTiHI6KpspZ/aOqv9CG
+         et2XkmktGEfy8m9ZZ1fFre9IcrurLS0m1KlLAG+eFRhK2CdAHG+Z33eWn66ZF1p6pySy
+         o+ZQ==
+X-Gm-Message-State: AJIora8wvpHqiaI42ZnwfJBpgVJT+TPVbwq9X97lkRzPRcwieCUuUPrA
+        zEU9zp/SR4kJOpvav1LfdUqUaA==
+X-Google-Smtp-Source: AGRyM1sXb4XOUh03tYJk3Xrv7BW0Vthk9Lt8zrGSlDbcRtKX8L4DZdYoNiXFstwB368JKU9MskJOHA==
+X-Received: by 2002:a63:7204:0:b0:40c:9dc6:57f1 with SMTP id n4-20020a637204000000b0040c9dc657f1mr16985974pgc.153.1656411101412;
+        Tue, 28 Jun 2022 03:11:41 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id f15-20020a170902684f00b0015e8d4eb2ddsm3313623pln.295.2022.06.28.03.11.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 03:11:41 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 15:41:39 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220628101139.jdpsplkqbbh6qpse@vireshk-i7>
 References: <cover.1653564321.git.viresh.kumar@linaro.org>
  <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
  <20220624004831.po35sowzfo4c47b3@vireshk-i7>
@@ -57,60 +70,33 @@ References: <cover.1653564321.git.viresh.kumar@linaro.org>
  <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
  <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
  <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/28/22 10:09, Viresh Kumar wrote:
-> On 27-06-22, 12:51, Viresh Kumar wrote:
->> On 27-06-22, 10:14, Dmitry Osipenko wrote:
->>> 27.06.2022 09:45, Viresh Kumar пишет:
->>>>> Looks okay. If you'll solve the cpufreq problem where OPP config is set
->>>>> by two drivers for the same cpu device
->>>> This is supported, there is some early freeing of resources on the
->>>> removal path though, the reasoning for which I already gave in another
->>>> email. Though, I am open to sorting that out as well, but nothing
->>>> breaks the code for now AFAICT.
->>>>
->>>
->>> In case of Tegra, we use tegra-cpufreq driver that sets supported_hw and
->>> registers cpufreq-dt. If cpufreq-dt driver defers the probe, then the
->>> supported_hw will be lost on the re-probe. I haven't checked yet, but I
->>> suppose that cpufreq-dt driver defers on Tegra30 because of the CPU
->>> regulator and that's why we get the "OPP table is missing" error.
->>
->> Aha, I get it now. I see, this is a real problem. Will fix it. Give me
->> some time to think. Thanks.
+On 28-06-22, 13:08, Dmitry Osipenko wrote:
+> The opp/linux-next works fine, thank you.
 > 
-> Okay, I fixed this in opp/linux-next, can you or Jon please give it a
-> go on tegra30 to see if the issue is fixed ?
-> 
-> FWIW, I have fixed this with the IDR API and the OPP core will only
-> free the resources in clear-config, that the corresponding set-config
-> has configured. I have tested it with the clk API only though.
-> 
-> Once you confirm, I will resend all the patches and hope no issues are
-> left here.
-> 
-> Thanks for helping out guys. Really appreciate it.
-> 
+> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-The opp/linux-next works fine, thank you.
+Thanks. I should add this to all the core + tegra -patches in that
+branch, right ?
 
-Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> BTW, the idr_alloc() is obsoleted by xa_alloc().
 
-BTW, the idr_alloc() is obsoleted by xa_alloc().
+The earlier interface isn't deprecated, right ? I really don't want to
+go change it again :)
 
 -- 
-Best regards,
-Dmitry
+viresh
