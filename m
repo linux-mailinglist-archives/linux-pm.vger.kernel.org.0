@@ -2,519 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAEB55D188
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B145755C32E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiF1DMF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 23:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S244235AbiF1FcD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 01:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiF1DME (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 23:12:04 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61CC24BC5;
-        Mon, 27 Jun 2022 20:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656385922; x=1687921922;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ylASZCejaRNO8p5xafj9qyvpZzJ7dovRfBsTeL6QC50=;
-  b=mLPFt6OyZN0ECkOTrzLZGxZzUWXJ3O5XOIb08RbJ6zfm1bZPfh/nj/1i
-   7vFsy/OuGFG1unaIYLP8GcwlXXDifEZkqwcPpQMLRi/XdUqsdlWi4J/Ev
-   rJmZucyFx8HLAcjJjg3gIfIOSs5T09ME071dkS/QWLPG0nozdXlwVGcDy
-   JqbO3Z4ksIDOw8cdkVj/FLqzbJmvu66fpu/zl1NE4BxTHk/10iDXg33Q6
-   4lu7PHIBzu/NCzMgHKcND3G3KQIvmhVaQEza6xexl41L0Khpnm8TaZFjS
-   DJJHENuMAkYOayhchYHCi6fkVd15RV0orL8fllwU8JM7GCapZdXe4kY4R
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="262029754"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="262029754"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 20:12:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="836480443"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Jun 2022 20:12:00 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o61dv-0009Ri-WC;
-        Tue, 28 Jun 2022 03:12:00 +0000
-Date:   Tue, 28 Jun 2022 11:11:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [rafael-pm:bleeding-edge 29/30] drivers/bus/hisi_lpc.c:488:41:
- error: 'struct acpi_device' has no member named 'children'
-Message-ID: <202206281146.iWj1cpqY-lkp@intel.com>
+        with ESMTP id S229698AbiF1FcC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 01:32:02 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E65711A36;
+        Mon, 27 Jun 2022 22:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656394321; x=1687930321;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=apiE6ZqVRDttlfHw7HYKu5F6fqY2OHrTk8IJQ7nNCLc=;
+  b=DSem2kWV3QQXc8Ddx5BSeWLY+sDt3H3lFCh27SX5RtU4KPJYdaDsqFvx
+   viW4/rf5LH5/WB/CFwsGr9VTaJINwr51ehACQOZ1sCzHhmd30oyGYOYuz
+   pdC5Lg92PLN2DtzAqzK4Zvjuzv7bXdgMxC/QiGZRlkl9J41Uh8dJlCszu
+   4=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jun 2022 22:32:01 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 22:32:00 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 27 Jun 2022 22:31:59 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 27 Jun 2022 22:31:53 -0700
+Date:   Tue, 28 Jun 2022 11:01:48 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Mathias Nyman" <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_vpulyala@quicinc.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+ <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com>
+ <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
+ <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+ <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   3ea94b067c49378a574fc477647ece5c2f41dccb
-commit: 647590eb6f340e8d501b9568e566dfb05c61b245 [29/30] ACPI: bus: Drop unused list heads from struct acpi_device
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220628/202206281146.iWj1cpqY-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=647590eb6f340e8d501b9568e566dfb05c61b245
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout 647590eb6f340e8d501b9568e566dfb05c61b245
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
+On Mon, Jun 27, 2022 at 01:02:49PM -0700, Stephen Boyd wrote:
+> Quoting Pavan Kondeti (2022-06-20 01:54:15)
+> > +Felipe, Bjorn
+> >
+> > On Thu, Jun 16, 2022 at 10:15:49AM -0700, Matthias Kaehlcke wrote:
+> > > On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
+> > >
+> > > Good point! It doesn't really ensure that the child is probed (actually it
+> > > won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
+> > > could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
+> > > the PHYs should be ready and dwc3_probe() be invoked through
+> > > of_platform_populate().
+> >
+> > This is a generic problem i.e if a parent can only proceed after the child
+> > devices are bounded (i.e probed successfully), how to ensure this behavior
+> > from the parent's probe? Since we can't block the parent probe (async probe is
+> > not the default behavior), we have to identify the condition that the children
+> > are deferring probe, so that parent also can do that.
+> >
+> > Can we add a API in drivers core to tell if a device probe is deferred or
+> > not? This can be done by testing list_empty(&dev->p->deferred_probe) under
+> > deferred_probe_mutex mutex. The parent can return EPROBE_DEFER based on this
+> > API return value.
+> >
+> > Another alternative would be explicitly checking if the child device suppliers
+> > are ready or not before adding child device. That would require decoupling
+> > of_platform_populate() to creating devices and adding devices.
+> >
+> > Note that this problem is not just limited to suppliers not ready. if the
+> > dwc3-qcom is made asynchronous probe, then its child also probed
+> > asynchronously and there is no guarantee that child would be probed by the
+> > time of_platform_populate() is returned.  The bus notifier might come handy
+> > in this case. The parent can register for this notifier and waiting for
+> > the children device's BUS_NOTIFY_BOUND_DRIVER/BUS_NOTIFY_DRIVER_NOT_BOUND
+> > notifications. This would also work in our case, if we move to
+> > of_platform_populate() outside the probe().
+> >
+> > Would like to hear other people thoughts on this.
+> >
+> 
+> I'm not following very closely but it sounds like a problem that may be
+> solved by using the component driver code (see
+> include/linux/component.h). That would let you move anything that needs
+> to be done once the child devices probe to the aggregate driver 'bind'
+> function (see struct component_master_ops::bind).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks Stephen for letting us know about the component device framework.
 
-All errors (new ones prefixed by >>):
+IIUC, 
 
-   In file included from include/linux/list.h:5,
-                    from include/linux/kobject.h:19,
-                    from include/linux/of.h:17,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from drivers/bus/hisi_lpc.c:9:
-   drivers/bus/hisi_lpc.c: In function 'hisi_lpc_acpi_remove':
->> drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member named 'children'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                         ^~
-   include/linux/container_of.h:18:33: note: in definition of macro 'container_of'
-      18 |         void *__mptr = (void *)(ptr);                                   \
-         |                                 ^~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/bits.h:22,
-                    from include/linux/ioport.h:13,
-                    from include/linux/acpi.h:12,
-                    from drivers/bus/hisi_lpc.c:9:
->> drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member named 'children'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                         ^~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
->> drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                                     ^~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
->> drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member named 'children'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                         ^~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:20:23: note: in expansion of macro '__same_type'
-      20 |                       __same_type(*(ptr), void),                        \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from arch/arm64/include/asm/rwonce.h:71,
-                    from include/linux/compiler.h:248,
-                    from include/linux/build_bug.h:5,
-                    from include/linux/bits.h:22,
-                    from include/linux/ioport.h:13,
-                    from include/linux/acpi.h:12,
-                    from drivers/bus/hisi_lpc.c:9:
->> drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                                     ^~~~
-   include/linux/stddef.h:16:58: note: in definition of macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                                          ^~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/kobject.h:19,
-                    from include/linux/of.h:17,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from drivers/bus/hisi_lpc.c:9:
->> drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                                     ^~~~
-   include/linux/list.h:665:16: note: in definition of macro 'list_entry_is_head'
-     665 |         (&pos->member == (head))
-         |                ^~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
->> drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member named 'children'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                         ^~
-   include/linux/list.h:665:27: note: in definition of macro 'list_entry_is_head'
-     665 |         (&pos->member == (head))
-         |                           ^~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/list.h:5,
-                    from include/linux/kobject.h:19,
-                    from include/linux/of.h:17,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from drivers/bus/hisi_lpc.c:9:
->> drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                                     ^~~~
-   include/linux/container_of.h:18:33: note: in definition of macro 'container_of'
-      18 |         void *__mptr = (void *)(ptr);                                   \
-         |                                 ^~~
-   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
-     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
-     676 |              pos = list_next_entry(pos, member))
-         |                    ^~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/bits.h:22,
-                    from include/linux/ioport.h:13,
-                    from include/linux/acpi.h:12,
-                    from drivers/bus/hisi_lpc.c:9:
->> drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                                     ^~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
-     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
-     676 |              pos = list_next_entry(pos, member))
-         |                    ^~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
->> drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                                     ^~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
-     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
-     676 |              pos = list_next_entry(pos, member))
-         |                    ^~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
->> drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                                     ^~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:20:23: note: in expansion of macro '__same_type'
-      20 |                       __same_type(*(ptr), void),                        \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
-     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
-     676 |              pos = list_next_entry(pos, member))
-         |                    ^~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
-     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
-     676 |              pos = list_next_entry(pos, member))
-         |                    ^~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from arch/arm64/include/asm/rwonce.h:71,
-                    from include/linux/compiler.h:248,
-                    from include/linux/build_bug.h:5,
-                    from include/linux/bits.h:22,
-                    from include/linux/ioport.h:13,
-                    from include/linux/acpi.h:12,
-                    from drivers/bus/hisi_lpc.c:9:
->> drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |                                                     ^~~~
-   include/linux/stddef.h:16:58: note: in definition of macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                                          ^~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
-     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
-     676 |              pos = list_next_entry(pos, member))
-         |                    ^~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_entry'
-     488 |         list_for_each_entry(child, &adev->children, node)
-         |         ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/list.h:5,
-                    from include/linux/kobject.h:19,
-                    from include/linux/of.h:17,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from drivers/bus/hisi_lpc.c:9:
-   drivers/bus/hisi_lpc.c: In function 'hisi_lpc_acpi_probe':
-   drivers/bus/hisi_lpc.c:509:41: error: 'struct acpi_device' has no member named 'children'
-     509 |         list_for_each_entry(child, &adev->children, node) {
-         |                                         ^~
-   include/linux/container_of.h:18:33: note: in definition of macro 'container_of'
-      18 |         void *__mptr = (void *)(ptr);                                   \
-         |                                 ^~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_entry'
-     509 |         list_for_each_entry(child, &adev->children, node) {
-         |         ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/bits.h:22,
-                    from include/linux/ioport.h:13,
-                    from include/linux/acpi.h:12,
-                    from drivers/bus/hisi_lpc.c:9:
-   drivers/bus/hisi_lpc.c:509:41: error: 'struct acpi_device' has no member named 'children'
-     509 |         list_for_each_entry(child, &adev->children, node) {
-         |                                         ^~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_entry'
-     509 |         list_for_each_entry(child, &adev->children, node) {
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
-     509 |         list_for_each_entry(child, &adev->children, node) {
-         |                                                     ^~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
-     520 |         container_of(ptr, type, member)
-         |         ^~~~~~~~~~~~
-   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
-     531 |         list_entry((ptr)->next, type, member)
-         |         ^~~~~~~~~~
-   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
-     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
-         |                    ^~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_entry'
-     509 |         list_for_each_entry(child, &adev->children, node) {
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/bus/hisi_lpc.c:509:41: error: 'struct acpi_device' has no member named 'children'
-     509 |         list_for_each_entry(child, &adev->children, node) {
-         |                                         ^~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
+- dwc3-qcom (parent of the dwc3 core) registers as a component master by
+calling component_master_add_with_match() before calling
+of_platform_populate(). The match callback could be as simple as comparing
+the device against our child device.
 
+- The dwc3 core (child) at the end of its probe can add as a component by calling
+component_add(). 
 
-vim +488 drivers/bus/hisi_lpc.c
+- The above triggers the component_master_ops::bind callback implemented in
+  dwc3-qcom driver which signals that we are good to go.
 
-99c0228d6ff1fa John Garry 2018-05-08  480  
-10e62b47973b0b John Garry 2019-07-30  481  static void hisi_lpc_acpi_remove(struct device *hostdev)
-10e62b47973b0b John Garry 2019-07-30  482  {
-10e62b47973b0b John Garry 2019-07-30  483  	struct acpi_device *adev = ACPI_COMPANION(hostdev);
-10e62b47973b0b John Garry 2019-07-30  484  	struct acpi_device *child;
-10e62b47973b0b John Garry 2019-07-30  485  
-10e62b47973b0b John Garry 2019-07-30  486  	device_for_each_child(hostdev, NULL, hisi_lpc_acpi_remove_subdev);
-10e62b47973b0b John Garry 2019-07-30  487  
-10e62b47973b0b John Garry 2019-07-30 @488  	list_for_each_entry(child, &adev->children, node)
-10e62b47973b0b John Garry 2019-07-30  489  		acpi_device_clear_enumerated(child);
-10e62b47973b0b John Garry 2019-07-30  490  }
-10e62b47973b0b John Garry 2019-07-30  491  
+- The dwc-qcom can call component_bind_all() to finish the formality i.e
+  telling the dwc3 core that we are good to go.
 
-:::::: The code at line 488 was first introduced by commit
-:::::: 10e62b47973b0b0ceda076255bcb147b83e20517 bus: hisi_lpc: Add .remove method to avoid driver unbind crash
+Is my understanding correct? This is what we are looking for i.e a way for
+the child device(s) to signal the parent when the former is bounded.
 
-:::::: TO: John Garry <john.garry@huawei.com>
-:::::: CC: Wei Xu <xuwei5@hisilicon.com>
+Also what happens when the child device probe fails for any reason. i.e
+component_add() would never be called so the master driver i.e dwc3-qcom would
+wait indefinitely. May be it needs to implement a timeout or runtime suspend
+etc should take care of keeping the resoures in suspend state.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Pavan
