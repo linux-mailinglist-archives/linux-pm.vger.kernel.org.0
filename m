@@ -2,81 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A9355EF3D
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 22:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A62A55EFAF
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 22:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbiF1UXR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 16:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S230178AbiF1Ui7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 16:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiF1UVk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 16:21:40 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4251124
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 13:19:34 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id w2-20020a056830110200b00616ce0dfcb2so5270198otq.1
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 13:19:34 -0700 (PDT)
+        with ESMTP id S230007AbiF1Ui6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 16:38:58 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1B21FCC9
+        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 13:38:57 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id f39so24376062lfv.3
+        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 13:38:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gEvFuUJcgKjD1KK0O2ptd6IoziGK1DkrPBnMIs51Dlw=;
-        b=viMzckyLSxyumGDXuvwbZfAH+ZpVcpddnKGKjmRdiZ7c2R+4pUF7GTRI4GEZerLJll
-         9NZqbUSMRtLM2QyP3uKI4lsn42t40dCeV/aMayXiovylNS8+AtX73VbrJtYdodZ5c275
-         R9f+lh5b6yd3dJDgsay575pZ11Bk8zfxYcrGLNtHnZkaO7Ly5lj7p8iQRSQcWPGPGovB
-         X9VCCXVvkOq6AjNubZHRVVI0O3QaI+jwiIh6uGBib9951sMhZWBXZJp4UaTpVBl+PSah
-         cq1uE8+2yGGXcT+s8rs32s1nL3Bgtr7iXAKVpFm7YFIdPhOXtOQ3DeuPlRUPRB0khkH5
-         oqnA==
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=Xmi9Zlf0oj5LCKHCuDvQ1k8JqDaa3QSmZJvGzHNzvuM=;
+        b=qxCq0oGZJ0MLKsBRQGAqd8dN+Q6795yvZIm4hb3cOT1md3MhZpNt6uhGPiIfoqKF81
+         YF0nibH38J5rrH0BzHGScDRkBMl+hgM2TNZTCEZaPeOEhQdHJhZjIYhywQb3RfPvlM2T
+         E+VP3Pu6qEOmFZm2m1XXCGKJNIaoz+DomscA+gQBxx3GFeNVpLlp7yxegA3znrRDA2vN
+         vfai0EY/ffZLKcx3XN9URyY5681zXpmX6qSZHAsvxvexQ/Gp+vWKB+sseHsUia36+fSS
+         3YbgEy7Lu7POLazTOTSW6lmBNfBTacW7xdHDTTuNBP2DH36Iv2BMpLMz3tp5mIHjchaN
+         Ot5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gEvFuUJcgKjD1KK0O2ptd6IoziGK1DkrPBnMIs51Dlw=;
-        b=s274XNfH6U1Nd62NUTOFuVapwlGup2pJsrqJfJsBXn4XYVgDHmpTfKJXMnsqWDicDs
-         c0U0DF21H9q2CV/LyGTbQQgDxppVwGfG8xZXwZxWrTFu4bbN1QB46iK6FRcNLKdZZYsA
-         1RENlAII00zBiH2nfcY9sxlDqv+JzP2Usk1nhSMLxxKreKbJvecRVkzIBD9H+TIxWjwD
-         1zjIDdSGkGQXXqsII3EGhzwf7MM3f46zK6iUvpiuVSWidQRfkIosCIw7rc733AWBriSp
-         Qim5Y1SVe8/r4GiRMc9dJpqXxlBQW3zQwPChR8ANPlSH0g2LpYpG3KNjAPFX19O3QJld
-         AnPQ==
-X-Gm-Message-State: AJIora/SKXQVZ1V5EwIqRB11h1lhR87LAQXm7ndP46D9DczNPtY/vgLk
-        3dB/+VyD1iWgcngtcCpM0bSs9A==
-X-Google-Smtp-Source: AGRyM1t6GoZu1uEi97J1earoxokH7cav9I4fHY14+CKDIjkVDDzutLG1V153Sm7YjcURG36xlQccSA==
-X-Received: by 2002:a05:6830:438a:b0:616:f238:1562 with SMTP id s10-20020a056830438a00b00616f2381562mr419026otv.111.1656447574266;
-        Tue, 28 Jun 2022 13:19:34 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:19:33 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     linux-kernel@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        devicetree@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=Xmi9Zlf0oj5LCKHCuDvQ1k8JqDaa3QSmZJvGzHNzvuM=;
+        b=C+9rTPz6h9aNPIgM72t6ABom1NPMgj/Lu9bBIlOXq0YC5/IBFX+l3qMXy2LXp3o764
+         jb7rcMQHjmoLxu8uGeEYzkS1y5WDMDK8fjR84kbI/WpXNd4XDqVmr7q3my8ncyG3eyQU
+         yDlncdUBRcz54xwcfgPm8mu5Wv9ylbzVoCHRgiKqOpqyeG0wBQibmyudUUzqzTFkcMTL
+         CTfjaq1wz6yB43OvOYSgaAXkocjV9zl19KuCKYjeS6Z1FKxXR/Mag1o5Q1qI+2bzTVPa
+         PeH9gkVHRgK2dEFGrw0u9S8lpCXi3/GxlT8/iypk8Wc//1y1kwkrsN3A5u4Gt/cuPOha
+         825g==
+X-Gm-Message-State: AJIora/ff4UlpDI+6uvs7zR3OHUqY4hzN7hnpcmskO2lLjdw6OhZKxJt
+        WRX6nolQNiNZr+pWu443kqivKQ==
+X-Google-Smtp-Source: AGRyM1uui+OQa7CWZ6BeoG7URy6HIyqC81TUIny4WbxhHjVxhV40t6lnln7hSf9wDCObVgP7qlLIHw==
+X-Received: by 2002:a05:6512:260a:b0:47f:ab30:d624 with SMTP id bt10-20020a056512260a00b0047fab30d624mr13640371lfb.326.1656448735689;
+        Tue, 28 Jun 2022 13:38:55 -0700 (PDT)
+Received: from [127.0.0.1] ([188.162.64.167])
+        by smtp.gmail.com with ESMTPSA id t11-20020ac24c0b000000b0047f8e9826a1sm2331073lfq.31.2022.06.28.13.38.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 Jun 2022 13:38:55 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 23:38:49 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+CC:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-scsi@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: (subset) [PATCH v3 1/7] dt-bindings: clock: qcom,gcc-sdm845: add parent power domain
-Date:   Tue, 28 Jun 2022 15:19:04 -0500
-Message-Id: <165644753308.10525.1688009123553849699.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220513061347.46480-2-krzysztof.kozlowski@linaro.org>
-References: <20220513061347.46480-1-krzysztof.kozlowski@linaro.org> <20220513061347.46480-2-krzysztof.kozlowski@linaro.org>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_2/3=5D_thermal=3A_qcom=3A_tse?= =?US-ASCII?Q?ns-v1=3A_Use_GENMASK_macro_for_bitmasks?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220628142359.93100-2-konrad.dybcio@somainline.org>
+References: <20220628142359.93100-1-konrad.dybcio@somainline.org> <20220628142359.93100-2-konrad.dybcio@somainline.org>
+Message-ID: <30ED78BE-3B77-4779-AC4B-958E5B0B7499@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,17 +81,190 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 13 May 2022 08:13:41 +0200, Krzysztof Kozlowski wrote:
-> Allow Qualcomm GCC to register its parent power domain (e.g. RPMHPD) to
-> properly pass performance state from children.
-> 
-> 
 
-Applied, thanks!
 
-[1/7] dt-bindings: clock: qcom,gcc-sdm845: add parent power domain
-      commit: d62cac46b0184b8730c68b01359a33769fee821b
+On 28 June 2022 17:23:58 GMT+03:00, Konrad Dybcio <konrad=2Edybcio@somainl=
+ine=2Eorg> wrote:
+>Convert the masks to use GENMASK=2E Tested by objdumping and making sure
+>the output is identical pre- and post this patch=2E
+>
+>Signed-off-by: Konrad Dybcio <konrad=2Edybcio@somainline=2Eorg>
+>---
+>Changes since v3:
+>* Add this patch
+>
+> drivers/thermal/qcom/tsens-v1=2Ec | 107 ++++++++++++++++----------------
+> 1 file changed, 54 insertions(+), 53 deletions(-)
+>
+>diff --git a/drivers/thermal/qcom/tsens-v1=2Ec b/drivers/thermal/qcom/tse=
+ns-v1=2Ec
+>index 573e261ccca7=2E=2Ed6f0dec4bfa1 100644
+>--- a/drivers/thermal/qcom/tsens-v1=2Ec
+>+++ b/drivers/thermal/qcom/tsens-v1=2Ec
+>@@ -3,6 +3,7 @@
+>  * Copyright (c) 2019, Linaro Limited
+>  */
+>=20
+>+#include <linux/bits=2Eh>
+> #include <linux/bitops=2Eh>
+> #include <linux/regmap=2Eh>
+> #include <linux/delay=2Eh>
+>@@ -22,34 +23,34 @@
+> #define TM_HIGH_LOW_Sn_INT_THRESHOLD_OFF	0x0090
+>=20
+> /* eeprom layout data for msm8956/76 (v1) */
+>-#define MSM8976_BASE0_MASK	0xff
+>-#define MSM8976_BASE1_MASK	0xff
+>+#define MSM8976_BASE0_MASK	GENMASK(7, 0)
+>+#define MSM8976_BASE1_MASK	GENMASK(7, 0)
+> #define MSM8976_BASE1_SHIFT	8
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Hmm=2E Is the BASE1_MASK correct? Should it be 0xff00 instead?
+(Yes, it's not a mistake in your patch, but let's make sure it is not a mi=
+stake)=2E
+
+>=20
+>-#define MSM8976_S0_P1_MASK	0x3f00
+>-#define MSM8976_S1_P1_MASK	0x3f00000
+>-#define MSM8976_S2_P1_MASK	0x3f
+>-#define MSM8976_S3_P1_MASK	0x3f000
+>-#define MSM8976_S4_P1_MASK	0x3f00
+>-#define MSM8976_S5_P1_MASK	0x3f00000
+>-#define MSM8976_S6_P1_MASK	0x3f
+>-#define MSM8976_S7_P1_MASK	0x3f000
+>-#define MSM8976_S8_P1_MASK	0x1f8
+>-#define MSM8976_S9_P1_MASK	0x1f8000
+>-#define MSM8976_S10_P1_MASK	0xf8000000
+>-#define MSM8976_S10_P1_MASK_1	0x1
+>-
+>-#define MSM8976_S0_P2_MASK	0xfc000
+>-#define MSM8976_S1_P2_MASK	0xfc000000
+>-#define MSM8976_S2_P2_MASK	0xfc0
+>-#define MSM8976_S3_P2_MASK	0xfc0000
+>-#define MSM8976_S4_P2_MASK	0xfc000
+>-#define MSM8976_S5_P2_MASK	0xfc000000
+>-#define MSM8976_S6_P2_MASK	0xfc0
+>-#define MSM8976_S7_P2_MASK	0xfc0000
+>-#define MSM8976_S8_P2_MASK	0x7e00
+>-#define MSM8976_S9_P2_MASK	0x7e00000
+>-#define MSM8976_S10_P2_MASK	0x7e
+>+#define MSM8976_S0_P1_MASK	GENMASK(13, 8)
+
+I was thinking about:
+
+#define MSM8976_MASK(shift) GENMASK((shift) + 5, (shift))
+#define MSM8976_S1_P1_MASK MSM8976_MASK(MSM8976_S0_P1_SHIFT)
+
+But=2E=2E=2E While you are reworking this driver, could you please replace=
+ mask+shift statements with the FIELD_GET / FIELD_PREP?
+There is a huge chance that we can drop _SHIFT completely and just use new=
+ly defined masks from this patch=2E
+
+>+#define MSM8976_S1_P1_MASK	GENMASK(25, 20)
+>+#define MSM8976_S2_P1_MASK	GENMASK(5, 0)
+>+#define MSM8976_S3_P1_MASK	GENMASK(17, 12)
+>+#define MSM8976_S4_P1_MASK	GENMASK(13, 8)
+>+#define MSM8976_S5_P1_MASK	GENMASK(25, 20)
+>+#define MSM8976_S6_P1_MASK	GENMASK(5, 0)
+>+#define MSM8976_S7_P1_MASK	GENMASK(17, 12)
+>+#define MSM8976_S8_P1_MASK	GENMASK(8, 3)
+>+#define MSM8976_S9_P1_MASK	GENMASK(20, 15)
+>+#define MSM8976_S10_P1_MASK	GENMASK(31, 27)
+>+#define MSM8976_S10_P1_MASK_1	GENMASK(0, 0)
+>+
+>+#define MSM8976_S0_P2_MASK	GENMASK(19, 14)
+>+#define MSM8976_S1_P2_MASK	GENMASK(31, 26)
+>+#define MSM8976_S2_P2_MASK	GENMASK(11, 6)
+>+#define MSM8976_S3_P2_MASK	GENMASK(23, 18)
+>+#define MSM8976_S4_P2_MASK	GENMASK(19, 14)
+>+#define MSM8976_S5_P2_MASK	GENMASK(31, 26)
+>+#define MSM8976_S6_P2_MASK	GENMASK(11, 6)
+>+#define MSM8976_S7_P2_MASK	GENMASK(23, 18)
+>+#define MSM8976_S8_P2_MASK	GENMASK(14, 9)
+>+#define MSM8976_S9_P2_MASK	GENMASK(26, 21)
+>+#define MSM8976_S10_P2_MASK	GENMASK(6, 1)
+>=20
+> #define MSM8976_S0_P1_SHIFT	8
+> #define MSM8976_S1_P1_SHIFT	20
+>@@ -76,7 +77,7 @@
+> #define MSM8976_S9_P2_SHIFT	21
+> #define MSM8976_S10_P2_SHIFT	1
+>=20
+>-#define MSM8976_CAL_SEL_MASK	0x3
+>+#define MSM8976_CAL_SEL_MASK	GENMASK(1, 0)
+>=20
+> #define MSM8976_CAL_DEGC_PT1	30
+> #define MSM8976_CAL_DEGC_PT2	120
+>@@ -84,34 +85,34 @@
+> #define MSM8976_SLOPE_DEFAULT	3200
+>=20
+> /* eeprom layout data for qcs404/405 (v1) */
+>-#define BASE0_MASK	0x000007f8
+>-#define BASE1_MASK	0x0007f800
+>+#define BASE0_MASK	GENMASK(10, 3)
+>+#define BASE1_MASK	GENMASK(18, 11)
+> #define BASE0_SHIFT	3
+> #define BASE1_SHIFT	11
+>=20
+>-#define S0_P1_MASK	0x0000003f
+>-#define S1_P1_MASK	0x0003f000
+>-#define S2_P1_MASK	0x3f000000
+>-#define S3_P1_MASK	0x000003f0
+>-#define S4_P1_MASK	0x003f0000
+>-#define S5_P1_MASK	0x0000003f
+>-#define S6_P1_MASK	0x0003f000
+>-#define S7_P1_MASK	0x3f000000
+>-#define S8_P1_MASK	0x000003f0
+>-#define S9_P1_MASK	0x003f0000
+>-
+>-#define S0_P2_MASK	0x00000fc0
+>-#define S1_P2_MASK	0x00fc0000
+>-#define S2_P2_MASK_1_0	0xc0000000
+>-#define S2_P2_MASK_5_2	0x0000000f
+>-#define S3_P2_MASK	0x0000fc00
+>-#define S4_P2_MASK	0x0fc00000
+>-#define S5_P2_MASK	0x00000fc0
+>-#define S6_P2_MASK	0x00fc0000
+>-#define S7_P2_MASK_1_0	0xc0000000
+>-#define S7_P2_MASK_5_2	0x0000000f
+>-#define S8_P2_MASK	0x0000fc00
+>-#define S9_P2_MASK	0x0fc00000
+>+#define S0_P1_MASK	GENMASK(5, 0)
+>+#define S1_P1_MASK	GENMASK(17, 12)
+>+#define S2_P1_MASK	GENMASK(29, 24)
+>+#define S3_P1_MASK	GENMASK(9, 4)
+>+#define S4_P1_MASK	GENMASK(21, 16)
+>+#define S5_P1_MASK	GENMASK(5, 0)
+>+#define S6_P1_MASK	GENMASK(17, 12)
+>+#define S7_P1_MASK	GENMASK(29, 24)
+>+#define S8_P1_MASK	GENMASK(9, 4)
+>+#define S9_P1_MASK	GENMASK(21, 16)
+>+
+>+#define S0_P2_MASK	GENMASK(11, 6)
+>+#define S1_P2_MASK	GENMASK(23, 18)
+>+#define S2_P2_MASK_1_0	GENMASK(31, 30)
+>+#define S2_P2_MASK_5_2	GENMASK(3, 0)
+>+#define S3_P2_MASK	GENMASK(15, 10)
+>+#define S4_P2_MASK	GENMASK(27, 22)
+>+#define S5_P2_MASK	GENMASK(11, 6)
+>+#define S6_P2_MASK	GENMASK(23, 18)
+>+#define S7_P2_MASK_1_0	GENMASK(31, 30)
+>+#define S7_P2_MASK_5_2	GENMASK(3, 0)
+>+#define S8_P2_MASK	GENMASK(15, 10)
+>+#define S9_P2_MASK	GENMASK(27, 22)
+>=20
+> #define S0_P1_SHIFT	0
+> #define S0_P2_SHIFT	6
+>@@ -139,7 +140,7 @@
+> #define S9_P1_SHIFT	16
+> #define S9_P2_SHIFT	22
+>=20
+>-#define CAL_SEL_MASK	7
+>+#define CAL_SEL_MASK	GENMASK(2, 0)
+> #define CAL_SEL_SHIFT	0
+>=20
+> static void compute_intercept_slope_8976(struct tsens_priv *priv,
+
+--=20
+With best wishes
+Dmitry
