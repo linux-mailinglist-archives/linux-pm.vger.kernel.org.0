@@ -2,105 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E78B55CA95
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4203A55CCFC
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242006AbiF1Apf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jun 2022 20:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
+        id S243216AbiF1Btx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jun 2022 21:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240124AbiF1Apd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 20:45:33 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C251C139
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 17:45:11 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 128so10499987pfv.12
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jun 2022 17:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+07R8ZyMp+5hGqx337Jl/FxePBkgkf4MJf4MdZjVvcc=;
-        b=BmzEJhHRJMJi6PYyaBJJSBT3lBP29VNlUbYB7YVfvy0drJKiq/XH3IuJTxarSjH3l8
-         8IU6M7Qd87PQW6u2KGW8rHJxXo/X/+4VRuQc2uvCX/byZrn8W9AtLnNwH4WH/6N9bKRL
-         StXyEu/5UCLwa9B6luALA3rjMKBkbvOwLtEIO9/S0RGuL1X4gmgDhftLqyD8ByTmrssy
-         IH++5JZS06ngLaH6V45EkiRs7GreJG1NT1jwjhdFWQMf0JfLU1vXHxihq5jaTHMcnmZo
-         OqayBDP2VInUV0+WIjRipDA+hUQVkBE256yJby+82uAprgh+Xc6o3vYQKOkB5R9cbGuv
-         lCUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+07R8ZyMp+5hGqx337Jl/FxePBkgkf4MJf4MdZjVvcc=;
-        b=cbRhL2ud+hYY2pQ0sMz47CL0J8k2zisZZyQR5wEtcF3hDhIEx83+5aPb25Rt+/S+Vj
-         w021H5HNf/+NRcv/QsDo74amlhAQDbCSuTDT+yUJvJEkQ1N6XbsbExZ/qVPvf++T7Ayf
-         xPXo0xo2GCv1tU+2LY/3bqlXLTbdKY29H60avOUkDI96algyL1q0EK3IbQsADHU1/1eh
-         T5lICnEZOVeEORBhlsXQ8HixMpXsPvVtRrmV3O+ASisTbWEo3n4yvbMeXqMgqovD4Xp+
-         EYL4DNo2fK1ZoWgfvnhw4eTqVfCwCEi97xufZKgtT8h4wE6ycc0ex4/w52ayYtgIOo9g
-         asFg==
-X-Gm-Message-State: AJIora95Sk9vnUHYfQE88rAZquD+8HI8LzAJDAHLVEZteMYJtZTIRkvW
-        negu7Am6EXzSsXYp51Xndig/cw==
-X-Google-Smtp-Source: AGRyM1vCH3BDKnJBbhchtIKQE4gHvwE+EJtNJ0TOcyD7LgIP0eTEV8PXiq2/zzhhDt0rBSro7m27YQ==
-X-Received: by 2002:a63:90c7:0:b0:40d:3c0d:33f4 with SMTP id a190-20020a6390c7000000b0040d3c0d33f4mr14973935pge.334.1656377110718;
-        Mon, 27 Jun 2022 17:45:10 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id jf20-20020a170903269400b0015e8d4eb25fsm7762019plb.169.2022.06.27.17.45.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 17:45:10 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 06:15:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: cpufreq: qcom-cpufreq-nvmem: fix board
- compatible in example
-Message-ID: <20220628004507.kghkkf6vx3l2hpqe@vireshk-i7>
-References: <20220627143340.477120-1-krzysztof.kozlowski@linaro.org>
- <20220627195040.GA2840123-robh@kernel.org>
+        with ESMTP id S240857AbiF1Btw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jun 2022 21:49:52 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0A4B12;
+        Mon, 27 Jun 2022 18:49:50 -0700 (PDT)
+X-UUID: 8b1f629551ae440989a800a6c41902d9-20220628
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:f4d558a4-8fa9-494d-9c42-0fce62b98fea,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:87442a2,CLOUDID:b2edcb62-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 8b1f629551ae440989a800a6c41902d9-20220628
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <peter.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 444901962; Tue, 28 Jun 2022 09:49:48 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 28 Jun 2022 09:49:47 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 28 Jun 2022 09:49:46 +0800
+Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release
+ supplier
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <matthias.bgg@gmail.com>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <rafael@kernel.org>, <stanley.chu@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
+        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>, <powen.kao@mediatek.com>,
+        <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+        <tun-yu.yu@mediatek.com>
+References: <20220613120755.14306-1-peter.wang@mediatek.com>
+ <Yrm7QSRXKZg4/q7s@kroah.com>
+From:   Peter Wang <peter.wang@mediatek.com>
+Message-ID: <9946359f-8ceb-2bad-9a4e-1e8a1dfd24c6@mediatek.com>
+Date:   Tue, 28 Jun 2022 09:49:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627195040.GA2840123-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yrm7QSRXKZg4/q7s@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-06-22, 13:50, Rob Herring wrote:
-> On Mon, Jun 27, 2022 at 04:33:40PM +0200, Krzysztof Kozlowski wrote:
-> > In the example, alone compatible "qcom,qcs404" is not correct.  Add
-> > proper board compatibles for QCS404 Evaluation Board.
-> > 
-> > Reported-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > 
-> > ---
-> > 
-> > Can be picked up independently, although the issue reported by Rob was
-> > caused by:
-> > https://lore.kernel.org/all/CAL_JsqKXDs=QHKob2Xy6vAFZfnkM9ggfmqf9TNA1hv8TScTmgQ@mail.gmail.com/
-> 
-> Best to go in that tree unless it's going to take weeks...
 
-Lemme know Krzysztof about the timing, I am going to send a pull
-request for cpufreq fixes very soon, so I can take it as well if you
-want.
+On 6/27/22 10:14 PM, Greg KH wrote:
+> On Mon, Jun 13, 2022 at 08:07:55PM +0800, peter.wang@mediatek.com wrote:
+>> From: Peter Wang <peter.wang@mediatek.com>
+>>
+>> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
+>> to prevent supplier enter suspend, pm_runtime_release_supplier should
+>> check supplier_preactivated before let supplier enter suspend.
+>>
+>> If the link is drop or release, bypass check supplier_preactivated.
+>>
+>> Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+>> ---
+>>   drivers/base/core.c          |  2 +-
+>>   drivers/base/power/runtime.c | 15 ++++++++++++---
+>>   include/linux/pm_runtime.h   |  5 +++--
+>>   3 files changed, 16 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/base/core.c b/drivers/base/core.c
+>> index 7cd789c4985d..3b9cc559928f 100644
+>> --- a/drivers/base/core.c
+>> +++ b/drivers/base/core.c
+>> @@ -486,7 +486,7 @@ static void device_link_release_fn(struct work_struct *work)
+>>   	/* Ensure that all references to the link object have been dropped. */
+>>   	device_link_synchronize_removal();
+>>   
+>> -	pm_runtime_release_supplier(link, true);
+>> +	pm_runtime_release_supplier(link, true, true);
+>>   
+>>   	put_device(link->consumer);
+>>   	put_device(link->supplier);
+>> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+>> index 676dc72d912d..3c4f425937a1 100644
+>> --- a/drivers/base/power/runtime.c
+>> +++ b/drivers/base/power/runtime.c
+>> @@ -314,10 +314,19 @@ static int rpm_get_suppliers(struct device *dev)
+>>    * and if @check_idle is set, check if that device is idle (and so it can be
+>>    * suspended).
+>>    */
+>> -void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
+>> +void pm_runtime_release_supplier(struct device_link *link, bool check_idle,
+>> +	bool drop)
+> This is just making this horrible api even worse.  Now there are 2
+> boolean flags required, 2 more than really should even be here at all.
+> Every time you see this function being used, you will now have to look
+> up the definition  to see what it really does.
+>
+> Please make a new function that calls the internal function with the
+> flag set properly, so that it is obvious what is happening when the call
+> is made.
+>
+> and really, the same thing should be done for the check_idle flag,
+> that's not good either.
+>
+> thanks,
 
-> > ---
-> >  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml       | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
+Hi Gerg,
 
--- 
-viresh
+Good point! you are right, I wont change api next version
+
+Thank you for review
+
+
+> greg k-h
