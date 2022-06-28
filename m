@@ -2,46 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EAF55E7AA
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 18:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F4B55E877
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 18:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348121AbiF1QBG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 12:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S1348123AbiF1QBy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 12:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348207AbiF1QAw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 12:00:52 -0400
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FBE1A047
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 09:00:28 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31772f8495fso121921877b3.4
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 09:00:28 -0700 (PDT)
+        with ESMTP id S1348246AbiF1QBk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 12:01:40 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A724C37A25;
+        Tue, 28 Jun 2022 09:01:10 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id h187so20775304ybg.0;
+        Tue, 28 Jun 2022 09:01:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VwpLeCsURPmPplcj9Gkpo0p39waVrWsRPMxVBr86wQ0=;
-        b=gcy9ekk1+MbjKhkSlAlP+gCKT/3NslSiPptHKmg/l+Hjg51NBs2i1Azv4El7cEgHW7
-         nZ/kqz+CzpNe58LuTsnELwKhAz+TmOWeaZJIQbp5M5IxzN1mS/kq62sJNleTegY4FW8N
-         zICTrkEsPJGSkwV66UlTI4/o9NLma3JG4YPLZCLBmaYjPnbijcN0d3MP5OyC/3WuLjTO
-         FhttvsdtdYivECvyroyLnfLzdWjEwmVXz5zLOsaj5F82gU2oFJeiuj47KmCCWozraAjD
-         XD4UB+gXmoXfkql6dzF6xXP2CzDAqneEMtKesI4iLF8bWIPjgSDNn0pf+dRuPpW81sRo
-         UsDQ==
-X-Gm-Message-State: AJIora+GO2DgluZmfwuIo2Hh+v8NmMriD0MQnQuP5xPELX5Okbi3jNyQ
-        UnOtUGqm/9z3sudSd/M1PGjcULfnaxAGZoXUj24=
-X-Google-Smtp-Source: AGRyM1vmKLTVyYqLHM2sxnlmkj2wEz4CmdumYak44KXY6Gvq8wZ5uQ9WSAC0mP+PCutxazt1FCFEBBgDPb+VBguYeJg=
-X-Received: by 2002:a81:57d7:0:b0:317:b111:34d5 with SMTP id
- l206-20020a8157d7000000b00317b11134d5mr22455781ywb.7.1656432027521; Tue, 28
- Jun 2022 09:00:27 -0700 (PDT)
+        bh=uMaNSGappz9cVeuRcW4qtSkksstkuegRFciPogPxfeA=;
+        b=eNcr80joiHxSsl/WU6Ybw6Cx00dOPVYcXTPn9RTDLCLVBnpioDFDNg0/Wb8NqrDP5k
+         gdmKB8lI1joM7RPA0D6ifDQHMffltGcvDR1dnSDrJP7ocvqBm1+fUazS5dVOlaVYl2z3
+         E7dxg70yKj+U45h/kRdS2oq1ba/lWlXv2ORqZTuP92+pNaKghgeMT/lurGvvEsmJ1sFk
+         IDQhkyd4FU5qcoJsxy8Y4TRwj6h0dc+SgPd29nhbI0Bszp/wRbD7NNh0K8MmrKbz76UN
+         3wt0yQuOdRNffaDhOSErEt+37hvGz5YcEtx5hYHmKHKREBKkIgtusw3InpM6eF1QCUQ9
+         Ydzg==
+X-Gm-Message-State: AJIora+sMu2K3nS8VrwKEe1W95OpDVMEAubWArXgaT+LCCtNTwTc46t4
+        vy20ynQ+X5u1d5DGvG72jyIUYPLsfPMg7J8ticUJOI5G
+X-Google-Smtp-Source: AGRyM1sOcSK9b/Nj+VspQSDrsUymMTlRPLzI4yS3poWbUnMORZXDxAHCqwzEs2ctY23x80/nitc/60D3nv4ifrctIIs=
+X-Received: by 2002:a05:6902:1141:b0:669:3f2a:c6bb with SMTP id
+ p1-20020a056902114100b006693f2ac6bbmr19131037ybu.365.1656432069677; Tue, 28
+ Jun 2022 09:01:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220628080812.twfoo2tzot3m32i2@vireshk-i7>
-In-Reply-To: <20220628080812.twfoo2tzot3m32i2@vireshk-i7>
+References: <2653259.mvXUDI8C0e@kreacher> <YrqY+c1NPQ+wEiUk@kroah.com>
+In-Reply-To: <YrqY+c1NPQ+wEiUk@kroah.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Jun 2022 18:00:16 +0200
-Message-ID: <CAJZ5v0iAiGF6tXJsrkBxh3A98vEpea9L=P3KcZAJwTDR5WZQCg@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm fixes for 5.19
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+Date:   Tue, 28 Jun 2022 18:00:58 +0200
+Message-ID: <CAJZ5v0i=stVf+igcmQmeiFSndOrBhegG1mJjku5OmojPzw5VhA@mail.gmail.com>
+Subject: Re: [PATCH] PK: runtime: Redefine pm_runtime_release_supplier()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -54,44 +55,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:08 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Tue, Jun 28, 2022 at 8:00 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+> On Mon, Jun 27, 2022 at 08:42:18PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Instead of passing an extra bool argument to pm_runtime_release_supplier(),
+> > make its callers take care of triggering a runtime-suspend of the
+> > supplier device as needed.
+> >
+> > No expected functional impact.
+> >
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+> Nice, thanks for cleaning this up.
 >
-> are available in the Git repository at:
+> If you want to take this through your tree:
+>         Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-fixes-5.19-rc5
->
-> for you to fetch changes up to be4b61ec45b3efe5e9077525fc92d544305eb2a6:
->
->   cpufreq: Add MT8186 to cpufreq-dt-platdev blocklist (2022-06-28 13:34:56 +0530)
->
-> ----------------------------------------------------------------
-> cpufreq arm fixes for 5.19-rc5
->
-> - Fix missing of_node_put for qoriq and pmac32 driver (Liang He).
-> - Fix issues around throttle interrupt for qcom driver (Stephen Boyd).
-> - Add MT8186 to cpufreq-dt-platdev blocklist (AngeloGioacchino Del Regno).
->
-> ----------------------------------------------------------------
-> AngeloGioacchino Del Regno (1):
->       cpufreq: Add MT8186 to cpufreq-dt-platdev blocklist
->
-> Liang He (2):
->       drivers: cpufreq: Add missing of_node_put() in qoriq-cpufreq.c
->       cpufreq: pmac32-cpufreq: Fix refcount leak bug
->
-> Stephen Boyd (1):
->       cpufreq: qcom-hw: Don't do lmh things without a throttle interrupt
->
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  drivers/cpufreq/pmac32-cpufreq.c     | 4 ++++
->  drivers/cpufreq/qcom-cpufreq-hw.c    | 6 ++++++
->  drivers/cpufreq/qoriq-cpufreq.c      | 1 +
->  4 files changed, 12 insertions(+)
->
-> --
+> But if you want me to take it, please just let me know and I will.
 
-Pulled, thanks!
+I'll take care of it myself.
+
+Thank you!
