@@ -2,47 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA7855C54C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770E355C63B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 14:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239763AbiF1GAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 02:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S243202AbiF1GGM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 02:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235044AbiF1GAc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 02:00:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015102C664;
-        Mon, 27 Jun 2022 23:00:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3131B81C17;
-        Tue, 28 Jun 2022 06:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A95C3411D;
-        Tue, 28 Jun 2022 06:00:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656396028;
-        bh=29k4Ow4oNcUSrFKMbJ2975+WfuAaRON14I7dvFBkeNk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xf0rToeQPRPfD7q0e5T5XQu9pKwLF7pDRLXgyaEYzuaBK16fJeClIa4pf1a1sWhh0
-         luqcSqGI0DFLr58g4XBuKzA21noZoyfcbXcnX5/arbeqjY2glJdlGbBnUy66SfKKVv
-         DF8hePeldvOKatR4dnty92To7g+ZqoLfkpss6sRY=
-Date:   Tue, 28 Jun 2022 08:00:25 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S229574AbiF1GGL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 02:06:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109F52315F;
+        Mon, 27 Jun 2022 23:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656396369; x=1687932369;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2n/5vn8rOoyELei0tsqkTQhJvHu4rRiriyqzIYLuJ8k=;
+  b=mKo1IEVUCl+h1xI0ZmDKatkloUdrG/u9msvziaRBTmf72B7mLJ/nPuq4
+   +CevJKNwKxQCsY9aDu/KbIyOq9Ou3XzublUf9+YIm1HjdFPT/dYhivhys
+   naNNWSY/TN78QOc6SwaPhlDtXIEc9HPA7+Sp/6UVLrd+AIqreAIqrQ2jh
+   HXg7Gvu5wdmse3xe7T0aJGxQ3N8B5pvm5UK9XhfHhXIv42SA1aaWPU9tB
+   2MU4r1MhuXV5lcUhFGSpv90SdgQnLEtmZtCVUnzEy40wScxoHg3iEGUXz
+   wct0ZFbv2cB/be7b6rV1JA1S6X+3ZugIny3LsVRR8A/0kclCCxilsy7x6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="281682813"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="281682813"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 23:06:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="594633503"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Jun 2022 23:06:08 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o64MR-0009aI-QX;
+        Tue, 28 Jun 2022 06:06:07 +0000
+Date:   Tue, 28 Jun 2022 14:05:55 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] PK: runtime: Redefine pm_runtime_release_supplier()
-Message-ID: <YrqY+c1NPQ+wEiUk@kroah.com>
-References: <2653259.mvXUDI8C0e@kreacher>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD REGRESSION
+ 3ea94b067c49378a574fc477647ece5c2f41dccb
+Message-ID: <62ba9a43.2Ijs96enQ2O4Tcxl%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2653259.mvXUDI8C0e@kreacher>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,25 +63,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 08:42:18PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Instead of passing an extra bool argument to pm_runtime_release_supplier(),
-> make its callers take care of triggering a runtime-suspend of the
-> supplier device as needed.
-> 
-> No expected functional impact.
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 3ea94b067c49378a574fc477647ece5c2f41dccb  Merge branch 'acpi-bus' into bleeding-edge
 
-Nice, thanks for cleaning this up.
+Error/Warning reports:
 
-If you want to take this through your tree:
-	Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+https://lore.kernel.org/linux-acpi/202206281146.iWj1cpqY-lkp@intel.com
 
-But if you want me to take it, please just let me know and I will.
+Error/Warning: (recently discovered and may have been fixed)
 
-thanks,
+drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member named 'children'
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member named 'node'; did you mean 'fwnode'?
 
-greg k-h
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+`-- arm64-allyesconfig
+    |-- drivers-bus-hisi_lpc.c:error:struct-acpi_device-has-no-member-named-children
+    `-- drivers-bus-hisi_lpc.c:error:struct-acpi_device-has-no-member-named-node
+
+elapsed time: 726m
+
+configs tested: 52
+configs skipped: 2
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64               randconfig-a012-20220627
+x86_64               randconfig-a016-20220627
+x86_64               randconfig-a011-20220627
+x86_64               randconfig-a013-20220627
+x86_64               randconfig-a014-20220627
+x86_64               randconfig-a015-20220627
+i386                 randconfig-a012-20220627
+i386                 randconfig-a015-20220627
+i386                 randconfig-a011-20220627
+i386                 randconfig-a016-20220627
+i386                 randconfig-a013-20220627
+i386                 randconfig-a014-20220627
+arc                  randconfig-r043-20220627
+s390                 randconfig-r044-20220627
+riscv                randconfig-r042-20220627
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+x86_64               randconfig-a002-20220627
+x86_64               randconfig-a003-20220627
+x86_64               randconfig-a001-20220627
+x86_64               randconfig-a006-20220627
+x86_64               randconfig-a005-20220627
+x86_64               randconfig-a004-20220627
+i386                 randconfig-a002-20220627
+i386                 randconfig-a004-20220627
+i386                 randconfig-a003-20220627
+i386                 randconfig-a001-20220627
+i386                 randconfig-a006-20220627
+i386                 randconfig-a005-20220627
+hexagon              randconfig-r041-20220627
+hexagon              randconfig-r045-20220627
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
