@@ -2,156 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1917D55E883
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 18:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C176355E8FC
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 18:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346990AbiF1P0K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 11:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S1346913AbiF1Pyy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 11:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347280AbiF1P0J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 11:26:09 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41C22DA9D
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 08:26:08 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id d17so12580748wrc.10
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jun 2022 08:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vHL7KLG7cNuB7LCeGAkW01vH5AeHqBrHUv1IstKU05Q=;
-        b=G/lrcJnISuX92SQ+iq8Fv8dYzQO9R72BfpagBmEOi8ngHAQNAOTDrcoKNScmK3DnOz
-         io06T+YiFAkKhPc42RDQ/rqHyaC/yVa8sAFk2QkjQvwUydzOBgZHXQwZuIJIN13kDgG5
-         iPO3AVOjd+v78xfoUsPuMADZA5UzKM/CbJ2xX59v9oHhi4s+uXSJeVPYqF2kNRW3GgXI
-         MYXT0+vM7agOcZ1esrJPUW9n785ddjsPA/l4m0EOsA/sTqvgmLiOOOcn9S8E+70BcOJr
-         NmBhkNE5lxe4xbdCDWtgtpiX71HiRSjXuZifF6LnjV42gVazBha68w/qzjKIzhJNzpBg
-         ciRA==
+        with ESMTP id S231159AbiF1Pyy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 11:54:54 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943112EA08;
+        Tue, 28 Jun 2022 08:54:53 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id o19so16404921ybg.2;
+        Tue, 28 Jun 2022 08:54:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vHL7KLG7cNuB7LCeGAkW01vH5AeHqBrHUv1IstKU05Q=;
-        b=ph9qCuv9589GN1xrF08Zrg5IeEHmf0Ncr8joiLvC0LqxVBjshAMeUMqd/ty8PBvFKH
-         HuEcOLcGStVDVrJ8q+RW8RHHCHWXLKPI9Y0Y69Balv4nVWl9mbx2pi+mQjymRKB2JuI7
-         HGk8JUwrXM33/ogc+R5RfPHHZEps6bFv/0kVqWjG8SIdVAvPaqmBsLYduTgVpD9ggYut
-         1sZ+cD/RLIP5MjnZyYBCHxNe0exJFfGlW+2f6X15M0/VwqPjsrXq+7mmuRo2C2iX2ZEo
-         8rMZeyVBNa2CJseS3MrYaau71i2IaE/QRW7qjv1Kqm7z2B46bdsZBqSpcIebMJlPKqwe
-         knlg==
-X-Gm-Message-State: AJIora/6vAHFtJTXMv4bcm88LMUcmXNA+VLGxuyC7c0fgxOT/ozzUQXT
-        IylgpNRmTY+SNHZTuKhS6ErP2HkD+aYExw==
-X-Google-Smtp-Source: AGRyM1uImHgo1CFyv3j+ARJwngGN5DnquV/SQpht6gc3qTPcHnrSKpRMhocjL0T1LMvu/CHIwwBECw==
-X-Received: by 2002:a5d:6da9:0:b0:21b:bf88:1ab0 with SMTP id u9-20020a5d6da9000000b0021bbf881ab0mr16293580wrs.66.1656429967115;
-        Tue, 28 Jun 2022 08:26:07 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id g13-20020adffc8d000000b0021b99efceb6sm14057462wrr.22.2022.06.28.08.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 08:26:06 -0700 (PDT)
-Message-ID: <0603d0e5-df0b-f47c-4391-b0860b07c13a@linaro.org>
-Date:   Tue, 28 Jun 2022 17:26:05 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M2M/nWMIArWh6jatNaLmjqxVllqrja+AOnsO6CfEGJk=;
+        b=mtCmM3JiPfD/6bpZEZijrDLFXlqm6XNZnzWlMz7DacAbGOpklNYAxN8RVULsku9KHh
+         9zA2qbMdLlouLDnIDDyzl2gOtxiRTR/tne3GW0De7MbGXKwBAjX3zNhSrP+FoCdhfYTE
+         6q51GIyLasFNBHnn3TgHrWS/fUS6ZJCRCmVMzDUwJw3pW/yyNtm60lz8aYxwBxXIw9ca
+         czcBI1/jZXbswHHxC2n4A0EB9qc2LCR50iDZa6iQoaAYm5/ZpHKL0Ns7/POyX51J4EYW
+         H71OWMBln1zB6jEe1kSttJjWn4Zfo6WkbEtTQA0dIdhO0rB4aGdCmp/0GcgbNI7Pk3uP
+         qMRw==
+X-Gm-Message-State: AJIora9U1NO1Z545QNt8HW5KDgXBWuj8iZXVeSHRSplbs+SKowPSied+
+        fRUhKovDePZp3oojyiwUHGiqY6qu8ku1226JgZY=
+X-Google-Smtp-Source: AGRyM1v35HaVSm8aGnI7ET9CfTgX4A2FHre43lUkb7LAgas5M9aN2OgQHgFB+2vu3UVCEj1r+eu3tSjcm/Nu5ocohJc=
+X-Received: by 2002:a25:9847:0:b0:669:b4c6:d081 with SMTP id
+ k7-20020a259847000000b00669b4c6d081mr19508238ybo.633.1656431692627; Tue, 28
+ Jun 2022 08:54:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/3] thermal/sysfs: Remove cooling device sysfs statistics
-Content-Language: en-US
-To:     Wei Wang <wvw@google.com>, linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org
-References: <20220601151441.9128-1-daniel.lezcano@linaro.org>
- <20220601151441.9128-3-daniel.lezcano@linaro.org>
- <be8395e3-98d7-7a8f-7153-c491b22d4463@arm.com>
- <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org>
- <eada018c-b857-7946-ae4b-2532e6866a45@arm.com>
- <CAHRSSEz9ExOgvByycztKYf1ncxCKeoy3uHuyQcnUC1r5nujc2w@mail.gmail.com>
- <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
- <CAGXk5yqCNUpGpHkecVP8U=ys9NF6dJAMu6R0E+jpgvcSVFN+Ug@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAGXk5yqCNUpGpHkecVP8U=ys9NF6dJAMu6R0E+jpgvcSVFN+Ug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220613120755.14306-1-peter.wang@mediatek.com>
+ <CAJZ5v0ipi5frHBGWWcFpGCYL7au=dF6vUG772h0r0pnCYsi5Zg@mail.gmail.com> <028eba89-8176-740f-42df-736a0fcf26e7@mediatek.com>
+In-Reply-To: <028eba89-8176-740f-42df-736a0fcf26e7@mediatek.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 28 Jun 2022 17:54:41 +0200
+Message-ID: <CAJZ5v0g7kuD9CNBUv+9CuthX79Sq01_e4DQAvbUqFPKsMYkedA@mail.gmail.com>
+Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release supplier
+To:     Peter Wang <peter.wang@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        wsd_upstream <wsd_upstream@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>, chun-hung.wu@mediatek.com,
+        alice.chao@mediatek.com, cc.chou@mediatek.com,
+        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
+        powen.kao@mediatek.com, qilin.tan@mediatek.com,
+        lin.gui@mediatek.com, tun-yu.yu@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/06/2022 08:02, Wei Wang wrote:
-> On Fri, Jun 3, 2022 at 4:04 AM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Todd,
->>
->> [adding Wei]
->>
->> On 02/06/2022 21:02, Todd Kjos wrote:
->>> On Thu, Jun 2, 2022 at 2:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> [ ... ]
->>
->>>> I see, it makes sense. Let's see if Todd and Android folks don't
->>>> use this thermal sysfs stats, so we could remove them.
->>>
->>> Android HALs do use the thermal sysfs stats. debugfs isn't a viable
->>> replacement since debugfs must not be mounted during normal operation.
->>
->> Thanks for your answer.
->>
->> I'm curious, what is the purpose of getting the statistics, especially
->> the transitions stats from normal operation?
->>
->> There were some complains about systems having a high number of cooling
->> devices with a lot of states. The state transitions are represented as a
->> matrix and result in up to hundred of megabytes of memory wasted.
->>
->> Moreover, sysfs being limited a page size, the output is often truncated.
->>
->> As it is automatically enabled for GKI, this waste of memory which is
->> not negligible for system with low memory can not be avoided.
->>
->> I went through the thermal HAL but did not find an usage of these
->> statistics, do you have a pointer to the code using them ?
->>
->> Thanks
->>
->>     -- Daniel
->>
->>
-> 
-> Sorry for the late reply, trying to catch up on emails after sick
-> recovery. We use it for stats collection to understand thermal
-> residency, and it is not in the HAL code, we don't use the transition
-> table heavily though. Are some of the devices having too many cooling
-> devices? Can we have a config to enable stats for a given cooling
-> device?
+On Tue, Jun 28, 2022 at 3:53 AM Peter Wang <peter.wang@mediatek.com> wrote:
+>
+>
+> On 6/28/22 3:00 AM, Rafael J. Wysocki wrote:
+> > On Mon, Jun 13, 2022 at 2:08 PM <peter.wang@mediatek.com> wrote:
+> >> From: Peter Wang <peter.wang@mediatek.com>
+> >>
+> >> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
+> >> to prevent supplier enter suspend, pm_runtime_release_supplier should
+> >> check supplier_preactivated before let supplier enter suspend.
+> > Why?
+>
+> because supplier_preactivated is true means supplier cannot enter
+> suspend, right?
 
-
-The stats table is bogus. As soon as the combination of the states leads 
-to a size greater than a page size, then the result is truncated.
-
-As the cooling devices is also abused to mimic power capping capable 
-device, we are ending up to 1024 states sometimes.
-
-Moreover, having the option set also create tables which take MB of 
-memory for nothing.
-
-The option only enables the stats for all the cooling device stats.
-
-As you mentioned, it seems to you are using the stats for debugging 
-purpose. The debugfs provides the same information, except it does only 
-show the transitions would actually happened and we are no longer 
-limited to a page size.
-
-Would it be acceptable to remove the sysfs stats ?
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+No, it doesn't mean that.
