@@ -2,79 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643C955E435
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9530855E466
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346087AbiF1NPf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 09:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S1346181AbiF1NVk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 09:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346085AbiF1NPc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 09:15:32 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6682CDC4;
-        Tue, 28 Jun 2022 06:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656422130; x=1687958130;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DzEwiScb7BUaJPJtWXZ4e9gxvyvur5LuNHvwmcTiF0o=;
-  b=VvPbtgvxGNRkSBxmldT3YDxIHH69KmfrIf9YPsYMvMxcsaUhzxXXCsd3
-   tJ1jLt34gmBiOdhw/y82K+q3u0dgEwRwSbpB70ePWdJuGZWC+PtBqJ1H5
-   fGvluMDCXGXE7nUfmFU3JE/3/XQ/fKUKlP7sQQZni+l+XxD49ZFM+GCg2
-   M=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 28 Jun 2022 06:15:28 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 06:15:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 28 Jun 2022 06:15:27 -0700
-Received: from [10.216.26.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
- 2022 06:15:21 -0700
-Message-ID: <173717b1-9cd9-9298-3a20-7dd3d95339af@quicinc.com>
-Date:   Tue, 28 Jun 2022 18:45:18 +0530
+        with ESMTP id S1346208AbiF1NVQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 09:21:16 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C1035DC4;
+        Tue, 28 Jun 2022 06:19:20 -0700 (PDT)
+Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D1CFD3EEC7;
+        Tue, 28 Jun 2022 15:19:17 +0200 (CEST)
+Message-ID: <e57300bb-163b-2963-e55e-a5d0b0678f4f@somainline.org>
+Date:   Tue, 28 Jun 2022 15:19:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 2/2] thermal: qcom: tsens-v1: Add support for MSM8992/4
+ TSENS
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Thara Gopinath" <thara.gopinath@linaro.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
- <bc423d7b-df03-d4e2-2898-0873db710943@quicinc.com>
- <64eb52ee-b3ac-3d94-cfce-ceb1c88dddb6@linaro.org>
- <042cb765-113b-9335-edae-595addf50dd0@quicinc.com>
- <23320e3c-40c3-12bb-0a1c-7e659a1961f2@linaro.org>
- <YrfSWw9Wpq5TsRUt@builder.lan>
- <47e1fcb4-237b-b880-b1b2-3910cc19e727@linaro.org>
- <59b5115e-0fe5-dbe1-552b-c29e771c0583@quicinc.com>
- <c43d4c9e-54d6-7b00-0ff7-e114850302ad@linaro.org>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <c43d4c9e-54d6-7b00-0ff7-e114850302ad@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220501202025.211567-1-konrad.dybcio@somainline.org>
+ <20220501202025.211567-2-konrad.dybcio@somainline.org>
+ <CAA8EJpqM5i88UKSrQyG1pMM6NQb8naTri-jNt++q7oKB-zdGAg@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <CAA8EJpqM5i88UKSrQyG1pMM6NQb8naTri-jNt++q7oKB-zdGAg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,118 +58,88 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 6/28/2022 4:20 PM, Krzysztof Kozlowski wrote:
-> On 28/06/2022 12:36, Rajendra Nayak wrote:
+On 27.06.2022 17:15, Dmitry Baryshkov wrote:
+> On Sun, 1 May 2022 at 23:21, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
 >>
->> On 6/27/2022 6:09 PM, Krzysztof Kozlowski wrote:
->>> On 26/06/2022 05:28, Bjorn Andersson wrote:
->>>> On Thu 23 Jun 07:58 CDT 2022, Krzysztof Kozlowski wrote:
->>>>
->>>>> On 23/06/2022 08:48, Rajendra Nayak wrote:
->>>>>>>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>>> index 83e8b63f0910..adffb9c70566 100644
->>>>>>>>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>>> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
->>>>>>>>>      			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>>>>      		};
->>>>>>>>>      
->>>>>>>>> +		pmu@1436400 {
->>>>>>>>> +			compatible = "qcom,sdm845-cpu-bwmon";
->>>>>>>>> +			reg = <0 0x01436400 0 0x600>;
->>>>>>>>> +
->>>>>>>>> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>>>> +
->>>>>>>>> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
->>>>>>>>> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->>>>>>>>> +			interconnect-names = "ddr", "l3c";
->>>>>>>>
->>>>>>>> Is this the pmu/bwmon instance between the cpu and caches or the one between the caches and DDR?
->>>>>>>
->>>>>>> To my understanding this is the one between CPU and caches.
->>>>>>
->>>>>> Ok, but then because the OPP table lists the DDR bw first and Cache bw second, isn't the driver
->>>>>> ending up comparing the bw values thrown by the pmu against the DDR bw instead of the Cache BW?
->>>>>
->>>>> I double checked now and you're right.
->>>>>
->>>>>> Atleast with my testing on sc7280 I found this to mess things up and I always was ending up at
->>>>>> higher OPPs even while the system was completely idle. Comparing the values against the Cache bw
->>>>>> fixed it.(sc7280 also has a bwmon4 instance between the cpu and caches and a bwmon5 between the cache
->>>>>> and DDR)
->>>>>
->>>>> In my case it exposes different issue - under performance. Somehow the
->>>>> bwmon does not report bandwidth high enough to vote for high bandwidth.
->>>>>
->>>>> After removing the DDR interconnect and bandwidth OPP values I have for:
->>>>> sysbench --threads=8 --time=60 --memory-total-size=20T --test=memory
->>>>> --memory-block-size=4M run
->>>>>
->>>>> 1. Vanilla: 29768 MB/s
->>>>> 2. Vanilla without CPU votes: 8728 MB/s
->>>>> 3. Previous bwmon (voting too high): 32007 MB/s
->>>>> 4. Fixed bwmon 24911 MB/s
->>>>> Bwmon does not vote for maximum L3 speed:
->>>>> bwmon report 9408 MB/s (thresholds set: <9216000 15052801>
->>>>> )
->>>>> osm l3 aggregate 14355 MBps -> 897 MHz, level 7, bw 14355 MBps
->>>>>
->>>>> Maybe that's just problem with missing governor which would vote for
->>>>> bandwidth rounding up or anticipating higher needs.
->>>>>
->>>>>>>> Depending on which one it is, shouldn;t we just be scaling either one and not both the interconnect paths?
->>>>>>>
->>>>>>> The interconnects are the same as ones used for CPU nodes, therefore if
->>>>>>> we want to scale both when scaling CPU, then we also want to scale both
->>>>>>> when seeing traffic between CPU and cache.
->>>>>>
->>>>>> Well, they were both associated with the CPU node because with no other input to decide on _when_
->>>>>> to scale the caches and DDR, we just put a mapping table which simply mapped a CPU freq to a L3 _and_
->>>>>> DDR freq. So with just one input (CPU freq) we decided on what should be both the L3 freq and DDR freq.
->>>>>>
->>>>>> Now with 2 pmu's, we have 2 inputs, so we can individually scale the L3 based on the cache PMU
->>>>>> counters and DDR based on the DDR PMU counters, no?
->>>>>>
->>>>>> Since you said you have plans to add the other pmu support as well (bwmon5 between the cache and DDR)
->>>>>> how else would you have the OPP table associated with that pmu instance? Would you again have both the
->>>>>> L3 and DDR scale based on the inputs from that bwmon too?
->>>>>
->>>>> Good point, thanks for sharing. I think you're right. I'll keep only the
->>>>> l3c interconnect path.
->>>>>
->>>>
->>>> If I understand correctly, <&osm_l3 MASTER_OSM_L3_APPS &osm_l3
->>>> SLAVE_OSM_L3> relates to the L3 cache speed, which sits inside the CPU
->>>> subsystem. As such traffic hitting this cache will not show up in either
->>>> bwmon instance.
->>>>
->>>> The path <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>
->>>> affects the DDR frequency. So the traffic measured by the cpu-bwmon
->>>> would be the CPU subsystems traffic that missed the L1/L2/L3 caches and
->>>> hits the memory bus towards DDR.
+>> MSM8994, despite being heavily based on MSM8974, uses the
+>> 1.2 version of TSENS. Also, 8994 being 8994, it has a custom
+>> way of calculating the slope.
 >>
->> That seems right, looking some more into the downstream code and register definitions
->> I see the 2 bwmon instances actually lie on the path outside CPU SS towards DDR,
->> first one (bwmon4) is between the CPUSS and LLCC (system cache) and the second one
->> (bwmon5) between LLCC and DDR. So we should use the counters from bwmon4 to
->> scale the CPU-LLCC path (and not L3), on sc7280 that would mean splitting the
->> <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3> into
->> <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3> (voting based on the bwmon4 inputs)
->> and <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3> (voting based on the bwmon5 inputs)
->> and similar for sdm845 too.
+>> MSM8992 in turn is a cut-down version of MSM8994 and uses
+>> the same TSENS hardware, albeit with a different set of sensors.
 >>
->> L3 should perhaps still be voted based on the cpu freq as done today.
+>> Also tested on 8976 (by a person who didn't want to be named)
+>> to make sure the 11->16 max_sensors changes didn't break anything.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+>> Changes since v2:
+>>
+>> - don't use slope before it's initialized (whoops!)
+>> - don't re-assign the same value to p[0..15]
+>> - free calib_rsel
+>> - use the same ops for 8992 and 8994
+>>
+>>  drivers/thermal/qcom/tsens-v1.c | 293 ++++++++++++++++++++++++++++++--
+>>  drivers/thermal/qcom/tsens.c    |   6 +
+>>  drivers/thermal/qcom/tsens.h    |   2 +-
+>>  3 files changed, 288 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+>> index 573e261ccca7..58864962f370 100644
+>> --- a/drivers/thermal/qcom/tsens-v1.c
+>> +++ b/drivers/thermal/qcom/tsens-v1.c
+>> @@ -142,6 +142,99 @@
+>>  #define CAL_SEL_MASK   7
+>>  #define CAL_SEL_SHIFT  0
+>>
+>> +/* eeprom layout data for 8994 */
+>> +#define MSM8994_BASE0_MASK     0x3ff
+>> +#define MSM8994_BASE1_MASK     0xffc00
+>> +#define MSM8994_BASE0_SHIFT    0
+>> +#define MSM8994_BASE1_SHIFT    10
 > 
-> This would mean that original bandwidth values (800 - 7216 MB/s) were
-> correct. However we have still your observation that bwmon kicks in very
-> fast and my measurements that sampled bwmon data shows bandwidth ~20000
-> MB/s.
+> Generally I feel that all the _MASK values can be better generated
+> using the GENMASK and newly defined _SHIFT value.
+Yes, I agree, however I think it'd be better to do it for
+all the defines in this file at once in a separate commit.
 
-Right, thats because the bandwidth supported between the cpu<->llcc path is much higher
-than the DDR frequencies. For instance on sc7280, I see (2288 - 15258 MB/s) for LLCC while
-the DDR max is 8532 MB/s.
-
+Konrad
 > 
+>> +
+>> +#define MSM8994_S0_MASK        0xf00000
+>> +#define MSM8994_S1_MASK        0xf000000
+>> +#define MSM8994_S2_MASK        0xf0000000
+>> +#define MSM8994_S3_MASK        0xf
+>> +#define MSM8994_S4_MASK        0xf0
+>> +#define MSM8994_S5_MASK        0xf00
+>> +#define MSM8994_S6_MASK        0xf000
+>> +#define MSM8994_S7_MASK        0xf0000
+>> +#define MSM8994_S8_MASK        0xf00000
+>> +#define MSM8994_S9_MASK        0xf000000
+>> +#define MSM8994_S10_MASK       0xf0000000
+>> +#define MSM8994_S11_MASK       0xf
+>> +#define MSM8994_S12_MASK       0xf0
+>> +#define MSM8994_S13_MASK       0xf00
+>> +#define MSM8994_S14_MASK       0xf000
+>> +#define MSM8994_S15_MASK       0xf0000
+>> +
+>> +#define MSM8994_S0_SHIFT       20
+>> +#define MSM8994_S1_SHIFT       24
+>> +#define MSM8994_S2_SHIFT       28
+>> +#define MSM8994_S3_SHIFT       0
+>> +#define MSM8994_S4_SHIFT       4
+>> +#define MSM8994_S5_SHIFT       8
+>> +#define MSM8994_S6_SHIFT       12
+>> +#define MSM8994_S7_SHIFT       16
+>> +#define MSM8994_S8_SHIFT       20
+>> +#define MSM8994_S9_SHIFT       24
+>> +#define MSM8994_S10_SHIFT      28
+>> +#define MSM8994_S11_SHIFT      0
+>> +#define MSM8994_S12_SHIFT      4
+>> +#define MSM8994_S13_SHIFT      8
+>> +#define MSM8994_S14_SHIFT      12
+>> +#define MSM8994_S15_SHIFT      16
 > 
-> Best regards,
-> Krzysztof
+> [skipped the rest]
+> 
