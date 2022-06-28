@@ -2,212 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D43D55E61D
+	by mail.lfdr.de (Postfix) with ESMTP id 25FA155E61C
 	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 18:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347032AbiF1PKg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 11:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S1347801AbiF1PUb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 11:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345950AbiF1PKe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 11:10:34 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4771D95A8;
-        Tue, 28 Jun 2022 08:10:33 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id w24so12860046pjg.5;
-        Tue, 28 Jun 2022 08:10:33 -0700 (PDT)
+        with ESMTP id S1344555AbiF1PUa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 11:20:30 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F67032EF5;
+        Tue, 28 Jun 2022 08:20:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=PQdhoN5Y92Sffq/hOjS2nUMXws/DtAotkv6AY0an4t4=;
-        b=V6dMZ0z58UrUfatSTJEe0X1KX+7nyCpO3U8PTqJXLtBpT+teARJDVA4MzcJXAP6MD1
-         lOrpaAuItF/+ir7d8LcC3UJD8ygiU1cw2pN+3yDEVyLr1PN2AC5G5GP4Subgk/2NUkBk
-         P42NOacoYZhr2TH2WQAfNIi4PaV4y6x2zBnLP8xu/FYzvRHfvewW6xfZ0rtR9fvzyN5C
-         NmjMdYbx8nvkvaIBhypP3fJmeBRH8sXNDWP79HnCnXJZci6ul5xAaG9+AA0GCupRMIqM
-         5aaiAZPmbL8pa8aFf0xn17XhjCHkdkBfjnqkG742tKGwus7GPiZAXoFaVSpPPSwqau69
-         D3bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=PQdhoN5Y92Sffq/hOjS2nUMXws/DtAotkv6AY0an4t4=;
-        b=RjUMVHKoPODeep3YLr8AgiOsEKgapRLBMp1Urq9BanTb3HNiFqSfGmvNMI5KXiYz90
-         3af2fz/7p+CTfipWQcYcWlCSkToVU43GMndNFGlDC9ycLH86YtO+mk2TkPOfXzkPC811
-         Vc4YI+OxdxJf91DJjjlJ9JCeCUh8UfGzRzCR17KsE8DeP+GoA4HbsluomeSjOQdx7lGi
-         wgBYU1el6BVe8LkQ1lI8fxkw0Pkh2Y+aBa2faZrOo3wmxiAKwEs9Y4iBJosxCDWTER2B
-         byYTIA5p63Hwo+MaN+bL5PtlYsvWx8wZvZ8ClGVIgfUCUlyTO/uwb1DmvXm+ssN0/9yI
-         3p6Q==
-X-Gm-Message-State: AJIora+65/Z0+a15CuXRl7d9FTGfCfEgHtfJRokaMaNEdoDGwMgN6K4z
-        unTxHKk4xQM2+ZOV4MwYlag=
-X-Google-Smtp-Source: AGRyM1tsPj/V6CDv94LXNl91i1dCBmE8JH99oIjI9o2Cw/MrR03bgs+VohPLlMK2LhEtjyDRhNt8+Q==
-X-Received: by 2002:a17:902:ec06:b0:16a:1877:425 with SMTP id l6-20020a170902ec0600b0016a18770425mr4057838pld.131.1656429032710;
-        Tue, 28 Jun 2022 08:10:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n24-20020a056a000d5800b00517c84fd24asm9972175pfv.172.2022.06.28.08.10.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 08:10:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 28 Jun 2022 08:10:30 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        rafael@kernel.org
-Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
-Message-ID: <20220628151030.GA3361452@roeck-us.net>
-References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
- <20220616202537.303655-2-daniel.lezcano@linaro.org>
- <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
- <d186bb7d-cbe6-8ec4-82a1-8323b3901ac2@collabora.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656429629; x=1687965629;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/kH8GubTfw963zb0YPRUYAeVknTxA6TmZdDQvBJ+pxU=;
+  b=WctqYpubYecF1m1/WaUyXho1eyUF2D6qg27p/xuaefrDrzNMjQzDz5Eu
+   FgmcJ2FIEvYGdu91QnPEghU61ai+HL4ru2ci9B6urlzb/BtmPBg27CDd/
+   JWGNPo6Qd0cd3UJyD+V+gvO1V2amOjF5pqRswbITkPifhZ6/dM2TbIK81
+   E=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Jun 2022 08:20:29 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 08:20:28 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 28 Jun 2022 08:20:28 -0700
+Received: from [10.216.26.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
+ 2022 08:20:22 -0700
+Message-ID: <1cb53abf-067a-25d2-1596-fe3961725e93@quicinc.com>
+Date:   Tue, 28 Jun 2022 20:50:19 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d186bb7d-cbe6-8ec4-82a1-8323b3901ac2@collabora.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Thara Gopinath" <thara.gopinath@linaro.org>
+References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
+ <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
+ <bc423d7b-df03-d4e2-2898-0873db710943@quicinc.com>
+ <64eb52ee-b3ac-3d94-cfce-ceb1c88dddb6@linaro.org>
+ <042cb765-113b-9335-edae-595addf50dd0@quicinc.com>
+ <23320e3c-40c3-12bb-0a1c-7e659a1961f2@linaro.org>
+ <YrfSWw9Wpq5TsRUt@builder.lan>
+ <47e1fcb4-237b-b880-b1b2-3910cc19e727@linaro.org>
+ <59b5115e-0fe5-dbe1-552b-c29e771c0583@quicinc.com>
+ <c43d4c9e-54d6-7b00-0ff7-e114850302ad@linaro.org>
+ <173717b1-9cd9-9298-3a20-7dd3d95339af@quicinc.com>
+ <9b6486b7-418a-0102-213d-f6a5451c8c7c@linaro.org>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <9b6486b7-418a-0102-213d-f6a5451c8c7c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 02:44:31PM +0300, Dmitry Osipenko wrote:
-> On 6/28/22 11:41, Daniel Lezcano wrote:
-> > 
-> > Thierry, Dmitry,
-> > 
-> > are fine with this patch?
-> 
-> Seems should be good. I couldn't test it using recent the linux-next
-> because of a lockup in LM90 driver. There were quite a lot of changes in
-> LM90 recently, adding Guenter.
-> 
 
-Weird, I tested those changes to death with real hardware, and I don't
-see a code path where the mutex can be left in blocked state unless the
-underlying i2c driver locks up for some reason. What is the platform,
-and can you point me to the devicetree file ? Also, is there anything
-else lm90 or i2c related in the kernel log ?
 
-Thanks,
-Guenter
+On 6/28/2022 7:32 PM, Krzysztof Kozlowski wrote:
+> On 28/06/2022 15:15, Rajendra Nayak wrote:
+>>
+>>
+>> On 6/28/2022 4:20 PM, Krzysztof Kozlowski wrote:
+>>> On 28/06/2022 12:36, Rajendra Nayak wrote:
+>>>>
+>>>> On 6/27/2022 6:09 PM, Krzysztof Kozlowski wrote:
+>>>>> On 26/06/2022 05:28, Bjorn Andersson wrote:
+>>>>>> On Thu 23 Jun 07:58 CDT 2022, Krzysztof Kozlowski wrote:
+>>>>>>
+>>>>>>> On 23/06/2022 08:48, Rajendra Nayak wrote:
+>>>>>>>>>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>>>>>>>>>> index 83e8b63f0910..adffb9c70566 100644
+>>>>>>>>>>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>>>>>>>>>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>>>>>>>>>> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
+>>>>>>>>>>>       			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>>>>>>       		};
+>>>>>>>>>>>       
+>>>>>>>>>>> +		pmu@1436400 {
+>>>>>>>>>>> +			compatible = "qcom,sdm845-cpu-bwmon";
+>>>>>>>>>>> +			reg = <0 0x01436400 0 0x600>;
+>>>>>>>>>>> +
+>>>>>>>>>>> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>>>>>> +
+>>>>>>>>>>> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+>>>>>>>>>>> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+>>>>>>>>>>> +			interconnect-names = "ddr", "l3c";
+>>>>>>>>>>
+>>>>>>>>>> Is this the pmu/bwmon instance between the cpu and caches or the one between the caches and DDR?
+>>>>>>>>>
+>>>>>>>>> To my understanding this is the one between CPU and caches.
+>>>>>>>>
+>>>>>>>> Ok, but then because the OPP table lists the DDR bw first and Cache bw second, isn't the driver
+>>>>>>>> ending up comparing the bw values thrown by the pmu against the DDR bw instead of the Cache BW?
+>>>>>>>
+>>>>>>> I double checked now and you're right.
+>>>>>>>
+>>>>>>>> Atleast with my testing on sc7280 I found this to mess things up and I always was ending up at
+>>>>>>>> higher OPPs even while the system was completely idle. Comparing the values against the Cache bw
+>>>>>>>> fixed it.(sc7280 also has a bwmon4 instance between the cpu and caches and a bwmon5 between the cache
+>>>>>>>> and DDR)
+>>>>>>>
+>>>>>>> In my case it exposes different issue - under performance. Somehow the
+>>>>>>> bwmon does not report bandwidth high enough to vote for high bandwidth.
+>>>>>>>
+>>>>>>> After removing the DDR interconnect and bandwidth OPP values I have for:
+>>>>>>> sysbench --threads=8 --time=60 --memory-total-size=20T --test=memory
+>>>>>>> --memory-block-size=4M run
+>>>>>>>
+>>>>>>> 1. Vanilla: 29768 MB/s
+>>>>>>> 2. Vanilla without CPU votes: 8728 MB/s
+>>>>>>> 3. Previous bwmon (voting too high): 32007 MB/s
+>>>>>>> 4. Fixed bwmon 24911 MB/s
+>>>>>>> Bwmon does not vote for maximum L3 speed:
+>>>>>>> bwmon report 9408 MB/s (thresholds set: <9216000 15052801>
+>>>>>>> )
+>>>>>>> osm l3 aggregate 14355 MBps -> 897 MHz, level 7, bw 14355 MBps
+>>>>>>>
+>>>>>>> Maybe that's just problem with missing governor which would vote for
+>>>>>>> bandwidth rounding up or anticipating higher needs.
+>>>>>>>
+>>>>>>>>>> Depending on which one it is, shouldn;t we just be scaling either one and not both the interconnect paths?
+>>>>>>>>>
+>>>>>>>>> The interconnects are the same as ones used for CPU nodes, therefore if
+>>>>>>>>> we want to scale both when scaling CPU, then we also want to scale both
+>>>>>>>>> when seeing traffic between CPU and cache.
+>>>>>>>>
+>>>>>>>> Well, they were both associated with the CPU node because with no other input to decide on _when_
+>>>>>>>> to scale the caches and DDR, we just put a mapping table which simply mapped a CPU freq to a L3 _and_
+>>>>>>>> DDR freq. So with just one input (CPU freq) we decided on what should be both the L3 freq and DDR freq.
+>>>>>>>>
+>>>>>>>> Now with 2 pmu's, we have 2 inputs, so we can individually scale the L3 based on the cache PMU
+>>>>>>>> counters and DDR based on the DDR PMU counters, no?
+>>>>>>>>
+>>>>>>>> Since you said you have plans to add the other pmu support as well (bwmon5 between the cache and DDR)
+>>>>>>>> how else would you have the OPP table associated with that pmu instance? Would you again have both the
+>>>>>>>> L3 and DDR scale based on the inputs from that bwmon too?
+>>>>>>>
+>>>>>>> Good point, thanks for sharing. I think you're right. I'll keep only the
+>>>>>>> l3c interconnect path.
+>>>>>>>
+>>>>>>
+>>>>>> If I understand correctly, <&osm_l3 MASTER_OSM_L3_APPS &osm_l3
+>>>>>> SLAVE_OSM_L3> relates to the L3 cache speed, which sits inside the CPU
+>>>>>> subsystem. As such traffic hitting this cache will not show up in either
+>>>>>> bwmon instance.
+>>>>>>
+>>>>>> The path <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>
+>>>>>> affects the DDR frequency. So the traffic measured by the cpu-bwmon
+>>>>>> would be the CPU subsystems traffic that missed the L1/L2/L3 caches and
+>>>>>> hits the memory bus towards DDR.
+>>>>
+>>>> That seems right, looking some more into the downstream code and register definitions
+>>>> I see the 2 bwmon instances actually lie on the path outside CPU SS towards DDR,
+>>>> first one (bwmon4) is between the CPUSS and LLCC (system cache) and the second one
+>>>> (bwmon5) between LLCC and DDR. So we should use the counters from bwmon4 to
+>>>> scale the CPU-LLCC path (and not L3), on sc7280 that would mean splitting the
+>>>> <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3> into
+>>>> <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3> (voting based on the bwmon4 inputs)
+> 
+> For sdm845 SLAVE_LLCC is in mem_noc, so I guess mc_virt on sc7280?
 
-> INFO: task kworker/3:1:44 blocked for more than 61 seconds.
->       Not tainted 5.19.0-rc4-next-20220627-00012-g08b697b94b8a #2
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/3:1     state:D stack:    0 pid:   44 ppid:     2
-> flags:0x00000000
-> Workqueue: events_freezable_power_ thermal_zone_device_check
-> Backtrace:
->  __schedule from schedule+0x60/0xcc
->  r10:c0fead70 r9:c2854c94 r8:df9a1dac r7:c2814b40 r6:00000002 r5:c1883020
->  r4:c2814b40
->  schedule from schedule_preempt_disabled+0x28/0x38
->  r5:c1883020 r4:c2814b40
->  schedule_preempt_disabled from __mutex_lock.constprop.0+0x1e0/0x9ac
->  r5:c1883020 r4:c2854c90
->  __mutex_lock.constprop.0 from __mutex_lock_slowpath+0x1c/0x20
->  r10:00000000 r9:c1882ae0 r8:c2854c90 r7:c2854c40 r6:00000001 r5:00000001
->  r4:c2854c90
->  __mutex_lock_slowpath from mutex_lock+0x60/0x64
->  mutex_lock from lm90_read+0x40/0x3d4
->  r5:00000001 r4:c2854e08
->  lm90_read from hwmon_thermal_get_temp+0x58/0x8c
->  r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1660 r5:c0af7940 r4:df9a1eb8
->  hwmon_thermal_get_temp from of_thermal_get_temp+0x38/0x44
->  r5:df9a1eb8 r4:c1db1400
->  of_thermal_get_temp from thermal_zone_get_temp+0x58/0x78
->  thermal_zone_get_temp from thermal_zone_device_update.part.0+0x4c/0x450
->  r7:de6aee00 r6:c1db1400 r5:00000000 r4:c1db1400
->  thermal_zone_device_update.part.0 from thermal_zone_device_check+0x58/0x5c
->  r10:00000000 r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1400 r5:c1db1660
->  r4:00000001
->  thermal_zone_device_check from process_one_work+0x21c/0x530
->  r7:de6aee00 r6:de6ab600 r5:c2802c00 r4:c1db167c
->  process_one_work from worker_thread+0x19c/0x5cc
->  r10:00000008 r9:c2814b40 r8:c1703d40 r7:de6ab61c r6:c2802c18 r5:de6ab600
->  r4:c2802c00
->  worker_thread from kthread+0x100/0x120
->  r10:00000000 r9:df895e80 r8:c285e3c0 r7:c2802c00 r6:c014cf84 r5:c285e300
->  r4:c2814b40
->  kthread from ret_from_fork+0x14/0x2c
-> Exception stack(0xdf9a1fb0 to 0xdf9a1ff8)
+thats correct,
+
 > 
-> > On 16/06/2022 22:25, Daniel Lezcano wrote:
-> >> The get_trend function does already what the generic framework does.
-> >>
-> >> Remove it.
-> >>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> ---
-> >>   drivers/thermal/tegra/soctherm.c | 32 --------------------------------
-> >>   1 file changed, 32 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/tegra/soctherm.c
-> >> b/drivers/thermal/tegra/soctherm.c
-> >> index 210325f92559..825eab526619 100644
-> >> --- a/drivers/thermal/tegra/soctherm.c
-> >> +++ b/drivers/thermal/tegra/soctherm.c
-> >> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void
-> >> *data, int trip, int temp)
-> >>       return 0;
-> >>   }
-> >>   -static int tegra_thermctl_get_trend(void *data, int trip,
-> >> -                    enum thermal_trend *trend)
-> >> -{
-> >> -    struct tegra_thermctl_zone *zone = data;
-> >> -    struct thermal_zone_device *tz = zone->tz;
-> >> -    int trip_temp, temp, last_temp, ret;
-> >> -
-> >> -    if (!tz)
-> >> -        return -EINVAL;
-> >> -
-> >> -    ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
-> >> -    if (ret)
-> >> -        return ret;
-> >> -
-> >> -    temp = READ_ONCE(tz->temperature);
-> >> -    last_temp = READ_ONCE(tz->last_temperature);
-> >> -
-> >> -    if (temp > trip_temp) {
-> >> -        if (temp >= last_temp)
-> >> -            *trend = THERMAL_TREND_RAISING;
-> >> -        else
-> >> -            *trend = THERMAL_TREND_STABLE;
-> >> -    } else if (temp < trip_temp) {
-> >> -        *trend = THERMAL_TREND_DROPPING;
-> >> -    } else {
-> >> -        *trend = THERMAL_TREND_STABLE;
-> >> -    }
-> >> -
-> >> -    return 0;
-> >> -}
-> >> -
-> >>   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
-> >>   {
-> >>       u32 r;
-> >> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data,
-> >> int lo, int hi)
-> >>   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
-> >>       .get_temp = tegra_thermctl_get_temp,
-> >>       .set_trip_temp = tegra_thermctl_set_trip_temp,
-> >> -    .get_trend = tegra_thermctl_get_trend,
-> >>       .set_trips = tegra_thermctl_set_trips,
-> >>   };
-> >>   
-> > 
-> > 
+>>>> and <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3> (voting based on the bwmon5 inputs)
+>>>> and similar for sdm845 too.
+>>>>
+>>>> L3 should perhaps still be voted based on the cpu freq as done today.
+>>>
+>>> This would mean that original bandwidth values (800 - 7216 MB/s) were
+>>> correct. However we have still your observation that bwmon kicks in very
+>>> fast and my measurements that sampled bwmon data shows bandwidth ~20000
+>>> MB/s.
+>>
+>> Right, thats because the bandwidth supported between the cpu<->llcc path is much higher
+>> than the DDR frequencies. For instance on sc7280, I see (2288 - 15258 MB/s) for LLCC while
+>> the DDR max is 8532 MB/s.
 > 
+> OK, that sounds right.
+> 
+> Another point is that I did not find actual scaling of throughput via
+> that interconnect path:
+> <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>
+
+Shouldn't this be <&gladiator_noc MASTER_APPSS_PROC 3 &gladiator_noc SLAVE_LLCC 3> on sdm845?
+
+> 
+> so I cannot test impact of bwmon that way.
+> 
+> Best regards,
+> Krzysztof
