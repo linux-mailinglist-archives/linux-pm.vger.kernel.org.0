@@ -2,66 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2520E55CC2F
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9264D55D14E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 15:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344591AbiF1KE2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 06:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S245668AbiF1KIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 06:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344679AbiF1KEL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 06:04:11 -0400
+        with ESMTP id S245666AbiF1KIo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 06:08:44 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AED2B1B8;
-        Tue, 28 Jun 2022 03:04:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9A22F393;
+        Tue, 28 Jun 2022 03:08:43 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ABBF566018AF;
-        Tue, 28 Jun 2022 11:04:04 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0C21966015BF;
+        Tue, 28 Jun 2022 11:08:40 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656410645;
-        bh=uRRR4e7RSIOXYCVcdSS5IPUDASv9iE0gIMNRnAP/73M=;
+        s=mail; t=1656410921;
+        bh=4SmhwJ59cYNwGa9/uAOmjkCzl5Kwd4RkrU6slG6AY6c=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ecZ1sTtwXEpq9nOapEj65/Kxs7CcDEsYhrqGa8qJDOzyTiTWx9fo6OPDJjoMa1kDU
-         N2SW0qA53cTEtUO7lafakDBRzYVtcys7L3hljzcuNr4bkHKxrZEasct8pdf4qk+1pH
-         avLu4TtCZhx+WN6tcS04s+rrioVQIveAR6jUiNllrwPt33fWL1qhSetofwCiPCb1hw
-         suRXkJVP2JceQjjUSUz+fGLwjAskfFabP64MXd2XAptmic/f+sCp65mh/NR1aggLMT
-         64xx0/kNeia5eXFWDrodjIrAGiqaqR7BJfwuNeYS9o6duf09fp+fkJzk8lAZ2jDL4w
-         jhN19++GIUy6A==
-Message-ID: <d2a8c329-4469-f68a-5b4b-789a93725ea4@collabora.com>
-Date:   Tue, 28 Jun 2022 13:04:01 +0300
+        b=gBcsZ9sToRUM8cKdvaAO72/zDI2G3Kl2iaVhdyvOxLtKDzWiVt3MBPV9oeKUhssOi
+         62COElRol0rewHQCq5aLavu4HrwWozFJA0T6/XTjCyKEGJI+BZDli/VzJ/hui00gjE
+         i/FI7Yx7Y+jHenRhurJ+RtU/QFwGVq7wnYmgmjSHrqM5yN1k4fsTdwktEDjORqgoab
+         +Ss7jDoo002EMMU0Nt/ZG8an7mVtncv4k0kIoBCjzpIcOpEqKrpMUPJTi8Ro6t7fV0
+         TCU3XOjLd6zZ66MOZUsfG9URyZSk/aebQQvUblK2QjoPpJH5CojSW3mctDn264kGhp
+         uiYWKUDHGukNw==
+Message-ID: <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
+Date:   Tue, 28 Jun 2022 13:08:38 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 5/5] OPP: Remove custom OPP helper support
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
 Content-Language: en-US
 To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Dmitry Osipenko <digetx@gmail.com>
-Cc:     Keerthy <j-keerthy@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <cover.1653991004.git.viresh.kumar@linaro.org>
- <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
- <565ff879-11e4-1ae4-08d8-1237a875ef12@gmail.com>
- <20220627060636.rfpok75zydgcwwo6@vireshk-i7>
- <4a8114f7-4ee6-a9ad-f5be-ceaf64be8a0e@gmail.com>
- <20220627064155.jo7iqz5h33l7a4vn@vireshk-i7>
- <d18a1f18-d78c-2db8-9b19-196dc88978c2@gmail.com>
- <20220627071937.uneeudaqzo2aa2me@vireshk-i7>
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
+ <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
+ <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
+ <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220627071937.uneeudaqzo2aa2me@vireshk-i7>
+In-Reply-To: <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -72,37 +71,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/27/22 10:19, Viresh Kumar wrote:
-> On 27-06-22, 10:09, Dmitry Osipenko wrote:
->> Yes, I missed that multi-clock OPP patch, thanks.
+On 6/28/22 10:09, Viresh Kumar wrote:
+> On 27-06-22, 12:51, Viresh Kumar wrote:
+>> On 27-06-22, 10:14, Dmitry Osipenko wrote:
+>>> 27.06.2022 09:45, Viresh Kumar пишет:
+>>>>> Looks okay. If you'll solve the cpufreq problem where OPP config is set
+>>>>> by two drivers for the same cpu device
+>>>> This is supported, there is some early freeing of resources on the
+>>>> removal path though, the reasoning for which I already gave in another
+>>>> email. Though, I am open to sorting that out as well, but nothing
+>>>> breaks the code for now AFAICT.
+>>>>
+>>>
+>>> In case of Tegra, we use tegra-cpufreq driver that sets supported_hw and
+>>> registers cpufreq-dt. If cpufreq-dt driver defers the probe, then the
+>>> supported_hw will be lost on the re-probe. I haven't checked yet, but I
+>>> suppose that cpufreq-dt driver defers on Tegra30 because of the CPU
+>>> regulator and that's why we get the "OPP table is missing" error.
 >>
->> Seems _opp_compare_key() won't work properly for the multi-clocks since
->> Tegra doesn't have bandwidth nor level for the 3d OPPs. Why does it need
->> to check opp_table->clk_count == 1? Shouldn't it be opp_table->clk_count
->>> 0?
+>> Aha, I get it now. I see, this is a real problem. Will fix it. Give me
+>> some time to think. Thanks.
 > 
-> The problem is that when we have multiple clocks, we can't assume any
-> of them as primary. Its the combination of the clock frequencies that
-> make them unique. Otherwise, what will happen if we have same
-> frequency of the first clock in two OPPs, but different frequency of
-> the second clock.
+> Okay, I fixed this in opp/linux-next, can you or Jon please give it a
+> go on tegra30 to see if the issue is fixed ?
 > 
-> Because of this, we won't also support multiple clocks in all freq
-> finder APIs, like dev_pm_opp_find_freq_exact(). We can't do that from
-> just one frequency.
+> FWIW, I have fixed this with the IDR API and the OPP core will only
+> free the resources in clear-config, that the corresponding set-config
+> has configured. I have tested it with the clk API only though.
 > 
-> Ideally, the drivers should now be calling dev_pm_opp_set_opp() to set
-> the OPP now.
+> Once you confirm, I will resend all the patches and hope no issues are
+> left here.
 > 
-> For your case, I think you can just add levels (like index) in the OPP
-> table. So we can uniquely identify each OPP.
+> Thanks for helping out guys. Really appreciate it.
 > 
 
-What about to bump the "by-level" sorting priority, making it above the
-"by-rate" sorting and then always use the first clock for the "by-rate"
-sorting? Then the multi-clock will work for Tegra without breaking dtbs
-and those for whom this sorting option won't be appropriate will have to
-add levels to the DT.
+The opp/linux-next works fine, thank you.
+
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+
+BTW, the idr_alloc() is obsoleted by xa_alloc().
 
 -- 
 Best regards,
