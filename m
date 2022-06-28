@@ -2,195 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6C355ECB3
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 20:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E675255ECCC
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jun 2022 20:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbiF1Sh5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 14:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S231356AbiF1Sng (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 14:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiF1Sh4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 14:37:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B450420F5F;
-        Tue, 28 Jun 2022 11:37:55 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SHgO3i002705;
-        Tue, 28 Jun 2022 18:37:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=Kr5eKPrGqH/iNt4EQ0PmPKbTFY3yJ6iKC1kNfLg+lcI=;
- b=EfR84tCSRMY9D4gP0GALzXA9TYqEFiimlq+a9HZ+wfgu5kAop0DsGCCmocjxhBIhBMhF
- CUjSFnMHRw/e92Vcj1SW268sDgW0Y2I2ZIurTKScJNqkEs9tlWBlUBNmcWUy4yHPFJKL
- lMRrtL26w2XXeDxA3BYGt3wsgE6oODlxy5HK0PQ8/kibjRuvDXTzpj6+xkQNsOVejwmx
- /AFST05sKWtZ4zx4TeoQ9kmw0SIxaAr/l4P3BQscv23JK0RWa72VECTiAbIS3pXLWec9
- vyJxVePP5ciHa1/IWVui9cunXighug4rA9LIC4wahB2ckeUBg3hakrXGM3WNZsPBRCYI oQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h06989ptj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 18:37:01 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SHidEN010965;
-        Tue, 28 Jun 2022 18:37:00 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h06989pry-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 18:37:00 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SIZBGw006547;
-        Tue, 28 Jun 2022 18:36:57 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gwsmj5a0j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 18:36:57 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SIatuf21823956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 18:36:55 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A7384C044;
-        Tue, 28 Jun 2022 18:36:55 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A1464C040;
-        Tue, 28 Jun 2022 18:36:54 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 28 Jun 2022 18:36:54 +0000 (GMT)
-Date:   Tue, 28 Jun 2022 20:36:53 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <YrtKReO2vIiX8VVU@tuxmaker.boeblingen.de.ibm.com>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <20220505182645.497868-12-ebiederm@xmission.com>
- <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <877d5ajesi.fsf@email.froward.int.ebiederm.org>
- <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
+        with ESMTP id S229955AbiF1Sng (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 14:43:36 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A6C1D0C6;
+        Tue, 28 Jun 2022 11:43:35 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id o18so11885149plg.2;
+        Tue, 28 Jun 2022 11:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Nf+OblUWFZy1JS2yrD639AItKuL1KQKNpAKw7anuvjY=;
+        b=HZc4YoW+bX2VEtQNtd28uVZZ74iNTEVxswYwXGIaNYz83F/gr+edoSYQ6d7nBUDrR4
+         gK61Um71/RZY9IqytdLIrByDeFiNTsgfHUooOkA3UXhi359fdpaNXtdR2qFasgUMoco/
+         Sxb4DpKF7FeGc9FV8AKqKjR0XO71DDWsGw6aZr2J3VaQL93tq+/cTRAqMy+KOOOE++uG
+         hiCdyFsY2Ow5xHT3TyFriFKi8M3a7UuJzfzef29WjCJLWBjl5duAZsppK50h89b6GvI6
+         bouNW4K8W33mADzbJ3y1nGZZJpxY4tgag++HWOjMhvXe3kbKDLtDmfddV0dhWZ5ooWnc
+         TDhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=Nf+OblUWFZy1JS2yrD639AItKuL1KQKNpAKw7anuvjY=;
+        b=R/FAemTzmdoaz6m1zbObm7gcfKw6jfnYNqxPGGaxyYvc0n2UgF6Q5aX++BMxfKEb5A
+         f2BaC6xnbNlU+fzJCxPRDr4/5tZGasri3rIp2KrQ/4lEPBP5ayatjAa0Lt2Q7MtqOXLu
+         yikERfka6U97HyO+EYx1Gk08SJ4todwgaJez3h11OlpxIXX6qlGvpokMXRvAzvLdFPrP
+         fmZYgPEiA6mmKpyPKm/zBJa5V/VwsIKTYpeyG/3v38WDGeMMIBRA3pZZ9+xFacfOGjW6
+         zoZWANnwQbXEWXIUWXNv6z40TfAASFvVk2CqYkEj/ZiMn1R0JR2sL7uc9VvAeOCSkLap
+         mbdA==
+X-Gm-Message-State: AJIora+ADffEOT/JSL7g3QwW7LtNEYIdwDIIcG72ATTZANYX/3gpftr/
+        6iRbB2fGVUlFXRKoKjAaA65EzOsIa9c=
+X-Google-Smtp-Source: AGRyM1uNLIskFHfRQr6mWvFmFqeRAY+FqrXG1HMf9YtxM4eqGdjvdNEoZDUa9fVW3zn6oaVigsD8BA==
+X-Received: by 2002:a17:903:1cf:b0:16a:605a:d58a with SMTP id e15-20020a17090301cf00b0016a605ad58amr4995298plh.37.1656441814741;
+        Tue, 28 Jun 2022 11:43:34 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bt11-20020a17090af00b00b001d95c09f877sm172288pjb.35.2022.06.28.11.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 11:43:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 28 Jun 2022 11:43:32 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        rafael@kernel.org
+Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
+Message-ID: <20220628184332.GA3624671@roeck-us.net>
+References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+ <20220616202537.303655-2-daniel.lezcano@linaro.org>
+ <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
+ <d186bb7d-cbe6-8ec4-82a1-8323b3901ac2@collabora.com>
+ <20220628151030.GA3361452@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JKZNRj7mPThveR49Jq1cKgSMT_MSny1l
-X-Proofpoint-ORIG-GUID: clmplF6XXiQeVpQGsOzYn3NLFuBGpIX_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-28_11,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 spamscore=0 clxscore=1015 mlxlogscore=999
- malwarescore=0 impostorscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280074
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220628151030.GA3361452@roeck-us.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 11:34:46AM -0500, Eric W. Biederman wrote:
-> I haven't gotten as far as reproducing this but I have started giving
-> this issue some thought.
+On Tue, Jun 28, 2022 at 08:10:30AM -0700, Guenter Roeck wrote:
+> On Tue, Jun 28, 2022 at 02:44:31PM +0300, Dmitry Osipenko wrote:
+> > On 6/28/22 11:41, Daniel Lezcano wrote:
+> > > 
+> > > Thierry, Dmitry,
+> > > 
+> > > are fine with this patch?
+> > 
+> > Seems should be good. I couldn't test it using recent the linux-next
+> > because of a lockup in LM90 driver. There were quite a lot of changes in
+> > LM90 recently, adding Guenter.
+> > 
 > 
-> This entire thing smells like a memory barrier is missing somewhere.
-> However by definition the lock implementations in linux provide all the
-> needed memory barriers, and in the ptrace_stop and ptrace_check_attach
-> path I don't see cases where these values are sampled outside of a lock
-> except in wait_task_inactive.  Does doing that perhaps require a
-> barrier? 
+> Weird, I tested those changes to death with real hardware, and I don't
+> see a code path where the mutex can be left in blocked state unless the
+> underlying i2c driver locks up for some reason. What is the platform,
+> and can you point me to the devicetree file ? Also, is there anything
+> else lm90 or i2c related in the kernel log ?
 > 
-> The two things I can think of that could shed light on what is going on
-> is enabling lockdep, to enable the debug check in signal_wake_up_state
-> and verifying bits of state that should be constant while the task
-> is frozen for ptrace are indeed constant when task is frozen for ptrace.
-> Something like my patch below.
+
+Follow-up question: I see that various Tegra systems use lm90 compatible
+chips, and the interrupt line is in general wired up. Can you check if
+you get lots of interrupts on that interrupt line ? Also, can you check
+what happens if you read hwmon attributes directly ?
+
+Thanks,
+Guenter
+
+> Thanks,
+> Guenter
 > 
-> If you could test that when you have a chance that would help narrow
-> down what is going on.
-> 
-> Thank you,
-> Eric
-> 
-> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-> index 156a99283b11..6467a2b1c3bc 100644
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -268,9 +268,13 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
->  	}
->  	read_unlock(&tasklist_lock);
->  
-> -	if (!ret && !ignore_state &&
-> -	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
-> +	if (!ret && !ignore_state) {
-> +		WARN_ON_ONCE(!(child->jobctl & JOBCTL_PTRACE_FROZEN));
-> +		WARN_ON_ONCE(!(child->joctctl & JOBCTL_TRACED));
-> +		WARN_ON_ONCE(READ_ONCE(child->__state) != __TASK_TRACED);
-> +		WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED));
->  		ret = -ESRCH;
-> +	}
->  
->  	return ret;
->  }
-
-I modified your chunk a bit - hope that is what you had in mind:
-
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 156a99283b11..f0e9a9a4d63c 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -268,9 +268,19 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
- 	}
- 	read_unlock(&tasklist_lock);
- 
--	if (!ret && !ignore_state &&
--	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
--		ret = -ESRCH;
-+	if (!ret && !ignore_state) {
-+		unsigned int __state;
-+
-+		WARN_ON_ONCE(!(child->jobctl & JOBCTL_PTRACE_FROZEN));
-+		WARN_ON_ONCE(!(child->jobctl & JOBCTL_TRACED));
-+		__state = READ_ONCE(child->__state);
-+		if (__state != __TASK_TRACED) {
-+			pr_err("%s(%d) __state %x", __FUNCTION__, __LINE__, __state);
-+			WARN_ON_ONCE(1);
-+		}
-+		if (WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
-+			ret = -ESRCH;
-+	}
- 
- 	return ret;
- }
-
-
-When WARN_ON_ONCE(1) hits the child __state is always zero/TASK_RUNNING,
-as reported by the preceding pr_err(). Yet, in the resulting core dump
-it is always __TASK_TRACED.
-
-Removing WARN_ON_ONCE(1) while looping until (__state != __TASK_TRACED)
-confirms the unexpected __state is always TASK_RUNNING. It never observed
-more than one iteration and gets printed once in 30-60 mins.
-
-So probably when the condition is entered __state is TASK_RUNNING more
-often, but gets overwritten with __TASK_TRACED pretty quickly. Which kind
-of consistent with my previous observation that kernel/sched/core.c:3305
-is where return 0 makes wait_task_inactive() fail.
-
-No other WARN_ON_ONCE() hit ever.
+> > INFO: task kworker/3:1:44 blocked for more than 61 seconds.
+> >       Not tainted 5.19.0-rc4-next-20220627-00012-g08b697b94b8a #2
+> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > task:kworker/3:1     state:D stack:    0 pid:   44 ppid:     2
+> > flags:0x00000000
+> > Workqueue: events_freezable_power_ thermal_zone_device_check
+> > Backtrace:
+> >  __schedule from schedule+0x60/0xcc
+> >  r10:c0fead70 r9:c2854c94 r8:df9a1dac r7:c2814b40 r6:00000002 r5:c1883020
+> >  r4:c2814b40
+> >  schedule from schedule_preempt_disabled+0x28/0x38
+> >  r5:c1883020 r4:c2814b40
+> >  schedule_preempt_disabled from __mutex_lock.constprop.0+0x1e0/0x9ac
+> >  r5:c1883020 r4:c2854c90
+> >  __mutex_lock.constprop.0 from __mutex_lock_slowpath+0x1c/0x20
+> >  r10:00000000 r9:c1882ae0 r8:c2854c90 r7:c2854c40 r6:00000001 r5:00000001
+> >  r4:c2854c90
+> >  __mutex_lock_slowpath from mutex_lock+0x60/0x64
+> >  mutex_lock from lm90_read+0x40/0x3d4
+> >  r5:00000001 r4:c2854e08
+> >  lm90_read from hwmon_thermal_get_temp+0x58/0x8c
+> >  r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1660 r5:c0af7940 r4:df9a1eb8
+> >  hwmon_thermal_get_temp from of_thermal_get_temp+0x38/0x44
+> >  r5:df9a1eb8 r4:c1db1400
+> >  of_thermal_get_temp from thermal_zone_get_temp+0x58/0x78
+> >  thermal_zone_get_temp from thermal_zone_device_update.part.0+0x4c/0x450
+> >  r7:de6aee00 r6:c1db1400 r5:00000000 r4:c1db1400
+> >  thermal_zone_device_update.part.0 from thermal_zone_device_check+0x58/0x5c
+> >  r10:00000000 r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1400 r5:c1db1660
+> >  r4:00000001
+> >  thermal_zone_device_check from process_one_work+0x21c/0x530
+> >  r7:de6aee00 r6:de6ab600 r5:c2802c00 r4:c1db167c
+> >  process_one_work from worker_thread+0x19c/0x5cc
+> >  r10:00000008 r9:c2814b40 r8:c1703d40 r7:de6ab61c r6:c2802c18 r5:de6ab600
+> >  r4:c2802c00
+> >  worker_thread from kthread+0x100/0x120
+> >  r10:00000000 r9:df895e80 r8:c285e3c0 r7:c2802c00 r6:c014cf84 r5:c285e300
+> >  r4:c2814b40
+> >  kthread from ret_from_fork+0x14/0x2c
+> > Exception stack(0xdf9a1fb0 to 0xdf9a1ff8)
+> > 
+> > > On 16/06/2022 22:25, Daniel Lezcano wrote:
+> > >> The get_trend function does already what the generic framework does.
+> > >>
+> > >> Remove it.
+> > >>
+> > >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > >> ---
+> > >>   drivers/thermal/tegra/soctherm.c | 32 --------------------------------
+> > >>   1 file changed, 32 deletions(-)
+> > >>
+> > >> diff --git a/drivers/thermal/tegra/soctherm.c
+> > >> b/drivers/thermal/tegra/soctherm.c
+> > >> index 210325f92559..825eab526619 100644
+> > >> --- a/drivers/thermal/tegra/soctherm.c
+> > >> +++ b/drivers/thermal/tegra/soctherm.c
+> > >> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void
+> > >> *data, int trip, int temp)
+> > >>       return 0;
+> > >>   }
+> > >>   -static int tegra_thermctl_get_trend(void *data, int trip,
+> > >> -                    enum thermal_trend *trend)
+> > >> -{
+> > >> -    struct tegra_thermctl_zone *zone = data;
+> > >> -    struct thermal_zone_device *tz = zone->tz;
+> > >> -    int trip_temp, temp, last_temp, ret;
+> > >> -
+> > >> -    if (!tz)
+> > >> -        return -EINVAL;
+> > >> -
+> > >> -    ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
+> > >> -    if (ret)
+> > >> -        return ret;
+> > >> -
+> > >> -    temp = READ_ONCE(tz->temperature);
+> > >> -    last_temp = READ_ONCE(tz->last_temperature);
+> > >> -
+> > >> -    if (temp > trip_temp) {
+> > >> -        if (temp >= last_temp)
+> > >> -            *trend = THERMAL_TREND_RAISING;
+> > >> -        else
+> > >> -            *trend = THERMAL_TREND_STABLE;
+> > >> -    } else if (temp < trip_temp) {
+> > >> -        *trend = THERMAL_TREND_DROPPING;
+> > >> -    } else {
+> > >> -        *trend = THERMAL_TREND_STABLE;
+> > >> -    }
+> > >> -
+> > >> -    return 0;
+> > >> -}
+> > >> -
+> > >>   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
+> > >>   {
+> > >>       u32 r;
+> > >> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data,
+> > >> int lo, int hi)
+> > >>   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
+> > >>       .get_temp = tegra_thermctl_get_temp,
+> > >>       .set_trip_temp = tegra_thermctl_set_trip_temp,
+> > >> -    .get_trend = tegra_thermctl_get_trend,
+> > >>       .set_trips = tegra_thermctl_set_trips,
+> > >>   };
+> > >>   
+> > > 
+> > > 
+> > 
