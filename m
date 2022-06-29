@@ -2,66 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D014560430
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 17:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FDF56044A
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 17:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiF2PMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 11:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S230496AbiF2PPL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 11:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234180AbiF2PMF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 11:12:05 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE173EF0B
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:10:30 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id m6-20020a05600c3b0600b003a0489f412cso888512wms.1
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:10:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=k/xWzWXDjwfHlllM6Hvtaj2XKm2chFd2jJ2ssW13thU=;
-        b=qsokU08JAvgideuDlR9em8hS0EkmPliIb05x2bqVwzfMJUXEcMybvE8u+D9fjuvrel
-         3QP+Zfdry1XM7qWyYh1zl7MuHNSyz91nmJf4hqVKCRw+dJ031mY8hDrkA82oAuuy8il7
-         fih/AQexicIQKz9WipwwHNAaBGpZrOHEaMVPVJUjEpz85Wk/4YYFHBBENSu662mFOkrN
-         BrYhMS/zOn+luxiZSNjz4us5OdpFp23sLI+h4I9mtioJ+WYgB/aoGxHUjHuuvZAhOqqW
-         ba9htJQvX6bRUfjigXVSQP3ftiXSqWGJT6OlyTAAayxCEGFUb6ZWnVss1/8dSkOIVNv/
-         aXew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=k/xWzWXDjwfHlllM6Hvtaj2XKm2chFd2jJ2ssW13thU=;
-        b=5fNUWwFy4l0tx2bukyfsqMseZxglgo34fGyzqaetf5LLY2MbVaZ5iQaM13h5BturqC
-         tzAg91pX9+j6BAnlD2gEH6FZzf/TKeR9axqp5kSi2DlCT6orpcwVaEfwIvB9AObPG7Z2
-         R+gn8gY7LxjOa8nk18YpM68Sq+4HU34INgIalmv1PfGo5yLvAu4pT7UXiukjVWUVjzLk
-         f/1w6DnHAv+6Au99vcU9zM6CQR2iohELl7QZ5C+SguhI64wEC6IXTrbSQqldjLeRNXlg
-         IaWe2xJyfz4xpv6wayJhxHrRmxl3+auqSqwvp9lOmZeaJhIJdIBRvOA2Q2oqZHJbMk9G
-         mhuQ==
-X-Gm-Message-State: AJIora+GHcK+EbSOXkBDa4RrUnf10KD8DCuyysyVtGOQ7nwpK/WEcnN6
-        3sjNGqoMgdzCbTKqyVldWM53Vw==
-X-Google-Smtp-Source: AGRyM1sC3dsIpYTDwO198OxJpK+5oBNuhHGguIKYVnPwaVxiGRjAVt7t7Cx8Bi4DEbZwA8B0MrKFlQ==
-X-Received: by 2002:a05:600c:509:b0:3a0:45d9:43e7 with SMTP id i9-20020a05600c050900b003a045d943e7mr4209360wmc.176.1656515428563;
-        Wed, 29 Jun 2022 08:10:28 -0700 (PDT)
-Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0a5500b0039c4d022a44sm3509029wmq.1.2022.06.29.08.10.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 08:10:27 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH 2/2] thermal/core: Remove DROP_FULL and RAISE_FULL
-Date:   Wed, 29 Jun 2022 17:10:12 +0200
-Message-Id: <20220629151012.3115773-2-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
-References: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
+        with ESMTP id S231747AbiF2PPJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 11:15:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CABA262
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:15:08 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o6ZP7-0004Rg-4n; Wed, 29 Jun 2022 17:14:57 +0200
+Message-ID: <4fb9c1b77507b3691f95b55afe053137dd022b29.camel@pengutronix.de>
+Subject: Re: [PATCH V2 8/9] interconnect: imx: configure NoC
+ mode/prioriry/ext_control
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abel.vesa@nxp.com, abailon@baylibre.com,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
+Date:   Wed, 29 Jun 2022 17:14:55 +0200
+In-Reply-To: <20220616073320.2203000-9-peng.fan@oss.nxp.com>
+References: <20220616073320.2203000-1-peng.fan@oss.nxp.com>
+         <20220616073320.2203000-9-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,58 +55,277 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The trends DROP_FULL and RAISE_FULL are not used and were never used
-in the past AFAICT. Remove these conditions as they seems to not be
-handled anywhere.
+Am Donnerstag, dem 16.06.2022 um 15:33 +0800 schrieb Peng Fan (OSS):
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Introduce imx_icc_noc_setting structure to describe a master port setting
+> Pass imx_icc_noc_setting as a parameter from specific driver
+> Set priority level, mode, ext control in imx_icc_node_set
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/interconnect/imx/imx.c    | 43 ++++++++++++++++++++++++++----
+>  drivers/interconnect/imx/imx.h    | 44 ++++++++++++++++++++++++++++++-
+>  drivers/interconnect/imx/imx8mm.c |  2 +-
+>  drivers/interconnect/imx/imx8mn.c |  2 +-
+>  drivers/interconnect/imx/imx8mq.c |  2 +-
+>  5 files changed, 84 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
+> index 78557fe6da2c..bd728caf2b85 100644
+> --- a/drivers/interconnect/imx/imx.c
+> +++ b/drivers/interconnect/imx/imx.c
+> @@ -10,6 +10,7 @@
+>  
+>  #include <linux/device.h>
+>  #include <linux/interconnect-provider.h>
+> +#include <linux/io.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_platform.h>
+> @@ -21,8 +22,10 @@
+>  /* private icc_node data */
+>  struct imx_icc_node {
+>  	const struct imx_icc_node_desc *desc;
+> +	const struct imx_icc_noc_setting *setting;
+>  	struct device *qos_dev;
+>  	struct dev_pm_qos_request qos_req;
+> +	struct imx_icc_provider *imx_provider;
+>  };
+>  
+>  static int imx_icc_get_bw(struct icc_node *node, u32 *avg, u32 *peak)
+> @@ -37,8 +40,24 @@ static int imx_icc_node_set(struct icc_node *node)
+>  {
+>  	struct device *dev = node->provider->dev;
+>  	struct imx_icc_node *node_data = node->data;
+> +	void __iomem *base;
+> +	u32 prio;
+>  	u64 freq;
+>  
+> +	if (node_data->setting && !node_data->setting->ignore && node->peak_bw) {
+> +		base = node_data->setting->reg + node_data->imx_provider->noc_base;
+> +		if (node_data->setting->mode == IMX_NOC_MODE_FIXED) {
+> +			prio = node_data->setting->prio_level;
+> +			prio = PRIORITY_COMP_MARK | (prio << 8) | prio;
+> +			writel(prio, base + IMX_NOC_PRIO_REG);
+> +			writel(node_data->setting->mode, base + IMX_NOC_MODE_REG);
+> +			writel(node_data->setting->ext_control, base + IMX_NOC_EXT_CTL_REG);
+> +		} else {
+> +			dev_info(dev, "mode: %d not supported\n", node_data->setting->mode);
+> +			return -ENOTSUPP;
+> +		}
+> +	}
+> +
+>  	if (!node_data->qos_dev)
+>  		return 0;
+>  
+> @@ -135,7 +154,8 @@ static int imx_icc_node_init_qos(struct icc_provider *provider,
+>  }
+>  
+>  static struct icc_node *imx_icc_node_add(struct imx_icc_provider *imx_provider,
+> -					 const struct imx_icc_node_desc *node_desc)
+> +					 const struct imx_icc_node_desc *node_desc,
+> +					 const struct imx_icc_noc_setting *setting)
+>  {
+>  	struct icc_provider *provider = &imx_provider->provider;
+>  	struct device *dev = provider->dev;
+> @@ -164,6 +184,8 @@ static struct icc_node *imx_icc_node_add(struct imx_icc_provider *imx_provider,
+>  	node->name = node_desc->name;
+>  	node->data = node_data;
+>  	node_data->desc = node_desc;
+> +	node_data->setting = setting;
+> +	node_data->imx_provider = imx_provider;
+>  	icc_node_add(node, provider);
+>  
+>  	if (node_desc->adj) {
+> @@ -187,7 +209,8 @@ static void imx_icc_unregister_nodes(struct icc_provider *provider)
+>  
+>  static int imx_icc_register_nodes(struct imx_icc_provider *imx_provider,
+>  				  const struct imx_icc_node_desc *descs,
+> -				  int count)
+> +				  int count,
+> +				  const struct imx_icc_noc_setting *settings)
+>  {
+>  	struct icc_provider *provider = &imx_provider->provider;
+>  	struct icc_onecell_data *provider_data = provider->data;
+> @@ -199,7 +222,10 @@ static int imx_icc_register_nodes(struct imx_icc_provider *imx_provider,
+>  		const struct imx_icc_node_desc *node_desc = &descs[i];
+>  		size_t j;
+>  
+> -		node = imx_icc_node_add(imx_provider, node_desc);
+> +		if (settings)
+> +			node = imx_icc_node_add(imx_provider, node_desc, &settings[node_desc->id]);
+> +		else
+> +			node = imx_icc_node_add(imx_provider, node_desc, NULL);
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/gov_step_wise.c | 11 -----------
- include/linux/thermal.h         |  2 --
- 2 files changed, 13 deletions(-)
+Maybe just write as
+node = imx_icc_node_add(imx_provider, node_desc, settings ? &settings[node_desc->id] : NULL);
 
-diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
-index 6efbfaf014da..9729b46d0258 100644
---- a/drivers/thermal/gov_step_wise.c
-+++ b/drivers/thermal/gov_step_wise.c
-@@ -67,10 +67,6 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
- 		}
- 		break;
--	case THERMAL_TREND_RAISE_FULL:
--		if (throttle)
--			next_target = instance->upper;
--		break;
- 	case THERMAL_TREND_DROPPING:
- 		if (cur_state <= instance->lower) {
- 			if (!throttle)
-@@ -81,13 +77,6 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 			}
- 		}
- 		break;
--	case THERMAL_TREND_DROP_FULL:
--		if (cur_state == instance->lower) {
--			if (!throttle)
--				next_target = THERMAL_NO_TARGET;
--		} else
--			next_target = instance->lower;
--		break;
- 	default:
- 		break;
- 	}
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 522c9180a08d..c8528bb6c01c 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -41,8 +41,6 @@ enum thermal_trend {
- 	THERMAL_TREND_STABLE, /* temperature is stable */
- 	THERMAL_TREND_RAISING, /* temperature is raising */
- 	THERMAL_TREND_DROPPING, /* temperature is dropping */
--	THERMAL_TREND_RAISE_FULL, /* apply highest cooling action */
--	THERMAL_TREND_DROP_FULL, /* apply lowest cooling action */
- };
- 
- /* Thermal notification reason */
--- 
-2.25.1
+But I don't really care, so feel free to ignore this suggestion if you
+don't like it.
+
+>  		if (IS_ERR(node)) {
+>  			ret = dev_err_probe(provider->dev,
+> PTR_ERR(node),
+>  					    "failed to add %s\n",
+> node_desc->name);
+> @@ -237,7 +263,8 @@ static int get_max_node_id(struct
+> imx_icc_node_desc *nodes, int nodes_count)
+>  }
+>  
+>  int imx_icc_register(struct platform_device *pdev,
+> -		     struct imx_icc_node_desc *nodes, int
+> nodes_count)
+> +		     struct imx_icc_node_desc *nodes, int
+> nodes_count,
+> +		     struct imx_icc_noc_setting *settings)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct icc_onecell_data *data;
+> @@ -267,13 +294,19 @@ int imx_icc_register(struct platform_device
+> *pdev,
+>  	provider->dev->of_node = dev->parent->of_node;
+>  	platform_set_drvdata(pdev, imx_provider);
+>  
+> +	if (settings) {
+> +		imx_provider->noc_base = devm_of_iomap(dev,
+> provider->dev->of_node, 0, NULL);
+> +		if (!imx_provider->noc_base)
+> +			return PTR_ERR(imx_provider->noc_base);
+> +	}
+> +
+>  	ret = icc_provider_add(provider);
+>  	if (ret) {
+>  		dev_err(dev, "error adding interconnect provider:
+> %d\n", ret);
+>  		return ret;
+>  	}
+>  
+> -	ret = imx_icc_register_nodes(imx_provider, nodes,
+> nodes_count);
+> +	ret = imx_icc_register_nodes(imx_provider, nodes,
+> nodes_count, settings);
+>  	if (ret)
+>  		goto provider_del;
+>  
+> diff --git a/drivers/interconnect/imx/imx.h
+> b/drivers/interconnect/imx/imx.h
+> index 0ad2c654c222..1da87cfe27da 100644
+> --- a/drivers/interconnect/imx/imx.h
+> +++ b/drivers/interconnect/imx/imx.h
+> @@ -15,6 +15,31 @@
+>  
+>  #define IMX_ICC_MAX_LINKS	4
+>  
+> +/*
+> + * High throughput priority level in Regulator mode
+> + * Read Priority in Fixed/Limiter mode
+> + */
+> +#define PRIORITY0_SHIFT	0
+> +/*
+> + * Low throughput priority level in Regulator mode
+> + * Write Priority in Fixed/Limiter mode
+> + */
+> +#define PRIORITY1_SHIFT	8
+> +#define PRIORITY_MASK		0x7
+> +
+> +#define PRIORITY_COMP_MARK	BIT(31)	/* Must set */
+> +
+> +#define IMX_NOC_MODE_FIXED	0
+> +#define IMX_NOC_MODE_LIMITER	1
+> +#define IMX_NOC_MODE_BYPASS	2
+> +#define IMX_NOC_MODE_REGULATOR	3
+> +
+> +#define IMX_NOC_PRIO_REG	0x8
+> +#define IMX_NOC_MODE_REG	0xC
+> +#define IMX_NOC_BANDWIDTH_REG	0x10
+> +#define IMX_NOC_SATURATION	0x14
+> +#define IMX_NOC_EXT_CTL_REG	0x18
+> +
+>  struct imx_icc_provider {
+>  	void __iomem *noc_base;
+>  	struct icc_provider provider;
+> @@ -44,6 +69,22 @@ struct imx_icc_node_desc {
+>  	const struct imx_icc_node_adj_desc *adj;
+>  };
+>  
+> +/*
+> + * struct imx_icc_noc_setting - Describe an interconnect node
+> setting
+> + * @ignore: indicate whether need apply this setting
+> + * @reg: register offset inside the NoC
+> + * @prio_level: priority level
+> + * @mode: functional mode
+> + * @ext_control: external input control
+> + */
+> +struct imx_icc_noc_setting {
+> +	bool ignore;
+
+I don't like this ignore member. Can we get rid of this and make the
+"don't touch" a special mode, like IMX_NOC_MODE_UNCONFIGURED?
+
+Other than those two nitpicks, the patch looks good.
+
+Regards,
+Lucas
+
+> +	u32 reg;
+> +	u32 prio_level;
+> +	u32 mode;
+> +	u32 ext_control;
+> +};
+> +
+>  #define DEFINE_BUS_INTERCONNECT(_name, _id, _adj, ...)			\
+>  	{								\
+>  		.id = _id,						\
+> @@ -61,7 +102,8 @@ struct imx_icc_node_desc {
+>  
+>  int imx_icc_register(struct platform_device *pdev,
+>  		     struct imx_icc_node_desc *nodes,
+> -		     int nodes_count);
+> +		     int nodes_count,
+> +		     struct imx_icc_noc_setting *noc_settings);
+>  int imx_icc_unregister(struct platform_device *pdev);
+>  
+>  #endif /* __DRIVERS_INTERCONNECT_IMX_H */
+> diff --git a/drivers/interconnect/imx/imx8mm.c b/drivers/interconnect/imx/imx8mm.c
+> index 1083490bb391..ae797412db96 100644
+> --- a/drivers/interconnect/imx/imx8mm.c
+> +++ b/drivers/interconnect/imx/imx8mm.c
+> @@ -83,7 +83,7 @@ static struct imx_icc_node_desc nodes[] = {
+>  
+>  static int imx8mm_icc_probe(struct platform_device *pdev)
+>  {
+> -	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes));
+> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), NULL);
+>  }
+>  
+>  static int imx8mm_icc_remove(struct platform_device *pdev)
+> diff --git a/drivers/interconnect/imx/imx8mn.c b/drivers/interconnect/imx/imx8mn.c
+> index ad97e55fd4e5..1ce94c5bdd8c 100644
+> --- a/drivers/interconnect/imx/imx8mn.c
+> +++ b/drivers/interconnect/imx/imx8mn.c
+> @@ -72,7 +72,7 @@ static struct imx_icc_node_desc nodes[] = {
+>  
+>  static int imx8mn_icc_probe(struct platform_device *pdev)
+>  {
+> -	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes));
+> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), NULL);
+>  }
+>  
+>  static int imx8mn_icc_remove(struct platform_device *pdev)
+> diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
+> index d7768d3c6d8a..7f00a0511c6e 100644
+> --- a/drivers/interconnect/imx/imx8mq.c
+> +++ b/drivers/interconnect/imx/imx8mq.c
+> @@ -82,7 +82,7 @@ static struct imx_icc_node_desc nodes[] = {
+>  
+>  static int imx8mq_icc_probe(struct platform_device *pdev)
+>  {
+> -	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes));
+> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), NULL);
+>  }
+>  
+>  static int imx8mq_icc_remove(struct platform_device *pdev)
+
 
