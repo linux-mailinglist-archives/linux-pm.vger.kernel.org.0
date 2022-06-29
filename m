@@ -2,66 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B0156045C
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 17:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091CC56046A
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 17:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbiF2PVl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 11:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S233372AbiF2PWK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 11:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiF2PVk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 11:21:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5042CDF2
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:21:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E34B2B824DD
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 15:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8211AC341CB
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 15:21:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656516096;
-        bh=ZDCDwpca81bkD7zfj/ZeuVqZ6HEMCvFZH+Pt1rVzrs0=;
-        h=From:To:Subject:Date:From;
-        b=h1X1dCKGVUdldIwir2N6gGyndoyEkLSdtGwOBauE+hgBJJWTQzEYHTgKop2c4raUw
-         v8bMIycIYGu/7OeBaPK2B8ntppAsAnoUKMv3ae3ErvGFWWfQeP7CVjSPCt4XTY+GOd
-         S6gHnMda43wKV45iJU8zb7w+6oeG/ciUIlSxfUyvxlIvCHZMjPvyKnHPHwF8/uQEn3
-         +4jw47JOaGu8SGE4ZCsdQLBvIlbQ5PSfkYAGjy/I9z+6miv3/eweL6QKhm8u+I/Rfu
-         q/z0WZhl9ioaynW0xv65beFj5hT1R3TUVgSQwGBCpK8LY/+sDZt9TiZKyE5cVu4wqf
-         VIL3CGRHs982g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 68769C05FF5; Wed, 29 Jun 2022 15:21:36 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 216189] New: amd-pstate stops working after S3 suspend
-Date:   Wed, 29 Jun 2022 15:21:36 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: a@annel.in
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-216189-137361@https.bugzilla.kernel.org/>
+        with ESMTP id S230213AbiF2PWJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 11:22:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606992C654
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:22:08 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o6ZVv-0005er-6q; Wed, 29 Jun 2022 17:21:59 +0200
+Message-ID: <245b25cc8f512e7a724a3b8cf4526d99708c8e83.camel@pengutronix.de>
+Subject: Re: [PATCH 6/8] arm64: dts: imx8mp: add NoC node
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abel.vesa@nxp.com, abailon@baylibre.com,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+Date:   Wed, 29 Jun 2022 17:21:57 +0200
+In-Reply-To: <20220601094537.3390127-7-peng.fan@oss.nxp.com>
+References: <20220601094537.3390127-1-peng.fan@oss.nxp.com>
+         <20220601094537.3390127-7-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,94 +54,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216189
+Am Mittwoch, dem 01.06.2022 um 17:45 +0800 schrieb Peng Fan (OSS):
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add i.MX8MP NoC node
 
-            Bug ID: 216189
-           Summary: amd-pstate stops working after S3 suspend
-           Product: Power Management
-           Version: 2.5
-    Kernel Version: 5.18.8
-          Hardware: AMD
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: cpufreq
-          Assignee: linux-pm@vger.kernel.org
-          Reporter: a@annel.in
-        Regression: No
+Please move this patch into the "interconnect: support i.MX8MP" series
+and add a bit more info to the commit message.
 
-Hardware: Lenovo Thinkpad T14 Gen2 AMD=20=20
-CPU: AMD Ryzen 7 PRO 5850U=20=20
-Kernel: 5.18.8  (tried linux-next too)=20=20
+Regards,
+Lucas
 
-
-I've managed to get new `amd-pstate` driver working on my system, but after
-suspend (S3) it stops working and CPU frequency and Boost state control is =
-not
-working.=20
-
-Falling back to `acpi-cpufreq` driver solves the issue =E2=80=94 suspend no=
- longer
-breaks CPU frequency and Boost controls.=20
-
-
-```
-    ~ sudo cpupower frequency-info=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20
-    analyzing CPU 0:
-      driver: amd-pstate
-      CPUs which run at the same hardware frequency: 0
-      CPUs which need to have their frequency coordinated by software: 0
-      maximum transition latency: 131 us
-      hardware limits: 400 MHz - 1.90 GHz
-      available cpufreq governors: ondemand performance schedutil
-      current policy: frequency should be within 800 MHz and 1.50 GHz.
-                      The governor "ondemand" may decide which speed to use
-                      within this range.
-      current CPU frequency: Unable to call hardware
-      current CPU frequency: 3.41 GHz (asserted by call to kernel)
-
-     boost state support:
-        Supported: yes
-        Active: no
-        AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.51 GHz.
-        AMD PSTATE Nominal Performance: 70. Nominal Frequency: 1.90 GHz.
-        AMD PSTATE Lowest Non-linear Performance: 41. Lowest Non-linear
-Frequency: 1.11 GHz.
-        AMD PSTATE Lowest Performance: 15. Lowest Frequency: 400 MHz.
-```
-
-As we see here, frequency limits are set to 800 MHz - 1.50 GHz and boost st=
-ats
-is inactive, but actual CPU frequency 3.41 GHz (that means boost is on and
-limits are ignored)=20=20
-
-The things starts working again only after reboot.=20=20
-
-Any commands such as=20
-```
-echo 1 > /sys/devices/system/cpu/cpufreq/boost
-echo 0 > /sys/devices/system/cpu/cpufreq/boost
-cpupower frequency-set -g ondemand -d 400MHz -u 800MHz
-cpupower frequency-set -g performance -d 1.9GHz -u 1.9GHz
-
-```
-
-just does nothing. (after reboot they start working again of course)=20=20
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> index 2a1c6ff37e03..9e9e941a8906 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> @@ -1019,6 +1019,27 @@ eqos: ethernet@30bf0000 {
+>  			};
+>  		};
+>  
+> +		noc: interconnect@32700000 {
+> +			compatible = "fsl,imx8mp-noc", "fsl,imx8m-noc", "syscon";
+> +			reg = <0x32700000 0x100000>;
+> +			clocks = <&clk IMX8MP_CLK_NOC>;
+> +			#interconnect-cells = <1>;
+> +
+> +			operating-points-v2 = <&noc_opp_table>;
+> +
+> +			noc_opp_table: opp-table {
+> +				compatible = "operating-points-v2";
+> +
+> +				opp-200M {
+> +					opp-hz = /bits/ 64 <200000000>;
+> +				};
+> +
+> +				opp-1000M {
+> +					opp-hz = /bits/ 64 <1000000000>;
+> +				};
+> +			};
+> +		};
+> +
+>  		aips4: bus@32c00000 {
+>  			compatible = "fsl,aips-bus", "simple-bus";
+>  			reg = <0x32c00000 0x400000>;
 
 
-There are no mentions of pstate module in dmesg, but maybe I have to enable
-some debug (how to do it?)=20=20
-
-Simillar bug for intel_pstate:
-https://bugzilla.kernel.org/show_bug.cgi?id=3D90421=20=20
-Maybe it is related some way.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
