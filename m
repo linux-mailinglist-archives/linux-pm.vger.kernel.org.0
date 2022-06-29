@@ -2,115 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87477560A8F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 21:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7508D560ADE
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 22:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiF2Tpb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 15:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S230112AbiF2UFl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 16:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiF2Tpa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 15:45:30 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C1D25C46;
-        Wed, 29 Jun 2022 12:45:30 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id x138so13366158pfc.3;
-        Wed, 29 Jun 2022 12:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zX93b4uo7r2zzM20H0vNMZpGBveIXWgxPACeOg4RsOo=;
-        b=oi24oy8pB5I5ioF84ISCdNpuTo7TCnpI6ZmcooU6WiEr8PStnOU7pOwqXU/KD3DCvw
-         onhUjkKKusDKbSWuLaHrRe5QZv+lsQTR+rbd0O2w7eExewrDZQjg8WVpRvUXtUtwo8i0
-         NvrHU6UuipcewkCfCCZZEJiSuFgjDhxlduRkQ4Nzub9aZhjDdmPqVjgGqtWRKyAjj6ZG
-         MgdZzudjoS4/q+yUhfw6sRst7Hy3oiCKD9ifiZ2a6dLienB+uwlxubFG/IzfGbRKUMag
-         wa6ceJcYw/RLdZpbARhWKZWe6VnL06G6eJPcUqxmeYyMuQuF15mD4HKTkOdSVlN7wxhV
-         ZjhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zX93b4uo7r2zzM20H0vNMZpGBveIXWgxPACeOg4RsOo=;
-        b=r5WohLB1NZ2fwPPHrQGLwWpJFf9fYGo9lTHn6zyvleYpP/Gw0UhpeTbHpLltL27EsF
-         MqdewiSGqtsrOHvXGrLpShJonlw8ClnKEc1orh1ufTODTiK3DeGlwiD4pugBLdNz5LEY
-         5qCZeevXUIeWhzwbs+GHVOh3kl6yBl8ITYojwd3mlN8KKuZro8OP7t+UH+iNS0v1W8O5
-         GhD/fvcUQ0E9Tce5/L92odX41sBsTMQfZoJZzUA1HZgytgWaGUsTpE6BgaY+eCd6uw8W
-         J7BbsIf367DWw9IKRg/lv46Z60OtSH2nvswuiD9SNxWpHVE6ju3h112/zLFKWum6R4/x
-         FTuQ==
-X-Gm-Message-State: AJIora9YQeSNgEEKML3rUthYhEV8DClAFDDyOAcLKDHgmrRHw79rmyMM
-        oMJgPGPz66JnPhllIXCKdl0=
-X-Google-Smtp-Source: AGRyM1vhnun+Dx/Iat4x3HGNWqaZwBKHI4Xr3keeaJWM7+Gp+HWhYaNAyqHh7y97JFLA0sm9Wf6etg==
-X-Received: by 2002:a63:242:0:b0:401:b84a:6008 with SMTP id 63-20020a630242000000b00401b84a6008mr4183776pgc.100.1656531929988;
-        Wed, 29 Jun 2022 12:45:29 -0700 (PDT)
-Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id c15-20020a170902c2cf00b0016a268563ecsm11867517pla.23.2022.06.29.12.45.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 12:45:29 -0700 (PDT)
-Message-ID: <2e9d3702-595d-20e3-9e8c-c9723384b3a9@gmail.com>
-Date:   Thu, 30 Jun 2022 04:45:24 +0900
+        with ESMTP id S229714AbiF2UFk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 16:05:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB1535869;
+        Wed, 29 Jun 2022 13:05:39 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9FC5C660194C;
+        Wed, 29 Jun 2022 21:05:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656533138;
+        bh=wA2jDF5jhWNY2EPA/ycOSjh4UOW5u3KqQjpi/Q1H1Xc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FI85VpieM3E2wpg+bT+g4CkrH0pcelahztRbS1nJjBf0QkiNILhd5K1gsxXRokSDh
+         YcY9po03I4B1HDxJn/MCoTik+Z+Ltqf0fB0diN6+axmIojN4h9JHOEIaMXy3CkJmoR
+         0Y2yjjhvJxzSuWzt+n9/AAON6WB7GkUWr745hAjvEoKN0ykf02DX6NQfilXowVNDJl
+         nt++17HqsNQHXzJVPz8AtOzrThlAfu1LPu/g/kkXj5U6B3GLsCTMzU2ZgPqHuvnXtj
+         grId4V+x54nSS6Xoqh/FcsVDkAc7cwDegpIvC2egtY/qjrREa76yo8t5/KMSoCDm6Y
+         4GjnOsHOS7/5A==
+Message-ID: <b4adef64-cc2c-14ab-b16d-3f8c27f3834b@collabora.com>
+Date:   Wed, 29 Jun 2022 23:05:35 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] PM / devfreq: imx-bus: use NULL to pass a null pointer
- rather than zero
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
 Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220623180054.79687-1-colin.i.king@gmail.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220623180054.79687-1-colin.i.king@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+ <20220616202537.303655-2-daniel.lezcano@linaro.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220616202537.303655-2-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22. 6. 24. 03:00, Colin Ian King wrote:
-> The 3rd argument to the function of_get_property is a pointer and it is
-> being passed using 0. Use NULL instead.
+On 6/16/22 23:25, Daniel Lezcano wrote:
+> The get_trend function does already what the generic framework does.
 > 
-> Cleans up sparse warning:
-> warning: Using plain integer as NULL pointer
+> Remove it.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  drivers/devfreq/imx-bus.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/thermal/tegra/soctherm.c | 32 --------------------------------
+>  1 file changed, 32 deletions(-)
 > 
-> diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
-> index f3f6e25053ed..f87067fc574d 100644
-> --- a/drivers/devfreq/imx-bus.c
-> +++ b/drivers/devfreq/imx-bus.c
-> @@ -59,7 +59,7 @@ static int imx_bus_init_icc(struct device *dev)
->  	struct imx_bus *priv = dev_get_drvdata(dev);
->  	const char *icc_driver_name;
+> diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
+> index 210325f92559..825eab526619 100644
+> --- a/drivers/thermal/tegra/soctherm.c
+> +++ b/drivers/thermal/tegra/soctherm.c
+> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void *data, int trip, int temp)
+>  	return 0;
+>  }
 >  
-> -	if (!of_get_property(dev->of_node, "#interconnect-cells", 0))
-> +	if (!of_get_property(dev->of_node, "#interconnect-cells", NULL))
->  		return 0;
->  	if (!IS_ENABLED(CONFIG_INTERCONNECT_IMX)) {
->  		dev_warn(dev, "imx interconnect drivers disabled\n");
+> -static int tegra_thermctl_get_trend(void *data, int trip,
+> -				    enum thermal_trend *trend)
+> -{
+> -	struct tegra_thermctl_zone *zone = data;
+> -	struct thermal_zone_device *tz = zone->tz;
+> -	int trip_temp, temp, last_temp, ret;
+> -
+> -	if (!tz)
+> -		return -EINVAL;
+> -
+> -	ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
+> -	if (ret)
+> -		return ret;
+> -
+> -	temp = READ_ONCE(tz->temperature);
+> -	last_temp = READ_ONCE(tz->last_temperature);
+> -
+> -	if (temp > trip_temp) {
+> -		if (temp >= last_temp)
+> -			*trend = THERMAL_TREND_RAISING;
+> -		else
+> -			*trend = THERMAL_TREND_STABLE;
+> -	} else if (temp < trip_temp) {
+> -		*trend = THERMAL_TREND_DROPPING;
+> -	} else {
+> -		*trend = THERMAL_TREND_STABLE;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
+>  {
+>  	u32 r;
+> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data, int lo, int hi)
+>  static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
+>  	.get_temp = tegra_thermctl_get_temp,
+>  	.set_trip_temp = tegra_thermctl_set_trip_temp,
+> -	.get_trend = tegra_thermctl_get_trend,
+>  	.set_trips = tegra_thermctl_set_trips,
+>  };
+>  
 
-Applied it. Thanks.
+Guenter fixed the LM90 driver problem. There are other regressions in
+the latest -next which complicate testing, but I can't see any problems
+from the thermal side.
+
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+Best regards,
+Dmitry
