@@ -2,113 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45B1560BBE
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 23:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E173560C32
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 00:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiF2VdM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 17:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S230004AbiF2WPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 18:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiF2VdK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 17:33:10 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1691102E;
-        Wed, 29 Jun 2022 14:33:08 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 145so2421121pga.12;
-        Wed, 29 Jun 2022 14:33:08 -0700 (PDT)
+        with ESMTP id S229632AbiF2WPV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 18:15:21 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D0B344F4
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 15:15:20 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id y77so23572303oia.3
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 15:15:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=P2HquEVtI+pw57E6S5i14/TATcUTeLRqaqJNNbt7nE0=;
-        b=CeVJygw/0cgsj7YHNS4X+1qw464Ewte+SybrmPFUSN450ZagwqipfmRtK0X2k8H9xY
-         QYkX7ftvy3KaR9CSIO2HftOREwGS3n7gaWivdN9jfFyZejnMw0bWB0ANjLJU2DNoCFHv
-         54h928XSvgR3GV6ZFAt1OlsYtzL2qMyqDdO/DKBK+Ywr5cW8hgnDwb9/YpS4m5J26pT4
-         HvVNI2o8efGYg1R/SaNDYRXRaI3TmmeRdD/uylI4qmh00KEnx9pUyGVBhwh1bTkwhod/
-         Lwr7N1CcfaWGYpLir9nUPRIuLS8yA3mnUgr0B/G8f02E+oIDPBnraVgk83e4PsHQ1V0/
-         OC0w==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=mVoh40gI4rO7l5P610TuxYrPnSY080uxRzgBN6iYHPw=;
+        b=J1EwYJaAuhZYWSzaIMQPrFvichlEBV0wEJXVGgxiGkfuiW+LSAUKhLXvFor3y/gY1I
+         g3G55YwwfAtYsFNCQU8luQfEzkAkaPjhdlG7yLKWNA4GRVnA32+sM/PnVfP6m/I2yL3N
+         QBDpAhJJfkc47+mpEs2pdgJjynB//53l3WQeM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=P2HquEVtI+pw57E6S5i14/TATcUTeLRqaqJNNbt7nE0=;
-        b=FYmVCteErxzEZP8gI1rhi5R3Hs/i+KgPVfdTt7CaVaCkVukLv991/o/iNBnAqJ79AW
-         jwdU/B8Hp9A9MuT4y9vbb7DeIPbfVZnGkPZzC8GkWc2FEYRWV9l/4cCLlB97vZztSgop
-         j7ZswejvqNcjYFb2KR2rsw6hS324e9gzMhbe3YiuHrZ53XXJah/aYyMTa68raOQGlu7f
-         CzrIfyGpIfoMZ+h6ArkxqFR/F/8j+Ya1jPqXlUxW+jyugLrS9Qk3m1UquJVzhG+mMlce
-         Lv3d9VwXQYzRqvjG9gkZ0eGe5+k78zLsQkJYazk3tv4nPn8yK8dqISZjMh9Z6C16jSfc
-         ECRA==
-X-Gm-Message-State: AJIora8/TyQ+2kOxVUwEkKat2KhI0inCaA6UlKrvpdHY6FkYcUDKpEJv
-        zhCprrD4ypmcN7G7yzOUyyA=
-X-Google-Smtp-Source: AGRyM1ucrUKB6ebsaq/gmawyS9muFOGtlInub9/s2LxqaW7A+prAT68k/ANdVjAqG528BJQuSA3DUw==
-X-Received: by 2002:a05:6a00:b45:b0:525:7ad2:91a7 with SMTP id p5-20020a056a000b4500b005257ad291a7mr11974724pfo.22.1656538388446;
-        Wed, 29 Jun 2022 14:33:08 -0700 (PDT)
-Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id i1-20020a625401000000b00527dba9e37bsm2675845pfb.73.2022.06.29.14.33.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 14:33:07 -0700 (PDT)
-Message-ID: <6256a27e-58fc-1c72-be93-f203feb79b0a@gmail.com>
-Date:   Thu, 30 Jun 2022 06:33:04 +0900
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=mVoh40gI4rO7l5P610TuxYrPnSY080uxRzgBN6iYHPw=;
+        b=EZ6SGKK7Z5Y98nqCJBSN0PrkQ6qszn2ssJZn83Sn+eebaNnSfs+Zhkg0Qj7SbLa9lL
+         V+/UiXIECcKtMWqcxYJ4WjN4pLcDMuSxW/DL+oMH4m2jvIrsGqTCAbm1mNlsO+D3/nik
+         uN1su4ZyFJbHzfslwYaoqHXIVoPzbUbDPaUZbFpf/WfDa+Sr/9JoyzKNUBB9N7fdfGKy
+         ugnf1mNDMar51qr8dZC78FVMLyiYfIXMxBAPHsChm5HM55+D+rPSWAoXSLWxZW6e4dY7
+         lPGSb16Ir9zwRQKOXnBHnHUM7OrlwiNQ+wmjqTjS29bU1mROACmmeSF7p2Va4t5wSWkh
+         WI3A==
+X-Gm-Message-State: AJIora+lNxeki2M5psyOT6XkFu6s92Q+kdZ9PdowSIdPDy31ROvfc/99
+        KvaXsUj3WASKp+YgHpRtM2ctTZjyNiT8/vjSYBAnAg==
+X-Google-Smtp-Source: AGRyM1tbuJ+dTBm80e52XefpYch+GdMWbSr4bA36AZQ68tY4ma07ZyFuFFne+0loAcndzlIIccRQmt/8JirxK9nrK/k=
+X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id
+ bc28-20020a056808171c00b00334934263efmr3625283oib.63.1656540920035; Wed, 29
+ Jun 2022 15:15:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 29 Jun 2022 15:15:19 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] PM / devfreq: Fix kernel warning with cpufreq passive
- register fail
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Saravana Kannan <skannan@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220619222939.32029-1-ansuelsmth@gmail.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220619222939.32029-1-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com> <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com> <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
+ <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 29 Jun 2022 15:15:19 -0700
+Message-ID: <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system suspend
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22. 6. 20. 07:29, Christian Marangi wrote:
-> Remove cpufreq_passive_unregister_notifier from
-> cpufreq_passive_register_notifier in case of error as devfreq core
-> already call unregister on GOV_START fail.
-> 
-> This fix the kernel always printing a WARN on governor PROBE_DEFER as
-> cpufreq_passive_unregister_notifier is called two times and return
-> error on the second call as the cpufreq is already unregistered.
-> 
-> Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/devfreq/governor_passive.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-> index 72c67979ebe1..8055801cf182 100644
-> --- a/drivers/devfreq/governor_passive.c
-> +++ b/drivers/devfreq/governor_passive.c
-> @@ -336,7 +336,6 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
->  err_put_policy:
->  	cpufreq_cpu_put(policy);
->  err:
-> -	WARN_ON(cpufreq_passive_unregister_notifier(devfreq));
->  
->  	return ret;
->  }
+Quoting Pavan Kondeti (2022-06-27 22:31:48)
+> On Mon, Jun 27, 2022 at 01:02:49PM -0700, Stephen Boyd wrote:
+> > Quoting Pavan Kondeti (2022-06-20 01:54:15)
+> > >
+> > > Would like to hear other people thoughts on this.
+> > >
+> >
+> > I'm not following very closely but it sounds like a problem that may be
+> > solved by using the component driver code (see
+> > include/linux/component.h). That would let you move anything that needs
+> > to be done once the child devices probe to the aggregate driver 'bind'
+> > function (see struct component_master_ops::bind).
+>
+> Thanks Stephen for letting us know about the component device framework.
+>
+> IIUC,
+>
+> - dwc3-qcom (parent of the dwc3 core) registers as a component master by
+> calling component_master_add_with_match() before calling
+> of_platform_populate(). The match callback could be as simple as comparing
+> the device against our child device.
+>
+> - The dwc3 core (child) at the end of its probe can add as a component by calling
+> component_add().
+>
+> - The above triggers the component_master_ops::bind callback implemented in
+>   dwc3-qcom driver which signals that we are good to go.
+>
+> - The dwc-qcom can call component_bind_all() to finish the formality i.e
+>   telling the dwc3 core that we are good to go.
+>
+> Is my understanding correct? This is what we are looking for i.e a way for
+> the child device(s) to signal the parent when the former is bounded.
 
-Applied. Thanks.
+Sounds about right to me.
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+>
+> Also what happens when the child device probe fails for any reason. i.e
+> component_add() would never be called so the master driver i.e dwc3-qcom would
+> wait indefinitely. May be it needs to implement a timeout or runtime suspend
+> etc should take care of keeping the resoures in suspend state.
+
+When the child fails probe, it should return -EPROBE_DEFER if probe
+needs to be deferred. Then the driver will attempt probe at a later
+time. If probe fails without defer then it will never work and dwc3-qcom
+will wait indefinitely. Not much we can do in that situation.
+
+dwc3-qcom should wait for dwc3 core to call component_add() and then do
+whatever needs to be done once the dwc3 core is registered in the
+dwc3-qcom bind callback. Honestly this may all be a little overkill if
+there's only two drivers here, dwc3-qcom and dwc3 core. It could
+probably just be some callback from dwc3 core at the end of probe that
+calls some function in dwc3-qcom.
