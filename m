@@ -2,26 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FDF56044A
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 17:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D79560453
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 17:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiF2PPL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 11:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S233508AbiF2PSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 11:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbiF2PPJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 11:15:09 -0400
+        with ESMTP id S233315AbiF2PSE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 11:18:04 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CABA262
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:15:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289201090
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:18:03 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <l.stach@pengutronix.de>)
-        id 1o6ZP7-0004Rg-4n; Wed, 29 Jun 2022 17:14:57 +0200
-Message-ID: <4fb9c1b77507b3691f95b55afe053137dd022b29.camel@pengutronix.de>
-Subject: Re: [PATCH V2 8/9] interconnect: imx: configure NoC
- mode/prioriry/ext_control
+        id 1o6ZRy-0004xL-3C; Wed, 29 Jun 2022 17:17:54 +0200
+Message-ID: <7158eb7c000c1698d36fe2b32d8f6d040462a6f1.camel@pengutronix.de>
+Subject: Re: [PATCH V2 9/9] interconnect: imx: Add platform driver for imx8mp
 From:   Lucas Stach <l.stach@pengutronix.de>
 To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -34,10 +33,10 @@ Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-imx@nxp.com,
         abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
-Date:   Wed, 29 Jun 2022 17:14:55 +0200
-In-Reply-To: <20220616073320.2203000-9-peng.fan@oss.nxp.com>
+Date:   Wed, 29 Jun 2022 17:17:52 +0200
+In-Reply-To: <20220616073320.2203000-10-peng.fan@oss.nxp.com>
 References: <20220616073320.2203000-1-peng.fan@oss.nxp.com>
-         <20220616073320.2203000-9-peng.fan@oss.nxp.com>
+         <20220616073320.2203000-10-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
@@ -47,8 +46,8 @@ X-SA-Exim-Mail-From: l.stach@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,274 +57,317 @@ X-Mailing-List: linux-pm@vger.kernel.org
 Am Donnerstag, dem 16.06.2022 um 15:33 +0800 schrieb Peng Fan (OSS):
 > From: Peng Fan <peng.fan@nxp.com>
 > 
-> Introduce imx_icc_noc_setting structure to describe a master port setting
-> Pass imx_icc_noc_setting as a parameter from specific driver
-> Set priority level, mode, ext control in imx_icc_node_set
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/interconnect/imx/imx.c    | 43 ++++++++++++++++++++++++++----
->  drivers/interconnect/imx/imx.h    | 44 ++++++++++++++++++++++++++++++-
->  drivers/interconnect/imx/imx8mm.c |  2 +-
->  drivers/interconnect/imx/imx8mn.c |  2 +-
->  drivers/interconnect/imx/imx8mq.c |  2 +-
->  5 files changed, 84 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-> index 78557fe6da2c..bd728caf2b85 100644
-> --- a/drivers/interconnect/imx/imx.c
-> +++ b/drivers/interconnect/imx/imx.c
-> @@ -10,6 +10,7 @@
->  
->  #include <linux/device.h>
->  #include <linux/interconnect-provider.h>
-> +#include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_platform.h>
-> @@ -21,8 +22,10 @@
->  /* private icc_node data */
->  struct imx_icc_node {
->  	const struct imx_icc_node_desc *desc;
-> +	const struct imx_icc_noc_setting *setting;
->  	struct device *qos_dev;
->  	struct dev_pm_qos_request qos_req;
-> +	struct imx_icc_provider *imx_provider;
->  };
->  
->  static int imx_icc_get_bw(struct icc_node *node, u32 *avg, u32 *peak)
-> @@ -37,8 +40,24 @@ static int imx_icc_node_set(struct icc_node *node)
->  {
->  	struct device *dev = node->provider->dev;
->  	struct imx_icc_node *node_data = node->data;
-> +	void __iomem *base;
-> +	u32 prio;
->  	u64 freq;
->  
-> +	if (node_data->setting && !node_data->setting->ignore && node->peak_bw) {
-> +		base = node_data->setting->reg + node_data->imx_provider->noc_base;
-> +		if (node_data->setting->mode == IMX_NOC_MODE_FIXED) {
-> +			prio = node_data->setting->prio_level;
-> +			prio = PRIORITY_COMP_MARK | (prio << 8) | prio;
-> +			writel(prio, base + IMX_NOC_PRIO_REG);
-> +			writel(node_data->setting->mode, base + IMX_NOC_MODE_REG);
-> +			writel(node_data->setting->ext_control, base + IMX_NOC_EXT_CTL_REG);
-> +		} else {
-> +			dev_info(dev, "mode: %d not supported\n", node_data->setting->mode);
-> +			return -ENOTSUPP;
-> +		}
-> +	}
-> +
->  	if (!node_data->qos_dev)
->  		return 0;
->  
-> @@ -135,7 +154,8 @@ static int imx_icc_node_init_qos(struct icc_provider *provider,
->  }
->  
->  static struct icc_node *imx_icc_node_add(struct imx_icc_provider *imx_provider,
-> -					 const struct imx_icc_node_desc *node_desc)
-> +					 const struct imx_icc_node_desc *node_desc,
-> +					 const struct imx_icc_noc_setting *setting)
->  {
->  	struct icc_provider *provider = &imx_provider->provider;
->  	struct device *dev = provider->dev;
-> @@ -164,6 +184,8 @@ static struct icc_node *imx_icc_node_add(struct imx_icc_provider *imx_provider,
->  	node->name = node_desc->name;
->  	node->data = node_data;
->  	node_data->desc = node_desc;
-> +	node_data->setting = setting;
-> +	node_data->imx_provider = imx_provider;
->  	icc_node_add(node, provider);
->  
->  	if (node_desc->adj) {
-> @@ -187,7 +209,8 @@ static void imx_icc_unregister_nodes(struct icc_provider *provider)
->  
->  static int imx_icc_register_nodes(struct imx_icc_provider *imx_provider,
->  				  const struct imx_icc_node_desc *descs,
-> -				  int count)
-> +				  int count,
-> +				  const struct imx_icc_noc_setting *settings)
->  {
->  	struct icc_provider *provider = &imx_provider->provider;
->  	struct icc_onecell_data *provider_data = provider->data;
-> @@ -199,7 +222,10 @@ static int imx_icc_register_nodes(struct imx_icc_provider *imx_provider,
->  		const struct imx_icc_node_desc *node_desc = &descs[i];
->  		size_t j;
->  
-> -		node = imx_icc_node_add(imx_provider, node_desc);
-> +		if (settings)
-> +			node = imx_icc_node_add(imx_provider, node_desc, &settings[node_desc->id]);
-> +		else
-> +			node = imx_icc_node_add(imx_provider, node_desc, NULL);
+> Add a platform driver for the i.MX8MP SoC describing bus topology, based
+> on internal documentation.
 
-Maybe just write as
-node = imx_icc_node_add(imx_provider, node_desc, settings ? &settings[node_desc->id] : NULL);
+This series is missing the compatible addition in drivers/devfreq/imx-
+bus.c to make the platform driver probe.
 
-But I don't really care, so feel free to ignore this suggestion if you
-don't like it.
-
->  		if (IS_ERR(node)) {
->  			ret = dev_err_probe(provider->dev,
-> PTR_ERR(node),
->  					    "failed to add %s\n",
-> node_desc->name);
-> @@ -237,7 +263,8 @@ static int get_max_node_id(struct
-> imx_icc_node_desc *nodes, int nodes_count)
->  }
->  
->  int imx_icc_register(struct platform_device *pdev,
-> -		     struct imx_icc_node_desc *nodes, int
-> nodes_count)
-> +		     struct imx_icc_node_desc *nodes, int
-> nodes_count,
-> +		     struct imx_icc_noc_setting *settings)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct icc_onecell_data *data;
-> @@ -267,13 +294,19 @@ int imx_icc_register(struct platform_device
-> *pdev,
->  	provider->dev->of_node = dev->parent->of_node;
->  	platform_set_drvdata(pdev, imx_provider);
->  
-> +	if (settings) {
-> +		imx_provider->noc_base = devm_of_iomap(dev,
-> provider->dev->of_node, 0, NULL);
-> +		if (!imx_provider->noc_base)
-> +			return PTR_ERR(imx_provider->noc_base);
-> +	}
-> +
->  	ret = icc_provider_add(provider);
->  	if (ret) {
->  		dev_err(dev, "error adding interconnect provider:
-> %d\n", ret);
->  		return ret;
->  	}
->  
-> -	ret = imx_icc_register_nodes(imx_provider, nodes,
-> nodes_count);
-> +	ret = imx_icc_register_nodes(imx_provider, nodes,
-> nodes_count, settings);
->  	if (ret)
->  		goto provider_del;
->  
-> diff --git a/drivers/interconnect/imx/imx.h
-> b/drivers/interconnect/imx/imx.h
-> index 0ad2c654c222..1da87cfe27da 100644
-> --- a/drivers/interconnect/imx/imx.h
-> +++ b/drivers/interconnect/imx/imx.h
-> @@ -15,6 +15,31 @@
->  
->  #define IMX_ICC_MAX_LINKS	4
->  
-> +/*
-> + * High throughput priority level in Regulator mode
-> + * Read Priority in Fixed/Limiter mode
-> + */
-> +#define PRIORITY0_SHIFT	0
-> +/*
-> + * Low throughput priority level in Regulator mode
-> + * Write Priority in Fixed/Limiter mode
-> + */
-> +#define PRIORITY1_SHIFT	8
-> +#define PRIORITY_MASK		0x7
-> +
-> +#define PRIORITY_COMP_MARK	BIT(31)	/* Must set */
-> +
-> +#define IMX_NOC_MODE_FIXED	0
-> +#define IMX_NOC_MODE_LIMITER	1
-> +#define IMX_NOC_MODE_BYPASS	2
-> +#define IMX_NOC_MODE_REGULATOR	3
-> +
-> +#define IMX_NOC_PRIO_REG	0x8
-> +#define IMX_NOC_MODE_REG	0xC
-> +#define IMX_NOC_BANDWIDTH_REG	0x10
-> +#define IMX_NOC_SATURATION	0x14
-> +#define IMX_NOC_EXT_CTL_REG	0x18
-> +
->  struct imx_icc_provider {
->  	void __iomem *noc_base;
->  	struct icc_provider provider;
-> @@ -44,6 +69,22 @@ struct imx_icc_node_desc {
->  	const struct imx_icc_node_adj_desc *adj;
->  };
->  
-> +/*
-> + * struct imx_icc_noc_setting - Describe an interconnect node
-> setting
-> + * @ignore: indicate whether need apply this setting
-> + * @reg: register offset inside the NoC
-> + * @prio_level: priority level
-> + * @mode: functional mode
-> + * @ext_control: external input control
-> + */
-> +struct imx_icc_noc_setting {
-> +	bool ignore;
-
-I don't like this ignore member. Can we get rid of this and make the
-"don't touch" a special mode, like IMX_NOC_MODE_UNCONFIGURED?
-
-Other than those two nitpicks, the patch looks good.
+Other than that, looks good.
 
 Regards,
 Lucas
 
-> +	u32 reg;
-> +	u32 prio_level;
-> +	u32 mode;
-> +	u32 ext_control;
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/interconnect/imx/Kconfig  |   4 +
+>  drivers/interconnect/imx/Makefile |   2 +
+>  drivers/interconnect/imx/imx8mp.c | 259 ++++++++++++++++++++++++++++++
+>  3 files changed, 265 insertions(+)
+>  create mode 100644 drivers/interconnect/imx/imx8mp.c
+> 
+> diff --git a/drivers/interconnect/imx/Kconfig b/drivers/interconnect/imx/Kconfig
+> index be2928362bb7..c772552431f5 100644
+> --- a/drivers/interconnect/imx/Kconfig
+> +++ b/drivers/interconnect/imx/Kconfig
+> @@ -15,3 +15,7 @@ config INTERCONNECT_IMX8MN
+>  config INTERCONNECT_IMX8MQ
+>  	tristate "i.MX8MQ interconnect driver"
+>  	depends on INTERCONNECT_IMX
+> +
+> +config INTERCONNECT_IMX8MP
+> +	tristate "i.MX8MP interconnect driver"
+> +	depends on INTERCONNECT_IMX
+> diff --git a/drivers/interconnect/imx/Makefile b/drivers/interconnect/imx/Makefile
+> index 21fd5233754f..16d256cdeab4 100644
+> --- a/drivers/interconnect/imx/Makefile
+> +++ b/drivers/interconnect/imx/Makefile
+> @@ -2,8 +2,10 @@ imx-interconnect-objs			:= imx.o
+>  imx8mm-interconnect-objs       		:= imx8mm.o
+>  imx8mq-interconnect-objs       		:= imx8mq.o
+>  imx8mn-interconnect-objs       		:= imx8mn.o
+> +imx8mp-interconnect-objs       		:= imx8mp.o
+>  
+>  obj-$(CONFIG_INTERCONNECT_IMX)		+= imx-interconnect.o
+>  obj-$(CONFIG_INTERCONNECT_IMX8MM)	+= imx8mm-interconnect.o
+>  obj-$(CONFIG_INTERCONNECT_IMX8MQ)	+= imx8mq-interconnect.o
+>  obj-$(CONFIG_INTERCONNECT_IMX8MN)	+= imx8mn-interconnect.o
+> +obj-$(CONFIG_INTERCONNECT_IMX8MP)	+= imx8mp-interconnect.o
+> diff --git a/drivers/interconnect/imx/imx8mp.c b/drivers/interconnect/imx/imx8mp.c
+> new file mode 100644
+> index 000000000000..2be2e9e2974e
+> --- /dev/null
+> +++ b/drivers/interconnect/imx/imx8mp.c
+> @@ -0,0 +1,259 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Interconnect framework driver for i.MX8MP SoC
+> + *
+> + * Copyright 2022 NXP
+> + * Peng Fan <peng.fan@nxp.com>
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <dt-bindings/interconnect/fsl,imx8mp.h>
+> +
+> +#include "imx.h"
+> +
+> +static const struct imx_icc_node_adj_desc imx8mp_noc_adj = {
+> +	.bw_mul = 1,
+> +	.bw_div = 16,
+> +	.main_noc = true,
 > +};
 > +
->  #define DEFINE_BUS_INTERCONNECT(_name, _id, _adj, ...)			\
->  	{								\
->  		.id = _id,						\
-> @@ -61,7 +102,8 @@ struct imx_icc_node_desc {
->  
->  int imx_icc_register(struct platform_device *pdev,
->  		     struct imx_icc_node_desc *nodes,
-> -		     int nodes_count);
-> +		     int nodes_count,
-> +		     struct imx_icc_noc_setting *noc_settings);
->  int imx_icc_unregister(struct platform_device *pdev);
->  
->  #endif /* __DRIVERS_INTERCONNECT_IMX_H */
-> diff --git a/drivers/interconnect/imx/imx8mm.c b/drivers/interconnect/imx/imx8mm.c
-> index 1083490bb391..ae797412db96 100644
-> --- a/drivers/interconnect/imx/imx8mm.c
-> +++ b/drivers/interconnect/imx/imx8mm.c
-> @@ -83,7 +83,7 @@ static struct imx_icc_node_desc nodes[] = {
->  
->  static int imx8mm_icc_probe(struct platform_device *pdev)
->  {
-> -	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes));
-> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), NULL);
->  }
->  
->  static int imx8mm_icc_remove(struct platform_device *pdev)
-> diff --git a/drivers/interconnect/imx/imx8mn.c b/drivers/interconnect/imx/imx8mn.c
-> index ad97e55fd4e5..1ce94c5bdd8c 100644
-> --- a/drivers/interconnect/imx/imx8mn.c
-> +++ b/drivers/interconnect/imx/imx8mn.c
-> @@ -72,7 +72,7 @@ static struct imx_icc_node_desc nodes[] = {
->  
->  static int imx8mn_icc_probe(struct platform_device *pdev)
->  {
-> -	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes));
-> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), NULL);
->  }
->  
->  static int imx8mn_icc_remove(struct platform_device *pdev)
-> diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
-> index d7768d3c6d8a..7f00a0511c6e 100644
-> --- a/drivers/interconnect/imx/imx8mq.c
-> +++ b/drivers/interconnect/imx/imx8mq.c
-> @@ -82,7 +82,7 @@ static struct imx_icc_node_desc nodes[] = {
->  
->  static int imx8mq_icc_probe(struct platform_device *pdev)
->  {
-> -	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes));
-> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), NULL);
->  }
->  
->  static int imx8mq_icc_remove(struct platform_device *pdev)
+> +static struct imx_icc_noc_setting noc_setting_nodes[] = {
+> +	[IMX8MP_ICM_MLMIX] = {
+> +		.reg = 0x180,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_DSP] = {
+> +		.reg = 0x200,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_SDMA2PER] = {
+> +		.reg = 0x280,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 4,
+> +	},
+> +	[IMX8MP_ICM_SDMA2BURST] = {
+> +		.reg = 0x300,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 4,
+> +	},
+> +	[IMX8MP_ICM_SDMA3PER] = {
+> +		.reg = 0x380,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 4,
+> +	},
+> +	[IMX8MP_ICM_SDMA3BURST] = {
+> +		.reg = 0x400,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 4,
+> +	},
+> +	[IMX8MP_ICM_EDMA] = {
+> +		.reg = 0x480,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 4,
+> +	},
+> +	[IMX8MP_ICM_GPU3D] = {
+> +		.reg = 0x500,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_GPU2D] = {
+> +		.reg = 0x580,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_HRV] = {
+> +		.reg = 0x600,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 2,
+> +		.ext_control = 1,
+> +	},
+> +	[IMX8MP_ICM_LCDIF_HDMI] = {
+> +		.reg = 0x680,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 2,
+> +		.ext_control = 1,
+> +	},
+> +	[IMX8MP_ICM_HDCP] = {
+> +		.reg = 0x700,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 5,
+> +	},
+> +	[IMX8MP_ICM_NOC_PCIE] = {
+> +		.reg = 0x780,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_USB1] = {
+> +		.reg = 0x800,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_USB2] = {
+> +		.reg = 0x880,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_PCIE] = {
+> +		.reg = 0x900,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_LCDIF_RD] = {
+> +		.reg = 0x980,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 2,
+> +		.ext_control = 1,
+> +	},
+> +	[IMX8MP_ICM_LCDIF_WR] = {
+> +		.reg = 0xa00,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 2,
+> +		.ext_control = 1,
+> +	},
+> +	[IMX8MP_ICM_ISI0] = {
+> +		.reg = 0xa80,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 2,
+> +		.ext_control = 1,
+> +	},
+> +	[IMX8MP_ICM_ISI1] = {
+> +		.reg = 0xb00,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 2,
+> +		.ext_control = 1,
+> +	},
+> +	[IMX8MP_ICM_ISI2] = {
+> +		.reg = 0xb80,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 2,
+> +		.ext_control = 1,
+> +	},
+> +	[IMX8MP_ICM_ISP0] = {
+> +		.reg = 0xc00,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 7,
+> +	},
+> +	[IMX8MP_ICM_ISP1] = {
+> +		.reg = 0xc80,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 7,
+> +	},
+> +	[IMX8MP_ICM_DWE] = {
+> +		.reg = 0xd00,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 7,
+> +	},
+> +	[IMX8MP_ICM_VPU_G1] = {
+> +		.reg = 0xd80,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_VPU_G2] = {
+> +		.reg = 0xe00,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICM_VPU_H1] = {
+> +		.reg = 0xe80,
+> +		.mode = IMX_NOC_MODE_FIXED,
+> +		.prio_level = 3,
+> +	},
+> +	[IMX8MP_ICN_MEDIA] = {
+> +		.ignore = true,
+> +	},
+> +	[IMX8MP_ICN_VIDEO] = {
+> +		.ignore = true,
+> +	},
+> +	[IMX8MP_ICN_AUDIO] = {
+> +		.ignore = true,
+> +	},
+> +	[IMX8MP_ICN_HDMI] = {
+> +		.ignore = true,
+> +	},
+> +	[IMX8MP_ICN_GPU] = {
+> +		.ignore = true,
+> +	},
+> +	[IMX8MP_ICN_HSIO] = {
+> +		.ignore = true,
+> +	},
+> +};
+> +
+> +/* Describe bus masters, slaves and connections between them */
+> +static struct imx_icc_node_desc nodes[] = {
+> +	DEFINE_BUS_INTERCONNECT("NOC", IMX8MP_ICN_NOC, &imx8mp_noc_adj,
+> +				IMX8MP_ICS_DRAM, IMX8MP_ICN_MAIN),
+> +
+> +	DEFINE_BUS_SLAVE("OCRAM", IMX8MP_ICS_OCRAM, NULL),
+> +	DEFINE_BUS_SLAVE("DRAM", IMX8MP_ICS_DRAM, NULL),
+> +	DEFINE_BUS_MASTER("A53", IMX8MP_ICM_A53, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("SUPERMIX", IMX8MP_ICM_SUPERMIX, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("GIC", IMX8MP_ICM_GIC, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("MLMIX", IMX8MP_ICM_MLMIX, IMX8MP_ICN_NOC),
+> +
+> +	DEFINE_BUS_INTERCONNECT("NOC_AUDIO", IMX8MP_ICN_AUDIO, NULL, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("DSP", IMX8MP_ICM_DSP, IMX8MP_ICN_AUDIO),
+> +	DEFINE_BUS_MASTER("SDMA2PER", IMX8MP_ICM_SDMA2PER, IMX8MP_ICN_AUDIO),
+> +	DEFINE_BUS_MASTER("SDMA2BURST", IMX8MP_ICM_SDMA2BURST, IMX8MP_ICN_AUDIO),
+> +	DEFINE_BUS_MASTER("SDMA3PER", IMX8MP_ICM_SDMA3PER, IMX8MP_ICN_AUDIO),
+> +	DEFINE_BUS_MASTER("SDMA3BURST", IMX8MP_ICM_SDMA3BURST, IMX8MP_ICN_AUDIO),
+> +	DEFINE_BUS_MASTER("EDMA", IMX8MP_ICM_EDMA, IMX8MP_ICN_AUDIO),
+> +
+> +	DEFINE_BUS_INTERCONNECT("NOC_GPU", IMX8MP_ICN_GPU, NULL, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("GPU 2D", IMX8MP_ICM_GPU2D, IMX8MP_ICN_GPU),
+> +	DEFINE_BUS_MASTER("GPU 3D", IMX8MP_ICM_GPU3D, IMX8MP_ICN_GPU),
+> +
+> +	DEFINE_BUS_INTERCONNECT("NOC_HDMI", IMX8MP_ICN_HDMI, NULL, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("HRV", IMX8MP_ICM_HRV, IMX8MP_ICN_HDMI),
+> +	DEFINE_BUS_MASTER("LCDIF_HDMI", IMX8MP_ICM_LCDIF_HDMI, IMX8MP_ICN_HDMI),
+> +	DEFINE_BUS_MASTER("HDCP", IMX8MP_ICM_HDCP, IMX8MP_ICN_HDMI),
+> +
+> +	DEFINE_BUS_INTERCONNECT("NOC_HSIO", IMX8MP_ICN_HSIO, NULL, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("NOC_PCIE", IMX8MP_ICM_NOC_PCIE, IMX8MP_ICN_HSIO),
+> +	DEFINE_BUS_MASTER("USB1", IMX8MP_ICM_USB1, IMX8MP_ICN_HSIO),
+> +	DEFINE_BUS_MASTER("USB2", IMX8MP_ICM_USB2, IMX8MP_ICN_HSIO),
+> +	DEFINE_BUS_MASTER("PCIE", IMX8MP_ICM_PCIE, IMX8MP_ICN_HSIO),
+> +
+> +	DEFINE_BUS_INTERCONNECT("NOC_MEDIA", IMX8MP_ICN_MEDIA, NULL, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("LCDIF_RD", IMX8MP_ICM_LCDIF_RD, IMX8MP_ICN_MEDIA),
+> +	DEFINE_BUS_MASTER("LCDIF_WR", IMX8MP_ICM_LCDIF_WR, IMX8MP_ICN_MEDIA),
+> +	DEFINE_BUS_MASTER("ISI0", IMX8MP_ICM_ISI0, IMX8MP_ICN_MEDIA),
+> +	DEFINE_BUS_MASTER("ISI1", IMX8MP_ICM_ISI1, IMX8MP_ICN_MEDIA),
+> +	DEFINE_BUS_MASTER("ISI2", IMX8MP_ICM_ISI2, IMX8MP_ICN_MEDIA),
+> +	DEFINE_BUS_MASTER("ISP0", IMX8MP_ICM_ISP0, IMX8MP_ICN_MEDIA),
+> +	DEFINE_BUS_MASTER("ISP1", IMX8MP_ICM_ISP1, IMX8MP_ICN_MEDIA),
+> +	DEFINE_BUS_MASTER("DWE", IMX8MP_ICM_DWE, IMX8MP_ICN_MEDIA),
+> +
+> +	DEFINE_BUS_INTERCONNECT("NOC_VIDEO", IMX8MP_ICN_VIDEO, NULL, IMX8MP_ICN_NOC),
+> +	DEFINE_BUS_MASTER("VPU G1", IMX8MP_ICM_VPU_G1, IMX8MP_ICN_VIDEO),
+> +	DEFINE_BUS_MASTER("VPU G2", IMX8MP_ICM_VPU_G2, IMX8MP_ICN_VIDEO),
+> +	DEFINE_BUS_MASTER("VPU H1", IMX8MP_ICM_VPU_H1, IMX8MP_ICN_VIDEO),
+> +	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MP_ICN_MAIN, NULL,
+> +				IMX8MP_ICN_NOC, IMX8MP_ICS_OCRAM),
+> +};
+> +
+> +static int imx8mp_icc_probe(struct platform_device *pdev)
+> +{
+> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), noc_setting_nodes);
+> +}
+> +
+> +static int imx8mp_icc_remove(struct platform_device *pdev)
+> +{
+> +	return imx_icc_unregister(pdev);
+> +}
+> +
+> +static struct platform_driver imx8mp_icc_driver = {
+> +	.probe = imx8mp_icc_probe,
+> +	.remove = imx8mp_icc_remove,
+> +	.driver = {
+> +		.name = "imx8mp-interconnect",
+> +	},
+> +};
+> +
+> +module_platform_driver(imx8mp_icc_driver);
+> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:imx8mp-interconnect");
 
 
