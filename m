@@ -2,132 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0400E55F447
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 05:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C6D55F418
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 05:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiF2Dpn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 23:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S231586AbiF2DYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jun 2022 23:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiF2Dpn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 23:45:43 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8D418343;
-        Tue, 28 Jun 2022 20:45:41 -0700 (PDT)
-X-UUID: 78fabd2e204b48a492c26a37b27e5e8d-20220629
-X-Spam-Fingerprint: 0
-X-GW-Reason: 13103
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HNeS6uumcgOimgeWuoeaguA==
-X-Content-Feature: ica/max.line-size 73
-        audit/email.address 1
-        dict/adv 1
-        dict/contack 1
-        dict/job 1
-        dict/notice 1
-        dict/operate 1
-        dict/time 1
-        meta/cnt.alert 1
-X-CPASD-INFO: 79a2431c46c548daab49de3fa2ab5c91@gImbUmFlX5NgVqWBg3uvm4GTZGmUkVO
-        1o2yBlGOTZVGVgnxsTWBnX1OEgnBQYl5dZFZ3dG9RYmBgYlB_i4Jyj1RiXmCCVHSTgHlzgWRiYw==
-X-CLOUD-ID: 79a2431c46c548daab49de3fa2ab5c91
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:2.0,URL:-5,TVAL:182.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:195.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:2.0,CFOB:2.0,SPC:0,SIG:-
-        5,AUF:6,DUF:133,ACD:2,DCD:2,SL:0,EISP:0,AG:0,CFC:0.512,CFSR:0.049,UAT:0,RAF:0
-        ,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF:
-        0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 78fabd2e204b48a492c26a37b27e5e8d-20220629
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 78fabd2e204b48a492c26a37b27e5e8d-20220629
-X-User: xiongxin@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xiongxin@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 596082055; Wed, 29 Jun 2022 09:12:15 +0800
-From:   xiongxin <xiongxin@kylinos.cn>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        xiongxin@kylinos.cn, luriwen@kylinos.cn
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH -next 2/2] PM: suspend: advanced pm_wakeup_clear() for normal suspend/hibernate
-Date:   Wed, 29 Jun 2022 09:11:46 +0800
-Message-Id: <20220629011146.299521-3-xiongxin@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220629011146.299521-1-xiongxin@kylinos.cn>
-References: <20220629011146.299521-1-xiongxin@kylinos.cn>
+        with ESMTP id S231676AbiF2DYQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 23:24:16 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32111D8;
+        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so14674240pjj.5;
+        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Fj7BbdljqsoGparCST0EyCcPUKNtLNBlk+LCRCpdJLw=;
+        b=oFx79pTDKe/0K4DzWTg5WbhaY9GMAgsDaFSkH6r1vPW1HFdOJXqGQ5UZxgywHDM3Ir
+         0equTGt8PyPlERIlnTf5/BcxXxzGITpucSE2VIl8CV1o9ehzFCMhzuOGmi45/AK6qG76
+         /8w9TpCEjcwZrf18xju/rDZxtqGU8P6zQ25P+y1i5vCqEbFPPa98WvDxnH8cFtX3sIwJ
+         junUVkx5AYbgAFw0eC61vARiqpw1IzYsntMTivQEIBdgIUJa+1mBXf7au2lMkxwOomRF
+         Tq177jWJbMD53EgF/Vw9Bn+IKNlGCEHOCstQTlq+u9cuVkwNV5MjGVV2oNYBWWI67o+0
+         Kprw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Fj7BbdljqsoGparCST0EyCcPUKNtLNBlk+LCRCpdJLw=;
+        b=oXJlEWr9GORBnTsXKEBiPrTqXFmJCmxnu7Eo/itHVD/+d2QUCErNnoFyEEHD7Awpxd
+         X9TDcjBEeJqDOZ4b9mHB0EZzkkwaWSfy5wEgTb80yGw+xSpQyjs4sQ3aYFlvrb8eoCad
+         vkr6ZQUdt6PJz6i3XIwBvf0/Tv4YchtzS84riNvnquk7d8VL8etOhqXhDSqAVfAfjWF7
+         q1yTgemMYx5XBdK4fAY7n9Egu3tZMM1sLyXueNBnNgeMpDMZi+SXaX5p87Ly+W+xvUpr
+         asNXkkjYPrAUHA7GXXV4L/WprbOomuAK11H2VPyhlyZROLOJKoD5uaeQtZrPSE5eAU8P
+         +pHw==
+X-Gm-Message-State: AJIora/k8F4rc5Gm/NSxX7x+P6nAq2G1WPW/RjzZYOWwIhVq/ilMxMLm
+        5ZeL2xU9DHpIJqvbZ9Usm0M=
+X-Google-Smtp-Source: AGRyM1vsi7CgNn+hm6JA8nRBvn1UfsHiN+DuVQjG+D41n++oNdHScStsgrICm72S8/mDUKvSMDDq4A==
+X-Received: by 2002:a17:902:a701:b0:16a:65b:f9f1 with SMTP id w1-20020a170902a70100b0016a065bf9f1mr8387462plq.73.1656473045455;
+        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-13.three.co.id. [180.214.232.13])
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709026b8900b0016372486febsm10011584plk.297.2022.06.28.20.24.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 20:24:04 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id E4C29103832; Wed, 29 Jun 2022 10:23:59 +0700 (WIB)
+Date:   Wed, 29 Jun 2022 10:23:58 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Marco Elver <elver@google.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        kasan-dev@googlegroups.com, linaro-mm-sig@lists.linaro.org,
+        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mm@kvack.org,
+        linux-pm@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/22] Fix kernel-doc warnings at linux-next
+Message-ID: <YrvFzoH61feRFoxV@debian.me>
+References: <cover.1656409369.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RCVD_IN_PBL,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.1656409369.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm_wakeup_clear() will clear the wakeup source, which can ensure that it
-is not disturbed by useless wakeup signals when doing suspend/hibernate;
+On Tue, Jun 28, 2022 at 10:46:04AM +0100, Mauro Carvalho Chehab wrote:
+> As we're currently discussing about making kernel-doc issues fatal when
+> CONFIG_WERROR is enable, let's fix all 60 kernel-doc warnings 
+> inside linux-next:
+> 
 
-At the beginning of the suspend/hibernate process, the notifier
-mechanism is used to notify other device drivers. This action is
-time-consuming (second-level time-consuming). If the process fails due
-to the received wakeup signal during the execution of these functions,
-it can better improve the experience of failing suspend/hibernate
-returns;
+To be fair, besides triggering error on kernel-doc warnings, Sphinx
+warnings should also be errors on CONFIG_WERROR.
 
-Therefore, it is recommended here that for the suspend/hibernate process
-normally called from /sys/power/state, the pm_wakeup_clear() function
-should be brought before the notifier call; for the freeze_process()
-function called from other places, the original logic is kept;
-
-The pm_suspend_target_state variable is used here to identify whether the
-suspend process is going normally.
-
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
----
- kernel/power/process.c | 5 ++++-
- kernel/power/suspend.c | 6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index 3068601e585a..3fde0240b3d1 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -131,7 +131,10 @@ int freeze_processes(void)
- 	if (!pm_freezing)
- 		atomic_inc(&system_freezing_cnt);
- 
--	pm_wakeup_clear(0);
-+	if (pm_suspend_target_state != PM_SUSPEND_ON)
-+		pm_wakeup_clear(1);
-+	else
-+		pm_wakeup_clear(0);
- 	pr_info("Freezing user space processes ... ");
- 	pm_freezing = true;
- 	error = try_to_freeze_tasks(true);
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index c754b084ec03..f4259f6c1cc2 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -569,6 +569,12 @@ static int enter_state(suspend_state_t state)
- 	 * performed from the /sys/power/state entry.
- 	 */
- 	pm_suspend_target_state = state;
-+	/*
-+	 * Put pm_wakeup_clear() before the notifier notification chain to
-+	 * optimize in the suspend process, the wakeup signal can interrupt
-+	 * the suspend in advance and fail to return.
-+	 */
-+	pm_wakeup_clear(0);
- 
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
 -- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+An old man doll... just what I always wanted! - Clara
