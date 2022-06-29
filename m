@@ -2,71 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA63560A52
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 21:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFA7560A58
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 21:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiF2Tb5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 15:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
+        id S229849AbiF2TeL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 15:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiF2Tb4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 15:31:56 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AE31402F;
-        Wed, 29 Jun 2022 12:31:56 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so503288pjr.0;
-        Wed, 29 Jun 2022 12:31:56 -0700 (PDT)
+        with ESMTP id S229948AbiF2TeK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 15:34:10 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DC322B12;
+        Wed, 29 Jun 2022 12:34:10 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so464067pjz.1;
+        Wed, 29 Jun 2022 12:34:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jYmbPjWKjblF3Fbvn5D7snSMKd9hjTzx+uVhX6b92oQ=;
-        b=WH87GyqrupEFl05RzR4g5wzqLrb890Xo8u9ZNHJ+AIX97hcciUZdOgIZh87YWgdQm0
-         T2o5WE4L2Qbac+DFg5E/EwuT79dqm9+s4L4DneL4z9jVaXvIFBmQXtm+MffVl+vsW0fT
-         GRZibCs5H1LHbC9jHG/kCbpEJDupJt+lkWm/Yt8CqUoqKSCEov33m4PTef3JaQktE9Ry
-         bpq8BYomvObC5cozfUf74rY9ULK7lyoMUS7myK+0wAHxRDt7Jn6GsAvHs3kO01swdmYE
-         BqS9mqbRfyj/ufRA0x27ojiBczoUah5EHkhAlwhQKEasbjg9OssuCpOr9XvmOhAzD96t
-         lxAw==
+        bh=YYCqzzmao2nkKWy6jAkVvj4l8v/TmTYQQPXuNAPJEaI=;
+        b=qS10neaoML1jirwTEWwcNgQ+OR4PuGQr0cAfF7KIHricCWzZSJUe64bckBQTl73nfx
+         JV0C4uT2/1IPu6WNQ0cxXu+5XOTekrydSTiS3fDfW9/+HOuTdJgUDQtov84IxPBxbgqL
+         6rEQwjLKUZc3g6vyWICyo5YitPtJrj377vrMFqwT5b5JNCupJtxmECMiG5/LiJZvPCus
+         urpY7d0Ra/ifM16jx5mEIPwuaE4vbVslphfEhqSTm1rhS9EoLOPruZuyGvxpCon0s3IS
+         XEc8Lsd8zHmBBDkxUmxeMa3UWX9ZyWfZXasM/CPiytj0gPFmgqaObO/c/znbMnBgViLu
+         F2Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=jYmbPjWKjblF3Fbvn5D7snSMKd9hjTzx+uVhX6b92oQ=;
-        b=kun8BiiQl1XwT2pJbfCMqCWaBAlc9JghbUq3aQAa7Ein+kSkcwb7FzeAAvLTyv+rx1
-         pFy7yDCuQMW+UXWuaO94qnPpojCATzRBmTdkWJHpgCUGNiNFIWZI1GUTXo/87vg8YPoA
-         uW3zACnS7uHywHwaBiDQWdj278H+HZnXOiC7+EqdshjPAKIB7m1juWE855q0eSYswVDG
-         321PTUvdHbszgGkhNm1aobge+DX18tYZw1ZXMdTiRaJ3M0boL5V8KuKUbCIFt+ElUuO/
-         6VZnuFAdc1iaZi9zNXUwy4qvQe5LGnfG/PgMyAnjM3JDRyFvsG6BGs+BmZIxSY66Lx5L
-         ht0A==
-X-Gm-Message-State: AJIora/QflLzaMypjI5YwPdF8A3nwNH4Qf4yZyv5m82eNFPkFjZaQkUf
-        FStyv5hg624g6vcXv6J+wjk=
-X-Google-Smtp-Source: AGRyM1tDIKZpKQtLvsksnXuYUjag9Ap7LacWq35dvAXGQC0NZYh/aOQJoGkWbDlEwanzGB/U/NGszA==
-X-Received: by 2002:a17:90b:4c86:b0:1ec:cc0f:32da with SMTP id my6-20020a17090b4c8600b001eccc0f32damr7507818pjb.66.1656531115687;
-        Wed, 29 Jun 2022 12:31:55 -0700 (PDT)
+        bh=YYCqzzmao2nkKWy6jAkVvj4l8v/TmTYQQPXuNAPJEaI=;
+        b=11sVb8FGtf6yXNXHAnzFg7TtvueN948AdvTnFY2wYEphSGghxGRxHHCSMKterGX5I/
+         VKs3QVUIf5tXgu3FWEcOZMjsloOxFYv+/98AwCZdKbEIWibTBXhzjrUw0D+MZgZMahJ6
+         3w6I4itj0ZNh52ouUCaVSo2DzUoSPUtZs3K6wXsMLpkZ6sHZmlAY668I66Kb6BemI07L
+         T2aaBskezTz9tuRBAUWiOyS7mn1k+iqjwz7B4poQ+YNlsleq0kQUq2CZgfKDzhrKv07q
+         l6BBS0q6aS8YDfxYjFNYzdb8XicaIkBU1resWndLA1WRIjg5ch8kz7+4Jrf1XdgQ/66x
+         KgMQ==
+X-Gm-Message-State: AJIora/M4crjOWYLzCyruGbSDe+gLdl5mzfrtE0TCRE7NQ2vFLwcqEI5
+        llO7O1XWEo0tU2OYauOpi6rjoR0WwYE=
+X-Google-Smtp-Source: AGRyM1srYx29S6gzu8JZbBQlxGDNK8Oa6fpbSwnqiJMdielPgTUcIu6i5r1elXEFNT+LsePbSZi/pA==
+X-Received: by 2002:a17:903:2347:b0:16a:33cd:5308 with SMTP id c7-20020a170903234700b0016a33cd5308mr10479936plh.122.1656531249629;
+        Wed, 29 Jun 2022 12:34:09 -0700 (PDT)
 Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id a8-20020a656048000000b003db7de758besm11796699pgp.5.2022.06.29.12.31.52
+        by smtp.gmail.com with ESMTPSA id ij26-20020a170902ab5a00b0016a1b60b19dsm11789007plb.91.2022.06.29.12.34.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 12:31:55 -0700 (PDT)
-Message-ID: <b6abe557-029d-cf2b-db79-40630fafb5f1@gmail.com>
-Date:   Thu, 30 Jun 2022 04:31:50 +0900
+        Wed, 29 Jun 2022 12:34:09 -0700 (PDT)
+Message-ID: <0f1fd530-7764-a465-0b02-0027fc9a1383@gmail.com>
+Date:   Thu, 30 Jun 2022 04:34:05 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 08/22] devfreq: shut up kernel-doc warnings
+Subject: Re: [PATCH] PM / devfreq: passive: revert an editing accident in
+ SPDX-License line
 Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <cover.1656409369.git.mchehab@kernel.org>
- <6a15081e17d78e914526c315d5bb53ea575edf90.1656409369.git.mchehab@kernel.org>
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220628053411.22438-1-lukas.bulwahn@gmail.com>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <6a15081e17d78e914526c315d5bb53ea575edf90.1656409369.git.mchehab@kernel.org>
+In-Reply-To: <20220628053411.22438-1-lukas.bulwahn@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,47 +76,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22. 6. 28. 18:46, Mauro Carvalho Chehab wrote:
-> There are 4 warnings there:
-> 	drivers/devfreq/devfreq.c:707: warning: Function parameter or member 'val' not described in 'qos_min_notifier_call'
-> 	drivers/devfreq/devfreq.c:707: warning: Function parameter or member 'ptr' not described in 'qos_min_notifier_call'
-> 	drivers/devfreq/devfreq.c:717: warning: Function parameter or member 'val' not described in 'qos_max_notifier_call'
-> 	drivers/devfreq/devfreq.c:717: warning: Function parameter or member 'ptr' not described in 'qos_max_notifier_call'
+On 22. 6. 28. 14:34, Lukas Bulwahn wrote:
+> Commit 26984d9d581e ("PM / devfreq: passive: Keep cpufreq_policy for
+> possible cpus") reworked governor_passive.c, and accidently added a
+> tab in the first line, i.e., the SPDX-License-Identifier line.
 > 
-> It turns that neither val nor ptr are actually used on those
-> function, so document as such.
+> The checkpatch script warns with the SPDX_LICENSE_TAG warning, and hence
+> pointed this issue out while investigating checkpatch warnings.
 > 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Revert this editing accident. No functional change.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
+> Chanwoo, please pick this minor non-urgent fix to your latest change above.
 > 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/22] at: https://lore.kernel.org/all/cover.1656409369.git.mchehab@kernel.org/
+>  drivers/devfreq/governor_passive.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  drivers/devfreq/devfreq.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 01474daf4548..3020855d8400 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -700,6 +700,8 @@ static int qos_notifier_call(struct devfreq *devfreq)
->  /**
->   * qos_min_notifier_call() - Callback for QoS min_freq changes.
->   * @nb:		Should be devfreq->nb_min
-> + * @val:	not used
-> + * @ptr:	not used
->   */
->  static int qos_min_notifier_call(struct notifier_block *nb,
->  					 unsigned long val, void *ptr)
-> @@ -710,6 +712,8 @@ static int qos_min_notifier_call(struct notifier_block *nb,
->  /**
->   * qos_max_notifier_call() - Callback for QoS max_freq changes.
->   * @nb:		Should be devfreq->nb_max
-> + * @val:	not used
-> + * @ptr:	not used
->   */
->  static int qos_max_notifier_call(struct notifier_block *nb,
->  					 unsigned long val, void *ptr)
+> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> index 72c67979ebe1..326482a68986 100644
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -1,4 +1,4 @@
+> -	// SPDX-License-Identifier: GPL-2.0-only
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * linux/drivers/devfreq/governor_passive.c
+>   *
 
 Applied it. Thanks.
 
