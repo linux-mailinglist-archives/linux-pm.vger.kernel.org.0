@@ -2,116 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C6D55F418
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 05:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C6055F501
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 06:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiF2DYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jun 2022 23:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S231281AbiF2ERH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 00:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbiF2DYQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jun 2022 23:24:16 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32111D8;
-        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so14674240pjj.5;
-        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fj7BbdljqsoGparCST0EyCcPUKNtLNBlk+LCRCpdJLw=;
-        b=oFx79pTDKe/0K4DzWTg5WbhaY9GMAgsDaFSkH6r1vPW1HFdOJXqGQ5UZxgywHDM3Ir
-         0equTGt8PyPlERIlnTf5/BcxXxzGITpucSE2VIl8CV1o9ehzFCMhzuOGmi45/AK6qG76
-         /8w9TpCEjcwZrf18xju/rDZxtqGU8P6zQ25P+y1i5vCqEbFPPa98WvDxnH8cFtX3sIwJ
-         junUVkx5AYbgAFw0eC61vARiqpw1IzYsntMTivQEIBdgIUJa+1mBXf7au2lMkxwOomRF
-         Tq177jWJbMD53EgF/Vw9Bn+IKNlGCEHOCstQTlq+u9cuVkwNV5MjGVV2oNYBWWI67o+0
-         Kprw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Fj7BbdljqsoGparCST0EyCcPUKNtLNBlk+LCRCpdJLw=;
-        b=oXJlEWr9GORBnTsXKEBiPrTqXFmJCmxnu7Eo/itHVD/+d2QUCErNnoFyEEHD7Awpxd
-         X9TDcjBEeJqDOZ4b9mHB0EZzkkwaWSfy5wEgTb80yGw+xSpQyjs4sQ3aYFlvrb8eoCad
-         vkr6ZQUdt6PJz6i3XIwBvf0/Tv4YchtzS84riNvnquk7d8VL8etOhqXhDSqAVfAfjWF7
-         q1yTgemMYx5XBdK4fAY7n9Egu3tZMM1sLyXueNBnNgeMpDMZi+SXaX5p87Ly+W+xvUpr
-         asNXkkjYPrAUHA7GXXV4L/WprbOomuAK11H2VPyhlyZROLOJKoD5uaeQtZrPSE5eAU8P
-         +pHw==
-X-Gm-Message-State: AJIora/k8F4rc5Gm/NSxX7x+P6nAq2G1WPW/RjzZYOWwIhVq/ilMxMLm
-        5ZeL2xU9DHpIJqvbZ9Usm0M=
-X-Google-Smtp-Source: AGRyM1vsi7CgNn+hm6JA8nRBvn1UfsHiN+DuVQjG+D41n++oNdHScStsgrICm72S8/mDUKvSMDDq4A==
-X-Received: by 2002:a17:902:a701:b0:16a:65b:f9f1 with SMTP id w1-20020a170902a70100b0016a065bf9f1mr8387462plq.73.1656473045455;
-        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-13.three.co.id. [180.214.232.13])
-        by smtp.gmail.com with ESMTPSA id p9-20020a1709026b8900b0016372486febsm10011584plk.297.2022.06.28.20.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 20:24:04 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E4C29103832; Wed, 29 Jun 2022 10:23:59 +0700 (WIB)
-Date:   Wed, 29 Jun 2022 10:23:58 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Marco Elver <elver@google.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        kasan-dev@googlegroups.com, linaro-mm-sig@lists.linaro.org,
-        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mm@kvack.org,
-        linux-pm@vger.kernel.org, linux-sgx@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/22] Fix kernel-doc warnings at linux-next
-Message-ID: <YrvFzoH61feRFoxV@debian.me>
-References: <cover.1656409369.git.mchehab@kernel.org>
+        with ESMTP id S229815AbiF2ERG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 00:17:06 -0400
+X-Greylist: delayed 1798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Jun 2022 21:17:02 PDT
+Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADA4E20BE8;
+        Tue, 28 Jun 2022 21:17:02 -0700 (PDT)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 172.17.9.202
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(2567:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Wed, 29 Jun 2022 11:31:10 +0800 (CST)
+Received: from sphcmbx01.sunplus.com.tw (172.17.9.202) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Wed, 29 Jun 2022 11:31:09 +0800
+Received: from sphcmbx01.sunplus.com.tw ([fe80::bdb5:968f:d409:32d1]) by
+ sphcmbx01.sunplus.com.tw ([fe80::bdb5:968f:d409:32d1%14]) with mapi id
+ 15.00.1497.033; Wed, 29 Jun 2022 11:31:09 +0800
+From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        =?utf-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v9 1/2] thermal: Add thermal driver for Sunplus
+Thread-Topic: [PATCH v9 1/2] thermal: Add thermal driver for Sunplus
+Thread-Index: AQHYfGnSmcz0ONeaZ065CGG9qHLjyK1Hct0AgAB4UYCAHe07gA==
+Date:   Wed, 29 Jun 2022 03:31:08 +0000
+Message-ID: <1eeaba5aeacc4f9e951e8845f15d5c64@sphcmbx01.sunplus.com.tw>
+References: <CAGcXWkzJwOPXfE6ESAtwBbe7W-UkApKosKUy=UBRh0kmi-Bc2Q@mail.gmail.com>
+ <395072af-3349-cead-fe07-62d3d758d635@infradead.org>
+ <e68724b0-4a9f-f564-c833-befd6c3515fb@linaro.org>
+In-Reply-To: <e68724b0-4a9f-f564-c833-befd6c3515fb@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.51]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1656409369.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:46:04AM +0100, Mauro Carvalho Chehab wrote:
-> As we're currently discussing about making kernel-doc issues fatal when
-> CONFIG_WERROR is enable, let's fix all 60 kernel-doc warnings 
-> inside linux-next:
-> 
-
-To be fair, besides triggering error on kernel-doc warnings, Sphinx
-warnings should also be errors on CONFIG_WERROR.
-
--- 
-An old man doll... just what I always wanted! - Clara
+SSdtIHNvcnJ5IGZvciB0aGUgd3JvbmcgaW5kZW50YXRpb24gcHJvYmxlbSwgaXQgd2FzIGNhdXNl
+ZCBieSBhIHdyb25nIHNldHRpbmcgaW4gdGhlIG1haWwgc2VydmVyLkkgd2lsbCBmaXggaXQgaW4g
+dGhlIG5leHQgcGF0Y2guDQoNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9t
+OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQo+
+IFNlbnQ6IEZyaWRheSwgSnVuZSAxMCwgMjAyMiA2OjMwIFBNDQo+IFRvOiBSYW5keSBEdW5sYXAg
+PHJkdW5sYXBAaW5mcmFkZWFkLm9yZz47IOmDreWKm+ixqiA8bGhqZWZmOTExQGdtYWlsLmNvbT47
+IHJhZmFlbEBrZXJuZWwub3JnOw0KPiBEYW5pZWwgTGV6Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGlu
+YXJvLm9yZz47IGFtaXRrQGtlcm5lbC5vcmc7IHJ1aS56aGFuZ0BpbnRlbC5jb207DQo+IHJvYmgr
+ZHRAa2VybmVsLm9yZzsgbGludXgtcG1Admdlci5rZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIu
+a2VybmVsLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBDYzogTGggS3Vv
+IOmDreWKm+ixqiA8bGguS3VvQHN1bnBsdXMuY29tPjsgV2VsbHMgTHUg5ZGC6Iqz6aiwIDx3ZWxs
+cy5sdUBzdW5wbHVzLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2OSAxLzJdIHRoZXJtYWw6
+IEFkZCB0aGVybWFsIGRyaXZlciBmb3IgU3VucGx1cw0KPiANCj4gT24gMTAvMDYvMjAyMiAwNTox
+OSwgUmFuZHkgRHVubGFwIHdyb3RlOg0KPiA+IEhpLS0NCj4gPg0KPiA+IE9uIDYvOS8yMiAxODoz
+Miwg6YOt5Yqb6LGqIHdyb3RlOg0KPiA+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aGVybWFsL0tj
+b25maWcgYi9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZyBpbmRleA0KPiA+PiAwZTVjYzk0Li5jODVl
+NjY4IDEwMDY0NA0KPiA+PiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZw0KPiA+PiArKysg
+Yi9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZw0KPiA+PiBAQCAtNTA0LDQgKzUwNCwxNCBAQCBjb25m
+aWcgS0hBREFTX01DVV9GQU5fVEhFUk1BTA0KPiA+PiAgICAgSWYgeW91IHNheSB5ZXMgaGVyZSB5
+b3UgZ2V0IHN1cHBvcnQgZm9yIHRoZSBGQU4gY29udHJvbGxlZA0KPiA+PiAgICAgYnkgdGhlIE1p
+Y3JvY29udHJvbGxlciBmb3VuZCBvbiB0aGUgS2hhZGFzIFZJTSBib2FyZHMuDQo+ID4+DQo+ID4+
+ICtjb25maWcgU1VOUExVU19USEVSTUFMDQo+ID4+ICsgdHJpc3RhdGUgIlN1bnBsdXMgdGhlcm1h
+bCBkcml2ZXJzIg0KPiA+PiArIGRlcGVuZHMgb24gU09DX1NQNzAyMSB8fCBDT01QSUxFX1RFU1Qg
+IGhlbHANCj4gPj4gKyAgIFRoaXMgZW5hYmxlIHRoZSBTdW5wbHVzIFNQNzAyMSB0aGVybWFsIGRy
+aXZlciwgd2hpY2ggc3VwcG9ydHMgdGhlIHByaW1pdGl2ZQ0KPiA+PiArICAgdGVtcGVyYXR1cmUg
+c2Vuc29yIGVtYmVkZGVkIGluIFN1bnBsdXMgU1A3MDIxIFNvQy4NCj4gPj4gKw0KPiA+PiArICAg
+SWYgeW91IGhhdmUgYSBTdW5wbHVzIFNQNzAyMSBwbGF0Zm9ybSBzYXkgWSBoZXJlIGFuZCBlbmFi
+bGUgdGhpcyBvcHRpb24NCj4gPj4gKyAgIHRvIGhhdmUgc3VwcG9ydCBmb3IgdGhlcm1hbCBtYW5h
+Z2VtZW50DQo+ID4NCj4gPiBFbmQgdGhlIHNlbnRlbmNlIGFib3ZlIHdpdGggYSBwZXJpb2QgKCcu
+JykuDQo+ID4NCj4gPiBBbmQgdGhlIGluZGVudGF0aW9uIGhlcmUgaXMgYWxsIG1lc3NlZCB1cC4N
+Cj4gPiBTZWUgRG9jdW1lbnRhdGlvbi9wcm9jZXNzL2NvZGluZy1zdHlsZS5yc3Q6DQo+ID4NCj4g
+DQo+IEl0J3Mgbm90IG9ubHkgdGhpcyBvbmUuIEVudGlyZSBmaWxlIGhhcyB3cm9uZyBpbmRlbnRh
+dGlvbi4NCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQo=
