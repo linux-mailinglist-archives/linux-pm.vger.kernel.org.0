@@ -2,66 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B925600C5
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 15:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787F05600DB
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 15:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233553AbiF2NDL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 09:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S233612AbiF2NDM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 09:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233535AbiF2NDJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 09:03:09 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E27C31
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 06:03:06 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 189so8854799wmz.2
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 06:03:06 -0700 (PDT)
+        with ESMTP id S233581AbiF2NDK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 09:03:10 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9BEF40
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 06:03:08 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so9539928wmb.5
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 06:03:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LohcD18nlQ+6W427GJ2K1kt6TSNfZnpRNiSGMheeips=;
-        b=jCu1LYGCwdgppXnuWg0ZvIwnBm4lHUhp0t6I7wq3O0HF0zuwFpi7iPNd5F1ggyNGdD
-         Uy5zF86WsFYoj3OHrbSVOmo/IY8yYcS9buEOsyGE0HlDjhm887KGe0FUEPftPG3E+28t
-         9PgaKDtNjqGB7GdI4o4IrM7hruiABbGMp9PPM/SCxLjuBScB8dUr1wGIOolziG2vFefw
-         Uvgw2nrtloEixaUkvE2QmWzbqvXRQ+G1XWs5AH8EvTWXS+/EYMLdFffOiDQjLT3aSyjE
-         xZ2i3+Z38EIZd49JFx/7Mzzc5DybkhsXfFfUjXMfnuPqYKtr+1UVQibiFGOKb0YpJmHX
-         eqzA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qibmwPgHDVec7acMg5rfS5jztxRq7kDuVLmasAHGZko=;
+        b=Rc3YWvgUukvUoANmf2wehXexmFktltGeRorBZdmH4dAWkhiABvECjZmUOl8kKlUBxb
+         iHx1gM1PnaMoHJ46X8LXQ3gdJFLpYmXOc+85YGdhYVjkzFUgcQL9myBuMMktCjelHE2B
+         nG69KdDck5K7bN74bBaFW5bExVw1vcBO/uTJSbqVl96I+7Mk8mUiZ0C8FlHDIYDEy/1x
+         QYNoMKpuMoN0xbID8tbmzn8P4LhFt4ZQKUm7tz9aQVkqxiFGZWj3VlawxNBO32pXeDQ7
+         Yvdj9exV51xCRD4ST1VANicjDFOY8fYNfcAlUtZLSqCSAZPwxRgeccDpnlV0f48kRJ/D
+         6IBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LohcD18nlQ+6W427GJ2K1kt6TSNfZnpRNiSGMheeips=;
-        b=pna1vuwgy6TDGtAXQdlMKnOcBkOS5iPynYh5zYSdB38W5VZX9f+LNi4MZSJ+utiWKM
-         tUN42Xemth8oqU/EJzaRdUTaWcvEwnfZR4EnueqE3C0aO0V+Q750rVZ091UTmBYpjtY2
-         tejLXKxxRnoqZN1+DcvQ51mjCHkBvqC6bKubMOJaqKQINtVDZUIVB6oB1a9GnZNWQp6j
-         4wf6NNTWdahJR9fDZooXMPu2PPmTVmfcVXfif2m/+6hwV6XeDaur7j8wU8AolHAH5bPd
-         AGErwjB8r1coGtan2Jyvtwa2sFv72PB1o5/ogSW9ATaEjAroejDSY5Lh4MwT+asHK5xe
-         XrHg==
-X-Gm-Message-State: AJIora+zpqDEW0gy8CT9R7UwnLdsIYFJF4/uCbnGyUlAttHdkI0Oghhf
-        BbWvllDl7P9Tu7IOWCVQB2QBwQ==
-X-Google-Smtp-Source: AGRyM1suqyEaDNY90LxZuwNUL3qYV1iZwH1FclDeTxACXRgX6r1imALYCKwVS8QyOzcbvFxJItfPow==
-X-Received: by 2002:a05:600c:2113:b0:3a0:432c:a8e8 with SMTP id u19-20020a05600c211300b003a0432ca8e8mr3678064wml.71.1656507785391;
-        Wed, 29 Jun 2022 06:03:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qibmwPgHDVec7acMg5rfS5jztxRq7kDuVLmasAHGZko=;
+        b=Gs81rztv1xhTWNIQfOjaPqBs7yGBC8eVn0Sx0z+fnEOyNVUwu5OU0/SIcCzYEDjU9l
+         pvEClqjPASCC8zrX4dadll4sWiVcgIy2Kw2r3eCTJqIbkXacKRYpvCrw1ojlqgf1subC
+         hhCnTzDgXS3afuu+MG163WadSezQC2qRB5mmhZjEAK5pJeqj7kOv3tgGvwx5krZN/qb1
+         9Q/23zslo+Qw2uQQFzB9LbZrivZwu96D60+dH7nwHSuVSQcb+Rljnem+QxhFOwLIpClT
+         42F/g6q86xuZPbNAhk1zaI2VNchMAbW0T+56ObfLitQK3QR4gHFBHk17T8tqh8pPpfDL
+         XoAQ==
+X-Gm-Message-State: AJIora8Ru30+3TUIQJCrF97qtUt8hLStx+Z9cvhP/bTwxRLqqyWOeiaf
+        SdgGTu5UL8r4r9/GQwskhq9Xng==
+X-Google-Smtp-Source: AGRyM1v49tOEh+yYktWC3g10o9aHtzdquBbdLd8lpTZFwYrhpLKm0+3FZtHeIKgV4yjwtFMKO3MPSw==
+X-Received: by 2002:a05:600c:358c:b0:39c:97ed:baa5 with SMTP id p12-20020a05600c358c00b0039c97edbaa5mr5625925wmq.77.1656507786690;
+        Wed, 29 Jun 2022 06:03:06 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id g1-20020adffc81000000b00213ba3384aesm17056979wrr.35.2022.06.29.06.03.04
+        by smtp.gmail.com with ESMTPSA id g1-20020adffc81000000b00213ba3384aesm17056979wrr.35.2022.06.29.06.03.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 06:03:04 -0700 (PDT)
+        Wed, 29 Jun 2022 06:03:06 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     ilia.lin@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
         rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [RESEND PATCH 0/5] qcom-cpufreq-nvmem: Add msm8939 with some fixups
-Date:   Wed, 29 Jun 2022 14:02:58 +0100
-Message-Id: <20220629130303.3288306-1-bryan.odonoghue@linaro.org>
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        krzk+dt@kernel.org, devicetree@vger.kernel.org
+Subject: [RESEND PATCH 1/5] dt-bindings: opp: Add missing compat devices
+Date:   Wed, 29 Jun 2022 14:02:59 +0100
+Message-Id: <20220629130303.3288306-2-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220629130303.3288306-1-bryan.odonoghue@linaro.org>
+References: <20220629130303.3288306-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,45 +72,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-V1 RESEND:
+A number of devices listed in drivers/cpufreq/qcom-cpufreq-nvmem.c appear
+to be missing from the compatible list.
 
-Resending the series with a better description to give context.
+Cc: ilia.lin@kernel.org
+Cc: robh+dt@kernel.org
+Cc: krzk+dt@kernel.org
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml     | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-This is a simple precursor series to add the msm8939 SoC dtsi.
-
-- dt-bindings fixes. We are missing some documentation for existing compat
-  strings in qcom-cpufreq-nvmem.yaml
-- dt-bindings add in msm8939 to qcom-cpufreq-nvmem.yaml
-- Add the msm8939 to the cpufreq-dt-platdev exclusion list
-- Fixing the naming of the code in qcom-cpufreq-nvmem so that we can
-  re-use the qcs404 code for msm8939
-- Adding msm8939 to the qcom-cpufreq-nvmem driver compat list
-
-Most of the msm8939 stuff is down to dt-bindings fixups and then adding the
-SoC dtsi. The minor exception here of needing to add the msm8939 compat to
-qcom-cpufreq-nvmem.c.
-
-A relatively tidy/scrubbed integrated tree for msm8939 is here for
-reference.
-
-https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-27-06-22-msm8939-no-cpr-v4
-
-V1
-Fix up some missing compat strings for the qcom-cpufreq-nvmem yaml.
-Add in msm8939 as a compatible qcom-cpufreq-nvmem.
-
-Bryan O'Donoghue (5):
-  dt-bindings: opp: Add missing compat devices
-  dt-bindings: opp: Add msm8939 to the compatible list
-  cpufreq: blocklist Qualcomm msm8939 in cpufreq-dt-platdev
-  cpufreq: qcom-cpufreq-nvmem: Rename qcs404 data to cpr_genpd
-  cpufreq: qcom-cpufreq-nvmem: Add msm8939 as cpr_genpd
-
- .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 7 +++++++
- drivers/cpufreq/cpufreq-dt-platdev.c                     | 1 +
- drivers/cpufreq/qcom-cpufreq-nvmem.c                     | 9 +++++----
- 3 files changed, 13 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index a9a776da55056..5eb1dba13fe2b 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -22,6 +22,12 @@ select:
+     compatible:
+       contains:
+         enum:
++          - qcom,apq8064
++          - qcom,apq8096
++          - qcom,ipq8064
++          - qcom,msm8960
++          - qcom,msm8974
++          - qcom,msm8996
+           - qcom,qcs404
+   required:
+     - compatible
 -- 
 2.36.1
 
