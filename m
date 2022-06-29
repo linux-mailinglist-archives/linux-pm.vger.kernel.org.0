@@ -2,372 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D79560453
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 17:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B0156045C
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 17:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbiF2PSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 11:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S232359AbiF2PVl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 11:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233315AbiF2PSE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 11:18:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289201090
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:18:03 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1o6ZRy-0004xL-3C; Wed, 29 Jun 2022 17:17:54 +0200
-Message-ID: <7158eb7c000c1698d36fe2b32d8f6d040462a6f1.camel@pengutronix.de>
-Subject: Re: [PATCH V2 9/9] interconnect: imx: Add platform driver for imx8mp
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abel.vesa@nxp.com, abailon@baylibre.com,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
-Date:   Wed, 29 Jun 2022 17:17:52 +0200
-In-Reply-To: <20220616073320.2203000-10-peng.fan@oss.nxp.com>
-References: <20220616073320.2203000-1-peng.fan@oss.nxp.com>
-         <20220616073320.2203000-10-peng.fan@oss.nxp.com>
+        with ESMTP id S230213AbiF2PVk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 11:21:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5042CDF2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 08:21:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E34B2B824DD
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 15:21:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8211AC341CB
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 15:21:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656516096;
+        bh=ZDCDwpca81bkD7zfj/ZeuVqZ6HEMCvFZH+Pt1rVzrs0=;
+        h=From:To:Subject:Date:From;
+        b=h1X1dCKGVUdldIwir2N6gGyndoyEkLSdtGwOBauE+hgBJJWTQzEYHTgKop2c4raUw
+         v8bMIycIYGu/7OeBaPK2B8ntppAsAnoUKMv3ae3ErvGFWWfQeP7CVjSPCt4XTY+GOd
+         S6gHnMda43wKV45iJU8zb7w+6oeG/ciUIlSxfUyvxlIvCHZMjPvyKnHPHwF8/uQEn3
+         +4jw47JOaGu8SGE4ZCsdQLBvIlbQ5PSfkYAGjy/I9z+6miv3/eweL6QKhm8u+I/Rfu
+         q/z0WZhl9ioaynW0xv65beFj5hT1R3TUVgSQwGBCpK8LY/+sDZt9TiZKyE5cVu4wqf
+         VIL3CGRHs982g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 68769C05FF5; Wed, 29 Jun 2022 15:21:36 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 216189] New: amd-pstate stops working after S3 suspend
+Date:   Wed, 29 Jun 2022 15:21:36 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: a@annel.in
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-216189-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Donnerstag, dem 16.06.2022 um 15:33 +0800 schrieb Peng Fan (OSS):
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add a platform driver for the i.MX8MP SoC describing bus topology, based
-> on internal documentation.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216189
 
-This series is missing the compatible addition in drivers/devfreq/imx-
-bus.c to make the platform driver probe.
+            Bug ID: 216189
+           Summary: amd-pstate stops working after S3 suspend
+           Product: Power Management
+           Version: 2.5
+    Kernel Version: 5.18.8
+          Hardware: AMD
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: a@annel.in
+        Regression: No
 
-Other than that, looks good.
-
-Regards,
-Lucas
-
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/interconnect/imx/Kconfig  |   4 +
->  drivers/interconnect/imx/Makefile |   2 +
->  drivers/interconnect/imx/imx8mp.c | 259 ++++++++++++++++++++++++++++++
->  3 files changed, 265 insertions(+)
->  create mode 100644 drivers/interconnect/imx/imx8mp.c
-> 
-> diff --git a/drivers/interconnect/imx/Kconfig b/drivers/interconnect/imx/Kconfig
-> index be2928362bb7..c772552431f5 100644
-> --- a/drivers/interconnect/imx/Kconfig
-> +++ b/drivers/interconnect/imx/Kconfig
-> @@ -15,3 +15,7 @@ config INTERCONNECT_IMX8MN
->  config INTERCONNECT_IMX8MQ
->  	tristate "i.MX8MQ interconnect driver"
->  	depends on INTERCONNECT_IMX
-> +
-> +config INTERCONNECT_IMX8MP
-> +	tristate "i.MX8MP interconnect driver"
-> +	depends on INTERCONNECT_IMX
-> diff --git a/drivers/interconnect/imx/Makefile b/drivers/interconnect/imx/Makefile
-> index 21fd5233754f..16d256cdeab4 100644
-> --- a/drivers/interconnect/imx/Makefile
-> +++ b/drivers/interconnect/imx/Makefile
-> @@ -2,8 +2,10 @@ imx-interconnect-objs			:= imx.o
->  imx8mm-interconnect-objs       		:= imx8mm.o
->  imx8mq-interconnect-objs       		:= imx8mq.o
->  imx8mn-interconnect-objs       		:= imx8mn.o
-> +imx8mp-interconnect-objs       		:= imx8mp.o
->  
->  obj-$(CONFIG_INTERCONNECT_IMX)		+= imx-interconnect.o
->  obj-$(CONFIG_INTERCONNECT_IMX8MM)	+= imx8mm-interconnect.o
->  obj-$(CONFIG_INTERCONNECT_IMX8MQ)	+= imx8mq-interconnect.o
->  obj-$(CONFIG_INTERCONNECT_IMX8MN)	+= imx8mn-interconnect.o
-> +obj-$(CONFIG_INTERCONNECT_IMX8MP)	+= imx8mp-interconnect.o
-> diff --git a/drivers/interconnect/imx/imx8mp.c b/drivers/interconnect/imx/imx8mp.c
-> new file mode 100644
-> index 000000000000..2be2e9e2974e
-> --- /dev/null
-> +++ b/drivers/interconnect/imx/imx8mp.c
-> @@ -0,0 +1,259 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Interconnect framework driver for i.MX8MP SoC
-> + *
-> + * Copyright 2022 NXP
-> + * Peng Fan <peng.fan@nxp.com>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <dt-bindings/interconnect/fsl,imx8mp.h>
-> +
-> +#include "imx.h"
-> +
-> +static const struct imx_icc_node_adj_desc imx8mp_noc_adj = {
-> +	.bw_mul = 1,
-> +	.bw_div = 16,
-> +	.main_noc = true,
-> +};
-> +
-> +static struct imx_icc_noc_setting noc_setting_nodes[] = {
-> +	[IMX8MP_ICM_MLMIX] = {
-> +		.reg = 0x180,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_DSP] = {
-> +		.reg = 0x200,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_SDMA2PER] = {
-> +		.reg = 0x280,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 4,
-> +	},
-> +	[IMX8MP_ICM_SDMA2BURST] = {
-> +		.reg = 0x300,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 4,
-> +	},
-> +	[IMX8MP_ICM_SDMA3PER] = {
-> +		.reg = 0x380,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 4,
-> +	},
-> +	[IMX8MP_ICM_SDMA3BURST] = {
-> +		.reg = 0x400,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 4,
-> +	},
-> +	[IMX8MP_ICM_EDMA] = {
-> +		.reg = 0x480,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 4,
-> +	},
-> +	[IMX8MP_ICM_GPU3D] = {
-> +		.reg = 0x500,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_GPU2D] = {
-> +		.reg = 0x580,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_HRV] = {
-> +		.reg = 0x600,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 2,
-> +		.ext_control = 1,
-> +	},
-> +	[IMX8MP_ICM_LCDIF_HDMI] = {
-> +		.reg = 0x680,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 2,
-> +		.ext_control = 1,
-> +	},
-> +	[IMX8MP_ICM_HDCP] = {
-> +		.reg = 0x700,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 5,
-> +	},
-> +	[IMX8MP_ICM_NOC_PCIE] = {
-> +		.reg = 0x780,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_USB1] = {
-> +		.reg = 0x800,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_USB2] = {
-> +		.reg = 0x880,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_PCIE] = {
-> +		.reg = 0x900,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_LCDIF_RD] = {
-> +		.reg = 0x980,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 2,
-> +		.ext_control = 1,
-> +	},
-> +	[IMX8MP_ICM_LCDIF_WR] = {
-> +		.reg = 0xa00,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 2,
-> +		.ext_control = 1,
-> +	},
-> +	[IMX8MP_ICM_ISI0] = {
-> +		.reg = 0xa80,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 2,
-> +		.ext_control = 1,
-> +	},
-> +	[IMX8MP_ICM_ISI1] = {
-> +		.reg = 0xb00,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 2,
-> +		.ext_control = 1,
-> +	},
-> +	[IMX8MP_ICM_ISI2] = {
-> +		.reg = 0xb80,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 2,
-> +		.ext_control = 1,
-> +	},
-> +	[IMX8MP_ICM_ISP0] = {
-> +		.reg = 0xc00,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 7,
-> +	},
-> +	[IMX8MP_ICM_ISP1] = {
-> +		.reg = 0xc80,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 7,
-> +	},
-> +	[IMX8MP_ICM_DWE] = {
-> +		.reg = 0xd00,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 7,
-> +	},
-> +	[IMX8MP_ICM_VPU_G1] = {
-> +		.reg = 0xd80,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_VPU_G2] = {
-> +		.reg = 0xe00,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICM_VPU_H1] = {
-> +		.reg = 0xe80,
-> +		.mode = IMX_NOC_MODE_FIXED,
-> +		.prio_level = 3,
-> +	},
-> +	[IMX8MP_ICN_MEDIA] = {
-> +		.ignore = true,
-> +	},
-> +	[IMX8MP_ICN_VIDEO] = {
-> +		.ignore = true,
-> +	},
-> +	[IMX8MP_ICN_AUDIO] = {
-> +		.ignore = true,
-> +	},
-> +	[IMX8MP_ICN_HDMI] = {
-> +		.ignore = true,
-> +	},
-> +	[IMX8MP_ICN_GPU] = {
-> +		.ignore = true,
-> +	},
-> +	[IMX8MP_ICN_HSIO] = {
-> +		.ignore = true,
-> +	},
-> +};
-> +
-> +/* Describe bus masters, slaves and connections between them */
-> +static struct imx_icc_node_desc nodes[] = {
-> +	DEFINE_BUS_INTERCONNECT("NOC", IMX8MP_ICN_NOC, &imx8mp_noc_adj,
-> +				IMX8MP_ICS_DRAM, IMX8MP_ICN_MAIN),
-> +
-> +	DEFINE_BUS_SLAVE("OCRAM", IMX8MP_ICS_OCRAM, NULL),
-> +	DEFINE_BUS_SLAVE("DRAM", IMX8MP_ICS_DRAM, NULL),
-> +	DEFINE_BUS_MASTER("A53", IMX8MP_ICM_A53, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("SUPERMIX", IMX8MP_ICM_SUPERMIX, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("GIC", IMX8MP_ICM_GIC, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("MLMIX", IMX8MP_ICM_MLMIX, IMX8MP_ICN_NOC),
-> +
-> +	DEFINE_BUS_INTERCONNECT("NOC_AUDIO", IMX8MP_ICN_AUDIO, NULL, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("DSP", IMX8MP_ICM_DSP, IMX8MP_ICN_AUDIO),
-> +	DEFINE_BUS_MASTER("SDMA2PER", IMX8MP_ICM_SDMA2PER, IMX8MP_ICN_AUDIO),
-> +	DEFINE_BUS_MASTER("SDMA2BURST", IMX8MP_ICM_SDMA2BURST, IMX8MP_ICN_AUDIO),
-> +	DEFINE_BUS_MASTER("SDMA3PER", IMX8MP_ICM_SDMA3PER, IMX8MP_ICN_AUDIO),
-> +	DEFINE_BUS_MASTER("SDMA3BURST", IMX8MP_ICM_SDMA3BURST, IMX8MP_ICN_AUDIO),
-> +	DEFINE_BUS_MASTER("EDMA", IMX8MP_ICM_EDMA, IMX8MP_ICN_AUDIO),
-> +
-> +	DEFINE_BUS_INTERCONNECT("NOC_GPU", IMX8MP_ICN_GPU, NULL, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("GPU 2D", IMX8MP_ICM_GPU2D, IMX8MP_ICN_GPU),
-> +	DEFINE_BUS_MASTER("GPU 3D", IMX8MP_ICM_GPU3D, IMX8MP_ICN_GPU),
-> +
-> +	DEFINE_BUS_INTERCONNECT("NOC_HDMI", IMX8MP_ICN_HDMI, NULL, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("HRV", IMX8MP_ICM_HRV, IMX8MP_ICN_HDMI),
-> +	DEFINE_BUS_MASTER("LCDIF_HDMI", IMX8MP_ICM_LCDIF_HDMI, IMX8MP_ICN_HDMI),
-> +	DEFINE_BUS_MASTER("HDCP", IMX8MP_ICM_HDCP, IMX8MP_ICN_HDMI),
-> +
-> +	DEFINE_BUS_INTERCONNECT("NOC_HSIO", IMX8MP_ICN_HSIO, NULL, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("NOC_PCIE", IMX8MP_ICM_NOC_PCIE, IMX8MP_ICN_HSIO),
-> +	DEFINE_BUS_MASTER("USB1", IMX8MP_ICM_USB1, IMX8MP_ICN_HSIO),
-> +	DEFINE_BUS_MASTER("USB2", IMX8MP_ICM_USB2, IMX8MP_ICN_HSIO),
-> +	DEFINE_BUS_MASTER("PCIE", IMX8MP_ICM_PCIE, IMX8MP_ICN_HSIO),
-> +
-> +	DEFINE_BUS_INTERCONNECT("NOC_MEDIA", IMX8MP_ICN_MEDIA, NULL, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("LCDIF_RD", IMX8MP_ICM_LCDIF_RD, IMX8MP_ICN_MEDIA),
-> +	DEFINE_BUS_MASTER("LCDIF_WR", IMX8MP_ICM_LCDIF_WR, IMX8MP_ICN_MEDIA),
-> +	DEFINE_BUS_MASTER("ISI0", IMX8MP_ICM_ISI0, IMX8MP_ICN_MEDIA),
-> +	DEFINE_BUS_MASTER("ISI1", IMX8MP_ICM_ISI1, IMX8MP_ICN_MEDIA),
-> +	DEFINE_BUS_MASTER("ISI2", IMX8MP_ICM_ISI2, IMX8MP_ICN_MEDIA),
-> +	DEFINE_BUS_MASTER("ISP0", IMX8MP_ICM_ISP0, IMX8MP_ICN_MEDIA),
-> +	DEFINE_BUS_MASTER("ISP1", IMX8MP_ICM_ISP1, IMX8MP_ICN_MEDIA),
-> +	DEFINE_BUS_MASTER("DWE", IMX8MP_ICM_DWE, IMX8MP_ICN_MEDIA),
-> +
-> +	DEFINE_BUS_INTERCONNECT("NOC_VIDEO", IMX8MP_ICN_VIDEO, NULL, IMX8MP_ICN_NOC),
-> +	DEFINE_BUS_MASTER("VPU G1", IMX8MP_ICM_VPU_G1, IMX8MP_ICN_VIDEO),
-> +	DEFINE_BUS_MASTER("VPU G2", IMX8MP_ICM_VPU_G2, IMX8MP_ICN_VIDEO),
-> +	DEFINE_BUS_MASTER("VPU H1", IMX8MP_ICM_VPU_H1, IMX8MP_ICN_VIDEO),
-> +	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MP_ICN_MAIN, NULL,
-> +				IMX8MP_ICN_NOC, IMX8MP_ICS_OCRAM),
-> +};
-> +
-> +static int imx8mp_icc_probe(struct platform_device *pdev)
-> +{
-> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), noc_setting_nodes);
-> +}
-> +
-> +static int imx8mp_icc_remove(struct platform_device *pdev)
-> +{
-> +	return imx_icc_unregister(pdev);
-> +}
-> +
-> +static struct platform_driver imx8mp_icc_driver = {
-> +	.probe = imx8mp_icc_probe,
-> +	.remove = imx8mp_icc_remove,
-> +	.driver = {
-> +		.name = "imx8mp-interconnect",
-> +	},
-> +};
-> +
-> +module_platform_driver(imx8mp_icc_driver);
-> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:imx8mp-interconnect");
+Hardware: Lenovo Thinkpad T14 Gen2 AMD=20=20
+CPU: AMD Ryzen 7 PRO 5850U=20=20
+Kernel: 5.18.8  (tried linux-next too)=20=20
 
 
+I've managed to get new `amd-pstate` driver working on my system, but after
+suspend (S3) it stops working and CPU frequency and Boost state control is =
+not
+working.=20
+
+Falling back to `acpi-cpufreq` driver solves the issue =E2=80=94 suspend no=
+ longer
+breaks CPU frequency and Boost controls.=20
+
+
+```
+    ~ sudo cpupower frequency-info=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20
+    analyzing CPU 0:
+      driver: amd-pstate
+      CPUs which run at the same hardware frequency: 0
+      CPUs which need to have their frequency coordinated by software: 0
+      maximum transition latency: 131 us
+      hardware limits: 400 MHz - 1.90 GHz
+      available cpufreq governors: ondemand performance schedutil
+      current policy: frequency should be within 800 MHz and 1.50 GHz.
+                      The governor "ondemand" may decide which speed to use
+                      within this range.
+      current CPU frequency: Unable to call hardware
+      current CPU frequency: 3.41 GHz (asserted by call to kernel)
+
+     boost state support:
+        Supported: yes
+        Active: no
+        AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.51 GHz.
+        AMD PSTATE Nominal Performance: 70. Nominal Frequency: 1.90 GHz.
+        AMD PSTATE Lowest Non-linear Performance: 41. Lowest Non-linear
+Frequency: 1.11 GHz.
+        AMD PSTATE Lowest Performance: 15. Lowest Frequency: 400 MHz.
+```
+
+As we see here, frequency limits are set to 800 MHz - 1.50 GHz and boost st=
+ats
+is inactive, but actual CPU frequency 3.41 GHz (that means boost is on and
+limits are ignored)=20=20
+
+The things starts working again only after reboot.=20=20
+
+Any commands such as=20
+```
+echo 1 > /sys/devices/system/cpu/cpufreq/boost
+echo 0 > /sys/devices/system/cpu/cpufreq/boost
+cpupower frequency-set -g ondemand -d 400MHz -u 800MHz
+cpupower frequency-set -g performance -d 1.9GHz -u 1.9GHz
+
+```
+
+just does nothing. (after reboot they start working again of course)=20=20
+
+
+There are no mentions of pstate module in dmesg, but maybe I have to enable
+some debug (how to do it?)=20=20
+
+Simillar bug for intel_pstate:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D90421=20=20
+Maybe it is related some way.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
