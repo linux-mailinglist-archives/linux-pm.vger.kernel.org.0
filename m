@@ -2,79 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E173560C32
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 00:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7D3560C63
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 00:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiF2WPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 18:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
+        id S230274AbiF2Wjb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 18:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiF2WPV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 18:15:21 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D0B344F4
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 15:15:20 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id y77so23572303oia.3
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 15:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=mVoh40gI4rO7l5P610TuxYrPnSY080uxRzgBN6iYHPw=;
-        b=J1EwYJaAuhZYWSzaIMQPrFvichlEBV0wEJXVGgxiGkfuiW+LSAUKhLXvFor3y/gY1I
-         g3G55YwwfAtYsFNCQU8luQfEzkAkaPjhdlG7yLKWNA4GRVnA32+sM/PnVfP6m/I2yL3N
-         QBDpAhJJfkc47+mpEs2pdgJjynB//53l3WQeM=
+        with ESMTP id S229748AbiF2WjF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 18:39:05 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4621E3F0;
+        Wed, 29 Jun 2022 15:37:09 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id p128so17484282iof.1;
+        Wed, 29 Jun 2022 15:37:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=mVoh40gI4rO7l5P610TuxYrPnSY080uxRzgBN6iYHPw=;
-        b=EZ6SGKK7Z5Y98nqCJBSN0PrkQ6qszn2ssJZn83Sn+eebaNnSfs+Zhkg0Qj7SbLa9lL
-         V+/UiXIECcKtMWqcxYJ4WjN4pLcDMuSxW/DL+oMH4m2jvIrsGqTCAbm1mNlsO+D3/nik
-         uN1su4ZyFJbHzfslwYaoqHXIVoPzbUbDPaUZbFpf/WfDa+Sr/9JoyzKNUBB9N7fdfGKy
-         ugnf1mNDMar51qr8dZC78FVMLyiYfIXMxBAPHsChm5HM55+D+rPSWAoXSLWxZW6e4dY7
-         lPGSb16Ir9zwRQKOXnBHnHUM7OrlwiNQ+wmjqTjS29bU1mROACmmeSF7p2Va4t5wSWkh
-         WI3A==
-X-Gm-Message-State: AJIora+lNxeki2M5psyOT6XkFu6s92Q+kdZ9PdowSIdPDy31ROvfc/99
-        KvaXsUj3WASKp+YgHpRtM2ctTZjyNiT8/vjSYBAnAg==
-X-Google-Smtp-Source: AGRyM1tbuJ+dTBm80e52XefpYch+GdMWbSr4bA36AZQ68tY4ma07ZyFuFFne+0loAcndzlIIccRQmt/8JirxK9nrK/k=
-X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id
- bc28-20020a056808171c00b00334934263efmr3625283oib.63.1656540920035; Wed, 29
- Jun 2022 15:15:20 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 29 Jun 2022 15:15:19 -0700
-MIME-Version: 1.0
-In-Reply-To: <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com> <YqtlRQOwb3t6Xtd0@google.com>
- <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com> <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 29 Jun 2022 15:15:19 -0700
-Message-ID: <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system suspend
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=PblpVWpvP4Mlg/XpzinVZ7+H1NQejQIk7gpI4n/YkVA=;
+        b=JohbpqY/AciEBlMYqcrCoc+sDXyONERKMgU9pueU8BrPetxYWqOS1QqqrOxw1eaUNy
+         ZLJWzXH1V3K2WzsLSu84BUcb6oayB9uDec7SNdJkF9gv7MPvqgx0XHX+8mH97d68ZOhG
+         i7bn8IllUD5HL8H8QOX1yltPkP7Aa9mSHd4UwN7QUQfH/zHOoaPXbRBdncjhoy/qKMjW
+         BNJjXrsWqPChXII7atWcEazOwHsiUalzPPOc+qfEqGTzehB/SAe1yhVaX+uRc/dQps8F
+         kQdM4c3v/A3CKrz6PA0VJ0trvvLENtFk2TNlyzxusMQZJHhGKVajDZZKdjis/24VzqCA
+         81qQ==
+X-Gm-Message-State: AJIora+Bu52iTB6TOTacd7grK7qCzpXy1zw9YdZYa8ksbGwSv2cgBP+J
+        zNTM65uIlw3j7ORj+ZVUBugsOr6fzg==
+X-Google-Smtp-Source: AGRyM1uB1StHyWE9SyBTWI1xOAT7t1T8HPaTXqhinGSqNnCsuY7X2NOCBA7TJszxIeJbR8r9S2YDKQ==
+X-Received: by 2002:a05:6638:300f:b0:335:b12d:3126 with SMTP id r15-20020a056638300f00b00335b12d3126mr3243964jak.210.1656542229016;
+        Wed, 29 Jun 2022 15:37:09 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id x26-20020a0566380cba00b00339e18d2c9bsm7868449jad.115.2022.06.29.15.37.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 15:37:08 -0700 (PDT)
+Received: (nullmailer pid 1042480 invoked by uid 1000);
+        Wed, 29 Jun 2022 22:36:59 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        ilia.lin@kernel.org, robh+dt@kernel.org, agross@kernel.org,
+        linux-pm@vger.kernel.org, rafael@kernel.org,
+        bjorn.andersson@linaro.org, krzk+dt@kernel.org,
+        viresh.kumar@linaro.org, linux-arm-msm@vger.kernel.org
+In-Reply-To: <20220629130303.3288306-2-bryan.odonoghue@linaro.org>
+References: <20220629130303.3288306-1-bryan.odonoghue@linaro.org> <20220629130303.3288306-2-bryan.odonoghue@linaro.org>
+Subject: Re: [RESEND PATCH 1/5] dt-bindings: opp: Add missing compat devices
+Date:   Wed, 29 Jun 2022 16:36:59 -0600
+Message-Id: <1656542219.641791.1042479.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,56 +61,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Pavan Kondeti (2022-06-27 22:31:48)
-> On Mon, Jun 27, 2022 at 01:02:49PM -0700, Stephen Boyd wrote:
-> > Quoting Pavan Kondeti (2022-06-20 01:54:15)
-> > >
-> > > Would like to hear other people thoughts on this.
-> > >
-> >
-> > I'm not following very closely but it sounds like a problem that may be
-> > solved by using the component driver code (see
-> > include/linux/component.h). That would let you move anything that needs
-> > to be done once the child devices probe to the aggregate driver 'bind'
-> > function (see struct component_master_ops::bind).
->
-> Thanks Stephen for letting us know about the component device framework.
->
-> IIUC,
->
-> - dwc3-qcom (parent of the dwc3 core) registers as a component master by
-> calling component_master_add_with_match() before calling
-> of_platform_populate(). The match callback could be as simple as comparing
-> the device against our child device.
->
-> - The dwc3 core (child) at the end of its probe can add as a component by calling
-> component_add().
->
-> - The above triggers the component_master_ops::bind callback implemented in
->   dwc3-qcom driver which signals that we are good to go.
->
-> - The dwc-qcom can call component_bind_all() to finish the formality i.e
->   telling the dwc3 core that we are good to go.
->
-> Is my understanding correct? This is what we are looking for i.e a way for
-> the child device(s) to signal the parent when the former is bounded.
+On Wed, 29 Jun 2022 14:02:59 +0100, Bryan O'Donoghue wrote:
+> A number of devices listed in drivers/cpufreq/qcom-cpufreq-nvmem.c appear
+> to be missing from the compatible list.
+> 
+> Cc: ilia.lin@kernel.org
+> Cc: robh+dt@kernel.org
+> Cc: krzk+dt@kernel.org
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml     | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-Sounds about right to me.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
->
-> Also what happens when the child device probe fails for any reason. i.e
-> component_add() would never be called so the master driver i.e dwc3-qcom would
-> wait indefinitely. May be it needs to implement a timeout or runtime suspend
-> etc should take care of keeping the resoures in suspend state.
+yamllint warnings/errors:
 
-When the child fails probe, it should return -EPROBE_DEFER if probe
-needs to be deferred. Then the driver will attempt probe at a later
-time. If probe fails without defer then it will never work and dwc3-qcom
-will wait indefinitely. Not much we can do in that situation.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@0: 'power-domains' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@0: 'power-domain-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@1: 'power-domains' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@1: 'power-domain-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@100: 'power-domains' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@100: 'power-domain-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@101: 'power-domains' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@101: 'power-domain-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: opp-table-0:opp-307200000: 'required-opps' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: opp-table-0:opp-1401600000: 'required-opps' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: opp-table-0:opp-1593600000: 'required-opps' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: opp-table-1:opp-307200000: 'required-opps' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: opp-table-1:opp-1804800000: 'required-opps' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: opp-table-1:opp-1900800000: 'required-opps' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb: /: opp-table-1:opp-2150400000: 'required-opps' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
 
-dwc3-qcom should wait for dwc3 core to call component_add() and then do
-whatever needs to be done once the dwc3 core is registered in the
-dwc3-qcom bind callback. Honestly this may all be a little overkill if
-there's only two drivers here, dwc3-qcom and dwc3 core. It could
-probably just be some callback from dwc3 core at the end of probe that
-calls some function in dwc3-qcom.
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
