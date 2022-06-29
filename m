@@ -2,62 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E6D55FF2A
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 13:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0406756002B
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 14:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbiF2L7A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 07:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S232699AbiF2MiO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 08:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbiF2L67 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 07:58:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D720B387B1;
-        Wed, 29 Jun 2022 04:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656503938; x=1688039938;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Rqyy90LBrWIUchSPPwXkNXZArjHXk98JSzOsryKu6/0=;
-  b=ntWO2YS5fFejrcDSW1GjteybebECugotLkHLzl405KTvQH16OLedpacb
-   I2WgIKdc7uo9QCqsUNYVB1Drod92GCQPXz4pXSYyl45rVMZKpUbBTMPkw
-   X0ErSUCvF/89MWks/l9UqWlyDjnlp20GoiIvtpaHuVkUCE+rd7I1QHAak
-   7MSJVovDvxCYclLjP+rObP0YZV0KlTa++aEnjFQ4vn3qV2b8WxcCL6kP2
-   Lo1f5bCJ3G6pCgVp+lFSbpbOe8Y9xLic7HbuS/Hq4Znau98yWv4nEKKJv
-   Xar7arCPHry/kWT6d5hisej/MigwIbH/QuHpDimijMUomPCOmpqqtz+IO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="261812421"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="261812421"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 04:58:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="917577894"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2022 04:58:56 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o6WLP-000B98-UF;
-        Wed, 29 Jun 2022 11:58:55 +0000
-Date:   Wed, 29 Jun 2022 19:58:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     xiongxin <xiongxin@kylinos.cn>, rafael@kernel.org,
-        len.brown@intel.com, pavel@ucw.cz
-Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiongxin@kylinos.cn
-Subject: Re: [PATCH -next 2/2] PM: suspend: advanced pm_wakeup_clear() for
- normal suspend/hibernate
-Message-ID: <202206291941.94EV5b6M-lkp@intel.com>
-References: <20220629003338.299195-3-xiongxin@kylinos.cn>
+        with ESMTP id S230521AbiF2MiL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 08:38:11 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B157661
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 05:38:09 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id cw10so32336151ejb.3
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 05:38:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xffDvQ4wmTlhbTHoSRY6CPrwO+KGNYtOQPheNUgMMls=;
+        b=isvoegge0G/3rLqgNYq1TraRhOBmwJk6sByRDFuEpY3HRuVM+EZXfxD73xlA9WGoqi
+         chksnKBcz6dUkwYYYo9jKQfmpBc+LrfCkDHgh/OnfXaONUcCUiqkvIlJMF/NjEX9+Cr2
+         Om36D7fL02bnlJjkvD1aKdXkqD2qeUxh2ggulHNxbLAppuPvidWe5OH1FbRRkcWi2Pom
+         a+bSXNF40aKMLqLjpg0oI+e2uRwi6HVkO4mx1MCJo3viI1YoglAKCYSovbHd382x0GRl
+         kHc2hyQtGGxENG1Kat8Hwsjw6ONb1rlLVIuB2mAP2SGwMs9+uBC9/W/68SMRCx4UWqQD
+         i5MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xffDvQ4wmTlhbTHoSRY6CPrwO+KGNYtOQPheNUgMMls=;
+        b=sRWYLSacjax/8ypOO5wbWrphtgZqlwGWOSYz5rJqHI09DXCz9OjkR6EfitcvE0l7Xh
+         FeUXbPsk7BFS41lkZPzafDpfJFYNp6nFsUwM7jdJzUHxF3bEebb7H7sORexsyjc8P13d
+         oP583kYpvwU0TKTfWyWYwVIO6BITGXrwziXkfd11EI9ZIn4kWqUeuaykocXQaAfCvZrh
+         KL8vdiZ64NoMPROeSbRgmrID+kuJFEPdDII9coHYeIkdeyOHn1wH/Rc4CHzZYbfEdbF9
+         tgU6zzkSKHdDGBRmUQtaoR7NuyoxU97nwmXpD6XE05tx3Hc2wbccXodCBKLd83RCuDDJ
+         qJpw==
+X-Gm-Message-State: AJIora+qSBLXcKAQHq9uAm4AKnVTe3KC+qDBn1WmtuYRtZPaUSp1DJAB
+        1cZgeVT1DVJFIA4E3Lqysy0g4g==
+X-Google-Smtp-Source: AGRyM1sbRmV7Ln3hOp7mKI5FGQ9uRHEZcWKjAdhQcMce0mwwiALmlGAElCFO91SZr84Kzu+ijhvbhA==
+X-Received: by 2002:a17:907:3e08:b0:726:2af1:1d5f with SMTP id hp8-20020a1709073e0800b007262af11d5fmr3174507ejc.235.1656506288542;
+        Wed, 29 Jun 2022 05:38:08 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id v5-20020a170906338500b006fed85c1a8fsm7729657eja.202.2022.06.29.05.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 05:38:07 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: power: reset: qcom,pshold: convert to dtschema
+Date:   Wed, 29 Jun 2022 14:38:04 +0200
+Message-Id: <20220629123804.94906-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629003338.299195-3-xiongxin@kylinos.cn>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,92 +71,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi xiongxin,
+Convert the Qualcomm Power Supply Hold Reset bindings to DT schema.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/power/reset/msm-poweroff.txt     | 17 ---------
+ .../bindings/power/reset/qcom,pshold.yaml     | 35 +++++++++++++++++++
+ 2 files changed, 35 insertions(+), 17 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/msm-poweroff.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/qcom,pshold.yaml
 
-[auto build test ERROR on next-20220628]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/xiongxin/PM-suspend-Optimized-suspend-is-fail-returned-by-wakeup/20220629-114731
-base:    cb71b93c2dc36d18a8b05245973328d018272cdf
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220629/202206291941.94EV5b6M-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2e0bc447b95996d1757038708bd6adf613f0b936
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review xiongxin/PM-suspend-Optimized-suspend-is-fail-returned-by-wakeup/20220629-114731
-        git checkout 2e0bc447b95996d1757038708bd6adf613f0b936
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/power/process.c: In function 'freeze_processes':
->> kernel/power/process.c:134:13: error: 'pm_suspend_target_state' undeclared (first use in this function)
-     134 |         if (pm_suspend_target_state != PM_SUSPEND_ON)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/power/process.c:134:13: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/pm_suspend_target_state +134 kernel/power/process.c
-
-   112	
-   113	/**
-   114	 * freeze_processes - Signal user space processes to enter the refrigerator.
-   115	 * The current thread will not be frozen.  The same process that calls
-   116	 * freeze_processes must later call thaw_processes.
-   117	 *
-   118	 * On success, returns 0.  On failure, -errno and system is fully thawed.
-   119	 */
-   120	int freeze_processes(void)
-   121	{
-   122		int error;
-   123	
-   124		error = __usermodehelper_disable(UMH_FREEZING);
-   125		if (error)
-   126			return error;
-   127	
-   128		/* Make sure this task doesn't get frozen */
-   129		current->flags |= PF_SUSPEND_TASK;
-   130	
-   131		if (!pm_freezing)
-   132			atomic_inc(&system_freezing_cnt);
-   133	
- > 134		if (pm_suspend_target_state != PM_SUSPEND_ON)
-   135			pm_wakeup_clear(1);
-   136		else
-   137			pm_wakeup_clear(0);
-   138		pr_info("Freezing user space processes ... ");
-   139		pm_freezing = true;
-   140		error = try_to_freeze_tasks(true);
-   141		if (!error) {
-   142			__usermodehelper_set_disable_depth(UMH_DISABLED);
-   143			pr_cont("done.");
-   144		}
-   145		pr_cont("\n");
-   146		BUG_ON(in_atomic());
-   147	
-   148		/*
-   149		 * Now that the whole userspace is frozen we need to disable
-   150		 * the OOM killer to disallow any further interference with
-   151		 * killable tasks. There is no guarantee oom victims will
-   152		 * ever reach a point they go away we have to wait with a timeout.
-   153		 */
-   154		if (!error && !oom_killer_disable(msecs_to_jiffies(freeze_timeout_msecs)))
-   155			error = -EBUSY;
-   156	
-   157		if (error)
-   158			thaw_processes();
-   159		return error;
-   160	}
-   161	
-
+diff --git a/Documentation/devicetree/bindings/power/reset/msm-poweroff.txt b/Documentation/devicetree/bindings/power/reset/msm-poweroff.txt
+deleted file mode 100644
+index ce44ad357565..000000000000
+--- a/Documentation/devicetree/bindings/power/reset/msm-poweroff.txt
++++ /dev/null
+@@ -1,17 +0,0 @@
+-MSM Restart Driver
+-
+-A power supply hold (ps-hold) bit is set to power the msm chipsets.
+-Clearing that bit allows us to restart/poweroff. The difference
+-between poweroff and restart is determined by unique power manager IC
+-settings.
+-
+-Required Properties:
+--compatible: "qcom,pshold"
+--reg: Specifies the physical address of the ps-hold register
+-
+-Example:
+-
+-	restart@fc4ab000 {
+-		compatible = "qcom,pshold";
+-		reg = <0xfc4ab000 0x4>;
+-	};
+diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pshold.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pshold.yaml
+new file mode 100644
+index 000000000000..527962d54a8f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/reset/qcom,pshold.yaml
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/reset/qcom,pshold.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SoC restart and power off
++
++maintainers:
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++
++description:
++  A power supply hold (ps-hold) bit is set to power the Qualcomm chipsets.
++  Clearing that bit allows us to restart/power off. The difference between
++  power off and restart is determined by unique power manager IC settings.
++
++properties:
++  compatible:
++    const: qcom,pshold
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    reset-controller@fc4ab000 {
++        compatible = "qcom,pshold";
++        reg = <0xfc4ab000 0x4>;
++    };
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
