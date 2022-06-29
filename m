@@ -2,72 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65424560166
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 15:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F885601E3
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jun 2022 16:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbiF2Nfp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 09:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S233438AbiF2ODP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 10:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232733AbiF2Nfo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 09:35:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3E72AC7A
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 06:35:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6Xqa-0006SP-06; Wed, 29 Jun 2022 15:35:12 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6XqQ-003PNQ-Vz; Wed, 29 Jun 2022 15:35:06 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6XqT-001txR-NY; Wed, 29 Jun 2022 15:35:05 +0200
-Date:   Wed, 29 Jun 2022 15:35:04 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-leds@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-crypto@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-clk@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-watchdog@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, netdev@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-input@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        patches@opensource.cirrus.com, UNGLinuxDriver@microchip.com,
-        linux-pwm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Message-ID: <20220629133504.syc6x4ptia3mnof5@pengutronix.de>
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
- <CAPAsAGwP4Mw_CJfsi7oapABdTBwO1HfiQux6X4UahspU74VjtQ@mail.gmail.com>
+        with ESMTP id S233206AbiF2ODO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 10:03:14 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B479AE50
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 07:03:09 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id ay16so32820493ejb.6
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 07:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X21RDYcZyPdAdSSiWnF38ilXDUTAkDc85p4urcENWOs=;
+        b=zp6x20OMhnXPHzNNi8WXugTMQFDEqCtld64Is1YD14JQCItQk0qaYwSpD1zeZmO/I8
+         JAn4GAgxjF8nFRDdIP2xbh0uvfE6wa7w+sVJK0IYyM6Qon7wsewcSuTMpXS6grEENUuN
+         2sjKO2jNlLLJlPyw2lmQv6YAx0oZrDL1pJels5dy2jy8xSAoHvKwYmCvMYX5UFmUxutN
+         Dw3BPl8BD99rKr5Dkz5RInSpxo55gFMUql9l4hDDPxF3KLe54xNhT03VZhL3ypi0L8an
+         eAOLZqhsA/+wNgGGEXH5My3uVM/1A7Zh+G97JQmTZ654pB613w5h0CkjgVuJ/YNmI5qf
+         sV3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X21RDYcZyPdAdSSiWnF38ilXDUTAkDc85p4urcENWOs=;
+        b=4DEBmihoDWyKbYjteGlqC6CBdtu3dJ2Ic4x1KCzzr+JDg14g+mLSUGTiPEmVH4IgQx
+         Sf+gL2R7hEMtB2ifFhNE0ZTLkTWbL0fzSgR89p1gOgs4cBn0T9n8O+oyAct7w+d3ptZI
+         OQL9sKOWjbVygIfdvh7vaXI0uuUiNTngu8mnn5Alv+L79WckZ/B6tiL8qk2GDqLT7jvj
+         zLS3iINnLjy6HK4hZpN1RqYehxBqXyfLEMql91+rWqU3p4kDl93syzzt3omiyGd2QU4j
+         RdSKlqHVbFljtEENdIDZZEnguVWKWM09Iqnfsm3UjELF9aHoDOyi1tEsxZGx7NHuw+tv
+         uaJw==
+X-Gm-Message-State: AJIora/4wEbq+d4SeBQKYlIDlF10RLcE8QZb4cY4aNP5/GVbDtx88uL+
+        V55OCwNj8sCjUtICJpP00S5VhA==
+X-Google-Smtp-Source: AGRyM1vfBpeK5a2y8Ai17mRG/zLK0C47Ezcpl3fOTQHlpYcTCUwBcZxJdjE29jGIN0w0jpEOhFnqJg==
+X-Received: by 2002:a17:906:9245:b0:726:3b57:1046 with SMTP id c5-20020a170906924500b007263b571046mr3576647ejx.221.1656511386646;
+        Wed, 29 Jun 2022 07:03:06 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id f9-20020a17090660c900b007262a5e2204sm7739260ejk.153.2022.06.29.07.03.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 07:03:05 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: [PATCH v6 0/4] soc/arm64: qcom: Add initial version of bwmon
+Date:   Wed, 29 Jun 2022 16:02:58 +0200
+Message-Id: <20220629140302.236715-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5z6hgi6euioj5d47"
-Content-Disposition: inline
-In-Reply-To: <CAPAsAGwP4Mw_CJfsi7oapABdTBwO1HfiQux6X4UahspU74VjtQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,76 +74,82 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
---5z6hgi6euioj5d47
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes since v5
+================
+1. Rename compatible (and files) to qcom,msm8998-llcc-bwmon as Rajendra suggested.
+   Keep the reviews/acks as the change is not significant.
+2. Update comment in DTS, update description in bindings and in Kconfig.
 
-[Dropped most people from Cc, keeping only lists]
+Changes since v4
+================
+1. Patch #1 (binding): Use qcom,msm8998-cpu-bwmon fallback compatible, only one
+   interconnect. Rename to qcom,msm8998-cpu-bwmon.yaml. This reflects
+   discussion with Bjorn, about the proper fallback compatible. Driver was
+   tested only on SDM845, so only that one compatible is actually implemented.
+   Keep the reviews/acks as the change is not significant.
+2. Patch #4 (DTS): Use qcom,msm8998-cpu-bwmon fallback compatible, only one
+   interconnect, use the LLCC bandwidth in OPP.
 
-On Wed, Jun 29, 2022 at 04:11:26PM +0300, Andrey Ryabinin wrote:
-> On 6/28/22 17:03, Uwe Kleine-K=F6nig wrote:
-> > From: Uwe Kleine-K=F6nig <uwe@kleine-koenig.org>
-> >
-> > The value returned by an i2c driver's remove function is mostly ignored.
-> > (Only an error message is printed if the value is non-zero that the
-> > error is ignored.)
-> >
-> > So change the prototype of the remove function to return no value. This
-> > way driver authors are not tempted to assume that passing an error to
-> > the upper layer is a good idea. All drivers are adapted accordingly.
-> > There is no intended change of behaviour, all callbacks were prepared to
-> > return 0 before.
-> >
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
->                                     | 2 +-
-> >  lib/Kconfig.kasan                                         | 1 +
->=20
-> > diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-> > index f0973da583e0..366e61639cb2 100644
-> > --- a/lib/Kconfig.kasan
-> > +++ b/lib/Kconfig.kasan
-> > @@ -149,6 +149,7 @@ config KASAN_STACK
-> >       depends on KASAN_GENERIC || KASAN_SW_TAGS
-> >       depends on !ARCH_DISABLE_KASAN_INLINE
-> >       default y if CC_IS_GCC
-> > +     depends on !ARM
-> >       help
-> >         Disables stack instrumentation and thus KASAN's ability to dete=
-ct
-> >         out-of-bounds bugs in stack variables.
->=20
->=20
-> What is this doing here?
+remove unused irq_enable (kbuild robot);
+Changes since v3
+================
+1. Patch #2 (bwmon): remove unused irq_enable (kbuild robot);
+   split bwmon_clear() into clearing counters and interrupts, so bwmon_start()
+   does not clear the counters twice.
 
-Huh, that is wrong. I needed that for build testing, but it shouldn't
-have been added to the patch. I'm dropping that for the final
-submission.
+Changes since v2
+================
+1. Spent a lot of time on benchmarking and learning the BWMON behavior.
+2. Drop PM/OPP patch - applied.
+3. Patch #1: drop opp-avg-kBps.
+4. Patch #2: Add several comments explaining pieces of code and BWMON, extend
+   commit msg with measurements, extend help message, add new #defines to document
+   some magic values, reorder bwmon clear/disable/enable operations to match
+   downstream source and document this with comments, fix unit count from 1 MB
+   to 65 kB.
+5. Patch #4: drop opp-avg-kBps.
+6. Add accumulated Rb tags.
 
-Thanks for spotting.
+Changes since v1
+================
+1. Add defconfig change.
+2. Fix missing semicolon in MODULE_AUTHOR.
+3. Add original downstream (msm-4.9 tree) copyrights to the driver.
 
-Best regards
-Uwe
+Description
+===========
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+The work is built on top of Thara Gopinath's patches with several cleanups,
+changes and simplifications.
 
---5z6hgi6euioj5d47
-Content-Type: application/pgp-signature; name="signature.asc"
+Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+Krzysztof
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmK8VQUACgkQwfwUeK3K
-7AkL0wf/Ra+JtsXozoGjhV4ADtJcJAo/mOIZQ6qOdPZGqHYkMvBmkEJ9zbvY4Edk
-SwYoapiHgVT4tDX56ekEGnm/x3udNUt5wugpsqDm4oAgYtbBCMEVtHbp3t/AqMp2
-sZcn0JsvUs6FVWSTomD396Pt10x0r+JrPTJVY2pwj1nUUV63/25oIT/4I77IughK
-LvQBMIesHK9damtObmRGqI5Ljz1L6SP7WgiLSEq1R/LjSeEwbURT3ijca95YO2Jv
-YyxoC7TiNJj2uJiisjl/r1T/LdGF6RpMN197XQjcvaZ0sbTZRF2vXlqp3cSyXrCG
-BbT2nohQYXjznouz9TIuBFtA0iX7SA==
-=YEZr
------END PGP SIGNATURE-----
+Krzysztof Kozlowski (4):
+  dt-bindings: interconnect: qcom,msm8998-cpu-bwmon: add BWMON device
+  soc: qcom: icc-bwmon: Add bandwidth monitoring driver
+  arm64: defconfig: enable Qualcomm Bandwidth Monitor
+  arm64: dts: qcom: sdm845: Add CPU BWMON
 
---5z6hgi6euioj5d47--
+ .../interconnect/qcom,msm8998-llcc-bwmon.yaml |  85 ++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  37 ++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/soc/qcom/Kconfig                      |  15 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/icc-bwmon.c                  | 421 ++++++++++++++++++
+ 7 files changed, 567 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
+ create mode 100644 drivers/soc/qcom/icc-bwmon.c
+
+-- 
+2.34.1
+
