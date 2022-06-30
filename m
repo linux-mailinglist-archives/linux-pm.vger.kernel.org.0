@@ -2,162 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3319560D13
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 01:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9335560DE8
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 02:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiF2XSn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 19:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S229512AbiF3AXK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 20:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiF2XSk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 19:18:40 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB262228B
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id jh14so15477266plb.1
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
+        with ESMTP id S229453AbiF3AXJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 20:23:09 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A3AE46
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 17:23:07 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id n12so16647788pfq.0
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 17:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=WCZ9XmbAa/JAaxeY8vzw1f1J/PDv98SAx+RwG4qaGQk=;
-        b=C1KyJQUYnz02b4RXDHNAvvaFDVfmkjh0FZyapJ//Hk32EKNpWSoI4dsCbp7qtx/HjF
-         fGtYM34+ke+USyOn/O4kr7ePGw/Glq/xc89kSuVYmAq63cNR3Vn4PXOKbwUAvn4JONuI
-         ANuXFQp1YAvtghzJEQO/Dawt3234kthqcqYGcDAETkcjDUlo5sEIgqK5D7JG8Qpb7ITq
-         wX28a0JIk34aRJnrulRoqMNR4ASTf4mdFG4Vm7PO/SV8+IZwHCnvMc9lMEEXjJuiFMeA
-         YEmDFNaPZpAoLmLagn16yb8qoR0rseYVni/T4dNThyT0l4vdf+51+B9pC1PpXBwVmiG7
-         vy/g==
+        bh=bDOI/zGOgy4m2A46KlbmsZQqwXs7u16Ivj5OzK4Omws=;
+        b=dBAbOQvACTkWGpYJZOYa/5H1HMw07URAlIcpTn2jVmcLyMyX0d6J5/z3eVKWA25JrH
+         J8BYM4elvOVARY+ou+ESfx4Wym+pWl0k7GW3DRQepmSXpJQk+POg9EVe+rVCKa/3uILR
+         f2iDtBo+4pVPde+7owd6f5WGub2b8jDDwEO10azRYJyUzt5JOIDmf4gz6nFn2gAlPlRi
+         Mw026bPJiMBkvM6zEK2H6MAMVHoBK2l7JrSFJSuOt7WH1lSN2IIf/RR7vG1aaCfSCnhc
+         LEG4HQ4QOwrq6OpN5bNdk1L2eeLmu9g8uItUaAWxTQyUvfE0c/HXTdzf2yb9gFUobQlZ
+         77qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WCZ9XmbAa/JAaxeY8vzw1f1J/PDv98SAx+RwG4qaGQk=;
-        b=fdWJGW9cdkKK3ub1eWiAKD5L4wDWA65pXigQaxKmxRgEIypKRWpP+PsQ5yX79nhYen
-         aqAh1QDh4rFTbLjZDvPv6KbrSijorx4IMQiYgctxjpB0pnDWyh7J+/kcfkecKrtVwGAv
-         kSQWzkSs0UizFSsHLt+cdDDkJFd0xW3lIHg36bSSf/pdJpaq8FM5sb1/XgM1gN8n/dCB
-         K22K+s8LH6hD8z87DDF79ClQ3fLnzSIovPSxIEosbGpB9o6xiMTfI32Biz5bsErDPAIz
-         7tzfar4q7ZUSpzh9UyTpVUAu+zEl5zG5+HdRIFPK0okqBP+r/FXRhfdncG9AOexK/T9o
-         6T3g==
-X-Gm-Message-State: AJIora+JoAsxO7uJBCGOnsa6mcgTxRKM7tHtWQMRLSLBwaubAA79Rhx7
-        uPUDTvGB+1Z/NRCxXsgAxuKT7g==
-X-Google-Smtp-Source: AGRyM1sSEsY/MmnYvfXLmBXPUMl+8nOa0/dAqS9qoVWFguDNOEdCu3wU0KNwoxXIKifvIu3ekKqGIg==
-X-Received: by 2002:a17:90a:5509:b0:1ec:caf4:b327 with SMTP id b9-20020a17090a550900b001eccaf4b327mr8333381pji.129.1656544717040;
-        Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
-Received: from google.com (249.189.233.35.bc.googleusercontent.com. [35.233.189.249])
-        by smtp.gmail.com with ESMTPSA id p26-20020a634f5a000000b0040dfb0857a0sm6688974pgl.78.2022.06.29.16.18.36
+        bh=bDOI/zGOgy4m2A46KlbmsZQqwXs7u16Ivj5OzK4Omws=;
+        b=KeZqnZlbVA7qXaicvhh/oSJE6i6WRRY437I6qyKeQZfRngoSA1SRNFYiIBNzXacGyT
+         5aexi5F9lPln4BjVJ8ZY3QKpbaFnbZ6nahjdC1nqoMnhZU0X4HBmOc+9yQxH9H8TGkIR
+         yXVoEbJbwlKRXcPAEiL5IObe22V9KyoOQea9YDokZqGMVsFdu1HsX8RDFWUu+798kZbm
+         DnsHwLmtD7kWxyHFSAb8Zt2+Vgysb6bCzEtv05BWYwqU69v7w/WnSj3JfN47NAPqyQ4o
+         xCOUyHYVTjNGGD3rlHxTA7pLOlFBgSoqyJ/bv79050PMUsMBmoBD8HlUnWAXElDutBLl
+         4mKw==
+X-Gm-Message-State: AJIora+GMbgbXQ6d6SgZydQkk83j9pJVxW9hx6DGMC3FYWtEGhNzwpMD
+        5bamYYNVOn8beqJkQO6KXKyxaeeTdYuaHw==
+X-Google-Smtp-Source: AGRyM1sxK5ymsefnvphBWk7lsdcyv9A0WQiBrMsM4q2L26HWA3zQJvGsemB0leRtjJVtuBmKMr3/6g==
+X-Received: by 2002:a05:6a00:a1f:b0:525:3ad6:fb7e with SMTP id p31-20020a056a000a1f00b005253ad6fb7emr2137905pfh.68.1656548587355;
+        Wed, 29 Jun 2022 17:23:07 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id 142-20020a621494000000b0052285857864sm12472325pfu.97.2022.06.29.17.23.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 16:18:36 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 23:18:33 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        kernel-team@android.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 4.19 v1 1/2] hwmon: Introduce
- hwmon_device_register_for_thermal
-Message-ID: <YrzdyUm/xlJPldwP@google.com>
-References: <20220629225843.332453-1-willmcvicker@google.com>
- <20220629225843.332453-2-willmcvicker@google.com>
- <d4a85598-af50-541a-9632-8d0343e8082d@roeck-us.net>
+        Wed, 29 Jun 2022 17:23:06 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 05:53:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220630002303.qdqzx2czz7d3msnk@vireshk-i7>
+References: <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
+ <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
+ <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
+ <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
+ <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
+ <f2acd51e-24f6-aa84-cfd4-372dd5e30aa0@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d4a85598-af50-541a-9632-8d0343e8082d@roeck-us.net>
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f2acd51e-24f6-aa84-cfd4-372dd5e30aa0@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/29/2022, Guenter Roeck wrote:
-> On 6/29/22 15:58, Will McVicker wrote:
-> > From: Guenter Roeck <linux@roeck-us.net>
-> > 
-> > [ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
-> > 
-> > The thermal subsystem registers a hwmon driver without providing
-> > chip or sysfs group information. This is for legacy reasons and
-> > would be difficult to change. At the same time, we want to enforce
-> > that chip information is provided when registering a hwmon device
-> > using hwmon_device_register_with_info(). To enable this, introduce
-> > a special API for use only by the thermal subsystem.
-> > 
-> > Acked-by: Rafael J . Wysocki <rafael@kernel.org>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> NACK. The patch introducing the problem needs to be reverted.
+On 29-06-22, 18:03, Jon Hunter wrote:
+> Today's -next is also working fine for me too!
 
-I'm fine with that as well. I've already verified that fixes the issue. I'll go
-ahead and send the revert.
+Thanks.
 
-Thanks,
-Will
+I hope all the trouble with core update was worth it :)
 
-> 
-> Guenter
-> 
-> > ---
-> >   drivers/hwmon/hwmon.c | 25 +++++++++++++++++++++++++
-> >   include/linux/hwmon.h |  3 +++
-> >   2 files changed, 28 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> > index c4051a3e63c2..412a5e39fc14 100644
-> > --- a/drivers/hwmon/hwmon.c
-> > +++ b/drivers/hwmon/hwmon.c
-> > @@ -725,6 +725,31 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
-> >   }
-> >   EXPORT_SYMBOL_GPL(hwmon_device_register_with_info);
-> > +/**
-> > + * hwmon_device_register_for_thermal - register hwmon device for thermal subsystem
-> > + * @dev: the parent device
-> > + * @name: hwmon name attribute
-> > + * @drvdata: driver data to attach to created device
-> > + *
-> > + * The use of this function is restricted. It is provided for legacy reasons
-> > + * and must only be called from the thermal subsystem.
-> > + *
-> > + * hwmon_device_unregister() must be called when the device is no
-> > + * longer needed.
-> > + *
-> > + * Returns the pointer to the new device.
-> > + */
-> > +struct device *
-> > +hwmon_device_register_for_thermal(struct device *dev, const char *name,
-> > +				  void *drvdata)
-> > +{
-> > +	if (!name || !dev)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	return __hwmon_device_register(dev, name, drvdata, NULL, NULL);
-> > +}
-> > +EXPORT_SYMBOL_GPL(hwmon_device_register_for_thermal);
-> > +
-> >   /**
-> >    * hwmon_device_register - register w/ hwmon
-> >    * @dev: the device to register
-> > diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> > index 8fde789f2eff..5ff3db6eb9f1 100644
-> > --- a/include/linux/hwmon.h
-> > +++ b/include/linux/hwmon.h
-> > @@ -390,6 +390,9 @@ hwmon_device_register_with_info(struct device *dev,
-> >   				const struct hwmon_chip_info *info,
-> >   				const struct attribute_group **extra_groups);
-> >   struct device *
-> > +hwmon_device_register_for_thermal(struct device *dev, const char *name,
-> > +				  void *drvdata);
-> > +struct device *
-> >   devm_hwmon_device_register_with_info(struct device *dev,
-> >   				const char *name, void *drvdata,
-> >   				const struct hwmon_chip_info *info,
-> 
+-- 
+viresh
