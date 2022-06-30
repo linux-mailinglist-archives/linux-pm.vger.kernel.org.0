@@ -2,77 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD2E561781
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 12:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5035618D7
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 13:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiF3KRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 06:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S234211AbiF3LOi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 07:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234975AbiF3KRf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 06:17:35 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB7A45070
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 03:17:34 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id i1so22052751wrb.11
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 03:17:34 -0700 (PDT)
+        with ESMTP id S230129AbiF3LOi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 07:14:38 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F944579E;
+        Thu, 30 Jun 2022 04:14:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=c96BIX1fdQoWXVeifIQLvlY9hToa+J8OCLgj66YDpdo=;
-        b=hxR+0DYQzyBeod/6ISMQjw069iwdQP3G6dVo1DQlk4ba7JW7UYZ4O7TE6g9NajuItk
-         p3wuOz4zRGR8CEq/BpalWRVErG0Y0rXGB+22+MVcT5ULiz7KSnNs22YiWKIaBM09kKMw
-         sWlX53ypI0udUXY1yWQEOk32myTSzVneVpmWoBk+l5yc3vElFTUYu8bO9acQI1+lAHZW
-         bHVpgFKSqoXIV+r1jsFOT9efDvWH4IfzT98msNbV6dcn0bgI0Hv97aY925yneWBdby5T
-         6D3frZSyzVLgKQqc86S4j5d0/xodXxI7e8MI049fagc4OBu4uHWmk5vEbZOg1JtZkyJi
-         CYww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c96BIX1fdQoWXVeifIQLvlY9hToa+J8OCLgj66YDpdo=;
-        b=eDwDKS8yIEDYZFILTk2Xy1Bp8DoHg6n/KjA2NhvDlz9OxKnRELyuPK0m2IYD5VudFQ
-         Mzxg7hBb0Miz4h6wavX4lfarc6NygDL7t/lz0R9ssxGSE+/JmEfbd2iwT3K96VWt5LxG
-         Ms2qCEW/Ir8ymgeT6Ksy8/fLIGdldgX+VhVci3EB9zdnXgHEnoZu/VxUkKFaYY2s1yhR
-         zfsFznS41anDD0qrV9JWS/Yf2XBZxMQfw8Vhzg5HGa68vGBrqL27MY+yWMiQRuit4ycb
-         z6/txr7CG+1zhCFkkJrt/dh02XD1Tm0lWnYAh6Q2G0xuNjfaaOwGtyWDrn056yJmGeH0
-         VMiQ==
-X-Gm-Message-State: AJIora+z8pO1APd+N6pLqXl4V5tqgLuq6BRJ+1QaDIANqbkj1nSY4f7J
-        NmNyYrX65F+IadNn2YcEhgHH1Q==
-X-Google-Smtp-Source: AGRyM1sbvmqN9/tkpqOkQ+1clLVa6+kww2xKsNUSTqdo01t1OTCv0ffjXeaKZcHNWk59VZfg9riTNA==
-X-Received: by 2002:a5d:5a84:0:b0:21b:92c7:a7f with SMTP id bp4-20020a5d5a84000000b0021b92c70a7fmr8055287wrb.586.1656584252619;
-        Thu, 30 Jun 2022 03:17:32 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id k42-20020a05600c1caa00b003a04722d745sm2184242wms.23.2022.06.30.03.17.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 03:17:32 -0700 (PDT)
-Message-ID: <1d9ed3ac-289f-88ea-ad08-0031e9bde1bb@linaro.org>
-Date:   Thu, 30 Jun 2022 12:17:30 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656587677; x=1688123677;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NZB5eT/e1Inc1VOY7M0kCfqzfvY8zcHVSIKYNkjKTxI=;
+  b=rnJPqlCJdij/kgH+Svk2qFpfLarGyCSlBstebonEY6Xm6vuTfa+jkuKq
+   md0zHIeLyr7YdY4Ul1TQSA8kupTSFtAxLvqKHp3eD3qPPrcJwgL/sYeGi
+   zpEFDpUGrXruh4fZw2m+/ByPKteXXDAuWhJ0SPpUsfRxClDkxajVz6P9/
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Jun 2022 04:14:36 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 04:14:35 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 30 Jun 2022 04:14:35 -0700
+Received: from [10.216.5.206] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
+ 2022 04:14:30 -0700
+Message-ID: <55cf5a2f-7be2-bb65-09d6-d4d5af4d2f0f@quicinc.com>
+Date:   Thu, 30 Jun 2022 16:44:27 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v6 1/4] dt-bindings: interconnect: qcom,msm8998-cpu-bwmon:
+ add BWMON device
 Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
- <20220616202537.303655-2-daniel.lezcano@linaro.org>
- <b4adef64-cc2c-14ab-b16d-3f8c27f3834b@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <b4adef64-cc2c-14ab-b16d-3f8c27f3834b@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Georgi Djakov" <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Rob Herring <robh@kernel.org>
+References: <20220629140302.236715-1-krzysztof.kozlowski@linaro.org>
+ <20220629140302.236715-2-krzysztof.kozlowski@linaro.org>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <20220629140302.236715-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,41 +75,119 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/06/2022 22:05, Dmitry Osipenko wrote:
-> On 6/16/22 23:25, Daniel Lezcano wrote:
->> The get_trend function does already what the generic framework does.
->>
->> Remove it.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
 
-[ ... ]
-
->>   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
->>   {
->>   	u32 r;
->> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data, int lo, int hi)
->>   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
->>   	.get_temp = tegra_thermctl_get_temp,
->>   	.set_trip_temp = tegra_thermctl_set_trip_temp,
->> -	.get_trend = tegra_thermctl_get_trend,
->>   	.set_trips = tegra_thermctl_set_trips,
->>   };
->>   
+On 6/29/2022 7:32 PM, Krzysztof Kozlowski wrote:
+> Add bindings for the Qualcomm Bandwidth Monitor device providing
+> performance data on interconnects.  The bindings describe only BWMON CPU
+> (version 4), e.g. the instance which appeared for the first on Qualcomm
+> MSM8998 SoC and is also used on SDM845.  This BWMON device sits between
+> CPU and Last Level Cache Controller.
 > 
-> Guenter fixed the LM90 driver problem. There are other regressions in
-> the latest -next which complicate testing, but I can't see any problems
-> from the thermal side.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-by: Georgi Djakov <djakov@kernel.org>
+> ---
+>   .../interconnect/qcom,msm8998-llcc-bwmon.yaml | 85 +++++++++++++++++++
+>   1 file changed, 85 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
 > 
-> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
+> new file mode 100644
+> index 000000000000..76e09658d615
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
+> @@ -0,0 +1,85 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,msm8998-llcc-bwmon.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Interconnect Bandwidth Monitor
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +
+> +description: |
+> +  Bandwidth Monitor measures current throughput on buses between various NoC
+> +  fabrics and provides information when it crosses configured thresholds.
+> +
+> +  Certain SoCs might have more than one Bandwidth Monitors, for example on SDM845::
+> +   - Measuring the bandwidth between CPUs and Last Level Cache Controller -
+> +     called LLCC BWMON,
+> +   - Measuring the bandwidth between Last Level Cache Controller and memory (DDR).
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - qcom,sdm845-llcc-bwmon
+> +          - const: qcom,msm8998-llcc-bwmon
+> +      - const: qcom,msm8998-llcc-bwmon       # BWMON v4
+> +
+> +  interconnects:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  operating-points-v2: true
+> +  opp-table: true
+> +
+> +  reg:
+> +    # BWMON v4 (currently described) and BWMON v5 use one register address
+> +    # space.  BWMON v2 uses two register spaces - not yet described.
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - interconnects
+> +  - interrupts
+> +  - operating-points-v2
+> +  - opp-table
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interconnect/qcom,sdm845.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    pmu@1436400 {
+> +        compatible = "qcom,sdm845-llcc-bwmon", "qcom,msm8998-llcc-bwmon";
 
-Great! Thanks for taking the time to test
+so with this compatible fallback scheme, I am trying to understand what
+do I need to do if I have to add support for another SoC for instance.
 
+I just update the binding with the new SoC compatible (lets say qcom,sc7280-llcc-bwmon)
+and in the device tree node use it as
+	compatible = "qcom,sc7280-llcc-bwmon", "qcom,sdm845-llcc-bwmon", "qcom,msm8998-llcc-bwmon";
+without any updates in the driver?
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> +        reg = <0x01436400 0x600>;
+> +        interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+> +        interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>;
+> +
+> +        operating-points-v2 = <&llcc_bwmon_opp_table>;
+> +
+> +        llcc_bwmon_opp_table: opp-table {
+> +            compatible = "operating-points-v2";
+> +            opp-0 {
+> +                opp-peak-kBps = <4800000>;
+> +            };
+> +            opp-1 {
+> +                opp-peak-kBps = <9216000>;
+> +            };
+> +            opp-2 {
+> +                opp-peak-kBps = <15052800>;
+> +            };
+> +            opp-3 {
+> +                opp-peak-kBps = <20889600>;
+> +            };
+> +            opp-4 {
+> +                opp-peak-kBps = <25497600>;
+> +            };
+> +        };
+> +    };
