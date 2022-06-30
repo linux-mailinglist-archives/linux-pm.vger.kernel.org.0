@@ -2,133 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE48561B49
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 15:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00A3561B76
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 15:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235206AbiF3N10 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 09:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
+        id S232771AbiF3Nh7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 09:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235195AbiF3N1Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 09:27:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE12733E35
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 06:27:24 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id l2-20020a05600c4f0200b0039c55c50482so1729043wmq.0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 06:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3uL7S2W5wN/+jflQoV3bAbJ3bLJFCX03amVujxIJvq8=;
-        b=Sf992KZuXqlhIEbSl5nytEW8JG+Gggb/JBkLjKDkc7HEXX3mVbyfncyj6CD1e98zM9
-         0qM9OWjWT98QLgm1X9PbtzVnhLUril+7ZvbD4aVXzDjRhqFO2I+1G6JTrZm185BbEDju
-         /LN5+Y2pNqNXMOcqVceMhZQ0g7iHwjbwm4ovi3D0i5eQMvi1SLqBIYST0+XmXknh7XgX
-         mVEht5mx0PhKef/JNl+C9P5l963AeTY3fV2QRNspiyCewDXbJvWqVFDJm6wUPxsVVCfi
-         /lqZDM1LIQdmg8cpGHCV4PwWzE8dJZ6YH3uQfv82Y9hID4fDkWlDU8rpGr3i0q/VFGKU
-         I5rg==
+        with ESMTP id S234515AbiF3Nh6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 09:37:58 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4B22ED49;
+        Thu, 30 Jun 2022 06:37:57 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-31c1d580e4bso47124517b3.3;
+        Thu, 30 Jun 2022 06:37:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3uL7S2W5wN/+jflQoV3bAbJ3bLJFCX03amVujxIJvq8=;
-        b=ai72uUs63A7Q5GdAWCzsQQNBKeqBTkSJs5zjHd3njCLju++bFKdt7u6r1TYM89usH6
-         sY2Gq+kQHt0K1XJyBxIhnt62lxGy3dv4Pq7NtR2EbO8crazj9sg5mJdmAKbUiI7BkDGJ
-         nekydkglIWjQWU27RQDKXEvgoReHv+FrOtKVSHhWdBZ74syf+xK5ZuTqTObx35EKdEo6
-         fDLNymUuFr3jwMEdjXQPxZYZW8rhDR/pvBdw4iymX/59VDH50LcrNBF6jzCMd1npGo9U
-         kjqs0l8s2BerOhf71x4VDFM3KvbNbuj8tNgIZYL6+Sg9rc90q0k/5YThj3KoYWD/8Ei1
-         qtTA==
-X-Gm-Message-State: AJIora9CiqoEKj81xMXn0ophJvxa6E4qoxt9QvfLWSvq1GXYyOHs0JU0
-        GV8y8AtCfZYf6mO6GwFfC7Q8XQ==
-X-Google-Smtp-Source: AGRyM1vSCfsiFnrzxnn7W5JSa663yVGfHgulBXFGfZ6n0K7cwsry5Z7ZfRhLnbIP8qtFYvXWSvgoIA==
-X-Received: by 2002:a05:600c:3659:b0:3a0:3915:8700 with SMTP id y25-20020a05600c365900b003a039158700mr9687564wmq.127.1656595643117;
-        Thu, 30 Jun 2022 06:27:23 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id h3-20020adfe983000000b0021b97ffa2a9sm20114787wrm.46.2022.06.30.06.27.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 06:27:22 -0700 (PDT)
-Message-ID: <986d197e-f40c-8fd8-449f-3f62b8366e60@linaro.org>
-Date:   Thu, 30 Jun 2022 15:27:21 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7NtscKgnr/TPZ4pSkCV8fTHou2/3bzArnwcRicRt7Lk=;
+        b=TTtjPq3NiWyruZey2USm5L96m3yb8fEggtfTS03G87FoHrAipXCourgJoM2EUby8Jc
+         nRCbgJ8B+Jlme7F67JL3NTEHu5tpsULeP9PUqc3kKK2911oiY5hqtGbRc7mhDNuJN7/3
+         PfQYROXIB5cMvQuFt5z1Z1e0/kKK24WS2a1pb+wmo4OPkGzSlk4WBS9sZHLrs0/1qBI3
+         ovbc2sEBJMKAE3fHmob0TsgcBxZjCb5RhkxFrESQjcjZkj+kPXehRYnEdpbW+0dmZ7k0
+         pCzBofEhYcUlkuCP6zja600u+d8r+A5Hf7AELmFeRHygATVRKaiEB+7dFiJbf44KmU9F
+         r4QA==
+X-Gm-Message-State: AJIora++0yr3rZLHNKJVgTzQDoyt6StKPBeTogdlmlHHhqaxkFxg5dDy
+        RGMX6RAbSDDjMuGIlrgTeEIvvDTeFFJ8OrOuyCA=
+X-Google-Smtp-Source: AGRyM1t57QTon5503C9GLG8fWbNKXBFL/wnqjXCZ3GgK4VAKR/+nr5BpBmCGjgXwk93gtEili3G9bekl2vLWYkeo/1E=
+X-Received: by 2002:a0d:e804:0:b0:317:9c5f:97a4 with SMTP id
+ r4-20020a0de804000000b003179c5f97a4mr10661578ywe.19.1656596276849; Thu, 30
+ Jun 2022 06:37:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/3] thermal/drivers/u8500: Remove the get_trend function
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
-References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
- <20220616202537.303655-3-daniel.lezcano@linaro.org>
- <f4b13249-abe8-080f-4d36-24ef67d4fb62@linaro.org>
- <CACRpkdZBUVGP6whu-ojW9KKapeuYKQbXWn1MEpJ33KFav+8zqQ@mail.gmail.com>
- <0a6c992d-ea88-c3fe-1837-8be4e912d266@linaro.org>
- <CAKfTPtBVBDsy3oc1vaSSLwYcz6y2VdT4d-NZzt=QRW+eUMm9tA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAKfTPtBVBDsy3oc1vaSSLwYcz6y2VdT4d-NZzt=QRW+eUMm9tA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <03056170-6501-3f4d-0331-37866d12330e@gmail.com>
+In-Reply-To: <03056170-6501-3f4d-0331-37866d12330e@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Jun 2022 15:37:45 +0200
+Message-ID: <CAJZ5v0iu_ZZGK-FpO-yWHs67bKzJ6K5i9gj7-GvC0U6Ap9uoKA@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq fixes for 5.19-rc5
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Jun 29, 2022 at 11:32 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+>
+> Dear Rafael,
+>
+> This is devfreq-fixes pull request for v5.19-rc5. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with
+> following updates.
+>
+> Best Regards,
+> Chanwoo Choi
+>
+>
+> The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+>
+>   Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-fixes-for-5.19-rc5
+>
+> for you to fetch changes up to f08fe6fcbe13f83558ecccc4acaf5af3dce71a1f:
+>
+>   PM / devfreq: passive: revert an editing accident in SPDX-License line (2022-06-30 05:11:17 +0900)
+>
+> ----------------------------------------------------------------
+>
+> Update devfreq for 5.19-rc5
+>
+> Detailed description for this pull request:
+> 1. Fix devfreq passive governor issue when cpufreq policy are not ready
+> during kernel booting because some cpus turn on after kernel booting or others.
+>
+>   - Re-initialize the vairables of struct devfreq_passive_data when PROBE_DEFER
+>   happen when cpufreq_get_returns NULL
+>
+>   - Use dev_err_probe to mute warning when PROBE_DEFER
+>
+>   - Fix cpufreq passive unregister erroring on PROBE_DEFER
+>   by using the allocated parent_cpu_data list to free resouce
+>   instead of for_each_possible_cpu.
+>
+>   - Remove duplicate cpufreq passive unregister and warning when PROBE_DEFER
+>
+>   - Use HZ_PER_KZH macro in units.h
+>
+>   - Fix wrong indentation in SPDX-License line
+>
+> 2. Fix reference count leak of exynos-ppmu.c by using of_node_put()
+>
+> 3. Rework freq_table to be local to devfreq struct
+>   - struct devfreq_dev_profile includes freq_table array to store
+>   the supported frequencies. If devfreq driver doesn't initialize
+>   the freq_table, devfreq core allocate the memory and initialize
+>   the freq_table.
+>
+>   On a devfreq PROBE_DEFER, the freq_table in the driver profile struct,
+>   is never reset and may be leaved in an undefined state. To fix this
+>   and correctly handle PROBE_DEFER, use a local freq_table and
+>   max_state in the devfreq struct.
+>
+> ----------------------------------------------------------------
+> Christian Marangi (5):
+>       PM / devfreq: Fix kernel panic with cpu based scaling to passive gov
+>       PM / devfreq: Mute warning on governor PROBE_DEFER
+>       PM / devfreq: Fix cpufreq passive unregister erroring on PROBE_DEFER
+>       PM / devfreq: Rework freq_table to be local to devfreq struct
+>       PM / devfreq: Fix kernel warning with cpufreq passive register fail
+>
+> Lukas Bulwahn (1):
+>       PM / devfreq: passive: revert an editing accident in SPDX-License line
+>
+> Miaoqian Lin (1):
+>       PM / devfreq: exynos-ppmu: Fix refcount leak in of_get_devfreq_events
+>
+> Yicong Yang (1):
+>       PM / devfreq: passive: Use HZ_PER_KHZ macro in units.h
+>
+>  drivers/devfreq/devfreq.c           | 76 ++++++++++++++++++-------------------
+>  drivers/devfreq/event/exynos-ppmu.c |  8 +++-
+>  drivers/devfreq/governor_passive.c  | 62 +++++++++++++-----------------
+>  include/linux/devfreq.h             |  5 +++
+>  4 files changed, 75 insertions(+), 76 deletions(-)
 
-Hi Vincent,
-
-On 30/06/2022 14:32, Vincent Guittot wrote:
-> On Thu, 30 Jun 2022 at 12:16, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 28/06/2022 14:50, Linus Walleij wrote:
->>> On Tue, Jun 28, 2022 at 10:40 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>
->>>> Adding Linus who is missing in the recipient list.
->>>>
->>>>
->>>> On 16/06/2022 22:25, Daniel Lezcano wrote:
->>>>> The get_trend function relies on the interrupt to set the raising or
->>>>> dropping trend. However the interpolated temperature is already giving
->>>>> the temperature information to the thermal framework which is able to
->>>>> deduce the trend.
->>>>>
->>>>> Remove the trend code.
->>>>>
->>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>
->>> I certainly trust you with this :)
->>> Acked-by: Linus Walleij <linus.walleij@linaro.org>
->>>
->>> The code was originally written by Hongbo Zhang, but co-developed
->>> and tested by Vincent Guittot I think, so paging
->>> him as well.
->>
->> Ok, thanks
->>
->> If Vincent has no concern with this change, I'll queue up the series
-> 
-> I don't have any particular concerns. I'm just curious, are you
-> planning to remove the get_trend completely from the thermal framework
-> ?
-
-Well, actually the get_trend() ops was added for ACPI and because the 
-ops was there, some drivers provided their own implementation and it 
-appears they are unnecessary. It is this pointless code I want to remove.
-
-Only the get_trend() ops will remain for the ACPI. Hopefully we can 
-remove the ops in the future.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Pulled and pushed out, thanks!
