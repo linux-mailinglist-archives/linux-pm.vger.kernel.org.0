@@ -2,83 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F505621D1
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 20:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44435621F6
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 20:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbiF3SNQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 14:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S233100AbiF3SZu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 14:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiF3SNP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 14:13:15 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9707810E0;
-        Thu, 30 Jun 2022 11:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656612794; x=1688148794;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PEKZxYZlf0wcPMg3FnbHkkbDO5CYIxcaK6zhZdRvs6E=;
-  b=CVcEjdAD/stI+71OPiaOFw3053D9mP5f9gO0aqBcMXKC330nm6L1gjwe
-   1MnAXeANF1MGjwhPhfUWJ6xFBktg+LwipR7q7Fc/AudYqOUAevrwesELO
-   EOrUCgWBNgbRHbkI9pGspZhZebF47Qm4ufKMVZ04M2NPx57zM9sXTl+Sr
-   s=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 30 Jun 2022 11:13:12 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 11:13:11 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 30 Jun 2022 11:13:11 -0700
-Received: from [10.216.41.79] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
- 2022 11:13:05 -0700
-Message-ID: <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
-Date:   Thu, 30 Jun 2022 23:43:01 +0530
+        with ESMTP id S232034AbiF3SZt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 14:25:49 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BC74198C;
+        Thu, 30 Jun 2022 11:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1656613546;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=jKpOLZ3nRpaJl5v9mgTzY+PZcO79LGbwo/W586DmY7M=;
+    b=IG6VnZfMcAzGCLHT/8Lw8hWqsQVzZMl5dngJsG1ipVSpGtGnJbZUg1VgYU6mScmb1v
+    mnhDLKFMTUaJ9Kj89dkGBSljHrKIbO99//7WxcWnw9Zv/+feEvqX6x73oFqU6PPpAaQr
+    gbN6agnWUkFu6aClF7dx7vEQIl4JMBofnwuJLVO6k53mXe14najEr/IUThLWypCyIhEu
+    gNrC/fk3B2aonUUaoeCHiYIU1qOsktH96kISNPMMD9X6o6HxO5+Ik4YpYmy4elyD0RRl
+    8M1+Uv62Mm5nKAakxRUXzk/yHH+kWScup+ylPB9gRwciriafvMPv0xMOtTYEG5ChSxyS
+    fmpQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLUrK8+86Y="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.46.1 AUTH)
+    with ESMTPSA id yfdd30y5UIPj4eF
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 30 Jun 2022 20:25:45 +0200 (CEST)
+Date:   Thu, 30 Jun 2022 20:25:38 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     ilia.lin@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [RESEND PATCH 4/5] cpufreq: qcom-cpufreq-nvmem: Rename qcs404
+ data to cpr_genpd
+Message-ID: <Yr3qogxjA9WGJlDX@gerhold.net>
+References: <20220629130303.3288306-1-bryan.odonoghue@linaro.org>
+ <20220629130303.3288306-5-bryan.odonoghue@linaro.org>
+ <Yryj1Nv/Yu8wShzo@gerhold.net>
+ <024088fd-1511-7423-55fb-ebcd47a5a6c2@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
- <YqtlRQOwb3t6Xtd0@google.com>
- <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <024088fd-1511-7423-55fb-ebcd47a5a6c2@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,64 +63,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Jun 30, 2022 at 05:05:59AM +0100, Bryan O'Donoghue wrote:
+> On 29/06/2022 20:11, Stephan Gerhold wrote:
+> > On Wed, Jun 29, 2022 at 02:03:02PM +0100, Bryan O'Donoghue wrote:
+> > > At the moment the CPR genpd based code is named after the qcs404 however
+> > > msm8936, msm8939 and other antecedent processors of the qcs404 can also
+> > > make use of this data.
+> > > 
+> > > Rename it to reflect a more generic use.
+> > > 
+> > > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> > 
+> > There is another power domain that needs to be scaled together with the
+> > CPU frequency on MSM8916 and MSM8939: (VDD)MX. How do you handle that?
+> > 
+> 
+> Short answer, in another series to enable CPR on 5.x
+> 
+> We have code for CPR in a 4.19 tree that works but, it needs more work to be
+> upstream-fit on 5.x.
+> 
+> CPR is deliberately omitted here to be submitted later.
+> 
 
-On 6/30/2022 3:45 AM, Stephen Boyd wrote:
-> Quoting Pavan Kondeti (2022-06-27 22:31:48)
->> On Mon, Jun 27, 2022 at 01:02:49PM -0700, Stephen Boyd wrote:
->>> Quoting Pavan Kondeti (2022-06-20 01:54:15)
->>>> Would like to hear other people thoughts on this.
->>>>
->>> I'm not following very closely but it sounds like a problem that may be
->>> solved by using the component driver code (see
->>> include/linux/component.h). That would let you move anything that needs
->>> to be done once the child devices probe to the aggregate driver 'bind'
->>> function (see struct component_master_ops::bind).
->> Thanks Stephen for letting us know about the component device framework.
->>
->> IIUC,
->>
->> - dwc3-qcom (parent of the dwc3 core) registers as a component master by
->> calling component_master_add_with_match() before calling
->> of_platform_populate(). The match callback could be as simple as comparing
->> the device against our child device.
->>
->> - The dwc3 core (child) at the end of its probe can add as a component by calling
->> component_add().
->>
->> - The above triggers the component_master_ops::bind callback implemented in
->>    dwc3-qcom driver which signals that we are good to go.
->>
->> - The dwc-qcom can call component_bind_all() to finish the formality i.e
->>    telling the dwc3 core that we are good to go.
->>
->> Is my understanding correct? This is what we are looking for i.e a way for
->> the child device(s) to signal the parent when the former is bounded.
-> Sounds about right to me.
->
->> Also what happens when the child device probe fails for any reason. i.e
->> component_add() would never be called so the master driver i.e dwc3-qcom would
->> wait indefinitely. May be it needs to implement a timeout or runtime suspend
->> etc should take care of keeping the resoures in suspend state.
-> When the child fails probe, it should return -EPROBE_DEFER if probe
-> needs to be deferred. Then the driver will attempt probe at a later
-> time. If probe fails without defer then it will never work and dwc3-qcom
-> will wait indefinitely. Not much we can do in that situation.
-Hi Stephen,
+I agree with this decision (doing CPR properly is way too complicated to
+block the entire msm8939.dtsi with this).
 
-   Thanks for the idea. But doesn't adding dwc3 as a component to an agg
-driver meanthat this change needs to be done on all glue drivers, as
-component_bind_all( ) from master componentis supposed to let the dwc3
-core know that we are good to go ?
-> dwc3-qcom should wait for dwc3 core to call component_add() and then do
-> whatever needs to be done once the dwc3 core is registered in the
-> dwc3-qcom bind callback. Honestly this may all be a little overkill if
-> there's only two drivers here, dwc3-qcom and dwc3 core. It could
-> probably just be some callback from dwc3 core at the end of probe that
-> calls some function in dwc3-qcom.
-Since the issue we are facing is that the ssphy device links are not ready
-causing the dwc3 probe not being invoked, can we add an API as Pavan 
-suggested
-to check if deferred_probe listfor dwc3 device is empty or not andbased on
-that we can choose to defer our qcomprobe ? In this case, we don't need to
-touch the dwc3 core driver and would be making changesonly in qcom glue 
-driver.
+> In this series I'm just switching away from the default cpufreq-dt-platdev
+> which breaks booting to qcom-cpufreq-nvmem.
+> 
+> Fair enough ?
+
+... but then I don't understand: Why do you need this patch set? You
+only need to attach the "cpr" power domain in qcom-cpufreq-nvmem if
+you're actually using CPR.
+
+I would recommend adding MSM8939 in a similar way to MSM8916, so without
+using qcom-cpufreq-nvmem for now. Then we can add CPR on both platforms
+in a similar way later.
+
+Thanks,
+Stephan
