@@ -2,159 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3561C5622B4
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 21:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3D75622EA
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 21:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236862AbiF3TMs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 15:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
+        id S235755AbiF3TQu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 15:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235392AbiF3TMs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 15:12:48 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B434326C5
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 12:12:47 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31c1f45e612so2605657b3.0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 12:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ThcqTcL2EK/v16TPbcx9ACYtX+c6g+PxYAfz/JDcQGs=;
-        b=UENhzz+jbEW4l84h8cZMmbOEXYbTwlSXV9VQ8f7rFL0Ztfrqrt5eiMNs9BlnxqiFU1
-         kccRNaD4buDLdaXHk8Zo69mr23KsOw5ADWsI0Lf3MnR7O7pR8Jl0ZPC0/DpJc5mfr/63
-         cmsnoRfEOdO9sBVUnpj4a4H8QONTMtoBbLQNfpdJ3NZlTQLV8dzxRGxWWewQdQBi4f5R
-         plkwj4+Qc4EQgC+HMXYGghTW27hTCxF1JdKHS1ab8tKMcshcTnDg5FwHIB4xOHFI6lIT
-         8NkGaAdeVB6UYyjsAafc0Hel3SfbBDnGNdDVbAE/eE4OGZQMdFii3kMiE22vMS7RgV+r
-         Gf5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ThcqTcL2EK/v16TPbcx9ACYtX+c6g+PxYAfz/JDcQGs=;
-        b=dPN81o44yLRkv3KTz7aeeCPyx5cPsxfGhjfsCfhaV9wctBmScsFYOjXZ2OAkiMJkvd
-         k1w1lpjY/TalPLoKVL1pGlIGXNam4lZEQGAS7zCWr6aV+GFsAY/R1VoVcmaWylbt9ynA
-         DGQjFdAO4N2J8Uwtse/I4TbQUWqPI3yrIjOvit2Mdt9xPqSDNt8NVZaVfDeooZXoyrqs
-         iml158NpRW73+PVWeyWk2/b3FMoYBnBRuoaJhByJN4QPdb4jbl7Itwpql1ecGL/Z7XCr
-         KNXpNUPW+n1+zGUS9thTk9iuhQj+/Pgr8p6KwITJyAtRLrc8vMLEpVmbazWEzbrl2PO7
-         ta9g==
-X-Gm-Message-State: AJIora/jO4rFD/ZKwLzm7HZmZmgPUIGlqBksj5CMbFr7ZphwS/cpwKfu
-        VEXM/VsaQ+X6GkHC0u7P/7N061GIDaHf/RKs7Q==
-X-Google-Smtp-Source: AGRyM1t3Ww7PWb3WFVXoxeowZvFh7zUW/ka0FXdujSxX4keyA44O4mR1BtFfGbDknmo/m4f02C8i2nkEO9Lj5x07PQ==
-X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:5fd:1939:78ea:dfb2])
- (user=kaleshsingh job=sendgmr) by 2002:a25:9388:0:b0:66d:1fd9:6f73 with SMTP
- id a8-20020a259388000000b0066d1fd96f73mr10731114ybm.147.1656616366313; Thu,
- 30 Jun 2022 12:12:46 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 19:12:29 +0000
-Message-Id: <20220630191230.235306-1-kaleshsingh@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] pm/sleep: Add PM_USERSPACE_AUTOSLEEP Kconfig
-From:   Kalesh Singh <kaleshsingh@google.com>
-To:     Jason@zx2c4.com, jstultz@google.com, paulmck@kernel.org,
-        rostedt@goodmis.org, rafael@kernel.org, hch@infradead.org
-Cc:     saravanak@google.com, tjmercier@google.com, surenb@google.com,
-        kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org
+        with ESMTP id S235907AbiF3TQq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 15:16:46 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D78942A16;
+        Thu, 30 Jun 2022 12:16:45 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 0ab7fcce5568376d; Thu, 30 Jun 2022 21:16:43 +0200
+Received: from kreacher.localnet (unknown [213.134.175.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 23E2766CA52;
+        Thu, 30 Jun 2022 21:16:42 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Saravana Kannan <saravanak@google.com>
+Subject: [PATCH] PM: runtime: Fix supplier device management during consumer probe
+Date:   Thu, 30 Jun 2022 21:16:41 +0200
+Message-ID: <4748074.GXAFRqVoOG@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.175.198
+X-CLIENT-HOSTNAME: 213.134.175.198
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudehuddgudeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudejhedrudelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduleekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghp
+ thhtohepphgvthgvrhdrfigrnhhgsehmvgguihgrthgvkhdrtghomhdprhgtphhtthhopegrughrihgrnhdrhhhunhhtvghrsehinhhtvghlrdgtohhmpdhrtghpthhtohepshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Systems that initiate frequent suspend/resume from userspace
-can make the kernel aware by enabling PM_USERSPACE_AUTOSLEEP
-config.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This allows for certain sleep-sensitive code (wireguard/rng) to
-decide on what preparatory work should be performed (or not) in
-their pm_notification callbacks.
+Because pm_runtime_get_suppliers() bumps up the rpm_active counter
+of each device link to a supplier of the given device in addition
+to bumping up the supplier's PM-runtime usage counter, a runtime
+suspend of the consumer device may case the latter to go down to 0
+when pm_runtime_put_suppliers() is running on a remote CPU.  If that
+happens after pm_runtime_put_suppliers() has released power.lock for
+the consumer device, and a runtime resume of that device takes place
+immediately after it, before pm_runtime_put() is called for the
+supplier, that pm_runtime_put() call may cause the supplier to be
+suspended even though the consumer is active.
 
-This patch was prompted by the discussion at [1] which attempts
-to remove CONFIG_ANDROID that currently guards these code paths.
+To prevent that from happening, modify pm_runtime_get_suppliers() to
+call pm_runtime_get_sync() for the given device's suppliers without
+touching the rpm_active counters of the involved device links
+Accordingly, modify pm_runtime_put_suppliers() to call pm_runtime_put()
+for the given device's suppliers without looking at the rpm_active
+counters of the device links at hand.  [This is analogous to what
+happened before commit 4c06c4e6cf63 ("driver core: Fix possible
+supplier PM-usage counter imbalance").]
 
-[1] https://lore.kernel.org/r/20220629150102.1582425-1-hch@lst.de/
+Since pm_runtime_get_suppliers() sets supplier_preactivated for each
+device link where the supplier's PM-runtime usage counter has been
+incremented and pm_runtime_put_suppliers() calls pm_runtime_put() for
+the suppliers whose device links have supplier_preactivated set, the
+PM-runtime usage counter is balanced for each supplier and this is
+independent of the runtime suspend and resume of the consumer device.
 
-Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+However, in case a device link with DL_FLAG_PM_RUNTIME set is dropped
+during the consumer device probe, so pm_runtime_get_suppliers() bumps
+up the supplier's PM-runtime usage counter, but it cannot be dropped by
+pm_runtime_put_suppliers(), make device_link_release_fn() take care of
+that.
+
+Fixes: 4c06c4e6cf63 ("driver core: Fix possible supplier PM-usage counter imbalance")
+Reported-by: Peter Wang <peter.wang@mediatek.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/char/random.c          |  4 ++--
- drivers/net/wireguard/device.c |  3 ++-
- kernel/power/Kconfig           | 20 ++++++++++++++++++++
- 3 files changed, 24 insertions(+), 3 deletions(-)
+ drivers/base/core.c          |   10 ++++++++++
+ drivers/base/power/runtime.c |   14 +-------------
+ 2 files changed, 11 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index e3dd1dd3dd22..8c90f535d149 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -755,8 +755,8 @@ static int random_pm_notification(struct notifier_block *nb, unsigned long actio
- 	spin_unlock_irqrestore(&input_pool.lock, flags);
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -1768,7 +1768,6 @@ void pm_runtime_get_suppliers(struct dev
+ 		if (link->flags & DL_FLAG_PM_RUNTIME) {
+ 			link->supplier_preactivated = true;
+ 			pm_runtime_get_sync(link->supplier);
+-			refcount_inc(&link->rpm_active);
+ 		}
  
- 	if (crng_ready() && (action == PM_RESTORE_PREPARE ||
--	    (action == PM_POST_SUSPEND &&
--	     !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !IS_ENABLED(CONFIG_ANDROID)))) {
-+	    (action == PM_POST_SUSPEND && !IS_ENABLED(CONFIG_PM_AUTOSLEEP) &&
-+	     !IS_ENABLED(CONFIG_PM_USERSPACE_AUTOSLEEP)))) {
- 		crng_reseed();
- 		pr_notice("crng reseeded on system resumption\n");
- 	}
-diff --git a/drivers/net/wireguard/device.c b/drivers/net/wireguard/device.c
-index aa9a7a5970fd..d58e9f818d3b 100644
---- a/drivers/net/wireguard/device.c
-+++ b/drivers/net/wireguard/device.c
-@@ -69,7 +69,8 @@ static int wg_pm_notification(struct notifier_block *nb, unsigned long action, v
- 	 * its normal operation rather than as a somewhat rare event, then we
- 	 * don't actually want to clear keys.
- 	 */
--	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID))
-+	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) ||
-+	    IS_ENABLED(CONFIG_PM_USERSPACE_AUTOSLEEP))
- 		return 0;
+ 	device_links_read_unlock(idx);
+@@ -1788,19 +1787,8 @@ void pm_runtime_put_suppliers(struct dev
+ 	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+ 				device_links_read_lock_held())
+ 		if (link->supplier_preactivated) {
+-			bool put;
+-
+ 			link->supplier_preactivated = false;
+-
+-			spin_lock_irq(&dev->power.lock);
+-
+-			put = pm_runtime_status_suspended(dev) &&
+-			      refcount_dec_not_one(&link->rpm_active);
+-
+-			spin_unlock_irq(&dev->power.lock);
+-
+-			if (put)
+-				pm_runtime_put(link->supplier);
++			pm_runtime_put(link->supplier);
+ 		}
  
- 	if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
-diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-index a12779650f15..60a1d3051cc7 100644
---- a/kernel/power/Kconfig
-+++ b/kernel/power/Kconfig
-@@ -143,6 +143,26 @@ config PM_AUTOSLEEP
- 	Allow the kernel to trigger a system transition into a global sleep
- 	state automatically whenever there are no active wakeup sources.
+ 	device_links_read_unlock(idx);
+Index: linux-pm/drivers/base/core.c
+===================================================================
+--- linux-pm.orig/drivers/base/core.c
++++ linux-pm/drivers/base/core.c
+@@ -487,6 +487,16 @@ static void device_link_release_fn(struc
+ 	device_link_synchronize_removal();
  
-+config PM_USERSPACE_AUTOSLEEP
-+	bool "Userspace opportunistic sleep"
-+	depends on PM_SLEEP
-+	help
-+	Notify kernel of aggressive userspace autosleep power management policy.
+ 	pm_runtime_release_supplier(link);
++	/*
++	 * If supplier_preactivated is set, the link has been dropped between
++	 * the pm_runtime_get_suppliers() and pm_runtime_put_suppliers() calls
++	 * in __driver_probe_device().  In that case, drop the supplier's
++	 * PM-runtime usage counter to remove the reference taken by
++	 * pm_runtime_get_suppliers().
++	 */
++	if (link->supplier_preactivated)
++		pm_runtime_put_noidle(link->supplier);
 +
-+	This option changes the behavior of various sleep-sensitive code to deal
-+	with frequent userspace-initiated transitions into a global sleep state.
-+
-+	Saying Y here, disables code paths that most users really should keep
-+	enabled. In particular, only enable this if it is very common to be
-+	asleep/awake for very short periods of time (<= 2 seconds).
-+
-+	Only platforms, such as Android, that implement opportunistic sleep from
-+	a userspace power manager service should enable this option; and not
-+	other machines. Therefore, you should say N here, unless you are
-+	extremely certain that this is what you want. The option otherwise has
-+	bad, undesirable effects, and should not be enabled just for fun.
-+
-+
- config PM_WAKELOCKS
- 	bool "User space wakeup sources interface"
- 	depends on PM_SLEEP
+ 	pm_request_idle(link->supplier);
+ 
+ 	put_device(link->consumer);
 
-base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+
 
