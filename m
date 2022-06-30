@@ -2,159 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D59F56221A
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 20:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3561C5622B4
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 21:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbiF3Sdr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 14:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        id S236862AbiF3TMs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 15:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235550AbiF3Sdq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 14:33:46 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA6825588
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 11:33:43 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r18so19851798edb.9
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 11:33:43 -0700 (PDT)
+        with ESMTP id S235392AbiF3TMs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 15:12:48 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B434326C5
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 12:12:47 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31c1f45e612so2605657b3.0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 12:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yJGEttsMIPFNExRUVjMuioYnkzWMdO3yRAB963cFp2o=;
-        b=bVZKc01WEs5LMjU5JtELjSXU1pShwhHGLZhNmZYt3wfTdiQE/yN2UAshZdvCOv8QGq
-         jvuwowiNtOjr5posUthWXU7PWhNZt5GOF4X2vS97DTQrhkMDd85y2516gnqfIuFFlh2I
-         ruddBdJWCPzK2JSEvz6DATLXX11xi0ZKag2bf5Laj6MHMpCI7ursQwhCZpecYj90tw5h
-         nPUB4qcjaCKLvbhHoLjfivF0IkdS9P0U2XM5vlr2MQX+1XbAOzaKqW9xv/xG0frtmHy6
-         SsZzW6ElgdT4rkY8rdjUlQFfxOrx2HPWseOs3kKWIzs1pfoxsos6mZK6KSJsuFIKNtoI
-         Jsqw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ThcqTcL2EK/v16TPbcx9ACYtX+c6g+PxYAfz/JDcQGs=;
+        b=UENhzz+jbEW4l84h8cZMmbOEXYbTwlSXV9VQ8f7rFL0Ztfrqrt5eiMNs9BlnxqiFU1
+         kccRNaD4buDLdaXHk8Zo69mr23KsOw5ADWsI0Lf3MnR7O7pR8Jl0ZPC0/DpJc5mfr/63
+         cmsnoRfEOdO9sBVUnpj4a4H8QONTMtoBbLQNfpdJ3NZlTQLV8dzxRGxWWewQdQBi4f5R
+         plkwj4+Qc4EQgC+HMXYGghTW27hTCxF1JdKHS1ab8tKMcshcTnDg5FwHIB4xOHFI6lIT
+         8NkGaAdeVB6UYyjsAafc0Hel3SfbBDnGNdDVbAE/eE4OGZQMdFii3kMiE22vMS7RgV+r
+         Gf5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yJGEttsMIPFNExRUVjMuioYnkzWMdO3yRAB963cFp2o=;
-        b=yCOvCOOuc5fczGElpakyMQ2e33bRuqeE0cY/+Hy7lXgVRRbmlLSBXQh8au/Ly/g+3K
-         3SLG6YiyqVuPLxZDVHrCv2uIpD0VelgSMU2PCof89wvXZiTO1cjQzLKNdRddI137oUPj
-         CDVyHSbA3YX+sgjBI9lfnL4HqqMNAUrQiHbgcuJCaNh6a9ZR3HzOj7+g2Lmw+JMkZZKV
-         v6U3QNEvHe/5sz/Gnj9C2WbcF+Pv3TTKALSifW/S+reLovBdIdNoYYSrYQeIdtTzUcCV
-         m2BuUuDWgCN9+cyWGMfTNQ2ZBX321w7MomPHbc1mBt40ikwD0I5CUz9gY6lG528HWAGg
-         YxmA==
-X-Gm-Message-State: AJIora9Ht36qeGUrstza1Hafs+ri977ShNgsE3KTCFbVsIKy2rpgjnrv
-        nJ4Q++lhUktPPBEUTaSTelGOyQ==
-X-Google-Smtp-Source: AGRyM1s8xy762cCi9FZl1Kcj0KeKPHclcEopngQ5Us/lz3lUXqlZKh+6oqktKAwNKh4wiC/U7Zn6jA==
-X-Received: by 2002:a05:6402:3708:b0:433:2d3b:ed5 with SMTP id ek8-20020a056402370800b004332d3b0ed5mr13495310edb.246.1656614022289;
-        Thu, 30 Jun 2022 11:33:42 -0700 (PDT)
-Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w3-20020a1709067c8300b00722fc0779e3sm9482072ejo.85.2022.06.30.11.33.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 11:33:41 -0700 (PDT)
-Message-ID: <78faf75d-80b7-7a0e-e306-6351dbe5133c@linaro.org>
-Date:   Thu, 30 Jun 2022 20:33:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 02/14] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
- yaml file
-Content-Language: en-US
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-3-viorel.suman@oss.nxp.com>
- <f0634bf0-77e9-939e-693f-31d50af4768c@linaro.org>
- <20220630123754.esbuac4pfktlseh2@fsr-ub1664-116>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220630123754.esbuac4pfktlseh2@fsr-ub1664-116>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ThcqTcL2EK/v16TPbcx9ACYtX+c6g+PxYAfz/JDcQGs=;
+        b=dPN81o44yLRkv3KTz7aeeCPyx5cPsxfGhjfsCfhaV9wctBmScsFYOjXZ2OAkiMJkvd
+         k1w1lpjY/TalPLoKVL1pGlIGXNam4lZEQGAS7zCWr6aV+GFsAY/R1VoVcmaWylbt9ynA
+         DGQjFdAO4N2J8Uwtse/I4TbQUWqPI3yrIjOvit2Mdt9xPqSDNt8NVZaVfDeooZXoyrqs
+         iml158NpRW73+PVWeyWk2/b3FMoYBnBRuoaJhByJN4QPdb4jbl7Itwpql1ecGL/Z7XCr
+         KNXpNUPW+n1+zGUS9thTk9iuhQj+/Pgr8p6KwITJyAtRLrc8vMLEpVmbazWEzbrl2PO7
+         ta9g==
+X-Gm-Message-State: AJIora/jO4rFD/ZKwLzm7HZmZmgPUIGlqBksj5CMbFr7ZphwS/cpwKfu
+        VEXM/VsaQ+X6GkHC0u7P/7N061GIDaHf/RKs7Q==
+X-Google-Smtp-Source: AGRyM1t3Ww7PWb3WFVXoxeowZvFh7zUW/ka0FXdujSxX4keyA44O4mR1BtFfGbDknmo/m4f02C8i2nkEO9Lj5x07PQ==
+X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:5fd:1939:78ea:dfb2])
+ (user=kaleshsingh job=sendgmr) by 2002:a25:9388:0:b0:66d:1fd9:6f73 with SMTP
+ id a8-20020a259388000000b0066d1fd96f73mr10731114ybm.147.1656616366313; Thu,
+ 30 Jun 2022 12:12:46 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 19:12:29 +0000
+Message-Id: <20220630191230.235306-1-kaleshsingh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] pm/sleep: Add PM_USERSPACE_AUTOSLEEP Kconfig
+From:   Kalesh Singh <kaleshsingh@google.com>
+To:     Jason@zx2c4.com, jstultz@google.com, paulmck@kernel.org,
+        rostedt@goodmis.org, rafael@kernel.org, hch@infradead.org
+Cc:     saravanak@google.com, tjmercier@google.com, surenb@google.com,
+        kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/06/2022 14:37, Viorel Suman (OSS) wrote:
-> On 22-06-29 19:53:51, Krzysztof Kozlowski wrote:
->> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
->>> From: Abel Vesa <abel.vesa@nxp.com>
->>>
->>> In order to replace the fsl,scu txt file from bindings/arm/freescale,
->>> we need to split it between the right subsystems. This patch documents
->>> separately the 'iomux/pinctrl' child node of the SCU main node.
->>>
->>> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
->>> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
->>> ---
->>>  .../bindings/pinctrl/fsl,scu-pinctrl.yaml     | 68 +++++++++++++++++++
->>>  1 file changed, 68 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
->>> new file mode 100644
->>> index 000000000000..76a2e7b28172
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-> [...]
->>> +      fsl,pins:
->>> +        description:
->>> +          each entry consists of 3 integers and represents the pin ID, the mux value
->>> +          and config setting for the pin. The first 2 integers - pin_id and mux_val - are
->>> +          specified using a PIN_FUNC_ID macro, which can be found in
->>> +          <include/dt-bindings/pinctrl/pads-imx8qxp.h>. The last integer CONFIG is
->>> +          the pad setting value like pull-up on this pin. Please refer to the
->>> +          appropriate i.MX8 Reference Manual for detailed CONFIG settings.
->>> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
->>
->> Look at fsl,imx8mq-pinctrl.yaml. Each item is described (items under items).
-> 
-> Added them initially, but later dropped because of some logs like
-> "pinctrl@xxxxxxx: usdhc1grp:fsl,pins:0: [...] is too long" shown by
-> "make dt_binding_check dtbs_check DT_SCHEMA_FILES=[...]/fsl,scu-pinctrl.yaml"
-> 
-> Same logs are shown for "fsl,imx8mq-pinctrl.yaml". Will add the items description in the next
-> version.
->
+Systems that initiate frequent suspend/resume from userspace
+can make the kernel aware by enabling PM_USERSPACE_AUTOSLEEP
+config.
 
-The fsl,imx8mq-pinctrl.yaml should be correct and I don't see the reason
-why dtschema complains in some of the entries. It's like one define was
-not correct... I'll take a look at this later, but anyway keep the same
-as fsl,imx8mq-pinctrl.yaml even if it complains.
+This allows for certain sleep-sensitive code (wireguard/rng) to
+decide on what preparatory work should be performed (or not) in
+their pm_notification callbacks.
 
+This patch was prompted by the discussion at [1] which attempts
+to remove CONFIG_ANDROID that currently guards these code paths.
 
-Best regards,
-Krzysztof
+[1] https://lore.kernel.org/r/20220629150102.1582425-1-hch@lst.de/
+
+Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+---
+ drivers/char/random.c          |  4 ++--
+ drivers/net/wireguard/device.c |  3 ++-
+ kernel/power/Kconfig           | 20 ++++++++++++++++++++
+ 3 files changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index e3dd1dd3dd22..8c90f535d149 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -755,8 +755,8 @@ static int random_pm_notification(struct notifier_block *nb, unsigned long actio
+ 	spin_unlock_irqrestore(&input_pool.lock, flags);
+ 
+ 	if (crng_ready() && (action == PM_RESTORE_PREPARE ||
+-	    (action == PM_POST_SUSPEND &&
+-	     !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !IS_ENABLED(CONFIG_ANDROID)))) {
++	    (action == PM_POST_SUSPEND && !IS_ENABLED(CONFIG_PM_AUTOSLEEP) &&
++	     !IS_ENABLED(CONFIG_PM_USERSPACE_AUTOSLEEP)))) {
+ 		crng_reseed();
+ 		pr_notice("crng reseeded on system resumption\n");
+ 	}
+diff --git a/drivers/net/wireguard/device.c b/drivers/net/wireguard/device.c
+index aa9a7a5970fd..d58e9f818d3b 100644
+--- a/drivers/net/wireguard/device.c
++++ b/drivers/net/wireguard/device.c
+@@ -69,7 +69,8 @@ static int wg_pm_notification(struct notifier_block *nb, unsigned long action, v
+ 	 * its normal operation rather than as a somewhat rare event, then we
+ 	 * don't actually want to clear keys.
+ 	 */
+-	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID))
++	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) ||
++	    IS_ENABLED(CONFIG_PM_USERSPACE_AUTOSLEEP))
+ 		return 0;
+ 
+ 	if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index a12779650f15..60a1d3051cc7 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -143,6 +143,26 @@ config PM_AUTOSLEEP
+ 	Allow the kernel to trigger a system transition into a global sleep
+ 	state automatically whenever there are no active wakeup sources.
+ 
++config PM_USERSPACE_AUTOSLEEP
++	bool "Userspace opportunistic sleep"
++	depends on PM_SLEEP
++	help
++	Notify kernel of aggressive userspace autosleep power management policy.
++
++	This option changes the behavior of various sleep-sensitive code to deal
++	with frequent userspace-initiated transitions into a global sleep state.
++
++	Saying Y here, disables code paths that most users really should keep
++	enabled. In particular, only enable this if it is very common to be
++	asleep/awake for very short periods of time (<= 2 seconds).
++
++	Only platforms, such as Android, that implement opportunistic sleep from
++	a userspace power manager service should enable this option; and not
++	other machines. Therefore, you should say N here, unless you are
++	extremely certain that this is what you want. The option otherwise has
++	bad, undesirable effects, and should not be enabled just for fun.
++
++
+ config PM_WAKELOCKS
+ 	bool "User space wakeup sources interface"
+ 	depends on PM_SLEEP
+
+base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+
