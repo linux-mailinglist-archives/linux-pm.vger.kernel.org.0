@@ -2,214 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B62562048
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 18:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409055620BE
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 19:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235958AbiF3Q2g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 12:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S236333AbiF3RCd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 13:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235445AbiF3Q2f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 12:28:35 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE59513F40;
-        Thu, 30 Jun 2022 09:28:33 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id q132so34659275ybg.10;
-        Thu, 30 Jun 2022 09:28:33 -0700 (PDT)
+        with ESMTP id S236263AbiF3RCd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 13:02:33 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A505338B1;
+        Thu, 30 Jun 2022 10:02:32 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id t21so50653pfq.1;
+        Thu, 30 Jun 2022 10:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XWkDP+ftLDbtk7OocZFgBK5F1p4Vc5nVr5Aln5Bk0dQ=;
+        b=n8LZs4epo5UQ4J+3zuY7BUPjc4xUXA5d75K4z0momEv9N2Xnjov8J9gGiRdXoZSw+a
+         6NtaahIysIS6pe67AF+pd02MuWdfRsIPS87b9idHjXHB4s9qXq1N9s/K9a928WA13DLy
+         hSLunucs/qAhoLDf8VwPCY/1b8VXIamidzzdwOHAZQkHwy3CzGsKWcDVOTJGKjtCqGmY
+         Z3SxNKybvr9SGYe7fEOMXpjxv1O8TU5KELQOyVx7afeHuSSaVXRLUieqswFuXLZNFca5
+         4p9+C8qUzny199h/ejCsCs2gFTFlYnZkbFPRfnWY93w/c8AUKw6qZkz/B4bH3jdfO0gY
+         VkeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U9GjRwiaqVTSHLEe+recFUTQ+XFqFuJ1dVz4o0C8jTQ=;
-        b=5t3OOhEqJQcGWAuTgy4MAJFXPNNm1H997s8e+waPkKrdwCs+k0OAnDwaYVKn3nh7Iv
-         3IL11yCyr/v8R47oezIZ5sjpwTCIia4uZo/hsYeuVlQefODCRu6wpMfKaGaPDxbwvTcD
-         azC+zATLhawMrW4QqgjmkoNcazkqkat8Y/rHvRhkR4IaK4bYmEonjDLhNLSyM4FfuO1E
-         MJieManZZnCoMUalPncnMPU2yZFbyW4tcQjqafpMWmDk2HcRHs6I0fW9q2kCxOFDJNU/
-         kNsKKJiiymh6cLrW7zOT0lvuMutvrRGXztEzxdRDdNjChl0C9wt2dmbh8hFXd9ywPWQu
-         RzJw==
-X-Gm-Message-State: AJIora9AUzf4H2haxDOm9LTF1ZqKn5xRmmox91TPH0Fet6tnP78EyJTv
-        JClN7lIVxBcN7plspUKuR3YArBKwi1/X1LZ+42Y=
-X-Google-Smtp-Source: AGRyM1sw8VfmW7KzVzYiAk2w9q5XP5vN1MhOU9ywlmvW31yRdLL5Dg7L3UWDVjPvKc9263RCG6c1jxTHgyC7Mbj03ag=
-X-Received: by 2002:a25:ae26:0:b0:66d:1fdc:263c with SMTP id
- a38-20020a25ae26000000b0066d1fdc263cmr10673355ybj.137.1656606513087; Thu, 30
- Jun 2022 09:28:33 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XWkDP+ftLDbtk7OocZFgBK5F1p4Vc5nVr5Aln5Bk0dQ=;
+        b=71r9QfUmHBEZ8sOeGk/HASNmbuQG+OPA47kWgRHwZkIBPTGU2A+J4HzV03lxXZ0cp4
+         qboO+qZ2+xNYhL+X+X7FdaQTT76S7Bv0Zkiazov9H1VMRR0tGLknPz6dOSSJAaDdiABU
+         i+l22tkixEWTfr7dcMSC4yFfHdUcGdpEQoE37jeU5VWnfUkpAdELTYO+THH6RSHVwRqo
+         O3HyIrbJ4e4EvMIIQIKAzOxARx9740+Tp1ehTe4Ysf36fyHXhxnoa+qJ6eq+DLuSwyIi
+         QlcOzQor+BOICM91x8iV4PRtUTlUQfC6qMFbBr424jKBe2P/y4leE1RV5+r+yuFaRQ9t
+         Te4A==
+X-Gm-Message-State: AJIora9UNUS4ljUVjOuxiH1zE5VT95X9SGjEqUR5hNMFxooTKBAoPcM8
+        q1TsRJakaxNjVxWGGc3yYTM=
+X-Google-Smtp-Source: AGRyM1unLh5+2f3N8WdaNvFePkaneEkCPbeaBgJSIjnjZNxgOeXkifHqiBLyurLiV39500WbhCEqGA==
+X-Received: by 2002:a63:5304:0:b0:3db:2e57:6f34 with SMTP id h4-20020a635304000000b003db2e576f34mr8330163pgb.88.1656608551924;
+        Thu, 30 Jun 2022 10:02:31 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id b1-20020a170902a9c100b0016a1e2c2efcsm13681071plr.223.2022.06.30.10.02.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 10:02:31 -0700 (PDT)
+Message-ID: <a876f862-c005-108d-e6f9-68336a8d89f0@gmail.com>
+Date:   Fri, 1 Jul 2022 01:02:21 +0800
 MIME-Version: 1.0
-References: <20220613120755.14306-1-peter.wang@mediatek.com>
- <b55d5691-0b2d-56bb-26ff-dcac56770611@mediatek.com> <CAJZ5v0gTpv2gt_Gm9rUd+8Jmp4=ij2=J20o7qO0sC-hm=w3=_A@mail.gmail.com>
- <12028598.O9o76ZdvQC@kreacher> <90b5f619-2dd6-817b-fe2d-f895be0b5b98@mediatek.com>
- <CAJZ5v0h8xNCV+1YwRA5wob6Vnvz8JFikv3pYMR_mUrXxzfc=tQ@mail.gmail.com> <f6ebfd39-a27a-8b1c-6a61-f9a63236961d@mediatek.com>
-In-Reply-To: <f6ebfd39-a27a-8b1c-6a61-f9a63236961d@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Jun 2022 18:28:21 +0200
-Message-ID: <CAJZ5v0gChpusk6JuTG+Zhd_qGR1N+s97Avn4ybdp7Ggpv_uRaQ@mail.gmail.com>
-Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release supplier
-To:     Peter Wang <peter.wang@mediatek.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] x86/ACPI: Set swiotlb area according to the number of
+ lapic entry in MADT
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     corbet@lwn.net, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        m.szyprowski@samsung.com, robin.murphy@arm.com, paulmck@kernel.org,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        songmuchun@bytedance.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, michael.h.kelley@microsoft.com,
+        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vkuznets@redhat.com, wei.liu@kernel.org, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
+        kirill.shutemov@intel.com, andi.kleen@intel.com,
+        Andi Kleen <ak@linux.intel.com>
+References: <20220627153150.106995-1-ltykernel@gmail.com>
+ <20220627153150.106995-3-ltykernel@gmail.com>
+ <YrxcCZKvFYjxLf9n@infradead.org>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <YrxcCZKvFYjxLf9n@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 5:19 PM Peter Wang <peter.wang@mediatek.com> wrote:
->
->
-> On 6/30/22 10:47 PM, Rafael J. Wysocki wrote:
-> > On Thu, Jun 30, 2022 at 4:26 PM Peter Wang <peter.wang@mediatek.com> wrote:
-> >>
-> >> On 6/30/22 12:01 AM, Rafael J. Wysocki wrote:
-> >>> [Add CCs to linix-pm, LKML and Greg]
-> >>>
-> >>> On Wednesday, June 29, 2022 5:32:00 PM CEST Rafael J. Wysocki wrote:
-> >>>> On Wed, Jun 29, 2022 at 4:47 PM Peter Wang <peter.wang@mediatek.com> wrote:
-> >>>>> On 6/29/22 9:22 PM, Rafael J. Wysocki wrote:
-> >>>>>> On Wed, Jun 29, 2022 at 5:02 AM Peter Wang <peter.wang@mediatek.com> wrote:
-> >>>>>>> On 6/28/22 11:54 PM, Rafael J. Wysocki wrote:
-> >>>>>>>> On Tue, Jun 28, 2022 at 3:53 AM Peter Wang <peter.wang@mediatek.com> wrote:
-> >>>>>>>>> On 6/28/22 3:00 AM, Rafael J. Wysocki wrote:
-> >>>>>>>>>> On Mon, Jun 13, 2022 at 2:08 PM <peter.wang@mediatek.com> wrote:
-> >>>>>>>>>>> From: Peter Wang <peter.wang@mediatek.com>
-> >>>>>>>>>>>
-> >>>>>>>>>>> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
-> >>>>>>>>>>> to prevent supplier enter suspend, pm_runtime_release_supplier should
-> >>>>>>>>>>> check supplier_preactivated before let supplier enter suspend.
-> >>>>>>>>>> Why?
-> >>>>>>>>> because supplier_preactivated is true means supplier cannot enter
-> >>>>>>>>> suspend, right?
-> >>>>>>>> No, it doesn't mean that.
-> >>>>>>> Hi Rafael,
-> >>>>>>>
-> >>>>>>> if supplier_preactivated is true, means someone call
-> >>>>>>> pm_runtime_get_suppliers and
-> >>>>>>> before pm_runtime_put_suppliers right? This section suppliers should not
-> >>>>>>> enter suspend.
-> >>>>>> No, this is not how this is expected to work.
-> >>>>>>
-> >>>>>> First off, the only caller of pm_runtime_get_suppliers() and
-> >>>>>> pm_runtime_put_suppliers() is __driver_probe_device().  Really nobody
-> >>>>>> else has any business that would require calling them.
-> >>>>> Hi Rafael,
-> >>>>>
-> >>>>> Yes, you are right!
-> >>>>> __driver_probe_device the only one use and just because
-> >>>>> __driver_probe_device use
-> >>>>> pm_runtime_get_suppliers cause problem.
-> >>>>>
-> >>>>>
-> >>>>>> Second, the role of pm_runtime_get_suppliers() is to "preactivate" the
-> >>>>>> suppliers before running probe for a consumer device and the role of
-> >>>>> the role of pm_runtime_get_suppliers() is to "preactivate" the suppliers,
-> >>>>> but suppliers may suspend immediately after preactivate right?
-> >>>>> Here is just this case. this is first racing point.
-> >>>>> Thread A: pm_runtime_get_suppliers                -> __driver_probe_device
-> >>>>> Thread B: pm_runtime_release_supplier
-> >>>>> Thread A: Run with supplier not preactivate      -> __driver_probe_device
-> >>>>>
-> >>>>>> pm_runtime_put_suppliers() is to do the cleanup in case the device is
-> >>>>>> left in suspend after probing.
-> >>>>>>
-> >>>>>> IOW, pm_runtime_get_suppliers() is to ensure that the suppliers will
-> >>>>>> be active until the probe callback takes over and the rest depends on
-> >>>>>> that callback.
-> >>>>> The problem of this racing will finally let consumer is active but
-> >>>>> supplier is suspended.
-> >>>> So it would be better to send a bug report regarding this.
-> >>>>
-> >>>>> The link relation is broken.
-> >>>>> I know you may curious how it happened? right?
-> >>>>> Honestly, I am not sure, but I think the second racing point
-> >>>>> is rpm_get_suppliers and pm_runtime_put_suppliers(release rpm_active).
-> >>>> I'm not sure what you mean by "the racing point".
-> >>>>
-> >>>> Yes, these functions can run concurrently.
-> >>>>
-> >>>>> So, I try to fix the first racing point and the problem is gone.
-> >>>>> It is full meet expect, and the pm runtime will work smoothly after
-> >>>>> __driver_probe_device done.
-> >>>> I'm almost sure that there is at least one scenario that would be
-> >>>> broken by this change.
-> >>> That said, the code in there may be a bit overdesigned.
-> >>>
-> >>> Does the patch below help?
-> >>>
-> >>> ---
-> >>>    drivers/base/power/runtime.c |   14 +-------------
-> >>>    1 file changed, 1 insertion(+), 13 deletions(-)
-> >>>
-> >>> Index: linux-pm/drivers/base/power/runtime.c
-> >>> ===================================================================
-> >>> --- linux-pm.orig/drivers/base/power/runtime.c
-> >>> +++ linux-pm/drivers/base/power/runtime.c
-> >>> @@ -1768,7 +1768,6 @@ void pm_runtime_get_suppliers(struct dev
-> >>>                if (link->flags & DL_FLAG_PM_RUNTIME) {
-> >>>                        link->supplier_preactivated = true;
-> >>>                        pm_runtime_get_sync(link->supplier);
-> >>> -                     refcount_inc(&link->rpm_active);
-> >>>                }
-> >>>
-> >>>        device_links_read_unlock(idx);
-> >>> @@ -1788,19 +1787,8 @@ void pm_runtime_put_suppliers(struct dev
-> >>>        list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
-> >>>                                device_links_read_lock_held())
-> >>>                if (link->supplier_preactivated) {
-> >>> -                     bool put;
-> >>> -
-> >>>                        link->supplier_preactivated = false;
-> >>> -
-> >>> -                     spin_lock_irq(&dev->power.lock);
-> >>> -
-> >>> -                     put = pm_runtime_status_suspended(dev) &&
-> >>> -                           refcount_dec_not_one(&link->rpm_active);
-> >>> -
-> >>> -                     spin_unlock_irq(&dev->power.lock);
-> >>> -
-> >>> -                     if (put)
-> >>> -                             pm_runtime_put(link->supplier);
-> >>> +                     pm_runtime_put(link->supplier);
-> >>>                }
-> >>>
-> >>>        device_links_read_unlock(idx);
-> >>
-> >> Hi Rafael,
-> >>
-> >> I think this patch solve the rpm_active racing problem.
-> >> But it still have problem that
-> >> pm_runtime_get_suppliers call pm_runtime_get_sync(link->supplier)
-> >> and supplier could suspend immediately by other thread who call
-> >> pm_runtime_release_supplier.
-> > No, it won't, because pm_runtime_release_supplier() won't drop the
-> > reference on the supplier taken by pm_runtime_get_suppliers(0 after
-> > the patch.
->
-> Hi Rafael,
->
-> I think pm_runtime_release_supplier will always decrese the reference
-> rpm_active count to 1 and check idle will let supplier enter suspend. Am
-> I wrong?
->
-> Could you explain why this patch won't drop the reference?
+On 6/29/2022 10:04 PM, Christoph Hellwig wrote:
+> On Mon, Jun 27, 2022 at 11:31:50AM -0400, Tianyu Lan wrote:
+>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>>
+>> When initialize swiotlb bounce buffer, smp_init() has not been
+>> called and cpu number can not be got from num_online_cpus().
+>> Use the number of lapic entry to set swiotlb area number and
+>> keep swiotlb area number equal to cpu number on the x86 platform.
+> 
+> Can we reorder that initialization?  Because I really hate having
+> to have an arch hook in every architecture.
 
-What matters is the supplier's PM-runtime usage counter and (with the
-patch above applied) pm_runtime_get_suppliers() bumps it up via
-pm_runtime_get_sync() and it doesn't bump up the device link's
-rpm_active count at the same time.
+How about using "flags" parameter of swiotlb_init() to pass area number
+or add new parameter for area number?
 
-This is important, because the number of times
-pm_runtime_release_supplier() decrements the supplier's usage counter
-is the same as the rpm_active count value at the beginning of that
-function minus 1.  Now, rpm_active is 1 initially and every time it
-gets incremented, the supplier's usage counter is also incremented.
-Combined with the observation in the previous paragraph, this means
-that after pm_runtime_get_suppliers() the value of the supplier's
-PM-runtime usage counter will always be greater than the rpm_active
-value minus 1, so pm_runtime_release_supplier() cannot decrement it
-down to zero until pm_runtime_put_suppliers() runs.
+I just reposted patch 1 since there is just some coding style issue and 
+area number may also set via swiotlb kernel parameter. We still need 
+figure out a good solution to pass area number from architecture code.
+
+
+
