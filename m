@@ -2,153 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3D75622EA
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 21:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E0E562350
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 21:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235755AbiF3TQu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 15:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S236961AbiF3Thf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 15:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbiF3TQq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 15:16:46 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D78942A16;
-        Thu, 30 Jun 2022 12:16:45 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 0ab7fcce5568376d; Thu, 30 Jun 2022 21:16:43 +0200
-Received: from kreacher.localnet (unknown [213.134.175.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 23E2766CA52;
-        Thu, 30 Jun 2022 21:16:42 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Saravana Kannan <saravanak@google.com>
-Subject: [PATCH] PM: runtime: Fix supplier device management during consumer probe
-Date:   Thu, 30 Jun 2022 21:16:41 +0200
-Message-ID: <4748074.GXAFRqVoOG@kreacher>
+        with ESMTP id S236950AbiF3The (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 15:37:34 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D509140E7A;
+        Thu, 30 Jun 2022 12:37:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656617848; x=1688153848;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gZreJKV+oMv/NDuxMdMPpFmRx9/TyNbeHXnP+CefYZM=;
+  b=omKGcov1tXyi4JgK5Mpnhlc+ardIzrZph60kTVDg0XuuYbRW2xjxX8Au
+   mxgALTa9ZxCBXbhxsVzJ1Z/W2ug7xA3YN+b3X7j2tp8z+lS6X4mHDg1Nr
+   v/jKOzOAsmXYWiYczqr4k3hzflyXCJxKddWyB8kLwrWvIypvNXMDFXl4+
+   s=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Jun 2022 12:37:28 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 12:37:28 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 30 Jun 2022 12:37:27 -0700
+Received: from [10.134.66.165] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
+ 2022 12:37:27 -0700
+Message-ID: <0f4eb095-efc2-f7cf-af84-1c381d53382a@quicinc.com>
+Date:   Thu, 30 Jun 2022 12:37:26 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] dt-bindings: power: reset: qcom-pon: update "reg"
+ property details
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>
+CC:     <vkoul@kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        David Collins <quic_collinsd@quicinc.com>
+References: <20220628015845.28751-1-quic_amelende@quicinc.com>
+ <1576e17a-add4-83b4-3847-458fea9fd831@linaro.org>
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+In-Reply-To: <1576e17a-add4-83b4-3847-458fea9fd831@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.198
-X-CLIENT-HOSTNAME: 213.134.175.198
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudehuddgudeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudejhedrudelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduleekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghp
- thhtohepphgvthgvrhdrfigrnhhgsehmvgguihgrthgvkhdrtghomhdprhgtphhtthhopegrughrihgrnhdrhhhunhhtvghrsehinhhtvghlrdgtohhmpdhrtghpthhtohepshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Because pm_runtime_get_suppliers() bumps up the rpm_active counter
-of each device link to a supplier of the given device in addition
-to bumping up the supplier's PM-runtime usage counter, a runtime
-suspend of the consumer device may case the latter to go down to 0
-when pm_runtime_put_suppliers() is running on a remote CPU.  If that
-happens after pm_runtime_put_suppliers() has released power.lock for
-the consumer device, and a runtime resume of that device takes place
-immediately after it, before pm_runtime_put() is called for the
-supplier, that pm_runtime_put() call may cause the supplier to be
-suspended even though the consumer is active.
-
-To prevent that from happening, modify pm_runtime_get_suppliers() to
-call pm_runtime_get_sync() for the given device's suppliers without
-touching the rpm_active counters of the involved device links
-Accordingly, modify pm_runtime_put_suppliers() to call pm_runtime_put()
-for the given device's suppliers without looking at the rpm_active
-counters of the device links at hand.  [This is analogous to what
-happened before commit 4c06c4e6cf63 ("driver core: Fix possible
-supplier PM-usage counter imbalance").]
-
-Since pm_runtime_get_suppliers() sets supplier_preactivated for each
-device link where the supplier's PM-runtime usage counter has been
-incremented and pm_runtime_put_suppliers() calls pm_runtime_put() for
-the suppliers whose device links have supplier_preactivated set, the
-PM-runtime usage counter is balanced for each supplier and this is
-independent of the runtime suspend and resume of the consumer device.
-
-However, in case a device link with DL_FLAG_PM_RUNTIME set is dropped
-during the consumer device probe, so pm_runtime_get_suppliers() bumps
-up the supplier's PM-runtime usage counter, but it cannot be dropped by
-pm_runtime_put_suppliers(), make device_link_release_fn() take care of
-that.
-
-Fixes: 4c06c4e6cf63 ("driver core: Fix possible supplier PM-usage counter imbalance")
-Reported-by: Peter Wang <peter.wang@mediatek.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/core.c          |   10 ++++++++++
- drivers/base/power/runtime.c |   14 +-------------
- 2 files changed, 11 insertions(+), 13 deletions(-)
-
-Index: linux-pm/drivers/base/power/runtime.c
-===================================================================
---- linux-pm.orig/drivers/base/power/runtime.c
-+++ linux-pm/drivers/base/power/runtime.c
-@@ -1768,7 +1768,6 @@ void pm_runtime_get_suppliers(struct dev
- 		if (link->flags & DL_FLAG_PM_RUNTIME) {
- 			link->supplier_preactivated = true;
- 			pm_runtime_get_sync(link->supplier);
--			refcount_inc(&link->rpm_active);
- 		}
- 
- 	device_links_read_unlock(idx);
-@@ -1788,19 +1787,8 @@ void pm_runtime_put_suppliers(struct dev
- 	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
- 				device_links_read_lock_held())
- 		if (link->supplier_preactivated) {
--			bool put;
--
- 			link->supplier_preactivated = false;
--
--			spin_lock_irq(&dev->power.lock);
--
--			put = pm_runtime_status_suspended(dev) &&
--			      refcount_dec_not_one(&link->rpm_active);
--
--			spin_unlock_irq(&dev->power.lock);
--
--			if (put)
--				pm_runtime_put(link->supplier);
-+			pm_runtime_put(link->supplier);
- 		}
- 
- 	device_links_read_unlock(idx);
-Index: linux-pm/drivers/base/core.c
-===================================================================
---- linux-pm.orig/drivers/base/core.c
-+++ linux-pm/drivers/base/core.c
-@@ -487,6 +487,16 @@ static void device_link_release_fn(struc
- 	device_link_synchronize_removal();
- 
- 	pm_runtime_release_supplier(link);
-+	/*
-+	 * If supplier_preactivated is set, the link has been dropped between
-+	 * the pm_runtime_get_suppliers() and pm_runtime_put_suppliers() calls
-+	 * in __driver_probe_device().  In that case, drop the supplier's
-+	 * PM-runtime usage counter to remove the reference taken by
-+	 * pm_runtime_get_suppliers().
-+	 */
-+	if (link->supplier_preactivated)
-+		pm_runtime_put_noidle(link->supplier);
-+
- 	pm_request_idle(link->supplier);
- 
- 	put_device(link->consumer);
 
 
+On 6/29/2022 3:35 AM, Krzysztof Kozlowski wrote:
+> On 28/06/2022 03:58, Anjelique Melendez wrote:
+>> From: David Collins <quic_collinsd@quicinc.com>
+>>
+>> Update the description of "reg" property to add the PON_PBS base
+>> address along with PON_HLOS base address.  Also add "reg-names"
+>> property description.
+>>
+>> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>> ---
+>>
+>> New patch series to sperate this patch from applied patches.
+>> Last comments from original patch series can be found
+>> https://lore.kernel.org/linux-arm-msm/27515993-18f3-8891-4835-9b6a8d7f86b0@quicinc.com/
+>>
+>> changes since v1:
+>>   - Updated path which was missing Documention/devicetree prefix
+>>   - Updated CC list
+>>   
+>>  ../bindings/power/reset/qcom,pon.yaml | 20 +++++++++++++++++++-
+>>  1 file changed, 19 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>> index 353f155d..1d8cf900 100644
+>> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>> @@ -26,8 +26,26 @@ properties:
+>>        - qcom,pm8998-pon
+>>  
+>>    reg:
+>> -    maxItems: 1
+>> +    description: |
+>> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
+>> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
+>> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
+>> +      peripherals.  In that case, the PON_PBS address needs to be specified to
+>> +      facilitate software debouncing on some PMICs.
+> 
+> You need separate compatibles for that and constraints (allOf:if:then)
+> for each variant.
+> 
+So I have been looking into using the separate compatible strings however
+have run into a few problems.
 
+The compatible strings in this binding relate to the parent pon device,
+while gen1/gen2/gen3 relate to the children devices.
+For example, qcom,pm8941-resin/qcpm,pm8941-pwrkey are gen1/gen2 children
+and defined under a parent pon device with the "qcom,pm8998-pon" compatible string
+but qcom,pmk8350-resin/pmk8350-resin are gen3 children and would also be defined
+under a parent pon device with the "qcom,pm8998-pon" compatible string.
+Currently the children do not define their own "reg" property and will use the
+register(s) address(es) defined for their parent[1].
+Because of this we are unable to use the compatibles to separate the constraints
+for gen1/gen2 vs gen3.
+
+There are two possible suggestions we came up with that could solve this.
+1. Add a new compatible string to this binding such as "qcom,pmk8350-pon". We would then
+place all gen3 children devices under this compatible string thus being able to use
+allOf:if:then for the constraints.This would also require a few changes within
+driver/power/supply/qcom,pon.c. 
+
+2. reg-names is not consumed by anything but rather used for clarification
+for users as what the register(s) address relates to. We could get rid of
+the property and simply have "reg" with minItem:1 and maxItem:2.
+
+
+Would love to hear your thoughts or other suggestions you may have!
+
+Thanks,
+Anjelique
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/misc/pm8941-pwrkey.c?h=v5.19-rc4#n274
+>> +    minItems: 1
+>> +    maxItems: 2
+>>  
+>> +  reg-names:
+>> +    description: |
+>> +      For PON GEN1 and GEN2, it should be "pon". For PON GEN3 it should include
+>> +      "pon_hlos" and optionally "pon_pbs".
+>> +    minItems: 1
+>> +    maxItems: 2
+>> +    items:
+>> +      anyOf:
+>> +        - const: pon_hlos
+>> +        - const: pon_pbs
+>> +        - const: pon
+> 
+> First, you missed Rob's comment, that names should be without "pon" prefix.
+> 
+> Second, uUnfortunately this cannot be such flexible. Items have to be
+> strictly ordered. You mentioned in description something about gen1/2/3,
+> so probably what you want per-variant, specific list
+> 
+> Best regards,
+> Krzysztof
