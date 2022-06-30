@@ -2,124 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DC05613C4
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 09:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C625613DB
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 10:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbiF3Hzt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 03:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
+        id S233341AbiF3H7A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 03:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbiF3Hzs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 03:55:48 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520E63F89F
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 00:55:46 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id i25so20465137wrc.13
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 00:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=cJpP1OkS6rqgrKq9b3POAwWxBCAPWm4YoIECgKmS3yQ=;
-        b=BbWdRrgZMdJ1PQyfce9NujC+Cv9Kn+TUQxncoG2TTnGy4BeFv0ZlRlRS3m01fdorNR
-         FZseq2tmJLiA0yMcKydgJl6Q92/IT69YiSmFlRAHCvfjH20hwuUf3inAGwYznkg31ZvR
-         YqYpktKRMrtuQntm3KQeOflrQtoyrHFsL6N7RMYzbJcFqR/Y6R+MB/JpYdpGQc68To4R
-         IUX0Y9rcbFNNL8US3uwCwIMxoVJx+T9w61Ohi9KO07ymvquF5mOxWsGzp+lbjvXYB3SP
-         diY8SNgQZ6nzfrTdgfwzvOX/7pDMBdxHfYrFqR2zGpbuSI44NC3c6l0+4jASQef6w6kL
-         X5sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cJpP1OkS6rqgrKq9b3POAwWxBCAPWm4YoIECgKmS3yQ=;
-        b=s5CgL3CGFLNfwKsc2xB2+gVbaMIedWfqj6U8wiOtC2ksSU18Dh/HOYJU660/krkoqr
-         5+ra1mlBZwuCsBG1vHjEknzKApQdAbBgO7lWgwE+54hPAZDm+o36v43+cDKQrfAP4vr/
-         Qf5LcPQdvxP54zHhOOMKz+ks0cI3oPm8wayx+fOHhb/Vc6B1+yyYLaqTZ9fjkU+g20zy
-         NpcQkiO3rbpydKGP0Upe/8xtFjNTsV1U4NdBNl9xbOTD4A1gDVSTe71+a3OSa8FHSDOi
-         OKBjxXkXIlLLswEHrXkP2pXCEow+qZZed9x2yFFZ2cLDsBy1KJ3pfNtpTPWBUF1pZytU
-         d0Ww==
-X-Gm-Message-State: AJIora+YirXKHGK+BIryGlhh57bRShvQLyjLQLjAB3h0zwcDu1Ungts9
-        IP8eOTbfoBV+Re46G1xTFh/5oQ==
-X-Google-Smtp-Source: AGRyM1uB8V88VxEz2AKA9EorOVdKaOEl38ZHL2JsuaOgJS62ydwWd+4V518CKzvP1GQDbSXI1x4IYg==
-X-Received: by 2002:a5d:508c:0:b0:21b:8cd2:2210 with SMTP id a12-20020a5d508c000000b0021b8cd22210mr6726289wrt.527.1656575744886;
-        Thu, 30 Jun 2022 00:55:44 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id z9-20020adfec89000000b0021b89f8662esm18282326wrn.13.2022.06.30.00.55.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 00:55:44 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 08:55:42 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Walle <michael@walle.cc>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v4 00/15] Add support for AXP192 PMIC
-Message-ID: <Yr1W/m6UV3792GvF@google.com>
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
- <CAHp75Vc=PWXauEKDNX+vmqv=oO1LDv8-GgU3OFZXjf8yJrG8wA@mail.gmail.com>
- <CAHp75VeqvCnWtWLF1zySPGkfBT5obosu0h_pZEhz+pOQWzMdWQ@mail.gmail.com>
+        with ESMTP id S233434AbiF3H6v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 03:58:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C842C41306;
+        Thu, 30 Jun 2022 00:58:50 -0700 (PDT)
+Received: from dimapc.. (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6CE3C66017F5;
+        Thu, 30 Jun 2022 08:58:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656575929;
+        bh=7ycOl0tf4G0sSnkM0jeUXBwerp1p2XzwKGi4RzRqJcc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eUlcV6ImEVCpigysQR9fXFnu70De58qNsrrPtXqNOz0ykpk3Q2m+8aUHilk1fHLq3
+         L1JRbkW3VeVQdGNX4CykiTBf7AYHLQGo15WHv2W6iAvZGETCfjjzyxklCLRx/m7vvG
+         GFkbuEo0wifOz+A4NXr60gOPuJPgFOT7UpobDOc58iNG5oEJfEOGuEZnzSsKFXtUMN
+         cHYN5YINR5HAbIti5MU2DRLvBn7wc7sYmeEQxha+mde8njJCeOoQtf+O5BveL8YZRv
+         aACXGjxNSx2HbzvtFrP50dwBiApVzrxEc9QGtOy34zS02zi77ntAF2iTrnnT6oCgnm
+         RW8rPGO1FKpww==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] PM / devfreq: tegra30: Add error message for devm_devfreq_add_device()
+Date:   Thu, 30 Jun 2022 10:57:51 +0300
+Message-Id: <20220630075751.1360786-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VeqvCnWtWLF1zySPGkfBT5obosu0h_pZEhz+pOQWzMdWQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 29 Jun 2022, Andy Shevchenko wrote:
+It's difficult to notice that driver failed to probe by looking at KMSG
+when devm_devfreq_add_device() fails. Add explicit error message for this
+case.
 
-> On Wed, Jun 29, 2022 at 11:14 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Wed, Jun 29, 2022 at 4:29 PM Aidan MacDonald
-> > <aidanmacdonald.0x0@gmail.com> wrote:
-> > >
-> > > Changes in v4:
-> > >
-> > > * Drop regmap-irq patches and rebase on top of the regmap-irq
-> > >   refactoring series[1], which implements the same functionality.
-> > > * Reorder mfd_cells, putting one-line entries at the bottom.
-> > > * Fix incorrect example in axp192-gpio device tree bindings.
-> > > * Perform adc_en2 flag -> adc_en2_mask conversion in axp20x_adc
-> > >   as a separate patch.
-> > > * Simplify axp192_usb_power_set_current_max().
-> > > * Drop unneeded OF dependency in pin control driver, and document
-> > >   tables used for describing register layouts.
-> > > * Various style fixups suggested by Andy Shevchenko.
-> >
-> >
-> > For patches 6-11
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> 
-> Ditto for patches 13-15.
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ drivers/devfreq/tegra30-devfreq.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Not sure `b4` will pick these up!
-
+diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+index 30382bdfc655..f0d414b881e3 100644
+--- a/drivers/devfreq/tegra30-devfreq.c
++++ b/drivers/devfreq/tegra30-devfreq.c
+@@ -926,8 +926,10 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 
+ 	devfreq = devm_devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
+ 					  "tegra_actmon", NULL);
+-	if (IS_ERR(devfreq))
++	if (IS_ERR(devfreq)) {
++		dev_err(&pdev->dev, "Failed to add device: %pe\n", devfreq);
+ 		return PTR_ERR(devfreq);
++	}
+ 
+ 	return 0;
+ }
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.36.1
+
