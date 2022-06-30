@@ -2,99 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4A2560E4E
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 02:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992895611F0
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 07:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiF3Auc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jun 2022 20:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
+        id S231990AbiF3FvM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 01:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiF3Auc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 20:50:32 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534A43FDAB
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 17:50:31 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 65so16586825pfw.11
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jun 2022 17:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ec4XEkBPA35XnLcPG87goxGDH+EEGY22aWvX/z3PefI=;
-        b=NFWCuFGRbcAjPzdLWOr/NQp3XWuDNO6BMyHySS+trahq6mX9UFO7j+zQOkjuhlioWl
-         xSYxRMQtRJOqPe6f8aUpkpL4C7uRkzlXaGc1roT4R/8VsrW+toIgTh/7JqCViwZCe/Eo
-         bM3/bnNdqFYGfV+tPNcVNd3eWRc0Rn5hwxOdK1VlUJRRIZ3O9GRQV5RBdLfmhk10TlJk
-         2ATBJG6SR6FP3U4213Q+Xm15I5KrUa3o0Fr+ZWYv1hYrq+etlRvLYAfJW1P6ul5x863m
-         GIRBOHuiCVrxZTYkdgcV7H2J/2nN8WZlUCw9A7RUKMGArEVcHcudATd8abMaGeTV4LBH
-         kHxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ec4XEkBPA35XnLcPG87goxGDH+EEGY22aWvX/z3PefI=;
-        b=ylfCXYCpuvafhfLdJz9O5seV5ct0MLUjdYFkMDRE85vSR82KTVFqYECE+xN/zfIrZA
-         vXM4xAODm9hPl43AbQdvPL91S0v18hN2QDPK1RlRHdvzMyBUVvFcN6G6CQ5cmqCGDxbs
-         yMA1E1ex61t8x28D0Jxwz4QvGlQgOWZ3zO2OTjfLRVcFDgLXqcueigSHkEMd1pgsQPQz
-         G63mVEyv9vIimway3HGWvK5JN+/xL+wffs57rn7wLDf2BhmVbj3ns2EnbFrcDzm1F1P8
-         1cXfd4SYw0VGRq8oEr1tOPGDq/JhcnlM9jwoFlizQcORnW7eHtFkqJq5kFMRbq2TWfHW
-         pqcg==
-X-Gm-Message-State: AJIora/3IZcFT2kmE1eY/TPtMjBu8LXWtM5Jb3IqdOTotZxM3OvjgoiV
-        MVG21xtuhUr0PkP2IieFI81hAw==
-X-Google-Smtp-Source: AGRyM1vwxJL4Embx1Cw1olp7yFM3sPbrYAoDKdwqAqD4m7eulhQl7MEsYnny1f0udvYVdgE3PBRHgA==
-X-Received: by 2002:a65:6bd4:0:b0:405:2d64:532c with SMTP id e20-20020a656bd4000000b004052d64532cmr5361306pgw.179.1656550230789;
-        Wed, 29 Jun 2022 17:50:30 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id 4-20020aa79244000000b005252a06750esm4541969pfp.182.2022.06.29.17.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 17:50:30 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 06:20:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Message-ID: <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
- <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
- <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
- <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
- <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
+        with ESMTP id S230135AbiF3FvM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 01:51:12 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4C228E3C;
+        Wed, 29 Jun 2022 22:51:10 -0700 (PDT)
+X-UUID: 36ac529d667f431184cbaed831aea1c2-20220630
+X-Spam-Fingerprint: 0
+X-GW-Reason: 13103
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HNeS6uumcgOimgeWuoeaguA==
+X-Content-Feature: ica/max.line-size 71
+        dict/adv 1
+        dict/contack 1
+        dict/notice 2
+        dict/time 2
+        meta/cnt.alert 1
+X-CPASD-INFO: 185bdac36a0b4b8ea920b9b216776b2e@eohvgpGTkWNigXKug6WDn4FqYmCSZYK
+        Bc3BXZ2SSXoWVgnxsTWBnX1OEgnBQYl5dZFZ3dG9RYmBgYlB_i4Jyj1RgXmCCVHSTgHNyVZKSkQ==
+X-CLOUD-ID: 185bdac36a0b4b8ea920b9b216776b2e
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:187.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:87.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5.
+        0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-5
+        ,AUF:9,DUF:235,ACD:3,DCD:3,SL:0,EISP:0,AG:0,CFC:0.448,CFSR:0.072,UAT:0,RAF:0,
+        IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF:0
+        ,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 36ac529d667f431184cbaed831aea1c2-20220630
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 36ac529d667f431184cbaed831aea1c2-20220630
+X-User: xiongxin@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <xiongxin@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1347455063; Thu, 30 Jun 2022 08:57:51 +0800
+From:   xiongxin <xiongxin@kylinos.cn>
+To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        xiongxin@kylinos.cn, luriwen@kylinos.cn
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 -next 0/2] PM: suspend: Optimized suspend is fail returned by wakeup
+Date:   Thu, 30 Jun 2022 08:57:16 +0800
+Message-Id: <20220630005718.309178-1-xiongxin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RCVD_IN_PBL,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-06-22, 21:33, Dmitry Osipenko wrote:
-> Today I noticed that tegra30-devfreq driver now fails to probe because
-> dev_pm_opp_find_freq_ceil() fails with -ERANGE. This patch is guilty for
-> that. Could you please take a look?
+Changes in v2:
+* fix a build test ERROR reported by kernel test robot.
+* Increase the initial value of the pm_suspend_target_state variable to
+  prevent the situation where it was not assigned before the call from
+  freeze_process().
 
-I remember this corner case now [1] and it was easy to miss this. So
-you want the OPP core to still parse the DT to read opp-hz, but don't
-want dev_pm_opp_set_opp() to update the clock rate for it.
+Cover letter from v1:
 
-What was the reason for this again ?
+When the suspend process is executed from the /sys/power/state entry,
+the pm_wakeup_clear() signal is cleared in advance, and the wakeup
+signal can be captured to fail the suspend process when the suspend
+process is notified by the notifier;
 
-I have a couple of solutions in mind, but one may be other than second
-and so want to know the real issue at hand first.
+Expanding the scope of the pm_suspend_target_state variable also allows
+the device driver to know that the system has entered the suspend
+process earlier.
+
+xiongxin (2):
+  PM: suspend: expand the assignment scope of the
+    pm_suspend_target_state
+  PM: suspend: advanced pm_wakeup_clear() for normal suspend/hibernate
+
+ kernel/power/process.c |  5 ++++-
+ kernel/power/suspend.c | 15 ++++++++++++++-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
 -- 
-viresh
+2.25.1
 
-[1] https://lore.kernel.org/lkml/71451eb2-46b2-1ea0-efcc-0811568159a4@gmail.com/
+
+No virus found
+		Checked by Hillstone Network AntiVirus
