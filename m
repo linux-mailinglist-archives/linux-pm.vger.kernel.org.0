@@ -2,178 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A2F56235E
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 21:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D40156236C
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 21:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbiF3Tn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 15:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S236381AbiF3TsZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 15:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236382AbiF3Tn4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 15:43:56 -0400
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98F843AD4;
-        Thu, 30 Jun 2022 12:43:53 -0700 (PDT)
-Received: from pps.filterd (m0127842.ppops.net [127.0.0.1])
-        by mx0b-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UELfEE019836;
-        Thu, 30 Jun 2022 12:43:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=proofpoint20171006;
- bh=u7Vi2mbOWN3hP+t0vSbKwTLiNxsdoGA197cmR/p8CbY=;
- b=P64HqcWocRsbHQGlMgy+R5+xtRMit+mIU0nt3J4l6+JWcwXFEqaKTVSXkug8XzYj//Qt
- fzTAKbSL2rM9AuIiBJfdVRRRRGd9IMA185Ww/JJt4KftN+/NcYGFCItmiIKmgQJBr3WU
- LtPPrtavnFB8WbqTIek5INIARKwSULM3ii4kk885kRnYCwYh7nUFzpOguucPqTQBNnoX
- 8IZ6Aa9TcyGEg+6rjCiN64g2fXH+Rxr6uw6gI2RHfst1oc3Q1uLriPwTAqwo6oWEmYr4
- nBdkMfZ6PZIIBndrMsEYeCGrH6HB9alkK9h2jxLdp6OVIIdtkcJZv0s03J44mXwrX9wH Zg== 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2177.outbound.protection.outlook.com [104.47.55.177])
-        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3gx1pfv56c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 12:43:41 -0700
+        with ESMTP id S235847AbiF3TsY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 15:48:24 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60073.outbound.protection.outlook.com [40.107.6.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C4818361;
+        Thu, 30 Jun 2022 12:48:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bepadfDuneaeQR0L8z9iYQK9mleyQh0UhePnZCrE0WlqzAJf2aq/Pkx8sB4foydDWA1THH1q/tML+JEJt0jVHvB0K+bSNzlf10aK9wvJA9bvRUbstoP6YbN/RAkw0fJaSb94whc345o0v81+p5MYE+t9wF+halZg88lI/fVj4Ar2JQb8+1uTLt0NpqnXuBsPOgE6z2vqI9OA6YpdFIaIdxeF/wSDvWMJ85933fdl7PVx30p2YoGnTt4UeBJhhCDBrOBo2800kGva3CaIK4cdnK8D/6woU1ECBCb88hUXSra0eXAtYoZb8D2Xg0Kj8Xd5cmH1XhsYAq08i0ryA/K5lQ==
+ b=Jmj3kNoIhAHUtI4Tpq+C/AqWDEJkERNN9Lq4EfnRf/ySyPOyCdFYu431oX4lFWBwDE8iP1VXGfAoQK6HS+cTWZKg1/FvEJkdKYF5nGqXW2oZOP+C78z3vlfe8qN4JY8x79fqdirNJevQEeH/SxLixwJaK2l1mNt57PwWlttla8xxxEDfIpzkC6ssrxPhnLHvpye7sggx5BJ6BZvWOW4qANf8wrnGPQHKwznVxUKdwQlhkSufoRt4FXrnhfyIkguUX6wW+HxPZPVDwRHYNoYeiYELYDwLMD7LuJWxxHbSve+5FktFJdyKg3QniaeKFskjlTcu0QbpzuAtbO0a8ZN9GA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u7Vi2mbOWN3hP+t0vSbKwTLiNxsdoGA197cmR/p8CbY=;
- b=MmA9keWCJ8iaqcPS8GV60gFhbLeGYq6SpwCejmfZ8T7oAir4Ic15LtFSIMyKH/hJ6pHrZ4ycWye5XwLH7DskqjU/LLde66xyZtMljQb858cCLa6J6R1LALSC5DIiFYFrlEg8kpXi1I7widsFmgXh3/ArJVYHnhvGnkcQksSp1dxseiBYi0q/Vx90XS8tAReIZQdUUsmwzBrftq4B4pYWngO/fKat52dOBa6adxwtYXvCWnnBJZiLMJowIMRQ0lqboEzr69CTtvNjZ9DM7fJm60EatOrKx5L92aLjQhtNmDSeljF9G7be2q0+4H9XGHnTe5svMSXqijWKdlcouEAYzg==
+ bh=KXX11JFzO/TcGM5yLVqfqcAY9R41AjkPlIcbJBX/nbU=;
+ b=dmh1/xq4RYn+0+u3qghP6PjPeItmg2w0fw9Lc3BeSMjM/cs4P0p6VMpJTkDuArbs76eHhNoz2KQTmOjv8sxKyjCKHooqyxM/ciMWltvKhOTg5AL0rlbVYGoWny3OgQr6IAA5UyMemYANUqsT5VnTaQb/01Hsc6tCbe6C9CAsz0W4bEQjS1JiHYqzv4ySFlx2XI6SWJx5d26U4MwBwUSpAYaRgMYTfR92ZKF93OdaQ+/RBgIliku2CaMJO4H5RmMKizEVJMmvZQ7GDfSaIRIEevXXJEdTUvqV3PK8eFwAdf38KGb/GcH+OSUV1hlN88YMMrIg3opsw9CmRBtKvb+03A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-Received: from BL0PR02MB4579.namprd02.prod.outlook.com (2603:10b6:208:4b::10)
- by SJ0PR02MB7567.namprd02.prod.outlook.com (2603:10b6:a03:32c::7) with
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KXX11JFzO/TcGM5yLVqfqcAY9R41AjkPlIcbJBX/nbU=;
+ b=UCVJirw4ONO0kPXpnH72IZncpKv+vrtdtSeKUr/HEQtRCaKujixYSQ3p9MuBee9+XQ5jKO/cYANIFjDfNModWasB5YD0OVvrjljZcRbUoKYbGf+YqqIsKcLhotEPXWDHQQGlISkXmIo9QSVlctYeTUaaavI1bcJ82RnQdm0mBOM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by DB3PR0402MB3689.eurprd04.prod.outlook.com (2603:10a6:8:b::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Thu, 30 Jun
- 2022 19:43:39 +0000
-Received: from BL0PR02MB4579.namprd02.prod.outlook.com
- ([fe80::64e5:da2f:e15c:2a6f]) by BL0PR02MB4579.namprd02.prod.outlook.com
- ([fe80::64e5:da2f:e15c:2a6f%7]) with mapi id 15.20.5395.015; Thu, 30 Jun 2022
- 19:43:39 +0000
-From:   Jon Kohler <jon@nutanix.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jon Kohler <jon@nutanix.com>
-Subject: [PATCH] intel_idle: add CPUIDLE_FLAG_IRQ_ENABLE to SPR C1 and C1E
-Date:   Thu, 30 Jun 2022 15:43:09 -0400
-Message-Id: <20220630194309.40465-1-jon@nutanix.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR03CA0009.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::22) To BL0PR02MB4579.namprd02.prod.outlook.com
- (2603:10b6:208:4b::10)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 30 Jun
+ 2022 19:48:18 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::6546:3ee1:5e6c:278f]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::6546:3ee1:5e6c:278f%5]) with mapi id 15.20.5395.015; Thu, 30 Jun 2022
+ 19:48:18 +0000
+Date:   Thu, 30 Jun 2022 22:48:04 +0300
+From:   Viorel Suman <viorel.suman@oss.nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Viorel Suman <viorel.suman@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 10/14] arm64: dts: freescale: imx8qxp: Remove
+ unnecessary clock related entries
+Message-ID: <20220630194804.sa3mvokpv7iksgbx@fsr-ub1664-116>
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-11-viorel.suman@oss.nxp.com>
+ <483d5115-4027-e811-8bce-15da6c7c660f@linaro.org>
+ <20220630083636.2c7mclmbq3tjma2j@fsr-ub1664-116>
+ <5d8b2044-5ca6-c90c-57b4-afbb2ae20dde@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d8b2044-5ca6-c90c-57b4-afbb2ae20dde@linaro.org>
+X-ClientProxiedBy: AM9P250CA0018.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21c::23) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 604a03ef-b4e9-466d-4847-08da5ad0d495
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB7567:EE_
-x-proofpoint-crosstenant: true
+X-MS-Office365-Filtering-Correlation-Id: b2a7b9d3-5be5-46b1-acfa-08da5ad17ae2
+X-MS-TrafficTypeDiagnostic: DB3PR0402MB3689:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fCyORe5Laq7sIWNZlVCGoFXQsW1tTr/EZVBquhUpcjT+YVLM35bK5ztUb8GkjOXy4ZVUWTrTOU5WHOhATj3ADV9m9NKzt0h10X2H/id5FfALUjNxTIM6hZSmA5f52pJiQgGEi5M8GyWAhrtzJmZbc3TsWLMHETUZTmGSSqm4XWDxK8E/zJRiqIiQZgIVrFqB4sJ28JWXjhnUW9w6yA9QuyxHpe87gtwP/V3/Vz0efzyvRaT5U4+qviyk9X0sBT3C8asiOlUMEV/WIvLxyxVa7BMU18aN3RZNpO5GQP8oSvwMb/CGL3nEYu7BexQkzk9YPQopywfHo0Y+BtGMPBZu6oipQypGBGd/rcePorHVmK/Ei/nqUUf1VWWDxyPWou3s/M0+iRhRXV94N9MV43EWVKzsl4vNuO5dOxauADGD7VTH/9/aGEo6Cvf20fMcJKy2uplS2dwjZ5xVwiGgr4Uim/b42yI5VHTNwUCM4yfcvdDxJHA7qvqLh+3hVqb876+YjepEopYRpyxnlvV49e1zMPceYZuv1v26vcg4TAPRKq2uF+S/Ed9XRNo54+texL+Wgxe9b8lRlfRPOXrlecqOQGBhNEcGwQOEBFzGkB2dYl0PLeQslrlP2F4sJZpq71t+vHjES46Kw+U6V+ASgXNCQ9CzLU15idNLotaZFBg0MvMHfGRt/4nT2Q17UBBV4yCYbw2BZ+R/oic0j7cKqOSg38LNVxTgVFcH8jSYxhjVw3PZRFJ2ioniuqjncmFZD+dE8L6njuc4f/TgtErEmmDMeA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR02MB4579.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(39860400002)(396003)(376002)(346002)(8676002)(4326008)(8936002)(83380400001)(66476007)(38100700002)(66556008)(66946007)(6506007)(52116002)(5660300002)(478600001)(41300700001)(2906002)(6486002)(6666004)(316002)(186003)(110136005)(107886003)(2616005)(1076003)(6512007)(86362001)(36756003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 6zRqIzhzRA4oymeIsRZZ2fg72Ee6oZ2EUZJGl1TPIIRLDcTTBkT0o73J03g41usdQiRX8Oltbm4bq4N4GEUSbEAaLytoe/HnpvjSC6xziOkYEgNNA/xP7YtTWwvvYwHaD/xNoYAekMHp6mFSHi7RUXxDpbQINP4x+DT3QXrwBodu6eumBnWtPDANA5hCiwTselfGxSc0SQJB1heRXOLxUJ0rT2WTkwMAju0k1yftIsK0otoryz0R3qUpeu4EbyhrlhZX8XwowKY9heJ0dDjHkCucYxN7fXcgryNaSUV/aVzm8dSs8HTZgTAe1eAyR6ePAlQNGSul1ngiPuTz26VdUSfzqz3BITGRPnkFcZ72HwlnpYAvA3lZ5bxCEkHBAbAagZeyH5T3JZl7mNYtSj8LWzM5RtvECjyBb/4fhyKlvYazqKp45za/Qr0fl7yCobcwzHlbAypliGJg6GwEsMqgaiEMHkASKb0UOBbuVfbl2zQyXvnmTJhFKgd2OaHqvrA4EDVCkhA1N9yFR9AOZgg6TILG6UOE3KvtGSNyZtnliXqaGDPWwPaUaFsZOx6XBoYfejAqULXPG1tjKsXKP2NpQ0cqwXyNcVUMth1l9tDoZ34HgUFzW+qHQ3bZiEBfsgXY9WoEUxQzKAeVC8h4F5cCeXGaXOcTmoOv3h1abgjxOmotgOvZOZcQhBrVITMXjPIaj36Spcv23o7ha48vGgUe0LYdQhik/qIjbgSak9n+w71wDnlZC+SUqYPX8e4R0OEZtmOMCsxlUJzsaUx/5WvTImSqQHP/Cp6FcQCqE4ndUo0UWjxhDnyv+FqjzV+EHq+VehZs11OBwZZpgs50II/48Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(396003)(39860400002)(136003)(346002)(366004)(376002)(7406005)(7416002)(478600001)(33716001)(38350700002)(38100700002)(6486002)(53546011)(52116002)(6512007)(26005)(1076003)(6506007)(9686003)(8936002)(86362001)(66556008)(83380400001)(6666004)(41300700001)(2906002)(186003)(5660300002)(4326008)(8676002)(44832011)(54906003)(6916009)(316002)(66946007)(66476007)(32563001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SzEh/Ugoj/j5QGhWQXN6xCBql+UgE7+UPSOvrqcrvJr+lMwrdj9OyLOaMkN1?=
- =?us-ascii?Q?W9jlTgvK1RFfXrzcGwDfHQ0AM4CuF4IO/o4oWy9qijkESat8e87yv/grZYnd?=
- =?us-ascii?Q?+dsCXoN67+pZ/GPN/IaEMArlKYfCghvX9fSbI/JuYNthZ/3YwyMeBICNvKGg?=
- =?us-ascii?Q?xxVdl8T+A1Gs1bOnUCuURqyFl9qJwto6iXLR0/M2HXGi847USd0xy2P8DL3s?=
- =?us-ascii?Q?2vQJRQOWKnpuSXeFeXIeQZrzyShoFdSZnLU/UfJIpavJcnwyGWhn8UeYTXEA?=
- =?us-ascii?Q?oaJu6vDYkkF0nUz6UAJRPAdQMh+IlGQ92ro1ADybl2vChT7qIBWUBprBebsT?=
- =?us-ascii?Q?j5axxzqJ+ANUwLlcakTLADn72poDaNJfPOXsc4WZwD5wS1X0GifXyjMX6o0a?=
- =?us-ascii?Q?4qauOVng05teAX/BzK6DilAAzQxG5hct/YysAvUz/QEsFEXDHc+6mW7pk4wM?=
- =?us-ascii?Q?qln379aGCWLFrhG9CHKeI9j9jHvoDE2rpFpXTsYsAKbLBPnFdIRoedbllJio?=
- =?us-ascii?Q?2Ki0RDRQAKr5e5qEJri+HDifQN0RH++9WcyUGV0X9jajtEoWNausezysNcg5?=
- =?us-ascii?Q?HOyD7atyr9mK0AupfF2CCShNHuwD2/kJ9DnK13jIPwhGl0BO+o/n0+MDVc9O?=
- =?us-ascii?Q?k51XO0n8fpVCN+tVSj521B8EHTGDxK4iVHHwYyN0tg9Ugx+BS6c/gPA+BJLv?=
- =?us-ascii?Q?3qUQ39vjvetSuicpTv+7jPmlupQcE8t9p1BwA2iZnHdk4l38NJIhsFVRaAqg?=
- =?us-ascii?Q?//xS9S0XBN+imz4Js4mlQ4JjUOkmd0o5lWHv1WgEl9ZDnTitHpE3uN703jgk?=
- =?us-ascii?Q?KyI9UoWr6gjnGsCHv/P2vieQzqjFK9gv2Y9DySF0Y1i9kEkvNT6mC29m9bN/?=
- =?us-ascii?Q?+GzY2XGuKIUGp6KkcoCL5EUc+GzPYcdWP5uSYgrGo39yOJHxqWp7VkmGwMf3?=
- =?us-ascii?Q?6+Bz/ElgzEaQaapWdB7JDNkxmAPrfhH9H556779tRkZIV1jLCyogXGX+DdJV?=
- =?us-ascii?Q?U/GQsPxqYjwc1TDnGjLn2sZEWeqGuPdqTNDH0VRPJfmNXf4Js1cBXoC+jtAz?=
- =?us-ascii?Q?kBbmDasnqY/1NmIjxrdPMbAxhAe3YNy0ecaia9AbCI+6auws7EkKX34X/Cw9?=
- =?us-ascii?Q?9fzr/SDxNSKsSuOhO8xMtvw2Je3YsgV6hgzsLcGwmgSp5MtO/vyQJCZB/em4?=
- =?us-ascii?Q?0JsTTnKUMP6aGw+UhMZ6F89EIDYsqptTsaF3mgKUo8JWQnALjTmno1AY0xrO?=
- =?us-ascii?Q?3IJ/5M/ytimKquJcaiSTc5naEtUs9KddkABso9cg5iskUn/Ba06NVEaSM5G3?=
- =?us-ascii?Q?QV9v9bKL+wb7/2zR6HKo+BMzSw8M8NNZ7AKRnH4ja5KHxszXaZPoCSbIaMCK?=
- =?us-ascii?Q?oS8ZNu6bQxSy6aOcg2jx8oTQ3RgaDU3fMZ1nz5hl1njhBHfJ3pIsMfRjUDoo?=
- =?us-ascii?Q?qASE1MXtdAcPPXIuaPW65WwGgxS8TSmHitvuCr6EvkvfJJtmcl4NpifPfrSk?=
- =?us-ascii?Q?ezmP2IwEg/DJoZaAQ4pyRXYO3i8J8Nzm9XngjRo1VhYkXTIdLEVqPq4H2Gtg?=
- =?us-ascii?Q?toacwbZ+RsvHQk0EUIQ1l9RYkq74dFE149Vc8dwK1VtZRaeGId5bgczq/PQ4?=
- =?us-ascii?Q?lPluV3MJTDc9zgxZhAbuyUTlh7ZVfKZn9f1OQcpe5sjEsWNPpOJ7/eOp9DWM?=
- =?us-ascii?Q?MiN9nQ=3D=3D?=
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 604a03ef-b4e9-466d-4847-08da5ad0d495
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR02MB4579.namprd02.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TsqnnqefiXGJxwmac6DvRuZwkyKXjlZZhFJM6uBqv3SR90wbAIL5IGkBblA6?=
+ =?us-ascii?Q?rPiFsKMSh7T4IIG9iEgxKjoJ6G9f9bnzRjZfNMceMmo5ePMggiY5On5lixr0?=
+ =?us-ascii?Q?C6yhWE86fR3onbVoMeCdOB1xv/rUP/H42im6DPtHi6ZuJW5qU01kpTGH7//T?=
+ =?us-ascii?Q?H6qvOf4BrYRv4HqRhIwf6fpdagp1jP+HPYdlS5zmx2Sfk74v+uokih86kHF+?=
+ =?us-ascii?Q?cZFuj2NVQG5zp10hWwNXa5MxeQnZbdcbAJmX/rYeA7P0PU8pn4YaKvDAv6qj?=
+ =?us-ascii?Q?0d5GsplMlKF6O5TFlYB1Vu6lJsI3tQ46P7Euz6yxnUxYIq4YL+O/yGT1Na+l?=
+ =?us-ascii?Q?Qb9RCpmD86Fab+JwRNWgGm9vmH6AfRvIn9wWToZOb+avDV2y5l/TbE4cyVoT?=
+ =?us-ascii?Q?IZP/fslf168saVY2GuSuugakX23gFhiMaFojYuuduXKW1NA/yjEmdIivIvq4?=
+ =?us-ascii?Q?/02siskYRDB07Z5CznOh5RiPoPrm5Ux0sRvw+7RVdhzvME+5IzBJdKoqTXAz?=
+ =?us-ascii?Q?lSZ+rKGZyJROf6Pk0TdxPgN4d/xsJ3xxiBMEYigYZbhYwO6SpjycV+2HlYVZ?=
+ =?us-ascii?Q?2yMhkYZyuPjru5Or4i86eysvdb1fO8E28hQ5t/GtooGfCEP04TB69n2SpHM4?=
+ =?us-ascii?Q?ymLsxsVFip2boURK8XvIOuDS5/1ZkHCf+2v/dnT2tVIAhgq4HSYZJFlDrHlN?=
+ =?us-ascii?Q?d9ZhFqQ8b1BqUaW3yNxlJk10Uj+lkShgQez9r5QxU+jJB7LVmGFlaSxivNXI?=
+ =?us-ascii?Q?waKWWRv6OY6Pf58HN8o7vzabLFrizE7J7k8S2EXyy4Q8ej0hCxu7Vhl6Pw8M?=
+ =?us-ascii?Q?yB+nhVwRiW1Y45avYmMy40DAyvxFhhF2Q0qg4uShQ1zgkacIs6tGcGzMKPzn?=
+ =?us-ascii?Q?eYs12gpPPWW80RA6dUEE+WSdQmS03yvriCe518o6CaGRyM4TA8jGVcwL5w0s?=
+ =?us-ascii?Q?tKMZ4aJHkOowFkGKgqNCuuxy6zFBdi+nMvv6Y+kML3TWrFQLsbPBqW/KJNUO?=
+ =?us-ascii?Q?SlY4KBVcUH13bC1hLP//Gmo+efbKtY/Sw+RLnNrg2XlRhMCBIkjPSfG5ypow?=
+ =?us-ascii?Q?onr3e+zsQ6gTz55kDEibuKaP7BiP40+D5NJirWPKTxxqSg1nCJqDQJYFOa8D?=
+ =?us-ascii?Q?yhPZ0+/oG22e+Nxfa4vzATNNpuDfdcCOD80LNiUKPTes2dgI8xCpGmok7+bu?=
+ =?us-ascii?Q?C780Gahs12UFV3yrP1nJADiPAtX6A571q3+tlse0KikB1e2WcnHQbLg+QmHy?=
+ =?us-ascii?Q?xAFM+3PFI2JIHK4ltZxWlHBBkjK94kCu4nbTdLcgB7Bv98NsqfyLGmRSk/cq?=
+ =?us-ascii?Q?ijIEb184vxjMraSFOspIDrWlTz8iGBWhWqVTlX36G9tnnENkmmTM6YPVBfsu?=
+ =?us-ascii?Q?nJGQnMS+u/DZna147p+5x0Va1VTXi9xeCLzyibsZm2IwRFj1hejZEezyXviX?=
+ =?us-ascii?Q?SUAbRE/JRWCLe3vSlLcvF/dzVCPOtF/tvUQegL0XoG996gw4jDApbjOY0+Vl?=
+ =?us-ascii?Q?rwBGGBqSX42W8XdS4BCFUvsqu/Jw4+5CY8DnmeKrPo3/hmPAv8mapgJBINMW?=
+ =?us-ascii?Q?gvz6C2gi2rjP0pAAPIdZqQnyRQSvxon6F2ElOg/U?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2a7b9d3-5be5-46b1-acfa-08da5ad17ae2
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 19:43:39.3378
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 19:48:18.4249
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: INKcNpSVp5cKQsN5jDRg0NVfNv3Yl51UP6rVJoVATfsJ1dMKIRcXKjnwWkXDcTnMj74erfczuPABQXqIzus0ZhoLO9cebCdjahUS/4upm38=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7567
-X-Proofpoint-GUID: CnQnfn8WiD_YDYk2HHqoQWLpVwPISiMP
-X-Proofpoint-ORIG-GUID: CnQnfn8WiD_YDYk2HHqoQWLpVwPISiMP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-30_13,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: kICC0qbe5b6BQoIRW3Da8dDVMUD+jiCKFvMp/K3+FTPVpSh3HLiXLeZZyLpPpj321S2F1fFOaU2Okdq5YVwW8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3689
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add CPUIDLE_FLAG_IRQ_ENABLE to spr_cstates C1 and C1E, which will
-allow local IRQs to be enabled during fast idle transitions on SPR.
+On 22-06-30 20:01:31, Krzysztof Kozlowski wrote:
+> On 30/06/2022 10:36, Viorel Suman wrote:
+> > On 22-06-29 20:04:43, Krzysztof Kozlowski wrote:
+> >> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+> >>> From: Viorel Suman <viorel.suman@nxp.com>
+> >>>
+> >>> "clocks" and "clock-names" are not used the driver, so
+> >>> remove them in order to match the yaml definition.
+> >>
+> >> So this explains the unexpected change in the bindings... but actually
+> >> it does not explain whether it is correct or not. Just because driver
+> >> does not use it, is not a proof that clocks are not there. In different
+> >> OS/implementation this DTS might break stuff, so basically it is ABI
+> >> break. DTS should describe the hardware fully, so if the clocks are
+> >> there, should be in DTS regardless of the driver.
+> > 
+> > Hi Krzysztof,
+> > 
+> > Both XTAL clocks - 24MHz and 32kHz - are still defined in DTSI files, see for instance in
+> > arch/arm64/boot/dts/freescale/imx8qxp.dtsi :
+> > ---------------
+> >         xtal32k: clock-xtal32k {
+> >                 compatible = "fixed-clock";
+> >                 #clock-cells = <0>;
+> >                 clock-frequency = <32768>;
+> >                 clock-output-names = "xtal_32KHz";
+> >         };
+> > 
+> >         xtal24m: clock-xtal24m {
+> >                 compatible = "fixed-clock";
+> >                 #clock-cells = <0>;
+> >                 clock-frequency = <24000000>;
+> >                 clock-output-names = "xtal_24MHz";
+> >         };
+> > ---------------
+> > Both can be seen in /sys/kernel/debug/clk/clk_summary once boot is complete, both can be referenced
+> > in any DTS node, so there is no ABI break.
+> 
+> ABI break is not relevant to the fixed clocks being or not being defined
+> in the DTS. You have a device which was taking the clock inputs, so the
+> clocks stayed enabled.
+> 
+> Now, you don't take these inputs, so for example the clocks are getting
+> disabled as not used.
 
-Note: Enabling this for both C1 and C1E is slightly different than
-the approach for SKX/ICX, where CPUIDLE_FLAG_IRQ_ENABLE is only
-enabled on C1; however, given that SPR target/exit latency is 1/1
-for c1 and 2/4 for C1E, respectively, which is slower than C1
-for SKX, it seems prudent to now enable it on both states.
+Ok, thanks for the explanation.
 
-This is also important as on SPR it is possible for only C1 or
-only C1E to be enabled (i.e. one of them would be disabled), so
-only enabling C1 would short change C1E-only configurations.
+> > 
+> > "DTS should describe the hardware fully" - this is true in case the OS is supposed to controll the
+> > hardware fully. i.MX8 System Controller Unit concept implies resources being allocated and managed
+> > by SCU, there is no direct OS access to some hardware. SCU actually defines the hardware environment
+> > the OS is being able to see and run within. SCU is able to define several such isolated hardware
+> > environments, each having its own OS running. So, in this particular case - i.MX8 SCU concept -
+> > DTS should describe the hardware from the perspective of the hardware environment exposed by SCU to
+> > OS.
+> 
+> OK, that sounds good, but the question about these clocks remain - are
+> they inputs to the SCU or not.
 
-Fixes: 9edf3c0ffef0 ("intel_idle: add SPR support")
-Signed-off-by: Jon Kohler <jon@nutanix.com>
----
- drivers/idle/intel_idle.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+The question context looks a bit shifted. The "clocks" and "clock-names"
+attributes are removed from a clock provider device.
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 424ef470223d..f51857cddf2b 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -893,7 +893,7 @@ static struct cpuidle_state spr_cstates[] __initdata = {
- 	{
- 		.name = "C1",
- 		.desc = "MWAIT 0x00",
--		.flags = MWAIT2flg(0x00),
-+		.flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_IRQ_ENABLE,
- 		.exit_latency = 1,
- 		.target_residency = 1,
- 		.enter = &intel_idle,
-@@ -902,7 +902,8 @@ static struct cpuidle_state spr_cstates[] __initdata = {
- 		.name = "C1E",
- 		.desc = "MWAIT 0x01",
- 		.flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE |
--					   CPUIDLE_FLAG_UNUSABLE,
-+					   CPUIDLE_FLAG_UNUSABLE  |
-+					   CPUIDLE_FLAG_IRQ_ENABLE,
- 		.exit_latency = 2,
- 		.target_residency = 4,
- 		.enter = &intel_idle,
--- 
-2.30.1 (Apple Git-130)
+The OS clock provider in this case is a client which uses some protocol
+to communicate with SCU via a messaging unit. There is no
+access to xtal clocks via the existing OS<->SCU communication protocol.
 
+> 
+> Regardless whether they are actual input or not, you used not
+> appropriate argument here - that Linux OS implementation does not use
+> them. The proper argument is - whether the hardware environment has them
+> connected or not.
+
+Right, agreed.
+
+Regards,
+Viorel
