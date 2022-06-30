@@ -2,76 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433345616CF
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 11:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1505616D9
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 11:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiF3Jwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 05:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        id S233435AbiF3JzY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 05:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiF3Jwt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 05:52:49 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD3843399
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 02:52:48 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id 128so17607098pfv.12
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 02:52:48 -0700 (PDT)
+        with ESMTP id S234577AbiF3JzW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 05:55:22 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6853643ACB
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 02:55:21 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so2473679pjr.0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 02:55:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=caHxsz7F+D6vKq73+2cvqFkt8HIG/x27nb53o+s7rdM=;
-        b=oX0gBWP5sDuY9D493B38ptIsSqR+8mFedgXylg0HCRHCMRgoaKSyD8WXZVUjVn9R9i
-         f5undUYZc7Kq0IqZMMvjJXKYwzzzkKhhkSYG92kWWQtD+ChLXriE+3XjpDB3O/kIilB4
-         Ekik14nTAxmoPn5XAr8V/nisbs9LkQ3eKkN3RJec3BLBkHJxU9GWu7qj7m1a3nTtzRF7
-         rVL3QMECtg8cDjN+Antq39RFIS1z45H8QoPPeG130hWCs/NbHZIm5AyB7WzJX/YnVCX4
-         GuJZgdN/A6HDENCAHxhf+SnKZflRd8YDe7HHa2mVZqpizVlQUnGVXOPmLb6nOc77x71Z
-         Y0Sw==
+        bh=u7LUrk2PQT0QuXB1ls6VgilrLt2bHgnHDE3d6QTzFn0=;
+        b=c/DcgPgMH8qK2qxUIRsHd9NqftRr5oOqCKgNKsTYK9Ah3ft5fkyKKV4WRq6k/ioEnb
+         FDGp4U9eidt4JRmGu66TBiGZELG4YTrTtM0AxUEKNv6seRbXzzmIF7xJw7VYLZbYBa2S
+         crLMn6gMWb0pxVvN/I7kTzlOk3azNREd2eiIqUI1Y23twMHRptJwjDGpFApP1+kdXnsR
+         rFsmc4gFxhPnYKP9ln61ppIgsi/8qIClZILFDJikmUlT9XroMVDP1vAoOT4/99YZgymY
+         7imFj7AYTE6nyfF9DiIm8Erjf4uggZy1hwQT7TRjjiAlIQQ6cYDBsc8nBkDQS1zbU1TN
+         8HUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=caHxsz7F+D6vKq73+2cvqFkt8HIG/x27nb53o+s7rdM=;
-        b=rwreowtmRAnB+4bDwj2Z2EpYJ2pkQV813b9bs0XTPIsNyTy2ZXDKgUJgVN3OmvYAEy
-         xiot7Sw9qMGMe6/oNE2agYJVxpf6Ebo88Lii9LrGG+eFaDwZjjH4sq+eJWLsoJWDvdqf
-         DJAuSXvnRSbz6F2eGn4+Hafj/oddspD60zKJF/dg9sI2rd/pWbwaTvRzVdzrRcMndR6m
-         dWEBfpRDlcyihZlRbMmXc/+obL3sv1ZGv6GmZZ0j++xU5zUyr5xre+W8SrZEGhUh33sg
-         DEdYpmEyGA+B3ByclpEQRUuFh/Jrm+0mYeuwIhMyrZDcH9B15qjaGaRwS7xwKcMy/j94
-         j2Yw==
-X-Gm-Message-State: AJIora/mWWpAIBNTyV31SHea6OJFKcWZ2n77u7vuPQV88Z3N+XjfSlX+
-        4jyUCeHbZsKjxeDhAFCeEKXk7A==
-X-Google-Smtp-Source: AGRyM1v0tiXFOdtoedN87YcN/z/p7ZOgYBDs4R7w8D71l/UKHqEv9chTQHtjKYr7zZLeMWpHki0/fQ==
-X-Received: by 2002:a63:82c6:0:b0:40d:c2d8:b910 with SMTP id w189-20020a6382c6000000b0040dc2d8b910mr6927098pgd.309.1656582768190;
-        Thu, 30 Jun 2022 02:52:48 -0700 (PDT)
+        bh=u7LUrk2PQT0QuXB1ls6VgilrLt2bHgnHDE3d6QTzFn0=;
+        b=TgLzhz/eR9eW9PPlDfqfFdTBmsvMhSVL3X7vYZ2pnhj9uewHw1z1g9GfJprjnXYogu
+         w/3SQe/FZCjFlGBK0P8ioi+KLfVQj0jIvYYJ8fsPDOcnFePoE6z3IEuZKvPKwkI0b9xa
+         evnwg+ERcBgV7KcnTUZ2pG+JcL/uMAILBBIMn2oHuOzMLkiHGrDZpIPPi0Eb2LSSBErU
+         Fb581uC59W6NleGSM7/3MlRGE1OqK+ZlXcQMcJFxqDJI4uVzCrrmpUF4lGmeTgP5ANTe
+         5k29KCZJYr2fMTHxM0URZULAcCiXqMWBFAazTNrgtUBjgl5Gx+Y1BjEm155ZRsNq2O0l
+         GD/w==
+X-Gm-Message-State: AJIora8S9+UrSdffuQrr23sUxPf8fRdOw8pLgVqTnluQJVuw8uMEa/sB
+        RYJcUGbRhhWt+kLmICfPY95Z/Q==
+X-Google-Smtp-Source: AGRyM1uvH6vnV3smGE+NjUvesmv27eoJ+j0uGzL/Bge/ktMXro/pYdvZBQiFwmnYgfr7zCKmlhbBdg==
+X-Received: by 2002:a17:90b:4c4d:b0:1ec:bb28:9819 with SMTP id np13-20020a17090b4c4d00b001ecbb289819mr9106630pjb.140.1656582920705;
+        Thu, 30 Jun 2022 02:55:20 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id x67-20020a628646000000b005252ab25363sm13131891pfd.206.2022.06.30.02.52.47
+        by smtp.gmail.com with ESMTPSA id f80-20020a623853000000b005252380a87bsm13040768pfa.59.2022.06.30.02.55.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 02:52:47 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 15:22:45 +0530
+        Thu, 30 Jun 2022 02:55:20 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 15:25:18 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Message-ID: <20220630095245.otvo53ezd4avoujw@vireshk-i7>
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
- <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
- <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
- <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
- <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
- <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
- <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH v3 2/7] dt-bindings: opp: accept array of frequencies
+Message-ID: <20220630095518.zhvocdbupqqkyps7@vireshk-i7>
+References: <20220513061347.46480-1-krzysztof.kozlowski@linaro.org>
+ <20220513061347.46480-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
+In-Reply-To: <20220513061347.46480-3-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -82,43 +86,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-06-22, 12:13, Dmitry Osipenko wrote:
-> On 6/30/22 03:50, Viresh Kumar wrote:
-> > On 29-06-22, 21:33, Dmitry Osipenko wrote:
-> >> Today I noticed that tegra30-devfreq driver now fails to probe because
-> >> dev_pm_opp_find_freq_ceil() fails with -ERANGE. This patch is guilty for
-> >> that. Could you please take a look?
- 
-> We added memory interconnect support to Tegra and since that time only
-> the memory controller can drive the clock rate. All other drivers,
-> including the devfreq, now issue memory bandwidth requests using ICC.
+On 13-05-22, 08:13, Krzysztof Kozlowski wrote:
+> Devices might need to control several clocks when scaling the frequency
+> and voltage.  Allow passing array of clock frequencies, similarly to the
+> voltages.
 > 
-> In case of the devfreq driver, it's the OPP core that makes the bw
-> request using ICC.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 > 
-> But it's the set_freq_table() that fails [2], I see
-> dev_pm_opp_get_opp_count() returns 17, which is correct, and then
-> dev_pm_opp_find_freq_ceil(freq=0) returns freq=1, which shall be
-> freq=12750000.
+> ---
+> 
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> index 76c8acd981b3..66d0ec763f0b 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> @@ -50,6 +50,16 @@ patternProperties:
+>            property to uniquely identify the OPP nodes exists. Devices like power
+>            domains must have another (implementation dependent) property.
+>  
+> +          Entries for multiple clocks shall be provided in the same field, as
+> +          array of frequencies.  The OPP binding doesn't provide any provisions
+> +          to relate the values to their clocks or the order in which the clocks
+> +          need to be configured and that is left for the implementation
+> +          specific binding.
+> +        minItems: 1
+> +        maxItems: 16
+> +        items:
+> +          maxItems: 1
+> +
+>        opp-microvolt:
+>          description: |
+>            Voltage for the OPP
 
-I am confused, you said earlier that it is failing with -ERANGE, but
-now it is a bad freq value ?
-
-Which one of these it is ?
-
-The problem I see is here though, because of which I was asking you
-the question earlier:
-
-- tegra30-devfreq driver calls devm_pm_opp_of_add_table_noclk(), i.e.
-  clk_count == 0.
-
-- _read_rate() (in drivers/opp/of.c) skips reading any opp-hz
-  properties if clk_count is 0.
-
-- And so you can get -ERANGE or some other error.
-
-Can you please see where we are failing. Also I don't see how freq can
-get set to 1 currently.
+Applied. Thanks.
 
 -- 
 viresh
