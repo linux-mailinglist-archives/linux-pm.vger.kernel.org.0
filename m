@@ -2,75 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3550A561546
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 10:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693FE561560
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 10:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiF3Iij (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 04:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S233849AbiF3IqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 04:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbiF3Iii (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 04:38:38 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A707419A0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 01:38:37 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id h23so37479988ejj.12
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 01:38:37 -0700 (PDT)
+        with ESMTP id S230044AbiF3IqV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 04:46:21 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CDD387B7
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 01:46:20 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id r81-20020a1c4454000000b003a0297a61ddso1213675wma.2
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 01:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RuzPecmK8lwJMTVULYofbK2iZPvsauIveMAadeADOMo=;
-        b=tdsGB+2NFmsAPBB/EUtedO7vX9EzT1WMIVZfKvtgukXqhZsMXG5jbbtUpjF8gf9fc1
-         rxu9gk0bvX8z+W8Km2DpbFNG+0QdkuFrZPwUdPmNZV+Q9BKlzHl4tj/xSg6zIi50w+xg
-         YXDn0G76eumzK26kDBmguIwrj6qEf5N1OQYNnQQ/AhC7eF/8/G5hpwga4a+26kpTp1Do
-         Et03yT7t8QjLvpnNDexMFNAiwpFeCGYVUHTcI0v66MLL7NQL7gg3CFsCwrUSVuNS4wc6
-         MKWAs37cOdvtj6Tl4cnFjzGT9JlgHkIGlCsPSkheEuUnYssDpOee30VFxY74+mVVCRBI
-         7AmA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=sPtsGsGxiY0pUJurJivkSz6fB7RJpCiec1m/UGMaAjk=;
+        b=DBAJoYyq7Z73P2+PdO6gsa3dmnvFmEowkOKISZ9iJz6pAEmXXVZIgWfDMriW3xYBnH
+         GvMAPIj6o3sVkw5riTDzKq9KZMiOj1coVvIRjSlknhw4w6M1BeyL7uLLQFetLUzNyR72
+         EQdNsTFZ8oSwNpP04o1/ZP0FjCouCsFW7TjNau7dO4vIpECdQzO1JUF/KoMzvPIFS3w8
+         bZ1zc8HlZdn+PdVg2BOhAx7Rwem9CD3pgAiW2MLDZ+K7avrwqUxnzrIKwYfeS4F1IiDP
+         EFPOXND2h1M2PUGx0GlTy7INVMXhhVJMynpsuiuTvBCJ4ug9aUl40GOpmGpFrBzp8pwS
+         q+Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RuzPecmK8lwJMTVULYofbK2iZPvsauIveMAadeADOMo=;
-        b=N0WWJIlMO9zVxw6KyYAzvKdQxZApZmFck+ZMGFnFB1EzlKSFSVGDAPY+n1ZAiRPXQp
-         zpB/NsITj3xPr1rcjnrnnIE84lNRNjNQ0Fw8hlqf0U7kbJ2Wi3Yw2eCpII0z91myxwCg
-         SPcaqCpNa+Itek7+6K7UsbmaT60LlS18wdMHCVr+ueJvG5u6Bwg5yrNLwqS+gx59bfgL
-         EExpVH0pmcO3vyT0vSt6kIRFoi9zYGs25hchY89ZwmVuVjZruIwCaCMn2iGawkbcy3Lg
-         CwZdn9JGv+JDj/eA66O8/lwXEXsP4EOL1v5U8/31jZTfSKLdoRsDsb0nCGZ8Ox4KRZM+
-         GEZg==
-X-Gm-Message-State: AJIora9ye0ipKB+qghz65/fDYQOTuAlp01IWljiHg57sZ2cQLAsRLo5J
-        JfvMyvqeulgFBeRaLahj+pq4aw==
-X-Google-Smtp-Source: AGRyM1vOmh1Edq9HczZ5mN0Mwdrir6CkMIAV/8A030PfRiF/wOyhMosw+9txF/+//XvuX5XfYMRMxw==
-X-Received: by 2002:a17:907:6d14:b0:726:34db:89fc with SMTP id sa20-20020a1709076d1400b0072634db89fcmr7666449ejc.406.1656578316020;
-        Thu, 30 Jun 2022 01:38:36 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jw14-20020a170906e94e00b007263481a43fsm8471129ejb.81.2022.06.30.01.38.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 01:38:35 -0700 (PDT)
-Message-ID: <494f610a-b252-44ba-c883-155731561769@linaro.org>
-Date:   Thu, 30 Jun 2022 10:38:34 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=sPtsGsGxiY0pUJurJivkSz6fB7RJpCiec1m/UGMaAjk=;
+        b=LiWD0wCfG8bLQc+z15VlXoCB8ouMO5DuMuTrImu5tU+nlxik2qsVhmLOPsrLddiTpO
+         8PGJG//vqFdMDjfjb3m7fOLnS495KMBH56dv0dgcvMQexe1epau2poPUCtklr8XJ1Ocn
+         s4qp50YmKsgEoD4SrF6+WAWiMNVsz+8+W4qAaga0U0vYmEPXenm7Ece8M0b8Npx/QGUk
+         fXK5SZkut3Jk6X0h3nEGHXjJDJaYZLcUe66Lg50lhhLivTV35fyxnK84sR7mJSyvewX1
+         fA/BzAEA4LzzYtdLefISM3UyJbpbQQdDvE/uMh1iHymivP1EDmP09bx7QdWuIkfnInPT
+         NtDg==
+X-Gm-Message-State: AJIora+BfNwvVWF21IW8H289DVQyVpA9IGqGV/+Pg13rwQx3iwN3d25a
+        7JjsUG5ksHQwFrfWLAcd8KIzVg==
+X-Google-Smtp-Source: AGRyM1ugh7ioXGoQUFDmXtrKxolSnmDVjP63pLV19ZWBQnnH2IWw2DyBym1XDSOSurWwcmKuA1D5Sg==
+X-Received: by 2002:a05:600c:4e51:b0:3a0:4e8d:1e44 with SMTP id e17-20020a05600c4e5100b003a04e8d1e44mr8845997wmq.105.1656578778595;
+        Thu, 30 Jun 2022 01:46:18 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id l1-20020a5d4bc1000000b00219e77e489fsm18371784wrt.17.2022.06.30.01.46.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 01:46:17 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 09:46:15 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Michael Walle <michael@walle.cc>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4 00/15] Add support for AXP192 PMIC
+Message-ID: <Yr1i19uttBub3G8P@google.com>
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+ <CAHp75Vc=PWXauEKDNX+vmqv=oO1LDv8-GgU3OFZXjf8yJrG8wA@mail.gmail.com>
+ <CAHp75VeqvCnWtWLF1zySPGkfBT5obosu0h_pZEhz+pOQWzMdWQ@mail.gmail.com>
+ <Yr1W/m6UV3792GvF@google.com>
+ <CAHp75VdC=Dw_YnTuzZ+PMLfr0y1NcH2DQ1bRccU8e=cGLWznuQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VdC=Dw_YnTuzZ+PMLfr0y1NcH2DQ1bRccU8e=cGLWznuQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,30 +92,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/06/2022 10:20, Viresh Kumar wrote:
-> This patch adds support to allow multiple clocks for a device.
-> 
-> The design is pretty much similar to how this is done for regulators,
-> and platforms can supply their own version of the config_clks() callback
-> if they have multiple clocks for their device. The core manages the
-> calls via opp_table->config_clks() eventually.
-> 
-> We have kept both "clk" and "clks" fields in the OPP table structure and
-> the reason is provided as a comment in _opp_set_clknames(). The same
-> isn't done for "rates" though and we use rates[0] at most of the places
-> now.
-> 
-> Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/opp/core.c     | 165 ++++++++++++++++++++++++++++-------------
->  drivers/opp/debugfs.c  |  27 ++++++-
->  drivers/opp/of.c       |  67 +++++++++++++----
+On Thu, 30 Jun 2022, Andy Shevchenko wrote:
 
-I don't see bindings change here, but I think you included my pieces of
-code related to parsing multiple opp-hz. Is that correct? If so, you
-need to pick up the bindings patch as well.
+> On Thu, Jun 30, 2022 at 9:55 AM Lee Jones <lee.jones@linaro.org> wrote:
+> > On Wed, 29 Jun 2022, Andy Shevchenko wrote:
+> > > On Wed, Jun 29, 2022 at 11:14 PM Andy Shevchenko
+> > > <andy.shevchenko@gmail.com> wrote:
+> > > > On Wed, Jun 29, 2022 at 4:29 PM Aidan MacDonald
+> > > > <aidanmacdonald.0x0@gmail.com> wrote:
+> > > > >
+> > > > > Changes in v4:
+> > > > >
+> > > > > * Drop regmap-irq patches and rebase on top of the regmap-irq
+> > > > >   refactoring series[1], which implements the same functionality.
+> > > > > * Reorder mfd_cells, putting one-line entries at the bottom.
+> > > > > * Fix incorrect example in axp192-gpio device tree bindings.
+> > > > > * Perform adc_en2 flag -> adc_en2_mask conversion in axp20x_adc
+> > > > >   as a separate patch.
+> > > > > * Simplify axp192_usb_power_set_current_max().
+> > > > > * Drop unneeded OF dependency in pin control driver, and document
+> > > > >   tables used for describing register layouts.
+> > > > > * Various style fixups suggested by Andy Shevchenko.
+> > > >
+> > > > For patches 6-11
+> > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > >
+> > > Ditto for patches 13-15.
+> >
+> > Not sure `b4` will pick these up!
+> 
+> No it won't. But it's not an issue, one may use `git msg-filter` for
+> that, esp. taking into account that series most likely will be resent
+> due to patch 12 (`but not fully sure it will be the case).
+> 
+> For your convenience I have added on per patch basis.
 
-Best regards,
-Krzysztof
+That helps, thanks Andy.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
