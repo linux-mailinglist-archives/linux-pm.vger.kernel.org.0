@@ -2,132 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2985611EC
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 07:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963E6560EDE
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 03:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiF3FvE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 01:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S230073AbiF3B6N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jun 2022 21:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiF3FvE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 01:51:04 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B547240B9;
-        Wed, 29 Jun 2022 22:51:01 -0700 (PDT)
-X-UUID: 6ac140b59ab44ceb8994a31cedae9485-20220630
-X-Spam-Fingerprint: 0
-X-GW-Reason: 13103
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HNeS6uumcgOimgeWuoeaguA==
-X-Content-Feature: ica/max.line-size 73
-        audit/email.address 1
-        dict/adv 1
-        dict/contack 1
-        dict/job 1
-        dict/notice 1
-        dict/operate 1
-        dict/time 1
-        meta/cnt.alert 1
-X-CPASD-INFO: 2e8b9918045d42f3b781bab8c232cf5e@e7VygmZrX2hcVHewg3WxbYJoaGGSjYK
-        HpWxTYpGWYYWVgnxsTWBnX1OEgnBQYl5dZFZ3dG9RYmBgYlB_i4Jyj1RgXmCCVHSTgHSfWJJnaQ==
-X-CLOUD-ID: 2e8b9918045d42f3b781bab8c232cf5e
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:182.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:195.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:11,DUF:237,ACD:3,DCD:3,SL:0,EISP:0,AG:0,CFC:0.512,CFSR:0.049,UAT:0,RAF:
-        0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF
-        :0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 6ac140b59ab44ceb8994a31cedae9485-20220630
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 6ac140b59ab44ceb8994a31cedae9485-20220630
-X-User: xiongxin@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xiongxin@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1894798137; Thu, 30 Jun 2022 08:57:52 +0800
-From:   xiongxin <xiongxin@kylinos.cn>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        xiongxin@kylinos.cn, luriwen@kylinos.cn
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 -next 2/2] PM: suspend: advanced pm_wakeup_clear() for normal suspend/hibernate
-Date:   Thu, 30 Jun 2022 08:57:18 +0800
-Message-Id: <20220630005718.309178-3-xiongxin@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220630005718.309178-1-xiongxin@kylinos.cn>
-References: <20220630005718.309178-1-xiongxin@kylinos.cn>
+        with ESMTP id S229489AbiF3B6M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jun 2022 21:58:12 -0400
+Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [210.0.225.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D80C248;
+        Wed, 29 Jun 2022 18:58:06 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 30 Jun
+ 2022 09:58:03 +0800
+Received: from [10.32.56.37] (10.32.56.37) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 30 Jun
+ 2022 09:58:01 +0800
+Subject: Re: [PATCH V2] cpufreq: Add Zhaoxin/Centaur turbo boost control
+ interface support
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <c4f669a8-0da6-862a-0450-ddf178272bdd@zhaoxin.com>
+ <CAJZ5v0iGQz0GprbHSL6JVmHv8y-kDsyW4TouN6JwJZtp46DokQ@mail.gmail.com>
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Message-ID: <2d961645-75e4-de10-47d5-b3351c54fa0b@zhaoxin.com>
+Date:   Thu, 30 Jun 2022 09:58:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RCVD_IN_PBL,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+In-Reply-To: <CAJZ5v0iGQz0GprbHSL6JVmHv8y-kDsyW4TouN6JwJZtp46DokQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.32.56.37]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm_wakeup_clear() will clear the wakeup source, which can ensure that it
-is not disturbed by useless wakeup signals when doing suspend/hibernate;
 
-At the beginning of the suspend/hibernate process, the notifier
-mechanism is used to notify other device drivers. This action is
-time-consuming (second-level time-consuming). If the process fails due
-to the received wakeup signal during the execution of these functions,
-it can better improve the experience of failing suspend/hibernate
-returns;
 
-Therefore, it is recommended here that for the suspend/hibernate process
-normally called from /sys/power/state, the pm_wakeup_clear() function
-should be brought before the notifier call; for the freeze_process()
-function called from other places, the original logic is kept;
+On 30/6/2022 02:16, Rafael J. Wysocki wrote:
+> On Thu, Jun 23, 2022 at 3:21 AM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
+>>
+>> Recent Zhaoxin/Centaur CPUs support X86_FEATURE_IDA and the turbo boost
+>> can be dynamically enabled or disabled through MSR 0x1a0[38] in the same
+>> way as Intel. So add turbo boost control support for these CPUs too.
+>>
+>> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+>> ---
+>>    drivers/cpufreq/acpi-cpufreq.c | 4 ++++
+>>    1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+>> index 3d514b8..1bb2b90 100644
+>> --- a/drivers/cpufreq/acpi-cpufreq.c
+>> +++ b/drivers/cpufreq/acpi-cpufreq.c
+>> @@ -78,6 +78,8 @@ static bool boost_state(unsigned int cpu)
+>>
+>>          switch (boot_cpu_data.x86_vendor) {
+>>          case X86_VENDOR_INTEL:
+>> +       case X86_VENDOR_CENTAUR:
+>> +       case X86_VENDOR_ZHAOXIN:
+>>                  rdmsr_on_cpu(cpu, MSR_IA32_MISC_ENABLE, &lo, &hi);
+>>                  msr = lo | ((u64)hi << 32);
+>>                  return !(msr & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
+>> @@ -97,6 +99,8 @@ static int boost_set_msr(bool enable)
+>>
+>>          switch (boot_cpu_data.x86_vendor) {
+>>          case X86_VENDOR_INTEL:
+>> +       case X86_VENDOR_CENTAUR:
+>> +       case X86_VENDOR_ZHAOXIN:
+>>                  msr_addr = MSR_IA32_MISC_ENABLE;
+>>                  msr_mask = MSR_IA32_MISC_ENABLE_TURBO_DISABLE;
+>>                  break;
+>> --
+> 
+> Applied as 5.20 material.
+> 
 
-The pm_suspend_target_state variable is used here to identify whether the
-suspend process is going normally.
+Thanks a lot.
 
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
----
- kernel/power/process.c | 5 ++++-
- kernel/power/suspend.c | 6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+> However, I had to manually fix up the formatting of the patch.
+> 
 
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index 3068601e585a..3fde0240b3d1 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -131,7 +131,10 @@ int freeze_processes(void)
- 	if (!pm_freezing)
- 		atomic_inc(&system_freezing_cnt);
- 
--	pm_wakeup_clear(0);
-+	if (pm_suspend_target_state != PM_SUSPEND_ON)
-+		pm_wakeup_clear(1);
-+	else
-+		pm_wakeup_clear(0);
- 	pr_info("Freezing user space processes ... ");
- 	pm_freezing = true;
- 	error = try_to_freeze_tasks(true);
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 4cfa464600bf..2a82db57adc9 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -569,6 +569,12 @@ static int enter_state(suspend_state_t state)
- 	 * performed from the /sys/power/state entry.
- 	 */
- 	pm_suspend_target_state = state;
-+	/*
-+	 * Put pm_wakeup_clear() before the notifier notification chain to
-+	 * optimize in the suspend process, the wakeup signal can interrupt
-+	 * the suspend in advance and fail to return.
-+	 */
-+	pm_wakeup_clear(0);
- 
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+Sorry for inconvenient.
+
+> Can you please configure your e-mail client so that this is not
+> necessary in the future?
+> 
+
+Was using the Thunderbird client to send patch, and will use git 
+send-email in the future.
+
+> Thanks!
+> .
+> 
+
 -- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+Sincerely
+TonyWWang-oc
