@@ -2,106 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF28561E4B
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 16:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA03C561E62
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 16:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbiF3OnV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 10:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S234996AbiF3OsJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 10:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiF3OnT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 10:43:19 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E7DDF5D;
-        Thu, 30 Jun 2022 07:43:17 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d5so17187003plo.12;
-        Thu, 30 Jun 2022 07:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RUoQVUfGIj+k3cK9VwLwIAhO4opF70rEutg3/2JWbC4=;
-        b=mgt0FAe0RaXxmkNV3dy2J1eV/FbHCE1/hDOnsUyVtVhvzO5yUJ0GR22CtF1X14Qnr7
-         CXxb8edTqh/LWLZmNaoF0bq7rHhonzgqNKelVBfU+dOi03LOjpThN7IxfB6vDgYeLd4r
-         W0LxeHexHjzHAzClwJwrY5Bnq0FsevwUOiYTReuID5T2LmFDZN2SHDD2ZNe9v9wLKdA8
-         ZyMYqUXMTrbGbwHxnttvTjIGZUA2dF3zxMuD01r9Lp3atcGjoQamcELO+XoLNGj8RJpQ
-         CU81vdOtOqTnAjLfDLcNGWg8u3YkUSsZ23oQwudqa3tZib6HtnbnoXIDq13jo2916ARP
-         CCLw==
+        with ESMTP id S232881AbiF3OsI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 10:48:08 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4028AD78;
+        Thu, 30 Jun 2022 07:48:07 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31bf3656517so90721917b3.12;
+        Thu, 30 Jun 2022 07:48:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RUoQVUfGIj+k3cK9VwLwIAhO4opF70rEutg3/2JWbC4=;
-        b=KCpvofXeV2g5fyo/9PrMVCLKlO3Ljd+H9xjkkrpumdIOhrk1WBIMl4CQUG8KAQi3wn
-         5TerU3ep1zivUc31OsYF+dr/ZWc24HEGlpKAGUTwFXmowon6DacN5xJtet2s6X432ODG
-         JmNg/yjWorODlckfQmRBffGygvINM5ShbyZ8xXHEiGNmg0EL1Jn5WYcMGzB5ySFlIB90
-         aV5kqCUB3P61Kbi0vnAVD81x8gEzmO5h/u8V2RozyWvAlsU0q9oI/PTY9stkBKh/lJTh
-         vKCoBZWK/XsIGo/heirHzjrF+EqMM71RtVNkrtWJMgROTWkyngD/xA0qAuGAQ5WMABZ7
-         qfdg==
-X-Gm-Message-State: AJIora+Sy96qocbWefnzwuczWpyXcBg8vfqP2FJ4t533d7IkeSpWeV3s
-        LgO1TxYyZnwiBRDAV302Ahg=
-X-Google-Smtp-Source: AGRyM1sYB1R3u1XCkRIl82xDtM8/BHbKNahIwLTkJ9JVsgEUEwGEDwnGSfR9o/mfcbDeU5mr4vFWJg==
-X-Received: by 2002:a17:90b:d82:b0:1ef:366f:b654 with SMTP id bg2-20020a17090b0d8200b001ef366fb654mr4955387pjb.151.1656600196861;
-        Thu, 30 Jun 2022 07:43:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o15-20020a17090ab88f00b001e305f5cd22sm4498009pjr.47.2022.06.30.07.43.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 07:43:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <05ab4cec-ed35-1923-5750-e43c3ed30c50@roeck-us.net>
-Date:   Thu, 30 Jun 2022 07:43:11 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+qCSLXLpvZWhA8w54PN+yxH0ih122e6D4lPNgfVMEk8=;
+        b=gOLuUA56LveIk4khjUgs7/laAbEK4DLHG/zomJQMK0rQVfTafwXv+C+TI5vOxRpQhy
+         X8zCHje9VfffquyCPTJZ4VU85KbZroivSXILGAXii+r5BawoMidurZ2cfC8K9+SjJZJ7
+         XRiK87Ni0Pe3eVCudWpLoCQQt5AxdZUI7KGEsXQwjGJZ9MnRiKugKvqn102vUDGv8oy6
+         I+wbegWnJeYhzd8ZHyIY3jBNCXemPlVJi1xypOfPZva8UgfCthhisgJDgdHAzJ22hVRN
+         kxaJe/lu+on3VdX5QvQasvuw2d45ZqyR/VqnoJt68xwXxq6wVUTWYR0KqvgnLJkXzo+b
+         D0Ng==
+X-Gm-Message-State: AJIora85i0cBiHEvDuLt0sJ/t9jQioJ9AmGOcgGEbImh6qzJiDgPi/cs
+        56rf+3C4NKVyB791kYbdVKTxX76KbNXgoMzfhNrEj4Pg7ew=
+X-Google-Smtp-Source: AGRyM1vbXZPXCJEI/TXz4b9n6Rap9xzho44Fu1+ZkkX+tZch2UYULtFcCmECp0qJIJHAScn3GPJy4uUioz3LXfV7EWw=
+X-Received: by 2002:a0d:d086:0:b0:31b:d0b2:e11f with SMTP id
+ s128-20020a0dd086000000b0031bd0b2e11fmr10645242ywd.515.1656600486367; Thu, 30
+ Jun 2022 07:48:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 08/14] dt-bindings: watchdog: Add fsl,scu-wdt yaml file
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+References: <20220613120755.14306-1-peter.wang@mediatek.com>
+ <b55d5691-0b2d-56bb-26ff-dcac56770611@mediatek.com> <CAJZ5v0gTpv2gt_Gm9rUd+8Jmp4=ij2=J20o7qO0sC-hm=w3=_A@mail.gmail.com>
+ <12028598.O9o76ZdvQC@kreacher> <90b5f619-2dd6-817b-fe2d-f895be0b5b98@mediatek.com>
+In-Reply-To: <90b5f619-2dd6-817b-fe2d-f895be0b5b98@mediatek.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Jun 2022 16:47:55 +0200
+Message-ID: <CAJZ5v0h8xNCV+1YwRA5wob6Vnvz8JFikv3pYMR_mUrXxzfc=tQ@mail.gmail.com>
+Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release supplier
+To:     Peter Wang <peter.wang@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-9-viorel.suman@oss.nxp.com>
- <988844aa-f7ce-3cba-dd6c-227fa6d58102@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <988844aa-f7ce-3cba-dd6c-227fa6d58102@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,28 +59,132 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/29/22 10:59, Krzysztof Kozlowski wrote:
-> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
->> From: Abel Vesa <abel.vesa@nxp.com>
->>
->> In order to replace the fsl,scu txt file from bindings/arm/freescale,
->> we need to split it between the right subsystems. This patch documents
->> separately the 'watchdog' child node of the SCU main node.
->>
->> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
->> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
->> ---
-> 
-> Assuming all patches are taken independently:
-> 
-> 
-Assuming the same:
+On Thu, Jun 30, 2022 at 4:26 PM Peter Wang <peter.wang@mediatek.com> wrote:
+>
+>
+> On 6/30/22 12:01 AM, Rafael J. Wysocki wrote:
+> > [Add CCs to linix-pm, LKML and Greg]
+> >
+> > On Wednesday, June 29, 2022 5:32:00 PM CEST Rafael J. Wysocki wrote:
+> >> On Wed, Jun 29, 2022 at 4:47 PM Peter Wang <peter.wang@mediatek.com> wrote:
+> >>>
+> >>> On 6/29/22 9:22 PM, Rafael J. Wysocki wrote:
+> >>>> On Wed, Jun 29, 2022 at 5:02 AM Peter Wang <peter.wang@mediatek.com> wrote:
+> >>>>> On 6/28/22 11:54 PM, Rafael J. Wysocki wrote:
+> >>>>>> On Tue, Jun 28, 2022 at 3:53 AM Peter Wang <peter.wang@mediatek.com> wrote:
+> >>>>>>> On 6/28/22 3:00 AM, Rafael J. Wysocki wrote:
+> >>>>>>>> On Mon, Jun 13, 2022 at 2:08 PM <peter.wang@mediatek.com> wrote:
+> >>>>>>>>> From: Peter Wang <peter.wang@mediatek.com>
+> >>>>>>>>>
+> >>>>>>>>> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
+> >>>>>>>>> to prevent supplier enter suspend, pm_runtime_release_supplier should
+> >>>>>>>>> check supplier_preactivated before let supplier enter suspend.
+> >>>>>>>> Why?
+> >>>>>>> because supplier_preactivated is true means supplier cannot enter
+> >>>>>>> suspend, right?
+> >>>>>> No, it doesn't mean that.
+> >>>>> Hi Rafael,
+> >>>>>
+> >>>>> if supplier_preactivated is true, means someone call
+> >>>>> pm_runtime_get_suppliers and
+> >>>>> before pm_runtime_put_suppliers right? This section suppliers should not
+> >>>>> enter suspend.
+> >>>> No, this is not how this is expected to work.
+> >>>>
+> >>>> First off, the only caller of pm_runtime_get_suppliers() and
+> >>>> pm_runtime_put_suppliers() is __driver_probe_device().  Really nobody
+> >>>> else has any business that would require calling them.
+> >>> Hi Rafael,
+> >>>
+> >>> Yes, you are right!
+> >>> __driver_probe_device the only one use and just because
+> >>> __driver_probe_device use
+> >>> pm_runtime_get_suppliers cause problem.
+> >>>
+> >>>
+> >>>> Second, the role of pm_runtime_get_suppliers() is to "preactivate" the
+> >>>> suppliers before running probe for a consumer device and the role of
+> >>> the role of pm_runtime_get_suppliers() is to "preactivate" the suppliers,
+> >>> but suppliers may suspend immediately after preactivate right?
+> >>> Here is just this case. this is first racing point.
+> >>> Thread A: pm_runtime_get_suppliers                -> __driver_probe_device
+> >>> Thread B: pm_runtime_release_supplier
+> >>> Thread A: Run with supplier not preactivate      -> __driver_probe_device
+> >>>
+> >>>> pm_runtime_put_suppliers() is to do the cleanup in case the device is
+> >>>> left in suspend after probing.
+> >>>>
+> >>>> IOW, pm_runtime_get_suppliers() is to ensure that the suppliers will
+> >>>> be active until the probe callback takes over and the rest depends on
+> >>>> that callback.
+> >>> The problem of this racing will finally let consumer is active but
+> >>> supplier is suspended.
+> >> So it would be better to send a bug report regarding this.
+> >>
+> >>> The link relation is broken.
+> >>> I know you may curious how it happened? right?
+> >>> Honestly, I am not sure, but I think the second racing point
+> >>> is rpm_get_suppliers and pm_runtime_put_suppliers(release rpm_active).
+> >> I'm not sure what you mean by "the racing point".
+> >>
+> >> Yes, these functions can run concurrently.
+> >>
+> >>> So, I try to fix the first racing point and the problem is gone.
+> >>> It is full meet expect, and the pm runtime will work smoothly after
+> >>> __driver_probe_device done.
+> >> I'm almost sure that there is at least one scenario that would be
+> >> broken by this change.
+> > That said, the code in there may be a bit overdesigned.
+> >
+> > Does the patch below help?
+> >
+> > ---
+> >   drivers/base/power/runtime.c |   14 +-------------
+> >   1 file changed, 1 insertion(+), 13 deletions(-)
+> >
+> > Index: linux-pm/drivers/base/power/runtime.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/base/power/runtime.c
+> > +++ linux-pm/drivers/base/power/runtime.c
+> > @@ -1768,7 +1768,6 @@ void pm_runtime_get_suppliers(struct dev
+> >               if (link->flags & DL_FLAG_PM_RUNTIME) {
+> >                       link->supplier_preactivated = true;
+> >                       pm_runtime_get_sync(link->supplier);
+> > -                     refcount_inc(&link->rpm_active);
+> >               }
+> >
+> >       device_links_read_unlock(idx);
+> > @@ -1788,19 +1787,8 @@ void pm_runtime_put_suppliers(struct dev
+> >       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+> >                               device_links_read_lock_held())
+> >               if (link->supplier_preactivated) {
+> > -                     bool put;
+> > -
+> >                       link->supplier_preactivated = false;
+> > -
+> > -                     spin_lock_irq(&dev->power.lock);
+> > -
+> > -                     put = pm_runtime_status_suspended(dev) &&
+> > -                           refcount_dec_not_one(&link->rpm_active);
+> > -
+> > -                     spin_unlock_irq(&dev->power.lock);
+> > -
+> > -                     if (put)
+> > -                             pm_runtime_put(link->supplier);
+> > +                     pm_runtime_put(link->supplier);
+> >               }
+> >
+> >       device_links_read_unlock(idx);
+>
+>
+> Hi Rafael,
+>
+> I think this patch solve the rpm_active racing problem.
+> But it still have problem that
+> pm_runtime_get_suppliers call pm_runtime_get_sync(link->supplier)
+> and supplier could suspend immediately by other thread who call
+> pm_runtime_release_supplier.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->  >
-> Best regards,
-> Krzysztof
-
+No, it won't, because pm_runtime_release_supplier() won't drop the
+reference on the supplier taken by pm_runtime_get_suppliers(0 after
+the patch.
