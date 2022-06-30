@@ -2,43 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62835616E8
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 11:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80039561771
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jun 2022 12:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbiF3J5W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jun 2022 05:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S234361AbiF3KPp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jun 2022 06:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbiF3J5T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 05:57:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B4543ACD;
-        Thu, 30 Jun 2022 02:57:18 -0700 (PDT)
-Received: from [192.168.2.145] (unknown [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E21336601948;
-        Thu, 30 Jun 2022 10:57:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656583037;
-        bh=q8/O3O9cAhPR9Cw2/yL31YTcTztXCqBC3JyU3IRJV6w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CjzdPE+le26ptVF7yKxrthrH553wOh4ZGUcJWjlPN741GxPd/+Cp/8DP2Pu++2X3v
-         0UTM43e18ilosLAMvbE+hHdx2ZACU9wFpVjrpHvBNw//+jn2Ej/XWx0SzE+uGEDNKF
-         HeElZTbqMEZ4Az8g2BNH/vqBjqg5YRh6dOB4myXdfOQzR6rF8jCOrLlg+//CDlI86n
-         u0OyRLor47xOcUnTeaB0eV9lVz4Gnwc7Rhe8PzgqD38uzrvKXMcQ598GI87ooyzoEA
-         rGOT+q0PLgfPIM+faQHKk5JQwxGK1kjr7LRPdBoDS4IqTU5goUAtLDBZtPtgycc8l4
-         12uyZp4FYJLrw==
-Message-ID: <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
-Date:   Thu, 30 Jun 2022 12:57:13 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        with ESMTP id S233739AbiF3KPp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jun 2022 06:15:45 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B07644A35
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 03:15:44 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id go6so18372603pjb.0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 03:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P2OGlRzOsLlHMLHaMAa8dkdRgxXAL7ovu/mT9dYjCwk=;
+        b=N3x/Ba1JJJpTAZU0/4ZAV0fceIVWqg2X5lBHu64bgQHXr603tXSd8bXKqm5vH8Kukj
+         XaZyjJnw+4Pvm0PnFbP+5oS8F33+YN5uuHkfrWVfidHO9zEKtVZENMCfrRPDoj3DDEx2
+         0AQ36VZ2aNunl4y674CdMIC8EsxvyjF7A8ZS1g94xjDBctSeeY0nk21nz04ZX9+U2hFW
+         U0zoVkl9rTnpsKe2sjWLXXUg/paTmXzgDdOGGTR3+h1AQljLicERqt1u0/OJvNaca57C
+         ufaEAO/cB02UVhu7C0tU/qsyf10r0P1zEmFFUjqkRQ9gLXJSkWWOXKfYJOVba0q5Jgy8
+         aLgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P2OGlRzOsLlHMLHaMAa8dkdRgxXAL7ovu/mT9dYjCwk=;
+        b=fPtspToRovFNJXry/X9jYaz3mMspYvRpAshWSgWIFwzuNZyCkw/u9QOOxgTmb0lW+I
+         gQ0pcU7efl21SPDhv47PL959omeuJ8YOeYd7gwv3r7Pt2/6H+7rhvrRi/WCA95WboJ50
+         jI7jV7W4fS0U9z436Y7Memjygyb8umiRKoynx3RoDd0g/JIeB43AsamE9F/RPdfkrDq+
+         Bu5JLwys5W1X5EYbjs3uwyPUIiFxPKirFw2l5+oK5UVDTUFIbilyUfOALbHNqVL6AqXw
+         JiHfoXdavv4mIajiz3vtMJ+0C6P0UuZ4/tQkBftrJ+hgScxBOZ0IgDCSG9XjXytnZlp7
+         Q2/Q==
+X-Gm-Message-State: AJIora+U2a7KaJtoGiEcuzR+mAnEAxcT9PVshVVr4rbUwAcMA2WiyFE2
+        UGfrpyoc5PcJ/s2InmaZy+PIBQ==
+X-Google-Smtp-Source: AGRyM1uqc8gtS8EqA81rlfwaMQt35aZZ4Tvp6yATRhuVRjNaxjXfM4zXo2yc60PMZF9UCIf5WN8dFA==
+X-Received: by 2002:a17:902:f792:b0:168:e97b:3c05 with SMTP id q18-20020a170902f79200b00168e97b3c05mr14909999pln.94.1656584144118;
+        Thu, 30 Jun 2022 03:15:44 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id n18-20020aa79052000000b00525251ce47esm13173547pfo.103.2022.06.30.03.15.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 03:15:43 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 15:45:40 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Cc:     Jon Hunter <jonathanh@nvidia.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
@@ -47,6 +58,8 @@ Cc:     Jon Hunter <jonathanh@nvidia.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         linux-kernel@vger.kernel.org,
         "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Message-ID: <20220630101540.5dafkegrmcattt2c@vireshk-i7>
 References: <cover.1654849214.git.viresh.kumar@linaro.org>
  <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
  <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
@@ -56,70 +69,39 @@ References: <cover.1654849214.git.viresh.kumar@linaro.org>
  <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
  <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
  <20220630095245.otvo53ezd4avoujw@vireshk-i7>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220630095245.otvo53ezd4avoujw@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/30/22 12:52, Viresh Kumar wrote:
-> On 30-06-22, 12:13, Dmitry Osipenko wrote:
->> On 6/30/22 03:50, Viresh Kumar wrote:
->>> On 29-06-22, 21:33, Dmitry Osipenko wrote:
->>>> Today I noticed that tegra30-devfreq driver now fails to probe because
->>>> dev_pm_opp_find_freq_ceil() fails with -ERANGE. This patch is guilty for
->>>> that. Could you please take a look?
->  
->> We added memory interconnect support to Tegra and since that time only
->> the memory controller can drive the clock rate. All other drivers,
->> including the devfreq, now issue memory bandwidth requests using ICC.
->>
->> In case of the devfreq driver, it's the OPP core that makes the bw
->> request using ICC.
->>
->> But it's the set_freq_table() that fails [2], I see
->> dev_pm_opp_get_opp_count() returns 17, which is correct, and then
->> dev_pm_opp_find_freq_ceil(freq=0) returns freq=1, which shall be
->> freq=12750000.
+On 30-06-22, 12:57, Dmitry Osipenko wrote:
+> The set_freq_table() gets available freqs using
+> dev_pm_opp_find_freq_ceil() iteration.
 > 
-> I am confused, you said earlier that it is failing with -ERANGE, but
-> now it is a bad freq value ?
-> 
-> Which one of these it is ?
-> 
-> The problem I see is here though, because of which I was asking you
-> the question earlier:
-> 
-> - tegra30-devfreq driver calls devm_pm_opp_of_add_table_noclk(), i.e.
->   clk_count == 0.
-> 
-> - _read_rate() (in drivers/opp/of.c) skips reading any opp-hz
->   properties if clk_count is 0.
-> 
-> - And so you can get -ERANGE or some other error.
-> 
-> Can you please see where we are failing. Also I don't see how freq can
-> get set to 1 currently.
-> 
+> The first dev_pm_opp_find_freq_ceil(freq=0) succeeds and returns ceil
+> freq=1.
 
-The set_freq_table() gets available freqs using
-dev_pm_opp_find_freq_ceil() iteration.
+I don't see how this can possibly happen. One possibility is that freq
+is set to 0 and one the next loop you do freq++, which can make it 1.
 
-The first dev_pm_opp_find_freq_ceil(freq=0) succeeds and returns ceil
-freq=1.
+> The second dev_pm_opp_find_freq_ceil(freq=1) fails with -ERANGE.
 
-The second dev_pm_opp_find_freq_ceil(freq=1) fails with -ERANGE.
+Even if we send freq = 1, I don't see how we can get ERANGE if the OPP
+table is properly initialized.
 
-I haven't looked yet at why freq is set to 1.
+> I haven't looked yet at why freq is set to 1.
+
+Thanks, but I would need some help to get it debugged.
 
 -- 
-Best regards,
-Dmitry
+viresh
