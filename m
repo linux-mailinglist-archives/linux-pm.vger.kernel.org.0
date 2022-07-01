@@ -2,62 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7153A562DBB
+	by mail.lfdr.de (Postfix) with ESMTP id B9D95562DBC
 	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 10:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbiGAIVD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S236020AbiGAIVD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Fri, 1 Jul 2022 04:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbiGAIVB (ORCPT
+        with ESMTP id S236175AbiGAIVB (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 04:21:01 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE1B70E47
-        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 01:20:53 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s206so1779105pgs.3
-        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 01:20:53 -0700 (PDT)
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728BC70E4C
+        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 01:20:56 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id g7so1938020pjj.2
+        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 01:20:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5sBbegLJ1lchy2hqalQ5gJ7BZ0uunI8SG7qvUv41a9Y=;
-        b=LtIggMzGQOAaeuUsH5+tfhe8ltdiSJAT7ASyNnbMKUFwg5LRGyfiXxcle/SSV3NIfW
-         GQx6G+M3HwU+tGz8WVhrwKpvnD+qxamu07mrJMSSs/0srPapAZo80RW4dEZjQcTXyHls
-         K3W0fNeg6V086Ehpk8Xs3rbfyBwd0uu3rlLw41Cb9Do8OTDOOUrFx0l7MGq9ATh1GCEe
-         cksw4Ni/rTwjaO7EyJIu6wLnrCu75x0oloKisDodgwtR/wlb9pyibOWZ8qFCsM1WWV+s
-         P7zuR7ZQLb9ZlwxBaYaLz4eDRX5qaMGQ5zSwoNL2Cw8PjF/0Bchum01YJKqkzUAyKtm9
-         H90w==
+        bh=cgbOoygWZaIIuor1RyiZGwebLyI7PYxrQBZVGVTI33I=;
+        b=obCdm4rJzIAby9ExFqqvOXIVGWgQpZy95pRUIC38dC0eIr+MePjuGhl1A0Zzh7axhV
+         oBTLRLs1niE+fF8sOtY4QAoyO5VqRj4FZiAT4ciUZy89txYOpFTijV/C8PXTfU3HfjBh
+         l/A2STUX1L+mLvU2uMHF5BI4sqqxkKPFGsm6AtheWMfuRp1xCzdvxgUG9Q9xcntIlAa9
+         3cLH720S30gUMnG57CrFy2k9ohBVVKyh7eHcCQ0amnV0ErJt5H3RfocVMUm0iG68H4qz
+         oYjM28jiKUptzVA7+M27RYNIWBIAcLj3CtdfPEc5KNkLMZj6C6JBlREteUNoz2tdZWXI
+         VI6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5sBbegLJ1lchy2hqalQ5gJ7BZ0uunI8SG7qvUv41a9Y=;
-        b=Fkenr/DiLEppaM8vNGlQ1Cex3uTJhf2Z+hPbSsqC+QwLCQ6C1c6pnGRR8i3u5+jM9s
-         MUuTLhEMapQ9JzCeotD76H2DE13sL/9x8flL5jEhGVYEyvmlissdrCktwCQFSOHb6SPv
-         xmVmBoobuO309+0P+3/ipMAnd753KRb6qdkD05ylKmmLDqJgvTJte6D31SzXYfMoEbnO
-         GadogLg4xNtBo82MuWwoqqfSLFttvGeu34ejLzmjMzpgMlkBynk1ZGQGUJg3C/wHeXCI
-         2kCmVXaYY8gAe95vjaqul1NJP3Qcy4fymeegeTnZK1noYKcJj/STfSBs4oAkWliR+ywM
-         CWJQ==
-X-Gm-Message-State: AJIora++5Oq8hw0cD1DKKYpd+Hy9cR6zNlInjni6Uo9bNvAPb7lscpUW
-        nszyR0oT4gzW87Z/Ywgx6AhoAQ==
-X-Google-Smtp-Source: AGRyM1uu8zggOPnDHNiBGQHOAPYQblLb5K23eAAtyPxBWbytzSoamd5/4G+YcLRQ/dpteT5fpwljKw==
-X-Received: by 2002:a63:455b:0:b0:411:bf36:f56e with SMTP id u27-20020a63455b000000b00411bf36f56emr4288740pgk.105.1656663653143;
-        Fri, 01 Jul 2022 01:20:53 -0700 (PDT)
+        bh=cgbOoygWZaIIuor1RyiZGwebLyI7PYxrQBZVGVTI33I=;
+        b=PGVtPJjREghUTwXnRkncWk73UaqZyxsuKui7aPa9OeqHYGM8D4U+3ChGO6WUxI7W/d
+         T0OgOaaSx0Wb4C5T4zjTQFudEnfkBDtW1mj/srq8PiCfOcu35zJzBsuEXzw54hgFQFD7
+         sTXznykKCQRbOAnKBbEOaJeAdcJ0aYm0mOINAHkcZ8NAXPJeDv6AdH7S2v2LYzn5rCYT
+         D6vLGnFi8sbD5soP/zlQx59gtOZvYgz8q6Rjd3MpA/UPNemgb2QcVr6RrO3EIDDIwkA+
+         7loCJVwdgcrqKbLBFVgy6rXnNes5/BPKeCwcXzSC5a8MGxu0dorr3BU1r2HiRoYmE+2A
+         lPjA==
+X-Gm-Message-State: AJIora+1LyB3g4u9FFlnYi1CNDfLZZ/ECi6rGsVia8HRLvC4bzJsUzRP
+        WDm/dUzXJ2k156wC6LFinmD86A==
+X-Google-Smtp-Source: AGRyM1tqcjCws6zg/SRdbpK7iJxqkiNnbiwu1OmSnN8KGWw1G6+vGEDusVUxK4VpgHd/fEzFYQ04bA==
+X-Received: by 2002:a17:90b:4b48:b0:1ec:fc87:691c with SMTP id mi8-20020a17090b4b4800b001ecfc87691cmr17043869pjb.120.1656663655997;
+        Fri, 01 Jul 2022 01:20:55 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id cm24-20020a17090afa1800b001ec87220fb9sm5938601pjb.16.2022.07.01.01.20.52
+        by smtp.gmail.com with ESMTPSA id a3-20020a1709027e4300b0016b8b35d725sm7861957pln.95.2022.07.01.01.20.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 01:20:52 -0700 (PDT)
+        Fri, 01 Jul 2022 01:20:55 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
 Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 03/30] cpufreq: dt: Migrate to dev_pm_opp_set_config()
-Date:   Fri,  1 Jul 2022 13:49:58 +0530
-Message-Id: <c90a2155c25803f23e8b79a69188c3fb6117607b.1656660185.git.viresh.kumar@linaro.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 04/30] cpufreq: imx: Migrate to dev_pm_opp_set_config()
+Date:   Fri,  1 Jul 2022 13:49:59 +0530
+Message-Id: <d5a3279dac9503cb0457dd9b20c57de774ec1dfa.1656660185.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1656660185.git.viresh.kumar@linaro.org>
 References: <cover.1656660185.git.viresh.kumar@linaro.org>
@@ -78,66 +82,68 @@ types, i.e. dev_pm_opp_set_config().
 
 Lets start using it.
 
-Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/cpufreq-dt.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/cpufreq/imx-cpufreq-dt.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
-index 8fcaba541539..9e25bf86e512 100644
---- a/drivers/cpufreq/cpufreq-dt.c
-+++ b/drivers/cpufreq/cpufreq-dt.c
-@@ -29,8 +29,8 @@ struct private_data {
+diff --git a/drivers/cpufreq/imx-cpufreq-dt.c b/drivers/cpufreq/imx-cpufreq-dt.c
+index 3fe9125156b4..8104fed4ff7c 100644
+--- a/drivers/cpufreq/imx-cpufreq-dt.c
++++ b/drivers/cpufreq/imx-cpufreq-dt.c
+@@ -31,8 +31,8 @@
  
- 	cpumask_var_t cpus;
- 	struct device *cpu_dev;
--	struct opp_table *opp_table;
- 	struct cpufreq_frequency_table *freq_table;
-+	int opp_token;
- 	bool have_static_opps;
- };
+ /* cpufreq-dt device registered by imx-cpufreq-dt */
+ static struct platform_device *cpufreq_dt_pdev;
+-static struct opp_table *cpufreq_opp_table;
+ static struct device *cpu_dev;
++static int cpufreq_opp_token;
  
-@@ -220,12 +220,16 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
- 	 */
- 	reg_name = find_supply_name(cpu_dev);
- 	if (reg_name) {
--		priv->opp_table = dev_pm_opp_set_regulators(cpu_dev, &reg_name,
--							    1);
--		if (IS_ERR(priv->opp_table)) {
--			ret = PTR_ERR(priv->opp_table);
-+		struct dev_pm_opp_config config = {
-+			.regulator_names = &reg_name,
-+			.regulator_count = 1,
-+		};
-+
-+		priv->opp_token = dev_pm_opp_set_config(cpu_dev, &config);
-+		if (priv->opp_token < 0) {
-+			ret = priv->opp_token;
- 			if (ret != -EPROBE_DEFER)
--				dev_err(cpu_dev, "failed to set regulators: %d\n",
-+				dev_err(cpu_dev, "failed to set OPP config: %d\n",
- 					ret);
- 			goto free_cpumask;
- 		}
-@@ -295,7 +299,7 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
- out:
- 	if (priv->have_static_opps)
- 		dev_pm_opp_of_cpumask_remove_table(priv->cpus);
--	dev_pm_opp_put_regulators(priv->opp_table);
-+	dev_pm_opp_clear_config(priv->opp_token);
- free_cpumask:
- 	free_cpumask_var(priv->cpus);
- 	return ret;
-@@ -309,7 +313,7 @@ static void dt_cpufreq_release(void)
- 		dev_pm_opp_free_cpufreq_table(priv->cpu_dev, &priv->freq_table);
- 		if (priv->have_static_opps)
- 			dev_pm_opp_of_cpumask_remove_table(priv->cpus);
--		dev_pm_opp_put_regulators(priv->opp_table);
-+		dev_pm_opp_clear_config(priv->opp_token);
- 		free_cpumask_var(priv->cpus);
- 		list_del(&priv->node);
+ enum IMX7ULP_CPUFREQ_CLKS {
+ 	ARM,
+@@ -86,6 +86,10 @@ static int imx_cpufreq_dt_probe(struct platform_device *pdev)
+ 	u32 cell_value, supported_hw[2];
+ 	int speed_grade, mkt_segment;
+ 	int ret;
++	struct dev_pm_opp_config config = {
++		.supported_hw = supported_hw,
++		.supported_hw_count = ARRAY_SIZE(supported_hw),
++	};
+ 
+ 	cpu_dev = get_cpu_device(0);
+ 
+@@ -153,17 +157,17 @@ static int imx_cpufreq_dt_probe(struct platform_device *pdev)
+ 	dev_info(&pdev->dev, "cpu speed grade %d mkt segment %d supported-hw %#x %#x\n",
+ 			speed_grade, mkt_segment, supported_hw[0], supported_hw[1]);
+ 
+-	cpufreq_opp_table = dev_pm_opp_set_supported_hw(cpu_dev, supported_hw, 2);
+-	if (IS_ERR(cpufreq_opp_table)) {
+-		ret = PTR_ERR(cpufreq_opp_table);
+-		dev_err(&pdev->dev, "Failed to set supported opp: %d\n", ret);
++	cpufreq_opp_token = dev_pm_opp_set_config(cpu_dev, &config);
++	if (cpufreq_opp_token < 0) {
++		ret = cpufreq_opp_token;
++		dev_err(&pdev->dev, "Failed to set Opp config: %d\n", ret);
+ 		return ret;
  	}
+ 
+ 	cpufreq_dt_pdev = platform_device_register_data(
+ 			&pdev->dev, "cpufreq-dt", -1, NULL, 0);
+ 	if (IS_ERR(cpufreq_dt_pdev)) {
+-		dev_pm_opp_put_supported_hw(cpufreq_opp_table);
++		dev_pm_opp_clear_config(cpufreq_opp_token);
+ 		ret = PTR_ERR(cpufreq_dt_pdev);
+ 		dev_err(&pdev->dev, "Failed to register cpufreq-dt: %d\n", ret);
+ 		return ret;
+@@ -176,7 +180,7 @@ static int imx_cpufreq_dt_remove(struct platform_device *pdev)
+ {
+ 	platform_device_unregister(cpufreq_dt_pdev);
+ 	if (!of_machine_is_compatible("fsl,imx7ulp"))
+-		dev_pm_opp_put_supported_hw(cpufreq_opp_table);
++		dev_pm_opp_clear_config(cpufreq_opp_token);
+ 	else
+ 		clk_bulk_put(ARRAY_SIZE(imx7ulp_clks), imx7ulp_clks);
+ 
 -- 
 2.31.1.272.g89b43f80a514
 
