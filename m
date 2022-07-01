@@ -2,64 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59D2562BF1
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 08:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C55562BF6
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 08:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbiGAGoR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Jul 2022 02:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
+        id S232948AbiGAGrO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Jul 2022 02:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiGAGoQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 02:44:16 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB7133A1F
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 23:44:14 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id q18so1473914pld.13
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 23:44:14 -0700 (PDT)
+        with ESMTP id S232320AbiGAGrM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 02:47:12 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D76A5A2D0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 23:47:11 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id bo5so1587414pfb.4
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 23:47:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=fqGOYzB/l7kZK+g2PKZOtqROPoLcRVD866dnEs5oBmg=;
-        b=S2RjsRb3GpYJqTgHxI6x24eL3axHi0Kfg9q59bm6bNShOPqNSkYNk7yLBGNEUzChmk
-         VEWY3BfMLsWXPQYPVDSzMgUs6DmUIjxV1OSfVFGyhjGRflr88zCdsO9W1zGtBj/L41cc
-         Ej563wqt8kAr9z6n/5ZyOfZQ/LrnFvfp+jp7+MkKO5kKQ1lbGz19wmAslM3ffDwD0qXg
-         Eo6dOubjHp35YzZ7xLA8Zq/BK5UjR6dx0w/v1s+NBZZ6e/ycZ94iVJ4Tm5y+vozAv7QV
-         aEIV3RSPEWCa2/aT3iIKsn/kZdH1wggTsXrtWDZF3QjmFORM9VKZndG7Xrv1vvDCnumS
-         3C3g==
+        bh=egN+UcRccyuVdeQkEYj2+EifXHdLgxW8lFptDJxiZwA=;
+        b=fMSzBwcdGpl7JiujKWe7RLNNTZJ/speGjpvF1eCWyvbWO1dWRU1Se2M584shUWZXhN
+         x8E6xce+MYk59dVHkITbamMpqowTtcIdK2XWHOASpJSUhz3YVBo4xN5psSO098BBixGR
+         61o/GgsaHhZ2PR3YgkJqYuj7EEx5PBHoz/8oVyYk8kb4/FQL7c3gSesgY7cZe2/uMiED
+         7mIxavqpSwPrJVLS9oyTpuSRJ2NqrKentqHN/rKtAZnGG+WIAXBnBRd6VaT54kWqM3Oz
+         gq61W+NXzU/DxP9r2lQAesaS94F80OFLRk+b4k8KIAxQ//79EtvfyPiJo2JQzYVwpyZn
+         gruw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fqGOYzB/l7kZK+g2PKZOtqROPoLcRVD866dnEs5oBmg=;
-        b=rtRclPeNDgE9jNv+eUuYlLIti82WdjmCfnyKLM5WN5qA+AmRUZ87qvMX8qjW+gBFWQ
-         YcGzuyj2F5kJF5JGggYVbQ+XvWI6Pi2eSVJP4iK/wjcyfrIxF7j7ra+HhUUBmyo7/1cC
-         W309qtJ7hq7K90mcc53YVwq/WzXLwIKGkbqrA3mRR3O9nKj8xjl/3Fe/MiCCLKvyxAGX
-         0AF/xt+sXj3ydmyffELkpJlm6iSLYcWT49CdM359dJEdsmP/QqKMibhsMzr0Fhb+x3Y3
-         ES/WKdzQAdYxpUXzF/2ON1/+ordKmnLQFX7FzPkQE3RoLO2Eq5oeRTgn3LsbR75Nx0Vn
-         JrLg==
-X-Gm-Message-State: AJIora9JewtbtdoezKeN2uxIdQr9aLrezOpkDLc1AdmoHM1/+txx0tEH
-        oIcb9otX32cjxeBSQxTUesVItA==
-X-Google-Smtp-Source: AGRyM1uwyvmSGlGJAjXrdc6N6uZUQfJRuTlnB3J/YZbniZZrpCKhJ5r35ItliBXy8saLnoAV5x2zwQ==
-X-Received: by 2002:a17:902:8501:b0:16b:8ec5:1bbd with SMTP id bj1-20020a170902850100b0016b8ec51bbdmr17918803plb.151.1656657854475;
-        Thu, 30 Jun 2022 23:44:14 -0700 (PDT)
+        bh=egN+UcRccyuVdeQkEYj2+EifXHdLgxW8lFptDJxiZwA=;
+        b=GoTgfkJ9q9k4oPoTqGYKuXkAa4AtRLobwkuxf6fkwA6Eo07a8oL4cGIHa/wkzvclov
+         QbI4tSBuxhrpPfu2LyEXlNEOlmXa6imoHDhyN7R8CZN3LLn6GUZXGmPavNdznmgoUGxf
+         EnA6XutPKnXa4N7J8UE2da/bUu22npN+v6flr3rap+lkR14lNCAGXRtOKYDDY1O1/Qw4
+         CP2JUf2EJIHQsRRmcuA/hYcY1zuKUKLKSfvZD+J2wATCuCL1OWuhQpEiD2UArG2z89dE
+         LOrJW5xWTxmeM1jR5n2ZmUbP1wS22+prAnlBEC2Sx3ir5Rd1Gbw9wpFuu8zX8mQP24ZE
+         s8Pw==
+X-Gm-Message-State: AJIora8IMV4NWv4HQulMyj74qXl0RzeH6v8cKKVq3JpCi4MepazbH3y/
+        8VcQguPLGs+u6sDvf/yj7jQl2IPYPwnO6Q==
+X-Google-Smtp-Source: AGRyM1u9PssLfCNx6VYufOEdSrkkUB1v4i9u0kQQRnf7duxhEmTfCshLrmwaMvtoDk6mwibMC1N5pA==
+X-Received: by 2002:a63:1a52:0:b0:40d:9515:c113 with SMTP id a18-20020a631a52000000b0040d9515c113mr11220337pgm.312.1656658030839;
+        Thu, 30 Jun 2022 23:47:10 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id c19-20020a62e813000000b005252adb89b3sm14738580pfi.32.2022.06.30.23.44.13
+        by smtp.gmail.com with ESMTPSA id n63-20020a17090a5ac500b001ec8c53544esm5713373pji.46.2022.06.30.23.47.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 23:44:14 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 12:14:09 +0530
+        Thu, 30 Jun 2022 23:47:10 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 12:17:06 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yi Zhang <yi.zhang@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [bug report] lscpu: cannot read
- /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq: Device or resource
- busy
-Message-ID: <20220701064409.b3uefcbipd5doure@vireshk-i7>
-References: <CAHj4cs9PPg7c=riv4OW9nTY_igFTNgX9Gm2a55ZAbVy+nB=LKg@mail.gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Message-ID: <20220701064706.jgm5q6k7yzumhqdy@vireshk-i7>
+References: <cover.1654849214.git.viresh.kumar@linaro.org>
+ <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
+ <de13cca4-3a33-6482-7b02-f89796f45325@linaro.org>
+ <4cac6c79-ea9a-1f48-c6f1-2e04b54590a4@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHj4cs9PPg7c=riv4OW9nTY_igFTNgX9Gm2a55ZAbVy+nB=LKg@mail.gmail.com>
+In-Reply-To: <4cac6c79-ea9a-1f48-c6f1-2e04b54590a4@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,27 +75,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+Rafael and linux-pm
-
-On 30-06-22, 19:37, Yi Zhang wrote:
-> Hi Viresh
+On 30-06-22, 14:39, Krzysztof Kozlowski wrote:
+> > Shouldn't this be >=1? I got several clocks and this one fails.
 > 
-> 
-> I got this issue when I run lscpu after offline cpu0 on the server[1],
-> and I'm using the latest linux tree.
-> 
-> [1]
-> echo 0 >/sys/devices/system/cpu/cpu0/online
-> lscpu: cannot read
-> /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq: Device or
-> resource busy
+> Actually this might be correct,
 
-That is by design, if the last CPU of a policy goes away we don't
-remove the sysfs entries right away, but disallow their access to
-avoid any races later on.
+Right.
 
-> I get your mail address from MAINTAINERS, I'm not sure which should be
-> the right maillist to report to, so only send to you.
+> but you need to update the bindings. Now
+> you require opp-level for case with multiple clocks.
+
+Will do.
 
 -- 
 viresh
