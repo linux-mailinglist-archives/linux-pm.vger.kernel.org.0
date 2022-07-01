@@ -2,269 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6949562D7F
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 10:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABDA562DB6
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 10:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbiGAILa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Jul 2022 04:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S233692AbiGAIUr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Jul 2022 04:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbiGAIL2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 04:11:28 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1885E70AD1
-        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 01:11:26 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id d5so2755747yba.5
-        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 01:11:26 -0700 (PDT)
+        with ESMTP id S229609AbiGAIUq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 04:20:46 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0810870AFE
+        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 01:20:45 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id k14so1715989plh.4
+        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 01:20:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hHlkuZMmnoq/Fcx5WJPgqnbubzspv6b5yJUWnWtjBFU=;
-        b=ef3c0Q9NjuflyQ+MqqXmFYsu6VqqoBDzl3Rn9YOZ6BtoUOKK35qOxdgC8QR/fTDybG
-         VqqyO8E0kSnvEPQLWxHMS1kOy7d31CPndv9IcUcD1PZLZYa4nQ8pJrAPz/ENotu6Fg+T
-         cv1U55Rkpgay9b5N9Cz/uaM1OcWmVrSoIxTsrnEXfFYEuj/E7nl1nLRX5Jmy3jh1toiX
-         m6K3sNRCdCrEU4AMi4upx2V2xs8eSYC2ucM/rUpwcUaeacdhm6JFJPOXHzwhz9f44Iz2
-         TiArY9oQLDmL0lT1Yba9o0E0/3CCha39GqTmMcxgRbms+W6WPbfZ6/kPtFAZ3gzJXLrq
-         H1MQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oUYtq84iNGdg4Xe0/YKALbCpeBgj55K/qcb5czheU50=;
+        b=YlwArJ/41k5bqIwMZiuj2szedp3s1rO7QSuQEi13s1O5Ve6bFzu2r9LarZt3O04Y9D
+         PVD3yDK+9Vb0f95dKwdM+JysaoQPKDf3zise0iThezxJk79eOmrZ72/c5Rg1gCbtjVDl
+         F60N2JHzziONCyalfA/wfFDCSlR8hqnvk92kRRSbAFaKwCckeWcCYXOytSRq+zImeRVe
+         lfI7JPrzOCmulRfNW+KQk7bRX6SOCXgDerBmRWMomIAXhT8TLCoNxRQjAHBANqs51hrT
+         iXX1rmjYKKRLhXUKxd6B3MFliSf1sdOs2RlkARJG2gMqxLz4mBo8TozUysUa0f+Xm3N4
+         gDYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hHlkuZMmnoq/Fcx5WJPgqnbubzspv6b5yJUWnWtjBFU=;
-        b=vhKRw+LVHCEZQQfsWBTgVVx+b0xMzNMbqvPpLjJn3l1GlcXH8EPd0Kp3iN24LQelhp
-         tzPs1cpDxdjYCATXe2TlXvCRyPF2rGufSgdgTakHEesav2QfBOJJWpXGtqxZz4N3zgRB
-         pQQ7sJxYrgV8MqxgBcbPwpeREep82Z6rh6MQyVYhMmj6WNX+XsS9qPyKCYZFQwQmc94w
-         EeqX+JQDm+IY0HhegP0swHsFoo0AjhUwnSGFKkGrzbvz7BwZ6l4M7iZ8iUhIqoCiws5x
-         yW2tJE457sRlJ9C/PGQ5/GOIj9pve4kqPx/3UVQmbWFlisolmoFlbyWy7tvkXxYdiCUs
-         KR7w==
-X-Gm-Message-State: AJIora9C01Ecv03NObdeCEbqq3qXP/bfVPP3w++6cfpGEDdbVM8GXEJ4
-        wrC96+6krt7MSwKWyX/mjZbOWqEuhzPzxj/k7IM56Q==
-X-Google-Smtp-Source: AGRyM1vDgmfSwZquyidL3tNXvh2BQFGuYMc3TLjl4/SGBSIpusjC3N4lyjRUlXNEzsK9FZ7zCyuWpHbcQKPzr3oaKYo=
-X-Received: by 2002:a05:6902:1544:b0:66d:3948:deae with SMTP id
- r4-20020a056902154400b0066d3948deaemr14505784ybu.530.1656663085093; Fri, 01
- Jul 2022 01:11:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
- <YrKhkmj3jCQA39X/@atomide.com> <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
- <YrQP3OZbe8aCQxKU@atomide.com> <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
- <Yrlz/P6Un2fACG98@atomide.com> <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
- <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
- <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
- <Yr6HQOtS4ctUYm9m@atomide.com> <Yr6QUzdoFWv/eAI6@atomide.com>
-In-Reply-To: <Yr6QUzdoFWv/eAI6@atomide.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 1 Jul 2022 01:10:48 -0700
-Message-ID: <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oUYtq84iNGdg4Xe0/YKALbCpeBgj55K/qcb5czheU50=;
+        b=3rHr7iB5IGFYfrG2ZZTwfsSIi556myfc50mLZ4xI0LQaturYzcfzyN+buaQlDdWBH9
+         F5p0/RNlKCU/pgls5FiVPfXYs8+dM/hpwHMUBtwlTqQql2sPCnsx2RQacsA5qXexPy1m
+         PzZ8KaOFfu1whfyBUwkNt3r446AIyifhgxvhlIL5OpY4lPbp7z8U+1tY58gJJHylI1wP
+         ABlhvsj2Up7fDbaHjS50WfFaIwso0dQdbOfzBGkSA1fKC+18SQ9/uKgEYxmQV5S467Zm
+         B/cdMHJMRiMviAV/iTzZndOh4Yi0kCKpbVJaCVDCdsZaoGaYeP8NeTO9VuJSYEpw3qTw
+         y7Tg==
+X-Gm-Message-State: AJIora908Za4hRioRL8baOT70hD80r6nQ1n1a4cqPYHvThgYEjIt1+ug
+        tOSkF+x3ylUePfpyIs4gLxbgWw==
+X-Google-Smtp-Source: AGRyM1uw8CKR4s38IcPhcQa1KogQ13yRLMm2Qxe1pU/dJuysA+BJx5bL0ipnbj/Tos0q5dkbVF00/Q==
+X-Received: by 2002:a17:90a:d80b:b0:1ec:9a1a:2266 with SMTP id a11-20020a17090ad80b00b001ec9a1a2266mr15418832pjv.7.1656663644453;
+        Fri, 01 Jul 2022 01:20:44 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id ru10-20020a17090b2bca00b001e880972840sm3443768pjb.29.2022.07.01.01.20.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 01:20:43 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mark Brown <broonie@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>, NXP Linux Team <linux-imx@nxp.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Qiang Yu <yuq825@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Rob Herring <robh@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Paul <sean@poorly.run>, Shawn Guo <shawnguo@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Viresh Kumar <vireshk@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        lima@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH V2 00/30] OPP: Add new configuration interface: dev_pm_opp_set_config()
+Date:   Fri,  1 Jul 2022 13:49:55 +0530
+Message-Id: <cover.1656660185.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 11:12 PM Tony Lindgren <tony@atomide.com> wrote:
->
-> * Tony Lindgren <tony@atomide.com> [220701 08:33]:
-> > * Saravana Kannan <saravanak@google.com> [220630 23:25]:
-> > > On Thu, Jun 30, 2022 at 4:26 PM Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > On Thu, Jun 30, 2022 at 5:11 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > > >
-> > > > > On Mon, Jun 27, 2022 at 2:10 AM Tony Lindgren <tony@atomide.com> wrote:
-> > > > > >
-> > > > > > * Saravana Kannan <saravanak@google.com> [220623 08:17]:
-> > > > > > > On Thu, Jun 23, 2022 at 12:01 AM Tony Lindgren <tony@atomide.com> wrote:
-> > > > > > > >
-> > > > > > > > * Saravana Kannan <saravanak@google.com> [220622 19:05]:
-> > > > > > > > > On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
-> > > > > > > > > > This issue is no directly related fw_devlink. It is a side effect of
-> > > > > > > > > > removing driver_deferred_probe_check_state(). We no longer return
-> > > > > > > > > > -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
-> > > > > > > > >
-> > > > > > > > > Yes, I understand the issue. But driver_deferred_probe_check_state()
-> > > > > > > > > was deleted because fw_devlink=on should have short circuited the
-> > > > > > > > > probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
-> > > > > > > > > probe function and hitting this -ENOENT failure. That's why I was
-> > > > > > > > > asking the other questions.
-> > > > > > > >
-> > > > > > > > OK. So where is the -EPROBE_DEFER supposed to happen without
-> > > > > > > > driver_deferred_probe_check_state() then?
-> > > > > > >
-> > > > > > > device_links_check_suppliers() call inside really_probe() would short
-> > > > > > > circuit and return an -EPROBE_DEFER if the device links are created as
-> > > > > > > expected.
-> > > > > >
-> > > > > > OK
-> > > > > >
-> > > > > > > > Hmm so I'm not seeing any supplier for the top level ocp device in
-> > > > > > > > the booting case without your patches. I see the suppliers for the
-> > > > > > > > ocp child device instances only.
-> > > > > > >
-> > > > > > > Hmmm... this is strange (that the device link isn't there), but this
-> > > > > > > is what I suspected.
-> > > > > >
-> > > > > > Yup, maybe it's because of the supplier being a device in the child
-> > > > > > interconnect for the ocp.
-> > > > >
-> > > > > Ugh... yeah, this is why the normal (not SYNC_STATE_ONLY) device link
-> > > > > isn't being created.
-> > > > >
-> > > > > So the aggregated view is something like (I had to set tabs = 4 space
-> > > > > to fit it within 80 cols):
-> > > > >
-> > > > >     ocp: ocp {         <========================= Consumer
-> > > > >         compatible = "simple-pm-bus";
-> > > > >         power-domains = <&prm_per>; <=========== Supplier ref
-> > > > >
-> > > > >                 l4_wkup: interconnect@44c00000 {
-> > > > >             compatible = "ti,am33xx-l4-wkup", "simple-pm-bus";
-> > > > >
-> > > > >             segment@200000 {  /* 0x44e00000 */
-> > > > >                 compatible = "simple-pm-bus";
-> > > > >
-> > > > >                 target-module@0 { /* 0x44e00000, ap 8 58.0 */
-> > > > >                     compatible = "ti,sysc-omap4", "ti,sysc";
-> > > > >
-> > > > >                     prcm: prcm@0 {
-> > > > >                         compatible = "ti,am3-prcm", "simple-bus";
-> > > > >
-> > > > >                         prm_per: prm@c00 { <========= Actual Supplier
-> > > > >                             compatible = "ti,am3-prm-inst", "ti,omap-prm-inst";
-> > > > >                         };
-> > > > >                     };
-> > > > >                 };
-> > > > >             };
-> > > > >         };
-> > > > >     };
-> > > > >
-> > > > > The power-domain supplier is the great-great-great-grand-child of the
-> > > > > consumer. It's not clear to me how this is valid. What does it even
-> > > > > mean?
-> > > > >
-> > > > > Rob, is this considered a valid DT?
-> > > >
-> > > > Valid DT for broken h/w.
-> > >
-> > > I'm not sure even in that case it's valid. When the parent device is
-> > > in reset (when the SoC is coming out of reset), there's no way the
-> > > descendant is functional. And if the descendant is not functional, how
-> > > is the parent device powered up? This just feels like an incorrect
-> > > representation of the real h/w.
-> >
-> > It should be correct representation based on scanning the interconnects
-> > and looking at the documentation. Some interconnect parts are wired
-> > always-on and some interconnect instances may be dual-mapped.
+Hello,
 
-Thanks for helping to debug this. Appreciate it.
+We have too many configuration specific APIs currently, six of them already,
+like dev_pm_opp_set_regulators(). This makes it complex/messy for both the OPP
+core and its users to manage. There is also code redundancy in these APIs, in
+the way they add/manage the OPP table specific stuff.
 
-> >
-> > We have a quirk to probe prm/prcm first with pdata_quirks_init_clocks().
+This patch series is an attempt to simplify these interfaces by adding a single
+interface, dev_pm_opp_set_config(), which replaces all the existing ones. This
+series also migrates the users to the new API.
 
-:'(
+The first two patches help get the API in place, followed by patches to migrate
+the end users. Once all the users are migrated, the last few patches remove the
+now unused interfaces.
 
-I checked out the code. These prm devices just get populated with NULL
-as the parent. So they are effectively top level devices from the
-perspective of driver core.
+This is pushed here:
 
-> > Maybe that also now fails in addition to the top level interconnect
-> > probing no longer producing -EPROBE_DEFER.
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
 
-As far as I can tell pdata_quirks_init_clocks() is just adding these
-prm devices (amongst other drivers). So I don't expect that to fail.
+This is already tested by various folks now.
 
-> >
-> > > > So the domain must be default on and then simple-pm-bus is going to
-> > > > hold a reference to the domain preventing it from ever getting powered
-> > > > off and things seem to work. Except what happens during suspend?
-> > >
-> > > But how can simple-pm-bus even get a reference? The PM domain can't
-> > > get added until we are well into the probe of the simple-pm-bus and
-> > > AFAICT the genpd attach is done before the driver probe is even
-> > > called.
-> >
-> > The prm/prcm gets of_platform_populate() called on it early.
+The entire patchset shall get merged via the OPP tree in 5.20-rc1, please do not
+merge individual patches.
 
-:'(
+V1->V2:
+- dev_pm_opp_set_config() doesn't return the OPP table anymore, but a token
+  allocated with xa_alloc(). The same needs to be passed to clear-config API.
+- Updated all users according to that as well.
+- The clk_names interface is updated to allow multiple clocks.
+- Converted few // comments to /* */.
+- Added tags by few people.
+- Dropped the last patch to rearrange stuff, not required anymore.
 
-> The hackish patch below makes things boot for me, not convinced this
-> is the preferred fix compared to earlier deferred probe handling though.
-> Going back to the init level tinkering seems like a step back to me.
+Thanks.
 
-The goal of fw_devlink is to avoid init level tinkering and it does
-help with that in general. But these kinds of quirks are going to need
-a few exceptions -- with them being quirks and all. And this change
-will avoid an unnecessary deferred probe (that used to happen even
-before my change).
+--
+Viresh
 
-The other option to handle this quirk is to create the invalid
-(consumer is parent of supplier) fwnode_link between the prm device
-and its consumers when the prm device is populated. Then fw_devlink
-will end up creating a device link when ocp gets added. But I'm not
-sure if it's going to be easy to find and add all those consumers.
+Viresh Kumar (30):
+  OPP: Track if clock name is configured by platform
+  OPP: Add dev_pm_opp_set_config() and friends
+  cpufreq: dt: Migrate to dev_pm_opp_set_config()
+  cpufreq: imx: Migrate to dev_pm_opp_set_config()
+  cpufreq: qcom-nvmem: Migrate to dev_pm_opp_set_config()
+  cpufreq: sti: Migrate to dev_pm_opp_set_config()
+  cpufreq: sun50i: Migrate to dev_pm_opp_set_config()
+  cpufreq: tegra20: Migrate to dev_pm_opp_set_config()
+  cpufreq: ti: Migrate to dev_pm_opp_set_config()
+  devfreq: exynos: Migrate to dev_pm_opp_set_config()
+  devfreq: sun8i: Migrate to dev_pm_opp_set_config()
+  devfreq: tegra30: Migrate to dev_pm_opp_set_config()
+  drm/lima: Migrate to dev_pm_opp_set_config()
+  drm/msm: Migrate to dev_pm_opp_set_config()
+  drm/panfrost: Migrate to dev_pm_opp_set_config()
+  drm/tegra: Migrate to dev_pm_opp_set_config()
+  media: venus: Migrate to dev_pm_opp_set_config()
+  memory: tegra: Migrate to dev_pm_opp_set_config()
+  mmc: sdhci-msm: Migrate to dev_pm_opp_set_config()
+  OPP: ti: Migrate to dev_pm_opp_set_config()
+  soc/tegra: Add comment over devm_pm_opp_set_clkname()
+  soc/tegra: Migrate to dev_pm_opp_set_config()
+  spi: qcom: Migrate to dev_pm_opp_set_config()
+  serial: qcom: Migrate to dev_pm_opp_set_config()
+  OPP: Remove dev_pm_opp_set_regulators() and friends
+  OPP: Remove dev_pm_opp_set_supported_hw() and friends
+  OPP: Remove dev_pm_opp_set_clkname() and friends
+  OPP: Remove dev_pm_opp_register_set_opp_helper() and friends
+  OPP: Remove dev_pm_opp_attach_genpd() and friends
+  OPP: Remove dev_pm_opp_set_prop_name() and friends
 
-I'd say, for now, let's go with this patch below. I'll see if I can
-get fw_devlink to handle these odd quirks without breaking the normal
-cases or making them significantly slower. But that'll take some time
-and I'm not sure there'll be a nice solution.
+ drivers/cpufreq/cpufreq-dt.c                  |  20 +-
+ drivers/cpufreq/imx-cpufreq-dt.c              |  18 +-
+ drivers/cpufreq/qcom-cpufreq-nvmem.c          | 109 +--
+ drivers/cpufreq/sti-cpufreq.c                 |  27 +-
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c        |  36 +-
+ drivers/cpufreq/tegra20-cpufreq.c             |  18 +-
+ drivers/cpufreq/ti-cpufreq.c                  |  38 +-
+ drivers/devfreq/exynos-bus.c                  |  25 +-
+ drivers/devfreq/sun8i-a33-mbus.c              |   8 +-
+ drivers/devfreq/tegra30-devfreq.c             |   8 +-
+ drivers/gpu/drm/lima/lima_devfreq.c           |  12 +-
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c         |   8 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c         |  10 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   6 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c              |   6 +-
+ drivers/gpu/drm/msm/dsi/dsi_host.c            |   6 +-
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c   |   9 +-
+ drivers/gpu/drm/tegra/gr3d.c                  |   6 +-
+ .../media/platform/qcom/venus/pm_helpers.c    |  18 +-
+ drivers/memory/tegra/tegra124-emc.c           |  17 +-
+ drivers/mmc/host/sdhci-msm.c                  |   6 +-
+ drivers/opp/core.c                            | 632 ++++++++----------
+ drivers/opp/opp.h                             |  23 +
+ drivers/opp/ti-opp-supply.c                   |   8 +-
+ drivers/soc/tegra/common.c                    |  45 +-
+ drivers/soc/tegra/pmc.c                       |   8 +-
+ drivers/spi/spi-geni-qcom.c                   |   6 +-
+ drivers/spi/spi-qcom-qspi.c                   |   6 +-
+ drivers/tty/serial/qcom_geni_serial.c         |   6 +-
+ include/linux/pm_opp.h                        | 121 +---
+ 30 files changed, 605 insertions(+), 661 deletions(-)
 
-Thanks,
-Saravana
+-- 
+2.31.1.272.g89b43f80a514
 
-> Regards,
->
-> Tony
->
-> 8< ----------------
-> diff --git a/drivers/soc/ti/omap_prm.c b/drivers/soc/ti/omap_prm.c
-> --- a/drivers/soc/ti/omap_prm.c
-> +++ b/drivers/soc/ti/omap_prm.c
-> @@ -991,4 +991,9 @@ static struct platform_driver omap_prm_driver = {
->                 .of_match_table = omap_prm_id_table,
->         },
->  };
-> -builtin_platform_driver(omap_prm_driver);
-> +
-> +static int __init omap_prm_init(void)
-> +{
-> +        return platform_driver_register(&omap_prm_driver);
-> +}
-> +subsys_initcall(omap_prm_init);
-> --
-> 2.36.1
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
