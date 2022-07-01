@@ -2,129 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E57F562AAB
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 06:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31622562AB9
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 07:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiGAExa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Jul 2022 00:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
+        id S233597AbiGAFGY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Jul 2022 01:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiGAExa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 00:53:30 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B55F65D7A;
-        Thu, 30 Jun 2022 21:53:25 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id u14so2994295qvv.2;
-        Thu, 30 Jun 2022 21:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UCRTnBAux6caQ40uFlyxkDENcZIAIY4tT/Z15xVlwZs=;
-        b=n4cwRNjWiYrHDnntdseMdfJJdukRAoowkS+MkJn8+imYIXAsjvZqI6PcQWaDst9co7
-         TwixdYfr4kafBHhH5TELmbemJK79aG66QbudaIyAfLiiLVQtHlEX+V5m3x0FGinmktQm
-         KeZ0LN1J+E2asOIXshzLXhcnvoGVex+EA6OscU1XTQoSw6mWGMq/UXWGP5RsSyFSBlVE
-         8J5DA5Wq3u9nRlNSFTRgQLVo1xnNJmkKh5IzyxSPfpYeitdDJmTsI4giijmXX8JtIf8s
-         eZBSahE4S/mcm6MWLoH9/vttgtvfDKkt96+FxyU+qaKo5C3TNUNzXN1aQ/dJ022TlGUg
-         RRBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UCRTnBAux6caQ40uFlyxkDENcZIAIY4tT/Z15xVlwZs=;
-        b=6QlKfjKeWbDffYAug+PgiZsyZMJhyDammUmw14lcuw36HtCTLi6dhfVScvMkQC3wb/
-         iVzfZSmPk34XgpVvdCYGDZclQdl51zKSWGJ2QIjhj4yytlMuOTICpFK+kQ5BK5vMKlxw
-         yI6AsJ7vFKk7DZmnaMu2DJe/fn4oaj85VRZI6vgSaTNVobIRfEWdkzpAfITuhc5+WHYM
-         XVwDyUEmVKZ/K4rNPzCeFOJ9Rd6KCnKOPDfIrAuwmKD59ICrLhiHzzuV2kAigB1roSux
-         kBB6UfRMXsjXdod3ZM9IbhQF1R1wfjzQ8LGy1BQD1MtVHVFw4rlUIa+0sDrFhUQjRv+N
-         TlHw==
-X-Gm-Message-State: AJIora88vozedk8VwgPqrGQMjEzRRk0+s5Ll+Zv14ZKmmWiYHtsnqRih
-        Sht4r390UeFJXB4wSHQlhAWyXFMafwveYA==
-X-Google-Smtp-Source: AGRyM1sW4RlGOVt+jzTxJzrAAPBqPkB2B8fVVtEY3bIwtuPAzfreXypswkGDLv8VCJdCQRKzbmgGzw==
-X-Received: by 2002:a05:622a:8c:b0:31b:f355:4d6e with SMTP id o12-20020a05622a008c00b0031bf3554d6emr10661613qtw.50.1656651204404;
-        Thu, 30 Jun 2022 21:53:24 -0700 (PDT)
-Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a254a00b006a6d74f8fc9sm18459756qko.127.2022.06.30.21.53.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Jun 2022 21:53:23 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Schspa Shi <schspa@gmail.com>
-Subject: [PATCH] PM / devfreq: Strengthen the handling of governor null pointer
-Date:   Fri,  1 Jul 2022 12:53:15 +0800
-Message-Id: <20220701045315.61456-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.29.0
+        with ESMTP id S233056AbiGAFGY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 01:06:24 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A77C61D56
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 22:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1656651982; x=1688187982;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SvxleXnvLLu2HAHqskkysVjHRspI2rZmxKBEUNqOG3g=;
+  b=XHa+zLe8ELRMQrVhr45MEY0VSy6ErVMEwi0eG+kbSSgKYKbyrEq4uEGg
+   cR5/+0q9K90SGa6uT0zb+y85j4kJ2oErATH8EAlJZ/ZZ1iEbbg48cNp+b
+   7v4P9zGSMiWyOFcoctP0go+SuNYmd9wOa5QcPSFcOxmgRqoK945CTMKUO
+   a2QJStDga8C/z+SaVYYe7aoiCdGYTddygJH9R1vGmN1weCXusBNj033Jv
+   P+TJtdg/jdvvV/Kt2bbuPU6bxI9B7SjOrcbjaXYRHUEMq2W4awVpNKqEv
+   Tc1da1TYkjRLE6aTzuAO/ydZZYB3ZUG5F4fm6lcPRzQCwfJFznpsdylaB
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,236,1650902400"; 
+   d="scan'208";a="316670747"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 01 Jul 2022 13:06:21 +0800
+IronPort-SDR: o2xaJUIDz16Bfk6sr31uGCStYxzkVy58n/7Iq860yGiaJcqOSrj5ft275aR2Ix/wC2luggeMNl
+ e/D7oSK9Uio14F08ILgEoiSlpuCd5mgEp+zupoi7T+dZu9WcxIG3nzA8ua6Wu+VQiiIFoIyAXg
+ J4pTL3KFMfEHGNSsAs+/X/ijygUkKvKWxi9kM36Kw792l9WJH/b6RJmH0KmZBmoqoTYSMrji7T
+ FZBc+TOd2DsEBRUdfS0bsj0/yzetGS+ZMNayim8hdKv99Fnc73DM/FAe89HIsyc2ht1t925l17
+ MOcQggd2s2zYvz3fQjSuj0ZG
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 21:23:52 -0700
+IronPort-SDR: jFukhM1r1L3jCiCTzTOrx2uKRfMl8Spb1/cLylURlKEZGMzkqs+ukEuhA1HwzW/p6rr+o3By5I
+ E9wMTMihKkiJEENKAggh3s/H1qf+HFLKBUZVHZd1hqpK036UTgxQPqapupugxsilAc7oyiUjW7
+ InqNRnU2sMfUutrhgcwgc6544cy9tB99keTRSmBKcsDyTECR5TAbafFQ8uh3d7AgaRs/UQ0tnH
+ V2zJPG8saSGskD+3OrOY4loMZxIN2SpEhBMGXT0KR4GXHn0gIVJjrqFsffcdAfZE9jX2TdjJ9O
+ qn4=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 22:06:22 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LZ37x1Cyqz1Rwnl
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jun 2022 22:06:21 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1656651980; x=1659243981; bh=SvxleXnvLLu2HAHqskkysVjHRspI2rZmxKB
+        EUNqOG3g=; b=EmrS2gTUseTPly7tzkn5i4i42v8gT5n5mRrMsDJEjbCUmpLGtbV
+        lcbFsEOQyuRuFxezy/eGfLqnI00kAsHK0r58wtfN62aG0zukPe+Xn4Gui8dF0wKg
+        pa8m0WoU6c/0T9XMerV2uSjIJhX0d5RgeMvuhUuKLfaaZr5YCGpaSjmYplnCp+ad
+        95hGHgo/ftS0spQH4SyHoZHeOPsQw6V53x7HQV8ZN7MkV066KhO49l5+jj5H940t
+        QRN1ErqRp1F2QtjB7O58RL7TA1qWTR26o5iZeD8pMshtYn8B965KeOuF4QBQgJn4
+        0kzOodBGTQ4neQHv02wS9hm1O1hjr0Nk66Q==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id r5S7cT4eJqn7 for <linux-pm@vger.kernel.org>;
+        Thu, 30 Jun 2022 22:06:20 -0700 (PDT)
+Received: from [10.225.163.102] (unknown [10.225.163.102])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LZ37v6Hz4z1RtVk;
+        Thu, 30 Jun 2022 22:06:19 -0700 (PDT)
+Message-ID: <4e0783ac-b9f5-24ff-f7c6-7b64549b8f9c@opensource.wdc.com>
+Date:   Fri, 1 Jul 2022 14:06:18 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 04/10] ata: ahci: Use `pm_suspend_preferred_s2idle`
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     linux-pm@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220701023328.2783-1-mario.limonciello@amd.com>
+ <20220701023328.2783-4-mario.limonciello@amd.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220701023328.2783-4-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When new governor start failed & the old governor start failed too,
-or the governor is removed, the devfreq->governor will be NULL, but
-we still access it's member from devfreq->governor->name, which will
-be a crash.
+On 7/1/22 11:33, Mario Limonciello wrote:
+> Drop the direct check from the FADT and use the helper instead.
 
-To fix it, change the position of Null pointer judgment before usage.
+Where is this helper defined ? Seeing that this is patch 4/10, I have no
+context for this patch. Please send the whole series next time.
 
-Another, If the governor is NULL, we try to assign a new governor to
-it.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/ata/ahci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+> index c1eca72b4575..3f79b732dd00 100644
+> --- a/drivers/ata/ahci.c
+> +++ b/drivers/ata/ahci.c
+> @@ -1611,7 +1611,7 @@ static void ahci_update_initial_lpm_policy(struct ata_port *ap,
+>  
+>  #ifdef CONFIG_ACPI
+>  	if (policy > ATA_LPM_MED_POWER &&
+> -	    (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)) {
+> +	    pm_suspend_preferred_s2idle()) {
+>  		if (hpriv->cap & HOST_CAP_PART)
+>  			policy = ATA_LPM_MIN_POWER_WITH_PARTIAL;
+>  		else if (hpriv->cap & HOST_CAP_SSC)
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- drivers/devfreq/devfreq.c | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 01474daf4548..30d7f8c128a6 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -1270,7 +1270,13 @@ int devfreq_add_governor(struct devfreq_governor *governor)
- 		int ret = 0;
- 		struct device *dev = devfreq->dev.parent;
- 
--		if (!strncmp(devfreq->governor->name, governor->name,
-+		/*
-+		 * When new governor start failed & the old governor start
-+		 * failed too. devfreq->governor will be NULL.
-+		 * Try to assign the new governor to this devfreq device.
-+		 */
-+		if (!devfreq->governor ||
-+			!strncmp(devfreq->governor->name, governor->name,
- 			     DEVFREQ_NAME_LEN)) {
- 			/* The following should never occur */
- 			if (devfreq->governor) {
-@@ -1358,15 +1364,15 @@ int devfreq_remove_governor(struct devfreq_governor *governor)
- 		int ret;
- 		struct device *dev = devfreq->dev.parent;
- 
-+		/* we should have a devfreq governor! */
-+		if (!devfreq->governor) {
-+			dev_warn(dev, "%s: Governor %s NOT present\n",
-+				__func__, governor->name);
-+			continue;
-+		}
-+
- 		if (!strncmp(devfreq->governor->name, governor->name,
- 			     DEVFREQ_NAME_LEN)) {
--			/* we should have a devfreq governor! */
--			if (!devfreq->governor) {
--				dev_warn(dev, "%s: Governor %s NOT present\n",
--					 __func__, governor->name);
--				continue;
--				/* Fall through */
--			}
- 			ret = devfreq->governor->event_handler(devfreq,
- 						DEVFREQ_GOV_STOP, NULL);
- 			if (ret) {
 -- 
-2.29.0
-
+Damien Le Moal
+Western Digital Research
