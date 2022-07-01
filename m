@@ -2,70 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EC65631C1
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 12:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63D15631C8
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 12:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiGAKpH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Jul 2022 06:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S236872AbiGAKpM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Jul 2022 06:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236803AbiGAKpE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 06:45:04 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E8A7BD01
-        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 03:45:03 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l2so2264497pjf.1
-        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 03:45:03 -0700 (PDT)
+        with ESMTP id S236870AbiGAKpL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 06:45:11 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AF7796B7
+        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 03:45:10 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id a11-20020a17090acb8b00b001eca0041455so4833162pju.1
+        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 03:45:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=8HWloTp9oIW+iED/Acv+r40kfMWwjhdwx51xoQB8x2M=;
-        b=YriKxqUoLyKSQMhBXSe8hPKWTboA5dURd/roSsXCPkAI+Z0netr66pQQKho4SZSoh/
-         Tldlrl6NcmqjV/PxVdvd6Dyk1dmq081fZJfjDYAYzhc2rpIp+mppLjZpuKfsbkOJGdUW
-         I9ZCTkS2sJlfpREWb/rhakDnAHGjUtVRotb5N9zkSeecZEnAVRoKBZ8/glM4FGin+RcL
-         n8fPB1WpUkBOM3JYG/xrplz8ELNpa+Ki917dgpC+wOit3HAVl5DGdOqTP1zllkSdT4nR
-         ylknha+FmEIptwcCiSvY2ky6wUY0Q2fhDAV9r6KEXUqeuVRT7FatbSlJRmz4KJlIfMUj
-         PV2g==
+        bh=zxTdft5xNc7J8YFkSd0py1mf7N70+0aOCnidcdDs4tE=;
+        b=ycBL6j7quvTaf4N2uH4qr5V5PJiE2qYg6RDtf3wGfWZ20kZ1/e7HeFZgrmeKpiYoyW
+         tX8A/trz9n9re9jLM4PNvXI0wMZFeGiaTZnmmLcqiWVQooz+YECRs4tKatbhEEDZc0MT
+         esoRcS5s6dFvoMg2C5iYlleymPjiheKbdRyoqfxa7h4ZR8eyL4JZeUckeDg3xQZ608M5
+         VfV58heci1FR0owz9/LVV9skWeKbe0FKH34lbR0Jnm1QB7v12OsTAO+cuTq3By9SdLYR
+         2djQVxGBVe5/qU8kruvZUWlKi+DVH/xoQa1O+cLunfYkri5jhmxN67WJJj2kQEUiljbG
+         Yh5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=8HWloTp9oIW+iED/Acv+r40kfMWwjhdwx51xoQB8x2M=;
-        b=3pkbQUxTdlzUVzwCnnRvqLHP3ZkIUytR46SCM7XCPBQVoh9tnXOM09FKoBwtqB80gU
-         e9Lnr6b+MeJhOHIjeicms5rD8uji0KrbfimYmh1rJggXIhJ66o/bsp6l5bkQbQX90rUd
-         D0D7jhJu/0ZQMPG+iD8RjfT+6D3djhp/An081O1NYz001naD/YtWtIetlw02rLQ12Sx3
-         MRywTPTKxXmRkiao002vXAvDOwI3PQi/4a7aVZ1vTdFyq3WnzlFw0P9ctXJPQC7A9hsE
-         PZGutLoLAiYToGcTlm8X17prDFHl+E4pSYtguborVlJpLhPjgTaXc7eUyArXO6FQ01gX
-         5VlA==
-X-Gm-Message-State: AJIora963Jvaf8C3ecvL2PA4n4/GRehjxTVmhn3spmDSfXztV7d4PYLW
-        hbry65oEea8ZZ9L9ykNqxxnLiTysGYINOZgv
-X-Google-Smtp-Source: AGRyM1vnkxC7wr6GobJACvzyiQPZYMOquCQ92Ie8YKbxEOvEN+epGRlgQSZ1NX/pwKyL4tSasYaTBQ==
-X-Received: by 2002:a17:902:c944:b0:16a:3ed0:e60b with SMTP id i4-20020a170902c94400b0016a3ed0e60bmr20311897pla.7.1656672302591;
-        Fri, 01 Jul 2022 03:45:02 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (n058152077154.netvigator.com. [58.152.77.154])
-        by smtp.gmail.com with ESMTPSA id x7-20020aa79567000000b0052524b1bfc3sm15979507pfq.147.2022.07.01.03.44.59
+        bh=zxTdft5xNc7J8YFkSd0py1mf7N70+0aOCnidcdDs4tE=;
+        b=cQAokIQjVsdS4kPZGFqPx0u9AttBQnicKgRyLKSxl5nmdC5eiqYzR3p5SOlRLKgvpP
+         1xRF+3Jr4EWEJ/ZMgDhcLo2pQLkXw+le3ORTu1uYkRt6cilDNZ9oJwNAS4Bl6WljnL3+
+         Zx9muSO1MMWfptMUboL/aUQm+4H4yyiiUlaXoHQdrtzFmuS8dLlw4FY97hf6vJjoDeZn
+         Y/b+PrRzOZIy8fzBpvuRoaUxjK1wPuJm9X8PH9qwZB7DqXYspGsnprGtX0tGbs4ljTKS
+         BdRS/kmvTtVsWEywu9tXn3lHYEsQIXDmrr+JW2c+ANO2Aqe6geN+0V5zB4J3wVXCF3l3
+         HiLQ==
+X-Gm-Message-State: AJIora/RGhiymONmkn5DVP7RcpJiSw3fEBGt4WEcq2qc9LEwElmyhOhb
+        11vdtIsfIgofeG3ERkLurByNEg==
+X-Google-Smtp-Source: AGRyM1vcSAY0ujJGydXrcRkYqJzibc2oSfglSmRCbOojCJpiZiuG7yhIJ1q+GW9zp6C5bvb5W3g9Bg==
+X-Received: by 2002:a17:902:9041:b0:16a:aef:7b84 with SMTP id w1-20020a170902904100b0016a0aef7b84mr20829039plz.124.1656672309760;
+        Fri, 01 Jul 2022 03:45:09 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id h5-20020a170902f7c500b00163bfaf0b17sm11820122plw.233.2022.07.01.03.45.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:45:01 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 18:44:57 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Fri, 01 Jul 2022 03:45:09 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 16:15:07 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] dt-bindings: interconnect: Update property for
- icc-rpm path tag
-Message-ID: <20220701104457.GC659023@leoy-ThinkPad-X240s>
-References: <20220630055723.704605-1-leo.yan@linaro.org>
- <20220630055723.704605-2-leo.yan@linaro.org>
- <1656596665.853599.2569463.nullmailer@robh.at.kernel.org>
+        Jiri Slaby <jirislaby@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 24/30] serial: qcom: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220701104507.b2k76y2s2hewfn25@vireshk-i7>
+References: <cover.1656660185.git.viresh.kumar@linaro.org>
+ <1f3328dafaf9e2944fba8ec9e55e3072a63a4192.1656660185.git.viresh.kumar@linaro.org>
+ <Yr6z5ixRTsIbZvsq@kroah.com>
+ <20220701092458.tzqv7yul476kh2o7@vireshk-i7>
+ <Yr7AwAZeSPeQKDPU@kroah.com>
+ <20220701100100.bxv4t4t7iqphalpv@vireshk-i7>
+ <Yr7J6f6+EQfXFjYN@kroah.com>
+ <20220701102926.uwvn7rurbxdybzeu@vireshk-i7>
+ <Yr7PUxdOKYp91mG0@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1656596665.853599.2569463.nullmailer@robh.at.kernel.org>
+In-Reply-To: <Yr7PUxdOKYp91mG0@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -76,46 +83,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rob,
-
-On Thu, Jun 30, 2022 at 07:44:25AM -0600, Rob Herring wrote:
-
-[...]
-
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On 01-07-22, 12:41, Greg Kroah-Hartman wrote:
+> That feels completely wrong, don't have NULL for a name, make a fake name
+> or something.  Don't make all users in the kernel have a horrible
+> interface just for one piece of broken hardware out there.
 > 
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml:49:11: [error] syntax error: expected <block end>, but found '<scalar>' (syntax)
-> 
-> dtschema/dtc warnings/errors:
-> make[1]: *** Deleting file 'Documentation/devicetree/bindings/interconnect/qcom,rpm.example.dts'
-> Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml:49:11: did not find expected key
-> make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/interconnect/qcom,rpm.example.dts] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> ./Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml:49:11: did not find expected key
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml: ignoring, error parsing file
-> make: *** [Makefile:1404: dt_binding_check] Error 2
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
+> Worst case, name it "".
 
-Sorry that I did not run 'make dt_binding_check', will check it.
+This name goes into the second argument of clk_get(dev, const char *con_id);
 
-> Please check and re-submit.
+I will see how else I should hack it :)
 
-Yeah, will do it.
-
-Thanks a lot for the tips.
-
-Leo
+-- 
+viresh
