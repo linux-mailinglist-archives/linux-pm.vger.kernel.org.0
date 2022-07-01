@@ -2,199 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B9C562C34
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 09:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F91562C3C
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 09:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbiGAHDC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Jul 2022 03:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        id S235103AbiGAHFz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Jul 2022 03:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbiGAHDB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 03:03:01 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180A2677F1
-        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 00:02:59 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31bf3656517so14485657b3.12
-        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 00:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3Oxpr/H6WS/cbatfKxunj+Rm+HXq43uwJ9TOx0tf4pg=;
-        b=G4+aGmI06EueqwK7C5Qo4w/41Yp3wU/CWyAMnimOU3r1x56NK0xwWd5NnQsEtkPJT1
-         j1wWR6jutsCmi+xE7hxYUqJNrQrMI+GL07X5ZYgIgqDAqQnMWhF8y5nc40xNPfhYS3jC
-         0nJhLPxfL1eyodYvq4oKHJFLeueGwA5XPbFVGoQA05bmNWxXq8PGbVqamZrTZs9J6qBh
-         1fRZx/U4bPFmJBSVu1knm/cNESUDsxYs6X7kurTJA14GFNtyIPF26073epdL9z6eSE2L
-         X78efI4BN3icU+xkSEEQMO42kPgo3k8M7uVN2JrWdQyoK9p0Z0nOVmWHNbnRgASj9y0m
-         xe+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3Oxpr/H6WS/cbatfKxunj+Rm+HXq43uwJ9TOx0tf4pg=;
-        b=P7bClXT9rncnOjI8j3ka6AJrF0VLMJWQYOts1pKottIbiFYMfhowduf+WYWjqTnbZT
-         q19gFZwPY7YgFkrFU3t6ETwuTl/qjHYSkejetedASq8Ne1BIIoYW94xaW15wQ7A80wvV
-         FZpC+S6XjR69MMYr29BzWO8f1wC/GOOZkbPaL7CHpJXYZOlh2bczWmYZpEkTtuEH/k3C
-         hFba/M1WzsGrzpGtBHikeMhkr+uwAXjROU/dVWq6DFaVZpv8vbYXgJsQ/QMaZ3tWGvnJ
-         HyvWMiJMArDwAJrxZoyNrmw6CgBVdwkC4iv/K6DYz4XW3TuKnLLQCiXUQLUj1Y41W5ll
-         RBQw==
-X-Gm-Message-State: AJIora8Vix7PAcVYZFJHYT9oqaVXg00Zw9G4h5bAuETcQGb9zDdwwwYG
-        +qK6hp3/4ndf7I2hMKWaNqCMmsglCKbzyUMO8l7sZQ==
-X-Google-Smtp-Source: AGRyM1sjHYE6b1ihEm8EzVroyoytiPu2X1qfGuWU3WGWHfolVcCLEjpB4ZdcYExvwYNCmCj3ip+B1gZf6PvcXiQN0KE=
-X-Received: by 2002:a81:4896:0:b0:317:f767:95f8 with SMTP id
- v144-20020a814896000000b00317f76795f8mr15214195ywa.218.1656658978077; Fri, 01
- Jul 2022 00:02:58 -0700 (PDT)
+        with ESMTP id S235025AbiGAHFy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 03:05:54 -0400
+Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [210.0.225.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B55677C2;
+        Fri,  1 Jul 2022 00:05:53 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 1 Jul
+ 2022 15:05:49 +0800
+Received: from tony-HX002EA0.zhaoxin.com (10.32.64.1) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 1 Jul
+ 2022 15:05:47 +0800
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linux-acpi@vger.kernel.org>, <CobeChen@zhaoxin.com>,
+        <TimGuo@zhaoxin.com>, <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>
+Subject: [PATCH] x86/cstate: Replace vendor check with X86_FEATURE_MWAIT in ffh_cstate_init
+Date:   Fri, 1 Jul 2022 15:05:47 +0800
+Message-ID: <1656659147-20396-1-git-send-email-TonyWWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <4799738.LvFx2qVVIh@steina-w> <CAGETcx_1qa=gGT4LVkyPpcA1vFM9FzuJE+0DhL_nFyg5cbFjVg@mail.gmail.com>
- <5265491.31r3eYUQgx@steina-w>
-In-Reply-To: <5265491.31r3eYUQgx@steina-w>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 1 Jul 2022 00:02:22 -0700
-Message-ID: <CAGETcx-fLAXnG+1S4MHJwg9t7O6jj6Mp+q25bh==C_Z1CLs-mg@mail.gmail.com>
-Subject: Re: (EXT) Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.32.64.1]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 11:02 PM Alexander Stein
-<alexander.stein@ew.tq-group.com> wrote:
->
-> Hi Saravana,
->
-> Am Freitag, 1. Juli 2022, 02:37:14 CEST schrieb Saravana Kannan:
-> > On Thu, Jun 23, 2022 at 5:08 AM Alexander Stein
-> >
-> > <alexander.stein@ew.tq-group.com> wrote:
-> > > Hi,
-> > >
-> > > Am Dienstag, 21. Juni 2022, 09:28:43 CEST schrieb Tony Lindgren:
-> > > > Hi,
-> > > >
-> > > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > > > > Now that fw_devlink=on by default and fw_devlink supports
-> > > > > "power-domains" property, the execution will never get to the point
-> > > > > where driver_deferred_probe_check_state() is called before the
-> > > > > supplier
-> > > > > has probed successfully or before deferred probe timeout has expired.
-> > > > >
-> > > > > So, delete the call and replace it with -ENODEV.
-> > > >
-> > > > Looks like this causes omaps to not boot in Linux next. With this
-> > > > simple-pm-bus fails to probe initially as the power-domain is not
-> > > > yet available. On platform_probe() genpd_get_from_provider() returns
-> > > > -ENOENT.
-> > > >
-> > > > Seems like other stuff is potentially broken too, any ideas on
-> > > > how to fix this?
-> > >
-> > > I think I'm hit by this as well, although I do not get a lockup.
-> > > In my case I'm using
-> > > arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dts and probing of
-> > > 38320000.blk-ctrl fails as the power-domain is not (yet) registed.
-> >
-> > Ok, took a look.
-> >
-> > The problem is that there are two drivers for the same device and they
-> > both initialize this device.
-> >
-> >     gpc: gpc@303a0000 {
-> >         compatible = "fsl,imx8mq-gpc";
-> >     }
-> >
-> > $ git grep -l "fsl,imx7d-gpc" -- drivers/
-> > drivers/irqchip/irq-imx-gpcv2.c
-> > drivers/soc/imx/gpcv2.c
-> >
-> > IMHO, this is a bad/broken design.
-> >
-> > So what's happening is that fw_devlink will block the probe of
-> > 38320000.blk-ctrl until 303a0000.gpc is initialized. And it stops
-> > blocking the probe of 38320000.blk-ctrl as soon as the first driver
-> > initializes the device. In this case, it's the irqchip driver.
-> >
-> > I'd recommend combining these drivers into one. Something like the
-> > patch I'm attaching (sorry for the attachment, copy-paste is mangling
-> > the tabs). Can you give it a shot please?
->
-> I tried this patch and it delayed the driver initialization (those of UART as
-> well BTW). Unfortunately the driver fails the same way:
+The original commit 991528d73486 ("ACPI: Processor native C-states using
+MWAIT") has a vendor check for Intel in the function of ffh_cstate_init().
 
-Thanks for testing the patch!
+Commit 5209654a46ee ("x86/ACPI/cstate: Allow ACPI C1 FFH MWAIT use on AMD
+systems") and commit 280b68a3b3b9 ("x86/cstate: Allow ACPI C1 FFH MWAIT
+use on Hygon systems") add vendor check for AMD and HYGON in the function
+of ffh_cstate_init().
 
-> > [    1.125253] imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV: failed to
-> attach power domain "bus"
->
-> More than that it even introduced some more errors:
-> > [    0.008160] irq: no irq domain found for gpc@303a0000 !
+Recent Zhaoxin and Centaur CPUs support MONITOR/MWAIT instructions that
+can be used for ACPI Cx state in the same way as Intel. So expected to
+add the support of these CPUs in the function of ffh_cstate_init() too.
 
-So the idea behind my change was that as long as the irqchip isn't the
-root of the irqdomain (might be using the terms incorrectly) like the
-gic, you can make it a platform driver. And I was trying to hack up a
-patch that's the equivalent of platform_irqchip_probe() (which just
-ends up eventually calling the callback you use in IRQCHIP_DECLARE().
-I probably made some mistake in the quick hack that I'm sure if
-fixable.
+The CPU feature X86_FEATURE_MWAIT indicates processor supports MONITOR/
+MWAIT instructions. So the check for many CPU vendors in ffh_cstate_init()
+is unnecessary, use X86_FEATURE_MWAIT to replace the CPU vendor check.
 
-> > [    0.013251] Failed to map interrupt for
-> > /soc@0/bus@30400000/timer@306a0000
+Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+---
+ arch/x86/kernel/acpi/cstate.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-However, this timer driver also uses TIMER_OF_DECLARE() which can't
-handle failure to get the IRQ (because it's can't -EPROBE_DEFER). So,
-this means, the timer driver inturn needs to be converted to a
-platform driver if it's supposed to work with the IRQCHIP_DECLARE()
-being converted to a platform driver.
+diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+index 7945eae..a64c38f 100644
+--- a/arch/x86/kernel/acpi/cstate.c
++++ b/arch/x86/kernel/acpi/cstate.c
+@@ -209,11 +209,7 @@ EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_enter);
+ 
+ static int __init ffh_cstate_init(void)
+ {
+-	struct cpuinfo_x86 *c = &boot_cpu_data;
+-
+-	if (c->x86_vendor != X86_VENDOR_INTEL &&
+-	    c->x86_vendor != X86_VENDOR_AMD &&
+-	    c->x86_vendor != X86_VENDOR_HYGON)
++	if (!boot_cpu_has(X86_FEATURE_MWAIT))
+ 		return -1;
+ 
+ 	cpu_cstate_entry = alloc_percpu(struct cstate_entry);
+-- 
+2.7.4
 
-But that's a can of worms not worth opening. But then I remembered
-this simpler workaround will work and it is pretty much a variant of
-the workaround that's already in the gpc's irqchip driver to allow two
-drivers to probe the same device (people really should stop doing
-that).
-
-Can you drop my previous hack patch and try this instead please? I'm
-99% sure this will work.
-
-diff --git a/drivers/irqchip/irq-imx-gpcv2.c b/drivers/irqchip/irq-imx-gpcv2.c
-index b9c22f764b4d..8a0e82067924 100644
---- a/drivers/irqchip/irq-imx-gpcv2.c
-+++ b/drivers/irqchip/irq-imx-gpcv2.c
-@@ -283,6 +283,7 @@ static int __init imx_gpcv2_irqchip_init(struct
-device_node *node,
-         * later the GPC power domain driver will not be skipped.
-         */
-        of_node_clear_flag(node, OF_POPULATED);
-+       fwnode_dev_initialized(domain->fwnode, false);
-        return 0;
- }
-
--Saravana
