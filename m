@@ -2,137 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD525636A2
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 17:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FD95636FF
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 17:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiGAPJB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Jul 2022 11:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S229627AbiGAPgm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Jul 2022 11:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbiGAPJA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 11:09:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC7952655C;
-        Fri,  1 Jul 2022 08:08:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19C17113E;
-        Fri,  1 Jul 2022 08:08:55 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F3BE3F66F;
-        Fri,  1 Jul 2022 08:08:51 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 16:08:48 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Tony Lindgren <tony@atomide.com>, Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
+        with ESMTP id S229491AbiGAPgl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 11:36:41 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A4B3969C;
+        Fri,  1 Jul 2022 08:36:41 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id v9so3748034wrp.7;
+        Fri, 01 Jul 2022 08:36:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=sYub0N475p+0VGhz+u6M1TELUK/iEnZfnAN/MojLZIE=;
+        b=dG3gWMTpxupxXO5Q1Yvv+bsWdhehMZxuBXH5mWSRK5qvyNzPOk6iHYgtKuXRgtzr1u
+         3QAhhbmKg3B0F1sHW7iP59NwsIZQA5BSBsiaNy93hT7b+WQRpOa9A4KcznOX0nLjDxkK
+         DWGZsPYbl3YTeWXgkL9XThoAAhc/5eXVopqOidZhV4ZtAeGtlA8INFSkoaT16O1XZX49
+         vE1WL4T8PROyZl/q4dJC4UevHEMgYvZrxx9Ppdd+PmOVoMIYfyW0hh4GYjJs/ogqUlMS
+         JmcVgJMX78rmCAtFIF8jnsP7CY/kngr+1OH5tlB8Ev2kxKZlGZm+SJISO2zKDBbeboA4
+         YSgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=sYub0N475p+0VGhz+u6M1TELUK/iEnZfnAN/MojLZIE=;
+        b=kjeYi6I++K1zoQCZ4nBpp4xiSCzrdvPDwS4B9to8HjoZ8eqr9NH/FW+dMZrKsXyBi+
+         kV8X4qwm5qt846UlzmCgwBpRs5ruw5WkzdFWGmTX+C/yU8/E+nGAOV5RpVcxSUk5b0O8
+         UcHzNj4Rf8s2NqYHchzyqY+rIgEKZK4nUgNvf24XoUJRXI/iYf8hOjYPqx46l8EZR3qF
+         Bj2anAYrHn70mAkvLGW1zxkthTsG/Nn1aJwPSjvOXXf4k2O30PmwO9TXAtSPvkl98Adk
+         p0rCXQi/DdUpmTBruwBY1UknoaCMqla5m5tEE2rfnfs/MUQDH3j9Mu7l01B73vFoF5HL
+         pSeA==
+X-Gm-Message-State: AJIora9z3S+eYnziX1HD48fo1jXTResbg0Om7ZWPI+7zj20ub3/JfEaN
+        nuMFmLczkcN+QAvTWT74N20=
+X-Google-Smtp-Source: AGRyM1uXzal0NgDC531OK+6wzV83ogvagHoNoOJlLzY7A1trI1imJ0FnVhho2+YakzVrN5zBn1NY6w==
+X-Received: by 2002:adf:f184:0:b0:21b:6c76:5b6e with SMTP id h4-20020adff184000000b0021b6c765b6emr13423763wro.126.1656689799526;
+        Fri, 01 Jul 2022 08:36:39 -0700 (PDT)
+Received: from localhost (92.40.202.205.threembb.co.uk. [92.40.202.205])
+        by smtp.gmail.com with ESMTPSA id a1-20020a05600c348100b003a03be22f9fsm1656240wmq.18.2022.07.01.08.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 08:36:38 -0700 (PDT)
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+ <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com>
+ <CAHp75Vduv_fN=2DKbOwReRoPeAYjGqSANT7UhDaRifUJ4zf5XQ@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Michael Walle <michael@walle.cc>,
+        Randy Dunlap <rdunlap@infradead.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of
- driver_deferred_probe_check_state()
-Message-ID: <20220701150848.75eeprptmb5beip7@bogus>
-References: <YrQP3OZbe8aCQxKU@atomide.com>
- <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
- <Yrlz/P6Un2fACG98@atomide.com>
- <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
- <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
- <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
- <Yr6HQOtS4ctUYm9m@atomide.com>
- <Yr6QUzdoFWv/eAI6@atomide.com>
- <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
- <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4 12/15] pinctrl: Add AXP192 pin control driver
+In-reply-to: <CAHp75Vduv_fN=2DKbOwReRoPeAYjGqSANT7UhDaRifUJ4zf5XQ@mail.gmail.com>
+Date:   Fri, 01 Jul 2022 16:37:45 +0100
+Message-ID: <oMIjFujkw4ZeuMGoTkWq64BbfEejJF12@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Saravana,
 
-On Fri, Jul 01, 2022 at 01:26:12AM -0700, Saravana Kannan wrote:
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
 
-[...]
+> On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
+>>
+>> The AXP192 PMIC's GPIO registers are much different from the GPIO
+>> registers of the AXP20x and AXP813 PMICs supported by the existing
+>> pinctrl-axp209 driver. It makes more sense to add a new driver for
+>> the AXP192, rather than add support in the existing axp20x driver.
+>>
+>> The pinctrl-axp192 driver is considerably more flexible in terms of
+>> register layout and should be able to support other X-Powers PMICs.
+>> Interrupts and pull down resistor configuration are supported too.
+>
+> ...
+>
+>> +config PINCTRL_AXP192
+>> +       tristate "X-Powers AXP192 PMIC pinctrl and GPIO Support"
+>> +       depends on MFD_AXP20X
+>> +       select PINMUX
+>> +       select GENERIC_PINCONF
+>> +       select GPIOLIB
+>> +       help
+>> +         AXP PMICs provide multiple GPIOs that can be muxed for different
+>> +         functions. This driver bundles a pinctrl driver to select the function
+>> +         muxing and a GPIO driver to handle the GPIO when the GPIO function is
+>> +         selected.
+>> +         Say Y to enable pinctrl and GPIO support for the AXP192 PMIC.
+>
+> What will be the module name if compiled as a module?
+>
+> ...
+>
+>> +/**
+>> + * struct axp192_pctl_function - describes a function that GPIOs may have
+>> + *
+>> + * @name: Function name
+>> + * @muxvals: Mux values used for selecting this function, one per GPIO.
+>> + *           The i'th element corresponds to the i'th GPIO and is written
+>> + *           to the GPIO's control register field to select this function.
+>> + *           U8_MAX indicates that the pin does not support this function.
+>> + * @groups: Array of @ngroups groups listing pins supporting this function.
+>> + * @ngroups: Number of pin groups.
+>> + */
+>> +struct axp192_pctl_function {
+>> +       const char              *name;
+>> +       /* Mux value written to the control register to select the function (-1 if unsupported) */
+>> +       const u8                *muxvals;
+>> +       const char * const      *groups;
+>> +       unsigned int            ngroups;
+>> +};
+>
+> Can it be replaced by struct function_desc?
+> https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/pinmux.h#L130
 
-> Can you check if this hack helps? If so, then I can think about
-> whether we can pick it up without breaking everything else. Copy-paste
-> tab mess up warning.
+That'd work, but using the generic infrastructure doesn't allow me to
+simplify anything -- I can eliminate three trivial functions, but the
+generic code is higher overhead (extra allocations, radix trees, ...)
+so I'd prefer to stick with the current approach.
 
-Sorry for jumping in late and not even sure if this is right thread.
-I have not bisected anything yet, but I am seeing issues on my Juno R2
-with SCMI enabled power domains and Coresight AMBA devices.
+>> +       ret = devm_gpiochip_add_data(dev, &pctl->chip, pctl);
+>> +       if (ret)
+>> +               dev_err_probe(dev, ret, "Failed to register GPIO chip\n");
+>
+> Missed return.
 
-OF: amba_device_add() failed (-19) for /etf@20010000
-OF: amba_device_add() failed (-19) for /tpiu@20030000
-OF: amba_device_add() failed (-19) for /funnel@20040000
-OF: amba_device_add() failed (-19) for /etr@20070000
-OF: amba_device_add() failed (-19) for /stm@20100000
-OF: amba_device_add() failed (-19) for /replicator@20120000
-OF: amba_device_add() failed (-19) for /cpu-debug@22010000
-OF: amba_device_add() failed (-19) for /etm@22040000
-OF: amba_device_add() failed (-19) for /cti@22020000
-OF: amba_device_add() failed (-19) for /funnel@220c0000
-OF: amba_device_add() failed (-19) for /cpu-debug@22110000
-OF: amba_device_add() failed (-19) for /etm@22140000
-OF: amba_device_add() failed (-19) for /cti@22120000
-OF: amba_device_add() failed (-19) for /cpu-debug@23010000
-OF: amba_device_add() failed (-19) for /etm@23040000
-OF: amba_device_add() failed (-19) for /cti@23020000
-OF: amba_device_add() failed (-19) for /funnel@230c0000
-OF: amba_device_add() failed (-19) for /cpu-debug@23110000
-OF: amba_device_add() failed (-19) for /etm@23140000
-OF: amba_device_add() failed (-19) for /cti@23120000
-OF: amba_device_add() failed (-19) for /cpu-debug@23210000
-OF: amba_device_add() failed (-19) for /etm@23240000
-OF: amba_device_add() failed (-19) for /cti@23220000
-OF: amba_device_add() failed (-19) for /cpu-debug@23310000
-OF: amba_device_add() failed (-19) for /etm@23340000
-OF: amba_device_add() failed (-19) for /cti@23320000
-OF: amba_device_add() failed (-19) for /cti@20020000
-OF: amba_device_add() failed (-19) for /cti@20110000
-OF: amba_device_add() failed (-19) for /funnel@20130000
-OF: amba_device_add() failed (-19) for /etf@20140000
-OF: amba_device_add() failed (-19) for /funnel@20150000
-OF: amba_device_add() failed (-19) for /cti@20160000
-
-These are working fine with deferred probe in the mainline.
-I tried the hack you have suggested here(rather Tony's version), also
-tried with fw_devlink=0 and fw_devlink=1 && fw_devlink.strict=0
-No change in the behaviour.
-
-The DTS are in arch/arm64/boot/dts/arm/juno-*-scmi.dts and there
-coresight devices are mostly in juno-cs-r1r2.dtsi
-
-Let me know if there is anything obvious or you want me to bisect which
-means I need more time. I can do that next week.
-
--- 
-Regards,
-Sudeep
+Thanks for catching this, that was pretty silly of me...
