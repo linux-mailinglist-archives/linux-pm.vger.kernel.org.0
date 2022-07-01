@@ -2,85 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012CB56373E
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 17:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C10556383D
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 18:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiGAPwz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Jul 2022 11:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S230410AbiGAQqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Jul 2022 12:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiGAPwy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 11:52:54 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872A413CE0
-        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 08:52:52 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 145so2726513pga.12
-        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 08:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GwCJQx8sgFjKqx/lCA3RxH+lFCAU49v9gAkFazVr4kI=;
-        b=JGyKim5cmpBfr8P3eul8H76XrfNlBpwWXjFJV6xVwpsD8Wx+/M1K7OOCy9WXfWxjjd
-         lJzA67y66zVfCRfRcnAC9DhfnLsXQjccJc3KhK4qyFU33+g0xaWzX5KGnRiVKwn6nvJn
-         IRswZzOBwkqI61T41Z6RekZBAHdeIEba6xJFw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GwCJQx8sgFjKqx/lCA3RxH+lFCAU49v9gAkFazVr4kI=;
-        b=CR76MLqNFlv90wWm81EqQxWzFgc5AODFsGGKcfdSSHOu4IuaLY2Bff2Aw49cEbN8zv
-         Th5I+6zk+sT4np6CLsxcuTTuc5EL4i1idmm5bbFwEZamf+cNeyRQ+SLLDE0svcVHJkUr
-         TRRuKEyz1KKNX2osuHzTYdqc26W5ylaEd5G5QAyDe/oph+e/UEc4YhnY5JJM5782QiDq
-         AoRa29hl5q74Tr5zHkmRq51MvV7cws/H4wKuN+VAx0ogrY+Qjx2khygVXyI4BzMaKl/7
-         pk7ICqQEQXF1HZV6lB2GGeCssmShClwiRNT3VR7n82XMBDlTF6azDvm/62t+euXiCV4B
-         XWXg==
-X-Gm-Message-State: AJIora+kLwOHfH9M7kwwLkQJjDlskD3g9d61sU+6TZVnUUu+UelXmXNO
-        FmBdgDCIVLj2UhzHyNTsd2kjVw==
-X-Google-Smtp-Source: AGRyM1unAQ7Hy3XTb21SIviGN36FXP7laFKOa5oKp755UdNTtbj9rY+F/HVa5luU0xbBFupWbBWmmw==
-X-Received: by 2002:a63:334d:0:b0:40c:3c28:1ec4 with SMTP id z74-20020a63334d000000b0040c3c281ec4mr13002795pgz.623.1656690772093;
-        Fri, 01 Jul 2022 08:52:52 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:faad:e53e:b60a:f694])
-        by smtp.gmail.com with UTF8SMTPSA id mj17-20020a17090b369100b001e2bd411079sm4327044pjb.20.2022.07.01.08.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 08:52:51 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 08:52:49 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <Yr8YUYJGJ5FRA3cv@google.com>
-References: <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
- <YqtlRQOwb3t6Xtd0@google.com>
- <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
- <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
- <Yr5JmrSaus8xKpM9@google.com>
- <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S229544AbiGAQqt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 12:46:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137C138DB2;
+        Fri,  1 Jul 2022 09:46:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C286625E4;
+        Fri,  1 Jul 2022 16:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F79C3411E;
+        Fri,  1 Jul 2022 16:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656694007;
+        bh=FLpSjTMwgYK01nyU2snZdBuhJwNNervY+onMcafn2Q8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KPKhOgvtshtWG18LD/2F88zR6sewXmcQHXjI+OH795z7+sCZxGz9cdGGe+glrnloS
+         ckuiQ/ghB1c64Jis0sBTpNDoGxNrylFzLTibhZHjc1f/020VZ8f5oeByEcvhADPL/H
+         C2afx5xF4nC2xMrc/X1ujaiJPkRklVs6zZj5GDG+FiOOSsJ10Y/uHYb9NvuDKpBZhI
+         6Lt0C9hEZJHCyQOVfZDSAg3gjRvAtZFX5P6NZAioLE+CMePGGBmmlFLruOzqJoTLHM
+         EsXAGcxZmMTEDwcEdQFPkt15K6uqx2G+FdweARFVFTmHIMzHo2bfmfR6nZRRQq3kdc
+         NAhYIbim0jJOg==
+Date:   Fri, 1 Jul 2022 17:56:17 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, sre@kernel.org,
+        lee.jones@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        lars@metafoo.de, quic_gurus@quicinc.com,
+        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
+        michael@walle.cc, rdunlap@infradead.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 09/15] iio: adc: axp20x_adc: Replace adc_en2 flag
+ with adc_en2_mask field
+Message-ID: <20220701175617.06d63c91@jic23-huawei>
+In-Reply-To: <20220629143046.213584-10-aidanmacdonald.0x0@gmail.com>
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+        <20220629143046.213584-10-aidanmacdonald.0x0@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,55 +63,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 03:45:26PM +0530, Pavan Kondeti wrote:
-> On Thu, Jun 30, 2022 at 06:10:50PM -0700, Matthias Kaehlcke wrote:
-> > > > dwc3-qcom should wait for dwc3 core to call component_add() and then do
-> > > > whatever needs to be done once the dwc3 core is registered in the
-> > > > dwc3-qcom bind callback. Honestly this may all be a little overkill if
-> > > > there's only two drivers here, dwc3-qcom and dwc3 core. It could
-> > > > probably just be some callback from dwc3 core at the end of probe that
-> > > > calls some function in dwc3-qcom.
-> > > Since the issue we are facing is that the ssphy device links are not ready
-> > > causing the dwc3 probe not being invoked, can we add an API as Pavan
-> > > suggested
-> > > to check if deferred_probe listfor dwc3 device is empty or not andbased on
-> > > that we can choose to defer our qcomprobe ? In this case, we don't need to
-> > > touch the dwc3 core driver and would be making changesonly in qcom glue
-> > > driver.
-> > 
-> > As mentioned above, it shouldn't be necessary to add component support to
-> > all the glue drivers. An API to check for deferred probing is an option,
-> > however there is a possible race condition: When the dwc3-qcom driver checks
-> > for a deferred probe the core could still be probing, in that situation the
-> > glue would proceed before the core driver is ready. That could be avoided
-> > with the component based approach.
-> 
-> The race can happen only if asynchronous probe is enabled, otherwise the
-> child's probe happens synchronously in of_platform_populate() 
+On Wed, 29 Jun 2022 15:30:40 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-I was thinking about the case where the dwc3-qcom probe is initially deferred,
-then the deferred probe starts shortly after (asynchronously) and now the
-dwc3-qcom driver does its check. Probably it's not very likely to happen ...
-
-> OTOH, would the below condition suffice for our needs here? if our device
-> is not bounded to a driver, we check the state of initcalls and return
-> either error or -EPROBE_DEFER
+> The adc_en2 flag is essentially specific to axp20x-compatible devices
+> because it hardcodes register values. Replace it with a mask field
+> so the register value can be specified in device match data.
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 7b6eff5..519a503 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->  		dev_err(dev, "failed to get dwc3 platform device\n");
->  	}
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  drivers/iio/adc/axp20x_adc.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
+> index ab25e6e1ff65..75bda94dbce1 100644
+> --- a/drivers/iio/adc/axp20x_adc.c
+> +++ b/drivers/iio/adc/axp20x_adc.c
+> @@ -623,9 +623,9 @@ struct axp_data {
+>  	int				num_channels;
+>  	struct iio_chan_spec const	*channels;
+>  	unsigned long			adc_en1_mask;
+> +	unsigned long			adc_en2_mask;
+>  	int				(*adc_rate)(struct axp20x_adc_iio *info,
+>  						    int rate);
+> -	bool				adc_en2;
+>  	struct iio_map			*maps;
+>  };
 >  
-> +	if (!qcom->dwc3->dev.driver)
-> +		return driver_deferred_probe_check_state(&qcom->dwc3->dev);
-> +
->  node_put:
->  	of_node_put(dwc3_np);
+> @@ -634,8 +634,8 @@ static const struct axp_data axp20x_data = {
+>  	.num_channels = ARRAY_SIZE(axp20x_adc_channels),
+>  	.channels = axp20x_adc_channels,
+>  	.adc_en1_mask = AXP20X_ADC_EN1_MASK,
+> +	.adc_en2_mask = AXP20X_ADC_EN2_MASK,
+>  	.adc_rate = axp20x_adc_rate,
+> -	.adc_en2 = true,
+>  	.maps = axp20x_maps,
+>  };
+>  
+> @@ -645,7 +645,6 @@ static const struct axp_data axp22x_data = {
+>  	.channels = axp22x_adc_channels,
+>  	.adc_en1_mask = AXP22X_ADC_EN1_MASK,
+>  	.adc_rate = axp22x_adc_rate,
+> -	.adc_en2 = false,
+>  	.maps = axp22x_maps,
+>  };
+>  
+> @@ -655,7 +654,6 @@ static const struct axp_data axp813_data = {
+>  	.channels = axp813_adc_channels,
+>  	.adc_en1_mask = AXP22X_ADC_EN1_MASK,
+>  	.adc_rate = axp813_adc_rate,
+> -	.adc_en2 = false,
+>  	.maps = axp22x_maps,
+>  };
+>  
+> @@ -713,10 +711,10 @@ static int axp20x_probe(struct platform_device *pdev)
+>  	/* Enable the ADCs on IP */
+>  	regmap_write(info->regmap, AXP20X_ADC_EN1, info->data->adc_en1_mask);
+>  
+> -	if (info->data->adc_en2)
+> -		/* Enable GPIO0/1 and internal temperature ADCs */
+> +	if (info->data->adc_en2_mask)
+>  		regmap_update_bits(info->regmap, AXP20X_ADC_EN2,
+> -				   AXP20X_ADC_EN2_MASK, AXP20X_ADC_EN2_MASK);
+> +				   info->data->adc_en2_mask,
+> +				   info->data->adc_en2_mask);
+>  
+>  	/* Configure ADCs rate */
+>  	info->data->adc_rate(info, 100);
+> @@ -741,7 +739,7 @@ static int axp20x_probe(struct platform_device *pdev)
+>  fail_map:
+>  	regmap_write(info->regmap, AXP20X_ADC_EN1, 0);
+>  
+> -	if (info->data->adc_en2)
+> +	if (info->data->adc_en2_mask)
+>  		regmap_write(info->regmap, AXP20X_ADC_EN2, 0);
+>  
+>  	return ret;
+> @@ -757,7 +755,7 @@ static int axp20x_remove(struct platform_device *pdev)
+>  
+>  	regmap_write(info->regmap, AXP20X_ADC_EN1, 0);
+>  
+> -	if (info->data->adc_en2)
+> +	if (info->data->adc_en2_mask)
+>  		regmap_write(info->regmap, AXP20X_ADC_EN2, 0);
+>  
+>  	return 0;
 
-I like the simplicity of it, no need for new APIs.
-
-The components based approach would be slightly safer, but in practice I
-think this should be good enough.
