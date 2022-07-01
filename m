@@ -2,128 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB1156315E
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 12:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85030563188
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Jul 2022 12:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236308AbiGAK3b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Jul 2022 06:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
+        id S236480AbiGAKgn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Jul 2022 06:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236316AbiGAK3a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 06:29:30 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EBF76E88
-        for <linux-pm@vger.kernel.org>; Fri,  1 Jul 2022 03:29:28 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id m2so1997295plx.3
-        for <linux-pm@vger.kernel.org>; Fri, 01 Jul 2022 03:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VdNa/95C+Rq3ZQV57wHlrLqjNCNUqyjRCenQXq1FaAg=;
-        b=cy1kEUQixm6Y3cXrhbEG6G6G49ltkDnz3uOcRvbpf0diLCBi2ak+q3dCBCWQ917zz/
-         VZEdxHXiV8F6LXr9LeEFjI0NQXT4372zLzvnSH8wejd6f6KZRCgxXRGveF+PA+AWTD5m
-         0nAkxFLfPFrCYD/vvDbHNHjHmkIlEneAHemmibvgW/4W2ODvKTyjaGaEYmgm/nUlJza2
-         tp2JQo9+Uwthm+fCpktFC+WWJNC/FI4u8gaJ7jkxnTwaxlM6MjNBaCY4GJ75oEe2loqM
-         ZToj4ocsM8VJ+OxWCyoNR8+gNhkrMkQhILGNpn3RrCIsjYnH0NFVxE54WyLgKGi3d7lp
-         I7uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VdNa/95C+Rq3ZQV57wHlrLqjNCNUqyjRCenQXq1FaAg=;
-        b=C3Uk6ASyrReQPNoSLHJzY2FlyO92XKJ7HBESBhMzcnOkzuBLK7/vpEyVsGHZPSUwie
-         E12ouzSs6AHwVrJa9DCqxgHfKzB5te+TAX927+Z94eIrQNlH0xkwetoSWUuwJPQENLdC
-         iANiCsvEkOsUpJGty/0nxv+bab6r8/ocDjLTPv535Gatmuew9V6LmlyJC02ZtCX2jQQg
-         1wF7+d6FxXTNJjIo3ah84jPeBacloiErQidM9atlwciFTh64DwGiLxOFl+mKjOMatV76
-         FM0YzyWzwp0HzHhDhDL4CkQqDiG9KOrKa7aifmbL75D4N3y79NTWOrycfLDm9GrFTKGS
-         J5bA==
-X-Gm-Message-State: AJIora9RZbEtOrShIaho1H2jymRXDg5MGkt/I12jwJHZqtlWFsGVMXMB
-        vMlxl4+FWG6m/rbGqExE/KPT1Q==
-X-Google-Smtp-Source: AGRyM1t98ZHNClSSTvU8mPt7KxgDKs8MLh+PmLSjlMqDYqC8nplHzkfK/QaYm4OOEsoOG88Rlpdk4A==
-X-Received: by 2002:a17:902:a9c9:b0:161:5b73:5ac9 with SMTP id b9-20020a170902a9c900b001615b735ac9mr20278437plr.14.1656671368482;
-        Fri, 01 Jul 2022 03:29:28 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id mr12-20020a17090b238c00b001ecc616c9f3sm3668647pjb.21.2022.07.01.03.29.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:29:28 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 15:59:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 24/30] serial: qcom: Migrate to dev_pm_opp_set_config()
-Message-ID: <20220701102926.uwvn7rurbxdybzeu@vireshk-i7>
-References: <cover.1656660185.git.viresh.kumar@linaro.org>
- <1f3328dafaf9e2944fba8ec9e55e3072a63a4192.1656660185.git.viresh.kumar@linaro.org>
- <Yr6z5ixRTsIbZvsq@kroah.com>
- <20220701092458.tzqv7yul476kh2o7@vireshk-i7>
- <Yr7AwAZeSPeQKDPU@kroah.com>
- <20220701100100.bxv4t4t7iqphalpv@vireshk-i7>
- <Yr7J6f6+EQfXFjYN@kroah.com>
+        with ESMTP id S236463AbiGAKgl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Jul 2022 06:36:41 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B199076EBB;
+        Fri,  1 Jul 2022 03:36:40 -0700 (PDT)
+X-UUID: b52a87f14af3438a92d23a4acad5b9a5-20220701
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:4d0ded8f-e5b4-4947-8b01-d315214e21a0,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:22,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:27
+X-CID-INFO: VERSION:1.1.7,REQID:4d0ded8f-e5b4-4947-8b01-d315214e21a0,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:22,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:27
+X-CID-META: VersionHash:87442a2,CLOUDID:a4f64c86-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:28|100|17|19|48|101,TC:nil,Content:0,EDM:-3,IP:ni
+        l,URL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: b52a87f14af3438a92d23a4acad5b9a5-20220701
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <peter.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 689567004; Fri, 01 Jul 2022 18:36:29 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 1 Jul 2022 18:36:29 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 1 Jul 2022 18:36:26 +0800
+Subject: Re: [PATCH] PM: runtime: Fix supplier device management during
+ consumer probe
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Saravana Kannan <saravanak@google.com>
+References: <4748074.GXAFRqVoOG@kreacher>
+From:   Peter Wang <peter.wang@mediatek.com>
+Message-ID: <04a046fd-d635-d9da-639a-1656c5283d86@mediatek.com>
+Date:   Fri, 1 Jul 2022 18:36:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr7J6f6+EQfXFjYN@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4748074.GXAFRqVoOG@kreacher>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-07-22, 12:18, Greg Kroah-Hartman wrote:
-> On Fri, Jul 01, 2022 at 03:31:00PM +0530, Viresh Kumar wrote:
-> Still crazy, but a bit better.
 
-:)
+On 7/1/22 3:16 AM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Because pm_runtime_get_suppliers() bumps up the rpm_active counter
+> of each device link to a supplier of the given device in addition
+> to bumping up the supplier's PM-runtime usage counter, a runtime
+> suspend of the consumer device may case the latter to go down to 0
+> when pm_runtime_put_suppliers() is running on a remote CPU.  If that
+> happens after pm_runtime_put_suppliers() has released power.lock for
+> the consumer device, and a runtime resume of that device takes place
+> immediately after it, before pm_runtime_put() is called for the
+> supplier, that pm_runtime_put() call may cause the supplier to be
+> suspended even though the consumer is active.
+>
+> To prevent that from happening, modify pm_runtime_get_suppliers() to
+> call pm_runtime_get_sync() for the given device's suppliers without
+> touching the rpm_active counters of the involved device links
+> Accordingly, modify pm_runtime_put_suppliers() to call pm_runtime_put()
+> for the given device's suppliers without looking at the rpm_active
+> counters of the device links at hand.  [This is analogous to what
+> happened before commit 4c06c4e6cf63 ("driver core: Fix possible
+> supplier PM-usage counter imbalance").]
+>
+> Since pm_runtime_get_suppliers() sets supplier_preactivated for each
+> device link where the supplier's PM-runtime usage counter has been
+> incremented and pm_runtime_put_suppliers() calls pm_runtime_put() for
+> the suppliers whose device links have supplier_preactivated set, the
+> PM-runtime usage counter is balanced for each supplier and this is
+> independent of the runtime suspend and resume of the consumer device.
+>
+> However, in case a device link with DL_FLAG_PM_RUNTIME set is dropped
+> during the consumer device probe, so pm_runtime_get_suppliers() bumps
+> up the supplier's PM-runtime usage counter, but it cannot be dropped by
+> pm_runtime_put_suppliers(), make device_link_release_fn() take care of
+> that.
+>
+> Fixes: 4c06c4e6cf63 ("driver core: Fix possible supplier PM-usage counter imbalance")
+> Reported-by: Peter Wang <peter.wang@mediatek.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>   drivers/base/core.c          |   10 ++++++++++
+>   drivers/base/power/runtime.c |   14 +-------------
+>   2 files changed, 11 insertions(+), 13 deletions(-)
+>
+> Index: linux-pm/drivers/base/power/runtime.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/power/runtime.c
+> +++ linux-pm/drivers/base/power/runtime.c
+> @@ -1768,7 +1768,6 @@ void pm_runtime_get_suppliers(struct dev
+>   		if (link->flags & DL_FLAG_PM_RUNTIME) {
+>   			link->supplier_preactivated = true;
+>   			pm_runtime_get_sync(link->supplier);
+> -			refcount_inc(&link->rpm_active);
+>   		}
+>   
+>   	device_links_read_unlock(idx);
+> @@ -1788,19 +1787,8 @@ void pm_runtime_put_suppliers(struct dev
+>   	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+>   				device_links_read_lock_held())
+>   		if (link->supplier_preactivated) {
+> -			bool put;
+> -
+>   			link->supplier_preactivated = false;
+> -
+> -			spin_lock_irq(&dev->power.lock);
+> -
+> -			put = pm_runtime_status_suspended(dev) &&
+> -			      refcount_dec_not_one(&link->rpm_active);
+> -
+> -			spin_unlock_irq(&dev->power.lock);
+> -
+> -			if (put)
+> -				pm_runtime_put(link->supplier);
+> +			pm_runtime_put(link->supplier);
+>   		}
+>   
+>   	device_links_read_unlock(idx);
+> Index: linux-pm/drivers/base/core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/core.c
+> +++ linux-pm/drivers/base/core.c
+> @@ -487,6 +487,16 @@ static void device_link_release_fn(struc
+>   	device_link_synchronize_removal();
+>   
+>   	pm_runtime_release_supplier(link);
+> +	/*
+> +	 * If supplier_preactivated is set, the link has been dropped between
+> +	 * the pm_runtime_get_suppliers() and pm_runtime_put_suppliers() calls
+> +	 * in __driver_probe_device().  In that case, drop the supplier's
+> +	 * PM-runtime usage counter to remove the reference taken by
+> +	 * pm_runtime_get_suppliers().
+> +	 */
+> +	if (link->supplier_preactivated)
+> +		pm_runtime_put_noidle(link->supplier);
+> +
+>   	pm_request_idle(link->supplier);
+>   
+>   	put_device(link->consumer);
 
-> Why do you need the clk_count?  A null terminated list is better,
-
-Because I am not a big fan of the null terminated lists :)
-
-I had to chase a bug once where someone removed that NULL at the end
-and it was a nightmare to understand what's going on.
-
-> as the
-> compiler can do it for you and you do not have to keep things in sync
-> like you are expecting people to be forced to do now.
-
-I am not sure I understand what the compiler can do for us here.
-
-The users will be required to do this here, isn't it ?
-
-        const char *clks[] = { "core", NULL };
-        struct dev_pm_opp_config opp_config = {
-               .clk_names = clks,
-        };
+Thanks for fix this bug.
+Reviewed-by: Peter Wang <peter.wang@mediatek.com>
 
 
-> The above is much more complex than a simple function call to make.
-> Remember to make it very simple for driver authors, and more
-> importantly, reviewers.
-
-Hmm.
-
-> Thanks, and drop the count field please.
-
-There is one case at least [1] where we actually have to pass NULL in
-the clk name. This is basically to allow the same code to run on
-different devices, one where an OPP table is present and one where it
-isn't. We don't want to do clk_set_rate() for the second case but just
-use dev_pm_opp_set_rate() (which does a lot of stuff apart from just
-clk).
-
--- 
-viresh
-
-[1] https://lore.kernel.org/lkml/b19a02422cae2408f953b92ae3c46a37fba688a3.1656660185.git.viresh.kumar@linaro.org/
+>
+>
