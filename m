@@ -2,74 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8549F564726
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Jul 2022 13:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B593C564799
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Jul 2022 15:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbiGCLaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Jul 2022 07:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
+        id S232723AbiGCNzT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Jul 2022 09:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiGCLaL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Jul 2022 07:30:11 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336D9A196;
-        Sun,  3 Jul 2022 04:30:09 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so3886039wme.0;
-        Sun, 03 Jul 2022 04:30:09 -0700 (PDT)
+        with ESMTP id S231574AbiGCNzS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Jul 2022 09:55:18 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4752EF58;
+        Sun,  3 Jul 2022 06:55:17 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id q140so6646915pgq.6;
+        Sun, 03 Jul 2022 06:55:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version;
-        bh=HhNrqokBiomVIzoEr5AmnzWfBeMWKGdIZTVz3IEoXng=;
-        b=UnW9iuGJiH4+wcmSQv/2EpJeoffrvnC9tP6Q9oTC3RWU61Tiw9Ip3dHeZoCwpCtVVx
-         rNAZkcpyWPrufejdIpzHZ9atpRvvB17H2DEnBAanyKAPpUG9pFtDPNN0IgRC9NdDB7tL
-         f8UNdt3cOhpxm3DW8j85KIvkwaj9SiN3zNOQVmSC8zdqtwFIRnKdo3n+u5md0ogAuLqR
-         MjXWcJZz1OFGV+DOpN8iRUwukFWnrNocijj1HrBdl4iLZPmwBs364TQXweKlkecG0yJs
-         vhZ7pyUv3cxVh1HD31Uo4UWIGQL7vOpzC2a07bn53z6ho+KxIt6UAIR1KeHTbugJ2pmt
-         n/cw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TIiGx/EEHym2I0yynhOroEkRxYFAU0a4P5SghNqA/Os=;
+        b=JJlz4V6gs3ioLlo0OwIvOn3CYlRRvqfAhaXr8waz7dSqPokJo6Vt6YnbsNA1R0SrwR
+         bHxJbZ5GnXxBrfWu5+er9gsJbGNQxqV6WNp14XYqaHrvy7c7gAzonKNmen9gMU9SPVaV
+         TjR69MEEce6eKScjxr4G+D8gs7IP5mhMd2T4yQXnTgoBKPDeo+eMd9Qmz23OF44VAJgR
+         5yKhGpcVGA6zYgPuZuUnvDaLEMt5TkoObPqRxbaTP/sVTZbVHlZFWQ3plDXNzWGxEhMu
+         2O3FuTWePqfgt+j+UG2TcTiNZ9Ae1LPgGy5BU5rgyj+i+bUsJJE1r6zv7ciqPJl//Ubf
+         IrMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=HhNrqokBiomVIzoEr5AmnzWfBeMWKGdIZTVz3IEoXng=;
-        b=dB+qdJomACe405FzBjLPZjyTI2MFx/ToJSD0XiHPUr4sVI+NTbw0XDWb/elT1tWHuo
-         wquxJxVIHv2YqUY3qqAF1BydVIrR+w+JUgKZCnBBH9N17A762CFzAeUuBp0y1YKA8HtR
-         Qzu0jqY2/1CAs2GSMBco7W8KJUzCjUurzqboeGy6uhHjUkwQW9OrCEZGicicZBfNYs7S
-         cOloN08347/YMmnT92Dt2okBM43nSLSKCwEEzHRfpWEaE+ahN0RS0eQIEovPhI+yo7um
-         Br33Jmotq/x16xoujqmqllD/wbHu13pXTQl2Rn8dYo0a0+ynTAWVss+a96YcvVsWvcTv
-         SmmQ==
-X-Gm-Message-State: AJIora9oSp1ICJhjAGL072nk0nc1qpRzQhZThYM2xZ4Qr1drnUF90bHc
-        4mokW5hIES82pJw585ZMvJU=
-X-Google-Smtp-Source: AGRyM1vGTp4tUllczcZIJO8vch792PAdlkdP7YNmgvkwJ2Ld2MAAdv9HiJkPKGRvpdViE3A4I2/8wA==
-X-Received: by 2002:a1c:ed08:0:b0:39c:80b1:b0b3 with SMTP id l8-20020a1ced08000000b0039c80b1b0b3mr26399757wmh.134.1656847807831;
-        Sun, 03 Jul 2022 04:30:07 -0700 (PDT)
-Received: from localhost (92.40.202.1.threembb.co.uk. [92.40.202.1])
-        by smtp.gmail.com with ESMTPSA id bg39-20020a05600c3ca700b003a18de85a64sm8278839wmb.24.2022.07.03.04.30.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 04:30:07 -0700 (PDT)
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
- <20220629143046.213584-5-aidanmacdonald.0x0@gmail.com>
- <d024858b-a461-2cbc-48fa-a13cf3be0cb4@sholland.org>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     wens@csie.org, linus.walleij@linaro.org, brgl@bgdev.pl,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jic23@kernel.org, sre@kernel.org, lee.jones@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, lars@metafoo.de,
-        quic_gurus@quicinc.com, sebastian.reichel@collabora.com,
-        andy.shevchenko@gmail.com, michael@walle.cc, rdunlap@infradead.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 04/15] dt-bindings: gpio: Add AXP192 GPIO bindings
-In-reply-to: <d024858b-a461-2cbc-48fa-a13cf3be0cb4@sholland.org>
-Date:   Sun, 03 Jul 2022 12:31:16 +0100
-Message-ID: <44jAwCl9UWFrACJoTf15VMnUXSmNBQO9@localhost>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TIiGx/EEHym2I0yynhOroEkRxYFAU0a4P5SghNqA/Os=;
+        b=f/y0EYjDteKYUDycJjGEqPYuy6yt2D1BknaEgzgVa2TQ3K+mZU1UObh/0An88bs20q
+         4+LjQSEHkXW/Se5FC2tqi/ujzm1rUTPVgUxga9SxSMWa0SNVrI1HdyZZHOGRJHzuAn0J
+         3863MpPxDegP8UfT4O0iaB9IfepTnfjhe7HsP6HI3xRAU3eI7kwYyIAI4nEFp9B3aHVL
+         KXgLgDJFQq0Pp2OrR0FyWV59kPOg3dXj10ltM9Z1Y5HPRT+BhUlxl9Z/4exRVCyj9i6a
+         jdhP52m1uDarZsm3nTYuzz6ue02FMDzDFpYgGi3TJZ9RRc4JZQ8uikE+ppgxN6+phgr/
+         MqDg==
+X-Gm-Message-State: AJIora+g9OL562Fq+E8pvns2Za2Xrj+iOfLn+U9FQ8WpxzQrsmCSDuw3
+        POLlzmhosTdzi9lIxMixQqtLheTf4dk=
+X-Google-Smtp-Source: AGRyM1uZW/hrChlatw3hN9PZb5qKHW8QCucFPk8Hq+pcwXumn+CtyP4btlBRvGTTbTeaZTcUpVzSAw==
+X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id d10-20020a656b8a000000b003db7dc5fec2mr20660291pgw.223.1656856516736;
+        Sun, 03 Jul 2022 06:55:16 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id pc3-20020a17090b3b8300b001ef3f85d1aasm7576804pjb.9.2022.07.03.06.55.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jul 2022 06:55:16 -0700 (PDT)
+Message-ID: <03f29fbf-4616-2fc1-c7cd-c575f31f8463@gmail.com>
+Date:   Sun, 3 Jul 2022 22:55:07 +0900
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3 09/10] PM / devfreq: imx: Register i.MX8MP interconnect
+ device
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com, cw00.choi@samsung.com,
+        kyungmin.park@samsung.com, myungjoo.ham@samsung.com
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
+References: <20220703091132.1412063-1-peng.fan@oss.nxp.com>
+ <20220703091132.1412063-10-peng.fan@oss.nxp.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20220703091132.1412063-10-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,43 +84,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 22. 7. 3. 18:11, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Same to i.MX8MM/N/Q, register i.MX8MP interconnect device to make
+> i.MX8MP Interconnect driver work.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/devfreq/imx-bus.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
+> index f87067fc574d..a727067980fb 100644
+> --- a/drivers/devfreq/imx-bus.c
+> +++ b/drivers/devfreq/imx-bus.c
+> @@ -145,6 +145,7 @@ static const struct of_device_id imx_bus_of_match[] = {
+>  	{ .compatible = "fsl,imx8mq-noc", .data = "imx8mq-interconnect", },
+>  	{ .compatible = "fsl,imx8mm-noc", .data = "imx8mm-interconnect", },
+>  	{ .compatible = "fsl,imx8mn-noc", .data = "imx8mn-interconnect", },
+> +	{ .compatible = "fsl,imx8mp-noc", .data = "imx8mp-interconnect", },
+>  	{ .compatible = "fsl,imx8m-noc", },
+>  	{ .compatible = "fsl,imx8m-nic", },
+>  	{ /* sentinel */ },
 
-Samuel Holland <samuel@sholland.org> writes:
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-> On 6/29/22 9:30 AM, Aidan MacDonald wrote:
->> The AXP192 PMIC is different enough from the PMICs supported by
->> the AXP20x GPIO driver to warrant a separate driver. The AXP192
->> driver also supports interrupts and pinconf settings.
->> 
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>  .../bindings/gpio/x-powers,axp192-gpio.yaml   | 68 +++++++++++++++++++
->>  1 file changed, 68 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
->> b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
->> new file mode 100644
->> index 000000000000..ceb94aa2bc97
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
->> [...]
->> +
->> +required:
->> +  - compatible
->> +  - "#gpio-cells"
->> +  - gpio-controller
->> +  - gpio-ranges
->
-> By requiring the gpio-ranges property, you will not be able to convert the
-> existing driver, as existing devicetrees do not have it.
->
-> If you instead call pinctrl_add_gpio_range() from the driver, you can maintain
-> compatibility with the existing binding.
->
-> Regards,
-> Samuel
-
-Originally I did use pinctrl_add_gpio_range(), but calling that from
-a pin control driver is apparently deprecated. It can be done from
-->of_gpio_ranges_fallback to deal with old device trees, though.
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
