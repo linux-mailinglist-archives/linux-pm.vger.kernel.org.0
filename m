@@ -2,82 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A304956479D
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Jul 2022 15:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1145056491D
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Jul 2022 20:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbiGCN4A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Jul 2022 09:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
+        id S230435AbiGCSb3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Jul 2022 14:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232643AbiGCNz7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Jul 2022 09:55:59 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AE92AC4;
-        Sun,  3 Jul 2022 06:55:58 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g7so1967055pfb.10;
-        Sun, 03 Jul 2022 06:55:58 -0700 (PDT)
+        with ESMTP id S230174AbiGCSb2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Jul 2022 14:31:28 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F9F2DE4
+        for <linux-pm@vger.kernel.org>; Sun,  3 Jul 2022 11:31:27 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id r14so4636169wrg.1
+        for <linux-pm@vger.kernel.org>; Sun, 03 Jul 2022 11:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GhTF+nRQIcV9gsjYBeN6guR0acy2VBXoBQhRoxTOx7M=;
-        b=GhHWrBpBExdLhV0vrS27nNC4Nc7fTg98y7uqU4ehoaHkXPerzzdoD7QtfLW7Vk4ozW
-         ZXAiwfW/ZBaqZaL1EpCFLbNa7604XqWgmgXUqIR3OU+QbnIDgRRnKqfML51d//IHSTsM
-         a3IQUvNVnCPPqnRu/vOGm6sOPzer+N6F2Al9R9c3Rxd0/K+GT09Qlk5p/H9rOf34ATNr
-         1aPk9VOZYRgo6dxh9vGhrYWgo1PsEe5VRew51OYUa7aHiJ05mCJcAt/49jV3qNJ93Dxs
-         U9K4xdBZq9zDPT1L+P1gMhWu/Ifw0zUZbmO9cBOq99ConrkiYljc3l2ptU3zdUQIz02h
-         OHxQ==
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g/dQAlLb9v0K7wDs4Mx74hQuc1qbwjyUP7a9c6lw8sM=;
+        b=oLbUcXtBpX6fAcaggVlgw4WsyVqOvXWDZfNFeyC1D5CM+bU4wrGCIlTXmTopAqKVu5
+         DHG2acHSVNYWC0PQPZxanNly/re9NfDqxwTO3riBCsRdTvJuweYgQk5KHXva7naCMR3l
+         W8wdsEuGMn4MG9fjqTVgggXnJNE8oxH6sPU40ItFA2Ddw/g2vA4ZOxfJcaworoeMxmvH
+         HF7sCSX3MkE/Ido3ToP3c8qBTgyi3mDG256YpoPes2DlaL3zaB4kyQhRjSdUW64+ySw0
+         fzJ06lb/ftjPSzjimXTXpLOjaOSGnvXogoqIdEYsP0B0bou5Ji2KpYydPeBwXJvYqUe0
+         1jZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GhTF+nRQIcV9gsjYBeN6guR0acy2VBXoBQhRoxTOx7M=;
-        b=WJeSeg1+2f/gUGxIT5Jd+u3ErnTWWivEhERYCcVm3bjL/RL92WXBQLnjCwf2qI5dRW
-         qd2A+JKg4RUHLjTZ66zGPLnHF6iqeCZ2Lr66BvZ2zb2B0mLDVnw3ShZLcG6AjE0ZrTKV
-         EifpB5qbR9kX1WWMvI6VFaqrl+BNenbl1/Zwi9EkV5fEpWiZr23bsALyGSzwqwqHI5Cf
-         E4zFN0RE4aACgriUhjx8IcVOzaPID4aEO4cHGF/G8ax6wXjXfYWindd+sWIUgWp90QS6
-         ULXwLKtwBk2e7rpJb1i6LFuSTEG3O7lZl+8MR1NVviOo7/W7KLazCcCIjWdy2Hb78T5T
-         eWzw==
-X-Gm-Message-State: AJIora/cDVBf1mO5k0AXWr2Pgm5WYJD2BizQ50L9diejDhK2h/0MLNr2
-        jyud1nkuCetop2sg09zuiBU=
-X-Google-Smtp-Source: AGRyM1vUkO/5aK0OinzEDH7Jhq+Yt/1wowhTRMS+xhfrjlAbcLF4PE2abQ3gwttZ9VChGDmABFlCbg==
-X-Received: by 2002:a63:3713:0:b0:40c:b98c:5e4b with SMTP id e19-20020a633713000000b0040cb98c5e4bmr20698478pga.8.1656856558312;
-        Sun, 03 Jul 2022 06:55:58 -0700 (PDT)
-Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902ea8600b0016a18ee30b5sm19055746plb.293.2022.07.03.06.55.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Jul 2022 06:55:57 -0700 (PDT)
-Message-ID: <2d912f49-f9bd-2020-a7ce-faca0a2b11a3@gmail.com>
-Date:   Sun, 3 Jul 2022 22:55:50 +0900
+        bh=g/dQAlLb9v0K7wDs4Mx74hQuc1qbwjyUP7a9c6lw8sM=;
+        b=SONY9D/n6NRYPOCGPVHyPmxceo+RBg+ZdO0997fSpPjVzW76TkpW1+sRomKoKgnO7G
+         qzw3Df2yWAXSjmFQllaYcEMCibWbyVrz7Wiegj6I4lrOPMAEKCe2TiVoa+U38ptv1Yw3
+         klwFoYIJj/NFQISkXAwzhX9oEQqefSkJc5eM4kWslNcXuZAQXLEwYNq0Kbv5vONjB87g
+         vLiIUo6Tt8rc0GY+kPnAnSfYwqqosfQmC7QKrNB/SxMRmsBun4Nhoux4BfoHBBqs/oEO
+         s9w4Ng56u9d8lOmaXDJIp5wRFscV2OISwRAd2luz7u2TDjuwr+qwkcgqgEBiTbu1Pyn2
+         UtRg==
+X-Gm-Message-State: AJIora86lxDUvXj+NGBIXmALTqvyeXaAEL4SGFhXJ1K0kEqpxlsPJ6vB
+        3706WNT7Btz7BnmhbJwQ+e8Buf2zFKAcWw==
+X-Google-Smtp-Source: AGRyM1sec14U0eJBHYfcXAY2ZiqrxrnNBq3qFb8ihWW8/qqdsMXvv/8oI9Wg1n2moyIwtzUsfA/KVg==
+X-Received: by 2002:a05:6000:ca:b0:21b:8082:7518 with SMTP id q10-20020a05600000ca00b0021b80827518mr22429233wrx.124.1656873086232;
+        Sun, 03 Jul 2022 11:31:26 -0700 (PDT)
+Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id x10-20020a5d54ca000000b0021b85664636sm27504258wrv.16.2022.07.03.11.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 11:31:25 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com
+Subject: [PATCH v3 00/12] thermal OF rework
+Date:   Sun,  3 Jul 2022 20:30:47 +0200
+Message-Id: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3 01/10] dt-bindings: interconnect: imx8m: Add bindings
- for imx8mp noc
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com, cw00.choi@samsung.com,
-        kyungmin.park@samsung.com, myungjoo.ham@samsung.com
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Rob Herring <robh@kernel.org>
-References: <20220703091132.1412063-1-peng.fan@oss.nxp.com>
- <20220703091132.1412063-2-peng.fan@oss.nxp.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220703091132.1412063-2-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,45 +66,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22. 7. 3. 18:11, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> i.MX8MP features same NoC/NIC as i.MX8MM/N/Q, and use two compatible
-> strings.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml     | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> index b8204ed22dd5..09c8948b5e25 100644
-> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> @@ -26,14 +26,16 @@ properties:
->      oneOf:
->        - items:
->            - enum:
-> -              - fsl,imx8mn-nic
->                - fsl,imx8mm-nic
-> +              - fsl,imx8mn-nic
-> +              - fsl,imx8mp-nic
->                - fsl,imx8mq-nic
->            - const: fsl,imx8m-nic
->        - items:
->            - enum:
-> -              - fsl,imx8mn-noc
->                - fsl,imx8mm-noc
-> +              - fsl,imx8mn-noc
-> +              - fsl,imx8mp-noc
->                - fsl,imx8mq-noc
->            - const: fsl,imx8m-noc
->        - const: fsl,imx8m-nic
+The thermal framework initialization with the device tree appears to
+be complicated and hard to make it to evolve.
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+It contains duplication of almost the same thermal generic structures
+and has an assymetric initialization making hard any kind of serious
+changes for more complex features. One of them is the multiple sensors
+support per thermal zone.
+
+In order to set the scene for the aforementioned feature with generic
+code, we need to cleanup and rework the device tree initialization.
+
+However this rework is not obvious because of the multiple components
+entering in the composition of a thermal zone and being initialized at
+different moments. For instance, a cooling device can be initialized
+before a sensor, so the thermal zones must exist before the cooling
+device as well as the sensor. This asynchronous initialization forces
+the thermal zone to be created with fake ops because they are
+mandotory and build a list of cooling devices which is used to lookup
+afterwards when the cooling device driver is registering itself.
+
+As there could be a large number of changes, this first series provide
+some steps forward for a simpler device tree initialization.
+
+Changelog:
+
+ - V3:
+    - Removed patch 1 and 2 from the V2 which consist in renaming the
+      thermal_zone_device_ops to thermal_sensor_ops and separating the
+      structure. I'll do a separate proposal for that after the incoming
+      cleanups
+
+ - V2:
+   - Drop patch 1/15 which contains too many changes for a simple
+     structure renaming. This could be addressed in a separate series as
+     it is not necessary for the OF rework
+     
+   - Fixed of_node_put with gchild not initialized as reported by
+     kbuild and Dan Carpenter
+
+ - V1:
+   - Initial post
+
+Daniel Lezcano (12):
+  thermal/core: Remove duplicate information when an error occurs
+  thermal/of: Replace device node match with device node search
+  thermal/of: Remove the device node pointer for thermal_trip
+  thermal/of: Move thermal_trip structure to thermal.h
+  thermal/core: Remove unneeded EXPORT_SYMBOLS
+  thermal/core: Move thermal_set_delay_jiffies to static
+  thermal/core: Rename trips to ntrips
+  thermal/core: Add thermal_trip in thermal_zone
+  thermal/core: Register with the trip points
+  thermal/of: Store the trips in the thermal zone
+  thermal/of: Use thermal trips stored in the thermal zone
+  thermal/of: Initialize trip points separately
+
+ drivers/thermal/gov_fair_share.c        |   6 +-
+ drivers/thermal/gov_power_allocator.c   |   4 +-
+ drivers/thermal/tegra/tegra30-tsensor.c |   2 +-
+ drivers/thermal/thermal_core.c          |  53 +++++--
+ drivers/thermal/thermal_core.h          |  25 ++-
+ drivers/thermal/thermal_helpers.c       |  13 +-
+ drivers/thermal/thermal_netlink.c       |   2 +-
+ drivers/thermal/thermal_of.c            | 201 +++++++++++++-----------
+ drivers/thermal/thermal_sysfs.c         |  22 +--
+ include/linux/thermal.h                 |  21 ++-
+ 10 files changed, 197 insertions(+), 152 deletions(-)
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+2.25.1
+
