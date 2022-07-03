@@ -2,75 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7500B5643FC
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Jul 2022 06:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1CD5645E1
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Jul 2022 10:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiGCD6f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Jul 2022 23:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
+        id S231726AbiGCInZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Jul 2022 04:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbiGCD54 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Jul 2022 23:57:56 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD245B4A2
-        for <linux-pm@vger.kernel.org>; Sat,  2 Jul 2022 20:57:27 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-fe023ab520so8802837fac.10
-        for <linux-pm@vger.kernel.org>; Sat, 02 Jul 2022 20:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=2t70EqaCAX2EIHEkB/F1VpDKZkBCdo0fN5cl2gsNC/0=;
-        b=pzw90zch/lqhVJuZMTOx8gesTxsUma4Pg8ASH8JTxkCBd/Mxh7EVENuwrFBefxpebc
-         12q04WRV5Qe81sH+VrxQ8eFYe0uUW6EzHFXBXtgPZO+eRpszhQlmKjg0ovzT8Xxw+m56
-         qX0EA8MFJmSfmaacmEGjN4vVxwihybWzAU5yM3ESzY5EOydFMuakII2R9hK+2kkEydrO
-         qm8Hz3PdtE48GMGMgHj36FOT8TRSld6jtaOAAFqToKG+qyrYVwKOYmwjAL2gC2PGOpPn
-         +PezBST+2qQetFmEnAcmayF/pq3XpD/u4rx8L0XhvV0B89A7YoPmg3fcSAXRHG//oRlB
-         3k8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2t70EqaCAX2EIHEkB/F1VpDKZkBCdo0fN5cl2gsNC/0=;
-        b=mYxMjowNu5BLtOakDLORu+xTiBaxtuSgCA6+dN1tvRheO1UDlgA1O5DtnuORU4k1R8
-         5wg0DIflcJqKEzh15O4TSJl8jY7oLV7XJrM17wkVVe18QdrrfFOMXcTTZ07W35GbMLgB
-         GM1u0ihMVIlZaZXW59/NftsfvdeCjD951nehDjGLASS4egSUT0q8DrwruBU2C8QTdUsj
-         SRQ1FSFKZpH7OOgumW39S+DqG/PHDG8A83pwvHEgcfGTLO2Pun54ZiYoBQOQl/7YHsOq
-         H8zJQZOUcCk5Ol4pgXtV/5iJoc2HhmBo5MsfYh88tr+tiljZ5Q5vPMCI1fK/klGpcfnY
-         3Q6w==
-X-Gm-Message-State: AJIora/XhVVBt3NivkhwEcU63VQnKq+E8jgf6RKo6d941NCjmc7i5aB4
-        ZaX3q4uEk508S6zpIeCayppb9w==
-X-Google-Smtp-Source: AGRyM1tfFSgdyku+GAdBGmnenRQEV1SRTVop1LLwpS7Gb8p210aLhk3EsnPy3hUUoysDDLYPPffJnQ==
-X-Received: by 2002:a05:6871:547:b0:10b:f2b9:7618 with SMTP id t7-20020a056871054700b0010bf2b97618mr290088oal.146.1656820647355;
-        Sat, 02 Jul 2022 20:57:27 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 25-20020aca0f19000000b0032e5d0b5d5fsm12965910oip.58.2022.07.02.20.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 20:57:26 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
-        Kumar Gala <galak@codeaurora.org>
-Subject: Re: (subset) [PATCH 2/2] ARM: dts: qcom: pm8841: add required thermal-sensor-cells
-Date:   Sat,  2 Jul 2022 22:56:23 -0500
-Message-Id: <165682055971.445910.7709192781079493994.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220608112702.80873-2-krzysztof.kozlowski@linaro.org>
-References: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org> <20220608112702.80873-2-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231295AbiGCInW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Jul 2022 04:43:22 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2058.outbound.protection.outlook.com [40.107.20.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15F1E39;
+        Sun,  3 Jul 2022 01:43:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UX1v80O+cS+iLy4xTTl3IX2pdooN9jnBmC7rbcd24Ds5tLImCoT6V5eZjEcATHiBX0ixtCe8dx14ZklJEFI/9scaXk/P/qZNe1eLY/SujMAJ96aLKWExwwsQ3zh9k+JjOiP/NOjRRUfDj+ynaFMsxla5znrp3qrjUYnVpVRSDx5FNF7o8dzbw43SJTEpzvT80M2+rKvUKev06xlAloUuxxhabNWXFzPif4BNKHjXzXB9OOYg3KJhIZCdyMC3I+XGbMLok9Q8ytEKPZ11UN5XaSTtA9OWwsN6uZIElRhZJQQWAeP8xKQrgsDsC7RkD5EAAKCNzN0jzw/uPrigjgXJUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5UL0+41wi2oJhbuLc6lb7B120yzM1jqmSdv2TZL6orA=;
+ b=cF5nGko9d6GNdR077UJq9ESABc0EIiC6PQRD5YYr1AfW5OL6ZND6VWMnxoR2EDH4cCAdGaFcCKbEYMFoDZ1owxe04jd7BdB3bvUfYRht3g6AGU2gQFHH98gHgdtmJABFeVArAXTWFIqystiiBkdvveDRMAncDHa5J64yHxqV9woAp/eIWuwdJVe3bG/TlwW5EecV7NSgoSBt6mo3BOFqIdHjvTsLEFEp4Alhal/m3VKC+v1qer+V1qD3DW0w6An/IPlXZO5y2WpxNpwM/iqy7byjO5qbUvvZqAlJcmrjlPgO+VlZYVoQ8e+cqmExhLOoKM8PBYaJd29BYmThoSmCrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5UL0+41wi2oJhbuLc6lb7B120yzM1jqmSdv2TZL6orA=;
+ b=UBLJBRkpIB3LxSU9Jdj+QE9py0gkesa1Xc4GkZQgxHATJOCj/o2VCLyQ151OZdFdriBzfCNvBYsv+5L8aRVv0Q5FmtwjnsfccD81w3WlYRFY29xQfSFuJyhpdXpJLNGgVaORXvADJ9tjM9BNRH1LR3OzSPSGwzmohNsLyQx/9qI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM0PR04MB4020.eurprd04.prod.outlook.com (2603:10a6:208:56::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.19; Sun, 3 Jul
+ 2022 08:43:16 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::fdd4:8557:334b:180d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::fdd4:8557:334b:180d%5]) with mapi id 15.20.5395.018; Sun, 3 Jul 2022
+ 08:43:16 +0000
+Message-ID: <68d8fc46-e875-7f4d-ef73-d2177eddc0f1@oss.nxp.com>
+Date:   Sun, 3 Jul 2022 16:43:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V2 7/9] interconnect: imx: set of_node for interconnect
+ provider
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lucas Stach <l.stach@pengutronix.de>
+Cc:     djakov@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, abel.vesa@nxp.com,
+        abailon@baylibre.com, marex@denx.de, paul.elder@ideasonboard.com,
+        Markus.Niebel@ew.tq-group.com, aford173@gmail.com,
+        kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
+References: <20220616073320.2203000-1-peng.fan@oss.nxp.com>
+ <20220616073320.2203000-8-peng.fan@oss.nxp.com>
+ <3c773637f626877832041d3065f387261ba70816.camel@pengutronix.de>
+ <YryMt4CfQNkIHwiV@pendragon.ideasonboard.com>
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+In-Reply-To: <YryMt4CfQNkIHwiV@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-ClientProxiedBy: SI2PR01CA0029.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::8) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 111df6c8-442a-4883-7eb4-08da5cd01261
+X-MS-TrafficTypeDiagnostic: AM0PR04MB4020:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AKfRHIWgKaR6cFejMXfKGxd1T+2+88N7W3XERcmyJDOhfyzuaJRuVQziz6n3whc4B6iYUfZBGIl1PPN7j07iGURqbfENxaSLZpZyUW3kUoUYVVsNe7FzID9dMcM5tk1lTrQ6+pRc0D+5GD4JvoAJv5YEHrk3MgFwXVbl2/Jnk9AuEhoR886UzBV1MDAfAcKm26FqPxBrsHGRwKIZb9xlfVa2hfmMI1ey+EEW/MQWyRUZBEAOlUeTs4t/a64zVNLgHcMlCsUp/QLANXM4CY0S+UcPS/H7bbQNoHuKene91kbnLXSrAOHYfNBZm3RcksCqBydResvVab6Eqg9sjYyh0UrOrD5OdESmxb7GHsUDMYFWSq6j+YuOpgZHdhDzmidtccdo8Y72+etoa5kPTGDEQndIeTHSDAiOJNx2/Jt1sPW2XOq8GJdVy7jpLSIwNPNINkJHyCLGvwrPazgW25Cv2oWYE0xiIAc/2GTevGW86Ognnw/GSj4SPkRhXGESt/OTO+xtNKu2V9KaEP1qICpEIVkkonP4Eh0w+KAe5PhbaEiYFDzcQwjIMebwcJU5jD3eluVrcSy++0uiTsEQxsTBOws0VQngCVhm9+mgkJOABc4fI5MvzXHhGevY7/irK2FIH2bBEMfZ4kcvc1rUNz27H9LqxsT0GK68wbXE4NvCAUWSbHO4jYPs/+LH8pqGPinLH6Q5/a3Sg15lU74zjj28XvMo4d8BsquT1q2Xqg9Bl/xaCw9oyvsyJMcuuvUKJDXo9gvJtKo76cQU1KYXhbpctEglLDdXBNJ9MbeAZgbE0zpXuYgqylFi0wv/IBGbb1IoYL87+kq97nWpHnZF0WrNRLLkB0S8uAcD1ezRwdAMBU9t0YxQhLpKkkK6CftvoAnn
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(346002)(136003)(366004)(31696002)(6486002)(86362001)(478600001)(4326008)(26005)(6512007)(6666004)(41300700001)(52116002)(6506007)(316002)(66476007)(66556008)(66946007)(8676002)(110136005)(186003)(38350700002)(38100700002)(2616005)(5660300002)(7416002)(8936002)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NjFNelZRYTVabU02YitGSE9vMzhJemRVL3ZzbXRtd3ExUnVVeVNRRDRvNkpo?=
+ =?utf-8?B?UjVOU1pvMlNKbndHMnlRaVk5Q2NyS2RRZmtDRDlmU3BHR3FpZHdFdk9YZGl1?=
+ =?utf-8?B?NE1QK1J1MGpYRmJVL25iQmx6eFVQbTFmL0YxY3hEamNIbEdQbWRnaWpLZG9R?=
+ =?utf-8?B?WXlnaXdUclNOa1FPZTR1K3pYNG9mRHJkMVV0djE0L3pyeGI0QVd4NXRrUkxr?=
+ =?utf-8?B?WGtFYVVqMFh6d1lxZW5BS0xSZEI4cVQ4dC9YdzNxYTQ3UDY0UU5sVGdaSlFQ?=
+ =?utf-8?B?YXBTaTYvZld5MFlKZi9Vb2VTVk11OWVDRTB1N3dyV0UxNFBvQUZBRTdNLzBM?=
+ =?utf-8?B?bTZnTVg5bXhQdTJjOUdIeng0czZlUXl2QVZUOW5FRUIyZDlCQ256SUdBOG1z?=
+ =?utf-8?B?UU9ERkNuejNzVitOeGU0Q2w2U3hDZEFaQXl5VC9FeXdjekNVM1NnZ2FZaTlo?=
+ =?utf-8?B?QlY0MWZQUjN0N0N0Nkc2OS83Zy8zTnNhNENYSXd4TXc3TThJKy9zMHFIS1ox?=
+ =?utf-8?B?V095TUJUSHJ1R2lQK09PVytVd3FWY2wvK1JCbUhzNUJsUkovemFnRkhUYWVE?=
+ =?utf-8?B?czlQL04venNGVUQ4elp2THdheXhBUUp2RGdCQVNtUUpiUmNBWVV1S0RwTFI0?=
+ =?utf-8?B?WGExenZkRUFjeEJDTmdYK0FES1Exc1V5emtRWkhlTmFMb1hCcDdkR1FZeThR?=
+ =?utf-8?B?am9HcmZYTGd5YWVEdHRmZFB5UTY2ZUo0eG80KzdtMUthZzVNMWZUU2hZcTBh?=
+ =?utf-8?B?eTV5YjNneHBtdnhzcDV4cytGbGRCUkl0bllvbkxjdFhpdjBuZWVsSmhwangx?=
+ =?utf-8?B?OGovVndrNzRqNWZReDJBak1kazE2WnF5c0IySTlQN2x1YkVhVFBuTUZjR3Ru?=
+ =?utf-8?B?TU5VeDZPa0hFeGhqNko3dmw1aGFac245MU9mZkRDUk00d0NrbkVzcG5xZmVN?=
+ =?utf-8?B?MWczUFNoRndVYytOUXZhdFp4djBDYTZUWGlBYlAzS1JIY1l5SWp3MUNnMHFD?=
+ =?utf-8?B?K0N4dzV1VTYramlYM0wyOVV3OHlMeVowQVZVbHRvQ1h3RFBndkVabHNic0xt?=
+ =?utf-8?B?bmcxMGJCVjZRKzlHdVF6SEVZcTdyU2ZhUmlKS2FFa2F1TFhvU3h2aXN2WWYy?=
+ =?utf-8?B?RldkTnYybHFqYWhoc25mZkxVbll6TjVNTTJrbGk4akRBNFZqNFUxNThsbnVa?=
+ =?utf-8?B?S1BqN1RpbitEckYya0NJbmxRT0dWREp4bGtIQ0FRVnprVnBqWHlKT3ZUU3pY?=
+ =?utf-8?B?OEVMVStXelFGZHphYWUvd1daM01sZ1d2a3IxbTdPc3c3dzZKUEFYUGxhelZL?=
+ =?utf-8?B?ZDV3NW1DT2MyR0pIamgyOGJsOHVXVjdVK1BkdDNWc3VrVUdNTDM0bEZpQkZ2?=
+ =?utf-8?B?Y1IySEJsWDVtN1FxN25WejEwSW1OcGJ3UythVE9tU2tZdktPWXloS0Q5bWNL?=
+ =?utf-8?B?Sm5NODdWQUpaWFpkR0FMbXJpWXFpNGJWMGVkM042dk05NllWTk9hc2xLd25C?=
+ =?utf-8?B?R2FPZzI0c255L0huSzg5RkZDOXNQUVVLVTRmMGRkcHcxRko1eU9ITW9ERGtF?=
+ =?utf-8?B?SnErb083RUpmUG0xQUIwUUVFV2pnVERBVXU2MFlLbGlMeEhPcHJkWCtkcEhV?=
+ =?utf-8?B?UzlLamtFNnlHQ0tGTUJrZm9PcVFkdzV3TUp6TStHbThHaEVOdVRnT2EyZEUr?=
+ =?utf-8?B?eCtuZFZLcmtwTnJpYi9wRmdnM2ZCWVFZOS9vRHBoeE1mQWpheDlhY0t4RnM4?=
+ =?utf-8?B?d0p1Um9kK281UlBLRXQ1aUxRZEdySDJlYWpJYnZkWEVqMFdZdE9rR2JCVFdk?=
+ =?utf-8?B?VkFqUWdGbU55Uy9nQllPcDJuT1QrOVBZU1ZQOUQwb25Qck1WVTh3dEFBLzh4?=
+ =?utf-8?B?WE9KNEY4MlBVQkxvTG5uNm82M0VFbVFXZXpuQVhzajFyOXdGa21FdHg4TWQ4?=
+ =?utf-8?B?UTlyTk5jZFJ2NkVUV0RGcDBFNDdVL21EdnZjcFh5WitzY2czRytKTE1EWllQ?=
+ =?utf-8?B?ZTJFM29aZS92SlFpZ3lEUGdYaENpYWJFMDJKSU1LZ3pkYWRWWUxxZktsa1lH?=
+ =?utf-8?B?M0QyUDQ5TzY0TERVTUgzUHZ5K21WVlUzSEJmZ2FtemFhelFZaTFTN3BLVXBv?=
+ =?utf-8?Q?WbBySYzhUlsGNTdbL64g3yb0I?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 111df6c8-442a-4883-7eb4-08da5cd01261
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2022 08:43:16.2688
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wxw5CxzGj2cwnMiSA6Kc6U/3z9WJwFWKogZs+G+qxq9W6dKSe4Lln8crElGKl2MVvVZElZe8aofYZ+euOJ5Nhw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4020
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,16 +137,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 8 Jun 2022 13:27:02 +0200, Krzysztof Kozlowski wrote:
-> The PM8841 temperature sensor has to define thermal-sensor-cells.
-> 
-> 
 
-Applied, thanks!
 
-[2/2] ARM: dts: qcom: pm8841: add required thermal-sensor-cells
-      commit: e2759fa0676c9a32bbddb9aff955b54bb35066ad
+在 2022/6/30 1:32, Laurent Pinchart 写道:
+> On Wed, Jun 29, 2022 at 05:08:58PM +0200, Lucas Stach wrote:
+>> Am Donnerstag, dem 16.06.2022 um 15:33 +0800 schrieb Peng Fan (OSS):
+>>> From: Peng Fan <peng.fan@nxp.com>
+>>>
+>>> The provider device is created using platform_device_register_data in
+>>> imx-bus driver, which not has of_node. With of_node set, it will be
+>>> easy to support QoS settings.
+>>>
+>> That's a bit dangerous, as sharing a of_node between two devices can
+>> lead to some reference counting issues IIRC, but then I also don't see
+>> a good way to do this any differently.
+>>
+>> Regards,
+>> Lucas
+>>
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>> ---
+>>>   drivers/interconnect/imx/imx.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
+>>> index 1f16eedea21c..78557fe6da2c 100644
+>>> --- a/drivers/interconnect/imx/imx.c
+>>> +++ b/drivers/interconnect/imx/imx.c
+>>> @@ -264,6 +264,7 @@ int imx_icc_register(struct platform_device *pdev,
+>>>   	provider->xlate = of_icc_xlate_onecell;
+>>>   	provider->data = data;
+>>>   	provider->dev = dev->parent;
+>>> +	provider->dev->of_node = dev->parent->of_node;
+> Due to the previous line, provider->dev is equal to dev->parent, so
+> doesn't this essentially do
+>
+> 	dev->parent->of_node = dev->parent->of_node;
+>
+> which is a no-op ?
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+hmm. Indeed, I just not able to recall the issue I met before. I'll drop 
+this patch in V3.
+
+Thanks,
+Peng.
+
+>
+>>>   	platform_set_drvdata(pdev, imx_provider);
+>>>   
+>>>   	ret = icc_provider_add(provider);
+
