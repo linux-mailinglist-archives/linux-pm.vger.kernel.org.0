@@ -2,119 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1905C56464E
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Jul 2022 11:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78022564721
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Jul 2022 13:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbiGCJOD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Jul 2022 05:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S232503AbiGCL0k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Jul 2022 07:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbiGCJN4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Jul 2022 05:13:56 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2040.outbound.protection.outlook.com [40.107.22.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF0563CC;
-        Sun,  3 Jul 2022 02:13:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SzNmhtMbzy3yWC3QTw3FjwywsLV3oRoUe4ID5YHCYDZ4ZZP97KZTHoeyEbhBmIzphQCbSG6/CQB16aC6srOgNklKi9GCRDUJkJr0vwlaQmN1BjGMTBRu+qyexUYnmY5izRmMiMSrZDMc5KN8W6rX7SpzaYD1s0CY4DO30CR+UOK+mOHQu68d9QEJU1xzdppZAeN3jZ6W1OIV991mEG04u1tYFI1WSPtY/UAncSjFBQbE2S4SOsagNOUbivD1wuyPzsYZ/hlBJ2zWcY0ja74eIYHa3p02Aa5mXiP93l6UT1K7HGhg8nJ02t3ms8b6KZPLqOxg7UAmYB5Xg8MTez0/DQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Gl2/EPlcXP1Mp7SUNao7Lkppmwn9KkEHDhQjQB3Les=;
- b=ZcVFlRjxoA24pIKji9xWAgllnfv6S2WlffddzkprhrQ1PhyZ3wjxS1pGYn2uNMqjYn7VI+qlVdSBU96Kob22es1IA+KfsnXsvSSI/IvUVIWFeuafQH74M4qaXdYhwFOGr2nagfQ8ppb0C7xEa+C0a8DYztg8PqJ//Z8ZYsSZrlDyjO+gxTGEoUHV1DZXBm6uN69BZRO98B4+A3LCtnRBm36KeG0OJXHFBUyUdWwYHnzcBsWuYtHwaM4wyoQVjAVmxphPheSvItNYJE7NLzsr/hm0m8T4ejXjQHjT59VxkoJCmXo9hnumELb3RzhfZrEMju5gL65MRXdXtJDmoFg8Yg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6Gl2/EPlcXP1Mp7SUNao7Lkppmwn9KkEHDhQjQB3Les=;
- b=YFs9xeHJnM5Ya1jFUVsR93QZEKn6ZLtIBtOQQ+rXJySDrW9/EZsp+wGanaNDUkp1CxNdudzA+6YZQw2JcVVbYQS4u6+gKYLArvXChi0FXidDkSaqi691AeZGKTDRjZuo1hvkWRIkSmUinjbT/sYFTj33rF2FTYGe5mToUTZyw2k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS8PR04MB7768.eurprd04.prod.outlook.com (2603:10a6:20b:2a4::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.19; Sun, 3 Jul
- 2022 09:13:51 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::fdd4:8557:334b:180d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::fdd4:8557:334b:180d%5]) with mapi id 15.20.5395.018; Sun, 3 Jul 2022
- 09:13:51 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     djakov@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, abelvesa@kernel.org,
-        abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V3 7/7] arm64: dts: imx8mp: add interconnect for hsio blk ctrl
-Date:   Sun,  3 Jul 2022 17:14:51 +0800
-Message-Id: <20220703091451.1416264-8-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220703091451.1416264-1-peng.fan@oss.nxp.com>
-References: <20220703091451.1416264-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0005.apcprd02.prod.outlook.com
- (2603:1096:4:194::6) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        with ESMTP id S231533AbiGCL0j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Jul 2022 07:26:39 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9E295B8;
+        Sun,  3 Jul 2022 04:26:38 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id m184so3835799wme.1;
+        Sun, 03 Jul 2022 04:26:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=y8JsYVvjrg3nX9Y9fVIfnji/DXIDBrBrl79jkU1TvKU=;
+        b=IGuIFHB+7c7eCSBqB3HdiS16/ssQSIiRjeDQkRGLTFQinjaZhsaCrxLLLgJtTmxVCB
+         wHvVqrLQWUYSHpLIvA2fyDG/7DDhz78XqMjSDbw0+kKI7NsT/b5gCmqxjopREAi81kK8
+         2ZRG048rWue8DT28p2NbXPdsCN1aNwK66XM+lwHoEew4w5WP24lFcAGLw4zbsiO7XmU1
+         Z/CgCIX0oD31/KiE+6j7fB6NkJZDDPnjxg4WZDdBru+ZcytfPb2jYy1R56hlMYlGQYfP
+         KI6KPvRsN1+qPY0EnfOpsCGlx4PduvLdUon3okM8HldTwGT4fKpEcYYt3DSfWgraZrLr
+         u05w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=y8JsYVvjrg3nX9Y9fVIfnji/DXIDBrBrl79jkU1TvKU=;
+        b=4XU/j6qVAYOli80P6VdB9YO6O68hElClq1kW116QXgt5cPfpTarW+3JfbtZsuxPBUt
+         xrr1PDeSwpk5jjiYm9a1wYasiZCYOuneISV0u2vz3wEWnKnPpdXvlRX/00AZu8ZvODUk
+         g7f+1KQnLgtPbe+bcI1NVhLAbaoa5eul7dKDI8ceIOpZ600Mi0cknlEieEsNot4FEfVU
+         3sT664iuMMhaZKtyl3j1oN/0bWhgF+oaJ44uBTk/GxU3NhjDdJHaq0U9GzeO34CQG8eL
+         tKqH+OD+liSd+wIW7I5qyaF8d/RujoL0D49OFin11Ac9O7uSgMnBLuH4e+iVbMYq1yWX
+         eL/A==
+X-Gm-Message-State: AJIora+IG8gXwAWvFKFLYARHhv1ObHmOqJP1nuGolgUeWjQ7oT0wYiLo
+        zf6LakZnTGE9UFQpMoyneD8=
+X-Google-Smtp-Source: AGRyM1v6QL7OjuVE6xLHx03p+2vy4QZhGP+nZtS496B+gM5MOIGkydAO/Cfqk6NlDuuk8F8/xC7uew==
+X-Received: by 2002:a05:600c:154c:b0:3a1:884e:72ac with SMTP id f12-20020a05600c154c00b003a1884e72acmr16618750wmg.23.1656847597004;
+        Sun, 03 Jul 2022 04:26:37 -0700 (PDT)
+Received: from localhost (92.40.202.1.threembb.co.uk. [92.40.202.1])
+        by smtp.gmail.com with ESMTPSA id n15-20020a05600c4f8f00b003a1980d55c4sm4354395wmq.47.2022.07.03.04.26.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 04:26:36 -0700 (PDT)
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+ <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com>
+ <37d40cf2-4512-754f-2e44-ee1449bc2e9f@sholland.org>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     wens@csie.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jic23@kernel.org, sre@kernel.org, lee.jones@linaro.org,
+        lgirdwood@gmail.com, broonie@kernel.org, lars@metafoo.de,
+        quic_gurus@quicinc.com, sebastian.reichel@collabora.com,
+        andy.shevchenko@gmail.com, michael@walle.cc, rdunlap@infradead.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 12/15] pinctrl: Add AXP192 pin control driver
+In-reply-to: <37d40cf2-4512-754f-2e44-ee1449bc2e9f@sholland.org>
+Date:   Sun, 03 Jul 2022 12:27:44 +0100
+Message-ID: <CeGWHuCl1EmopK1ddAnah2VepohGrPTq@localhost>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 47f80a13-2bdc-4898-e2fe-08da5cd45841
-X-MS-TrafficTypeDiagnostic: AS8PR04MB7768:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PQ663PT5oX84hdvXCo+3rWNuigWcPaMlLEmsrf53KMR3r95mOPc00vffS5wJrUTxPCQ3XZqHOrBd73taBWUfZAogV5kbn4OZXM4Rmm6bgftGlCCK/C4PNcmQTrGHZxf721RdouTiFLmGa8Abhvk9O4p9CxfmcA+HwwpjhiwOxFofkSxM1bEynHriWUA5hcqLRDNwuywEURexsV0aXYpngQhtdaFzsYxi+v1LPDq24e7fvlsZO6YNzUfUov1nvGY6Wow4FfThC2xGl67hqli4TeMw9r6dymQ4ufbI68RcXoYi7vFBZ1bxT/JHVkEQbx81tqWkOOChLcQ0DZCBxtW5JRru5p1WJz/DHMWCW488hOvxYLv551xw8RAILVWiFRfI1DQgRtVEN+zZRHOcsgt96Ybg7OHfuZYnyBH1VBNxNfvHfn10lYCcMRC2b1ZkbMMnO5DEUDmeJFyQcc4bthbVU19ix0+7GviKn4p89WjYXyKSqCLTesT5acmGw9yOtYKUrNUd500g6cHN3WebJ28nHjJ+MUBwwiWcebracJoWup0wzwWK0mWn9brTr3L7w51jCWtYUnruPPaVRpnJOnXUPTI9tgz6ROYyDiQr+t74ecPyRHCluJbjiNhAA8HEaJAq9pwjSjYjVM6c9B4yIdH6LjUhA5A66bf9D56733TYDyN/+EMs0itckeMHXZGJ+vLAFgZONzzJ41M7VIPpY9eUBCRYSwnmASr8vld3FKXtP00N7l/Nfezj6tKrTiILi2OcnTV2nsSqO5MBM0QNuK/7ZsOdlbYMwDpN9Oj04f8goUzbgqqnHA8WDoQV7esN7tm44Fz/R4TEmEojvPOBYD/roIu9aUDu7NsG6vetKu6IB4A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(478600001)(4744005)(5660300002)(8936002)(7416002)(921005)(316002)(86362001)(6486002)(4326008)(8676002)(66476007)(66556008)(66946007)(2616005)(1076003)(186003)(6512007)(26005)(52116002)(2906002)(41300700001)(38100700002)(38350700002)(6506007)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mmK2hBZ8R+GJz6apOxrLqvUAF9aY4LvF4n+s97OeEzVYeCF3eImqyhwk9IGx?=
- =?us-ascii?Q?b/U7oHv/etp0jHnAJLmloAqHeHV/V0dzTsYRf10WafjGQyJ2wjkq6pALvFMq?=
- =?us-ascii?Q?EyG0h+UT31RWotF8f9tUrI6N4UfcFqLcB21+tPvOSzVSkVJaoQQIZ2/U4+7N?=
- =?us-ascii?Q?ncVZtFIaQ8CrDMnfgLlgAMPmurW0UfdU9Nkzfysd/ieHohHailYQD5JalO6O?=
- =?us-ascii?Q?EAtict/45COolrUSm+jGa6DJSVkOvYw4zez45yqwIWbtSn8r8g4ZUhNUfSPO?=
- =?us-ascii?Q?R+Oy3V8D48FtbCgHndU5/UJRB+l38WUjvTuq2hNMVVer/aU+RBKID8buYQ9A?=
- =?us-ascii?Q?uQnr24Nv6+tAHVWMh/tJjkhUo+POPV2u8s1KKEMbRRFd95ZrsDoJxWvansDg?=
- =?us-ascii?Q?zXS9mikApBNssOFqcw41ZamPO16RTOiruUI0F2C2III+A1LWzIoaFfLKuFt6?=
- =?us-ascii?Q?0s/cxXLkR00SKVXjXi+YTrN44sGBWsjaZF9/aQuBbugdvmODaar5x6XJlOH7?=
- =?us-ascii?Q?nb6E8inDKfLPpQT6QeqNztw2I5ptamxGPvp0w0yVG5tkNRq6+/e5bDBWUqMB?=
- =?us-ascii?Q?gu9u7gMnFJ4gi+1IYQXAOM2V4cAuQBXE3EBQYS8oPwpKaWzFPHYJokBSBhZz?=
- =?us-ascii?Q?mphtu95ZjdHOZnxBVRLUOjArJg157kTrn5nLhJGOLBx4m6g2iBCzpJFFQjJV?=
- =?us-ascii?Q?IE7bR7ceQAa7QxB/Y7TRXeJLSgd4S/GFuLR0qHZ4az8SI25mQmdu5QKAD71q?=
- =?us-ascii?Q?cXRhR7FzmMuCb1Fl1CH/AdwKfsDc3PUiCYiL0E/kQe6EKeTD/9LQyTzTgRtQ?=
- =?us-ascii?Q?cN2nyjhJiSHcQWHR12DanRCsGuAvUOSmIfvHKY7Rr6Pcugo4cC8MUWGkRyjQ?=
- =?us-ascii?Q?C0IOI7pPDo4Ny57NLsPFNf/PFNfoowD/cHfjUWw8WJ1ruzgMJxe42StwFagW?=
- =?us-ascii?Q?UsZZntedEDxmzS5vExd/6gJ+ZYY32DaydP0UKn6sck2nDpyAmoAZ06E7+1Ft?=
- =?us-ascii?Q?4VFwVDXVXI2xHAnRXi6csQ8fPEuicBRY69tTP1SQLFfSDMl7tx11KQtco4Bq?=
- =?us-ascii?Q?yCixYjNVhJa0fmSA1e7/OTj6LctL/ryO4ldIRu9r7fi+OJGjIbo63aVv4Fc3?=
- =?us-ascii?Q?/+mdhii4Kf/htPgmpCyPUYCKn3o5HugXcNc9Ms2I4W4Ea541H/pmBYXFh2/0?=
- =?us-ascii?Q?YrQuOYIid+KgY8MkvoDMPGWI16o1+YI7p7rGZxo6CJz1pV6q/qnvuux3I9JJ?=
- =?us-ascii?Q?BvV30ZIhKNwDUKMFR3aXrwe+BSO0BhkWg5McHRT9FmdZGyNVsA7I8CriRmAs?=
- =?us-ascii?Q?a3RVAnLlOivgFSvYXO/Ve+gul/pE0Kldl/4iS3vNGfMxd3puARXol6umCCHG?=
- =?us-ascii?Q?AvXkuc0USonahIoNE1+RS1Ud9oKHUsugB0fOrp/ca/yUzHj3fwQ8uV//2CAG?=
- =?us-ascii?Q?DTJVQcKVA2bJSNYfr/dC9Q2DsypuEbb9coJ1aOmp0Ro+tZoss7zLX9bI2EvW?=
- =?us-ascii?Q?6zYpJT2ownx5R+Mw/BHvHD/AWo4lI7FSj04jUqGQ9f3JbEaD+J15paPrIf0v?=
- =?us-ascii?Q?qYR7BFOZ5iehxTGhazxfTW5+yPFt3cFP/dCDGHHo?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47f80a13-2bdc-4898-e2fe-08da5cd45841
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2022 09:13:51.3005
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I9l/EbbsqFGtVNMqs644pvxCt9yhLIyEELLUTdaB7vbPPi6cfq6QHSXpGDFgMo26gy5Fkk5MHwdHAC633+iQ7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7768
+Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,31 +77,170 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
 
-Add interconnect property for hsio blk ctrl
+Samuel Holland <samuel@sholland.org> writes:
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+> On 6/29/22 9:30 AM, Aidan MacDonald wrote:
+>> The AXP192 PMIC's GPIO registers are much different from the GPIO
+>> registers of the AXP20x and AXP813 PMICs supported by the existing
+>> pinctrl-axp209 driver. It makes more sense to add a new driver for
+>> the AXP192, rather than add support in the existing axp20x driver.
+>> 
+>> The pinctrl-axp192 driver is considerably more flexible in terms of
+>> register layout and should be able to support other X-Powers PMICs.
+>> Interrupts and pull down resistor configuration are supported too.
+>
+> I am planning to implement gpio/pinctrl support for AXP152[1], which is
+> somewhere between AXP20x and AXP192 in terms of GPIO capability.
+>
+> Which driver should I add it to? How much work would it be to convert AXP20x
+> variants to the new driver? And if supporting other X-Powers PMICs is the plan,
+> would it make sense to convert the existing driver in-place to avoid dealing
+> with Kconfig migrations?
+>
+> [1]: https://linux-sunxi.org/AXP152
+>
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 08bd57742294..9cceeeeb26be 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -1109,6 +1109,11 @@ hsio_blk_ctrl: blk-ctrl@32f10000 {
- 						<&pgc_hsiomix>, <&pgc_pcie_phy>;
- 				power-domain-names = "bus", "usb", "usb-phy1",
- 						     "usb-phy2", "pcie", "pcie-phy";
-+				interconnects = <&noc IMX8MP_ICM_NOC_PCIE &noc IMX8MP_ICN_HSIO>,
-+						<&noc IMX8MP_ICM_USB1 &noc IMX8MP_ICN_HSIO>,
-+						<&noc IMX8MP_ICM_USB2 &noc IMX8MP_ICN_HSIO>,
-+						<&noc IMX8MP_ICM_PCIE &noc IMX8MP_ICN_HSIO>;
-+				interconnect-names = "noc-pcie", "usb1", "usb2", "pcie";
- 				#power-domain-cells = <1>;
- 			};
- 		};
--- 
-2.25.1
+I'd assume variants getting new GPIO support would be better off using
+this driver. The existing one supports only AXP209 and AXP803/813, and
+it hardcodes far too many details.
+
+I'll let the maintainers decide whether converting the existing driver
+is better than dealing with possible future migrations. If conversion
+is the way to go then I'll drop this patch and revisit GPIO support at
+a later date.
+
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>  drivers/pinctrl/Kconfig          |  13 +
+>>  drivers/pinctrl/Makefile         |   1 +
+>>  drivers/pinctrl/pinctrl-axp192.c | 598 +++++++++++++++++++++++++++++++
+>>  3 files changed, 612 insertions(+)
+>>  create mode 100644 drivers/pinctrl/pinctrl-axp192.c
+>> [...]
+>> +static int axp192_pinconf_get(struct pinctrl_dev *pctldev, unsigned int pin, unsigned long *config)
+>> +{
+>> +	enum pin_config_param param = pinconf_to_config_param(*config);
+>> +	unsigned int arg = 1;
+>> +	bool pull_down;
+>> +	int ret;
+>> +
+>> +	switch (param) {
+>> +	case PIN_CONFIG_BIAS_DISABLE:
+>> +		ret = axp192_pinconf_get_pull_down(pctldev, pin, &pull_down);
+>> +		if (ret)
+>> +			return ret;
+>> +		if (pull_down)
+>> +			return -EINVAL;
+>> +		break;
+>> +
+>> +	case PIN_CONFIG_BIAS_PULL_DOWN:
+>> +		ret = axp192_pinconf_get_pull_down(pctldev, pin, &pull_down);
+>> +		if (ret)
+>> +			return ret;
+>> +		if (!pull_down)
+>> +			return -EINVAL;
+>> +		break;
+>> +
+>> +	default:
+>> +		return -ENOTSUPP;
+>> +	}
+>> +
+>> +	*config = pinconf_to_config_packed(param, arg);
+>> +	return 0;
+>> +}
+>> +
+>> +static int axp192_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+>> +			      unsigned long *configs, unsigned int num_configs)
+>> +{
+>> +	int ret;
+>> +	unsigned int cfg;
+>> +
+>> +	for (cfg = 0; cfg < num_configs; cfg++) {
+>> +		switch (pinconf_to_config_param(configs[cfg])) {
+>> +		case PIN_CONFIG_BIAS_DISABLE:
+>> +			ret = axp192_pinconf_set_pull_down(pctldev, pin, 0);
+>> +			if (ret)
+>> +				return ret;
+>> +			break;
+>> +
+>> +		case PIN_CONFIG_BIAS_PULL_DOWN:
+>> +			ret = axp192_pinconf_set_pull_down(pctldev, pin, 1);
+>> +			if (ret)
+>> +				return ret;
+>> +			break;
+>> +
+>> +		default:
+>> +			return -ENOTSUPP;
+>
+> The GPIO outputs are always open-drain. It looks like this needs to handle
+> PIN_CONFIG_DRIVE_OPEN_DRAIN, or gpiolib will try to emulate it.
+>
+> And I would suggest returning -EINVAL for PIN_CONFIG_DRIVE_PUSH_PULL, but
+> gpiolib does not check the return value when setting that.
+>
+
+You're right, thanks for pointing that out... guess I should actually
+read the documentation sometimes!
+
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> [...]
+>> +
+>> +static int axp192_pctl_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct axp20x_dev *axp20x = dev_get_drvdata(dev->parent);
+>> +	struct axp192_pctl *pctl;
+>> +	struct pinctrl_desc *pctrl_desc;
+>> +	int ret, i;
+>> +
+>> +	pctl = devm_kzalloc(dev, sizeof(*pctl), GFP_KERNEL);
+>> +	if (!pctl)
+>> +		return -ENOMEM;
+>> +
+>> +	pctl->desc = device_get_match_data(dev);
+>> +	pctl->regmap = axp20x->regmap;
+>> +	pctl->regmap_irqc = axp20x->regmap_irqc;
+>> +	pctl->dev = dev;
+>> +
+>> +	pctl->chip.base			= -1;
+>> +	pctl->chip.can_sleep		= true;
+>> +	pctl->chip.request		= gpiochip_generic_request;
+>> +	pctl->chip.free			= gpiochip_generic_free;
+>> +	pctl->chip.parent		= dev;
+>> +	pctl->chip.label		= dev_name(dev);
+>> +	pctl->chip.owner		= THIS_MODULE;
+>> +	pctl->chip.get			= axp192_gpio_get;
+>> +	pctl->chip.get_direction	= axp192_gpio_get_direction;
+>> +	pctl->chip.set			= axp192_gpio_set;
+>> +	pctl->chip.direction_input	= axp192_gpio_direction_input;
+>> +	pctl->chip.direction_output	= axp192_gpio_direction_output;
+>> +	pctl->chip.to_irq		= axp192_gpio_to_irq;
+>> +	pctl->chip.ngpio		= pctl->desc->npins;
+>> +
+>> +	pctl->irqs = devm_kcalloc(dev, pctl->desc->npins, sizeof(int), GFP_KERNEL);
+>> +	if (!pctl->irqs)
+>> +		return -ENOMEM;
+>> +
+>> +	for (i = 0; i < pctl->desc->npins; i++) {
+>> +		ret = platform_get_irq_byname_optional(pdev, pctl->desc->pins[i].name);
+>> +		if (ret > 0)
+>> +			pctl->irqs[i] = ret;
+>> +	}
+>> +
+>> +	platform_set_drvdata(pdev, pctl);
+>> +
+>> +	pctrl_desc = devm_kzalloc(dev, sizeof(*pctrl_desc), GFP_KERNEL);
+>> +	if (!pctrl_desc)
+>> +		return -ENOMEM;
+>
+> This can go inside struct axp192_pctl. It does not need a separate allocation.
+>
+> Regards,
+> Samuel
 
