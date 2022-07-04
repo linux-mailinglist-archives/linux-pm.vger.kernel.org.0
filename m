@@ -2,59 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6E4565845
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62124565859
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbiGDOIA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 10:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S232403AbiGDOLJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 10:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbiGDOIA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:08:00 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C70DEA1
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 07:07:59 -0700 (PDT)
-Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 264E7v25049441;
-        Mon, 4 Jul 2022 23:07:57 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
- Mon, 04 Jul 2022 23:07:57 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 264E7vm9049438
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 4 Jul 2022 23:07:57 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <951dd1a9-2b48-fb0c-9ee2-aac2b8170c2c@I-love.SAKURA.ne.jp>
-Date:   Mon, 4 Jul 2022 23:07:54 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Content-Language: en-US
-To:     Wedson Almeida Filho <wedsonaf@google.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <000000000000d9ff3a05bb37069e@google.com>
- <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
- <YsKW6VvWqvcMRBSl@kroah.com>
- <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
- <YsLIepAXeBKT0AF/@kroah.com>
- <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
- <YsLkJ1LMMnM9Mo0K@google.com>
- <19598d43-de61-c663-25e8-17b6f5d5ef80@I-love.SAKURA.ne.jp>
- <YsLx5JckMbx/4V4/@google.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YsLx5JckMbx/4V4/@google.com>
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S230348AbiGDOLI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:11:08 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5F963A3;
+        Mon,  4 Jul 2022 07:11:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656943865; x=1688479865;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=GcegQ4d7S5ejOoKN+JV3Yxl7V276w5LiEjBT6DSCm2A=;
+  b=NvPkCiHl+6ToYhQDn0b0vwAtvgkKqVLBk+4ivgXGQZ40SY47CrBHKOJD
+   a+ABzo/p1aLXDHYaiZN+9rk9u8FHihQKXGbqoZt6qpYCBHXwtUHzvOEew
+   uoMiXvUOzb1UELQ2fcx+iRe1w9f8GKZTn0Gld0swOVYdeXS5VQMe7XhUg
+   I+cvSz2TtWF/dSHpHu2GidfRNBHnYGBhkyHAUPfOv6y4C/VVLcIAkAhUe
+   mIcFCkuDnXETDOFU4eJs2p5JFk7eaUhrig8dpTUogYzOBbp5w6l9+Yoo7
+   6hzjB3ijT8N1bDQg/Tubyhxi0etP2aSHLNGyRy5SrIxdUffl3DEOAYO+S
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281896787"
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="281896787"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:11:05 -0700
+X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
+   d="scan'208";a="649622770"
+Received: from bbao3-mobl1.ccr.corp.intel.com ([10.249.173.150])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:11:02 -0700
+Message-ID: <e97e094cf99980f461ba798f7179ce1caea3cf87.camel@intel.com>
+Subject: Re: [PATCH v3 08/12] thermal/core: Add thermal_trip in thermal_zone
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com,
+        Amit Kucheria <amitk@kernel.org>
+Date:   Mon, 04 Jul 2022 22:11:00 +0800
+In-Reply-To: <20220703183059.4133659-9-daniel.lezcano@linexp.org>
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+         <20220703183059.4133659-9-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,37 +62,68 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022/07/04 22:57, Wedson Almeida Filho wrote:
-> On Mon, Jul 04, 2022 at 10:48:32PM +0900, Tetsuo Handa wrote:
->> On 2022/07/04 21:59, Wedson Almeida Filho wrote:
->>>> @@ -139,6 +139,10 @@ static int misc_open(struct inode *inode, struct file *file)
->>>>  
->>>>  	err = 0;
->>>>  	replace_fops(file, new_fops);
->>>> +	if (iter->unlocked_open && file->f_op->open) {
->>>> +		mutex_unlock(&misc_mtx);
->>>> +		return file->f_op->open(inode, file);
->>>> +	}
->>>
->>> One of the invariants of miscdev is that once misc_deregister() returns,
->>> no new calls to f_op->open() are made. (Although, of course, you can
->>> still have open files but that's a whole different problem.)
->>
->> The point of this change is that file->f_op after mutex_unlock(&misc_mtx) is
->>  from new_fops which is guaranteed to hold a ref on "struct file_operations"
->> via new_fops = fops_get("struct miscdevice"->fops).
->> That is, a module ref remains valid even after mutex_unlock(&misc_mtx).
->>
->> And as with major_names_lock case quoted below, this change assumes that
->> misc_deregister() is called from module's __exit function, and fops_get()
->> is preventing the module owning new_fops from calling __exit function.
+On Sun, 2022-07-03 at 20:30 +0200, Daniel Lezcano wrote:
+> The thermal trip points are properties of a thermal zone and the
+> different sub systems should be able to save them in the thermal zone
+> structure instead of having their own definition.
 > 
-> Your assumption is not sound. misc_deregister() can be (and is)
-> legitimately called from other places, for example, a driver's remove()
-> callback. In fact, when I grep for misc_deregister(), the second
-> instance is such a case.
+> Give the opportunity to the drivers to create a thermal zone with
+> thermal trips which will be accessible directly from the thermal core
+> framework.
+> 
+> Cc: Alexandre Bailon <abailon@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc; Eduardo Valentin <eduval@amazon.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> ---
+>  drivers/thermal/thermal_core.h | 10 ++++++++++
+>  include/linux/thermal.h        |  1 +
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/drivers/thermal/thermal_core.h
+> b/drivers/thermal/thermal_core.h
+> index c991bb290512..84e341c1e0fc 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -113,6 +113,16 @@ int thermal_build_list_of_policies(char *buf);
+>  /* Helpers */
+>  void thermal_zone_set_trips(struct thermal_zone_device *tz);
+>  
+> +static inline struct thermal_trip *thermal_zone_get_trips(struct
+> thermal_zone *tz)
 
-OK, the frequency of calling misc_deregister() can be much higher than
-unregister_blkdev(), which means that misc_mtx is more prone to trigger
-hung task warnings. I'm more inclined to avoid sleeping with misc_mtx held.
+it should be struct thermal_zone_device?
+It seems that you fixed it in patch 9/12, and leave it broke here.
+
+> +{
+> +	return tz->trips;
+> +}
+> +
+> +static inline int thermal_zone_get_ntrips(struct thermal_zone *tz)
+
+same problem as above.
+
+thanks,
+rui
+> +{
+> +	return tz->ntrips;
+> +}
+> +
+>  /* sysfs I/F */
+>  int thermal_zone_create_device_groups(struct thermal_zone_device *,
+> int);
+>  void thermal_zone_destroy_device_groups(struct thermal_zone_device
+> *);
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 3a57878a2a6c..3733e23b6359 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -179,6 +179,7 @@ struct thermal_zone_device {
+>  	struct thermal_zone_device_ops *ops;
+>  	struct thermal_zone_params *tzp;
+>  	struct thermal_governor *governor;
+> +	struct thermal_trip *trips;
+>  	void *governor_data;
+>  	struct list_head thermal_instances;
+>  	struct ida ida;
 
