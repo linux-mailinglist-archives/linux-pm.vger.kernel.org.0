@@ -2,107 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0345656D4
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 15:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 661EA5657C5
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 15:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbiGDNRk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 09:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S234251AbiGDNso (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 09:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233834AbiGDNRh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 09:17:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2567BF4A;
-        Mon,  4 Jul 2022 06:17:35 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4BB8166015BA;
-        Mon,  4 Jul 2022 14:17:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656940654;
-        bh=jM53Mho55XJNAJOjfJCae7IdDAjzaVZy7HpFUzPGAPo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cSZJanOk+FjZtVbkDhVcXylgobp5ueC046dvJyNpKa31imRMw/nPZU/X1605BkALH
-         zEZwloLad0acLGq6g9C5rTWkEwOSdpVDQwOMz6paZV67j0ysaXykc9d2lD8LPIRwuq
-         lknwMi9xyVFdLpLbdji+z07pAASwr0gGCm+psnS89ok4uHgzSNdTeOGKOtvgAat6mV
-         A06czF/ZjTlL6eoKT9HFsJmIbuvfjAmUGbv1yIwjIW4e9E5sfTW5C+Cyx8yd2PWZH8
-         92dQy8HDGGapvNje3wZJ62kgRx6TaoEzAkPgNT3QEE9hw0SnPXXkgnaeqGLFPktiZJ
-         IkXWtnWoKqNiA==
-Message-ID: <58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com>
-Date:   Mon, 4 Jul 2022 16:17:30 +0300
+        with ESMTP id S234043AbiGDNsm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 09:48:42 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55826412
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 06:48:38 -0700 (PDT)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 264Dma6G044703;
+        Mon, 4 Jul 2022 22:48:36 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Mon, 04 Jul 2022 22:48:36 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 264DmaQQ044699
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 4 Jul 2022 22:48:36 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <19598d43-de61-c663-25e8-17b6f5d5ef80@I-love.SAKURA.ne.jp>
+Date:   Mon, 4 Jul 2022 22:48:32 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
- <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
- <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
- <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
- <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
- <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
- <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
- <20220630095245.otvo53ezd4avoujw@vireshk-i7>
- <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
- <20220630101540.5dafkegrmcattt2c@vireshk-i7>
- <20220704120915.s3ermueulcofg7nj@vireshk-i7>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220704120915.s3ermueulcofg7nj@vireshk-i7>
+To:     Wedson Almeida Filho <wedsonaf@google.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <000000000000d9ff3a05bb37069e@google.com>
+ <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
+ <YsKW6VvWqvcMRBSl@kroah.com>
+ <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
+ <YsLIepAXeBKT0AF/@kroah.com>
+ <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+ <YsLkJ1LMMnM9Mo0K@google.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YsLkJ1LMMnM9Mo0K@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/4/22 15:09, Viresh Kumar wrote:
-> On 30-06-22, 15:45, Viresh Kumar wrote:
->> On 30-06-22, 12:57, Dmitry Osipenko wrote:
->>> The set_freq_table() gets available freqs using
->>> dev_pm_opp_find_freq_ceil() iteration.
->>>
->>> The first dev_pm_opp_find_freq_ceil(freq=0) succeeds and returns ceil
->>> freq=1.
->>
->> I don't see how this can possibly happen. One possibility is that freq
->> is set to 0 and one the next loop you do freq++, which can make it 1.
->>
->>> The second dev_pm_opp_find_freq_ceil(freq=1) fails with -ERANGE.
->>
->> Even if we send freq = 1, I don't see how we can get ERANGE if the OPP
->> table is properly initialized.
->>
->>> I haven't looked yet at why freq is set to 1.
-Actually the freq was 0 and it was 1 on the next loop like you suggested.
-
->> Thanks, but I would need some help to get it debugged.
+On 2022/07/04 21:59, Wedson Almeida Filho wrote:
+>> @@ -139,6 +139,10 @@ static int misc_open(struct inode *inode, struct file *file)
+>>  
+>>  	err = 0;
+>>  	replace_fops(file, new_fops);
+>> +	if (iter->unlocked_open && file->f_op->open) {
+>> +		mutex_unlock(&misc_mtx);
+>> +		return file->f_op->open(inode, file);
+>> +	}
 > 
-> Hi Dmitry,
-> 
-> I am looking to send another version of this now and soon merge this
-> in for 5.20-rc1. Can you please help figure out what's going on here ?
+> One of the invariants of miscdev is that once misc_deregister() returns,
+> no new calls to f_op->open() are made. (Although, of course, you can
+> still have open files but that's a whole different problem.)
 
-Previously, the _read_opp_key() was always reading the opp-hz. Now it
-skips reading the rates in _read_rate() because opp_table->clk_count=0
-for the tegra30-devfreq driver the uses devm_pm_opp_of_add_table_noclk().
+The point of this change is that file->f_op after mutex_unlock(&misc_mtx) is
+ from new_fops which is guaranteed to hold a ref on "struct file_operations"
+via new_fops = fops_get("struct miscdevice"->fops).
+That is, a module ref remains valid even after mutex_unlock(&misc_mtx).
 
--- 
-Best regards,
-Dmitry
+And as with major_names_lock case quoted below, this change assumes that
+misc_deregister() is called from module's __exit function, and fops_get()
+is preventing the module owning new_fops from calling __exit function.
+
++		if ((*n)->major != major || !(*n)->probe)
++			continue;
++		if (!try_module_get((*n)->owner))
++			break;
++		/*
++		 * Calling probe function with major_names_lock held causes
++		 * circular locking dependency problem. Thus, call it after
++		 * releasing major_names_lock.
++		 */
++		probe_fn = (*n)->probe;
++		mutex_unlock(&major_names_lock);
++		/*
++		 * Assuming that unregister_blkdev() is called from module's
++		 * __exit function, a module refcount taken above allows us
++		 * to safely call probe function without major_names_lock held.
++		 */
++		probe_fn(devt);
++		module_put((*n)->owner);
++		return;
+
