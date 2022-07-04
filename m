@@ -2,59 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62124565859
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9962556585F
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbiGDOLJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 10:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S233626AbiGDOMY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 10:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiGDOLI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:11:08 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5F963A3;
-        Mon,  4 Jul 2022 07:11:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656943865; x=1688479865;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GcegQ4d7S5ejOoKN+JV3Yxl7V276w5LiEjBT6DSCm2A=;
-  b=NvPkCiHl+6ToYhQDn0b0vwAtvgkKqVLBk+4ivgXGQZ40SY47CrBHKOJD
-   a+ABzo/p1aLXDHYaiZN+9rk9u8FHihQKXGbqoZt6qpYCBHXwtUHzvOEew
-   uoMiXvUOzb1UELQ2fcx+iRe1w9f8GKZTn0Gld0swOVYdeXS5VQMe7XhUg
-   I+cvSz2TtWF/dSHpHu2GidfRNBHnYGBhkyHAUPfOv6y4C/VVLcIAkAhUe
-   mIcFCkuDnXETDOFU4eJs2p5JFk7eaUhrig8dpTUogYzOBbp5w6l9+Yoo7
-   6hzjB3ijT8N1bDQg/Tubyhxi0etP2aSHLNGyRy5SrIxdUffl3DEOAYO+S
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10397"; a="281896787"
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="281896787"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:11:05 -0700
-X-IronPort-AV: E=Sophos;i="5.92,243,1650956400"; 
-   d="scan'208";a="649622770"
-Received: from bbao3-mobl1.ccr.corp.intel.com ([10.249.173.150])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 07:11:02 -0700
-Message-ID: <e97e094cf99980f461ba798f7179ce1caea3cf87.camel@intel.com>
-Subject: Re: [PATCH v3 08/12] thermal/core: Add thermal_trip in thermal_zone
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com,
-        Amit Kucheria <amitk@kernel.org>
-Date:   Mon, 04 Jul 2022 22:11:00 +0800
-In-Reply-To: <20220703183059.4133659-9-daniel.lezcano@linexp.org>
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
-         <20220703183059.4133659-9-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S233451AbiGDOMX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:12:23 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D213664CF
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 07:12:22 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so5227302pjf.2
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 07:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XvMKNURBZmqHrxF8QJGS8F3eP/YEjEThVZ5YkAtR3LA=;
+        b=sHzLNS/B2So35b27QkvNaBk4Jn+rjZp+E9MQO9sYclG8QsVUCjcZggvFhjxs4l9+Uv
+         +dgwwcTeqveqTbqd/w0YIJDEAsIgl9IT/nkHo/LyDydGZ5mGUFOuOTCqZCL02qmOikis
+         +GghU0LJ2Z2kIILUoGxDWTRaD7r2uTxciVOj7jqmZkFA56W7GSl+dyHNHB5/I28UU0jt
+         BDeDsiRO8hXmiib8hguNzM/mqdBni/r/HxG2Qu+3F+MoLik/r7wIUNPmfi3bRmeFCIWu
+         gNTihADRcaaJsTmPagoDdrA+OtUVzOi6BpXzr2NfZ5pSaQweQtrnG/rWb634njxiCmVq
+         heuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XvMKNURBZmqHrxF8QJGS8F3eP/YEjEThVZ5YkAtR3LA=;
+        b=xDtskaBute7TV4i+4XuOvwhlFWmGCg/zSgytU7PwmvDyovupVuCONPFUQdwnvRxycV
+         MieIkhhG4v6aghMhcrwANb1P+TPos95gQA9BgB3ltJmFzBy0PE9hjKaRknAOD5+/wQDa
+         d1mB/4uoS2X6ZfRiP/2gAan6PQedB0OtxFFQqB39zpQIQ45G1WcdFEWtR3wHiYerl1Z4
+         3ZNkVcgVZ+YkZ5FiWWMJVpoescLbfUbrQwtTcNAvC4+jFjpE+eQywlyyWn2WOWqyg2HS
+         cwk2cRKNVAsO3hlYRsruo0S+XGMsfdQhbqo0Kxd6aW4eqNUPS/9CYoDU9t9H/6ny/hTJ
+         sLcg==
+X-Gm-Message-State: AJIora/OlVUmWFuq2oaWqbBovJ+9XX4mO+6dIt3C/9ohmCt6BNaBO5kv
+        j2qODowaoxeS5RLWs7ZQg6LEsw==
+X-Google-Smtp-Source: AGRyM1sX+EQSZ3AJZh6255vGBLnZ8wef2aRbNcQk1qdilVus1vftYuMtYm1EkWpVflBclbuaDmSknA==
+X-Received: by 2002:a17:90b:1e42:b0:1ec:f362:8488 with SMTP id pi2-20020a17090b1e4200b001ecf3628488mr36066518pjb.32.1656943942253;
+        Mon, 04 Jul 2022 07:12:22 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([154.3.32.171])
+        by smtp.gmail.com with ESMTPSA id n24-20020a170902969800b0016a034ae481sm21235779plp.176.2022.07.04.07.12.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 07:12:21 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 22:12:17 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: [PATCH v3 1/5] dt-bindings: interconnect: Update property for
+ icc-rpm path tag
+Message-ID: <20220704141217.GA961806@leoy-ThinkPad-X240s>
+References: <20220704093029.1126609-1-leo.yan@linaro.org>
+ <20220704093029.1126609-2-leo.yan@linaro.org>
+ <18f1ee4a-5787-40d7-2eb5-50a43298845d@linaro.org>
+ <20220704130712.GD659023@leoy-ThinkPad-X240s>
+ <5fa79e89-144c-7261-335a-8f509b182bba@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5fa79e89-144c-7261-335a-8f509b182bba@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,68 +80,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2022-07-03 at 20:30 +0200, Daniel Lezcano wrote:
-> The thermal trip points are properties of a thermal zone and the
-> different sub systems should be able to save them in the thermal zone
-> structure instead of having their own definition.
+On Mon, Jul 04, 2022 at 03:50:41PM +0200, Krzysztof Kozlowski wrote:
+
+[...]
+
+> >>>    '#interconnect-cells':
+> >>> -    const: 1
+> >>> +    description: |
+> >>> +      Number of interconnect specifier. Value: <1> is one cell in a
+> >>> +      interconnect specifier for the interconnect node id, <2> requires
+> >>> +      the interconnect node id and an extra path tag.
+> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >>
+> >> Ah, too fast.  No ack. This ref is also pointless and not explained in
+> >> commit msg.
+> > 
+> > I referred other DT binding file for adding $ref to specify property
+> > type [1], so it's confused why it's pointless, anyway, I can drop $ref
+> > in next spin.
+> > 
+> > Thanks a lot for the review!
 > 
-> Give the opportunity to the drivers to create a thermal zone with
-> thermal trips which will be accessible directly from the thermal core
-> framework.
-> 
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc; Eduardo Valentin <eduval@amazon.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->  drivers/thermal/thermal_core.h | 10 ++++++++++
->  include/linux/thermal.h        |  1 +
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/drivers/thermal/thermal_core.h
-> b/drivers/thermal/thermal_core.h
-> index c991bb290512..84e341c1e0fc 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -113,6 +113,16 @@ int thermal_build_list_of_policies(char *buf);
->  /* Helpers */
->  void thermal_zone_set_trips(struct thermal_zone_device *tz);
->  
-> +static inline struct thermal_trip *thermal_zone_get_trips(struct
-> thermal_zone *tz)
+> The "arm,prefetch-offset" is not a cells property.
 
-it should be struct thermal_zone_device?
-It seems that you fixed it in patch 9/12, and leave it broke here.
+Understand.  Will drop $ref for in new patch.
 
-> +{
-> +	return tz->trips;
-> +}
-> +
-> +static inline int thermal_zone_get_ntrips(struct thermal_zone *tz)
-
-same problem as above.
-
-thanks,
-rui
-> +{
-> +	return tz->ntrips;
-> +}
-> +
->  /* sysfs I/F */
->  int thermal_zone_create_device_groups(struct thermal_zone_device *,
-> int);
->  void thermal_zone_destroy_device_groups(struct thermal_zone_device
-> *);
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 3a57878a2a6c..3733e23b6359 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -179,6 +179,7 @@ struct thermal_zone_device {
->  	struct thermal_zone_device_ops *ops;
->  	struct thermal_zone_params *tzp;
->  	struct thermal_governor *governor;
-> +	struct thermal_trip *trips;
->  	void *governor_data;
->  	struct list_head thermal_instances;
->  	struct ida ida;
-
+Thanks,
+Leo
