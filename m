@@ -2,79 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D6E56500E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 10:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A539D56504C
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 11:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbiGDIxe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 04:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S233518AbiGDJE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 05:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbiGDIxd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 04:53:33 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8FCBC85
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 01:53:30 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id n4so5041144wru.11
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 01:53:30 -0700 (PDT)
+        with ESMTP id S233506AbiGDJE6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 05:04:58 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A24BC2A
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 02:04:56 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id a13so14634571lfr.10
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 02:04:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=pIZhwpifJqOc8phnkh4a9ifyqfRsTCMKA0TsbzimolI=;
-        b=xuxMyqwGh9S6fUqGbF4kU7MvcPPyj3gr/NaY7QgTr9lULKX4OojlkL4VK6v8qFG1Lg
-         o4cb/1S6DdPn7uuQiqJafwZxA1iHLC5uSa4UKa23JRKgVt+BCzYHpFys3upJC0DfvpcM
-         Oi4ayQ0kV5c4vq7lpdcfq6362T3W0o/JSVKktLefLr7z9K3GSER9SmU+QcRuOhiPHzP9
-         ZfaN2xOBPLgbU9VjNrvZUnSvMEnab0SjnOYWZ/n12h9gN69dgwz9nL7vMt/gkFx6imKF
-         C4rZ5WEYHtij3ss22KjIFfBs8manc3BquB06crrwewtlrIkoG3CVuejF4LIlwTYcSUM9
-         YnlA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n4B9YLkKJASUbF6SDeFOUfEsE0vnt4+YdnmVDhP06z4=;
+        b=PYvq706wWC49R4jolMknaPmpRLaoYvxAwS/yrvpFklnZZejweFemyL+imVd3ZQHAkf
+         2/oXHaA9SGkarCtUTpJuT3rbr6E8/ZVClvuR1xBNSKo+a8wG5DTug1kwbGjWuOCBcI70
+         dWGUwdFSDfUGxCvJG/zPrfbQm+BbCyObhS6xtSNndCwmGipu6Cfuvu+r8eMks7OKGo0b
+         2YzZ/37v4uOxttWU2JFcYvY4M9Qr68hL1wTP8MZfoSjc1J2+2NJTNQry+5XTQR6atCko
+         dT/Z9yNTRRG/tHVo63yXJDe5gp8/LH7Off+y7xl7ruy7e2ZiSNNwjEwSUYfXcOFTMnzE
+         rrgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=pIZhwpifJqOc8phnkh4a9ifyqfRsTCMKA0TsbzimolI=;
-        b=zm7QKMS6Di6qELzZ46HbdriAcCjn/UZTwPxJ1ri0e/9+wuU9ZgGktvWBp8WLo2VIcc
-         5YzZDezMBWmKF8Q2GM73hZ/TmO77AnNNDNz32VI8hkL0YuOMKwnlE6EJUaqi58EEt2Di
-         SdZY2pjwQHzR2JmCrO4bBrw7YBW9si/CT/VjE4NUBuQd2Z+JqYK8qulFb05beDE6Bcoj
-         XYboTKrXQw8EtKixoqwBCz3c89TEJUseyqNPauFYnUKiHnkulLdfseLpwnMaDW5bTvNh
-         DpvVC0M1RI5rNrIbrId+UMeIZ95z6iBZZQURB6/cPdzKH+yUw/I9x7J7cJMMFHmNBuwD
-         eWJA==
-X-Gm-Message-State: AJIora9S4RCcqDL3m2m5p+zzltRWLw8QJN9GemP30x0kuo4UlEO4xzju
-        4HfVfag7tu3Ma6ffv6uPNwteMA==
-X-Google-Smtp-Source: AGRyM1tSHhOzmdD6Hr2s22fF4KammavgIRmSydrVMvER7ybYgJuqTt1fMOo3jf0dX7Ics7E3Fu2zyg==
-X-Received: by 2002:a5d:58cc:0:b0:21d:6919:7daf with SMTP id o12-20020a5d58cc000000b0021d69197dafmr5135376wrf.434.1656924808790;
-        Mon, 04 Jul 2022 01:53:28 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b0021d6433a7c3sm5999367wrv.72.2022.07.04.01.53.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 01:53:27 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 09:53:25 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Saravanan Sekar <sravanhome@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
-        <devicetree@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>, Andy
-        Shevchenko <andy.shevchenko@gmail.com>," <andy.shevchenko@gmail.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v3 2/6] dt-bindings: mfd: Add mp2733 compatible
-Message-ID: <YsKqhaeMfPAb6Y+m@google.com>
-References: <20220615145357.2370044-1-sravanhome@gmail.com>
- <20220615145357.2370044-3-sravanhome@gmail.com>
- <YrnChlCiyzgcyyxl@google.com>
- <CAL_Jsq++_+rPj94notsUp8SMPLFvq+QG4o_Bm6i2f2HSySDT2Q@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=n4B9YLkKJASUbF6SDeFOUfEsE0vnt4+YdnmVDhP06z4=;
+        b=vVTy1AWYtrAl9Fsox0gOQBQGPQOo6L6yUB4TlNGmv7csKk9vmxPVQ+mtBP9gjcVEsO
+         kQRbC5yPmOgLWAxVWjZF/rAzcNzSR42fGqHO8ZwJQuZdaC6rRAVcVSlF1pje3Bws1QWE
+         NiiJFafHu6Mv4R/VLJCN9L19hoY4thSIro5e7gni4RDtR95AU5GYaFZLSgZVmWYX/3R8
+         kgnEHwpUVTE+loTbrHw4FzN0b075GlFO41Y3r6KbtqsPBqsDK7ULFeNs4yjOBSemxhxZ
+         nhpwmK9MILzjLTS0JOKqm2jvdNZbFLMcncUtTovPSN0fQe4BlSDS51ooqMHsHTNpOQ4C
+         BzjA==
+X-Gm-Message-State: AJIora+JhpVUa42gCnyimpzWG+QZtk2DPSkLG8ggtonINwUJ4qIya7il
+        JiCijZTX+rU4FzdFtP4MBi2MKQ==
+X-Google-Smtp-Source: AGRyM1sLHkpEL/e3FbHHjgOt2aInxHNlxFrHeEIa0L1/Bz4GYdHDD1jIwPyFeJeq+08viN1qBJk27g==
+X-Received: by 2002:a05:6512:acb:b0:481:cce:3c22 with SMTP id n11-20020a0565120acb00b004810cce3c22mr17601128lfu.45.1656925495041;
+        Mon, 04 Jul 2022 02:04:55 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id 8-20020ac25f08000000b0047863382e3dsm5024155lfq.215.2022.07.04.02.04.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 02:04:54 -0700 (PDT)
+Message-ID: <4513594b-ece6-a4c2-82ba-d334f5c4234b@linaro.org>
+Date:   Mon, 4 Jul 2022 11:04:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq++_+rPj94notsUp8SMPLFvq+QG4o_Bm6i2f2HSySDT2Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 02/13] dt-bindings: power: supply: Add Mediatek MT6370
+ Charger
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+References: <20220704053901.728-1-peterwu.pub@gmail.com>
+ <20220704053901.728-3-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220704053901.728-3-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,29 +87,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 01 Jul 2022, Rob Herring wrote:
-
-> On Mon, Jun 27, 2022 at 8:45 AM Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > On Wed, 15 Jun 2022, Saravanan Sekar wrote:
-> >
-> > > Add new compatible for mp2733 mfd driver.
-> > >
-> > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/mfd/mps,mp2629.yaml | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > Applied in place of v1, thanks.
+On 04/07/2022 07:38, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> Still failing, pushed out?
+> Add Mediatek MT6370 Charger binding documentation.
+> 
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
 
-Of course not! :)
 
-Please try again tomorrow.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+
+Best regards,
+Krzysztof
