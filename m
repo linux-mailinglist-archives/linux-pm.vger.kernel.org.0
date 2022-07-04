@@ -2,127 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F05A564F4E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 10:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC0D564FAF
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 10:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiGDIGp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 04:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S233005AbiGDIYw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 04:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiGDIGo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 04:06:44 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEB5B1C2
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 01:06:43 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id c15so10164299ljr.0
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 01:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=W9vEcsuPOmb6PFD1YP9Cd5t2i8+H7vKDdbGELGM7w6o=;
-        b=qIVH3JbKvPTI90pL62KYY0CE73JeN2SUYSrBybV8uswZCRUzC7TyQR8SVFp8MZtE+n
-         xr7tJOlv3L2n5ZyjubWWSM+HvxpWMMviQPJGc+z61rfEV7BG6cQlF6JShpAp0jtu8vVF
-         ceTB3j2pH2b/Yt1sE4BJDCgHdKQmyfJZMtTr8D5mHqeWpIZvfd9zndu2IJA4nuyF61qJ
-         PLuksfEnXLVGlUXKspIWeM/QLHcLr0LmFBlIvSpGCb9lgFdOCT5hGek9uM/lI/l3D+aq
-         iN+8aCJy4pGjNnJY/joNcWnXboVwrTUBBtxKGrp15wZVhuCWO0JNd1/VK0fRmlhAUyqW
-         ctvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=W9vEcsuPOmb6PFD1YP9Cd5t2i8+H7vKDdbGELGM7w6o=;
-        b=6ITmZaiZzq3D2vujkkG6wwWH59Q89iQao1ZIr0dyifaRlX2VYrtK+Zg+jJbbNE4sNN
-         CfRNgA0LbThxmZrZpDtGqd9Wvh1G0yB4wlEWSWp70q7a0swwmjU+zMxnIR1CuwWVj1gb
-         TWQ53jSQPWdiljPK9VphhSxBjtdcZg7pjIW8G+QCnjw5iJLStnwEknAAZG0IyYfFsIqu
-         7q+M8tbwPJfOFflzxgfx7PvsQEKFIhaPpX8weITT768pNDK/lAiNyOTCoB63dQ7v3kIK
-         f0pXRLTkHhaXRb2BhBJZMtbsd7x3oMsCgACvgvx4KHZwhFVO/kf4sBAIXxMM4OX77kIb
-         4Xww==
-X-Gm-Message-State: AJIora8EGFBqdm43Lh+ojcXbQdl0kbLAavL/2qPCpUWz+k3Rh+zSH50r
-        aJ2h6jjU7h0INgVsiDMUSirILg==
-X-Google-Smtp-Source: AGRyM1shyweS5X2mqdSfWYknlmTWWG1DGobjjvfheeS4TSNX76HtThJhWEt1hwbwlkge4YLK4Rb5CA==
-X-Received: by 2002:a2e:9097:0:b0:25a:6e3a:8b21 with SMTP id l23-20020a2e9097000000b0025a6e3a8b21mr15698533ljg.37.1656922001547;
-        Mon, 04 Jul 2022 01:06:41 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id b8-20020a056512218800b0047f7c897b61sm5018145lft.129.2022.07.04.01.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 01:06:40 -0700 (PDT)
-Message-ID: <2823c36d-efce-6c02-3b00-df1466c0d2bc@linaro.org>
-Date:   Mon, 4 Jul 2022 10:06:39 +0200
+        with ESMTP id S232951AbiGDIYt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 04:24:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91B9865C5;
+        Mon,  4 Jul 2022 01:24:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7CAE23A;
+        Mon,  4 Jul 2022 01:24:47 -0700 (PDT)
+Received: from [192.168.33.14] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C55A3F792;
+        Mon,  4 Jul 2022 01:24:45 -0700 (PDT)
+Message-ID: <4ad311e5-62e1-d06b-7c5e-315ed923b5a5@arm.com>
+Date:   Mon, 4 Jul 2022 09:24:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 10/14] arm64: dts: freescale: imx8qxp: Remove
- unnecessary clock related entries
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 07/12] thermal/core: Rename trips to ntrips
 Content-Language: en-US
-To:     Viorel Suman <viorel.suman@oss.nxp.com>
-Cc:     Viorel Suman <viorel.suman@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-11-viorel.suman@oss.nxp.com>
- <483d5115-4027-e811-8bce-15da6c7c660f@linaro.org>
- <20220630083636.2c7mclmbq3tjma2j@fsr-ub1664-116>
- <5d8b2044-5ca6-c90c-57b4-afbb2ae20dde@linaro.org>
- <20220630194804.sa3mvokpv7iksgbx@fsr-ub1664-116>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220630194804.sa3mvokpv7iksgbx@fsr-ub1664-116>
-Content-Type: text/plain; charset=UTF-8
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        rafael@kernel.org
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+ <20220703183059.4133659-8-daniel.lezcano@linexp.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220703183059.4133659-8-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/06/2022 21:48, Viorel Suman wrote:
+
+
+On 7/3/22 19:30, Daniel Lezcano wrote:
+> In order to use thermal trips defined in the thermal structure, rename
+> the 'trips' field to 'ntrips' to have the 'trips' field containing the
+> thermal trip points.
 > 
-> The question context looks a bit shifted. The "clocks" and "clock-names"
-> attributes are removed from a clock provider device.
-> 
-> The OS clock provider in this case is a client which uses some protocol
-> to communicate with SCU via a messaging unit. There is no
-> access to xtal clocks via the existing OS<->SCU communication protocol.
+> Cc: Alexandre Bailon <abailon@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc; Eduardo Valentin <eduval@amazon.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> ---
+>   drivers/thermal/gov_fair_share.c        |  6 +++---
+>   drivers/thermal/gov_power_allocator.c   |  4 ++--
+>   drivers/thermal/tegra/tegra30-tsensor.c |  2 +-
+>   drivers/thermal/thermal_core.c          | 20 ++++++++++----------
+>   drivers/thermal/thermal_helpers.c       |  4 ++--
+>   drivers/thermal/thermal_netlink.c       |  2 +-
+>   drivers/thermal/thermal_sysfs.c         | 22 +++++++++++-----------
+>   include/linux/thermal.h                 |  2 +-
+>   8 files changed, 31 insertions(+), 31 deletions(-)
 
-SCU does not need to access them via communication protocol. It's enough
-that they are clock inputs, physical clocks being fed to your hardware
-which you describe in the DTS.
+
+[snip]
+
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 6289b0bb1c97..3a57878a2a6c 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+
+Missing updated ne name in comment here:
+  * @trips:      number of trip points the thermal zone supports
 
 
-Best regards,
-Krzysztof
+> @@ -165,7 +165,7 @@ struct thermal_zone_device {
+>   	struct thermal_attr *trip_hyst_attrs;
+>   	enum thermal_device_mode mode;
+>   	void *devdata;
+> -	int trips;
+> +	int ntrips;
+>   	unsigned long trips_disabled;	/* bitmap for disabled trips */
+>   	unsigned long passive_delay_jiffies;
+>   	unsigned long polling_delay_jiffies;
+
+Maybe this is only my bias, but this new name 'ntrips' looks
+like negation in electronics.
+
+We have examples like: num_cpus, num_pins, num_leds, num_groups,
+num_locks, num_buffers, num_phys, etc...
+
+Could we have 'num_trips' and follow to this convention here as well?
+
+
