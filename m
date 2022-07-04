@@ -2,138 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E75C5658E4
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D5A5659A4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 17:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiGDOq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 10:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S234090AbiGDPUh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 11:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiGDOqY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:46:24 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17C9EE13
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 07:46:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id fw3so17105643ejc.10
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 07:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=M+qVlZDYaAoCOVBpeXTz8LxMK35K+S3D3doABPbbA6U=;
-        b=O+YOPzG3QC5vCWWZEKLqaxGKZYtynjFnz6aQS6ibqsWEEVI11WzP+tP8h79MvxyvEI
-         VQtFQjNwpI05jrdPqDiyxAQHNM3HU7V8eANnSthLH3fjHpazQEeiDqN2azM+oOMZ8r20
-         bPXVCzPILpA7aqpUJZRdnrfD2lV/0VHDvK4CrObBHe79Zh2zhBt+2YqG94wstcDMwAqa
-         FSWz/w+dyw54CtjOx1Ox1XnBKF3CIQAfYSmrBxfJPLLOs+k2F0rZd7gG44L+8T8UEJQC
-         fUc38jfZwXld6BQy8XYnBSJWc44bEPnxhJlix/vdLigKWD5MmkdAPjKkZnGomLknYe+m
-         6BPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M+qVlZDYaAoCOVBpeXTz8LxMK35K+S3D3doABPbbA6U=;
-        b=wM6y3dVUT5hbM1GW1zU1hqbYkYIbSX0hRpD5sTMYVii/yK2pg03pTY/rOz5yxWn9O6
-         RppW865ugDu5rbg9EIX8V1Z9Hlq0hNJ+XPil6LPssZYzJ2XZlrD/7+LP/Vdw5sY5LIHi
-         15jCY9ZnfHUF8ReJgtuOkI9mpxFczoc6cZ6lfR8MBMXV1hsmK3XJN/lhUWwDagwEsImw
-         9VEJdHMWdWzAldYrpnzEuDYfxbcwGtphF6yN2obHKjeX+cVJUuL/MDiBlCvT01WgDPHX
-         S0nqYd1kFamR3HoNhWl7ykRaua6NCUSMzsx1diIS587T44RhyYI9vqWQZZc7A3s0Ax5/
-         YK2Q==
-X-Gm-Message-State: AJIora89G8l8pp5ziQhAT6wG7gU5e+e1eck6nWXmqinDu5yMO+xLkT8I
-        DGEu4II4DbDhPwGA5US5UmMQ
-X-Google-Smtp-Source: AGRyM1t89RbesStqt7Tieom5AmKNJLEeLrY0+FlIzuKMV7VyOhtKEjj91xD5EazoVDBn2kcBfXPj4Q==
-X-Received: by 2002:a17:906:6a11:b0:726:97b8:51e9 with SMTP id qw17-20020a1709066a1100b0072697b851e9mr29599521ejc.115.1656945980259;
-        Mon, 04 Jul 2022 07:46:20 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id pv1-20020a170907208100b00726abf9cd8esm9904462ejb.125.2022.07.04.07.46.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 07:46:19 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 14:46:15 +0000
-From:   Wedson Almeida Filho <wedsonaf@google.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Message-ID: <YsL9Ny3Vx9Q2uvpJ@google.com>
-References: <000000000000d9ff3a05bb37069e@google.com>
- <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
- <YsKW6VvWqvcMRBSl@kroah.com>
- <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
- <YsLIepAXeBKT0AF/@kroah.com>
- <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
- <YsLkJ1LMMnM9Mo0K@google.com>
- <19598d43-de61-c663-25e8-17b6f5d5ef80@I-love.SAKURA.ne.jp>
- <YsLx5JckMbx/4V4/@google.com>
- <951dd1a9-2b48-fb0c-9ee2-aac2b8170c2c@I-love.SAKURA.ne.jp>
+        with ESMTP id S234177AbiGDPUe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 11:20:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7D910FE6;
+        Mon,  4 Jul 2022 08:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=GcBIE8F1Amhld86dWfigGM4Z1aJl6HhmPq0gymmt37g=; b=Y9uYw+EXJiWS8zl4Zcb6tlYkGl
+        d2PjqZGF64zWe7kTqQHg9Fzh1vuRY+Qsu6wLI21ezbQWf91+UTqUnV1E1/ZN9gz56acNlj0uMM++3
+        Az9GydpPSOv0hidBJnLbxULDj4ahiWUY+W8GXWYIINP67ue9B0uPRJwEf7L+II+9m1q2uc5QfdAsT
+        sB9vASPDwp6uX8bDAF5IK/AE6uhwyeTW6C2ReucCt5gCvMoeFwb02r6WeYbxAY2/ofQuzlWVh/elj
+        o8S9TIs9SbR8puNdkmYMNhmAO7tHw9iHduTFKxPEFVdvodJ10/lQS3Z2ucIYE1p3MYGTZZEXKwiZh
+        YzX+T9Sw==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o8NsB-009fdZ-CO; Mon, 04 Jul 2022 15:20:27 +0000
+Message-ID: <3770bc6d-b3cc-9e49-a832-4c15af0b5f1a@infradead.org>
+Date:   Mon, 4 Jul 2022 08:20:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <951dd1a9-2b48-fb0c-9ee2-aac2b8170c2c@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 2/4] soc: qcom: icc-bwmon: Add bandwidth monitoring
+ driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
+ <20220704121730.127925-3-krzysztof.kozlowski@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220704121730.127925-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 11:07:54PM +0900, Tetsuo Handa wrote:
-> On 2022/07/04 22:57, Wedson Almeida Filho wrote:
-> > On Mon, Jul 04, 2022 at 10:48:32PM +0900, Tetsuo Handa wrote:
-> >> On 2022/07/04 21:59, Wedson Almeida Filho wrote:
-> >>>> @@ -139,6 +139,10 @@ static int misc_open(struct inode *inode, struct file *file)
-> >>>>  
-> >>>>  	err = 0;
-> >>>>  	replace_fops(file, new_fops);
-> >>>> +	if (iter->unlocked_open && file->f_op->open) {
-> >>>> +		mutex_unlock(&misc_mtx);
-> >>>> +		return file->f_op->open(inode, file);
-> >>>> +	}
-> >>>
-> >>> One of the invariants of miscdev is that once misc_deregister() returns,
-> >>> no new calls to f_op->open() are made. (Although, of course, you can
-> >>> still have open files but that's a whole different problem.)
-> >>
-> >> The point of this change is that file->f_op after mutex_unlock(&misc_mtx) is
-> >>  from new_fops which is guaranteed to hold a ref on "struct file_operations"
-> >> via new_fops = fops_get("struct miscdevice"->fops).
-> >> That is, a module ref remains valid even after mutex_unlock(&misc_mtx).
-> >>
-> >> And as with major_names_lock case quoted below, this change assumes that
-> >> misc_deregister() is called from module's __exit function, and fops_get()
-> >> is preventing the module owning new_fops from calling __exit function.
-> > 
-> > Your assumption is not sound. misc_deregister() can be (and is)
-> > legitimately called from other places, for example, a driver's remove()
-> > callback. In fact, when I grep for misc_deregister(), the second
-> > instance is such a case.
-> 
-> OK, the frequency of calling misc_deregister() can be much higher than
-> unregister_blkdev(), which means that misc_mtx is more prone to trigger
-> hung task warnings. I'm more inclined to avoid sleeping with misc_mtx held.
+Hi,
 
-Tetsuo, I'm sorry if I'm not making myself clear. I'm arguing that your
-patch is buggy and therefore should not be accepted.
+On 7/4/22 05:17, Krzysztof Kozlowski wrote:
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index e718b8735444..2c8091535bf7 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -228,4 +228,19 @@ config QCOM_APR
+>  	  application processor and QDSP6. APR is
+>  	  used by audio driver to configure QDSP6
+>  	  ASM, ADM and AFE modules.
+> +
+> +config QCOM_ICC_BWMON
+> +	tristate "QCOM Interconnect Bandwidth Monitor driver"
+> +	depends on ARCH_QCOM || COMPILE_TEST
+> +	select PM_OPP
+> +	help
+> +	  Sets up driver monitoring bandwidth on various interconnects and
 
-Here's one example of an issue that your patch would introduce. In
-binder init, we have the following error path:
+	  Sets up driver bandwidth monitoring
 
-err_init_binder_device_failed:
-        hlist_for_each_entry_safe(device, tmp, &binder_devices, hlist) {
-                misc_deregister(&device->miscdev);
-                hlist_del(&device->hlist);
-                kfree(device);
-        }
+would be better, I think.
 
-Note that open() for binder touches the `device` pointer. If open() can
-be called _after_ misc_deregister(), then there is a race condition
-where open() is touching `device` while this error path is freeing it.
+> +	  based on that voting for interconnect bandwidth, adjusting their
+> +	  speed to current demand.
+> +	  Current implementation brings support for BWMON v4, used for example
+> +	  on SDM845 to measure bandwidth between CPU (gladiator_noc) and Last
+> +	  Level Cache (memnoc).  Usage of this BWMON allows to remove some of
+> +	  the fixed bandwidth votes from cpufreq (CPU nodes) thus achieve high
+> +	  memory throughput even with lower CPU frequencies.
 
-Right now it isn't a bug because misc_deregister() guarantees that after
-it returns, open() won't be called anymore. Your patch breaks this
-guarantee.
+-- 
+~Randy
