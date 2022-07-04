@@ -2,117 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C584564F41
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 10:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F05A564F4E
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 10:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiGDIFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 04:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        id S233044AbiGDIGp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 04:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiGDIFf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 04:05:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FBDAAE6B;
-        Mon,  4 Jul 2022 01:05:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B2AE23A;
-        Mon,  4 Jul 2022 01:05:34 -0700 (PDT)
-Received: from [192.168.33.14] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63F6B3F792;
-        Mon,  4 Jul 2022 01:05:32 -0700 (PDT)
-Message-ID: <b5f69447-7ca2-ae39-2af0-1fa3602f31cd@arm.com>
-Date:   Mon, 4 Jul 2022 09:05:23 +0100
+        with ESMTP id S229658AbiGDIGo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 04:06:44 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEB5B1C2
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 01:06:43 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id c15so10164299ljr.0
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 01:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=W9vEcsuPOmb6PFD1YP9Cd5t2i8+H7vKDdbGELGM7w6o=;
+        b=qIVH3JbKvPTI90pL62KYY0CE73JeN2SUYSrBybV8uswZCRUzC7TyQR8SVFp8MZtE+n
+         xr7tJOlv3L2n5ZyjubWWSM+HvxpWMMviQPJGc+z61rfEV7BG6cQlF6JShpAp0jtu8vVF
+         ceTB3j2pH2b/Yt1sE4BJDCgHdKQmyfJZMtTr8D5mHqeWpIZvfd9zndu2IJA4nuyF61qJ
+         PLuksfEnXLVGlUXKspIWeM/QLHcLr0LmFBlIvSpGCb9lgFdOCT5hGek9uM/lI/l3D+aq
+         iN+8aCJy4pGjNnJY/joNcWnXboVwrTUBBtxKGrp15wZVhuCWO0JNd1/VK0fRmlhAUyqW
+         ctvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=W9vEcsuPOmb6PFD1YP9Cd5t2i8+H7vKDdbGELGM7w6o=;
+        b=6ITmZaiZzq3D2vujkkG6wwWH59Q89iQao1ZIr0dyifaRlX2VYrtK+Zg+jJbbNE4sNN
+         CfRNgA0LbThxmZrZpDtGqd9Wvh1G0yB4wlEWSWp70q7a0swwmjU+zMxnIR1CuwWVj1gb
+         TWQ53jSQPWdiljPK9VphhSxBjtdcZg7pjIW8G+QCnjw5iJLStnwEknAAZG0IyYfFsIqu
+         7q+M8tbwPJfOFflzxgfx7PvsQEKFIhaPpX8weITT768pNDK/lAiNyOTCoB63dQ7v3kIK
+         f0pXRLTkHhaXRb2BhBJZMtbsd7x3oMsCgACvgvx4KHZwhFVO/kf4sBAIXxMM4OX77kIb
+         4Xww==
+X-Gm-Message-State: AJIora8EGFBqdm43Lh+ojcXbQdl0kbLAavL/2qPCpUWz+k3Rh+zSH50r
+        aJ2h6jjU7h0INgVsiDMUSirILg==
+X-Google-Smtp-Source: AGRyM1shyweS5X2mqdSfWYknlmTWWG1DGobjjvfheeS4TSNX76HtThJhWEt1hwbwlkge4YLK4Rb5CA==
+X-Received: by 2002:a2e:9097:0:b0:25a:6e3a:8b21 with SMTP id l23-20020a2e9097000000b0025a6e3a8b21mr15698533ljg.37.1656922001547;
+        Mon, 04 Jul 2022 01:06:41 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id b8-20020a056512218800b0047f7c897b61sm5018145lft.129.2022.07.04.01.06.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 01:06:40 -0700 (PDT)
+Message-ID: <2823c36d-efce-6c02-3b00-df1466c0d2bc@linaro.org>
+Date:   Mon, 4 Jul 2022 10:06:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 06/12] thermal/core: Move thermal_set_delay_jiffies to
- static
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 10/14] arm64: dts: freescale: imx8qxp: Remove
+ unnecessary clock related entries
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com,
+To:     Viorel Suman <viorel.suman@oss.nxp.com>
+Cc:     Viorel Suman <viorel.suman@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
- <20220703183059.4133659-7-daniel.lezcano@linexp.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220703183059.4133659-7-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-11-viorel.suman@oss.nxp.com>
+ <483d5115-4027-e811-8bce-15da6c7c660f@linaro.org>
+ <20220630083636.2c7mclmbq3tjma2j@fsr-ub1664-116>
+ <5d8b2044-5ca6-c90c-57b4-afbb2ae20dde@linaro.org>
+ <20220630194804.sa3mvokpv7iksgbx@fsr-ub1664-116>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220630194804.sa3mvokpv7iksgbx@fsr-ub1664-116>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 7/3/22 19:30, Daniel Lezcano wrote:
-> The function 'thermal_set_delay_jiffies' is only used in
-> thermal_core.c but it is defined and implemented in a separate
-> file. Move the function to thermal_core.c and make it static.
+On 30/06/2022 21:48, Viorel Suman wrote:
 > 
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc; Eduardo Valentin <eduval@amazon.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->   drivers/thermal/thermal_core.c    | 7 +++++++
->   drivers/thermal/thermal_core.h    | 1 -
->   drivers/thermal/thermal_helpers.c | 7 -------
->   3 files changed, 7 insertions(+), 8 deletions(-)
+> The question context looks a bit shifted. The "clocks" and "clock-names"
+> attributes are removed from a clock provider device.
 > 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index e22e7d939c54..a8b1628937c6 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1159,6 +1159,13 @@ static void bind_tz(struct thermal_zone_device *tz)
->   	mutex_unlock(&thermal_list_lock);
->   }
->   
-> +static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
-> +{
-> +	*delay_jiffies = msecs_to_jiffies(delay_ms);
-> +	if (delay_ms > 1000)
-> +		*delay_jiffies = round_jiffies(*delay_jiffies);
-> +}
-> +
->   /**
->    * thermal_zone_device_register() - register a new thermal zone device
->    * @type:	the thermal zone device type
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> index 60844e2d59bb..c991bb290512 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -112,7 +112,6 @@ int thermal_build_list_of_policies(char *buf);
->   
->   /* Helpers */
->   void thermal_zone_set_trips(struct thermal_zone_device *tz);
-> -void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms);
->   
->   /* sysfs I/F */
->   int thermal_zone_create_device_groups(struct thermal_zone_device *, int);
-> diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-> index f4c1e87ef040..60bfda1a1db7 100644
-> --- a/drivers/thermal/thermal_helpers.c
-> +++ b/drivers/thermal/thermal_helpers.c
-> @@ -174,13 +174,6 @@ void thermal_zone_set_trips(struct thermal_zone_device *tz)
->   	mutex_unlock(&tz->lock);
->   }
->   
-> -void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
-> -{
-> -	*delay_jiffies = msecs_to_jiffies(delay_ms);
-> -	if (delay_ms > 1000)
-> -		*delay_jiffies = round_jiffies(*delay_jiffies);
-> -}
-> -
->   static void thermal_cdev_set_cur_state(struct thermal_cooling_device *cdev,
->   				       int target)
->   {
+> The OS clock provider in this case is a client which uses some protocol
+> to communicate with SCU via a messaging unit. There is no
+> access to xtal clocks via the existing OS<->SCU communication protocol.
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+SCU does not need to access them via communication protocol. It's enough
+that they are clock inputs, physical clocks being fed to your hardware
+which you describe in the DTS.
+
+
+Best regards,
+Krzysztof
