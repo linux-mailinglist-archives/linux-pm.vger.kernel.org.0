@@ -2,113 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6055658A8
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93D65658B4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiGDObJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 10:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S234132AbiGDOfN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 10:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiGDObI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:31:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2212C38A4;
-        Mon,  4 Jul 2022 07:31:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B249B61667;
-        Mon,  4 Jul 2022 14:31:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D15C3411E;
-        Mon,  4 Jul 2022 14:31:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656945064;
-        bh=abX2vFyPPxtUJL8wR+WOgxjRHK6sRVK3yADC3+pFltw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=haqBElDu9pTENB2dVUV2nrZD5Uk0XFiKbqJc2LFiDC8sy+CbpiUEMZ43KKyPpqV1x
-         wDKhunuPle1p/Hsmj8Zbs1/T1Pr9JwbUFBtP4g9uE3vIjIg2iH4FfgWs918wPTj54n
-         AL0mouy/oyRePOLwILDmV2KyPST9gEVWWUnaPpuc=
-Date:   Mon, 4 Jul 2022 16:31:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Message-ID: <YsL5pUuydMWJ9dSQ@kroah.com>
-References: <000000000000d9ff3a05bb37069e@google.com>
- <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
- <YsKW6VvWqvcMRBSl@kroah.com>
- <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
- <YsLIepAXeBKT0AF/@kroah.com>
- <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+        with ESMTP id S232123AbiGDOfM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:35:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 081F41136;
+        Mon,  4 Jul 2022 07:35:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBF9423A;
+        Mon,  4 Jul 2022 07:35:10 -0700 (PDT)
+Received: from [10.57.41.70] (unknown [10.57.41.70])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 419853F66F;
+        Mon,  4 Jul 2022 07:35:07 -0700 (PDT)
+Message-ID: <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
+Date:   Mon, 4 Jul 2022 15:35:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
+ NULL terminated list
+Content-Language: en-GB
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org
+References: <cover.1656935522.git.viresh.kumar@linaro.org>
+ <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 09:34:04PM +0900, Tetsuo Handa wrote:
-> On 2022/07/04 20:01, Greg KH wrote:
-> > On Mon, Jul 04, 2022 at 07:25:44PM +0900, Tetsuo Handa wrote:
-> >> On 2022/07/04 16:29, Greg KH wrote:
-> >>> On Mon, Jul 04, 2022 at 03:44:07PM +0900, Tetsuo Handa wrote:
-> >>>> syzbot is reporting hung task at misc_open() [1], for snapshot_open() from
-> >>>> misc_open() might sleep for long with misc_mtx held whereas userspace can
-> >>>> flood with concurrent misc_open() requests. Mitigate this problem by making
-> >>>> misc_open() and misc_register() killable.
-> >>>
-> >>> I do not understand, why not just fix snapshot_open()?  Why add this
-> >>> complexity to the misc core for a foolish individual misc device?  Why
-> >>> not add the fix there where it is spinning instead?
-> >>
-> >> Quoting an example from [1]. Multiple processes are calling misc_open() and
-> >> all but one processes are blocked at mutex_lock(&misc_mtx). The one which is
-> >> not blocked at mutex_lock(&misc_mtx) is also holding system_transition_mutex.
-> > 
-> > And that is because of that one misc device, right?  Why not fix that
-> > instead of papering over the issue in the misc core?
+On 04/07/2022 13:07, Viresh Kumar wrote:
+> Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
+> instead of making the callers keep the two parameters in sync, which
+> creates an opportunity for bugs to get in.
 > 
-> Since "struct file_operations"->open() is allowed to sleep, calling
-> "struct file_operations"->open() via reassignment by "struct miscdevice"->fops
-> with locks held can cause problems.
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
+>  drivers/cpufreq/ti-cpufreq.c                |  7 +++----
+>  drivers/devfreq/exynos-bus.c                |  4 ++--
+>  drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.c |  4 ++--
+>  drivers/opp/core.c                          | 18 ++++++++++++------
+>  drivers/soc/tegra/pmc.c                     |  4 ++--
+>  include/linux/pm_opp.h                      |  9 ++++-----
+>  8 files changed, 31 insertions(+), 27 deletions(-)
 > 
-> Assuming that this is not a deadlock hidden by device_initialize(), current
-> mutex_lock(&misc_mtx) is as problematic as major_names_lock mentioned at
-> https://lkml.kernel.org/r/b2af8a5b-3c1b-204e-7f56-bea0b15848d6@i-love.sakura.ne.jp .
-> 
-> >> If you don't like mutex_lock_killable(&misc_mtx), we will need to consider moving
-> >> file->f_op->open() from misc_open() to after mutex_unlock(&misc_mtx).
-> 
-> Below is minimal changes for avoid calling "struct file_operations"->open() with
-> misc_mtx held. This would be nothing but moving hung task warning from misc_open()
-> to snapshot_open() (and therefore we would need to introduce killable version of
-> lock_system_sleep()), but we can avoid making misc_mtx like major_names_lock above.
-> 
-> Greg, can you accept this minimal change?
-> 
->  drivers/char/misc.c        | 4 ++++
->  include/linux/miscdevice.h | 1 +
->  kernel/power/user.c        | 1 +
->  3 files changed, 6 insertions(+)
+[...]
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> index 194af7f607a6..12784f349550 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> @@ -91,6 +91,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+>  	struct devfreq *devfreq;
+>  	struct thermal_cooling_device *cooling;
+>  	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
+> +	const char *supplies[] = { pfdev->comp->supply_names[0], NULL };
+>  
+>  	if (pfdev->comp->num_supplies > 1) {
+>  		/*
+> @@ -101,8 +102,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+>  		return 0;
+>  	}
+>  
+> -	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
+> -					 pfdev->comp->num_supplies);
+> +	ret = devm_pm_opp_set_regulators(dev, supplies);
+>  	if (ret) {
+>  		/* Continue if the optional regulator is missing */
+>  		if (ret != -ENODEV) {
 
-I don't understand what you are trying to "fix" here.  What is userspace
-doing (as a normal user) that is causing a problem, and what problem is
-it causing and for what device/hardware/driver is this a problem?
+I have to say the 'new improved' list ending with NULL approach doesn't
+work out so well for Panfrost. We already have to have a separate
+'num_supplies' variable for devm_regulator_bulk_get() /
+regulator_bulk_{en,dis}able(), so the keeping everything in sync
+argument is lost here.
 
-Yes, you can sleep in open(), but you shouldn't sleep long, if at all
-possible as it can be annoying.  So why not fix up the offending driver
-not to sleep to long?
+I would suggest added the NULL on the end of the lists in panfrost_drv.c
+but then it would break the use of ARRAY_SIZE() to automagically keep
+the length correct...
 
-thanks,
+For now the approach isn't too bad because Panfrost doesn't yet support
+enabling devfreq with more than one supply. But that array isn't going
+to work so nicely when that restriction is removed.
 
-greg k-h
+The only sane way I can see of handling this in Panfrost would be
+replicating the loop to count the supplies in the Panfrost code which
+would allow dropping num_supplies from struct panfrost_compatible and
+then supply_names in the same struct could be NULL terminated ready for
+devm_pm_opp_set_regulators().
+
+Steve
+
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index e166bfe5fc90..4e4593957ec5 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2105,13 +2105,20 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_put_prop_name);
+>   * This must be called before any OPPs are initialized for the device.
+>   */
+>  struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+> -					    const char * const names[],
+> -					    unsigned int count)
+> +					    const char * const names[])
+>  {
+>  	struct dev_pm_opp_supply *supplies;
+> +	const char * const *temp = names;
+>  	struct opp_table *opp_table;
+>  	struct regulator *reg;
+> -	int ret, i;
+> +	int count = 0, ret, i;
+> +
+> +	/* Count number of regulators */
+> +	while (*temp++)
+> +		count++;
+> +
+> +	if (!count)
+> +		return ERR_PTR(-EINVAL);
+>  
+>  	opp_table = _add_opp_table(dev, false);
+>  	if (IS_ERR(opp_table))
+> @@ -2236,12 +2243,11 @@ static void devm_pm_opp_regulators_release(void *data)
+>   * Return: 0 on success and errorno otherwise.
+>   */
+>  int devm_pm_opp_set_regulators(struct device *dev,
+> -			       const char * const names[],
+> -			       unsigned int count)
+> +			       const char * const names[])
+>  {
+>  	struct opp_table *opp_table;
+>  
+> -	opp_table = dev_pm_opp_set_regulators(dev, names, count);
+> +	opp_table = dev_pm_opp_set_regulators(dev, names);
+>  	if (IS_ERR(opp_table))
+>  		return PTR_ERR(opp_table);
+>  
+> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+> index 5611d14d3ba2..6a4b8f7e7948 100644
+> --- a/drivers/soc/tegra/pmc.c
+> +++ b/drivers/soc/tegra/pmc.c
+> @@ -1384,7 +1384,7 @@ tegra_pmc_core_pd_opp_to_performance_state(struct generic_pm_domain *genpd,
+>  static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+>  {
+>  	struct generic_pm_domain *genpd;
+> -	const char *rname = "core";
+> +	const char *rname[] = { "core", NULL};
+>  	int err;
+>  
+>  	genpd = devm_kzalloc(pmc->dev, sizeof(*genpd), GFP_KERNEL);
+> @@ -1395,7 +1395,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
+>  	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
+>  	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
+>  
+> -	err = devm_pm_opp_set_regulators(pmc->dev, &rname, 1);
+> +	err = devm_pm_opp_set_regulators(pmc->dev, rname);
+>  	if (err)
+>  		return dev_err_probe(pmc->dev, err,
+>  				     "failed to set core OPP regulator\n");
+> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+> index 6708b4ec244d..4c490865d574 100644
+> --- a/include/linux/pm_opp.h
+> +++ b/include/linux/pm_opp.h
+> @@ -159,9 +159,9 @@ void dev_pm_opp_put_supported_hw(struct opp_table *opp_table);
+>  int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
+>  struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name);
+>  void dev_pm_opp_put_prop_name(struct opp_table *opp_table);
+> -struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
+> +struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[]);
+>  void dev_pm_opp_put_regulators(struct opp_table *opp_table);
+> -int devm_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
+> +int devm_pm_opp_set_regulators(struct device *dev, const char * const names[]);
+>  struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name);
+>  void dev_pm_opp_put_clkname(struct opp_table *opp_table);
+>  int devm_pm_opp_set_clkname(struct device *dev, const char *name);
+> @@ -379,7 +379,7 @@ static inline struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, con
+>  
+>  static inline void dev_pm_opp_put_prop_name(struct opp_table *opp_table) {}
+>  
+> -static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count)
+> +static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[])
+>  {
+>  	return ERR_PTR(-EOPNOTSUPP);
+>  }
+> @@ -387,8 +387,7 @@ static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, co
+>  static inline void dev_pm_opp_put_regulators(struct opp_table *opp_table) {}
+>  
+>  static inline int devm_pm_opp_set_regulators(struct device *dev,
+> -					     const char * const names[],
+> -					     unsigned int count)
+> +					     const char * const names[])
+>  {
+>  	return -EOPNOTSUPP;
+>  }
+
