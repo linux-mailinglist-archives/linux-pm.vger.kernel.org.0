@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6115654FC
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 14:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91DC5654FF
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 14:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234505AbiGDMSb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 08:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
+        id S234156AbiGDMSj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 08:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbiGDMR7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 08:17:59 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF4312616
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 05:17:40 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id c12so711125lff.2
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 05:17:40 -0700 (PDT)
+        with ESMTP id S234180AbiGDMSH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 08:18:07 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA9F1262E
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 05:17:41 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l7so10118004ljj.4
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 05:17:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=l4c6eL6FkT3F5Q2UMeh1SdTOW/jzEthp0aJ+P51R6LI=;
-        b=kXJS3f5b7yC9K8hm0tvpSXyKvaeyDMMSD899aQ9fPY0xv+kQ6x87ysIfsbv/i4t5ax
-         hetzoT2aSLQPlE8MYiAfEd5rdps5hQxEd7u9DRuV//7ri1nFDUzPCCFO+Su1r6il1ycF
-         r6MquXUYC4UB8KoWJ55xWDfzcEAckn33hVEo9FXKVvTrQxr2a4TQsx6KgWQOt8tpjO4/
-         kEnAHv/Qb5zKF/H5FfqnhI+ba7IGzakf4rkZcSSIc7VHzsgBzK7sgrBR5ejUy9XgjImR
-         eQRgfTpKrp+UT098Hz6KvYjUzhfLFhnyzm0GOi/U8qYim1IxQSkdoHrVWFh65ZDaYWyL
-         KS0A==
+        bh=C1M+FtKCNKsX4tOnqV3xDo7Y0vEiWdZsYEx0bmq2vBw=;
+        b=kgzluWAvls5eerYpL69ZSzolkF0CaWpkf9EzpVbG6E0L1l7pR39XWHBbKr5mU1Jflv
+         uuKViK6Kg/iq4NwIpV2QdaTD+aaoFNX6FEMYhN1SHkFE1BVErFf+WnUcewHo/ep2sca9
+         eN5z2VHHp734YiJgDG3HY3haLn1azLzbes0GKc/cOUCuQEhAAM7fopEETWAY+STAZAvk
+         Fng1zOxtF+R+ecobWOUQIK4iojMAFoheWVkMNPAjXWynolW6lF70JUYK71a6b0V/d2N3
+         iNdJfW2ETnbEqa/y/BH5bhS9uRwFbaNFWePpmTUCza9bmCkRxvskjUMQgrPxJXEJ8oWm
+         46NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=l4c6eL6FkT3F5Q2UMeh1SdTOW/jzEthp0aJ+P51R6LI=;
-        b=F671X5N2YsZVlvhID47w034H21t46Jk8ZGvV+I4XzzD/sKFuBSKsqwW46e8FTYhU22
-         7B9/v1wNP7P+pMn1J3e55u3lBKmVqNUh8kNzZmO57+qv0GJdtAMq9vTuBpAq93PRHYX0
-         wExyuWzPKoI45y+1bXqYFZbdi89WIzFOONAj/gLQPeSR5qWL34JcJl1czHnTAUFrSgNW
-         vZdphdkbxgPghPDzx4RXpwfvCJurdbBZX+KKrkHBqc5SMrJWm9n6WPUsdMQS12JX/bUR
-         ph+ZHBrY5wjSG8FviQ2IN5bCWPRN8CDaf2wnQaiiFLxRUfNIN7CjB47HefjsEldYsq9i
-         xqug==
-X-Gm-Message-State: AJIora9DGbwoIrA1ywyxq3+UpkcmCBGtGPBmoUjcKl1+S816+R4r0caa
-        WJ+Ltj3EbWXhitA5SCE9qUkB1w==
-X-Google-Smtp-Source: AGRyM1upzfjkZEwtDGMG41zysxdqM2gIjkq1K0IGy7cqb7Fo8Z5IGqeQ8GDyBx9J+kl/aMJjR+TSJw==
-X-Received: by 2002:a05:6512:318b:b0:47f:b39d:bbe3 with SMTP id i11-20020a056512318b00b0047fb39dbbe3mr19062136lfe.487.1656937058537;
-        Mon, 04 Jul 2022 05:17:38 -0700 (PDT)
+        bh=C1M+FtKCNKsX4tOnqV3xDo7Y0vEiWdZsYEx0bmq2vBw=;
+        b=Q54mGZeEQXaitfxvel426j8JzdDmdUbuHhPG9AY36P9pE59WTX8nzaV65TmzIJHNY9
+         XBzTY+thgSYsfslD7EAii5+xoAueCwxC3iq/wVaX72GJ/G1y+ouD5bfiv0PDxDA+59/I
+         gtakBG8q6YQsRxDBz+/fuz0vGMKS9NxJ8DOSVSNze1bbacU9xhlNUd1udxmDWYWhrMHs
+         J+mONFumgl5g1goV4a9Ap05FWOdv5kkY++vjspUgzWIUfpWRNybholWWK8Vor0QhEpoV
+         Nj4OGS1UVE72A4DDgOzmg4HPZq8NCu59jbUYhnJDWCfOliRcC8rOWuCWbp0s4V+4ACvU
+         oCoQ==
+X-Gm-Message-State: AJIora9quJlhUztcB447K2SWP7z7szYvIRqRnqW9IetLK6GMOdEHyBAI
+        ArUKzejyqpWa4YrAl7qRiw3NLQ==
+X-Google-Smtp-Source: AGRyM1tea0fdyzeMMijwvCjJj/z/c6EDy7K9Gdk1BfLqZOaT1ngMIkM67D9M61fD/2namUFa4HF2Qg==
+X-Received: by 2002:a2e:889a:0:b0:25a:ca71:823e with SMTP id k26-20020a2e889a000000b0025aca71823emr15873247lji.11.1656937059833;
+        Mon, 04 Jul 2022 05:17:39 -0700 (PDT)
 Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id u11-20020a05651220cb00b0047faa01edd9sm5102149lfr.229.2022.07.04.05.17.36
+        by smtp.gmail.com with ESMTPSA id u11-20020a05651220cb00b0047faa01edd9sm5102149lfr.229.2022.07.04.05.17.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 05:17:37 -0700 (PDT)
+        Mon, 04 Jul 2022 05:17:39 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -57,10 +57,11 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: [PATCH v8 3/4] arm64: defconfig: enable Qualcomm Bandwidth Monitor
-Date:   Mon,  4 Jul 2022 14:17:29 +0200
-Message-Id: <20220704121730.127925-4-krzysztof.kozlowski@linaro.org>
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Subject: [PATCH v8 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
+Date:   Mon,  4 Jul 2022 14:17:30 +0200
+Message-Id: <20220704121730.127925-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
 References: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
@@ -76,27 +77,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enable the Qualcomm Bandwidth Monitor to allow scaling interconnects
-depending on bandwidth usage between CPU and memory.  This is used
-already on Qualcomm SDM845 SoC.
+Add device node for CPU-memory BWMON device (bandwidth monitoring) on
+SDM845 measuring bandwidth between CPU (gladiator_noc) and Last Level
+Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
+votes from cpufreq (CPU nodes) thus achieve high memory throughput even
+with lower CPU frequencies.
 
+Co-developed-by: Thara Gopinath <thara.gopinath@gmail.com>
+Signed-off-by: Thara Gopinath <thara.gopinath@gmail.com>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 37 ++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 6906b83f5e45..6edbcfd3f4ca 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1096,6 +1096,7 @@ CONFIG_QCOM_SOCINFO=m
- CONFIG_QCOM_STATS=m
- CONFIG_QCOM_WCNSS_CTRL=m
- CONFIG_QCOM_APR=m
-+CONFIG_QCOM_ICC_BWMON=m
- CONFIG_ARCH_R8A77995=y
- CONFIG_ARCH_R8A77990=y
- CONFIG_ARCH_R8A77950=y
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 83e8b63f0910..e65dedfa6cee 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -2026,6 +2026,43 @@ llcc: system-cache-controller@1100000 {
+ 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
++		pmu@1436400 {
++			compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
++			reg = <0 0x01436400 0 0x600>;
++			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>;
++
++			operating-points-v2 = <&cpu_bwmon_opp_table>;
++
++			cpu_bwmon_opp_table: opp-table {
++				compatible = "operating-points-v2";
++
++				/*
++				 * The interconnect path bandwidth taken from
++				 * cpu4_opp_table bandwidth for OSM L3
++				 * interconnect.  This also matches the OSM L3
++				 * from bandwidth table of qcom,cpu4-l3lat-mon
++				 * (qcom,core-dev-table, bus width: 16 bytes)
++				 * from msm-4.9 downstream kernel.
++				 */
++				opp-0 {
++					opp-peak-kBps = <4800000>;
++				};
++				opp-1 {
++					opp-peak-kBps = <9216000>;
++				};
++				opp-2 {
++					opp-peak-kBps = <15052800>;
++				};
++				opp-3 {
++					opp-peak-kBps = <20889600>;
++				};
++				opp-4 {
++					opp-peak-kBps = <25497600>;
++				};
++			};
++		};
++
+ 		pcie0: pci@1c00000 {
+ 			compatible = "qcom,pcie-sdm845";
+ 			reg = <0 0x01c00000 0 0x2000>,
 -- 
 2.34.1
 
