@@ -2,176 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1EC565D5F
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 20:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412B4565DAE
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 20:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbiGDSKq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 14:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S229903AbiGDS7d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 14:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGDSKm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 14:10:42 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5887C636A;
-        Mon,  4 Jul 2022 11:10:40 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C715EE000A;
-        Mon,  4 Jul 2022 18:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656958234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bbTMYur9hGe+to/gtv00HbU/WaQ6VXCyohWjpUEuf0E=;
-        b=eyxcpojn5k/20aWTArkinYNnHoOORfNkzn+tGURVbE2BmPQ8FhFXfE3NbRa9CF1Pdate3e
-        52J3akmoXPD4S9uhzJb8PV6ZzGOK5pw9KLefDDwa5QSagsUjzHvBUheJMg+3uk4PItYtaJ
-        lsRujrtpvnARhqrh8tTcik9rTHEbj1VuG8jGvLRcaP4YL8OfuTopouHTblRrHI/92GERCB
-        1myPKjPf2gU2TjxW8diEIN/YKIiuNTHSUfK3dzJj8V7LErA3q1cNE/divpVopVx8qQp8VY
-        4dhQgBKBN//kXCCWTr8+QTQOwob06pEsMaJ0QR4m4OAW6IkbgDEB2y7zgQ5VOg==
-Date:   Mon, 4 Jul 2022 20:10:30 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S229595AbiGDS7b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 14:59:31 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEE26467;
+        Mon,  4 Jul 2022 11:59:31 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 91B905C00B2;
+        Mon,  4 Jul 2022 14:59:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 04 Jul 2022 14:59:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656961170; x=
+        1657047570; bh=F5nGqDVFT2QAl9raw0kYO5IPENgXXLfXR4vGd0m2UgE=; b=S
+        GWb3VNgBuFI+LzQ130jHv65ZXwAf93X6brKPo50RhylJOKQ3g5IPCv1eHe0dPJ2m
+        gv2+SaG+EA0hAyp/GlE5WxxXFQINQrkSDocf2MjWcECNThQRNT98jzEaJAMa4inR
+        Nz56/gjx20GJlZO4IQCvA9A6GU6H5kecJFz15Cx72e3MqoZl0xdOMANvmwXDN20S
+        mkrJ5N/iVgYzGPEEInxysHtOJJXuBSvleaQqZ7RK13b12AXvuzN827T936NqMmLM
+        GMZwn5GMIb7AH60TCsgc84OM7qd42QXKmOx7lc9jpjVRR/Mos3DCMBPczNnf7gRX
+        pL1xo5kBIoOseKuCLgQKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656961170; x=
+        1657047570; bh=F5nGqDVFT2QAl9raw0kYO5IPENgXXLfXR4vGd0m2UgE=; b=v
+        EtquaKUde5G9Xko95UNgER955jTmkZNlhs4oO+uPJNEN4wvtwUWg5/P37HQQXZc2
+        pz31KRHLph0PmZbnF3ne49v5Bx0qSXavEg/vUoP5NrV6lk2tDTdgOm6nNCiMAeFz
+        1viNexFarGcFYXK9GF6ZeCPSGmPbKA4ug4JgH6Uboj8Ow8Wp1lVmM7F6JEtQH1EJ
+        Wg0+evFYOE49x7i9Z97IgHKEVGxquvGbw1F2n2FBTbPbQp5MPGsQZQu7nwLpIItc
+        UZmHUgzRqTRvXDwHTMR/SlhY64OvEDPaPpcp9DwS+AxOGjenqrFhK8YTa8S+4mFb
+        8IdhvnUyNruQXAL/sq64w==
+X-ME-Sender: <xms:kjjDYiQxDScMgjLBhdVZymGn9ASzaTUkWpUR2QndQT-44Hzm_rt4VA>
+    <xme:kjjDYnxg6kfkCFsKSn4c4EB3GbgRsBINqE_vCPeY3VnlfeVvk9fDg8yp8QkSfY7vO
+    VpUXdsftf-Yo8Ugew>
+X-ME-Received: <xmr:kjjDYv3UKqMB-4tW5D8AT4Jbe6Se9xGtITVh2oYyfYyHw1dBLVXHPwks3s9e03JSkxLnikH9YPXIs_9d0yb7NiTq0ziBkNoD0Cue_vo2sf4XCxQc1mlLgo5NwQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehledgudeffecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgr
+    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
+    cuggftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfh
+    iedtheduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:kjjDYuBpt_hL62xi7sHJUUIVbGavVJRSeN4Uo_NWukIP-b4ojuCKBA>
+    <xmx:kjjDYrgY-8XI_1BWi1il2Od0_5jLhgxHYT4U0SDIk9UvECPkIp8FFQ>
+    <xmx:kjjDYqpypb5FqgWMwpOxstMBsP09Nk-h7yxkl0PrwSkKmxcKJWjCkQ>
+    <xmx:kjjDYgZJuf5d-Iblhqr-aditUvn1iSp3B1crGDRCETR0M4X9VBYhvA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 4 Jul 2022 14:59:29 -0400 (EDT)
+Subject: Re: [PATCH V3 15/20] OPP: Migrate set-prop-name helper API to use
+ set-config helpers
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
-Subject: Re: [PATCH v7 06/15] dt-bindings: rtc: Add fsl,scu-rtc yaml file
-Message-ID: <YsMtFhctM19giyAj@mail.local>
-References: <20220704161541.943696-1-viorel.suman@oss.nxp.com>
- <20220704161541.943696-7-viorel.suman@oss.nxp.com>
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1656935522.git.viresh.kumar@linaro.org>
+ <bbd8f1e7508a9c66028ea1d80fd86924256fdb64.1656935522.git.viresh.kumar@linaro.org>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <500bf605-a30c-8092-631f-0f9a623bfb74@sholland.org>
+Date:   Mon, 4 Jul 2022 13:59:29 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220704161541.943696-7-viorel.suman@oss.nxp.com>
+In-Reply-To: <bbd8f1e7508a9c66028ea1d80fd86924256fdb64.1656935522.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/07/2022 19:15:32+0300, Viorel Suman (OSS) wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
+On 7/4/22 7:07 AM, Viresh Kumar wrote:
+> Now that we have a central API to handle all OPP table configurations,
+> migrate the set-prop-name family of helpers to use the new
+> infrastructure.
 > 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch documents
-> separately the 'rtc' child node of the SCU main node.
+> The return type and parameter to the APIs change a bit due to this,
+> update the current users as well in the same commit in order to avoid
+> breaking builds.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-
-You had a reviewed-by, please add it in the subsequent series or it may
-be lost.
-
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  .../bindings/arm/freescale/fsl,scu.txt        | 10 ------
->  .../devicetree/bindings/rtc/fsl,scu-rtc.yaml  | 31 +++++++++++++++++++
->  2 files changed, 31 insertions(+), 10 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> index 1a06f627b125..6c0161fa4adf 100644
-> --- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> +++ b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> @@ -62,12 +62,6 @@ i.MX SCU Client Device Node:
->  
->  Client nodes are maintained as children of the relevant IMX-SCU device node.
->  
-> -RTC bindings based on SCU Message Protocol
-> -------------------------------------------------------------
-> -
-> -Required properties:
-> -- compatible: should be "fsl,imx8qxp-sc-rtc";
-> -
->  Watchdog bindings based on SCU Message Protocol
->  ------------------------------------------------------------
->  
-> @@ -116,10 +110,6 @@ firmware {
->  			  &lsio_mu1 1 3
->  			  &lsio_mu1 3 3>;
->  
-> -		rtc: rtc {
-> -			compatible = "fsl,imx8qxp-sc-rtc";
-> -		};
-> -
->  		watchdog {
->  			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
->  			timeout-sec = <60>;
-> diff --git a/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml b/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-> new file mode 100644
-> index 000000000000..8c102b70d735
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-> @@ -0,0 +1,31 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/fsl,scu-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: i.MX SCU Client Device Node - RTC bindings based on SCU Message Protocol
-> +
-> +maintainers:
-> +  - Dong Aisheng <aisheng.dong@nxp.com>
-> +
-> +description: i.MX SCU Client Device Node
-> +  Client nodes are maintained as children of the relevant IMX-SCU device node.
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: fsl,imx8qxp-sc-rtc
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    rtc {
-> +        compatible = "fsl,imx8qxp-sc-rtc";
-> +    };
-> -- 
-> 2.25.1
-> 
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 31 +++++++--------
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+For sun50i-cpufreq-nvmem.c:
+
+Acked-by: Samuel Holland <samuel@sholland.org>
+
+>  drivers/opp/core.c                     | 55 +++++++++-----------------
+>  include/linux/pm_opp.h                 | 23 ++++++-----
+>  3 files changed, 46 insertions(+), 63 deletions(-)
