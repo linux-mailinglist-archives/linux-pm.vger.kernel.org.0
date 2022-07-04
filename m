@@ -2,80 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70405659A9
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 17:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90734565A5F
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 17:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiGDPWc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 11:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S233864AbiGDPwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 11:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbiGDPWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 11:22:30 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CA4638E
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 08:22:24 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id f39so16353317lfv.3
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 08:22:24 -0700 (PDT)
+        with ESMTP id S234072AbiGDPw3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 11:52:29 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116DE26CB
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 08:52:28 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so3839479pjn.0
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 08:52:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8xwHiY+KHdJ36jx2bH5eRwBSG1byM2tLFU+DhcoTg0o=;
-        b=YO6UTzSTMoo1MhgbrFxQl5vZNZw780MrwSU4+5AHy0twMe030NRMYhtfLGId2QzwUo
-         wI9Q0dAMWIhASJNZGGMhzB7rCu7e49JQzi+DMhsY7o6a9FU8/OfjFmS29nSZsM1ItBu1
-         sf8Li67cxkTb2mho9wvlaRMfbsm22r27B+Ekki/bGoWavwR91hDggooJKFfOrLBoYFd0
-         /55/ih7UJ8dhNHhTpZOuDRtnd/A/rRnx5FW01bOEkkYhMIZBLrF5Py1qxExpeqDv1HrX
-         zLy1O3i0887k5I2I+P8ki47Z4mHXunDfrZipNicldGoA5LivZ1nj0WoQaceZ1nnGIiBa
-         dsyA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sRl2t1rvyRttEeKDRjtLGVtQ9G7VQBGwaD5cR1+2zVc=;
+        b=OWKeLJydETTHHzSeYEolojpSDDynSbdRGgZm+mwRATvXzsZHkOvQyJvG5dYMEGhHFU
+         y6om+6LA9NOz7PBv6WJuL0+3CGBn/7lsiqmoVu47CFHPb+Sjw3invk2dczk8ks80fLRR
+         x3MKnYuYYZGB5G553t9jZfszkYAA7RPLHEyy3jtqkuhanvuRt6HY8kqSe9jgJ/pQdzSi
+         tho+Xtw+mcp+/DADlPU+yaMqr2YltubKFj+BtqX0uLgnv5VDw1jxAc0gAvqdJZ0Py4u0
+         mpQCusU/77yjDkKmo5zO194I0MxPBNwVZsn+fGKW1ipn51skzJ2KRejOhBdp6wKpaS0k
+         lWIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8xwHiY+KHdJ36jx2bH5eRwBSG1byM2tLFU+DhcoTg0o=;
-        b=DDr4j07Ht6MTCy6Mm7Laob8rrRQs2GHEj+56mUl9OhcRc4iuVhYpLbvqpqiD0zfNCT
-         5lEpJAgtUgMRWKz7ZUpOE8GBXQcR6/KMWM2LZAlt4zhAEaOBEAqKi2egsvIWEwrOP9vt
-         WfN7lMqzWq+0x00vI9pJotiT+z0H5790GazSEIDyn3F+Ab1pXitqVCjWmRJVIA4ZRkUi
-         ENbm86/1VaYuBxK+wcRjSkAT8MPwy98neSwBtX2dbjyYN28kP00DR5xr0GUsEHMdnsVa
-         TFI8jL/VjQsxPSAGgSSyf/OhpnkipS1P0CqWYbg+PbCS3y1vyNsXcEqDleTWXjttSyDo
-         2Y/w==
-X-Gm-Message-State: AJIora+beECilrfT6IwEnuyAAbC2hXF5G6tmfxsCwcdfwN6RAEPLjkBr
-        /Xzlnil+sUox33p7iAxwugSKNA==
-X-Google-Smtp-Source: AGRyM1ty3S5JG0vO0h6LwyeRbL9KOVIVLYSgjbipJzz/dJcR241XrZa6IiWEoVI8Jo04igtYlFvBYQ==
-X-Received: by 2002:a05:6512:20cb:b0:481:7b9:ffb7 with SMTP id u11-20020a05651220cb00b0048107b9ffb7mr18663646lfr.573.1656948143217;
-        Mon, 04 Jul 2022 08:22:23 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id w22-20020a2e9bd6000000b00253c8dfc4e4sm4876809ljj.101.2022.07.04.08.22.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 08:22:22 -0700 (PDT)
-Message-ID: <9cd658cd-3b8c-89d1-651d-ce81794fb68c@linaro.org>
-Date:   Mon, 4 Jul 2022 17:22:21 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sRl2t1rvyRttEeKDRjtLGVtQ9G7VQBGwaD5cR1+2zVc=;
+        b=djAo7XSIMsTfo7j4gxSmP3fV2KD1qhKAk/BoXKe+QozUtmKk7Q5t+X8EYfYk2dhtaY
+         G0lZzU265KrFj8BXKCEDXqKgKUIMhwoL/pOG04AruC7rWjP6JbShunDltVxrBY0A5q57
+         U0i/h+JYPsuYhaHp12cdwf7nt3008JYGwHTEDav5jbBBzSKndyS8VAVWO4Hg3o1CSL4e
+         ztpQ0sMoDQaiPBG7VK0O4Syy2/QtJg3qL02BDTNfTwy5dMwYsrZPkRL9kT18JJ2LOLcR
+         HYV1U++pwyeLbRq6GLXhDlkzBkFES8Tp9Id5ka8e7W3FMSgpFZj3oW9GfnA22EK8WXiM
+         BcMQ==
+X-Gm-Message-State: AJIora9kkX+FxFbKVVqWRHtDj8Q6GyI6cHmSyVTT5Z6WIo2KbGhJWxMW
+        al2U717+406XuigyrxGuuKFAsfEO+AtMRA==
+X-Google-Smtp-Source: AGRyM1udrllayvfg/+/oNvT3GBTgY3hCV6AUGqvJ+UTbijLSpRL5ts+FK9A7Qg9ItLWQubsj3FVXyw==
+X-Received: by 2002:a17:902:9b8b:b0:16a:14fa:cd27 with SMTP id y11-20020a1709029b8b00b0016a14facd27mr37368228plp.86.1656949947517;
+        Mon, 04 Jul 2022 08:52:27 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id l10-20020a170902d34a00b0016be0571ef8sm2922134plk.143.2022.07.04.08.52.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 08:52:26 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 21:22:25 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Message-ID: <20220704155225.n4kmgwnvsuksbo2p@vireshk-i7>
+References: <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
+ <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
+ <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
+ <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
+ <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
+ <20220630095245.otvo53ezd4avoujw@vireshk-i7>
+ <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
+ <20220630101540.5dafkegrmcattt2c@vireshk-i7>
+ <20220704120915.s3ermueulcofg7nj@vireshk-i7>
+ <58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 2/4] soc: qcom: icc-bwmon: Add bandwidth monitoring
- driver
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220704121730.127925-1-krzysztof.kozlowski@linaro.org>
- <20220704121730.127925-3-krzysztof.kozlowski@linaro.org>
- <3770bc6d-b3cc-9e49-a832-4c15af0b5f1a@infradead.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3770bc6d-b3cc-9e49-a832-4c15af0b5f1a@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,46 +84,117 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/07/2022 17:20, Randy Dunlap wrote:
-> Hi,
+On 04-07-22, 16:17, Dmitry Osipenko wrote:
+> Actually the freq was 0 and it was 1 on the next loop like you suggested.
 > 
-> On 7/4/22 05:17, Krzysztof Kozlowski wrote:
->> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
->> index e718b8735444..2c8091535bf7 100644
->> --- a/drivers/soc/qcom/Kconfig
->> +++ b/drivers/soc/qcom/Kconfig
->> @@ -228,4 +228,19 @@ config QCOM_APR
->>  	  application processor and QDSP6. APR is
->>  	  used by audio driver to configure QDSP6
->>  	  ASM, ADM and AFE modules.
->> +
->> +config QCOM_ICC_BWMON
->> +	tristate "QCOM Interconnect Bandwidth Monitor driver"
->> +	depends on ARCH_QCOM || COMPILE_TEST
->> +	select PM_OPP
->> +	help
->> +	  Sets up driver monitoring bandwidth on various interconnects and
-> 
-> 	  Sets up driver bandwidth monitoring
-> 
-> would be better, I think.
+> Previously, the _read_opp_key() was always reading the opp-hz. Now it
+> skips reading the rates in _read_rate() because opp_table->clk_count=0
+> for the tegra30-devfreq driver the uses devm_pm_opp_of_add_table_noclk().
 
-It's a driver which monitors bandwidth, so your version sounds a bit
-like monitoring of driver's bandwidth.
+This is exactly what I wrote in an earlier email :)
 
-Maybe should be:
-    Sets up driver which monitors bandwidth...
-?
-> 
->> +	  based on that voting for interconnect bandwidth, adjusting their
->> +	  speed to current demand.
->> +	  Current implementation brings support for BWMON v4, used for example
->> +	  on SDM845 to measure bandwidth between CPU (gladiator_noc) and Last
->> +	  Level Cache (memnoc).  Usage of this BWMON allows to remove some of
->> +	  the fixed bandwidth votes from cpufreq (CPU nodes) thus achieve high
->> +	  memory throughput even with lower CPU frequencies.
-> 
+Anyway, I have pushed two patches on top of my opp/linux-next branch
+and they should fix it in a good way now I suppose. Can you please
+give that a try.
 
+This is how the diff looks like:
 
-Best regards,
-Krzysztof
+PM / devfreq: tegra30: Register config_clks helper
+
+There is a corner case with Tegra30, where we want to skip clk
+configuration via dev_pm_opp_set_opp(), but still want the OPP core to
+read the "opp-hz" property so we can find the right OPP via freq finding
+helpers.
+
+The OPP core provides support for the platforms to provide config_clks
+helpers now, lets use them instead of devm_pm_opp_of_add_table_noclk()
+to achieve the same result, as the OPP core won't parse the DT's
+"opp-hz" property if the clock isn't provided.
+
+diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+index 65ecf17a36f4..0e0a4058f45c 100644
+--- a/drivers/devfreq/tegra30-devfreq.c
++++ b/drivers/devfreq/tegra30-devfreq.c
+@@ -821,6 +821,15 @@ static int devm_tegra_devfreq_init_hw(struct device *dev,
+ 	return err;
+ }
+ 
++static int tegra_devfreq_config_clks_nop(struct device *dev,
++					 struct opp_table *opp_table,
++					 struct dev_pm_opp *opp, void *data,
++					 bool scaling_down)
++{
++	/* We want to skip clk configuration via dev_pm_opp_set_opp() */
++	return 0;
++}
++
+ static int tegra_devfreq_probe(struct platform_device *pdev)
+ {
+ 	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+@@ -830,6 +839,13 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 	unsigned int i;
+ 	long rate;
+ 	int err;
++	const char *clk_names[] = { "actmon", NULL };
++	struct dev_pm_opp_config config = {
++		.supported_hw = &hw_version,
++		.supported_hw_count = 1,
++		.clk_names = clk_names,
++		.config_clks = tegra_devfreq_config_clks_nop,
++	};
+ 
+ 	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
+ 	if (!tegra)
+@@ -874,13 +890,13 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 		return err;
+ 	}
+ 
+-	err = devm_pm_opp_set_supported_hw(&pdev->dev, &hw_version, 1);
++	err = devm_pm_opp_set_config(&pdev->dev, &config);
+ 	if (err) {
+-		dev_err(&pdev->dev, "Failed to set supported HW: %d\n", err);
++		dev_err(&pdev->dev, "Failed to set OPP config: %d\n", err);
+ 		return err;
+ 	}
+ 
+-	err = devm_pm_opp_of_add_table_noclk(&pdev->dev, 0);
++	err = devm_pm_opp_of_add_table_indexed(&pdev->dev, 0);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to add OPP table: %d\n", err);
+ 		return err;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 94c19e9b8cbf..03283ada3341 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2142,7 +2142,7 @@ static int _opp_set_clknames(struct opp_table *opp_table, struct device *dev,
+ 		count = 1;
+ 
+ 	/* Fail early for invalid configurations */
+-	if (!count || (config_clks && count == 1) || (!config_clks && count > 1))
++	if (!count || (!config_clks && count > 1))
+ 		return -EINVAL;
+ 
+ 	/* Another CPU that shares the OPP table has set the clkname ? */
+@@ -2168,10 +2168,12 @@ static int _opp_set_clknames(struct opp_table *opp_table, struct device *dev,
+ 	}
+ 
+ 	opp_table->clk_count = count;
++	opp_table->config_clks = config_clks;
+ 
+ 	/* Set generic single clk set here */
+ 	if (count == 1) {
+-		opp_table->config_clks = _opp_config_clk_single;
++		if (!opp_table->config_clks)
++			opp_table->config_clks = _opp_config_clk_single;
+ 
+ 		/*
+ 		 * We could have just dropped the "clk" field and used "clks"
+@@ -2186,8 +2188,6 @@ static int _opp_set_clknames(struct opp_table *opp_table, struct device *dev,
+ 		 * too.
+ 		 */
+ 		opp_table->clk = opp_table->clks[0];
+-	} else {
+-		opp_table->config_clks = config_clks;
+ 	}
+ 
+ 	return 0;
