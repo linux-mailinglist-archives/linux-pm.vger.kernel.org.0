@@ -2,119 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CC356568B
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 15:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0345656D4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 15:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbiGDNHp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 09:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S233622AbiGDNRk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 09:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234782AbiGDNHm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 09:07:42 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27217FD32
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 06:07:18 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id k14so8542985plh.4
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 06:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9vSwpNfijyGK+xrrZ4ktPT+fDOfewidBPv0KVUyPN8w=;
-        b=Daog+0QETcPjLevzyo5ThG79RtkL0CqCom7hkuuYfksUjPFSbwWnYTNzUMbILHd3DI
-         NF1Qu78ynNuVBxEGzjJEW2qnzI3y0NlEbiFDJGw/MChBXZLPJDw4s259eT+D8Q2dqa2O
-         yOnCOXah3RBd3klHMY5xP1wra1/75G4UsvbFKuZDY4PSjMixVMfunsFERDgtnueWwMV3
-         ND/H2alGaUoJjcDfh6LnEOhOt/TSLoZggVW3qSZeSBlH4a3TDZNNpyT0qs1Ol4svOKNy
-         uWbzHe1aZIJfglIzmsFY1d/CanOtzrCclAfIoT6/1GdK1Tjs+VC2knvI6NRXWMjNBO/8
-         uJEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9vSwpNfijyGK+xrrZ4ktPT+fDOfewidBPv0KVUyPN8w=;
-        b=QXFin62pbAfKoW3ISUtpum0nShXeDVZ/6zbC5fwBJ17gbbu1ffl1WolfC9VlIN0JDm
-         DwEuepMoTMl2SWW7LIlhbX+TV68IqlNLaUFGPgZeuzHo4GDSBfsymgW43R0ldUoPwvr2
-         vzpZOlra2H8YhTMKWVSlv966i98/SbRvan8yHgnaWFiIGh1zs8b//Ry9Q1Q0eTHg0f1Y
-         3VJJypGfDdI/rL0k9I9f4MvCDZ+xnk74KgGScQyLPZTVT35GKSJO54+6d626U/Rp3nml
-         e+fxg/gmbczFCXI8rvqLeoiaHTNhcNm0DhbAuyL9+yCMZIeFjCNj3WMGre33aMoGa0Pi
-         rr1g==
-X-Gm-Message-State: AJIora+4O2lXf1R4D60Yi9wYZMOo+KnvReWJXeP82G4cTTdEoLlMd2j0
-        0/2JwsfaeBOrgvThJ1rkG94wiQ==
-X-Google-Smtp-Source: AGRyM1u4sHIQ7MddMLsKSjsK4IcE4neuK6lXp6uptFSzLUxcH3x1D2Q7Xm2DlPLadoDisFpUznRMQw==
-X-Received: by 2002:a17:903:1108:b0:168:fa61:1456 with SMTP id n8-20020a170903110800b00168fa611456mr36044412plh.162.1656940037531;
-        Mon, 04 Jul 2022 06:07:17 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([154.3.32.171])
-        by smtp.gmail.com with ESMTPSA id 185-20020a6205c2000000b005284d10d8f6sm4577395pff.215.2022.07.04.06.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 06:07:17 -0700 (PDT)
-Date:   Mon, 4 Jul 2022 21:07:12 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: Re: [PATCH v3 1/5] dt-bindings: interconnect: Update property for
- icc-rpm path tag
-Message-ID: <20220704130712.GD659023@leoy-ThinkPad-X240s>
-References: <20220704093029.1126609-1-leo.yan@linaro.org>
- <20220704093029.1126609-2-leo.yan@linaro.org>
- <18f1ee4a-5787-40d7-2eb5-50a43298845d@linaro.org>
+        with ESMTP id S233834AbiGDNRh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 09:17:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2567BF4A;
+        Mon,  4 Jul 2022 06:17:35 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4BB8166015BA;
+        Mon,  4 Jul 2022 14:17:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656940654;
+        bh=jM53Mho55XJNAJOjfJCae7IdDAjzaVZy7HpFUzPGAPo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cSZJanOk+FjZtVbkDhVcXylgobp5ueC046dvJyNpKa31imRMw/nPZU/X1605BkALH
+         zEZwloLad0acLGq6g9C5rTWkEwOSdpVDQwOMz6paZV67j0ysaXykc9d2lD8LPIRwuq
+         lknwMi9xyVFdLpLbdji+z07pAASwr0gGCm+psnS89ok4uHgzSNdTeOGKOtvgAat6mV
+         A06czF/ZjTlL6eoKT9HFsJmIbuvfjAmUGbv1yIwjIW4e9E5sfTW5C+Cyx8yd2PWZH8
+         92dQy8HDGGapvNje3wZJ62kgRx6TaoEzAkPgNT3QEE9hw0SnPXXkgnaeqGLFPktiZJ
+         IkXWtnWoKqNiA==
+Message-ID: <58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com>
+Date:   Mon, 4 Jul 2022 16:17:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <18f1ee4a-5787-40d7-2eb5-50a43298845d@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
+ <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
+ <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
+ <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
+ <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
+ <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
+ <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
+ <20220630095245.otvo53ezd4avoujw@vireshk-i7>
+ <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
+ <20220630101540.5dafkegrmcattt2c@vireshk-i7>
+ <20220704120915.s3ermueulcofg7nj@vireshk-i7>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220704120915.s3ermueulcofg7nj@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 02:47:13PM +0200, Krzysztof Kozlowski wrote:
-> On 04/07/2022 11:30, Leo Yan wrote:
-> > To support path tag in icc-rpm driver, the "#interconnect-cells"
-> > property is updated as enumerate values: 1 or 2.  Setting to 1 means
-> > it is compatible with old DT binding that interconnect path only
-> > contains node id; if set to 2 for "#interconnect-cells" property, then
-> > the second specifier is used as a tag (e.g. vote for which buckets).
-> > 
-> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> > ---
-> >  .../devicetree/bindings/interconnect/qcom,rpm.yaml         | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> > index 8a676fef8c1d..cdfe419e7339 100644
-> > --- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> > @@ -45,7 +45,12 @@ properties:
-> >        - qcom,sdm660-snoc
-> >  
-> >    '#interconnect-cells':
-> > -    const: 1
-> > +    description: |
-> > +      Number of interconnect specifier. Value: <1> is one cell in a
-> > +      interconnect specifier for the interconnect node id, <2> requires
-> > +      the interconnect node id and an extra path tag.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
+On 7/4/22 15:09, Viresh Kumar wrote:
+> On 30-06-22, 15:45, Viresh Kumar wrote:
+>> On 30-06-22, 12:57, Dmitry Osipenko wrote:
+>>> The set_freq_table() gets available freqs using
+>>> dev_pm_opp_find_freq_ceil() iteration.
+>>>
+>>> The first dev_pm_opp_find_freq_ceil(freq=0) succeeds and returns ceil
+>>> freq=1.
+>>
+>> I don't see how this can possibly happen. One possibility is that freq
+>> is set to 0 and one the next loop you do freq++, which can make it 1.
+>>
+>>> The second dev_pm_opp_find_freq_ceil(freq=1) fails with -ERANGE.
+>>
+>> Even if we send freq = 1, I don't see how we can get ERANGE if the OPP
+>> table is properly initialized.
+>>
+>>> I haven't looked yet at why freq is set to 1.
+Actually the freq was 0 and it was 1 on the next loop like you suggested.
+
+>> Thanks, but I would need some help to get it debugged.
 > 
-> Ah, too fast.  No ack. This ref is also pointless and not explained in
-> commit msg.
+> Hi Dmitry,
+> 
+> I am looking to send another version of this now and soon merge this
+> in for 5.20-rc1. Can you please help figure out what's going on here ?
 
-I referred other DT binding file for adding $ref to specify property
-type [1], so it's confused why it's pointless, anyway, I can drop $ref
-in next spin.
+Previously, the _read_opp_key() was always reading the opp-hz. Now it
+skips reading the rates in _read_rate() because opp_table->clk_count=0
+for the tegra30-devfreq driver the uses devm_pm_opp_of_add_table_noclk().
 
-Thanks a lot for the review!
-
-Leo
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/arm/l2c2x0.yaml#n153
+-- 
+Best regards,
+Dmitry
