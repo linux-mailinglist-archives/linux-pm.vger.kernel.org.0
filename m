@@ -2,60 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93D65658B4
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E75C5658E4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Jul 2022 16:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbiGDOfN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 10:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S229896AbiGDOq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 10:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232123AbiGDOfM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:35:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 081F41136;
-        Mon,  4 Jul 2022 07:35:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBF9423A;
-        Mon,  4 Jul 2022 07:35:10 -0700 (PDT)
-Received: from [10.57.41.70] (unknown [10.57.41.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 419853F66F;
-        Mon,  4 Jul 2022 07:35:07 -0700 (PDT)
-Message-ID: <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
-Date:   Mon, 4 Jul 2022 15:35:05 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
- NULL terminated list
-Content-Language: en-GB
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        with ESMTP id S233644AbiGDOqY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 10:46:24 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17C9EE13
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 07:46:21 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id fw3so17105643ejc.10
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 07:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M+qVlZDYaAoCOVBpeXTz8LxMK35K+S3D3doABPbbA6U=;
+        b=O+YOPzG3QC5vCWWZEKLqaxGKZYtynjFnz6aQS6ibqsWEEVI11WzP+tP8h79MvxyvEI
+         VQtFQjNwpI05jrdPqDiyxAQHNM3HU7V8eANnSthLH3fjHpazQEeiDqN2azM+oOMZ8r20
+         bPXVCzPILpA7aqpUJZRdnrfD2lV/0VHDvK4CrObBHe79Zh2zhBt+2YqG94wstcDMwAqa
+         FSWz/w+dyw54CtjOx1Ox1XnBKF3CIQAfYSmrBxfJPLLOs+k2F0rZd7gG44L+8T8UEJQC
+         fUc38jfZwXld6BQy8XYnBSJWc44bEPnxhJlix/vdLigKWD5MmkdAPjKkZnGomLknYe+m
+         6BPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M+qVlZDYaAoCOVBpeXTz8LxMK35K+S3D3doABPbbA6U=;
+        b=wM6y3dVUT5hbM1GW1zU1hqbYkYIbSX0hRpD5sTMYVii/yK2pg03pTY/rOz5yxWn9O6
+         RppW865ugDu5rbg9EIX8V1Z9Hlq0hNJ+XPil6LPssZYzJ2XZlrD/7+LP/Vdw5sY5LIHi
+         15jCY9ZnfHUF8ReJgtuOkI9mpxFczoc6cZ6lfR8MBMXV1hsmK3XJN/lhUWwDagwEsImw
+         9VEJdHMWdWzAldYrpnzEuDYfxbcwGtphF6yN2obHKjeX+cVJUuL/MDiBlCvT01WgDPHX
+         S0nqYd1kFamR3HoNhWl7ykRaua6NCUSMzsx1diIS587T44RhyYI9vqWQZZc7A3s0Ax5/
+         YK2Q==
+X-Gm-Message-State: AJIora89G8l8pp5ziQhAT6wG7gU5e+e1eck6nWXmqinDu5yMO+xLkT8I
+        DGEu4II4DbDhPwGA5US5UmMQ
+X-Google-Smtp-Source: AGRyM1t89RbesStqt7Tieom5AmKNJLEeLrY0+FlIzuKMV7VyOhtKEjj91xD5EazoVDBn2kcBfXPj4Q==
+X-Received: by 2002:a17:906:6a11:b0:726:97b8:51e9 with SMTP id qw17-20020a1709066a1100b0072697b851e9mr29599521ejc.115.1656945980259;
+        Mon, 04 Jul 2022 07:46:20 -0700 (PDT)
+Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
+        by smtp.gmail.com with ESMTPSA id pv1-20020a170907208100b00726abf9cd8esm9904462ejb.125.2022.07.04.07.46.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 07:46:19 -0700 (PDT)
+Date:   Mon, 4 Jul 2022 14:46:15 +0000
+From:   Wedson Almeida Filho <wedsonaf@google.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org
-References: <cover.1656935522.git.viresh.kumar@linaro.org>
- <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+Message-ID: <YsL9Ny3Vx9Q2uvpJ@google.com>
+References: <000000000000d9ff3a05bb37069e@google.com>
+ <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
+ <YsKW6VvWqvcMRBSl@kroah.com>
+ <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
+ <YsLIepAXeBKT0AF/@kroah.com>
+ <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+ <YsLkJ1LMMnM9Mo0K@google.com>
+ <19598d43-de61-c663-25e8-17b6f5d5ef80@I-love.SAKURA.ne.jp>
+ <YsLx5JckMbx/4V4/@google.com>
+ <951dd1a9-2b48-fb0c-9ee2-aac2b8170c2c@I-love.SAKURA.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <951dd1a9-2b48-fb0c-9ee2-aac2b8170c2c@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,168 +82,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/07/2022 13:07, Viresh Kumar wrote:
-> Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
-> instead of making the callers keep the two parameters in sync, which
-> creates an opportunity for bugs to get in.
+On Mon, Jul 04, 2022 at 11:07:54PM +0900, Tetsuo Handa wrote:
+> On 2022/07/04 22:57, Wedson Almeida Filho wrote:
+> > On Mon, Jul 04, 2022 at 10:48:32PM +0900, Tetsuo Handa wrote:
+> >> On 2022/07/04 21:59, Wedson Almeida Filho wrote:
+> >>>> @@ -139,6 +139,10 @@ static int misc_open(struct inode *inode, struct file *file)
+> >>>>  
+> >>>>  	err = 0;
+> >>>>  	replace_fops(file, new_fops);
+> >>>> +	if (iter->unlocked_open && file->f_op->open) {
+> >>>> +		mutex_unlock(&misc_mtx);
+> >>>> +		return file->f_op->open(inode, file);
+> >>>> +	}
+> >>>
+> >>> One of the invariants of miscdev is that once misc_deregister() returns,
+> >>> no new calls to f_op->open() are made. (Although, of course, you can
+> >>> still have open files but that's a whole different problem.)
+> >>
+> >> The point of this change is that file->f_op after mutex_unlock(&misc_mtx) is
+> >>  from new_fops which is guaranteed to hold a ref on "struct file_operations"
+> >> via new_fops = fops_get("struct miscdevice"->fops).
+> >> That is, a module ref remains valid even after mutex_unlock(&misc_mtx).
+> >>
+> >> And as with major_names_lock case quoted below, this change assumes that
+> >> misc_deregister() is called from module's __exit function, and fops_get()
+> >> is preventing the module owning new_fops from calling __exit function.
+> > 
+> > Your assumption is not sound. misc_deregister() can be (and is)
+> > legitimately called from other places, for example, a driver's remove()
+> > callback. In fact, when I grep for misc_deregister(), the second
+> > instance is such a case.
 > 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
->  drivers/cpufreq/ti-cpufreq.c                |  7 +++----
->  drivers/devfreq/exynos-bus.c                |  4 ++--
->  drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
->  drivers/gpu/drm/panfrost/panfrost_devfreq.c |  4 ++--
->  drivers/opp/core.c                          | 18 ++++++++++++------
->  drivers/soc/tegra/pmc.c                     |  4 ++--
->  include/linux/pm_opp.h                      |  9 ++++-----
->  8 files changed, 31 insertions(+), 27 deletions(-)
-> 
-[...]
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> index 194af7f607a6..12784f349550 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> @@ -91,6 +91,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->  	struct devfreq *devfreq;
->  	struct thermal_cooling_device *cooling;
->  	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
-> +	const char *supplies[] = { pfdev->comp->supply_names[0], NULL };
->  
->  	if (pfdev->comp->num_supplies > 1) {
->  		/*
-> @@ -101,8 +102,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->  		return 0;
->  	}
->  
-> -	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
-> -					 pfdev->comp->num_supplies);
-> +	ret = devm_pm_opp_set_regulators(dev, supplies);
->  	if (ret) {
->  		/* Continue if the optional regulator is missing */
->  		if (ret != -ENODEV) {
+> OK, the frequency of calling misc_deregister() can be much higher than
+> unregister_blkdev(), which means that misc_mtx is more prone to trigger
+> hung task warnings. I'm more inclined to avoid sleeping with misc_mtx held.
 
-I have to say the 'new improved' list ending with NULL approach doesn't
-work out so well for Panfrost. We already have to have a separate
-'num_supplies' variable for devm_regulator_bulk_get() /
-regulator_bulk_{en,dis}able(), so the keeping everything in sync
-argument is lost here.
+Tetsuo, I'm sorry if I'm not making myself clear. I'm arguing that your
+patch is buggy and therefore should not be accepted.
 
-I would suggest added the NULL on the end of the lists in panfrost_drv.c
-but then it would break the use of ARRAY_SIZE() to automagically keep
-the length correct...
+Here's one example of an issue that your patch would introduce. In
+binder init, we have the following error path:
 
-For now the approach isn't too bad because Panfrost doesn't yet support
-enabling devfreq with more than one supply. But that array isn't going
-to work so nicely when that restriction is removed.
+err_init_binder_device_failed:
+        hlist_for_each_entry_safe(device, tmp, &binder_devices, hlist) {
+                misc_deregister(&device->miscdev);
+                hlist_del(&device->hlist);
+                kfree(device);
+        }
 
-The only sane way I can see of handling this in Panfrost would be
-replicating the loop to count the supplies in the Panfrost code which
-would allow dropping num_supplies from struct panfrost_compatible and
-then supply_names in the same struct could be NULL terminated ready for
-devm_pm_opp_set_regulators().
+Note that open() for binder touches the `device` pointer. If open() can
+be called _after_ misc_deregister(), then there is a race condition
+where open() is touching `device` while this error path is freeing it.
 
-Steve
-
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index e166bfe5fc90..4e4593957ec5 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2105,13 +2105,20 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_put_prop_name);
->   * This must be called before any OPPs are initialized for the device.
->   */
->  struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
-> -					    const char * const names[],
-> -					    unsigned int count)
-> +					    const char * const names[])
->  {
->  	struct dev_pm_opp_supply *supplies;
-> +	const char * const *temp = names;
->  	struct opp_table *opp_table;
->  	struct regulator *reg;
-> -	int ret, i;
-> +	int count = 0, ret, i;
-> +
-> +	/* Count number of regulators */
-> +	while (*temp++)
-> +		count++;
-> +
-> +	if (!count)
-> +		return ERR_PTR(-EINVAL);
->  
->  	opp_table = _add_opp_table(dev, false);
->  	if (IS_ERR(opp_table))
-> @@ -2236,12 +2243,11 @@ static void devm_pm_opp_regulators_release(void *data)
->   * Return: 0 on success and errorno otherwise.
->   */
->  int devm_pm_opp_set_regulators(struct device *dev,
-> -			       const char * const names[],
-> -			       unsigned int count)
-> +			       const char * const names[])
->  {
->  	struct opp_table *opp_table;
->  
-> -	opp_table = dev_pm_opp_set_regulators(dev, names, count);
-> +	opp_table = dev_pm_opp_set_regulators(dev, names);
->  	if (IS_ERR(opp_table))
->  		return PTR_ERR(opp_table);
->  
-> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-> index 5611d14d3ba2..6a4b8f7e7948 100644
-> --- a/drivers/soc/tegra/pmc.c
-> +++ b/drivers/soc/tegra/pmc.c
-> @@ -1384,7 +1384,7 @@ tegra_pmc_core_pd_opp_to_performance_state(struct generic_pm_domain *genpd,
->  static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
->  {
->  	struct generic_pm_domain *genpd;
-> -	const char *rname = "core";
-> +	const char *rname[] = { "core", NULL};
->  	int err;
->  
->  	genpd = devm_kzalloc(pmc->dev, sizeof(*genpd), GFP_KERNEL);
-> @@ -1395,7 +1395,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
->  	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
->  	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
->  
-> -	err = devm_pm_opp_set_regulators(pmc->dev, &rname, 1);
-> +	err = devm_pm_opp_set_regulators(pmc->dev, rname);
->  	if (err)
->  		return dev_err_probe(pmc->dev, err,
->  				     "failed to set core OPP regulator\n");
-> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-> index 6708b4ec244d..4c490865d574 100644
-> --- a/include/linux/pm_opp.h
-> +++ b/include/linux/pm_opp.h
-> @@ -159,9 +159,9 @@ void dev_pm_opp_put_supported_hw(struct opp_table *opp_table);
->  int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
->  struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name);
->  void dev_pm_opp_put_prop_name(struct opp_table *opp_table);
-> -struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
-> +struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[]);
->  void dev_pm_opp_put_regulators(struct opp_table *opp_table);
-> -int devm_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
-> +int devm_pm_opp_set_regulators(struct device *dev, const char * const names[]);
->  struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name);
->  void dev_pm_opp_put_clkname(struct opp_table *opp_table);
->  int devm_pm_opp_set_clkname(struct device *dev, const char *name);
-> @@ -379,7 +379,7 @@ static inline struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, con
->  
->  static inline void dev_pm_opp_put_prop_name(struct opp_table *opp_table) {}
->  
-> -static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count)
-> +static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[])
->  {
->  	return ERR_PTR(-EOPNOTSUPP);
->  }
-> @@ -387,8 +387,7 @@ static inline struct opp_table *dev_pm_opp_set_regulators(struct device *dev, co
->  static inline void dev_pm_opp_put_regulators(struct opp_table *opp_table) {}
->  
->  static inline int devm_pm_opp_set_regulators(struct device *dev,
-> -					     const char * const names[],
-> -					     unsigned int count)
-> +					     const char * const names[])
->  {
->  	return -EOPNOTSUPP;
->  }
-
+Right now it isn't a bug because misc_deregister() guarantees that after
+it returns, open() won't be called anymore. Your patch breaks this
+guarantee.
