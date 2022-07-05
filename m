@@ -2,78 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330A356621F
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 06:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B9056626E
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 06:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiGEEI1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 00:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
+        id S229525AbiGEEep (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 00:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233778AbiGEEI0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 00:08:26 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A78EAE
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 21:08:25 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id w24so10979559pjg.5
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 21:08:25 -0700 (PDT)
+        with ESMTP id S229504AbiGEEeo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 00:34:44 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174FB13CF6
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 21:34:43 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id fz10so4903546pjb.2
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 21:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=jlwigwlQcoYrdhkSBW2yT+ZrjXNWxDoG9Qdpdv63Uew=;
-        b=bOFzd4V7IdTxyt1oHggTxGQErW7qbQZy3wf3TXGcorZf/khYnmfvymzgzeLCK7zxGr
-         qWUS67+BzgMhud6EP93G5FhLZe6JoTJqSZskRMV0fuXBcEe/c/Y9y3/Nm7nDkOgQN8Ef
-         ZH5QHllrTye9o5kvP3A65PQHqn6pJujKXzoogqxmAoknTGiiULqDvZFgxFYhcYFzr4u1
-         Xh7yjcqGW/4KkoNTDmVDk3HBAyqbtcgNWNvDY7HtB0qPEn7kqI6AFG+Y/sfmJukGklfI
-         2bpW0Xt3fvffhdLk+Vz/CKAwHA0yZm68G0IK+qL89On1kJEoIdHrJMAxrWa/bNluCt3d
-         budA==
+        bh=tmakuE4H8rZY3d6iU39dHrEeioyPOU2VRNgXbaFPqgw=;
+        b=u7aod0CrQMXqVD1ebu7kjSt/WcQQQkg7j6oHslRmkt+QTw/T612mRYZc8qxkE8om3O
+         EQM+h21JvLKnCzpiIq4xgwUXzQLpQJOdCt1694l5ZM1mQPkjlLZ33DO+Dp91Uof0icTc
+         2eCH31nP6U7iVCED/tU23T/actjjYFmw5UZLP7t0DKiBKU/nAR7cp0MXJlqAa8wI742A
+         EQR0aX38sVjulvZcqY4l2O71LHN3k6M9c36toeseQylQoLjWGDZYqtxqvh3+p0Tozz/N
+         XPHPZJPQNycYMom8jxQv3xsFNeAKZLSk+yfh0F9BKr8UZwwsSvArNI8r2sZRhz3icFzn
+         3CaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=jlwigwlQcoYrdhkSBW2yT+ZrjXNWxDoG9Qdpdv63Uew=;
-        b=indHYrLKerk146uOUY3xt5c8YNpwoa0Ozj2gwFi1mXxlt7HSsvI2D8HdkQi4TKMqRk
-         8JT7dVQgsxajcznfsuNTH8ffu/QdPx4ZUp7Q3e8mUORATMtr8crOOK/Xk5cF1WOKeyK9
-         qy5/Ot9E+z/y2rLQM6xakqIW158BFiEP9r2R6GVWEBVwD5+p16enNAMXQPvqnUMFgcOV
-         SHESQkLt1PsqWOO3VugR3D0p+o/2P/Jee6z9RgruAMfuMHSgVrzaiI9zEjc8F2Mv+Wmx
-         IjcTAfVV2jg19xXKUiP0k7awaS3td7s0NFLDBSSxQjLNgmkPZSIKknkXwEdxLrHVgvy8
-         mujw==
-X-Gm-Message-State: AJIora9KC5hNq73doHjLg/0CWtTORW8fRP/jkBRbVz1ggr6Gof7BnCAX
-        vJvwfE+HaGTwY4S6ZVUeEmK8dw==
-X-Google-Smtp-Source: AGRyM1tNI2QNHBytqnLJKVyWohCZSupL/dSQ4ZO3W5+QzMRn/9xTNXOmN0sXqWjo7ei3cYWMv/T6NA==
-X-Received: by 2002:a17:902:c405:b0:16b:e7aa:2f22 with SMTP id k5-20020a170902c40500b0016be7aa2f22mr6341600plk.170.1656994104538;
-        Mon, 04 Jul 2022 21:08:24 -0700 (PDT)
+        bh=tmakuE4H8rZY3d6iU39dHrEeioyPOU2VRNgXbaFPqgw=;
+        b=MS+EUDNZRhyNlAPw/8/IVKG00sH3Pj19NI1XYyqeXiGuME+X0guuSzyFDz0E4/LVou
+         IXsG3qEJ6LQX0DSeBsomqwQouxv8uKg81ByJ0seS0O6O5YSKMaCigY9SUi9QensIWQWh
+         q4q68QrW7zONuTkCZgmjU7+AVxX1Npv/YjhS9Y3lXswIwkbt2Cq8DNml0O+I4I1OR5/Z
+         NevJ4nZv0hqMRuTpE646qEDtIOYdhFtd5MwgXdpsu2mcIwM/G8zhakdjSbNH1i1wXco0
+         ZEJWSjkSFegriSSQaLHxcF9/TIf8CwbLpBRKnUhOzgZJHUHP5Fa1DEJNjbDRLCWMP62q
+         jfbg==
+X-Gm-Message-State: AJIora9YTUUBXk1MBrBJ0HJd58rG6M3aHa7dBdFTXjtQIvCB2O0QnXht
+        X3WwwdfREimFuUSNwgxHxuhF8w==
+X-Google-Smtp-Source: AGRyM1sRTY3jhmXML4zUAHI23oIyvbgNG1ONSMMqox+hipkmWXEtiTEid5mCOhRsoVVHI5UrE7Q83A==
+X-Received: by 2002:a17:90b:4a4f:b0:1ef:90fb:35a5 with SMTP id lb15-20020a17090b4a4f00b001ef90fb35a5mr5846805pjb.161.1656995682324;
+        Mon, 04 Jul 2022 21:34:42 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id p22-20020a1709027ed600b0016a0fe1a1fbsm22257702plb.220.2022.07.04.21.08.23
+        by smtp.gmail.com with ESMTPSA id p26-20020a056a0026da00b005251e2b53acsm21651540pfw.116.2022.07.04.21.34.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 21:08:23 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 09:38:21 +0530
+        Mon, 04 Jul 2022 21:34:41 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 10:04:39 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
+To:     Steven Price <steven.price@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Message-ID: <20220705040821.w5hrj5qmm6tbtpap@vireshk-i7>
-References: <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
- <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
- <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
- <20220630095245.otvo53ezd4avoujw@vireshk-i7>
- <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
- <20220630101540.5dafkegrmcattt2c@vireshk-i7>
- <20220704120915.s3ermueulcofg7nj@vireshk-i7>
- <58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com>
- <20220704155225.n4kmgwnvsuksbo2p@vireshk-i7>
- <7c661c98-0cd2-1732-d60c-3202643926a5@collabora.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
+ NULL terminated list
+Message-ID: <20220705043439.xlrxusxrhwjupiyt@vireshk-i7>
+References: <cover.1656935522.git.viresh.kumar@linaro.org>
+ <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+ <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7c661c98-0cd2-1732-d60c-3202643926a5@collabora.com>
+In-Reply-To: <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -84,40 +89,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04-07-22, 21:04, Dmitry Osipenko wrote:
-> On 7/4/22 18:52, Viresh Kumar wrote:
-> > On 04-07-22, 16:17, Dmitry Osipenko wrote:
-> >> Actually the freq was 0 and it was 1 on the next loop like you suggested.
-> >>
-> >> Previously, the _read_opp_key() was always reading the opp-hz. Now it
-> >> skips reading the rates in _read_rate() because opp_table->clk_count=0
-> >> for the tegra30-devfreq driver the uses devm_pm_opp_of_add_table_noclk().
-> > 
-> > This is exactly what I wrote in an earlier email :)
-> > 
-> > Anyway, I have pushed two patches on top of my opp/linux-next branch
-> > and they should fix it in a good way now I suppose. Can you please
-> > give that a try.
-> > 
-> > This is how the diff looks like:
-> > 
-> > PM / devfreq: tegra30: Register config_clks helper
-> > 
-> > There is a corner case with Tegra30, where we want to skip clk
-> > configuration via dev_pm_opp_set_opp(), but still want the OPP core to
-> > read the "opp-hz" property so we can find the right OPP via freq finding
-> > helpers.
-> > 
-> > The OPP core provides support for the platforms to provide config_clks
-> > helpers now, lets use them instead of devm_pm_opp_of_add_table_noclk()
-> > to achieve the same result, as the OPP core won't parse the DT's
-> > "opp-hz" property if the clock isn't provided.
+On 04-07-22, 15:35, Steven Price wrote:
+> I have to say the 'new improved' list ending with NULL approach doesn't
+> work out so well for Panfrost. We already have to have a separate
+> 'num_supplies' variable for devm_regulator_bulk_get() /
+> regulator_bulk_{en,dis}able(), so the keeping everything in sync
+> argument is lost here.
 > 
-> Works, thanks you!
-> 
-> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> I would suggest added the NULL on the end of the lists in panfrost_drv.c
+> but then it would break the use of ARRAY_SIZE() to automagically keep
+> the length correct...
 
-Finally, thanks a lot Dmitry :)
+Actually we can still make it work.
+
+> For now the approach isn't too bad because Panfrost doesn't yet support
+> enabling devfreq with more than one supply. But that array isn't going
+> to work so nicely when that restriction is removed.
+> 
+> The only sane way I can see of handling this in Panfrost would be
+> replicating the loop to count the supplies in the Panfrost code which
+> would allow dropping num_supplies from struct panfrost_compatible and
+> then supply_names in the same struct could be NULL terminated ready for
+> devm_pm_opp_set_regulators().
+
+Or doing this, which will simplify both the cases.
+
+diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+index 7fcbc2a5b6cd..b3b55565b8ef 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_drv.c
++++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+@@ -625,24 +625,29 @@ static int panfrost_remove(struct platform_device *pdev)
+        return 0;
+ }
+ 
+-static const char * const default_supplies[] = { "mali" };
++/*
++ * The OPP core wants the supply names to be NULL terminated, but we need the
++ * correct num_supplies value for regulator core. Hence, we NULL terminate here
++ * and then initialize num_supplies with ARRAY_SIZE - 1.
++ */
++static const char * const default_supplies[] = { "mali", NULL };
+ static const struct panfrost_compatible default_data = {
+-       .num_supplies = ARRAY_SIZE(default_supplies),
++       .num_supplies = ARRAY_SIZE(default_supplies) - 1,
+        .supply_names = default_supplies,
+        .num_pm_domains = 1, /* optional */
+        .pm_domain_names = NULL,
+ };
+ 
+ static const struct panfrost_compatible amlogic_data = {
+-       .num_supplies = ARRAY_SIZE(default_supplies),
++       .num_supplies = ARRAY_SIZE(default_supplies) - 1,
+        .supply_names = default_supplies,
+        .vendor_quirk = panfrost_gpu_amlogic_quirk,
+ };
+ 
+-static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
++static const char * const mediatek_mt8183_supplies[] = { "mali", "sram", NULL };
+ static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
+ static const struct panfrost_compatible mediatek_mt8183_data = {
+-       .num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
++       .num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies) - 1,
+        .supply_names = mediatek_mt8183_supplies,
+        .num_pm_domains = ARRAY_SIZE(mediatek_mt8183_pm_domains),
+        .pm_domain_names = mediatek_mt8183_pm_domains,
 
 -- 
 viresh
