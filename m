@@ -2,139 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B439567147
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 16:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A71567172
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 16:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiGEOiP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 10:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S229536AbiGEOre (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 10:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiGEOiO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 10:38:14 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F636257
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 07:38:13 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id s1so17857651wra.9
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 07:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LEr7rAT/dnyEPQvdO9AbnDAZNWNC1MOMxzJEHX4ciRw=;
-        b=yWHt0oSA5NN7wvK9dqmRUjAPfhTwMvVbR3r6dnaxMKKI3iMkztHCur6uCnCyDSZCnM
-         CmQFiFwYbiciwfwbd0yAldFCuRJJ+vM8umXOumxOySv/8JzJLxVD2t7smbq/CKRbJMha
-         ToZK+dtiLZlmjDobTzR8B5HTIB28hq53pn4OyjuWv9ud4k31Ns9dI3jMOEm3r0vcpTNu
-         NogQrZ+Y1jkD8zKUmuIZDg7BnITD9m+pT3voh5hu05KR/LMPbRHABrmZOBAOfJn6Jluv
-         DKwyOrMktNlhmN8aMySVT+XQuH0f9/kSEmDtFkc7oiB/erPXZpV4qirn/2sFsRrSXn7x
-         OxRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LEr7rAT/dnyEPQvdO9AbnDAZNWNC1MOMxzJEHX4ciRw=;
-        b=0EmXiWbwIjnsad1lC9HLcOFQ8Lthe0Yq4FFiTjQzTtg/7ClGzn5Qlns1CP7F737p8D
-         LO3gaz/i/IdFEAE2FcVVXlN43llrrFGE21Jh2ienK2g6qqxiXnsyltRy/9hFi4wFwPvu
-         tSdNHL4OCiX5ULQQk1k0bFLCOLVO4GFZ+o768gnNPWLPEvvGSEJyTWQO2x6T7DouPcy0
-         NqMw/l2yROWpcV5OzGf2uSyAM9zHc6+UfwOKSqFzabnwTaKykq5n6lH/OQSNErZjDUOR
-         hQY0KsGQKjI8X8onhGct/hCgmMDqOMN9xx2nerm6nZa5D7tg7cjb7d2lRH+m3OVO25NS
-         3fHA==
-X-Gm-Message-State: AJIora/XbSt8A16/fvxsgznjiLyB4hhShWqKiyUdoQykOLmp6cfcdAyb
-        aTPNyRR5fMgLxZAmGA17AqK9Uf9rBWtziA==
-X-Google-Smtp-Source: AGRyM1tjvSYRki+5ro8CHDLjpDR4wA1h8wunkn2tYRP1SfoMKQYJCzQ3sF7vShJ0hFSOY3ibuNwkfw==
-X-Received: by 2002:a5d:6d8b:0:b0:21b:9814:793d with SMTP id l11-20020a5d6d8b000000b0021b9814793dmr31966737wrs.344.1657031891814;
-        Tue, 05 Jul 2022 07:38:11 -0700 (PDT)
-Received: from google.com ([2.26.241.96])
-        by smtp.gmail.com with ESMTPSA id z11-20020a5d654b000000b0021b8c554196sm33955336wrv.29.2022.07.05.07.38.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 07:38:11 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 15:38:08 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        lars@metafoo.de, quic_gurus@quicinc.com,
-        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
-        michael@walle.cc, rdunlap@infradead.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 06/15] mfd: axp20x: Add support for AXP192
-Message-ID: <YsRM0O3MQmBO5WXK@google.com>
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
- <20220629143046.213584-7-aidanmacdonald.0x0@gmail.com>
- <YsQwHiVdooN2TWbh@google.com>
- <MiQPswErEouy9b8OQ6k5WeQxH3ENw94W@localhost>
+        with ESMTP id S229492AbiGEOrd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 10:47:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4B24E02B;
+        Tue,  5 Jul 2022 07:47:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60604D6E;
+        Tue,  5 Jul 2022 07:47:32 -0700 (PDT)
+Received: from [10.57.8.239] (unknown [10.57.8.239])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D9943F66F;
+        Tue,  5 Jul 2022 07:47:30 -0700 (PDT)
+Message-ID: <75eb1aff-6aa9-b393-efe4-c8559d5a2701@arm.com>
+Date:   Tue, 5 Jul 2022 15:47:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <MiQPswErEouy9b8OQ6k5WeQxH3ENw94W@localhost>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 05/12] thermal/core: Remove unneeded EXPORT_SYMBOLS
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Todd Kjos <tkjos@google.com>,
+        Wei Wang <wvw@google.com>,
+        Daniel Lezcano <daniel.lezcano@linexp.org>
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+ <20220703183059.4133659-6-daniel.lezcano@linexp.org>
+ <ad8dd950-9260-16b3-2134-72984e2ba261@arm.com>
+ <e2d81210-a969-fe9d-a4fb-1826c991fbce@linexp.org>
+ <f1cd08de-e8cb-18c2-9f92-01436810bc20@arm.com>
+ <CAJZ5v0iKcLM--L4ecoPDWpQ=8zgfeMxCku4zJt7hzVxSszgSNQ@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0iKcLM--L4ecoPDWpQ=8zgfeMxCku4zJt7hzVxSszgSNQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 05 Jul 2022, Aidan MacDonald wrote:
 
-> 
-> Lee Jones <lee.jones@linaro.org> writes:
-> 
-> > On Wed, 29 Jun 2022, Aidan MacDonald wrote:
-> >
-> >> The AXP192 PMIC is similar to the AXP202/AXP209, but with different
-> >> regulators, additional GPIOs, and a different IRQ register layout.
-> >> 
-> >> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> >> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> >> ---
-> >>  drivers/mfd/axp20x-i2c.c   |   2 +
-> >>  drivers/mfd/axp20x.c       | 152 +++++++++++++++++++++++++++++++++++++
-> >>  include/linux/mfd/axp20x.h |  84 ++++++++++++++++++++
-> >>  3 files changed, 238 insertions(+)
-> >> [...]
-> >> +static const struct regmap_irq_chip axp192_regmap_irq_chip = {
-> >> +	.name			= "axp192_irq_chip",
-> >> +	.status_base		= AXP192_IRQ1_STATE,
-> >> +	.ack_base		= AXP192_IRQ1_STATE,
-> >> +	.unmask_base		= AXP192_IRQ1_EN,
-> >> +	.init_ack_masked	= true,
-> >> +	.irqs			= axp192_regmap_irqs,
-> >> +	.num_irqs		= ARRAY_SIZE(axp192_regmap_irqs),
-> >> +	.num_regs		= 5,
-> >> +	.get_irq_reg		= axp192_get_irq_reg,
-> >
-> > Fix me:
-> >
-> > drivers/mfd/axp20x.c:634:35: error: initialization of 'unsigned int (*)(struct regmap_irq_chip_data *, unsigned int,  int)' from incompatible pointer type 'int (*)(unsigned int,  int)' [-Werror=incompatible-pointer-types]
-> >   634 |         .get_irq_reg            = axp192_get_irq_reg,
-> >       |                                   ^~~~~~~~~~~~~~~~~~
-> > drivers/mfd/axp20x.c:634:35: note: (near initialization for 'axp192_regmap_irq_chip.get_irq_reg')
-> >
-> 
-> This doesn't need fixing. You are missing the prerequisite patches.
-> 
-> -- snip --
-> Changes in v4:
-> * Drop regmap-irq patches and rebase on top of the regmap-irq
->   refactoring series[1], which implements the same functionality.
-> 
-> [1]: https://lore.kernel.org/lkml/20220623211420.918875-1-aidanmacdonald.0x0@gmail.com/
-> -- snip --
 
-> Perhaps I wasn't clear enough that it was a dependency, sorry for
-> any confusion.
+On 7/5/22 15:20, Rafael J. Wysocki wrote:
+> On Tue, Jul 5, 2022 at 9:30 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>>
+>> On 7/4/22 22:14, Daniel Lezcano wrote:
+>>> On 04/07/2022 09:35, Lukasz Luba wrote:
+>>>> Hi Daniel,
+>>>>
+>>>> (+Todd and Wei on CC)
+>>>>
+>>>>
+>>>> On 7/3/22 19:30, Daniel Lezcano wrote:
+>>>
+>>> [ ... ]
+>>>
+>>>>>    }
+>>>>> -EXPORT_SYMBOL(get_tz_trend);
+>>>
+>>> [ ... ]
+>>>
+>>>>>    }
+>>>>> -EXPORT_SYMBOL(thermal_cdev_update);
+>>>>
+>>>> I wouldn't remove that export. I can see in my Pixel6 modules dir, that
+>>>> it's called in 7 places.
+>>>>
+>>>> I assume that in Android world this is common use.
+>>>
+>>> It is not possible to do changes taking into consideration out of tree
+>>> code. Moreover there is logically no good reason to use the
+>>> thermal_cdev_update() function from outside of the thermal core code.
+>>>
+>>
+>> I see your point which is 'upstream'. On the other hand the mostly
+>> deployed kernel is in Android devices and that brings a lot to the
+>> community.
+>>
+>> This symbol might also be used by other distros which might have
+>> modules for some accelerators, which also support tricky cooling.
+>>
+>> I would keep it as is...
+> 
+> I think that the long-term goal is to reduce differences between the
+> mainline kernel and Android.  From this angle, it would be good if
+> Android was aware that the mainline did stuff especially for them and
+> making them carry an extra patch would go a long way towards that
+> purpose.
 
-Any idea why the regmap-irq patches weren't in -next?
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+It's hard to judge sometimes especially on those small bits.
+I've just pointed out and shared the info that this symbol is used.
+What you will do with this it's up to you. You and Daniel are the
+maintainers of this subsystems and have long-term plans for it.
+Todd and Wei are on CC, so they will know about this change.
+My job finishes here.
