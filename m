@@ -2,67 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABC356628B
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 06:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E6756629C
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 07:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiGEE5s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 00:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S229515AbiGEFH4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 01:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiGEE5r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 00:57:47 -0400
+        with ESMTP id S229448AbiGEFHz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 01:07:55 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0801CBCBB;
-        Mon,  4 Jul 2022 21:57:46 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6725B5C005A;
-        Tue,  5 Jul 2022 00:57:45 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDB013D06;
+        Mon,  4 Jul 2022 22:07:54 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8208B5C003B;
+        Tue,  5 Jul 2022 01:07:52 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 05 Jul 2022 00:57:45 -0400
+  by compute3.internal (MEProxy); Tue, 05 Jul 2022 01:07:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656997065; x=
-        1657083465; bh=lNiuLvBXQLvDbsAsBDhebXbFbPXkCEhA9xFI27g2xcU=; b=F
-        fh6wWiqLjHTaw6lmgr/TeXOOQy5g+UWpmxS7ijZG6EhSmXoeTctJ20XK0sl3djrF
-        q36fdCzVS7HLhK50vF37cOd9ANofwAie9wLvf0oJqDl1vLQIQONuvAL+g2Hmfir0
-        t0g7yr/ICxcJ0Tsy+9PMA/PzDRsJ21IcAJEt1PnRrGEI+IX2yuyzuu55j3FTb1bF
-        DidUsCkRrGXfOYp1EL/MLwelDXmtnFEfzfuP91RBiQqHWyNJKns8CBcq7jSaNLhN
-        wrPxuWu6iOsSdLBiH7qMWIv74ck2PCBM64FDdjxBPeBbhU8h01cmhpEBE+PA1bfN
-        7HbfLvQeDg0qFtBBsBh5g==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656997672; x=
+        1657084072; bh=9nY5RE/bGNXng/ITS0f9EUPsxcwltUGdSfZPvL271To=; b=T
+        9k1HVY0weVxBaMWNkBqWADMO9f51TEejqMhkprOAaWP7A+GsRVnwtSoMS6CODWNN
+        xcrAEAnHeIc5uCfJZ38Irt9v/MBuFIgtobkKO5l9Gy1b8MdpwSRfDBfrZ8Jge9LY
+        OxVgwJ3zNgUUdzdovDAvUaBe9mDEbgkuZ5/KOEz2r7xopV4WSIAqBgcgz7x3jZ5L
+        7gefundRif3T9n5pNfYJjodIi6ceVbypq8b6eedZ7R6K8Kkc6iqYdcswBMmSpyv/
+        y2CnHppqbMLfFF5a2aoKZysla6u0T66GuCthie4pk9HD2gXMXpGcED+RpFrkeGTh
+        F4zn1A99TlL8RiZdmmaYQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656997065; x=
-        1657083465; bh=lNiuLvBXQLvDbsAsBDhebXbFbPXkCEhA9xFI27g2xcU=; b=K
-        /CM9VDexsN1FKc+YzfKEfoG0a6LSzxV/xn/FN4vXS9vT2LE1Sd7AwMGLYxPays8/
-        SMLsxCCDrW3Am4Dr+dJ61wT0nbLzyVtZg2BXHZm3oS6sKzN0El6kdprHlqz9uItb
-        9Gdm9PG4g0/70tupf/5L/+SjPaq+T5R8QuQgEg2GZg3ezHZME0p8lfneiH1kVChf
-        mfn1RTgdb0oBnJ8/cDphuCoTluHJBu93OhT7aCx+LxSCrDlO9M4zjqsFCkliuOZY
-        TYc9ZSv1NOiLYjCMTiSYxDyR8zLeCex4b/P71t/yBWxXJxzyoewL4T2SgE/BkdPc
-        ksQmnlKsuiG0kbW4zksWA==
-X-ME-Sender: <xms:ycTDYiva5z0CWEuf1prGDmXOXPlbczbYFxDqvJI_g5QAvhe0Fl3DjQ>
-    <xme:ycTDYneiVFs8DVKcbsfl1NcXkkwGwwqQfeI723CYrsOJxF19b3HwhlNTKGogx91eE
-    UMiuHSRG8juPbkWNA>
-X-ME-Received: <xmr:ycTDYtxuFNxq6I9z19lG0wIF6lr0x5LV4RhdjsIMu8GM6ocAj_JVu0u352PxdQ2hiuvcLSOzlHxbDPBhrF3kge-aVjhp-a-phnikU-aNjotzXOEEcfBzGIxcig>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgkeekucetufdoteggodetrfdotf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656997672; x=
+        1657084072; bh=9nY5RE/bGNXng/ITS0f9EUPsxcwltUGdSfZPvL271To=; b=i
+        iAb0VeIi7nUD5mvNBQIRan6fKs7Y5EXWQYwu1fsjqkKilP/2Gw0utNYB2RR8DvK5
+        pQpx+SpFC9pAi42/Gj+5OUrCwpCL2SmLpzan9srOWIhaw4GqOoSuYOxasR49O6xE
+        5PMIJb87MKAY6gXkMh9o6Nm9NJrJIWP4SRPX3m2xjc+mx9erNqnT38WSC1+BWfqt
+        XziI0IsgreK39Ub/yBUPIZ/2OvOyWfw+JuDIKsV3T3r9f0kH+mWeyz8SLgyt5yen
+        rBDZ2AR2zTQb9htKBwI4IxFYNVnwCYZSkdrmxWbf6v7nlO3KI9y2QFyAr4dxtxN+
+        khnQXi3Jh9Az+cgatBF1w==
+X-ME-Sender: <xms:KMfDYhVpC0qJbBv5rhTX0DfOyMtLPS8hTdFu3vmjdbe5q8Ywll_NdA>
+    <xme:KMfDYhm4liRTYzgXU-exIxT85Lqd1wGGICxnWSg5SHcGIby9S56wHMsrla52GanP_
+    RWnFvaSZajS_YeVQw>
+X-ME-Received: <xmr:KMfDYtYw_1l9CU3ZVQaqhAnnyy4xHUbQ7F11wDwaPRAJGM13LqV7rDt3cwhhh8hn4YXtRGuICDcqok0PXQlsfQfYdAg93RDnLvF3nNkWhdkBg_ipoL6-h3-T3A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgledtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
     uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    ggtffrrghtthgvrhhnpedtvefhheehgfdvkeetffeludeuudehudeuvddtveelleekvedv
+    uedviefhkeeuheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
     hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:ycTDYtNHAFCR5P-KJsak7ukAqmVxCDI7GidalUqgeGw6FjvCPry0Ew>
-    <xmx:ycTDYi_rbb1hbviwd3mmTNTxZXc4dEQQ8Va8mUVYJ1BVrSSEaBSinQ>
-    <xmx:ycTDYlX5U3uK6HxU8CfCmGhIblgaGhbf5DjBVn1n9i8eFnmB7su8uw>
-    <xmx:ycTDYj2ncbZx_ZsE6PqV29r5GurPgK__tv51OikNQndk6iq6qMUkkg>
+X-ME-Proxy: <xmx:KMfDYkV7s3VcgtsH5SnnQ9xEqB7UsNoZ0pnYCtQJ75zj4QIcC7QaMg>
+    <xmx:KMfDYrk-CxRRG008UoyjfZKqVXT7x0CaFch7_HMVGOm0cijNROQX0g>
+    <xmx:KMfDYheHlmTralLxPOkkUG62STM1NvTMvlaj6EeANtGZqVqTdbVZwQ>
+    <xmx:KMfDYkfxkom3UfDUb5XnB22GIH7LnyvZjfTfLEk_uw5Y8H7s6AZ4vA>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Jul 2022 00:57:44 -0400 (EDT)
-Subject: Re: [PATCH v5 2/3] ARM: dts: sun8i-r40: add opp table for cpu
+ 5 Jul 2022 01:07:50 -0400 (EDT)
+Subject: Re: [PATCH v5 3/3] ARM: dts: sun8i-r40: Add thermal trip
+ points/cooling maps
 To:     qianfanguijin@163.com
 Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
@@ -73,17 +74,17 @@ Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20220517013607.2252-1-qianfanguijin@163.com>
- <20220517013607.2252-3-qianfanguijin@163.com>
+ <20220517013607.2252-4-qianfanguijin@163.com>
 From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <161faad6-4ee5-97a7-ab4a-53bcb5b47334@sholland.org>
-Date:   Mon, 4 Jul 2022 23:57:44 -0500
+Message-ID: <75c9edeb-edfd-b910-7f72-53f7694b456d@sholland.org>
+Date:   Tue, 5 Jul 2022 00:07:49 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <20220517013607.2252-3-qianfanguijin@163.com>
+In-Reply-To: <20220517013607.2252-4-qianfanguijin@163.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -97,178 +98,22 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 5/16/22 8:36 PM, qianfanguijin@163.com wrote:
 > From: qianfan Zhao <qianfanguijin@163.com>
 > 
-> OPP table value is get from allwinner lichee linux-3.10 kernel driver
+> For the trip points, I used values from the BSP code.
+> 
+> The critical trip point value is 30°C above the maximum recommended
+> ambient temperature (85°C) for the SoC from the datasheet, so there's
+> some headroom even at such a high ambient temperature.
 > 
 > Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
-> ---
->  .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  |  1 +
->  arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi      | 52 +++++++++++++++++++
->  arch/arm/boot/dts/sun8i-r40-feta40i.dtsi      |  1 +
->  arch/arm/boot/dts/sun8i-r40.dtsi              |  8 +++
->  arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts      |  1 +
->  .../boot/dts/sun8i-v40-bananapi-m2-berry.dts  |  1 +
->  6 files changed, 64 insertions(+)
->  create mode 100644 arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi
-> 
-> diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> index 4f30018ec4a2..28197bbcb1d5 100644
-> --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> @@ -43,6 +43,7 @@
->  
->  /dts-v1/;
->  #include "sun8i-r40.dtsi"
-> +#include "sun8i-r40-cpu-opp.dtsi"
->  
->  #include <dt-bindings/gpio/gpio.h>
->  
-> diff --git a/arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi b/arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi
-> new file mode 100644
-> index 000000000000..4faa22d3bac8
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi
-> @@ -0,0 +1,52 @@
-> +/{
-> +	cpu0_opp_table: opp_table0 {
-
-The binding requires the node name to match a specific regex. The patch as
-written does not validate:
-
-arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dtb: opp_table0: $nodename:0: 'opp_table0'
-does not match '^opp-table(-[a-z0-9]+)?$'
-        From schema: Documentation/devicetree/bindings/opp/opp-v2.yaml
-
-With the node renamed to "opp-table-cpu" (following H3), the devicetrees pass
-validation. So with that one change:
 
 Reviewed-by: Samuel Holland <samuel@sholland.org>
 Tested-by: Samuel Holland <samuel@sholland.org>
 
-Regards,
-Samuel
+which took quite a while to hit the passive trip point:
 
-> +		compatible = "operating-points-v2";
-> +		opp-shared;
-> +
-> +		opp-720000000 {
-> +			opp-hz = /bits/ 64 <720000000>;
-> +			opp-microvolt = <1000000 1000000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +
-> +		opp-912000000 {
-> +			opp-hz = /bits/ 64 <912000000>;
-> +			opp-microvolt = <1100000 1100000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +
-> +		opp-1008000000 {
-> +			opp-hz = /bits/ 64 <1008000000>;
-> +			opp-microvolt = <1160000 1160000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +
-> +		opp-1104000000 {
-> +			opp-hz = /bits/ 64 <1104000000>;
-> +			opp-microvolt = <1240000 1240000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +
-> +		opp-1200000000 {
-> +			opp-hz = /bits/ 64 <1200000000>;
-> +			opp-microvolt = <1300000 1300000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +	};
-> +};
-> +
-> +&cpu0 {
-> +	operating-points-v2 = <&cpu0_opp_table>;
-> +};
-> +
-> +&cpu1 {
-> +	operating-points-v2 = <&cpu0_opp_table>;
-> +};
-> +
-> +&cpu2 {
-> +	operating-points-v2 = <&cpu0_opp_table>;
-> +};
-> +
-> +&cpu3 {
-> +	operating-points-v2 = <&cpu0_opp_table>;
-> +};
-> diff --git a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
-> index b872b51a346d..9f39b5a2bb35 100644
-> --- a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
-> +++ b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
-> @@ -5,6 +5,7 @@
->  //  Copyright (C) 2017 Icenowy Zheng <icenowy@aosc.io>
->  
->  #include "sun8i-r40.dtsi"
-> +#include "sun8i-r40-cpu-opp.dtsi"
->  
->  &cpu0 {
->  	cpu-supply = <&reg_dcdc2>;
-> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
-> index 291f4784e86c..ae2a5ebd9924 100644
-> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
-> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
-> @@ -84,24 +84,32 @@ cpu0: cpu@0 {
->  			compatible = "arm,cortex-a7";
->  			device_type = "cpu";
->  			reg = <0>;
-> +			clocks = <&ccu CLK_CPU>;
-> +			clock-names = "cpu";
->  		};
->  
->  		cpu1: cpu@1 {
->  			compatible = "arm,cortex-a7";
->  			device_type = "cpu";
->  			reg = <1>;
-> +			clocks = <&ccu CLK_CPU>;
-> +			clock-names = "cpu";
->  		};
->  
->  		cpu2: cpu@2 {
->  			compatible = "arm,cortex-a7";
->  			device_type = "cpu";
->  			reg = <2>;
-> +			clocks = <&ccu CLK_CPU>;
-> +			clock-names = "cpu";
->  		};
->  
->  		cpu3: cpu@3 {
->  			compatible = "arm,cortex-a7";
->  			device_type = "cpu";
->  			reg = <3>;
-> +			clocks = <&ccu CLK_CPU>;
-> +			clock-names = "cpu";
->  		};
->  	};
->  
-> diff --git a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
-> index 0eb1990742ff..9f472521f4a4 100644
-> --- a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
-> +++ b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
-> @@ -45,6 +45,7 @@
->  
->  /dts-v1/;
->  #include "sun8i-r40.dtsi"
-> +#include "sun8i-r40-cpu-opp.dtsi"
->  
->  #include <dt-bindings/gpio/gpio.h>
->  
-> diff --git a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
-> index fdf8bd12faaa..434871040aca 100644
-> --- a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
-> +++ b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
-> @@ -42,6 +42,7 @@
->  
->  /dts-v1/;
->  #include "sun8i-r40.dtsi"
-> +#include "sun8i-r40-cpu-opp.dtsi"
->  
->  #include <dt-bindings/gpio/gpio.h>
->  
-> 
-
+# cat /sys/class/thermal/cooling_device0/stats/time_in_state_ms
+state0  1374892
+state1  1499
+state2  0
+state3  0
+state4  0
