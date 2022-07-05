@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47FE5566397
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 09:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8481856638F
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 09:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiGEHBB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 03:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S230381AbiGEHBD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 03:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiGEHA5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 03:00:57 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE4B11C11
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 00:00:55 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso1364664pjj.5
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 00:00:55 -0700 (PDT)
+        with ESMTP id S230301AbiGEHA6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 03:00:58 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DE0E0FD
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 00:00:57 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id o15so6796485pjh.1
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 00:00:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yne49kj4HQHNC6O00jzXvoEbyLaflHJsRm88BUWfTRA=;
-        b=MVk6ugHg/PsAUBgTbj5ES8HglG1EVcnPkitNAK3zaiR4Vmr9/p1WzQ8DajGvAG0Smx
-         SaE7JeE3gyz/lsQUd0jvG3zOMeDbA+NgoImSRfMn3oIa5qUtoE2a2X/utbeCfsp9IDG6
-         Qpjm/6DnRtLIxO24wPS93MxGXo2sRA6MFmYjIscJ3YtoK4+alR3s6qBle2VCbMu8yf8m
-         NO6B9BMIPJpMhmeHdpx+xBwXX8hXnPE78dlZf0+0Bl8cddT0to95XAFKbhrWGPCNZOEi
-         F47n112KYmLdtqm8jD81BfpE4298b24o919ZHQLr8NutTChyMDeFvFI2GlDIuuA9On7g
-         9G1g==
+        bh=bTnSd1R3c2h/MITa9c+P658EkVFvGV+MYxMCfkJEHnA=;
+        b=NYf8GTmlfn19nNUsHKtjZ+dPbmWcd1QNJHok5icKPNNqrMl53t0rWdVRobyER1sfIY
+         gjXVj7Hv9kTL9tr0llnm+3p3a0vc9SAJshBZ60vot93+dApC7kcluFPnu6kmssMYYVrO
+         X2KW/EjOJEeZ72Wh42nbchY+J2YJqvA3zI5KoBuLQeS7yPFABcYlKpITZWlrdBbznRB6
+         T4Y8ctu7OSO2XzAb08NqJmP2WFgSCXA4Yix05+y+V0Lf3VbNMimP+pQ+8Z3xTroq9l7z
+         +IN4xwb+NnVJAqDLTE0hXtKWt+Qqffx1h8DZWu7Ow17eRySDJz+NCcuz7gOADgGJ6IGh
+         MwTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yne49kj4HQHNC6O00jzXvoEbyLaflHJsRm88BUWfTRA=;
-        b=FSVNE5L9xMSV9yswtHzqbeLfzZ8sH1rDgff4TiKU2mxHe63XklF5TyT7h9Rjcb6fU5
-         cq0eSDCUptm16zfAEv+1W3IJ43iwPxjKELMUa4k+xdBlvyyAxnn2IwLPYauE9WMGFhEC
-         5qcKF9qtptx09aEigTbLbm8cGnqrWd18BfOrrWlCao3ZIPClXVstBOw8IXvVOMEy3Iyx
-         27vTvxxDTIEBrOcdu9Up6YT013HkX2Roj6bNsYwm0/2Ogz1IqKySaagKxqsc6nZrInSN
-         m9WHFdqq7j5NvPC85EChcrUikJM8VCSt/YEhUdn2poU+8kJdRTwwqHyF0/O/9UG8nkm6
-         FZsQ==
-X-Gm-Message-State: AJIora+v9Bol2d3+jVtakNaFVCMv8d/mEcVxBY7L0ROlPqib8cyOmjhU
-        itonRJ1JV2hHfNCBd+NPrwxdZQ==
-X-Google-Smtp-Source: AGRyM1tpszP8t3guUioLy0gqcXoXDweT4feRKVPX/H1jc/zN/5TI9ZdMvol1LMS3SbaG/KoBGayG/A==
-X-Received: by 2002:a17:902:6b41:b0:16a:55f6:95ee with SMTP id g1-20020a1709026b4100b0016a55f695eemr40987923plt.156.1657004454759;
-        Tue, 05 Jul 2022 00:00:54 -0700 (PDT)
+        bh=bTnSd1R3c2h/MITa9c+P658EkVFvGV+MYxMCfkJEHnA=;
+        b=NFNzoMMeHyXullPobV4MUD0xg0f3bn18bJZ4HxC9jbf2v5YvyOJ+kMtc8/vDDMl4JR
+         7iZL2OcPBJDHhZUEJ3R414c1o6UB2ZA4aajdR0ZL1I1djl5OsfFCoujSsph0pDyDzq4b
+         BzT/en+ley+QNz4vBY+J7GZFI5wNj51Q+jUSh1je3ee5au0sokPbCODN2gRXPTYO4Eg0
+         wJKN8h7WaFpjy8Oq9dfwOs23SL2Fwde6fNQECvv7JHFfBt9BgCQfLFdljgy9zEKE/XkI
+         4FpdHI9+cIEDK/joHjwaBOi3yTV6WMei8a+uKyZbYI/3K8npz8f+gVAvw4gtHd20JvHQ
+         7pUA==
+X-Gm-Message-State: AJIora9zjuNeDNu2vIFgvCfhwiGSP0tFoPOsGSFOXF59TLeqJ9S+l135
+        HaLUJtrEdL2KbND6rXWb8X9bQQ==
+X-Google-Smtp-Source: AGRyM1s9x5apNo/JV/bi7399PxHr880FTjl5pyveN2IyqLdLo+GXLyH5ayAyZXd+FV5nyOW6iRZu3w==
+X-Received: by 2002:a17:902:cccf:b0:168:c4c3:e8ca with SMTP id z15-20020a170902cccf00b00168c4c3e8camr41917841ple.40.1657004457506;
+        Tue, 05 Jul 2022 00:00:57 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id l22-20020a17090a3f1600b001ecfa85c8f0sm11564120pjc.26.2022.07.05.00.00.53
+        by smtp.gmail.com with ESMTPSA id md4-20020a17090b23c400b001ecb5602944sm11499949pjb.28.2022.07.05.00.00.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 00:00:54 -0700 (PDT)
+        Tue, 05 Jul 2022 00:00:57 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -56,9 +56,9 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 08/13] OPP: Add key specific assert() method to key finding helpers
-Date:   Tue,  5 Jul 2022 12:30:11 +0530
-Message-Id: <1428eae4e3d3454eed6fccf1c53435402c102f4c.1657003420.git.viresh.kumar@linaro.org>
+Subject: [PATCH V2 09/13] OPP: Assert clk_count == 1 for single clk helpers
+Date:   Tue,  5 Jul 2022 12:30:12 +0530
+Message-Id: <f039572f213ee49125d3d1ea4e64a94b79778426.1657003420.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1657003420.git.viresh.kumar@linaro.org>
 References: <cover.1657003420.git.viresh.kumar@linaro.org>
@@ -66,7 +66,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,178 +74,150 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The helpers for the clock key, at least, would need to assert that the
-helpers are called only for single clock case. Prepare for that by
-adding an argument to the key finding helpers.
+Many helpers can be safely called only for devices that have a single
+clk associated with them. Assert the same for those routines.
 
 Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c | 52 +++++++++++++++++++++++++++++-----------------
- 1 file changed, 33 insertions(+), 19 deletions(-)
+ drivers/opp/core.c | 45 +++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 39 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 261f5e1abfe1..e1696cf63409 100644
+index e1696cf63409..5b3542557f72 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -481,10 +481,15 @@ static struct dev_pm_opp *_opp_table_find_key(struct opp_table *opp_table,
- 		unsigned long *key, int index, bool available,
- 		unsigned long (*read)(struct dev_pm_opp *opp, int index),
- 		bool (*compare)(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
--				unsigned long opp_key, unsigned long key))
-+				unsigned long opp_key, unsigned long key),
-+		bool (*assert)(struct opp_table *opp_table))
- {
- 	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
+@@ -97,6 +97,18 @@ struct opp_table *_find_opp_table(struct device *dev)
+ 	return opp_table;
+ }
  
-+	/* Assert that the requirement is met */
-+	if (assert && !assert(opp_table))
-+		return ERR_PTR(-EINVAL);
++/*
++ * Returns true if multiple clocks aren't there, else returns false with WARN.
++ *
++ * We don't force clk_count == 1 here as there are users who don't have a clock
++ * representation in the OPP table and manage the clock configuration themselves
++ * in an platform specific way.
++ */
++static bool assert_single_clk(struct opp_table *opp_table)
++{
++	return !WARN_ON(opp_table->clk_count > 1);
++}
 +
- 	mutex_lock(&opp_table->lock);
- 
- 	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
-@@ -509,7 +514,8 @@ static struct dev_pm_opp *
- _find_key(struct device *dev, unsigned long *key, int index, bool available,
- 	  unsigned long (*read)(struct dev_pm_opp *opp, int index),
- 	  bool (*compare)(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
--			  unsigned long opp_key, unsigned long key))
-+			  unsigned long opp_key, unsigned long key),
-+	  bool (*assert)(struct opp_table *opp_table))
- {
- 	struct opp_table *opp_table;
- 	struct dev_pm_opp *opp;
-@@ -522,7 +528,7 @@ _find_key(struct device *dev, unsigned long *key, int index, bool available,
+ /**
+  * dev_pm_opp_get_voltage() - Gets the voltage corresponding to an opp
+  * @opp:	opp for which voltage has to be returned for
+@@ -181,6 +193,9 @@ unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
+ 		return 0;
  	}
  
- 	opp = _opp_table_find_key(opp_table, key, index, available, read,
--				  compare);
-+				  compare, assert);
- 
- 	dev_pm_opp_put_opp_table(opp_table);
- 
-@@ -531,35 +537,42 @@ _find_key(struct device *dev, unsigned long *key, int index, bool available,
- 
- static struct dev_pm_opp *_find_key_exact(struct device *dev,
- 		unsigned long key, int index, bool available,
--		unsigned long (*read)(struct dev_pm_opp *opp, int index))
-+		unsigned long (*read)(struct dev_pm_opp *opp, int index),
-+		bool (*assert)(struct opp_table *opp_table))
- {
- 	/*
- 	 * The value of key will be updated here, but will be ignored as the
- 	 * caller doesn't need it.
- 	 */
--	return _find_key(dev, &key, index, available, read, _compare_exact);
-+	return _find_key(dev, &key, index, available, read, _compare_exact,
-+			 assert);
++	if (!assert_single_clk(opp->opp_table))
++		return 0;
++
+ 	return opp->rates[0];
  }
- 
- static struct dev_pm_opp *_opp_table_find_key_ceil(struct opp_table *opp_table,
- 		unsigned long *key, int index, bool available,
--		unsigned long (*read)(struct dev_pm_opp *opp, int index))
-+		unsigned long (*read)(struct dev_pm_opp *opp, int index),
-+		bool (*assert)(struct opp_table *opp_table))
- {
- 	return _opp_table_find_key(opp_table, key, index, available, read,
--				   _compare_ceil);
-+				   _compare_ceil, assert);
- }
- 
- static struct dev_pm_opp *_find_key_ceil(struct device *dev, unsigned long *key,
- 		int index, bool available,
--		unsigned long (*read)(struct dev_pm_opp *opp, int index))
-+		unsigned long (*read)(struct dev_pm_opp *opp, int index),
-+		bool (*assert)(struct opp_table *opp_table))
- {
--	return _find_key(dev, key, index, available, read, _compare_ceil);
-+	return _find_key(dev, key, index, available, read, _compare_ceil,
-+			 assert);
- }
- 
- static struct dev_pm_opp *_find_key_floor(struct device *dev,
- 		unsigned long *key, int index, bool available,
--		unsigned long (*read)(struct dev_pm_opp *opp, int index))
-+		unsigned long (*read)(struct dev_pm_opp *opp, int index),
-+		bool (*assert)(struct opp_table *opp_table))
- {
--	return _find_key(dev, key, index, available, read, _compare_floor);
-+	return _find_key(dev, key, index, available, read, _compare_floor,
-+			 assert);
- }
- 
- /**
-@@ -588,14 +601,15 @@ static struct dev_pm_opp *_find_key_floor(struct device *dev,
+ EXPORT_SYMBOL_GPL(dev_pm_opp_get_freq);
+@@ -601,7 +616,8 @@ static struct dev_pm_opp *_find_key_floor(struct device *dev,
  struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
  		unsigned long freq, bool available)
  {
--	return _find_key_exact(dev, freq, 0, available, _read_freq);
-+	return _find_key_exact(dev, freq, 0, available, _read_freq, NULL);
+-	return _find_key_exact(dev, freq, 0, available, _read_freq, NULL);
++	return _find_key_exact(dev, freq, 0, available, _read_freq,
++			       assert_single_clk);
  }
  EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_exact);
  
- static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
+@@ -609,7 +625,7 @@ static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
  						   unsigned long *freq)
  {
--	return _opp_table_find_key_ceil(opp_table, freq, 0, true, _read_freq);
-+	return _opp_table_find_key_ceil(opp_table, freq, 0, true, _read_freq,
-+					NULL);
+ 	return _opp_table_find_key_ceil(opp_table, freq, 0, true, _read_freq,
+-					NULL);
++					assert_single_clk);
  }
  
  /**
-@@ -619,7 +633,7 @@ static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
+@@ -633,7 +649,7 @@ static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
  struct dev_pm_opp *dev_pm_opp_find_freq_ceil(struct device *dev,
  					     unsigned long *freq)
  {
--	return _find_key_ceil(dev, freq, 0, true, _read_freq);
-+	return _find_key_ceil(dev, freq, 0, true, _read_freq, NULL);
+-	return _find_key_ceil(dev, freq, 0, true, _read_freq, NULL);
++	return _find_key_ceil(dev, freq, 0, true, _read_freq, assert_single_clk);
  }
  EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil);
  
-@@ -644,7 +658,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil);
+@@ -658,7 +674,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil);
  struct dev_pm_opp *dev_pm_opp_find_freq_floor(struct device *dev,
  					      unsigned long *freq)
  {
--	return _find_key_floor(dev, freq, 0, true, _read_freq);
-+	return _find_key_floor(dev, freq, 0, true, _read_freq, NULL);
+-	return _find_key_floor(dev, freq, 0, true, _read_freq, NULL);
++	return _find_key_floor(dev, freq, 0, true, _read_freq, assert_single_clk);
  }
  EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_floor);
  
-@@ -666,7 +680,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_floor);
- struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
- 					       unsigned int level)
- {
--	return _find_key_exact(dev, level, 0, true, _read_level);
-+	return _find_key_exact(dev, level, 0, true, _read_level, NULL);
+@@ -1521,6 +1537,9 @@ void dev_pm_opp_remove(struct device *dev, unsigned long freq)
+ 	if (IS_ERR(opp_table))
+ 		return;
+ 
++	if (!assert_single_clk(opp_table))
++		goto put_table;
++
+ 	mutex_lock(&opp_table->lock);
+ 
+ 	list_for_each_entry(iter, &opp_table->opp_list, node) {
+@@ -1542,6 +1561,7 @@ void dev_pm_opp_remove(struct device *dev, unsigned long freq)
+ 			 __func__, freq);
+ 	}
+ 
++put_table:
+ 	/* Drop the reference taken by _find_opp_table() */
+ 	dev_pm_opp_put_opp_table(opp_table);
  }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_exact);
+@@ -1868,6 +1888,9 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+ 	unsigned long tol;
+ 	int ret;
  
-@@ -691,7 +705,7 @@ struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
- 	unsigned long temp = *level;
- 	struct dev_pm_opp *opp;
++	if (!assert_single_clk(opp_table))
++		return -EINVAL;
++
+ 	new_opp = _opp_allocate(opp_table);
+ 	if (!new_opp)
+ 		return -ENOMEM;
+@@ -2721,6 +2744,11 @@ static int _opp_set_availability(struct device *dev, unsigned long freq,
+ 		return r;
+ 	}
  
--	opp = _find_key_ceil(dev, &temp, 0, true, _read_level);
-+	opp = _find_key_ceil(dev, &temp, 0, true, _read_level, NULL);
- 	*level = temp;
- 	return opp;
- }
-@@ -722,7 +736,7 @@ struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev, unsigned int *bw,
- 	unsigned long temp = *bw;
- 	struct dev_pm_opp *opp;
++	if (!assert_single_clk(opp_table)) {
++		r = -EINVAL;
++		goto put_table;
++	}
++
+ 	mutex_lock(&opp_table->lock);
  
--	opp = _find_key_ceil(dev, &temp, index, true, _read_bw);
-+	opp = _find_key_ceil(dev, &temp, index, true, _read_bw, NULL);
- 	*bw = temp;
- 	return opp;
- }
-@@ -753,7 +767,7 @@ struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
- 	unsigned long temp = *bw;
- 	struct dev_pm_opp *opp;
+ 	/* Do we have the frequency? */
+@@ -2792,6 +2820,11 @@ int dev_pm_opp_adjust_voltage(struct device *dev, unsigned long freq,
+ 		return r;
+ 	}
  
--	opp = _find_key_floor(dev, &temp, index, true, _read_bw);
-+	opp = _find_key_floor(dev, &temp, index, true, _read_bw, NULL);
- 	*bw = temp;
- 	return opp;
++	if (!assert_single_clk(opp_table)) {
++		r = -EINVAL;
++		goto put_table;
++	}
++
+ 	mutex_lock(&opp_table->lock);
+ 
+ 	/* Do we have the frequency? */
+@@ -2823,11 +2856,11 @@ int dev_pm_opp_adjust_voltage(struct device *dev, unsigned long freq,
+ 				     opp);
+ 
+ 	dev_pm_opp_put(opp);
+-	goto adjust_put_table;
++	goto put_table;
+ 
+ adjust_unlock:
+ 	mutex_unlock(&opp_table->lock);
+-adjust_put_table:
++put_table:
+ 	dev_pm_opp_put_opp_table(opp_table);
+ 	return r;
  }
 -- 
 2.31.1.272.g89b43f80a514
