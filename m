@@ -2,70 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDE45663A5
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 09:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6325663C6
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 09:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiGEHBY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 03:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S229588AbiGEHEf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 03:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiGEHBW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 03:01:22 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8836101C3
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 00:01:09 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id b2so10232899plx.7
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 00:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UdH5G4Th4X2DMlPi52KYT3YEURw2bBNX0NOy7kuLMhY=;
-        b=BplPUaz2WEKeGGwt/6Z+X3PMdVT80ZtLj7KK/CmEKgshjOHlZXpmzz5l/xAvLB/GeA
-         jW8PXw7eXfK/0hNvmWemwOj5hTyYsxJyi0IGxk4vt/Bih3femV2cAwdx8MYaZ1Cs2Lxu
-         PrM8ojwX5nUpbTjw2oZ6LIzGS1bPhWwMY2GD2DmXCTZethyfwyXsfKbZFsHqxWaswsM1
-         /n9Xjbu+X7PQsqoteDTQvAff/VxWKdPE9n2A1t2GczSJ6lcWKZe3SNG6byONmjMKsoLr
-         1uof0B8QTtvTcFOdOJANAyJcMXwfRWMoBfhaIgV55yTMUyrMD8xsI1LyjH7CpygbipbS
-         B7Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UdH5G4Th4X2DMlPi52KYT3YEURw2bBNX0NOy7kuLMhY=;
-        b=HdUcXa2yfqaMOvE71ePW7oI1obn/aSc4laaSRcMCW8ux55SHUkuzmXs/NEXmiTab5/
-         sIyCglReTi3P+EMA4kzQQSF+2Az+D0mTpqdSC/xuxVh4L4J1tTRGuGzaySmr6iF6HZfZ
-         WAslVgtL5t/8Vmx15BAYQtPTcNjnzoiICnLT+88VNdgfHFbel8G4yJCx+5oK6GvWAX1V
-         Mt26iPALOcY4CDFR2ebFfPDYxKFH5pyHvjwW+r2gXq1xLnqvJ8X9TKeWzVhBnlG22tCX
-         OIWmI9hOgFD0JeC68s0FQNaVoNG5lWTkWfLSZDwtePQ9rzyTyUdbASx6Bj8xgDg2RGq4
-         ebEA==
-X-Gm-Message-State: AJIora9FieMhuvEJAvZbHBcQ19XlgvIl4RT6bQdZ4uw4+6WY9WA/tXSD
-        YhKw8PYgfmO+I8WghD63DRikqAiF7JbhLg==
-X-Google-Smtp-Source: AGRyM1uANnFSFJWuoa9R9F/MRzwQAyXBS+zhGAv+0KR1ZYDjnYmpjdSC9nCLv6eJ0Zer7VCaSAXp+g==
-X-Received: by 2002:a17:90b:314c:b0:1ed:442c:117e with SMTP id ip12-20020a17090b314c00b001ed442c117emr40647091pjb.160.1657004469470;
-        Tue, 05 Jul 2022 00:01:09 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id 70-20020a621849000000b0051bb79437f7sm22134187pfy.37.2022.07.05.00.01.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 00:01:09 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 13/13] OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
-Date:   Tue,  5 Jul 2022 12:30:16 +0530
-Message-Id: <8e639af4cd22b6980cb3146d7656980b8697e647.1657003420.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1657003420.git.viresh.kumar@linaro.org>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
+        with ESMTP id S229636AbiGEHEe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 03:04:34 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CF712AF0;
+        Tue,  5 Jul 2022 00:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657004673; x=1688540673;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wv+ihuqMNYfV0YOw4cZgp3e9DiFCWVlHIiwZYlvTD8s=;
+  b=JlkzXZ/GFbYLwqtuCkZyCXYdURcZfuga1NMknFWIHir/1DiWkgoYnbPd
+   rqmnbThB+W4E2QfksMibp0IRJPf6P4K1ZBvswIliEQ5DWxYG3qcIpBhTF
+   vWZURYMVOBPuWhBDVMzXcCtOerQF5CVFqTSF51rTH44W8DAs4T5z/UqSG
+   Q9Q7HBvP4YQyxIbEKHsPYXKGLPRf/ptf3xTRH6RrXPOyK+bAMT5+R8WEk
+   Jmn6+nFmMixkfKrTAjM7VHlULlHn1wkTS827m/1V9T7ntKpxLHCQcZpBM
+   GrVUW86i90Novy1McwPk7Autncq+gFD3TeXfBx4CgaALq8XfuoC+2fyKD
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="263063993"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="263063993"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 00:04:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="619696830"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 05 Jul 2022 00:04:32 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o8cbn-000IpP-2u;
+        Tue, 05 Jul 2022 07:04:31 +0000
+Date:   Tue, 05 Jul 2022 15:03:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 5554cbed50ab8807c91451ba6bb292f8668c88f5
+Message-ID: <62c3e243.hCnUAzjERE5kMeqc%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,235 +63,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Remove the now unused variants and the extra "getclk" parameter from few
-routines, which is always "true" now.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 5554cbed50ab8807c91451ba6bb292f8668c88f5  Merge branch 'acpi-bus-next' into bleeding-edge
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c     | 19 +++++++----------
- drivers/opp/of.c       | 48 +++++++-----------------------------------
- drivers/opp/opp.h      |  2 +-
- include/linux/pm_opp.h | 12 -----------
- 4 files changed, 17 insertions(+), 64 deletions(-)
+elapsed time: 720m
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 666e1ebf91d1..0205b83e1c02 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1360,8 +1360,7 @@ void _get_opp_table_kref(struct opp_table *opp_table)
- }
- 
- static struct opp_table *_update_opp_table_clk(struct device *dev,
--					       struct opp_table *opp_table,
--					       bool getclk)
-+					       struct opp_table *opp_table)
- {
- 	int ret;
- 
-@@ -1369,8 +1368,7 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
- 	 * Return early if we don't need to get clk or we have already done it
- 	 * earlier.
- 	 */
--	if (!getclk || IS_ERR(opp_table) || !IS_ERR(opp_table->clk) ||
--	    opp_table->clks)
-+	if (IS_ERR(opp_table) || !IS_ERR(opp_table->clk) || opp_table->clks)
- 		return opp_table;
- 
- 	/* Find clk for the device */
-@@ -1409,8 +1407,7 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
-  * uses the opp_tables_busy flag to indicate if another creator is in the middle
-  * of adding an OPP table and others should wait for it to finish.
-  */
--struct opp_table *_add_opp_table_indexed(struct device *dev, int index,
--					 bool getclk)
-+struct opp_table *_add_opp_table_indexed(struct device *dev, int index)
- {
- 	struct opp_table *opp_table;
- 
-@@ -1457,12 +1454,12 @@ struct opp_table *_add_opp_table_indexed(struct device *dev, int index,
- unlock:
- 	mutex_unlock(&opp_table_lock);
- 
--	return _update_opp_table_clk(dev, opp_table, getclk);
-+	return _update_opp_table_clk(dev, opp_table);
- }
- 
--static struct opp_table *_add_opp_table(struct device *dev, bool getclk)
-+static struct opp_table *_add_opp_table(struct device *dev)
- {
--	return _add_opp_table_indexed(dev, 0, getclk);
-+	return _add_opp_table_indexed(dev, 0);
- }
- 
- struct opp_table *dev_pm_opp_get_opp_table(struct device *dev)
-@@ -2444,7 +2441,7 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
- 	if (!data)
- 		return -ENOMEM;
- 
--	opp_table = _add_opp_table(dev, false);
-+	opp_table = _add_opp_table(dev);
- 	if (IS_ERR(opp_table)) {
- 		kfree(data);
- 		return PTR_ERR(opp_table);
-@@ -2735,7 +2732,7 @@ int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
- 	struct opp_table *opp_table;
- 	int ret;
- 
--	opp_table = _add_opp_table(dev, true);
-+	opp_table = _add_opp_table(dev);
- 	if (IS_ERR(opp_table))
- 		return PTR_ERR(opp_table);
- 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 080481a05223..6b19764a3897 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -1123,7 +1123,7 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
- 	return ret;
- }
- 
--static int _of_add_table_indexed(struct device *dev, int index, bool getclk)
-+static int _of_add_table_indexed(struct device *dev, int index)
- {
- 	struct opp_table *opp_table;
- 	int ret, count;
-@@ -1139,7 +1139,7 @@ static int _of_add_table_indexed(struct device *dev, int index, bool getclk)
- 			index = 0;
- 	}
- 
--	opp_table = _add_opp_table_indexed(dev, index, getclk);
-+	opp_table = _add_opp_table_indexed(dev, index);
- 	if (IS_ERR(opp_table))
- 		return PTR_ERR(opp_table);
- 
-@@ -1163,11 +1163,11 @@ static void devm_pm_opp_of_table_release(void *data)
- 	dev_pm_opp_of_remove_table(data);
- }
- 
--static int _devm_of_add_table_indexed(struct device *dev, int index, bool getclk)
-+static int _devm_of_add_table_indexed(struct device *dev, int index)
- {
- 	int ret;
- 
--	ret = _of_add_table_indexed(dev, index, getclk);
-+	ret = _of_add_table_indexed(dev, index);
- 	if (ret)
- 		return ret;
- 
-@@ -1195,7 +1195,7 @@ static int _devm_of_add_table_indexed(struct device *dev, int index, bool getclk
-  */
- int devm_pm_opp_of_add_table(struct device *dev)
- {
--	return _devm_of_add_table_indexed(dev, 0, true);
-+	return _devm_of_add_table_indexed(dev, 0);
- }
- EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table);
- 
-@@ -1218,7 +1218,7 @@ EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table);
-  */
- int dev_pm_opp_of_add_table(struct device *dev)
- {
--	return _of_add_table_indexed(dev, 0, true);
-+	return _of_add_table_indexed(dev, 0);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table);
- 
-@@ -1234,7 +1234,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table);
-  */
- int dev_pm_opp_of_add_table_indexed(struct device *dev, int index)
- {
--	return _of_add_table_indexed(dev, index, true);
-+	return _of_add_table_indexed(dev, index);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table_indexed);
- 
-@@ -1247,42 +1247,10 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table_indexed);
-  */
- int devm_pm_opp_of_add_table_indexed(struct device *dev, int index)
- {
--	return _devm_of_add_table_indexed(dev, index, true);
-+	return _devm_of_add_table_indexed(dev, index);
- }
- EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table_indexed);
- 
--/**
-- * dev_pm_opp_of_add_table_noclk() - Initialize indexed opp table from device
-- *		tree without getting clk for device.
-- * @dev:	device pointer used to lookup OPP table.
-- * @index:	Index number.
-- *
-- * Register the initial OPP table with the OPP library for given device only
-- * using the "operating-points-v2" property. Do not try to get the clk for the
-- * device.
-- *
-- * Return: Refer to dev_pm_opp_of_add_table() for return values.
-- */
--int dev_pm_opp_of_add_table_noclk(struct device *dev, int index)
--{
--	return _of_add_table_indexed(dev, index, false);
--}
--EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table_noclk);
--
--/**
-- * devm_pm_opp_of_add_table_noclk() - Initialize indexed opp table from device
-- *		tree without getting clk for device.
-- * @dev:	device pointer used to lookup OPP table.
-- * @index:	Index number.
-- *
-- * This is a resource-managed variant of dev_pm_opp_of_add_table_noclk().
-- */
--int devm_pm_opp_of_add_table_noclk(struct device *dev, int index)
--{
--	return _devm_of_add_table_indexed(dev, index, false);
--}
--EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table_noclk);
--
- /* CPU device specific helpers */
- 
- /**
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 816009eaafee..5e089651c91f 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -254,7 +254,7 @@ int _opp_compare_key(struct opp_table *opp_table, struct dev_pm_opp *opp1, struc
- int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *opp_table);
- int _opp_add_v1(struct opp_table *opp_table, struct device *dev, unsigned long freq, long u_volt, bool dynamic);
- void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
--struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
-+struct opp_table *_add_opp_table_indexed(struct device *dev, int index);
- void _put_opp_list_kref(struct opp_table *opp_table);
- void _required_opps_available(struct dev_pm_opp *opp, int count);
- 
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 683e6baf9618..dc1fb5890792 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -402,8 +402,6 @@ static inline int dev_pm_opp_sync_regulators(struct device *dev)
- int dev_pm_opp_of_add_table(struct device *dev);
- int dev_pm_opp_of_add_table_indexed(struct device *dev, int index);
- int devm_pm_opp_of_add_table_indexed(struct device *dev, int index);
--int dev_pm_opp_of_add_table_noclk(struct device *dev, int index);
--int devm_pm_opp_of_add_table_noclk(struct device *dev, int index);
- void dev_pm_opp_of_remove_table(struct device *dev);
- int devm_pm_opp_of_add_table(struct device *dev);
- int dev_pm_opp_of_cpumask_add_table(const struct cpumask *cpumask);
-@@ -434,16 +432,6 @@ static inline int devm_pm_opp_of_add_table_indexed(struct device *dev, int index
- 	return -EOPNOTSUPP;
- }
- 
--static inline int dev_pm_opp_of_add_table_noclk(struct device *dev, int index)
--{
--	return -EOPNOTSUPP;
--}
--
--static inline int devm_pm_opp_of_add_table_noclk(struct device *dev, int index)
--{
--	return -EOPNOTSUPP;
--}
--
- static inline void dev_pm_opp_of_remove_table(struct device *dev)
- {
- }
+configs tested: 52
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                          randconfig-a014
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+riscv                randconfig-r042-20220703
+s390                 randconfig-r044-20220703
+arc                  randconfig-r043-20220703
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r045-20220703
+hexagon              randconfig-r041-20220703
+
 -- 
-2.31.1.272.g89b43f80a514
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
