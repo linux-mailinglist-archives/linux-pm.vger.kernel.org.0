@@ -2,70 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9705E566341
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 08:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6745566357
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 08:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiGEGiD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 02:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S229954AbiGEGoW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 02:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiGEGh7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 02:37:59 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EF311A25
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 23:37:58 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so15793725pjl.5
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 23:37:58 -0700 (PDT)
+        with ESMTP id S229499AbiGEGoV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 02:44:21 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761365F50
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 23:44:18 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id r14so10280135wrg.1
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 23:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mcN5aWF/+F7X9Dd6NAzqDokTXFgMVn5D4Bvd5NBE264=;
-        b=VJGq5G0/CDZRAMAODM6TfM4aIIch7aVu0lmqTWD4KxBuCoZ3DtXshzKbGvH0pTJCkk
-         kqOPW/s0S3SstmRjP5V7qA1hI0jhELXOGvgmzo7ueKs7DgvgDtYl8hfd8xmXjRbZL4hB
-         qx+xXyuh4PHs/3EZuM5T382nVrxnyBuewtQJ9aFNq53Jym+SYUY4EEfiJGi5fCEewGyZ
-         Etm10IzQX44BALDRFy4ygoxAdgpQm2Z3WfZI1RURwKzKMq5BkQD0InTarsSRbC9+SRgi
-         Nlv4O36UZuuxbgADmoIAQofXtqho+3p2KD0CwI4cw0KdbxYShx4ARrsIYu1JyhHlYoKe
-         AIcg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1xyjL8uVi4oUWM4NxyVLfSq7f5Oq55Jjs2ZuqXwoovg=;
+        b=HHtqiYfa34sLF/w4kuG7IpCfJKs5H8S2BQi0DB/toNXW5ZjTeF9pN6cQib8Qbrfg2J
+         CXJ0KSOaYpmWgCEaAgaZSfiBWzGWqcY0dms8clqD9gb7HnPNokAFJYBrK/kso0rXQGnn
+         0uLuX3Fib2sxm3g9QshwNh60IsSyg2KrP0Fi5PNOEDstPQqF+PEx+8OqysT4lgqtijQ7
+         1FDpmcWCStE1PGBeINfP0u7oSHgmRbElXeW6SYCuZMRifBqRsg/Fv1DWe9EQ+ouZFPcW
+         jbkRYAmk2WAh4vAzdzD6jEsBwh5w2FzTdpMVpwiLX1iq6nT7Pr3v1VPHAGWhS0p6X+k+
+         Gi+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mcN5aWF/+F7X9Dd6NAzqDokTXFgMVn5D4Bvd5NBE264=;
-        b=BkxUZ3TZbV4Rmc31RwaXTf3Y93/ePQXAbmBdByLuSS2P5HN3mMGKCJe4c0DVcJWalV
-         76vEK8q/0lAbDYfJtiKFRjmEyAImN/4+oEMHf4wUkziAw/jJRxUPXp3wrJPKnnYppJRc
-         1lx1lcQH7y03CoxF+PE3291CiOjE+uLpIyTiM8/aGAxJ6Lb6O/2zNdEnC7+lKmBKvSeQ
-         QF/5G9UERUwcd4jcygXQyDg6eS9wK3F3gVcPE+bhNuybMWU/nXtnzs2YJSoVuEkHUbiK
-         QLJ+uHCpTce+l105qH6cdcuf7H8ALeeMKExFmdnana5s7fkm1l0EmGt9tLDhufg3NEkW
-         bmpA==
-X-Gm-Message-State: AJIora9UwR1rLCWZ0cESdAOAv/KTKIZefSc2sSdpkoXS1zbHSOB+M1P+
-        X0dgOKUiij8965SEJi/LmkrJeg==
-X-Google-Smtp-Source: AGRyM1s6eL8w4tjHdNsJxvPP4VeAZaAPooYVPfK1Mk2uaInhFxM7fBf4tBdImNj41uKdR3Yv7hf81w==
-X-Received: by 2002:a17:90b:4c49:b0:1ec:e8a2:b5f0 with SMTP id np9-20020a17090b4c4900b001ece8a2b5f0mr40764256pjb.21.1657003077666;
-        Mon, 04 Jul 2022 23:37:57 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170902780600b0016a4db13429sm22464251pll.192.2022.07.04.23.37.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 23:37:57 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 4/4] OPP: Use generic key finding helpers for bandwidth key
-Date:   Tue,  5 Jul 2022 12:07:40 +0530
-Message-Id: <c26b8501250a39a64a27330ec5888a355ab6c9d4.1657002904.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1657002904.git.viresh.kumar@linaro.org>
-References: <cover.1657002904.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1xyjL8uVi4oUWM4NxyVLfSq7f5Oq55Jjs2ZuqXwoovg=;
+        b=wogKO43F6pRymL/eLq2LMzByLjOlnyKfIqMNBkLq30gurYS3WWExL5+sSrHpZBS2Lh
+         OUxavgiw6Qa1jevwYVrkbVr2Ar6/VHhEiJsAhIfiauskskkrreaQZZWS4uN7Hq43yhFf
+         JcvoO7ksoEclUWo9cRhL8R+jAngdQU7rp/Y1XWRVb8Bn8GSOkDJ1EGTL41RJzrCnTXbs
+         rKosR484mDnJWiw25fdzbK+TMmncSQ06jkjaKVhm6sAIFdK0AEawH0gfV9mZSxC4YRzg
+         YR/3ChTvpUcn1hWKiY9EmADQIYbSnNoqR95MTPspqurN40x1zDiPxCkevCc35/XVrefl
+         XWIg==
+X-Gm-Message-State: AJIora/X9JbENIVcfn0EBjcDmpOIiLZo+pFxszP9fKQB/E4kqt1y4yC7
+        VVi5upqLJ7Ymb0F7IRMEVhyfNgrOWdTUuw==
+X-Google-Smtp-Source: AGRyM1vybu38jG39FWVZVthCnVWGJGdI1MdMyHsvjn1rrZ5exauM4Covm67WvgWzhaFm/M0VKmbbqg==
+X-Received: by 2002:adf:f48e:0:b0:21d:6562:4717 with SMTP id l14-20020adff48e000000b0021d65624717mr11438288wro.428.1657003456933;
+        Mon, 04 Jul 2022 23:44:16 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id q5-20020adff945000000b0021b9585276dsm31416242wrr.101.2022.07.04.23.44.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 23:44:16 -0700 (PDT)
+Message-ID: <af7463e7-4ec3-8a26-fbc1-aa73bda2e434@linaro.org>
+Date:   Tue, 5 Jul 2022 08:44:15 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 11/12] thermal/of: Use thermal trips stored in the
+ thermal zone
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com,
+        Amit Kucheria <amitk@kernel.org>
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+ <20220703183059.4133659-12-daniel.lezcano@linexp.org>
+ <6c7e1865e7e68ac0f035680044eb878ced715a1b.camel@intel.com>
+ <f16d855b-28b0-b4ee-0e42-7293d0e61c21@linexp.org>
+ <0c525d16f34bedd1ea4ee4b7516c9dee5a92d419.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <0c525d16f34bedd1ea4ee4b7516c9dee5a92d419.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,126 +80,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the recently added generic key findings helpers to find bandwidth
-key values.
+On 05/07/2022 03:20, Zhang Rui wrote:
 
-Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 83 +++++++++-------------------------------------
- 1 file changed, 15 insertions(+), 68 deletions(-)
+[ ... ]
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 968fdbbc0693..5ad43dbfd87f 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -438,6 +438,11 @@ static unsigned long _read_level(struct dev_pm_opp *opp, int index)
- 	return opp->level;
- }
- 
-+static unsigned long _read_bw(struct dev_pm_opp *opp, int index)
-+{
-+	return opp->bandwidth[index].peak;
-+}
-+
- /* Generic comparison helpers */
- static bool _compare_exact(struct dev_pm_opp **opp, struct dev_pm_opp *temp_opp,
- 			   unsigned long opp_key, unsigned long key)
-@@ -711,42 +716,14 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_ceil);
-  * The callers are required to call dev_pm_opp_put() for the returned OPP after
-  * use.
-  */
--struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev,
--					   unsigned int *bw, int index)
-+struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev, unsigned int *bw,
-+					   int index)
- {
--	struct opp_table *opp_table;
--	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
--
--	if (!dev || !bw) {
--		dev_err(dev, "%s: Invalid argument bw=%p\n", __func__, bw);
--		return ERR_PTR(-EINVAL);
--	}
--
--	opp_table = _find_opp_table(dev);
--	if (IS_ERR(opp_table))
--		return ERR_CAST(opp_table);
--
--	if (index >= opp_table->path_count)
--		return ERR_PTR(-EINVAL);
--
--	mutex_lock(&opp_table->lock);
--
--	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
--		if (temp_opp->available && temp_opp->bandwidth) {
--			if (temp_opp->bandwidth[index].peak >= *bw) {
--				opp = temp_opp;
--				*bw = opp->bandwidth[index].peak;
--
--				/* Increment the reference count of OPP */
--				dev_pm_opp_get(opp);
--				break;
--			}
--		}
--	}
--
--	mutex_unlock(&opp_table->lock);
--	dev_pm_opp_put_opp_table(opp_table);
-+	unsigned long temp = *bw;
-+	struct dev_pm_opp *opp;
- 
-+	opp = _find_key_ceil(dev, &temp, index, true, _read_bw);
-+	*bw = temp;
- 	return opp;
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_ceil);
-@@ -773,41 +750,11 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_ceil);
- struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
- 					    unsigned int *bw, int index)
- {
--	struct opp_table *opp_table;
--	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
--
--	if (!dev || !bw) {
--		dev_err(dev, "%s: Invalid argument bw=%p\n", __func__, bw);
--		return ERR_PTR(-EINVAL);
--	}
--
--	opp_table = _find_opp_table(dev);
--	if (IS_ERR(opp_table))
--		return ERR_CAST(opp_table);
--
--	if (index >= opp_table->path_count)
--		return ERR_PTR(-EINVAL);
--
--	mutex_lock(&opp_table->lock);
--
--	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
--		if (temp_opp->available && temp_opp->bandwidth) {
--			/* go to the next node, before choosing prev */
--			if (temp_opp->bandwidth[index].peak > *bw)
--				break;
--			opp = temp_opp;
--		}
--	}
--
--	/* Increment the reference count of OPP */
--	if (!IS_ERR(opp))
--		dev_pm_opp_get(opp);
--	mutex_unlock(&opp_table->lock);
--	dev_pm_opp_put_opp_table(opp_table);
--
--	if (!IS_ERR(opp))
--		*bw = opp->bandwidth[index].peak;
-+	unsigned long temp = *bw;
-+	struct dev_pm_opp *opp;
- 
-+	opp = _find_key_floor(dev, &temp, index, true, _read_bw);
-+	*bw = temp;
- 	return opp;
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_floor);
+>> There is no difference between those functions. There are 34 more
+>> patches in the pipe to be sent after this series to do more cleanups
+>> and
+>> remove code duplication.
+>>
+> Good to know.
+> 
+> It would be nice to have a cover letter to describe the whole picture,
+> including this patch series and the following patches in your queue.
+
+https://lore.kernel.org/lkml/20220703183059.4133659-4-daniel.lezcano@linexp.org/T/
+
+You will Cc'ed next time ;)
+
+
 -- 
-2.31.1.272.g89b43f80a514
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
