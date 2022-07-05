@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CDC5676D4
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 20:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E1F5676F4
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 20:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbiGESu4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 14:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
+        id S229983AbiGES4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 14:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiGESuz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 14:50:55 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5AC18370;
-        Tue,  5 Jul 2022 11:50:54 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 76so7842800ybd.0;
-        Tue, 05 Jul 2022 11:50:54 -0700 (PDT)
+        with ESMTP id S230185AbiGES4K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 14:56:10 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E028E1B7AE;
+        Tue,  5 Jul 2022 11:56:08 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id e69so16893891ybh.2;
+        Tue, 05 Jul 2022 11:56:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rEEp1avjtVpzd2rsIuvCf8awzg9kogoo/eZ9Po79gdw=;
-        b=7nJf6Nr24WQCYtyhTuUjddA2GsQqaAuNQJ0Dt+xvFDy7Th7ZuHAP6NqsbLnGfXe1uz
-         zGdg1XdDC3eL1xHXCNu+coKL9TjtzpEIgMsyMnSuG53mReozZyqAk0oximOWg4Y4oSnM
-         tmrhl9uyIGTb7xb4HHx+Hnpu7+F+PehbNY73f6SRowfnt5etTjSXHLNBax5ad79APcm2
-         rOPVT7vMPRCLVe/sgSn4aotCwJP02gx9OtmVIKNDVDD+HAtK7d3m6TSbSzRnfTM2WCi2
-         ijYl1kd7b02CekxddsVkFP2gZNYOR55UeEOW3iSDnfIfJiu+aY3TMm22A22VQReAlIeX
-         EygQ==
-X-Gm-Message-State: AJIora+27yAA4WGbIf/UQ/XP3Np4pJefReiKP92fd+cDM1aMERoZEihS
-        Ve5oJwDlSglWsXtk5hsW2niM9NUNIcGTZTqLJlg=
-X-Google-Smtp-Source: AGRyM1s+K+w9syS/4MUthIcayVyD+nAAsBHqrlB9RJMsRRD1+cb3mvFhbUNxWI/P5iK+pcwBsKRnGVi3K9dKqJ8GaC4=
-X-Received: by 2002:a25:ab81:0:b0:66e:3dc5:898c with SMTP id
- v1-20020a25ab81000000b0066e3dc5898cmr15271965ybi.81.1657047054027; Tue, 05
- Jul 2022 11:50:54 -0700 (PDT)
+        bh=6lb/COsTw/Yi6jNORtkg8dNZ2wmUs9sMaIBSDV796s4=;
+        b=DsXazNkDOkkB5tF6zcG5/XNnSwyFKu10KNHLbiIArht0q63k62quk/iPpkA3oOEjTI
+         cdbVqUPdL0Fn4ZGGYOzrmqkIN99okofEE5fvjSW5AwOMaMtscnqTlJzKZU+fAcYbsjtr
+         JNmJskKsPtRhFsWmXGgJhi1EJ+xgdGT9G+71+MYuEUvZcz+AAJWuoRjEdsSAqZHZCbDR
+         2StvSRgeq/BH2uVyXi0jJTaLHddT5DxxBr4GFiO1TMn3zqrqJZCNLzmGwR35P7ias5Ze
+         wQNt6YpCo+SoubgJzmJkJrYxy8D2kA5BU5NhuMGP/uTLmzPpqnI5kWV6Y8Bb7XVl99z4
+         ZyIw==
+X-Gm-Message-State: AJIora//Nw/9crvy81tC4GTh0j/GgPuIxEKOUI1F5VwCzqt8vL1x+jQi
+        N5xrg1lvjAknkJygzUEHY/mzl41KjKxCRLKFXH8=
+X-Google-Smtp-Source: AGRyM1vwcWagIDDdHSsIYmWswFFY6iJARfo9P5PiM2Zq9xwKbEr54ojks5kFS3t2x4uoJIsEjsXd+MxMsla6oYMh/VQ=
+X-Received: by 2002:a25:9847:0:b0:669:b4c6:d081 with SMTP id
+ k7-20020a259847000000b00669b4c6d081mr37902769ybo.633.1657047368140; Tue, 05
+ Jul 2022 11:56:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220607035158.308111-1-helgaas@kernel.org>
-In-Reply-To: <20220607035158.308111-1-helgaas@kernel.org>
+References: <20220514141932.53938-1-wudaemon@163.com>
+In-Reply-To: <20220514141932.53938-1-wudaemon@163.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Jul 2022 20:50:43 +0200
-Message-ID: <CAJZ5v0idEvNRU5vmybRms4aQbBoUUH8CBRtaGT5O1bScND5ZSA@mail.gmail.com>
-Subject: Re: [PATCH] PM / wakeup: Unify device_init_wakeup() for PM_SLEEP and !PM_SLEEP
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+Date:   Tue, 5 Jul 2022 20:55:57 +0200
+Message-ID: <CAJZ5v0jOpJhdLEdOr5EY5v_e2AXcn_1pt71F3t_KqCZe=ntd=Q@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal/core: Make trans_table tunnable to avoid some
+ needless zero output
+To:     Junwen Wu <wudaemon@163.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -59,127 +59,208 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 5:52 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+Sorry for the delay.
+
+On Sat, May 14, 2022 at 4:20 PM Junwen Wu <wudaemon@163.com> wrote:
 >
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> Previously the CONFIG_PM_SLEEP and !CONFIG_PM_SLEEP device_init_wakeup()
-> implementations differed in confusing ways:
->
->   - The PM_SLEEP version checked for a NULL device pointer and returned
->     -EINVAL, while the !PM_SLEEP version did not and would simply
->     dereference a NULL pointer.
->
->   - When called with "false", the !PM_SLEEP version cleared "capable" and
->     "enable" in the opposite order of the PM_SLEEP version.  That was
->     harmless because for !PM_SLEEP they're simple assignments, but it's
->     unnecessary confusion.
->
-> Use a simplified version of the PM_SLEEP implementation for both cases.
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Very high cooling device max state value make trans_table node
+> prompt File too large. We introduce show_state node, tunnable
+> by user,thus trans_table only show show_state'th trans count to
+> the max trans count, in this way trans_table_show's buffer is
+> always less than PAGE_SIZE and shows the important changes.
+
+This changelog is rather hard to understand.
+
+As far as the code changes go, you cannot add new sysfs attributes
+arbitrarily without documenting them.
+
+Also, is the proposed change compatible with all existing user space
+that may be using the sysfs modified by this change?
+
+> Signed-off-by: Junwen Wu <wudaemon@163.com>
 > ---
->  drivers/base/power/wakeup.c | 30 ------------------------------
->  include/linux/pm_wakeup.h   | 31 +++++++++++++++++++++++--------
->  2 files changed, 23 insertions(+), 38 deletions(-)
+>  drivers/thermal/thermal_sysfs.c | 111 +++++++++++++++++++++++++-------
+>  1 file changed, 86 insertions(+), 25 deletions(-)
 >
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 11a4ffe91367..e3befa2c1b66 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -500,36 +500,6 @@ void device_set_wakeup_capable(struct device *dev, bool capable)
->  }
->  EXPORT_SYMBOL_GPL(device_set_wakeup_capable);
->
-> -/**
-> - * device_init_wakeup - Device wakeup initialization.
-> - * @dev: Device to handle.
-> - * @enable: Whether or not to enable @dev as a wakeup device.
-> - *
-> - * By default, most devices should leave wakeup disabled.  The exceptions are
-> - * devices that everyone expects to be wakeup sources: keyboards, power buttons,
-> - * possibly network interfaces, etc.  Also, devices that don't generate their
-> - * own wakeup requests but merely forward requests from one bus to another
-> - * (like PCI bridges) should have wakeup enabled by default.
-> - */
-> -int device_init_wakeup(struct device *dev, bool enable)
-> -{
-> -       int ret = 0;
-> -
-> -       if (!dev)
-> -               return -EINVAL;
-> -
-> -       if (enable) {
-> -               device_set_wakeup_capable(dev, true);
-> -               ret = device_wakeup_enable(dev);
-> -       } else {
-> -               device_wakeup_disable(dev);
-> -               device_set_wakeup_capable(dev, false);
-> -       }
-> -
-> -       return ret;
-> -}
-> -EXPORT_SYMBOL_GPL(device_init_wakeup);
-> -
->  /**
->   * device_set_wakeup_enable - Enable or disable a device to wake up the system.
->   * @dev: Device to handle.
-> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> index 196a157456aa..77f4849e3418 100644
-> --- a/include/linux/pm_wakeup.h
-> +++ b/include/linux/pm_wakeup.h
-> @@ -109,7 +109,6 @@ extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws);
->  extern int device_wakeup_enable(struct device *dev);
->  extern int device_wakeup_disable(struct device *dev);
->  extern void device_set_wakeup_capable(struct device *dev, bool capable);
-> -extern int device_init_wakeup(struct device *dev, bool val);
->  extern int device_set_wakeup_enable(struct device *dev, bool enable);
->  extern void __pm_stay_awake(struct wakeup_source *ws);
->  extern void pm_stay_awake(struct device *dev);
-> @@ -167,13 +166,6 @@ static inline int device_set_wakeup_enable(struct device *dev, bool enable)
->         return 0;
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index f154bada2906..bb8627aa49b7 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -656,6 +656,7 @@ struct cooling_dev_stats {
+>         spinlock_t lock;
+>         unsigned int total_trans;
+>         unsigned long state;
+> +       unsigned long show_state;
+>         unsigned long max_states;
+>         ktime_t last_time;
+>         ktime_t *time_in_state;
+> @@ -752,38 +753,93 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
+>         return count;
 >  }
 >
-> -static inline int device_init_wakeup(struct device *dev, bool val)
-> -{
-> -       device_set_wakeup_capable(dev, val);
-> -       device_set_wakeup_enable(dev, val);
-> -       return 0;
-> -}
-> -
->  static inline bool device_may_wakeup(struct device *dev)
+> -static ssize_t trans_table_show(struct device *dev,
+> -                               struct device_attribute *attr, char *buf)
+> +static ssize_t
+> +show_state_store(struct device *dev, struct device_attribute *attr, const char *buf,
+> +               size_t count)
 >  {
->         return dev->power.can_wakeup && dev->power.should_wakeup;
-> @@ -217,4 +209,27 @@ static inline void pm_wakeup_hard_event(struct device *dev)
->         return pm_wakeup_dev_event(dev, 0, true);
->  }
+>         struct thermal_cooling_device *cdev = to_cooling_device(dev);
+>         struct cooling_dev_stats *stats = cdev->stats;
+> -       ssize_t len = 0;
+> -       int i, j;
+> +       unsigned long state;
+> +       ssize_t ret;
 >
-> +/**
-> + * device_init_wakeup - Device wakeup initialization.
-> + * @dev: Device to handle.
-> + * @enable: Whether or not to enable @dev as a wakeup device.
-> + *
-> + * By default, most devices should leave wakeup disabled.  The exceptions are
-> + * devices that everyone expects to be wakeup sources: keyboards, power buttons,
-> + * possibly network interfaces, etc.  Also, devices that don't generate their
-> + * own wakeup requests but merely forward requests from one bus to another
-> + * (like PCI bridges) should have wakeup enabled by default.
-> + */
-> +static inline int device_init_wakeup(struct device *dev, bool enable)
-> +{
-> +       if (enable) {
-> +               device_set_wakeup_capable(dev, true);
-> +               return device_wakeup_enable(dev);
-> +       } else {
-> +               device_wakeup_disable(dev);
-> +               device_set_wakeup_capable(dev, false);
-> +               return 0;
-> +       }
+> -       len += snprintf(buf + len, PAGE_SIZE - len, " From  :    To\n");
+> -       len += snprintf(buf + len, PAGE_SIZE - len, "       : ");
+> -       for (i = 0; i < stats->max_states; i++) {
+> -               if (len >= PAGE_SIZE)
+> -                       break;
+> -               len += snprintf(buf + len, PAGE_SIZE - len, "state%2u  ", i);
+> -       }
+> -       if (len >= PAGE_SIZE)
+> -               return PAGE_SIZE;
+> +       spin_lock(&stats->lock);
+> +
+> +       ret = kstrtoul(buf, 10, &state);
+> +       if (ret || (state > stats->max_states))
+> +               goto unlock;
+>
+> -       len += snprintf(buf + len, PAGE_SIZE - len, "\n");
+> +       stats->show_state = state;
+> +unlock:
+> +       spin_unlock(&stats->lock);
+>
+> -       for (i = 0; i < stats->max_states; i++) {
+> -               if (len >= PAGE_SIZE)
+> -                       break;
+> +       return count;
 > +}
 > +
->  #endif /* _LINUX_PM_WAKEUP_H */
+> +static ssize_t
+> +show_state_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +       struct thermal_cooling_device *cdev = to_cooling_device(dev);
+> +       struct cooling_dev_stats *stats = cdev->stats;
+> +
+> +       return sprintf(buf, "%lu\n", stats->show_state);
+> +}
+>
+> -               len += snprintf(buf + len, PAGE_SIZE - len, "state%2u:", i);
+> +/* find the kth largest in nums array*/
+> +static int find_show_state(int *nums, int numsSize, int k, unsigned int *max_value)
+> +{
+> +       int i, l, r, mid, cnt = 0, min = INT_MAX, max = 0;
+>
+> -               for (j = 0; j < stats->max_states; j++) {
+> -                       if (len >= PAGE_SIZE)
+> -                               break;
+> -                       len += snprintf(buf + len, PAGE_SIZE - len, "%8u ",
+> -                               stats->trans_table[i * stats->max_states + j]);
+> +       for (i = 0; i < numsSize; i++) {
+> +               min = nums[i] < min ? nums[i] : min;
+> +               max = nums[i] > max ? nums[i] : max;
+> +       }
+> +       l = min;
+> +       r = max;
+> +       while (l < r) {
+> +               mid = r - (r - l) / 2;
+> +               for (i = 0; i < numsSize; i++) {
+> +                       if (nums[i] >= mid)
+> +                               cnt++;
+> +               }
+> +               if (cnt < k) {
+> +                       r = mid - 1;
+> +                       cnt = 0;
+> +               } else {
+> +                       l = mid;
+> +                       cnt = 0;
+>                 }
+> +       }
+> +
+> +       *max_value = max;
+> +
+> +       return l;
+> +}
+> +
+> +
+> +
+> +static ssize_t trans_table_show(struct device *dev,
+> +                               struct device_attribute *attr, char *buf)
+> +{
+> +       struct thermal_cooling_device *cdev = to_cooling_device(dev);
+> +       struct cooling_dev_stats *stats = cdev->stats;
+> +       unsigned int show_state_value = 0;
+> +       unsigned int max_state_value = 0;
+> +       ssize_t len = 0;
+> +       int i, j;
+> +
+> +       len += snprintf(buf + len, PAGE_SIZE - len, " From  :    Index_change\n");
+> +       for (i = 0; i < stats->max_states; i++) {
+> +               show_state_value = find_show_state(&stats->trans_table[i * stats->max_states],
+> +                               stats->max_states, stats->show_state, &max_state_value);
+> +               if (max_state_value)
+> +                       len += snprintf(buf + len, PAGE_SIZE - len, "state%2u:", i);
+> +               else
+> +                       continue;
+> +               for (j = 0; j < stats->max_states; j++)
+> +                       if (stats->trans_table[i * stats->max_states + j] && (show_state_value <=
+> +                                               stats->trans_table[i * stats->max_states + j]))
+> +                               len += snprintf(buf + len, PAGE_SIZE - len, "     ->%u(%u)", j,
+> +                                               stats->trans_table[i * stats->max_states + j]);
+>                 if (len >= PAGE_SIZE)
+>                         break;
+>                 len += snprintf(buf + len, PAGE_SIZE - len, "\n");
+> @@ -793,6 +849,7 @@ static ssize_t trans_table_show(struct device *dev,
+>                 pr_warn_once("Thermal transition table exceeds PAGE_SIZE. Disabling\n");
+>                 return -EFBIG;
+>         }
+> +
+>         return len;
+>  }
+>
+> @@ -800,12 +857,14 @@ static DEVICE_ATTR_RO(total_trans);
+>  static DEVICE_ATTR_RO(time_in_state_ms);
+>  static DEVICE_ATTR_WO(reset);
+>  static DEVICE_ATTR_RO(trans_table);
+> +static DEVICE_ATTR_RW(show_state);
+>
+>  static struct attribute *cooling_device_stats_attrs[] = {
+>         &dev_attr_total_trans.attr,
+>         &dev_attr_time_in_state_ms.attr,
+>         &dev_attr_reset.attr,
+>         &dev_attr_trans_table.attr,
+> +       &dev_attr_show_state.attr,
+>         NULL
+>  };
+>
+> @@ -829,7 +888,7 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+>         var += sizeof(*stats->time_in_state) * states;
+>         var += sizeof(*stats->trans_table) * states * states;
+>
+> -       stats = kzalloc(var, GFP_KERNEL);
+> +       stats = kvzalloc(var, GFP_KERNEL);
+>         if (!stats)
+>                 return;
+>
+> @@ -838,6 +897,8 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+>         cdev->stats = stats;
+>         stats->last_time = ktime_get();
+>         stats->max_states = states;
+> +       /* default set show_state = max_states/2 */
+> +       stats->show_state = states / 2;
+>
+>         spin_lock_init(&stats->lock);
+>
+> @@ -848,7 +909,7 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+>
+>  static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
+>  {
+> -       kfree(cdev->stats);
+> +       kvfree(cdev->stats);
+>         cdev->stats = NULL;
+>  }
+>
 > --
-
-Applied as 5.20 material, sorry for the delay.
-
-Thanks!
+> 2.25.1
+>
