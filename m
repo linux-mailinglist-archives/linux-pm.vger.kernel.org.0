@@ -2,68 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2CF566715
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 11:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2304566712
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 11:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbiGEJwF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 05:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
+        id S232087AbiGEJwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 05:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232367AbiGEJvP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 05:51:15 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD04813F81
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 02:49:59 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso3526964pjk.3
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 02:49:59 -0700 (PDT)
+        with ESMTP id S232591AbiGEJvM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 05:51:12 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54CE13F6F
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 02:49:53 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id j13so637234ljo.7
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 02:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dNuDujWN9W1g88kKFQJS4fnKwCoQVZmV8mz8Iq8FU/s=;
-        b=BhBQ9g2q9M0kZORA2LG2XIzUp7lCMhxIe5kQhvGIfqCVFNtnBWDtCYi/aSXCzPCe+u
-         h7jocr2l1u+4Q9JnBf5J1ZCcBrmAQLy5ZgF4zxXobx7Ao8I6L3VqPN06HBr5kSTu020e
-         Z0j+PaSP/GSURTlhhrzZfoMoYnUuzneOYqxu0=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=shv90DwYEPdUFHu8Cga4VYHWdDzItCMFq4BFSIFK8MQ=;
+        b=EXpa8/uKwzMzew+mn994GeiCVEwmKgmDVTf6C4LdMJ+ZQk8cTCli0GnR60hardY+1E
+         2hGVWntRvgBDlPyAcsp6OQmj7N/e6M4Hgxcw2fGTKTC+Bp/oiCKS5qzJnItCTn061LOY
+         SQBUqDi0P6GjkiiiFsahsD72ZRMFwmTOclakEWI5oU4astCcgkNAWbgv8BUbiASLsHdq
+         v0F9vGkr5cQkHGf0Co0+dum4XqEwgsLrwyR2DiFv49zAN+Nj0zl4f0Bd0iPx0+VGi8n5
+         el0lQ3Jms5CrugPf8sk6t+R+imFv9o7yHunVrhaDThCfvdIZmdhrQCd3g3oho3cSS0Ox
+         KXOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=dNuDujWN9W1g88kKFQJS4fnKwCoQVZmV8mz8Iq8FU/s=;
-        b=jlwoZFSc/y2BjN05BH+69lkGYvmUHPeJYZOO6D0J3AnEK2j2UJ/GxeoFmuPsK45xRc
-         a7pZkSl1dscQ2WKfNEkhW2jCzZk8btW5VXMMnwBckGlPR2VqtZwUMOJi/qq82jwbZhuV
-         Cr8w2/X5AMeRIrgAYjjMctw/t6FJxltDiaN6qNG42l/KswFun0/+/rW9vigJWzWLoGmH
-         akqXTVs2lYJKBLEdV12WZqEH/0oTjuRqeQwbqK6poUD700VS+Nk/5gZfSrM18A9CiAZ/
-         2aDA44Al6v/2GawmHsNCLfUklnF/Jzkwz81O7+ptVVEGKgBLT/1o+kCJlMeLAm6UYmzv
-         qk1w==
-X-Gm-Message-State: AJIora/BMpWcHuiKdQbx10TP4O+UG5hgtLA7c+CEEI47LG4Elc1rDYcQ
-        0K+dzLspNnUjIwoPC0XfGgTXeduoEOIjmw==
-X-Google-Smtp-Source: AGRyM1srUa7NyStt9XxdcLUu8TEjpzpM9KcuxS4p7FiTh2jnPnLRDGAc5YssLWz/O7Tg/YLTswEFOA==
-X-Received: by 2002:a17:903:41c4:b0:16a:1fda:579f with SMTP id u4-20020a17090341c400b0016a1fda579fmr40995717ple.169.1657014599029;
-        Tue, 05 Jul 2022 02:49:59 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:c921:5fa9:6620:638])
-        by smtp.gmail.com with ESMTPSA id j8-20020a17090a060800b001ed1444df67sm12002232pjj.6.2022.07.05.02.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 02:49:58 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Strudel <tstrudel@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH] PM: domains: Ensure genpd_debugfs_dir exists before remove
-Date:   Tue,  5 Jul 2022 17:49:47 +0800
-Message-Id: <20220705094946.827697-1-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+        bh=shv90DwYEPdUFHu8Cga4VYHWdDzItCMFq4BFSIFK8MQ=;
+        b=XfnnJrgBDSkACWywky72socIN6cR/zq2Ub7F6bMyR8epNp7DZNYN+Jea2j7sRP6UHQ
+         /aXgjRvvDKrhLJu03AU3lOtMtjkRCkVkEjg6bxbgp00V2XJUcUmVg/OXVBssG9/XzekZ
+         bRyZtEXWUwOJyfO7/Kugvdi4oPTJATcXgPl5pE13/LlGrti9YvXLP8Jir7EQYorNGnAA
+         0A1xcWNuayynhlETXRC6ijQ2IXWEsXy2DDZ2rm2Alf9cjuiDl6xwIyAtJhTXFt5szrG4
+         oX1Tprhts7nCl1uV3fIX7NsgNGNkaDuF0Jcik3v33eqn4D6w1p17C8sLWeRlA6XzcHTJ
+         4pBA==
+X-Gm-Message-State: AJIora/ydYvgIsvyLIMUHwtTZREUVuMIDEiQxvImTRFPV4R//vm/ECs2
+        /u6JB5mf++fi/kaIacan2Pf7bA==
+X-Google-Smtp-Source: AGRyM1uoZPMckUe4fDIWlkcjaMJ+OIVVYuinLeVA7VFD6UQOGHcf0Ahl4PkuVPIUrYneNnB79zWC3g==
+X-Received: by 2002:a2e:a54a:0:b0:25a:7010:4aee with SMTP id e10-20020a2ea54a000000b0025a70104aeemr19678705ljn.245.1657014592229;
+        Tue, 05 Jul 2022 02:49:52 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id k6-20020ac257c6000000b0047f665e2df8sm5591179lfo.257.2022.07.05.02.49.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 02:49:51 -0700 (PDT)
+Message-ID: <42f8f46f-e5e3-8e77-22e1-07fdbfb6d96a@linaro.org>
+Date:   Tue, 5 Jul 2022 11:49:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 1/5] dt-bindings: interconnect: Update property for
+ icc-rpm path tag
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220705072336.742703-1-leo.yan@linaro.org>
+ <20220705072336.742703-2-leo.yan@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705072336.742703-2-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,36 +79,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-genpd_debug_remove() may be indirectly called from others while
-genpd_debugfs_dir is not yet set. Make sure genpd_debugfs_dir exists
-before remove the sub components, otherwise components under
-/sys/kernel/debug may be accidentally removed.
+On 05/07/2022 09:23, Leo Yan wrote:
+> To support path tag in icc-rpm driver, the "#interconnect-cells"
+> property is updated as enumerate values: 1 or 2.  Setting to 1 means
+> it is compatible with old DT binding that interconnect path only
+> contains node id; if set to 2 for "#interconnect-cells" property, then
+> the second specifier is used as a tag (e.g. vote for which buckets).
+> 
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
 
-Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
-An example:
-scpsys_probe() in drivers/soc/mediatek/mtk-pm-domains.c indirectly calls
-genpd_debug_remove() on probe fail, causing /sys/kernel/debug/usb to be
-removed.
----
- drivers/base/power/domain.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 3e86772d5fac5..5a2e0232862e0 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
- {
- 	struct dentry *d;
- 
-+	if (!genpd_debugfs_dir)
-+		return;
-+
- 	d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
- 	debugfs_remove(d);
- }
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
