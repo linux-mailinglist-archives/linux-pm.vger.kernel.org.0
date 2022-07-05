@@ -2,92 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E6756629C
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 07:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360A95662B9
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 07:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiGEFH4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 01:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S229705AbiGEFVy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 01:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGEFHz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 01:07:55 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDB013D06;
-        Mon,  4 Jul 2022 22:07:54 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8208B5C003B;
-        Tue,  5 Jul 2022 01:07:52 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 05 Jul 2022 01:07:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656997672; x=
-        1657084072; bh=9nY5RE/bGNXng/ITS0f9EUPsxcwltUGdSfZPvL271To=; b=T
-        9k1HVY0weVxBaMWNkBqWADMO9f51TEejqMhkprOAaWP7A+GsRVnwtSoMS6CODWNN
-        xcrAEAnHeIc5uCfJZ38Irt9v/MBuFIgtobkKO5l9Gy1b8MdpwSRfDBfrZ8Jge9LY
-        OxVgwJ3zNgUUdzdovDAvUaBe9mDEbgkuZ5/KOEz2r7xopV4WSIAqBgcgz7x3jZ5L
-        7gefundRif3T9n5pNfYJjodIi6ceVbypq8b6eedZ7R6K8Kkc6iqYdcswBMmSpyv/
-        y2CnHppqbMLfFF5a2aoKZysla6u0T66GuCthie4pk9HD2gXMXpGcED+RpFrkeGTh
-        F4zn1A99TlL8RiZdmmaYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656997672; x=
-        1657084072; bh=9nY5RE/bGNXng/ITS0f9EUPsxcwltUGdSfZPvL271To=; b=i
-        iAb0VeIi7nUD5mvNBQIRan6fKs7Y5EXWQYwu1fsjqkKilP/2Gw0utNYB2RR8DvK5
-        pQpx+SpFC9pAi42/Gj+5OUrCwpCL2SmLpzan9srOWIhaw4GqOoSuYOxasR49O6xE
-        5PMIJb87MKAY6gXkMh9o6Nm9NJrJIWP4SRPX3m2xjc+mx9erNqnT38WSC1+BWfqt
-        XziI0IsgreK39Ub/yBUPIZ/2OvOyWfw+JuDIKsV3T3r9f0kH+mWeyz8SLgyt5yen
-        rBDZ2AR2zTQb9htKBwI4IxFYNVnwCYZSkdrmxWbf6v7nlO3KI9y2QFyAr4dxtxN+
-        khnQXi3Jh9Az+cgatBF1w==
-X-ME-Sender: <xms:KMfDYhVpC0qJbBv5rhTX0DfOyMtLPS8hTdFu3vmjdbe5q8Ywll_NdA>
-    <xme:KMfDYhm4liRTYzgXU-exIxT85Lqd1wGGICxnWSg5SHcGIby9S56wHMsrla52GanP_
-    RWnFvaSZajS_YeVQw>
-X-ME-Received: <xmr:KMfDYtYw_1l9CU3ZVQaqhAnnyy4xHUbQ7F11wDwaPRAJGM13LqV7rDt3cwhhh8hn4YXtRGuICDcqok0PXQlsfQfYdAg93RDnLvF3nNkWhdkBg_ipoL6-h3-T3A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeitddgledtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedtvefhheehgfdvkeetffeludeuudehudeuvddtveelleekvedv
-    uedviefhkeeuheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:KMfDYkV7s3VcgtsH5SnnQ9xEqB7UsNoZ0pnYCtQJ75zj4QIcC7QaMg>
-    <xmx:KMfDYrk-CxRRG008UoyjfZKqVXT7x0CaFch7_HMVGOm0cijNROQX0g>
-    <xmx:KMfDYheHlmTralLxPOkkUG62STM1NvTMvlaj6EeANtGZqVqTdbVZwQ>
-    <xmx:KMfDYkfxkom3UfDUb5XnB22GIH7LnyvZjfTfLEk_uw5Y8H7s6AZ4vA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Jul 2022 01:07:50 -0400 (EDT)
-Subject: Re: [PATCH v5 3/3] ARM: dts: sun8i-r40: Add thermal trip
- points/cooling maps
-To:     qianfanguijin@163.com
-Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220517013607.2252-1-qianfanguijin@163.com>
- <20220517013607.2252-4-qianfanguijin@163.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <75c9edeb-edfd-b910-7f72-53f7694b456d@sholland.org>
-Date:   Tue, 5 Jul 2022 00:07:49 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        with ESMTP id S229652AbiGEFVx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 01:21:53 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DBA12A9A
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 22:21:52 -0700 (PDT)
+Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2655LLBb056114;
+        Tue, 5 Jul 2022 14:21:21 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
+ Tue, 05 Jul 2022 14:21:21 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2655LKMB056102
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 5 Jul 2022 14:21:20 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
+Date:   Tue, 5 Jul 2022 14:21:17 +0900
 MIME-Version: 1.0
-In-Reply-To: <20220517013607.2252-4-qianfanguijin@163.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>
+References: <000000000000d9ff3a05bb37069e@google.com>
+ <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
+ <YsKW6VvWqvcMRBSl@kroah.com>
+ <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
+ <YsLIepAXeBKT0AF/@kroah.com>
+ <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+ <YsL5pUuydMWJ9dSQ@kroah.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YsL5pUuydMWJ9dSQ@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,25 +61,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/16/22 8:36 PM, qianfanguijin@163.com wrote:
-> From: qianfan Zhao <qianfanguijin@163.com>
-> 
-> For the trip points, I used values from the BSP code.
-> 
-> The critical trip point value is 30°C above the maximum recommended
-> ambient temperature (85°C) for the SoC from the datasheet, so there's
-> some headroom even at such a high ambient temperature.
-> 
-> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+On 2022/07/04 23:31, Greg KH wrote:
+> I don't understand what you are trying to "fix" here.  What is userspace
+> doing (as a normal user) that is causing a problem, and what problem is
+> it causing and for what device/hardware/driver is this a problem?
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Tested-by: Samuel Holland <samuel@sholland.org>
+Currently the root cause is unknown.
+This might be another example of deadlock hidden by device_initialize().
 
-which took quite a while to hit the passive trip point:
+We can see from https://syzkaller.appspot.com/text?tag=CrashReport&x=11feb7e0080000 that
+when khungtaskd reports that a process is blocked waiting for misc_mtx at misc_open(),
+there is a process which is holding system_transition_mutex from snapshot_open().
 
-# cat /sys/class/thermal/cooling_device0/stats/time_in_state_ms
-state0  1374892
-state1  1499
-state2  0
-state3  0
-state4  0
+----------------------------------------
+INFO: task syz-executor.4:21922 blocked for more than 143 seconds.
+      Not tainted 5.19.0-rc4-syzkaller-00187-g089866061428 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.4  state:D stack:28408 pid:21922 ppid:  3666 flags:0x00000004
+
+2 locks held by syz-executor.5/21906:
+ #0: ffffffff8c82f708 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x5f/0x4a0 drivers/char/misc.c:107
+ #1: ffffffff8bc536e8 (system_transition_mutex){+.+.}-{3:3}, at: snapshot_open+0x3b/0x2a0 kernel/power/user.c:54
+1 lock held by syz-executor.4/21922:
+ #0: ffffffff8c82f708 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x5f/0x4a0 drivers/char/misc.c:107
+----------------------------------------
+
+Possible locations where snapshot_open() might sleep with system_transition_mutex held are
+pm_notifier_call_chain_robust()/wait_for_device_probe()/create_basic_memory_bitmaps().
+But I think we can exclude pm_notifier_call_chain_robust() because lockdep does not report
+that that process is holding "struct blocking_notifier_head"->rwsem. I suspect that
+that process is sleeping at wait_for_device_probe(), for it waits for probe operations.
+
+----------------------------------------
+void wait_for_device_probe(void)
+{
+	/* wait for the deferred probe workqueue to finish */
+	flush_work(&deferred_probe_work);
+
+	/* wait for the known devices to complete their probing */
+	wait_event(probe_waitqueue, atomic_read(&probe_count) == 0);
+	async_synchronize_full();
+}
+----------------------------------------
+
+> 
+> Yes, you can sleep in open(), but you shouldn't sleep long, if at all
+> possible as it can be annoying.  So why not fix up the offending driver
+> not to sleep to long?
+
+We can't predict how long snapshot_open() sleeps inside wait_for_device_probe().
+
+Looking at abovementioned report again, it seems to be common that one process is
+inside input_register_handle() and another process is inside input_close_device(),
+and these two processes are holding the same &dev->mutex#2 object. Guessing from
+the code that input_register_handle() will not sleep with dev->mutex held,
+input_close_device() is holding dev->mutex and input_register_handle() is
+waiting for input_close_device() to release dev->mutex.
+
+Therefore, there might be a race or deadlock between these two processes.
+If &dev->mutex#2 were subjected to device_initialize() magic, lockdep won't be
+able to catch the deadlock. But I'm not familiar with device management code...
+
+Maybe input_close_device() is failing to release dev->mutex for some reason?
+Maybe nothing but too slow to wait?
+
+----------------------------------------
+7 locks held by kworker/1:0/22:
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc900001c7da8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+ #2: ffff8881479d4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff8881479d4190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4690 drivers/usb/core/hub.c:5691
+ #3: ffff888044782190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #3: ffff888044782190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #4: ffff8880447d2118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #4: ffff8880447d2118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #5: ffffffff8ceafca8 (input_mutex){+.+.}-{3:3}, at: input_register_device.cold+0x34/0x304 drivers/input/input.c:2378
+ #6: ffff8880447d52c0 (&dev->mutex#2){+.+.}-{3:3}, at: input_register_handle+0x6d/0x510 drivers/input/input.c:2544
+
+2 locks held by acpid/2962:
+ #0: ffff888042a28158 (&joydev->mutex){+.+.}-{3:3}, at: joydev_close_device drivers/input/joydev.c:220 [inline]
+ #0: ffff888042a28158 (&joydev->mutex){+.+.}-{3:3}, at: joydev_release+0x187/0x290 drivers/input/joydev.c:252
+ #1: ffff8880447d52c0 (&dev->mutex#2){+.+.}-{3:3}, at: input_close_device+0x42/0x1f0 drivers/input/input.c:726
+
+7 locks held by kworker/1:11/5743:
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888011a65d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc900153c7da8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+ #2: ffff888021384190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff888021384190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4690 drivers/usb/core/hub.c:5691
+ #3: ffff8880468a4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #3: ffff8880468a4190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #4: ffff8880468a6118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #4: ffff8880468a6118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #5: ffff8880255f1a20 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #5: ffff8880255f1a20 (&dev->mutex){....}-{3:3}, at: __device_attach+0x76/0x530 drivers/base/dd.c:964
+ #6: ffffffff8ceafca8 (input_mutex){+.+.}-{3:3}, at: input_register_device.cold+0x34/0x304 drivers/input/input.c:2378
+----------------------------------------
+
