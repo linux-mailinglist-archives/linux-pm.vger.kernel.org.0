@@ -2,53 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A71567172
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 16:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DACC5671B4
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 17:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiGEOre (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 10:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S231347AbiGEPAb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 11:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGEOrd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 10:47:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4B24E02B;
-        Tue,  5 Jul 2022 07:47:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60604D6E;
-        Tue,  5 Jul 2022 07:47:32 -0700 (PDT)
-Received: from [10.57.8.239] (unknown [10.57.8.239])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D9943F66F;
-        Tue,  5 Jul 2022 07:47:30 -0700 (PDT)
-Message-ID: <75eb1aff-6aa9-b393-efe4-c8559d5a2701@arm.com>
-Date:   Tue, 5 Jul 2022 15:47:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 05/12] thermal/core: Remove unneeded EXPORT_SYMBOLS
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
+        with ESMTP id S229542AbiGEPAa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 11:00:30 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E4D14D03
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 08:00:29 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31c9f68d48cso33261247b3.0
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 08:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=QKuFg9afWhUipvD+WdWRILrNmuYqti5h58sgL8Ob85w=;
+        b=I1hm1SyHmxcLO7/EzbgkwyhvtMLZ2oqIEFbEoFVWd6iXy9zRpmRcMlkRB48oF+revL
+         ZWoUdXXELCCZ1ITOv4C9zvfjcqggfmuXkPrpSwyiZ+MZL0nsCjOEgB8dB1F+wF56qpgb
+         3S0C50+n99eVaZWajRE7iLRc6cKulNgTwzcsj/aPuX+XrIyyza46XkdeLBX4mjnqnzPd
+         8QjPoWGIqESpY4uzqrGlSv5Ogx+J5DsfqlP902d6jeo9x9E6zs0THNYHlkNybr3JhBY3
+         MA6SkMQcDTDUlSLxzzmcs9Yo37CDIVZkLbm+dlAhLYKVSAtxqv4HKyMk9tt3BEv1c7bN
+         r5yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=QKuFg9afWhUipvD+WdWRILrNmuYqti5h58sgL8Ob85w=;
+        b=v7POd84R/KQgD6vp02ehLkUBglPpDaNfgzWUzI97wggjUrMNMqvo8XNHzOp8psr8MS
+         9uFDh/yKW5BPMcm4y/6aUlU187BkYLFGSydQgpEIKIDPgZZRpBnMFPyQPi12gQ7g4fMH
+         KZrM4vBVtUSPMUt8xZQAQk9ymvf3jZMCKfTeGzCWyF5pVNgPlHAWQIYswJ+XlsVPbk3g
+         sPy2dNQvMGOQWjYPsYfZPny1RYfX58hMLObqFjVrhxYpgRF5+CzGPBfaMToHZL+PaYIc
+         Whxht9qox73ra+XsDpq68s6uk1+b6vsJ+JlDFx3g9uQfqdpJJqWWqhOKIFcCzfdOQ+Oy
+         0KtQ==
+X-Gm-Message-State: AJIora/Pxo6SYMiG9zLsoyBh4c9SEJxDPrmiGoCTzNJ1TNrYxh19OLpW
+        LIMXtQOcSJgFYfHSXmCAqRpXASwBTfOT3O4/Ig==
+X-Google-Smtp-Source: AGRyM1vov+co30UkhlpMFkCv16wQz5Y36w5l/CsmBztWgrqpIsFJp2fvlSpQSueDSb7FKEdWEPgSZo1iHk9nkbZt1Q==
+X-Received: from devel.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:4ea])
+ (user=varadgautam job=sendgmr) by 2002:a81:83c1:0:b0:31c:782f:7a42 with SMTP
+ id t184-20020a8183c1000000b0031c782f7a42mr21651503ywf.399.1657033228690; Tue,
+ 05 Jul 2022 08:00:28 -0700 (PDT)
+Date:   Tue,  5 Jul 2022 15:00:02 +0000
+Message-Id: <20220705150002.2016207-1-varadgautam@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] thermal: sysfs: Perform bounds check when storing thermal states
+From:   Varad Gautam <varadgautam@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Todd Kjos <tkjos@google.com>,
-        Wei Wang <wvw@google.com>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
- <20220703183059.4133659-6-daniel.lezcano@linexp.org>
- <ad8dd950-9260-16b3-2134-72984e2ba261@arm.com>
- <e2d81210-a969-fe9d-a4fb-1826c991fbce@linexp.org>
- <f1cd08de-e8cb-18c2-9f92-01436810bc20@arm.com>
- <CAJZ5v0iKcLM--L4ecoPDWpQ=8zgfeMxCku4zJt7hzVxSszgSNQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0iKcLM--L4ecoPDWpQ=8zgfeMxCku4zJt7hzVxSszgSNQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        Varad Gautam <varadgautam@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,60 +66,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Check that a user-provided thermal state is within the maximum
+thermal states supported by a given driver before attempting to
+apply it. This prevents a subsequent OOB access in
+thermal_cooling_device_stats_update() while performing
+state-transition accounting on drivers that do not have this check
+in their set_cur_state() handle.
 
+Signed-off-by: Varad Gautam <varadgautam@google.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-On 7/5/22 15:20, Rafael J. Wysocki wrote:
-> On Tue, Jul 5, 2022 at 9:30 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 7/4/22 22:14, Daniel Lezcano wrote:
->>> On 04/07/2022 09:35, Lukasz Luba wrote:
->>>> Hi Daniel,
->>>>
->>>> (+Todd and Wei on CC)
->>>>
->>>>
->>>> On 7/3/22 19:30, Daniel Lezcano wrote:
->>>
->>> [ ... ]
->>>
->>>>>    }
->>>>> -EXPORT_SYMBOL(get_tz_trend);
->>>
->>> [ ... ]
->>>
->>>>>    }
->>>>> -EXPORT_SYMBOL(thermal_cdev_update);
->>>>
->>>> I wouldn't remove that export. I can see in my Pixel6 modules dir, that
->>>> it's called in 7 places.
->>>>
->>>> I assume that in Android world this is common use.
->>>
->>> It is not possible to do changes taking into consideration out of tree
->>> code. Moreover there is logically no good reason to use the
->>> thermal_cdev_update() function from outside of the thermal core code.
->>>
->>
->> I see your point which is 'upstream'. On the other hand the mostly
->> deployed kernel is in Android devices and that brings a lot to the
->> community.
->>
->> This symbol might also be used by other distros which might have
->> modules for some accelerators, which also support tricky cooling.
->>
->> I would keep it as is...
-> 
-> I think that the long-term goal is to reduce differences between the
-> mainline kernel and Android.  From this angle, it would be good if
-> Android was aware that the mainline did stuff especially for them and
-> making them carry an extra patch would go a long way towards that
-> purpose.
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 1c4aac8464a7..0c6b0223b133 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -607,7 +607,7 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+ 		const char *buf, size_t count)
+ {
+ 	struct thermal_cooling_device *cdev = to_cooling_device(dev);
+-	unsigned long state;
++	unsigned long state, max_state;
+ 	int result;
+ 
+ 	if (sscanf(buf, "%ld\n", &state) != 1)
+@@ -618,10 +618,20 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+ 
+ 	mutex_lock(&cdev->lock);
+ 
++	result = cdev->ops->get_max_state(cdev, &max_state);
++	if (result)
++		goto unlock;
++
++	if (state > max_state) {
++		result = -EINVAL;
++		goto unlock;
++	}
++
+ 	result = cdev->ops->set_cur_state(cdev, state);
+ 	if (!result)
+ 		thermal_cooling_device_stats_update(cdev, state);
+ 
++unlock:
+ 	mutex_unlock(&cdev->lock);
+ 	return result ? result : count;
+ }
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
-It's hard to judge sometimes especially on those small bits.
-I've just pointed out and shared the info that this symbol is used.
-What you will do with this it's up to you. You and Daniel are the
-maintainers of this subsystems and have long-term plans for it.
-Todd and Wei are on CC, so they will know about this change.
-My job finishes here.
