@@ -2,113 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6315672EC
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 17:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881E75673A9
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 17:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiGEPor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 11:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S230424AbiGEP7V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 11:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiGEPor (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 11:44:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F0F2ADB;
-        Tue,  5 Jul 2022 08:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YXOVzFNFx/d0xO77KJVr1MjwZXUfSymtjaW6FSuQCgs=; b=LXfa0kxtypFYqAtz+ojoxkj2bC
-        +f7Cu/r/v7GhDmDWwCzjMIPo4ImZKRT61WTDT3D78htU9DjT6vOW/UeiBzTgUpZghUQRRXc6eXVGP
-        N8lpG1SWaf0COY/QIHkE7bxsFQ5unFRtVVnpQWOMP1mhDVGKHZx4UxbPGO99o9l8g97A4W40GkWt7
-        Xh4viabMZIqjgavSLmk/yKDDvrp5cA8si92fSOAHQWEAaDqqmUrIAQgJXZ6w7L5dU3se0x8NN9bhX
-        7WOEYEKQHoJP5BH7MW6Ju5uv11pwPQgySNe7v5iObTO2hcNxO5+0UhFgU07WuP8rxtttT+/gD/FjX
-        il3sMmrg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o8kie-000hUT-JP; Tue, 05 Jul 2022 15:44:08 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 91A01980059; Tue,  5 Jul 2022 17:44:06 +0200 (CEST)
-Date:   Tue, 5 Jul 2022 17:44:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        svens@linux.ibm.com
-Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <YsRcRgfZFl0K4L9h@worktop.programming.kicks-ass.net>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <20220505182645.497868-12-ebiederm@xmission.com>
- <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <877d5ajesi.fsf@email.froward.int.ebiederm.org>
- <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
- <YrtKReO2vIiX8VVU@tuxmaker.boeblingen.de.ibm.com>
- <87czess94h.fsf@email.froward.int.ebiederm.org>
- <20220628184850.05f60d1e@gandalf.local.home>
- <87pmisqgs0.fsf@email.froward.int.ebiederm.org>
+        with ESMTP id S229974AbiGEP7V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 11:59:21 -0400
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84AF13DE8
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 08:59:18 -0700 (PDT)
+Received: by mail-vk1-xa30.google.com with SMTP id 15so6025817vko.13
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 08:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZU7W/SaUNwlLynUXHU1559g+E1sKkpeDnZgFm447AJ4=;
+        b=RUpc5HbairS1muuAandh0K1YIz3OU+CY1bzs4MzSb9d/yXOHKExzfTTMvhjxdRoGrH
+         brzzY7co1C3auBZAiVCPtPod3rgW0LVIwohOoXpsFpPcsR2TYsHiXUFJD3jKlnlZx7vf
+         eSowmcatcNNChGbFwNzBc3isGsXUvaR+zL838=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZU7W/SaUNwlLynUXHU1559g+E1sKkpeDnZgFm447AJ4=;
+        b=JFdL06j+nlkcoI3Mna7GPnqcNCmkXsZa/9+xYWpfL4DE2YUQ09nGxKMbGCV8q/dnhQ
+         JQc2WK8PUdBoAVq32Bkai/gqOjIu6M8nEiyPP1bmiOGYA8e8lzVXQdcieRy+xyHE0q7O
+         tGEMI3XY91oarh/kG4uii5EeSCEaMXXZqVvpRm71gsU/3dbs34wexae01zbSJx8hYynV
+         kp8LSTRvLpX5K4dAvHjGVw+fYXQF/8g+oqn7A+qVq45ov0AP/JxXMRVOXmey4gaeRXHY
+         axntOSMYCyBTmYlhwqFgFyHK8JTWJpbK6b1wG+iJ1FaoYnx5ceUL1IDDv1KaJwyglz2i
+         tD6Q==
+X-Gm-Message-State: AJIora+aWwwG0QyiEcRwjLIOg7cO+rAUVG1nFrYE0B/+qTaxmiLNaSna
+        7rtlnbhYuxw0ey3xa7K9cna0awWF0xGZrD1757ai/Q==
+X-Google-Smtp-Source: AGRyM1tVxUSAm2T1Nxl7N7tWHLd/SqB3cVttIW1P+Qnp4RcyMMq977b2TfF3xiIS+RI8lj7Eq26HwnjCbDy4xYL4lEA=
+X-Received: by 2002:a1f:1f84:0:b0:370:44fb:5e90 with SMTP id
+ f126-20020a1f1f84000000b0037044fb5e90mr20575906vkf.6.1657036758529; Tue, 05
+ Jul 2022 08:59:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pmisqgs0.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220705094946.827697-1-hsinyi@chromium.org> <YsQUrXfugKT1IV75@kroah.com>
+ <CAJMQK-jA-GWw=v1PGAfYBKq5KWyYXGbYk30jVx26b1HWiw5yTQ@mail.gmail.com> <YsQluCvLLRXSo3Oc@kroah.com>
+In-Reply-To: <YsQluCvLLRXSo3Oc@kroah.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Tue, 5 Jul 2022 23:58:52 +0800
+Message-ID: <CAJMQK-gtfCL3smM6EAm2bLsSWvuk1QzviCQ6de4k8wiphEKQHg@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Ensure genpd_debugfs_dir exists before remove
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thierry Strudel <tstrudel@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Pin-yen Lin <treapking@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:39:59PM -0500, Eric W. Biederman wrote:
+On Tue, Jul 5, 2022 at 7:51 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jul 05, 2022 at 07:06:41PM +0800, Hsin-Yi Wang wrote:
+> > On Tue, Jul 5, 2022 at 6:38 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Tue, Jul 05, 2022 at 05:49:47PM +0800, Hsin-Yi Wang wrote:
+> > > > genpd_debug_remove() may be indirectly called from others while
+> > > > genpd_debugfs_dir is not yet set. Make sure genpd_debugfs_dir exists
+> > > > before remove the sub components, otherwise components under
+> > > > /sys/kernel/debug may be accidentally removed.
+> > > >
+> > > > Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
+> > > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > > > ---
+> > > > An example:
+> > > > scpsys_probe() in drivers/soc/mediatek/mtk-pm-domains.c indirectly calls
+> > > > genpd_debug_remove() on probe fail, causing /sys/kernel/debug/usb to be
+> > > > removed.
+> > > > ---
+> > > >  drivers/base/power/domain.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > > > index 3e86772d5fac5..5a2e0232862e0 100644
+> > > > --- a/drivers/base/power/domain.c
+> > > > +++ b/drivers/base/power/domain.c
+> > > > @@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
+> > > >  {
+> > > >       struct dentry *d;
+> > > >
+> > > > +     if (!genpd_debugfs_dir)
+> > > > +             return;
+> > > > +
+> > > >       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
+> > > >       debugfs_remove(d);
+> > >
+> > > Why not just change this to be:
+> > >         debugfs_remove(debugfs_lookup(genpd->name, debugfs_lookup("pm_genpd", NULL)));
+> > If pm_genpd hasn't been created yet,  debugfs_lookup("pm_genpd", NULL)
+> > will return null.
+>
+> And how is this codepath being called if pm_genpd is not created yet?
+> Surely you are not relying on the presence of a debugfs file to
+> determine that?
+>
 
-> > That is, the two paths should already be synchronized, and the memory
-> > barriers will not help anything inside the locks. The locking should (and
-> > must) handle all that.
-> 
-> I would presume so to.  However the READ_ONCE that is going astray
-> does not look like it is honoring that.
-> 
-> So perhaps there is a bug in the s390 spin_lock barriers?  Perhaps there
-> is a subtle detail in the barriers that spin locks provide that we are
-> overlooking?
+Caller didn't directly call genpd_debug_remove(). The flow is as follows:
 
-So the thing is, s390 is, like x86, a TSO architecture with SC atomics.
-Or at least it used to be; I'm not entirely solid on the Z196 features.
+Normally, scpsys will create pm domain by:
+scpsys_probe()
+   --> scpsys_add_one_domain()
+     --> pm_genpd_init()
+       --> genpd_debug_add()
 
-I've been looking at this and I can't find anything obviously wrong.
-arch_spin_trylock_once() has what seems a spurious barrier() but that's
-not going to cause this.
 
-Specifically, s390 is using a simple test-and-set spinlock based on
-their Compare-and-Swap (CS) instruction (so no Z196 funnies around).
+If something fails, it will do the cleanup:
+scpsys_probe()
+  --> scpsys_domain_cleanup()
+     --> scpsys_remove_one_domain()
+       --> pm_genpd_remove()
+          --> genpd_remove()
+            --> genpd_debug_remove()
 
-Except perhaps arch_spin_unlock(), I can't grok the magic there. It does
-something weird before the presumably regular TSO store of 0 into the
-lock word.
+genpd_debug_add() checks if genpd_debugfs_dir is init by a
+late_initcall genpd_debug_init(). If it's NULL, it will return
+directly without creating anything. Later when genpd_debug_init() is
+called, it will call genpd_debug_add() again.
 
-Ooohh.. /me finds arch_spin_lock_queued().. *urfh* because obviously a
-copy of queued spinlocks is what we need.
+pm_genpd_remove() still needs to be called on the cleanup path to free
+other stuff, but if genpd_debug_init() hasn't happened,
+genpd_debug_remove() should be a no-op, or genpd_remove() shouldn't
+call it. (We can move the check there, but adding in
+genpd_debug_remove() is more similar to what genpd_debug_add()
+currently is.)
 
-rwlock_t OTOH is using __atomic_add_*() and that's all Z196 magic.
+> > If genpd->name also exists under root debugfs, it will still be
+> > deleted unintentionally, since NULL represents root debugfs.
+> > Eg. one of the genpd->name is "usb", which is supposed to be added as
+> > /sys/kernel/debug/pm_genpd/usb later. But pm_genpd is not yet created,
+> > /sys/kernel/debug/usb will be removed.
+>
+> Ah, that's a bad name to pick :)
+>
+> But still, don't paper over this problem, please solve the root issue of
+> never relying on the creation of a debugfs file to determine functional
+> logic.
+>
+Currently we can't remove genpd_debug_add() called in pm_genpd_init()
+and genpd_debug_remove() called in genpd_remove(). If some power
+domain is created after genpd_debug_init(), their genpd subdomain
+won't be registered in debugfs. genpd_debug_remove() also has similar
+issues, eg. failed domain not removed after genpd_debug_init() is called.
 
-Sven, does all this still reproduce if you take out
-CONFIG_HAVE_MARCH_Z196_FEATURES ? Also, could you please explain the
-Z196 bits or point me to the relevant section in the PoO. Additionally,
-what's that _niai[48] stuff?
-
-And I'm assuming s390 has hardware fairness on competing CS ?
+> thanks,
+>
+> greg k-h
