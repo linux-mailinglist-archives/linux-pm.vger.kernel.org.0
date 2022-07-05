@@ -2,68 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8C6566096
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 03:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6BC5660A0
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 03:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiGEBQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Jul 2022 21:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S230125AbiGEBUo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Jul 2022 21:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiGEBQZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 21:16:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B2BE0A0
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 18:16:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C00ACB81600
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 01:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F77FC341CF
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 01:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656983782;
-        bh=Azc78YL4t6otPpO9mNrwcKNHuFQsDEGpNTLX8XFx6/g=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=bvXT4wWRVSCZJNX7wJ/vKh2DvT5CHnHDy3E3bn18pzkxlomKenUIyP8lEA6MzZwXO
-         /Lr2lZuDexQ7aR11TeeVvLZ1tFigew+VhTYhCsgKy7lwWmxxqR2ZiFXeiyovQ2lnmD
-         pb0V4WMoGOkQgATTgAa6QeNNM2rcvnzQfxkLnM59MLhMLwG4Dqyj61eOrusiKk5iC6
-         RYQ9BV7KASMT2sRASxPtETHSLJQhUO4IotFQwLl8U9ieboABpY8qAL4IC/+ejI+lPF
-         LJvT14hkrmWhDeUeYMFWv24KYztlKAyRmkOTe6yBpj5iAczJBRqJ+GlLtzM2UO03XI
-         IGi02CfCoYY0w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 4E8D4CC13B7; Tue,  5 Jul 2022 01:16:22 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215938] amd-pstate ignoring scaling_max_freq after waking from
- suspend
-Date:   Tue, 05 Jul 2022 01:16:22 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: perry_yuan@outlook.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215938-137361-z13ZbA2Ndi@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215938-137361@https.bugzilla.kernel.org/>
-References: <bug-215938-137361@https.bugzilla.kernel.org/>
+        with ESMTP id S230075AbiGEBUo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Jul 2022 21:20:44 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881BD2DC;
+        Mon,  4 Jul 2022 18:20:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656984043; x=1688520043;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nCiN/Jz7RaTKec/xvaYJ5gfSVdZpNNJhnyeiC7HP6/c=;
+  b=nUmtNk1lrBhsAXHwmDjooJSTRIqU26zA/vQ2KUtNeACIf7JYOfFt84nb
+   IKTWXpowIGBQV9wmwL7bhZKusqDTRs71sE1oOuTOfnlkFhvcUDDtlsx7o
+   jn3/FwE38HvQY06zpPcqWfO/GNMEybCgMCt3268F4Dg1pKMcsZD421ZBn
+   qxVvAtm9698q6eXGtqRGAj+unyV6O8xZ/Scil5mY9TWrr89ydYubEWP4d
+   V7cx+pJD0BbDB6GeMTbQQaEDmC3ivth/tJrJoLhXWyyP8nuhRoSCMKcXp
+   D2tP9E8Dlf4IeUFwmP+G15bATYFoydFU87x7F5P/QGll0FxuUNeZfmg5a
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10398"; a="344900412"
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="344900412"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 18:20:43 -0700
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="619565707"
+Received: from shuangy2-mobl.ccr.corp.intel.com ([10.249.171.213])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2022 18:20:40 -0700
+Message-ID: <0c525d16f34bedd1ea4ee4b7516c9dee5a92d419.camel@intel.com>
+Subject: Re: [PATCH v3 11/12] thermal/of: Use thermal trips stored in the
+ thermal zone
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com,
+        Amit Kucheria <amitk@kernel.org>
+Date:   Tue, 05 Jul 2022 09:20:38 +0800
+In-Reply-To: <f16d855b-28b0-b4ee-0e42-7293d0e61c21@linexp.org>
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+         <20220703183059.4133659-12-daniel.lezcano@linexp.org>
+         <6c7e1865e7e68ac0f035680044eb878ced715a1b.camel@intel.com>
+         <f16d855b-28b0-b4ee-0e42-7293d0e61c21@linexp.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,56 +65,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
+On Mon, 2022-07-04 at 23:24 +0200, Daniel Lezcano wrote:
+> On 04/07/2022 16:14, Zhang Rui wrote:
+> > On Sun, 2022-07-03 at 20:30 +0200, Daniel Lezcano wrote:
+> > > Now that we have the thermal trip stored in the thermal zone in a
+> > > generic way, we can rely on them and remove one indirection we
+> > > found
+> > > in the thermal_of code and do one more step forward the removal
+> > > of
+> > > the
+> > > duplicated structures.
+> > > 
+> > > Cc: Alexandre Bailon <abailon@baylibre.com>
+> > > Cc: Kevin Hilman <khilman@baylibre.com>
+> > > Cc; Eduardo Valentin <eduval@amazon.com>
+> > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> > > ---
+> 
+> [ ... ]
+> 
+> > >   EXPORT_SYMBOL_GPL(of_thermal_get_ntrips);
+> > >   
+> > > @@ -139,9 +134,7 @@ EXPORT_SYMBOL_GPL(of_thermal_get_ntrips);
+> > >    */
+> > >   bool of_thermal_is_trip_valid(struct thermal_zone_device *tz,
+> > > int
+> > > trip)
+> > >   {
+> > > -	struct __thermal_zone *data = tz->devdata;
+> > > -
+> > > -	if (!data || trip >= data->ntrips || trip < 0)
+> > > +	if (trip >= tz->ntrips || trip < 0)
+> > >   		return false;
+> > >   
+> > >   	return true;
+> > > @@ -161,12 +154,7 @@ EXPORT_SYMBOL_GPL(of_thermal_is_trip_valid);
+> > >   const struct thermal_trip *
+> > >   of_thermal_get_trip_points(struct thermal_zone_device *tz)
+> > >   {
+> > > -	struct __thermal_zone *data = tz->devdata;
+> > > -
+> > > -	if (!data)
+> > > -		return NULL;
+> > > -
+> > > -	return data->trips;
+> > > +	return tz->trips;
+> > >   }
+> > >   EXPORT_SYMBOL_GPL(of_thermal_get_trip_points);
+> > 
+> > what is the difference between
+> > of_thermal_get_ntrips/of_thermal_get_trip_points and
+> > thermal_zone_get_ntrips/thermal_zone_get_trips as introduced in
+> > this
+> > patch series?
+> > 
+> > we need to remove the duplications.
+> 
+> There is no difference between those functions. There are 34 more 
+> patches in the pipe to be sent after this series to do more cleanups
+> and 
+> remove code duplication.
+> 
+Good to know.
 
---- Comment #17 from perry_yuan@outlook.com ---
-(In reply to Alex Maras from comment #13)
-> Hey Perry, results below:
->=20
-> [I] alex@alex-laptop ~> sudo cpupower frequency-set -g userspace
-> [sudo] password for alex:
-> Setting cpu: 0
-> Setting cpu: 1
-> Setting cpu: 2
-> Setting cpu: 3
-> Setting cpu: 4
-> Setting cpu: 5
-> Setting cpu: 6
-> Setting cpu: 7
-> Setting cpu: 8
-> Setting cpu: 9
-> Setting cpu: 10
-> Setting cpu: 11
-> Setting cpu: 12
-> Setting cpu: 13
-> Setting cpu: 14
-> Setting cpu: 15
-> [I] alex@alex-laptop ~> systemctl suspend
-> [I] alex@alex-laptop ~> cd /sys/devices/system/cpu/cpufreq/policy0
-> [I] alex@alex-laptop /s/d/s/c/c/policy0> echo 1752589 | sudo tee
-> scaling_setspeed
-> 1752589
-> [I] alex@alex-laptop /s/d/s/c/c/policy0> cat scaling_setspeed
-> 1752589
-> [I] alex@alex-laptop /s/d/s/c/c/policy0> cat scaling_governor
-> userspace
-> [I] alex@alex-laptop /s/d/s/c/c/policy0> cat scaling_cur_freq
-> 2796520
-> [I] alex@alex-laptop /s/d/s/c/c/policy0>
->=20
->=20
-> Looks like the same issue continuing. Do you want the same dmesg with pst=
-ate
-> logging turned on?
+It would be nice to have a cover letter to describe the whole picture,
+including this patch series and the following patches in your queue.
 
-The suspend issue has been fixed by below patch.
-Please try the below patch for the suspend/resume issue.
+thanks,
+rui
 
-https://patchwork.kernel.org/project/linux-pm/patch/20220623031509.555269-1=
--Jinzhou.Su@amd.com/
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
