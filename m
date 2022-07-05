@@ -2,110 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66E85670D3
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 16:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AC85670D8
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 16:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiGEOUk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 10:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
+        id S229663AbiGEOWF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 10:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbiGEOU0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 10:20:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E199FF8;
-        Tue,  5 Jul 2022 07:16:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B5E961975;
-        Tue,  5 Jul 2022 14:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 448FDC341C7;
-        Tue,  5 Jul 2022 14:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657030598;
-        bh=KxRgDso37euMOKlGomCI79juLH2/Cs+Mjwd2v0X7HXA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BpITVrTaEQ0TRB6FUw/PXNszTp7SaijtskEb/RN6eliN8yisPIRqprrh1BWfVuLEf
-         JMWggip8/9rUDrmegj/uwsURwq2oAhSiZ32RTzRKEtL4n7am5x7RIvxrEU6yT023fV
-         eWHXMWI89MBRFEFa0jg4IxDK/IqbNIUs3eMwPE6w=
-Date:   Tue, 5 Jul 2022 16:16:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Message-ID: <YsRHwy6+5gask+KT@kroah.com>
-References: <000000000000d9ff3a05bb37069e@google.com>
- <72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp>
- <YsKW6VvWqvcMRBSl@kroah.com>
- <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
- <YsLIepAXeBKT0AF/@kroah.com>
- <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
- <YsL5pUuydMWJ9dSQ@kroah.com>
- <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
- <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
+        with ESMTP id S231382AbiGEOVu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 10:21:50 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E9C2F9;
+        Tue,  5 Jul 2022 07:20:46 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id l144so9583968ybl.5;
+        Tue, 05 Jul 2022 07:20:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=moN/mB85gS3lzdF/iudqcHdJYr12PlhTawzxEcZPH9M=;
+        b=QcI9TNjTjwN4/HXlM7tVfKPFBZPhYT7MlIidUxvVSNUu4MfKk/D0MroKP7tOowqShg
+         //44Oppz/I5ABD3iVTNDZwelNcLlYi4ZI4nQuDEufjuAuvByy3gpmRc3fYnBFwF+nvqR
+         iNRI4J3c+lbai/+MdSDmO3oEOkMGFG6IvwS68EAGGNqBBlVGOETmfrbubSH3nIF+Ovvm
+         HEs0ocVq2hTJKaQPGbxHc8KscZfJUMMwhU42NjRULgoZmMtxtAZAPj93N4K1aotwvi7R
+         cuawDsQmlszk5Wn7+PF0JOD5ZJlnOLaKof/c1pW1PsZ2XfsNhGxIxBC3qUmu7nnpG4Ci
+         FwAA==
+X-Gm-Message-State: AJIora8S/ZRvXdeAH+HtscA9wYvj97sCKDM7uqViI47OdkUZ8Me0KgEc
+        Z6XSvoTWeH/iI3DHxXqYemDAxAQwyEvxZG+RmUQ=
+X-Google-Smtp-Source: AGRyM1vZCKRP7wH7I3kUoT40URHjBTjDmEqnttfgPyVxDKcKBGau+xSfP+rRXXTJ5OVg8kIMJLGBIdfmEau3BeKKEe8=
+X-Received: by 2002:a25:fb02:0:b0:66e:3db9:5d49 with SMTP id
+ j2-20020a25fb02000000b0066e3db95d49mr14212439ybe.137.1657030845422; Tue, 05
+ Jul 2022 07:20:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
+ <20220703183059.4133659-6-daniel.lezcano@linexp.org> <ad8dd950-9260-16b3-2134-72984e2ba261@arm.com>
+ <e2d81210-a969-fe9d-a4fb-1826c991fbce@linexp.org> <f1cd08de-e8cb-18c2-9f92-01436810bc20@arm.com>
+In-Reply-To: <f1cd08de-e8cb-18c2-9f92-01436810bc20@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Jul 2022 16:20:32 +0200
+Message-ID: <CAJZ5v0iKcLM--L4ecoPDWpQ=8zgfeMxCku4zJt7hzVxSszgSNQ@mail.gmail.com>
+Subject: Re: [PATCH v3 05/12] thermal/core: Remove unneeded EXPORT_SYMBOLS
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Todd Kjos <tkjos@google.com>,
+        Wei Wang <wvw@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 11:01:38PM +0900, Tetsuo Handa wrote:
-> On 2022/07/05 14:21, Tetsuo Handa wrote:
-> > Possible locations where snapshot_open() might sleep with system_transition_mutex held are
-> > pm_notifier_call_chain_robust()/wait_for_device_probe()/create_basic_memory_bitmaps().
-> > But I think we can exclude pm_notifier_call_chain_robust() because lockdep does not report
-> > that that process is holding "struct blocking_notifier_head"->rwsem. I suspect that
-> > that process is sleeping at wait_for_device_probe(), for it waits for probe operations.
-> > 
-> > ----------------------------------------
-> > void wait_for_device_probe(void)
-> > {
-> > 	/* wait for the deferred probe workqueue to finish */
-> > 	flush_work(&deferred_probe_work);
-> > 
-> > 	/* wait for the known devices to complete their probing */
-> > 	wait_event(probe_waitqueue, atomic_read(&probe_count) == 0);
-> > 	async_synchronize_full();
-> > }
-> > ----------------------------------------
-> 
-> syzbot confirmed that snapshot_open() is unable to proceed due to
-> atomic_read(&probe_count) == 2 for 145 seconds.
-> 
-> ----------------------------------------
-> [   86.794300][ T4209] Held system_transition_mutex.
-> [   86.821486][ T4209] Calling wait_for_device_probe()
-> [   86.841374][ T4209] Calling flush_work(&deferred_probe_work)
-> [   86.867398][ T4209] Calling wait_event(probe_waitqueue)
-> [   87.966188][ T4209] Calling probe_count=2
-> (...snipped...)
-> [  233.554473][ T4209] Calling probe_count=2
-> [  234.444800][   T28] INFO: task syz-executor.4:4146 blocked for more than 143 seconds.
-> ----------------------------------------
-> 
-> Apart from whether we should fuzz snapshot code or not,
-> there seems to be a bug that causes wait_for_device_probe() to hung.
+On Tue, Jul 5, 2022 at 9:30 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+>
+>
+> On 7/4/22 22:14, Daniel Lezcano wrote:
+> > On 04/07/2022 09:35, Lukasz Luba wrote:
+> >> Hi Daniel,
+> >>
+> >> (+Todd and Wei on CC)
+> >>
+> >>
+> >> On 7/3/22 19:30, Daniel Lezcano wrote:
+> >
+> > [ ... ]
+> >
+> >>>   }
+> >>> -EXPORT_SYMBOL(get_tz_trend);
+> >
+> > [ ... ]
+> >
+> >>>   }
+> >>> -EXPORT_SYMBOL(thermal_cdev_update);
+> >>
+> >> I wouldn't remove that export. I can see in my Pixel6 modules dir, that
+> >> it's called in 7 places.
+> >>
+> >> I assume that in Android world this is common use.
+> >
+> > It is not possible to do changes taking into consideration out of tree
+> > code. Moreover there is logically no good reason to use the
+> > thermal_cdev_update() function from outside of the thermal core code.
+> >
+>
+> I see your point which is 'upstream'. On the other hand the mostly
+> deployed kernel is in Android devices and that brings a lot to the
+> community.
+>
+> This symbol might also be used by other distros which might have
+> modules for some accelerators, which also support tricky cooling.
+>
+> I would keep it as is...
 
-What else is going on in the system at this point in time?  Are devices
-still being added as part of boot init sequences?  Or has boot finished
-properly and these are devices being removed?
-
-Some device is being probed at the moment, maybe we have a deadlock
-somewhere here...
-
-thanks,
-
-greg k-h
+I think that the long-term goal is to reduce differences between the
+mainline kernel and Android.  From this angle, it would be good if
+Android was aware that the mainline did stuff especially for them and
+making them carry an extra patch would go a long way towards that
+purpose.
