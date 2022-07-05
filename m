@@ -2,91 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4EE566537
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 10:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE3C566550
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 10:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiGEIkh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 04:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
+        id S230309AbiGEIor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 04:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiGEIkg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 04:40:36 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65A15FCB
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 01:40:35 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id a15so10873311pfv.13
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 01:40:35 -0700 (PDT)
+        with ESMTP id S230220AbiGEIoq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 04:44:46 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9343FDEC1
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 01:44:44 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id e69so14044990ybh.2
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 01:44:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VR95GotZ7Nj3L4cg4OZ6XG6Fy5wQSJaOusIVhdvl2CM=;
-        b=FTcCNptdrwJCmACL4XpzaJX4tYJgDHx1gxMAcSkGUhmqYHFWs4MYEqUEyTHRc9X/QM
-         Kxq5ZuPMyHzLXUeBjIydg7h4ACgOemDwnXsMbGT7VIdhT75qPlAWoetk8PzS1g5UXPJY
-         WWU+1z66Cp2aoOYTRZ1hgb95BgJ+zqz/zsUbUdVBC2h8ehGzYYdTYj5oBb87TSVt+bz/
-         +FpEOg3Zc01PzpiIWvZNPbPWkWRQ4PV+k4MN1ItTEITtuLUXdrrAAxiBlwJxnSPftieY
-         N3/Ac+7LSRCwzEer+aI6ACL/t/PrnJ5Ww/KHAZQ8iPXDDjQwYW/7G28zHAwc4cGdCF5H
-         jjpw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2nqg94hUDjf5VEy31mCYebRLyQWKOgGJpJElSft6kJk=;
+        b=oVdJFaZLt6iik+gYVPoDhE3E0/T/qMpp81wNqUxEUTmekiaqU9ynpZ0mDpnp2WD8cV
+         1XxBK2Tr40GZWioBld+i2V2kPexOZDXUouMVZ8Ta2CmvZ6vewWiUjnGTEovIbce1WKpR
+         nRulH13G0QJpSAV8IrG/vyGQL8xWb2qk/6ax3FTz3YAu5ngRNie2xDTdyn/3wo8LdI4n
+         4XMCNJA3C+XzvqbqeIqouGJjzVPFaCYGN7b0gBNrXW2dEfwZAh5IeAKq/qf7jDjP6DxQ
+         sJuscQX3dxs/MUyavOF2DrQo82K7EPd+OrV7QEVmkdbS/+lXRLFYmWGyqUhmElgGNChc
+         XHOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VR95GotZ7Nj3L4cg4OZ6XG6Fy5wQSJaOusIVhdvl2CM=;
-        b=D6gqKPA8DQa2CncryGWqpo9rRUkd2GbQNv9PCRKGr6eVeImf2m50eGi+fjqo+aLgvp
-         h7my4B0TZlKhgRffo2TW1mr8uBplfnksxr3qpRoLLq1B0ZZnLAgGXAjeVPBaaqe59hUa
-         eDLa6YZ40oK0RCTDPhmOI0tC1EhgMNPt7HUpsLDHdplDZUsIYofzI2m3TPc+pm3R9O6T
-         s54/R04iVqHdZUAfVOb81KlduSqGDvQXO6QR4bZlqn1ZyMzqXMThg3ztgK0uUJeAO+ll
-         dO6hKZCRs3wHSNbv1eV6fuH/HBiOO+pp5vNheFSVkFvQfhsm0RL7oGzYhJyPhqa4AW7d
-         m1Nw==
-X-Gm-Message-State: AJIora9iVvOG5cE/ngAp+cebkDSRuejeecAfLspIN/S4xa62eRHXeg65
-        HwNA8Qz88AkToBAVydBbOezmbA==
-X-Google-Smtp-Source: AGRyM1v5vvUOuDVxuL90GQcs8N2x+l+yK4Ev9FXClziIY8Mg07pToCm7ABiPgejU487hA6hy8F7+Eg==
-X-Received: by 2002:a63:6aca:0:b0:408:8af6:a885 with SMTP id f193-20020a636aca000000b004088af6a885mr28922712pgc.477.1657010435472;
-        Tue, 05 Jul 2022 01:40:35 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id 125-20020a630483000000b0040d2717473fsm22453993pge.38.2022.07.05.01.40.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 01:40:34 -0700 (PDT)
-Date:   Tue, 5 Jul 2022 14:10:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Message-ID: <20220705084032.stkoixfiotifivgm@vireshk-i7>
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
- <de13cca4-3a33-6482-7b02-f89796f45325@linaro.org>
- <4cac6c79-ea9a-1f48-c6f1-2e04b54590a4@linaro.org>
- <20220705065940.v3n2s7bgr6eai3rf@vireshk-i7>
- <20fdb316-0f7e-0a19-0b1d-70f2f8f7dad9@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2nqg94hUDjf5VEy31mCYebRLyQWKOgGJpJElSft6kJk=;
+        b=2D1hrS3DAFZrjmO5fOTUiRaLtghXeGH0+hi/yzwkajkZJX7j+M0zTlSzLSI0BP1ol0
+         3ulSxiCwX9KnZAVqjDC4+J0tB7LqRuBBEHfIXQ0ixiVofQstj/W25AGizIh2kg3zMqEa
+         DYPOwPblPwzHaj2uT65Ij20zdbyo+QeAGUzDdCI4IP5N1+TFdeXv7fLmj9prTpM6ZFx9
+         PHRzrgGfeUwDHPPkbDa20YaotLU8KjxSNjbI2JG+ipjxZevt8dYydl9sLnF4vHsMmpU0
+         wPX848zzZeybVrWH1tbZpGr6mpYaNPOfVkoOrddErQ8PwIkHRxLA5q5UlELj0+TmvFr4
+         RkpQ==
+X-Gm-Message-State: AJIora/CC69lBmPujDk9oSzVXyrjcR4YCOUzrGKfnzxhtUclbjg5KD8v
+        j9ID2NG7vHoEE/hk0ggFcVvmICMgVJI2GBath3PjaQ==
+X-Google-Smtp-Source: AGRyM1s3KR9timt0Nv154BBVjZtVup9YxTIdAuMg5rdc0L5tuSQBdw4qLUFuMUr86cFiFJimYkgebSO//Pbzv6BbJEU=
+X-Received: by 2002:a25:abce:0:b0:66e:38e8:d286 with SMTP id
+ v72-20020a25abce000000b0066e38e8d286mr12961807ybi.447.1657010683689; Tue, 05
+ Jul 2022 01:44:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20fdb316-0f7e-0a19-0b1d-70f2f8f7dad9@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YrQP3OZbe8aCQxKU@atomide.com> <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
+ <Yrlz/P6Un2fACG98@atomide.com> <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
+ <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+ <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
+ <Yr6HQOtS4ctUYm9m@atomide.com> <Yr6QUzdoFWv/eAI6@atomide.com>
+ <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
+ <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
+ <20220701150848.75eeprptmb5beip7@bogus> <CAGETcx_Y-9WBeRwf22v3NSuY8PGpPrTxtx_uBqe_Q7rD6mEQMQ@mail.gmail.com>
+In-Reply-To: <CAGETcx_Y-9WBeRwf22v3NSuY8PGpPrTxtx_uBqe_Q7rD6mEQMQ@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 5 Jul 2022 01:44:07 -0700
+Message-ID: <CAGETcx8hECfU9-rXpXnnB5m4HcTBJVKNuG77FjhpqRcBkOOotw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Tony Lindgren <tony@atomide.com>, Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-07-22, 10:18, Krzysztof Kozlowski wrote:
-> I would say it is not different than existing opp-level property. To me
-> it sounded fine, so at least one DT bindings maintainer would accept it. :)
+On Fri, Jul 1, 2022 at 12:13 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Fri, Jul 1, 2022 at 8:08 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > Hi, Saravana,
+> >
+> > On Fri, Jul 01, 2022 at 01:26:12AM -0700, Saravana Kannan wrote:
+> >
+> > [...]
+> >
+> > > Can you check if this hack helps? If so, then I can think about
+> > > whether we can pick it up without breaking everything else. Copy-paste
+> > > tab mess up warning.
+> >
+> > Sorry for jumping in late and not even sure if this is right thread.
+> > I have not bisected anything yet, but I am seeing issues on my Juno R2
+> > with SCMI enabled power domains and Coresight AMBA devices.
+> >
+> > OF: amba_device_add() failed (-19) for /etf@20010000
+> > OF: amba_device_add() failed (-19) for /tpiu@20030000
+> > OF: amba_device_add() failed (-19) for /funnel@20040000
+> > OF: amba_device_add() failed (-19) for /etr@20070000
+> > OF: amba_device_add() failed (-19) for /stm@20100000
+> > OF: amba_device_add() failed (-19) for /replicator@20120000
+> > OF: amba_device_add() failed (-19) for /cpu-debug@22010000
+> > OF: amba_device_add() failed (-19) for /etm@22040000
+> > OF: amba_device_add() failed (-19) for /cti@22020000
+> > OF: amba_device_add() failed (-19) for /funnel@220c0000
+> > OF: amba_device_add() failed (-19) for /cpu-debug@22110000
+> > OF: amba_device_add() failed (-19) for /etm@22140000
+> > OF: amba_device_add() failed (-19) for /cti@22120000
+> > OF: amba_device_add() failed (-19) for /cpu-debug@23010000
+> > OF: amba_device_add() failed (-19) for /etm@23040000
+> > OF: amba_device_add() failed (-19) for /cti@23020000
+> > OF: amba_device_add() failed (-19) for /funnel@230c0000
+> > OF: amba_device_add() failed (-19) for /cpu-debug@23110000
+> > OF: amba_device_add() failed (-19) for /etm@23140000
+> > OF: amba_device_add() failed (-19) for /cti@23120000
+> > OF: amba_device_add() failed (-19) for /cpu-debug@23210000
+> > OF: amba_device_add() failed (-19) for /etm@23240000
+> > OF: amba_device_add() failed (-19) for /cti@23220000
+> > OF: amba_device_add() failed (-19) for /cpu-debug@23310000
+> > OF: amba_device_add() failed (-19) for /etm@23340000
+> > OF: amba_device_add() failed (-19) for /cti@23320000
+> > OF: amba_device_add() failed (-19) for /cti@20020000
+> > OF: amba_device_add() failed (-19) for /cti@20110000
+> > OF: amba_device_add() failed (-19) for /funnel@20130000
+> > OF: amba_device_add() failed (-19) for /etf@20140000
+> > OF: amba_device_add() failed (-19) for /funnel@20150000
+> > OF: amba_device_add() failed (-19) for /cti@20160000
+> >
+> > These are working fine with deferred probe in the mainline.
+> > I tried the hack you have suggested here(rather Tony's version),
+>
+> Thanks for trying that.
+>
+> > also
+> > tried with fw_devlink=0 and fw_devlink=1
+>
+> 0 and 1 aren't valid input to fw_devlink. But yeah, I don't expect
+> disabling it to make anything better.
+>
+> > && fw_devlink.strict=0
+> > No change in the behaviour.
+> >
+> > The DTS are in arch/arm64/boot/dts/arm/juno-*-scmi.dts and there
+> > coresight devices are mostly in juno-cs-r1r2.dtsi
+>
+> Thanks
+>
+> > Let me know if there is anything obvious or you want me to bisect which
+> > means I need more time. I can do that next week.
+>
+> I'll let you know once I poke at the DTS. We need to figure out why
+> fw_devlink wasn't blocking these from getting to the error (same as in
+> Tony's case). But since these are amba devices, I think I have some
+> guesses.
+>
+> This is an old series that had some issues in some cases and I haven't
+> gotten around to looking at it. You can give that a shot if you can
+> apply it to a recent tree.
+> https://lore.kernel.org/lkml/20210304195101.3843496-1-saravanak@google.com/
 
-:)
+I rebased it to driver-core-next and tested the patch  (for
+correctness, not with your issue though). I'm fairly sure it should
+help with your issue. Can you give it a shot please?
 
-No one is stopping a user to use "level" here, just that I didn't
-wanted to force it for everyone with multiple clocks. From a DT point
-of view, we should be able to uniquely identify OPP nodes just based
-on all freq values.
+https://lore.kernel.org/lkml/20220705083934.3974140-1-saravanak@google.com/T/#u
 
--- 
-viresh
+-Saravana
+
+>
+> After looking at that old patch again, I think I know what's going on.
+> For normal devices, the pm domain attach happens AFTER the device is
+> added and fw_devlink has had a chance to set up device links. And if
+> the suppliers aren't ready, really_probe() won't get as far as
+> dev_pm_domain_attach(). But for amba, the clock and pm domain
+> suppliers are "grabbed" before adding the device.
+>
+> So with that old patch + always returning -EPROBE_DEFER in
+> amba_device_add() if amba_read_periphid() fails should fix your issue.
+>
+> -Saravana
