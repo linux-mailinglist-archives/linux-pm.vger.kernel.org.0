@@ -2,77 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D821F567574
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 19:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42259567564
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 19:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiGERVH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 13:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S230170AbiGERR5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 13:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiGERVG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 13:21:06 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F571F61A
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 10:21:04 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bu42so1860819lfb.0
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 10:21:04 -0700 (PDT)
+        with ESMTP id S229754AbiGERR5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 13:17:57 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786E91EED0
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 10:17:56 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id s9so379140vkn.9
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 10:17:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LBrUJU1OxaLc3a1NUAUniiflOroxzr7h0e1+YimfCmc=;
-        b=yHU8071L/Dc1Dd5xMXJPKAl6QgqMp9H8ecbHxLqyBFhLDAAXAizmd6gA0Sz415y2Wz
-         r17h2IFKHZQliQu6WCCCDlIxyQH+aSqafDedO1eHPUA7skiA3dlUfRdWWTwMw5e5cAs4
-         nmS5UAbt75r289sZj8S4BLqVW8vXCwF2ah4oMHiBmDanJfg+/XT0S0ppNBYrhoE3lhfE
-         uAf8hyHXPDTo7+kd0ePEJmvN+4P5pzaam6VArfO93mK1FShxWW+CvmmW6sJQsONGDEbK
-         vt0f8HFTwtp59Ik4A3gCaVUjLOuWjLFYm+caTVgX4a7Up9AWtJd+slBOCWDYXJGLeUUy
-         ZfXw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DibX9iQEUFrXxkIm9PYaQ+YczA5+PDT4pu/k9a93CZ4=;
+        b=nK5H+j5ZR39sYeXQoPrCBk/xTcXYb0lrGz/hZhHBtPek2kaE+xuCcYjTmZZBb5J4IZ
+         VFXFAj0a3LAS8jtJhbS4PtkPhPg1CjfV00iuEL+oI3k5WQYaDFov2C6t9uju9W509TwD
+         /5RBMO3qIpkp6DxPnVoIw5VeFwEi5JWiEJotw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LBrUJU1OxaLc3a1NUAUniiflOroxzr7h0e1+YimfCmc=;
-        b=LJkQp0r1ePGj8e8K105lXgwQ4PV1kQxtLwCpj2I8e7B3Agbp1/HYL+9QEI30Vnnbp6
-         KBTegdmFCzFIzlG+gqSocWsbrX5Lo1pHAO+FBAwYwAF3XjzW2W4Dg9eDbkAiDD1jFOFv
-         HG8WiFzPtwediAYMpz95d5dfGt/Wdurq5ihlVNOB8FgTYEAtEBrC4EJj9V7ckb+20nHh
-         AC3rNUHfcseLn22yILj2WVtuhdWueUxmSjNjinHPKSSh7xGI2BXfBOHqjuZxjvRfoAVr
-         /S/2Smv5941DzLkP0I5tMfGxrVtUX9C9r+qLacPF02zVm6yBrbcfNAFTCLG58egQKtRT
-         JsIQ==
-X-Gm-Message-State: AJIora+6TMLdYrLKKH2DMhTZ60ZDHPIkHAoJX1Zy9TO8XTgRdLffhynN
-        9VDBMypQ2Bwibg7yDqw2deIlCdaEfWUQDQ==
-X-Google-Smtp-Source: AGRyM1srO23IxMNPr3M+wSImTNYHEpYUX54PkoZGBWDlguJDCbU2Eod7/q8lRXytKxURFIU+HfTmkA==
-X-Received: by 2002:a05:6512:3d11:b0:47f:8fe3:8e98 with SMTP id d17-20020a0565123d1100b0047f8fe38e98mr22634217lfv.53.1657041663194;
-        Tue, 05 Jul 2022 10:21:03 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id f9-20020a05651c03c900b0025a79b7fb7dsm5683463ljp.93.2022.07.05.10.21.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 10:21:02 -0700 (PDT)
-Message-ID: <df997015-df77-2bcb-1551-6e8da4acb36a@linaro.org>
-Date:   Tue, 5 Jul 2022 19:21:01 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DibX9iQEUFrXxkIm9PYaQ+YczA5+PDT4pu/k9a93CZ4=;
+        b=fRDDhhs6U6UZ2+E7kFMiSxpt/huN+z1RrJMQ0l+mgnXsmFv0TYTm/vliHlO2nFEgnL
+         AGExS6Zlw92/mNo19DJWkDwLP74FWKqBYr2/PcbcK6jM0umQvTs028Y/z37/WWSHgozj
+         lG0DYp7KKLnqvaVlosUbbWvu+q6GQNZVWmsV70D1bjNv/NS509aCQQi8pvdBzTy6EnkN
+         UKxHawk5QtLyxukdDqzsth1anSaPFSl8xuk3Fz6DIHvdLHMjikX9YPI/mRBYnXJI4Cx8
+         046VOYnSXEfie2D1dtX2PdguGU6gI3WDN65lQ52/wvthokYDDJxndFMHRHOd7+lYJOGA
+         gh7g==
+X-Gm-Message-State: AJIora/S5w3l/sjw78vBVykI01az2+rg97ajWSGTcTzCcCEFsySKbWqS
+        E8N7xfm7ahhvVm/9KhCizJJaLd8auU39WAD+H/X5TQ==
+X-Google-Smtp-Source: AGRyM1vjE+XIl428JT5ISAnbg0EIoYJ+7JSRqA2pTtZa1SnDBKe7Cz1aIqj0GttScxh4Hat1teS3mBNopwWOIyHsf50=
+X-Received: by 2002:a05:6122:152b:b0:36c:2e3f:599b with SMTP id
+ g11-20020a056122152b00b0036c2e3f599bmr21318514vkq.5.1657041475532; Tue, 05
+ Jul 2022 10:17:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 09/13] OPP: Assert clk_count == 1 for single clk
- helpers
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <f039572f213ee49125d3d1ea4e64a94b79778426.1657003420.git.viresh.kumar@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f039572f213ee49125d3d1ea4e64a94b79778426.1657003420.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220705094946.827697-1-hsinyi@chromium.org> <YsQUrXfugKT1IV75@kroah.com>
+ <CAJMQK-jA-GWw=v1PGAfYBKq5KWyYXGbYk30jVx26b1HWiw5yTQ@mail.gmail.com>
+ <YsQluCvLLRXSo3Oc@kroah.com> <CAJMQK-gtfCL3smM6EAm2bLsSWvuk1QzviCQ6de4k8wiphEKQHg@mail.gmail.com>
+ <YsRmQVrcAuguv03U@kroah.com>
+In-Reply-To: <YsRmQVrcAuguv03U@kroah.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Wed, 6 Jul 2022 01:27:07 +0800
+Message-ID: <CAJMQK-gYjdWg8wXHMjzRSBvAPHO9aT08tqiviJ8O3jjYe8PV3g@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Ensure genpd_debugfs_dir exists before remove
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thierry Strudel <tstrudel@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Pin-yen Lin <treapking@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,14 +72,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/07/2022 09:00, Viresh Kumar wrote:
-> Many helpers can be safely called only for devices that have a single
-> clk associated with them. Assert the same for those routines.
-> 
+On Wed, Jul 6, 2022 at 12:26 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jul 05, 2022 at 11:58:52PM +0800, Hsin-Yi Wang wrote:
+> > On Tue, Jul 5, 2022 at 7:51 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Tue, Jul 05, 2022 at 07:06:41PM +0800, Hsin-Yi Wang wrote:
+> > > > On Tue, Jul 5, 2022 at 6:38 PM Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > On Tue, Jul 05, 2022 at 05:49:47PM +0800, Hsin-Yi Wang wrote:
+> > > > > > genpd_debug_remove() may be indirectly called from others while
+> > > > > > genpd_debugfs_dir is not yet set. Make sure genpd_debugfs_dir exists
+> > > > > > before remove the sub components, otherwise components under
+> > > > > > /sys/kernel/debug may be accidentally removed.
+> > > > > >
+> > > > > > Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
+> > > > > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > > > > > ---
+> > > > > > An example:
+> > > > > > scpsys_probe() in drivers/soc/mediatek/mtk-pm-domains.c indirectly calls
+> > > > > > genpd_debug_remove() on probe fail, causing /sys/kernel/debug/usb to be
+> > > > > > removed.
+> > > > > > ---
+> > > > > >  drivers/base/power/domain.c | 3 +++
+> > > > > >  1 file changed, 3 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > > > > > index 3e86772d5fac5..5a2e0232862e0 100644
+> > > > > > --- a/drivers/base/power/domain.c
+> > > > > > +++ b/drivers/base/power/domain.c
+> > > > > > @@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
+> > > > > >  {
+> > > > > >       struct dentry *d;
+> > > > > >
+> > > > > > +     if (!genpd_debugfs_dir)
+> > > > > > +             return;
+> > > > > > +
+> > > > > >       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
+> > > > > >       debugfs_remove(d);
+> > > > >
+> > > > > Why not just change this to be:
+> > > > >         debugfs_remove(debugfs_lookup(genpd->name, debugfs_lookup("pm_genpd", NULL)));
+> > > > If pm_genpd hasn't been created yet,  debugfs_lookup("pm_genpd", NULL)
+> > > > will return null.
+> > >
+> > > And how is this codepath being called if pm_genpd is not created yet?
+> > > Surely you are not relying on the presence of a debugfs file to
+> > > determine that?
+> > >
+> >
+> > Caller didn't directly call genpd_debug_remove(). The flow is as follows:
+> >
+> > Normally, scpsys will create pm domain by:
+> > scpsys_probe()
+> >    --> scpsys_add_one_domain()
+> >      --> pm_genpd_init()
+> >        --> genpd_debug_add()
+> >
+> >
+> > If something fails, it will do the cleanup:
+> > scpsys_probe()
+> >   --> scpsys_domain_cleanup()
+> >      --> scpsys_remove_one_domain()
+> >        --> pm_genpd_remove()
+> >           --> genpd_remove()
+> >             --> genpd_debug_remove()
+> >
+> > genpd_debug_add() checks if genpd_debugfs_dir is init by a
+> > late_initcall genpd_debug_init(). If it's NULL, it will return
+> > directly without creating anything. Later when genpd_debug_init() is
+> > called, it will call genpd_debug_add() again.
+> >
+> > pm_genpd_remove() still needs to be called on the cleanup path to free
+> > other stuff, but if genpd_debug_init() hasn't happened,
+> > genpd_debug_remove() should be a no-op, or genpd_remove() shouldn't
+> > call it. (We can move the check there, but adding in
+> > genpd_debug_remove() is more similar to what genpd_debug_add()
+> > currently is.)
+>
+> Thanks for the details.  You might want to include this in the changelog
+> text.  I'm ok with the change now if that information is in there, I
+> missed that there are paths to create devices before debugfs is
+> initialized.
+>
+Done. Added in v2. Thanks for the review.
 
-Where is the safety problem with multiple-clocks case? And how users of
-PM OPP API are supposed to iterate/find OPPs they want if the API now
-throws WARN?
-
-Best regards,
-Krzysztof
+> thanks,
+>
+> greg k-h
