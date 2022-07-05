@@ -2,200 +2,364 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE3C566550
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 10:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8735665D5
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 11:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiGEIor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 04:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S229591AbiGEJJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 05:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiGEIoq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 04:44:46 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9343FDEC1
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 01:44:44 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id e69so14044990ybh.2
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 01:44:44 -0700 (PDT)
+        with ESMTP id S229497AbiGEJJO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 05:09:14 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF71F10B5
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 02:09:12 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id h17so3431382wrx.0
+        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 02:09:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2nqg94hUDjf5VEy31mCYebRLyQWKOgGJpJElSft6kJk=;
-        b=oVdJFaZLt6iik+gYVPoDhE3E0/T/qMpp81wNqUxEUTmekiaqU9ynpZ0mDpnp2WD8cV
-         1XxBK2Tr40GZWioBld+i2V2kPexOZDXUouMVZ8Ta2CmvZ6vewWiUjnGTEovIbce1WKpR
-         nRulH13G0QJpSAV8IrG/vyGQL8xWb2qk/6ax3FTz3YAu5ngRNie2xDTdyn/3wo8LdI4n
-         4XMCNJA3C+XzvqbqeIqouGJjzVPFaCYGN7b0gBNrXW2dEfwZAh5IeAKq/qf7jDjP6DxQ
-         sJuscQX3dxs/MUyavOF2DrQo82K7EPd+OrV7QEVmkdbS/+lXRLFYmWGyqUhmElgGNChc
-         XHOg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yJ3/p/b20rd9gITr340jXdoH64eB6vygRRljkiC3keQ=;
+        b=ZkMdT84ipj39vCO/c7Hf55PtVWpnxXpU4nIqZoPE9TBg3nzHvLN5uXiLRJJWJZUaFH
+         IVV75UQbUT+9xDfo9XPMnzulnGXkf0TEsJjRSIzZUi4Ckh7/Svqgm6oN4TBOEqX64CxG
+         h1KaOpT1pmbUcEpWFyctI/tMq+QCjPS5Hr+2hYok5wrZ/PJK3CVduRzjKGmy3YoOQBrb
+         SRQRym6k4u4qGoicGUV4zLsVl6uHpRCNWbzTsrDP8oIWC04qpRxzkL622nDV/MlfMoZu
+         H9yzQ2Y0LwSktRRbqcW3hWnun7r1kUQ63dSBNCTL7dvAD9Aw2G8GXycOd7X0Cd+7J08O
+         JYgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2nqg94hUDjf5VEy31mCYebRLyQWKOgGJpJElSft6kJk=;
-        b=2D1hrS3DAFZrjmO5fOTUiRaLtghXeGH0+hi/yzwkajkZJX7j+M0zTlSzLSI0BP1ol0
-         3ulSxiCwX9KnZAVqjDC4+J0tB7LqRuBBEHfIXQ0ixiVofQstj/W25AGizIh2kg3zMqEa
-         DYPOwPblPwzHaj2uT65Ij20zdbyo+QeAGUzDdCI4IP5N1+TFdeXv7fLmj9prTpM6ZFx9
-         PHRzrgGfeUwDHPPkbDa20YaotLU8KjxSNjbI2JG+ipjxZevt8dYydl9sLnF4vHsMmpU0
-         wPX848zzZeybVrWH1tbZpGr6mpYaNPOfVkoOrddErQ8PwIkHRxLA5q5UlELj0+TmvFr4
-         RkpQ==
-X-Gm-Message-State: AJIora/CC69lBmPujDk9oSzVXyrjcR4YCOUzrGKfnzxhtUclbjg5KD8v
-        j9ID2NG7vHoEE/hk0ggFcVvmICMgVJI2GBath3PjaQ==
-X-Google-Smtp-Source: AGRyM1s3KR9timt0Nv154BBVjZtVup9YxTIdAuMg5rdc0L5tuSQBdw4qLUFuMUr86cFiFJimYkgebSO//Pbzv6BbJEU=
-X-Received: by 2002:a25:abce:0:b0:66e:38e8:d286 with SMTP id
- v72-20020a25abce000000b0066e38e8d286mr12961807ybi.447.1657010683689; Tue, 05
- Jul 2022 01:44:43 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yJ3/p/b20rd9gITr340jXdoH64eB6vygRRljkiC3keQ=;
+        b=iozxhr6CWM+z7nrDUa3mXx8uT33LoXeGynMqV8TdqrIqv/XTtfUsN3Zxl4xDMCPca8
+         /Bxm8c74yo8ZvyOaDWIG8anFbtT2JPzsyrB59bxacraWvZa8vSpzOZUaO4lDpfteF2rh
+         Xk8XlJIzfdPhUQwbP6MaUVSNeSBuGhUb+NJMZtdwW9BHUlFXViG+hWWe92iAjocywFv1
+         Cg7AepuqFVUdMTGzoH1Aq8Ims3SJo4HM7aH4U/RYXMkbs94y2WmSfVT9nI0gVuKniFy2
+         wCa/qiVkeUNYS5+VX1mXmrXkD3h04IhJdQqUp2T2Fb8SXKtdPqjxYqcxj5GhSZu/mSNq
+         LnyQ==
+X-Gm-Message-State: AJIora/Fb2R4ncvdhfAk2cVx8ntFx5oZkVPbvizemtxpw98GoF+Wm0Rm
+        dRS0iQqIUdszofm3YxDH4Xh+nQ==
+X-Google-Smtp-Source: AGRyM1uOmYs7yfGw762F2c9Ek0zTm5wi/+qAG9KZ9cTFCOZgYur4sj1hP42/yknm4nKxzPH5BLFvaw==
+X-Received: by 2002:a5d:4345:0:b0:21a:3b82:ad57 with SMTP id u5-20020a5d4345000000b0021a3b82ad57mr31677768wrr.176.1657012151232;
+        Tue, 05 Jul 2022 02:09:11 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id l14-20020a05600c4f0e00b003a199ed4f44sm10760635wmq.27.2022.07.05.02.09.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 02:09:10 -0700 (PDT)
+Message-ID: <3b0ce952-0674-d01d-3fc0-795d35743723@linaro.org>
+Date:   Tue, 5 Jul 2022 11:09:09 +0200
 MIME-Version: 1.0
-References: <YrQP3OZbe8aCQxKU@atomide.com> <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
- <Yrlz/P6Un2fACG98@atomide.com> <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
- <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
- <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
- <Yr6HQOtS4ctUYm9m@atomide.com> <Yr6QUzdoFWv/eAI6@atomide.com>
- <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
- <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
- <20220701150848.75eeprptmb5beip7@bogus> <CAGETcx_Y-9WBeRwf22v3NSuY8PGpPrTxtx_uBqe_Q7rD6mEQMQ@mail.gmail.com>
-In-Reply-To: <CAGETcx_Y-9WBeRwf22v3NSuY8PGpPrTxtx_uBqe_Q7rD6mEQMQ@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 5 Jul 2022 01:44:07 -0700
-Message-ID: <CAGETcx8hECfU9-rXpXnnB5m4HcTBJVKNuG77FjhpqRcBkOOotw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Tony Lindgren <tony@atomide.com>, Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/4] PM: EM: convert power field to micro-Watts precision
+ and align drivers
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com, nm@ti.com,
+        sboyd@kernel.org, sudeep.holla@arm.com, cristian.marussi@arm.com,
+        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220622145802.13032-1-lukasz.luba@arm.com>
+ <20220622145802.13032-2-lukasz.luba@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220622145802.13032-2-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 12:13 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> On Fri, Jul 1, 2022 at 8:08 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > Hi, Saravana,
-> >
-> > On Fri, Jul 01, 2022 at 01:26:12AM -0700, Saravana Kannan wrote:
-> >
-> > [...]
-> >
-> > > Can you check if this hack helps? If so, then I can think about
-> > > whether we can pick it up without breaking everything else. Copy-paste
-> > > tab mess up warning.
-> >
-> > Sorry for jumping in late and not even sure if this is right thread.
-> > I have not bisected anything yet, but I am seeing issues on my Juno R2
-> > with SCMI enabled power domains and Coresight AMBA devices.
-> >
-> > OF: amba_device_add() failed (-19) for /etf@20010000
-> > OF: amba_device_add() failed (-19) for /tpiu@20030000
-> > OF: amba_device_add() failed (-19) for /funnel@20040000
-> > OF: amba_device_add() failed (-19) for /etr@20070000
-> > OF: amba_device_add() failed (-19) for /stm@20100000
-> > OF: amba_device_add() failed (-19) for /replicator@20120000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@22010000
-> > OF: amba_device_add() failed (-19) for /etm@22040000
-> > OF: amba_device_add() failed (-19) for /cti@22020000
-> > OF: amba_device_add() failed (-19) for /funnel@220c0000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@22110000
-> > OF: amba_device_add() failed (-19) for /etm@22140000
-> > OF: amba_device_add() failed (-19) for /cti@22120000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@23010000
-> > OF: amba_device_add() failed (-19) for /etm@23040000
-> > OF: amba_device_add() failed (-19) for /cti@23020000
-> > OF: amba_device_add() failed (-19) for /funnel@230c0000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@23110000
-> > OF: amba_device_add() failed (-19) for /etm@23140000
-> > OF: amba_device_add() failed (-19) for /cti@23120000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@23210000
-> > OF: amba_device_add() failed (-19) for /etm@23240000
-> > OF: amba_device_add() failed (-19) for /cti@23220000
-> > OF: amba_device_add() failed (-19) for /cpu-debug@23310000
-> > OF: amba_device_add() failed (-19) for /etm@23340000
-> > OF: amba_device_add() failed (-19) for /cti@23320000
-> > OF: amba_device_add() failed (-19) for /cti@20020000
-> > OF: amba_device_add() failed (-19) for /cti@20110000
-> > OF: amba_device_add() failed (-19) for /funnel@20130000
-> > OF: amba_device_add() failed (-19) for /etf@20140000
-> > OF: amba_device_add() failed (-19) for /funnel@20150000
-> > OF: amba_device_add() failed (-19) for /cti@20160000
-> >
-> > These are working fine with deferred probe in the mainline.
-> > I tried the hack you have suggested here(rather Tony's version),
->
-> Thanks for trying that.
->
-> > also
-> > tried with fw_devlink=0 and fw_devlink=1
->
-> 0 and 1 aren't valid input to fw_devlink. But yeah, I don't expect
-> disabling it to make anything better.
->
-> > && fw_devlink.strict=0
-> > No change in the behaviour.
-> >
-> > The DTS are in arch/arm64/boot/dts/arm/juno-*-scmi.dts and there
-> > coresight devices are mostly in juno-cs-r1r2.dtsi
->
-> Thanks
->
-> > Let me know if there is anything obvious or you want me to bisect which
-> > means I need more time. I can do that next week.
->
-> I'll let you know once I poke at the DTS. We need to figure out why
-> fw_devlink wasn't blocking these from getting to the error (same as in
-> Tony's case). But since these are amba devices, I think I have some
-> guesses.
->
-> This is an old series that had some issues in some cases and I haven't
-> gotten around to looking at it. You can give that a shot if you can
-> apply it to a recent tree.
-> https://lore.kernel.org/lkml/20210304195101.3843496-1-saravanak@google.com/
+On 22/06/2022 16:57, Lukasz Luba wrote:
+> The milli-Watts precision causes rounding errors while calculating
+> efficiency cost for each OPP. This is especially visible in the 'simple'
+> Energy Model (EM), where the power for each OPP is provided from OPP
+> framework. This can cause some OPPs to be marked inefficient, while
+> using micro-Watts precision that might not happen.
+> 
+> Update all EM users which access 'power' field and assume the value is
+> in milli-Watts.
+> 
+> Solve also an issue with potential overflow in calculation of energy
+> estimation on 32bit machine. It's needed now since the power value
+> (thus the 'cost' as well) are higher.
+> 
+> Example calculation which shows the rounding error and impact:
+> 
+> power = 'dyn-power-coeff' * volt_mV * volt_mV * freq_MHz
+> 
+> power_a_uW = (100 * 600mW * 600mW * 500MHz) / 10^6 = 18000
+> power_a_mW = (100 * 600mW * 600mW * 500MHz) / 10^9 = 18
+> 
+> power_b_uW = (100 * 605mW * 605mW * 600MHz) / 10^6 = 21961
+> power_b_mW = (100 * 605mW * 605mW * 600MHz) / 10^9 = 21
+> 
+> max_freq = 2000MHz
+> 
+> cost_a_mW = 18 * 2000MHz/500MHz = 72
+> cost_a_uW = 18000 * 2000MHz/500MHz = 72000
+> 
+> cost_b_mW = 21 * 2000MHz/600MHz = 70 // <- artificially better
+> cost_b_uW = 21961 * 2000MHz/600MHz = 73203
+> 
+> The 'cost_b_mW' (which is based on old milli-Watts) is misleadingly
+> better that the 'cost_b_uW' (this patch uses micro-Watts) and such
+> would have impact on the 'inefficient OPPs' information in the Cpufreq
+> framework. This patch set removes the rounding issue.
 
-I rebased it to driver-core-next and tested the patch  (for
-correctness, not with your issue though). I'm fairly sure it should
-help with your issue. Can you give it a shot please?
+Thanks for this detailed description, it really helps to understand why 
+this change is needed.
 
-https://lore.kernel.org/lkml/20220705083934.3974140-1-saravanak@google.com/T/#u
+Perhaps it would make sense to add a power_uw in the EM structure and 
+keeping the old one with the milli-watts in order to reduce the impact 
+of the change.
 
--Saravana
+It is a suggestion if you find it more convenient. Otherwise I'm fine 
+with this approach too.
 
->
-> After looking at that old patch again, I think I know what's going on.
-> For normal devices, the pm domain attach happens AFTER the device is
-> added and fw_devlink has had a chance to set up device links. And if
-> the suppliers aren't ready, really_probe() won't get as far as
-> dev_pm_domain_attach(). But for amba, the clock and pm domain
-> suppliers are "grabbed" before adding the device.
->
-> So with that old patch + always returning -EPROBE_DEFER in
-> amba_device_add() if amba_read_periphid() fails should fix your issue.
->
-> -Saravana
+A few comments below.
+
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   drivers/cpufreq/mediatek-cpufreq-hw.c |  7 +--
+>   drivers/cpufreq/scmi-cpufreq.c        |  6 +++
+>   drivers/opp/of.c                      | 15 ++++---
+>   drivers/powercap/dtpm_cpu.c           |  5 +--
+>   drivers/thermal/cpufreq_cooling.c     | 13 +++++-
+>   drivers/thermal/devfreq_cooling.c     | 19 ++++++--
+>   include/linux/energy_model.h          | 63 ++++++++++++++++++++-------
+>   kernel/power/energy_model.c           | 31 ++++++++-----
+>   8 files changed, 114 insertions(+), 45 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> index 813cccbfe934..f0e0a35c7f21 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq-hw.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> @@ -51,7 +51,7 @@ static const u16 cpufreq_mtk_offsets[REG_ARRAY_SIZE] = {
+>   };
+>   
+
+[ ... ]
+
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index b8151d95a806..dc19e7c80751 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -21,6 +21,7 @@
+>   #include <linux/pm_qos.h>
+>   #include <linux/slab.h>
+>   #include <linux/thermal.h>
+> +#include <linux/units.h>
+>   
+>   #include <trace/events/thermal.h>
+>   
+> @@ -101,6 +102,7 @@ static unsigned long get_level(struct cpufreq_cooling_device *cpufreq_cdev,
+>   static u32 cpu_freq_to_power(struct cpufreq_cooling_device *cpufreq_cdev,
+>   			     u32 freq)
+>   {
+> +	unsigned long power_mw;
+>   	int i;
+>   
+>   	for (i = cpufreq_cdev->max_level - 1; i >= 0; i--) {
+> @@ -108,16 +110,23 @@ static u32 cpu_freq_to_power(struct cpufreq_cooling_device *cpufreq_cdev,
+>   			break;
+>   	}
+>   
+> -	return cpufreq_cdev->em->table[i + 1].power;
+> +	power_mw = cpufreq_cdev->em->table[i + 1].power;
+> +	power_mw /= MICROWATT_PER_MILLIWATT;
+
+Won't this fail with an unresolved symbols on some archs ? I mean may be 
+do_div should be used instead ?
+
+> +
+> +	return power_mw;
+>   }
+
+[ ... ]
+
+>   #ifdef CONFIG_64BIT
+> -#define em_scale_power(p) ((p) * 1000)
+> +#define em_estimate_energy(cost, sum_util, scale_cpu) \
+> +	(((cost) * (sum_util)) / (scale_cpu))
+>   #else
+> -#define em_scale_power(p) (p)
+> +#define em_estimate_energy(cost, sum_util, scale_cpu) \
+> +	(((cost) / (scale_cpu)) * (sum_util))
+>   #endif
+>   
+>   struct em_data_callback {
+> @@ -112,7 +143,7 @@ struct em_data_callback {
+>   	 * and frequency.
+>   	 *
+>   	 * In case of CPUs, the power is the one of a single CPU in the domain,
+> -	 * expressed in milli-Watts or an abstract scale. It is expected to
+> +	 * expressed in micro-Watts or an abstract scale. It is expected to
+>   	 * fit in the [0, EM_MAX_POWER] range.
+>   	 *
+>   	 * Return 0 on success.
+> @@ -148,7 +179,7 @@ struct em_perf_domain *em_cpu_get(int cpu);
+>   struct em_perf_domain *em_pd_get(struct device *dev);
+>   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>   				struct em_data_callback *cb, cpumask_t *span,
+> -				bool milliwatts);
+> +				bool microwatts);
+>   void em_dev_unregister_perf_domain(struct device *dev);
+>   
+>   /**
+> @@ -273,7 +304,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>   	 *   pd_nrg = ------------------------                       (4)
+>   	 *                  scale_cpu
+>   	 */
+> -	return ps->cost * sum_util / scale_cpu;
+> +	return em_estimate_energy(ps->cost, sum_util, scale_cpu);
+>   }
+>   
+>   /**
+> @@ -297,7 +328,7 @@ struct em_data_callback {};
+>   static inline
+>   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>   				struct em_data_callback *cb, cpumask_t *span,
+> -				bool milliwatts)
+> +				bool microwatts)
+>   {
+>   	return -EINVAL;
+>   }
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 6c373f2960e7..910668ec8838 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -108,10 +108,11 @@ static void em_debug_remove_pd(struct device *dev) {}
+>   
+>   static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+>   				int nr_states, struct em_data_callback *cb,
+> -				unsigned long flags)
+> +				unsigned long flags, int num_devs)
+>   {
+>   	unsigned long power, freq, prev_freq = 0, prev_cost = ULONG_MAX;
+>   	struct em_perf_state *table;
+> +	unsigned long max_cost = 0;
+>   	int i, ret;
+>   	u64 fmax;
+>   
+> @@ -145,7 +146,7 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+>   
+>   		/*
+>   		 * The power returned by active_state() is expected to be
+> -		 * positive and to fit into 16 bits.
+> +		 * positive and be in range.
+>   		 */
+>   		if (!power || power > EM_MAX_POWER) {
+>   			dev_err(dev, "EM: invalid power: %lu\n",
+> @@ -170,7 +171,7 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+>   				goto free_ps_table;
+>   			}
+>   		} else {
+> -			power_res = em_scale_power(table[i].power);
+> +			power_res = table[i].power;
+>   			cost = div64_u64(fmax * power_res, table[i].frequency);
+>   		}
+>   
+> @@ -183,6 +184,15 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+>   		} else {
+>   			prev_cost = table[i].cost;
+>   		}
+> +
+> +		if (max_cost < table[i].cost)
+> +			max_cost = table[i].cost;
+> +	}
+> +
+> +	/* Check if it won't overflow during energy estimation. */
+> +	if (em_validate_cost(max_cost, num_devs)) {
+
+I'm not finding the em_validate_cost() function
+
+> +		dev_err(dev, "EM: too big 'cost' value: %lu\n",	max_cost);
+> +		goto free_ps_table;
+>   	}
+>   
+>   	pd->table = table;
+> @@ -199,9 +209,9 @@ static int em_create_pd(struct device *dev, int nr_states,
+>   			struct em_data_callback *cb, cpumask_t *cpus,
+>   			unsigned long flags)
+>   {
+> +	int cpu, ret, num_devs = 1;
+>   	struct em_perf_domain *pd;
+>   	struct device *cpu_dev;
+> -	int cpu, ret;
+>   
+>   	if (_is_cpu_device(dev)) {
+>   		pd = kzalloc(sizeof(*pd) + cpumask_size(), GFP_KERNEL);
+> @@ -209,13 +219,14 @@ static int em_create_pd(struct device *dev, int nr_states,
+>   			return -ENOMEM;
+>   
+>   		cpumask_copy(em_span_cpus(pd), cpus);
+> +		num_devs = cpumask_weight(cpus);
+
+Why is this change needed ? What is the connection with the uW unit change ?
+
+
+>   	} else {
+>   		pd = kzalloc(sizeof(*pd), GFP_KERNEL);
+>   		if (!pd)
+>   			return -ENOMEM;
+>   	}
+>   
+> -	ret = em_create_perf_table(dev, pd, nr_states, cb, flags);
+> +	ret = em_create_perf_table(dev, pd, nr_states, cb, flags, num_devs);
+>   	if (ret) {
+>   		kfree(pd);
+>   		return ret;
+> @@ -314,13 +325,13 @@ EXPORT_SYMBOL_GPL(em_cpu_get);
+>    * @cpus	: Pointer to cpumask_t, which in case of a CPU device is
+>    *		obligatory. It can be taken from i.e. 'policy->cpus'. For other
+>    *		type of devices this should be set to NULL.
+> - * @milliwatts	: Flag indicating that the power values are in milliWatts or
+> + * @microwatts	: Flag indicating that the power values are in micro-Watts or
+>    *		in some other scale. It must be set properly.
+>    *
+>    * Create Energy Model tables for a performance domain using the callbacks
+>    * defined in cb.
+>    *
+> - * The @milliwatts is important to set with correct value. Some kernel
+> + * The @microwatts is important to set with correct value. Some kernel
+>    * sub-systems might rely on this flag and check if all devices in the EM are
+>    * using the same scale.
+>    *
+> @@ -331,7 +342,7 @@ EXPORT_SYMBOL_GPL(em_cpu_get);
+>    */
+>   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>   				struct em_data_callback *cb, cpumask_t *cpus,
+> -				bool milliwatts)
+> +				bool microwatts)
+>   {
+>   	unsigned long cap, prev_cap = 0;
+>   	unsigned long flags = 0;
+> @@ -381,8 +392,8 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>   		}
+>   	}
+>   
+> -	if (milliwatts)
+> -		flags |= EM_PERF_DOMAIN_MILLIWATTS;
+> +	if (microwatts)
+> +		flags |= EM_PERF_DOMAIN_MICROWATTS;
+>   	else if (cb->get_cost)
+>   		flags |= EM_PERF_DOMAIN_ARTIFICIAL;
+>   
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
