@@ -2,76 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6745566357
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 08:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75525663A2
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 09:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiGEGoW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 02:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S229622AbiGEG7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 02:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiGEGoV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 02:44:21 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761365F50
-        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 23:44:18 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id r14so10280135wrg.1
-        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 23:44:18 -0700 (PDT)
+        with ESMTP id S229463AbiGEG7p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 02:59:45 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EF9FD1
+        for <linux-pm@vger.kernel.org>; Mon,  4 Jul 2022 23:59:43 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d5so10202205plo.12
+        for <linux-pm@vger.kernel.org>; Mon, 04 Jul 2022 23:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1xyjL8uVi4oUWM4NxyVLfSq7f5Oq55Jjs2ZuqXwoovg=;
-        b=HHtqiYfa34sLF/w4kuG7IpCfJKs5H8S2BQi0DB/toNXW5ZjTeF9pN6cQib8Qbrfg2J
-         CXJ0KSOaYpmWgCEaAgaZSfiBWzGWqcY0dms8clqD9gb7HnPNokAFJYBrK/kso0rXQGnn
-         0uLuX3Fib2sxm3g9QshwNh60IsSyg2KrP0Fi5PNOEDstPQqF+PEx+8OqysT4lgqtijQ7
-         1FDpmcWCStE1PGBeINfP0u7oSHgmRbElXeW6SYCuZMRifBqRsg/Fv1DWe9EQ+ouZFPcW
-         jbkRYAmk2WAh4vAzdzD6jEsBwh5w2FzTdpMVpwiLX1iq6nT7Pr3v1VPHAGWhS0p6X+k+
-         Gi+g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VNHiUGwQOsu7UA6RtMt6UvhL2D1FX1PORHMBoWhLfD4=;
+        b=z6etQfMnTbRrOcBrlN/iGHfzncd6ag4b5iN4UmJeWIyOsBpisXTRRrJ/gvO1VfnUwP
+         1Bhy3dgSynR08aHh/R8byFYCa43fCrlakxi4+3ssqQx7dAiJiuQeTaM2D03Tse/wqYRS
+         iPS5y4RBqKCrgmI13zGtZXQvjSlxXJnWT/CdvasFacgK/+Ep++XM574JxnCwhc31YeXU
+         1b5PwvqKvUFChqc8vgoqzuuAxTAdbzTIQapwyO57MxBykTo50UL7n90im+7yPZFjNpRE
+         yc80A82JZzQ52uJqmBUZprwmB7w/ASQtB1elQynTXn97Zyw55S3jR3VB7p5gW/+8x8Sc
+         VQgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1xyjL8uVi4oUWM4NxyVLfSq7f5Oq55Jjs2ZuqXwoovg=;
-        b=wogKO43F6pRymL/eLq2LMzByLjOlnyKfIqMNBkLq30gurYS3WWExL5+sSrHpZBS2Lh
-         OUxavgiw6Qa1jevwYVrkbVr2Ar6/VHhEiJsAhIfiauskskkrreaQZZWS4uN7Hq43yhFf
-         JcvoO7ksoEclUWo9cRhL8R+jAngdQU7rp/Y1XWRVb8Bn8GSOkDJ1EGTL41RJzrCnTXbs
-         rKosR484mDnJWiw25fdzbK+TMmncSQ06jkjaKVhm6sAIFdK0AEawH0gfV9mZSxC4YRzg
-         YR/3ChTvpUcn1hWKiY9EmADQIYbSnNoqR95MTPspqurN40x1zDiPxCkevCc35/XVrefl
-         XWIg==
-X-Gm-Message-State: AJIora/X9JbENIVcfn0EBjcDmpOIiLZo+pFxszP9fKQB/E4kqt1y4yC7
-        VVi5upqLJ7Ymb0F7IRMEVhyfNgrOWdTUuw==
-X-Google-Smtp-Source: AGRyM1vybu38jG39FWVZVthCnVWGJGdI1MdMyHsvjn1rrZ5exauM4Covm67WvgWzhaFm/M0VKmbbqg==
-X-Received: by 2002:adf:f48e:0:b0:21d:6562:4717 with SMTP id l14-20020adff48e000000b0021d65624717mr11438288wro.428.1657003456933;
-        Mon, 04 Jul 2022 23:44:16 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q5-20020adff945000000b0021b9585276dsm31416242wrr.101.2022.07.04.23.44.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 23:44:16 -0700 (PDT)
-Message-ID: <af7463e7-4ec3-8a26-fbc1-aa73bda2e434@linaro.org>
-Date:   Tue, 5 Jul 2022 08:44:15 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VNHiUGwQOsu7UA6RtMt6UvhL2D1FX1PORHMBoWhLfD4=;
+        b=7KfIYAqYF4kal0pY2Xm4zpg82EkK7OX1iYTGtIHQlluV5wsSs/1gcpod6dNQ60VkGB
+         qA5NPwvGWO7IQUXarqwn6VzOH8qNDi8R49VJLvwUqmrjR0h33gNBZNviSFuErdX8Gvr/
+         eI5cZG8p/XjVmuhfUAI1BS7w4pPvVl0RC0pLf6E6xc3eFeu8CwGUPaklUlUTdwS+fB/Q
+         iylUZODrJWPHi+eOfqh32Wf6udISmd+Ab3Sfq4oFUk7SNyDiZVKgIw4j6tUQCbx2jgB3
+         0VZH5iCCAuKj9kScYLMhcnqsQdYL4ZeKu8Gqtak4QEOGSFDAsTevYcqQoMEX6QHbk+s/
+         LCGA==
+X-Gm-Message-State: AJIora+2AOgG7fvy/gaNDuUS3K2QKBfahZmc/qYbxOf+QKlrSaFpsKg4
+        pTG21DP+9FiTqXj6fX9LPTApN2UEcKYLJQ==
+X-Google-Smtp-Source: AGRyM1s12wAWEf1FeyoLI4yLjcshz3btgDoC6a3E4Ygji4hbulwSG8IAxWF5dNR4t68BnI3qBg4Arg==
+X-Received: by 2002:a17:90b:19d3:b0:1ed:5596:1ee5 with SMTP id nm19-20020a17090b19d300b001ed55961ee5mr42381061pjb.83.1657004383035;
+        Mon, 04 Jul 2022 23:59:43 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id e11-20020a170902784b00b00168b113f222sm22696770pln.173.2022.07.04.23.59.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 23:59:42 -0700 (PDT)
+Date:   Tue, 5 Jul 2022 12:29:40 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Message-ID: <20220705065940.v3n2s7bgr6eai3rf@vireshk-i7>
+References: <cover.1654849214.git.viresh.kumar@linaro.org>
+ <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
+ <de13cca4-3a33-6482-7b02-f89796f45325@linaro.org>
+ <4cac6c79-ea9a-1f48-c6f1-2e04b54590a4@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 11/12] thermal/of: Use thermal trips stored in the
- thermal zone
-Content-Language: en-US
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com,
-        Amit Kucheria <amitk@kernel.org>
-References: <20220703183059.4133659-1-daniel.lezcano@linexp.org>
- <20220703183059.4133659-12-daniel.lezcano@linexp.org>
- <6c7e1865e7e68ac0f035680044eb878ced715a1b.camel@intel.com>
- <f16d855b-28b0-b4ee-0e42-7293d0e61c21@linexp.org>
- <0c525d16f34bedd1ea4ee4b7516c9dee5a92d419.camel@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <0c525d16f34bedd1ea4ee4b7516c9dee5a92d419.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cac6c79-ea9a-1f48-c6f1-2e04b54590a4@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,28 +75,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/07/2022 03:20, Zhang Rui wrote:
-
-[ ... ]
-
->> There is no difference between those functions. There are 34 more
->> patches in the pipe to be sent after this series to do more cleanups
->> and
->> remove code duplication.
->>
-> Good to know.
+On 30-06-22, 14:39, Krzysztof Kozlowski wrote:
+> On 30/06/2022 14:32, Krzysztof Kozlowski wrote:
+> > On 10/06/2022 10:20, Viresh Kumar wrote:
+> >> +	ret = _read_rate(new_opp, opp_table, np);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +	else if (opp_table->clk_count == 1)
+> > 
+> > Shouldn't this be >=1? I got several clocks and this one fails.
 > 
-> It would be nice to have a cover letter to describe the whole picture,
-> including this patch series and the following patches in your queue.
+> Actually this might be correct, but you need to update the bindings. Now
+> you require opp-level for case with multiple clocks.
 
-https://lore.kernel.org/lkml/20220703183059.4133659-4-daniel.lezcano@linexp.org/T/
+I have thought about this again and adding such "fake" property in DT
+doesn't look right, specially in binding document. It maybe fine to
+have a "level" property in your case of UFS, where we want something
+to represent gears. But others may not want it.
 
-You will Cc'ed next time ;)
+So, in the new version I am sending now, we still consider opp-hz
+property as the property that uniquely identifies an OPP. Just that we
+compare all the rates now, and not just the first one. I have updated
+_opp_compare_keys() for this as well.
 
+The drivers, for multiple clock case, are expected to call
+dev_pm_opp_set_opp() to set the specific OPP. Though how they find the
+target OPP is left for the users to handle. For some, we may have
+another unique OPP property, like level, which can be used to find the
+OPP. While in case of others, we may want to implement freq-based OPP
+finder APIs for multiple clock rates. I have decided not to implement
+them in advance, and add them only someone wants to use them.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+viresh
