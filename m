@@ -2,76 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E41566601
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 11:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB46D566629
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Jul 2022 11:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiGEJZH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 05:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S230205AbiGEJaD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Jul 2022 05:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGEJZH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 05:25:07 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAF4CEA
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 02:25:05 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id cl1so16655790wrb.4
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 02:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZW5lLkL4JDDf9YU7h/GJGKjkCyTulUg7IkJ5X2M8OE0=;
-        b=CpNzyFgqsQd/DD8PMyj/53gIhGninW9JqnA2U3FFJTOPqE5SM3EkDrAdhwn+7ncT5v
-         wKjohAnLgdC+n8Y+UXvJHDf7RYG5VaTRCd4Fc+uRINtx5aikqTNMbIqtV1nzjCPlk6nj
-         D/0sZ0VLfEaIsUm3UnmE+bpDGWNXeaH/Lyw8ggXAyVBXoijGMVpfJlbrX4rfqEKD3bb6
-         uhQFDW/Q7u7w3Yq0l4IgTZkgzhb28Gyrzno9rxTV0SenCO9ZTDV5UPfBNTAsvX9nsPC0
-         qcyL9P/sBnSoRnd8AnS0YlfRh+Al/8plbYVUFILSlTeSfZmrUb+nZ0vZd+kObtXtFkp7
-         viYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZW5lLkL4JDDf9YU7h/GJGKjkCyTulUg7IkJ5X2M8OE0=;
-        b=5RmcQTbE5qe958glI68X31n3unFJqtwUVarcFbZqRuFRrOf8L/KioIBkvk2iINoK0D
-         lnCxCobplRdfK14BK8PeNCPAWYlH+rfq5Fa1ayu5YrPFveLvW7uqhW8Uo5ysdsuLdJAT
-         dVTXagvutHwSDlhSubn26uXFCzxdC9g63Lx1pMvQPPFG+n8Sb9tv2CurlO5ZWBVhse23
-         pTlJg9p41vs35eLQb4ufm+1qLc+g1EU1sBDpjzIjXA2rz1LDt73coTMg98EJHr23i6LF
-         1Wzp67x/LAR6eXnrj3aA1mbW3xTU1YtkQhBxFQx/1P48SUVDbEW3tYPiyG20e3+yLkvU
-         2SMg==
-X-Gm-Message-State: AJIora9uRF8UjAI2xM4AlXDGTshF+RJiskulkct9k1cYgXTqnOHrbXoB
-        bPU8kfj8xn4j5N/4zVYDZSlKsA==
-X-Google-Smtp-Source: AGRyM1ulejTrozItdDe8gUaSa6g97LeECzQY32rA9ATM/klopckLROa1qgzi/UICUNSR8vmGdeg9yQ==
-X-Received: by 2002:a5d:4f0b:0:b0:21d:705c:caf with SMTP id c11-20020a5d4f0b000000b0021d705c0cafmr3189291wru.55.1657013103855;
-        Tue, 05 Jul 2022 02:25:03 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q7-20020a05600000c700b0021d76985929sm484157wrx.80.2022.07.05.02.25.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jul 2022 02:25:03 -0700 (PDT)
-Message-ID: <653f63e5-c794-27fb-115a-7b051850991b@linaro.org>
-Date:   Tue, 5 Jul 2022 11:25:01 +0200
+        with ESMTP id S231665AbiGEJ3b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 05:29:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E433DEB8
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 02:29:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66031B816A6
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 09:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 25F91C341D0
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 09:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657013339;
+        bh=dDsk/0iHsfwB6mPPSmyk3ZpsD8SvIvj4N+YQNC3tzZ4=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=qs7PHiZdWFPXkzB2SG/io/3KGqgFhom4zsufvIANfRorKqhSK8RwHkZ4bDVAnpxzO
+         iMHsJAGywvq8qEh3/3p57SGeRVLXVOnlolWhUizFE3RWpQmEh4Ca5zD/ww5ROx7O5C
+         8Vvi/O9SNCXMl1rrugXPqvWGp7iD7YExMSlSaRhWzmenLYEleNAujka+37Y+fsJrh7
+         GQD7yPMYZSA9Jx2Xw9HxSjCejDQIp2y3NeAvGsZ0oMmV0Fu50flYzSnyUp1QsjO9Fe
+         x3OJxf6UBRdBozEnbikncKSiu6ZPZUmyDCLspYfZlK7Nq5gzmHOIDSyFP+6rcEyOso
+         QUNGhaBGhZrYg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 08E95CC13B1; Tue,  5 Jul 2022 09:28:59 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215938] amd-pstate ignoring scaling_max_freq after waking from
+ suspend
+Date:   Tue, 05 Jul 2022 09:28:57 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: perry_yuan@outlook.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215938-137361-UZoih0iMk2@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215938-137361@https.bugzilla.kernel.org/>
+References: <bug-215938-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4/4] cpufreq: scmi: Support the power scale in micro-Watts
- in SCMI v3.1
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, nm@ti.com,
-        sboyd@kernel.org, sudeep.holla@arm.com, cristian.marussi@arm.com,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220622145802.13032-1-lukasz.luba@arm.com>
- <20220622145802.13032-5-lukasz.luba@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220622145802.13032-5-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,74 +71,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/06/2022 16:58, Lukasz Luba wrote:
-> The SCMI v3.1 adds support for power values in micro-Watts. They are not
-> always in milli-Watts anymore (ignoring the bogo-Watts). Thus, the power
-> must be converted conditionally before sending to Energy Model. Add the
-> logic which handles the needed checks and conversions.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->   drivers/cpufreq/scmi-cpufreq.c | 15 ++++++++++-----
->   1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index bfd35583d653..513a071845c2 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -100,7 +100,7 @@ static int __maybe_unused
->   scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
->   		   unsigned long *KHz)
->   {
-> -	bool power_scale_mw = perf_ops->power_scale_mw_get(ph);
-> +	enum scmi_power_scale power_scale = perf_ops->power_scale_get(ph);
->   	unsigned long Hz;
->   	int ret, domain;
->   
-> @@ -114,8 +114,8 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
->   	if (ret)
->   		return ret;
->   
-> -	/* Provide bigger resolution power to the Energy Model */
-> -	if (power_scale_mw)
-> +	/* Convert the power to uW if it is mW (ignore bogoW) */
-> +	if (power_scale == SCMI_POWER_MILLIWATTS)
->   		*power *= MICROWATT_PER_MILLIWATT;
->   
->   	/* The EM framework specifies the frequency in KHz. */
-> @@ -255,8 +255,9 @@ static int scmi_cpufreq_exit(struct cpufreq_policy *policy)
->   static void scmi_cpufreq_register_em(struct cpufreq_policy *policy)
->   {
->   	struct em_data_callback em_cb = EM_DATA_CB(scmi_get_cpu_power);
-> -	bool power_scale_mw = perf_ops->power_scale_mw_get(ph);
-> +	enum scmi_power_scale power_scale = perf_ops->power_scale_get(ph);
->   	struct scmi_data *priv = policy->driver_data;
-> +	bool em_power_scale = false;
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
 
-Just pass 'false' to em_dev_register_perf_domain()
+--- Comment #19 from perry_yuan@outlook.com ---
+(In reply to Alex Maras from comment #18)
+> Thanks Perry - tested and working as expected. I'm now able to set the CPU
+> freq with amd-pstate, suspend, resume and see that the cpu frequency limi=
+ts
+> are now respected correctly, and changing both the governor and the
+> frequency limits works as expected.=20
+>=20
+> I've set this to resolved with a code fix.
 
->   	/*
->   	 * This callback will be called for each policy, but we don't need to
-> @@ -268,9 +269,13 @@ static void scmi_cpufreq_register_em(struct cpufreq_policy *policy)
->   	if (!priv->nr_opp)
->   		return;
->   
-> +	if (power_scale == SCMI_POWER_MILLIWATTS
-> +	    || power_scale == SCMI_POWER_MICROWATTS)
-> +		em_power_scale = true;
-> +
->   	em_dev_register_perf_domain(get_cpu_device(policy->cpu), priv->nr_opp,
->   				    &em_cb, priv->opp_shared_cpus,
-> -				    power_scale_mw);
-> +				    em_power_scale);
->   }
->   
->   static struct cpufreq_driver scmi_cpufreq_driver = {
+HI Alex.
 
+Good to hear that.=20
+Thanks for your confirm.=20
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Perry.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
