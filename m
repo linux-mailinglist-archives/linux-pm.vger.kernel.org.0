@@ -2,112 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F78568344
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 11:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE91A568365
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 11:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbiGFJOI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 05:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S233178AbiGFJVW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 05:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbiGFJNs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 05:13:48 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3931A3B1;
-        Wed,  6 Jul 2022 02:13:20 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id k30so10305959edk.8;
-        Wed, 06 Jul 2022 02:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WKlacHhWVR2IblvCAgYMcCw7cvtmo7gBzlhxFpijOWM=;
-        b=UyINPEp8aUU7+iO4UvYReAysG8acJi4s0lW7fYS990hIHuI2KgReqshlPjlC0FcdQX
-         RWLEJ1iagzj5JHTLAwg1Tfl34CjKErUg06qCwRi5FpbuqXpIfRK0B8kuUc2l5x+40o+8
-         2YldATzAdsq2GhIZIL2D0cZi8oKOkVG5Y5xLvvP4kajNiX5yCXAJSyEYBx1RvA9W9SdO
-         piij5Lfa0VXVwqnHofYdHxRPOmYTBO/NXTATLm6C9JRKYr2iRvgzlsZTZRGqO8gtc9pI
-         zkPBxco6Fa5B8qkZy3WblPhpXY+1PsQ3ol/zLxC+L8wAov5SdI1JA4byrn/VHyXJavbs
-         ZPkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WKlacHhWVR2IblvCAgYMcCw7cvtmo7gBzlhxFpijOWM=;
-        b=QxR5OpPe3NgjVZHkxNID4w7Mgvcw6XaQKzgi6rmn5TdcUkdgaBseRGdfsFVHDfK+LW
-         qhe6gUqffxKYBwr8jvHWxccaa/ThR1eRottwfKm2NQmkTLT10ajPqMSVzGrGZZaNbfSG
-         ornZME+JmgmlRk5r1vYTpZ8jQF3eEmPw3seTG0dsDKCTXCpG90vpF2NV/bTtBNQ0jo/r
-         Cb/OfvKw5bcMuJ+BRqb9+3CIzWMmEcQ/1X77PlHpLxmiK7TnDOOxNF2f5hWrdOj8ijIm
-         b0bKL/Ab/riiu2JY5h2t0CwqmoaY6Z57nESze7yZBTjtdV2/PF7odfLK7dF3yv5IRI8Q
-         mqsQ==
-X-Gm-Message-State: AJIora808hsnV+UdsynlkTYT6KRbYaZklCtQ/r1z67l8sQQwRm1XoMiS
-        PqE6mIIEjoGD9C62az3dzFg=
-X-Google-Smtp-Source: AGRyM1tgzHocOxIjG9HexS+g9z9ap2nsem/HblqVyMjIbl5ZbLhG8nAvflW5PCvUObUWjIPHfLadCA==
-X-Received: by 2002:a05:6402:350a:b0:435:df44:30aa with SMTP id b10-20020a056402350a00b00435df4430aamr51209856edd.403.1657098799156;
-        Wed, 06 Jul 2022 02:13:19 -0700 (PDT)
-Received: from skbuf ([188.26.185.61])
-        by smtp.gmail.com with ESMTPSA id er13-20020a056402448d00b0043a5bcf80a2sm6350790edb.60.2022.07.06.02.13.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 02:13:18 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 12:13:15 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Message-ID: <20220706091315.p5k2jck3rmyjhvqw@skbuf>
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S233136AbiGFJVP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 05:21:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B981759B;
+        Wed,  6 Jul 2022 02:21:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4239E61C7B;
+        Wed,  6 Jul 2022 09:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E177C341CA;
+        Wed,  6 Jul 2022 09:21:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657099273;
+        bh=WwyVSdZffKGWz2R6RdngoJpksypjl3TOOhDleKEMPr0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hSI1p6TRFXRut9439VlvkMxtBQ5/v+zrVALqaB1OG2yUotwdM9aEehT22gY8KrgbC
+         KV6YATir5U/D/m4eIL37fQWi3c8EvZ5LsK5Cpb9ZpzWfOQiidinzBh014fepxjxMd9
+         PeaLODzJ4mBMjXSO/0c8cDWEsbqw8f95pFscyvyw=
+Date:   Wed, 6 Jul 2022 11:21:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     Varad Gautam <varadgautam@google.com>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing
+ thermal states
+Message-ID: <YsVUB76c2b0EkRBb@kroah.com>
+References: <20220705150002.2016207-1-varadgautam@google.com>
+ <YsRkPUcrMj+JU0Om@kroah.com>
+ <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
+ <YsUvgWmrk+ZfUy3t@kroah.com>
+ <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
+ <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:03:12PM +0200, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <uwe@kleine-koenig.org>
+On Wed, Jul 06, 2022 at 04:51:59PM +0800, Zhang Rui wrote:
+> On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
+> > On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
+> > wrote:
+> > > 
+> > > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
+> > > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
+> > > > gregkh@linuxfoundation.org> wrote:
+> > > > > 
+> > > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
+> > > > > > Check that a user-provided thermal state is within the
+> > > > > > maximum
+> > > > > > thermal states supported by a given driver before attempting
+> > > > > > to
+> > > > > > apply it. This prevents a subsequent OOB access in
+> > > > > > thermal_cooling_device_stats_update() while performing
+> > > > > > state-transition accounting on drivers that do not have this
+> > > > > > check
+> > > > > > in their set_cur_state() handle.
+> > > > > > 
+> > > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> > > > > > Cc: stable@vger.kernel.org
+> > > > > > ---
+> > > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+> > > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/thermal/thermal_sysfs.c
+> > > > > > b/drivers/thermal/thermal_sysfs.c
+> > > > > > index 1c4aac8464a7..0c6b0223b133 100644
+> > > > > > --- a/drivers/thermal/thermal_sysfs.c
+> > > > > > +++ b/drivers/thermal/thermal_sysfs.c
+> > > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
+> > > > > > struct device_attribute *attr,
+> > > > > >               const char *buf, size_t count)
+> > > > > >  {
+> > > > > >       struct thermal_cooling_device *cdev =
+> > > > > > to_cooling_device(dev);
+> > > > > > -     unsigned long state;
+> > > > > > +     unsigned long state, max_state;
+> > > > > >       int result;
+> > > > > > 
+> > > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
+> > > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
+> > > > > > struct device_attribute *attr,
+> > > > > > 
+> > > > > >       mutex_lock(&cdev->lock);
+> > > > > > 
+> > > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
+> > > > > > +     if (result)
+> > > > > > +             goto unlock;
+> > > > > > +
+> > > > > > +     if (state > max_state) {
+> > > > > > +             result = -EINVAL;
+> > > > > > +             goto unlock;
+> > > > > > +     }
+> > > > > > +
+> > > > > >       result = cdev->ops->set_cur_state(cdev, state);
+> > > > > 
+> > > > > Why doesn't set_cur_state() check the max state before setting
+> > > > > it?  Why
+> > > > > are the callers forced to always check it before?  That feels
+> > > > > wrong...
+> > > > > 
+> > > > 
+> > > > The problem lies in thermal_cooling_device_stats_update(), not
+> > > > set_cur_state().
+> > > > 
+> > > > If ->set_cur_state() doesn't error out on invalid state,
+> > > > thermal_cooling_device_stats_update() does a:
+> > > > 
+> > > > stats->trans_table[stats->state * stats->max_states +
+> > > > new_state]++;
+> > > > 
+> > > > stats->trans_table reserves space depending on max_states, but
+> > > > we'd end up
+> > > > reading/writing outside it. cur_state_store() can prevent this
+> > > > regardless of
+> > > > the driver's ->set_cur_state() implementation.
+> > > 
+> > > Why wouldn't cur_state_store() check for an out-of-bounds condition
+> > > by
+> > > calling get_max_state() and then return an error if it is invalid,
+> > > preventing thermal_cooling_device_stats_update() from ever being
+> > > called?
+> > > 
+> > 
+> > That's what this patch does, it adds the out-of-bounds check.
 > 
-> The value returned by an i2c driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
+> No, I think Greg' question is
+> why cdev->ops->set_cur_state() return 0 when setting a cooling state
+> that exceeds the maximum cooling state?
 
-Assuming you remove the spurious kasan change:
+Yes, that is what I am asking, it should not allow a state to be
+exceeded.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+thanks,
+
+greg k-h
