@@ -2,174 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9E9568B2A
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 16:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FEB568B37
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 16:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbiGFO1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 10:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S233425AbiGFO3T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 10:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbiGFO1u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 10:27:50 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E789C21E14;
-        Wed,  6 Jul 2022 07:27:47 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266E3ggd021463;
-        Wed, 6 Jul 2022 14:27:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : in-reply-to : mime-version;
- s=corp-2021-07-09; bh=4SHq+Du6ohQxycotkTXGAVx2FxIHl893Wh2JIjbihMk=;
- b=FGwHs8KcafZn8iGop6tds8Wf+e53FOIufvYoUc4tLoq8jbxiq7cg5xvuDohfnBSfulWb
- 677moCvfX9f91vIHaAQww5wyB+6RwrUFuMg54nzr5nPkAbSbISZcBBMZr2kf0j56MgdH
- POOeLRD05TFTIt/vtZqo9IPzheahoAz3e/HUqfTfZ97VBd6jkX6GKtKQ9uuA0+BkBiWx
- TY7cZA/Q/rHOfaBLU0k02OLKXEn6biEzRv6FAWfn8NKpixdJC3v69IUk3GXKTEpwi4IY
- akpt+2iCtPwJ4x5u05XjQCn+mIFUgi5f1so8ONij70IjZ/o7z4M8ZpcLumev8LRHHOLj hg== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h4uby25pu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Jul 2022 14:27:42 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 266EGxN6021079;
-        Wed, 6 Jul 2022 14:27:41 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h4ud0v7sv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Jul 2022 14:27:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gzJPVJSdsD3K75clRdUIp2o/pcgH6RHjK+inkKR/1uw//Ra8lcE0UkK6JFlM8rykf2tI0hN6GI7UCpQQWTk14tUC6TM+lzJw9jMMLC82pytwpCNbZeFrHQ9ckjl/JqpL4HmzGhjhvdSEZiaJJbfmYXXQigNy0fw+0TZidgIh6zKfTswhnE5Zetg1nfC9JPBJqMg9KfXAz7pDFk2ELqeQdAp7z39wKC7viuMG+LbEmuJX8+5oCOezZqkayVnlQ/KnioLJHa5FUG95DjMPXpVEJBPG8izWURUT4Qa6fcIeK792yBUwLMLHuI2OmHGqWNUb9F3HRsUoUUlRArXktmPloA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4SHq+Du6ohQxycotkTXGAVx2FxIHl893Wh2JIjbihMk=;
- b=JpOO+36ePVbUaFcWClMCYLjyzhNe+vH4zisHnrOXObg/9EdGQZJWLXQDC9iASt3yt8VSICL6zuPSN1ZkHuxViioRYiytf0WmAdL/1Qp8vTmS9nVKVn5rZjqVJA7eGVHOzH/kgexBCCZxNHY4MlH5Hvnai5FVab69TZDZ/MCYDQfVuTeiMskyZ3aZe8Cxj6DfZ0+D2Km1VjpnQvn9i7KOwpXYLZZKTn5Atc8LvPRdVz4WLD8noY2jTx9FMGGMx8mIGRG4gvIb12RXcesl5AJlIzqJvFbocx5kXZlTKkoLj7uTaqsJ0q5WYr0f8JiobPY1IwksvrhuG7cGP9coh3rhMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        with ESMTP id S232835AbiGFO3S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 10:29:18 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0C61C923
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 07:29:16 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a11so18689047ljb.5
+        for <linux-pm@vger.kernel.org>; Wed, 06 Jul 2022 07:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4SHq+Du6ohQxycotkTXGAVx2FxIHl893Wh2JIjbihMk=;
- b=vRu+1EH4TDuMEMWfvwoWqOUR7rBoEv5lP9EZD1EFDto+219vPoStEZ8FMMbifMI16N6FjiQVdKDWAk6Ic+ReNA2nSF+w1XvLhcCTkdB8m5vJuzzmBdaXqMa/M4QO8q+ShWFgKFO8sjIMT2l0guL3twqzSsmOVyVBGaDMUXJw65w=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by PH7PR10MB5813.namprd10.prod.outlook.com
- (2603:10b6:510:132::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Wed, 6 Jul
- 2022 14:27:39 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5395.022; Wed, 6 Jul 2022
- 14:27:39 +0000
-Date:   Wed, 6 Jul 2022 17:27:28 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH 2/2] powercap: arm_scmi: Fix a NULL vs IS_ERR() bug
-Message-ID: <YsWb0JLVFbXS+qGj@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsWbsKolf4UFeEYz@kili>
-X-Mailer: git-send-email haha only kidding
-X-ClientProxiedBy: ZRAP278CA0002.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:10::12) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=A5XEhFEI1sgOxZaIiNl90M23If361wx8ONPLgT7XGzI=;
+        b=TehnPfWsuMVsRwFU81r/h8zYcxQIpoObN9ie5xXroVxDcqpcJP061im2t2iUz+aIzy
+         TS4HZlmzQlGwdEim9PjrvSEA+yLT9OV4ePWfHLPHQpxbTJpcrFtk0jh5A1pShX7uo56v
+         MK9tmTwENiCQPlvHV6IiyWBI8tvVRp0XaMhmij/Xj/dii68gyW+3UWm49v3RuTPK00vs
+         ylAY1jIF6txWpDHiD3+FdU0+S1VJnFu/d5h0VqTDpPqKAeYB2Z5ExyiBmMSnwjk2K269
+         GMhg1BZr0QNa60yDX63rq58ZFGibbuM+JbTDRuZtATgw4eIse49PfDj/aDcwPZZiz3DD
+         2hsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A5XEhFEI1sgOxZaIiNl90M23If361wx8ONPLgT7XGzI=;
+        b=NOkMnIWRGTuEyqqu1k06ctuVEAP5IcxXmPqg3gbVk2PSwNDhueO9Yh9KKXCFEYYK+w
+         ed2Dgl3jrv5x7c2yOSA3wSC0S2Mr2ZMJIpP/kpjfjHkm7v33xq0eHJAMwo+OYV9AmEa3
+         2o5H+s6ht1zaqrKuNujx3iP1CdX6SqYO7LQuVuO9fHvoXglmHV+khGHIS3DtP+bOELwx
+         C5CjRSOuhUi9D1caSwdb1JVuEqw8MWS8P3O4f+pShItI5vj4mNwXr7Y1n2SJSQcCLEQn
+         wTh8kjGlMtom3vbA7ubaIXco5JHkPdzrJNzvY58t7saF3+V3MMbOVCeI1ITvtO1qC1Ch
+         YLGw==
+X-Gm-Message-State: AJIora8b1SdMPeKUnzVpMcCe7kZYolHhqQjXTMEi0FvRVH0FbzAmOIHM
+        yB7javxpNBjaDV7uspVf3TZ7bQ==
+X-Google-Smtp-Source: AGRyM1sIkGqNfg4WOnb75LEjMGlLNjDJs3f3DtG0GuRhGMvhVYHisNiN2pWPdwfuUokq2/yMVyEnkg==
+X-Received: by 2002:a2e:6e14:0:b0:25a:8ca0:7efd with SMTP id j20-20020a2e6e14000000b0025a8ca07efdmr22921772ljc.56.1657117755139;
+        Wed, 06 Jul 2022 07:29:15 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id 68-20020a2e0947000000b0025d375e8665sm971537ljj.99.2022.07.06.07.29.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 07:29:14 -0700 (PDT)
+Message-ID: <8c395ba8-45f6-01ae-2fcf-24344cc89141@linaro.org>
+Date:   Wed, 6 Jul 2022 16:29:12 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a93192d3-05b3-4c51-b5e0-08da5f5badb0
-X-MS-TrafficTypeDiagnostic: PH7PR10MB5813:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z0AD/BArOcoc4/dhWg54KPDRp54SgATgbVmveQ+K1eXHCwd62auc+OSHucmpEyqkECP4dt1rU+UG+hYfKlPZ7SnPgZ8xxJVOCeeMGMSPK/GYpSBfVPgEJSsYW6JTlXNh74GiWujlizWYr4S32gIc2fY/XQtYBPsHRgwpDtC78La7Wu2ZIGlwyZvKvrR69phGTx/O9Lvf4J86KxzoMncJaotz0Mt6iAQHn4jsjrjCqbDjjm4JAZz9C1WlI1p0tqYGltmxGxBXzIUDKdhmc8bzlQ9EBnnC+67p1KKNDTnjt73Pa3wPxdqfvIeISLUM6KFoRa2m0OotLgGq2XNsTYTpEZKCN18Ncml/O8/axxJSX5CRFFzt8OxdfDc9CbQC2VOU5cXn9ow3AqcBD9Ph0PDXXrUyZ8XfTCO9uuUrNaffca4mJ5RVLNyK5zrbRMOyl2FYMIZsTbkCtHweMD4u61jltFMfta635lZwB52vnhP3jr4iAsmL8yzeS4/C0p6/nXlcjJSr/u17P7w7Xwe2rI8+JIvaF85C7+DCRTwdwDY2NbzbrLSm9NGjgMC+wMtl9uf58An4HfJBuM+agZ2zJRQuJ3Z5qunmYvilFrptg5lS3m1l63gJmGT3/MhD2B9spCfynxoGFOPuuUS21bAwX0QtqYEjG3Jh4FFj6G6Kjc5apUI7o2ZrUD+q5Ki7QgABD4jZJyQ7eZeJ1dtz4TyOa/Q1XvLD9SJnvQ0CnGv00DRVcwX1/H/WP+R/Po8wQfT/f524M8QUpGxJ8TlWE1XxyjlW1Mc1/cszklYToT9iG9hQ6W6hePR3d3lyuQvVo+fumS0ZwX04dcnzXKkYKgncOswaTg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(346002)(376002)(396003)(366004)(39860400002)(478600001)(38100700002)(38350700002)(6486002)(186003)(6506007)(41300700001)(6666004)(52116002)(110136005)(2906002)(66556008)(316002)(8936002)(5660300002)(44832011)(86362001)(6512007)(26005)(9686003)(83380400001)(66946007)(66476007)(33716001)(4326008)(8676002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+orFxSSa3x63AlfVSS75rPyPDekI2OUSD9tJN6DBh1ZjDoHFWHIEgbFbwMCp?=
- =?us-ascii?Q?WeEWHzfhmBqVX6qyylLtsaIVQ/vzi6NyUGiL7T4QfHY8mnbH7yU1xHnbkP26?=
- =?us-ascii?Q?izf+Dv9Lu2rZS39HS7aV8nq54aMEltctYwnBbdojBn2DzhXCVxLaQuaqF874?=
- =?us-ascii?Q?G06c5xK8Zr0WSZU7BMC4soMtpTHCXMrw1CRqHki+JYNTThYXiM3cVKIHUf6X?=
- =?us-ascii?Q?fIBu5sQ3rKt8W2tViR4r6YPCa8F9lfQwFJW/5fpns8ZaofMbKDTPxEoSgtGL?=
- =?us-ascii?Q?HXZP1SDUUWyohC/dgXRrPtcD+Y82KubPHY20iNnZFkIQ51PsCrEm1xjVf7KB?=
- =?us-ascii?Q?3RPiX5n2H2tR4nsKXvyrgcu03abVHVh7oOJpaj7OQ8nqE13JpWP651stqPx8?=
- =?us-ascii?Q?JphPXtkLmjStjt/IaYQPgtGoS9Y1s5imJJWXAmMoE7X3I3E8+Dc6JFY+v40H?=
- =?us-ascii?Q?Vv7VxB9qLs0zi+/VCOYVhNzI62QcfexCBr9wpILxHowiTyBXDRrigNzIukxU?=
- =?us-ascii?Q?xcVIymCSfcLhoDBKK7kovfvk9CRYtU3K0Hwi02YJ4QeW0Yc3pNH9Sph6DHcA?=
- =?us-ascii?Q?d3Y4fsUH20FpCunZ4A7Nk1G9mr/ezS0hj1Lux1eUac6oIsufecodhbSfrMYW?=
- =?us-ascii?Q?dJ6mSB8Jpy8bCF1q1RcPN1g2teyhYhCLiGovG+QBnMbcVwMBMGoNlnKiZQjv?=
- =?us-ascii?Q?UFuZh6YUlFX4aMpRXhxOovoUXL4sojzzQvzBcuTl1Gr0jPH3a5DqQnVbXoRe?=
- =?us-ascii?Q?RKIBRx+LYzV2iPhOTS0SCzr/NXKHykAlHO9wfieaKlstnC8TYvKMOVvAGTcE?=
- =?us-ascii?Q?6KwOqTl7q3+Mp8KsUO+rNTHwFX+ECzCMTOfF9+yGiYa3/ndwmjEELAgg+U9w?=
- =?us-ascii?Q?GJe90Q4luEfVWAbwzulo06jamHu5tAPjRL/x398abO6ObR/KjrjruPwsq61F?=
- =?us-ascii?Q?M7iOyQXlErUdAiO31XvL4kCV4+mWPg2LaQ6eZfTHEP6n7U+71MhXWw2e4mjy?=
- =?us-ascii?Q?ZaXe1LepXNrl/WyLM9XlCwVvp1cU2h0A9e0q/YDLcu5c5qWPra76T/tVE6iE?=
- =?us-ascii?Q?0YeyxHunPV87oVkvhuLAFhFJPWm8nFulRTLJStZO01pqvAC79A9g7P4dstYo?=
- =?us-ascii?Q?m7eIGOxdA2cBM3VnNnyUxJUCrSIJ18Yul3WqK9lR+rcBSIcCfBUYwzhHzkHw?=
- =?us-ascii?Q?q1e93DPHeQYQyweV1s+14C6RYZlxkfQ4eZ10Kd3DzvM4zfCRjZUohV+rkYAf?=
- =?us-ascii?Q?z3LgDuqKSsPnPhMjEH8Ao3fdZpUdVMvIgxQGMEaXKm59MFy91GakEMntD3wC?=
- =?us-ascii?Q?mtrHj4mJkawyT42SFcSOcctRg2QWX+S1SmebQRKm40NiIYIieVwPWLp/UyNq?=
- =?us-ascii?Q?ldGrBtNpYJBla3J+ujhUpXQyTEDx+JR4oeNNHEwVNY3HSLM2A6JSFypesNnm?=
- =?us-ascii?Q?4TAKcE6s1NXnYJljKu5iSdEFhY/Lvj1+RUWTNXL4qlnuJZh4BRo23/mwAFiG?=
- =?us-ascii?Q?ZpBNmWUaeTKePRwObtIMPPRWdUl+y6tz/tOngxe8D5psdLGm7a+E+t/L/GA2?=
- =?us-ascii?Q?nAIo+rzKfWdJBA4rwNl08UAVuPgITuDSf/6PAy/yORy4bbnxHnbnq5BZBjEl?=
- =?us-ascii?Q?cw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a93192d3-05b3-4c51-b5e0-08da5f5badb0
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 14:27:39.0173
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OGAm1VPOlH3r5zLT5MpaiEFleekH2OViC8TDCNpEurtWhA64AUHACu1ZcJhsZTqAqE6L0FK4J0oKx1JfvRCv0IS6uKp7JbMexQDqWR3wg1Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5813
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-07-06_08:2022-06-28,2022-07-06 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 spamscore=0
- phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207060057
-X-Proofpoint-ORIG-GUID: gAWlqgS9cj6pGlhCHMqPhWK2XRXGgSJu
-X-Proofpoint-GUID: gAWlqgS9cj6pGlhCHMqPhWK2XRXGgSJu
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 02/14] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
+ yaml file
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>,
+        "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-3-viorel.suman@oss.nxp.com>
+ <f0634bf0-77e9-939e-693f-31d50af4768c@linaro.org>
+ <20220630123754.esbuac4pfktlseh2@fsr-ub1664-116>
+ <78faf75d-80b7-7a0e-e306-6351dbe5133c@linaro.org>
+ <CAL_Jsq+0GJBTVkS12XTvUKphMH4XuQ5AS1-QHMw6ULgpWbZBQQ@mail.gmail.com>
+ <CAL_Jsq++FqUn3u56boHcoZhskx-6uUiduhJbUyWXbOH6dzExJg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAL_Jsq++FqUn3u56boHcoZhskx-6uUiduhJbUyWXbOH6dzExJg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The powercap_register_control_type() return error pointers.  It never
-returns NULL.
+On 06/07/2022 16:11, Rob Herring wrote:
+>>> The fsl,imx8mq-pinctrl.yaml should be correct and I don't see the reason
+>>> why dtschema complains in some of the entries. It's like one define was
+>>> not correct... I'll take a look at this later, but anyway keep the same
+>>> as fsl,imx8mq-pinctrl.yaml even if it complains.
+>>
+>> The issue is that 'fsl,pins' is problematic for the new dtb decoding
+>> because it has a variable definition in terms of matrix bounds as each
+>> i.MX platform has its own length (typ 5 or 6). The tools try to work
+>> around it by figuring out which size fits. That works until there are
+>> multiple answers which seems to be what's happening here.
+>>
+>> The easiest solution I think is to just strip the constraints in
+>> occurances of this property. I'll look into that.
+> 
+> This is now fixed in the dt-schema main branch.
 
-Fixes: 31afdd34f2b9 ("powercap: arm_scmi: Add SCMI powercap based driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
-This functions should really clean up after itself if scmi_register()
-fails.  I need to fix the static checker for that and then I'll come
-back and fix it if no one else does.
+Great, thanks!
 
- drivers/powercap/arm_scmi_powercap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
-index ab96cf9a8604..2d505ec7ff81 100644
---- a/drivers/powercap/arm_scmi_powercap.c
-+++ b/drivers/powercap/arm_scmi_powercap.c
-@@ -519,8 +519,8 @@ static struct scmi_driver scmi_powercap_driver = {
- static int __init scmi_powercap_init(void)
- {
- 	scmi_top_pcntrl = powercap_register_control_type(NULL, "arm-scmi", NULL);
--	if (!scmi_top_pcntrl)
--		return -ENODEV;
-+	if (IS_ERR(scmi_top_pcntrl))
-+		return PTR_ERR(scmi_top_pcntrl);
- 
- 	return scmi_register(&scmi_powercap_driver);
- }
--- 
-2.35.1
-
+Best regards,
+Krzysztof
