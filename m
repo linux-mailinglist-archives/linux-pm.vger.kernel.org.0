@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B0C568CF4
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 17:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5766D568DA3
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 17:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233894AbiGFPbm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 11:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S234009AbiGFPd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 11:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiGFPbQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 11:31:16 -0400
+        with ESMTP id S234006AbiGFPc4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 11:32:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596B125EBC;
-        Wed,  6 Jul 2022 08:31:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE24026570;
+        Wed,  6 Jul 2022 08:32:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BD68B81D98;
-        Wed,  6 Jul 2022 15:31:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D59C3C385A5;
-        Wed,  6 Jul 2022 15:31:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50DC0B81D8E;
+        Wed,  6 Jul 2022 15:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11BA0C341C8;
+        Wed,  6 Jul 2022 15:32:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657121471;
+        s=k20201202; t=1657121539;
         bh=2tvJ+fipO4VZmFYhZ9As3c1NcfOg4s2bZwVEwvLpA6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qFxHdrRZMTfbnk3vLHK1ITM0WmYGo5JMm8fnANLO0H22Jia3fVF5U67mg78lBTsRZ
-         6q/1TKLFOtsNCGjR+vETadTxHRX+dy6nBqTxeztzIAtOQrGM4r2sqJUwZNhz1mISO+
-         erLbZHTMxQ1HoIC+XQhjnjD5NGPdghIdv3RJe0fjIOU+Qw/R+5NHzoYXpTbovZufDx
-         BYyb1uv6kQFfFOqE6WnkYsqdae0Fk4sU6PajrQAmJHloCTQHx8ur9GspQl0lo2voZC
-         ei9BdSrqc13gyL94oPgbawdY5mUtlu6pv/tlyb0565GRN0MQbvGa+pH/WXW57R5XOK
-         cyJA/TZ/jgWfw==
+        b=ilCDhFZJt/Q2Snut441k9GZxbZLf1viePwZlKYh6rDdu+yszJiL7xw0At1WNvDbAA
+         HrvS88ooELOd8Sa2nqE4EkifAw0Fu66toDzsAA09meJh3zLlOqTy3zxQevE2Z6ZTbr
+         +KEzSXNnS4UcphPcwlQyz4HvQS/EeNd+OpuCZ5cBTs0ErLNuWoWTBqL5oLLZAhV0dP
+         gYAKZwVgGB18UqKVN/TjVkgvFn7dn67lzWmDaQXwQDtrkTfQUsPdmrk16Avn5cfNjm
+         obuI6oqM14pxaRm2Tj5ralRSx7Fg4RgeWwqTRMPxYvt/0o6E3gVRUFlfz30pc1S3q3
+         J9Bh6BAoJ9RVA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Liang He <windhl@126.com>, Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
         mpe@ellerman.id.au, linux-pm@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 5.18 11/22] cpufreq: pmac32-cpufreq: Fix refcount leak bug
-Date:   Wed,  6 Jul 2022 11:30:29 -0400
-Message-Id: <20220706153041.1597639-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 09/18] cpufreq: pmac32-cpufreq: Fix refcount leak bug
+Date:   Wed,  6 Jul 2022 11:31:44 -0400
+Message-Id: <20220706153153.1598076-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220706153041.1597639-1-sashal@kernel.org>
-References: <20220706153041.1597639-1-sashal@kernel.org>
+In-Reply-To: <20220706153153.1598076-1-sashal@kernel.org>
+References: <20220706153153.1598076-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
