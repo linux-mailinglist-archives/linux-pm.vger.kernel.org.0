@@ -2,180 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EAC568485
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 12:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4BC5684EB
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 12:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiGFKBg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 06:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S232422AbiGFKMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 06:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiGFKBd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 06:01:33 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866BD24F00
-        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 03:01:31 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id y18so5239105plb.2
-        for <linux-pm@vger.kernel.org>; Wed, 06 Jul 2022 03:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=izBSDhEo5LkaKfHP1dONDKBae8Gt8mJVPobNlAoGfDM=;
-        b=MlcF3wqO/V85e/FqvG2aKl03wiSIMQfXYBvfKy2OGFsF7Hq0mu82AfoCPBm8llGBTi
-         4JMDyKlzabIHgWrhoKInoq421y2c1Fy+ra3rx6oynfgzzzqzKSXoAOIlwV+blu87b7TZ
-         Mc67S/8G/Oqyk4Yarl2CubxK1nBLs4lAAte3QXQ54vehyNTVD8VpE39mr2OtOvLwKkCf
-         ld3D8IE4H08vVLiRaDxZCkNz/wRYxAoZrLaECNgWa3VQCWJQbOE/gHbhpZCQCUf2Zc2x
-         2cJxnn/piI3hVeWPvn0No/DgH8UqaieLhSfEnTVVN8VLArdT41QJg+BwwbXhttkk5ZR5
-         gwOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=izBSDhEo5LkaKfHP1dONDKBae8Gt8mJVPobNlAoGfDM=;
-        b=gHaBuKmH69sggBBHDdvpkGYqNK6Y7yv8N2eVrRJk7uP1CnbKCMs0tMwE4470AB9yeS
-         bR8Rjsrt9UUmNLCTt4oW9TSB96RnePFA/bhStakcnd4uxkb4q3JZTqbPePgoC8BzVlDt
-         H2eOwqberVTKeYp759S3pLl8tpkCjLXPAkAuiGTJfHiKxpSaTtNO9DU98XYY6mzcL4Pa
-         LQ+pAtI8hvgtYGufKEtBC/MlJQfRaR9VCteSCdZX7mfzZJZ+HdGgcIr7oRj5c7D+bw7i
-         3fni76xsADyjOMs+AIkxYpe646DFir/7h7GTgAw+GyeTn7VpDGZRmOZ9UMrM6/rL4H1J
-         7lJA==
-X-Gm-Message-State: AJIora94VlWTOdzqXMBPahm6kkkrxkgv4qOvT6yWOyN7PAvdGEuWW+tw
-        wEme/DPP+4NTbTh4gLZg7PIDKk0acKxEo8YbjaBM5w==
-X-Google-Smtp-Source: AGRyM1v3ziWKPv53EFicedDG8HWTa+LjL5AiWoFupEyKusVCvS/6LLjFV+/tJzX/UcthosxH8pT/GY30l6NARdYD9xs=
-X-Received: by 2002:a17:90b:38c2:b0:1ed:474a:a668 with SMTP id
- nn2-20020a17090b38c200b001ed474aa668mr47273440pjb.201.1657101690952; Wed, 06
- Jul 2022 03:01:30 -0700 (PDT)
+        with ESMTP id S232385AbiGFKMR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 06:12:17 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74FB8D;
+        Wed,  6 Jul 2022 03:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Tkl3lxTOKWGbOCuxxKNckxHNjYRI3zGLuGc8imHNxDs=; b=WpgGH4+Y6U9gQSSnMVR6OLMxva
+        3xYxeAZ7USH+mmbkdac+gWqkqSUncCao79OXiiUot5IPHXuNd6BKu4KcdJ/3wd9E6vbdtwdlfX++8
+        YHg9SPa4d3D+hoJ+xHEd64U2BB0PxnnwhjCX34YKvpd3mB9eaqJ+9sCf1Ma6Y4Sc+A5HLQFse3wc3
+        7p9dt+e0Yzacjyq/2QRyinJn3DEvx+LTPjMD8J3/m/+8JP5Q5o8reLw6djHCmeIC4Lr1NoUT74Cpg
+        hLfvPld/nyGauGdSHTmpv4A/geUNh2jHXRL3BD0xt9eK7uievOocsG0NSTJd7nMGZkXKKLQVVrNY/
+        fCxnd6CA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9207-000QRU-BY; Wed, 06 Jul 2022 10:11:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6964C3001AE;
+        Wed,  6 Jul 2022 12:11:15 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 43F7A20207235; Wed,  6 Jul 2022 12:11:15 +0200 (CEST)
+Date:   Wed, 6 Jul 2022 12:11:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+Message-ID: <YsVfw3dy7smrpEbn@hirez.programming.kicks-ass.net>
+References: <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <877d5ajesi.fsf@email.froward.int.ebiederm.org>
+ <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <20220628191541.34a073fc@gandalf.local.home>
+ <yt9d5ykbekn3.fsf@linux.ibm.com>
+ <yt9dpmijcvu6.fsf@linux.ibm.com>
+ <YsSQRmCZSIQ1ewzo@worktop.programming.kicks-ass.net>
+ <yt9dsfneaczk.fsf@linux.ibm.com>
+ <YsVO1NU3bXGg9YJ3@worktop.programming.kicks-ass.net>
+ <yt9da69ma8wm.fsf@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220705150002.2016207-1-varadgautam@google.com>
- <YsRkPUcrMj+JU0Om@kroah.com> <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
- <YsUvgWmrk+ZfUy3t@kroah.com> <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
- <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com> <YsVUB76c2b0EkRBb@kroah.com>
-In-Reply-To: <YsVUB76c2b0EkRBb@kroah.com>
-From:   Varad Gautam <varadgautam@google.com>
-Date:   Wed, 6 Jul 2022 12:01:19 +0200
-Message-ID: <CAOLDJOJLvSUMqF37H13aiH59Pm4_t6esRxy7Ej3Grhr4fmSGQA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing thermal states
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9da69ma8wm.fsf@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 11:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Jul 06, 2022 at 04:51:59PM +0800, Zhang Rui wrote:
-> > On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
-> > > On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
-> > > wrote:
-> > > >
-> > > > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
-> > > > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
-> > > > > gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
-> > > > > > > Check that a user-provided thermal state is within the
-> > > > > > > maximum
-> > > > > > > thermal states supported by a given driver before attempting
-> > > > > > > to
-> > > > > > > apply it. This prevents a subsequent OOB access in
-> > > > > > > thermal_cooling_device_stats_update() while performing
-> > > > > > > state-transition accounting on drivers that do not have this
-> > > > > > > check
-> > > > > > > in their set_cur_state() handle.
-> > > > > > >
-> > > > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
-> > > > > > > Cc: stable@vger.kernel.org
-> > > > > > > ---
-> > > > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
-> > > > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/thermal/thermal_sysfs.c
-> > > > > > > b/drivers/thermal/thermal_sysfs.c
-> > > > > > > index 1c4aac8464a7..0c6b0223b133 100644
-> > > > > > > --- a/drivers/thermal/thermal_sysfs.c
-> > > > > > > +++ b/drivers/thermal/thermal_sysfs.c
-> > > > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
-> > > > > > > struct device_attribute *attr,
-> > > > > > >               const char *buf, size_t count)
-> > > > > > >  {
-> > > > > > >       struct thermal_cooling_device *cdev =
-> > > > > > > to_cooling_device(dev);
-> > > > > > > -     unsigned long state;
-> > > > > > > +     unsigned long state, max_state;
-> > > > > > >       int result;
-> > > > > > >
-> > > > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
-> > > > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
-> > > > > > > struct device_attribute *attr,
-> > > > > > >
-> > > > > > >       mutex_lock(&cdev->lock);
-> > > > > > >
-> > > > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
-> > > > > > > +     if (result)
-> > > > > > > +             goto unlock;
-> > > > > > > +
-> > > > > > > +     if (state > max_state) {
-> > > > > > > +             result = -EINVAL;
-> > > > > > > +             goto unlock;
-> > > > > > > +     }
-> > > > > > > +
-> > > > > > >       result = cdev->ops->set_cur_state(cdev, state);
-> > > > > >
-> > > > > > Why doesn't set_cur_state() check the max state before setting
-> > > > > > it?  Why
-> > > > > > are the callers forced to always check it before?  That feels
-> > > > > > wrong...
-> > > > > >
-> > > > >
-> > > > > The problem lies in thermal_cooling_device_stats_update(), not
-> > > > > set_cur_state().
-> > > > >
-> > > > > If ->set_cur_state() doesn't error out on invalid state,
-> > > > > thermal_cooling_device_stats_update() does a:
-> > > > >
-> > > > > stats->trans_table[stats->state * stats->max_states +
-> > > > > new_state]++;
-> > > > >
-> > > > > stats->trans_table reserves space depending on max_states, but
-> > > > > we'd end up
-> > > > > reading/writing outside it. cur_state_store() can prevent this
-> > > > > regardless of
-> > > > > the driver's ->set_cur_state() implementation.
-> > > >
-> > > > Why wouldn't cur_state_store() check for an out-of-bounds condition
-> > > > by
-> > > > calling get_max_state() and then return an error if it is invalid,
-> > > > preventing thermal_cooling_device_stats_update() from ever being
-> > > > called?
-> > > >
-> > >
-> > > That's what this patch does, it adds the out-of-bounds check.
+On Wed, Jul 06, 2022 at 11:27:05AM +0200, Sven Schnelle wrote:
+> Peter Zijlstra <peterz@infradead.org> writes:
+> 
+> > On Wed, Jul 06, 2022 at 09:58:55AM +0200, Sven Schnelle wrote:
 > >
-> > No, I think Greg' question is
-> > why cdev->ops->set_cur_state() return 0 when setting a cooling state
-> > that exceeds the maximum cooling state?
->
-> Yes, that is what I am asking, it should not allow a state to be
-> exceeded.
->
+> >> >> [   86.218551] kill_chi-343805    6d.... 79990141us : ptrace_stop: JOBCTL_TRACED already set, state=0 <------ valid combination of flags?
+> >> >
+> >> > Yeah, that's not supposed to be so. JOBCTL_TRACED is supposed to follow
+> >> > __TASK_TRACED for now. Set when __TASK_TRACED, cleared when
+> >> > TASK_RUNNING.
+> >> >
+> >> > Specifically {ptrace_,}signal_wake_up() in signal.h clear JOBCTL_TRACED
+> >> > when they would wake a __TASK_TRACED task.
+> >> 
+> >> try_to_wake_up() clears TASK_TRACED in this case because a signal
+> >> (SIGKILL) has to be delivered. As a test I put the following change
+> >> on top, and it "fixes" the problem:
+> >> 
+> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> >> index da0bf6fe9ecd..f2e0f5e70e77 100644
+> >> --- a/kernel/sched/core.c
+> >> +++ b/kernel/sched/core.c
+> >> @@ -4141,6 +4149,9 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+> >>          * TASK_WAKING such that we can unlock p->pi_lock before doing the
+> >>          * enqueue, such as ttwu_queue_wakelist().
+> >>          */
+> >> +       if (p->__state & TASK_TRACED)
+> >> +               trace_printk("clearing TASK_TRACED 2\n");
+> >> +       p->jobctl &= ~JOBCTL_TRACED;
+> >>         WRITE_ONCE(p->__state, TASK_WAKING);
+> >> 
+> >>         /*
+> >> 
+> >> There are several places where the state is changed from TASK_TRACED to
+> >> something else without clearing JOBCTL_TRACED.
+> >
+> > I'm having difficulty spotting them; I find:
+> >
+> > TASK_WAKEKILL: signal_wake_up()
+> > __TASK_TRACED: ptrace_signal_wake_up(), ptrace_unfreeze_traced(), ptrace_resume()
+> >
+> > And all those sites dutifully clear JOBCTL_TRACED.
+> >
+> > I'd be most interested in the calstack for the 'clearing TASK_TRACED 2'
+> > events to see where we miss a spot.
+> 
+> The calltrace is:
+> [    9.863613] Call Trace:
+> [    9.863616]  [<00000000d3105f0e>] try_to_wake_up+0xae/0x620
+> [    9.863620] ([<00000000d3106164>] try_to_wake_up+0x304/0x620)
+> [    9.863623]  [<00000000d30d1e46>] ptrace_unfreeze_traced+0x9e/0xa8
+> [    9.863629]  [<00000000d30d2ef0>] __s390x_sys_ptrace+0xc0/0x160
+> [    9.863633]  [<00000000d3c5d8f4>] __do_syscall+0x1d4/0x200
+> [    9.863678]  [<00000000d3c6c332>] system_call+0x82/0xb0
+> [    9.863685] Last Breaking-Event-Address:
+> [    9.863686]  [<00000000d3106176>] try_to_wake_up+0x316/0x620
+> [    9.863688] ---[ end trace 0000000000000000 ]---
+> 
+> ptrace_unfreeze_traced() is:
+> 
+> static void ptrace_unfreeze_traced(struct task_struct *task)
+> {
+>         unsigned long flags;
+> 
+>         /*
+>          * The child may be awake and may have cleared
+>          * JOBCTL_PTRACE_FROZEN (see ptrace_resume).  The child will
+>          * not set JOBCTL_PTRACE_FROZEN or enter __TASK_TRACED anew.
+>          */
+>         if (lock_task_sighand(task, &flags)) {
+>                 task->jobctl &= ~JOBCTL_PTRACE_FROZEN;
+>                 if (__fatal_signal_pending(task)) {
+>                         task->jobctl &= ~TASK_TRACED;
+> 
+> Looking at this, shouldn't the line above read task->jobctl &= ~JOBCTL_TRACED?
 
-Indeed, it is upto the driver to return !0 from cdev->ops->set_cur_state()
-when setting state > max - and it is a driver bug for not doing so.
+YES! Absolutely.
 
-But a buggy driver should not lead to cur_state_store() performing an OOB
-access.
-
-> thanks,
->
-> greg k-h
+>                         wake_up_state(task, __TASK_TRACED);
+>                 }
+>                 unlock_task_sighand(task, &flags);
+>         }
+> }
