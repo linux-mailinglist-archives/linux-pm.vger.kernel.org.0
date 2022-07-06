@@ -2,59 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8455688B0
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 14:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A885688C4
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 14:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbiGFMvt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 08:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        id S232434AbiGFMzA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 08:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiGFMvs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 08:51:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8055314090;
-        Wed,  6 Jul 2022 05:51:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16E7CB81CE2;
-        Wed,  6 Jul 2022 12:51:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2632BC341C0;
-        Wed,  6 Jul 2022 12:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657111904;
-        bh=RvVF+pX2pQJvhQhl3VwMAq7Yr6W0YSgKG1Uay6bdLjo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XfFiAmi5S0vNcOt2j2FYsW6jko6n9fjj+ir6pftjgIIqnIbhTcuEgIR1GCgifE9nl
-         3Wfxs5XPgLG7vKDGGEoAxr1+B3oGq4MIJrj7Y1X+4Y5u62Z5S0yTXPK9AR961rgg7+
-         WP+MINhmRV+VolBioKdDJYbdvqKsg/apqn6ykPPA=
-Date:   Wed, 6 Jul 2022 14:51:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Varad Gautam <varadgautam@google.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing
- thermal states
-Message-ID: <YsWFXVALpyedoeYt@kroah.com>
-References: <20220705150002.2016207-1-varadgautam@google.com>
- <YsRkPUcrMj+JU0Om@kroah.com>
- <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
- <YsUvgWmrk+ZfUy3t@kroah.com>
- <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
- <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com>
- <YsVUB76c2b0EkRBb@kroah.com>
- <CAOLDJOJLvSUMqF37H13aiH59Pm4_t6esRxy7Ej3Grhr4fmSGQA@mail.gmail.com>
- <YsViJpAnkqW1QTwW@kroah.com>
- <CAOLDJOK0Ti2hyskS68LRrd=G5opMz4fnzduj5-d3MF0JLwxS6w@mail.gmail.com>
+        with ESMTP id S230233AbiGFMy7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 08:54:59 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FCC122
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 05:54:58 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 205-20020a1c02d6000000b003a03567d5e9so11118715wmc.1
+        for <linux-pm@vger.kernel.org>; Wed, 06 Jul 2022 05:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:from
+         :subject:content-transfer-encoding;
+        bh=0ZwsMZMEyuVmYUY6BiNm7d/QmUV/8RywgdDZkvjd/Jk=;
+        b=rQ+B62nGB6xChlmZFu1bTH9LmHJjTUoGj4I6bEx1BvCxbRejV01VUmmSmmWdHTEUlH
+         hsZlDlidJou7qij/3V28XMyYrNg/2ARbQqR54RZlv5KAtRPgLXQeplPCpUV9ktDRtSCT
+         XyXzUSMQsIiKuT5djVNxLMY9HHhouao0EvOsETvKsM/4OwFOroAB49XCT64SoTFNjW+7
+         rGHlrhg3+8mvCsx0T9V+5GKArKmWzKV8QVRP6msyTx0YkTKRv1z2fnLjjRkAgZvx0FjO
+         L91S8NjhiTfY2+BLTE3n0pO6GU3Grl+Qz3KbaMI2LgF6w6nzkMrVFwbp/GoNt04RDOXT
+         asUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:from:subject:content-transfer-encoding;
+        bh=0ZwsMZMEyuVmYUY6BiNm7d/QmUV/8RywgdDZkvjd/Jk=;
+        b=KupBRaTPEyvkXSIJacMzlsjlQs2BtLZ5EN83SxlRb2jVLi5G7D2A3jnxpqTSPHV1Zh
+         TBcfLBJxBilEpQz/80PdF7DAzdx+8UF3CQchdljv53Dzex8q6s62X1IGMnMffLCtOcsb
+         ZW9bOoqmh+qgD+8Ey8o4fFRZOijyjY58IKPvU6FTKcr1Vn/uywguzvnwvUbkuw/eUr+3
+         m5aJDg1hTkQ7JqUkM9SiieHdjbY36di4JWc7Rp1/bAycu0Ef4I4Ul9ApljfugveFGHK3
+         XjVW8VT8eGrmNS5kNMgHI5jNCcD33sNbqIfAcWUWa33wr7vWnNNsHcglFRTa/EOcR23X
+         5LtQ==
+X-Gm-Message-State: AJIora8SocbWjNBDMRoCV8PTSQC6mLJyj6L6mIABEzIRAqiuflm5kpb1
+        rJeOrKri7/Q9fu/1RGOcPSGa9Q==
+X-Google-Smtp-Source: AGRyM1siQSDHkk1KiF3vnPRny8ROLxutov4RTlttoYSVTIzAc0rmtYcm2hvIKKtCaJwVE6TRcCLdxA==
+X-Received: by 2002:a05:600c:5028:b0:3a0:524c:2aa2 with SMTP id n40-20020a05600c502800b003a0524c2aa2mr43303412wmr.66.1657112097293;
+        Wed, 06 Jul 2022 05:54:57 -0700 (PDT)
+Received: from [192.168.1.12] (88-107-17-60.dynamic.dsl.as9105.com. [88.107.17.60])
+        by smtp.gmail.com with ESMTPSA id m10-20020adff38a000000b0021d6de18f68sm6931761wro.22.2022.07.06.05.54.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 05:54:56 -0700 (PDT)
+Message-ID: <164f2458-fb66-f238-7143-bdbe1e200870@linaro.org>
+Date:   Wed, 6 Jul 2022 13:54:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOLDJOK0Ti2hyskS68LRrd=G5opMz4fnzduj5-d3MF0JLwxS6w@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Content-Language: en-US
+To:     Sebastian Reichel <sre@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+Subject: power_supply cooling interface
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,145 +74,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 02:30:21PM +0200, Varad Gautam wrote:
-> On Wed, Jul 6, 2022 at 12:21 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Jul 06, 2022 at 12:01:19PM +0200, Varad Gautam wrote:
-> > > On Wed, Jul 6, 2022 at 11:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Wed, Jul 06, 2022 at 04:51:59PM +0800, Zhang Rui wrote:
-> > > > > On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
-> > > > > > On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
-> > > > > > wrote:
-> > > > > > >
-> > > > > > > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
-> > > > > > > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
-> > > > > > > > gregkh@linuxfoundation.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
-> > > > > > > > > > Check that a user-provided thermal state is within the
-> > > > > > > > > > maximum
-> > > > > > > > > > thermal states supported by a given driver before attempting
-> > > > > > > > > > to
-> > > > > > > > > > apply it. This prevents a subsequent OOB access in
-> > > > > > > > > > thermal_cooling_device_stats_update() while performing
-> > > > > > > > > > state-transition accounting on drivers that do not have this
-> > > > > > > > > > check
-> > > > > > > > > > in their set_cur_state() handle.
-> > > > > > > > > >
-> > > > > > > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
-> > > > > > > > > > Cc: stable@vger.kernel.org
-> > > > > > > > > > ---
-> > > > > > > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
-> > > > > > > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > > > > > > > >
-> > > > > > > > > > diff --git a/drivers/thermal/thermal_sysfs.c
-> > > > > > > > > > b/drivers/thermal/thermal_sysfs.c
-> > > > > > > > > > index 1c4aac8464a7..0c6b0223b133 100644
-> > > > > > > > > > --- a/drivers/thermal/thermal_sysfs.c
-> > > > > > > > > > +++ b/drivers/thermal/thermal_sysfs.c
-> > > > > > > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
-> > > > > > > > > > struct device_attribute *attr,
-> > > > > > > > > >               const char *buf, size_t count)
-> > > > > > > > > >  {
-> > > > > > > > > >       struct thermal_cooling_device *cdev =
-> > > > > > > > > > to_cooling_device(dev);
-> > > > > > > > > > -     unsigned long state;
-> > > > > > > > > > +     unsigned long state, max_state;
-> > > > > > > > > >       int result;
-> > > > > > > > > >
-> > > > > > > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
-> > > > > > > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
-> > > > > > > > > > struct device_attribute *attr,
-> > > > > > > > > >
-> > > > > > > > > >       mutex_lock(&cdev->lock);
-> > > > > > > > > >
-> > > > > > > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
-> > > > > > > > > > +     if (result)
-> > > > > > > > > > +             goto unlock;
-> > > > > > > > > > +
-> > > > > > > > > > +     if (state > max_state) {
-> > > > > > > > > > +             result = -EINVAL;
-> > > > > > > > > > +             goto unlock;
-> > > > > > > > > > +     }
-> > > > > > > > > > +
-> > > > > > > > > >       result = cdev->ops->set_cur_state(cdev, state);
-> > > > > > > > >
-> > > > > > > > > Why doesn't set_cur_state() check the max state before setting
-> > > > > > > > > it?  Why
-> > > > > > > > > are the callers forced to always check it before?  That feels
-> > > > > > > > > wrong...
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > The problem lies in thermal_cooling_device_stats_update(), not
-> > > > > > > > set_cur_state().
-> > > > > > > >
-> > > > > > > > If ->set_cur_state() doesn't error out on invalid state,
-> > > > > > > > thermal_cooling_device_stats_update() does a:
-> > > > > > > >
-> > > > > > > > stats->trans_table[stats->state * stats->max_states +
-> > > > > > > > new_state]++;
-> > > > > > > >
-> > > > > > > > stats->trans_table reserves space depending on max_states, but
-> > > > > > > > we'd end up
-> > > > > > > > reading/writing outside it. cur_state_store() can prevent this
-> > > > > > > > regardless of
-> > > > > > > > the driver's ->set_cur_state() implementation.
-> > > > > > >
-> > > > > > > Why wouldn't cur_state_store() check for an out-of-bounds condition
-> > > > > > > by
-> > > > > > > calling get_max_state() and then return an error if it is invalid,
-> > > > > > > preventing thermal_cooling_device_stats_update() from ever being
-> > > > > > > called?
-> > > > > > >
-> > > > > >
-> > > > > > That's what this patch does, it adds the out-of-bounds check.
-> > > > >
-> > > > > No, I think Greg' question is
-> > > > > why cdev->ops->set_cur_state() return 0 when setting a cooling state
-> > > > > that exceeds the maximum cooling state?
-> > > >
-> > > > Yes, that is what I am asking, it should not allow a state to be
-> > > > exceeded.
-> > > >
-> > >
-> > > Indeed, it is upto the driver to return !0 from cdev->ops->set_cur_state()
-> > > when setting state > max - and it is a driver bug for not doing so.
-> > >
-> > > But a buggy driver should not lead to cur_state_store() performing an OOB
-> > > access.
-> >
-> > Agreed, which is why the code that does the access should check before
-> > it does so.  Right now you are relying on the sysfs code to do so, which
-> > seems very wrong.
-> >
-> 
-> I see the point.
-> 
-> The OOB access happens in thermal_cooling_device_stats_update().
-> 
-> By placing the check in cur_state_store(), I'm trying to ensure
-> two things for a buggy driver:
+Hi,
 
-What in-kernel driver has this problem, and why not just fix it there?
+I've been working on a driver for the charger found in most Snapdragon 845 
+phones (the OnePlus 6, SHIFT6mq, PocoPhone F1, etc). I wanted to include support 
+for the POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT property.
 
-> 1. The driver's cdev->ops->set_cur_state() doesn't get called if
-> the new state is > max state. This is to prevent the driver
-> from storing the new (invalid) state internally. If the driver
-> didn't realise/reject an invalid state, chances are it will try
-> to propagate it internally and take actions according to that,
-> which can have side effects on system stability.
+My understanding is that it exposes the current limit as a cooling device so 
+that userspace (or frameworks like DTPM) can optimise for performance in a 
+thermally constrained device by limiting the input current and thus reducing the 
+heat generated by the charger circuitry, a similar idea was applied on the Pixel C:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a4496d52b3430cb3c4c16d03cdd5f4ee97ad1241
 
-Again, set_cur_state() should check for max values, if not, it is broken
-and that needs to be fixed in the driver.
+However, reading through the sysfs docs for cooling devices, and looking at the 
+implementation in power_supply_core.c, it seems like the behavior here is wrong 
+in a few ways:
+  1. The values should scale from 0: no cooling to max_state: max cooling, but 
+the power_supply docs and the only existing implementation (the smbb driver) 
+just export the current_limit, such that increasing cur_state would increase the 
+current limit, not decrease it.
+  2. (unsure?)The scale is completely different to most other cooling devices, 
+most cooling devices don't seem to have a max state much beyond the double 
+digits, but CHARGE_CONTROL_LIMIT is on the scale of uA, so approaches like 
+incrementing the cooling state by 1 don't really work.
+  3. The value exposed is current, not power, making it tricky for something 
+like the DTPM framework to make good use of it, and making it harder to 
+correlate a particular "amount" of cooling with a change in thermal headroom.
 
-> 2. The kernel doesn't do an OOB access in
-> thermal_cooling_device_stats_update().
 
-Then don't allow thermal_cooling_device_stats_update() to do an out of
-band access by fixing it there too.  But again, your patch does not
-solve that directly.
+I don't really know what the right approach is here, one idea might be to have 
+the power_supply cooling device implementation try and be more intelligent. 
+Scaling based on the power rather than current and exposing some smaller range 
+so that at maximum cooling the device doesn't just stop charging entirely 
+(unless we've hit some thermal trip?).
 
-thanks,
+Maybe a way to determine the amount of thermal headroom you can expect by 
+adjusting the current limit on a particular charger / device like a power 
+efficiency curve might be useful too, although gathering that data might be 
+difficult to do.
 
-greg k-h
+I'll include the POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT and 
+POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX properties in my driver, as the 
+maximum current allowed and whatever the maximum is right now.
+
+-- 
+Kind Regards,
+Caleb (they/he)
