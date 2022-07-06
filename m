@@ -2,150 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BD9568434
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 11:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24552568407
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 11:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbiGFJzP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 05:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S229793AbiGFJuc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 05:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiGFJyN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 05:54:13 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA6725281;
-        Wed,  6 Jul 2022 02:54:10 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-10bf634bc50so11683649fac.3;
-        Wed, 06 Jul 2022 02:54:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o8jOPstF035V3JBIGTjyEra8xnCZ4RAIho4NrHeIzoU=;
-        b=ifKui5S5rFjVMq/DNxGGiZYtnihyrIPz+XgGy+287htk2qPkSPTBDT6zU/bqaW0IAj
-         eEIcUuZm8zNyVqggg0vPkfq5SvWboTygMYut/vI30ZWm7OI6knykq5A50cyUN7yxHwbt
-         x3OJkAQz3rS3Y9MtqJ6NwJrgnwi7+6R6OQArw7NoCvrdzt2fl1u+Op6Sk71Eo0mnk7Kf
-         K4jGzZJ9jl69cTwc5fCZkxMTOGQj3eJLQiDqOz0u70kr/hzsHNPD58iNGRUJ3Qra3PtG
-         IF6KKSoTvxIaCco+8PSMr8pK01Kl4c2wWlCyc/+gJQOyWRzB04t4vTh7uCb3o8arKg4q
-         uq5Q==
-X-Gm-Message-State: AJIora8bNvFpKnAMxBIwdfj9hdkzH+LUCtZi660XXnMILcmdqPyTufKv
-        uEDKcQWoKlpivWccpTeeGBiDcGrSKa967ox8
-X-Google-Smtp-Source: AGRyM1uAKY8ZoN6KGv4/toshO1qHFCf+QFQjTKFAVF+YPn4y9ij2Yrnm8jj6CEE8H4m9dwU7r8nybw==
-X-Received: by 2002:a05:6870:b3a7:b0:10c:224c:a0b6 with SMTP id w39-20020a056870b3a700b0010c224ca0b6mr2265078oap.248.1657101249503;
-        Wed, 06 Jul 2022 02:54:09 -0700 (PDT)
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com. [209.85.161.46])
-        by smtp.gmail.com with ESMTPSA id r81-20020acaf354000000b003359fb6609asm8613210oih.22.2022.07.06.02.54.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 02:54:09 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id m26-20020a4abc9a000000b00425cd321033so2843821oop.10;
-        Wed, 06 Jul 2022 02:54:09 -0700 (PDT)
-X-Received: by 2002:a05:6902:50e:b0:66e:7f55:7a66 with SMTP id
- x14-20020a056902050e00b0066e7f557a66mr6648581ybs.365.1657100796735; Wed, 06
- Jul 2022 02:46:36 -0700 (PDT)
+        with ESMTP id S229558AbiGFJub (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 05:50:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 249561580C;
+        Wed,  6 Jul 2022 02:50:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3259A1042;
+        Wed,  6 Jul 2022 02:50:30 -0700 (PDT)
+Received: from [10.57.42.44] (unknown [10.57.42.44])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DB933F66F;
+        Wed,  6 Jul 2022 02:50:25 -0700 (PDT)
+Message-ID: <f545c1f4-0cb5-ec4e-66e8-dbed6b992085@arm.com>
+Date:   Wed, 6 Jul 2022 10:50:23 +0100
 MIME-Version: 1.0
-References: <20220608142723.103523089@infradead.org> <20220608144517.124597382@infradead.org>
-In-Reply-To: <20220608144517.124597382@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jul 2022 11:46:25 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW4pT+YQfLzLTegFu1M3v9-9vaFDFAama7mc82=x6R__w@mail.gmail.com>
-Message-ID: <CAMuHMdW4pT+YQfLzLTegFu1M3v9-9vaFDFAama7mc82=x6R__w@mail.gmail.com>
-Subject: Re: [PATCH 19/36] objtool/idle: Validate __cpuidle code as noinstr
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, tony@atomide.com,
-        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, sammy@sammy.net, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3.1 02/20] OPP: Make dev_pm_opp_set_regulators() accept
+ NULL terminated list
+Content-Language: en-GB
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
+ <bcabb1a90a5158628ee1633c10f8886544723fb9.1657095331.git.viresh.kumar@linaro.org>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <bcabb1a90a5158628ee1633c10f8886544723fb9.1657095331.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 4:46 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> Idle code is very like entry code in that RCU isn't available. As
-> such, add a little validation.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On 06/07/2022 09:18, Viresh Kumar wrote:
+> Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
+> instead of making the callers keep the two parameters in sync, which
+> creates an opportunity for bugs to get in.
+> 
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> V3->V3.1:
+> - Update panfrost_drv.c to include the NULL element.
+> 
+>  drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
+>  drivers/cpufreq/ti-cpufreq.c                |  7 +++----
+>  drivers/devfreq/exynos-bus.c                |  4 ++--
+>  drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.c |  3 +--
+>  drivers/gpu/drm/panfrost/panfrost_drv.c     | 15 ++++++++++-----
+>  drivers/opp/core.c                          | 18 ++++++++++++------
+>  drivers/soc/tegra/pmc.c                     |  4 ++--
+>  include/linux/pm_opp.h                      |  9 ++++-----
+>  9 files changed, 40 insertions(+), 32 deletions(-)
+> 
+[...]
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> index 194af7f607a6..5110cd9b2425 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> @@ -101,8 +101,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+>  		return 0;
+>  	}
+>  
+> -	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
+> -					 pfdev->comp->num_supplies);
+> +	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names);
+>  	if (ret) {
+>  		/* Continue if the optional regulator is missing */
+>  		if (ret != -ENODEV) {
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> index 7fcbc2a5b6cd..8a4bef65d38c 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> @@ -625,24 +625,29 @@ static int panfrost_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static const char * const default_supplies[] = { "mali" };
+> +/*
+> + * The OPP core wants the supply names to be NULL terminated, but we need the
+> + * correct num_supplies value for regulator core. Hence, we NULL terminate here
+> + * and then initialize num_supplies with ARRAY_SIZE - 1.
+> + */
+> +static const char * const default_supplies[] = { "mali", NULL };
+>  static const struct panfrost_compatible default_data = {
+> -	.num_supplies = ARRAY_SIZE(default_supplies),
+> +	.num_supplies = ARRAY_SIZE(default_supplies) - 1,
+>  	.supply_names = default_supplies,
+>  	.num_pm_domains = 1, /* optional */
+>  	.pm_domain_names = NULL,
+>  };
+>  
+>  static const struct panfrost_compatible amlogic_data = {
+> -	.num_supplies = ARRAY_SIZE(default_supplies),
+> +	.num_supplies = ARRAY_SIZE(default_supplies) - 1,
+>  	.supply_names = default_supplies,
+>  	.vendor_quirk = panfrost_gpu_amlogic_quirk,
+>  };
+>  
+> -static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
+> +static const char * const mediatek_mt8183_supplies[] = { "mali", "sram", NULL };
+>  static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
+>  static const struct panfrost_compatible mediatek_mt8183_data = {
+> -	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
+> +	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies) - 1,
+>  	.supply_names = mediatek_mt8183_supplies,
+>  	.num_pm_domains = ARRAY_SIZE(mediatek_mt8183_pm_domains),
+>  	.pm_domain_names = mediatek_mt8183_pm_domains,
 
->  arch/m68k/kernel/vmlinux-nommu.lds   |    1 -
->  arch/m68k/kernel/vmlinux-std.lds     |    1 -
->  arch/m68k/kernel/vmlinux-sun3.lds    |    1 -
+Reviewed-by: Steven Price <steven.price@arm.com>
 
-FWIW
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Thanks for the rework, much cleaner.
 
-Gr{oetje,eeting}s,
+Steve
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
