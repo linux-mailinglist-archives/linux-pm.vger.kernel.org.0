@@ -2,48 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F50568341
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 11:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F78568344
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 11:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbiGFJLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 05:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S233300AbiGFJOI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 05:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiGFJLS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 05:11:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51E872872E;
-        Wed,  6 Jul 2022 02:08:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2673115A1;
-        Wed,  6 Jul 2022 02:08:10 -0700 (PDT)
-Received: from [10.57.9.19] (unknown [10.57.9.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 08F243F66F;
-        Wed,  6 Jul 2022 02:08:06 -0700 (PDT)
-Message-ID: <95d76278-ce40-aab8-1418-322f8b4a3072@arm.com>
-Date:   Wed, 6 Jul 2022 10:08:05 +0100
+        with ESMTP id S232759AbiGFJNs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 05:13:48 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3931A3B1;
+        Wed,  6 Jul 2022 02:13:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id k30so10305959edk.8;
+        Wed, 06 Jul 2022 02:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=WKlacHhWVR2IblvCAgYMcCw7cvtmo7gBzlhxFpijOWM=;
+        b=UyINPEp8aUU7+iO4UvYReAysG8acJi4s0lW7fYS990hIHuI2KgReqshlPjlC0FcdQX
+         RWLEJ1iagzj5JHTLAwg1Tfl34CjKErUg06qCwRi5FpbuqXpIfRK0B8kuUc2l5x+40o+8
+         2YldATzAdsq2GhIZIL2D0cZi8oKOkVG5Y5xLvvP4kajNiX5yCXAJSyEYBx1RvA9W9SdO
+         piij5Lfa0VXVwqnHofYdHxRPOmYTBO/NXTATLm6C9JRKYr2iRvgzlsZTZRGqO8gtc9pI
+         zkPBxco6Fa5B8qkZy3WblPhpXY+1PsQ3ol/zLxC+L8wAov5SdI1JA4byrn/VHyXJavbs
+         ZPkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=WKlacHhWVR2IblvCAgYMcCw7cvtmo7gBzlhxFpijOWM=;
+        b=QxR5OpPe3NgjVZHkxNID4w7Mgvcw6XaQKzgi6rmn5TdcUkdgaBseRGdfsFVHDfK+LW
+         qhe6gUqffxKYBwr8jvHWxccaa/ThR1eRottwfKm2NQmkTLT10ajPqMSVzGrGZZaNbfSG
+         ornZME+JmgmlRk5r1vYTpZ8jQF3eEmPw3seTG0dsDKCTXCpG90vpF2NV/bTtBNQ0jo/r
+         Cb/OfvKw5bcMuJ+BRqb9+3CIzWMmEcQ/1X77PlHpLxmiK7TnDOOxNF2f5hWrdOj8ijIm
+         b0bKL/Ab/riiu2JY5h2t0CwqmoaY6Z57nESze7yZBTjtdV2/PF7odfLK7dF3yv5IRI8Q
+         mqsQ==
+X-Gm-Message-State: AJIora808hsnV+UdsynlkTYT6KRbYaZklCtQ/r1z67l8sQQwRm1XoMiS
+        PqE6mIIEjoGD9C62az3dzFg=
+X-Google-Smtp-Source: AGRyM1tgzHocOxIjG9HexS+g9z9ap2nsem/HblqVyMjIbl5ZbLhG8nAvflW5PCvUObUWjIPHfLadCA==
+X-Received: by 2002:a05:6402:350a:b0:435:df44:30aa with SMTP id b10-20020a056402350a00b00435df4430aamr51209856edd.403.1657098799156;
+        Wed, 06 Jul 2022 02:13:19 -0700 (PDT)
+Received: from skbuf ([188.26.185.61])
+        by smtp.gmail.com with ESMTPSA id er13-20020a056402448d00b0043a5bcf80a2sm6350790edb.60.2022.07.06.02.13.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 02:13:18 -0700 (PDT)
+Date:   Wed, 6 Jul 2022 12:13:15 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
+Message-ID: <20220706091315.p5k2jck3rmyjhvqw@skbuf>
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+ <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4/4] cpufreq: scmi: Support the power scale in micro-Watts
- in SCMI v3.1
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, nm@ti.com,
-        sboyd@kernel.org, sudeep.holla@arm.com, cristian.marussi@arm.com,
-        linux-kernel@vger.kernel.org, matthias.bgg@gmail.com,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20220622145802.13032-1-lukasz.luba@arm.com>
- <20220622145802.13032-5-lukasz.luba@arm.com>
- <653f63e5-c794-27fb-115a-7b051850991b@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <653f63e5-c794-27fb-115a-7b051850991b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,81 +92,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 7/5/22 10:25, Daniel Lezcano wrote:
-> On 22/06/2022 16:58, Lukasz Luba wrote:
->> The SCMI v3.1 adds support for power values in micro-Watts. They are not
->> always in milli-Watts anymore (ignoring the bogo-Watts). Thus, the power
->> must be converted conditionally before sending to Energy Model. Add the
->> logic which handles the needed checks and conversions.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   drivers/cpufreq/scmi-cpufreq.c | 15 ++++++++++-----
->>   1 file changed, 10 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/cpufreq/scmi-cpufreq.c 
->> b/drivers/cpufreq/scmi-cpufreq.c
->> index bfd35583d653..513a071845c2 100644
->> --- a/drivers/cpufreq/scmi-cpufreq.c
->> +++ b/drivers/cpufreq/scmi-cpufreq.c
->> @@ -100,7 +100,7 @@ static int __maybe_unused
->>   scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
->>              unsigned long *KHz)
->>   {
->> -    bool power_scale_mw = perf_ops->power_scale_mw_get(ph);
->> +    enum scmi_power_scale power_scale = perf_ops->power_scale_get(ph);
->>       unsigned long Hz;
->>       int ret, domain;
->> @@ -114,8 +114,8 @@ scmi_get_cpu_power(struct device *cpu_dev, 
->> unsigned long *power,
->>       if (ret)
->>           return ret;
->> -    /* Provide bigger resolution power to the Energy Model */
->> -    if (power_scale_mw)
->> +    /* Convert the power to uW if it is mW (ignore bogoW) */
->> +    if (power_scale == SCMI_POWER_MILLIWATTS)
->>           *power *= MICROWATT_PER_MILLIWATT;
->>       /* The EM framework specifies the frequency in KHz. */
->> @@ -255,8 +255,9 @@ static int scmi_cpufreq_exit(struct cpufreq_policy 
->> *policy)
->>   static void scmi_cpufreq_register_em(struct cpufreq_policy *policy)
->>   {
->>       struct em_data_callback em_cb = EM_DATA_CB(scmi_get_cpu_power);
->> -    bool power_scale_mw = perf_ops->power_scale_mw_get(ph);
->> +    enum scmi_power_scale power_scale = perf_ops->power_scale_get(ph);
->>       struct scmi_data *priv = policy->driver_data;
->> +    bool em_power_scale = false;
+On Tue, Jun 28, 2022 at 04:03:12PM +0200, Uwe Kleine-K�nig wrote:
+> From: Uwe Kleine-K�nig <uwe@kleine-koenig.org>
 > 
-> Just pass 'false' to em_dev_register_perf_domain()
-
-We cannot,
-
+> The value returned by an i2c driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
 > 
->>       /*
->>        * This callback will be called for each policy, but we don't 
->> need to
->> @@ -268,9 +269,13 @@ static void scmi_cpufreq_register_em(struct 
->> cpufreq_policy *policy)
->>       if (!priv->nr_opp)
->>           return;
->> +    if (power_scale == SCMI_POWER_MILLIWATTS
->> +        || power_scale == SCMI_POWER_MICROWATTS)
->> +        em_power_scale = true;
->> +
-
-because sometimes it's 'true'.
-
->>       em_dev_register_perf_domain(get_cpu_device(policy->cpu), 
->> priv->nr_opp,
->>                       &em_cb, priv->opp_shared_cpus,
->> -                    power_scale_mw);
->> +                    em_power_scale);
-
-Then we just use the variable here in single call.
-
->>   }
->>   static struct cpufreq_driver scmi_cpufreq_driver = {
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
 > 
-> 
+> Signed-off-by: Uwe Kleine-K�nig <u.kleine-koenig@pengutronix.de>
+> ---
+
+Assuming you remove the spurious kasan change:
+
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
