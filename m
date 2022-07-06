@@ -2,62 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FEB568B37
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 16:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E566A568B5A
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 16:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiGFO3T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 10:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S232901AbiGFOhH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 10:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbiGFO3S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 10:29:18 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0C61C923
-        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 07:29:16 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id a11so18689047ljb.5
-        for <linux-pm@vger.kernel.org>; Wed, 06 Jul 2022 07:29:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=A5XEhFEI1sgOxZaIiNl90M23If361wx8ONPLgT7XGzI=;
-        b=TehnPfWsuMVsRwFU81r/h8zYcxQIpoObN9ie5xXroVxDcqpcJP061im2t2iUz+aIzy
-         TS4HZlmzQlGwdEim9PjrvSEA+yLT9OV4ePWfHLPHQpxbTJpcrFtk0jh5A1pShX7uo56v
-         MK9tmTwENiCQPlvHV6IiyWBI8tvVRp0XaMhmij/Xj/dii68gyW+3UWm49v3RuTPK00vs
-         ylAY1jIF6txWpDHiD3+FdU0+S1VJnFu/d5h0VqTDpPqKAeYB2Z5ExyiBmMSnwjk2K269
-         GMhg1BZr0QNa60yDX63rq58ZFGibbuM+JbTDRuZtATgw4eIse49PfDj/aDcwPZZiz3DD
-         2hsA==
+        with ESMTP id S229792AbiGFOhG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 10:37:06 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0149022511;
+        Wed,  6 Jul 2022 07:37:03 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id r133so14177222iod.3;
+        Wed, 06 Jul 2022 07:37:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A5XEhFEI1sgOxZaIiNl90M23If361wx8ONPLgT7XGzI=;
-        b=NOkMnIWRGTuEyqqu1k06ctuVEAP5IcxXmPqg3gbVk2PSwNDhueO9Yh9KKXCFEYYK+w
-         ed2Dgl3jrv5x7c2yOSA3wSC0S2Mr2ZMJIpP/kpjfjHkm7v33xq0eHJAMwo+OYV9AmEa3
-         2o5H+s6ht1zaqrKuNujx3iP1CdX6SqYO7LQuVuO9fHvoXglmHV+khGHIS3DtP+bOELwx
-         C5CjRSOuhUi9D1caSwdb1JVuEqw8MWS8P3O4f+pShItI5vj4mNwXr7Y1n2SJSQcCLEQn
-         wTh8kjGlMtom3vbA7ubaIXco5JHkPdzrJNzvY58t7saF3+V3MMbOVCeI1ITvtO1qC1Ch
-         YLGw==
-X-Gm-Message-State: AJIora8b1SdMPeKUnzVpMcCe7kZYolHhqQjXTMEi0FvRVH0FbzAmOIHM
-        yB7javxpNBjaDV7uspVf3TZ7bQ==
-X-Google-Smtp-Source: AGRyM1sIkGqNfg4WOnb75LEjMGlLNjDJs3f3DtG0GuRhGMvhVYHisNiN2pWPdwfuUokq2/yMVyEnkg==
-X-Received: by 2002:a2e:6e14:0:b0:25a:8ca0:7efd with SMTP id j20-20020a2e6e14000000b0025a8ca07efdmr22921772ljc.56.1657117755139;
-        Wed, 06 Jul 2022 07:29:15 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id 68-20020a2e0947000000b0025d375e8665sm971537ljj.99.2022.07.06.07.29.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 07:29:14 -0700 (PDT)
-Message-ID: <8c395ba8-45f6-01ae-2fcf-24344cc89141@linaro.org>
-Date:   Wed, 6 Jul 2022 16:29:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v6 02/14] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
- yaml file
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>,
-        "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BO6eBhC7unEc5DAXkBz59T47rbusdIS+hGohLImKruE=;
+        b=QKJcI6Bp0B1eSaw6DDpE2N/PfwBMZcWH4b9q4+dWtH9UGM6uJMhF16yeh7nJqDdkzq
+         sZi8i0Z7FZqlmGOLA9UJitHnjiqsooO9Z47uohW3LNmnGQXf848j4rRN/WJYueSGsUtk
+         YJ03ojbBdp6Jz4rHZMres3hTSJwJsy8i1zOhepXz45l+yUhWO2uYCchf8j9zIhjP4dju
+         0NnSrz5J5Bt56mN2NllhCX6fEEPs8ObZrs2MM0D8m3Q/udiBwFTmSnvnp23XgfM0CEm9
+         H3LQAvngufkKodbP3VBc1YnDPpjoCSRNBLV7Ng057/aKEmuTdQitSbKp/aKDphDiDXnZ
+         1yWw==
+X-Gm-Message-State: AJIora8eAgZq1x2Q/3ZsHXPaM2aBkLX6QvPe/U9QTeD2o26fVqYN9TAE
+        spJG6XzDBR7NRlIUXdYjEQ==
+X-Google-Smtp-Source: AGRyM1uwogNqbjjsWF2UgQe/CajDfMiG+sh6Ni2OjP0BX9xF2QmOazErflXLRz0+SMeIhacevi0Dxg==
+X-Received: by 2002:a05:6638:491a:b0:33e:f73f:b138 with SMTP id cx26-20020a056638491a00b0033ef73fb138mr4759038jab.21.1657118222100;
+        Wed, 06 Jul 2022 07:37:02 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id g18-20020a05663810f200b00339d5108b60sm15982358jae.17.2022.07.06.07.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 07:37:01 -0700 (PDT)
+Received: (nullmailer pid 5054 invoked by uid 1000);
+        Wed, 06 Jul 2022 14:36:58 -0000
+Date:   Wed, 6 Jul 2022 08:36:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -81,34 +64,28 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         NXP Linux Team <linux-imx@nxp.com>,
         Abel Vesa <abelvesa@kernel.org>,
         Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
         Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-3-viorel.suman@oss.nxp.com>
- <f0634bf0-77e9-939e-693f-31d50af4768c@linaro.org>
- <20220630123754.esbuac4pfktlseh2@fsr-ub1664-116>
- <78faf75d-80b7-7a0e-e306-6351dbe5133c@linaro.org>
- <CAL_Jsq+0GJBTVkS12XTvUKphMH4XuQ5AS1-QHMw6ULgpWbZBQQ@mail.gmail.com>
- <CAL_Jsq++FqUn3u56boHcoZhskx-6uUiduhJbUyWXbOH6dzExJg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAL_Jsq++FqUn3u56boHcoZhskx-6uUiduhJbUyWXbOH6dzExJg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Liu Ying <victor.liu@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
+Subject: Re: [PATCH v7 09/15] dt-bindings: firmware: Add fsl,scu yaml file
+Message-ID: <20220706143658.GA4191302-robh@kernel.org>
+References: <20220704161541.943696-1-viorel.suman@oss.nxp.com>
+ <20220704161541.943696-10-viorel.suman@oss.nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704161541.943696-10-viorel.suman@oss.nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,25 +93,306 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/07/2022 16:11, Rob Herring wrote:
->>> The fsl,imx8mq-pinctrl.yaml should be correct and I don't see the reason
->>> why dtschema complains in some of the entries. It's like one define was
->>> not correct... I'll take a look at this later, but anyway keep the same
->>> as fsl,imx8mq-pinctrl.yaml even if it complains.
->>
->> The issue is that 'fsl,pins' is problematic for the new dtb decoding
->> because it has a variable definition in terms of matrix bounds as each
->> i.MX platform has its own length (typ 5 or 6). The tools try to work
->> around it by figuring out which size fits. That works until there are
->> multiple answers which seems to be what's happening here.
->>
->> The easiest solution I think is to just strip the constraints in
->> occurances of this property. I'll look into that.
+On Mon, Jul 04, 2022 at 07:15:35PM +0300, Viorel Suman (OSS) wrote:
+> From: Abel Vesa <abel.vesa@nxp.com>
 > 
-> This is now fixed in the dt-schema main branch.
+> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+> we need to split it between the right subsystems. This patch adds the
+> fsl,scu.yaml in the firmware bindings folder. This one is only for
+> the main SCU node. The old txt file will be removed only after all
+> the child nodes have been properly switch to yaml.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> ---
+>  .../bindings/arm/freescale/fsl,scu.txt        |  96 -----------
+>  .../devicetree/bindings/firmware/fsl,scu.yaml | 160 ++++++++++++++++++
+>  2 files changed, 160 insertions(+), 96 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+>  create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+> deleted file mode 100644
+> index e1cc72741f1f..000000000000
+> --- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+> +++ /dev/null
+> @@ -1,96 +0,0 @@
+> -NXP i.MX System Controller Firmware (SCFW)
+> ---------------------------------------------------------------------
+> -
+> -The System Controller Firmware (SCFW) is a low-level system function
+> -which runs on a dedicated Cortex-M core to provide power, clock, and
+> -resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
+> -(QM, QP), and i.MX8QX (QXP, DX).
+> -
+> -The AP communicates with the SC using a multi-ported MU module found
+> -in the LSIO subsystem. The current definition of this MU module provides
+> -5 remote AP connections to the SC to support up to 5 execution environments
+> -(TZ, HV, standard Linux, etc.). The SC side of this MU module interfaces
+> -with the LSIO DSC IP bus. The SC firmware will communicate with this MU
+> -using the MSI bus.
+> -
+> -System Controller Device Node:
+> -============================================================
+> -
+> -The scu node with the following properties shall be under the /firmware/ node.
+> -
+> -Required properties:
+> --------------------
+> -- compatible:	should be "fsl,imx-scu".
+> -- mbox-names:	should include "tx0", "tx1", "tx2", "tx3",
+> -			       "rx0", "rx1", "rx2", "rx3";
+> -		include "gip3" if want to support general MU interrupt.
+> -- mboxes:	List of phandle of 4 MU channels for tx, 4 MU channels for
+> -		rx, and 1 optional MU channel for general interrupt.
+> -		All MU channels must be in the same MU instance.
+> -		Cross instances are not allowed. The MU instance can only
+> -		be one of LSIO MU0~M4 for imx8qxp and imx8qm. Users need
+> -		to make sure use the one which is not conflict with other
+> -		execution environments. e.g. ATF.
+> -		Note:
+> -		Channel 0 must be "tx0" or "rx0".
+> -		Channel 1 must be "tx1" or "rx1".
+> -		Channel 2 must be "tx2" or "rx2".
+> -		Channel 3 must be "tx3" or "rx3".
+> -		General interrupt rx channel must be "gip3".
+> -		e.g.
+> -		mboxes = <&lsio_mu1 0 0
+> -			  &lsio_mu1 0 1
+> -			  &lsio_mu1 0 2
+> -			  &lsio_mu1 0 3
+> -			  &lsio_mu1 1 0
+> -			  &lsio_mu1 1 1
+> -			  &lsio_mu1 1 2
+> -			  &lsio_mu1 1 3
+> -			  &lsio_mu1 3 3>;
+> -		See Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
+> -		for detailed mailbox binding.
+> -
+> -Note: Each mu which supports general interrupt should have an alias correctly
+> -numbered in "aliases" node.
+> -e.g.
+> -aliases {
+> -	mu1 = &lsio_mu1;
+> -};
+> -
+> -i.MX SCU Client Device Node:
+> -============================================================
+> -
+> -Client nodes are maintained as children of the relevant IMX-SCU device node.
+> -
+> -Example (imx8qxp):
+> --------------
+> -aliases {
+> -	mu1 = &lsio_mu1;
+> -};
+> -
+> -lsio_mu1: mailbox@5d1c0000 {
+> -	...
+> -	#mbox-cells = <2>;
+> -};
+> -
+> -firmware {
+> -	scu {
+> -		compatible = "fsl,imx-scu";
+> -		mbox-names = "tx0", "tx1", "tx2", "tx3",
+> -			     "rx0", "rx1", "rx2", "rx3",
+> -			     "gip3";
+> -		mboxes = <&lsio_mu1 0 0
+> -			  &lsio_mu1 0 1
+> -			  &lsio_mu1 0 2
+> -			  &lsio_mu1 0 3
+> -			  &lsio_mu1 1 0
+> -			  &lsio_mu1 1 1
+> -			  &lsio_mu1 1 2
+> -			  &lsio_mu1 1 3
+> -			  &lsio_mu1 3 3>;
+> -	};
+> -};
+> -
+> -serial@5a060000 {
+> -	...
+> -};
+> diff --git a/Documentation/devicetree/bindings/firmware/fsl,scu.yaml b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+> new file mode 100644
+> index 000000000000..c1f5b727352e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+> @@ -0,0 +1,160 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/firmware/fsl,scu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP i.MX System Controller Firmware (SCFW)
+> +
+> +maintainers:
+> +  - Dong Aisheng <aisheng.dong@nxp.com>
+> +
+> +description: System Controller Device Node
 
-Great, thanks!
+The formatting here is not maintained unless you use a literal block 
+('|'). But I would just drop this first line.
 
+> +  The System Controller Firmware (SCFW) is a low-level system function
+> +  which runs on a dedicated Cortex-M core to provide power, clock, and
+> +  resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
+> +  (QM, QP), and i.MX8QX (QXP, DX).
+> +  The AP communicates with the SC using a multi-ported MU module found
+> +  in the LSIO subsystem. The current definition of this MU module provides
+> +  5 remote AP connections to the SC to support up to 5 execution environments
+> +  (TZ, HV, standard Linux, etc.). The SC side of this MU module interfaces
+> +  with the LSIO DSC IP bus. The SC firmware will communicate with this MU
+> +  using the MSI bus.
+> +
+> +properties:
+> +  compatible:
+> +    const: fsl,imx-scu
+> +
+> +  clock-controller:
+> +    description:
+> +      Clock controller node that provides the clocks controlled by the SCU
+> +    $ref: /schemas/clock/fsl,scu-clk.yaml
+> +
+> +  ocotp:
+> +    description:
+> +      OCOTP controller node provided by the SCU
+> +    $ref: /schemas/nvmem/fsl,scu-ocotp.yaml
+> +
+> +  keys:
+> +    description:
+> +      Keys provided by the SCU
+> +    $ref: /schemas/input/fsl,scu-key.yaml
+> +
+> +  mboxes:
+> +    description: |
+> +      List of phandle of 4 MU channels for tx, 4 MU channels for
+> +      rx, and 1 optional MU channel for general interrupt.
+> +      All MU channels must be in the same MU instance.
+> +      Cross instances are not allowed. The MU instance can only
+> +      be one of LSIO MU0~M4 for imx8qxp and imx8qm. Users need
+> +      to make sure use the one which is not conflict with other
+> +      execution environments. e.g. ATF.
+> +    minItems: 1
+> +    maxItems: 10
 
-Best regards,
-Krzysztof
+Based on the description, shouldn't this be:
+
+minItems: 8
+maxItems: 9
+
+> +
+> +  mbox-names:
+> +    description:
+> +      include "gip3" if want to support general MU interrupt.
+
+What are all the other names? Needs to be a schema, not freeform text.
+
+> +    minItems: 1
+> +    maxItems: 10
+> +
+> +  pinctrl:
+> +    description:
+> +      Pin controller provided by the SCU
+> +    $ref: /schemas/pinctrl/fsl,scu-pinctrl.yaml
+> +
+> +  power-controller:
+> +    description: |
+> +      Power domains controller node that provides the power domains
+> +      controlled by the SCU
+> +    $ref: /schemas/power/fsl,scu-pd.yaml
+> +
+> +  rtc:
+> +    description:
+> +      RTC controller provided by the SCU
+> +    $ref: /schemas/rtc/fsl,scu-rtc.yaml
+> +
+> +  thermal-sensor:
+> +    description:
+> +      Thermal sensor provided by the SCU
+> +    $ref: /schemas/thermal/fsl,scu-thermal.yaml
+> +
+> +  watchdog:
+> +    description:
+> +      Watchdog controller provided by the SCU
+> +    $ref: /schemas/watchdog/fsl,scu-wdt.yaml
+> +
+> +required:
+> +  - compatible
+> +  - mbox-names
+> +  - mboxes
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/firmware/imx/rsrc.h>
+> +    #include <dt-bindings/input/input.h>
+> +    #include <dt-bindings/pinctrl/pads-imx8qxp.h>
+> +
+> +    firmware {
+> +        system-controller {
+> +            compatible = "fsl,imx-scu";
+> +            mbox-names = "tx0", "tx1", "tx2", "tx3",
+> +                         "rx0", "rx1", "rx2", "rx3",
+> +                         "gip3";
+> +            mboxes = <&lsio_mu1 0 0 &lsio_mu1 0 1 &lsio_mu1 0 2 &lsio_mu1 0 3
+> +                      &lsio_mu1 1 0 &lsio_mu1 1 1 &lsio_mu1 1 2 &lsio_mu1 1 3
+> +                      &lsio_mu1 3 3>;
+> +
+> +            clock-controller {
+> +                compatible = "fsl,imx8qxp-clk", "fsl,scu-clk";
+> +                #clock-cells = <2>;
+> +            };
+> +
+> +            pinctrl {
+> +                compatible = "fsl,imx8qxp-iomuxc";
+> +
+> +                pinctrl_lpuart0: lpuart0grp {
+> +                    fsl,pins = <
+> +                        IMX8QXP_UART0_RX_ADMA_UART0_RX   0x06000020
+> +                        IMX8QXP_UART0_TX_ADMA_UART0_TX   0x06000020
+> +                    >;
+> +                };
+> +            };
+> +
+> +            ocotp {
+> +                compatible = "fsl,imx8qxp-scu-ocotp";
+> +                #address-cells = <1>;
+> +                #size-cells = <1>;
+> +
+> +                fec_mac0: mac@2c4 {
+> +                    reg = <0x2c4 6>;
+> +                };
+> +            };
+> +
+> +            power-controller {
+> +                compatible = "fsl,imx8qxp-scu-pd", "fsl,scu-pd";
+> +                #power-domain-cells = <1>;
+> +            };
+> +
+> +            rtc {
+> +                compatible = "fsl,imx8qxp-sc-rtc";
+> +            };
+> +
+> +            keys {
+> +                compatible = "fsl,imx8qxp-sc-key", "fsl,imx-sc-key";
+> +                linux,keycodes = <KEY_POWER>;
+> +            };
+> +
+> +            watchdog {
+> +                compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
+> +                timeout-sec = <60>;
+> +            };
+> +
+> +            thermal-sensor {
+> +                compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
+> +                #thermal-sensor-cells = <1>;
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.25.1
+> 
+> 
