@@ -2,72 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B31567EBA
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 08:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC43567EDE
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 08:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiGFGjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 02:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S229648AbiGFGp2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 02:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiGFGju (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 02:39:50 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715E915807
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 23:39:49 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id j3so884943pfb.6
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 23:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vRmDjPpc1ypdcneiWKEOt2A9rTdMJLx78Cgy5W5981I=;
-        b=n2H4gCdeHo2gNaIplHcteu9pNdBzHjiMsZ3HktbeujIfTSTHZOIp8M6i9KFOS/7tGo
-         AGG0KWlbosrHRn6oXOB/3NXtAS+fw9ucxy3MMKMh7JmCZg+NF4fPZmECERwUugcbmlDG
-         Q7qY6Y+kcP11LhpO5z553sCkV53YQkExlJ11RGhbVaIQoVwnWCVogdPDpK9YDveaJ2B8
-         QBlZx1dToQ1uDdrjAXV9eEueKGMNKaDenn9rpgJBPtPCdF3X4cobBb7piYAfPKkYQIS6
-         LW+2XO6gTYgy77S3O/VFScec0XhN8bNR6S24/06C49uV0i/xvXtEO2cLsZ0TikvoYaWd
-         HUoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vRmDjPpc1ypdcneiWKEOt2A9rTdMJLx78Cgy5W5981I=;
-        b=qsygQ4Bfyi+7m7BJFeFHHjSSR6lAkU3bu7DJKgWiSKzcoY4u3eCmGawsroBeYsvwau
-         uCJ7HMWzqYAZpoaJppPDVvcrSWlvQZxgiZHhGQJmTn2/UiqGg7lZQrXULZaS1H31/2Bx
-         98bXuB0s3sb+GVkoEkeO+ruYE49t62amVeM2UiMHEFW1SQ1lSEZ6qSt9OXP26HT+knBX
-         PO7AYvwhJU6Ys+JJc5/3q7xlRDOFPZjiRwAOFcJtjOJ5PSmQXSfSM3KvTtNdRb46FM3Q
-         mY7JUm7RHNFazKdDAa3a9LI5sLqSUC2v4NBZcHXMmlr/3ef16RNS3vbhwc2dRwq/cZjN
-         W4cw==
-X-Gm-Message-State: AJIora/ZvLXBXbyyTd5S92qPSjC0u6xGm2HnG+wSV/4aEEwAXHigiRby
-        VUncGwz/D7kpfvSu4vi1FCf6RA==
-X-Google-Smtp-Source: AGRyM1uxQGhUy5Sr+MIJTzxNS6ZGjSIqdJU5vg3JQGPO6WWbvIuMl58/vYe/PFW+FZfao0qAeALdqA==
-X-Received: by 2002:a65:42cc:0:b0:3a9:f71f:33f9 with SMTP id l12-20020a6542cc000000b003a9f71f33f9mr32966547pgp.391.1657089588947;
-        Tue, 05 Jul 2022 23:39:48 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id br10-20020a056a00440a00b0051c2fc79aa8sm24619356pfb.91.2022.07.05.23.39.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 23:39:48 -0700 (PDT)
-Date:   Wed, 6 Jul 2022 12:09:46 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 09/13] OPP: Assert clk_count == 1 for single clk
- helpers
-Message-ID: <20220706063946.pmtkwiyfzxx5ka7h@vireshk-i7>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <f039572f213ee49125d3d1ea4e64a94b79778426.1657003420.git.viresh.kumar@linaro.org>
- <df997015-df77-2bcb-1551-6e8da4acb36a@linaro.org>
+        with ESMTP id S229755AbiGFGp0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 02:45:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583C418384;
+        Tue,  5 Jul 2022 23:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6C4961D89;
+        Wed,  6 Jul 2022 06:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C478AC3411C;
+        Wed,  6 Jul 2022 06:45:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657089924;
+        bh=vQICsFQqcsaq2kWATV7iI594WeUqIbbCj2oxRSUPcys=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g9Yl06NtLmHle14xehgyZ1GcsieFSxpvS+qraRzcVEP9HQxYNBO4iB2odlZmR437k
+         UmPCumxj1DdoODSBZESqTB2BElcXR0QDdLBEjZ0LXqqJ5lyb4w1QqL8QxbNCxs47lf
+         vYilhfVk2ZaNUUHqcJk5EoDPBZulXDopeEr751tA=
+Date:   Wed, 6 Jul 2022 08:45:21 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Varad Gautam <varadgautam@google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing
+ thermal states
+Message-ID: <YsUvgWmrk+ZfUy3t@kroah.com>
+References: <20220705150002.2016207-1-varadgautam@google.com>
+ <YsRkPUcrMj+JU0Om@kroah.com>
+ <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <df997015-df77-2bcb-1551-6e8da4acb36a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,29 +57,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-07-22, 19:21, Krzysztof Kozlowski wrote:
-> Where is the safety problem with multiple-clocks case?
+On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
+> On Tue, Jul 5, 2022 at 6:18 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
+> > > Check that a user-provided thermal state is within the maximum
+> > > thermal states supported by a given driver before attempting to
+> > > apply it. This prevents a subsequent OOB access in
+> > > thermal_cooling_device_stats_update() while performing
+> > > state-transition accounting on drivers that do not have this check
+> > > in their set_cur_state() handle.
+> > >
+> > > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> > > Cc: stable@vger.kernel.org
+> > > ---
+> > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+> > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> > > index 1c4aac8464a7..0c6b0223b133 100644
+> > > --- a/drivers/thermal/thermal_sysfs.c
+> > > +++ b/drivers/thermal/thermal_sysfs.c
+> > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+> > >               const char *buf, size_t count)
+> > >  {
+> > >       struct thermal_cooling_device *cdev = to_cooling_device(dev);
+> > > -     unsigned long state;
+> > > +     unsigned long state, max_state;
+> > >       int result;
+> > >
+> > >       if (sscanf(buf, "%ld\n", &state) != 1)
+> > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+> > >
+> > >       mutex_lock(&cdev->lock);
+> > >
+> > > +     result = cdev->ops->get_max_state(cdev, &max_state);
+> > > +     if (result)
+> > > +             goto unlock;
+> > > +
+> > > +     if (state > max_state) {
+> > > +             result = -EINVAL;
+> > > +             goto unlock;
+> > > +     }
+> > > +
+> > >       result = cdev->ops->set_cur_state(cdev, state);
+> >
+> > Why doesn't set_cur_state() check the max state before setting it?  Why
+> > are the callers forced to always check it before?  That feels wrong...
+> >
+> 
+> The problem lies in thermal_cooling_device_stats_update(), not set_cur_state().
+> 
+> If ->set_cur_state() doesn't error out on invalid state,
+> thermal_cooling_device_stats_update() does a:
+> 
+> stats->trans_table[stats->state * stats->max_states + new_state]++;
+> 
+> stats->trans_table reserves space depending on max_states, but we'd end up
+> reading/writing outside it. cur_state_store() can prevent this regardless of
+> the driver's ->set_cur_state() implementation.
 
-All these APIs, which I have added the assert to now, are designed
-with a single clk/freq in mind. They simply take a clock frequency
-value as input and do something based on it. It only works fine with
-single clk case, as more information is required for multiple clock
-case, a freq value isn't sufficient here. In order to avoid abuse or
-accidental use of the wrong API, these WARNs were required.
+Why wouldn't cur_state_store() check for an out-of-bounds condition by
+calling get_max_state() and then return an error if it is invalid,
+preventing thermal_cooling_device_stats_update() from ever being called?
 
-> And how users of PM OPP API are supposed to iterate/find OPPs they
-> want if the API now throws WARN?
+thanks,
 
-We need to provide new APIs for that, as I mentioned in the cover
-letter and the other mail I sent you yesterday.
-
-Specifically, if we want to have OPP finder API based on freq value,
-then it needs to either have index + freq as input, or an array of
-frequencies (one for each clk) as input.
-
-Though I am not sure what you would need at the moment, as you can
-also use opp-level for OPPs as they match UFS gears, that was my
-understanding from earlier discussion.
-
--- 
-viresh
+greg k-h
