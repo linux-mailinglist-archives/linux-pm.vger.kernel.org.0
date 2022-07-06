@@ -2,177 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82525681F9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 10:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F2C56821E
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 10:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiGFIoZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 04:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
+        id S231391AbiGFIwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 04:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiGFIoY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 04:44:24 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2054.outbound.protection.outlook.com [40.107.104.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4019A1707C;
-        Wed,  6 Jul 2022 01:44:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LXMUCc6S8iwBzIWr4xL76gUpjbhumC/Nj9wNWL3g4PHUwnBkvKlesMQhnj645RNAx0iPm4X0XzK4MEanXulSrmqliR4GykXk3kwZhaq9mga3BBCl0/P4/VQLEN1QUDQCdfo4OeZ2afzVdZGhmxTDArkhLvU52D1mijKTrEeLDwXovBmiuk7EudrEtKgyzfB7CpMfaAQfd0abySTgwrT9buFa5DHLUvcqohM/QjCnIEFMlOJ748P/iye7pR7pb7+5tbKlB3WA5n2/ll1qiV0zOO6Iiq5uWXW++hPCQAnDQiCfnoGNp7VUq9iFbitDNKGD7XwAwy7jwRXVbTRamAjwWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hAY4Ue8N425D+q4fohbjt1fY2cx5KEMaARzr3yFvefM=;
- b=JQ/7pPfZAIMhJ1lzKVvgrIuX3kkD2dOX0Lm0HWuSXKzaSIZ+GqpXOREITTJNtLBirCk5CUHtVZixxwyUS/PIJEw0LWuXlTty/+YKo0xxyh3f9DvchoI30zYGtRkwq8KlfllcrNYTnnV0TOPY2blyvqN6ChxJXm6oE9hHHOMyy7LN7cVSKRxVg95kx9fMtuLoMgoHmboBncXFBaGaNI+rn1YQatDmzYmdPG2/Tg66mrPyQ85Fb5OH+I8eOZDYn+oimss0uz4UMr3JNipkLoZ1ZQtNpHPnd2i5z1PxFoplZxQvcw/xRsq5dF3s/1AhaecSoz/oDJRmEzpGn0jZZqvhHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hAY4Ue8N425D+q4fohbjt1fY2cx5KEMaARzr3yFvefM=;
- b=ATJi8d0BV74BY5FKKbKQ0YC4YlaORV+ALKDw2ImcN2XAUsGyEQfl1nAqNqw/A0wjB5ye74IxPPclxH3IvOvTow83pl1OIkrvN389dPb1Iy8ubiF13/N77yrTOohTYcB9N6A5XP0BZ4QvvBZKIMA2OcKgPZ6T/2c4J4WePsSj2i4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
- by AM0PR04MB4948.eurprd04.prod.outlook.com (2603:10a6:208:ca::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Wed, 6 Jul
- 2022 08:44:17 +0000
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::6546:3ee1:5e6c:278f]) by VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::6546:3ee1:5e6c:278f%5]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
- 08:44:17 +0000
-Date:   Wed, 6 Jul 2022 11:44:03 +0300
-From:   Viorel Suman <viorel.suman@oss.nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S232138AbiGFIwJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 04:52:09 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3883B248EC;
+        Wed,  6 Jul 2022 01:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657097529; x=1688633529;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rrbZGLkCmOqSgzRms+ImBGiKNcOdYZiidZ/LIuBdEGU=;
+  b=O5Sn4Dt4Yqz1OBzA+686FnOo7t/Sli2YMhkKs8Dbwpr5spmH+gr81WCi
+   q3mqaqPEGKZTMxuj/SfhkA/zpzs0nKodapi56noV/2Q9wa+6uzir9E/PH
+   C4xVgtR4isnjRO1LMvRTNQBnhOuBTWjf5k74fHeXnrq1eEJHVQb0uZ+GY
+   c+1CtzhErbM5vkxA6JTmFgNp/DxCDkxdhspKyg9moiiIImPzy1DGKSALC
+   dFptH9cZXOdsUnvVsUX6UgwZzrwDE7zQbrl3LN7DKr410xtoOiG6F2cKt
+   LGW4fwGDFUxPrQomRrm2Iykslf4yq3aa1OuymVM++hnRhWGSLQaJBcnWz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="283710640"
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="283710640"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 01:52:08 -0700
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="620220665"
+Received: from lilicui-mobl.ccr.corp.intel.com ([10.255.29.244])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 01:52:03 -0700
+Message-ID: <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com>
+Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing
+ thermal states
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Varad Gautam <varadgautam@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
-Subject: Re: [PATCH v7 01/15] dt-bindings: clk: imx: Add fsl,scu-clk yaml file
-Message-ID: <20220706084403.46hsjhkrsss5n3i3@fsr-ub1664-116>
-References: <20220704161541.943696-1-viorel.suman@oss.nxp.com>
- <20220704161541.943696-2-viorel.suman@oss.nxp.com>
- <e9917b17-49e2-6f0f-201c-8b2064c5efc6@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e9917b17-49e2-6f0f-201c-8b2064c5efc6@linaro.org>
-X-ClientProxiedBy: AM0PR04CA0091.eurprd04.prod.outlook.com
- (2603:10a6:208:be::32) To VI1PR04MB5005.eurprd04.prod.outlook.com
- (2603:10a6:803:57::30)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0067dbcf-e2c0-495a-10c4-08da5f2bb636
-X-MS-TrafficTypeDiagnostic: AM0PR04MB4948:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JTC8onsN4yQvYfGlP1Np083G7dHj7+B2805Hii26EzzautPDyH5YAu4wSoUIHyAyayToK1pLcpztolQKLHg3j7Tkn+CtYHcZNZKY55DEtR3O+2XTwXT5NyK/64/QV4M6ab54PoJnaEtPhqEY+0LOMtoW7gWwJ/t4s5aoE95nNkj3WRiCJx4tt5yFEUUR+9OmdaiU4CZDMeLdH8lvU5YoZknp9Xs0MrU8GhctEokTBEVMgs72EgwKJgGBBD9F6qaKYlCOs76FGPE+VJn8dWYMnr0EzevWEJCZZ+eSXOy/TvWK4v+UOyzQqOMeBNJG09D4jK8VuXDLxpCLAjK2DxFdUoMDqcFM1FGHAc7rZsVn8m3Cj4X9FS+5St0nqbqv8Co/Fl2t50Hy71QSfbNQWuNzef7FYuINsTacUXyMT4GLNS38CVfkdkFs69gIFiOYdaUp29MaQeyGJ2qCs9XCE3i0S5bN4FqZWjfQwnSFFljJ4ZlEkZSAjzzBsIDfyNSS+G3m71FCttz3MI0/Q6fptiin8x0nBTKTi5MZiE4RhQdVH9dy4tSkGZzLQboAfjyLKO+A/FWKGOQ2rgl+eoa6t+K96+D5wFOSTJfMC4gbW8tdGw62QyOxXYsm4TkXdk83pX1HlwJ/dA8Uw8CAR6+Qp6jPtmTTDwZelMzSl/ftpQcdTrnU2M4o2I93IwccgPDd0y15JeEENl7pNaLPL8DGoHpTQHUatB602L/29TKUR0pZbPIrWsaKCIjbXoQJn5vjuZNhXZDVYRSRtaf3vsgEyS3bIr6Htb6Hq8uBDIsOv0SJxfT553UXtueXmQiXJ0wxZtR1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(376002)(136003)(346002)(396003)(39860400002)(366004)(1076003)(6512007)(6486002)(9686003)(38350700002)(54906003)(6916009)(316002)(186003)(38100700002)(66476007)(66556008)(4326008)(8676002)(44832011)(41300700001)(86362001)(66946007)(53546011)(52116002)(33716001)(8936002)(83380400001)(5660300002)(26005)(478600001)(7406005)(7416002)(6666004)(6506007)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?G2aWd0ev/FdpR2Jvc9R3sPEZC1qSgDTUCrs8sBzVJU0O35CY0yQKW4LpSNRM?=
- =?us-ascii?Q?WTubicyOv076GBBjwd3ck35DQaAmLu4u7GSQxS0R3wwsZLn2qJS//TCa/0ja?=
- =?us-ascii?Q?dcSra2AN35rUMTpHzxnZnKT/cKr3Mu4xXublS0ZtyhuSN4K9ezg8vkPrOt2Q?=
- =?us-ascii?Q?/zLckAUtFe+vgVVN5lrQOT7Op+ctt5Cljf8yzABq/9RPX7ISiXQodr+8vuHH?=
- =?us-ascii?Q?tdZN1WG585p5ymf2LtY2xM3vQxedn5pNkLCUSAcOmewIg0zD+2hAhKEknI4Z?=
- =?us-ascii?Q?PIksCdR+t4dbzIP9uSq0XHF9MHmQJVBhnEPgduaBM6HyBaYqQPVhAp1sA6sH?=
- =?us-ascii?Q?nixmFLANaQsPthCbJvGv8p4IfjP+EgPWXGCVI1bvhcB98VmfQPaChT0OzZrd?=
- =?us-ascii?Q?C4sF0QEMISek8rIAkjUzc7U0GdQMdGai0ltNjvsPlHWe4BdfZGa2RCmm2yji?=
- =?us-ascii?Q?sLPS4xAGPMZ7rKhrAJHFi75OvMvAg54HDgEFm9gqtIxo4ZUG7UGJqLYyBPX4?=
- =?us-ascii?Q?k0fI7Pf/Z5AYPjGNC37fYhZTWumgrNmc/5/ujzf8aCSYdOQ3saGe1yw8b9Nf?=
- =?us-ascii?Q?wyFd3T0bMLaWP82t/IHZM7muY6YAn4w5OvctkNJqPHWbBYcekCC+j7K8PPOP?=
- =?us-ascii?Q?iQeKrjV1LTcUMIe+1djiKA/BeI4HiYz1ELrgu4nz3XdFD9u0q9+2qDHZq3Pg?=
- =?us-ascii?Q?jtVCiWHNJK9uYMP46Se3dRY3xlIshZ2lCFf/SD0OVUfYkHr+W57P7aGeEhgi?=
- =?us-ascii?Q?wfvuozndL0RD01WIdDxUxywsM53GvhoCLSnhK4OtPhdErU3FpEAYaye8PF+D?=
- =?us-ascii?Q?TBkrf0QYebUdPGGQnbaUuWpIrLN3By8uk8k4tzrWHsASBoQxGc2I3iLDZunQ?=
- =?us-ascii?Q?tU/OaAQDCVZ5uYGc6JM00yFOnLpe+G5r7RAWp7Z3xSVMGhH9qIY/wehd0UEO?=
- =?us-ascii?Q?oVTZFJ5lBxl1G6nz7+vftfwg5IIR7QKerRJ3fr5Zzw576Vzq5J8ZyUFyB6u2?=
- =?us-ascii?Q?eqDBodLDOtL3yUD9X3YAwEY0zx5V1Gil9nCy8LxVIgVQKILht6C78sRFNEno?=
- =?us-ascii?Q?MjIDeffAWyWmhH3fUC8zOVxWSfcSC1DAlgjtQoTteNzfJ84x+blwRcFaDgEq?=
- =?us-ascii?Q?j7HEdSp2RsomWLBbOBPen1P+NEpnFW104ZpyYI8rX96u0AsGidFDwoN+Dbtx?=
- =?us-ascii?Q?ppMjbNskDAcivVyb4id6Kk3taOE+0vTzGFju72XraUlM1sM/KfUq0dQT52mh?=
- =?us-ascii?Q?eQpCcyQxYDs/mHz8MPoSTkPeSjmClum5ZGUKqvu/noG4AL0pSkN60mgBor6c?=
- =?us-ascii?Q?RD/ojbYtSwh5aRWt5XH0fI7kI7alL99Ge1Bj1JbmhKixojKbhKyHRUScy5OO?=
- =?us-ascii?Q?1zAJIIbqNrJS6q83Z/TBcRkPGKgqBfV6/kSbD1Ad4UyC/yjTzHD7QxwvWvXM?=
- =?us-ascii?Q?HrKw22F8U+9Opu1yEavFD4VWms4OzJeUbRLelpOw+YI96inNHJH5niG/Pxmo?=
- =?us-ascii?Q?jpN+NnIjQY2gLIQ8vQ6JNhtWYfEIrEmRHZGbiNOtR8jmiuZ9XhkyyErFaz2F?=
- =?us-ascii?Q?InN+Exw/tSvCSrH/xR7xTx7Y8A87a4AFKUc75TU7?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0067dbcf-e2c0-495a-10c4-08da5f2bb636
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 08:44:17.3606
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TCbVi17vMhKq6zVF6ouvyO27T8HLu46/ItKY5KKfFW5wCrhiTVWEu6jbUXkg3TxbMSfLURYtZxrg8nLQWFOCSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4948
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Date:   Wed, 06 Jul 2022 16:51:59 +0800
+In-Reply-To: <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
+References: <20220705150002.2016207-1-varadgautam@google.com>
+         <YsRkPUcrMj+JU0Om@kroah.com>
+         <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
+         <YsUvgWmrk+ZfUy3t@kroah.com>
+         <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-07-06 10:27:57, Krzysztof Kozlowski wrote:
-> On 04/07/2022 18:15, Viorel Suman (OSS) wrote:
-> > From: Abel Vesa <abel.vesa@nxp.com>
+On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
+> On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
+> wrote:
 > > 
-> > In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> > we need to split it between the right subsystems. This patch documents
-> > separately the 'clock' child node of the SCU main node.
+> > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
+> > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
+> > > gregkh@linuxfoundation.org> wrote:
+> > > > 
+> > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
+> > > > > Check that a user-provided thermal state is within the
+> > > > > maximum
+> > > > > thermal states supported by a given driver before attempting
+> > > > > to
+> > > > > apply it. This prevents a subsequent OOB access in
+> > > > > thermal_cooling_device_stats_update() while performing
+> > > > > state-transition accounting on drivers that do not have this
+> > > > > check
+> > > > > in their set_cur_state() handle.
+> > > > > 
+> > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> > > > > Cc: stable@vger.kernel.org
+> > > > > ---
+> > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+> > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/thermal/thermal_sysfs.c
+> > > > > b/drivers/thermal/thermal_sysfs.c
+> > > > > index 1c4aac8464a7..0c6b0223b133 100644
+> > > > > --- a/drivers/thermal/thermal_sysfs.c
+> > > > > +++ b/drivers/thermal/thermal_sysfs.c
+> > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
+> > > > > struct device_attribute *attr,
+> > > > >               const char *buf, size_t count)
+> > > > >  {
+> > > > >       struct thermal_cooling_device *cdev =
+> > > > > to_cooling_device(dev);
+> > > > > -     unsigned long state;
+> > > > > +     unsigned long state, max_state;
+> > > > >       int result;
+> > > > > 
+> > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
+> > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
+> > > > > struct device_attribute *attr,
+> > > > > 
+> > > > >       mutex_lock(&cdev->lock);
+> > > > > 
+> > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
+> > > > > +     if (result)
+> > > > > +             goto unlock;
+> > > > > +
+> > > > > +     if (state > max_state) {
+> > > > > +             result = -EINVAL;
+> > > > > +             goto unlock;
+> > > > > +     }
+> > > > > +
+> > > > >       result = cdev->ops->set_cur_state(cdev, state);
+> > > > 
+> > > > Why doesn't set_cur_state() check the max state before setting
+> > > > it?  Why
+> > > > are the callers forced to always check it before?  That feels
+> > > > wrong...
+> > > > 
+> > > 
+> > > The problem lies in thermal_cooling_device_stats_update(), not
+> > > set_cur_state().
+> > > 
+> > > If ->set_cur_state() doesn't error out on invalid state,
+> > > thermal_cooling_device_stats_update() does a:
+> > > 
+> > > stats->trans_table[stats->state * stats->max_states +
+> > > new_state]++;
+> > > 
+> > > stats->trans_table reserves space depending on max_states, but
+> > > we'd end up
+> > > reading/writing outside it. cur_state_store() can prevent this
+> > > regardless of
+> > > the driver's ->set_cur_state() implementation.
 > > 
-> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> > Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> > Acked-by: Stephen Boyd <sboyd@kernel.org>
+> > Why wouldn't cur_state_store() check for an out-of-bounds condition
+> > by
+> > calling get_max_state() and then return an error if it is invalid,
+> > preventing thermal_cooling_device_stats_update() from ever being
+> > called?
+> > 
 > 
-> Hm, you kept Stephen's ack, so why you did not keep my review? Sorry, I
-> am not going to do the same review second time. Please add changelog to
-> each patch instead describing what changed, which also will justify why
-> my review was dropped.
+> That's what this patch does, it adds the out-of-bounds check.
 
-Hi Krzysztof,
+No, I think Greg' question is
+why cdev->ops->set_cur_state() return 0 when setting a cooling state
+that exceeds the maximum cooling state?
 
-I thought it would be best to get your final "good to go" before adding
-your "reviewed-by" given that the patches includes additional changes
-and may not fit your expectations. No problem from my side, will
-send one more version.
-
-Regards,
-Viorel
- 
+thanks,
+rui
+> 
+> > thanks,
+> > 
+> > greg k-h
 
