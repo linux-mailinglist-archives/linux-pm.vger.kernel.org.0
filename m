@@ -2,164 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4BC5684EB
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 12:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB6956852A
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 12:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbiGFKMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 06:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        id S232381AbiGFKSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 06:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbiGFKMR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 06:12:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74FB8D;
-        Wed,  6 Jul 2022 03:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Tkl3lxTOKWGbOCuxxKNckxHNjYRI3zGLuGc8imHNxDs=; b=WpgGH4+Y6U9gQSSnMVR6OLMxva
-        3xYxeAZ7USH+mmbkdac+gWqkqSUncCao79OXiiUot5IPHXuNd6BKu4KcdJ/3wd9E6vbdtwdlfX++8
-        YHg9SPa4d3D+hoJ+xHEd64U2BB0PxnnwhjCX34YKvpd3mB9eaqJ+9sCf1Ma6Y4Sc+A5HLQFse3wc3
-        7p9dt+e0Yzacjyq/2QRyinJn3DEvx+LTPjMD8J3/m/+8JP5Q5o8reLw6djHCmeIC4Lr1NoUT74Cpg
-        hLfvPld/nyGauGdSHTmpv4A/geUNh2jHXRL3BD0xt9eK7uievOocsG0NSTJd7nMGZkXKKLQVVrNY/
-        fCxnd6CA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9207-000QRU-BY; Wed, 06 Jul 2022 10:11:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6964C3001AE;
-        Wed,  6 Jul 2022 12:11:15 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 43F7A20207235; Wed,  6 Jul 2022 12:11:15 +0200 (CEST)
-Date:   Wed, 6 Jul 2022 12:11:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <YsVfw3dy7smrpEbn@hirez.programming.kicks-ass.net>
-References: <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <877d5ajesi.fsf@email.froward.int.ebiederm.org>
- <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <20220628191541.34a073fc@gandalf.local.home>
- <yt9d5ykbekn3.fsf@linux.ibm.com>
- <yt9dpmijcvu6.fsf@linux.ibm.com>
- <YsSQRmCZSIQ1ewzo@worktop.programming.kicks-ass.net>
- <yt9dsfneaczk.fsf@linux.ibm.com>
- <YsVO1NU3bXGg9YJ3@worktop.programming.kicks-ass.net>
- <yt9da69ma8wm.fsf@linux.ibm.com>
+        with ESMTP id S230295AbiGFKSc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 06:18:32 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D1818E13;
+        Wed,  6 Jul 2022 03:18:31 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id s1so21354305wra.9;
+        Wed, 06 Jul 2022 03:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6XVkH+FRDklHSQ61jiiN/g1120SGYSf462Y0l/EHI00=;
+        b=QUjNNww5rGPJNE+NyXbivOvx14LJuS8Eyluh3ExEWQSjeLsrOpW7XUUpk4bAhxUW0a
+         PPOXoKKmSsiETJXrxn7/+j6LkHpaWIuOkZvvMaM6+T6dkFRY4+ky7F1vNPgJOtaL0iHE
+         ilF620FU52IOZio4rCx4kyrEOSyodoLg4jc/ZAsOZTR4O/+kSOkvhpO5A/uMqskAUpiC
+         23Co7WW25VK3n0rLUZAQHule/BaZkY+swDT41o3320wP7hQuWXXpFTc/bQ8ZUfhi6gam
+         X7i+bVr78PSdWQ6h7/tcpn6Ar7vS1lMn+KCBCw/bkZEW15yXZMUbu3ByChfuHzo/QsF0
+         hHbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6XVkH+FRDklHSQ61jiiN/g1120SGYSf462Y0l/EHI00=;
+        b=EtfDY44pAlhLdJoUvNSMk479WeaWIFeugBN2enmMNOp6Zy50Vd0HpEkklwt7wO7jzy
+         XrwrMApZRioZR5hSF2s5snP8bIR93MAe+NK6bA7SLqZdeyIi6P+WUEauCrfGuzmq8PzG
+         qI0AJGT8Wv+WQuQPpv0Bgh9npBWd0FU8a4INmMGCHfTsulYkHPC0h3OUCMdiGNhbIgkU
+         qCrSZ/oc25EVA0IxlViMQpUPpJy5hE3V8DUG/eY7WIhL+dXcuRc66xRFXB5zLA7c+L4A
+         WEcnnxMZ9LMHQdugUHcYbhsWhtwLpO01ipAdEZ16in3VSYdI9WAqKRQrmGNlUxtBPGn6
+         8EhA==
+X-Gm-Message-State: AJIora8gjv6ejVlum/42YtpilZVddZ+aZ3GkAjozVw8UQIQ2/IS5MlfZ
+        RyBwiIYDdbdbzHv7V+xSogw=
+X-Google-Smtp-Source: AGRyM1udRsGsiYwhrOGBdZg4xYw3DrzUKBGkZO5JGyaWrsQHHOSQOZQV68TakS3QPX7GdVpvA4tH2w==
+X-Received: by 2002:a05:6000:601:b0:21d:7f3e:e231 with SMTP id bn1-20020a056000060100b0021d7f3ee231mr1258354wrb.219.1657102710127;
+        Wed, 06 Jul 2022 03:18:30 -0700 (PDT)
+Received: from localhost (92.40.202.167.threembb.co.uk. [92.40.202.167])
+        by smtp.gmail.com with ESMTPSA id a3-20020a056000100300b0021b943a50b3sm35917569wrx.85.2022.07.06.03.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 03:18:29 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     jic23@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lee.jones@linaro.org, sre@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org
+Cc:     lars@metafoo.de, andy.shevchenko@gmail.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl, michael@walle.cc,
+        samuel@sholland.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v5 00/13] Add support for AXP192 PMIC
+Date:   Wed,  6 Jul 2022 11:18:49 +0100
+Message-Id: <20220706101902.4984-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yt9da69ma8wm.fsf@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 11:27:05AM +0200, Sven Schnelle wrote:
-> Peter Zijlstra <peterz@infradead.org> writes:
-> 
-> > On Wed, Jul 06, 2022 at 09:58:55AM +0200, Sven Schnelle wrote:
-> >
-> >> >> [   86.218551] kill_chi-343805    6d.... 79990141us : ptrace_stop: JOBCTL_TRACED already set, state=0 <------ valid combination of flags?
-> >> >
-> >> > Yeah, that's not supposed to be so. JOBCTL_TRACED is supposed to follow
-> >> > __TASK_TRACED for now. Set when __TASK_TRACED, cleared when
-> >> > TASK_RUNNING.
-> >> >
-> >> > Specifically {ptrace_,}signal_wake_up() in signal.h clear JOBCTL_TRACED
-> >> > when they would wake a __TASK_TRACED task.
-> >> 
-> >> try_to_wake_up() clears TASK_TRACED in this case because a signal
-> >> (SIGKILL) has to be delivered. As a test I put the following change
-> >> on top, and it "fixes" the problem:
-> >> 
-> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >> index da0bf6fe9ecd..f2e0f5e70e77 100644
-> >> --- a/kernel/sched/core.c
-> >> +++ b/kernel/sched/core.c
-> >> @@ -4141,6 +4149,9 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
-> >>          * TASK_WAKING such that we can unlock p->pi_lock before doing the
-> >>          * enqueue, such as ttwu_queue_wakelist().
-> >>          */
-> >> +       if (p->__state & TASK_TRACED)
-> >> +               trace_printk("clearing TASK_TRACED 2\n");
-> >> +       p->jobctl &= ~JOBCTL_TRACED;
-> >>         WRITE_ONCE(p->__state, TASK_WAKING);
-> >> 
-> >>         /*
-> >> 
-> >> There are several places where the state is changed from TASK_TRACED to
-> >> something else without clearing JOBCTL_TRACED.
-> >
-> > I'm having difficulty spotting them; I find:
-> >
-> > TASK_WAKEKILL: signal_wake_up()
-> > __TASK_TRACED: ptrace_signal_wake_up(), ptrace_unfreeze_traced(), ptrace_resume()
-> >
-> > And all those sites dutifully clear JOBCTL_TRACED.
-> >
-> > I'd be most interested in the calstack for the 'clearing TASK_TRACED 2'
-> > events to see where we miss a spot.
-> 
-> The calltrace is:
-> [    9.863613] Call Trace:
-> [    9.863616]  [<00000000d3105f0e>] try_to_wake_up+0xae/0x620
-> [    9.863620] ([<00000000d3106164>] try_to_wake_up+0x304/0x620)
-> [    9.863623]  [<00000000d30d1e46>] ptrace_unfreeze_traced+0x9e/0xa8
-> [    9.863629]  [<00000000d30d2ef0>] __s390x_sys_ptrace+0xc0/0x160
-> [    9.863633]  [<00000000d3c5d8f4>] __do_syscall+0x1d4/0x200
-> [    9.863678]  [<00000000d3c6c332>] system_call+0x82/0xb0
-> [    9.863685] Last Breaking-Event-Address:
-> [    9.863686]  [<00000000d3106176>] try_to_wake_up+0x316/0x620
-> [    9.863688] ---[ end trace 0000000000000000 ]---
-> 
-> ptrace_unfreeze_traced() is:
-> 
-> static void ptrace_unfreeze_traced(struct task_struct *task)
-> {
->         unsigned long flags;
-> 
->         /*
->          * The child may be awake and may have cleared
->          * JOBCTL_PTRACE_FROZEN (see ptrace_resume).  The child will
->          * not set JOBCTL_PTRACE_FROZEN or enter __TASK_TRACED anew.
->          */
->         if (lock_task_sighand(task, &flags)) {
->                 task->jobctl &= ~JOBCTL_PTRACE_FROZEN;
->                 if (__fatal_signal_pending(task)) {
->                         task->jobctl &= ~TASK_TRACED;
-> 
-> Looking at this, shouldn't the line above read task->jobctl &= ~JOBCTL_TRACED?
+This series adds support for the AXP192 PMIC to the AXP20x MFD driver
+framework, including support for regulators, ADCs, and AC/USB/battery
+power supplies.
 
-YES! Absolutely.
+This depends on the "regmap-irq cleanups and refactoring" series[1]
+for the ->get_irq_reg() operation, needed by the AXP192's IRQ chip.
 
->                         wake_up_state(task, __TASK_TRACED);
->                 }
->                 unlock_task_sighand(task, &flags);
->         }
-> }
+Changes in v5:
+
+* Drop everything related to GPIO / pin control. It seems that driver
+  is going to require further discussion while the rest of the series
+  probably won't need much at this point, and I'd rather not hold the
+  whole series up over one driver.
+
+Older changelogs can be found in v4[2].
+
+[1]: https://lore.kernel.org/lkml/20220623211420.918875-1-aidanmacdonald.0x0@gmail.com/
+[2]: https://lore.kernel.org/lkml/20220629143046.213584-1-aidanmacdonald.0x0@gmail.com/
+
+Aidan MacDonald (13):
+  dt-bindings: mfd: add bindings for AXP192 MFD device
+  dt-bindings: iio: adc: axp209: Add AXP192 compatible
+  dt-bindings: power: supply: axp20x: Add AXP192 compatible
+  dt-bindings: power: axp20x-battery: Add AXP192 compatible
+  mfd: axp20x: Add support for AXP192
+  regulator: axp20x: Add support for AXP192
+  iio: adc: axp20x_adc: Minor code cleanups
+  iio: adc: axp20x_adc: Replace adc_en2 flag with adc_en2_mask field
+  iio: adc: axp20x_adc: Add support for AXP192
+  power: supply: axp20x_usb_power: Add support for AXP192
+  power: axp20x_battery: Add constant charge current table
+  power: axp20x_battery: Support battery status without fuel gauge
+  power: axp20x_battery: Add support for AXP192
+
+ .../bindings/iio/adc/x-powers,axp209-adc.yaml |  18 +
+ .../bindings/mfd/x-powers,axp152.yaml         |   1 +
+ .../x-powers,axp20x-battery-power-supply.yaml |   1 +
+ .../x-powers,axp20x-usb-power-supply.yaml     |   1 +
+ drivers/iio/adc/axp20x_adc.c                  | 356 ++++++++++++++++--
+ drivers/mfd/axp20x-i2c.c                      |   2 +
+ drivers/mfd/axp20x.c                          | 141 +++++++
+ drivers/power/supply/axp20x_battery.c         | 142 ++++++-
+ drivers/power/supply/axp20x_usb_power.c       |  84 ++++-
+ drivers/regulator/axp20x-regulator.c          | 100 ++++-
+ include/linux/mfd/axp20x.h                    |  84 +++++
+ 11 files changed, 856 insertions(+), 74 deletions(-)
+
+
+base-commit: e35e5b6f695d241ffb1d223207da58a1fbcdff4b
+prerequisite-patch-id: a45db1cac7537769dc10087fc61f977dc150744c
+prerequisite-patch-id: cb8aa009c7bb7a6575eb05e3af65342dc8d0efa3
+prerequisite-patch-id: 8d32557e53b894d1fb17250d2d0eb3673f068d37
+prerequisite-patch-id: 5b293867ef81e3697892ac51b941bb53680a70dc
+prerequisite-patch-id: 8138d39a4817e804141bfe8c2ad37d9c55456a40
+prerequisite-patch-id: b01216129e887519d441cf556bbc75c397871773
+prerequisite-patch-id: b5dcf0c0609113c2d81bc557c1fc95ef23f40811
+prerequisite-patch-id: 622ca1c10e851b1889aaa567c1d2a0adf43cca44
+prerequisite-patch-id: d28c5187f9bf0e43f27b2f4aa8dcf7fd91842a03
+prerequisite-patch-id: d29d54b756be73304f844abeeaf9b46a5c0119d5
+prerequisite-patch-id: 5d405790ae89c0831b46a359f86e94bac5a67470
+prerequisite-patch-id: c90120e79acbb52ffa148bfedee1df9d35b5eced
+-- 
+2.35.1
+
