@@ -2,60 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5188E567E96
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 08:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7B2567EAA
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 08:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiGFGbE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 02:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        id S229602AbiGFGev (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 02:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiGFGak (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 02:30:40 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C747C1D302;
-        Tue,  5 Jul 2022 23:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657089014; x=1688625014;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HKgGNtH5+ZCmlx68r1yZkOpQeKz/TE7pn1yL+4sruqo=;
-  b=v6hTFnjtFFVpnBWK+rFPSYNAF0EAcxCanXPIhI4ncLYhImJ1QQ83JUnz
-   DRTGr5ZgoBC1SFmEPTG7CFOcGB9GIXjfBoSJBnTDQZb5Mdee4iIJhP4mZ
-   FXoPfBXt1EmCvZIz0AwSu8Ws/RmU3Jv1hm92tJPxzjfToa4mZr+/1if8d
-   U=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Jul 2022 23:30:13 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 23:30:13 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 23:30:12 -0700
-Received: from [10.216.8.139] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Jul 2022
- 23:30:10 -0700
-Message-ID: <91421440-578a-ccd1-21b3-7b8e2e8e2e8d@quicinc.com>
-Date:   Wed, 6 Jul 2022 12:00:07 +0530
+        with ESMTP id S229732AbiGFGet (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 02:34:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B7FAE7F;
+        Tue,  5 Jul 2022 23:34:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 939F561D7E;
+        Wed,  6 Jul 2022 06:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F955C3411C;
+        Wed,  6 Jul 2022 06:34:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657089288;
+        bh=soWSvNA9Dp3GJYUfQD8ILvkJm+sr1NemDRSI9xBjKqA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pO9gpcJUAo7tqcRnirjoQgTgE6jaTjMaRym+qgFDPmZALGvGIvRzPOarSXX7OeYO7
+         gU9x1jd0tNGsZdFWjkAoLHLIo+/s9r0Wiz6Vx+e0iR7a3KhaPIDw0F0flNXGAdn8Wj
+         A+S7nFsvhHIxDTdDkPU78hPAJ1KkqRL9OuOYURFo=
+Date:   Wed, 6 Jul 2022 08:34:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
+Message-ID: <YsUtBERm94k/iZTy@kroah.com>
+References: <YsKW6VvWqvcMRBSl@kroah.com>
+ <100f445e-9fa8-4f37-76aa-8359f0008c59@I-love.SAKURA.ne.jp>
+ <YsLIepAXeBKT0AF/@kroah.com>
+ <01a93294-e323-b9ca-7e95-a33d4b89dc47@I-love.SAKURA.ne.jp>
+ <YsL5pUuydMWJ9dSQ@kroah.com>
+ <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
+ <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
+ <YsRHwy6+5gask+KT@kroah.com>
+ <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
+ <7ddb25ff-60e5-75be-8080-2a7465cca68c@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] PM: QoS: Add check to make sure CPU freq is non-negative
-Content-Language: en-US
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220623064605.2538969-1-quic_kshivnan@quicinc.com>
-From:   Shivnandan Kumar <quic_kshivnan@quicinc.com>
-In-Reply-To: <20220623064605.2538969-1-quic_kshivnan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ddb25ff-60e5-75be-8080-2a7465cca68c@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,48 +63,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Gentle reminder,
+On Wed, Jul 06, 2022 at 03:21:15PM +0900, Tetsuo Handa wrote:
+> On 2022/07/05 23:35, Tetsuo Handa wrote:
+> > On 2022/07/05 23:16, Greg KH wrote:
+> >> Some device is being probed at the moment, maybe we have a deadlock
+> >> somewhere here...
+> > 
+> > Lockdep says __device_attach() from hub_event() was in progress.
+> > 
+> > ----------------------------------------
+> > [  237.376478][   T28] 5 locks held by kworker/1:1/26:
+> > [  237.381526][   T28]  #0: ffff888016b92538 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610
+> > [  237.392798][   T28]  #1: ffffc90000c2fda8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610
+> > [  237.406354][   T28]  #2: ffff88801f7ee220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4680
+> > [  237.415920][   T28]  #3: ffff88801b6c6220 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0
+> > [  237.426682][   T28]  #4: ffff8880216bc1a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x4a0
+> > ----------------------------------------
+> > 
+> 
+> The number returned by atomic_read(&probe_count) matched the number of works for hub_event()
+> in usb_hub_wq workqueue. The probe function is called from hub_event(), and
+> usb_stor_msg_common() calls wait_for_completion_interruptible_timeout(MAX_SCHEDULE_TIMEOUT)
+> via driver's init function.
+> 
+> But if the usb device is unresponsive, wait_for_completion_interruptible_timeout() sleeps
+> forever. And in this testcase (which emulates usb devices using /dev/raw-gadget interface),
+> the usb device became unresponsive because the process who is responsible with reading/writing
+> /dev/raw-gadget interface is blocked at mutex_lock(&misc_mtx) at misc_open(), and results in
+> an AB-BA deadlock condition. Making misc_open() killable solved this problem, by allowing
+> the opener of /dev/raw-gadget interface to call fput() upon "send SIGKILL after 5 seconds from
+> fork()" behavior.
+> 
+> Anyway,
+> 
+>         /*
+>          * Resuming.  We may need to wait for the image device to
+>          * appear.
+>          */
+>         wait_for_device_probe();
+> 
+> in snapshot_open() will sleep forever if some device became unresponsive.
+> 
+> How should we fix this problem?
 
-Thanks,
+We can decrease the timeout in usb_stor_msg_common().  I imagine that if
+that timeout is ever hit in this sequence, then all will recover, right?
+Try decreasing it to a sane number and see what happens.
 
-Shivnandan
+thanks,
 
-On 6/23/2022 12:16 PM, Shivnandan Kumar wrote:
-> 	CPU frequency should never be non-negative.
-> 	If some client driver calls freq_qos_update_request with some
-> 	value greater than INT_MAX, then it will set max CPU freq at
-> 	fmax but it will add plist node with some negative priority.
-> 	plist node has priority from INT_MIN (highest) to INT_MAX
-> 	(lowest). Once priority is set as negative, another client
-> 	will not be able to reduce max CPU frequency. Adding check
-> 	to make sure CPU freq is non-negative will fix this problem.
-> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
->
-> ---
->   kernel/power/qos.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index ec7e1e85923e..41e96fe34bfd 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -531,7 +531,8 @@ int freq_qos_add_request(struct freq_constraints *qos,
->   {
->   	int ret;
->   
-> -	if (IS_ERR_OR_NULL(qos) || !req)
-> +	if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE
-> +		|| value > FREQ_QOS_MAX_DEFAULT_VALUE)
->   		return -EINVAL;
->   
->   	if (WARN(freq_qos_request_active(req),
-> @@ -563,7 +564,8 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
->    */
->   int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
->   {
-> -	if (!req)
-> +	if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE ||
-> +		new_value > FREQ_QOS_MAX_DEFAULT_VALUE)
->   		return -EINVAL;
->   
->   	if (WARN(!freq_qos_request_active(req),
+greg k-h
