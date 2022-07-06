@@ -2,69 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C7356867E
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 13:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2F95687C9
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 14:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbiGFLNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 07:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S231816AbiGFMHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 08:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbiGFLNs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 07:13:48 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE39527CFA
-        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 04:13:47 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id d16so15247567wrv.10
-        for <linux-pm@vger.kernel.org>; Wed, 06 Jul 2022 04:13:47 -0700 (PDT)
+        with ESMTP id S233576AbiGFMHh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 08:07:37 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D91229812
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 05:07:36 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id a5so7072319wrx.12
+        for <linux-pm@vger.kernel.org>; Wed, 06 Jul 2022 05:07:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hxajPjZjIIJo4Uw5JtvbzfkD5YwE8zFfsd2Za5sspF8=;
-        b=wGRsgClpjHUfBd208DANmZuE+CScB4xVvQpKhG7Ci7o0PR663OotMa16WuZiMgVyq/
-         hwSBDr1Y5tNEg86svtzs7tvCXHk+izl8tIC72tTdkjOCK55UpzaZLr6RUX9rHVkBgNQx
-         N3Oyf9iVVOYhuyCCRREKOcnnYie+ff1jB/GqFvPFufknFTZjiLjFQTo/jYkD1HtIa17K
-         s6s7gMCs4btjAgsj9pvIYw2H841SPADZsoqT17UK1lhedQ7v2/GSPtnH6kqjzZobydpp
-         Zzx0rC6GC7DGai1lKSMHx8ZyLiA87w7CDC3ET036cnbFVl/DdcMmPxeQUgoYKcoQtGHe
-         t88g==
+        bh=B0kLxzZFv1hjl2nfhxxmYfuW3/1xWKZfd4iRfJyADCA=;
+        b=W4IpqFitVi7E1RKJJKjdCax2gbQUOSIMcqHImgpXMYXAxoug6Gf4whNjyLVu+PKC+3
+         obCDaRjukdn6IY0Th84IIXc+vshNdThJf1Ku0BDZwofL15LqCUTtvoJhc11wkSxhhtZG
+         V+6ShElpcYoVMzipYpKj4nA2DEtiIH44vzwO/pA8g3QKh/d2SkDqY3IjRa/aKh7Lu3PQ
+         tdRmQCl7HSMRgJ3aEhUfxtrgk1VZaFkQLg1mEp2KN3H412u8Dl7ydaJQDOVY8DO0ceIn
+         Xp37cUOUP42djBwMv2zcjHoJz/NgpADCnCp5mmA/YVcLCp+IdqoU8dragn4CzaLrmXb5
+         O5sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=hxajPjZjIIJo4Uw5JtvbzfkD5YwE8zFfsd2Za5sspF8=;
-        b=LPSJYwYvwq+982EUGBAg6LcmgWtAObm/sDycl0rZ6zuSYQeGd2VLhLlzwEVjVWPY90
-         KtI4tByNxzwDMSnEr8+IOzjkCobVDxvNO7GoHFOPH/rM0slzE4Ptv7IdERAeJsmxI6jx
-         VU+kkN3xfYXPgmJe/a3igyPsVT5G5Dppj7qWqb9J5yyMshNdJVwY7CIzV1Q6e1HudrOY
-         453osABo04bYkC5jcqvlguTQR31L7C/bfaQN+s2YYk7t5LPpQUzR9yjhzJSAcPyHTgSg
-         YidlnDwfe86oQ2/IGJ0FgOGoxBloa27laZYfwfwt1FhAkdMlQNH2fxayvgz4NbvOuEGH
-         hv5A==
-X-Gm-Message-State: AJIora8LwkCKp2Qts/nLHWLWeHgcWD6wY4j20m7cyeJYKIPYfP2pVPSL
-        98hMZEEljXSBA301mB6NZ6id3A==
-X-Google-Smtp-Source: AGRyM1tRfASnXiQBIRBnvAskiX+ntjbs9MqsDP8H55AKWzrB2UaraDmSlvlqsfRcqUrl5S073OOUfg==
-X-Received: by 2002:a05:6000:10a:b0:21d:6c43:d2b with SMTP id o10-20020a056000010a00b0021d6c430d2bmr13889813wrx.46.1657106026292;
-        Wed, 06 Jul 2022 04:13:46 -0700 (PDT)
+        bh=B0kLxzZFv1hjl2nfhxxmYfuW3/1xWKZfd4iRfJyADCA=;
+        b=5IlD43Tdlo29EXO9nnsRJVyZz7Ed9xRwDufUdzFNKLyw/fgdV0CDuWPvHn2tb96pbr
+         zhjhDQ8ZyOyYpxQOHg+5ELd73cMvZqNGpflsha0pnyoRJs/CtPXlYGumwWxcb/uHlHEM
+         MctBtUaOQlwplq81aSWt74q/s6KCiwVbPWxq5v01xqonkM5ko3v2oR89V0zugUxZQLcA
+         c5O4P5RffNt+EQ88LZyTR5k+WznYsHu6oJULR3tz9+YcxJOXWCsfBD4NEqlkeSm+oPG+
+         rYratpyST/XmbwdE/Fduui8KxAiZ7pD+n77mbWiX5TXec3PW8hawokdxmXSaCiWPzFaW
+         2eTA==
+X-Gm-Message-State: AJIora9pXUTaPKnitVv0ksjlWoofshDbH5nmvcCRouw/L5jxN4eMqR5x
+        BIsJ9Az2zy7+SN+9wmL1zddDWw==
+X-Google-Smtp-Source: AGRyM1swvtQyKZX/OMeE3u9Y360rVt9bNVOwb7jRaTSA9O8jTAiIlYIpfhsAwKqK1MXxRmd06BiYxA==
+X-Received: by 2002:a05:6000:1849:b0:21b:95c7:bbca with SMTP id c9-20020a056000184900b0021b95c7bbcamr35997989wri.93.1657109254705;
+        Wed, 06 Jul 2022 05:07:34 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id g34-20020a05600c4ca200b0039c7dbafa7asm19848465wmp.19.2022.07.06.04.13.45
+        by smtp.googlemail.com with ESMTPSA id i1-20020adffc01000000b0021b5861eaf7sm36216018wrr.3.2022.07.06.05.07.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 04:13:45 -0700 (PDT)
-Message-ID: <40b2b8d1-f86c-4788-767c-22e60283e458@linaro.org>
-Date:   Wed, 6 Jul 2022 13:13:44 +0200
+        Wed, 06 Jul 2022 05:07:34 -0700 (PDT)
+Message-ID: <92c86903-354f-0114-a796-64571667a923@linaro.org>
+Date:   Wed, 6 Jul 2022 14:07:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/2] thermal: rcar_gen3_thermal: Add support for
- hardware trip points
+Subject: Re: [PATCH 1/2] thermal/core: Use clamp() helper in the stepwise
+ governor
 Content-Language: en-US
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-pm@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org
-References: <20210804091818.2196806-1-niklas.soderlund+renesas@ragnatech.se>
- <20210804091818.2196806-2-niklas.soderlund+renesas@ragnatech.se>
+To:     rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20210804091818.2196806-2-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,70 +75,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Niklas,
-
-
-On 04/08/2021 11:18, Niklas Söderlund wrote:
-> All supported hardware except V3U is capable of generating interrupts
-> to the CPU when the temperature go below or above a set value. Use this
-> to implement support for the set_trip() feature of the thermal core on
-> supported hardware.
+On 29/06/2022 17:10, Daniel Lezcano wrote:
+> The code is actually clampling the next cooling device state using the
+> lowest and highest states of the thermal instance.
 > 
-> The V3U have its interrupts routed to the ECM module and therefore can
-> not be used to implement set_trip() as the driver can't be made aware of
-> when the interrupt triggers.
+> That code can be replaced by the clamp() macro which does exactly the
+> same. It results in a simpler routine to read.
 > 
-> Each TSC is capable of tracking up-to three different temperatures while
-> only two are needed to implement the tracking of the thermal window.
-> 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> ---
-> * Changes since v1
-> - Remove the 'have_irq' flag from the OF match data and auto-detect if
->    interrupts are available using platform_get_irq_optional().
-> - Have a non-static thermal_zone_of_device_ops and clear the .set_trips
->    if interrupts are unavailable.
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
 
-[ ... ]
+I'll apply this series if nobody has comments
 
-> @@ -401,8 +492,12 @@ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
+
+>   drivers/thermal/gov_step_wise.c | 15 ++++-----------
+>   1 file changed, 4 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+> index 12acb12aac50..6efbfaf014da 100644
+> --- a/drivers/thermal/gov_step_wise.c
+> +++ b/drivers/thermal/gov_step_wise.c
+> @@ -11,6 +11,7 @@
+>    */
 >   
->   	for (i = 0; i < priv->num_tscs; i++) {
->   		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
-> +		struct thermal_zone_device *zone = tsc->zone;
+>   #include <linux/thermal.h>
+> +#include <linux/minmax.h>
+>   #include <trace/events/thermal.h>
 >   
->   		priv->thermal_init(tsc);
-> +		if (zone->ops->set_trips)
-> +			rcar_gen3_thermal_set_trips(tsc, zone->prev_low_trip,
-> +						    zone->prev_high_trip);
->   	}
-
-While doing a cleanup I lately noticed this change and I've concerns 
-about it:
-
-  - it uses the thermal zone internals
-
-  - is it really needed ?
-
-At resume time we have:
-
-thermal_pm_notify()
-   --> PM_POST_RESTORE
-     --> thermal_zone_device_update()
-       --> thermal_zone_set_trips()
-
-In addition, I believe this later call is consistent as it sets the trip 
-point based on the last temperature update, while the 
-rcar_gen3_thermal_resume() does not.
-
-Was this function added on purpose because some there is an issue when 
-resuming the board or just put there assuming it is doing the right thing ?
-
-I would be happy if we can remove this portion of code because it is the 
-only users of prev_*_trip I would like to replace by prev_trip id.
-
+>   #include "thermal_core.h"
+> @@ -52,10 +53,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+>   
+>   	if (!instance->initialized) {
+>   		if (throttle) {
+> -			next_target = (cur_state + 1) >= instance->upper ?
+> -					instance->upper :
+> -					((cur_state + 1) < instance->lower ?
+> -					instance->lower : (cur_state + 1));
+> +			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
+>   		} else {
+>   			next_target = THERMAL_NO_TARGET;
+>   		}
+> @@ -66,10 +64,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+>   	switch (trend) {
+>   	case THERMAL_TREND_RAISING:
+>   		if (throttle) {
+> -			next_target = cur_state < instance->upper ?
+> -				    (cur_state + 1) : instance->upper;
+> -			if (next_target < instance->lower)
+> -				next_target = instance->lower;
+> +			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
+>   		}
+>   		break;
+>   	case THERMAL_TREND_RAISE_FULL:
+> @@ -82,9 +77,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+>   				next_target = THERMAL_NO_TARGET;
+>   		} else {
+>   			if (!throttle) {
+> -				next_target = cur_state - 1;
+> -				if (next_target > instance->upper)
+> -					next_target = instance->upper;
+> +				next_target = clamp((cur_state - 1), instance->lower, instance->upper);
+>   			}
+>   		}
+>   		break;
 
 
 -- 
