@@ -2,145 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5ED05680C6
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 10:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 618855680E7
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 10:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiGFIJ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 04:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
+        id S229995AbiGFIRg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 04:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiGFIJ4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 04:09:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7971F18381;
-        Wed,  6 Jul 2022 01:09:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D6E51596;
-        Wed,  6 Jul 2022 01:09:55 -0700 (PDT)
-Received: from [10.57.42.44] (unknown [10.57.42.44])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F28C3F792;
-        Wed,  6 Jul 2022 01:09:51 -0700 (PDT)
-Message-ID: <ca5b2602-358c-ce37-c698-8aaf4f579945@arm.com>
-Date:   Wed, 6 Jul 2022 09:09:50 +0100
+        with ESMTP id S229592AbiGFIRf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 04:17:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A404521265;
+        Wed,  6 Jul 2022 01:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657095454; x=1688631454;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QJdbd0sqRzbuJvDZDdncwbnN1AAfcsaUkYqnPqI4xSg=;
+  b=FN1lh8xp839H0goWYQncchjVpd5qg7EUtXhgYVgL3hxGB35HZUlUrHKV
+   o1EqebfSxdGB0+opFKNRPUHB4iVQbxHOxW3fZELvvvY81UYnUcVNEP+f9
+   IcBRXx01AqWHhsDUYL6jliDehroJ0jVQgpwDbmpsL7eRKP2FHfDIhUtGA
+   eKTP2GPuvXDWOmbkCefTntWYNAnTPuhixnC8t5LBYtc5NGswuo0TZS2B4
+   zajsfOYRoK/oA8xi/xEQ3byZgpq0njYU4Tm6MGEZyOKicTEvroLyk7E+1
+   uOADiaLbB+PGYRR12Q3dX3FnQm+MqEiUWtvIMo5DnbDNrzZFAUrT+8wwR
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10399"; a="369998131"
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="369998131"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 01:17:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,249,1650956400"; 
+   d="scan'208";a="920061818"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Jul 2022 01:17:32 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o90E0-000KFZ-8q;
+        Wed, 06 Jul 2022 08:17:32 +0000
+Date:   Wed, 06 Jul 2022 16:16:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 7a713b029862c784eaf30793456b1c83240675e5
+Message-ID: <62c544ee.WVUmFTMxrJ2pC2aE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3 02/20] OPP: Make dev_pm_opp_set_regulators() accept
- NULL terminated list
-Content-Language: en-GB
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org
-References: <cover.1656935522.git.viresh.kumar@linaro.org>
- <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
- <48d865e8-6c0d-99c0-a43b-89793d5c3f85@arm.com>
- <20220705043439.xlrxusxrhwjupiyt@vireshk-i7>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20220705043439.xlrxusxrhwjupiyt@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/07/2022 05:34, Viresh Kumar wrote:
-> On 04-07-22, 15:35, Steven Price wrote:
->> I have to say the 'new improved' list ending with NULL approach doesn't
->> work out so well for Panfrost. We already have to have a separate
->> 'num_supplies' variable for devm_regulator_bulk_get() /
->> regulator_bulk_{en,dis}able(), so the keeping everything in sync
->> argument is lost here.
->>
->> I would suggest added the NULL on the end of the lists in panfrost_drv.c
->> but then it would break the use of ARRAY_SIZE() to automagically keep
->> the length correct...
-> 
-> Actually we can still make it work.
-> 
->> For now the approach isn't too bad because Panfrost doesn't yet support
->> enabling devfreq with more than one supply. But that array isn't going
->> to work so nicely when that restriction is removed.
->>
->> The only sane way I can see of handling this in Panfrost would be
->> replicating the loop to count the supplies in the Panfrost code which
->> would allow dropping num_supplies from struct panfrost_compatible and
->> then supply_names in the same struct could be NULL terminated ready for
->> devm_pm_opp_set_regulators().
-> 
-> Or doing this, which will simplify both the cases.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 7a713b029862c784eaf30793456b1c83240675e5  Merge branch 'powercap' into bleeding-edge
 
-Yes the below works, it's just a bit ugly having the "- 1", and
-potentially easy to forgot when adding another. However I don't suppose
-it would get far in that case so I think it would be spotted quickly
-when adding a new compatible.
+elapsed time: 727m
 
-It's probably the best solution at the moment.
+configs tested: 52
+configs skipped: 2
 
-Thanks,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Steve
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+riscv                randconfig-r042-20220703
+arc                  randconfig-r043-20220703
+s390                 randconfig-r044-20220703
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
 
-> 
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> index 7fcbc2a5b6cd..b3b55565b8ef 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> @@ -625,24 +625,29 @@ static int panfrost_remove(struct platform_device *pdev)
->         return 0;
->  }
->  
-> -static const char * const default_supplies[] = { "mali" };
-> +/*
-> + * The OPP core wants the supply names to be NULL terminated, but we need the
-> + * correct num_supplies value for regulator core. Hence, we NULL terminate here
-> + * and then initialize num_supplies with ARRAY_SIZE - 1.
-> + */
-> +static const char * const default_supplies[] = { "mali", NULL };
->  static const struct panfrost_compatible default_data = {
-> -       .num_supplies = ARRAY_SIZE(default_supplies),
-> +       .num_supplies = ARRAY_SIZE(default_supplies) - 1,
->         .supply_names = default_supplies,
->         .num_pm_domains = 1, /* optional */
->         .pm_domain_names = NULL,
->  };
->  
->  static const struct panfrost_compatible amlogic_data = {
-> -       .num_supplies = ARRAY_SIZE(default_supplies),
-> +       .num_supplies = ARRAY_SIZE(default_supplies) - 1,
->         .supply_names = default_supplies,
->         .vendor_quirk = panfrost_gpu_amlogic_quirk,
->  };
->  
-> -static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
-> +static const char * const mediatek_mt8183_supplies[] = { "mali", "sram", NULL };
->  static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
->  static const struct panfrost_compatible mediatek_mt8183_data = {
-> -       .num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
-> +       .num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies) - 1,
->         .supply_names = mediatek_mt8183_supplies,
->         .num_pm_domains = ARRAY_SIZE(mediatek_mt8183_pm_domains),
->         .pm_domain_names = mediatek_mt8183_pm_domains,
-> 
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+hexagon              randconfig-r045-20220703
+hexagon              randconfig-r041-20220703
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
