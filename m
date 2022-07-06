@@ -2,292 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2BA56800E
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 09:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E045680A4
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 10:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbiGFHhZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 03:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S231671AbiGFIAH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 04:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbiGFHhV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 03:37:21 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2051.outbound.protection.outlook.com [40.107.95.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE7422BDA;
-        Wed,  6 Jul 2022 00:37:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AikVvfv3W4dkSMBa27t5RqP3sK8k65pSec9enHAFOQu4HS1m8DqkGRHfYe8iv94IkmjWNSWkyPNMKQ5c2kAKVat8OIs47fcu8KjFkqZbyUCCEx3iXiQ5Q8QABMpV74KyQGlO4oGjUOjmUPnLY7D4qDdU3ySYhtuwkKw+lu5i5DC/aw3LY7NIcw7xUc2MmZNWalvDSq67o5zYwU8NascEWutvwv/CK1xT0Jp47iLxQzQK6hE1BJ8WQtuQ25ubIR2/xrK/QcQ1FPO9AxovUEE9k66bAPVxW8b0QvWjhwH3x1gNvHD02JA/uN5fVrikFMIfwZU1xF4TgqmLmGJmB2Emgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u9jVD8VCQwj175Ua0vVRJi7aq/e/QgeG8zsInv6yQbM=;
- b=fItEhAuZkM6g9UJkHTumC0WRTziZ7HQV7uPmhIEyVrTSzwUAUHE2jQGRMDav6p8sbVA7U4eVCWHIKXmX9HvGfDYeefYgzWFIF2vHDZa1jybPfX4wo2Qkap2PlDlYOUkugV1/p4MhubbS0qymdde29Uk4vi5qr2KTKu+0AeTaOS0BiAWeK1128t4vfpI1CabwnEaD+YC3juYMveaseO3VpVCzZ0k13ay2xXFkJkJtWuJDNh41j33Dq5fu/gGGpKERxhoNTLSj8GOBrorwzxX9iTPIXGI1BMh77Dya77tFq8kNP2c871Q/BwYo+qoM5FXHUI3tOihH2KoCelOmdGlh0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u9jVD8VCQwj175Ua0vVRJi7aq/e/QgeG8zsInv6yQbM=;
- b=YzfIPc3yAVMme4nHGSew8uHt4uvi4ai9HVpOrbPL3e6sAQlUjRy4aUc2V8ssa6mZg2oAL5/Q67ANfXMotlkzpn91dmUz9suLj1hrpANEMryB4BsQDz9bN8pbvl0X8LGEBlhHZyeAZllWUJKtUHMyuXo1qJGmZd8F0rsCjXnCvkE=
-Received: from MWHPR20CA0041.namprd20.prod.outlook.com (2603:10b6:300:ed::27)
- by CY4PR1201MB2503.namprd12.prod.outlook.com (2603:10b6:903:d1::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Wed, 6 Jul
- 2022 07:37:12 +0000
-Received: from CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:ed:cafe::9e) by MWHPR20CA0041.outlook.office365.com
- (2603:10b6:300:ed::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16 via Frontend
- Transport; Wed, 6 Jul 2022 07:37:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT019.mail.protection.outlook.com (10.13.175.57) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Wed, 6 Jul 2022 07:37:12 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 6 Jul
- 2022 02:37:07 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
-        Meng Li <li.meng@amd.com>
-Subject: [PATCH V1 4/4] Documentation: amd-pstate: Add tbench and gitsource test introduction
-Date:   Wed, 6 Jul 2022 15:36:22 +0800
-Message-ID: <20220706073622.672135-5-li.meng@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220706073622.672135-1-li.meng@amd.com>
-References: <20220706073622.672135-1-li.meng@amd.com>
+        with ESMTP id S230500AbiGFIAF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 04:00:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA1E17E26;
+        Wed,  6 Jul 2022 01:00:03 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2667keKq016868;
+        Wed, 6 Jul 2022 07:59:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=lAz8CYxgUuAr2chjH7/qX9SQzUwR8SFIV6N9oFUZ63E=;
+ b=ke6CAJjmJf2Q80cYtNn+NPtDlE44OOkSYVBTPsaCCIleXnAJBq8ryJOi0xfa8NhX0yvo
+ as/CzQSvXanOxYGd858EmsxJYTm5OGs78ztWzotP8Ccf/mTtIjjCeQ8pys01gELDkABP
+ iGFxKTKkan7+uZl7u6R3iQtv8f7X+qvQyNF4qkIFMUyYbabRiWLNCT1cbIAejTYSFfyp
+ TiEnz6H3opgkfYlRIqzlJeUGJ488p61gict+zTC8LFxNdfjRwAKx+lkbAp2YCcpaxwYe
+ uEJKSVZ8wQKR07Fgt2NRsEodCol5E5jF9hP/Q8AI03owTGjymWTEHJ88oE9KNKKb2Mxm LA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h56a5g7sg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 07:59:02 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2667lVQ3019089;
+        Wed, 6 Jul 2022 07:59:02 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h56a5g7rb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 07:59:01 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2667pldW016665;
+        Wed, 6 Jul 2022 07:58:59 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3h4usd0mwx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Jul 2022 07:58:58 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2667wu4Y25035184
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Jul 2022 07:58:56 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 977604C04A;
+        Wed,  6 Jul 2022 07:58:56 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DC1DC4C040;
+        Wed,  6 Jul 2022 07:58:55 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  6 Jul 2022 07:58:55 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <20220505182645.497868-12-ebiederm@xmission.com>
+        <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        <877d5ajesi.fsf@email.froward.int.ebiederm.org>
+        <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        <20220628191541.34a073fc@gandalf.local.home>
+        <yt9d5ykbekn3.fsf@linux.ibm.com> <yt9dpmijcvu6.fsf@linux.ibm.com>
+        <YsSQRmCZSIQ1ewzo@worktop.programming.kicks-ass.net>
+Date:   Wed, 06 Jul 2022 09:58:55 +0200
+In-Reply-To: <YsSQRmCZSIQ1ewzo@worktop.programming.kicks-ass.net> (Peter
+        Zijlstra's message of "Tue, 5 Jul 2022 21:25:58 +0200")
+Message-ID: <yt9dsfneaczk.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5d2242aa-9b9d-4bbf-0ebb-08da5f225746
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB2503:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +EpgYX8ntRwEFUrGPue6E3L4ezsYuIGrTfCjujGo9bc6vouncqcVAvzJp4enIBbDXQQqlMFXtyVh7nxtOIOAHyNtAQBAtG2kvDJmeTIpB1xvS5vVB9f8C7uq4UQNSw1t0Z1Llb/+3w6AcVGlcE8DBTjSu1lnXAdMP6HNwIApmwQWJ8zKO0ZG6hJeWGS5G7a5HJHVOH+DfSVfQ2ikucOaQBzrR8cDLR/+wb+Avmu7JjGoApft50Aui71lse/3gz8Yylz1Xum5cfvTxgiWw7Hu08N0sqGDudkX0PHTXjKSpPX6KbHfC5VwilaH1hfLM3hjB4OeUh2yVoT9Ymoje81Dtu3TAJDfHeJOXiSC3FnkotIIht9vssW7kmNvRRYhzx4XYoiJx98hhkrg0JtGE846FmjMR1iLTNIJ6qVgHjT+D0ByKw+1KW8guN9bYiGHZHUqcNWGlD7Z8eRyg0xPyrt7M8Lr8Y1LmWMruRaYI9RBUBei05cx53X0nCMut4aennwOuOq0UuYgpqpjwCknpT1w8k3ieLe1riP2askgfL0AA/7SBtrzSTjVxNsNAPa+yqBB6qa1YrlQMVv69Og+FxpWrl6X4zId/SpfBhUP7CEhPxAkOoADF4q72JYFtXn3PMG8en2XyTturQqZxEMb4GG+T+nBcPhkdjYR8JXjsseumj5DHXJRJougrjlwXJQnRKGITJjFqgDPNzu4azkkhLz7T05w1rqkbv4tjXDgNDBAY1qGuBWAR4F2L5Ndu45xEOanHPhsjJ8P5VCm7obMrkwnGQJqz4PKxJUzrACLWHuo2bv05xvTxzh3Tl//xnZH2l43Nd17aBrbsgx9DG5f4zm8a8Nphemzk0cWr3neQYJvm/Sy/BqNHvpZ/8oHCmAmnOTl
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(376002)(136003)(36840700001)(40470700004)(46966006)(316002)(86362001)(478600001)(8676002)(6666004)(40480700001)(356005)(110136005)(41300700001)(2906002)(54906003)(82310400005)(81166007)(82740400003)(8936002)(36756003)(47076005)(70206006)(186003)(426003)(336012)(1076003)(2616005)(83380400001)(16526019)(70586007)(34020700004)(26005)(36860700001)(7696005)(5660300002)(40460700003)(40140700001)(4326008)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 07:37:12.2363
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d2242aa-9b9d-4bbf-0ebb-08da5f225746
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2503
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: s6Dr1WmnUBuWfDZCTQXpLRNWOROw7oYK
+X-Proofpoint-GUID: ROzuHG_ntV65qYicxOU284KWExlpFIQI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-06_04,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
+ spamscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207060027
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce tbench and gitsource test cases design and implementation.
-Monitor cpus changes about performance and power consumption etc.
+Hi Peter,
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 124 +++++++++++++++++---
- 1 file changed, 106 insertions(+), 18 deletions(-)
+Peter Zijlstra <peterz@infradead.org> writes:
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 8f3d30c5a0d8..48fb488e000e 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -409,37 +409,53 @@ Unit Tests for amd-pstate
- 
- 1. Test case decriptions
- 
-+    1). basic tests
-+
-+        Test prerequisite and basic functions for the ``amd-pstate`` driver.
-+
-         +---------+--------------------------------+------------------------------------------------------------------------------------+
-         | Index   | Functions                      | Description                                                                        |
-         +=========+================================+====================================================================================+
--        | 0       | amd_pstate_ut_acpi_cpc_valid   || Check whether the _CPC object is present in SBIOS.                                |
-+        | 1       | amd_pstate_ut_acpi_cpc_valid   || Check whether the _CPC object is present in SBIOS.                                |
-         |         |                                ||                                                                                   |
-         |         |                                || The detail refer to `Processor Support <processor_support_>`_.                    |
-         +---------+--------------------------------+------------------------------------------------------------------------------------+
--        | 1       | amd_pstate_ut_check_enabled    || Check whether AMD P-State is enabled.                                             |
-+        | 2       | amd_pstate_ut_check_enabled    || Check whether AMD P-State is enabled.                                             |
-         |         |                                ||                                                                                   |
-         |         |                                || AMD P-States and ACPI hardware P-States always can be supported in one processor. |
-         |         |                                | But AMD P-States has the higher priority and if it is enabled with                 |
-         |         |                                | :c:macro:`MSR_AMD_CPPC_ENABLE` or ``cppc_set_enable``, it will respond to the      |
-         |         |                                | request from AMD P-States.                                                         |
-         +---------+--------------------------------+------------------------------------------------------------------------------------+
--        | 2       | amd_pstate_ut_check_perf       || Check if the each performance values are reasonable.                              |
-+        | 3       | amd_pstate_ut_check_perf       || Check if the each performance values are reasonable.                              |
-         |         |                                || highest_perf >= nominal_perf > lowest_nonlinear_perf > lowest_perf > 0.           |
-         +---------+--------------------------------+------------------------------------------------------------------------------------+
--        | 3       | amd_pstate_ut_check_freq       || Check if the each frequency values and max freq when set support boost mode       |
-+        | 4       | amd_pstate_ut_check_freq       || Check if the each frequency values and max freq when set support boost mode       |
-         |         |                                | are reasonable.                                                                    |
-         |         |                                || max_freq >= nominal_freq > lowest_nonlinear_freq > min_freq > 0                   |
-         |         |                                || If boost is not active but supported, this maximum frequency will be larger than  |
-         |         |                                | the one in ``cpuinfo``.                                                            |
-         +---------+--------------------------------+------------------------------------------------------------------------------------+
- 
-+    2). Tbench test
-+
-+        Testing and monitor the cpu changes when running tbench benchmark under the specified governor.
-+        These changes include desire performance, frequency, load, performance, energy etc.
-+        The specified governor is ondemand or schedutil.
-+
-+    3). Gitsource test
-+
-+        Testing and monitor the cpu changes when running gitsource benchmark under the specified governor.
-+        These changes include desire performance, frequency, load, time, energy etc.
-+        The specified governor is ondemand or schedutil.
-+
- #. How to execute the tests
- 
-    We use test module in the kselftest frameworks to implement it.
-    We create amd-pstate-ut module and tie it into kselftest.(for
-    details refer to Linux Kernel Selftests [4]_).
- 
--    1. Build
-+    a. Build
- 
-         + open the :c:macro:`CONFIG_X86_AMD_PSTATE` configuration option.
-         + set the :c:macro:`CONFIG_X86_AMD_PSTATE_UT` configuration option to M.
-@@ -449,23 +465,95 @@ Unit Tests for amd-pstate
-             $ cd linux
-             $ make -C tools/testing/selftests
- 
-+        + make perf ::
-+
-+            $ cd tools/perf/
-+            $ make
-+
-+
-     #. Installation & Steps ::
- 
-         $ make -C tools/testing/selftests install INSTALL_PATH=~/kselftest
-+        $ cp tools/perf/perf ~/kselftest/amd-pstate/
-         $ sudo ./kselftest/run_kselftest.sh -c amd-pstate
--        TAP version 13
--        1..1
--        # selftests: amd-pstate: amd-pstate-ut.sh
--        # amd-pstate-ut: ok
--        ok 1 selftests: amd-pstate: amd-pstate-ut.sh
--
--    #. Results ::
--
--         $ dmesg | grep "amd_pstate_ut" | tee log.txt
--         [12977.570663] amd_pstate_ut: 1    amd_pstate_ut_acpi_cpc_valid  success!
--         [12977.570673] amd_pstate_ut: 2    amd_pstate_ut_check_enabled   success!
--         [12977.571207] amd_pstate_ut: 3    amd_pstate_ut_check_perf      success!
--         [12977.571212] amd_pstate_ut: 4    amd_pstate_ut_check_freq      success!
-+
-+    #. Specified test case ::
-+
-+        $ cd ~/kselftest/amd-pstate
-+        $ sudo ./run.sh -t basic
-+        $ sudo ./run.sh -t tbench
-+        $ sudo ./run.sh -t gitsource
-+        $ ./run.sh --help
-+        ./run.sh: illegal option -- -
-+        Usage: ./run.sh [OPTION...]
-+        [-h <help>]
-+        [-o <output-file-for-dump>]
-+        [-t <all:       All testing,
-+        basic:     Basic testing,
-+        tbench:    Test tbench,
-+        gitsource: Test gitsource.>]
-+        [-i <tbench time limit>]
-+        [-p <tbench process number>]
-+        [-l <loop times for tbench/gitsource]
-+        [-n <amd tracer interval]
-+
-+    4). Results
-+
-+        + basic
-+
-+         When you finish test, you will get the following log info ::
-+
-+          $ dmesg | grep "amd_pstate_ut" | tee log.txt
-+          [12977.570663] amd_pstate_ut: 1    amd_pstate_ut_acpi_cpc_valid  success!
-+          [12977.570673] amd_pstate_ut: 2    amd_pstate_ut_check_enabled   success!
-+          [12977.571207] amd_pstate_ut: 3    amd_pstate_ut_check_perf      success!
-+          [12977.571212] amd_pstate_ut: 4    amd_pstate_ut_check_freq      success!
-+
-+        + tbench
-+
-+         When you finish test, you will get selftest.tbench.csv and selftest.tbench.result files form amd-pstate.
-+         Open selftest.tbench.csv :
-+
-+         +-----------+---------+----------+---------+----------+-------------------+----------------+-----------+
-+         + Governor  | Round   | Des-perf | Freq    | Load     | Performance(MB/s) | Energy(Joules) | PPW(MB/J) |
-+         +===========+=========+==========+=========+==========+===================+================+===========+
-+         + ondemand  | 1       | 203.244  | 3.2225  | 87.5064  | 35368.2           | 6626.1         | 101.4164  |
-+         +-----------+---------+----------+---------+----------+-------------------+----------------+-----------+
-+         + ondemand  | 2       | 205.861  | 3.24948 | 88.9281  | 34795.7           | 6547.06        | 100.9794  |
-+         +-----------+---------+----------+---------+----------+-------------------+----------------+-----------+
-+         + ondemand  | Average | 204.553  | 3.23599 | 88.2173  | 35081.9           | 6586.58        | 101.1991  |
-+         +-----------+---------+----------+---------+----------+-------------------+----------------+-----------+
-+         +           |         |          |         |          |                   |                |           |
-+         +-----------+---------+----------+---------+----------+-------------------+----------------+-----------+
-+         + schedutil | 1       | 253.735  | 3.26755 | 96.6481  | 34653.9           | 6622.85        | 99.4170   |
-+         +-----------+---------+----------+---------+----------+-------------------+----------------+-----------+
-+         + schedutil | 2       | 254.654  | 3.44086 | 92.3564  | 31707.8           | 6573.67        | 91.6456   |
-+         +-----------+---------+----------+---------+----------+-------------------+----------------+-----------+
-+         + schedutil | Average | 254.195  | 3.3542  | 94.5023  | 33180.8           | 6598.26        | 95.5456   |
-+         +-----------+---------+----------+---------+----------+-------------------+----------------+-----------+
-+
-+        + gitsource
-+
-+         When you finish test, you will get selftest.gitsource.csv and selftest.gitsource.result files form amd-pstate.
-+         Open selftest.gitsource.csv :
-+
-+         +-----------+---------+----------+----------+----------+----------+----------------+----------+
-+         + Governor  | Round   | Des-perf | Freq     | Load     | Times(s) | Energy(Joules) | PPW(s/J) |
-+         +===========+=========+==========+==========+==========+==========+================+==========+
-+         + ondemand  | 1       | 29.7305  | 1.13025  | 8.49585  | 341.61   | 6811.02        | 0.0501   |
-+         +-----------+---------+----------+----------+----------+----------+----------------+----------+
-+         + ondemand  | 2       | 28.0523  | 1.33848  | 8.16496  | 339.21   | 6999.84        | 0.0484   |
-+         +-----------+---------+----------+----------+----------+----------+----------------+----------+
-+         + ondemand  | Average | 28.8914  | 1.23436  | 8.33041  | 340.41   | 6905.43        | 0.0492   |
-+         +-----------+---------+----------+----------+----------+----------+----------------+----------+
-+         +           |         |          |          |          |          |                |          |
-+         +-----------+---------+----------+----------+----------+----------+----------------+----------+
-+         + schedutil | 1       | 29.6971  | 0.834149 | 9.57879  | 278.15   | 5992.26        | 0.0464   |
-+         +-----------+---------+----------+----------+----------+----------+----------------+----------+
-+         + schedutil | 2       | 31.6573  | 0.99686  | 8.60513  | 280.28   | 5772.59        | 0.0485   |
-+         +-----------+---------+----------+----------+----------+----------+----------------+----------+
-+         + schedutil | Average | 30.6772  | 0.915504 | 9.09196  | 279.215  | 5882.43        | 0.0474   |
-+         +-----------+---------+----------+----------+----------+----------+----------------+----------+
- 
- Reference
- ===========
--- 
-2.25.1
+> On Tue, Jul 05, 2022 at 07:28:49PM +0200, Sven Schnelle wrote:
+>> Sven Schnelle <svens@linux.ibm.com> writes:
+>
+>> I think there's a race in ptrace_check_attach(). It first calls
+>> ptrace_freeze_task(), which checks whether JOBCTL_TRACED is set.
+>> If it is (and a few other conditions match) it will set ret = 0.
+>> 
+>> Later outside of siglock and tasklist_lock it will call
+>> wait_task_inactive, assuming the target is in TASK_TRACED, but it isn't.
+>> 
+>> ptrace_stop(), which runs on another CPU, does:
+>> 
+>> set_special_state(TASK_TRACED);
+>> current->jobctl |= JOBCTL_TRACED;
+>> 
+>> which looks ok on first sight, but in this case JOBCTL is already set,
+>> so the reading CPU will immediately move on to wait_task_inactive(),
+>> before JOBCTL_TRACED is set. I don't know whether this is a valid
+>> combination. I never looked into JOBCTL_* semantics, but i guess now
+>> is a good time to do so. I added some debugging statements, and that
+>> gives:
+>> 
+>> [   86.218488] kill_chi-300545    2d.... 79990135us : ptrace_stop: state 8
+>> [   86.218492] kill_chi-300545    2d.... 79990136us : signal_generate: sig=17 errno=0 code=4 comm=strace pid=300542 grp=1 res=1
+>> [   86.218496] kill_chi-300545    2d.... 79990136us : sched_stat_runtime: comm=kill_child pid=300545 runtime=3058 [ns] vruntime=606165713178 [ns]
+>> [ 86.218500] kill_chi-300545 2d.... 79990136us : sched_switch:
+>> prev_comm=kill_child prev_pid=300545 prev_prio=120 prev_state=t ==>
+>> next_comm=swapper/2 next_pid=0 next_prio=120
+>> [   86.218504]   strace-300542    7..... 79990139us : sys_ptrace -> 0x50
+>> [   86.218508]   strace-300542    7..... 79990139us : sys_write(fd: 2, buf: 2aa198f7ad0, count: 12)
+>> [   86.218512]   strace-300542    7..... 79990140us : sys_write -> 0x12
+>> [   86.218515]   <idle>-0         6dNh.. 79990140us : sched_wakeup: comm=kill_child pid=343805 prio=120 target_cpu=006
+>> [ 86.218519] <idle>-0 6d.... 79990140us : sched_switch:
+>> prev_comm=swapper/6 prev_pid=0 prev_prio=120 prev_state=R ==>
+>> next_comm=kill_child next_pid=343805 next_prio=120
+>> [   86.218524]   strace-300542    7..... 79990140us : sys_write(fd: 2, buf: 2aa198f7ad0, count: 19)
+>> [   86.218527]   strace-300542    7..... 79990141us : sys_write -> 0x19
+>> [   86.218531] kill_chi-343805    6..... 79990141us : sys_sched_yield -> 0xffffffffffffffda
+>> [   86.218535]   strace-300542    7..... 79990141us : sys_ptrace(request: 18, pid: 53efd, addr: 0, data: 0)
+>> [   86.218539] kill_chi-343805    6d.... 79990141us : signal_deliver: sig=9 errno=0 code=0 sa_handler=0 sa_flags=0
+>> [   86.218543]   strace-300542    7d.... 79990141us : ptrace_check_attach: task_is_traced: 1, fatal signal pending: 0
+>> [   86.218547]   strace-300542    7..... 79990141us : ptrace_check_attach: child->pid = 343805, child->__flags=0
+>> [   86.218551] kill_chi-343805    6d.... 79990141us : ptrace_stop: JOBCTL_TRACED already set, state=0 <------ valid combination of flags?
+>
+> Yeah, that's not supposed to be so. JOBCTL_TRACED is supposed to follow
+> __TASK_TRACED for now. Set when __TASK_TRACED, cleared when
+> TASK_RUNNING.
+>
+> Specifically {ptrace_,}signal_wake_up() in signal.h clear JOBCTL_TRACED
+> when they would wake a __TASK_TRACED task.
 
+try_to_wake_up() clears TASK_TRACED in this case because a signal
+(SIGKILL) has to be delivered. As a test I put the following change
+on top, and it "fixes" the problem:
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index da0bf6fe9ecd..f2e0f5e70e77 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4141,6 +4149,9 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+         * TASK_WAKING such that we can unlock p->pi_lock before doing the
+         * enqueue, such as ttwu_queue_wakelist().
+         */
++       if (p->__state & TASK_TRACED)
++               trace_printk("clearing TASK_TRACED 2\n");
++       p->jobctl &= ~JOBCTL_TRACED;
+        WRITE_ONCE(p->__state, TASK_WAKING);
+
+        /*
+
+There are several places where the state is changed from TASK_TRACED to
+something else without clearing JOBCTL_TRACED.
