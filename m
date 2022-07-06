@@ -2,243 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287DF567A63
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 00:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C3E567E20
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 08:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbiGEWvY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Jul 2022 18:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
+        id S229986AbiGFGAn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 02:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbiGEWvK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Jul 2022 18:51:10 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CB51E3C1
-        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 15:49:59 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id l12so6824944plk.13
-        for <linux-pm@vger.kernel.org>; Tue, 05 Jul 2022 15:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=rW7YJx+Jyr0hMBioBIAAA0tsQzE1vCtR28ls3o4tiwc=;
-        b=UnCjRiMFwD9RyQQkdO/XlrjqS2TJVJEU4sPzAshRGFe3ddZksIfc8YqT+wXvIJsdh+
-         Jsu++XNnBeEvBR2M5G6Gwv16ev9kfn3j52HBn2sNiFOJ5806SsGhjt3mtJrJaCa/Raz7
-         YF7ZclFVwQHQBpbp66WW4yXPzMg2Fb3oMcpA8r3lAWUxuAPb8qEMe7AQFA8dgGcnwn9i
-         9spYxk0yoPPJBz1lPLRs9Hoz0eRhBJb7LgZIixVPtk0J3/4g1zQbufha649HBfVxaX7f
-         Rhz0WvPuhZxaBmq1TfrVcVVega8jFDMeksR22aTbFqo0mFkJTyqFmqQbet4MR3mOcoFx
-         wqTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=rW7YJx+Jyr0hMBioBIAAA0tsQzE1vCtR28ls3o4tiwc=;
-        b=kssEHwUoanY049EyEX+6ZLWFxTsMcf25thrN6gMdaHXWiYuG4tppLA+OXh3CokCs++
-         RFT5HJ2WG54Ba5BPkI59xEfQ40AumAYnbXLr8kYx+dSBoygkP0COKtO/9MQzMtE2HvwW
-         sGJgQlZO7KCWLjAkTWBM0LrWCyYFumg69PuoBPAnAjc0Ea8UM5s7faHOQSudeChDDbCX
-         sLAWhJdkTs5HWLsTwQ4sUM2/KRnmHN1GeZmFo6BAHUxZxEMoNcGQiEE8cdSLPtKe4SFd
-         7livdzY1LREhJopwYU6f/6mTCYfbKjwDpvLFdn36QObsfjA/v3a1vHdntabGH2YAdWAl
-         mU/g==
-X-Gm-Message-State: AJIora/Ar/4wwPlw37BP9+HH0r11vA8Dw6eJyrnUR6jYFNat3sdqlFPP
-        I6TBoWVQuyjptBiNcnoS7iA3Pg==
-X-Google-Smtp-Source: AGRyM1uJ1Onm4/TB1TQgUtRX3Rz7vpysmgOOyoaRia9I90JmGv0Ydy/lgZlQlzLtQKsGuSrxR2fU6A==
-X-Received: by 2002:a17:90b:2384:b0:1ef:8506:374e with SMTP id mr4-20020a17090b238400b001ef8506374emr17504953pjb.99.1657061399207;
-        Tue, 05 Jul 2022 15:49:59 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id x6-20020a1709028ec600b001638a171558sm23933150plo.202.2022.07.05.15.49.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 15:49:58 -0700 (PDT)
-Message-ID: <62c4c016.1c69fb81.717e9.2bc8@mx.google.com>
-Date:   Tue, 05 Jul 2022 15:49:58 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        with ESMTP id S229522AbiGFGAm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 02:00:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BF512AA2
+        for <linux-pm@vger.kernel.org>; Tue,  5 Jul 2022 23:00:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 978CB61D38
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 06:00:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F1919C341CF
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 06:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657087241;
+        bh=YjUAyIO5LtuS6PDvo1e6TOeiV+RbUt1/XyVTxR4y7UE=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=swGB3j5ncfP9IRN4+BdQaEyLAFf6NXuetpyHIXOqSvqNJA2SrB6JxRbicLM41TBZd
+         GtchSWvc201ELWZBGwSqiEoZHYFK/QPL+PiawxqAvYx7PAIqtUXgQokpMzcl8ZXpH5
+         1I7vQbQMk8klJjF63d8fFx/IxyPoF7HGavoeG9N7VCylFA+qDze0ecqflh+ZegjMq5
+         nl+a9DDy7mNWNWJJgZAYcs96OQnxEyqI2vvS4NzG8gA2upNoiMNG0j4wNLNGqS8Uwr
+         rfpcSMKAaM5041Tpho50xVDOY9tGqF2OltwJEGj097ymRAkMAxXg5o07gpnGb3nuzo
+         esOx97OPqxAbg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id DED73CC13B9; Wed,  6 Jul 2022 06:00:40 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215938] amd-pstate ignoring scaling_max_freq after waking from
+ suspend
+Date:   Wed, 06 Jul 2022 06:00:40 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: a@annel.in
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215938-137361-x327VlpRUc@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215938-137361@https.bugzilla.kernel.org/>
+References: <bug-215938-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.19-rc5-50-g3bc028d913bd
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 91 runs,
- 4 regressions (v5.19-rc5-50-g3bc028d913bd)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 91 runs, 4 regressions (v5.19-rc5-50-g3bc028d913bd)
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
 
-Regressions Summary
--------------------
+--- Comment #20 from a@annel.in ---
+Guys, have you get amd_pstate working with schedutil governor?=20=20
+On my system, it completely ignores frequency limits and boost state.=20
 
-platform              | arch  | lab             | compiler | defconfig     =
-     | regressions
-----------------------+-------+-----------------+----------+---------------=
------+------------
-imx6ul-pico-hobbit    | arm   | lab-pengutronix | gcc-10   | multi_v7_defco=
-nfig | 1          =
+```
+~  sudo cpupower frequency-set -g schedutil -d 1200MHz -u 1600MHz=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20
+~  sudo cpupower frequency-info=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20
+analyzing CPU 0:
+  driver: amd-pstate
+  CPUs which run at the same hardware frequency: 0
+  CPUs which need to have their frequency coordinated by software: 0
+  maximum transition latency: 131 us
+  hardware limits: 400 MHz - 1.90 GHz
+  available cpufreq governors: ondemand performance schedutil
+  current policy: frequency should be within 1.20 GHz and 1.60 GHz.
+                  The governor "schedutil" may decide which speed to use
+                  within this range.
+  current CPU frequency: Unable to call hardware
+  current CPU frequency: 2.60 GHz (asserted by call to kernel)
+  boost state support:
+    Supported: yes
+    Active: no
+    AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.51 GHz.
+    AMD PSTATE Nominal Performance: 70. Nominal Frequency: 1.90 GHz.
+    AMD PSTATE Lowest Non-linear Performance: 41. Lowest Non-linear Frequen=
+cy:
+1.11 GHz.
+    AMD PSTATE Lowest Performance: 15. Lowest Frequency: 400 MHz.
+```
 
-jetson-tk1            | arm   | lab-baylibre    | gcc-10   | multi_v7_defco=
-nfig | 1          =
+Other governors (ondemand/performance) works as intended.=20=20
+Is it a bug or something else?
 
-kontron-bl-imx8mm     | arm64 | lab-kontron     | gcc-10   | defconfig     =
-     | 1          =
+--=20
+You may reply to this email to add a comment.
 
-kontron-kbox-a-230-ls | arm64 | lab-kontron     | gcc-10   | defconfig     =
-     | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.19-rc=
-5-50-g3bc028d913bd/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.19-rc5-50-g3bc028d913bd
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      3bc028d913bd352d8ba9e4b371e7e1303457bfe3 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab             | compiler | defconfig     =
-     | regressions
-----------------------+-------+-----------------+----------+---------------=
------+------------
-imx6ul-pico-hobbit    | arm   | lab-pengutronix | gcc-10   | multi_v7_defco=
-nfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62c4b6773147a6bcb7a39c1f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc5-50-g3bc02=
-8d913bd/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-=
-hobbit.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc5-50-g3bc02=
-8d913bd/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-=
-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220624.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62c4b6773147a6bcb7a39=
-c20
-        failing since 28 days (last pass: thermal-5.16-rc5-48-gf1f42573b6f3=
-, first fail: v5.19-rc1-2-g6a8964e282382) =
-
- =
-
-
-
-platform              | arch  | lab             | compiler | defconfig     =
-     | regressions
-----------------------+-------+-----------------+----------+---------------=
------+------------
-jetson-tk1            | arm   | lab-baylibre    | gcc-10   | multi_v7_defco=
-nfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62c4b6e325345c6beca39c09
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc5-50-g3bc02=
-8d913bd/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk1.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc5-50-g3bc02=
-8d913bd/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220624.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62c4b6e325345c6beca39=
-c0a
-        failing since 6 days (last pass: v5.19-rc4-36-g4035647418c1, first =
-fail: v5.19-rc4-35-g06cab9aecb43) =
-
- =
-
-
-
-platform              | arch  | lab             | compiler | defconfig     =
-     | regressions
-----------------------+-------+-----------------+----------+---------------=
------+------------
-kontron-bl-imx8mm     | arm64 | lab-kontron     | gcc-10   | defconfig     =
-     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62c4b683d3fb415e00a39cdf
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc5-50-g3bc02=
-8d913bd/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-bl-imx8mm.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc5-50-g3bc02=
-8d913bd/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-bl-imx8mm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220624.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62c4b683d3fb415e00a39=
-ce0
-        new failure (last pass: v5.19-rc4-63-g5a03ffb415cc) =
-
- =
-
-
-
-platform              | arch  | lab             | compiler | defconfig     =
-     | regressions
-----------------------+-------+-----------------+----------+---------------=
------+------------
-kontron-kbox-a-230-ls | arm64 | lab-kontron     | gcc-10   | defconfig     =
-     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62c4b56bf057aa3f8fa39bf9
-
-  Results:     94 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc5-50-g3bc02=
-8d913bd/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc5-50-g3bc02=
-8d913bd/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220624.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/62=
-c4b56bf057aa3f8fa39c06
-        failing since 28 days (last pass: v5.18-rc7-183-g45785e0ed597, firs=
-t fail: v5.19-rc1-2-g6a8964e282382)
-
-    2022-07-05T22:04:16.201847  /lava-136942/1/../bin/lava-test-case
-    2022-07-05T22:04:16.202143  <8>[   18.887406] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
-
- =20
+You are receiving this mail because:
+You are the assignee for the bug.=
