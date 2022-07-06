@@ -2,148 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24552568407
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 11:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EAC568485
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 12:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiGFJuc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 05:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
+        id S232077AbiGFKBg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 06:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiGFJub (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 05:50:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 249561580C;
-        Wed,  6 Jul 2022 02:50:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3259A1042;
-        Wed,  6 Jul 2022 02:50:30 -0700 (PDT)
-Received: from [10.57.42.44] (unknown [10.57.42.44])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DB933F66F;
-        Wed,  6 Jul 2022 02:50:25 -0700 (PDT)
-Message-ID: <f545c1f4-0cb5-ec4e-66e8-dbed6b992085@arm.com>
-Date:   Wed, 6 Jul 2022 10:50:23 +0100
+        with ESMTP id S230420AbiGFKBd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 06:01:33 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866BD24F00
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 03:01:31 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id y18so5239105plb.2
+        for <linux-pm@vger.kernel.org>; Wed, 06 Jul 2022 03:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=izBSDhEo5LkaKfHP1dONDKBae8Gt8mJVPobNlAoGfDM=;
+        b=MlcF3wqO/V85e/FqvG2aKl03wiSIMQfXYBvfKy2OGFsF7Hq0mu82AfoCPBm8llGBTi
+         4JMDyKlzabIHgWrhoKInoq421y2c1Fy+ra3rx6oynfgzzzqzKSXoAOIlwV+blu87b7TZ
+         Mc67S/8G/Oqyk4Yarl2CubxK1nBLs4lAAte3QXQ54vehyNTVD8VpE39mr2OtOvLwKkCf
+         ld3D8IE4H08vVLiRaDxZCkNz/wRYxAoZrLaECNgWa3VQCWJQbOE/gHbhpZCQCUf2Zc2x
+         2cJxnn/piI3hVeWPvn0No/DgH8UqaieLhSfEnTVVN8VLArdT41QJg+BwwbXhttkk5ZR5
+         gwOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=izBSDhEo5LkaKfHP1dONDKBae8Gt8mJVPobNlAoGfDM=;
+        b=gHaBuKmH69sggBBHDdvpkGYqNK6Y7yv8N2eVrRJk7uP1CnbKCMs0tMwE4470AB9yeS
+         bR8Rjsrt9UUmNLCTt4oW9TSB96RnePFA/bhStakcnd4uxkb4q3JZTqbPePgoC8BzVlDt
+         H2eOwqberVTKeYp759S3pLl8tpkCjLXPAkAuiGTJfHiKxpSaTtNO9DU98XYY6mzcL4Pa
+         LQ+pAtI8hvgtYGufKEtBC/MlJQfRaR9VCteSCdZX7mfzZJZ+HdGgcIr7oRj5c7D+bw7i
+         3fni76xsADyjOMs+AIkxYpe646DFir/7h7GTgAw+GyeTn7VpDGZRmOZ9UMrM6/rL4H1J
+         7lJA==
+X-Gm-Message-State: AJIora94VlWTOdzqXMBPahm6kkkrxkgv4qOvT6yWOyN7PAvdGEuWW+tw
+        wEme/DPP+4NTbTh4gLZg7PIDKk0acKxEo8YbjaBM5w==
+X-Google-Smtp-Source: AGRyM1v3ziWKPv53EFicedDG8HWTa+LjL5AiWoFupEyKusVCvS/6LLjFV+/tJzX/UcthosxH8pT/GY30l6NARdYD9xs=
+X-Received: by 2002:a17:90b:38c2:b0:1ed:474a:a668 with SMTP id
+ nn2-20020a17090b38c200b001ed474aa668mr47273440pjb.201.1657101690952; Wed, 06
+ Jul 2022 03:01:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3.1 02/20] OPP: Make dev_pm_opp_set_regulators() accept
- NULL terminated list
-Content-Language: en-GB
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Qiang Yu <yuq825@gmail.com>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <9730e011004b7526e79c6f409f5147fb235b414a.1656935522.git.viresh.kumar@linaro.org>
- <bcabb1a90a5158628ee1633c10f8886544723fb9.1657095331.git.viresh.kumar@linaro.org>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <bcabb1a90a5158628ee1633c10f8886544723fb9.1657095331.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220705150002.2016207-1-varadgautam@google.com>
+ <YsRkPUcrMj+JU0Om@kroah.com> <CAOLDJOJ_v75WqGt2mZa0h-GgF+NThFBY5DvasH+9LLVgLrrvog@mail.gmail.com>
+ <YsUvgWmrk+ZfUy3t@kroah.com> <CAOLDJOJug5jYpaSjY1tAYWNo0QRM4NB+wM2Vd2=Lf_O7TRjVCg@mail.gmail.com>
+ <6eed01c90fafe681cccba2f227d65f2e9bfb8348.camel@intel.com> <YsVUB76c2b0EkRBb@kroah.com>
+In-Reply-To: <YsVUB76c2b0EkRBb@kroah.com>
+From:   Varad Gautam <varadgautam@google.com>
+Date:   Wed, 6 Jul 2022 12:01:19 +0200
+Message-ID: <CAOLDJOJLvSUMqF37H13aiH59Pm4_t6esRxy7Ej3Grhr4fmSGQA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: sysfs: Perform bounds check when storing thermal states
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/07/2022 09:18, Viresh Kumar wrote:
-> Make dev_pm_opp_set_regulators() accept a NULL terminated list of names
-> instead of making the callers keep the two parameters in sync, which
-> creates an opportunity for bugs to get in.
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> V3->V3.1:
-> - Update panfrost_drv.c to include the NULL element.
-> 
->  drivers/cpufreq/cpufreq-dt.c                |  9 ++++-----
->  drivers/cpufreq/ti-cpufreq.c                |  7 +++----
->  drivers/devfreq/exynos-bus.c                |  4 ++--
->  drivers/gpu/drm/lima/lima_devfreq.c         |  3 ++-
->  drivers/gpu/drm/panfrost/panfrost_devfreq.c |  3 +--
->  drivers/gpu/drm/panfrost/panfrost_drv.c     | 15 ++++++++++-----
->  drivers/opp/core.c                          | 18 ++++++++++++------
->  drivers/soc/tegra/pmc.c                     |  4 ++--
->  include/linux/pm_opp.h                      |  9 ++++-----
->  9 files changed, 40 insertions(+), 32 deletions(-)
-> 
-[...]
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> index 194af7f607a6..5110cd9b2425 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> @@ -101,8 +101,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->  		return 0;
->  	}
->  
-> -	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
-> -					 pfdev->comp->num_supplies);
-> +	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names);
->  	if (ret) {
->  		/* Continue if the optional regulator is missing */
->  		if (ret != -ENODEV) {
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> index 7fcbc2a5b6cd..8a4bef65d38c 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> @@ -625,24 +625,29 @@ static int panfrost_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -static const char * const default_supplies[] = { "mali" };
-> +/*
-> + * The OPP core wants the supply names to be NULL terminated, but we need the
-> + * correct num_supplies value for regulator core. Hence, we NULL terminate here
-> + * and then initialize num_supplies with ARRAY_SIZE - 1.
-> + */
-> +static const char * const default_supplies[] = { "mali", NULL };
->  static const struct panfrost_compatible default_data = {
-> -	.num_supplies = ARRAY_SIZE(default_supplies),
-> +	.num_supplies = ARRAY_SIZE(default_supplies) - 1,
->  	.supply_names = default_supplies,
->  	.num_pm_domains = 1, /* optional */
->  	.pm_domain_names = NULL,
->  };
->  
->  static const struct panfrost_compatible amlogic_data = {
-> -	.num_supplies = ARRAY_SIZE(default_supplies),
-> +	.num_supplies = ARRAY_SIZE(default_supplies) - 1,
->  	.supply_names = default_supplies,
->  	.vendor_quirk = panfrost_gpu_amlogic_quirk,
->  };
->  
-> -static const char * const mediatek_mt8183_supplies[] = { "mali", "sram" };
-> +static const char * const mediatek_mt8183_supplies[] = { "mali", "sram", NULL };
->  static const char * const mediatek_mt8183_pm_domains[] = { "core0", "core1", "core2" };
->  static const struct panfrost_compatible mediatek_mt8183_data = {
-> -	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies),
-> +	.num_supplies = ARRAY_SIZE(mediatek_mt8183_supplies) - 1,
->  	.supply_names = mediatek_mt8183_supplies,
->  	.num_pm_domains = ARRAY_SIZE(mediatek_mt8183_pm_domains),
->  	.pm_domain_names = mediatek_mt8183_pm_domains,
+On Wed, Jul 6, 2022 at 11:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jul 06, 2022 at 04:51:59PM +0800, Zhang Rui wrote:
+> > On Wed, 2022-07-06 at 09:16 +0200, Varad Gautam wrote:
+> > > On Wed, Jul 6, 2022 at 8:45 AM Greg KH <gregkh@linuxfoundation.org>
+> > > wrote:
+> > > >
+> > > > On Tue, Jul 05, 2022 at 11:02:50PM +0200, Varad Gautam wrote:
+> > > > > On Tue, Jul 5, 2022 at 6:18 PM Greg KH <
+> > > > > gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Tue, Jul 05, 2022 at 03:00:02PM +0000, Varad Gautam wrote:
+> > > > > > > Check that a user-provided thermal state is within the
+> > > > > > > maximum
+> > > > > > > thermal states supported by a given driver before attempting
+> > > > > > > to
+> > > > > > > apply it. This prevents a subsequent OOB access in
+> > > > > > > thermal_cooling_device_stats_update() while performing
+> > > > > > > state-transition accounting on drivers that do not have this
+> > > > > > > check
+> > > > > > > in their set_cur_state() handle.
+> > > > > > >
+> > > > > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > ---
+> > > > > > >  drivers/thermal/thermal_sysfs.c | 12 +++++++++++-
+> > > > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/thermal/thermal_sysfs.c
+> > > > > > > b/drivers/thermal/thermal_sysfs.c
+> > > > > > > index 1c4aac8464a7..0c6b0223b133 100644
+> > > > > > > --- a/drivers/thermal/thermal_sysfs.c
+> > > > > > > +++ b/drivers/thermal/thermal_sysfs.c
+> > > > > > > @@ -607,7 +607,7 @@ cur_state_store(struct device *dev,
+> > > > > > > struct device_attribute *attr,
+> > > > > > >               const char *buf, size_t count)
+> > > > > > >  {
+> > > > > > >       struct thermal_cooling_device *cdev =
+> > > > > > > to_cooling_device(dev);
+> > > > > > > -     unsigned long state;
+> > > > > > > +     unsigned long state, max_state;
+> > > > > > >       int result;
+> > > > > > >
+> > > > > > >       if (sscanf(buf, "%ld\n", &state) != 1)
+> > > > > > > @@ -618,10 +618,20 @@ cur_state_store(struct device *dev,
+> > > > > > > struct device_attribute *attr,
+> > > > > > >
+> > > > > > >       mutex_lock(&cdev->lock);
+> > > > > > >
+> > > > > > > +     result = cdev->ops->get_max_state(cdev, &max_state);
+> > > > > > > +     if (result)
+> > > > > > > +             goto unlock;
+> > > > > > > +
+> > > > > > > +     if (state > max_state) {
+> > > > > > > +             result = -EINVAL;
+> > > > > > > +             goto unlock;
+> > > > > > > +     }
+> > > > > > > +
+> > > > > > >       result = cdev->ops->set_cur_state(cdev, state);
+> > > > > >
+> > > > > > Why doesn't set_cur_state() check the max state before setting
+> > > > > > it?  Why
+> > > > > > are the callers forced to always check it before?  That feels
+> > > > > > wrong...
+> > > > > >
+> > > > >
+> > > > > The problem lies in thermal_cooling_device_stats_update(), not
+> > > > > set_cur_state().
+> > > > >
+> > > > > If ->set_cur_state() doesn't error out on invalid state,
+> > > > > thermal_cooling_device_stats_update() does a:
+> > > > >
+> > > > > stats->trans_table[stats->state * stats->max_states +
+> > > > > new_state]++;
+> > > > >
+> > > > > stats->trans_table reserves space depending on max_states, but
+> > > > > we'd end up
+> > > > > reading/writing outside it. cur_state_store() can prevent this
+> > > > > regardless of
+> > > > > the driver's ->set_cur_state() implementation.
+> > > >
+> > > > Why wouldn't cur_state_store() check for an out-of-bounds condition
+> > > > by
+> > > > calling get_max_state() and then return an error if it is invalid,
+> > > > preventing thermal_cooling_device_stats_update() from ever being
+> > > > called?
+> > > >
+> > >
+> > > That's what this patch does, it adds the out-of-bounds check.
+> >
+> > No, I think Greg' question is
+> > why cdev->ops->set_cur_state() return 0 when setting a cooling state
+> > that exceeds the maximum cooling state?
+>
+> Yes, that is what I am asking, it should not allow a state to be
+> exceeded.
+>
 
-Reviewed-by: Steven Price <steven.price@arm.com>
+Indeed, it is upto the driver to return !0 from cdev->ops->set_cur_state()
+when setting state > max - and it is a driver bug for not doing so.
 
-Thanks for the rework, much cleaner.
+But a buggy driver should not lead to cur_state_store() performing an OOB
+access.
 
-Steve
-
+> thanks,
+>
+> greg k-h
