@@ -2,157 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1D45692D9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Jul 2022 21:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB01569511
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Jul 2022 00:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiGFTtT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Jul 2022 15:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        id S231872AbiGFWKq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Jul 2022 18:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiGFTtT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 15:49:19 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7503217065
-        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 12:49:18 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id o12so1703777pfp.5
-        for <linux-pm@vger.kernel.org>; Wed, 06 Jul 2022 12:49:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=5W6vJvOFXnXPMLwp26uhNrAQcL07LrTq8GzeGAp4zr0=;
-        b=m+QsKUWIEBP/rc2Vx7Di3sMln2ivgx4WeK2rMN61ZIR+QMEITyTKidVZHHiHfl7+Cv
-         bMIbP4M/Sag7aeuhfJa9ytQFWGfx+lpDAa1cRcpgtDZKDhW/+HCozdNXxJkfr6zrUnSm
-         lgitb6GpyvTs4nNa2r2Boivjeg9YRA3DSFIZL9uHgiqogrlqNazQqIicNA4eAnCCRFIo
-         QQoHnggV9QkJTV+kv4SGrMinLizzSBlfYqRxqzc02WfKKMTC6xGbVhtrdLk+Hwx0NA9Q
-         xUNQe46wpM6aqmPecnpDS1gY5Jjeeimz1pi1BcrETrIrtn6SStmUHPcvi47Yq41a198G
-         fQ+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=5W6vJvOFXnXPMLwp26uhNrAQcL07LrTq8GzeGAp4zr0=;
-        b=kAxS0xwfE2EGqaOWi8ODz3tEcW8eBQfEvZhF6Usya/VHN0NFbRPuDc0yyLNIVW131c
-         +p9DpVCLsWGC4dzhjjtgDJB41UYjikGK7UcsaX5dy3Otf47QPrXlCmubW5F6KQnUXTts
-         kVRO4K+ANxssUc4JiX2ipeM29WeNglLT9zngv7RUCIVyRpBJNagmnWl2aloYwkTZPzAo
-         NCc7GwuFufmv1D5DQ/WTqIRcuGygnN0wnDGP/xqRHWkoXrdI6QhnYr0qkr0JFL565GZe
-         Rg9ikKyWa+Efz5Mg9djQi4BBY8tr6SVcOVxUFmCG1VDPHJw2XG4/cnBmNcMAHIMVj/OJ
-         hIOg==
-X-Gm-Message-State: AJIora9Ud6AG83yDuFOclViJArGMlZ5yUnS3E8va6iUtvGjJXnfDrQ4P
-        whUNAoBzKc7zfKR1OtHl7x9QtZndixBrnYQs
-X-Google-Smtp-Source: AGRyM1tOFgYChWHjDsZ/427P14UfYy9ng2VxVXRomW5a6zIfKbippCWV3xdRywdbOowl3qXjjZJ44A==
-X-Received: by 2002:a63:710c:0:b0:40c:adcf:ce72 with SMTP id m12-20020a63710c000000b0040cadcfce72mr36782581pgc.310.1657136958015;
-        Wed, 06 Jul 2022 12:49:18 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id t12-20020a170902e84c00b0016c0d531448sm87164plg.276.2022.07.06.12.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 12:49:17 -0700 (PDT)
-Message-ID: <62c5e73d.1c69fb81.22b61.040f@mx.google.com>
-Date:   Wed, 06 Jul 2022 12:49:17 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        with ESMTP id S234300AbiGFWKm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Jul 2022 18:10:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A10C29806
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 15:10:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2635FB81F19
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 22:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC303C341D5
+        for <linux-pm@vger.kernel.org>; Wed,  6 Jul 2022 22:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657145439;
+        bh=2Dcvz1S2Ga1R7AxQZPzGlCMtVPm+ZVpi2Uia8L5y/gE=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=t1pOmIO+F1O2sdvkgj28YpVfmc/iyC9mIYaXHbEazTDBIUKaHUhZuUjGOjoxroT3H
+         ugj1/MTrA4XyLeepJbrSxSU/dz8a2cz5mEYdjnW3Iad50nKNKTpWKwvpnUDuRmB4aJ
+         gYD9GT2QC+hZEWZoI61dG/Y+IiNbkaUC2DFh0nSEXsbxB3OZwcLdiEI4sLZB6g2N6g
+         vR3GIF/gqVz86wzMz+ASg1eMQL7iAsg8cH3kZVWscgOMJiyjfYvvs0g6zGWU4Biv1K
+         meGQT9b/oDnsh3WrB5/HuFJD9DqpNRQ0UKy1N/ItOYSCiyufhsWav39eaRDqqy16Zb
+         E/ghM2srtOGmg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id D1982CBF854; Wed,  6 Jul 2022 22:10:38 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
+ frequency above 2200MHz for a desktop Zen 3 CPU
+Date:   Wed, 06 Jul 2022 22:10:38 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215800-137361-dLRciTaYNl@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
+References: <bug-215800-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.19-rc5-58-gf97e5813664c
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.19-rc5-58-gf97e5813664c)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc5-58-gf9=
-7e5813664c)
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-19-rc5-58-gf97e5813664c/
+--- Comment #23 from Artem S. Tashkinov (aros@gmx.com) ---
+(In reply to perry_yuan from comment #22)
+> Please drop the replace parameter when loading driver, that patch is not
+> merged by upstream yet.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.19-rc5-58-gf97e5813664c
-Git Commit: f97e5813664c9631f3890f316cc9c8da611719ea
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+This is reproducible when booting with the amd-pstate driver.
 
-Warnings Detected:
+--=20
+You may reply to this email to add a comment.
 
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+You are receiving this mail because:
+You are the assignee for the bug.=
