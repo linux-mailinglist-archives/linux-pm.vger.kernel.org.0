@@ -2,193 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D091569DCB
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Jul 2022 10:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B84569EAB
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Jul 2022 11:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbiGGIpR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jul 2022 04:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S235229AbiGGJic (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Jul 2022 05:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbiGGIpJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 04:45:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563D813F9F;
-        Thu,  7 Jul 2022 01:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657183508; x=1688719508;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=edbKoKalbvq90CBmxogPesuIiDjl8rwJ49B+zZvetjQ=;
-  b=BfVKisWKCdx8CvBHxqsYg7j9cXv26yoQXE72HrhvrsHZACMcDf+Q4QeE
-   iezKOt76usGXV+kbwaKO7ucB7IaYA4gBUybR0oLB4xyC1Vm4hlMy3Mfqh
-   9orF/TMUfYsnaA4siDN3OfNN2ZHi8li2Tg62mdzzqPrFaDG0JJbV+DRPP
-   iwpbPp2cvvpvUZ62IKMOCHbcsc96XaEccZnOxR3WRawWvB7mbC3jKctJN
-   8CAuCUDBdHrDFmaFdIMnnGGbzhA6JCPGgQiHYVbqMyi9DeZgOTiWpgxom
-   oJhCT3UL+2okh6qNBEUcmQZZmIof0uguLdB3ImckLr4T46d5mInnCBOBg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="345659129"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="345659129"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:45:06 -0700
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="651047273"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.6]) ([10.255.31.6])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:44:45 -0700
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 088b9c375534d905a4d337c78db3b3bfbb52c4a0
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        virtualization@lists.linux-foundation.org,
-        usbb2k-api-dev@nongnu.org, tipc-discussion@lists.sourceforge.net,
-        target-devel@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        samba-technical@lists.samba.org, rds-devel@oss.oracle.com,
-        patches@opensource.cirrus.com, osmocom-net-gprs@lists.osmocom.org,
-        openipmi-developer@lists.sourceforge.net, nvdimm@lists.linux.dev,
-        ntb@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
-        megaraidlinux.pdl@broadcom.com, linuxppc-dev@lists.ozlabs.org,
-        linux1394-devel@lists.sourceforge.net, linux-x25@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-sctp@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-parport@lists.infradead.org,
-        linux-parisc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-nfc@lists.01.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linaro-mm-sig@lists.linaro.org,
-        legousb-devel@lists.sourceforge.net, kvm@vger.kernel.org,
-        keyrings@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
-        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
-        intel-wired-lan@lists.osuosl.org, greybus-dev@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, dm-devel@redhat.com,
-        devicetree@vger.kernel.org, dev@openvswitch.org,
-        dccp@vger.kernel.org, damon@lists.linux.dev,
-        coreteam@netfilter.org, cgroups@vger.kernel.org,
-        ceph-devel@vger.kernel.org, ath11k@lists.infradead.org,
-        apparmor@lists.ubuntu.com, amd-gfx@lists.freedesktop.org,
-        alsa-devel@alsa-project.org,
-        accessrunner-general@lists.sourceforge.net
-References: <62c683a2.g1VSVt6BrQC6ZzOz%lkp@intel.com>
- <YsaUgfPbOg7WuBuB@kroah.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <c86816fd-aaba-01a9-5def-44868f0a46c9@intel.com>
-Date:   Thu, 7 Jul 2022 16:44:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        with ESMTP id S235228AbiGGJia (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 05:38:30 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75D764EC
+        for <linux-pm@vger.kernel.org>; Thu,  7 Jul 2022 02:38:28 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id o4so25484237wrh.3
+        for <linux-pm@vger.kernel.org>; Thu, 07 Jul 2022 02:38:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9kWQOrhoFmy774oTZXorQk1Sl8VEFQpTuVhXI8f62Fg=;
+        b=Gtbe+RgzEMUXiokTKTzNmYpNVvw6yOPQVvghv90mIBKpwaZFctO7qwcjZU8CXJi8Xp
+         VM8ud0JRdl8qS6XBBsh7RoGUQcK95WTzyiD4lwXH9PtUn/B+zq5lSA7JWDdRr8DmUf4C
+         xWEO7ohWseQ4l3+c6Ad5OQmaUlRtKhltruVGF5sw+KE/mXKxiU4vPaGyXSKhoFrAwj0k
+         6M+Nex/CHlr7TjIisai7JXuSRdvNhRMyf45ka2DqaTVnCHsim3j/yRRUw1n4TVj/f89b
+         85kCZ+WTbr4/FSHxSRyjbt5xs31+dZx4BShJ53c3Hm3BLhrgdkOKj1QhOgkotZBlg0W5
+         bsjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9kWQOrhoFmy774oTZXorQk1Sl8VEFQpTuVhXI8f62Fg=;
+        b=sdw55Wkcg2s5RlVdH3YbkCi6LI3OfP3ln/flvyJC4tFALbdu3XXxEcM1fKQpsvdUzH
+         avItTDAEiX08asgRpSBbUJeFlGr37YzuF52UN8YDB3jDsw7rrIXlQSMrjYUeKeCI4/47
+         AS/ieVCJMgztmty1PktHtFDad2ubt/+nOIi4yA4qOhTzrt8VWjSiH/i6mjdUq2nyLxst
+         nm02CvzPO6m1k1jb3e0Pk1GBXcU4IpvwuOvqpROilr59doyiFVSeZ8Wmzl5WpduekAAg
+         9DPs69dkkz6zIAHPV4WaqqdGayIBQpoJHBcc1+o7jdn5DmiN4MqwotAQtyNuurCJezXK
+         qWkw==
+X-Gm-Message-State: AJIora9TWFq8gspfz+PGS5szLydAyCRX1mh/C/JMNP0A9eu8s01HaBcn
+        6BIHjdsCYPLCIG7DWIDt3+ESEg==
+X-Google-Smtp-Source: AGRyM1tbUaUSzMdnUl4PWsdemUZoobZzVtm+vBha/cvhQpP4EuC4TTRfh7ln3HJlSEL4j9z2t6DWng==
+X-Received: by 2002:a05:6000:15c6:b0:21b:ccda:fc69 with SMTP id y6-20020a05600015c600b0021bccdafc69mr42022615wry.411.1657186707260;
+        Thu, 07 Jul 2022 02:38:27 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id g1-20020adffc81000000b00213ba3384aesm38877781wrr.35.2022.07.07.02.38.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 02:38:26 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     djakov@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        shawn.guo@linaro.org, dmitry.baryshkov@linaro.org,
+        leo.yan@linaro.org, bryan.odonoghue@linaro.org
+Subject: [PATCH] interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth
+Date:   Thu,  7 Jul 2022 10:38:23 +0100
+Message-Id: <20220707093823.1691870-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-In-Reply-To: <YsaUgfPbOg7WuBuB@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Make it possible to set destination as well as source bandwidth. If the
+*dst pointer is non-NULL. Right now it appears that we never make the
+destination bw allocation call, which is inconsistent with the downstream
+way of doing this.
 
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ drivers/interconnect/qcom/icc-rpm.c | 41 +++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 11 deletions(-)
 
-On 7/7/2022 4:08 PM, Greg KH wrote:
-> On Thu, Jul 07, 2022 at 02:56:34PM +0800, kernel test robot wrote:
->> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->> branch HEAD: 088b9c375534d905a4d337c78db3b3bfbb52c4a0  Add linux-next specific files for 20220706
->>
->> Error/Warning reports:
->>
->> https://lore.kernel.org/linux-doc/202207070644.x48XOOvs-lkp@intel.com
->>
->> Error/Warning: (recently discovered and may have been fixed)
->>
->> Documentation/arm/google/chromebook-boot-flow.rst: WARNING: document isn't included in any toctree
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1108): undefined reference to `__aeabi_ddiv'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1124): undefined reference to `__aeabi_ui2d'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1164): undefined reference to `__aeabi_dmul'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1170): undefined reference to `__aeabi_dadd'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1180): undefined reference to `__aeabi_dsub'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1190): undefined reference to `__aeabi_d2uiz'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x162c): undefined reference to `__aeabi_d2iz'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x16b0): undefined reference to `__aeabi_i2d'
->> dc_dmub_srv.c:(.text+0x10f8): undefined reference to `__aeabi_ui2d'
->> dc_dmub_srv.c:(.text+0x464): undefined reference to `__floatunsidf'
->> dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x33c): undefined reference to `__floatunsidf'
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for 'pci_read' [-Wmissing-prototypes]
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for 'pci_write' [-Wmissing-prototypes]
->> drivers/vfio/vfio_iommu_type1.c:2141:35: warning: cast to smaller integer type 'enum iommu_cap' from 'void *' [-Wvoid-pointer-to-enum-cast]
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x34c): undefined reference to `__floatunsidf'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x378): undefined reference to `__divdf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x38c): undefined reference to `__muldf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3a0): undefined reference to `__adddf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3b4): undefined reference to `__subdf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3d4): undefined reference to `__fixunsdfsi'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x750): undefined reference to `__fixdfsi'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x7c0): undefined reference to `__floatsidf'
->> powerpc-linux-ld: drivers/pci/endpoint/functions/pci-epf-vntb.c:174: undefined reference to `ntb_link_event'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x468): undefined reference to `__divdf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x46c): undefined reference to `__muldf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x470): undefined reference to `__adddf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x474): undefined reference to `__subdf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x478): undefined reference to `__fixunsdfsi'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x47c): undefined reference to `__fixdfsi'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x480): undefined reference to `__floatsidf'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x60c): undefined reference to `__floatunsidf'
->>
->> Unverified Error/Warning (likely false positive, please contact us if interested):
->>
->> arch/x86/events/core.c:2114 init_hw_perf_events() warn: missing error code 'err'
->> drivers/android/binder.c:1481:19-23: ERROR: from is NULL but dereferenced.
->> drivers/android/binder.c:2920:29-33: ERROR: target_thread is NULL but dereferenced.
->> drivers/android/binder.c:353:25-35: ERROR: node -> proc is NULL but dereferenced.
->> drivers/android/binder.c:4888:16-20: ERROR: t is NULL but dereferenced.
->> drivers/base/regmap/regmap.c:1996:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/char/random.c:869:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/firmware/arm_scmi/clock.c:394:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/firmware/arm_scmi/powercap.c:376:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/vega10_powertune.c:1214:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/gpu/drm/amd/display/dc/os_types.h: drm/drm_print.h is included more than once.
->> drivers/gpu/drm/bridge/ite-it66121.c:1398:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/greybus/operation.c:617:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> 
-> <snip>
-> 
-> When the compiler crashes, why are you blaming all of these different
-> mailing lists?  Perhaps you need to fix your compiler :)
-> 
-> thanks,
-> 
-> greg k-h
-> 
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+index fb013191c29b9..7e8bcbb2f5dba 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -233,10 +233,30 @@ static int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
+ 	return ret;
+ }
+ 
++static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
++			  u64 sum_bw)
++{
++	int ret;
++
++	if (!qn->qos.ap_owned) {
++		/* send bandwidth request message to the RPM processor */
++		ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
++		if (ret)
++			return ret;
++	} else if (qn->qos.qos_mode != -1) {
++		/* set bandwidth directly from the AP */
++		ret = qcom_icc_qos_set(n, sum_bw);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ {
+ 	struct qcom_icc_provider *qp;
+-	struct qcom_icc_node *qn;
++	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
+ 	struct icc_provider *provider;
+ 	struct icc_node *n;
+ 	u64 sum_bw;
+@@ -246,7 +266,9 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ 	u32 agg_peak = 0;
+ 	int ret, i;
+ 
+-	qn = src->data;
++	src_qn = src->data;
++	if (dst)
++		dst_qn = dst->data;
+ 	provider = src->provider;
+ 	qp = to_qcom_provider(provider);
+ 
+@@ -257,21 +279,18 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ 	sum_bw = icc_units_to_bps(agg_avg);
+ 	max_peak_bw = icc_units_to_bps(agg_peak);
+ 
+-	if (!qn->qos.ap_owned) {
+-		/* send bandwidth request message to the RPM processor */
+-		ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
+-		if (ret)
+-			return ret;
+-	} else if (qn->qos.qos_mode != -1) {
+-		/* set bandwidth directly from the AP */
+-		ret = qcom_icc_qos_set(src, sum_bw);
++	ret = __qcom_icc_set(src, src_qn, sum_bw);
++	if (ret)
++		return ret;
++	if (dst_qn) {
++		ret = __qcom_icc_set(dst, dst_qn, sum_bw);
+ 		if (ret)
+ 			return ret;
+ 	}
+ 
+ 	rate = max(sum_bw, max_peak_bw);
+ 
+-	do_div(rate, qn->buswidth);
++	do_div(rate, src_qn->buswidth);
+ 	rate = min_t(u64, rate, LONG_MAX);
+ 
+ 	for (i = 0; i < qp->num_clks; i++) {
+-- 
+2.36.1
 
-Hi Greg,
-
-Sorry for the inconvience, we'll fix it ASAP.
-
-Best Regards,
-Rong Chen
