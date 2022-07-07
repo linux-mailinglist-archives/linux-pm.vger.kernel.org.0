@@ -2,44 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A664956A03B
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Jul 2022 12:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE45356A04E
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Jul 2022 12:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbiGGKpC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jul 2022 06:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S234912AbiGGKrF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Jul 2022 06:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbiGGKpB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 06:45:01 -0400
+        with ESMTP id S234884AbiGGKrF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 06:47:05 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AFB445055;
-        Thu,  7 Jul 2022 03:45:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03C244D4C0;
+        Thu,  7 Jul 2022 03:47:04 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 301BE1063;
-        Thu,  7 Jul 2022 03:45:00 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 238E31063;
+        Thu,  7 Jul 2022 03:47:04 -0700 (PDT)
 Received: from [10.57.11.194] (unknown [10.57.11.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F1F4A3F792;
-        Thu,  7 Jul 2022 03:44:56 -0700 (PDT)
-Message-ID: <e6d5ad5c-7014-2a34-cabc-84a94d3c84ee@arm.com>
-Date:   Thu, 7 Jul 2022 11:44:55 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E2DA3F792;
+        Thu,  7 Jul 2022 03:47:00 -0700 (PDT)
+Message-ID: <41c333e1-2545-f6be-2db2-9061297d0b9a@arm.com>
+Date:   Thu, 7 Jul 2022 11:46:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/4] PM: EM: convert power field to micro-Watts
- precision and align drivers
+Subject: Re: [PATCH v2 0/4] Energy Model power in micro-Watts and SCMI v3.1
+ alignment
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        dietmar.eggemann@arm.com, nm@ti.com, sboyd@kernel.org,
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, rui.zhang@intel.com,
+        viresh.kumar@linaro.org, dietmar.eggemann@arm.com, nm@ti.com,
+        sboyd@kernel.org, linux-kernel@vger.kernel.org,
         sudeep.holla@arm.com, cristian.marussi@arm.com,
         matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+        linux-arm-kernel@lists.infradead.org
 References: <20220707071555.10085-1-lukasz.luba@arm.com>
- <20220707071555.10085-2-lukasz.luba@arm.com>
- <9b4bd8b5-d5d9-7f75-128a-87b727ad0bd7@linaro.org>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <9b4bd8b5-d5d9-7f75-128a-87b727ad0bd7@linaro.org>
+In-Reply-To: <20220707071555.10085-1-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -51,52 +50,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rafael,
 
-
-On 7/7/22 09:31, Daniel Lezcano wrote:
-> On 07/07/2022 09:15, Lukasz Luba wrote:
->> The milli-Watts precision causes rounding errors while calculating
->> efficiency cost for each OPP. This is especially visible in the 'simple'
->> Energy Model (EM), where the power for each OPP is provided from OPP
->> framework. This can cause some OPPs to be marked inefficient, while
->> using micro-Watts precision that might not happen.
->>
->> Update all EM users which access 'power' field and assume the value is
->> in milli-Watts.
->>
->> Solve also an issue with potential overflow in calculation of energy
->> estimation on 32bit machine. It's needed now since the power value
->> (thus the 'cost' as well) are higher.
->>
->> Example calculation which shows the rounding error and impact:
->>
->> power = 'dyn-power-coeff' * volt_mV * volt_mV * freq_MHz
->>
->> power_a_uW = (100 * 600mW * 600mW * 500MHz) / 10^6 = 18000
->> power_a_mW = (100 * 600mW * 600mW * 500MHz) / 10^9 = 18
->>
->> power_b_uW = (100 * 605mW * 605mW * 600MHz) / 10^6 = 21961
->> power_b_mW = (100 * 605mW * 605mW * 600MHz) / 10^9 = 21
->>
->> max_freq = 2000MHz
->>
->> cost_a_mW = 18 * 2000MHz/500MHz = 72
->> cost_a_uW = 18000 * 2000MHz/500MHz = 72000
->>
->> cost_b_mW = 21 * 2000MHz/600MHz = 70 // <- artificially better
->> cost_b_uW = 21961 * 2000MHz/600MHz = 73203
->>
->> The 'cost_b_mW' (which is based on old milli-Watts) is misleadingly
->> better that the 'cost_b_uW' (this patch uses micro-Watts) and such
->> would have impact on the 'inefficient OPPs' information in the Cpufreq
->> framework. This patch set removes the rounding issue.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+On 7/7/22 08:15, Lukasz Luba wrote:
+> Hi all,
 > 
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> This is a patch set which changes Energy Model power values scale to
+> micro-Watts. It also upgrades the SCMI performance layer + scmi-cpufreq
+> driver to leverage the SCMI v3.1 spec and process micro-Watts power values
+> coming from FW. The higher precision in EM power field solves an issue
+> of a rounding error, which then can be misinterpreted as 'inefficient OPP'.
+> An example rounding issue calculation is present in patch 1/4 description.
 > 
+> Changes:
+> v2
+> - simplified 32bit checks for max number of CPUs preventing energy
+>    estimation overflow
+> - added Reviewed-by and ACKs
+> v1 [1]
 > 
+> Regards,
+> Lukasz Luba
+> 
+> [1] https://lore.kernel.org/lkml/20220622145802.13032-1-lukasz.luba@arm.com/
+> 
+> Lukasz Luba (4):
+>    PM: EM: convert power field to micro-Watts precision and align drivers
+>    Documentation: EM: Switch to micro-Watts scale
+>    firmware: arm_scmi: Get detailed power scale from perf
+>    cpufreq: scmi: Support the power scale in micro-Watts in SCMI v3.1
+> 
+>   Documentation/power/energy-model.rst  | 14 +++----
+>   drivers/cpufreq/mediatek-cpufreq-hw.c |  7 ++--
+>   drivers/cpufreq/scmi-cpufreq.c        | 15 +++++++-
+>   drivers/firmware/arm_scmi/perf.c      | 18 +++++----
+>   drivers/opp/of.c                      | 15 ++++----
+>   drivers/powercap/dtpm_cpu.c           |  5 +--
+>   drivers/thermal/cpufreq_cooling.c     | 13 ++++++-
+>   drivers/thermal/devfreq_cooling.c     | 19 ++++++++--
+>   include/linux/energy_model.h          | 54 +++++++++++++++++++--------
+>   include/linux/scmi_protocol.h         |  8 +++-
+>   kernel/power/energy_model.c           | 24 ++++++++----
+>   11 files changed, 132 insertions(+), 60 deletions(-)
 > 
 
-Thanks Daniel! I'll ping Rafael to take this via his PM tree
-
+I got ACKs (and on Reviewed-by) for this patch set.
+Could you take this via your PM tree, please?
