@@ -2,250 +2,399 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668FD56A6D8
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Jul 2022 17:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9892556A72D
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Jul 2022 17:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235202AbiGGP1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jul 2022 11:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
+        id S235645AbiGGPk4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Jul 2022 11:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiGGP1d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 11:27:33 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2050.outbound.protection.outlook.com [40.107.237.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA6F2E6A9;
-        Thu,  7 Jul 2022 08:27:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HQ6iK8ZMk32JEZ7j47i+b5AdZbA2MFOx4QK8b1krvsIIPz3up3Hcu+FkrDb09ckIOAPlWySuITWLOO/MC52KV1n9zgi45gEbT2jqtLHWp6h/6cYd6KR1abIXhOKiwqmC6IHtfe+qBE1Ja4r1t1q0NqKN55uYeMFaE07gy4RtKC1H7gksw6TNOBYdoPKGdehzbQYFlJvWaxrNtCzpLHcrDDotRiCJEk7glHH6BPva6xn20IWAXejG3pyoVBmKlP9M2djdZCTJW+6eG+1XEsEl4eUuTM0Pk1RV5BB7SHBvD7EQ0ndCQr40puFooazdMPqEYAWmFJcnrXNs9oEwFoSouA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cflTPdaTBS1qx1FqCstuBaDzkotQcI+iTKIiMAHC/y0=;
- b=Vpu+bucFYSgSXzXNZ6Wlhf13sV9dBxfBEeM5ZvxRHxo0ygRBoSNy/reLXW/4/AVWY9XvFX5NXf6vbrSqq9GYPTpuPMQeiEJZAYkaYDGPucLkbcHq5CR8yK2agjSsFh/hWQZi1JR/UL+HyWGh/QBCs42aJkie4gzPiy13JATrzcLGRMXvcrfQuyEWEI59RzHSkaCrIyqrJSN2ZYFQi9aAStCrFwRlEseRtyz0ND5hV4YkyDtkEJB7D4wyOVzqQORJbtNdCNkm6Li50VnOCLrWdgQx4gXgAs9sUsecHBr6VMinm/zjT0aS4c9ZAgkNCP/diBci30Jmko9YZua9T9+eFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cflTPdaTBS1qx1FqCstuBaDzkotQcI+iTKIiMAHC/y0=;
- b=BQYI3TWWgKOK5DulZ7X2dLwiZnnKfsF9cnoORRkTQWR1zF+8/wsU1VUB1Pzih+Q19vxm/AfrnPmxjO4Jg5EypxwDNU7VnCIinWKtXt/6VUH10/7dLVnB4juyKV8arRfbicwaFEvdtpEsbC9NRa6lSph8QaAPR2SoH8kMmDMmXgM=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM6PR12MB3483.namprd12.prod.outlook.com (2603:10b6:5:11f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Thu, 7 Jul
- 2022 15:27:24 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::1143:10a5:987a:7598]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::1143:10a5:987a:7598%5]) with mapi id 15.20.5395.021; Thu, 7 Jul 2022
- 15:27:24 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "dmy@semihalf.com" <dmy@semihalf.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "dbehr@google.com" <dbehr@google.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>,
-        "zide.chen@intel.corp-partner.google.com" 
-        <zide.chen@intel.corp-partner.google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sachi King <nakato@nakato.io>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Subject: RE: [RFC PATCH 0/2] x86: allow to notify host about guest entering
- s2idle
-Thread-Topic: [RFC PATCH 0/2] x86: allow to notify host about guest entering
- s2idle
-Thread-Index: AQHYkgDy4lzAjPGC9UKu5zAtzCiz0q1zB75w
-Date:   Thu, 7 Jul 2022 15:27:24 +0000
-Message-ID: <MN0PR12MB610107D8E99AC05C7884AEE6E2839@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <20220707125329.378277-1-jaz@semihalf.com>
-In-Reply-To: <20220707125329.378277-1-jaz@semihalf.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-07-07T15:27:21Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=5e06c8fa-9fa7-4eef-8d22-2ac09137181a;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-07-07T15:27:23Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: de8b1b8a-0829-411d-8f2b-c933272e8c83
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 342b7545-8776-403e-e510-08da602d3195
-x-ms-traffictypediagnostic: DM6PR12MB3483:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MbkCYreULCjtP+eb8nktS3Nm4V4H7hwRH0bXEWA9g58wsymtdf+p4pfdptfw8XnhmD0/CNQcizMf4F6BG22p3HnHnMckT2CotBY70snCsqbhFhEoSawvzNpI6k7JjXS/HoKWt/C7LBjsImYTwGcR4ypIWOhcxNIc9S0Cne4N03ybCdbwF5cbBBLX9vRU3TBsYUyUJxRXDuL6RZNQ9jlcd+tjuQnh+ozGR7JjOkfBHOgYJUxMLCGNu4kuxkUMfwiWGB1TMU+SDF2g/pbTI7SrHIR7cJcAV9UUb0sdgFa8A6/2mzYGg9fp4cjIG8M+EltC0YH0yHr1tIJDN4YGGbHDu/OP4vRfUHalfC8cUDDmO5PqUhtwVDvHzFsQCS8UXROaywKzD8g6c7QJk/N6wmi+VG9REjSTDbT2k1Pv7zjmCrHxFoWeppc4f1qNmW13uezYuilfFxMTeIsKugX8SWaezNGG/125VbgKMMKbhvzkECeGdiyd909x/84EbdZOJLNyq74yGXg/u17gxzWvlrMcRTgVZPg+6Pb/Zs2kRDgFJ7zLSQBw4fI0U7rB8jehmkVuRcdCzP3swcjO28FH4QhWsS72gOaoldvIh7CJPYRCaauWHC9DNHS3jTzBWPL9MIZJaKUoXX/3sF6CWLseU+XYfjZ0N9STyEO4gAQch2wGV9KpfsSeBJER1ic8pgnvRz27xHhEc8H/HwnPjkOe+5yklUQp2FUasIAJOzt65/G0nVU7ayP3jiHh0vJ4rU3fSvPhBfNSpZKCm7jXZXVskK19QdnQSF+p05Axe/rqrLDXpjWp+j+u28vmhRJcA7DtknPkawFn6XmP7Y0/6ksnGkFRzWL+IkMGdiXiwhSGWJY0ZDXt5s2sOjcMJjE3Gim9Rgbz
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(346002)(396003)(39860400002)(376002)(45080400002)(6506007)(966005)(9686003)(54906003)(110136005)(38100700002)(186003)(316002)(41300700001)(8676002)(66946007)(38070700005)(4326008)(76116006)(53546011)(26005)(8936002)(86362001)(122000001)(64756008)(55016003)(52536014)(83380400001)(7416002)(478600001)(71200400001)(2906002)(5660300002)(66446008)(66556008)(7696005)(33656002)(66476007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WUz86dADOHKj3ckIaSvg4QCKzvI8bD7h3kr5a+UqB2u4PqZNV8z7d5DKS9E+?=
- =?us-ascii?Q?I/rnWSKWxmrQKhnHKmRRez0wgafw+EwzV2jRegfTNMwNRXP6/knwQYTqIC37?=
- =?us-ascii?Q?Vtsrp86SRqlYssey3k2MaR4D5rdAau49nNA6ySBgBJRhLczGB7xgVweXxu7i?=
- =?us-ascii?Q?uPdm4UxNKoEsaoonStcrvttZ7vnIAORcClc4njJWhVSJNjNZilQRTu8+kf3n?=
- =?us-ascii?Q?aFLzz41SALnJY7O0Ivg7FuskOysi/ObwGNVRDHPauAD9FRDj4O0WvXnMRd/j?=
- =?us-ascii?Q?8AFgbtG5LmjOB3GQMfa03+IqC4QdR8YKAB7FobpBND/E/l4qR++/pdkbNr3F?=
- =?us-ascii?Q?5hHlkoONkfUkwJu3ETUioLvVLyCd2Y9ZeZ3TGW66+/dinQp2sq4ihRUpoM+J?=
- =?us-ascii?Q?cLlCWu5OreIF7Dy7yq6XQ8tFoH/uxEr9kN10OThWxf3ITE9tOgpjrFsUv+5Z?=
- =?us-ascii?Q?/OpLCLEJUoIC2oaAy/hvzcfBoQEMaJwFIQ64+szLC2us2vRo2bAS7TDphOpZ?=
- =?us-ascii?Q?xEqiC29ERU3/F5ek08Zn7IQ+Oa/tOiQ/7CED5P2kh4fjbMsBbQN4p4eEKOjl?=
- =?us-ascii?Q?AIV0X3nXcrHNd3gBT7aRJalCpeRPNFFrhnL34gFPskZ4mdwadVuU7Hwmq96D?=
- =?us-ascii?Q?NVkfIc34W+pg7pUAYLlRRMX29eG4iuqzbmqj8rZZYB86vq4hrRUdx0LW59+0?=
- =?us-ascii?Q?fEpGKJjHM7Wtq4YzHa9lBhbTnM6rzwG+rGVXY8qThDN+uYhepoxt1vwxHQQr?=
- =?us-ascii?Q?NUDRl438dj54DjD0tv66RElEET1iBaPBvhuxnI5C6Ebgr3IVp+8KjyCC4CDz?=
- =?us-ascii?Q?LA1IUE194B8X3RvOSoAW+oJW7ZbnRKFw4lC3O5NYbFtNWc5Ifqh5HIcXlJ7N?=
- =?us-ascii?Q?DSbtNeUZhclBGVyHkTJYTkb3NNZy31tCe/thrwmwrwBMWMGxa0rjbCTIy5dR?=
- =?us-ascii?Q?aenaVvrSRFbie6h0ECJrnNAX/hi8unWJa7BSuYdEru6GdHQKfqgC0MYWN6Ow?=
- =?us-ascii?Q?mYlGTUyNYMMY5XAp/Fp9L508Tc6e1B6+ReeTi+MAaZ3OFL41uz9appA6ZQuM?=
- =?us-ascii?Q?/YrcDjPUNAgOkJCd910zr+pg7jX0xKvt3WmoH8fN8PMQqmO4RlhB4wxK4tWx?=
- =?us-ascii?Q?+qqLI5BpyGBmcG8PjLKeSosvmqxZh+TMhTmP7mscH5BUx8JoKPOEfZgk98Vc?=
- =?us-ascii?Q?K8cZvhtfgy99sG5lCrFytIG2lPfM9ub39DCa9LjXvB3YC5o/9B7/RLivdvtj?=
- =?us-ascii?Q?KL4R2X/gQ+raDscCB9P92Y9BjPC3kiRXDKhJbAymFR5MPY5onYpOElHZL2av?=
- =?us-ascii?Q?ac/qs/DthCQ5k+ZknuxI8eVtDYstF/rwS3fC5W5Tq157DUvqudACcavzIjQ3?=
- =?us-ascii?Q?ZuuQF87jPkNha3NT60cWOmt9IUDqyY12a/jTAcWRngDEoDWgtiodQbdLpcQL?=
- =?us-ascii?Q?ODcCeLS/CNzaRS3YngR6acSht5Dihmny82BJhbUovL9QoGYNGGh1KOtoj04F?=
- =?us-ascii?Q?QO/7BdKY7+y2vzVlNjvkzLdpZOfYCLcYUDt5MEoDg5RD4vqj+g+UdKTfbYmE?=
- =?us-ascii?Q?srtJ0zOBLJGGokg85hw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S231320AbiGGPk4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 11:40:56 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C2620BCA;
+        Thu,  7 Jul 2022 08:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657208455; x=1688744455;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K98f2lGesm9VxtLvneIAOHDNuCUd/i45m2bxaKcd7VI=;
+  b=DhMGcYdrk9xazsA4fEVbht71X7Pt9gWJiyvOFkXA7fwaYRFkzwl3XT45
+   1QmR9OJo0aVD9EwBLwREAJ/irT5zBcf361etgwqOrt96zlHRwhwT1wrOC
+   5GpRCixMBi8S0xTYLq4d0XZGSHaTWNlmeg0h/srp2sqBzCNY3v1s9Vwty
+   +RzzzVds0VILnKGqpN0oB/3zqVrnQSLBfPWkj8DjXnqSIFNNdmWjL2UCk
+   tPhxn358BDBHk1ClOwWMrWFWSIgMhHsq+PGVXnTIzu3GlwYnajpsnnogX
+   GP2yjKrpET55JjJOgaRhCnLLwTH8w5RST2/LiR6paOYq1FNpCVsshAD6Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="282807844"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="282807844"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 08:40:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="661429543"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Jul 2022 08:40:50 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9TcY-000MBC-12;
+        Thu, 07 Jul 2022 15:40:50 +0000
+Date:   Thu, 7 Jul 2022 23:40:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Caleb Connolly <caleb.connolly@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+        phone-devel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v4 1/2] power: supply: add Qualcomm PMI8998 SMB2 Charger
+ driver
+Message-ID: <202207072358.2odInqXi-lkp@intel.com>
+References: <20220706194125.1861256-2-caleb.connolly@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 342b7545-8776-403e-e510-08da602d3195
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 15:27:24.7266
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3qf+KEi9z7U15mZ535ATNjBqQnXhyxyjOq6W6mpoFxM+0Q+JL8itaOumJOUMWAi76M5daF2Wr2QvCSsvGK/lEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3483
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706194125.1861256-2-caleb.connolly@linaro.org>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[Public]
+Hi Caleb,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on robh/for-next linus/master v5.19-rc5 next-20220707]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Caleb-Connolly/power-supply-introduce-support-for-the-Qualcomm-smb2-charger/20220707-034307
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220707/202207072358.2odInqXi-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f553287b588916de09c66e3e32bf75e5060f967f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/a6b315467a158024bb1af7fed00c9a5227c9b293
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Caleb-Connolly/power-supply-introduce-support-for-the-Qualcomm-smb2-charger/20220707-034307
+        git checkout a6b315467a158024bb1af7fed00c9a5227c9b293
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/power/supply/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/power/supply/qcom_pmi8998_charger.c:425:5: warning: no previous prototype for function 'smb2_get_prop_usb_online' [-Wmissing-prototypes]
+   int smb2_get_prop_usb_online(struct smb2_chip *chip, int *val)
+       ^
+   drivers/power/supply/qcom_pmi8998_charger.c:425:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smb2_get_prop_usb_online(struct smb2_chip *chip, int *val)
+   ^
+   static 
+>> drivers/power/supply/qcom_pmi8998_charger.c:486:5: warning: no previous prototype for function 'smb2_get_prop_status' [-Wmissing-prototypes]
+   int smb2_get_prop_status(struct smb2_chip *chip, int *val)
+       ^
+   drivers/power/supply/qcom_pmi8998_charger.c:486:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smb2_get_prop_status(struct smb2_chip *chip, int *val)
+   ^
+   static 
+>> drivers/power/supply/qcom_pmi8998_charger.c:565:6: warning: no previous prototype for function 'smb2_status_change_work' [-Wmissing-prototypes]
+   void smb2_status_change_work(struct work_struct *work)
+        ^
+   drivers/power/supply/qcom_pmi8998_charger.c:565:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void smb2_status_change_work(struct work_struct *work)
+   ^
+   static 
+>> drivers/power/supply/qcom_pmi8998_charger.c:614:5: warning: no previous prototype for function 'smb2_get_iio_chan' [-Wmissing-prototypes]
+   int smb2_get_iio_chan(struct smb2_chip *chip, struct iio_channel *chan,
+       ^
+   drivers/power/supply/qcom_pmi8998_charger.c:614:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smb2_get_iio_chan(struct smb2_chip *chip, struct iio_channel *chan,
+   ^
+   static 
+>> drivers/power/supply/qcom_pmi8998_charger.c:635:5: warning: no previous prototype for function 'smb2_get_prop_health' [-Wmissing-prototypes]
+   int smb2_get_prop_health(struct smb2_chip *chip, int *val)
+       ^
+   drivers/power/supply/qcom_pmi8998_charger.c:635:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smb2_get_prop_health(struct smb2_chip *chip, int *val)
+   ^
+   static 
+>> drivers/power/supply/qcom_pmi8998_charger.c:736:13: warning: no previous prototype for function 'smb2_handle_batt_overvoltage' [-Wmissing-prototypes]
+   irqreturn_t smb2_handle_batt_overvoltage(int irq, void *data)
+               ^
+   drivers/power/supply/qcom_pmi8998_charger.c:736:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   irqreturn_t smb2_handle_batt_overvoltage(int irq, void *data)
+   ^
+   static 
+>> drivers/power/supply/qcom_pmi8998_charger.c:754:13: warning: no previous prototype for function 'smb2_handle_usb_plugin' [-Wmissing-prototypes]
+   irqreturn_t smb2_handle_usb_plugin(int irq, void *data)
+               ^
+   drivers/power/supply/qcom_pmi8998_charger.c:754:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   irqreturn_t smb2_handle_usb_plugin(int irq, void *data)
+   ^
+   static 
+>> drivers/power/supply/qcom_pmi8998_charger.c:766:13: warning: no previous prototype for function 'smb2_handle_usb_icl_change' [-Wmissing-prototypes]
+   irqreturn_t smb2_handle_usb_icl_change(int irq, void *data)
+               ^
+   drivers/power/supply/qcom_pmi8998_charger.c:766:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   irqreturn_t smb2_handle_usb_icl_change(int irq, void *data)
+   ^
+   static 
+>> drivers/power/supply/qcom_pmi8998_charger.c:775:13: warning: no previous prototype for function 'smb2_handle_wdog_bark' [-Wmissing-prototypes]
+   irqreturn_t smb2_handle_wdog_bark(int irq, void *data)
+               ^
+   drivers/power/supply/qcom_pmi8998_charger.c:775:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   irqreturn_t smb2_handle_wdog_bark(int irq, void *data)
+   ^
+   static 
+   drivers/power/supply/qcom_pmi8998_charger.c:896:12: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+             .addr = 1950000 / 25000 },
+                     ^~~~~~~~~~~~~~~
+   drivers/power/supply/qcom_pmi8998_charger.c:894:12: note: previous initialization is here
+           { .addr = FAST_CHARGE_CURRENT_CFG,
+                     ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/qcom_pmi8998_charger.c:76:36: note: expanded from macro 'FAST_CHARGE_CURRENT_CFG'
+   #define FAST_CHARGE_CURRENT_CFG                         0x61
+                                                           ^~~~
+   10 warnings generated.
 
 
+vim +/smb2_get_prop_usb_online +425 drivers/power/supply/qcom_pmi8998_charger.c
 
-> -----Original Message-----
-> From: Grzegorz Jaszczyk <jaz@semihalf.com>
-> Sent: Thursday, July 7, 2022 07:53
-> To: linux-kernel@vger.kernel.org
-> Cc: jaz@semihalf.com; dmy@semihalf.com; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; seanjc@google.com; dbehr@google.com;
-> upstream@semihalf.com; zide.chen@intel.corp-partner.google.com; Rafael J.
-> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; Hans de Goede
-> <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>; Pavel Machek
-> <pavel@ucw.cz>; Mika Westerberg <mika.westerberg@linux.intel.com>; Sachi
-> King <nakato@nakato.io>; open list:ACPI <linux-acpi@vger.kernel.org>; ope=
-n
-> list:X86 PLATFORM DRIVERS <platform-driver-x86@vger.kernel.org>; open
-> list:HIBERNATION (aka Software Suspend, aka swsusp) <linux-
-> pm@vger.kernel.org>
-> Subject: [RFC PATCH 0/2] x86: allow to notify host about guest entering s=
-2idle
->=20
-> According to the mailing list discussion [1] about the preferred approach
-> for notifying hypervisor/VMM about guest entering s2idle state this RFC w=
-as
-> implemented.
->=20
-> Instead of original hypercall based approach, which involves KVM change [=
-2]
-> and makes it hypervisor specific, implement different mechanism, which
-> takes advantage of MMIO/PIO trapping and makes it hypervisor independent.
->=20
-> Patch #1 extends S2Idle ops by new notify handler which will be invoked a=
-s
-> a very last command before system actually enters S2Idle states. It also
-> allows to register and use driver specific notification hook which is use=
-d
-> in patch #2.
->=20
-> Patch #2 introduces new driver for virtual PMC, which registers
-> acpi_s2idle_dev_ops's notify handler. Its implementation is based on an
-> ACPI _DSM evaluation, which in turn can perform MMIO access and allow to
-> trap and therefore notify the VMM about guest entering S2Idle state.
->=20
-> Please see individual patches and commit logs for more verbose descriptio=
-n.
->=20
-> This patchset is marked as RFC since patch #2 implements driver for non
-> existing device "HYPE0001", which ACPI ID was not registered yet.
-> Furthermore the required registration process [3] will not be started
-> before getting positive feedback about this patchset.
->=20
-> [1]
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpatch=
-w
-> ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
-> 2-
-> jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> 7C3000%7C%7C%7C&amp;sdata=3DRIDiHUNpHUsBYyK3pwGND%2BWJoioXZNCKt
-> mML2%2F1LAxs%3D&amp;reserved=3D0
-> [2]
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpatch=
-w
-> ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
-> 3-
-> jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> 7C3000%7C%7C%7C&amp;sdata=3DBqykAwWzO%2BfeGPSsAqTmX13O8F0Vvm3G
-> PL56EpmdSJ8%3D&amp;reserved=3D0
-> [3]
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fuefi.=
-org
-> %2FPNP_ACPI_Registry&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> 7C3000%7C%7C%7C&amp;sdata=3DQXK52zFXJGEBm6xIv6IFeF7Xxgz4Yp5UmgLSQ
-> diXtlI%3D&amp;reserved=3D0
->=20
-> Grzegorz Jaszczyk (2):
->   suspend: extend S2Idle ops by new notify handler
->   platform/x86: Add virtual PMC driver used for S2Idle
->=20
->  drivers/acpi/x86/s2idle.c       | 11 +++++
->  drivers/platform/x86/Kconfig    |  7 ++++
->  drivers/platform/x86/Makefile   |  1 +
->  drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
->  include/linux/acpi.h            |  1 +
->  include/linux/suspend.h         |  1 +
->  kernel/power/suspend.c          |  4 ++
->  7 files changed, 98 insertions(+)
->  create mode 100644 drivers/platform/x86/virt_pmc.c
->=20
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
+   424	
+ > 425	int smb2_get_prop_usb_online(struct smb2_chip *chip, int *val)
+   426	{
+   427		unsigned int stat;
+   428		int rc;
+   429	
+   430		rc = regmap_read(chip->regmap, chip->base + POWER_PATH_STATUS, &stat);
+   431		if (rc < 0) {
+   432			dev_err(chip->dev, "Couldn't read POWER_PATH_STATUS! ret=%d\n",
+   433				rc);
+   434			return rc;
+   435		}
+   436	
+   437		*val = (stat & P_PATH_USE_USBIN_BIT) &&
+   438		       (stat & P_PATH_VALID_INPUT_POWER_SOURCE_STS_BIT);
+   439		return 0;
+   440	}
+   441	
+   442	/*
+   443	 * Qualcomm "automatic power source detection" aka APSD
+   444	 * tells us what type of charger we're connected to.
+   445	 */
+   446	static int smb2_apsd_get_charger_type(struct smb2_chip *chip, int *val)
+   447	{
+   448		int rc;
+   449		unsigned int apsd_stat, stat;
+   450		int usb_online;
+   451	
+   452		rc = smb2_get_prop_usb_online(chip, &usb_online);
+   453		if (rc < 0 || !usb_online) {
+   454			*val = POWER_SUPPLY_USB_TYPE_UNKNOWN;
+   455			return 0;
+   456		}
+   457	
+   458		rc = regmap_read(chip->regmap, chip->base + APSD_STATUS, &apsd_stat);
+   459		if (rc < 0) {
+   460			dev_err(chip->dev, "Failed to read apsd status, rc = %d", rc);
+   461			return rc;
+   462		}
+   463		if (!(apsd_stat & APSD_DTC_STATUS_DONE_BIT)) {
+   464			dev_err(chip->dev, "Apsd not ready");
+   465			return -EAGAIN;
+   466		}
+   467	
+   468		rc = regmap_read(chip->regmap, chip->base + APSD_RESULT_STATUS, &stat);
+   469		if (rc < 0) {
+   470			dev_err(chip->dev, "Failed to read apsd result, rc = %d", rc);
+   471			return rc;
+   472		}
+   473	
+   474		stat &= APSD_RESULT_STATUS_MASK;
+   475	
+   476		if (stat & CDP_CHARGER_BIT)
+   477			*val = POWER_SUPPLY_USB_TYPE_CDP;
+   478		else if (stat & (DCP_CHARGER_BIT | OCP_CHARGER_BIT | FLOAT_CHARGER_BIT))
+   479			*val = POWER_SUPPLY_USB_TYPE_DCP;
+   480		else /* SDP_CHARGER_BIT (or others) */
+   481			*val = POWER_SUPPLY_USB_TYPE_SDP;
+   482	
+   483		return 0;
+   484	}
+   485	
+ > 486	int smb2_get_prop_status(struct smb2_chip *chip, int *val)
+   487	{
+   488		int usb_online_val;
+   489		unsigned char stat[2];
+   490		int rc;
+   491	
+   492		rc = smb2_get_prop_usb_online(chip, &usb_online_val);
+   493		if (rc < 0) {
+   494			dev_err(chip->dev, "Couldn't get usb online property rc = %d\n",
+   495				rc);
+   496			return rc;
+   497		}
+   498	
+   499		if (!usb_online_val) {
+   500			*val = POWER_SUPPLY_STATUS_DISCHARGING;
+   501			return rc;
+   502		}
+   503	
+   504		rc = regmap_bulk_read(chip->regmap,
+   505				      chip->base + BATTERY_CHARGER_STATUS_1, &stat, 2);
+   506		if (rc < 0) {
+   507			dev_err(chip->dev, "Failed to read charging status ret=%d\n",
+   508				rc);
+   509			return rc;
+   510		}
+   511	
+   512		if (stat[1] & CHARGER_ERROR_STATUS_BAT_OV_BIT) {
+   513			*val = POWER_SUPPLY_STATUS_NOT_CHARGING;
+   514			return 0;
+   515		}
+   516	
+   517		stat[0] = stat[0] & BATTERY_CHARGER_STATUS_MASK;
+   518	
+   519		switch (stat[0]) {
+   520		case TRICKLE_CHARGE:
+   521		case PRE_CHARGE:
+   522		case FAST_CHARGE:
+   523		case FULLON_CHARGE:
+   524		case TAPER_CHARGE:
+   525			*val = POWER_SUPPLY_STATUS_CHARGING;
+   526			return rc;
+   527		case DISABLE_CHARGE:
+   528			*val = POWER_SUPPLY_STATUS_NOT_CHARGING;
+   529			return rc;
+   530		case TERMINATE_CHARGE:
+   531			*val = POWER_SUPPLY_STATUS_FULL;
+   532			return rc;
+   533		case INHIBIT_CHARGE:
+   534		default:
+   535			*val = POWER_SUPPLY_STATUS_UNKNOWN;
+   536			return rc;
+   537		}
+   538	}
+   539	
+   540	static inline int smb2_get_current_limit(struct smb2_chip *chip,
+   541						 unsigned int *val)
+   542	{
+   543		int rc = regmap_read(chip->regmap, chip->base + ICL_STATUS, val);
+   544	
+   545		if (rc >= 0)
+   546			*val *= 25000;
+   547		return rc;
+   548	}
+   549	
+   550	static int smb2_set_current_limit(struct smb2_chip *chip, unsigned int val)
+   551	{
+   552		unsigned char val_raw;
+   553	
+   554		if (val > 4800000) {
+   555			dev_err(chip->dev,
+   556				"Can't set current limit higher than 4800000uA");
+   557			return -EINVAL;
+   558		}
+   559		val_raw = val / 25000;
+   560	
+   561		return regmap_write(chip->regmap, chip->base + USBIN_CURRENT_LIMIT_CFG,
+   562				    val_raw);
+   563	}
+   564	
+ > 565	void smb2_status_change_work(struct work_struct *work)
+   566	{
+   567		struct smb2_chip *chip =
+   568			container_of(work, struct smb2_chip, status_change_work.work);
+   569		unsigned int charger_type, current_ua;
+   570		int usb_online, count, rc;
+   571	
+   572		smb2_get_prop_usb_online(chip, &usb_online);
+   573		if (usb_online == 0) {
+   574			chip->default_curr_limit = 0;
+   575			return;
+   576		}
+   577	
+   578		for (count = 0; count < 3; count++) {
+   579			dev_dbg(chip->dev, "get charger type retry %d\n", count);
+   580			rc = smb2_apsd_get_charger_type(chip, &charger_type);
+   581			if (rc == 0)
+   582				break;
+   583			msleep(100);
+   584		}
+   585	
+   586		if (rc < 0) {
+   587			rc = regmap_update_bits(chip->regmap, chip->base + CMD_APSD,
+   588						APSD_RERUN_BIT, APSD_RERUN_BIT);
+   589			schedule_delayed_work(&chip->status_change_work,
+   590					      msecs_to_jiffies(1500));
+   591			dev_dbg(chip->dev, "get charger type failed, rerun apsd\n");
+   592			return;
+   593		}
+   594	
+   595		switch (charger_type) {
+   596		case POWER_SUPPLY_USB_TYPE_CDP:
+   597			current_ua = CDP_CURRENT_UA;
+   598			break;
+   599		case POWER_SUPPLY_USB_TYPE_DCP:
+   600			current_ua = DCP_CURRENT_UA;
+   601			break;
+   602		case POWER_SUPPLY_USB_TYPE_SDP:
+   603		default:
+   604			current_ua = SDP_CURRENT_UA;
+   605			break;
+   606		}
+   607	
+   608		chip->default_curr_limit = current_ua;
+   609	
+   610		smb2_set_current_limit(chip, current_ua);
+   611		power_supply_changed(chip->chg_psy);
+   612	}
+   613	
+ > 614	int smb2_get_iio_chan(struct smb2_chip *chip, struct iio_channel *chan,
+   615			      int *val)
+   616	{
+   617		int rc;
+   618		union power_supply_propval status;
+   619	
+   620		rc = power_supply_get_property(chip->chg_psy, POWER_SUPPLY_PROP_STATUS,
+   621					       &status);
+   622		if (rc < 0 || status.intval != POWER_SUPPLY_STATUS_CHARGING) {
+   623			*val = 0;
+   624			return 0;
+   625		}
+   626	
+   627		if (IS_ERR(chan)) {
+   628			dev_err(chip->dev, "Failed to chan, err = %li", PTR_ERR(chan));
+   629			return PTR_ERR(chan);
+   630		}
+   631	
+   632		return iio_read_channel_processed(chan, val);
+   633	}
+   634	
 
-Thanks, you matched the implementation I was expecting.
-This looks fine by me.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
