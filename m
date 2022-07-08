@@ -2,53 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D032A56C33E
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Jul 2022 01:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E6D56C26E
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Jul 2022 01:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239783AbiGHT2X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 15:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S238800AbiGHThv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 15:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239784AbiGHT2R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 15:28:17 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A089153D06;
-        Fri,  8 Jul 2022 12:28:16 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id h132so8660553ybb.4;
-        Fri, 08 Jul 2022 12:28:16 -0700 (PDT)
+        with ESMTP id S239515AbiGHThu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 15:37:50 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5BF6B247;
+        Fri,  8 Jul 2022 12:37:50 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id n74so9770917yba.3;
+        Fri, 08 Jul 2022 12:37:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Adq262FqgbHF8RrsXNyOZR99yv/bgTrTtDi82M2Lai8=;
-        b=uMlKL0MvMx61bWaHIU9GTSc4KoaGqsoB2Xt7kgysYmO99916zTMo7ifyWJfKA7P8JN
-         s7m1nt+ZD9LenKM+hOga8l+V17vJXcBpmx5vZuZeWoM2QRgG4lNAVblr/yOCSFP7wCqV
-         U/Sg6UIi9fKgPYDrdwOf7x/qkwXcmuSdU/XNJbhY4sauo+l4qIKLypJ8WZ3XF6oW8lIo
-         dGhqbOnNauTu7Txme3F//HQp0Kra+7SUprpQAR1TIHXepjpLarj30RUNfP2HjqyS/3B2
-         7PSymvfVEArjqwND+060hagkONDV+B/himgDID/zXX8N4oalJ0dxPGnuFhq7zJK5wODY
-         79jg==
-X-Gm-Message-State: AJIora91XhAOmpcCrzeuqZwdvTiXAFxGLnctbselzzFUlVDfXnU4qAPJ
-        78QQ5Ff9fztXUmGe1C+JYoB2HsyuDCKJHYjCaUc=
-X-Google-Smtp-Source: AGRyM1uNOen2w4MD2F36UQSnxq6oGUS88nJifcsvzfTMSipLjWrvOecHgD4zbExkeIYYVyX0xKAMBRsgMyjM2cB5Ow0=
+        bh=1tWvLnk25eVFmRuWXyIo+J+soKWBo63spsgNtK5YUIQ=;
+        b=YEIuMvqrCWh9avfsBKVkeH2FW/O+6w97DxyT3T2h6qjSu06Gj/u8bYU6LvnQFZgqEf
+         xZ9xPh/nKRlnJdYlep0x0RLmKBmnv0iwV/ifXDoGmdIJOnBVpuzXshRVA5NyrWbqPzuB
+         UZ9KY3c92yr4rbBJPNehlD51Je5+hK/OzlN90kyIomwWTbMUPutwFyhhTTMgxlMPs6Se
+         5r2Tmm9iSIx3Y8Xk4WyGsHim4gWql8LMMBuPY42XtWxWnN/O5rvLysnC5xoqFTE5RcXU
+         ataJgWHidWh1yj/DQpcM0MtAGVdylJ3tFcWvLT6mO1HOBg6IGYbmXiHhYWvDq5mi57w5
+         kRZg==
+X-Gm-Message-State: AJIora9c06N3Vr9gZBf6S1Qmkyh+eLBevWcgwDhJ+wUZc/ophDFW9a9M
+        LksCBJ+UQrJZmiv1Nna5vAUq4CGJ4GZd0IvQ0vcQM7dJza8=
+X-Google-Smtp-Source: AGRyM1t+PY0RF7EEcVDON1w058h7z0P79ITz2m4IhhHNHX23kUJDigbFkpHqqwqg2LO3luDC7W1mDTJ4aEZuhu4V14w=
 X-Received: by 2002:a05:6902:1108:b0:66e:a9b1:3e48 with SMTP id
- o8-20020a056902110800b0066ea9b13e48mr5547856ybu.153.1657308495710; Fri, 08
- Jul 2022 12:28:15 -0700 (PDT)
+ o8-20020a056902110800b0066ea9b13e48mr5593293ybu.153.1657309069484; Fri, 08
+ Jul 2022 12:37:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220602163330.317-1-mario.limonciello@amd.com>
- <20220608222922.GA429328@bhelgaas> <MN0PR12MB610188F2F289EFA12872D8E2E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB610188F2F289EFA12872D8E2E2AB9@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20220608153120.303070-1-ulf.hansson@linaro.org> <YqhuB4ayHZY42SBN@atomide.com>
+In-Reply-To: <YqhuB4ayHZY42SBN@atomide.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 8 Jul 2022 21:28:02 +0200
-Message-ID: <CAJZ5v0jzJBABqsbxNwhjojdkgQdreuU5+SVnenm48GOyLioZQg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: PM: Drop pme_interrupt reference
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+Date:   Fri, 8 Jul 2022 21:37:38 +0200
+Message-ID: <CAJZ5v0iLGY-qoj7+p8mQqgEs6_TZkH6934qq+xs7EJSgUObyQQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Extend support for wakeirq for force_suspend|resume
+To:     Tony Lindgren <tony@atomide.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Axe Yang <axe.yang@mediatek.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,82 +61,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sorry for the delay.
+On Tue, Jun 14, 2022 at 1:16 PM Tony Lindgren <tony@atomide.com> wrote:
+>
+> * Ulf Hansson <ulf.hansson@linaro.org> [220608 15:26]:
+> > A driver that makes use of pm_runtime_force_suspend|resume() to support
+> > system suspend/resume, currently needs to manage the wakeirq support
+> > itself. To avoid the boilerplate code in the driver's system suspend/resume
+> > callbacks in particular, let's extend pm_runtime_force_suspend|resume() to
+> > deal with the wakeirq.
+>
+> Looks good to me:
+>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
 
-On Mon, Jun 13, 2022 at 5:57 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> [Public]
->
->
->
-> > -----Original Message-----
-> > From: Bjorn Helgaas <helgaas@kernel.org>
-> > Sent: Wednesday, June 8, 2022 17:29
-> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > Cc: Rafael J. Wysocki <rafael@kernel.org>; Len Brown <len.brown@intel.com>;
-> > Pavel Machek <pavel@ucw.cz>; Bjorn Helgaas <bhelgaas@google.com>; Mika
-> > Westerberg <mika.westerberg@linux.intel.com>; open list:SUSPEND TO RAM
-> > <linux-pm@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
-> > Subject: Re: [PATCH] Documentation: PM: Drop pme_interrupt reference
-> >
-> > On Thu, Jun 02, 2022 at 11:33:30AM -0500, Mario Limonciello wrote:
-> > > `pme_interrupt` was dropped from `struct pci_dev` as part of commit
-> > > 8370c2dc4c7b ("PCI / PM: Drop pme_interrupt flag from struct pci_dev"),
-> > > but the Documentation still includes this member.
-> > >
-> > > Remove it from the documentation as well and update it to have the missing
-> > > `pme_poll` member instead.
-> > >
-> > > Fixes: 8370c2dc4c7b ("PCI / PM: Drop pme_interrupt flag from struct pci_dev")
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > >  Documentation/power/pci.rst | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
-> > > index b04fb18cc4e2..a125544b4cb6 100644
-> > > --- a/Documentation/power/pci.rst
-> > > +++ b/Documentation/power/pci.rst
-> > > @@ -315,7 +315,7 @@ that these callbacks operate on::
-> > >                                        configuration space */
-> > >     unsigned int    pme_support:5;  /* Bitmask of states from which PME#
-> > >                                        can be generated */
-> > > -   unsigned int    pme_interrupt:1;/* Is native PCIe PME signaling used?
-> > */
-> > > +   unsigned int    pme_poll:1;     /* Poll device's PME status bit */
-> > >     unsigned int    d1_support:1;   /* Low power state D1 is supported */
-> > >     unsigned int    d2_support:1;   /* Low power state D2 is supported */
-> > >     unsigned int    no_d1d2:1;      /* D1 and D2 are forbidden */
-> >
-> > I'm OK with this patch if Rafael wants to take it.
-> >
-> > But I'm not sure how much value this section of the doc really adds.
-> > The doc basically says "the PCI PM callbacks operate on several of
-> > these fields of the struct pci_dev" and goes on to quote part of the
-> > struct pci_dev.
->
-> The reason that the patch came up is that someone who doesn't normally look
-> at kernel code but looked at documentation reached out asking questions about
-> these variables at the time a bug was occurring.  I was baffled how they were referring
-> to pme_interrupt until I found that it's only mentioned in documentation since the linked
-> Fixes tag.  So I figured we should make the documentation match the code.
->
-> >
-> > But "pm_cap" is the only one of those fields that is mentioned
-> > elsewhere in the doc, and that one is only incidental.
-> >
-> > For example, is it really useful to say "the PCI PM callbacks use
-> > pci_dev.pme_poll" without any other details about pme_poll?
-> >
-> > I think I would consider just removing everything from "The structure
-> > representing a PCI device ..." to the end of the section, i.e., lines
-> > 308-329 at [1].
-> >
->
-> That's perfectly fine to me too.
+Applied (as 5.20 material), but there is still a quite fundamental
+problem with pm_runtime_force_suspend|resume() which is using
+RPM_GET_CALLBACK() in these functions, because that macro returns a
+middle-layer PM-runtime callback, so any bus type or PM domain
+implementing meaningful generic power management ends up calling its
+own PM-runtime callback from its system-wide PM callback which is
+super-confusing at best.
 
-I've decided to apply the patch, because it is fine as is and the
-cleanup mentioned above can be done on top of it just fine.
-
-Applied as 5.20 material, thanks!
+Another problem with them is that they are generally not suitable for
+devices that can wake up the system from sleep.
