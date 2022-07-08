@@ -2,60 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1EE56B024
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 03:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C3356AFF9
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 03:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237176AbiGHBo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jul 2022 21:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S237177AbiGHBo2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Jul 2022 21:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237168AbiGHBo0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 21:44:26 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC48829821
-        for <linux-pm@vger.kernel.org>; Thu,  7 Jul 2022 18:44:24 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l40-20020a05600c1d2800b003a18adff308so286983wms.5
-        for <linux-pm@vger.kernel.org>; Thu, 07 Jul 2022 18:44:24 -0700 (PDT)
+        with ESMTP id S237148AbiGHBo1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 21:44:27 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB89B12D38
+        for <linux-pm@vger.kernel.org>; Thu,  7 Jul 2022 18:44:25 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id j7so11628129wmp.2
+        for <linux-pm@vger.kernel.org>; Thu, 07 Jul 2022 18:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Gg24pBkx9uxXH81vY9HTkL7j8WN9zHUs35lE66OFcP8=;
-        b=u/REpx/iqr2PSY72P1Lkc6VLwh13iknvaEhtYOv243VQ9iV98yr0v58azAQssn1k4/
-         yhEZTwWEvEBudD1y6YqwrkVzW0fFzrOScShiyEKDkPxN4+e/14rPyw3evJa1imriLefh
-         M/wUsSLGJFaWNsqmTgsj9ytFYOyPJDf4PDabzPo4O8VoCmiuITzM7sjQRHFtCwbvPhLV
-         Hi1lNWea4TffuqCnqdbHP5H8/alvjOEOtwqx8ION5SKaX6+4uSWB/bL758bUJQTYzOpD
-         aQGDU7M7pCIDZH1w8m1S+paJbHWP+KOaDiRXSeRugxqJ2+PHc28JKs8TpptTUC/uMmFz
-         Vcug==
+        bh=zzwiIB75BAWXHQ1Oucx/2up/baq7so/2ltJZoy05TUg=;
+        b=BWxnfPlV8Q8BYyXMLqgy9hjFNavcy6XvYfjcuZySNKLLpX7kYZP29mLdvn8U9h3DNu
+         pGQVijc8PbXDyGp+hl5HvKLIE3jMRKdXNnctSVWT3SXfK4piHeVsRU+KwhT4raSbWbJ8
+         Oacrx1luBpcRNAUFIUcjXN8hETTVT1Iu3OkdOnf1OokqxzMRMJWXKX8R5R3K9Ib/Xgqz
+         nVGRe6By1k+E+Tm2CXxHuRYPtmGNGtNiy1RdxmU6EKN5wjOKrZUuBNi6H8/ZWWS66FSz
+         Rw2YHIjaa4GNC2vbKGjVsZu+Z9f+ts2De9boMOBquRHRQr+9sr4FKeqPB0n1sYB8SJKJ
+         go3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Gg24pBkx9uxXH81vY9HTkL7j8WN9zHUs35lE66OFcP8=;
-        b=MzVrUEqsqQg+2oTTOn6w1Gb2HOmTp/2B25TRstuCBIN8yUOknf11PLUmBhPJKTe9xi
-         8sWEZRW9kYY0oEXOFMwU7Jg3kuQDKrG0CWyWLN9PdsytGkHijhKWfJHs6qLiq+qY5qnO
-         43PREV4t7YzQzbfyUoG2tIFt7XlJXSkiPEjocOauDWBK8xpDoiz+ueSE7ZUDVWUjXhe4
-         e73MFMcjGJUOjtmfpOp3Y6ya1bwvaaBrZLF8wNA1qP9WuAU7lzMJGQEeeK+qk0ZpP0h+
-         xjzbHpBoW6dvfKVACgvkGpAZJPiedL3tGMmlUvn1oeSTYeaCdJRxJEldOAPqtraNpwvR
-         3sFw==
-X-Gm-Message-State: AJIora8W71iVG6C+MxjjpDiY9h99KNn+LHdI3rJ2s1UB4L5p/LpB2W8H
-        +anWJ01SRNQHKMrEia1+6IhxtEqVhJI/Gg==
-X-Google-Smtp-Source: AGRyM1uwXsJL6ZYFg/20F5dBKhnHJv+gtRAmCuidCs83OIKDB+j2FlDtzCKLxrAzhDy73C1ZLHOl2w==
-X-Received: by 2002:a05:600c:3658:b0:3a0:390e:ea00 with SMTP id y24-20020a05600c365800b003a0390eea00mr785989wmq.128.1657244663370;
-        Thu, 07 Jul 2022 18:44:23 -0700 (PDT)
+        bh=zzwiIB75BAWXHQ1Oucx/2up/baq7so/2ltJZoy05TUg=;
+        b=0z5PvWhMDfLMDM/24PdSu6jlicT/5QJ8LL5G9/jdfAPxULK64r3cY51ZsFPDD3bzwh
+         poCAvaA8S1BHzm+AcFLoR55zuilX11l2pQf1qPQQRTADVMDSRNZBrzEDAA2yOjju7z1W
+         1cwfGOLA6TiiE7J180ngFEA4EfFxv8YeV2on3aMRxnxZ1dT73U74Y0KpzP++jMtc0CwW
+         cBQrvW7Qr4/SQwBOZ1Ezu9BhQUfWm12jN/Rb4cw6QHwM/wigumnQIb7Jl8StQSE22np0
+         jDzWIfch7rYMrUYdY1n1vwOKvrYy17/vNjv7qe5MEmOMg7w8arwS8UMydZyDuyVN9I82
+         PsQg==
+X-Gm-Message-State: AJIora9j222fGIBFLgbiGrnSrEqNMsB+mzBTtVdgA5sq9yOqjaUQhXYh
+        nG3iAHErGZqsg1kIEFrjig0nX83wLNUciA==
+X-Google-Smtp-Source: AGRyM1vXwu2pvpX1minwYkFEaPlB7+DgmfwcN1c3PwLM25R4rcBIq8GqBLnOe9At6oQ807VAO2hlhw==
+X-Received: by 2002:a7b:c017:0:b0:3a0:355d:a965 with SMTP id c23-20020a7bc017000000b003a0355da965mr7285024wmb.173.1657244664505;
+        Thu, 07 Jul 2022 18:44:24 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d4d8a000000b0021d4aca9d1esm22732846wru.99.2022.07.07.18.44.22
+        by smtp.gmail.com with ESMTPSA id b10-20020a5d4d8a000000b0021d4aca9d1esm22732846wru.99.2022.07.07.18.44.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 18:44:22 -0700 (PDT)
+        Thu, 07 Jul 2022 18:44:24 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     ilia.lin@kernel.org, agross@kernel.org, rafael@kernel.org,
         viresh.kumar@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, stephan@gerhold.net
 Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, bryan.odonoghue@linaro.org
-Subject: [PATCH v2 1/4] dt-bindings: opp: opp-v2-kryo-cpu: Fix example binding checks
-Date:   Fri,  8 Jul 2022 02:44:16 +0100
-Message-Id: <20220708014419.2009018-2-bryan.odonoghue@linaro.org>
+        devicetree@vger.kernel.org, bryan.odonoghue@linaro.org,
+        krzk+dt@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 2/4] dt-bindings: opp: Add missing compat devices
+Date:   Fri,  8 Jul 2022 02:44:17 +0100
+Message-Id: <20220708014419.2009018-3-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220708014419.2009018-1-bryan.odonoghue@linaro.org>
 References: <20220708014419.2009018-1-bryan.odonoghue@linaro.org>
@@ -63,7 +66,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,111 +74,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Adding missing compat entries to the cpufreq node
-Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml shows up
-a dt_binding_check in this file.
+A number of devices listed in drivers/cpufreq/qcom-cpufreq-nvmem.c appear
+to be missing from the compatible list.
 
-opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@0: 'power-domains' is a required property
-opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@0: 'power-domain-names' is a required property
-opp-v2-kryo-cpu.example.dtb: /: opp-table-0:opp-307200000: 'required-opps' is a required property
-
-Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+Cc: ilia.lin@kernel.org
+Cc: robh+dt@kernel.org
+Cc: krzk+dt@kernel.org
+Cc: devicetree@vger.kernel.org
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml  | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml     | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-index 30f7b596d609b..59663e897dae9 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-@@ -98,6 +98,8 @@ examples:
-                 capacity-dmips-mhz = <1024>;
-                 clocks = <&kryocc 0>;
-                 operating-points-v2 = <&cluster0_opp>;
-+                power-domains = <&cpr>;
-+                power-domain-names = "cpr";
-                 #cooling-cells = <2>;
-                 next-level-cache = <&L2_0>;
-                 L2_0: l2-cache {
-@@ -115,6 +117,8 @@ examples:
-                 capacity-dmips-mhz = <1024>;
-                 clocks = <&kryocc 0>;
-                 operating-points-v2 = <&cluster0_opp>;
-+                power-domains = <&cpr>;
-+                power-domain-names = "cpr";
-                 #cooling-cells = <2>;
-                 next-level-cache = <&L2_0>;
-             };
-@@ -128,6 +132,8 @@ examples:
-                 capacity-dmips-mhz = <1024>;
-                 clocks = <&kryocc 1>;
-                 operating-points-v2 = <&cluster1_opp>;
-+                power-domains = <&cpr>;
-+                power-domain-names = "cpr";
-                 #cooling-cells = <2>;
-                 next-level-cache = <&L2_1>;
-                 L2_1: l2-cache {
-@@ -145,6 +151,8 @@ examples:
-                 capacity-dmips-mhz = <1024>;
-                 clocks = <&kryocc 1>;
-                 operating-points-v2 = <&cluster1_opp>;
-+                power-domains = <&cpr>;
-+                power-domain-names = "cpr";
-                 #cooling-cells = <2>;
-                 next-level-cache = <&L2_1>;
-             };
-@@ -182,18 +190,21 @@ examples:
-                 opp-microvolt = <905000 905000 1140000>;
-                 opp-supported-hw = <0x7>;
-                 clock-latency-ns = <200000>;
-+                required-opps = <&cpr_opp1>;
-             };
-             opp-1401600000 {
-                 opp-hz = /bits/ 64 <1401600000>;
-                 opp-microvolt = <1140000 905000 1140000>;
-                 opp-supported-hw = <0x5>;
-                 clock-latency-ns = <200000>;
-+                required-opps = <&cpr_opp2>;
-             };
-             opp-1593600000 {
-                 opp-hz = /bits/ 64 <1593600000>;
-                 opp-microvolt = <1140000 905000 1140000>;
-                 opp-supported-hw = <0x1>;
-                 clock-latency-ns = <200000>;
-+                required-opps = <&cpr_opp3>;
-             };
-         };
- 
-@@ -207,24 +218,28 @@ examples:
-                 opp-microvolt = <905000 905000 1140000>;
-                 opp-supported-hw = <0x7>;
-                 clock-latency-ns = <200000>;
-+                required-opps = <&cpr_opp1>;
-             };
-             opp-1804800000 {
-                 opp-hz = /bits/ 64 <1804800000>;
-                 opp-microvolt = <1140000 905000 1140000>;
-                 opp-supported-hw = <0x6>;
-                 clock-latency-ns = <200000>;
-+                required-opps = <&cpr_opp4>;
-             };
-             opp-1900800000 {
-                 opp-hz = /bits/ 64 <1900800000>;
-                 opp-microvolt = <1140000 905000 1140000>;
-                 opp-supported-hw = <0x4>;
-                 clock-latency-ns = <200000>;
-+                required-opps = <&cpr_opp5>;
-             };
-             opp-2150400000 {
-                 opp-hz = /bits/ 64 <2150400000>;
-                 opp-microvolt = <1140000 905000 1140000>;
-                 opp-supported-hw = <0x1>;
-                 clock-latency-ns = <200000>;
-+                required-opps = <&cpr_opp6>;
-             };
-         };
- 
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 10b3a7a4af366..b8b6cdc73209f 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -22,6 +22,12 @@ select:
+     compatible:
+       contains:
+         enum:
++          - qcom,apq8064
++          - qcom,apq8096
++          - qcom,ipq8064
++          - qcom,msm8960
++          - qcom,msm8974
++          - qcom,msm8996
+           - qcom,qcs404
+   required:
+     - compatible
 -- 
 2.36.1
 
