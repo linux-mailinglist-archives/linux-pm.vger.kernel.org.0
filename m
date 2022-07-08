@@ -2,95 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3550956B026
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 03:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C7656B126
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 05:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbiGHBo3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Jul 2022 21:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
+        id S236471AbiGHD4x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Jul 2022 23:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237149AbiGHBo2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 21:44:28 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B6412D38
-        for <linux-pm@vger.kernel.org>; Thu,  7 Jul 2022 18:44:28 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id n10so3303914wrc.4
-        for <linux-pm@vger.kernel.org>; Thu, 07 Jul 2022 18:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tA1T69NTAu2GrtW3MQqMLxs934MrKxAEy6GEq/EFFiY=;
-        b=rL6nHlsKVSr8t/NeupTRp5VCJb2s6NGVgLM6ymWbs4RYw5bRx2N55bdlSTgs0Bn/yI
-         +AcogrlsCRRpi6nBab/KaAKa+zMu07Tal9YN46za2g0V8gk4b2p5aQGM5dWgUoURoJ/k
-         gtHfASQ2+KecMgRMCw3xqnCdcJxjn6+mCbON91+alKA2xW+kbYNRC+hJm4HlIVV0ku4S
-         BpjCxwZRcEsexID53XZvyaLDTF80s1h3PXOIf7QEoL3s1QEm++Aeg+bk3MbWNlPtqlzo
-         H8wUiB/xq6YyskEw5Mp61w7SpY4qGhkWurus2SX/ETajJY0XLZv6D4jm4Chf9Zutn/D/
-         ZEUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tA1T69NTAu2GrtW3MQqMLxs934MrKxAEy6GEq/EFFiY=;
-        b=qewD6doawP7ydWzcykf7ozIjMEHHpywsKWhoivgc9v3xLaQIAE2ejHM7EiHNN4jCWu
-         RAP+uFMgxYnu5zM489nYicGo/mxTccWr1HlMSkn5De56PjNMDa950tb1AybE/DZE5Z0S
-         iF/RsG1QdJJeFp00jzpxgbU+7avXm9zKiK0KgDcBKbLlcTER8xWO+oqOd7+tsFSbUOoB
-         U6gY5PtbNcLnrgkgFCmc3P5yH9HKYOyDQa9aRxuGr1SQJ0QVg3VE0S7nncWvtwz1iqTs
-         xI+rQzKW9To602YzyB+hXdELpPDji7/N2o8zOZqPjmTrkw+dQnuVKbeUi+IcGiKb7A4g
-         80Bg==
-X-Gm-Message-State: AJIora8nwWiig+NxM9PfqcVAMTGwbd9O2n0a+nSXG8mVpj5IHpOu7pa6
-        kzKhWO3K3Heiy2/E7uFbzEa9Vg==
-X-Google-Smtp-Source: AGRyM1sb0xTEO1GlKvD6kKmv1jDxMZTw1qjGgB6EkBag2vAnOG3nALiC408OE+fGUNqXvfPaxKwasg==
-X-Received: by 2002:a5d:4e04:0:b0:21d:6ec3:38a2 with SMTP id p4-20020a5d4e04000000b0021d6ec338a2mr753962wrt.362.1657244666788;
-        Thu, 07 Jul 2022 18:44:26 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d4d8a000000b0021d4aca9d1esm22732846wru.99.2022.07.07.18.44.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 18:44:26 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     ilia.lin@kernel.org, agross@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, stephan@gerhold.net
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, bryan.odonoghue@linaro.org
-Subject: [PATCH v2 4/4] cpufreq: blocklist Qualcomm msm8939 in cpufreq-dt-platdev
-Date:   Fri,  8 Jul 2022 02:44:19 +0100
-Message-Id: <20220708014419.2009018-5-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220708014419.2009018-1-bryan.odonoghue@linaro.org>
-References: <20220708014419.2009018-1-bryan.odonoghue@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230230AbiGHD4w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Jul 2022 23:56:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DF974DE7;
+        Thu,  7 Jul 2022 20:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657252611; x=1688788611;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MYEPcE7pN1KciP37QC/kj2gcO7ZMO75h5cRFJHszhV8=;
+  b=T6bOy/TvmUcr9pzFIzRgeCQMmXYKhBeTQ8Dt/rxvP1i94DOhdK3S/fVp
+   hY6m+oy7umIiCKrkIq3eGWJjS7ILXy8zSryRZhJaRNlfax4TSC01zQ0hP
+   fO8p9ltDUOFA3rPRvCLfn40yExfM4DpJZ0vdir170HcO+iNVBgxHv1+cy
+   D9AH4l/osVoMGmt4DEDFRJS7mEXV61W8gbvaSla6mmQkYJPOJuCTRTMP3
+   4Z9slRF+kmMgXE6Y1K+cIHvXzSCgWKROPunjJvuTuHbZQEBf8WZqS8Yob
+   KPtwbkBBmiyWciweBF5v+cAK4leLpyoE3tBzVvCiUlrzSv++xy2wLvB4J
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="309744718"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="309744718"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:56:50 -0700
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="544063323"
+Received: from lshi10-mobl.ccr.corp.intel.com ([10.249.172.47])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 20:56:48 -0700
+Message-ID: <6f8d449906a42ba11698d3c0ae9740b83f918f42.camel@intel.com>
+Subject: Re: [PATCH 3/3] thermal/core: Fix thermal trip cross point
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, Amit Kucheria <amitk@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Fri, 08 Jul 2022 11:56:45 +0800
+In-Reply-To: <20220707214513.1133506-3-daniel.lezcano@linaro.org>
+References: <20220707214513.1133506-1-daniel.lezcano@linaro.org>
+         <20220707214513.1133506-3-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-msm8939 will use qcom-cpufreq-nvmem. Block it on the generic cpufreq-dt
-list.
+On Thu, 2022-07-07 at 23:45 +0200, Daniel Lezcano wrote:
+> The routine doing trip point crossing the way up or down is actually
+> wrong.
+> 
+> A trip point is composed with a trip temperature and a hysteresis.
+> 
+> The trip temperature is used to detect when the trip point is crossed
+> the way up.
+> 
+> The trip temperature minus the hysteresis is used to detect when the
+> trip point is crossed the way down.
+> 
+> > -----------low--------high------------|
+> 
+>              |<--------->|
+>              |    hyst   |
+>              |           |
+>              |          -|--> crossed the way up
+>              |
+>          <---|-- crossed the way down
+> 
+> For that, there is a two point comparison: the current temperature
+> and
+> the previous temperature.
+> 
+> The actual code assumes if the current temperature is greater than
+> the
+> trip temperature and the previous temperature was lesser, then the
+> trip point is crossed the way up. That is true only if we crossed the
+> way down the low temperature boundary from the previous temperature
+> or
+> if the hysteresis is zero. The temperature can decrease between the
+> low and high, so the trip point is not crossed the way down and then
+> increase again and cross the high temperature raising a new trip
+> point
+> crossed detection which is incorrect. The same scenario happens when
+> crossing the way down.
+> 
+> The trip point crossing the way up and down must act as parenthesis,
+> a
+> trip point down must close a trip point up. Today we have multiple
+> trip point up without the corresponding trip point down.
+> 
+> In order to fix that, we store the previous trip point which gives
+> the
+> information about the previous trip.
+> 
+> As a sidenote, the thermal_zone_device structure has already the
+> prev_trip_low and prev_trip_high information which are used by the
+> thermal_zone_set_trips() function. This one can be changed to be
+> triggered by the trip temperature crossing function, which makes more
+> sense, and the two fields will disappear.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/thermal_core.c | 32 ++++++++++++++++++++++----------
+>  include/linux/thermal.h        |  2 ++
+>  2 files changed, 24 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c
+> b/drivers/thermal/thermal_core.c
+> index f66036b3daae..92bc9ddb6904 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -357,19 +357,30 @@ static void handle_critical_trips(struct
+> thermal_zone_device *tz,
+>  static void handle_thermal_trip_crossed(struct thermal_zone_device
+> *tz, int trip,
+>  					int trip_temp, int trip_hyst,
+> enum thermal_trip_type trip_type)
+>  {
+> +	int trip_low_temp = trip_temp - trip_hyst;
+> +
+>  	if (tz->last_temperature == THERMAL_TEMP_INVALID)
+>  		return;
+>  
+> -	if (tz->last_temperature < trip_temp &&
+> -	    tz->temperature >= trip_temp) {
+> -		thermal_notify_tz_trip_up(tz->id, trip,
+> -					  tz->temperature);
+> -	}
+> -
+> -	if (tz->last_temperature >= trip_temp &&
+> -	    tz->temperature < (trip_temp - trip_hyst)) {
+> -		thermal_notify_tz_trip_down(tz->id, trip,
+> -					    tz->temperature);
+> +	/*
+> +	 * Due to the hysteresis, a third information is needed to
+> +	 * detect when the temperature is wavering between the
+> +	 * trip_low_temp and the trip_temp. A trip point is crossed
+> +	 * the way up only if the temperature is above it while the
+> +	 * previous temperature was below *and* we crossed the
+> +	 * trip_temp_low before. The previous trip point give us the
+> +	 * previous trip point transition. The similar problem exists
+> +	 * when crossing the way down.
+> +	 */
+> +	if (tz->last_temperature < trip_temp && tz->temperature >=
+> trip_temp &&
+> +	    trip != tz->prev_trip) {
+> +		thermal_notify_tz_trip_up(tz->id, trip, tz-
+> >temperature);
+> +		tz->prev_trip = trip;
+> +		
+> +	} else if (tz->last_temperature >= trip_low_temp && tz-
+> >temperature < trip_low_temp &&
+> +	    trip == tz->prev_trip) {
+> +		thermal_notify_tz_trip_down(tz->id, trip, tz-
+> >temperature);
+> +		tz->prev_trip = trip - 1;
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
- 1 file changed, 1 insertion(+)
+Say, let's assume hysteresis is Zero,
+When the temperature increases and we do thermal_notify_tz_trip_up()
+for trip 0 and trip 1, tz->prev_trip is set to 1 in this case.
+And then the temperature drops below trip 0, we don't have chance to do
+thermal_notify_tz_trip_down() for trip 0, because we always handle the
+trips in ascending order, and tz->prev_trip is 1 when we do
+handle_thermal_trip(0).
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index 2c96de3f2d83c..26c97ab778974 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -137,6 +137,7 @@ static const struct of_device_id blocklist[] __initconst = {
- 	{ .compatible = "nvidia,tegra210", },
- 
- 	{ .compatible = "qcom,apq8096", },
-+	{ .compatible = "qcom,msm8939", },
- 	{ .compatible = "qcom,msm8996", },
- 	{ .compatible = "qcom,qcs404", },
- 	{ .compatible = "qcom,sa8155p" },
--- 
-2.36.1
+thanks,
+rui
+
+>  	}
+>  }
+>  
+> @@ -427,6 +438,7 @@ static void thermal_zone_device_init(struct
+> thermal_zone_device *tz)
+>  {
+>  	struct thermal_instance *pos;
+>  	tz->temperature = THERMAL_TEMP_INVALID;
+> +	tz->prev_trip = -1;
+>  	tz->prev_low_trip = -INT_MAX;
+>  	tz->prev_high_trip = INT_MAX;
+>  	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 231bac2768fb..5b3bfb902d10 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -124,6 +124,7 @@ struct thermal_cooling_device {
+>   * @last_temperature:	previous temperature read
+>   * @emul_temperature:	emulated temperature when using
+> CONFIG_THERMAL_EMULATION
+>   * @passive:		1 if you've crossed a passive trip point, 0
+> otherwise.
+> + * @prev_trip:		previous trip point the thermal zone
+> was, -1 if below all of them
+>   * @prev_low_trip:	the low current temperature if you've crossed a
+> passive
+>  			trip point.
+>   * @prev_high_trip:	the above current temperature if you've crossed
+> a
+> @@ -159,6 +160,7 @@ struct thermal_zone_device {
+>  	int last_temperature;
+>  	int emul_temperature;
+>  	int passive;
+> +	int prev_trip;
+>  	int prev_low_trip;
+>  	int prev_high_trip;
+>  	atomic_t need_update;
 
