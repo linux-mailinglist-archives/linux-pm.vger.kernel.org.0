@@ -2,70 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20D056B96F
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 14:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8795756B9CC
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 14:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238109AbiGHMMH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 08:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
+        id S238260AbiGHMgO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 08:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238155AbiGHMMG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 08:12:06 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE1A9CE28
-        for <linux-pm@vger.kernel.org>; Fri,  8 Jul 2022 05:12:03 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id v10-20020a05600c15ca00b003a2db8aa2c4so614686wmf.2
-        for <linux-pm@vger.kernel.org>; Fri, 08 Jul 2022 05:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=I0vsy3nOfEBocgEXlD5YYOEw0Nm9b6yNglnomLM83zo=;
-        b=OOsz3C5BvP0NXTwAX9N54ixPmgBTIJs9R6J9pNJVL/e4Pijs465wP4ayaG6F/qCHyw
-         qAIzoyo1OuG+rRzTmEAB5t9b50Tf/JoYNOVWC0b85CeMXkVRupjEC8m/adKTREmx9JeX
-         HLoN4zqIwt69vSc+CBquKIFjcGCWTiyOXxWExRCFRj9+dyjamLdFPtXn5b8aonzcDXw6
-         zNoV5BcPeo2GnxgJrevso98knP85VON1Kc/7vlSgSHWphLErkUuEZqYmEQ2XZo2cnjdr
-         KmJ/bAb/5TbYXKGrjmQSYayZwRBdZLCHmNKXHou/ZZErxznHGVKcEG4dLoXPs0fcMKit
-         9VuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=I0vsy3nOfEBocgEXlD5YYOEw0Nm9b6yNglnomLM83zo=;
-        b=4zIG/GseKrelFAQo6I5A3KrQMeMabu5ygDE6vOb2w210mrN2zdvbQTCCSXh4wOneaE
-         qIdAFFT4TrVE1BWmG+gHhBdzv3hTb4cwi1n5agyNS2Y4bmwKQneXF++1xBQIOb2ZxlcO
-         Gk6qTAhYyU1Fk1CCSVEPnOhaI+2O1hXGMddWyWihAlX0uCDSTkm3jSnVPjQVAHEzmRhV
-         udGDyEIULH3GqUI0wlXkRgXT0NaogYthqjdP0HXQEdhZPdpOxUqZdASCY5KH9BwQfz7F
-         3uk+p0vhAHaXOaZ5Yh+98wHO+iTmFl3RLLjh+v3LqdmNiaa0vPB3RQiSHiqnasdQWwMI
-         Srcg==
-X-Gm-Message-State: AJIora8E6DOLZ7TP2AviMfg+eutA9sVOJePUKT7VdAvizCYE8K+V+PBo
-        ACG0ff7MFrdYUzWoDJIr+dyfahTzF5dfgA==
-X-Google-Smtp-Source: AGRyM1uMoiZK0a4NZMhSTPegyLZFhuMy4864g2L1I6VNwQ1TkVPaCd/8HQi9Y7NEUT336HZSpeQ8hA==
-X-Received: by 2002:a05:600c:1e8e:b0:3a2:c1b4:922c with SMTP id be14-20020a05600c1e8e00b003a2c1b4922cmr3469421wmb.24.1657282322032;
-        Fri, 08 Jul 2022 05:12:02 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l3-20020a05600c1d0300b003a03ae64f57sm2030549wms.8.2022.07.08.05.12.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 05:12:01 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     ilia.lin@kernel.org, agross@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, stephan@gerhold.net
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, bryan.odonoghue@linaro.org,
-        krzk+dt@kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 3/3] dt-bindings: opp: Add msm8939 to the compatible list
-Date:   Fri,  8 Jul 2022 13:11:56 +0100
-Message-Id: <20220708121156.2165250-4-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220708121156.2165250-1-bryan.odonoghue@linaro.org>
-References: <20220708121156.2165250-1-bryan.odonoghue@linaro.org>
+        with ESMTP id S238246AbiGHMgM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 08:36:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237417C1A6;
+        Fri,  8 Jul 2022 05:36:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2D856271D;
+        Fri,  8 Jul 2022 12:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DE9C341CB;
+        Fri,  8 Jul 2022 12:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657283771;
+        bh=hq0+B/dAKE6KAtx/w8/pzHOgIoBA3D5lqFzL4AAZuD0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oszWAku0C+PsBkcHAWimhkDNHJmcX4DGcNbiIuPC97mm+hQp3UNk68L+XMeRTGwyi
+         iRpcSXZKS/mWe/Q7AIGIujWDCIHszuz369g9mKkKm5lpdFtXwj4zD8oDnBvv59RRxa
+         h9EZsRzRFunJJa1pT+K1aIImOmqlGe3VmpTmnbthscUIY52de6/UAmcJ7g0H5+0Qcu
+         cgOhf5uWTsaaTskZUL1wOECszcwH1v4us+aJju3wULm3dkUgC85zccKr3gpnrA/JzG
+         i5Cce56flAuxGHq3aWpM0iKuGqjWZRk+qkHMf765TQurQHKnlY8I5GZPy8BFAnQS+v
+         4xvVp0DSbOyMg==
+Date:   Fri, 8 Jul 2022 20:35:59 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v8 00/15] dt-bindings: arm: freescale: Switch fsl,scu
+ from txt to yaml
+Message-ID: <20220708083952.GV819983@dragon>
+References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,31 +84,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-msm8939 will uses this driver instead of the generic dt-cpufreq. Add to the
-compatible list.
+On Thu, Jul 07, 2022 at 03:50:07PM +0300, Viorel Suman (OSS) wrote:
+> From: Viorel Suman <viorel.suman@nxp.com>
+> 
+> Changes since v7: https://lore.kernel.org/lkml/20220704161541.943696-1-viorel.suman@oss.nxp.com/
+>   * added missing Reviewed-By: 
+>   * Defined "mboxes" and "mbox-names" sections in scu-key.yaml as schema.
+> 
+> Changes since v6: https://lore.kernel.org/lkml/20220629164414.301813-1-viorel.suman@oss.nxp.com/
+>   * The series updated so that each patch making the conversion removes
+>     the piece being converted, then finally the patch adding fsl,scu.yaml
+>     removes the last pieces, as suggested by Krzysztof Kozlowski.
+>   * Updated ocotp and system-controller node names in the existing DTS
+>     files
+> 
+> Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
+>   * Updated according to Krzysztof Kozlowski comments
+> 
+> Changes since v4: https://lore.kernel.org/lkml/20220615105834.743045-1-viorel.suman@nxp.com/
+>   * Missing SoB added
+> 
+> Changes since v3: https://lore.kernel.org/lkml/20220609143423.2839186-1-abel.vesa@nxp.com/
+>   * Examples included
+>   * Included Abel's patches fixing thermal zone, keys and power controller names.
+> 
+> Abel Vesa (12):
+>   dt-bindings: clk: imx: Add fsl,scu-clk yaml file
+>   dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
+>   dt-bindings: input: Add fsl,scu-key yaml file
+>   dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
+>   dt-bindings: power: Add fsl,scu-pd yaml file
+>   dt-bindings: rtc: Add fsl,scu-rtc yaml file
+>   dt-bindings: thermal: Add fsl,scu-thermal yaml file
+>   dt-bindings: watchdog: Add fsl,scu-wdt yaml file
+>   dt-bindings: firmware: Add fsl,scu yaml file
+>   arm64: dts: freescale: imx8: Fix power controller name
+>   arm64: dts: freescale: imx8qxp: Add fallback compatible for clock
+>     controller
+>   arm64: dts: freescale: imx8qxp: Fix the keys node name
+> 
+> Viorel Suman (3):
+>   arm64: dts: freescale: imx8qxp: Remove unnecessary clock related
+>     entries
+>   arm64: dts: freescale: imx8qxp: Fix the ocotp node name
+>   arm64: dts: freescale: imx8: Fix the system-controller node name
 
-Cc: ilia.lin@kernel.org
-Cc: robh+dt@kernel.org
-Cc: krzk+dt@kernel.org
-Cc: devicetree@vger.kernel.org
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml          | 1 +
- 1 file changed, 1 insertion(+)
+I'm preparing material for the next merge window, so just picked the
+series up.  If there is more outstanding review comments coming up,
+let's address them with follow-up changes.
 
-diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
-index b8b6cdc73209f..a11e1b867379a 100644
---- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
-+++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
-@@ -25,6 +25,7 @@ select:
-           - qcom,apq8064
-           - qcom,apq8096
-           - qcom,ipq8064
-+          - qcom,msm8939
-           - qcom,msm8960
-           - qcom,msm8974
-           - qcom,msm8996
--- 
-2.36.1
-
+Shawn
