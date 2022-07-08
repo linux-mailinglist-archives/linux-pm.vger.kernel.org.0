@@ -2,148 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E4E56B281
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 08:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9DF56B2C8
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 08:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237043AbiGHGGr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 02:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S237296AbiGHG3o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 02:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237027AbiGHGGp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 02:06:45 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B00613E94
-        for <linux-pm@vger.kernel.org>; Thu,  7 Jul 2022 23:06:44 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z25so17086307lfr.2
-        for <linux-pm@vger.kernel.org>; Thu, 07 Jul 2022 23:06:44 -0700 (PDT)
+        with ESMTP id S237245AbiGHG3n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 02:29:43 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1926C1A812
+        for <linux-pm@vger.kernel.org>; Thu,  7 Jul 2022 23:29:42 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id b9so6719629pfp.10
+        for <linux-pm@vger.kernel.org>; Thu, 07 Jul 2022 23:29:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yDcFqeczHGyZYd7T238OgZvCCK1eXFIoTBdYc3SeZos=;
-        b=DittmnZPcRT+xjFr0ed9UvAlzAFmVKUPNDmbhL2Xp88Abar5gi3sxJN4MHIPC8oBri
-         +kAmgOZX95RtjJD6AcqYQIdiw1XHTh3e5knHYqmil56Av1TN6O4cOoQHvI26Iyc73Y90
-         VJBKK8nB8ovQ5ZPoeO8+A2MTtM0qgCutPIz/D/nBnhMmFMfLU3Aw4DMieUBq6JwHLUOy
-         g6M/acHahuel+dFTIQAKAhLLEpbugR5KCP5VNdLxC5iWqB8rrqL6iUPylXYrxlv2YBvT
-         x5CYJWIQvNFNAzsixoH8VJDl+lngq0VfCvAM5PPFxoJaqEVzI3CkI6fd049rvjlAjxDL
-         Iapw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OxzlnlJQQW+AJLZaxxRnLlnUnRueupJTmSnVE0o02mw=;
+        b=zEStfvLSPbT+0vqMFAaS74qIUp+eaKV3ktNkqsNvTQSBxYZodYjqZFdOcVoM5aiEhW
+         hfq3BlfBqNnASiqYQSSmA05An0FlDp2NPTaXBf4p9nh9tlscZa0u1Q1tXBPID6thL4vd
+         v/L965NTucQ3/ZDV7GQpKDBXs+NMVOSqx2wTziQCnFyzZfs1VODX7/ik9o+GzHpVfABV
+         tRW2R/K0oBSsjK2u+PdcB+t7ScLB2zwR2w+FLFT0PzheDnPn39A+L61d3zgx+WD/4lOF
+         ZxQWaLNRnVZ7g8BrobxJ52cy23LULENK2+jNrQDWpQp67XrlcDKHr3rzcvU3jE5RNc3G
+         mcPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yDcFqeczHGyZYd7T238OgZvCCK1eXFIoTBdYc3SeZos=;
-        b=nHmGl3powSW3eL7ArZfXT0+/w4DGr9lMdYnndlFyu+9RSsuG5c9irZMfMX89cTljpB
-         /iNlRMTq8cWw1gAQGYIdGX9Seuiwk8dRhsSVFmQWuLSTaHWWBI2PIX0w2vNT1spmyT/d
-         bnq/RAiFPzJ7nouf3OnaFuJ5lIE5LljDMu2GwRmt+bdENPYxpcKSqvnP2BA68Zt37wAW
-         16uDEwnAg0nAcF+p1hsXscvXilzERMwBwSr6OiclhebJbbkw5pGfB22tNSkaEt2jKpHU
-         f3ng1nL6MQhFTwHhD2zjwdZMwou1MWJ8ecGHKutyIlwnjjHkRAuGmcxdndVYPPILjnDG
-         CmAA==
-X-Gm-Message-State: AJIora8UrYMRpCcWha4IkcoCHsiogAr0aWHZVInrPVx3PwwZiRkgOrpf
-        VVoyJRHM/3NRyg33GE4vwU63x7KtoeY+UIkMlctdFg==
-X-Google-Smtp-Source: AGRyM1sTtjfrNu/fSE3mT7VoMqjGcZ4ClYdoRho9XcGSkjNBrML2LhgLhFEP2pyAGlMoHwoO0ig22H81jkQ3gZammY0=
-X-Received: by 2002:a05:6512:114b:b0:482:c057:60b3 with SMTP id
- m11-20020a056512114b00b00482c05760b3mr1284786lfg.206.1657260402433; Thu, 07
- Jul 2022 23:06:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OxzlnlJQQW+AJLZaxxRnLlnUnRueupJTmSnVE0o02mw=;
+        b=V8sTrr1fo16nAySC0yGlBnfJF+lVQvxxVzuvd1tS97AYWZ6rKIskaNxTnQ5W9+tUal
+         uK3mYUJh8oqXfL5b9DnDlclQlOVtld2Cq56OI8ee25ual7kD8z6EMzIp/78KgKXHvAXA
+         RrH7xRqXhidO8/9/aCogm9Jx/4g6ok4N1s6w3in/4m1MvcVypv8hgxI8HDtI19ysk1S1
+         N4v0z6Pzx1sxuCZV3y9c1oeeRWL4jAk0qNGflbFE24rAw4M4u0xsOI0mSwaGABv4dFSC
+         +1kPsuBnxIsNAQOKBs4hc9HitCbSpvdX6DFij2Jc/be77I5V9f+U/haNxi+Sez2K5aRT
+         Rl8g==
+X-Gm-Message-State: AJIora+sDDTiQ9DMWtyoiWESkQv1kt4cxw3HWdw2+UY8pJalf/Tev33/
+        2xV4pcHveYyTfFlO2NqQHeXWeA==
+X-Google-Smtp-Source: AGRyM1vx5F5PLe2M6kbtNv22VitB1eggD2eJ+w2NdziPJN4Sg8QPSijHXrkDRjBNReGg3SnuseQCvQ==
+X-Received: by 2002:a65:430a:0:b0:412:1877:7def with SMTP id j10-20020a65430a000000b0041218777defmr1946422pgq.93.1657261781329;
+        Thu, 07 Jul 2022 23:29:41 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (n058152077182.netvigator.com. [58.152.77.182])
+        by smtp.gmail.com with ESMTPSA id bk21-20020aa78315000000b005254e44b748sm27802126pfb.84.2022.07.07.23.29.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 23:29:40 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 14:29:36 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/5] interconnect: qcom: icc-rpm: Support multiple
+ buckets
+Message-ID: <20220708062936.GA195591@leoy-ThinkPad-X240s>
+References: <20220705072336.742703-1-leo.yan@linaro.org>
+ <20220705072336.742703-5-leo.yan@linaro.org>
+ <1d0fec7d-ed83-e1ff-92a1-e721bcc50298@kernel.org>
 MIME-Version: 1.0
-References: <YsPOEYU7ZqmpD8dw@kroah.com> <a1fcc07e-51ef-eaad-f14b-33f1263e45ac@I-love.SAKURA.ne.jp>
- <CACT4Y+bUw8LebceH0fDZriqAivuwNSNntTTS1647CQF-j2C4RQ@mail.gmail.com> <YsQOG3+ItWmrpaFt@kroah.com>
-In-Reply-To: <YsQOG3+ItWmrpaFt@kroah.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 8 Jul 2022 08:06:30 +0200
-Message-ID: <CACT4Y+asMhzEh+6WvHTX6-DNCf3A+oqwZJ27oedPCaP8kv7TVg@mail.gmail.com>
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d0fec7d-ed83-e1ff-92a1-e721bcc50298@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 5 Jul 2022 at 12:10, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jul 05, 2022 at 09:20:24AM +0200, Dmitry Vyukov wrote:
-> > On Tue, 5 Jul 2022 at 07:54, Tetsuo Handa
-> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
-> > > On Tue, Jul 05, 2022 at 02:21:17PM +0900, Tetsuo Handa wrote:
-> > > > On 2022/07/04 23:31, Greg KH wrote:
-> > > > > I don't understand what you are trying to "fix" here.  What is userspace
-> > > > > doing (as a normal user) that is causing a problem, and what problem is
-> > > > > it causing and for what device/hardware/driver is this a problem?
-> > > >
-> > > > Currently the root cause is unknown.
-> > > > This might be another example of deadlock hidden by device_initialize().
-> > > >
-> > > > We can see from https://syzkaller.appspot.com/text?tag=CrashReport&x=11feb7e0080000 that
-> > > > when khungtaskd reports that a process is blocked waiting for misc_mtx at misc_open(),
-> > > > there is a process which is holding system_transition_mutex from snapshot_open().
-> > >
-> > > /dev/snapshot is not read/writable by anyone but root for obvious
-> > > reasons.
-> > >
-> > > And perhaps it's something that syzbot shouldn't be fuzzing unless it
-> > > wants to take the system down easily :)
-> >
-> > We could turn CONFIG_HIBERNATION_SNAPSHOT_DEV off for syzbot, but it
-> > will also mean this part of the kernel won't be tested at all.
-> > I see it has 14 ioclt's (below) and not all of them look problematic
-> > (like POWER_OFF).
-> > Perhaps the kernel could restrict access only to reboot/restore
-> > functionality? This way we could at least test everything related to
-> > snapshot creation.
->
-> This is already restricted to root, why would you want to restrict it
-> anymore?
+On Thu, Jul 07, 2022 at 05:29:16PM +0300, Georgi Djakov wrote:
 
-Root like the wrong criteria here. Root protection is for global
-machine state and in some cases closing unreliable code. It's not
-about if this code should be randomly tested or not. In fact,
-unreliable code (bpf, filesystems) is exactly the code that needs to
-be tested as much as possible. But it is restricted with root as well.
+[...]
 
-Though, I noticed syzkaller already avoids SNAPSHOT_FREEZE and
-SNAPSHOT_POWER_OFF:
-https://github.com/google/syzkaller/blob/bff65f44b47bd73f56c3d6a5c3899de5f5775136/sys/linux/init.go#L310-L315
-This should work fine (unless the IOCTL const values don't collide
-with any other IOCTL const values, otherwise these duplicate values
-won't be tested as well).
+> > +/**
+> > + * qcom_icc_rpm_pre_bw_aggregate - cleans up values before re-aggregate requests
+> 
+> This does not match with the name of the function below.
 
+Will fix it.
 
+> > + * @node: icc node to operate on
+> > + */
+> > +static void qcom_icc_pre_bw_aggregate(struct icc_node *node)
 
-> > #define SNAPSHOT_FREEZE _IO(SNAPSHOT_IOC_MAGIC, 1)
-> > #define SNAPSHOT_UNFREEZE _IO(SNAPSHOT_IOC_MAGIC, 2)
-> > #define SNAPSHOT_ATOMIC_RESTORE _IO(SNAPSHOT_IOC_MAGIC, 4)
-> > #define SNAPSHOT_FREE _IO(SNAPSHOT_IOC_MAGIC, 5)
-> > #define SNAPSHOT_FREE_SWAP_PAGES _IO(SNAPSHOT_IOC_MAGIC, 9)
-> > #define SNAPSHOT_S2RAM _IO(SNAPSHOT_IOC_MAGIC, 11)
-> > #define SNAPSHOT_SET_SWAP_AREA _IOW(SNAPSHOT_IOC_MAGIC, 13, struct
-> > resume_swap_area)
-> > #define SNAPSHOT_GET_IMAGE_SIZE _IOR(SNAPSHOT_IOC_MAGIC, 14, __kernel_loff_t)
-> > #define SNAPSHOT_PLATFORM_SUPPORT _IO(SNAPSHOT_IOC_MAGIC, 15)
-> > #define SNAPSHOT_POWER_OFF _IO(SNAPSHOT_IOC_MAGIC, 16)
-> > #define SNAPSHOT_CREATE_IMAGE _IOW(SNAPSHOT_IOC_MAGIC, 17, int)
-> > #define SNAPSHOT_PREF_IMAGE_SIZE _IO(SNAPSHOT_IOC_MAGIC, 18)
-> > #define SNAPSHOT_AVAIL_SWAP_SIZE _IOR(SNAPSHOT_IOC_MAGIC, 19, __kernel_loff_t)
-> > #define SNAPSHOT_ALLOC_SWAP_PAGE _IOR(SNAPSHOT_IOC_MAGIC, 20, __kernel_loff_t)
->
-> Fuzzing this is always nice, but be very aware of the system state
-> changes that you are creating.  Also know when you make these state
-> changes, the rest of the system's functionality also changes.
->
-> thanks,
->
-> greg k-h
+Thanks,
+Leo
