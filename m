@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C634F56B42B
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 10:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D5956B446
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 10:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237181AbiGHIMi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 04:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S237737AbiGHIOE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 04:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237608AbiGHIMh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 04:12:37 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F028804B2
-        for <linux-pm@vger.kernel.org>; Fri,  8 Jul 2022 01:12:36 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id l12so10399528plk.13
-        for <linux-pm@vger.kernel.org>; Fri, 08 Jul 2022 01:12:36 -0700 (PDT)
+        with ESMTP id S237732AbiGHIOD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 04:14:03 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5707392C
+        for <linux-pm@vger.kernel.org>; Fri,  8 Jul 2022 01:14:01 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y9so8708414pff.12
+        for <linux-pm@vger.kernel.org>; Fri, 08 Jul 2022 01:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Vc+eezlfPnzWYHGSMVP9Zv55im3/1gxewNG9+41SKHQ=;
-        b=GEuY25tkvfR+qMvbD0fCszzdfYTU4NF5Ad0EdTtSbTbd5b4ECbjymsy5SjPeuDYENL
-         PKHzDRk1W56+xDKWluThcfnIudP5kv7vhviC78tW9yJONmwWlQYDhdK4NBCehRygfd9H
-         DX7CiJv2JVaT4Vb2Y9mnpNlF5TrSRUUSoqt65o8gukiEqQ/Gi82UzaIuapKefZ6XrMem
-         T6ljE7wt0qZ7c9fiG22d+N1VoY+HGdDNglqniIlbjYr6yXbDq5DSojuosLT4gSK7O7V1
-         APYsyiGYQg2RAhndyVGT/aJD1S+HVPtNnXA+SngnAjbMSfuCRvU3uCH/IuswwT9T24Xj
-         wzwA==
+        bh=dl82gz8QjmANwna+I20UXlrSEeJ1+WO2UZanVzGM0so=;
+        b=CZSXGcFDCZp9VbC5FmUr5/iPgXLOqnr+60QCezEU4A5g7VFUwLtvbvGa8psin8X/fE
+         h1+wvf1+Wt1N/lOwTpaiF5YioutMWPJrueOuIoSV/+yXTurxCWx4ReXRFrpJPtQGxdDN
+         aE6V7tWwwf9DV8sbReSdtVvCtMNBzAURZtL4em3QL5If7q/g19Lu+vhAAgOAS0vS/bQB
+         QGnJI8M+V8YNTCzT4ObD8fvL3fUicj6stZainTO4eD/gQ5xoqKUdPR5T40Y1ZlUq8Kwx
+         Zc7iYB8p67fW0y8LhnGzb0zwfY0/vRE7p8NCzgaczoUtVGHVjFENmXdvz6uFvKXLDcwA
+         sSFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Vc+eezlfPnzWYHGSMVP9Zv55im3/1gxewNG9+41SKHQ=;
-        b=H5dj/zinDm9VzuY9S7ndcuNH8DJyVDIftC7mmgetkoHz3BMhsHwsg1jE7LHawEa9kR
-         CZyb/KENkzzsMXMciP6fyB0Det4sc1wJj7DCDcK0zvcB0d3AoAFNNS0FENUrnFRlOB9V
-         U1rgwSaRuFHVGxKJDulw4UDMnwNZFcDU9xgnomcWXIMxHJijc6Inb1MeYzIjeZYanz3t
-         pgMtuuijJ8aI0Th2YM86FxS9IC7M+nY6NSZyEC4ukBzahCfvQdRClfXB5k3nH0Vf8vfx
-         acs6HQ6KI4ttSkdbgjrzXVY84R7AkP9A5zbnyBQdTGIJC07TZjePLfGYz2Ce1KDgUO0j
-         oUnw==
-X-Gm-Message-State: AJIora865JKhCuLMwerc3p0eYC3moJHHXLImjL5eOrkOK8UUdyTqiVcb
-        iEk8XDfkZBC+M/m/e6wBXxxPZA==
-X-Google-Smtp-Source: AGRyM1tB6s3CEGsSYt8UjK8u2lu2OyolxM22P8Pu7PnItHcD07cQTGZypwxfxyU28F9ynAVDHrwFTA==
-X-Received: by 2002:a17:902:b198:b0:16c:1c13:cd8d with SMTP id s24-20020a170902b19800b0016c1c13cd8dmr2566479plr.92.1657267955732;
-        Fri, 08 Jul 2022 01:12:35 -0700 (PDT)
+        bh=dl82gz8QjmANwna+I20UXlrSEeJ1+WO2UZanVzGM0so=;
+        b=xW3oIuMDsNzdKujG0auQDGHgHSMOMgrcLstpuC14DKV0RvXNK4Fba5F1faDAWluKwH
+         QacfEb/JT5G480DqMJhoOw4ifi6eE4gDCAKdCa1MzovVD6+gkDTD81kPUINSoJlsAB1U
+         yY2CcifcovaSnRcZ+qa30glZcaYikemJwlv/Twfj97BUvgAJRtsvv0QGb2fXc/9vGnbn
+         cbpTzrUTMg7P0FBVps4PSHZ8n2a8xk/U1pwiU+psgLqJojiNYI59Xyoulk2tb5ZnGgbn
+         pg9NBkLAPMn4o9yTv6O2F3p93r6KTP1+fFk4QOCxxPjhsDPM93qGUqBUXXBABw8gZDdi
+         K6Pg==
+X-Gm-Message-State: AJIora8cIzku8y7pNNHh7WJzwyyY/j5G2ml3UyC+8lDWqTGRg7ab//9k
+        thDgPuPIAhg7Wy5LLvju9IJZkVStYxzeqA==
+X-Google-Smtp-Source: AGRyM1u1VL9RI6muZTqV+yjUK0SBUkQP4Hy/5vLre7Pmw0+rdutvZOufYdaMHzt147Jc8SA1X+QKkQ==
+X-Received: by 2002:a05:6a00:22cb:b0:525:ba83:559a with SMTP id f11-20020a056a0022cb00b00525ba83559amr2760170pfj.54.1657268041108;
+        Fri, 08 Jul 2022 01:14:01 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id j14-20020a170902da8e00b0016bd67bc868sm2679388plx.210.2022.07.08.01.12.34
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902680700b0016bfbd99f64sm5766698plk.118.2022.07.08.01.14.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 01:12:35 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 13:42:33 +0530
+        Fri, 08 Jul 2022 01:14:00 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 13:43:58 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
@@ -68,15 +68,16 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Rob Herring <robh@kernel.org>
 Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <20220708081233.pncnill6dqe4ghko@vireshk-i7>
+Message-ID: <20220708081358.o4ozv5qwf5xpqpb5@vireshk-i7>
 References: <cover.1657003420.git.viresh.kumar@linaro.org>
  <d557bbd0-2afb-12dc-1287-1aeb44ef55f5@collabora.com>
  <20220708071926.zehurtbcf35s5tv6@vireshk-i7>
  <8c52e1d2-6c6d-9a09-e426-e5292f68a3f0@collabora.com>
+ <f018df81-e51d-ce4f-f10a-65ea25db48e9@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8c52e1d2-6c6d-9a09-e426-e5292f68a3f0@collabora.com>
+In-Reply-To: <f018df81-e51d-ce4f-f10a-65ea25db48e9@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -87,29 +88,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-07-22, 10:26, Dmitry Osipenko wrote:
-> On 7/8/22 10:19, Viresh Kumar wrote:
-> > On 07-07-22, 22:43, Dmitry Osipenko wrote:
-> >> This patch breaks Tegra again, please take a look:
-> > 
-> > Damn, not again :(
-> > 
-> >>    OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
-> > 
-> > Why did you mention this patch ? This just removed an unused API,
-> > Tegra should have broke because of something else, isn't it ?
-> 
-> This patch is the cause.
+On 08-07-22, 10:30, Dmitry Osipenko wrote:
+> BTW, maybe we should consider to start adding kselftests for OPP, like
+> clk framework did. That will be handy to have given that it's not easy
+> to test the whole OPP core without having specific devices.
 
-I was tracking the crash too closely it seems. :(
+After being regularly bitten by such issues, I added some for cpufreq
+earlier. Its time that I invest some time for OPP core too I think :)
 
-> I see that previously dev_pm_opp_set_config() had "_add_opp_table(dev,
-> false)", now it's "_add_opp_table(dev, true)".
-
-That's definitely a mistake, I still don't understand though how it
-can lead to the crash we got.
-
-I have fixed this in my tree now, can you check again please.
+I don't know though when I will be able to find time for that :(
 
 -- 
 viresh
