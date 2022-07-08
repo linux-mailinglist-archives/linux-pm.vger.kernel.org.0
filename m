@@ -2,106 +2,219 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EFF56BAA9
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 15:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B8156BAB2
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 15:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237721AbiGHN3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 09:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
+        id S237883AbiGHN3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 09:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237419AbiGHN3W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 09:29:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063902CC89;
-        Fri,  8 Jul 2022 06:29:22 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0DA7366019BD;
-        Fri,  8 Jul 2022 14:29:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657286960;
-        bh=kYuvuzoKyfF8He1pBh2mVcn/g+3TU24CLCFthngUncQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UtRVuGZTETFIO5meZShAMsL+bwK2NYecNGPsBKytgct9kclAQTpVCfMfWaMj2813Q
-         Mt8Q1CzMLQchmPKZolQ5UJ6BL3bM4c4W7nr5vfLoBxxt/P+8r6KaZrLHs74hj6eYJE
-         Gy2ZfJ52iQ6Fzoxzl13jACyO0eT6MFGWu713IpcTOXmYF9tEaje7KcPRTipBNJQfbJ
-         t1hHajALHFUQ10L1iYC4B1c3CQZdQDA+4+V/imfNFwvKThS2PJlSV4vHS9d2vCkjHQ
-         ABqfLyYXwUYNPRKOq2UJXiYqqvLvJmBzpm+9qaknDL2kS6WSUJ3UKACOMKaIXVGRTi
-         0k3bD7L/xwKSw==
-Message-ID: <e6dccc45-5b69-dd65-a3dc-88a219fb238e@collabora.com>
-Date:   Fri, 8 Jul 2022 16:29:17 +0300
+        with ESMTP id S237813AbiGHN3f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 09:29:35 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7182CC8E;
+        Fri,  8 Jul 2022 06:29:34 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id v12so14250741edc.10;
+        Fri, 08 Jul 2022 06:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A5yNT274X8JVIXWHK9IfpidEsdTyKnF8Wkvv4Lr1xrM=;
+        b=T49Dpozw8GmXePIozCQt/BaE/hs09JQQS4VxY2XNYeGltK2ufde6tdkHJ+qV49MBb/
+         cgwtD6o1chIsu+K45lOGnt78rWTmMo8vN1vybAtnydtU+Pk1wXJGbUa4BvPHJvUl6F46
+         0IO+W3gYuGyE74EWOFwblBeMc6VAEVL4ujHWVs5RZIoKT1DyIQXJLnTME3n15/m/I9x1
+         juYtvJDLa9gOAoN8tv9ma5PzIfq8zYzwwPY4SLiPTiCzL4SZ3ZTkIJC6d8T5xif4FN/D
+         40VPwo8Jo2XzQoMVmeWzQDUNSieBneVh12KQgzHI+MWJUjixLMEPHUQ/5wUu8JJsKjaC
+         fv3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A5yNT274X8JVIXWHK9IfpidEsdTyKnF8Wkvv4Lr1xrM=;
+        b=gWXmQuF0onXbp4/7jHrv/6f0D4Xz4UT4Be5dwk3b6M9oC7Pe4uQ3QvZfb6BSDs9h4F
+         NkFbnoKKUAeC9L/rqKpzMuWwokKxpk4ekrhFcXH3IIuJVooBXp37tsyZczTTxFbInfv7
+         wooBsAMp5PBqVzA5v0gkQGrb7VoQf9mpd70w7j0egtQA4gER8Lk5dgDY8JUhpZY2ZoHK
+         s2dZivHef4VwfalEC4NsVY8vuGd/KWJpMt1pBHjT8cGojmSaTRKeAZPs4mJf1v7mccGY
+         1Pm8IomLl09+hz+xGzE2doEvS7BJcgsnV5az0864LorgV3AanJsDS8jyrC8LBFNyXJvV
+         9U/g==
+X-Gm-Message-State: AJIora+7s1mS89rBTPw+4nCFqeN438ho1cgcuspWvzLm+sbVGRfPEBli
+        L7xpw/ega9CZ6pPLWudVjbo=
+X-Google-Smtp-Source: AGRyM1vrAKpKJdOECJLFrVkdBIXOKfAQt31+tD63iuif8bqLLfCeZhXJEam7m9XwSLL0XuoHuXbtQQ==
+X-Received: by 2002:a05:6402:2687:b0:43a:6025:1658 with SMTP id w7-20020a056402268700b0043a60251658mr4658569edd.271.1657286972649;
+        Fri, 08 Jul 2022 06:29:32 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-96-250.xnet.hr. [88.207.96.250])
+        by smtp.googlemail.com with ESMTPSA id q4-20020a1709064cc400b006fec4ee28d0sm20170398ejt.189.2022.07.08.06.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 06:29:32 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Date:   Fri,  8 Jul 2022 15:29:26 +0200
+Message-Id: <20220708132930.595897-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] Fix 2 5.19 power-off regressions caused by
- sys-off-handler work
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, x86@kernel.org,
-        linux-efi@vger.kernel.org
-References: <20220708131412.81078-1-hdegoede@redhat.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220708131412.81078-1-hdegoede@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/8/22 16:14, Hans de Goede wrote:
-> Hi All,
-> 
-> I noticed that my Lenovo Yoga Tablet 2 1050L was hanging on power-off again
-> with 5.19, even though I had implemented a workaround for this in 5.17 .
-> 
-> I quickly realized that this was caused by the recent sys-off-handler work
-> and fixed this by switching the workaround over to register_sys_off_handler
-> with a priority of SYS_OFF_PRIO_FIRMWARE + 1, so that the workaround runs
-> before acpi_power_off() get a chance to run.
-> 
-> This made me realize that the efi_power_off handler which sometimes is
-> used in preference of acpi_power_off had the same problem, so the second
-> patch in this series fixes that.
-> 
-> I plan to include patch 1/2 in a fixes pull-req to Linus soon. Ard,
-> if I can get your Ack for 2/2 then I can include this in the pull-req
-> if you want; or you can send this to Linus yourself.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> Hans de Goede (2):
->   platform/x86: x86-android-tablets: Fix Lenovo Yoga Tablet 2 830/1050
->     poweroff again
->   efi: Fix efi_power_off() not being run before acpi_power_off() when
->     necessary
-> 
->  drivers/firmware/efi/reboot.c              | 21 +++++++++++----------
->  drivers/platform/x86/x86-android-tablets.c | 17 +++++++++++++----
->  2 files changed, 24 insertions(+), 14 deletions(-)
-> 
+Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
 
-Thank you for the fixes. It's great that the RC is getting more testing
-since I couldn't test everything and we don't have CI for the power-off
-testing.
+We also have to make sure that correct interrupts are set according to
+compatibles, so populate interrupt information per compatibles.
 
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes in v4:
+* Add the forgotten Reviewed-by tag from Krzysztof
+
+Changes in v3:
+* Remove implied min/maxItem properties as pointed by Rob
+
+Changes in v2:
+* No need for a list in compatible check
+* Specify minItems and maxItems for interrupt and interrupt-names
+---
+ .../bindings/thermal/qcom-tsens.yaml          | 76 ++++++++++++++++---
+ 1 file changed, 65 insertions(+), 11 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 038d81338fcf..fee2b6281417 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -59,6 +59,10 @@ properties:
+               - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
+ 
++      - description: v2 of TSENS with combined interrupt
++        enum:
++          - qcom,ipq8074-tsens
++
+   reg:
+     items:
+       - description: TM registers
+@@ -66,15 +70,11 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    items:
+-      - description: Combined interrupt if upper or lower threshold crossed
+-      - description: Interrupt if critical threshold crossed
++    maxItems: 2
+ 
+   interrupt-names:
+     minItems: 1
+-    items:
+-      - const: uplow
+-      - const: critical
++    maxItems: 2
+ 
+   nvmem-cells:
+     minItems: 1
+@@ -128,22 +128,61 @@ allOf:
+     then:
+       properties:
+         interrupts:
+-          maxItems: 1
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
+         interrupt-names:
+-          maxItems: 1
++          items:
++            - const: uplow
+ 
+-    else:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8953-tsens
++              - qcom,msm8996-tsens
++              - qcom,msm8998-tsens
++              - qcom,sc7180-tsens
++              - qcom,sc7280-tsens
++              - qcom,sc8180x-tsens
++              - qcom,sdm630-tsens
++              - qcom,sdm845-tsens
++              - qcom,sm8150-tsens
++              - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
++              - qcom,tsens-v2
++    then:
++      properties:
++        interrupts:
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
++            - description: Interrupt if critical threshold crossed
++        interrupt-names:
++          items:
++            - const: uplow
++            - const: critical
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,ipq8074-tsens
++    then:
+       properties:
+         interrupts:
+-          minItems: 2
++          items:
++            - description: Combined interrupt if upper, lower or critical thresholds crossed
+         interrupt-names:
+-          minItems: 2
++          items:
++            - const: combined
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
++              - qcom,ipq8074-tsens
+               - qcom,tsens-v0_1
+               - qcom,tsens-v1
+               - qcom,tsens-v2
+@@ -226,4 +265,19 @@ examples:
+            #qcom,sensors = <13>;
+            #thermal-sensor-cells = <1>;
+     };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    // Example 4 (for any IPQ8074 based SoC-s):
++    tsens4: thermal-sensor@4a9000 {
++           compatible = "qcom,ipq8074-tsens";
++           reg = <0x4a9000 0x1000>,
++                 <0x4a8000 0x1000>;
++
++           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++           interrupt-names = "combined";
++
++           #qcom,sensors = <16>;
++           #thermal-sensor-cells = <1>;
++    };
+ ...
 -- 
-Best regards,
-Dmitry
+2.36.1
+
