@@ -2,66 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B0E56C05A
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 20:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C5A56BFCF
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 20:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238789AbiGHQhu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 12:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S238907AbiGHQta (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 12:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238547AbiGHQhu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 12:37:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD86167EF;
-        Fri,  8 Jul 2022 09:37:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4B00B828B5;
-        Fri,  8 Jul 2022 16:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8D3C341C6;
-        Fri,  8 Jul 2022 16:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657298266;
-        bh=faBbiFmeCk/XXmJzoX4Ig8MuGcWSSVfGfVZBC0uD89k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JnNXQWwfR5Pobgkk8oUvEGVJBSmO2r9GUMSSXlJVJdnjacOYs4rzXZWR5xmnv4a9V
-         EgIw/O7MB3F2AVQe10p3DSyNGUskkhA9GX0KFE45XYEH6U2oqHPwNF2s0PTOM6Tbqb
-         +NrTONPkT3X+4Vth/c+oAIggdeCp4m3/wCte3gkq9csT28C2fUd8cgL8vEn2SbmI8z
-         FP4DKekY/u9cbEm5oWQS/AAC1NyCHA/KobF2VwgAUerALCK/Z4B7EYl3T1sjPXN/2R
-         4GXx4zL0QFw2MDFbeBxRG6I3RHAs7Jz4ihj0wGobXZq+EHQLU3c03k26EXfXlRR2CW
-         f+Ip/z3hWi6lA==
-Received: by mail-ot1-f45.google.com with SMTP id q18-20020a9d7c92000000b00616b27cda7cso16572452otn.9;
-        Fri, 08 Jul 2022 09:37:46 -0700 (PDT)
-X-Gm-Message-State: AJIora/ERigHeK+aorDpCkoc6Ighsdjp5BrWUnaNgxSS3bFuDQytH3pt
-        t4g6ymRDrjkMWlCtsP3WV9NbK6rj/tSHF/22NVM=
-X-Google-Smtp-Source: AGRyM1svHSEUASsl57J1Bv3MiYQY3jBtqML3YrRdG2TT3OOBZQNPUyNOlB3mW51SOJdsvRkRATEvgOuuAgNAADolzfA=
-X-Received: by 2002:a9d:7cc7:0:b0:61a:4fe8:95c4 with SMTP id
- r7-20020a9d7cc7000000b0061a4fe895c4mr1924578otn.71.1657298265369; Fri, 08 Jul
- 2022 09:37:45 -0700 (PDT)
+        with ESMTP id S238827AbiGHQt2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 12:49:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6B8B1F2FE
+        for <linux-pm@vger.kernel.org>; Fri,  8 Jul 2022 09:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657298966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MXdSVBidbMpMzS1rCTcLXDUZBptLZ/DAXk7Nw972YV8=;
+        b=U3DNT1xoFNAanbqCVoP/KlbBTVnfii2D5PjRiGDGGDmRUU9YIModarzqMtpC2npsHvVBeB
+        h4PMs0ojQbDcPfdA/k8bzzTxZhCNVhDdOt2wsaptEIdfKbEyCW5IxmfQBdyfV2wHiItKE5
+        zoqzlTbnoYktHOhLt3vSnv5CvK6f5Ug=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-OVGMu_1rN3GY-XookCD8vA-1; Fri, 08 Jul 2022 12:49:25 -0400
+X-MC-Unique: OVGMu_1rN3GY-XookCD8vA-1
+Received: by mail-io1-f69.google.com with SMTP id b5-20020a05660214c500b0067530b15cc1so11550971iow.9
+        for <linux-pm@vger.kernel.org>; Fri, 08 Jul 2022 09:49:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=MXdSVBidbMpMzS1rCTcLXDUZBptLZ/DAXk7Nw972YV8=;
+        b=nMGT9oznR3FhEQJqwCEADVZnTMtHVph/Vq5BnFVhbmxN2n3xE7noHnumm4kAGyPmWf
+         07QUEX+cxvFunQDqSMmaNF0tAbamFJW3K6OIk/2hpGg1VPJ/ORftBpbaYhNmc9rB3JRn
+         nVEiHjTkxDBBJY3A5N8DX7+scoeIoe4PeSeTXyW0beKqav0ASmYALB4xqzmJ0p9MKjb9
+         Hb2VBl5ffjZxK3/pqeuFXc+kGTD3zQyxrHGdBY7x6QAUJfsfRoYqlDpTw8f6M88WOSqY
+         3FSDBusbsKLA3RPKBuIu1jtnR5lrpJLO1/LxGikc6oV4tDoHdpaHGJAgTMXjbyJYyYFV
+         qlrA==
+X-Gm-Message-State: AJIora8VuQlytBzBlszZVWr7FYgLAqHnKWrb9jn8pl89y5VsGUNBHrT+
+        oM9bSXznCSeeOlsobAJNmaYrDOhJ51+ni8JFsCy/BtU50iFKzESES2PlSaiIsA1i4rSxa3+tEIN
+        sds5XEETmavN5u2saTNw=
+X-Received: by 2002:a92:c26d:0:b0:2dc:3f21:28fc with SMTP id h13-20020a92c26d000000b002dc3f2128fcmr2604944ild.242.1657298964673;
+        Fri, 08 Jul 2022 09:49:24 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uS6H6Li4tWgDd7BtY0/IOmJRn2qf6PDT+ecBYl4qPbI9EMIbJHJK356anTA6ev91NnCZxKXw==
+X-Received: by 2002:a92:c26d:0:b0:2dc:3f21:28fc with SMTP id h13-20020a92c26d000000b002dc3f2128fcmr2604930ild.242.1657298964407;
+        Fri, 08 Jul 2022 09:49:24 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id g42-20020a02852d000000b0033f1e23ab20sm1794025jai.125.2022.07.08.09.49.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 09:49:24 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 10:49:00 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v4 3/6] vfio: Increment the runtime PM usage count
+ during IOCTL call
+Message-ID: <20220708104900.1780b8d7.alex.williamson@redhat.com>
+In-Reply-To: <47aa6b7d-e529-b79a-54eb-5f5a7fe639d6@nvidia.com>
+References: <20220701110814.7310-1-abhsahu@nvidia.com>
+        <20220701110814.7310-4-abhsahu@nvidia.com>
+        <20220706094007.12c33d63.alex.williamson@redhat.com>
+        <47aa6b7d-e529-b79a-54eb-5f5a7fe639d6@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-References: <20220708131412.81078-1-hdegoede@redhat.com> <20220708131412.81078-3-hdegoede@redhat.com>
-In-Reply-To: <20220708131412.81078-3-hdegoede@redhat.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 8 Jul 2022 18:37:34 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXH8sck_WMQObNVuT0RkoRFpdZ-V7A4wNW2Mj9CmwdSmZw@mail.gmail.com>
-Message-ID: <CAMj1kXH8sck_WMQObNVuT0RkoRFpdZ-V7A4wNW2Mj9CmwdSmZw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] efi: Fix efi_power_off() not being run before
- acpi_power_off() when necessary
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org, X86 ML <x86@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,94 +89,78 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 8 Jul 2022 at 15:14, Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Commit 98f30d0ecf79 ("ACPI: power: Switch to sys-off handler API")
-> switched the ACPI sleep code from directly setting the old global
-> pm_power_off handler to using the new register_sys_off_handler()
-> mechanism with a priority of SYS_OFF_PRIO_FIRMWARE.
->
-> This is a problem when the old global pm_power_off handler would later
-> be overwritten, such as done by the late_initcall(efi_shutdown_init):
->
->         if (efi_poweroff_required())
->                 pm_power_off = efi_power_off;
->
-> The old global pm_power_off handler gets run with a priority of
-> SYS_OFF_PRIO_DEFAULT which is lower then SYS_OFF_PRIO_FIRMWARE, causing
-> acpi_power_off() to run first, changing the behavior from before
-> the ACPI sleep code switched to the new register_sys_off_handler().
->
-> Switch the registering of efi_power_off over to register_sys_off_handler()
-> with a priority of SYS_OFF_PRIO_FIRMWARE + 1 so that it will run before
-> acpi_power_off() as before.
->
-> Note since the new sys-off-handler code will try all handlers in
-> priority order, there is no more need for the EFI code to store and
-> call the original pm_power_off handler.
->
-> Fixes: 98f30d0ecf79 ("ACPI: power: Switch to sys-off handler API")
-> Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+On Fri, 8 Jul 2022 15:13:16 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> On 7/6/2022 9:10 PM, Alex Williamson wrote:
+> > On Fri, 1 Jul 2022 16:38:11 +0530
+> > Abhishek Sahu <abhsahu@nvidia.com> wrote:
+> >   
+> >> The vfio-pci based driver will have runtime power management
+> >> support where the user can put the device into the low power state
+> >> and then PCI devices can go into the D3cold state. If the device is
+> >> in the low power state and the user issues any IOCTL, then the
+> >> device should be moved out of the low power state first. Once
+> >> the IOCTL is serviced, then it can go into the low power state again.
+> >> The runtime PM framework manages this with help of usage count.
+> >>
+> >> One option was to add the runtime PM related API's inside vfio-pci
+> >> driver but some IOCTL (like VFIO_DEVICE_FEATURE) can follow a
+> >> different path and more IOCTL can be added in the future. Also, the
+> >> runtime PM will be added for vfio-pci based drivers variant currently,
+> >> but the other VFIO based drivers can use the same in the
+> >> future. So, this patch adds the runtime calls runtime-related API in
+> >> the top-level IOCTL function itself.
+> >>
+> >> For the VFIO drivers which do not have runtime power management
+> >> support currently, the runtime PM API's won't be invoked. Only for
+> >> vfio-pci based drivers currently, the runtime PM API's will be invoked
+> >> to increment and decrement the usage count.  
+> > 
+> > Variant drivers can easily opt-out of runtime pm support by performing
+> > a gratuitous pm-get in their device-open function.
+> >    
+> 
+>  Do I need to add this line in the commit message?
 
-Note that, as far as I know, this should only affect x86 even though
-this is generic EFI code, and arm64 also supports ACPI boot, but it
-doesn't use ACPI for poweroff/reboot etc
+Maybe I misinterpreted, but my initial read was that there was some
+sort of opt-in, which there is by providing pm-runtime support in the
+driver, which vfio-pci-core does for all vfio-pci variant drivers.  But
+there's also an opt-out, where a vfio-pci variant driver might not want
+to support pm-runtime support and could accomplish that by bumping the
+pm reference count on device-open such that the user cannot trigger a
+pm-suspend.
 
-> ---
->  drivers/firmware/efi/reboot.c | 21 +++++++++++----------
->  1 file changed, 11 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/firmware/efi/reboot.c b/drivers/firmware/efi/reboot.c
-> index 73089a24f04b..ceae84c19d22 100644
-> --- a/drivers/firmware/efi/reboot.c
-> +++ b/drivers/firmware/efi/reboot.c
-> @@ -6,7 +6,7 @@
->  #include <linux/efi.h>
->  #include <linux/reboot.h>
->
-> -static void (*orig_pm_power_off)(void);
-> +static struct sys_off_handler *efi_sys_off_handler;
->
->  int efi_reboot_quirk_mode = -1;
->
-> @@ -51,15 +51,11 @@ bool __weak efi_poweroff_required(void)
->         return false;
->  }
->
-> -static void efi_power_off(void)
-> +static int efi_power_off(struct sys_off_data *data)
->  {
->         efi.reset_system(EFI_RESET_SHUTDOWN, EFI_SUCCESS, 0, NULL);
-> -       /*
-> -        * The above call should not return, if it does fall back to
-> -        * the original power off method (typically ACPI poweroff).
-> -        */
-> -       if (orig_pm_power_off)
-> -               orig_pm_power_off();
-> +
-> +       return NOTIFY_DONE;
->  }
->
->  static int __init efi_shutdown_init(void)
-> @@ -68,8 +64,13 @@ static int __init efi_shutdown_init(void)
->                 return -ENODEV;
->
->         if (efi_poweroff_required()) {
-> -               orig_pm_power_off = pm_power_off;
-> -               pm_power_off = efi_power_off;
-> +               /* SYS_OFF_PRIO_FIRMWARE + 1 so that it runs before acpi_power_off */
-> +               efi_sys_off_handler =
-> +                       register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-> +                                                SYS_OFF_PRIO_FIRMWARE + 1,
-> +                                                efi_power_off, NULL);
-> +               if (IS_ERR(efi_sys_off_handler))
-> +                       return PTR_ERR(efi_sys_off_handler);
->         }
->
->         return 0;
-> --
-> 2.36.0
->
+> >> Taking this usage count incremented while servicing IOCTL will make
+> >> sure that the user won't put the device into low power state when any
+> >> other IOCTL is being serviced in parallel. Let's consider the
+> >> following scenario:
+> >>
+> >>  1. Some other IOCTL is called.
+> >>  2. The user has opened another device instance and called the power
+> >>     management IOCTL for the low power entry.
+> >>  3. The power management IOCTL moves the device into the low power state.
+> >>  4. The other IOCTL finishes.
+> >>
+> >> If we don't keep the usage count incremented then the device
+> >> access will happen between step 3 and 4 while the device has already
+> >> gone into the low power state.
+> >>
+> >> The runtime PM API's should not be invoked for
+> >> VFIO_DEVICE_FEATURE_POWER_MANAGEMENT since this IOCTL itself performs
+> >> the runtime power management entry and exit for the VFIO device.  
+> > 
+> > I think the one-shot interface I proposed in the previous patch avoids
+> > the need for special handling for these feature ioctls.  Thanks,
+> >   
+> 
+>  Okay. So, for low power exit case (means feature GET ioctl in the
+>  updated case) also, we will trigger eventfd. Correct?
+
+If all ioctls are wrapped in pm-get/put, then the pm feature exit ioctl
+would wakeup and signal the eventfd via the pm-get.  I'm not sure if
+it's worthwhile to try to surprise this eventfd.  Do you foresee any
+issues?  Thanks,
+
+Alex
+
