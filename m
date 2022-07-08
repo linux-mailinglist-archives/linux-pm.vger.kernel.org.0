@@ -2,54 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1088056B353
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 09:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAD556B382
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 09:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237128AbiGHHTl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 03:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S237563AbiGHH0z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 03:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237495AbiGHHTa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 03:19:30 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523327B344
-        for <linux-pm@vger.kernel.org>; Fri,  8 Jul 2022 00:19:29 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so1091605pjo.3
-        for <linux-pm@vger.kernel.org>; Fri, 08 Jul 2022 00:19:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EgcXrxFHPmhqBnO22Uw6rifkBWhXEzlsDV2ZenDVWU8=;
-        b=vU39rQY3c+OTwi/QX2HZiMp2QYsUfvKVx2zn6usRNfHNsEfY+XQm1hgSEt4DdABj+R
-         BNsKnJ7MNpcIJ3+RU9Xqpq2+vUIjMIbjPjfiW/L0ullDWw21nN4N7vhcmv9SwjIm/reZ
-         0D6JU2d9CJ09Uy6StGdnWRtxkxuDmur0f0cmeLDZfwiqOQe8OWeEPFtx8+yMSWPwbqDh
-         mHd9z+NvBtNPrG9qafH6kWzHyUnKF204fzpR+3+mmVpqMb44pI7uLQ2v1zNL8yHKQflj
-         tBOuwVHw7jOuNuV7I1YgF9/MVnEm1wR5ZcB7JzrDsprZEO05MU8Y+95LmzCspoQJTJ7A
-         Cu4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EgcXrxFHPmhqBnO22Uw6rifkBWhXEzlsDV2ZenDVWU8=;
-        b=vsUBRiOKvMRGgw3elkrChu3I1t7HzNWHPiV5nc9oBOy9r0Fdklqw6XRD3BqNGyCZY7
-         PUs6cIcpRKjKd784ezocKiUaCLtZHc7MNLgWWGQk2qqHZUWqBYHB+yOjnzyULuPGH+CA
-         gaMg8vwissS8QuFgoupKZNSKrYpN9sgyTs/jMgpxPwSRj/Lq5oxWwo+msqU2WWjRBr5g
-         n6DkFSp9qhMH2MkLYepAt+ihsrUctPxsoRsoLleFQO6TUcFfsFeXg46qBDJ+Uus8Buvf
-         usVBn6oOBbBtg8sORCxPX2GT85Zeh8Tql9iEYkKVIcLvkY5z6sJG5Q0Glkxg9QTFu32d
-         mkig==
-X-Gm-Message-State: AJIora8JYoLe6vcKE0Nb6aIlXDwBzpKEBcqVboBJh6OsNu95pSevaPhq
-        0QUXrPbMJ6QPdNxSkChTCVRRSQ==
-X-Google-Smtp-Source: AGRyM1vZo8QUsmyZeVSd3mpHaBtw97+PUE+4i7ZXdQ6ibzdXhyINZfsmvaA1cspDz6ZTmsUrV7/sBw==
-X-Received: by 2002:a17:90b:1807:b0:1ef:8aa5:1158 with SMTP id lw7-20020a17090b180700b001ef8aa51158mr10339270pjb.163.1657264768818;
-        Fri, 08 Jul 2022 00:19:28 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id j17-20020a170902da9100b0016be7a89ac9sm9777958plx.94.2022.07.08.00.19.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 00:19:28 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 12:49:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+        with ESMTP id S237571AbiGHH0t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 03:26:49 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EF97D1CC;
+        Fri,  8 Jul 2022 00:26:46 -0700 (PDT)
+Received: from [192.168.2.145] (unknown [109.252.119.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BD66166019C5;
+        Fri,  8 Jul 2022 08:26:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657265205;
+        bh=3UW1BZZx+0gVRM3Zkg56i+K3sZq4zS9Tzxasaob0LAE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ASA7nMIDiWDv/ejeK0zgmd16Zf+Q1IOtCFu4xdTH4MLLIgpZSSo/wjADlaiDbrrE2
+         uHeh9xR3yGKahayPkylS9JJ15+X4wDVPR1x/TBbIHVIStRyfrmrjsLD9hQPwWqDdoX
+         aQVgCM2QQ8hVVLNHF0fWZf6G+rH0TCwfkjuX/Ze3a9Db/u5VmaObbLhBpA/EqycblU
+         4QzeMQqxt0wgwrgfslarMXYV9kkh0if9R2x74hsG84itLTGP9NdFFA32aPddiNmT7q
+         YKlFgHMYNbqfXYJvr+ZAxiqKJeWELRwWR2wWKAFcXycCU0OsED+HwaGf+FiRz2yDQ2
+         fVKndaxgkPdgA==
+Message-ID: <8c52e1d2-6c6d-9a09-e426-e5292f68a3f0@collabora.com>
+Date:   Fri, 8 Jul 2022 10:26:40 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,76 +56,86 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         linux-tegra@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <20220708071926.zehurtbcf35s5tv6@vireshk-i7>
 References: <cover.1657003420.git.viresh.kumar@linaro.org>
  <d557bbd0-2afb-12dc-1287-1aeb44ef55f5@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d557bbd0-2afb-12dc-1287-1aeb44ef55f5@collabora.com>
+ <20220708071926.zehurtbcf35s5tv6@vireshk-i7>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220708071926.zehurtbcf35s5tv6@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-07-22, 22:43, Dmitry Osipenko wrote:
-> This patch breaks Tegra again, please take a look:
+On 7/8/22 10:19, Viresh Kumar wrote:
+> On 07-07-22, 22:43, Dmitry Osipenko wrote:
+>> This patch breaks Tegra again, please take a look:
+> 
+> Damn, not again :(
+> 
+>>    OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
+> 
+> Why did you mention this patch ? This just removed an unused API,
+> Tegra should have broke because of something else, isn't it ?
 
-Damn, not again :(
+This patch is the cause.
 
->    OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
+>>  8<--- cut here ---
+>>  Unable to handle kernel paging request at virtual address ffffffff
+>>  [ffffffff] *pgd=9effd861, *pte=00000000, *ppte=00000000
+>>  Internal error: Oops: 37 [#1] PREEMPT SMP ARM
+>>  Modules linked in:
+>>  CPU: 3 PID: 8 Comm: kworker/u8:0 Not tainted
+>> 5.19.0-rc1-00040-g30b62d123f4f #82
+>>  Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+>>  Workqueue: events_unbound deferred_probe_work_func
+>>  PC is at _opp_compare_key+0x40/0xc4
+>>  LR is at 0xfffffffb
+> 
+> How is LR set to such an address ?
+> 
+>>  pc : [<c0b91b54>]    lr : [<fffffffb>]    psr: 20000113
+>>  sp : df831b08  ip : c33cd4d0  fp : df831b24
+>>  r10: c2586078  r9 : c258606c  r8 : 00000000
+>>  r7 : 00000000  r6 : 00000001  r5 : c33cd480  r4 : c2586000
+>>  r3 : 00000000  r2 : c33cd480  r1 : c258606c  r0 : c2586000
+>>  Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+>>  Control: 10c5387d  Table: 8000404a  DAC: 00000051
+>> ...
+>>  Backtrace:
+>>   _opp_compare_key from _set_opp+0x80/0x408
+> 
+> Whatever happened, happened from _opp_compare_key() and I tried to
+> look at it many times, couldn't figure out what's wrong there.
+> 
+> For the device in question, pmc I think, we don't have any "opp-hz"
+> property in the DT, but still the OPP core will fetch its clock and
+> set clk_count to 1. But this was working earlier too, we were
+> comparing the rate anyways. I think one of _opp_compare_rate() or
+> _opp_compare_bw() is broken here, but I just couldn't figure out. The
+> rate one should run one loop and bw one should just return. I don't
+> see why a crash should come out eventually.
+> 
+> Can you help debug this a bit ? Also see what are the values of
+> opp_table->path_count and opp_table->clk_count, should be 0 and 1
+> AFAICT.
 
-Why did you mention this patch ? This just removed an unused API,
-Tegra should have broke because of something else, isn't it ?
+I see that previously dev_pm_opp_set_config() had "_add_opp_table(dev,
+false)", now it's "_add_opp_table(dev, true)".
 
->  8<--- cut here ---
->  Unable to handle kernel paging request at virtual address ffffffff
->  [ffffffff] *pgd=9effd861, *pte=00000000, *ppte=00000000
->  Internal error: Oops: 37 [#1] PREEMPT SMP ARM
->  Modules linked in:
->  CPU: 3 PID: 8 Comm: kworker/u8:0 Not tainted
-> 5.19.0-rc1-00040-g30b62d123f4f #82
->  Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
->  Workqueue: events_unbound deferred_probe_work_func
->  PC is at _opp_compare_key+0x40/0xc4
->  LR is at 0xfffffffb
+Will take a closer look later on.
 
-How is LR set to such an address ?
+> Sorry about this Dmitry, I think we are all settled and again went
+> into crap.
 
->  pc : [<c0b91b54>]    lr : [<fffffffb>]    psr: 20000113
->  sp : df831b08  ip : c33cd4d0  fp : df831b24
->  r10: c2586078  r9 : c258606c  r8 : 00000000
->  r7 : 00000000  r6 : 00000001  r5 : c33cd480  r4 : c2586000
->  r3 : 00000000  r2 : c33cd480  r1 : c258606c  r0 : c2586000
->  Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
->  Control: 10c5387d  Table: 8000404a  DAC: 00000051
-> ...
->  Backtrace:
->   _opp_compare_key from _set_opp+0x80/0x408
-
-Whatever happened, happened from _opp_compare_key() and I tried to
-look at it many times, couldn't figure out what's wrong there.
-
-For the device in question, pmc I think, we don't have any "opp-hz"
-property in the DT, but still the OPP core will fetch its clock and
-set clk_count to 1. But this was working earlier too, we were
-comparing the rate anyways. I think one of _opp_compare_rate() or
-_opp_compare_bw() is broken here, but I just couldn't figure out. The
-rate one should run one loop and bw one should just return. I don't
-see why a crash should come out eventually.
-
-Can you help debug this a bit ? Also see what are the values of
-opp_table->path_count and opp_table->clk_count, should be 0 and 1
-AFAICT.
-
-Sorry about this Dmitry, I think we are all settled and again went
-into crap.
+No problems :)
 
 -- 
-viresh
+Best regards,
+Dmitry
