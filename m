@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B397156B707
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 12:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562CF56B7AB
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 12:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237836AbiGHKP1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 06:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
+        id S237664AbiGHKtC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 06:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237352AbiGHKP0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 06:15:26 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE6A393
-        for <linux-pm@vger.kernel.org>; Fri,  8 Jul 2022 03:15:24 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id s1so29884556wra.9
-        for <linux-pm@vger.kernel.org>; Fri, 08 Jul 2022 03:15:24 -0700 (PDT)
+        with ESMTP id S237880AbiGHKtA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 06:49:00 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B948184EFC
+        for <linux-pm@vger.kernel.org>; Fri,  8 Jul 2022 03:48:57 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id b26so30022417wrc.2
+        for <linux-pm@vger.kernel.org>; Fri, 08 Jul 2022 03:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=//ZIEtMiJwet7hlLmuFqjVir93kiywzloQ78cgqOB6Q=;
-        b=pDm2XjqZpxPRQbZaEJ2VAYWNdayd4hQ0TH+2vRV7cDIMRNyGSC1DpABuSu98xhl8/W
-         5dw09i0NARTn5Nar5Q5cG2av6d7UT6Wt+eBkCMoJQgQVz7hUcQHpU10tECUgqFodjJXX
-         GbTFnDZOfFx5bzC4THEN5X/dWXgBQHyMVj67h82bb5x7kZFlGkw6bVcbZSzkXwgeb5u+
-         sDgpT7HLgDxeaz622+58YZPDxu5r2LOyHEbAgJCTq97QIQ/dAdGn95t57qgOL0liXEX+
-         tvgPyOBp0kqOJoIUnIdNWKju7ZvchW+WIINg8xN0/05LaLd3ttM0BNGHczGZi82podCl
-         ZR3Q==
+        bh=OsTNTRG4KqNreOuBGVU/o2FbeooZXP6/5uwnACxatIE=;
+        b=fTIjqwYLOEpjJ2EB5ggdyU0lpmkAigKUr9FmF+CyyRCY/VmMp7Sen7JfcUE4B1rTw9
+         hEELkjmrElKmNX7am2tlWE4AW3+p+QoPfDCe9nQ63QUj9gb4rNmK/0CRS/Fo8/ZgsOYP
+         0PsemLXZUvNuIQzBgBaSfKAVTnjiauP5Tueb5tdYDItZVgQT6x6AI8caFQBnfvDrOm6O
+         D1JKOFtOyj6yfsaubTBMjwaZp4/13aaoo2eE7Tc6HLFoNbxIPTzFKAloii3RkeoPpY4Q
+         1yc03f3A3NlGRXwb6IXLUtjHnam5PbI22TwNsgxxV5rZyA/mGFxPfovzt6zQlLaK75i9
+         MLQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=//ZIEtMiJwet7hlLmuFqjVir93kiywzloQ78cgqOB6Q=;
-        b=1j4cCEhDyPyMsOurzhAVn8b2b0cKHLMTqiUXIDF7TwB7fiETAac/mQFBHKul4pXK78
-         tH3U5cGkAoB7HFhu3tYMit9jR2PutroICIdsxz9Qcm+RlEvfAcbGZ6EUjNa4oEPeIyzs
-         PjlsjMp1KBTCKThYCZoi/Kzn7Kye+edzNXU/+LrT3h8y7EVG49tkLZbYXslR2BJYvDEI
-         jQRnsc8c82/KpLegObzVztvlvMRxKeZL8TyyDfeho2sFZTY9S5g7okzi1qcLlXyRbkbQ
-         87JV/H8bfEKmDVywp4MXkxL9NJi0HXXFqoJtPabU04uE9+AwYnYb2uCvh0pxBEmdoe3n
-         lqrA==
-X-Gm-Message-State: AJIora8HkRlTosa2ETZJ4yMEJW+6Wv68U48MX7WmMkcgSoSyJ9Yyn6Yk
-        94Owdts/lm9rR7sbnL0EALe5dA==
-X-Google-Smtp-Source: AGRyM1skvvJE90Z/qsompIurlpPMEhkmexMkzxtzONX/3PQzgMmcTArj3JxTdM9dlhqhy8ED3/X16w==
-X-Received: by 2002:a05:6000:1789:b0:21d:7279:f455 with SMTP id e9-20020a056000178900b0021d7279f455mr2535366wrg.542.1657275323179;
-        Fri, 08 Jul 2022 03:15:23 -0700 (PDT)
+        bh=OsTNTRG4KqNreOuBGVU/o2FbeooZXP6/5uwnACxatIE=;
+        b=kbF7mkWqbz+c8I9DyDG3iNY5nCEf8uwFWbeoIrOPgH8TtnUTzIXU+byrQWWsfb1LHM
+         B0D/CefKgGgJd6sIAj8mh58cUcerZmKtEufTFUdGRsolk0kZjJPW6AL9EEimzmsXuuk6
+         qS/79/pf5QnMVj5TeJg1TJvRaXs6qUAhwmOieGyXWdz7Q9bDVzkMI0LJIWH04MUlx73Z
+         6VZ9a42r53i3OxaJBakDrtnAOjovwr3cKOB0YVI76UIMbwpii/53LuUxsEEvA2VaMnW8
+         R1j5EFLZO1oeNM9oAKukzUfA8rdDfb6xNiKYYI7sTuBosneLaqt7+uN7TOOAIKRKIL6P
+         Ot4A==
+X-Gm-Message-State: AJIora9n01iPEB6OOShkHnyCTzmpLE/TEW13AmMAyWefKxLVT27OuxeN
+        pRz1SZGa692FdYLwvFRfjZwbzQ==
+X-Google-Smtp-Source: AGRyM1umTikns98Puhtn+l/ypO6m7oa7DrFAI530U1ATKgKertdqJUB4WFHUYrQwAvR+2RiE1CKrgw==
+X-Received: by 2002:a05:6000:1683:b0:21b:93b0:898f with SMTP id y3-20020a056000168300b0021b93b0898fmr2680833wrd.662.1657277336196;
+        Fri, 08 Jul 2022 03:48:56 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id be12-20020a05600c1e8c00b0039c4d022a44sm1718057wmb.1.2022.07.08.03.15.22
+        by smtp.googlemail.com with ESMTPSA id r41-20020a05600c322900b003a032c88877sm1636072wmp.15.2022.07.08.03.48.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 03:15:22 -0700 (PDT)
-Message-ID: <828d8a53-7ba2-94f7-693c-ed3e6d4b4c28@linaro.org>
-Date:   Fri, 8 Jul 2022 12:15:21 +0200
+        Fri, 08 Jul 2022 03:48:55 -0700 (PDT)
+Message-ID: <5f3aae11-f881-78e8-f90e-80b485e252f3@linaro.org>
+Date:   Fri, 8 Jul 2022 12:48:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
@@ -68,7 +68,7 @@ Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,108 +76,10 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Zhang,
-
-thanks for reviewing
-
 On 08/07/2022 05:56, Zhang Rui wrote:
-> On Thu, 2022-07-07 at 23:45 +0200, Daniel Lezcano wrote:
->> The routine doing trip point crossing the way up or down is actually
->> wrong.
->>
->> A trip point is composed with a trip temperature and a hysteresis.
->>
->> The trip temperature is used to detect when the trip point is crossed
->> the way up.
->>
->> The trip temperature minus the hysteresis is used to detect when the
->> trip point is crossed the way down.
->>
->>> -----------low--------high------------|
->>
->>               |<--------->|
->>               |    hyst   |
->>               |           |
->>               |          -|--> crossed the way up
->>               |
->>           <---|-- crossed the way down
->>
->> For that, there is a two point comparison: the current temperature
->> and
->> the previous temperature.
->>
->> The actual code assumes if the current temperature is greater than
->> the
->> trip temperature and the previous temperature was lesser, then the
->> trip point is crossed the way up. That is true only if we crossed the
->> way down the low temperature boundary from the previous temperature
->> or
->> if the hysteresis is zero. The temperature can decrease between the
->> low and high, so the trip point is not crossed the way down and then
->> increase again and cross the high temperature raising a new trip
->> point
->> crossed detection which is incorrect. The same scenario happens when
->> crossing the way down.
->>
->> The trip point crossing the way up and down must act as parenthesis,
->> a
->> trip point down must close a trip point up. Today we have multiple
->> trip point up without the corresponding trip point down.
->>
->> In order to fix that, we store the previous trip point which gives
->> the
->> information about the previous trip.
->>
->> As a sidenote, the thermal_zone_device structure has already the
->> prev_trip_low and prev_trip_high information which are used by the
->> thermal_zone_set_trips() function. This one can be changed to be
->> triggered by the trip temperature crossing function, which makes more
->> sense, and the two fields will disappear.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>   drivers/thermal/thermal_core.c | 32 ++++++++++++++++++++++----------
->>   include/linux/thermal.h        |  2 ++
->>   2 files changed, 24 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/thermal/thermal_core.c
->> b/drivers/thermal/thermal_core.c
->> index f66036b3daae..92bc9ddb6904 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -357,19 +357,30 @@ static void handle_critical_trips(struct
->> thermal_zone_device *tz,
->>   static void handle_thermal_trip_crossed(struct thermal_zone_device
->> *tz, int trip,
->>   					int trip_temp, int trip_hyst,
->> enum thermal_trip_type trip_type)
->>   {
->> +	int trip_low_temp = trip_temp - trip_hyst;
->> +
->>   	if (tz->last_temperature == THERMAL_TEMP_INVALID)
->>   		return;
->>   
->> -	if (tz->last_temperature < trip_temp &&
->> -	    tz->temperature >= trip_temp) {
->> -		thermal_notify_tz_trip_up(tz->id, trip,
->> -					  tz->temperature);
->> -	}
->> -
->> -	if (tz->last_temperature >= trip_temp &&
->> -	    tz->temperature < (trip_temp - trip_hyst)) {
->> -		thermal_notify_tz_trip_down(tz->id, trip,
->> -					    tz->temperature);
->> +	/*
->> +	 * Due to the hysteresis, a third information is needed to
->> +	 * detect when the temperature is wavering between the
->> +	 * trip_low_temp and the trip_temp. A trip point is crossed
->> +	 * the way up only if the temperature is above it while the
->> +	 * previous temperature was below *and* we crossed the
->> +	 * trip_temp_low before. The previous trip point give us the
->> +	 * previous trip point transition. The similar problem exists
->> +	 * when crossing the way down.
->> +	 */
+
+[ ... ]
+
 >> +	if (tz->last_temperature < trip_temp && tz->temperature >=
 >> trip_temp &&
 >> +	    trip != tz->prev_trip) {
@@ -199,12 +101,13 @@ On 08/07/2022 05:56, Zhang Rui wrote:
 > thermal_notify_tz_trip_down() for trip 0, because we always handle the
 > trips in ascending order, and tz->prev_trip is 1 when we do
 > handle_thermal_trip(0).
+Well actually you are right, I reproduced the scenario with temperature 
+emulation. I'll investigate how to handle this case.
 
-Well I don't see how to handle this case, except accepting the detection 
-will happen at the next temperature update, no ?
+Thanks for spotting this
 
 
--- 
+
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
 Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
