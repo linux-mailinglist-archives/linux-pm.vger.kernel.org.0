@@ -2,81 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8795756B9CC
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 14:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2DE56BA72
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Jul 2022 15:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238260AbiGHMgO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 08:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S231921AbiGHNOa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Jul 2022 09:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238246AbiGHMgM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 08:36:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237417C1A6;
-        Fri,  8 Jul 2022 05:36:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S238044AbiGHNO2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 09:14:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA0B510CB
+        for <linux-pm@vger.kernel.org>; Fri,  8 Jul 2022 06:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657286065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xahRR/MGCN4opUKZtfERLy3MATM50vexXH0Q0OxZ6Kk=;
+        b=QQE/vPHMRwFSKvenSXNGt7xWAKTQSTQ6jCZGArLhSzzkk27ls/CFD61vKCG3j1Pn1ezl+R
+        Zm2r7x8HmMqwhnbvem73ppYJcAEIlU6YDrWumNQzZb3MH0EU5D/z3q55FNTZsPYH1qniYK
+        VB4K0QMePo3+JGlhgoH9ad3IS8rU/cc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-vFZrUz05PrOtVJI0C0VS3A-1; Fri, 08 Jul 2022 09:14:15 -0400
+X-MC-Unique: vFZrUz05PrOtVJI0C0VS3A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2D856271D;
-        Fri,  8 Jul 2022 12:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DE9C341CB;
-        Fri,  8 Jul 2022 12:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657283771;
-        bh=hq0+B/dAKE6KAtx/w8/pzHOgIoBA3D5lqFzL4AAZuD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oszWAku0C+PsBkcHAWimhkDNHJmcX4DGcNbiIuPC97mm+hQp3UNk68L+XMeRTGwyi
-         iRpcSXZKS/mWe/Q7AIGIujWDCIHszuz369g9mKkKm5lpdFtXwj4zD8oDnBvv59RRxa
-         h9EZsRzRFunJJa1pT+K1aIImOmqlGe3VmpTmnbthscUIY52de6/UAmcJ7g0H5+0Qcu
-         cgOhf5uWTsaaTskZUL1wOECszcwH1v4us+aJju3wULm3dkUgC85zccKr3gpnrA/JzG
-         i5Cce56flAuxGHq3aWpM0iKuGqjWZRk+qkHMf765TQurQHKnlY8I5GZPy8BFAnQS+v
-         4xvVp0DSbOyMg==
-Date:   Fri, 8 Jul 2022 20:35:59 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 00/15] dt-bindings: arm: freescale: Switch fsl,scu
- from txt to yaml
-Message-ID: <20220708083952.GV819983@dragon>
-References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64F2219705AB;
+        Fri,  8 Jul 2022 13:14:14 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.193.188])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B43461121314;
+        Fri,  8 Jul 2022 13:14:12 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        x86@kernel.org, linux-efi@vger.kernel.org
+Subject: [PATCH 0/2] Fix 2 5.19 power-off regressions caused by sys-off-handler work
+Date:   Fri,  8 Jul 2022 15:14:10 +0200
+Message-Id: <20220708131412.81078-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,53 +62,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 03:50:07PM +0300, Viorel Suman (OSS) wrote:
-> From: Viorel Suman <viorel.suman@nxp.com>
-> 
-> Changes since v7: https://lore.kernel.org/lkml/20220704161541.943696-1-viorel.suman@oss.nxp.com/
->   * added missing Reviewed-By: 
->   * Defined "mboxes" and "mbox-names" sections in scu-key.yaml as schema.
-> 
-> Changes since v6: https://lore.kernel.org/lkml/20220629164414.301813-1-viorel.suman@oss.nxp.com/
->   * The series updated so that each patch making the conversion removes
->     the piece being converted, then finally the patch adding fsl,scu.yaml
->     removes the last pieces, as suggested by Krzysztof Kozlowski.
->   * Updated ocotp and system-controller node names in the existing DTS
->     files
-> 
-> Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
->   * Updated according to Krzysztof Kozlowski comments
-> 
-> Changes since v4: https://lore.kernel.org/lkml/20220615105834.743045-1-viorel.suman@nxp.com/
->   * Missing SoB added
-> 
-> Changes since v3: https://lore.kernel.org/lkml/20220609143423.2839186-1-abel.vesa@nxp.com/
->   * Examples included
->   * Included Abel's patches fixing thermal zone, keys and power controller names.
-> 
-> Abel Vesa (12):
->   dt-bindings: clk: imx: Add fsl,scu-clk yaml file
->   dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
->   dt-bindings: input: Add fsl,scu-key yaml file
->   dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
->   dt-bindings: power: Add fsl,scu-pd yaml file
->   dt-bindings: rtc: Add fsl,scu-rtc yaml file
->   dt-bindings: thermal: Add fsl,scu-thermal yaml file
->   dt-bindings: watchdog: Add fsl,scu-wdt yaml file
->   dt-bindings: firmware: Add fsl,scu yaml file
->   arm64: dts: freescale: imx8: Fix power controller name
->   arm64: dts: freescale: imx8qxp: Add fallback compatible for clock
->     controller
->   arm64: dts: freescale: imx8qxp: Fix the keys node name
-> 
-> Viorel Suman (3):
->   arm64: dts: freescale: imx8qxp: Remove unnecessary clock related
->     entries
->   arm64: dts: freescale: imx8qxp: Fix the ocotp node name
->   arm64: dts: freescale: imx8: Fix the system-controller node name
+Hi All,
 
-I'm preparing material for the next merge window, so just picked the
-series up.  If there is more outstanding review comments coming up,
-let's address them with follow-up changes.
+I noticed that my Lenovo Yoga Tablet 2 1050L was hanging on power-off again
+with 5.19, even though I had implemented a workaround for this in 5.17 .
 
-Shawn
+I quickly realized that this was caused by the recent sys-off-handler work
+and fixed this by switching the workaround over to register_sys_off_handler
+with a priority of SYS_OFF_PRIO_FIRMWARE + 1, so that the workaround runs
+before acpi_power_off() get a chance to run.
+
+This made me realize that the efi_power_off handler which sometimes is
+used in preference of acpi_power_off had the same problem, so the second
+patch in this series fixes that.
+
+I plan to include patch 1/2 in a fixes pull-req to Linus soon. Ard,
+if I can get your Ack for 2/2 then I can include this in the pull-req
+if you want; or you can send this to Linus yourself.
+
+Regards,
+
+Hans
+
+
+Hans de Goede (2):
+  platform/x86: x86-android-tablets: Fix Lenovo Yoga Tablet 2 830/1050
+    poweroff again
+  efi: Fix efi_power_off() not being run before acpi_power_off() when
+    necessary
+
+ drivers/firmware/efi/reboot.c              | 21 +++++++++++----------
+ drivers/platform/x86/x86-android-tablets.c | 17 +++++++++++++----
+ 2 files changed, 24 insertions(+), 14 deletions(-)
+
+-- 
+2.36.0
+
