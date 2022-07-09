@@ -2,58 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1804C56C3E7
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Jul 2022 01:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB2056C7BB
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Jul 2022 09:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240248AbiGHUde (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Jul 2022 16:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
+        id S229482AbiGIHtf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Jul 2022 03:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240161AbiGHUdD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Jul 2022 16:33:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08988A2E45;
-        Fri,  8 Jul 2022 13:32:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA372B824C0;
-        Fri,  8 Jul 2022 20:32:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70A08C341CF;
-        Fri,  8 Jul 2022 20:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657312358;
-        bh=1tPXpVG/Ml0a3RXii5mlbRyVNrajog25HL71TNtWBNY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CSfG9dPTmvmgAzDbzMF9SEXY84/tXm9WRWlAvh1VTsPDIM6O5zJHscGHR/ykhhENB
-         74iU+TnZU/0bN0XrUEHrQ9fI4z7Q4Uv7TrIqfUSkzugXCJ68Pivb52CSuz8AVGlcHJ
-         CZQwX7TofhDK+RAOigr0/P6OQMioM4zOxaIC7IGuzKXxrnEz+x82oH404wJnMjSJIH
-         Gd8/DCYedWNoZlCAl5gNoV39lKcNe3qhkKJZiU5j7DY9HJ/L0IKyAyZaLKaJNuHPvo
-         HzacNMV378jGvwbEGlODRMwsQF73EE1420dRfudDIED5RlLb5lAftqptj6i35h46X2
-         Fjk/d5rC3ACbA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5331FE45BDB;
-        Fri,  8 Jul 2022 20:32:38 +0000 (UTC)
-Subject: Re: [GIT PULL] Power management fixes for v5.19-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hEZmJ4PJZs43m4tbrEVX4Hx3Jd1jvSsTzU09uaqbm7TQ@mail.gmail.com>
-References: <CAJZ5v0hEZmJ4PJZs43m4tbrEVX4Hx3Jd1jvSsTzU09uaqbm7TQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hEZmJ4PJZs43m4tbrEVX4Hx3Jd1jvSsTzU09uaqbm7TQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.19-rc6
-X-PR-Tracked-Commit-Id: fe7c758c07c4729a16f940eb1d77027ad032ab29
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3784fad934c5bd68551f0af4252821697957a72a
-Message-Id: <165731235833.2541.17663215306032983349.pr-tracker-bot@kernel.org>
-Date:   Fri, 08 Jul 2022 20:32:38 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229448AbiGIHte (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Jul 2022 03:49:34 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01FA3ED56;
+        Sat,  9 Jul 2022 00:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657352971; x=1688888971;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6WJoZVk75dNFJXda9XH+6JTKF3UWIiSuwtfl/PGMrOA=;
+  b=cNTPqR5hMYg4jzPnBgHq8mrlm7hWbjE05VKviXCcqiDdE5qX+0W7eron
+   KL8VVbsGhC3B371+vfXQfL5n6Lm7zyrzV8QIhSiG+fFORE0Rnhj2kdJ01
+   DvwQ8cVIGkZwNEh9H33NgXyRdky4wAFo7OtvIjeZUBqjP9ujRd2cw0c0F
+   PV+QvZ1+I6L7TetAi40qMWfIGfFXTUgIcrV2aWoSbAcApX4ZQdNFltcjR
+   BGCUHwFr+VsGUFlNf3wCDbsOCc7lj/o1fapBc3GWoJr+7mZJfsxNlGmfp
+   z+aAA2m2ix6YfHuo+/0flNMcO3cxP6z9zJYO7MJaI2V9HVLvNT9EakJQE
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="346102157"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="346102157"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 00:49:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="626946662"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 09 Jul 2022 00:49:29 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oA5DV-000ORz-9d;
+        Sat, 09 Jul 2022 07:49:29 +0000
+Date:   Sat, 09 Jul 2022 15:48:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 3420be34050b75d68043c73c30ad950166ba05a7
+Message-ID: <62c932d0.icFRZQKJxHBI2M1R%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,15 +63,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 8 Jul 2022 21:18:47 +0200:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 3420be34050b75d68043c73c30ad950166ba05a7  Merge branch 'pm-core-next' into bleeding-edge
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.19-rc6
+elapsed time: 722m
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3784fad934c5bd68551f0af4252821697957a72a
+configs tested: 52
+configs skipped: 2
 
-Thank you!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                          randconfig-a014
+arc                  randconfig-r043-20220707
+riscv                randconfig-r042-20220707
+s390                 randconfig-r044-20220707
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220707
+hexagon              randconfig-r045-20220707
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://01.org/lkp
