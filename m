@@ -2,43 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3964756C9D0
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Jul 2022 16:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E7256C9DF
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Jul 2022 16:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiGIOKZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Jul 2022 10:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
+        id S229491AbiGIORo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Jul 2022 10:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGIOKY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Jul 2022 10:10:24 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2071.outbound.protection.outlook.com [40.107.96.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B4013F23;
-        Sat,  9 Jul 2022 07:10:22 -0700 (PDT)
+        with ESMTP id S229379AbiGIORn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Jul 2022 10:17:43 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2064.outbound.protection.outlook.com [40.107.244.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4E9CE32;
+        Sat,  9 Jul 2022 07:17:42 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YPnq1ahb+TfviT7vzF97El2uq5ACqnvDhnyKlrJnOpqYVZKHmMIzMqX7wgW01NK4PFwZGJ1s0qujVmAvt3tkwCAn+2+tfHKDNl9irTm0aV1jddg743T7YtxbBovgJEx49Y34bAF0nBMeffSct6pONijO87GKqwEIm1lEw2Dy/4QYv5o2TkyOhCbbdxXZCZU7kGLM7vPaSoYU29TPnE9hbTEMxuBLzx4ClibUz8Y8WgUBx/a5IbnZL070/jtW7LP42yi3hSn6tIsgHJM+l58ZKGiRYlqGMtxgtT+ICSQ/B1kw+ib859cEJvPavmWT7DTwlu0LIeqTn8fXNS4KpftzSA==
+ b=abJ0hZEjpx8Xaf0nsJ65qnk9gEtWof1ToIf63WPlRp+zfEyL/QFuC5qo+mtPDY9PB9P8DNtRUab8rpB46RbVCYIflNypYbg2Iez3EfUAl6m2KAz+7lUmTIe3cCWOuqJ8v9l5NMxpponfrKWR6/vgKrzTO7EVj/8v7Tmu4JFfJ6/L7BruMAeDFf4YBlfmXdkehTOiKToL67oV0M2Yzvepiu5ywE3lWdyBFUxgcig5nW7S5G5mZ60JaohABQqHfM5cs9AETqrHzih0NVKWDEf/XT722xg50HMRLjXEt0ga/UieoknLp6fyhSt/4AteuxUe/q03G1p8HmoRgBNbm2lXOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bcYhTcRIqYsFfZBKTEYI68asQtvruIN06VdsK79VyKU=;
- b=RlQYsMiQ3nMQLkfPxw4LhH3IIRfNFGUF2yC8+8+2RRS/Iau8BOpkwi31p10hk3qwWgsgrH790kVEawGJi20AbBTCxQ0ovr9RXWaWF94UA9kxfVz4rIF2inwp6eCbbpyXabMCx1wy1r49f0sTLB3FlHDEthFb3/G/BW2C1RqLyIM4BFIRVEcbndYaBSfAa6iIJ0KTx5a3ZKZ927hVfl8p3sNCwj82LJQGtIFdH8PbNxL01Rrf+D1Li7JFt8SxibKcGW6WvWp1C+hXvrOH1VOEuSNQKNGMUPwMikd7PZyjESWheKaBRy3jxSaC4Grs0RV1oU2+ssgq+SXFqDT/P/kPDg==
+ bh=AZjYVInbbsLWr3JkIKw3CSb4z2A1d1LNPl48JfqA8SQ=;
+ b=cwgWpJiMX+yGsa9x3NpFylPcQBW5r9W7r2LuJoHaNPEaeDR1QS40c4/acoUcOHaTQERFVxn6ZMVcAEHkwwAGG1UBl+/s/2v36h0xcIOS07gs1s6NYslUHlveVgBN6j60xx3mCbK1YRlJoG3OIf2qlYxxZkQ+qAfBGuDLIIpHaHk2h7r/i+WNvG17E3cykCuUc8uJD4AbGT5KKWeuYrZK9xGcWYYH0DAb7/gfOB28uEpn4dIPNAxGSFEhtkS5aHXH4u57nY5l43i9kK6tsSu3UY71R6a+g7ksDToGAe6Cln7ot0y6Ymh8vsG5Kq8kPeZwwF7FdmVdWB/aXSc5pDa0XA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bcYhTcRIqYsFfZBKTEYI68asQtvruIN06VdsK79VyKU=;
- b=a6XeKBNIADTHjBtJLUnHY7E1avbiyx5zV119T22hM7h8DSjNR992ul7iwIQ7KYsV/M2ehjmT1JqWoc3ISF/4M5Re+OP17ocgToDhJHcK2An3GvjiLvIVW6U/rms8jpr4kRv8cX61hCoE9Z1vqIQ80OI9XwPQPn+tnY44kL8PkdY=
-Received: from BN8PR04CA0054.namprd04.prod.outlook.com (2603:10b6:408:d4::28)
- by MW5PR12MB5681.namprd12.prod.outlook.com (2603:10b6:303:19e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.23; Sat, 9 Jul
- 2022 14:10:20 +0000
-Received: from BN8NAM11FT024.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:d4:cafe::61) by BN8PR04CA0054.outlook.office365.com
- (2603:10b6:408:d4::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.19 via Frontend
- Transport; Sat, 9 Jul 2022 14:10:20 +0000
+ bh=AZjYVInbbsLWr3JkIKw3CSb4z2A1d1LNPl48JfqA8SQ=;
+ b=Asdlz2CcDpogbFBDCjtk82MgloQMfc6oqiyCa3rO0Grsh4b3pjrLl7QGktnWjpJcSo8v5q4A51Y4qMxzuCqJDK4r4IOCJuJQG5xh/gH5Td7ngT4c7fsmxi65RV49jyql7oOjEA1Iw3FVr/cdmGnQdGoMrCnhmajJfk1MGPfj7gU=
+Received: from DM5PR06CA0096.namprd06.prod.outlook.com (2603:10b6:3:4::34) by
+ MW2PR12MB2396.namprd12.prod.outlook.com (2603:10b6:907:9::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5417.20; Sat, 9 Jul 2022 14:17:39 +0000
+Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:4:cafe::c4) by DM5PR06CA0096.outlook.office365.com
+ (2603:10b6:3:4::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.17 via Frontend
+ Transport; Sat, 9 Jul 2022 14:17:39 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,13 +45,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT024.mail.protection.outlook.com (10.13.177.38) with Microsoft SMTP
+ DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Sat, 9 Jul 2022 14:10:19 +0000
+ 15.20.5417.15 via Frontend Transport; Sat, 9 Jul 2022 14:17:39 +0000
 Received: from pyuan-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Sat, 9 Jul
- 2022 09:10:15 -0500
+ 2022 09:17:35 -0500
 From:   Perry Yuan <Perry.Yuan@amd.com>
 To:     <rafael.j.wysocki@intel.com>, <viresh.kumar@linaro.org>,
         <Ray.Huang@amd.com>
@@ -62,35 +61,51 @@ CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
         <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
         <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Perry Yuan <Perry.Yuan@amd.com>
-Subject: [PATCH v2 00/14] AMD Pstate Enhancement And Issue Fixs
-Date:   Sat, 9 Jul 2022 10:08:35 -0400
-Message-ID: <20220709140835.830084-1-Perry.Yuan@amd.com>
+Subject: [PATCH v2 01/14] x86/msr: Add the MSR definition for AMD CPPC hardware control.
+Date:   Sat, 9 Jul 2022 10:17:15 -0400
+Message-ID: <20220709141715.834713-1-Perry.Yuan@amd.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 72952b6b-225e-44d1-b02b-08da61b4c1c6
-X-MS-TrafficTypeDiagnostic: MW5PR12MB5681:EE_
+X-MS-Office365-Filtering-Correlation-Id: fc3f1730-c20c-4c67-4a64-08da61b5c7c4
+X-MS-TrafficTypeDiagnostic: MW2PR12MB2396:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Qcg6kmW4rj8Q8B8hmy6P1CUk6TJYI5ju8on6YkA3wSq9hEd6W0ZGk44XBPlJ+FGq4vkVTKr5JKrWv+B7QMI1i3jdiOlvOnIEZnRV45cabEBdcSfU4mNk74KVdcT9q82GmVLRfm4gIvuzwwiA1i35rQUlYWNqBHSqnuTGZVh395CxvjikBs0decV//Yi58lXd8fwOdl0lOEgO/y3a6vDgofanRSenHF51um6iXeXbUZinl5L5cr8mskm82Jd5zHuATVblTZlflNNpfw6lI7Cq3Vv7uYEiBTqy8OYmUqblFVSsdghkVEIU4XrIiYEM1L92KofsW5p9LOYHqHtE/Iswy7w8N9QckRhmi14TvDNhpR1ux+1kMdKpO2zX29rAjmqn8fkMxD8cYhlgRXdkCMYjhv5cTjzMyTM0k36b9UAIs45e2btlu6zjlH3PcHlCd43uxa7/CY4jQN92h7O4aHI3madl+97ZVLTD1mUbNseQjDKPqFdZAv27OTUnz8klLBdp49CzmV4+T1s7+WZ09jFmA3guMIvY9afUfRT03kYc/4hBIemXahoo4H/VnVSfP0fIxYtshxa3HZrDuHOpM31+ansqgwWqO4rBgo7+kaIvNnwb1ONv2s7br3OrB9449n7QvswIC4FBBNzwjSOw17+LQTrIYDrlilyvoOc99OEuYsH00AZbeseaSMzYrf8lUsWP9W8u6k6yhl9uY67r70vmdDdTpWwnfRpwli5+4UD9gXTANIkh5luFstGcu5BMEybfIsgsc+HgXftijNLN2tav3Ag4q49nddbtaIYmoSPGjjnhKxsaWOCQGwMmcU5uykLC6gI+9ECMAda/WfMux2nplG0NIHhf5DfT2uwVcoPJPmDdsa4Mh6elhHFG1UcwHG3nznNO9NKAcO4a4pGaQhLM7ElgC2C/YPqgKFo5DAq86Pc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(376002)(136003)(46966006)(40470700004)(36840700001)(81166007)(86362001)(82740400003)(356005)(36860700001)(34020700004)(4326008)(8676002)(82310400005)(40460700003)(70206006)(70586007)(2906002)(5660300002)(2616005)(1076003)(26005)(8936002)(40480700001)(16526019)(186003)(426003)(336012)(47076005)(83380400001)(7696005)(54906003)(6636002)(110136005)(316002)(478600001)(41300700001)(6666004)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?sQi0UmND7ZvbthNm5x/kRKw5khRSuu194UX/QqzdSnx/H+Zb/M5ER2fZ3X8k?=
+ =?us-ascii?Q?ry63yrbrDxJxp5ydnAjCFCmq1OUe6o2pyJMK5iatNWlkJQ4YdncAaoHxlKWq?=
+ =?us-ascii?Q?pFgNib6rMQX5gV7l1IRpl6MjkOqwilAHk432N/6F3n4qZHmeYH7oyNEQ+x3O?=
+ =?us-ascii?Q?EA+b8nLJv1Ja9usGXsv9dhz89eMD5IrdCWuAMbmg/BZPbBjtydOri2jx/LoF?=
+ =?us-ascii?Q?9RAyHSVmTxj+uA+PRulaK5Rs3NtAzIUeZmtX8lTmyUen6QTPvRCiUDvY0j9d?=
+ =?us-ascii?Q?+NwZyaGB5Lb01MdxzrtRGUIzl36rgVf5a15WTM23NZ6tDtD1zc2VA+7lN43V?=
+ =?us-ascii?Q?VusJ7zEKOzD1puqHjG35WSqwVPqBWmY50Pz/HfbVcvQMLaLfbTAVMtTJwmRQ?=
+ =?us-ascii?Q?UL0Wa7+eOknyOGorvbyoqNgv7YZL0ueaX9h8DPCeORmPFcRHrXiBHMGPVbCS?=
+ =?us-ascii?Q?lTok9ck7WFKQMVQfjrHG74QrdrjHaC+EzBRZC0UB0gdbVnACOGx8CBNT1e9k?=
+ =?us-ascii?Q?WEdPUuKWp8veqjtihdbm5vDK6Q0I30JRSuK+VmuRbah4UHYV7snrSgXAAENF?=
+ =?us-ascii?Q?RHl4Z4CkRWNQV47/Spwcu6p+3N9RhWmGI/hYaX3iGxKhlJ151UALu3T+RNwp?=
+ =?us-ascii?Q?VLNcFdoTKHUQL4SJviJK0fqbuGJgDRoPXJGjOXuBIthtWe6/x9ixk9OExOnX?=
+ =?us-ascii?Q?njeR4sTuz8jE0J411GLE+R/UGUI19xYAajNGl/WImX4vQa0h93DyO/zpxFBf?=
+ =?us-ascii?Q?EPeB6niqN4jZOYDs289cfY1uEh80XfrfS1PbE5ZtYidI1b9ZDNvDcXQ/GDzY?=
+ =?us-ascii?Q?ET8s/w15W/allyPExwZZ65Rahahdp4o/tbty8Rf7s0M4RVWp7A+klD+BUM5n?=
+ =?us-ascii?Q?yprZbKSD+a3zx5YNvBIc6oLebeCW6OpcO+zotXJP1rYBJ80AspbJumOaPcfI?=
+ =?us-ascii?Q?rd2ICx/vicAqr4SFehBkNg=3D=3D?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(346002)(396003)(46966006)(40470700004)(36840700001)(70586007)(70206006)(26005)(966005)(40460700003)(478600001)(8676002)(36756003)(40480700001)(86362001)(4326008)(1076003)(110136005)(8936002)(6666004)(16526019)(34020700004)(36860700001)(82310400005)(186003)(4744005)(2906002)(54906003)(81166007)(82740400003)(426003)(356005)(41300700001)(5660300002)(7696005)(336012)(6636002)(316002)(2616005)(47076005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2022 14:10:19.8596
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2022 14:17:39.3757
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72952b6b-225e-44d1-b02b-08da61b4c1c6
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc3f1730-c20c-4c67-4a64-08da61b5c7c4
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT024.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5681
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2396
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -101,53 +116,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+This MSR can be used for controlling whether the CPU boost state
+is enabled in the hardware.
 
-This patchsets adds support for precision boost hardware control
-for AMD processors.
+AMD Processor Programming Reference (PPR)
+Link: https://www.amd.com/system/files/TechDocs/40332.pdf [p1095]
+Link: https://www.amd.com/system/files/TechDocs/56569-A1-PUB.zip [p162]
 
-Meanwhile the patchset fixs lowest perf query and desired perf scope issues.
-Update transition delay and latency default value to meet SMU firmware requirement.
-and do some code cleanups,
-It also exports cpufreq cpu release and acquire for coming amd-pstate epp mode driver
+Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+---
+ arch/x86/include/asm/msr-index.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-The patch series are tested on the AMD mobile and EYPC server systems
-
-v1->v2:
-- add two new patches to remove the acpi_disabled check
-- fix some typos in the commit info
-- move the clamp_t() into amd_pstate_update() function
-- rebased to 5.19-rc5
-
-[1]:https://patchwork.kernel.org/project/linux-pm/list/?series=657510
-
-Perry Yuan (14):
-  x86/msr: Add the MSR definition for AMD CPPC hardware control.
-  cpufreq: amd-pstate: enable AMD Precision Boost mode switch
-  cpufreq: amd-pstate: cleanup the unused and duplicated headers
-    declaration
-  cpufreq: amd-pstate: prefetch cppc_req_cached value in
-    amd_pstate_cpu_init()
-  cpufreq: amd-pstate: simplify cpudata pointer assignment
-  cpufreq: amd_pstate: fix wrong lowest perf fetch
-  cpufreq: amd_pstate: map desired perf into pstate scope for powersave
-    governor
-  cpufreq: amd-pstate: fix white-space
-  cpufreq: amd-pstate: update pstate frequency transition delay time
-  cpufreq: cpufreq: export cpufreq cpu release and acquire
-  cpufreq: amd-pstate: add ACPI disabled check in acpi_cpc_valid()
-  cpufreq: amd_pstate: update transition delay time to 1ms
-  arch_topology: remove the acpi_disabled check
-  cpufreq: CPPC: remove the acpi_disabled check
-
- arch/x86/include/asm/msr-index.h |  3 ++
- drivers/acpi/cppc_acpi.c         |  3 ++
- drivers/base/arch_topology.c     |  2 +-
- drivers/cpufreq/amd-pstate.c     | 57 +++++++++++++++++++-------------
- drivers/cpufreq/cppc_cpufreq.c   |  2 +-
- drivers/cpufreq/cpufreq.c        |  2 ++
- 6 files changed, 44 insertions(+), 25 deletions(-)
-
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index d27e0581b777..869508de8269 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -548,6 +548,7 @@
+ #define MSR_AMD_CPPC_CAP2		0xc00102b2
+ #define MSR_AMD_CPPC_REQ		0xc00102b3
+ #define MSR_AMD_CPPC_STATUS		0xc00102b4
++#define MSR_AMD_CPPC_HW_CTL		0xc0010015
+ 
+ #define AMD_CPPC_LOWEST_PERF(x)		(((x) >> 0) & 0xff)
+ #define AMD_CPPC_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
 -- 
 2.25.1
 
