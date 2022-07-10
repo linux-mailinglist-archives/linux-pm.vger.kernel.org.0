@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC0D56CF14
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 14:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F03856CF1D
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 14:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiGJMfc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jul 2022 08:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
+        id S229699AbiGJMf6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jul 2022 08:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiGJMf3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 08:35:29 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D705511447
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 05:35:27 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id v16so3810142wrd.13
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 05:35:27 -0700 (PDT)
+        with ESMTP id S229696AbiGJMfl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 08:35:41 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55E113DC7
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 05:35:33 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so1602921wmb.3
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 05:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XDBCqCi5qpLpV3N/M8gq3K+ocUXlMKc797KB4nwKvLU=;
-        b=T9EDchFlGT4kE8VFbio2ci9HzYc71XyBwd+huTje1aKumQMtWF2nvYLaaHzcovCqtU
-         PchUPMJiXvD3P288if8JrBRE5YS7IqPOaNdKrO8p2D7i6E7yQUj/Sd2Oh17g+Oulyl6R
-         7uXF3gazDiZebiSs8OEjOck1RW3uit9PiQ6gClfYEDmp7GSrBPM443boAiKgJJh9Yhzh
-         /F/buSf/Tdb4Odv6kfeOaCw41N1WnEjknu1TBae6T7Ki9/efUyGxg9QdPLcdubhR7glv
-         y78vVxrElnx0ZZwm+0KpBxKeR2d1bvagWArAky5badjcTIv4DABMkEtQAJVPanwjc5mZ
-         B23w==
+        bh=L3skzrLPntV9feVuTsato+Vtj+oVFJD2KdodKzkC6Z0=;
+        b=sAEw6cqMT71U33e7SfvrJcyAd2gE6AbB0vJgY7xd/u/Wf5P7Hgv4HIFH8Mt4pPTBY0
+         H9UwhD872eu7I05zlTmOX9jsuLJsZDjjJ1LRqKrn1NDYfKMmkU56VKQUJUjL5M7WBnkT
+         1QaAyYFnQVv5YPzkOky3WVzZyA6XSwuSRhqV06xWzJtUnnBYjRsJoiQNLPM8ndVaihE5
+         Wr1J6d4itq6U7yWXS3Dm+BJa8bCiy5a4ZUzkPLXZoaJcW4nkZnlPJ/z/LeY8HSZnOT1N
+         rXLj1WPcg3HCbMFRxoU7L6z8Dp5trADaQG3vOi7apEGkXPR5E5tTYGd0lCfH6A9uHe6a
+         EI7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XDBCqCi5qpLpV3N/M8gq3K+ocUXlMKc797KB4nwKvLU=;
-        b=dsC+Nb7T9ppe1oMYRRoDJjXw2Y3c19yrxzC8AIXFTR0TtPOb+6VZF5FBy6XgGzESIO
-         0uERo1QOkKLXgeYlcBu61rOMpvWPsL06oF6YRl2dagYU9W2SD7ytRRJni4CvacecgRtk
-         tlvCNBnvkwYp6vcoOe4BtHVbAo/7NQifeVBjj+5fMeKNILV0Ro/ohFHkyjVuK+US36Vh
-         Ie1vtFb18Gj6eib1PmQCIcdO86G4iL6pXNoL1xbKD0eTI1km2KfNIZs73ap3q5ot+8u0
-         fLxyg8nnq5ziQtqaSkprD/KKt6tLEThr+Dr9CNQPrqunBOLXnYZSC0fzWJfFgUPiwn71
-         npYw==
-X-Gm-Message-State: AJIora9GUMoOkG+iSHwDSKTU0u6ZsmGlJ+jnR3eEK6yxojVqDvlFPcWg
-        inqng9hJzogJwkbMzWjQ49rk0Q==
-X-Google-Smtp-Source: AGRyM1tRXEejFGVqxpRyRsE0/11z+sUMc9mvfhAoyrwAATIdkz4+rrRtebjinqNsHpVJLQf8MLH5+g==
-X-Received: by 2002:a5d:5451:0:b0:21d:2295:6a05 with SMTP id w17-20020a5d5451000000b0021d22956a05mr12204812wrv.302.1657456527458;
-        Sun, 10 Jul 2022 05:35:27 -0700 (PDT)
+        bh=L3skzrLPntV9feVuTsato+Vtj+oVFJD2KdodKzkC6Z0=;
+        b=AH59AtiuKi2F1QGLINP/QJUvAud3kV29WqYuFQNQovLXsXtcgtc1g++IxcaEi2KQdJ
+         5vrzfsoraA8ARn1T9ai5otWdyYPC4JK7IQBYD9k5izVh/3Q98XHenNGCOZWB60SZ3bQB
+         Fpdd7cC+KLBkP/NmJ44Jlfzuf8ZCtCwJeIN0GvoHarb1QG4drR+KfkE3eEv9cP9yeLIJ
+         MhXseaUR1pwRU2wqroQRsxJXgp+b4gsYzYEFQ1kDiOiTLG8P1oXu6kXxqm/4fmLZshVV
+         vFtiovARku3GE/GW0OeTQGoSzEw9I+51jwGP1+BpMyjn2pbwpGLCoK0BdcgOF1Z9m0uL
+         Hr4A==
+X-Gm-Message-State: AJIora8H/IBEQKUKnHd+QxGI/fRctOwlDYhyVodcdng+gyqlFhguG1sb
+        smsORNwWLJy0n/65OUMbCyEJ+w==
+X-Google-Smtp-Source: AGRyM1vyUbaeoRaMhBmtCkfSXCX5V+7e9GTFAynDXwVIc5gIYTc+2A6USfeykIpaXMES3eiUTmijkw==
+X-Received: by 2002:a05:600c:4f08:b0:3a1:99ed:4f1f with SMTP id l8-20020a05600c4f0800b003a199ed4f1fmr10121049wmq.199.1657456532071;
+        Sun, 10 Jul 2022 05:35:32 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a0375c4f73sm3775144wmg.44.2022.07.10.05.35.26
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a0375c4f73sm3775144wmg.44.2022.07.10.05.35.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 05:35:27 -0700 (PDT)
+        Sun, 10 Jul 2022 05:35:31 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
@@ -57,9 +57,9 @@ Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT)
-Subject: [PATCH v5 07/12] thermal/core: Rename trips to ntrips
-Date:   Sun, 10 Jul 2022 14:35:06 +0200
-Message-Id: <20220710123512.1714714-8-daniel.lezcano@linexp.org>
+Subject: [PATCH v5 07/12] thermal/core: Rename 'trips' to 'num_trips'
+Date:   Sun, 10 Jul 2022 14:35:07 +0200
+Message-Id: <20220710123512.1714714-9-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
 References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
@@ -67,7 +67,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,7 +76,7 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 In order to use thermal trips defined in the thermal structure, rename
-the 'trips' field to 'ntrips' to have the 'trips' field containing the
+the 'trips' field to 'num_trips' to have the 'trips' field containing the
 thermal trip points.
 
 Cc: Alexandre Bailon <abailon@baylibre.com>
