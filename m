@@ -2,301 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7895D56CF26
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 14:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E8056CFBE
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 17:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiGJMgR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jul 2022 08:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
+        id S229585AbiGJPYn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jul 2022 11:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiGJMf6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 08:35:58 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2680613F2B
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 05:35:39 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l68so1644547wml.3
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 05:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DMovIUMU9IB4F56zxQvm9VYr7WFPPP8mufoJe3SI6xw=;
-        b=JKIgwceJ17zdG5NJAvOUZ2YHaz79yM3RULs4bXVPMv4BmM6sp9TcFiXJoX4Kryv7Hq
-         fYxdeG0SocJKVKSpz3Xj2d4cfuPX2tvdZZx2hG4RyB85hBppeK4p4fBjGz4+6s7+RLe6
-         n4Ccv8u2fWT59YLG2cLYNoc57VfxPbyyuD5cfBO6zBQN4tkV7U2kA83dc2OoMSdnbqXA
-         tW0cwcw4GNylZOcVucPcU9StTH6TcAKO42tiA/oY7P0l7/K2MKVmB0Qx3ReUvJFvN6tK
-         HAEI4f770m4DxUXhEUbRAL27QPXhAEF9RQnHXkkdz3IfIVJil1LW4QOLn+m6nrjb9DtV
-         j7rw==
+        with ESMTP id S229470AbiGJPYn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 11:24:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ABB3BE3A
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 08:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657466680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fhwQDFPNGXkKMP43FBbH/URrviZilI4PJK8EbA8uiTQ=;
+        b=N9oTcurnj0i/pHchoE9ZrcbFzkUMA0wtZsd2OZk1EwA38e0oUMEwWJz5QL9lyyEKtzKf5m
+        vdRydp4rELzrZyJiJUNHGIJJxeb+x93uADpeyH0YcVBdXBV3y0Hhf63dZ3mphO3G2bft4T
+        ItjzHerNE7O1F5oFOyxCGF7UlLBlQ1I=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-408-VfkevID5MNmEHkWSXvWx3A-1; Sun, 10 Jul 2022 11:24:39 -0400
+X-MC-Unique: VfkevID5MNmEHkWSXvWx3A-1
+Received: by mail-ed1-f70.google.com with SMTP id f13-20020a0564021e8d00b00437a2acb543so2665867edf.7
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 08:24:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DMovIUMU9IB4F56zxQvm9VYr7WFPPP8mufoJe3SI6xw=;
-        b=k0Wt/SU6BMqXuGDQUrWqBV5Ll3ocd9R5SzEv17jrefyjWDz/0KAa7GnbDJ9yqqKYIv
-         0H7uiXEpq1XyoD1boqnIuK9DQsQSYs6yTCwhy38QtUkLU00p8FQDFB+Su2icDxY6V5OS
-         4dDJECL6KfEphhsk5mCKTj+ATdjxxPTrsFPsV615JAwJggoy45OU4odRX/RSlk+fvogQ
-         8hwa4g5ZDz6H1En04S4q9sEJQAlKByLSU1GZhcITy/Ft8uGFfj94v5kSAaS4FyFpvjvl
-         qInparEhx7yrYuhiuatZICE3UcOIJhdlftEa2PnUZ2rdpiSvvUkGpKP5FNUV3fVFtGoa
-         Xr5A==
-X-Gm-Message-State: AJIora8R+G7XUqIn4apfwPNvqj/52DCDQWMIch4m0xwk+6lqEFpnuRHy
-        yEu3+1KbSRVgVR1IeacSXg8V/A==
-X-Google-Smtp-Source: AGRyM1slDJXVc+SVSYNpyfvlyEWaa57gj+z1rQ1DxY7hOVLPpLWmg6eehIMp17JzKfDRogoWraDLWg==
-X-Received: by 2002:a7b:c381:0:b0:3a2:aef9:8df4 with SMTP id s1-20020a7bc381000000b003a2aef98df4mr10622445wmj.7.1657456537255;
-        Sun, 10 Jul 2022 05:35:37 -0700 (PDT)
-Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a0375c4f73sm3775144wmg.44.2022.07.10.05.35.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 05:35:37 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v5 12/12] thermal/of: Initialize trip points separately
-Date:   Sun, 10 Jul 2022 14:35:12 +0200
-Message-Id: <20220710123512.1714714-14-daniel.lezcano@linexp.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
-References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fhwQDFPNGXkKMP43FBbH/URrviZilI4PJK8EbA8uiTQ=;
+        b=W+LIk8X5dEFtVDmhcr7e8Oi91bT8+YAwFPPcmN99mp3haQHuwNVm8d29vsTv1xLtMz
+         ZFZ6Q6n1crx+xoI2qwTfUZndd4fhGZKP3nUk6Np70DG3lQZjmZjVW5M9EgVKF/Fntidw
+         WE/9VDqpUTbXg219q0Bc5Jwhdk9LeE9diEs4C4o4EB41j5Vp53Gov/kXhh64kwG17/xa
+         WbwAuI2HZNVfG0vtavw6x449yzKc1PQU/1zwrUJ2mC/9m3u4mie+T4dJyq91HCvhcMv9
+         1yduI2D4TJlgY4Rn9L6Ztp5lDwYQmTgkuHJRaCg2teYQF4ay6U8MGyfD9V3dhXHJUXzs
+         gCNQ==
+X-Gm-Message-State: AJIora+AiS6NK8Q0HoKBihv4Rz6HM1TW+WNiwPxAJw/uKf77VDRJ/CUQ
+        hDdOCZn8rN/dPt8BmASBbfBcwGkFe6P52jHTPKhl1I1iJJtKbSRX3s8BmF9q1bvQ+KWENTWhFrP
+        uTBdHhjt8PZQnoPQQbYg=
+X-Received: by 2002:a05:6402:26ca:b0:43a:c743:7c with SMTP id x10-20020a05640226ca00b0043ac743007cmr6653762edd.227.1657466678377;
+        Sun, 10 Jul 2022 08:24:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sVS0RLr7ja+b+bMEy7f6bAHlD+bRCxD+TKlOiWNgAgQkATKaHb+nqTyuoOFb8uD4sVGFThWw==
+X-Received: by 2002:a05:6402:26ca:b0:43a:c743:7c with SMTP id x10-20020a05640226ca00b0043ac743007cmr6653722edd.227.1657466678030;
+        Sun, 10 Jul 2022 08:24:38 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b0071c6dc728b2sm406655ejf.86.2022.07.10.08.24.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Jul 2022 08:24:37 -0700 (PDT)
+Message-ID: <eb19505d-da6a-cdd0-46be-88865617ddbb@redhat.com>
+Date:   Sun, 10 Jul 2022 17:24:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/2] efi: Fix efi_power_off() not being run before
+ acpi_power_off() when necessary
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org, X86 ML <x86@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+References: <20220708131412.81078-1-hdegoede@redhat.com>
+ <20220708131412.81078-3-hdegoede@redhat.com>
+ <CAMj1kXH8sck_WMQObNVuT0RkoRFpdZ-V7A4wNW2Mj9CmwdSmZw@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAMj1kXH8sck_WMQObNVuT0RkoRFpdZ-V7A4wNW2Mj9CmwdSmZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Self contain the trip initialization from the device tree in a single
-function for the sake of making the code flow more clear.
+Hi,
 
-Cc: Alexandre Bailon <abailon@baylibre.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
----
- drivers/thermal/thermal_of.c | 102 ++++++++++++++++++++++-------------
- 1 file changed, 65 insertions(+), 37 deletions(-)
+On 7/8/22 18:37, Ard Biesheuvel wrote:
+> On Fri, 8 Jul 2022 at 15:14, Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Commit 98f30d0ecf79 ("ACPI: power: Switch to sys-off handler API")
+>> switched the ACPI sleep code from directly setting the old global
+>> pm_power_off handler to using the new register_sys_off_handler()
+>> mechanism with a priority of SYS_OFF_PRIO_FIRMWARE.
+>>
+>> This is a problem when the old global pm_power_off handler would later
+>> be overwritten, such as done by the late_initcall(efi_shutdown_init):
+>>
+>>         if (efi_poweroff_required())
+>>                 pm_power_off = efi_power_off;
+>>
+>> The old global pm_power_off handler gets run with a priority of
+>> SYS_OFF_PRIO_DEFAULT which is lower then SYS_OFF_PRIO_FIRMWARE, causing
+>> acpi_power_off() to run first, changing the behavior from before
+>> the ACPI sleep code switched to the new register_sys_off_handler().
+>>
+>> Switch the registering of efi_power_off over to register_sys_off_handler()
+>> with a priority of SYS_OFF_PRIO_FIRMWARE + 1 so that it will run before
+>> acpi_power_off() as before.
+>>
+>> Note since the new sys-off-handler code will try all handlers in
+>> priority order, there is no more need for the EFI code to store and
+>> call the original pm_power_off handler.
+>>
+>> Fixes: 98f30d0ecf79 ("ACPI: power: Switch to sys-off handler API")
+>> Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> 
+> Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 601552c55d0b..0693edc00f60 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -118,7 +118,7 @@ static int of_thermal_set_trips(struct thermal_zone_device *tz,
-  */
- int of_thermal_get_ntrips(struct thermal_zone_device *tz)
- {
--	return tz->ntrips;
-+	return tz->num_trips;
- }
- EXPORT_SYMBOL_GPL(of_thermal_get_ntrips);
- 
-@@ -134,7 +134,7 @@ EXPORT_SYMBOL_GPL(of_thermal_get_ntrips);
-  */
- bool of_thermal_is_trip_valid(struct thermal_zone_device *tz, int trip)
- {
--	if (trip >= tz->ntrips || trip < 0)
-+	if (trip >= tz->num_trips || trip < 0)
- 		return false;
- 
- 	return true;
-@@ -269,7 +269,7 @@ static int of_thermal_unbind(struct thermal_zone_device *thermal,
- static int of_thermal_get_trip_type(struct thermal_zone_device *tz, int trip,
- 				    enum thermal_trip_type *type)
- {
--	if (trip >= tz->ntrips || trip < 0)
-+	if (trip >= tz->num_trips || trip < 0)
- 		return -EDOM;
- 
- 	*type = tz->trips[trip].type;
-@@ -280,7 +280,7 @@ static int of_thermal_get_trip_type(struct thermal_zone_device *tz, int trip,
- static int of_thermal_get_trip_temp(struct thermal_zone_device *tz, int trip,
- 				    int *temp)
- {
--	if (trip >= tz->ntrips || trip < 0)
-+	if (trip >= tz->num_trips || trip < 0)
- 		return -EDOM;
- 
- 	*temp = tz->trips[trip].temperature;
-@@ -293,7 +293,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
- {
- 	struct __thermal_zone *data = tz->devdata;
- 
--	if (trip >= tz->ntrips || trip < 0)
-+	if (trip >= tz->num_trips || trip < 0)
- 		return -EDOM;
- 
- 	if (data->ops && data->ops->set_trip_temp) {
-@@ -313,7 +313,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
- static int of_thermal_get_trip_hyst(struct thermal_zone_device *tz, int trip,
- 				    int *hyst)
- {
--	if (trip >= tz->ntrips || trip < 0)
-+	if (trip >= tz->num_trips || trip < 0)
- 		return -EDOM;
- 
- 	*hyst = tz->trips[trip].hysteresis;
-@@ -324,7 +324,7 @@ static int of_thermal_get_trip_hyst(struct thermal_zone_device *tz, int trip,
- static int of_thermal_set_trip_hyst(struct thermal_zone_device *tz, int trip,
- 				    int hyst)
- {
--	if (trip >= tz->ntrips || trip < 0)
-+	if (trip >= tz->num_trips || trip < 0)
- 		return -EDOM;
- 
- 	/* thermal framework should take care of data->mask & (1 << trip) */
-@@ -338,7 +338,7 @@ static int of_thermal_get_crit_temp(struct thermal_zone_device *tz,
- {
- 	int i;
- 
--	for (i = 0; i < tz->ntrips; i++)
-+	for (i = 0; i < tz->num_trips; i++)
- 		if (tz->trips[i].type == THERMAL_TRIP_CRITICAL) {
- 			*temp = tz->trips[i].temperature;
- 			return 0;
-@@ -693,7 +693,8 @@ static int of_find_trip_id(struct device_node *np, struct device_node *trip)
-  *
-  * Return: 0 on success, proper error code otherwise
-  */
--static int thermal_of_populate_bind_params(struct device_node *np,
-+static int thermal_of_populate_bind_params(struct device_node *tz_np,
-+					   struct device_node *np,
- 					   struct __thermal_bind_params *__tbp)
- {
- 	struct of_phandle_args cooling_spec;
-@@ -715,7 +716,7 @@ static int thermal_of_populate_bind_params(struct device_node *np,
- 		return -ENODEV;
- 	}
- 
--	trip_id = of_find_trip_id(np, trip);
-+	trip_id = of_find_trip_id(tz_np, trip);
- 	if (trip_id < 0) {
- 		ret = trip_id;
- 		goto end;
-@@ -849,6 +850,53 @@ static int thermal_of_populate_trip(struct device_node *np,
- 	return 0;
- }
- 
-+static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *ntrips)
-+{
-+	struct thermal_trip *tt;
-+	struct device_node *trips, *trip;
-+	int ret, count;
-+
-+	trips = of_get_child_by_name(np, "trips");
-+	if (!trips) {
-+		pr_err("Failed to find 'trips' node\n");
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	count = of_get_child_count(trips);
-+	if (!count) {
-+		pr_err("No trip point defined\n");
-+		ret = -EINVAL;
-+		goto out_of_node_put;
-+	}
-+
-+	tt = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
-+	if (!tt) {
-+		ret = -ENOMEM;
-+		goto out_of_node_put;
-+	}
-+
-+	*ntrips = count;
-+
-+	count = 0;
-+	for_each_child_of_node(trips, trip) {
-+		ret = thermal_of_populate_trip(trip, &tt[count++]);
-+		if (ret)
-+			goto out_kfree;
-+	}
-+
-+	of_node_put(trips);
-+	
-+	return tt;
-+	
-+out_kfree:
-+	kfree(tt);
-+	*ntrips = 0;
-+out_of_node_put:
-+	of_node_put(trips);
-+
-+	return ERR_PTR(ret);
-+}
-+
- /**
-  * thermal_of_build_thermal_zone - parse and fill one thermal zone data
-  * @np: DT node containing a thermal zone node
-@@ -867,7 +915,6 @@ static struct __thermal_zone
- __init *thermal_of_build_thermal_zone(struct device_node *np)
- {
- 	struct device_node *child = NULL, *gchild;
--	struct device_node *trips;
- 	struct __thermal_zone *tz;
- 	int ret, i;
- 	u32 prop, coef[2];
-@@ -909,28 +956,10 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 		tz->offset = 0;
- 	}
- 
--	/* trips */
--	trips = of_get_child_by_name(np, "trips");
--
--	/* No trips provided */
--	if (!trips)
-+	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
-+	if (IS_ERR(tz->trips)) {
-+		ret = PTR_ERR(tz->trips);
- 		goto finish;
--
--	tz->ntrips = of_get_child_count(trips);
--	if (tz->ntrips == 0) /* must have at least one child */
--		goto finish;
--
--	tz->trips = kcalloc(tz->ntrips, sizeof(*tz->trips), GFP_KERNEL);
--	if (!tz->trips) {
--		ret = -ENOMEM;
--		goto free_tz;
--	}
--
--	i = 0;
--	for_each_child_of_node(trips, gchild) {
--		ret = thermal_of_populate_trip(gchild, &tz->trips[i++]);
--		if (ret)
--			goto free_trips;
- 	}
- 
- 	/* cooling-maps */
-@@ -952,13 +981,14 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 
- 	i = 0;
- 	for_each_child_of_node(child, gchild) {
--		ret = thermal_of_populate_bind_params(gchild, &tz->tbps[i++]);
--		if (ret)
-+		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
-+		if (ret) {
-+			of_node_put(gchild);
- 			goto free_tbps;
-+		}
- 	}
- 
- finish:
--	of_node_put(trips);
- 	of_node_put(child);
- 
- 	return tz;
-@@ -977,8 +1007,6 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 	kfree(tz->tbps);
- free_trips:
- 	kfree(tz->trips);
--	of_node_put(trips);
--	of_node_put(gchild);
- free_tz:
- 	kfree(tz);
- 	of_node_put(child);
--- 
-2.25.1
+Thanks, I'll include this in my next fixes pull-req for 5.19.
+
+Regards,
+
+Hans
+
+
+> 
+> Note that, as far as I know, this should only affect x86 even though
+> this is generic EFI code, and arm64 also supports ACPI boot, but it
+> doesn't use ACPI for poweroff/reboot etc
+> 
+>> ---
+>>  drivers/firmware/efi/reboot.c | 21 +++++++++++----------
+>>  1 file changed, 11 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/firmware/efi/reboot.c b/drivers/firmware/efi/reboot.c
+>> index 73089a24f04b..ceae84c19d22 100644
+>> --- a/drivers/firmware/efi/reboot.c
+>> +++ b/drivers/firmware/efi/reboot.c
+>> @@ -6,7 +6,7 @@
+>>  #include <linux/efi.h>
+>>  #include <linux/reboot.h>
+>>
+>> -static void (*orig_pm_power_off)(void);
+>> +static struct sys_off_handler *efi_sys_off_handler;
+>>
+>>  int efi_reboot_quirk_mode = -1;
+>>
+>> @@ -51,15 +51,11 @@ bool __weak efi_poweroff_required(void)
+>>         return false;
+>>  }
+>>
+>> -static void efi_power_off(void)
+>> +static int efi_power_off(struct sys_off_data *data)
+>>  {
+>>         efi.reset_system(EFI_RESET_SHUTDOWN, EFI_SUCCESS, 0, NULL);
+>> -       /*
+>> -        * The above call should not return, if it does fall back to
+>> -        * the original power off method (typically ACPI poweroff).
+>> -        */
+>> -       if (orig_pm_power_off)
+>> -               orig_pm_power_off();
+>> +
+>> +       return NOTIFY_DONE;
+>>  }
+>>
+>>  static int __init efi_shutdown_init(void)
+>> @@ -68,8 +64,13 @@ static int __init efi_shutdown_init(void)
+>>                 return -ENODEV;
+>>
+>>         if (efi_poweroff_required()) {
+>> -               orig_pm_power_off = pm_power_off;
+>> -               pm_power_off = efi_power_off;
+>> +               /* SYS_OFF_PRIO_FIRMWARE + 1 so that it runs before acpi_power_off */
+>> +               efi_sys_off_handler =
+>> +                       register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
+>> +                                                SYS_OFF_PRIO_FIRMWARE + 1,
+>> +                                                efi_power_off, NULL);
+>> +               if (IS_ERR(efi_sys_off_handler))
+>> +                       return PTR_ERR(efi_sys_off_handler);
+>>         }
+>>
+>>         return 0;
+>> --
+>> 2.36.0
+>>
+> 
 
