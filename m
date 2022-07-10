@@ -2,73 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D192656CC6F
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 04:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F43056CF0B
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 14:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiGJC2T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Jul 2022 22:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S229617AbiGJMfV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jul 2022 08:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiGJC2N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Jul 2022 22:28:13 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7279C26556
-        for <linux-pm@vger.kernel.org>; Sat,  9 Jul 2022 19:28:11 -0700 (PDT)
-Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26A2Rc5T088850;
-        Sun, 10 Jul 2022 11:27:38 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
- Sun, 10 Jul 2022 11:27:38 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26A2Rc4F088845
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 10 Jul 2022 11:27:38 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <1fa33281-7671-d9af-8155-daf0558b56f1@I-love.SAKURA.ne.jp>
-Date:   Sun, 10 Jul 2022 11:27:34 +0900
+        with ESMTP id S229495AbiGJMfT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 08:35:19 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C0E11160
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 05:35:17 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id q9so3829506wrd.8
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 05:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3iu8NsclK7JFmY+wUFMCI26v9YBeA0ybRek44nKEV3A=;
+        b=DGAlXdSAhG+4S795iQscSCYdtXs/vNbFQ+rY+OZ7eVA890tEtOnvjBOhvEu+owT7as
+         ML6JVCDa1n0HI+2QXrPWGSmNATt7V+KPOvuzzJEAbchHWonCTPxVIbyKjcrxZx5GG8G0
+         rG8bS/juS6UV41Mjv93cj3k5Smcrk7/o39KOhOTc/ZnZIICczAMhiFdS1+bxrzx73zvV
+         8WFUb0qd5insWjFfUPG5xJ9bu6/hEEpHuE99SP6aRWCX+AoAOOKtQfCaKAxjabzys/c+
+         9QXr3qzOFBBdrxQ7YQtc8yCC5YtHhrAPr6/LZZ6SPP85Uplb/bFOqpeKkHxXla7nQTcE
+         P6gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3iu8NsclK7JFmY+wUFMCI26v9YBeA0ybRek44nKEV3A=;
+        b=HybhjcEUrKoj2BooUwLlN09ztXdjWYaLAbQIbhYWgT7nfhfOgPGfAlHyDzh14G9Dyx
+         dOmBm4AUcwSMwRco3S4NDjR6BNpg+12X2h3lEIO3XUppW41RAty6edvUlWNGbv1daGZi
+         FN8/yw3DgpeCiiuktU+5WtDkrtWT0io67BP/lZQDngaPgoLsQrvo0SySLLxoTKk/D88A
+         R+kOKsZ6Q0CWbvQIgIg5tar5tni/vgOZK4arDVwblS4MFG1dFS5m15DdKzNuqVKJWJ49
+         zSHDZlus5qC/WM3s7lBP9yZUqF0emWSab/wc23mjTdNU8YzEjQgUXyhgS7kVta0UAaIL
+         PpWw==
+X-Gm-Message-State: AJIora+X9uGrzplIkNTZgewm7E9weh36fwPkevzshQH0PUj/eH2uzBbb
+        YlqjsHrwQvpJy8pIvQFyXfKDTQ==
+X-Google-Smtp-Source: AGRyM1sIrwljPIVDaPkvGjTYdZohHb0FzDYL834CewaFtw/VWbFR2CkfMpUSnSUeB13fNR/4cDFLXg==
+X-Received: by 2002:adf:d84b:0:b0:21d:6efd:efa with SMTP id k11-20020adfd84b000000b0021d6efd0efamr12198620wrl.384.1657456516470;
+        Sun, 10 Jul 2022 05:35:16 -0700 (PDT)
+Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a0375c4f73sm3775144wmg.44.2022.07.10.05.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 05:35:16 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com
+Subject: [PATCH v5 00/12] thermal OF rework
+Date:   Sun, 10 Jul 2022 14:34:59 +0200
+Message-Id: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
-        Arjan van de Ven <arjan@linux.intel.com>
-References: <YsL5pUuydMWJ9dSQ@kroah.com>
- <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
- <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
- <YsRHwy6+5gask+KT@kroah.com>
- <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
- <7ddb25ff-60e5-75be-8080-2a7465cca68c@I-love.SAKURA.ne.jp>
- <YsUtBERm94k/iZTy@kroah.com>
- <a6d98824-56c8-6d92-bb1b-eb065b57cb81@I-love.SAKURA.ne.jp>
- <815866b5-842e-4829-5ed8-26a5f1e856a4@suse.com>
- <22c61a75-8140-c62d-ffe0-efd6e9fa38ee@I-love.SAKURA.ne.jp>
- <YsgzHc54onQ1DeFc@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YsgzHc54onQ1DeFc@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022/07/08 22:37, Greg KH wrote:
-> Can you make this a patch series, it's hard to tease out what the
-> different things are attempting to do here :(
+The thermal framework initialization with the device tree appears to
+be complicated and hard to make it to evolve.
 
-I see. Posted v2 at https://lkml.kernel.org/r/03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp .
+It contains duplication of almost the same thermal generic structures
+and has an assymetric initialization making hard any kind of serious
+changes for more complex features. One of them is the multiple sensors
+support per thermal zone.
+
+In order to set the scene for the aforementioned feature with generic
+code, we need to cleanup and rework the device tree initialization.
+
+However this rework is not obvious because of the multiple components
+entering in the composition of a thermal zone and being initialized at
+different moments. For instance, a cooling device can be initialized
+before a sensor, so the thermal zones must exist before the cooling
+device as well as the sensor. This asynchronous initialization forces
+the thermal zone to be created with fake ops because they are
+mandotory and build a list of cooling devices which is used to lookup
+afterwards when the cooling device driver is registering itself.
+
+As there could be a large number of changes, this first series provide
+some steps forward for a simpler device tree initialization.
+
+More series for cleanup and code duplication removal will follow.
+
+Changelog:
+
+ - v5:
+    - Remove extra of_node_put() reported by lkp
+
+ - V4:
+    - Added of_node_put(trips)
+    - Changed naming 'ntrips' -> 'num_trips'
+    - Updated documentation for added and renamed fields in the thermal
+      zone structure
+    - Fixed bad parameter type 'thermal_zone' -> 'thermal_zone_device'
+    - Clarified there is more cleanups coming in the changelog
+    - Put 'trips' and 'num_trips' fields all together
+    - Made git-bisect safe the series
+
+ - V3:
+    - Removed patch 1 and 2 from the V2 which consist in renaming the
+      thermal_zone_device_ops to thermal_sensor_ops and separating the
+      structure. I'll do a separate proposal for that after the incoming
+      cleanups
+
+ - V2:
+   - Drop patch 1/15 which contains too many changes for a simple
+     structure renaming. This could be addressed in a separate series as
+     it is not necessary for the OF rework
+
+   - Fixed of_node_put with gchild not initialized as reported by
+     kbuild and Dan Carpenter
+
+ - V1:
+   - Initial post
+
+Daniel Lezcano (12):
+  thermal/core: Remove duplicate information when an error occurs
+  thermal/of: Replace device node match with device node search
+  thermal/of: Remove the device node pointer for thermal_trip
+  thermal/of: Move thermal_trip structure to thermal.h
+  thermal/core: Remove unneeded EXPORT_SYMBOLS
+  thermal/core: Move thermal_set_delay_jiffies to static
+  thermal/core: Rename trips to ntrips
+  thermal/core: Add thermal_trip in thermal_zone
+  thermal/core: Register with the trip points
+  thermal/of: Store the trips in the thermal zone
+  thermal/of: Use thermal trips stored in the thermal zone
+  thermal/of: Initialize trip points separately
+
+ drivers/thermal/gov_fair_share.c        |   6 +-
+ drivers/thermal/gov_power_allocator.c   |   4 +-
+ drivers/thermal/tegra/tegra30-tsensor.c |   2 +-
+ drivers/thermal/thermal_core.c          |  53 +++++--
+ drivers/thermal/thermal_core.h          |  25 ++-
+ drivers/thermal/thermal_helpers.c       |  13 +-
+ drivers/thermal/thermal_netlink.c       |   2 +-
+ drivers/thermal/thermal_of.c            | 201 +++++++++++++-----------
+ drivers/thermal/thermal_sysfs.c         |  22 +--
+ include/linux/thermal.h                 |  24 ++-
+ 10 files changed, 199 insertions(+), 153 deletions(-)
+
+-- 
+2.25.1
+
