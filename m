@@ -2,60 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA8B56D18C
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 23:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B7E56D194
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 23:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiGJV0h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jul 2022 17:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
+        id S229872AbiGJV0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jul 2022 17:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiGJVZ7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 17:25:59 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3642115A18
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 14:25:23 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id v16so4735431wrd.13
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 14:25:22 -0700 (PDT)
+        with ESMTP id S229688AbiGJV0G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 17:26:06 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962F111152
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 14:25:25 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id o8so2053970wms.2
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 14:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZwqLH//W1+QEOMAk/S4a/3Zrx4GN2+Bea3NwAVXcO70=;
-        b=clgX/y+/32mEh9l/6iuJB3mbxw5oYz4wdwoyICnbeWlyhTs62a/IQb2+0m0RoIii+r
-         9HGkAQBSuW4ev20frhVaMPM/82lKEeHJdn6gFM82nLeeZrdu0SKKGC0fbf6CLoYbClD9
-         2SviVQITEyeLGCpZ2jzA+yP7uePb3u8UAPCjBBTKedy0WRtpwCgvgr6KTEInvlOwWgjC
-         cx5eCCnUBw5JzBjVu8ELgcblOhpc4m9DjEUjJJ0b0O/4oFT/Su0v1H5VxvOWU7n3qsZZ
-         WiDGfGcyEikv93+5r5cKSu53Q98r7JlGUpk86h07BZQrY0HV+WCiFd2OtcOxBLlGoMKJ
-         geGw==
+        bh=5Y41vOcDtdL2yhYCNKjxuRzzCxuMEk7Llli1lwExUdg=;
+        b=gRio6k2EfN0lPHxe9XKBa+OWp5nlOVY+HqFctDEILdSwLi5dcpH5D2LWh7Vt1IRY62
+         SsLQbXlJDTKw40zNL38akvijSko3+Cpus4a8fKWZQHeJGp4/3mhqwhvAPuEMIPIDnVyT
+         B0z5SsSkklUDMi4XIMVCry/gSPTWv60RAIB4L3JPVQ9bK29VkMcdluSppqEavwO4d6Zi
+         JlapfbIZDRQoG5gvKGlAnEdpFw5O5w0zDrbcWnr5eHQOwY6XAqUx4adp8ABC3ZoZM7gj
+         RJouXsT+TFJuIRkU3Yql4isdaWVcCwbGQ2LG/rExqFbEmGSwKXijKUoF820eTrjCdKAQ
+         FEOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZwqLH//W1+QEOMAk/S4a/3Zrx4GN2+Bea3NwAVXcO70=;
-        b=wi8JzH9nPWsDiy2+LRf9Mygf9xJPqMM1SAtq7qtfZJgkumMJOind1QuOoxR407EVLr
-         4bT0R6Fnm44fb178uZYSt4LC8sb7NGuv2Gqg/clMzh/PQFP4qG+TZV+AhnlF8a/X3Lk7
-         xZgLLIocevQWdSVmtola59i8ybdf7UoKGhQtaRMqLk8bdUaaWzSZAGXquNA9HVpaiLjn
-         ujLLRppYUNau9j8UJoepdeqsQri5ycPgFZgJYSY4eyRI9j4lxoUDxIZi7gWiNfhcKF7W
-         XQEQyYrkhannVCRWn4wdWC7QWGGZq8oeQLBGYSf+z9MUfRdSV3+DgTp+yd3c7cinlu63
-         hWOg==
-X-Gm-Message-State: AJIora/pYuLAvkJGWUoDtKl17ISMMCRIJh8am/TQI7qvls3XGs+xElNM
-        6hCSNHOLngIedVu1uGyAlPXGQQ==
-X-Google-Smtp-Source: AGRyM1sjOeQpf0Z7hmGR89J+3e9HHSig/8dGQ1+XVo+nYwSo2953t3SZUm8Anb/OMRa0RMEkLOpbtw==
-X-Received: by 2002:a5d:47ca:0:b0:21d:9f54:ef97 with SMTP id o10-20020a5d47ca000000b0021d9f54ef97mr4924054wrc.478.1657488322655;
-        Sun, 10 Jul 2022 14:25:22 -0700 (PDT)
+        bh=5Y41vOcDtdL2yhYCNKjxuRzzCxuMEk7Llli1lwExUdg=;
+        b=JyEf31CtvD4gQNsaUQSTqkTBont1mDXhLiulDpjpRUpZG4VCPWF3O/HAgehCEvYAdQ
+         dzmo4iqgtL5b7AQwEw0llBiaZOy5oH3A3wHtmewYTZpDc2GeExV/hOukVz00a4KTmuBX
+         5aeoUEW1v/glNH9g70vvJ2zOiRPpzk1C4dkej2wRXs/70zRLSpahWWbx+PbLDCoQ2hY+
+         qf+CJIqHmirb6jRYRLF9eigmdjVR3kXu9OYlXQXnqUK3Syznh7OJihNd4THYWT13ewVS
+         gsmZwvluENjJevShcHw7EJk7JH6d0chI6UoFUirlmKVvqCzsy2y2riAbgejrKqT4AXtY
+         3s3g==
+X-Gm-Message-State: AJIora9pA9U8fs2fCchdlke8dA7vzjk5fHsqSwJiMBYs7JWJ/yKW2nuG
+        Y3SSi2Ycu8qwwejWbDW5YPLb+w==
+X-Google-Smtp-Source: AGRyM1v0f0koxAy5K6IGmhH3p5egstHMC1RkTZGC8vOXm5s6fC2BXAXfbIKulZ9qLa6QN67JLNAj5A==
+X-Received: by 2002:a05:600c:206:b0:3a2:e224:da6f with SMTP id 6-20020a05600c020600b003a2e224da6fmr9346363wmi.167.1657488325026;
+        Sun, 10 Jul 2022 14:25:25 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:c7c0:6823:f3ce:2447])
-        by smtp.gmail.com with ESMTPSA id m19-20020a05600c3b1300b003a2dd0d21f0sm7142759wms.13.2022.07.10.14.25.21
+        by smtp.gmail.com with ESMTPSA id m19-20020a05600c3b1300b003a2dd0d21f0sm7142759wms.13.2022.07.10.14.25.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 14:25:22 -0700 (PDT)
+        Sun, 10 Jul 2022 14:25:24 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
         amitk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 29/33] regulator/drivers/max8976: Switch to new of thermal API
-Date:   Sun, 10 Jul 2022 23:24:19 +0200
-Message-Id: <20220710212423.681301-30-daniel.lezcano@linexp.org>
+        linux-pm@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE)
+Subject: [PATCH v1 30/33] thermal/drivers/bcm2835: Switch to new of thermal API
+Date:   Sun, 10 Jul 2022 23:24:20 +0200
+Message-Id: <20220710212423.681301-31-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220710212423.681301-1-daniel.lezcano@linexp.org>
 References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
@@ -77,45 +84,63 @@ Use this new API.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 ---
- drivers/regulator/max8973-regulator.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/thermal/broadcom/bcm2835_thermal.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/regulator/max8973-regulator.c b/drivers/regulator/max8973-regulator.c
-index cb7e50003f70..45d4395fcc06 100644
---- a/drivers/regulator/max8973-regulator.c
-+++ b/drivers/regulator/max8973-regulator.c
-@@ -447,9 +447,9 @@ static int max8973_init_dcdc(struct max8973_chip *max,
- 	return ret;
+diff --git a/drivers/thermal/broadcom/bcm2835_thermal.c b/drivers/thermal/broadcom/bcm2835_thermal.c
+index c8e4344d5a3d..4a7c6270dfac 100644
+--- a/drivers/thermal/broadcom/bcm2835_thermal.c
++++ b/drivers/thermal/broadcom/bcm2835_thermal.c
+@@ -88,9 +88,9 @@ static int bcm2835_thermal_temp2adc(int temp, int offset, int slope)
+ 	return temp;
  }
  
--static int max8973_thermal_read_temp(void *data, int *temp)
-+static int max8973_thermal_read_temp(struct thermal_zone_device *tz, int *temp)
+-static int bcm2835_thermal_get_temp(void *d, int *temp)
++static int bcm2835_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
  {
--	struct max8973_chip *mchip = data;
-+	struct max8973_chip *mchip = tz->devdata;
- 	unsigned int val;
- 	int ret;
+-	struct bcm2835_thermal_data *data = d;
++	struct bcm2835_thermal_data *data = tz->devdata;
+ 	u32 val = readl(data->regs + BCM2835_TS_TSENSSTAT);
  
-@@ -478,7 +478,7 @@ static irqreturn_t max8973_thermal_irq(int irq, void *data)
- 	return IRQ_HANDLED;
+ 	if (!(val & BCM2835_TS_TSENSSTAT_VALID))
+@@ -135,7 +135,7 @@ static void bcm2835_thermal_debugfs(struct platform_device *pdev)
+ 	debugfs_create_regset32("regset", 0444, data->debugfsdir, regset);
  }
  
--static const struct thermal_zone_of_device_ops max77621_tz_ops = {
-+static struct thermal_zone_device_ops max77621_tz_ops = {
- 	.get_temp = max8973_thermal_read_temp,
+-static const struct thermal_zone_of_device_ops bcm2835_thermal_ops = {
++static struct thermal_zone_device_ops bcm2835_thermal_ops = {
+ 	.get_temp = bcm2835_thermal_get_temp,
  };
  
-@@ -492,8 +492,8 @@ static int max8973_thermal_init(struct max8973_chip *mchip)
- 	if (mchip->id != MAX77621)
- 		return 0;
+@@ -206,8 +206,8 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
+ 			 data->clk, rate);
  
--	tzd = devm_thermal_zone_of_sensor_register(mchip->dev, 0, mchip,
--						   &max77621_tz_ops);
-+	tzd = devm_thermal_of_zone_register(mchip->dev, 0, mchip,
-+					    &max77621_tz_ops);
- 	if (IS_ERR(tzd)) {
- 		ret = PTR_ERR(tzd);
- 		dev_err(mchip->dev, "Failed to register thermal sensor: %d\n",
+ 	/* register of thermal sensor and get info from DT */
+-	tz = thermal_zone_of_sensor_register(&pdev->dev, 0, data,
+-					     &bcm2835_thermal_ops);
++	tz = devm_thermal_of_zone_register(&pdev->dev, 0, data,
++					   &bcm2835_thermal_ops);
+ 	if (IS_ERR(tz)) {
+ 		err = PTR_ERR(tz);
+ 		dev_err(&pdev->dev,
+@@ -277,7 +277,7 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ err_tz:
+-	thermal_zone_of_sensor_unregister(&pdev->dev, tz);
++	thermal_of_zone_unregister(tz);
+ err_clk:
+ 	clk_disable_unprepare(data->clk);
+ 
+@@ -290,7 +290,7 @@ static int bcm2835_thermal_remove(struct platform_device *pdev)
+ 	struct thermal_zone_device *tz = data->tz;
+ 
+ 	debugfs_remove_recursive(data->debugfsdir);
+-	thermal_zone_of_sensor_unregister(&pdev->dev, tz);
++	thermal_of_zone_unregister(tz);
+ 	clk_disable_unprepare(data->clk);
+ 
+ 	return 0;
 -- 
 2.25.1
 
