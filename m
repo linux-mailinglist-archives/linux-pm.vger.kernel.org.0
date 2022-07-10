@@ -2,168 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51FD56CC6C
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 04:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D192656CC6F
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Jul 2022 04:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiGJC0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Jul 2022 22:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S229543AbiGJC2T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Jul 2022 22:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiGJC0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Jul 2022 22:26:11 -0400
+        with ESMTP id S229603AbiGJC2N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Jul 2022 22:28:13 -0400
 Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFA9B859
-        for <linux-pm@vger.kernel.org>; Sat,  9 Jul 2022 19:26:10 -0700 (PDT)
-Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26A2Pp8d088449;
-        Sun, 10 Jul 2022 11:25:51 +0900 (JST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7279C26556
+        for <linux-pm@vger.kernel.org>; Sat,  9 Jul 2022 19:28:11 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26A2Rc5T088850;
+        Sun, 10 Jul 2022 11:27:38 +0900 (JST)
         (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
 Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
- Sun, 10 Jul 2022 11:25:51 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Sun, 10 Jul 2022 11:27:38 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
 Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
         (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26A2PpbT088446
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26A2Rc4F088845
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 10 Jul 2022 11:25:51 +0900 (JST)
+        Sun, 10 Jul 2022 11:27:38 +0900 (JST)
         (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <273ec8c8-8b70-0a0e-4688-5b943ac8e648@I-love.SAKURA.ne.jp>
-Date:   Sun, 10 Jul 2022 11:25:47 +0900
+Message-ID: <1fa33281-7671-d9af-8155-daf0558b56f1@I-love.SAKURA.ne.jp>
+Date:   Sun, 10 Jul 2022 11:27:34 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: [PATCH v2 4/4] PM: hibernate: don't set PF_FREEZER_SKIP flag when
- manipulating /dev/snapshot
+Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
 Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>,
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Wedson Almeida Filho <wedsonaf@google.com>,
-        "Rafael J. Wysocki" <rjw@sisk.pl>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Cc:     linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp>
- <48d01ce7-e028-c103-ea7f-5a4ea4c8930b@I-love.SAKURA.ne.jp>
- <2646e8a3-cc9f-c2c5-e4d6-c86de6e1b739@I-love.SAKURA.ne.jp>
-In-Reply-To: <2646e8a3-cc9f-c2c5-e4d6-c86de6e1b739@I-love.SAKURA.ne.jp>
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Arjan van de Ven <arjan@linux.intel.com>
+References: <YsL5pUuydMWJ9dSQ@kroah.com>
+ <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
+ <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
+ <YsRHwy6+5gask+KT@kroah.com>
+ <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
+ <7ddb25ff-60e5-75be-8080-2a7465cca68c@I-love.SAKURA.ne.jp>
+ <YsUtBERm94k/iZTy@kroah.com>
+ <a6d98824-56c8-6d92-bb1b-eb065b57cb81@I-love.SAKURA.ne.jp>
+ <815866b5-842e-4829-5ed8-26a5f1e856a4@suse.com>
+ <22c61a75-8140-c62d-ffe0-efd6e9fa38ee@I-love.SAKURA.ne.jp>
+ <YsgzHc54onQ1DeFc@kroah.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YsgzHc54onQ1DeFc@kroah.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since khungtaskd skips threads with PF_FREEZER_SKIP flag set, currently
-we can't report unbounded uninterruptible sleep when something went wrong
-while manipulating /dev/snapshot interface.
+On 2022/07/08 22:37, Greg KH wrote:
+> Can you make this a patch series, it's hard to tease out what the
+> different things are attempting to do here :(
 
-Let's change snapshot_{open,read,write}() to use mutex_lock_killable()
-and change snapshot_release() to use mutex_lock(), so that khungtaskd can
-report unbounded uninterruptible sleep, by not setting PF_FREEZER_SKIP
-flag.
-
-Since /dev/snapshot is exclusive due to hibernate_acquire(), we could
-choose mutex_trylock() for snapshot_{open,read,write}() as with
-snapshot_ioctl(). But until we confirm that this patch does not
-break something, let's stay mutex_lock_killable().
-
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>
----
-This patch is only compile tested. Need to review if somewhere depends
-on PF_FREEZER_SKIP flag being set.
-
- kernel/power/user.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 32dd5a855e8c..9936efa07022 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -68,7 +68,8 @@ static int snapshot_open(struct inode *inode, struct file *filp)
- 		break;
- 	}
- 
--	lock_system_sleep();
-+	if (mutex_lock_killable(&system_transition_mutex))
-+		return -EINTR;
- 
- 	if (!hibernate_acquire()) {
- 		error = -EBUSY;
-@@ -102,7 +103,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
- 	data->dev = 0;
- 
-  Unlock:
--	unlock_system_sleep();
-+	mutex_unlock(&system_transition_mutex);
- 
- 	return error;
- }
-@@ -111,7 +112,7 @@ static int snapshot_release(struct inode *inode, struct file *filp)
- {
- 	struct snapshot_data *data;
- 
--	lock_system_sleep();
-+	mutex_lock(&system_transition_mutex);
- 
- 	swsusp_free();
- 	data = filp->private_data;
-@@ -128,7 +129,7 @@ static int snapshot_release(struct inode *inode, struct file *filp)
- 			PM_POST_HIBERNATION : PM_POST_RESTORE);
- 	hibernate_release();
- 
--	unlock_system_sleep();
-+	mutex_unlock(&system_transition_mutex);
- 
- 	return 0;
- }
-@@ -140,7 +141,8 @@ static ssize_t snapshot_read(struct file *filp, char __user *buf,
- 	ssize_t res;
- 	loff_t pg_offp = *offp & ~PAGE_MASK;
- 
--	lock_system_sleep();
-+	if (mutex_lock_killable(&system_transition_mutex))
-+		return -EINTR;
- 
- 	data = filp->private_data;
- 	if (!data->ready) {
-@@ -161,7 +163,7 @@ static ssize_t snapshot_read(struct file *filp, char __user *buf,
- 		*offp += res;
- 
-  Unlock:
--	unlock_system_sleep();
-+	mutex_unlock(&system_transition_mutex);
- 
- 	return res;
- }
-@@ -173,7 +175,8 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 	ssize_t res;
- 	loff_t pg_offp = *offp & ~PAGE_MASK;
- 
--	lock_system_sleep();
-+	if (mutex_lock_killable(&system_transition_mutex))
-+		return -EINTR;
- 
- 	data = filp->private_data;
- 
-@@ -195,7 +198,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 	if (res > 0)
- 		*offp += res;
- unlock:
--	unlock_system_sleep();
-+	mutex_unlock(&system_transition_mutex);
- 
- 	return res;
- }
--- 
-2.18.4
-
+I see. Posted v2 at https://lkml.kernel.org/r/03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp .
