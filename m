@@ -2,74 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D636570108
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 13:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418DD57013D
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 13:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiGKLrC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jul 2022 07:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        id S231343AbiGKLxI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jul 2022 07:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiGKLqn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 07:46:43 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9261173
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:44:09 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id e28so4625888lfj.4
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:44:09 -0700 (PDT)
+        with ESMTP id S231243AbiGKLwz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 07:52:55 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2B026AE6
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:52:52 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id 70so4573689pfx.1
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8kbHaWOgwGZ87aOELCDzqAsSUAa/8f6yn0taHmP3zxI=;
-        b=AUEYlFC4TI5jDI3kIduulNZ04vzgkQbh+jz7GGLVxs8ReKM0ztlPdlyECtXIZUPZyk
-         Si3LAMbEfGu5s70hqKcXZCGlI/MQK8B2iscjHc7AA6U6WAraqd5pgszysr0O6yOFYIwV
-         Xeh3x/xRYDdI6+AfluUFVECTGLiOzyvFV55AFpsUCZ6mdklx++KXYeFbj5rRcPIRjoBy
-         ySQxOE4+TRBP6lqcm5VAfA51hzZjKPysXuo75aky9LnOtZrkXaHe7kspfRQKul81P+FT
-         0xoybe3CwssN0IR5UF04K7Dllkh35FQJL8wNHOyTCc4S88bOnmizZN970UALckPRqoEm
-         8jwA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IT6bnfMyBorw+49wZozfoU6MUehJRZf9hememagooxg=;
+        b=m9fKb8SOEPmRpvJUEaFB8Bp6mooUCxzh1kDecueyx/hGEXEMe4FQgGHJ/av4sCGRWk
+         hVGwapeMF3Ayxf1liMcuSiOOSf7VrCAnisII7KXiRdgOLbMW5KfWR6+uGqa7PqY0NLbt
+         PE3Obqve1rOR5CxZaQpaWYqZlaUK9FNO7D6+RCEIEEovHlKga84TgEF/4fE3/IYLYwwo
+         TK6Lngw/ujtxVxdALIwTWbCSbgRC5O7L1LzK/MQa9a0l+M0gO+RaD6MT7ji0axnNSoqY
+         tD5CZcHifnRbsKtWl/J2HVsVt85JTgQDtwXswXcVUYq6KfoB0ykdnCvJ0LykDmO4it7f
+         NH0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=8kbHaWOgwGZ87aOELCDzqAsSUAa/8f6yn0taHmP3zxI=;
-        b=5CWJIVzjCBpYadNAzuzFOsSPvijbT6PzsdajkNjrTbFMpKML8Wel0sALGbb/JJycKZ
-         Sh6pmXyMovCNZEQM0qGMkezewx16M9Kg9ydLpmmY9sbJb8S46NdAU5nR6yk/MeVv26L/
-         DsUWk5qTlimOZJ9qd/qDqIOkZKrz1VQjJdGGt3Nj9+0P9obURdHCaiv7dff/relrH8Ek
-         e0GKdCXu8Qt+tZBwLevpT03LSpET2IzGW3euA3o4DAq6Ao8a1ieYvgNhkqVh9xa60Uwg
-         RtfFC0xCRIHIDNnB8q1YztigWVnItMQi8tLgiGbOpwo9wSJ0SG3XV7cj7z7lDN/DJNj+
-         w0Dg==
-X-Gm-Message-State: AJIora+bbY7aN+jO5VYz57ZdQzRmQxhwUwYRPzrKbMHI9UHaoBOSgRTp
-        GrYvlsNAZj0neOzALbgsJGIyGQ==
-X-Google-Smtp-Source: AGRyM1sAtNG9Q4gvJx/XKH67qmjMODpoRG0NKU4WTIlmAxdT2Xsk7myk6V3u4yOHOvFUtg1A0FOFbQ==
-X-Received: by 2002:a05:6512:3083:b0:489:e0e1:6a3f with SMTP id z3-20020a056512308300b00489e0e16a3fmr2253906lfd.73.1657539847557;
-        Mon, 11 Jul 2022 04:44:07 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id u16-20020a056512095000b004896b58f2fasm1492648lft.270.2022.07.11.04.44.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 04:44:06 -0700 (PDT)
-Message-ID: <ceb5130e-a3e7-bfb2-a782-f6773a0af4f6@linaro.org>
-Date:   Mon, 11 Jul 2022 13:44:05 +0200
+        bh=IT6bnfMyBorw+49wZozfoU6MUehJRZf9hememagooxg=;
+        b=guxGR3+M/L5pnzNWG6nnr1Wy9edfX6frDsY31uaudXrdwCGe3otLiQ0h8u4jbEZCce
+         HcyeX4XWkuCWlKTJKiUs61BjxsS/PGtiG5/VXDUolIzZiVX8jZMSgDLwH+HydtZLJsaJ
+         arzpo3HTDbxKg97pbPvc3f2edPx5QHhPEU2opXoB86PiW5nieA9UXWT/obmiGThrlZrQ
+         lyNPv+4iNsFtPCcWmGmn+9plmlfEiLXGO4+xjbIjWLQvdQV9Rl/oKQ4S2BXHPyC1IHpc
+         tkxW6U9MbEJM2w0Fh/q0c+uY5sXIdbzuYiLjvlqvw7dHujJ+LasqsDqkWUKyoK3P52EY
+         ew7A==
+X-Gm-Message-State: AJIora9TukZUTULTXlBA75PIEuvOYJournb85dAHOMC/eCegyNJHFL/K
+        j7g0VXsmHXacOcAQuSRBnUzCPQ==
+X-Google-Smtp-Source: AGRyM1v1eihj78aPHcT9tIZ0bs0xq5JvJcgQfTJHIDOgqGyxrt23hFKUSIltMelH/gN9b7lieOudTQ==
+X-Received: by 2002:aa7:954a:0:b0:52a:bd44:d15a with SMTP id w10-20020aa7954a000000b0052abd44d15amr10936464pfq.35.1657540372026;
+        Mon, 11 Jul 2022 04:52:52 -0700 (PDT)
+Received: from leo-build-box.lan (n058152077182.netvigator.com. [58.152.77.182])
+        by smtp.gmail.com with ESMTPSA id h14-20020a17090a648e00b001eaec8cea55sm4586502pjj.57.2022.07.11.04.52.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 04:52:51 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v5 0/5] interconnect: qcom: icc-rpm: Support bucket
+Date:   Mon, 11 Jul 2022 19:52:35 +0800
+Message-Id: <20220711115240.806236-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: opp: opp-v2-kryo-cpu: Fix example
- binding checks
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, ilia.lin@kernel.org,
-        agross@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        stephan@gerhold.net
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220708121156.2165250-1-bryan.odonoghue@linaro.org>
- <20220708121156.2165250-2-bryan.odonoghue@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220708121156.2165250-2-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,19 +73,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/07/2022 14:11, Bryan O'Donoghue wrote:
-> Adding missing compat entries to the cpufreq node
-> Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml shows up
-> a dt_binding_check in this file.
-> 
-> opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@0: 'power-domains' is a required property
-> opp-v2-kryo-cpu.example.dtb: /: cpus:cpu@0: 'power-domain-names' is a required property
-> opp-v2-kryo-cpu.example.dtb: /: opp-table-0:opp-307200000: 'required-opps' is a required property
-> 
+This patch set is to support bucket in icc-rpm driver, so it implements
+the similar mechanism in the icc-rpmh driver.
+
+We can use interconnect path tag to indicate the bandwidth voting is for
+which buckets, and there have three kinds of buckets: AWC, WAKE and
+SLEEP, finally the wake and sleep bucket values are used to set the
+corresponding clock (active and sleep clocks).  So far, we keep the AWC
+bucket but doesn't really use it.
+
+Patches 01, 02, 03 enable interconnect path tag and update the DT
+binding document; patches 04 and 05 support bucket and use bucket values
+to set the bandwidth and clock rates.
+
+Note, this patch set is dependent on an out of tree patch "interconnect:
+icc-rpm: Set destination bandwidth as well as source bandwidth" [1].
+With the dependent patch, this patch set can be cleanly applied on the
+Linux kernel master branch with the latest commit 32346491ddf2
+("Linux 5.19-rc6").
+
+[1] https://lore.kernel.org/linux-pm/20220707093823.1691870-1-bryan.odonoghue@linaro.org/T/#r304f7b103c806e1570d555a0f5aaf83ae3990ac0
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Changes from v4:
+- Added Krzysztof's Acked tag for DT binding document patch;
+- Fixed the unalignment between function qcom_icc_pre_bw_aggregate() and
+  its comment (Georgi);
+- Simplified qcom_icc_bus_aggregate() with removing unused parameter
+  'max_agg_peak';
+- Removed unsed local variable 'max_peak_bw' in qcom_icc_set() (Georgi).
+
+Changes from v3:
+- Removed $ref and redundant sentence in DT binding document for
+  '#interconnect-cells' (Krzysztof Kozlowski).
+
+Changes from v2:
+- Fixed for DT checker error for command ''make DT_CHECKER_FLAGS=-m
+  dt_binding_check' (Rob Herring).
+
+Changes from v1:
+- Added description for property "#interconnect-cells" (Rob Herring);
+- Added Dimtry's reviewed tags for patches 02 and 03 (Dmitry Baryshkov);
+- Rebased on the latest mainline kernel and resolved conflict.
 
 
-Best regards,
-Krzysztof
+Leo Yan (5):
+  dt-bindings: interconnect: Update property for icc-rpm path tag
+  interconnect: qcom: Move qcom_icc_xlate_extended() to a common file
+  interconnect: qcom: icc-rpm: Change to use qcom_icc_xlate_extended()
+  interconnect: qcom: icc-rpm: Support multiple buckets
+  interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
+
+ .../bindings/interconnect/qcom,rpm.yaml       |   6 +-
+ drivers/interconnect/qcom/Makefile            |   3 +
+ drivers/interconnect/qcom/icc-common.c        |  34 +++++
+ drivers/interconnect/qcom/icc-common.h        |  13 ++
+ drivers/interconnect/qcom/icc-rpm.c           | 129 +++++++++++++++---
+ drivers/interconnect/qcom/icc-rpm.h           |   6 +
+ drivers/interconnect/qcom/icc-rpmh.c          |  26 +---
+ drivers/interconnect/qcom/icc-rpmh.h          |   1 -
+ drivers/interconnect/qcom/sm8450.c            |   1 +
+ 9 files changed, 176 insertions(+), 43 deletions(-)
+ create mode 100644 drivers/interconnect/qcom/icc-common.c
+ create mode 100644 drivers/interconnect/qcom/icc-common.h
+
+-- 
+2.25.1
+
