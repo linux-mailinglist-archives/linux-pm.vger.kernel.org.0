@@ -2,98 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF40556D6FB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 09:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C1F56D704
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 09:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiGKHnd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jul 2022 03:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S230186AbiGKHra (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jul 2022 03:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiGKHnc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 03:43:32 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D116568;
-        Mon, 11 Jul 2022 00:43:29 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id o12so2608935ljc.3;
-        Mon, 11 Jul 2022 00:43:29 -0700 (PDT)
+        with ESMTP id S230160AbiGKHr3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 03:47:29 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9D7A1B8
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 00:47:27 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id f11so3196297pgj.7
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 00:47:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6+Eje+BI4mgYWYNE16gkK8LI+X4SswO3LLw9Mljelro=;
-        b=jcaIQZW81P74s1CpNAYO8N8l0GZfj7ayncDoX4MF8kXAAWbl4HvPSxXIfhr6A+3/nx
-         O2ZTotadCJTDen2eFsibLo3TqpPkBw+NUjgBTB7Af8Mw7S5UftVGJMQSon7jl6ecbkgZ
-         EQSw+JHmykzIY8For3YASqO7XzibR5TeF/gb8MClV4iPy86bXdZ9BFx+PW/7Z9s42sqT
-         UZWwv9GJ8JC6+k1rOzTvSKIo2c52vAxnyYaRDOEmm+T7z48Lu9aSKMxmcz+TioEzGAN7
-         UghtWSk4Ct41GfxY16+1v6eaTagFAp/21tzaJUNRtO4it+xNy+BXVBlybJynr583Msin
-         pw4w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gVWdkX/m1Qk9iruntOsK3yu1LrQltAXUFPSy21C5XNA=;
+        b=VERXYZ+T9H58wkavpjHTanqt00qi09rylxLZqPmDCjG9ATm6O66Ah6LdvdOPj4RIpU
+         F12Y48ETmxqLzTmtbHJ8ktQ5cjUEGYFSp9Fh4Eq8tJTlAaA4RepwoOeccHkv8FahuJcD
+         2yNGmXbEXKw/k3awYd8j04XSnHttd6Vw75cRSIUT659bmlxPnd7fOhig1FXbFrzeR13q
+         /7Iv1Z/I/QSQG0MzN7Hofj3haTQ50R8IOvuXAg86VHH3y4mBVWCJdFVLDK+0PdsKUAQA
+         snxlexk7c/buV7QDhFRBSwU4XktxxoPzPWAADR2bIfbqltFmkuWaDpVx5e5+w2/GF101
+         3KpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6+Eje+BI4mgYWYNE16gkK8LI+X4SswO3LLw9Mljelro=;
-        b=c9mx3EgKZYvSVlSRIondbxnBTLWzH0gRlp9W12cCwVyOwQsW3BmIb+mlRPscujToyw
-         VgOWzQ2OQoJORBT3JFuVrjBjt3AK1OHcZ1EZWTrKYfcLA2Crxu87ZOhqm1ZEC8rjHRKY
-         2bTHHrkibChZsefr63sq5C4E04raXfz54L0u4yky58S7ShnCl8wec1rndk+X84QGimDD
-         ip94TNBVUWpUMfcE9im/aXKLM8HEkJ8onu/laCPi+jIpk3JIIFIC+rwBUie2VSgtPyG5
-         Mw2ecPJKFdXPz8NB7M6SiK+6PR8FpLcetQer/XNhBmATqevX97flQsGh228dDM4aHgmG
-         XHHA==
-X-Gm-Message-State: AJIora+BwqHYyKVhlKzCli7XQT46LNKebWAX/fd6K8OE4NEcQqUAHcbU
-        E1omtcw9u2kc9IrWNrfmHx4BZQ4D9vw46XTatpQ=
-X-Google-Smtp-Source: AGRyM1sWvpjgSJFW19NE3gcXq3cbOwxFZbvPtLSl2rdJY2M8qgy5upBrRLJTDyNwcyAnlw4QRDKk67ablDHOMGZeV7c=
-X-Received: by 2002:a2e:bf20:0:b0:25a:45a6:7587 with SMTP id
- c32-20020a2ebf20000000b0025a45a67587mr9504164ljr.377.1657525408206; Mon, 11
- Jul 2022 00:43:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220705123705.764-1-xuewen.yan@unisoc.com> <CAB8ipk8w1=cMJV2_ZjWuX6T9RH9VXCMdUaZhLEkCziarhpy-5w@mail.gmail.com>
- <9ade9d43-3ed1-1239-f26e-73145856275a@arm.com>
-In-Reply-To: <9ade9d43-3ed1-1239-f26e-73145856275a@arm.com>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Mon, 11 Jul 2022 15:43:17 +0800
-Message-ID: <CAB8ipk_Y5vaUMnRQVJsbHUue_J00qqy0E1ifu3W_hFSspL1r1w@mail.gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gVWdkX/m1Qk9iruntOsK3yu1LrQltAXUFPSy21C5XNA=;
+        b=IBD1bbot7+D8ho5Y1djexfEj8ahlgfIe7uaJCMQRS0h3urjHaL5uAZqAhFVwiiBgc7
+         ZxQmKTT9F7CdgT/cICM0MBGkJbYXxrNTvZRQSXUdT2XvTtnxRh4wWVvVP0q9xlyHsppg
+         brm1XKY4436YgQ54Fy9L3nrRcQoNI5DuAP8pwY/NYLa535GsllaHJGFCJVrbXYhlW6P8
+         m8euWa36D2fj7x8LZbkADXUqmUaTUNiYez25nDETa8sUXCysZBwz6HSjU88vJqZ1ENkJ
+         6+fI5mF9fdRSmE2LxlsCnQtT6evtHJOCozII1BM3PEyaPhvIwdvvpJGb/NUIAL5mTIyQ
+         8w5w==
+X-Gm-Message-State: AJIora8BjIzuh0gU/DpHdGckIiQCugEijwxLDLvd52AwB2B4CzIFUTlZ
+        tlWQmapTatunz6/dE7iXNq+fCw==
+X-Google-Smtp-Source: AGRyM1vH9arVcJAj5xz0lDtflVHw1uEgRKfdipmUFQRQlurlJJUI0mfxMQcQ6l6SqEFgsottlDcBuQ==
+X-Received: by 2002:a62:79d7:0:b0:52a:b557:2796 with SMTP id u206-20020a6279d7000000b0052ab5572796mr14342440pfc.34.1657525647022;
+        Mon, 11 Jul 2022 00:47:27 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id fh17-20020a17090b035100b001ec932d7592sm4095335pjb.9.2022.07.11.00.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 00:47:26 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 13:17:24 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org
 Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
  hotplug when using schedutil
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <20220711074724.tbwefl42fpf2aq5a@vireshk-i7>
+References: <20220705123705.764-1-xuewen.yan@unisoc.com>
+ <CAB8ipk8w1=cMJV2_ZjWuX6T9RH9VXCMdUaZhLEkCziarhpy-5w@mail.gmail.com>
+ <9ade9d43-3ed1-1239-f26e-73145856275a@arm.com>
+ <CAB8ipk_Y5vaUMnRQVJsbHUue_J00qqy0E1ifu3W_hFSspL1r1w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAB8ipk_Y5vaUMnRQVJsbHUue_J00qqy0E1ifu3W_hFSspL1r1w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 3:32 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Hi Xuewen,
->
-> On 7/11/22 08:21, Xuewen Yan wrote:
-> > Hi all
-> >
-> > This deadlock is inevitable, any comment?
->
-> Could you tell me how to reproduce this?
-> Is there a need of special cgroup setup?
+On 11-07-22, 15:43, Xuewen Yan wrote:
+> This deadlock occurs when we run the monkey test on an Android phone,
+> at the same time, randomly put online or offline a cpu core.
+> Indeed the thread-A which get the cgroup_threadgroup_rwsem and waiting
+> for the cpu_hotplug_lock is the thread whose name is "OomAdjuster" in
+> android.
 
-This deadlock occurs when we run the monkey test on an Android phone,
-at the same time, randomly put online or offline a cpu core.
-Indeed the thread-A which get the cgroup_threadgroup_rwsem and waiting
-for the cpu_hotplug_lock is the thread whose name is "OomAdjuster" in
-android.
+It would be better to reproduce this on mainline kernel, no android,
+and tell us the steps. We don't want to chase an Android only issue,
+just in case.
 
-And I see the cpu_hotplug_lock is added by the patch:
-https://lore.kernel.org/all/20220121101210.84926-1-zhangqiao22@huawei.com/
+Thanks.
 
-Thanks!
-
->
-> Regards,
-> Lukasz
+-- 
+viresh
