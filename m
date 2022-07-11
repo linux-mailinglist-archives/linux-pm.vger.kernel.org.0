@@ -2,106 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B8656D1FF
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 01:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B87856D22D
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 02:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiGJXTI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jul 2022 19:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
+        id S229572AbiGKAaX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jul 2022 20:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGJXTF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 19:19:05 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28EBB4B6
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 16:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1657495144; x=1689031144;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9U1yowspje4FdTFucTBGWccDXl2PpYAhcwMntZrTWFk=;
-  b=gQ7EvmnC16kN42Dqhpy/zH+zQRqhDLNogJQkYBKaWcOwTJCaKiEdixaN
-   pkZv0fNM+EzfGlNutH5jdTrLkEGl6EQxTu8aAAeZPssf/iCotokuWMEtm
-   oBJ/NQlHNEN7+XVLvFIgc2lqSBkLgu8KBRxpczx3tkvO5axccfh8lj80k
-   /+++z4WOtRhBk8cPpNnnDf4457AYmvxMsj47YEt5jhzXP9uQ3dSuPJy/8
-   xkhAErh9Nrl1oEHaJMefh4KCe1dR3HQE+yMBqEZztXLkV9+G2UBchIVrU
-   lbC52uOyLvFlMyUflVMmz5xpxkxJOtxy/ckggYB7JmuklG1gTjf04PG8t
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,261,1650902400"; 
-   d="scan'208";a="206013760"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Jul 2022 07:19:02 +0800
-IronPort-SDR: AIufDQqNTh9oOHtLD7yF+xFoSMkB0yh4cyNclXXjCkZC6gDHJynt9SRUborJrrCWf9UuMmnN/b
- j/KQ8L6pGD9S0Lgi3rEbpT6UohYtpcKfcVODx6yW8f/kXZ8V7PJsAdkEP2nn7i9bEy99ny0XSP
- xmzyTneJSN1x0j1eYq1jPpTC5djWIEOc/Sr61KDKE2LARRRMeq0wur0yMJxJSXULN+EGqrtkF1
- U+qsDyfs2mjMG7NGZvQxGtlGbjpd2vCtsMDsznHMbGtW2X5hb8Wx7VpMORiOgNPvMh0DiETfom
- pLl/R6IWV9cVrexNmP/wEYAD
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Jul 2022 15:36:02 -0700
-IronPort-SDR: c6IMVcCuc35qhk2cTQK9Aa1UttPlGIe1IqiCKaosbV8D4LZfUzJC8+Mw2pjAiZaJkXDlhQLR2A
- 9+NlQTN9BnQ03NwxFaAaDvkGULdyaoLxXh53SlIPqU9PB/Yme3mpG8WDit8//EeLibx+BbIR76
- V1+mSBXTO2OMu59bJr0jYQLb6yc/4vDnw7wXcE7qVq+5H8lAr7/WuC32V+MimzyIHQB8uiw7iE
- dcVRonFUp76SDlVlsZiqPcNrA2k11S799GPrkdzda1NyRLl3F90vAPa6dH3SUYswK4KFFqEn0o
- 31A=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Jul 2022 16:19:01 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Lh2yY3xlsz1Rws7
-        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 16:19:01 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1657495140; x=1660087141; bh=9U1yowspje4FdTFucTBGWccDXl2PpYAhcwM
-        ntZrTWFk=; b=Pv1uRX3RO20K/ITFSgBCCPV6CDfLNqYAw0/wPpkimhh5JMM7JIv
-        L6lSx5tjheWKMgGbRLNLy3Wcv7lLwBwDvcr8gnOUT55ObuGJeQ+XhM9T8+SgY9Kl
-        8gH3YW8X+oNaKlK+PMLfOMBfGHzyeaCBhn/tTgDWPWRRivPdcJzYjroBBumLmZOB
-        h/VKCHxD1Bjx7nKMZKojJGocV0TU3gOQhqeWV6hLCtM0GO9sstiomk0AACH000b6
-        EVFLX97jxEXfPaIxTVtTYPaaWAFjRk9PbNJxrrjbNR3z7/qi0ZtewZXMOyEcfVRv
-        nWFjwrs+xLhml7ZT4QGcOVr29sdI+qW4ZLg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VxC4ZJK9PwX9 for <linux-pm@vger.kernel.org>;
-        Sun, 10 Jul 2022 16:19:00 -0700 (PDT)
-Received: from [10.225.163.114] (unknown [10.225.163.114])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Lh2yT5gN9z1RtVk;
-        Sun, 10 Jul 2022 16:18:57 -0700 (PDT)
-Message-ID: <a424890d-8647-48c5-68ab-742a95bb6865@opensource.wdc.com>
-Date:   Mon, 11 Jul 2022 08:18:56 +0900
+        with ESMTP id S229476AbiGKAaW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 20:30:22 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070AA26E8
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 17:30:21 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id o18so3424636pgu.9
+        for <linux-pm@vger.kernel.org>; Sun, 10 Jul 2022 17:30:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DJg3YRH6CUXfVSsu3n1w0/lNOyzgmf1DQiZyHhqhZhU=;
+        b=VQBocgpCZ4dsFBSfRIbIYncvcQdzbFY/GrStM11S9TEcEutsI6A/hj/x2or3uh7IWv
+         2bV1KqaArnRAWWDmYi4SxctLDaDTCSxASaK1vIZc8gPIIHuvpLNdchkI5Sjdcwuhml67
+         3IFeueE1cpV8ZfhHao8V/NYSFyew+CmaSdJP6X4yTqLog3uU77sSJZayfkEF2rG5JhUh
+         2xZqPUyUAssgnzFep/Yi1PgYag6Q3tKsYn/V7q3BwPpc1yBNcBJws0vBXzbKLkx//yW0
+         SLY/zAEnzWNphB2tBUZNlStfBN7Hc6SjRr+md+qmISmFdOraLZLz95ZLBAnAqqancBNC
+         6L7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DJg3YRH6CUXfVSsu3n1w0/lNOyzgmf1DQiZyHhqhZhU=;
+        b=f8eMGT9JzS4GWggaOFXbn8R4lylCE5vEKFb7yREkKHKXK589cqkDlgEiTqAYXFSkd9
+         7ooWBbVwHz6FUAeZXUmy2NsCKPgFgFXcOwHMQ2pFDGRmteNU/DXJFI2npK6XpSn4c8Vw
+         sZFtpAUQIiB1MWzLswMXBuc8JhpIoV2OpbS+8RcXiynKB3p1e9JzPlJEGz9iUaeVtFVn
+         ltVTujkO4zvTvAbz7z1S68boreHQEP76ng41WI6P7Fryq2RWDDZ3aWF5UlA7RKxOnjZL
+         wXbGznPSgN0IQhis0/m69bqUKGlI1RaKJ8HIRetyRa78Aj6mAlL+dEctO2VgOXhGn8Fn
+         oJNQ==
+X-Gm-Message-State: AJIora/bf2uDI+FFjjd3b6UWj6WexKRnFgT141C1k2Knl9fR9sEEFIW4
+        xTvVABgd4FgjiRBnnLQUPYWKbzSSMlf+VA==
+X-Google-Smtp-Source: AGRyM1vMXt7mVlflj87k8nDofAiOwRDlpcv/PraUDQsidAU0LuwEsrMYoGVKQjfBncUQPBeyufqO9w==
+X-Received: by 2002:a05:6a00:2384:b0:52a:b75b:1123 with SMTP id f4-20020a056a00238400b0052ab75b1123mr11870976pfc.8.1657499420447;
+        Sun, 10 Jul 2022 17:30:20 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id d9-20020a170902654900b0016bfb09be10sm3244937pln.305.2022.07.10.17.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 17:30:20 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 06:00:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Perry Yuan <Perry.Yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, Ray.Huang@amd.com,
+        Deepak.Sharma@amd.com, Mario.Limonciello@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Jinzhou.Su@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+        Li.Meng@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/14] AMD Pstate Enhancement And Issue Fixs
+Message-ID: <20220711003010.iofsk6xdyxkvmsnl@vireshk-i7>
+References: <20220709140835.830084-1-Perry.Yuan@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 25/33] ata/drivers/ahci_imx: Switch to new of thermal
- API
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
-        amitk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-26-daniel.lezcano@linexp.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220710212423.681301-26-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220709140835.830084-1-Perry.Yuan@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,84 +73,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/11/22 06:24, Daniel Lezcano wrote:
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach.
+On 09-07-22, 10:08, Perry Yuan wrote:
+> Hello,
 > 
-> Use this new API.
+> This patchsets adds support for precision boost hardware control
+> for AMD processors.
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->  drivers/ata/ahci_imx.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
+> Meanwhile the patchset fixs lowest perf query and desired perf scope issues.
+> Update transition delay and latency default value to meet SMU firmware requirement.
+> and do some code cleanups,
+> It also exports cpufreq cpu release and acquire for coming amd-pstate epp mode driver
 > 
-> diff --git a/drivers/ata/ahci_imx.c b/drivers/ata/ahci_imx.c
-> index 79aa9f285312..5ad9a890e71a 100644
-> --- a/drivers/ata/ahci_imx.c
-> +++ b/drivers/ata/ahci_imx.c
-> @@ -327,7 +327,7 @@ static int read_adc_sum(void *dev, u16 rtune_ctl_reg, void __iomem * mmio)
->  }
->  
->  /* SATA AHCI temperature monitor */
-> -static int sata_ahci_read_temperature(void *dev, int *temp)
-> +static int __sata_ahci_read_temperature(void *dev, int *temp)
->  {
->  	u16 mpll_test_reg, rtune_ctl_reg, dac_ctl_reg, read_sum;
->  	u32 str1, str2, str3, str4;
-> @@ -416,6 +416,11 @@ static int sata_ahci_read_temperature(void *dev, int *temp)
->  	return 0;
->  }
->  
-> +static int sata_ahci_read_temperature(struct thermal_zone_device *tz, int *temp)
-> +{
-> +	return __sata_ahci_read_temperature(tz->devdata, temp);
-> +}
-> +
->  static ssize_t sata_ahci_show_temp(struct device *dev,
->  				   struct device_attribute *da,
->  				   char *buf)
-> @@ -423,14 +428,14 @@ static ssize_t sata_ahci_show_temp(struct device *dev,
->  	unsigned int temp = 0;
->  	int err;
->  
-> -	err = sata_ahci_read_temperature(dev, &temp);
-> +	err = __sata_ahci_read_temperature(dev, &temp);
->  	if (err < 0)
->  		return err;
->  
->  	return sprintf(buf, "%u\n", temp);
->  }
+> The patch series are tested on the AMD mobile and EYPC server systems
 
-I do not see why the above changes are necessary. Please explain.
-
->  
-> -static const struct thermal_zone_of_device_ops fsl_sata_ahci_of_thermal_ops = {
-> +static struct thermal_zone_device_ops fsl_sata_ahci_of_thermal_ops = {
-
-Why remove the const ?
-
->  	.get_temp = sata_ahci_read_temperature,
->  };
->  
-> @@ -1131,8 +1136,8 @@ static int imx_ahci_probe(struct platform_device *pdev)
->  			ret = PTR_ERR(hwmon_dev);
->  			goto disable_clk;
->  		}
-> -		devm_thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
-> -					     &fsl_sata_ahci_of_thermal_ops);
-> +		devm_thermal_of_zone_register(hwmon_dev, 0, hwmon_dev,
-> +					      &fsl_sata_ahci_of_thermal_ops);
-
-This is the only change that seems necessary.
-
->  		dev_info(dev, "%s: sensor 'sata_ahci'\n", dev_name(hwmon_dev));
->  	}
->  
-
-And it is hard to review a patch without the full series for context.
-Please send all patches next time.
-
+Please use "--thread=shallow" option while generating patches with
+git, these should be part of a single thread.
 
 -- 
-Damien Le Moal
-Western Digital Research
+viresh
