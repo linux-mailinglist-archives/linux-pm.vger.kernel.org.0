@@ -2,72 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DD057014F
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 13:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7A15702E8
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 14:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiGKLxj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jul 2022 07:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S229708AbiGKMm7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jul 2022 08:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiGKLxP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 07:53:15 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B8B29CAA
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:53:10 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id b9so4542434pfp.10
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=F9C4b2eXgqDOnaISTWY3hd8BHivbis4FswsOZcWe/jU=;
-        b=vUebZIGKNacxF3KqZp8W0o7xTR8bwMilpI1OMr+YKfjbmxpHzCKq8DfP+s/d7BrbKk
-         vqUfx0AJTq+tlRaVvaCvg6+cewoJZY4++sqiwpgU2wMvnnoA1cKwdpZU+9+yLTwHCU6R
-         ygRvVQDUiggbMbr07B0VtyBk1eXhHVVZbCanUv6uOoiFaATgLNuRSfXyUZ5yjp0qfrrs
-         Ouogbe02NP7BFzX25uiWgLFH5XvVG2A3A52pHpdjNt9Pnfh1dnIyt9IvKh8HtAssLccG
-         /rDbXdNYAeGCVDYP0CLq/+dnumAW/bT17c+SyoL4AaSEg6jtLvgWHwKAjEkIqAPXuj/u
-         yYAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=F9C4b2eXgqDOnaISTWY3hd8BHivbis4FswsOZcWe/jU=;
-        b=u3KW0HHEpDO1w0a2tzueabu7xkR0P2YkoC5gVTYTYxeCD0rz0tkKt2p74G6gLgLpkq
-         bukFalpFwbgyKBS8JMVNEv8fOujuwCZFjcSncywEhAei9qIiDI67c2GkuKal9IYfrRJC
-         3ch7O6oz31HKZGfIpAv+oUIqkWcQH+jH3tCZCl7vGaYPoLvDMrnLcpuFjEQiT6F9KapY
-         rEGOMc3oQjLx8/oSxgbuQia2n7V7Lh/2GVVBkzS/aBmypU3FQnFuhN3S8p7KvZS0aoRY
-         Q4rZtYDuRqz09pK7KepDE1VZ3m5+kL+t9Sukq2jwRj9yFlyfSy7/qe9/79jC4VahhWAc
-         v6cQ==
-X-Gm-Message-State: AJIora+/q1xvneEYdW2sgHJtrch3KL1ry0sa4q0GMEtQjRl92RlPNZqT
-        czGac4rBLTHjBugPrIkMWy5uYqwMv+8DZ4G066U=
-X-Google-Smtp-Source: AGRyM1vpZXo8S0A+cw9lPocExuKZFE4v5svlvg3jjLPozwoQPPVwu6Nf4Qtp7bhf5TPqR8+tyxmQXw==
-X-Received: by 2002:a63:9701:0:b0:40c:a588:b488 with SMTP id n1-20020a639701000000b0040ca588b488mr15689995pge.303.1657540389089;
-        Mon, 11 Jul 2022 04:53:09 -0700 (PDT)
-Received: from leo-build-box.lan (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id h14-20020a17090a648e00b001eaec8cea55sm4586502pjj.57.2022.07.11.04.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 04:53:08 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v5 5/5] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
-Date:   Mon, 11 Jul 2022 19:52:40 +0800
-Message-Id: <20220711115240.806236-6-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220711115240.806236-1-leo.yan@linaro.org>
-References: <20220711115240.806236-1-leo.yan@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        with ESMTP id S229687AbiGKMm6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 08:42:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EDF5322;
+        Mon, 11 Jul 2022 05:42:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CF821576;
+        Mon, 11 Jul 2022 05:42:57 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.12.169])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5BC873F792;
+        Mon, 11 Jul 2022 05:42:55 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     lukasz.luba@arm.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        dietmar.eggemann@arm.com, vincent.guittot@linaro.org
+Subject: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+Date:   Mon, 11 Jul 2022 13:42:29 +0100
+Message-Id: <20220711124229.16516-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,133 +37,140 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This commit uses buckets for support bandwidth and clock rates.  It
-introduces a new function qcom_icc_bus_aggregate() to calculate the
-aggregate average and peak bandwidths for every bucket, and also it
-calculates the maximum value of aggregated average bandwidth across all
-buckets.
+There is no need to keep the max CPU capacity in the per_cpu instance.
+Furthermore, there is no need to check and update that variable
+(sg_cpu->max) everytime in the frequency change request, which is part
+of hot path. Instead use struct sugov_policy to store that information.
+Initialize the max CPU capacity during the setup and start callback.
+We can do that since all CPUs in the same frequency domain have the same
+max capacity (capacity setup and thermal pressure are based on that).
 
-The maximum aggregated average is used to calculate the final bandwidth
-requests.  And we can set the clock rate per bucket, we use SLEEP bucket
-as default bucket if a platform doesn't enable the interconnect path
-tags in DT binding; otherwise, we use WAKE bucket to set active clock
-and use SLEEP bucket for other clocks.  So far we don't use AMC bucket.
-
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 75 +++++++++++++++++++++++------
- 1 file changed, 61 insertions(+), 14 deletions(-)
+ kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index d27b1582521f..f15f5deee6ef 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -302,18 +302,57 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- 	return 0;
- }
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 1207c78f85c1..9161d1136d01 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -25,6 +25,9 @@ struct sugov_policy {
+ 	unsigned int		next_freq;
+ 	unsigned int		cached_raw_freq;
  
-+/**
-+ * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
-+ * @provider: generic interconnect provider
-+ * @agg_avg: an array for aggregated average bandwidth of buckets
-+ * @agg_peak: an array for aggregated peak bandwidth of buckets
-+ * @max_agg_avg: pointer to max value of aggregated average bandwidth
-+ */
-+static void qcom_icc_bus_aggregate(struct icc_provider *provider,
-+				   u64 *agg_avg, u64 *agg_peak,
-+				   u64 *max_agg_avg)
-+{
-+	struct icc_node *node;
-+	struct qcom_icc_node *qn;
-+	int i;
++	/* max CPU capacity, which is equal for all CPUs in freq. domain */
++	unsigned long		max;
 +
-+	/* Initialise aggregate values */
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+		agg_avg[i] = 0;
-+		agg_peak[i] = 0;
-+	}
-+
-+	*max_agg_avg = 0;
-+
-+	/*
-+	 * Iterate nodes on the interconnect and aggregate bandwidth
-+	 * requests for every bucket.
-+	 */
-+	list_for_each_entry(node, &provider->nodes, node_list) {
-+		qn = node->data;
-+		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+			agg_avg[i] += qn->sum_avg[i];
-+			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
-+		}
-+	}
-+
-+	/* Find maximum values across all buckets */
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++)
-+		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
-+}
-+
- static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ 	/* The next fields are only needed if fast switch cannot be used: */
+ 	struct			irq_work irq_work;
+ 	struct			kthread_work work;
+@@ -48,7 +51,6 @@ struct sugov_cpu {
+ 
+ 	unsigned long		util;
+ 	unsigned long		bw_dl;
+-	unsigned long		max;
+ 
+ 	/* The field below is for single-CPU policies only: */
+ #ifdef CONFIG_NO_HZ_COMMON
+@@ -158,7 +160,6 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
  {
- 	struct qcom_icc_provider *qp;
- 	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
- 	struct icc_provider *provider;
--	struct icc_node *n;
- 	u64 sum_bw;
--	u64 max_peak_bw;
- 	u64 rate;
--	u32 agg_avg = 0;
--	u32 agg_peak = 0;
-+	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
-+	u64 max_agg_avg, max_agg_peak;
- 	int ret, i;
-+	int bucket;
+ 	struct rq *rq = cpu_rq(sg_cpu->cpu);
  
- 	src_qn = src->data;
- 	if (dst)
-@@ -321,12 +360,9 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	provider = src->provider;
- 	qp = to_qcom_provider(provider);
+-	sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+ 	sg_cpu->bw_dl = cpu_bw_dl(rq);
+ 	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+ 					  FREQUENCY_UTIL, NULL);
+@@ -253,6 +254,7 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+  */
+ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
+ {
++	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+ 	unsigned long boost;
  
--	list_for_each_entry(n, &provider->nodes, node_list)
--		provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
--				    &agg_avg, &agg_peak);
-+	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
+ 	/* No boost currently required */
+@@ -280,7 +282,8 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
+ 	 * sg_cpu->util is already in capacity scale; convert iowait_boost
+ 	 * into the same scale so we can compare.
+ 	 */
+-	boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
++	boost = sg_cpu->iowait_boost * sg_policy->max;
++	boost >>= SCHED_CAPACITY_SHIFT;
+ 	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
+ 	if (sg_cpu->util < boost)
+ 		sg_cpu->util = boost;
+@@ -337,7 +340,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+ 	if (!sugov_update_single_common(sg_cpu, time, flags))
+ 		return;
  
--	sum_bw = icc_units_to_bps(agg_avg);
--	max_peak_bw = icc_units_to_bps(agg_peak);
-+	sum_bw = icc_units_to_bps(max_agg_avg);
+-	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
++	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_policy->max);
+ 	/*
+ 	 * Do not reduce the frequency if the CPU has not been idle
+ 	 * recently, as the reduction is likely to be premature then.
+@@ -373,6 +376,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+ 				     unsigned int flags)
+ {
+ 	struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
++	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+ 	unsigned long prev_util = sg_cpu->util;
  
- 	ret = __qcom_icc_set(src, src_qn, sum_bw);
- 	if (ret)
-@@ -337,12 +373,23 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 			return ret;
+ 	/*
+@@ -399,7 +403,8 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+ 		sg_cpu->util = prev_util;
+ 
+ 	cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
+-				   map_util_perf(sg_cpu->util), sg_cpu->max);
++				   map_util_perf(sg_cpu->util),
++				   sg_policy->max);
+ 
+ 	sg_cpu->sg_policy->last_freq_update_time = time;
+ }
+@@ -408,25 +413,19 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+ {
+ 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+ 	struct cpufreq_policy *policy = sg_policy->policy;
+-	unsigned long util = 0, max = 1;
++	unsigned long util = 0;
+ 	unsigned int j;
+ 
+ 	for_each_cpu(j, policy->cpus) {
+ 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+-		unsigned long j_util, j_max;
+ 
+ 		sugov_get_util(j_sg_cpu);
+ 		sugov_iowait_apply(j_sg_cpu, time);
+-		j_util = j_sg_cpu->util;
+-		j_max = j_sg_cpu->max;
+ 
+-		if (j_util * max > j_max * util) {
+-			util = j_util;
+-			max = j_max;
+-		}
++		util = max(j_sg_cpu->util, util);
  	}
  
--	rate = max(sum_bw, max_peak_bw);
--
--	do_div(rate, src_qn->buswidth);
--	rate = min_t(u64, rate, LONG_MAX);
--
- 	for (i = 0; i < qp->num_clks; i++) {
-+		/*
-+		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
-+		 * for other clocks.  If a platform doesn't set interconnect
-+		 * path tags, by default use sleep bucket for all clocks.
-+		 *
-+		 * Note, AMC bucket is not supported yet.
-+		 */
-+		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
-+			bucket = QCOM_ICC_BUCKET_WAKE;
-+		else
-+			bucket = QCOM_ICC_BUCKET_SLEEP;
-+
-+		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
-+		do_div(rate, src_qn->buswidth);
-+		rate = min_t(u64, rate, LONG_MAX);
-+
- 		if (qp->bus_clk_rate[i] == rate)
- 			continue;
+-	return get_next_freq(sg_policy, util, max);
++	return get_next_freq(sg_policy, util, sg_policy->max);
+ }
+ 
+ static void
+@@ -752,7 +751,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+ {
+ 	struct sugov_policy *sg_policy = policy->governor_data;
+ 	void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
+-	unsigned int cpu;
++	unsigned int cpu = cpumask_first(policy->cpus);
+ 
+ 	sg_policy->freq_update_delay_ns	= sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
+ 	sg_policy->last_freq_update_time	= 0;
+@@ -760,6 +759,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 	sg_policy->work_in_progress		= false;
+ 	sg_policy->limits_changed		= false;
+ 	sg_policy->cached_raw_freq		= 0;
++	sg_policy->max				= arch_scale_cpu_capacity(cpu);
+ 
+ 	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
  
 -- 
-2.25.1
+2.17.1
 
