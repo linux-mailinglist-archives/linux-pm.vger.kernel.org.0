@@ -2,287 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F5E57095E
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 19:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF075709A0
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 19:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiGKRqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jul 2022 13:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
+        id S230057AbiGKR6h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jul 2022 13:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiGKRqf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 13:46:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17E872AC69;
-        Mon, 11 Jul 2022 10:46:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F288816A3;
-        Mon, 11 Jul 2022 10:46:33 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.86.231])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40E7F3F792;
-        Mon, 11 Jul 2022 10:46:31 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 18:46:29 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
- hotplug when using schedutil
-Message-ID: <20220711174629.uehfmqegcwn2lqzu@wubuntu>
-References: <20220705123705.764-1-xuewen.yan@unisoc.com>
+        with ESMTP id S229725AbiGKR6g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 13:58:36 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F3FFF0;
+        Mon, 11 Jul 2022 10:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657562315; x=1689098315;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vzMEXbbbTZku2X+5Bo9S/hj+ODiBZz1T4G2KY3usj+o=;
+  b=KzcRuVECUprJJD9MxlBjdns0AHLC6x78ewxsZwjO77mM4V0aF2uzml4D
+   XTQrO8nR7oPqVW8NLnJIgcsWHsQHonaClASSYlqiKalRpViXUu/eoyOp7
+   Jt66+/0mTf6Cn5m26DxkHjwCazg4XRoIs+Dv16s5CBWnQgCQSZDU1zh+Y
+   wkYMKdVH2/NxfJ9EMAlMVFR8iCNtL9X85mBR3FVVJjSCRME65Jb140YoY
+   9hJOXNRf01GicUoGuM7/7jognJUnlQ/OLQHq4SHFBvUZa+Q0dPreNENtf
+   Ot7ybZWF3Fo6Qw2O5WpIzG39Kmuofl6NzrIHjzynMsc/JOspfKqWiRmnq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="267769931"
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="267769931"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 10:58:34 -0700
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="697717582"
+Received: from avandeve-mobl.amr.corp.intel.com (HELO [10.212.162.191]) ([10.212.162.191])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 10:58:33 -0700
+Message-ID: <1eed4bc7-fe26-a302-461b-33439f96779f@linux.intel.com>
+Date:   Mon, 11 Jul 2022 10:58:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220705123705.764-1-xuewen.yan@unisoc.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/4] PM: hibernate: allow wait_for_device_probe() to
+ timeout when resuming from hibernation
+Content-Language: en-US
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rjw@sisk.pl>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Len Brown <len.brown@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>, linux-pm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp>
+ <48d01ce7-e028-c103-ea7f-5a4ea4c8930b@I-love.SAKURA.ne.jp>
+ <2646e8a3-cc9f-c2c5-e4d6-c86de6e1b739@I-love.SAKURA.ne.jp>
+ <YsvbgxJ80kMP5juv@kroah.com>
+ <601436f2-b13e-6c24-bcfd-29548e288f23@I-love.SAKURA.ne.jp>
+From:   Arjan van de Ven <arjan@linux.intel.com>
+In-Reply-To: <601436f2-b13e-6c24-bcfd-29548e288f23@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Xuewen
+On 7/11/2022 3:44 AM, Tetsuo Handa wrote:
+> On 2022/07/11 17:12, Greg KH wrote:
+>>                                                         creating a
+>> locking loop like this should be resolved first,
+> 
+> Rafael and Arjan, can we agree with removing wait_for_device_probe() from snapshot_open() ?
+> 
 
-+CC Tejun who might be interested.
+we can probably remove it. the "fun" is then that devices you need might not be ready once you remove it.
+so if we otherwise would panic, we should at least try again after some delay...
+(since a panic() is very nasty to debug for all the obvious reasons.. especially is the screen isn't on yet)
 
-On 07/05/22 20:37, Xuewen Yan wrote:
-> There is a deadlock between cpu_hotplug_lock sem and cgroup_threadgroup_rwsem.
-> And both cpu online and cpu offline scenarios will cause deadlock:
-> 
-> [1] cpu online:
-> 
-> 1. first, thread-A get the cgroup_threadgroup_rwsem and waiting foe the cpu_hotplug_lock:
-> 
->   [ffffffc00f9c3850] __switch_to at ffffffc0081229d4
->   [ffffffc00f9c38b0] __schedule at ffffffc009c824f8
->   [ffffffc00f9c3910] schedule at ffffffc009c82b50
->   [ffffffc00f9c3970] percpu_rwsem_wait at ffffffc00828fbcc
->   [ffffffc00f9c39b0] __percpu_down_read at ffffffc008290180     <<< try to get cpu_hotplug_lock
->   [ffffffc00f9c39e0] cpus_read_lock at ffffffc0081dade8
->   [ffffffc00f9c3a20] cpuset_attach at ffffffc008366ed4
->   [ffffffc00f9c3a90] cgroup_migrate_execute at ffffffc00834f7d8
->   [ffffffc00f9c3b60] cgroup_attach_task at ffffffc0083539b8
->   [ffffffc00f9c3bd0] __cgroup1_procs_write at ffffffc00835f6ac   <<< get the cgroup_threadgroup_rwsem
->   [ffffffc00f9c3c30] cgroup1_tasks_write at ffffffc00835f018
->   [ffffffc00f9c3c60] cgroup_file_write at ffffffc008348b04
->   [ffffffc00f9c3c90] kernfs_fop_write_iter at ffffffc0087544d8
->   [ffffffc00f9c3d50] vfs_write at ffffffc008607a8c
->   [ffffffc00f9c3db0] ksys_write at ffffffc0086076d8
->   [ffffffc00f9c3df0] __arm64_sys_write at ffffffc008607640
->   [ffffffc00f9c3e10] invoke_syscall at ffffffc00813dccc
->   [ffffffc00f9c3e30] el0_svc_common at ffffffc00813dbe4
->   [ffffffc00f9c3e70] do_el0_svc at ffffffc00813dac8
->   [ffffffc00f9c3e80] el0_svc at ffffffc0098836c8
->   [ffffffc00f9c3ea0] el0t_64_sync_handler at ffffffc00988363c
->   [ffffffc00f9c3fe0] el0t_64_sync at ffffffc008091e44
-> 
-> 2. Thread-B get the cpu_hotplug_lock and waiting for cpuhp/x:
-> 
->   [ffffffc01245b740] __switch_to at ffffffc0081229d4
->   [ffffffc01245b7a0] __schedule at ffffffc009c824f8
->   [ffffffc01245b800] schedule at ffffffc009c82b50
->   [ffffffc01245b880] schedule_timeout at ffffffc009c8a144
->   [ffffffc01245b8e0] wait_for_common at ffffffc009c83dac     <<< waiting for cpuhp/x complete
->   [ffffffc01245b940] cpuhp_kick_ap at ffffffc0081dc8ac       <<< wake up cpuhp/x
->   [ffffffc01245b980] bringup_cpu at ffffffc0081db7f0
->   [ffffffc01245ba00] cpuhp_invoke_callback at ffffffc0081dc000
->   [ffffffc01245ba60] cpuhp_up_callbacks at ffffffc0081dd9b0
->   [ffffffc01245bac0] _cpu_up at ffffffc0081dd844            <<< percpu_down_write(&cpu_hotplug_lock)
->   [ffffffc01245bb40] cpu_up at ffffffc0081dd100
->   [ffffffc01245bb80] cpu_subsys_online at ffffffc008d8ebe4
->   [ffffffc01245bb90] device_online at ffffffc008d77dec
->   [ffffffc01245bbd0] online_store at ffffffc008d77bb8
->   [ffffffc01245bc30] dev_attr_store at ffffffc008d7c8b8
->   [ffffffc01245bc60] sysfs_kf_write at ffffffc008757894
->   [ffffffc01245bc90] kernfs_fop_write_iter at ffffffc0087544d8
->   [ffffffc01245bd50] vfs_write at ffffffc008607a8c
->   [ffffffc01245bdb0] ksys_write at ffffffc0086076d8
->   [ffffffc01245bdf0] __arm64_sys_write at ffffffc008607640
->   [ffffffc01245be10] invoke_syscall at ffffffc00813dccc
->   [ffffffc01245be30] el0_svc_common at ffffffc00813dc14
->   [ffffffc01245be70] do_el0_svc at ffffffc00813dac8
->   [ffffffc01245be80] el0_svc at ffffffc0098836c8
->   [ffffffc01245bea0] el0t_64_sync_handler at ffffffc00988363c
->   [ffffffc01245bfe0] el0t_64_sync at ffffffc008091e44
-> 
-> 3. cpuhp/x would call cpufreq_online and the schedutil need create kthread, as a result it need wait for kthreadd:
-> 
->   [ffffffc00b653860] __switch_to at ffffffc0081229d4
->   [ffffffc00b6538c0] __schedule at ffffffc009c824f8
->   [ffffffc00b653920] schedule at ffffffc009c82b50
->   [ffffffc00b6539a0] schedule_timeout at ffffffc009c8a144
->   [ffffffc00b653a00] wait_for_common at ffffffc009c83dac     <<< wait for kthreadd
->   [ffffffc00b653ad0] __kthread_create_on_node at ffffffc0082296b8
->   [ffffffc00b653b90] kthread_create_on_node at ffffffc008229a58
->   [ffffffc00b653bb0] sugov_init at ffffffc001d01414
->   [ffffffc00b653c00] cpufreq_init_governor at ffffffc009179a48
->   [ffffffc00b653c50] cpufreq_set_policy at ffffffc009179360
->   [ffffffc00b653cb0] cpufreq_online at ffffffc00917c3e4
->   [ffffffc00b653d10] cpuhp_cpufreq_online at ffffffc00917ee3c
->   [ffffffc00b653d70] cpuhp_invoke_callback at ffffffc0081dc000
->   [ffffffc00b653dd0] cpuhp_thread_fun at ffffffc0081df47c
->   [ffffffc00b653e10] smpboot_thread_fn at ffffffc008234718
->   [ffffffc00b653e70] kthread at ffffffc00822ac84
-> 
-> 4. the kthreadd is trying to get cgroup_threadgroup_rwsem...
-> 
->   [ffffffc008073a70] __switch_to at ffffffc0081229d4
->   [ffffffc008073ad0] __schedule at ffffffc009c824f8
->   [ffffffc008073b30] schedule at ffffffc009c82b50
->   [ffffffc008073b90] percpu_rwsem_wait at ffffffc00828fbcc  <<< cgroup_threadgroup_rwsem
->   [ffffffc008073bd0] __percpu_down_read at ffffffc008290180
->   [ffffffc008073c00] cgroup_css_set_fork at ffffffc008357ecc
->   [ffffffc008073c60] cgroup_can_fork at ffffffc008357bb4
->   [ffffffc008073d00] copy_process at ffffffc0081d18c4
->   [ffffffc008073d90] kernel_clone at ffffffc0081d088c
->   [ffffffc008073e50] kthreadd at ffffffc00822a8e4
-> 
-> Finally, the Thread-A and Thread-B would be blockd forever.
-> 
-> [2]cpu_offline:
-> 
-> 1. first, thread-A get the cgroup_threadgroup_rwsem and waiting foe the cpu_hotplug_lock:
-> 
->   [ffffffc00f9c3850] __switch_to at ffffffc0081229d4
->   [ffffffc00f9c38b0] __schedule at ffffffc009c824f8
->   [ffffffc00f9c3910] schedule at ffffffc009c82b50
->   [ffffffc00f9c3970] percpu_rwsem_wait at ffffffc00828fbcc
->   [ffffffc00f9c39b0] __percpu_down_read at ffffffc008290180     <<< try to get cpu_hotplug_lock
->   [ffffffc00f9c39e0] cpus_read_lock at ffffffc0081dade8
->   [ffffffc00f9c3a20] cpuset_attach at ffffffc008366ed4
->   [ffffffc00f9c3a90] cgroup_migrate_execute at ffffffc00834f7d8
->   [ffffffc00f9c3b60] cgroup_attach_task at ffffffc0083539b8
->   [ffffffc00f9c3bd0] __cgroup1_procs_write at ffffffc00835f6ac   <<< get the cgroup_threadgroup_rwsem
->   [ffffffc00f9c3c30] cgroup1_tasks_write at ffffffc00835f018
->   [ffffffc00f9c3c60] cgroup_file_write at ffffffc008348b04
->   [ffffffc00f9c3c90] kernfs_fop_write_iter at ffffffc0087544d8
->   [ffffffc00f9c3d50] vfs_write at ffffffc008607a8c
->   [ffffffc00f9c3db0] ksys_write at ffffffc0086076d8
->   [ffffffc00f9c3df0] __arm64_sys_write at ffffffc008607640
->   [ffffffc00f9c3e10] invoke_syscall at ffffffc00813dccc
->   [ffffffc00f9c3e30] el0_svc_common at ffffffc00813dbe4
->   [ffffffc00f9c3e70] do_el0_svc at ffffffc00813dac8
->   [ffffffc00f9c3e80] el0_svc at ffffffc0098836c8
->   [ffffffc00f9c3ea0] el0t_64_sync_handler at ffffffc00988363c
->   [ffffffc00f9c3fe0] el0t_64_sync at ffffffc008091e44
-> 
-> 2. Thread-B get the cpu_hotplug_lock and waiting for cpuhp/x:
-> 
->   [ffffffc01245b740] __switch_to at ffffffc0081229d4
->   [ffffffc01245b7a0] __schedule at ffffffc009c824f8
->   [ffffffc01245b800] schedule at ffffffc009c82b50
->   [ffffffc01245b880] schedule_timeout at ffffffc009c8a144
->   [ffffffc01245b8e0] wait_for_common at ffffffc009c83dac     <<< waiting for cpuhp/x complete
->   [ffffffc01245b940] cpuhp_kick_ap at ffffffc0081dc8ac       <<< wake up cpuhp/x
->   [ffffffc01245b980] bringup_cpu at ffffffc0081db7f0
->   [ffffffc01245ba00] cpuhp_invoke_callback at ffffffc0081dc000
->   [ffffffc01245ba60] cpuhp_up_callbacks at ffffffc0081dd9b0
->   [ffffffc01245bac0] _cpu_up at ffffffc0081dd844            <<< percpu_down_write(&cpu_hotplug_lock)
->   [ffffffc01245bb40] cpu_up at ffffffc0081dd100
->   [ffffffc01245bb80] cpu_subsys_online at ffffffc008d8ebe4
->   [ffffffc01245bb90] device_online at ffffffc008d77dec
->   [ffffffc01245bbd0] online_store at ffffffc008d77bb8
->   [ffffffc01245bc30] dev_attr_store at ffffffc008d7c8b8
->   [ffffffc01245bc60] sysfs_kf_write at ffffffc008757894
->   [ffffffc01245bc90] kernfs_fop_write_iter at ffffffc0087544d8
->   [ffffffc01245bd50] vfs_write at ffffffc008607a8c
->   [ffffffc01245bdb0] ksys_write at ffffffc0086076d8
->   [ffffffc01245bdf0] __arm64_sys_write at ffffffc008607640
->   [ffffffc01245be10] invoke_syscall at ffffffc00813dccc
->   [ffffffc01245be30] el0_svc_common at ffffffc00813dc14
->   [ffffffc01245be70] do_el0_svc at ffffffc00813dac8
->   [ffffffc01245be80] el0_svc at ffffffc0098836c8
->   [ffffffc01245bea0] el0t_64_sync_handler at ffffffc00988363c
->   [ffffffc01245bfe0] el0t_64_sync at ffffffc008091e44
-> 
-> 3.cpuhp/x would call cpufreq_offline and schedutil need stop_kthread:
-> 
->   [ffffffc00b683a60] __switch_to at ffffffc0081229d4
->   [ffffffc00b683ac0] __schedule at ffffffc009c824f8
->   [ffffffc00b683b20] schedule at ffffffc009c82b50
->   [ffffffc00b683ba0] schedule_timeout at ffffffc009c8a144
->   [ffffffc00b683c00] wait_for_common at ffffffc009c83dac <<< waiting for sugov complete
->   [ffffffc00b683c60] kthread_stop at ffffffc008228128   <<< wakeup sugov
->   [ffffffc00b683c90] sugov_exit at ffffffc001d016a8
->   [ffffffc00b683cc0] cpufreq_offline at ffffffc00917b4b8
->   [ffffffc00b683d10] cpuhp_cpufreq_offline at ffffffc00917ee70
->   [ffffffc00b683d70] cpuhp_invoke_callback at ffffffc0081dc000
->   [ffffffc00b683dd0] cpuhp_thread_fun at ffffffc0081df47c
->   [ffffffc00b683e10] smpboot_thread_fn at ffffffc008234718
->   [ffffffc00b683e70] kthread at ffffffc00822ac84
-> 
-> 4. the sugov thread is waiting cgroup_threadgroup_rwsem:
-> 
->   [ffffffc01258bc10] __switch_to at ffffffc0081229d4
->   [ffffffc01258bc70] __schedule at ffffffc009c824f8
->   [ffffffc01258bcd0] schedule at ffffffc009c82b50
->   [ffffffc01258bd30] percpu_rwsem_wait at ffffffc00828fbcc  <<< wait for cgroup_threadgroup_rwsem
->   [ffffffc01258bd70] __percpu_down_read at ffffffc008290180
->   [ffffffc01258bdb0] exit_signals at ffffffc0082074c8
->   [ffffffc01258be10] do_exit at ffffffc0081e5130
->   [ffffffc01258be70] kthread at ffffffc00822ac8c
-> 
-> Finally, the Thread-A and Thread-B would be blockd forever.
-> 
-> Combining the above two situations, the reason why Thread-A and Thread-B are blocked is because cpuhp/x is blocked.
-> If we can solve the problem that cpuhp is not blocked, Thread-A and Thread-B can run normally.
-> So we can let schedutil do not create or destory thread, so that the cpuhp/x would not be blocked.
-> 
-> So init the sugov thread just once to prevent the above deadlock.
-> 
-> Signed-off-by: Ke Wang <ke.wang@unisoc.com>
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> ---
-
-Have you tried running with PROVE_LOCKDEP enabled? It'll help print a useful
-output about the DEADLOCK. But your explanation was good and clear to me.
-
-AFAIU:
-
-
-CPU0                                     CPU1                                   CPU2
-
-// attach task to a different
-// cpuset cgroup via sysfs
-__acquire(cgroup_threadgroup_rwsem)
-
-                                         // pring up CPU2 online
-                                         __acquire(cpu_hotplug_lock)
-                                         // wait for CPU2 to come online
-                                                                                // bringup cpu online
-                                                                                // call cpufreq_online() which tries to create sugov kthread
-__acquire(cpu_hotplug_lock)                                                     copy_process()
-                                                                                   cgroup_can_fork()
-                                                                                      cgroup_css_set_fork()
-                                                                                      __acquire(cgroup_threadgroup_rwsem)
-// blocks forever                        // blocks forever                            // blocks forever
-
-
-Is this a correct summary of the problem?
-
-The locks are held in reverse order and we end up with a DEADLOCK.
-
-I believe the same happens on offline it's just the path to hold the
-cgroup_threadgroup_rwsem on CPU2 is different.
-
-This will be a tricky one. Your proposed patch might fix it for this case, but
-if there's anything else that creates a kthread when a cpu goes online/offline
-then we'll hit the same problem again.
-
-I haven't reviewed your patch to be honest, but I think worth seeing first if
-there's something that can be done at the 'right level' first.
-
-Needs head scratching from my side at least. This is the not the first type of
-locking issue between hotplug and cpuset :-/
-
-
-Thanks
-
---
-Qais Yousef
