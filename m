@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD16A57014C
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 13:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DD057014F
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 13:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiGKLx1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jul 2022 07:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
+        id S230374AbiGKLxj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jul 2022 07:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiGKLxL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 07:53:11 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2D229CA4
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:53:06 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so4693132pjf.2
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:53:06 -0700 (PDT)
+        with ESMTP id S230054AbiGKLxP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 07:53:15 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B8B29CAA
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:53:10 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id b9so4542434pfp.10
+        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 04:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rsuVX4+Fk0zEwgcAXa4p8Pic6TFa+DVD5bKVK4M/r5c=;
-        b=kPy+zR91RLOnuD5gCrxaQwZnlck5gmy6/62lGsFszwd6HtNlVHf9Y8MP7ekyasuOHG
-         Xdszm9FRx3PGF8i5d7C+XEKBKiwo+jN1AkZnK31CQT2rIUhS9YGKp06IOvTverORBxgR
-         1Q/sJrWjvm17V5rJfjSDyR0RhcWW5bgIrX7YbTaHLH5hyaow19CRsonEcHbIxVyvHdQI
-         MvYPHtnSiyczI7NLYSmKj/eVJBFTUtC9fzMGaD4FG5MRrVJRzYPfH/sVrkVYCbGBDYSQ
-         oPORB+NIHfsq5gsV6K1d5ucq0c+JvB+fa0yXFO3v4Hnx69jLPNXANgv5uRDc41TS3c7E
-         ouRw==
+        bh=F9C4b2eXgqDOnaISTWY3hd8BHivbis4FswsOZcWe/jU=;
+        b=vUebZIGKNacxF3KqZp8W0o7xTR8bwMilpI1OMr+YKfjbmxpHzCKq8DfP+s/d7BrbKk
+         vqUfx0AJTq+tlRaVvaCvg6+cewoJZY4++sqiwpgU2wMvnnoA1cKwdpZU+9+yLTwHCU6R
+         ygRvVQDUiggbMbr07B0VtyBk1eXhHVVZbCanUv6uOoiFaATgLNuRSfXyUZ5yjp0qfrrs
+         Ouogbe02NP7BFzX25uiWgLFH5XvVG2A3A52pHpdjNt9Pnfh1dnIyt9IvKh8HtAssLccG
+         /rDbXdNYAeGCVDYP0CLq/+dnumAW/bT17c+SyoL4AaSEg6jtLvgWHwKAjEkIqAPXuj/u
+         yYAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rsuVX4+Fk0zEwgcAXa4p8Pic6TFa+DVD5bKVK4M/r5c=;
-        b=alorBydwQBNz0FgY+kinoAuM9T07sk1mXnffEDWgCgV0e1T+7GW1uc/XAk0N6Ixf//
-         VJL8UOxy+I9dqGHI3jCpzjI75OWtJ0FHlzjVDrsj7Wpf3E6upZ7y/yBipVRsQTuq004l
-         qPTl7j56UrMDmnjxKiVP+xXWodpNjkA4edKiJTWtiNm1YSpakz5+6oay7nhZkjyIZ0rj
-         3uAo+HdCTc/1A/8rmys04Q8gNJeVXk01vFxHUIQfltouPSltwbtCiCGihOAQhGlxoTAz
-         Y7An4BjLJe5B58iGpggLAF1Mkl4o/DOt1yuv1mnhd1Bc7opGVaJHvZNDD7eRFNJaW5ga
-         6P8A==
-X-Gm-Message-State: AJIora8Zsxoz6gufv51LsPjH5lJFQF+8YLgn+PAY/ad5gJpY3+HdCHho
-        971hcHCftILebk27FnewLD8Vew==
-X-Google-Smtp-Source: AGRyM1trqeE8jumz0+BBE5PpV7s3JbwJY81MH/u6aKNSvnOd++XaYUDGEpEDSHpAt74/zFSK9ZCPlw==
-X-Received: by 2002:a17:90b:1c07:b0:1f0:2077:6a9 with SMTP id oc7-20020a17090b1c0700b001f0207706a9mr12503682pjb.90.1657540385661;
-        Mon, 11 Jul 2022 04:53:05 -0700 (PDT)
+        bh=F9C4b2eXgqDOnaISTWY3hd8BHivbis4FswsOZcWe/jU=;
+        b=u3KW0HHEpDO1w0a2tzueabu7xkR0P2YkoC5gVTYTYxeCD0rz0tkKt2p74G6gLgLpkq
+         bukFalpFwbgyKBS8JMVNEv8fOujuwCZFjcSncywEhAei9qIiDI67c2GkuKal9IYfrRJC
+         3ch7O6oz31HKZGfIpAv+oUIqkWcQH+jH3tCZCl7vGaYPoLvDMrnLcpuFjEQiT6F9KapY
+         rEGOMc3oQjLx8/oSxgbuQia2n7V7Lh/2GVVBkzS/aBmypU3FQnFuhN3S8p7KvZS0aoRY
+         Q4rZtYDuRqz09pK7KepDE1VZ3m5+kL+t9Sukq2jwRj9yFlyfSy7/qe9/79jC4VahhWAc
+         v6cQ==
+X-Gm-Message-State: AJIora+/q1xvneEYdW2sgHJtrch3KL1ry0sa4q0GMEtQjRl92RlPNZqT
+        czGac4rBLTHjBugPrIkMWy5uYqwMv+8DZ4G066U=
+X-Google-Smtp-Source: AGRyM1vpZXo8S0A+cw9lPocExuKZFE4v5svlvg3jjLPozwoQPPVwu6Nf4Qtp7bhf5TPqR8+tyxmQXw==
+X-Received: by 2002:a63:9701:0:b0:40c:a588:b488 with SMTP id n1-20020a639701000000b0040ca588b488mr15689995pge.303.1657540389089;
+        Mon, 11 Jul 2022 04:53:09 -0700 (PDT)
 Received: from leo-build-box.lan (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id h14-20020a17090a648e00b001eaec8cea55sm4586502pjj.57.2022.07.11.04.53.02
+        by smtp.gmail.com with ESMTPSA id h14-20020a17090a648e00b001eaec8cea55sm4586502pjj.57.2022.07.11.04.53.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 04:53:05 -0700 (PDT)
+        Mon, 11 Jul 2022 04:53:08 -0700 (PDT)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,9 +57,9 @@ To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v5 4/5] interconnect: qcom: icc-rpm: Support multiple buckets
-Date:   Mon, 11 Jul 2022 19:52:39 +0800
-Message-Id: <20220711115240.806236-5-leo.yan@linaro.org>
+Subject: [PATCH v5 5/5] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
+Date:   Mon, 11 Jul 2022 19:52:40 +0800
+Message-Id: <20220711115240.806236-6-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220711115240.806236-1-leo.yan@linaro.org>
 References: <20220711115240.806236-1-leo.yan@linaro.org>
@@ -75,127 +75,133 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The current interconnect rpm driver uses a single aggregate bandwidth to
-calculate the clock rates for both active and sleep clocks; therefore,
-it has no chance to separate bandwidth requests for these two kinds of
-clocks.
+This commit uses buckets for support bandwidth and clock rates.  It
+introduces a new function qcom_icc_bus_aggregate() to calculate the
+aggregate average and peak bandwidths for every bucket, and also it
+calculates the maximum value of aggregated average bandwidth across all
+buckets.
 
-This patch studies the implementation from interconnect rpmh driver to
-support multiple buckets.  The rpmh driver provides three buckets for
-AMC, WAKE, and SLEEP; this driver only needs to use WAKE and SLEEP
-buckets, but we keep the same way with rpmh driver, this can allow us to
-reuse the DT binding and avoid to define duplicated data structures.
-
-This patch introduces two callbacks: qcom_icc_pre_bw_aggregate() is used
-to clean up bucket values before aggregate bandwidth requests, and
-qcom_icc_bw_aggregate() is to aggregate bandwidth for buckets.
+The maximum aggregated average is used to calculate the final bandwidth
+requests.  And we can set the clock rate per bucket, we use SLEEP bucket
+as default bucket if a platform doesn't enable the interconnect path
+tags in DT binding; otherwise, we use WAKE bucket to set active clock
+and use SLEEP bucket for other clocks.  So far we don't use AMC bucket.
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 51 ++++++++++++++++++++++++++++-
- drivers/interconnect/qcom/icc-rpm.h |  6 ++++
- 2 files changed, 56 insertions(+), 1 deletion(-)
+ drivers/interconnect/qcom/icc-rpm.c | 75 +++++++++++++++++++++++------
+ 1 file changed, 61 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 8c9d5cc7276c..d27b1582521f 100644
+index d27b1582521f..f15f5deee6ef 100644
 --- a/drivers/interconnect/qcom/icc-rpm.c
 +++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -254,6 +254,54 @@ static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
+@@ -302,18 +302,57 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
  	return 0;
  }
  
 +/**
-+ * qcom_icc_pre_bw_aggregate - cleans up values before re-aggregate requests
-+ * @node: icc node to operate on
++ * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
++ * @provider: generic interconnect provider
++ * @agg_avg: an array for aggregated average bandwidth of buckets
++ * @agg_peak: an array for aggregated peak bandwidth of buckets
++ * @max_agg_avg: pointer to max value of aggregated average bandwidth
 + */
-+static void qcom_icc_pre_bw_aggregate(struct icc_node *node)
++static void qcom_icc_bus_aggregate(struct icc_provider *provider,
++				   u64 *agg_avg, u64 *agg_peak,
++				   u64 *max_agg_avg)
 +{
++	struct icc_node *node;
 +	struct qcom_icc_node *qn;
-+	size_t i;
++	int i;
 +
-+	qn = node->data;
++	/* Initialise aggregate values */
 +	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+		qn->sum_avg[i] = 0;
-+		qn->max_peak[i] = 0;
++		agg_avg[i] = 0;
++		agg_peak[i] = 0;
 +	}
-+}
 +
-+/**
-+ * qcom_icc_bw_aggregate - aggregate bw for buckets indicated by tag
-+ * @node: node to aggregate
-+ * @tag: tag to indicate which buckets to aggregate
-+ * @avg_bw: new bw to sum aggregate
-+ * @peak_bw: new bw to max aggregate
-+ * @agg_avg: existing aggregate avg bw val
-+ * @agg_peak: existing aggregate peak bw val
-+ */
-+static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
-+				 u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-+{
-+	size_t i;
-+	struct qcom_icc_node *qn;
++	*max_agg_avg = 0;
 +
-+	qn = node->data;
-+
-+	if (!tag)
-+		tag = QCOM_ICC_TAG_ALWAYS;
-+
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+		if (tag & BIT(i)) {
-+			qn->sum_avg[i] += avg_bw;
-+			qn->max_peak[i] = max_t(u32, qn->max_peak[i], peak_bw);
++	/*
++	 * Iterate nodes on the interconnect and aggregate bandwidth
++	 * requests for every bucket.
++	 */
++	list_for_each_entry(node, &provider->nodes, node_list) {
++		qn = node->data;
++		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
++			agg_avg[i] += qn->sum_avg[i];
++			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
 +		}
 +	}
 +
-+	*agg_avg += avg_bw;
-+	*agg_peak = max_t(u32, *agg_peak, peak_bw);
-+	return 0;
++	/* Find maximum values across all buckets */
++	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++)
++		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
 +}
 +
  static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
  {
  	struct qcom_icc_provider *qp;
-@@ -414,7 +462,8 @@ int qnoc_probe(struct platform_device *pdev)
- 	INIT_LIST_HEAD(&provider->nodes);
- 	provider->dev = dev;
- 	provider->set = qcom_icc_set;
--	provider->aggregate = icc_std_aggregate;
-+	provider->pre_aggregate = qcom_icc_pre_bw_aggregate;
-+	provider->aggregate = qcom_icc_bw_aggregate;
- 	provider->xlate_extended = qcom_icc_xlate_extended;
- 	provider->data = data;
+ 	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
+ 	struct icc_provider *provider;
+-	struct icc_node *n;
+ 	u64 sum_bw;
+-	u64 max_peak_bw;
+ 	u64 rate;
+-	u32 agg_avg = 0;
+-	u32 agg_peak = 0;
++	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
++	u64 max_agg_avg, max_agg_peak;
+ 	int ret, i;
++	int bucket;
  
-diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index ebee9009301e..a49af844ab13 100644
---- a/drivers/interconnect/qcom/icc-rpm.h
-+++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -6,6 +6,8 @@
- #ifndef __DRIVERS_INTERCONNECT_QCOM_ICC_RPM_H
- #define __DRIVERS_INTERCONNECT_QCOM_ICC_RPM_H
+ 	src_qn = src->data;
+ 	if (dst)
+@@ -321,12 +360,9 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ 	provider = src->provider;
+ 	qp = to_qcom_provider(provider);
  
-+#include <dt-bindings/interconnect/qcom,icc.h>
+-	list_for_each_entry(n, &provider->nodes, node_list)
+-		provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
+-				    &agg_avg, &agg_peak);
++	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
+ 
+-	sum_bw = icc_units_to_bps(agg_avg);
+-	max_peak_bw = icc_units_to_bps(agg_peak);
++	sum_bw = icc_units_to_bps(max_agg_avg);
+ 
+ 	ret = __qcom_icc_set(src, src_qn, sum_bw);
+ 	if (ret)
+@@ -337,12 +373,23 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ 			return ret;
+ 	}
+ 
+-	rate = max(sum_bw, max_peak_bw);
+-
+-	do_div(rate, src_qn->buswidth);
+-	rate = min_t(u64, rate, LONG_MAX);
+-
+ 	for (i = 0; i < qp->num_clks; i++) {
++		/*
++		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
++		 * for other clocks.  If a platform doesn't set interconnect
++		 * path tags, by default use sleep bucket for all clocks.
++		 *
++		 * Note, AMC bucket is not supported yet.
++		 */
++		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
++			bucket = QCOM_ICC_BUCKET_WAKE;
++		else
++			bucket = QCOM_ICC_BUCKET_SLEEP;
 +
- #define RPM_BUS_MASTER_REQ	0x73616d62
- #define RPM_BUS_SLAVE_REQ	0x766c7362
++		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
++		do_div(rate, src_qn->buswidth);
++		rate = min_t(u64, rate, LONG_MAX);
++
+ 		if (qp->bus_clk_rate[i] == rate)
+ 			continue;
  
-@@ -65,6 +67,8 @@ struct qcom_icc_qos {
-  * @links: an array of nodes where we can go next while traversing
-  * @num_links: the total number of @links
-  * @buswidth: width of the interconnect between a node and the bus (bytes)
-+ * @sum_avg: current sum aggregate value of all avg bw requests
-+ * @max_peak: current max aggregate value of all peak bw requests
-  * @mas_rpm_id:	RPM id for devices that are bus masters
-  * @slv_rpm_id:	RPM id for devices that are bus slaves
-  * @qos: NoC QoS setting parameters
-@@ -75,6 +79,8 @@ struct qcom_icc_node {
- 	const u16 *links;
- 	u16 num_links;
- 	u16 buswidth;
-+	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
-+	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
- 	int mas_rpm_id;
- 	int slv_rpm_id;
- 	struct qcom_icc_qos qos;
 -- 
 2.25.1
 
