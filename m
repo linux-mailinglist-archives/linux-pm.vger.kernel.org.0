@@ -2,131 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2240D57040B
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 15:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E87FD5704BC
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 15:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiGKNRo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jul 2022 09:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
+        id S229654AbiGKNyD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jul 2022 09:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiGKNRn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 09:17:43 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556EC3E77F;
-        Mon, 11 Jul 2022 06:17:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id B686FDF80B;
-        Mon, 11 Jul 2022 06:17:41 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id x4jnSWMSPkx2; Mon, 11 Jul 2022 06:17:41 -0700 (PDT)
-Message-ID: <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1657545461; bh=loLzIztXpcWDKjqrW/8JqeDWdPr8OtVlFcuH9XDPBk0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=fJ0TxsveR+F9NhDnytauCSPpatACOvucztQhqLVUtHlGQPbjTdDaTHiRwGtyHj7ic
-         t19gojZKSOBt7HZORmXcGnNJOsO/WbO6a6Tj1OOcKvo/Jf7Q/1CZBIhH+HOtb1wCmt
-         PtmtR8jdjlke4eJoz1bzKotfEPBpfjQptGBxF9Atr4A1ESEfOaB8ATwyDDeA3Slibh
-         NXApcSt3ZKUREZSkSIIh6tmMN4nriCrdioxxMDxxALyI8lQA61OaA8Cer5EvuCi9J3
-         XYkbTTHNIYj4kXF9HzR0c1g9o8VkkxnD/dKFKfu7dIJxOnyNQss7sd2Vnkd87VjvKm
-         M9f0mDZrD1rDg==
-Subject: Re: [PATCH v1 2/3] dt-binding: power: power-domain: add
- power-supply-needs-irq
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
-        robh@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, pavel@ucw.cz
-Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Mon, 11 Jul 2022 15:17:33 +0200
-In-Reply-To: <c68e4ae9-c435-c74e-91cd-b153be6de92f@linaro.org>
-References: <20220711094549.3445566-1-martin.kepplinger@puri.sm>
-         <20220711094549.3445566-2-martin.kepplinger@puri.sm>
-         <c68e4ae9-c435-c74e-91cd-b153be6de92f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S230213AbiGKNx5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 09:53:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC0F3C8F6;
+        Mon, 11 Jul 2022 06:53:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29707614E4;
+        Mon, 11 Jul 2022 13:53:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A85C34115;
+        Mon, 11 Jul 2022 13:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657547635;
+        bh=caL07f0ZrqZjLNrdweHxAxsixM8nX4rbPbMW6ZYxsV0=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=mjcLQAZ2hiumn0Rhx5n0oqEfEPs3iWu4Ef3cICqJ/e0aEdPsHK+6uTVnVmyI/PgOX
+         5/Q4FgJ8udz3ZHaCcNlWI3urxE+qi3N5a2Swl7WeGW3RTrBWmasCNF0rwMCQaG8fsI
+         MBT9yNmNhEbEviQ9WMswhT4q50Q8rOKFnUpCS/rSAH7Q6FxRRv8DUoYFPNkOV62rXT
+         6sR2OQp8GnuWL3INmgM2nagbgmYuhO74Y9r4t2sLAd9Gb0xo53JdQrsIlVn3SHiXpP
+         B9O8HDwxv1ejO3Koq5QhYyInUOXHK26f7kxqfPuB3UQovAzRfljun6+3GrOAF+qv0L
+         nh1CjE/CuubYg==
+Message-ID: <480d38db-3114-29d1-8b81-b35a07623060@kernel.org>
+Date:   Mon, 11 Jul 2022 16:53:47 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v5 5/5] interconnect: qcom: icc-rpm: Set bandwidth and
+ clock for bucket values
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220711115240.806236-1-leo.yan@linaro.org>
+ <20220711115240.806236-6-leo.yan@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220711115240.806236-6-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Montag, dem 11.07.2022 um 12:38 +0200 schrieb Krzysztof Kozlowski:
-> On 11/07/2022 11:45, Martin Kepplinger wrote:
-> > Add the power-supply-needs-irq board description property for power
-> > domains.
-> 
-> Where is a board description here? I think you just meant
-> "power-supply-needs-irq property"?
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> >  .../devicetree/bindings/power/power-domain.yaml        | 10
-> > ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/power/power-
-> > domain.yaml b/Documentation/devicetree/bindings/power/power-
-> > domain.yaml
-> > index 889091b9814f..e82c2f7ccb97 100644
-> > --- a/Documentation/devicetree/bindings/power/power-domain.yaml
-> > +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
-> > @@ -70,6 +70,16 @@ properties:
-> >        by the given provider should be subdomains of the domain
-> > specified
-> >        by this binding.
-> >  
-> > +  power-supply: true
-> 
-> This is a new property not described in the commit msg.
 
-true, I think it's missing and could be added as a separate patch.
+Hi Leo,
 
+On 11.07.22 14:52, Leo Yan wrote:
+> This commit uses buckets for support bandwidth and clock rates.  It
+> introduces a new function qcom_icc_bus_aggregate() to calculate the
+> aggregate average and peak bandwidths for every bucket, and also it
+> calculates the maximum value of aggregated average bandwidth across all
+> buckets.
 > 
-> > +
-> > +  power-supply-needs-irq:
-> > +    type: boolean
-> > +    description:
-> > +      A power-supply can link for example to a regulator
-> > controlled via
-> > +      i2c or otherwise needing interrupts enabled to be able to
-> > enable and
-> > +      disable. 
+> The maximum aggregated average is used to calculate the final bandwidth
+> requests.  And we can set the clock rate per bucket, we use SLEEP bucket
+> as default bucket if a platform doesn't enable the interconnect path
+> tags in DT binding; otherwise, we use WAKE bucket to set active clock
+> and use SLEEP bucket for other clocks.  So far we don't use AMC bucket.
 > 
-> Not really a property of power domain. How the regulator supply works
-> is
-> entirely up to regulator. Otherwise such property should appear for
-> every device.
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>   drivers/interconnect/qcom/icc-rpm.c | 75 +++++++++++++++++++++++------
+>   1 file changed, 61 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index d27b1582521f..f15f5deee6ef 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -302,18 +302,57 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>   	return 0;
+>   }
+>   
+> +/**
+> + * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
+> + * @provider: generic interconnect provider
+> + * @agg_avg: an array for aggregated average bandwidth of buckets
+> + * @agg_peak: an array for aggregated peak bandwidth of buckets
+> + * @max_agg_avg: pointer to max value of aggregated average bandwidth
+> + */
+> +static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+> +				   u64 *agg_avg, u64 *agg_peak,
+> +				   u64 *max_agg_avg)
+> +{
+> +	struct icc_node *node;
+> +	struct qcom_icc_node *qn;
+> +	int i;
+> +
+> +	/* Initialise aggregate values */
+> +	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> +		agg_avg[i] = 0;
+> +		agg_peak[i] = 0;
+> +	}
+> +
+> +	*max_agg_avg = 0;
+> +
+> +	/*
+> +	 * Iterate nodes on the interconnect and aggregate bandwidth
+> +	 * requests for every bucket.
+> +	 */
+> +	list_for_each_entry(node, &provider->nodes, node_list) {
+> +		qn = node->data;
+> +		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> +			agg_avg[i] += qn->sum_avg[i];
+> +			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
+> +		}
+> +	}
+> +
+> +	/* Find maximum values across all buckets */
+> +	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++)
+> +		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
+> +}
+> +
+>   static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>   {
+>   	struct qcom_icc_provider *qp;
+>   	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
+>   	struct icc_provider *provider;
+> -	struct icc_node *n;
+>   	u64 sum_bw;
+> -	u64 max_peak_bw;
+>   	u64 rate;
+> -	u32 agg_avg = 0;
+> -	u32 agg_peak = 0;
+> +	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
+> +	u64 max_agg_avg, max_agg_peak;
 
-you're right. The power-domain driver could read the power-supply
-regulator node directly. Still, I think then a new regulator property
-is needed instead, or is it?
+Now max_agg_peak is unused?
 
-> 
-> > This property makes various callbacks usually run in the
-> > +      noirq phase, being run when interrupts are available.
-> 
-> Last sentence does not fit - you embed Linux implementation into DT
-> bindings. noirq phase is Linux specific.
-
-oh I keep making this mistake. thanks for the fast review!
-
-> 
-> > +
-> >  required:
-> >    - "#power-domain-cells"
-> >  
-> 
-> 
-> Best regards,
-> Krzysztof
-
-
+Thanks,
+Georgi
