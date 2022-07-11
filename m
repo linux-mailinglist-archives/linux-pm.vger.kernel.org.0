@@ -2,160 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590AF570AC6
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 21:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCD6570C41
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 22:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiGKTdy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jul 2022 15:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S231814AbiGKU6i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jul 2022 16:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGKTdx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 15:33:53 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D597101C8;
-        Mon, 11 Jul 2022 12:33:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L+QC5AdPDP5/i3uNok6B27okm+VEIbSSF21lRCxLIXMBhDRw/LSlnceasudc0qDpq7eia7jJ/pMSfATM+2ru5cFz9P/Lpn8yKiuNrkp3U0rRDc6VnYdQ26s/3iQ+fI+f1CKGNjyM4v5BfjOSk1VQ0flxoNp+t5eOJ37gvSkMQZNz6FpL9YDip3KvJ3VSoD1oEo/NWnDv0yECRWT4nAtba+UmjYER6B7S0ur82nFWU4luvjywP293TfPENJ6Xa/R+pigYr3kyX/h3vDD443f0dy7afG8/rusH2YDldM7f27uv4jyizzMPlsqy5S85gdj0QJ7qNktU8tyK+0qKqC3jig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nP0D4NTRr/asZv3u7FeLQg8IG6J0jnr0WqLGNMamYd0=;
- b=KJEFQI6Zd8PSTGtXCbLZ90+x2gueX99tiVeIRlEESH1Eyh+e/H7lGby54jzwyxeUamhwZFWt9RTRNzZva/kP/noN6N2K6Ef9+3yovLZtCdYQVgi+oI17pDllhEePQ5jj/UwwZTGvEbm3YKkl34DQ9up1lZlKyz6Tcg8MbjG1VqEZ22h8HPrUjNcjXuhuToCiZSg3+NqZc3+youp0vgvP+9EMe9ILnHG6SKl5k5SOIBKRCMQA/Lk2LKob+l9prfDSOsP16iTc5uEorqTigqHOE2P/sW9FezvuYx1oahn7lZ6kqyjZOUpuICmR+Lzc+HHrkzHAGAez3DjUeThrQjv41w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nP0D4NTRr/asZv3u7FeLQg8IG6J0jnr0WqLGNMamYd0=;
- b=CW2hXnOVuqi4Eki+oak6dkboz98Uiva4oKeL/DLoOiu9utJGseRjCX58F53DWPS7HHXP6pEXeJWwuRPrSjKJPzS7wmwsOLFJr55clf/AOhlZiOJ/eOt6P0+/s+EfPp1P/6KEdZ0aBKdcUin3RIZsn5BkoGiJBkmlGCvN2sukV00=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6222.namprd12.prod.outlook.com (2603:10b6:208:3c2::19)
- by MN0PR12MB5763.namprd12.prod.outlook.com (2603:10b6:208:376::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 11 Jul
- 2022 19:33:50 +0000
-Received: from MN0PR12MB6222.namprd12.prod.outlook.com
- ([fe80::ec96:60a2:ca21:17d1]) by MN0PR12MB6222.namprd12.prod.outlook.com
- ([fe80::ec96:60a2:ca21:17d1%3]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 19:33:50 +0000
-Message-ID: <359a0e0a-b118-450e-67d8-a784d1a43cca@amd.com>
-Date:   Mon, 11 Jul 2022 14:33:48 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 07/14] cpufreq: amd_pstate: map desired perf into
- pstate scope for powersave governor
-Content-Language: en-US
-To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
-        viresh.kumar@linaro.org, Ray.Huang@amd.com
-Cc:     Deepak.Sharma@amd.com, Mario.Limonciello@amd.com,
-        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
-        Jinzhou.Su@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
-        Li.Meng@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220709141901.835903-1-Perry.Yuan@amd.com>
-From:   Nathan Fontenot <nafonten@amd.com>
-In-Reply-To: <20220709141901.835903-1-Perry.Yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0272.namprd13.prod.outlook.com
- (2603:10b6:208:2bc::7) To MN0PR12MB6222.namprd12.prod.outlook.com
- (2603:10b6:208:3c2::19)
+        with ESMTP id S229615AbiGKU6h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 16:58:37 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD821C10;
+        Mon, 11 Jul 2022 13:58:31 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso177642pjz.0;
+        Mon, 11 Jul 2022 13:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VtPW/Lt5Z1tr8gm6l2bDv7xPDRY/d3rry0OUzw7TIPc=;
+        b=Nbhhl2aSnTEudJCfY9q/OqMf3HdGS3Y67MZiTWFOOLD+oZqbG2/ONfCTHlrefHbI5G
+         jxfm72weuCLaP2wFfAB3jRN7qCQVBGKjpnwZAoPchLDeB6dP4otu5zGScji2u9K6fpKb
+         WV0lXLz1N/gPWVlD4YNqrA8Nr0NRBK/E7gf5+OkJ+4XbsC25JJ1gmA0VHFDRr226NKFn
+         1lPGsdEhX6JTW4O9SPGID4K7yV9oMYhkbEWkomOXvvLiJ6tF6hzRmBqWcwDIXNHl+f2l
+         7zzZWhS8law7H7oIcy4SbE2KOVZw/i5JJkIk641uUPgf/F1f3w/qmOHGbSFtvakk/nHd
+         XMJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=VtPW/Lt5Z1tr8gm6l2bDv7xPDRY/d3rry0OUzw7TIPc=;
+        b=23oPxwItCFxDzNawocvWpIxXn1b7cX3p4YpIQ9JPZgUZa6P+T6G/piT7WN/+TowzU4
+         gX8kb8ou70d6spt7zAPj5FaXImQYz7LliBgXZRtYrDCUc/uGMo6f4lqAHEC+MDU1cU/d
+         WU/fn/qRzmlr2d4uKCNlAOmdLgOgjso9nfoGIqlVwafLFQ2L/93bmJXFKA+48aV5fCSH
+         sILWJ8795iN8hBe7qecQfXsP1hUwnj+DMexYbdSg/RIGljPoCDK3wLzL3W7erH3hAEwt
+         ZpRbcMQ95hmfemAzJKbeip/Walq2u/RO+84yDneUDOHnl/rA9sagxbLO5T3jLHf8FAX/
+         5IpA==
+X-Gm-Message-State: AJIora+RCbqrwVp7XIraKfPW90qUVx4qwdiAqQj5q9ATrPTssbh/1Ut8
+        jk/CcC+Jbx4nPfvuf1WO1Ps=
+X-Google-Smtp-Source: AGRyM1vn9A15ZlwVHjPMYQdbom4DMItZ7W19yFs6V66bI0PvIZG6FMFMc0rwahiWRD0ZWoLPS2YdRQ==
+X-Received: by 2002:a17:90a:6008:b0:1ef:abc7:a740 with SMTP id y8-20020a17090a600800b001efabc7a740mr260728pji.179.1657573111142;
+        Mon, 11 Jul 2022 13:58:31 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170902a38a00b001678ce9080dsm5112601pla.258.2022.07.11.13.58.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 13:58:30 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 11 Jul 2022 10:58:28 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+Message-ID: <YsyO9GM9mCydaybo@slm.duckdns.org>
+References: <20220705123705.764-1-xuewen.yan@unisoc.com>
+ <20220711174629.uehfmqegcwn2lqzu@wubuntu>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9c9194bb-80b0-405b-7965-08da63744827
-X-MS-TrafficTypeDiagnostic: MN0PR12MB5763:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jhwk1eNNspISf/zhuKDOmhYogJat7II1Go94ptvW0DqtqfTJDEXh8Y4Lq1yIa2jC37ETp1xarr9yJezUEieW3+B0H3Q65oI7H7VQV43Q+UT5iC+04XCvKpKcfGXZNe/DDFf4Uic9sBlgAFHJ6KSWIRbw4ykZT2Jxw4CvhYitY+Vg5iK0MhzOXvrCXT80CVW2z19ETMmSunH77B6njTjI7T0/pLpuufCo+GPM+aI6m+3abhBy5nQpn7oOEemHg4KbzUqh8xK7/4d8KwyhNjQ/stWcLtc44SHjNsgbI7mJtnS5wUJtMV7V2Gg7Hi18ntpKtk0mP116k2H/XTU7Wo1yY5qgOd8bLl67Mc321EXGw2dmYnEJg/e27w0hKSxJyXNAJq1z1Las7/jPWD1eEmizKqu4MkLjDlnvKpb5gHJhNpkIAk1qZkdcBMGbNr1II/eEGZDO9LqEQa5c6BO3kr3fot52iqhB0Qrw9qe5R9pxDUvL85JgKdG/xE9U+ZGJ6WEVleox+7abbfudHL63LeglOsIlp3tWIAfyXkQqyfNyo5S7IkbFAAjYSRVH2UxhfpbW8oUz/FPsRkQokmt4NbrdHgttvqz06aRFQVcV8X/S5uDDWgufkq9PjADyG2TkYqwFjyOUg+8FU9YnFs1aOCSV91Q3anJn30z6RfDqgUSbUV8UpXmGLkf7wYsMb9CyHbpt0xDyECgtlcHYP/ick2LMxRVVSJJDcdxDgYTt1cMaC+hEEQ7lzoPNF6qlGYjapuI+Hb7EWbldUKc5DffJcIIOvlWlBxSBxNt4kYAaENer9o5E1KkFtGuhd3Dd20od5VV5mH3Cejvz8Mc6CN0yada3kjvBAHTEyhKoJDo2bnnqRRQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6222.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(136003)(366004)(376002)(66556008)(4326008)(66946007)(8676002)(478600001)(66476007)(38100700002)(2616005)(6486002)(41300700001)(6506007)(53546011)(6512007)(83380400001)(186003)(8936002)(2906002)(5660300002)(6636002)(31696002)(31686004)(316002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OUpSZU9tYmwvNll3Z3ZDOWo2b0w3Y0x1bUFmcG1yZ3RIZVRVc0JiOEVOUyt5?=
- =?utf-8?B?YjcrVTZDSkVDRW5TaHd5UUR5Z1J5aUVGYXF6VDVXK1p0VjVmYVZ1cFVycitj?=
- =?utf-8?B?eVJ2TGk3YTZjazdMWC9qOFpPWlhlU1FIOFRLeE9yRWt6TUFmRmEvQXIzeDZo?=
- =?utf-8?B?emZnbTJNekYvTG0vMnNDTXRQa2Zjc3BSTm1VT2Frc1BKN3FOWndmd0FRbkxE?=
- =?utf-8?B?UytYNEZIdHNXZ2ZzaHV4b0xhNkt6YVFSUEFwelJ3aFZWaG4yY090Ym4zT3Zs?=
- =?utf-8?B?anByM1d5eWNNVmJTZjdOK3BaN1RvbXQ5TG9rYUl2Sjg0ZTEvN3RGWDcwUmhB?=
- =?utf-8?B?am12c1lzWUdnTzY2OE91TDI2Sk42ekdtZnhLcGh2TGZKaW9QWGlWc2wrS2FH?=
- =?utf-8?B?SFBGN2xEWjNEcHphdkNhRmNJY2tnTGpSMHl2QnlvYVR3VXFrQTZTNUlwTE02?=
- =?utf-8?B?T2NOTjV3WmFwUnhHcmZrUCtDZGtpR1c2eHBIUkdiNXczcGNiNkFHTHIrOXRD?=
- =?utf-8?B?OTR6QUwvaUZweWpvVWNINVd6dG5kVkovZWxRaC93MlR0ZGY5SS9YYmtydTJJ?=
- =?utf-8?B?Y01OZ1BkUlNwd0xwRTdDSFBxbDBVRGtDUm9TRlc1dzhiUkNEbXNacHh3ajlQ?=
- =?utf-8?B?aFd6bWtKblJYbHhkN0l3ai9wVWVKTUw3Vi9yN3NVOTVXV0xWUEZ0YnBhWnMz?=
- =?utf-8?B?ZnhNYWRhY2wyU2d5VU5ycG9zTzhzcEhPMmIwZHEvdFhkSTdZbVU2VEVQWWt1?=
- =?utf-8?B?OHBEUTNTVXdBaEFrSWR2ODZCSTlnSGFsbjYvTmQzSVFjaUZvZ3I3R2EwOWFC?=
- =?utf-8?B?R1hrbkVOTld3QzlScExLYVlPcmFjSnhCQjVDN3ROMDByRjBVUUZKZEdiVWZM?=
- =?utf-8?B?cUEvQzFhb29vOXBlTWxkTUNUdFlSWC9ubDlYK2xObjJXdlp0dUpZQ0VNcXNZ?=
- =?utf-8?B?SitNbGVma1hMWE9CSTU1NkJDVHQwWWwzUmplMHo2SGlsNVZIcXRrRjFmczA5?=
- =?utf-8?B?YzRtK3VzdFRlUHFBYkIrQ3dJVXh5Z1ZpZGNaNTlIZ3FHVlkvR1ZKMDRyNFls?=
- =?utf-8?B?bE03Y3d4Tmg3QXdMc3JFYTEzVzJxeHY1cE5lQ3ZPR1U4SklCUjF4WXNDc3Uv?=
- =?utf-8?B?aUFpcjViSk1HWURwMHQxV09qbWttSENKQTBlUDByYjg2YzRoeVVLeFVDZ1pu?=
- =?utf-8?B?clBMd0pBUmJwNnFVNGlyaUJ0aEV2M0lJdzhQUElpT1JVMmFhTVZKakhjZDBD?=
- =?utf-8?B?RkpRVFZyTWxLZ2JoUUFNSWtoUE1RN1cySDd6S3BxZ1o5THkvZnJUMUlOZHNK?=
- =?utf-8?B?MCtXYWNiNmM0MDV3anQ3Uld5bS9HdnhJRWVqYkliUXhnRnA2WW51eFhIVmRO?=
- =?utf-8?B?QW01N2hFdVkweWYwaVY0Z25hZU9LVnN2QkxVOHNNZ2Z6VVYwRUF1Mkh1NGhL?=
- =?utf-8?B?ODFtZXBHTlhZV2FqVHB3bTlZb0I4U1E3UXJVTXQ5TFhXWUFtbzJmdGdpdnZ6?=
- =?utf-8?B?cW1FbzJEMG53b3dnSUUvMS9EM21UWk5lVDVoY0lSNldoQUlxYUZmcUtsSmtx?=
- =?utf-8?B?RVJMdDFzMkoxckFDR2JGd2Q2czVMMGh1Z0pZOGtwdldNajBOZmlCdGNwVlVk?=
- =?utf-8?B?SEtDQnNKQ2V3Qk5NSkRiRHM2a1dFb010Um54UEJwczBLbkpjUmJBTzVOcURQ?=
- =?utf-8?B?YWNYQzJ2YkpXQUFIVCtpellxRjdWOFZUK0x3NG92bkI1MCtpVkZYMXpDcFZP?=
- =?utf-8?B?TG91SzV2emNpakR1RFIxcDhFMEFyOW5aeGVxSjdnbEhsNWZYV2t1dm1mUVJX?=
- =?utf-8?B?VDdmNlpXSmlyOVFRYUN0aUdrd1hxU3M4bGg0Z21iQmloV21NQU9iL2Z0eEM5?=
- =?utf-8?B?YXZkbW42dDRDM3hNOUJYb0pBd3VDYlpkOUI5eGU2Ty9xdTlHMDV1cVJqT3ZZ?=
- =?utf-8?B?SHI0V01HdlMwVloxTDVLc1g3Zm9va2syL2RqVWVLQnZVNlpZbWlqdDBBQXB5?=
- =?utf-8?B?SG5nTjlSMXJHOFNKckUzZXVldGxjSDdiSHFrS0VHNUpyV3MxcndkQ0haTUpz?=
- =?utf-8?B?WjJvM3FsR3ZmOEhYQ245V0Q3Zzk4bGlXT05tNUEvSGo3M0crYU5vUTVWcnhl?=
- =?utf-8?B?NXphdkNpQzFySks3d1QxZ0toV2UvbUVSOFo3WWprT1cyREZLWFN5TWRQMFpJ?=
- =?utf-8?Q?skR4e/zL8DTKmIZFAq03VcyaknbDuiDyWgLU7ww0o5WX?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c9194bb-80b0-405b-7965-08da63744827
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6222.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 19:33:50.5186
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Muoc7Cz9VZRCYoKM+Y4kurIrvVQyrkp5Daa8IUDgr0z/qU/pnuuH6Q5YUN+PO/U0WtvozPRYZuyQm7KN4OCK6g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5763
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711174629.uehfmqegcwn2lqzu@wubuntu>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/9/22 09:19, Perry Yuan wrote:
-> The patch will fix the invalid desired perf value for powersave
-> governor. This issue is found when testing on one AMD EPYC system, the
-> actual des_perf is smaller than the min_perf value, that is invalid
-> value. because the min_perf is the lowest_perf system can support in
-> idle state.
+(cc'ing Waiman)
+
+On Mon, Jul 11, 2022 at 06:46:29PM +0100, Qais Yousef wrote:
+> Have you tried running with PROVE_LOCKDEP enabled? It'll help print a useful
+> output about the DEADLOCK. But your explanation was good and clear to me.
+
+I don't think lockdep would be able to track CPU1 -> CPU2 dependency here
+unfortunately.
+
+> AFAIU:
 > 
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 7c51f4125263..8a2b6ad9b8c0 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -265,6 +265,7 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
->  	u64 prev = READ_ONCE(cpudata->cppc_req_cached);
->  	u64 value = prev;
->  
-> +	des_perf = clamp_t(unsigned long, des_perf, min_perf, max_perf);
+> CPU0                                     CPU1                                   CPU2
+> 
+> // attach task to a different
+> // cpuset cgroup via sysfs
+> __acquire(cgroup_threadgroup_rwsem)
+> 
+>                                          // pring up CPU2 online
+>                                          __acquire(cpu_hotplug_lock)
+>                                          // wait for CPU2 to come online
+>                                                                                 // bringup cpu online
+>                                                                                 // call cpufreq_online() which tries to create sugov kthread
+> __acquire(cpu_hotplug_lock)                                                     copy_process()
+>                                                                                    cgroup_can_fork()
+>                                                                                       cgroup_css_set_fork()
+>                                                                                       __acquire(cgroup_threadgroup_rwsem)
+> // blocks forever                        // blocks forever                            // blocks forever
+> 
+> 
+> Is this a correct summary of the problem?
+> 
+> The locks are held in reverse order and we end up with a DEADLOCK.
+> 
+> I believe the same happens on offline it's just the path to hold the
+> cgroup_threadgroup_rwsem on CPU2 is different.
+> 
+> This will be a tricky one. Your proposed patch might fix it for this case, but
+> if there's anything else that creates a kthread when a cpu goes online/offline
+> then we'll hit the same problem again.
+> 
+> I haven't reviewed your patch to be honest, but I think worth seeing first if
+> there's something that can be done at the 'right level' first.
+> 
+> Needs head scratching from my side at least. This is the not the first type of
+> locking issue between hotplug and cpuset :-/
 
-You should also update amd_pstate_adjust_perf() to remove the clamp_t() call now
-that it is done here.
+Well, the only thing I can think of is always grabbing cpus_read_lock()
+before grabbing threadgroup_rwsem. Waiman, what do you think?
 
--Nathan
+Thanks.
 
->  	value &= ~AMD_CPPC_MIN_PERF(~0L);
->  	value |= AMD_CPPC_MIN_PERF(min_perf);
->  
+-- 
+tejun
