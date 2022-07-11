@@ -2,77 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B56D56D303
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 04:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8415456D306
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Jul 2022 04:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiGKChK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Jul 2022 22:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S229490AbiGKCkV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Jul 2022 22:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGKChJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 22:37:09 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9104918382;
-        Sun, 10 Jul 2022 19:37:08 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id e132so3601816pgc.5;
-        Sun, 10 Jul 2022 19:37:08 -0700 (PDT)
+        with ESMTP id S229463AbiGKCkU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Jul 2022 22:40:20 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28AB165A4;
+        Sun, 10 Jul 2022 19:40:19 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id s206so3608600pgs.3;
+        Sun, 10 Jul 2022 19:40:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KYXBxETadIY8kHIH11CVmyV2r8MLGFf+pAjzRc0P/V0=;
-        b=LfFh5qDPxy0SOn0Isaw+jHnkYNCuCN617lNenJpB51pa2M5S+zOEUEkoODtJ5DDi7X
-         7MonAZt7ztiE5I/+rULZaFjkFRTaIH9fzSoTfRZgxLrRm8vvoiL4CLeZduQWE4KL+eu5
-         ow3NZVXgzK2k5gtd4hbwCPNQ6XZpMv5Ftdz28oNofG529n3NOasdSmJeTaJ4xadNY3Y2
-         Mmm58XXss7PYjxFLykxhO4x9p1c7yIrjHBs1x7sZLX3xQl4EYwp8T0p3ClEjtiCWeL/T
-         aRYkyzp0sbq+/s39u3AZ8biyY7EIZZiJaN4zi43MAlQ+Q5FTSIwCELlqVCgXOVwX580e
-         OWBw==
+        bh=cVE7wOlVeNoq1ySfCQ4BILmyFDppX/c2EN1/2ktSi7E=;
+        b=lAZn5fjqQJxtVCnpPOB8/uAa8Cvj+PbSrcMGX9JC84aSbNGEFj7CJorONn1amlml8l
+         a76pMzVRoDatox9mAR5C0N7SbVHuXruMIm1JxYTYVECEGHlGq+496H1Se/vY48GITr6N
+         LbX/W8ErNjIhf23aTLPPxr1AXPiS42F3H0ubTysYneFxpBPU6eGtFTNMuzjc+YBUjRmB
+         /Ht5md1BNgwGUMMaZ4f0JLjN64D43dFjSYElz6Zr86T2pcUlh1WW8o8/QHuCF1lI8snh
+         GelhZ4kvPFy/RMcUVVfRnBSu1Kj3thyhhD1Mm/uv8MEocOyfVA335OWK86AC93e51P/0
+         auBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=KYXBxETadIY8kHIH11CVmyV2r8MLGFf+pAjzRc0P/V0=;
-        b=eY60vk2zJsQUNP2H7g7wOyGsJspi1oz3G8WXqeNH9EiO9AlNFMoJGtwOs7HG2NDRNA
-         UL6MhZmaCPwka4gVxQpTEoTiSpbDz9qBXdgFcNcTefeMfEx93QM1H8/TEnvY+qwc4AHX
-         6DDhO3eZbzsknc0KcNACgmM5anBS27AETbaKZ1I77xxDGI4KWRXB+kyfCvyZQMaVdlkP
-         ldvUYnwdSqbZ9DaTj2QWenG8EUnT241k/OwjKmieWIM3heIhfKt4Nx0MucA4NUE7L4z8
-         tzChrOWLomUNJXh3hP4R42UW+NfKJM90glywNgm+N+loDNlFVkP7JJIVVWTanp1irXi8
-         7uCw==
-X-Gm-Message-State: AJIora8sdNOpYD76Ei010XpfEEK20Fns0RtFA6N6Z2zZIiA3PeR9AGti
-        5TfWmSuhpFOcEnnKw0GWaCeguncb++E=
-X-Google-Smtp-Source: AGRyM1s3jOZyBXcl7FpSAa4vlr0D6Xr/DWu4brEpCTOOs3EEwx+BOV6LRFnvaknMEht6NbxVM483ng==
-X-Received: by 2002:a05:6a00:2188:b0:50c:ef4d:ef3b with SMTP id h8-20020a056a00218800b0050cef4def3bmr16056377pfi.83.1657507027978;
-        Sun, 10 Jul 2022 19:37:07 -0700 (PDT)
+        bh=cVE7wOlVeNoq1ySfCQ4BILmyFDppX/c2EN1/2ktSi7E=;
+        b=IuE+qcUjyx9bZkqoVFwhrqgYfYhAE5V477p20dEbS8LldxS6KhyLdtzxNnUpvorgzh
+         8QsC0qfgg3OScsJENxpg6V5SuB+6NXI6p2LSO3eNCLVHjLxfQZ6Rq/5Rld8nQKTV1Sd8
+         gPxeEnai1gmjzY+cERKvjWUi0dfBbrfarVZrqQ4j7jab1HzIaGRbZVT7KIR5/zwz1CHs
+         ZYqVfSj2DDsod/H1AT4kskk0x/P1gqNvQFT0dK/Cih0uVbd1NC7UFEP8K77SqMK0DOL6
+         r1ef13aV5zbUfPfd46S5z+rkRR5JomzcwREJe8dctsyBqvIGrP8Gz0h22iTEmqAKXNZe
+         LePg==
+X-Gm-Message-State: AJIora+SSaHpAmUg0RVeIw0UwF88G3afXHgjmSD0nNqaR/6FTudtBLwD
+        7kMRs/JN1PYScQ0SkINqPiY=
+X-Google-Smtp-Source: AGRyM1uLsbArbBufRT4sZY/RJ0B6O7H9L+XcFPJl4cjIAj1KyHZzkJhMnE452gVQxC4+c7t7ikwXJA==
+X-Received: by 2002:a62:e817:0:b0:52a:b9fa:9a54 with SMTP id c23-20020a62e817000000b0052ab9fa9a54mr10507357pfi.61.1657507219377;
+        Sun, 10 Jul 2022 19:40:19 -0700 (PDT)
 Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id i8-20020a17090a138800b001ecbd9aa1a7sm3487069pja.1.2022.07.10.19.37.06
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b0016c433f7c12sm1319528plg.271.2022.07.10.19.40.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Jul 2022 19:37:07 -0700 (PDT)
-Message-ID: <1a33e931-0bf2-4eed-cc7f-718fb49f6bde@gmail.com>
-Date:   Sun, 10 Jul 2022 19:37:05 -0700
+        Sun, 10 Jul 2022 19:40:18 -0700 (PDT)
+Message-ID: <aab5ce68-fd50-7be2-1ffd-1652564d59a0@gmail.com>
+Date:   Sun, 10 Jul 2022 19:40:17 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.0.1
-Subject: Re: [PATCH v1 10/33] thermal/drivers/broadcom: Switch to new of API
+Subject: Re: [PATCH v1 30/33] thermal/drivers/bcm2835: Switch to new of
+ thermal API
 Content-Language: en-US
 To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
         daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
         amitk@kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-rpi-kernel@lists.infradead.org>,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>
 References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-11-daniel.lezcano@linexp.org>
+ <20220710212423.681301-31-daniel.lezcano@linexp.org>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220710212423.681301-11-daniel.lezcano@linexp.org>
+In-Reply-To: <20220710212423.681301-31-daniel.lezcano@linexp.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -94,18 +94,7 @@ On 7/10/2022 2:24 PM, Daniel Lezcano wrote:
 > Use this new API.
 > 
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->   drivers/thermal/broadcom/bcm2711_thermal.c | 14 +++---
->   drivers/thermal/broadcom/brcmstb_thermal.c | 20 ++++-----
-
-For these two above:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-
-and for the whole patch:
 
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Any chance we can keep the struct thermal_zone_device_ops const though?
---
+-- 
 Florian
