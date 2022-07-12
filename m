@@ -2,150 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7142A57132A
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 09:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D0357137D
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 09:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbiGLHbo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 03:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
+        id S232474AbiGLHwr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 03:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiGLHbl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 03:31:41 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CF09A5EE;
-        Tue, 12 Jul 2022 00:31:40 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so7135446pjf.2;
-        Tue, 12 Jul 2022 00:31:40 -0700 (PDT)
+        with ESMTP id S232404AbiGLHwp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 03:52:45 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A819D500
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:52:43 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id v7so4767342pfb.0
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=t+djDSzD3Pg3sYjwMz+n3xMozdzdEx12hm2NBAhg06M=;
-        b=AHGYu6Gp4981YQ2emWscw9effTHDD95yJgCNylEZIVVAoeD5Gnduuxm1p1/dAD6R4y
-         7AyZJ/z0X24sG1mZWoGjPeRyjPoal/IanjU36Yxyf8/5v/63f1mJf2VkApuchXYhUxcO
-         pebAxuaxoS154mTvUEO7+EQzWJojwPegdYAOcvdR8tyTDIFoltwz/TTMhOH3TEC+pX2W
-         6wQXXPUBtm0Sm1SHAy+xrw977LdzqCAy4TOgBGrAXdbyqcrs/PlqwgQtwmOLYnNiNPcJ
-         DEejseM+XWiNoD4SinRUXc4mC+wN+jxiIV3r3GKIt4SWdYb4znvMdQxBjJ0oZYzfK4bT
-         ZywQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JDE9efA6tNnV2IAGh2LYLxXJO4QIDeRatDZhQ/9xv0Y=;
+        b=aIVJoOrYsOxTCnwRWJsJsadg8YScTtWaD0KWY7O/2+d8GVdTuEwcbqHC65rXN8wf++
+         3HyfuAZeUSNgl+yUHx/5KlRezG7txR0FdQaKUCs2dK0RgqKtkIgKMHUn4a3fWXtchUD8
+         g7IW4PdmeGjP3yX98W+7cqVp78RzOGcfYR2jVyT+kDsObWUtEQhH3ipi3c2vyzkFN7va
+         evzX9xXekM3lXyocMknYXWvrCdbXQa0fWYKFk+OPPr6btstHwE+thj2ExuI+0c/1nZaE
+         VVpSXpq1Vet9CUK+J3jdAlNviHFp/4+V2qoSblLUDATIq/8mDyFEOkl3La/CM4Q0VqgH
+         8E7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=t+djDSzD3Pg3sYjwMz+n3xMozdzdEx12hm2NBAhg06M=;
-        b=pKXrhJSe8TIUVXL7r++NxbwGgHh78+hxcy3fVrviwYJiuHnsqKra8laii0q5bdv/GW
-         JBDt1sj4UAvsAKp1wBVsF7GbKTBdlGSIxjhbryhJ8O8fXHvZ9qxD1B11YnM8o5VHD/z4
-         CaD+cU0PeIf/m1wtWIGVZii9MjFRoRjF3WUQ0q5d3fNmDNCILwBEzb2gVIjT+GBHtA2y
-         gtJn4i4bxysCnQfHpQbMQT2Mb2xG2dYsfDbr3MUMPHcv91SLZNpAQxSDH2i+2qeyjETK
-         W7lfh9f+a++Ofjx4yrffA/z3CYVvGUEcVm4QPGBxDVwT5ADTbTqMwfQ3Ji4ZagYCtIa9
-         y1Pg==
-X-Gm-Message-State: AJIora/PKWQF7BoEWxcQWdnlRARvZgdY/8lwsX6pP4Yng6sOOrz9MxEN
-        IyqppUav47qh8jM2ig/BOJ5zzwksHn3qXg==
-X-Google-Smtp-Source: AGRyM1vPG84Yxbx2MBVUwjcHnb2WnhbuneVRIBiTY5rEUdf3iqBGhy5XR1TO9UimjlZ4mu8shS5Vpw==
-X-Received: by 2002:a17:902:da88:b0:16c:27f9:8762 with SMTP id j8-20020a170902da8800b0016c27f98762mr20442574plx.85.1657611099473;
-        Tue, 12 Jul 2022 00:31:39 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id t18-20020a170902d29200b0016c09a0ef87sm5994557plc.255.2022.07.12.00.31.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Jul 2022 00:31:38 -0700 (PDT)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lh.kuo@sunplus.com, Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v10 2/2] dt-bindings: thermal: Add Sunplus schema
-Date:   Tue, 12 Jul 2022 15:30:45 +0800
-Message-Id: <5d2c95959dd6efaa204bc80ca9b24a8be9293d2f.1654660009.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1654660009.git.lhjeff911@gmail.com>
-References: <cover.1654660009.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1654660009.git.lhjeff911@gmail.com>
-References: <cover.1654660009.git.lhjeff911@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JDE9efA6tNnV2IAGh2LYLxXJO4QIDeRatDZhQ/9xv0Y=;
+        b=NQtgHlowCzEBsC5Jqg9o5+A+A29Yq1a8q2Bw7rULErd3rGLcv15NHTEZJuogQ0xpg1
+         X1nJI7zGqwZqa+woHO4yQvazm4ohNnhEr4TKLmgSpd5JcByDdrML5w2KnRHiQnmh7tL4
+         mBtyVOUnl7FYBXRGogZ+HkpVVVpa81YG7dtfSThpQZ6HNXMVG1kklSVCdnfALzHDSbZn
+         6KRbnoc54U4nv3h8MBoEszWemrgD6UgR9QczMbvnxdvgjZ26qnRCuZxjGQdtUWXi3Vkv
+         mP4dvt1On1BPUqqYgPvxncTB7e6xW8wq1ODbbESxgTIG5gF+/FdqG5fet1RVoxHutcoc
+         TJcQ==
+X-Gm-Message-State: AJIora9nl+kzJ6s5E4a2aPqxy6TFEYqbPzB/NEDBUvCj50ia8gMWx5VP
+        4dFFS0ewDN2BpsSl2+fTo7dVaA==
+X-Google-Smtp-Source: AGRyM1vRTqycGBlzrqk2OttaehDP+MhVi+0ovxCWFXTXmuSWvayqxox7e6xtAjUzE9s1bj017NCd/Q==
+X-Received: by 2002:a63:754:0:b0:415:4578:248a with SMTP id 81-20020a630754000000b004154578248amr19503049pgh.196.1657612362818;
+        Tue, 12 Jul 2022 00:52:42 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id u9-20020a1709026e0900b0016bdf53b303sm5739118plk.205.2022.07.12.00.52.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 00:52:42 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 13:22:40 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+Message-ID: <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
+References: <cover.1657003420.git.viresh.kumar@linaro.org>
+ <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add bindings for Sunplus thermal driver
+On 11-07-22, 18:40, Johan Hovold wrote:
+> This break OPP parsing on SC8280XP and hence cpufreq and other things:
+> 
+> [  +0.010890] cpu cpu0: _opp_add_static_v2: opp key field not found
+> [  +0.000019] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -19
+> [  +0.000060] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 403200000, volt: 576000, enabled: 1
+> [  +0.000030] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 499200000, volt: 576000, enabled: 1
+> ...
+> 
+> I just did a rebase on next-20220708 and hit this.
+> 
+> I've narrowed it down to _read_rate() now returning -ENODEV since
+> opp_table->clk_count is zero.
+> 
+> Similar to what was reported for tegra for v1:
+> 
+> 	https://lore.kernel.org/all/58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com/
+> 
+> I don't have time to look at this any more today, but it would we nice
+> if you could unbreak linux-next.
+> 
+> Perhaps Bjorn or Mani can help with further details, but this doesn't
+> look like something that is specific to SC8280XP.
 
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v10:
- - Fix wrong indentation.
- - Change the setting of compatible.
- - Mosdify the setting of remove funciton.
+It is actually. This is yet another corner case, Tegra had one as
+well.
 
- .../bindings/thermal/sunplus,thermal.yaml          | 43 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
+I have tried to understand the Qcom code / setup to best of my
+abilities, and the problem as per me is that qcom-cpufreq-hw doesn't
+provide a clk to the OPP core, which breaks it after the new updates
+to the OPP core. I believe following will solve it. Can someone please
+try this ? I will then merge it with the right commit.
 
-diff --git a/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-new file mode 100644
-index 0000000..52094da
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/sunplus,thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 666e1ebf91d1..4f4a285886fa 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+        }
+
+        if (ret == -ENOENT) {
++               /*
++                * There are few platforms which don't want the OPP core to
++                * manage device's clock settings. In such cases neither the
++                * platform provides the clks explicitly to us, nor the DT
++                * contains a valid clk entry. The OPP nodes in DT may still
++                * contain "opp-hz" property though, which we need to parse and
++                * allow the platform to find an OPP based on freq later on.
++                *
++                * This is a simple solution to take care of such corner cases,
++                * i.e. make the clk_count 1, which lets us allocate space for
++                * frequency in opp->rates and also parse the entries in DT.
++                */
++               opp_table->clk_count = 1;
 +
-+title: Sunplus Thermal controller
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  nvmem-cells:
-+    maxItems: 1
-+
-+  nvmem-cell-names:
-+    const: calib
-+
-+required:
-+  - compatible
-+  - reg
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    thermal@9c000280 {
-+        compatible = "sunplus,sp7021-thermal";
-+        reg = <0x9c000280 0xc>;
-+        nvmem-cells = <&calib>;
-+        nvmem-cell-names = "calib";
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 23bde07..a8c44eb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19107,6 +19107,7 @@ SUNPLUS THERMAL DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
- F:	drivers/thermal/sunplus_thermal.c
- 
- SUNPLUS UART DRIVER
+                dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+                return opp_table;
+        }
+
 -- 
-2.7.4
-
+viresh
