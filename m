@@ -2,159 +2,274 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B24A571C9C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 16:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAED571D41
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 16:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiGLOaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 10:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S230327AbiGLOtY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 10:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiGLO36 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 10:29:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018D22871F;
-        Tue, 12 Jul 2022 07:29:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91A80618F8;
-        Tue, 12 Jul 2022 14:29:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB807C341C8;
-        Tue, 12 Jul 2022 14:29:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657636196;
-        bh=eD8CW9WNiJT8VXhu8zwAPpJ2nHI6u87NDwtq5Ro4Zkk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pT24m+7R6+CJHODdS4TaCZnUnta0iUdEIVJOWr7keb/BUm3h8P7woBbOS3bnGjyDG
-         H3mH8VlmYAOdfSrROvE1aHkFMIrbycy6ANEXqEhrJW/Ghrz44jlSwKPyBdILAs2wA5
-         dTcNFqENehXUrSK18juekpJWXSpPHviib7ngzjdlwddI71q7gznYGIbaAmWW+U2G8z
-         M5f1BeBaM1PtpaPkUS7tBWvBBD/0i7SHYyhqxoiuKn0pkMhz5sQ7X+GG/6nWvkREZi
-         JyK9eAkIQNR4bQKKM63DQCF2McAsV1jsJBarnKRktOrNLnYL0zGgJ7UELJG3t4trgV
-         Vs7l2LXgTXxcw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oBGth-0001zS-P1; Tue, 12 Jul 2022 16:29:57 +0200
-Date:   Tue, 12 Jul 2022 16:29:57 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <YsxSkswzsqgMOc0l@hovoldconsulting.com>
- <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
+        with ESMTP id S233746AbiGLOtO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 10:49:14 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A1D54CAA
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 07:49:13 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q82so7773211pgq.6
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 07:49:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=FO/mif2PB1na5ia79WNezqjCmfQFDt/29S89cTVyav0=;
+        b=AOh+2imMb8EWZX5YbqB59kbLfiHSIYzX1yH9n9HTkv5PULPvwunITMNcuwLhJgHbly
+         M/aJt5+P9tgJrsP/NmjzSDhltPS4yag/O/IRWh98MEpANHvEa2nJfiupr85C11F7hYYN
+         vguBl9BV/o51CoQeYUbtPjfBIEuu5HL2158lt5ckfLfn2szfHSH4zqEIausnKuG9QE+Z
+         +XPJf+7Jua5quIQFU9CQk2mMlGuqP/ngCxfTvlgIBKedq9LpuAf0U+qJgGTB4pC6m6qA
+         9THbVYgS4LGxc9B0WcQ5ZmqwsYwD3USRQGmjhxBldQgEAAJwArKcJivFaxrG4Z0334eK
+         aUGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=FO/mif2PB1na5ia79WNezqjCmfQFDt/29S89cTVyav0=;
+        b=Ed/Vd35iblJXeCiZw9c7fj0t9UKTnUXFj39VQRZuXdAFcLjy3vhVgUgbaYja+x9Mmn
+         81J/+i3y/dud0Vyt8JdySs2WbnaHy5zQ3qC4EsreIFPH48KkjCg8MoK1y001xZ/dqhQ0
+         PQLHe+as/jkBSmreuaFDBcuQvMxcQu4SKw7wpELgnfpTw+ss7JQN6VfNlNKx3h1wI5Lq
+         XBAuvmge+gLaMbkkuwtGEyLQ3CNA36Sac9kzrbDpHMbspgyHZE9/MQFhdBK7M+jEnsKA
+         KoEIlVJgXs620GGjZik+jHUSZH/2lAhTmBok6d64trV5o3tDuhsGysUblklv8JqDlAFP
+         MYeQ==
+X-Gm-Message-State: AJIora/cwH/Lw+xDa1DO2yfwJ1TLQMwKXbf9Mv3b28z/cFcnG5HEDaDa
+        jVTiLWPTkHcJdFKJATZt8wYhlw==
+X-Google-Smtp-Source: AGRyM1vySQrfQwA9c8hpGiU62MzipzBZeFXJ3nN/WwD3/c2x2fTeKAuJFFYbTP2xssEzSuM7Sqf2ew==
+X-Received: by 2002:a63:235f:0:b0:412:77a8:4fe5 with SMTP id u31-20020a63235f000000b0041277a84fe5mr21506357pgm.258.1657637352967;
+        Tue, 12 Jul 2022 07:49:12 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a20-20020a170902b59400b00161ac982b9esm6908633pls.185.2022.07.12.07.49.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 07:49:12 -0700 (PDT)
+Message-ID: <62cd89e8.1c69fb81.25b55.9ea8@mx.google.com>
+Date:   Tue, 12 Jul 2022 07:49:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.19-rc6-53-ge71c5921cc50
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing baseline: 83 runs,
+ 5 regressions (v5.19-rc6-53-ge71c5921cc50)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 01:22:40PM +0530, Viresh Kumar wrote:
-> On 11-07-22, 18:40, Johan Hovold wrote:
-> > This break OPP parsing on SC8280XP and hence cpufreq and other things:
-> > 
-> > [  +0.010890] cpu cpu0: _opp_add_static_v2: opp key field not found
-> > [  +0.000019] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -19
-> > [  +0.000060] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 403200000, volt: 576000, enabled: 1
-> > [  +0.000030] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 499200000, volt: 576000, enabled: 1
-> > ...
-> > 
-> > I just did a rebase on next-20220708 and hit this.
-> > 
-> > I've narrowed it down to _read_rate() now returning -ENODEV since
-> > opp_table->clk_count is zero.
-> > 
-> > Similar to what was reported for tegra for v1:
-> > 
-> > 	https://lore.kernel.org/all/58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com/
-> > 
-> > I don't have time to look at this any more today, but it would we nice
-> > if you could unbreak linux-next.
-> > 
-> > Perhaps Bjorn or Mani can help with further details, but this doesn't
-> > look like something that is specific to SC8280XP.
-> 
-> It is actually. This is yet another corner case, Tegra had one as
-> well.
+pm/testing baseline: 83 runs, 5 regressions (v5.19-rc6-53-ge71c5921cc50)
 
-I literally meant that it does not appear to be SC8280XP specific. Bjorn
-reported seeing similar problems on multiple Qualcomm SoCs.
+Regressions Summary
+-------------------
 
-> I have tried to understand the Qcom code / setup to best of my
-> abilities, and the problem as per me is that qcom-cpufreq-hw doesn't
-> provide a clk to the OPP core, which breaks it after the new updates
-> to the OPP core. I believe following will solve it. Can someone please
-> try this ? I will then merge it with the right commit.
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 666e1ebf91d1..4f4a285886fa 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
->         }
-> 
->         if (ret == -ENOENT) {
-> +               /*
-> +                * There are few platforms which don't want the OPP core to
-> +                * manage device's clock settings. In such cases neither the
-> +                * platform provides the clks explicitly to us, nor the DT
-> +                * contains a valid clk entry. The OPP nodes in DT may still
-> +                * contain "opp-hz" property though, which we need to parse and
-> +                * allow the platform to find an OPP based on freq later on.
-> +                *
-> +                * This is a simple solution to take care of such corner cases,
-> +                * i.e. make the clk_count 1, which lets us allocate space for
-> +                * frequency in opp->rates and also parse the entries in DT.
-> +                */
-> +               opp_table->clk_count = 1;
-> +
->                 dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
->                 return opp_table;
->         }
+platform              | arch  | lab           | compiler | defconfig | regr=
+essions
+----------------------+-------+---------------+----------+-----------+-----=
+-------
+kontron-kbox-a-230-ls | arm64 | lab-kontron   | gcc-10   | defconfig | 1   =
+       =
 
-This looks like a hack. And it also triggers a bunch of new warning when
-opp is trying to create debugfs entries for an entirely different table
-which now gets clk_count set to 1:
+rk3328-rock64         | arm64 | lab-baylibre  | gcc-10   | defconfig | 2   =
+       =
 
-[  +0.000979]  cx: _update_opp_table_clk: Couldn't find clock: -2
-[  +0.000022] debugfs: Directory 'opp:0' with parent 'cx' already present!
-[  +0.000004] debugfs: Directory 'opp:0' with parent 'cx' already present!
-[  +0.000004] debugfs: Directory 'opp:0' with parent 'cx' already present!
-[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+rk3399-rock-pi-4b     | arm64 | lab-collabora | gcc-10   | defconfig | 2   =
+       =
 
-This is for the rpmhpd whose opp table does not have either opp-hz or
-clocks (just opp-level).
 
-The above unbreaks cpufreq though.
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.19-rc=
+6-53-ge71c5921cc50/plan/baseline/
 
-Johan
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.19-rc6-53-ge71c5921cc50
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      e71c5921cc5005d866e7acd0b501faff1f548897 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch  | lab           | compiler | defconfig | regr=
+essions
+----------------------+-------+---------------+----------+-----------+-----=
+-------
+kontron-kbox-a-230-ls | arm64 | lab-kontron   | gcc-10   | defconfig | 1   =
+       =
+
+
+  Details:     https://kernelci.org/test/plan/id/62cd7ec3c6a7a6e526a39bcd
+
+  Results:     94 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
+921cc50/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
+921cc50/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220708.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/62=
+cd7ec4c6a7a6e526a39bda
+        failing since 35 days (last pass: v5.18-rc7-183-g45785e0ed597, firs=
+t fail: v5.19-rc1-2-g6a8964e282382)
+
+    2022-07-12T14:01:18.007369  /lava-139315/1/../bin/lava-test-case
+    2022-07-12T14:01:18.007900  <8>[   14.615481] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2022-07-12T14:01:18.008068  /lava-139315/1/../bin/lava-test-case
+    2022-07-12T14:01:18.008247  <8>[   14.631579] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
+    2022-07-12T14:01:18.008454  /lava-139315/1/../bin/lava-test-case
+    2022-07-12T14:01:18.008679  <8>[   14.647215] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
+    2022-07-12T14:01:18.008844  /lava-139315/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform              | arch  | lab           | compiler | defconfig | regr=
+essions
+----------------------+-------+---------------+----------+-----------+-----=
+-------
+rk3328-rock64         | arm64 | lab-baylibre  | gcc-10   | defconfig | 2   =
+       =
+
+
+  Details:     https://kernelci.org/test/plan/id/62cd7feddb719b7d3aa39be2
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
+921cc50/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
+921cc50/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220708.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/62cd7feddb719b7=
+d3aa39be5
+        new failure (last pass: v5.19-rc5-50-g3bc028d913bd)
+        2 lines
+
+    2022-07-12T14:06:17.418420  kern  :emerg : Internal error: Oops: 960000=
+06 [#1] PREEMPT SMP
+    2022-07-12T14:06:17.422044  kern  :emerg : Code: aa0003f4 a9025bf5 aa00=
+03f6 aa0103f5 (f8418e93) =
+
+    2022-07-12T14:06:17.428228  [   71.313063] <LAVA_SIGNAL_TESTCASE TEST_C=
+ASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
+    2022-07-12T14:06:17.428545  + set +x   =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/62cd7feddb719b7=
+d3aa39be6
+        new failure (last pass: v5.19-rc5-50-g3bc028d913bd)
+        12 lines
+
+    2022-07-12T14:06:17.397654  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000000000000005
+    2022-07-12T14:06:17.398178  kern  :alert : Mem abort info:
+    2022-07-12T14:06:17.398501  kern  :alert :   ESR =3D 0x0000000096000006
+    2022-07-12T14:06:17.398804  kern  :alert :   EC =3D 0x25: DABT (current=
+ EL), IL =3D 32 bits
+    2022-07-12T14:06:17.399250  kern  :alert :   SET =3D 0, FnV =3D 0
+    2022-07-12T14:06:17.399502  kern  :alert :   EA =3D 0, S1PTW =3D 0
+    2022-07-12T14:06:17.399775  kern  :alert :   FSC =3D 0x06: level 2 tran=
+slation fault
+    2022-07-12T14:06:17.400202  kern  :alert : Data abort info:
+    2022-07-12T14:06:17.400373  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
+006
+    2022-07-12T14:06:17.400766  kern  :alert :   CM =3D 0, WnR =3D 0 =
+
+    ... (3 line(s) more)  =
+
+ =
+
+
+
+platform              | arch  | lab           | compiler | defconfig | regr=
+essions
+----------------------+-------+---------------+----------+-----------+-----=
+-------
+rk3399-rock-pi-4b     | arm64 | lab-collabora | gcc-10   | defconfig | 2   =
+       =
+
+
+  Details:     https://kernelci.org/test/plan/id/62cd7e884a9940910ea39bed
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
+921cc50/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
+921cc50/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220708.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/62cd7e884a99409=
+10ea39bf0
+        new failure (last pass: v5.19-rc5-50-g3bc028d913bd)
+        2 lines
+
+    2022-07-12T14:00:23.512762  kern  :emerg : Code: aa0003f4 a9025bf5 aa00=
+03f6 aa0103f5 (f8418e93) =
+
+    2022-07-12T14:00:23.512979  <8>[   60.001281] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
+    2022-07-12T14:00:23.513097  + set +x
+    2022-07-12T14:00:23.513202  <8>[   60.003132] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 6800090_1.5.2.4.1>   =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/62cd7e884a99409=
+10ea39bf1
+        new failure (last pass: v5.19-rc5-50-g3bc028d913bd)
+        12 lines
+
+    2022-07-12T14:00:23.468978  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
+006
+    2022-07-12T14:00:23.469066  kern  :alert :   CM =3D 0, WnR =3D 0
+    2022-07-12T14:00:23.469135  kern  :alert : user pgtable: 4k pages, 48-b=
+it VAs, pgdp=3D0000000009326000
+    2022-07-12T14:00:23.469201  kern  :alert : [0000000000000005] pgd=3D080=
+0000009327003, p4d=3D0800000009327003, pud=3D0800000009328003, pmd=3D000000=
+0000000000
+    2022-07-12T14:00:23.469266  <8>[   59.975488] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D12>
+    2022-07-12T14:00:23.469328  kern  :emerg : Internal error: Oops: 960000=
+06 [#1] PREEMPT SMP   =
+
+ =20
