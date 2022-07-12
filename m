@@ -2,146 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057505712A6
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 09:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2D05712CE
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 09:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbiGLHCG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 03:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S231302AbiGLHKi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 03:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiGLHCF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 03:02:05 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B306B8CC87
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:02:03 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id z25so12417366lfr.2
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:02:03 -0700 (PDT)
+        with ESMTP id S229818AbiGLHKi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 03:10:38 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BB9275DE
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:10:35 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id t127so6993099vsb.8
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:10:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rR4EvPz2QTL/uIlV/7u9u2k3BsIB6Cd/Y2fmLLbm+6Q=;
-        b=uv2LG7gzP10xj/mheaKVtOSrTN+X0UgE93fZG1uQNEpadxp50LH8Wy6Nb+ABdxSpFm
-         B4ik9P6lWDr3pkePBdZ5WVfIHNQJB1iZdsDBFbuKkGmwpvwVYB1mQ7TlzJreqpP/7y6q
-         Hpa3hqo05U29UPqt2oLIG4BsnlwCiJiPZtr/u1WI29lQpVbeGTgyyM5hVCiVpjX1yiZs
-         Q4NIrluD9usVxYsfHc9sGHN0SS1C7ElIyyy8ySmBekz5t4ckAnHO5F/8Nn3J06LO3FYz
-         ugCpqa4Ff8QbFTsnd1J0VBqMGRmvUbnYwJfz4hjJIstdQHANHF9OQPUcaRxCV7AWMPTc
-         eaKQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=VaLdCxxT6H+yQ21ljsJJCI0JVFTWEh1IT2eBGtm6sxQ=;
+        b=AYbH/BwwR/3nG5HJ416AGTRe5B1p9pKYSMLF43KI7zJrYd0V1KA/nd5aL4DIJ4NDHX
+         T6Pfr4UMzEbzrO/vZVaHr/dHPVzg9EnIIrKPwgJnLzrNADT9tx0JyPgjLC+Q49D5g35X
+         LG7xVZ6lD93a9M1xrmbJCrNOqBUv88bzsjkIp2ZYp2mjeB8G9DxSserW6FzcfpXobwfa
+         GCv+8uSilJ7xpnUYArhN+MCkp5DcSIXYcpQaOSD0ciGLLLc02wXUJT3gEvdEZlMUenhC
+         FOZzyY2gGUylUVyxKcVudwHKSMWt6Zp1dh9+74iOQFWAbOQC+jwIewY6PwgrSZcHjmb7
+         zRDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rR4EvPz2QTL/uIlV/7u9u2k3BsIB6Cd/Y2fmLLbm+6Q=;
-        b=K8vSK+MDpu/l+JRUlOPJku7rXBG4aCyN7lxrHGNjDOw/e35QYeqBuMM9IXZqG2/q7V
-         Iqv+6Y31gf4warzGyEMfWPGwOsGOiSTdVJgiYi1LfSt8YwApxdDRGffH/W/mEDa37HCR
-         soU63yVgatPBgXEIWeqQiYB8fAjqtgGt1T8CuIx9t6/QddunBVyebTRPzNL1kFUr9290
-         AljBUxckx5YpJUWLbEAOEXeHKWm7g6IO2wtC9Sh1rmOq9kNgntt0UjmeFt5heZ8nG8y0
-         V5sLUayr3wlhj3Us2ESZemaBGG0YKORvweNHSDtkhwxBq8XMGR9wsJ3ergWXMkij3d75
-         NPAQ==
-X-Gm-Message-State: AJIora//I6W+MKBLtlZqLkf5O95iko/qvzRqf/OzQi/94YXV1E+1tlmw
-        ih+5BEyTfOz1nk1YeNQ7UUuOsA==
-X-Google-Smtp-Source: AGRyM1v8I7FEdMPilvPTeX/T5acQuHUvYJJlCGQqXlGNHZ8ieSAEOmPjfUgENxvwkU4d+kyg3znBVA==
-X-Received: by 2002:a19:520f:0:b0:489:dc56:df68 with SMTP id m15-20020a19520f000000b00489dc56df68mr6534018lfb.295.1657609322071;
-        Tue, 12 Jul 2022 00:02:02 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id u10-20020a05651220ca00b00489da32ec80sm1387629lfr.238.2022.07.12.00.01.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 00:02:01 -0700 (PDT)
-Message-ID: <69e8195e-8d2b-3df0-0783-269f9aef1a83@linaro.org>
-Date:   Tue, 12 Jul 2022 09:01:58 +0200
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=VaLdCxxT6H+yQ21ljsJJCI0JVFTWEh1IT2eBGtm6sxQ=;
+        b=IiUYy9pC1/XUF0HB1Dath1RN5N3asZKLVWuDVnOBuNO2tzLLLKUC7I2H1Jv8L5WcUo
+         rzTjslmsaKunasheKyAuHLbmnfvcMrWvWAlx7KVEYPQDN90uDl/SLTy9YNu2SF/Q/rUe
+         mviOFVkfOfRitvzplWnjZhglulJmykG/tWO6+8A4NmV4uSFpoSZEHcOx8UTkF58ubc8w
+         b/cjkxGvkOAljxdGxrbXv0ypZJf5YvwZz1yXX0MvTbtiY1DPWq8YNy5b93OVjCsz+2PG
+         Z74SfjS+PKxs8phM5bT9dKFGpYBmz19FIu8suchKuzc55EwtYDXZIaSh6WpsT8KhWa4p
+         AUrQ==
+X-Gm-Message-State: AJIora+bhEmYqK574GWDz0L16WaP1131newj7OSehKaasY1sdxSsAvW6
+        JckZSGImHjOTCOnjt2RvOtLFsOTnJl4a5IPXrQc=
+X-Google-Smtp-Source: AGRyM1uyqUPWVt14j7dYrXfyaORAMsp3Hlvjb5JcHaVQ3ByVlPyBjvKYn1pbNYlxVIuQwFZc4r7qrbjOmsJB780qqcg=
+X-Received: by 2002:a05:6102:b16:b0:357:5533:ded4 with SMTP id
+ b22-20020a0561020b1600b003575533ded4mr3789788vst.36.1657609833809; Tue, 12
+ Jul 2022 00:10:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 2/3] dt-binding: power: power-domain: add
- power-supply-needs-irq
-Content-Language: en-US
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>, rafael@kernel.org,
-        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        pavel@ucw.cz
-Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220711094549.3445566-1-martin.kepplinger@puri.sm>
- <20220711094549.3445566-2-martin.kepplinger@puri.sm>
- <c68e4ae9-c435-c74e-91cd-b153be6de92f@linaro.org>
- <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Sender: ahaijout@gmail.com
+Received: by 2002:a05:612c:210a:b0:2c9:f309:ea94 with HTTP; Tue, 12 Jul 2022
+ 00:10:33 -0700 (PDT)
+From:   "Mrs. Aisha Gaddafi" <aishagaddaf95@gmail.com>
+Date:   Tue, 12 Jul 2022 00:10:33 -0700
+X-Google-Sender-Auth: z835C80p2D4HsBLOpCKxpoRzhqM
+Message-ID: <CAOCce-wkkp4MEzTqqWnYKNZNeYSb2pdFu_MZg7tSnhPpvQgcPg@mail.gmail.com>
+Subject: hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,NA_DOLLARS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e2f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5028]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ahaijout[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.5 NA_DOLLARS BODY: Talks about a million North American dollars
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/07/2022 15:17, Martin Kepplinger wrote:
-> Am Montag, dem 11.07.2022 um 12:38 +0200 schrieb Krzysztof Kozlowski:
->> On 11/07/2022 11:45, Martin Kepplinger wrote:
->>> Add the power-supply-needs-irq board description property for power
->>> domains.
->>
->> Where is a board description here? I think you just meant
->> "power-supply-needs-irq property"?
->>>
->>> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
->>> ---
->>>  .../devicetree/bindings/power/power-domain.yaml        | 10
->>> ++++++++++
->>>  1 file changed, 10 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/power/power-
->>> domain.yaml b/Documentation/devicetree/bindings/power/power-
->>> domain.yaml
->>> index 889091b9814f..e82c2f7ccb97 100644
->>> --- a/Documentation/devicetree/bindings/power/power-domain.yaml
->>> +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
->>> @@ -70,6 +70,16 @@ properties:
->>>        by the given provider should be subdomains of the domain
->>> specified
->>>        by this binding.
->>>  
->>> +  power-supply: true
->>
->> This is a new property not described in the commit msg.
-> 
-> true, I think it's missing and could be added as a separate patch.
-> 
->>
->>> +
->>> +  power-supply-needs-irq:
->>> +    type: boolean
->>> +    description:
->>> +      A power-supply can link for example to a regulator
->>> controlled via
->>> +      i2c or otherwise needing interrupts enabled to be able to
->>> enable and
->>> +      disable. 
->>
->> Not really a property of power domain. How the regulator supply works
->> is
->> entirely up to regulator. Otherwise such property should appear for
->> every device.
-> 
-> you're right. The power-domain driver could read the power-supply
-> regulator node directly. Still, I think then a new regulator property
-> is needed instead, or is it?
-
-In case of regulator, I am not so sure it needs a dedicated property of
-DT. If it is I2C regulator - the parent node is I2C bus and regulator
-device is some child of I2C controller (could be via a MFD device), so
-no need for dedicated property.
-
-If it uses interrupts, then:
-1. The presence of interrupts is already known - "interrupts" property.
-2. The actual use of interrupts is DT independent and only driver knows it.
-
-Best regards,
-Krzysztof
+-- 
+Please i need your kind Assistance. I will be very glad if you can assist
+me to receive this sum of ( $8.5 Million US dollars.) into your bank
+account, my name is  princess mercy i am 21years,i need who will help
+me save  this fund,
+i lost my father and only brother,
+Please contact me through my private email:(princessmercy68@yahoo.com),
+ for more information
