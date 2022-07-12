@@ -2,52 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D2F572245
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 20:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7B9572285
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 20:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiGLSQv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 14:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S229619AbiGLSZI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 14:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiGLSQu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 14:16:50 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1243ABD3B5;
-        Tue, 12 Jul 2022 11:16:50 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31c86fe1dddso89929167b3.1;
-        Tue, 12 Jul 2022 11:16:50 -0700 (PDT)
+        with ESMTP id S229590AbiGLSZH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 14:25:07 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3101CB79E5;
+        Tue, 12 Jul 2022 11:25:07 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id y195so15439163yby.0;
+        Tue, 12 Jul 2022 11:25:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xlWXUwga3ltyY5Mjt3+pu126riRkOGLx3DSNAjuT1jk=;
-        b=zJJXrME0AvHpSeqzAO9PB7L7yLF1UIo2SMrU1wrmfM3B8NCYF7+vrxLJAyD2Cp27j2
-         ddNAItA1YuH/ZjNbTXjD0pW2h2FZLspEUPzjWiEfQIjxDIUUXHpzD6MN2BoifBELuC1+
-         CfIZy2cONRhRFCINydPx1dmHIyJNglraM0u3HExfbc8M84kzrBOud0QfepQlMKJDSeNW
-         14iumXynUTJQgvrCd+oeyS9xRo4ZmdWgEhGSXKqDjDCobLC4vMQPRCNx2VVpFd9H32ON
-         cuAhXp6pSyYAM47+p4cMkHsl+mzs0I6IBnyXxseGma0TvpuDP4TVrEFiU3mJCeZBlpmg
-         N2xw==
-X-Gm-Message-State: AJIora+eDdrVKDJq1bKl2gS9eZM9e1va4q7kwp1y5vL3pL2+P98UjL9J
-        yoROomMSRXFETtsiJdsDZpfXXw2/M/cKMynR0yk=
-X-Google-Smtp-Source: AGRyM1u4CV9wOgZQoJoK07kxVH9aOriHxiZ30XDiUkh8YZxZv9ldmutudpeup7pyDVREWd2fDYZDpkZ21Ee1jBC8suA=
-X-Received: by 2002:a81:17d0:0:b0:31c:c5e2:fc1e with SMTP id
- 199-20020a8117d0000000b0031cc5e2fc1emr27671017ywx.196.1657649809348; Tue, 12
- Jul 2022 11:16:49 -0700 (PDT)
+        bh=WhigSqxeprC/iSJ1PmZDgrTrNXdKTQMiYjkNAnJuhDQ=;
+        b=cpjPJypm3a1bcsYKwvB7cPS7nqg2Ls2ulHKaGwDTPqDCUUYJ+heqh/GTFicw3GANNN
+         m5mPG849zwsHswMbWtp4iV4wxLBRhs7QqlyvF3LF7pyIPHu6+Rft8LvO0ue8xX7L3+Hj
+         0q9/Iw4CDkOILcBtOCwfMTm8RRJASKMRb5ub8BgQz81URJ6Y7d8elc20ZUzLGTEo3DKd
+         PlFKCzF60JcqZjvrhKIh/FslC6IMvN0ykzX2gTDBqjNmG+1xd3KXAnsCbBaYqh4KbUeh
+         oQDoUCDjAbkVSPYvAN/8sTXtKiATV+KhqVPr5WNm/RN1Z1km1UVQBFYbxQblogr86bUf
+         tw6A==
+X-Gm-Message-State: AJIora+oiLHVXoVkyN7vDhrbRHwmZ6GXGaqzUmW3+MWzyIzZkzGKGMcH
+        3erK8uiBHBC6hecO+a1Fh7N2CPmWw/0pXC4oO8w=
+X-Google-Smtp-Source: AGRyM1sJRFpRWREBGTsyEusLfQW7bqW/jZJS4G6oCVKzesRFaRJRtA7WeQJmY45VWkelgOQGJM8Iv1Vw8yZj+NqWwkY=
+X-Received: by 2002:a25:d714:0:b0:66f:5898:9eb1 with SMTP id
+ o20-20020a25d714000000b0066f58989eb1mr8352308ybg.633.1657650306516; Tue, 12
+ Jul 2022 11:25:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220708183210.1334839-1-daniel.lezcano@linaro.org> <20220708183210.1334839-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20220708183210.1334839-2-daniel.lezcano@linaro.org>
+References: <20220622155543.9780-1-jiangjian@cdjrlc.com>
+In-Reply-To: <20220622155543.9780-1-jiangjian@cdjrlc.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Jul 2022 20:16:38 +0200
-Message-ID: <CAJZ5v0j9pQz5eTwZdt-ZXBgrKkO7O3+G48XRJh2A5-j5Ze28=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] thermal/core: Passing a parameter instead of
- calling the function again
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Date:   Tue, 12 Jul 2022 20:24:55 +0200
+Message-ID: <CAJZ5v0ioojTNtwEXu=JKPTTYypxoYDr1uUQFSCR0rpVRUQPhXg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: drop unexpected word 'is' in the comments
+To:     Jiang Jian <jiangjian@cdjrlc.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
         "Zhang, Rui" <rui.zhang@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -59,54 +58,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 8:32 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Wed, Jun 22, 2022 at 5:56 PM Jiang Jian <jiangjian@cdjrlc.com> wrote:
 >
-> As the trip temperature is already available when calling the
-> function,
-
-Which function?
-
-I would change the subject to something like "Avoid calling
-->get_trip_temp() unnecessarily" and then use the specific function
-name in the changelog.
-
-The changes themselves LGTM.
-
-> pass it as a parameter instead of having the function
-> calling the ops again to retrieve the same data.
+> there is an unexpected word 'is' in the comments that need to be dropped
 >
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> file: ./drivers/thermal/intel/x86_pkg_temp_thermal.c
+> line: 108
+>
+> * tj-max is is interesting because threshold is set relative to this
+>
+> changed to:
+>
+> * tj-max is interesting because threshold is set relative to this
+>
+> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 > ---
->  drivers/thermal/thermal_core.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+>  drivers/thermal/intel/x86_pkg_temp_thermal.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index d9f771b15ed8..f66036b3daae 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -340,12 +340,8 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz)
->  EXPORT_SYMBOL(thermal_zone_device_critical);
+> diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> index 4d8edc61a78b..a0e234fce71a 100644
+> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> @@ -105,7 +105,7 @@ static struct zone_device *pkg_temp_thermal_get_dev(unsigned int cpu)
+>  }
 >
->  static void handle_critical_trips(struct thermal_zone_device *tz,
-> -                                 int trip, enum thermal_trip_type trip_type)
-> +                                 int trip, int trip_temp, enum thermal_trip_type trip_type)
->  {
-> -       int trip_temp;
-> -
-> -       tz->ops->get_trip_temp(tz, trip, &trip_temp);
-> -
->         /* If we have not crossed the trip_temp, we do not care. */
->         if (trip_temp <= 0 || tz->temperature < trip_temp)
->                 return;
-> @@ -394,7 +390,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
->         handle_thermal_trip_crossed(tz, trip, trip_temp, hyst, type);
->
->         if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
-> -               handle_critical_trips(tz, trip, type);
-> +               handle_critical_trips(tz, trip, trip_temp, type);
->         else
->                 handle_non_critical_trips(tz, trip);
->         /*
+>  /*
+> -* tj-max is is interesting because threshold is set relative to this
+> +* tj-max is interesting because threshold is set relative to this
+>  * temperature.
+>  */
+>  static int get_tj_max(int cpu, u32 *tj_max)
 > --
-> 2.25.1
->
+
+Applied as 5.20 material with some edits in the changelog and subject.
+
+Thanks!
