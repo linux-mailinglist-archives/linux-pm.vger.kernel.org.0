@@ -2,49 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E5557256B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 21:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D331A5725A0
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 21:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235879AbiGLTOw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 15:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S233602AbiGLTbg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 15:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236118AbiGLTO2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 15:14:28 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4C7E683E;
-        Tue, 12 Jul 2022 11:54:11 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id p129so15517362yba.7;
-        Tue, 12 Jul 2022 11:54:11 -0700 (PDT)
+        with ESMTP id S234415AbiGLTbV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 15:31:21 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7833BF6BAA;
+        Tue, 12 Jul 2022 12:07:09 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id i14so15581756yba.1;
+        Tue, 12 Jul 2022 12:07:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ayGO49PfhW5yn8VZVDZP2vCg6MktvihoyGEzbg3823A=;
-        b=vPdnYSEt92RVtKJX42PS/PjJkZCQ/HWjXXqD3qDgkEcvJFV1t5uKwIMUCK57lmFVAb
-         9J5Erv/RkOgb45plxXZfQ+hRVRIgyJIgg13XG7vZn1xuHiMpp/e/sbshXyYPdXskPxqL
-         wCrdVqYbhjiNlBYeKDAE1j9zLCVzevODIzi/wHXFb47rXQFrq3WPfkwPlyypqP2ASh+k
-         roRz1laKusUShTrXs2cv5+Z86wD+U8mrLZONxdAX7Kcj1LAI2u6/m0/7RBtNQV+BzpKD
-         o/I6CJVi4xM2w8wSZU/HVe1BC/KTQzeIRxXw3OHyF7LaLFldJ3HO6NUyEDRq5oUuJDEh
-         uDCg==
-X-Gm-Message-State: AJIora/fy40g51l5fcjYwa4dfW1vvalANJnypJ/DQBbUw2z4uVK4fhh3
-        uD0bDC4lZz1YhWoptk+6vlaVJquZ/GeLEIlpcNA=
-X-Google-Smtp-Source: AGRyM1t+aWUxZewPLwcIpwK1Ma3RA1r6QQ75+VBKPWZXevvL2PtzIyXroWnXqdtasPd086IfxhYKYyVlU+344UWm5jw=
+        bh=9jSG1wgtixdY+YA7Ct6rK6ymsNuCZJmArD422MXwHis=;
+        b=T972PrJ9pEdTXdaZBKrHZXHv/ozNN3G9CyoLNIE6lS5nXY4XCgZfx0mtStUcudAdAK
+         tDcRsxMc52MFYwxmkkTnfbgyS581wdPPzSm/v0XPx4NB1UktoVfVA8cQxWgELhcbtXaH
+         ZYgZKojngbT6fxL1ACb+QJ/svFhAlqKHHYFL4EwNQFv8b1Z5Y81MvqdaT34el1nIjs78
+         dqjMVIsztUw2Qb+HFeC3rNV89Ny8lDrpiHQ0SEc+FrUVIH3dJX/MwesB6uFMYwCICOU+
+         A8JU044LkREj4sI4geMcY64vK0HEY//L1GcYLLntk3XtaIMjdAuFDnqo/qE+VdAKGviz
+         MoiA==
+X-Gm-Message-State: AJIora+/QCRvkoQlK8ZejGnzLPjjnqnAR6HzFIcZVdbmRUNJeMjbUrrF
+        CWAZiTp39mouCmv/PcRDef6rTMqCacSGalUndHI=
+X-Google-Smtp-Source: AGRyM1u98PWCXYTMOkpVRxjYEtoYwvwqepx9OO+uuI42JLM9g9l1UWgHksdgil2QZhC1d9a7zIHKSoCnqYAu7/R+hf4=
 X-Received: by 2002:a25:d714:0:b0:66f:5898:9eb1 with SMTP id
- o20-20020a25d714000000b0066f58989eb1mr8476398ybg.633.1657652050606; Tue, 12
- Jul 2022 11:54:10 -0700 (PDT)
+ o20-20020a25d714000000b0066f58989eb1mr8536068ybg.633.1657652828443; Tue, 12
+ Jul 2022 12:07:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629011146.299521-1-xiongxin@kylinos.cn> <20220629011146.299521-3-xiongxin@kylinos.cn>
-In-Reply-To: <20220629011146.299521-3-xiongxin@kylinos.cn>
+References: <20220701023328.2783-1-mario.limonciello@amd.com>
+In-Reply-To: <20220701023328.2783-1-mario.limonciello@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Jul 2022 20:53:59 +0200
-Message-ID: <CAJZ5v0hURC-mhHszh=BhrGYfP9hwCs_nTQVxmtnV4Ot2yuajLA@mail.gmail.com>
-Subject: Re: [PATCH -next 2/2] PM: suspend: advanced pm_wakeup_clear() for
- normal suspend/hibernate
-To:     xiongxin <xiongxin@kylinos.cn>
+Date:   Tue, 12 Jul 2022 21:06:57 +0200
+Message-ID: <CAJZ5v0g5Zsbddid+w2qxa_bqwmeP-FSk_42SZ3doMoFs0r8S8g@mail.gmail.com>
+Subject: Re: [PATCH v3 01/10] PM: suspend: Introduce `pm_suspend_preferred_s2idle`
+To:     Mario Limonciello <mario.limonciello@amd.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Riwen Lu <luriwen@kylinos.cn>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -58,80 +56,82 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 5:35 AM xiongxin <xiongxin@kylinos.cn> wrote:
+On Fri, Jul 1, 2022 at 4:33 AM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> pm_wakeup_clear() will clear the wakeup source, which can ensure that it
-> is not disturbed by useless wakeup signals when doing suspend/hibernate;
+> Many drivers in the kernel will check the FADT to determine if low
+> power idle is supported and use this information to set up a policy
+> decision in the driver.  To abstract this information from drivers
+> introduce a new helper symbol that can indicate this information.
 >
-> At the beginning of the suspend/hibernate process, the notifier
-> mechanism is used to notify other device drivers. This action is
-> time-consuming (second-level time-consuming). If the process fails due
-> to the received wakeup signal during the execution of these functions,
-> it can better improve the experience of failing suspend/hibernate
-> returns;
->
-> Therefore, it is recommended here that for the suspend/hibernate process
-> normally called from /sys/power/state, the pm_wakeup_clear() function
-> should be brought before the notifier call; for the freeze_process()
-> function called from other places, the original logic is kept;
->
-> The pm_suspend_target_state variable is used here to identify whether the
-> suspend process is going normally.
-
-You seem to be arguing that the previous wakeup IRQ should be cleared
-before invoking PM notifiers.  However, it is only set in
-pm_system_irq_wakeup() which is only called after
-suspend_device_irqs(), so clearing it anywhere before calling that
-function in the given cycle should be sufficient.
-
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  kernel/power/process.c | 5 ++++-
->  kernel/power/suspend.c | 6 ++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
+>  include/linux/suspend.h |  1 +
+>  kernel/power/suspend.c  | 17 +++++++++++++++++
+>  2 files changed, 18 insertions(+)
 >
-> diff --git a/kernel/power/process.c b/kernel/power/process.c
-> index 3068601e585a..3fde0240b3d1 100644
-> --- a/kernel/power/process.c
-> +++ b/kernel/power/process.c
-> @@ -131,7 +131,10 @@ int freeze_processes(void)
->         if (!pm_freezing)
->                 atomic_inc(&system_freezing_cnt);
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 70f2921e2e70..9d911e026720 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -305,6 +305,7 @@ static inline bool idle_should_enter_s2idle(void)
+>         return unlikely(s2idle_state == S2IDLE_STATE_ENTER);
+>  }
 >
-> -       pm_wakeup_clear(0);
-> +       if (pm_suspend_target_state != PM_SUSPEND_ON)
-> +               pm_wakeup_clear(1);
-
-This doesn't make sense.
-
-> +       else
-> +               pm_wakeup_clear(0);
->         pr_info("Freezing user space processes ... ");
->         pm_freezing = true;
->         error = try_to_freeze_tasks(true);
+> +extern bool pm_suspend_preferred_s2idle(void);
+>  extern bool pm_suspend_default_s2idle(void);
+>  extern void __init pm_states_init(void);
+>  extern void s2idle_set_ops(const struct platform_s2idle_ops *ops);
 > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index c754b084ec03..f4259f6c1cc2 100644
+> index 827075944d28..0030e7dfe6cf 100644
 > --- a/kernel/power/suspend.c
 > +++ b/kernel/power/suspend.c
-> @@ -569,6 +569,12 @@ static int enter_state(suspend_state_t state)
->          * performed from the /sys/power/state entry.
->          */
->         pm_suspend_target_state = state;
-> +       /*
-> +        * Put pm_wakeup_clear() before the notifier notification chain to
-> +        * optimize in the suspend process, the wakeup signal can interrupt
-> +        * the suspend in advance and fail to return.
-> +        */
-
-The comment above is too hard to understand for me, sorry.
-
-> +       pm_wakeup_clear(0);
+> @@ -9,6 +9,7 @@
 >
->         if (sync_on_suspend_enabled) {
->                 trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+>  #define pr_fmt(fmt) "PM: " fmt
+>
+> +#include <linux/acpi.h>
+>  #include <linux/string.h>
+>  #include <linux/delay.h>
+>  #include <linux/errno.h>
+> @@ -61,6 +62,22 @@ static DECLARE_SWAIT_QUEUE_HEAD(s2idle_wait_head);
+>  enum s2idle_states __read_mostly s2idle_state;
+>  static DEFINE_RAW_SPINLOCK(s2idle_lock);
+>
+> +/**
+> + * pm_suspend_preferred_s2idle - Check if suspend-to-idle is the preferred suspend method.
+> + *
+> + * Return 'true' if suspend-to-idle is preferred by the system designer for the default
+> + * suspend method.
+> + */
+> +bool pm_suspend_preferred_s2idle(void)
+> +{
+> +#ifdef CONFIG_ACPI
+> +       return acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0;
+> +#else
+> +       return false;
+> +#endif
+> +}
+> +EXPORT_SYMBOL_GPL(pm_suspend_preferred_s2idle);
+
+First, this is ACPI-specific, so please don't try to generalize it
+artificially.  This confuses things and doesn't really help.
+
+Second, ACPI_FADT_LOW_POWER_S0 means that "low power S0 idle" is
+supported, not that suspend-to-idle is the preferred suspend method in
+Linux.
+
+System designers who set that bit in FADT may not even know what
+suspend-to-idle is.
+
+But it is good that you have identified the code checking that bit,
+because it should not be checked without a valid reason.  I need to
+review that code and see what's going on in there.
+
+> +
+>  /**
+>   * pm_suspend_default_s2idle - Check if suspend-to-idle is the default suspend.
+>   *
 > --
-> 2.25.1
+> 2.34.1
 >
->
-> No virus found
->                 Checked by Hillstone Network AntiVirus
