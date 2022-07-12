@@ -2,205 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2262570FE4
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 04:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97AF571068
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 04:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiGLCAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Jul 2022 22:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S229765AbiGLClG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Jul 2022 22:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiGLCAU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 22:00:20 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027808E1F3
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 19:00:16 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id o12so6260286pfp.5
-        for <linux-pm@vger.kernel.org>; Mon, 11 Jul 2022 19:00:16 -0700 (PDT)
+        with ESMTP id S229735AbiGLClG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Jul 2022 22:41:06 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0D98CCA2;
+        Mon, 11 Jul 2022 19:41:04 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d10so6316561pfd.9;
+        Mon, 11 Jul 2022 19:41:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JrLh+9lwzn/hVK+x3i4SIxhqvOdLJGufkP7mGEFOm9c=;
-        b=JyNI/FbvGc5ZUsCcMu6of1CIJXsDPu4qESFa1L5GYZGcSmZSGD8HmF22chR05DLpNR
-         IwQQMOPJil0jwSX2iHcKnJ3iSxEYyRuknAPgeLLG+j2fHk9ZexDrMQ/XNY4hF7QLAtMg
-         Kc3IPFq3PPIYubiXI8KZjFtz33sD55mf++AVbQPYU9y9Su/kRVTpr+H6kPLBSZ/owavj
-         JmyCUWr9oqqYOK8yVHEcoI+dEgjMzxaqTnjaUCJ5/E4wvrRLMhcI1JQApHRZj7G1E7lZ
-         oTLUus32jmtgFUQkaDf3Wt4+nVFSKLzuCu+y6hHUOpx24WdzxWfRYgj1d3NriUnmOJMB
-         xNow==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lDqoYU06M5qfjJNyMJVfxr7RWOkJpJykf6wQoyOq3/4=;
+        b=nktI3+yVZ2upxobo1pYI+Imzvb40JntPSd+uVznnE+JDiZ3iqfgylh7IdheE417ReI
+         0ZJpKflv+wrre/BLrPhm4QrxaUd3LOGwvwHzkbu7H+1fNoleMTZTDhPkSukdQ3PUQ/KD
+         juCfkcILprPT0MwHhmuOHfyicKcZori7Q384uxVes08GJTq3ofAq4GkB/P+dcKQNyhSn
+         VtxQLkhJYWpiqxb45R3paqRoCG9hNEAdbQMIwIArDB+kC1uF0c3fP/q7PpXuVbVFKpg1
+         7fCoKDWpMVbjfUYwWIFNl9vyB7Rg2HqMO7tyZ/SEbkPs+j1g1k6+m5t1IpJ67AhI55rf
+         WlnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JrLh+9lwzn/hVK+x3i4SIxhqvOdLJGufkP7mGEFOm9c=;
-        b=y78Aslh/fRLX06U9A4PzAUihBShFia9sWfC3FxRvGGdIKFVjtkCqQBKIg9nTid3YDW
-         21SZ3CCJcRblbv91/7vzjXdt7YzmErYSAYSYL8pe9QVgq+r0Rn73X83vXzNgS0AEpeVG
-         UtUjYXRh0RspcAFRTWAKCRpmiC8/KUQv1p4X9uVif7tM0Chnmjrwe/5gVvFgv+bKbxUs
-         HZxSGgZLlgtR2aPF5lXnSeAAk2eTIzUoetK5Th/goYQeAbKjBklgTEZSpz2JXOAv0/mI
-         pYndTrV06pRn+kI1hQGFM3MbKEwDIJ8ZGXYVmVSaWVGW2NUk2JPiCyC1L14JKPFxKJbc
-         5EfQ==
-X-Gm-Message-State: AJIora+Q5YvBuRS3OoQemww4ZoT0jkZd5l0xzSfh5W3nvnNRG3cFykfh
-        Mx2zqlzCKJo50ze5df41VJ70EA==
-X-Google-Smtp-Source: AGRyM1vvGyt5VystS+i0DJ7EvZGc01AZoMkAN3JlckCOtoxswxdxThw9EmkygDkwOIo8HzjlAeHQuA==
-X-Received: by 2002:a62:5bc5:0:b0:528:c346:9632 with SMTP id p188-20020a625bc5000000b00528c3469632mr21427527pfb.48.1657591216051;
-        Mon, 11 Jul 2022 19:00:16 -0700 (PDT)
-Received: from leo-build-box.lan (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id x5-20020a17090a6b4500b001ef76dbae28sm5425821pjl.36.2022.07.11.19.00.12
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=lDqoYU06M5qfjJNyMJVfxr7RWOkJpJykf6wQoyOq3/4=;
+        b=c5Vx1VispoR8dbOpceTvpwb/T8YSt1Ui/j0TaPbeOkbJhVxT0MCPBu3v0Ot19Mas6/
+         Zs3bzTXrQ8D5Wa1z5QNkmSmZzFOqTZS+LS8Lm+L1AqpDgjWhHlD9pe8jjm2z4SoYkTm8
+         zR93oybayry4La7QkgimSwilG03LFcVoAjRVZOam+mc7vA2NnHpINIOUp3j0tYja86kX
+         tjlEjFHC97dH5HmBHBK4A4mTt/JEW/7D/nBpWiMRN5TpCzhZwnpLJ4u5ZedTex3hx5bl
+         o5i/Giydw+4uw1a424J64SmcLcnX1U/UoF4pUaSzlA3B2FwsgWQiL3vFeRl92xtxMnU5
+         OUog==
+X-Gm-Message-State: AJIora9yidsT2CujiQ1cy1uNu0BccDkFyWeBlcUF0Crrwsa0kjH1/iTA
+        5Nz2adMKuYP8HlxZwmFynsU=
+X-Google-Smtp-Source: AGRyM1sgSZac13/1lfi1ve8MaLQooeCokQeReYKhIfbjxRfYG+jCF6NsV3uqc9I/KRMG3daStn5p3w==
+X-Received: by 2002:a63:5cd:0:b0:412:b163:b7e1 with SMTP id 196-20020a6305cd000000b00412b163b7e1mr18843432pgf.451.1657593664115;
+        Mon, 11 Jul 2022 19:41:04 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v3-20020aa799c3000000b0052ab9f1fe45sm5448189pfi.120.2022.07.11.19.40.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 19:00:15 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v6 5/5] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
-Date:   Tue, 12 Jul 2022 09:59:29 +0800
-Message-Id: <20220712015929.2789881-6-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220712015929.2789881-1-leo.yan@linaro.org>
-References: <20220712015929.2789881-1-leo.yan@linaro.org>
+        Mon, 11 Jul 2022 19:41:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 11 Jul 2022 19:40:58 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        khilman@baylibre.com, abailon@baylibre.com, amitk@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 01/33] thermal/of: Rework the thermal device tree
+ initialization
+Message-ID: <20220712024058.GA2308616@roeck-us.net>
+References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
+ <20220710212423.681301-2-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220710212423.681301-2-daniel.lezcano@linexp.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This commit uses buckets for support bandwidth and clock rates.  It
-introduces a new function qcom_icc_bus_aggregate() to calculate the
-aggregate average and peak bandwidths for every bucket, and also it
-calculates the maximum value of aggregated average bandwidth across all
-buckets.
+On Sun, Jul 10, 2022 at 11:23:51PM +0200, Daniel Lezcano wrote:
+[ ... ]
+>  
+> +static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+> +{
+> +}
+> +
+> +static inline void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
+> +{
+> +}
+> +
 
-The maximum aggregated average is used to calculate the final bandwidth
-requests.  And we can set the clock rate per bucket, we use SLEEP bucket
-as default bucket if a platform doesn't enable the interconnect path
-tags in DT binding; otherwise, we use WAKE bucket to set active clock
-and use SLEEP bucket for other clocks.  So far we don't use AMC bucket.
+Unless I am missing something, there are no dummies for the registration
+functions. Is that on purpose ?
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- drivers/interconnect/qcom/icc-rpm.c | 75 +++++++++++++++++++++++------
- 1 file changed, 61 insertions(+), 14 deletions(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index d27b1582521f..7f6a70e0256a 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -302,18 +302,57 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- 	return 0;
- }
- 
-+/**
-+ * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
-+ * @provider: generic interconnect provider
-+ * @agg_avg: an array for aggregated average bandwidth of buckets
-+ * @agg_peak: an array for aggregated peak bandwidth of buckets
-+ * @max_agg_avg: pointer to max value of aggregated average bandwidth
-+ */
-+static void qcom_icc_bus_aggregate(struct icc_provider *provider,
-+				   u64 *agg_avg, u64 *agg_peak,
-+				   u64 *max_agg_avg)
-+{
-+	struct icc_node *node;
-+	struct qcom_icc_node *qn;
-+	int i;
-+
-+	/* Initialise aggregate values */
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+		agg_avg[i] = 0;
-+		agg_peak[i] = 0;
-+	}
-+
-+	*max_agg_avg = 0;
-+
-+	/*
-+	 * Iterate nodes on the interconnect and aggregate bandwidth
-+	 * requests for every bucket.
-+	 */
-+	list_for_each_entry(node, &provider->nodes, node_list) {
-+		qn = node->data;
-+		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+			agg_avg[i] += qn->sum_avg[i];
-+			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
-+		}
-+	}
-+
-+	/* Find maximum values across all buckets */
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++)
-+		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
-+}
-+
- static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- {
- 	struct qcom_icc_provider *qp;
- 	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
- 	struct icc_provider *provider;
--	struct icc_node *n;
- 	u64 sum_bw;
--	u64 max_peak_bw;
- 	u64 rate;
--	u32 agg_avg = 0;
--	u32 agg_peak = 0;
-+	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
-+	u64 max_agg_avg;
- 	int ret, i;
-+	int bucket;
- 
- 	src_qn = src->data;
- 	if (dst)
-@@ -321,12 +360,9 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	provider = src->provider;
- 	qp = to_qcom_provider(provider);
- 
--	list_for_each_entry(n, &provider->nodes, node_list)
--		provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
--				    &agg_avg, &agg_peak);
-+	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
- 
--	sum_bw = icc_units_to_bps(agg_avg);
--	max_peak_bw = icc_units_to_bps(agg_peak);
-+	sum_bw = icc_units_to_bps(max_agg_avg);
- 
- 	ret = __qcom_icc_set(src, src_qn, sum_bw);
- 	if (ret)
-@@ -337,12 +373,23 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 			return ret;
- 	}
- 
--	rate = max(sum_bw, max_peak_bw);
--
--	do_div(rate, src_qn->buswidth);
--	rate = min_t(u64, rate, LONG_MAX);
--
- 	for (i = 0; i < qp->num_clks; i++) {
-+		/*
-+		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
-+		 * for other clocks.  If a platform doesn't set interconnect
-+		 * path tags, by default use sleep bucket for all clocks.
-+		 *
-+		 * Note, AMC bucket is not supported yet.
-+		 */
-+		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
-+			bucket = QCOM_ICC_BUCKET_WAKE;
-+		else
-+			bucket = QCOM_ICC_BUCKET_SLEEP;
-+
-+		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
-+		do_div(rate, src_qn->buswidth);
-+		rate = min_t(u64, rate, LONG_MAX);
-+
- 		if (qp->bus_clk_rate[i] == rate)
- 			continue;
- 
--- 
-2.25.1
-
+>  static inline
+>  void devm_thermal_zone_of_sensor_unregister(struct device *dev,
+>  					    struct thermal_zone_device *tz)
