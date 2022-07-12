@@ -2,80 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D0357137D
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 09:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 671E25714E0
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 10:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbiGLHwr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 03:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S230269AbiGLIlm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 04:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbiGLHwp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 03:52:45 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A819D500
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:52:43 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id v7so4767342pfb.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:52:43 -0700 (PDT)
+        with ESMTP id S230198AbiGLIlm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 04:41:42 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680B67AC15
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 01:41:41 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id q5-20020a17090a304500b001efcc885cc4so7268749pjl.4
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 01:41:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=JDE9efA6tNnV2IAGh2LYLxXJO4QIDeRatDZhQ/9xv0Y=;
-        b=aIVJoOrYsOxTCnwRWJsJsadg8YScTtWaD0KWY7O/2+d8GVdTuEwcbqHC65rXN8wf++
-         3HyfuAZeUSNgl+yUHx/5KlRezG7txR0FdQaKUCs2dK0RgqKtkIgKMHUn4a3fWXtchUD8
-         g7IW4PdmeGjP3yX98W+7cqVp78RzOGcfYR2jVyT+kDsObWUtEQhH3ipi3c2vyzkFN7va
-         evzX9xXekM3lXyocMknYXWvrCdbXQa0fWYKFk+OPPr6btstHwE+thj2ExuI+0c/1nZaE
-         VVpSXpq1Vet9CUK+J3jdAlNviHFp/4+V2qoSblLUDATIq/8mDyFEOkl3La/CM4Q0VqgH
-         8E7A==
+        bh=9jlvp3ctzfV5qIwygKhimi/OMZvViFDBhQEGu7/yFHI=;
+        b=kzLKsiAjlkufjLDqxapjEYgh1ncbzgUECLW+oHEZVys0qAYcP5sn6XnrSv2Awsbk3v
+         vaImKcE/YZfn8AzNPNKbopI/23QAPmafu/HOvBFr/mTB5xtRR3GGJ/Lq/lz88K1h4m51
+         NiDl3LyxnUUoT82Jk/KhkQJ1yEJTW3DqpbYO0MnhPEgqD4dc5tYPsThWnoNrtQ728teU
+         JDE+DSUJ2vfntqY4SQ6gpDU9Y+EUY7EkLM5kC9CgizxqAxTIsmu/Y63aCmBteDtIYl1f
+         kvKmA/zpWkf7tktfx/ui/7XvzbnyKkayZvBL59rGSLDFB6lHIUsV/MeeQlwN9Nfrw8Nr
+         1DTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=JDE9efA6tNnV2IAGh2LYLxXJO4QIDeRatDZhQ/9xv0Y=;
-        b=NQtgHlowCzEBsC5Jqg9o5+A+A29Yq1a8q2Bw7rULErd3rGLcv15NHTEZJuogQ0xpg1
-         X1nJI7zGqwZqa+woHO4yQvazm4ohNnhEr4TKLmgSpd5JcByDdrML5w2KnRHiQnmh7tL4
-         mBtyVOUnl7FYBXRGogZ+HkpVVVpa81YG7dtfSThpQZ6HNXMVG1kklSVCdnfALzHDSbZn
-         6KRbnoc54U4nv3h8MBoEszWemrgD6UgR9QczMbvnxdvgjZ26qnRCuZxjGQdtUWXi3Vkv
-         mP4dvt1On1BPUqqYgPvxncTB7e6xW8wq1ODbbESxgTIG5gF+/FdqG5fet1RVoxHutcoc
-         TJcQ==
-X-Gm-Message-State: AJIora9nl+kzJ6s5E4a2aPqxy6TFEYqbPzB/NEDBUvCj50ia8gMWx5VP
-        4dFFS0ewDN2BpsSl2+fTo7dVaA==
-X-Google-Smtp-Source: AGRyM1vRTqycGBlzrqk2OttaehDP+MhVi+0ovxCWFXTXmuSWvayqxox7e6xtAjUzE9s1bj017NCd/Q==
-X-Received: by 2002:a63:754:0:b0:415:4578:248a with SMTP id 81-20020a630754000000b004154578248amr19503049pgh.196.1657612362818;
-        Tue, 12 Jul 2022 00:52:42 -0700 (PDT)
+        bh=9jlvp3ctzfV5qIwygKhimi/OMZvViFDBhQEGu7/yFHI=;
+        b=etKda862C870C7xBAWKY+FIqnhvJ/lZpY6zSez0KoTiyN/OuP+uST6qFK3BtJaybb9
+         XzHgmgbMzELDDbpRSmFZwBhvu6e8LMvK9WlReIrUaqjPhb9uSiWRSlCM/52SD26/+GOb
+         M4rtsxjt2GnHGXMF6pLAL9SBqzT0jGIDLbTaMAfAgawRur2DodAAHuhh254NukFwoqYk
+         Kja3w8saakDjaIsQnxWu6d0elux/OYTbJ5/LQ+bUHAans9r7SMHwwHtJDr1sOVLT28Fx
+         1OPRbiJyJWzYeYUnHtPkfeX3HLtYHgJuug6mqyjdcSQP8+E+PD9SRy5Kwz1KZgAUUjeQ
+         HTYA==
+X-Gm-Message-State: AJIora+TJI1nug9g+t0k+T9c7m8ON0TdOLMVIoKuU8Wb7+0pZfJnGGGW
+        UMwITXM0h4aSpFBi632jaOkPIA==
+X-Google-Smtp-Source: AGRyM1u0Orb3NyHrPVrygHCrKYTYrtkpqltCrDm7vAH9cwSewR2UFTT/T76rR7qWddA2MUIBo0A5Hg==
+X-Received: by 2002:a17:902:ce8c:b0:16c:4be6:254d with SMTP id f12-20020a170902ce8c00b0016c4be6254dmr8898036plg.51.1657615300935;
+        Tue, 12 Jul 2022 01:41:40 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id u9-20020a1709026e0900b0016bdf53b303sm5739118plk.205.2022.07.12.00.52.41
+        by smtp.gmail.com with ESMTPSA id l7-20020a622507000000b0052aaf7fe731sm6174399pfl.45.2022.07.12.01.41.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 00:52:42 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 13:22:40 +0530
+        Tue, 12 Jul 2022 01:41:40 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 14:11:37 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com,
+        vincent.guittot@linaro.org
+Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+Message-ID: <20220712084137.pb24lolhuk2yln4e@vireshk-i7>
+References: <20220711124229.16516-1-lukasz.luba@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+In-Reply-To: <20220711124229.16516-1-lukasz.luba@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -86,64 +70,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-07-22, 18:40, Johan Hovold wrote:
-> This break OPP parsing on SC8280XP and hence cpufreq and other things:
+On 11-07-22, 13:42, Lukasz Luba wrote:
+> There is no need to keep the max CPU capacity in the per_cpu instance.
+> Furthermore, there is no need to check and update that variable
+> (sg_cpu->max) everytime in the frequency change request, which is part
+> of hot path. Instead use struct sugov_policy to store that information.
+> Initialize the max CPU capacity during the setup and start callback.
+> We can do that since all CPUs in the same frequency domain have the same
+> max capacity (capacity setup and thermal pressure are based on that).
 > 
-> [  +0.010890] cpu cpu0: _opp_add_static_v2: opp key field not found
-> [  +0.000019] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -19
-> [  +0.000060] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 403200000, volt: 576000, enabled: 1
-> [  +0.000030] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 499200000, volt: 576000, enabled: 1
-> ...
-> 
-> I just did a rebase on next-20220708 and hit this.
-> 
-> I've narrowed it down to _read_rate() now returning -ENODEV since
-> opp_table->clk_count is zero.
-> 
-> Similar to what was reported for tegra for v1:
-> 
-> 	https://lore.kernel.org/all/58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com/
-> 
-> I don't have time to look at this any more today, but it would we nice
-> if you could unbreak linux-next.
-> 
-> Perhaps Bjorn or Mani can help with further details, but this doesn't
-> look like something that is specific to SC8280XP.
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
 
-It is actually. This is yet another corner case, Tegra had one as
-well.
+I tried to check all possible combinations on how this can break, but
+couldn't find one. I had to check that as this code is there since
+ages and none of us thought of it, which was surprising.
 
-I have tried to understand the Qcom code / setup to best of my
-abilities, and the problem as per me is that qcom-cpufreq-hw doesn't
-provide a clk to the OPP core, which breaks it after the new updates
-to the OPP core. I believe following will solve it. Can someone please
-try this ? I will then merge it with the right commit.
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 666e1ebf91d1..4f4a285886fa 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
-        }
-
-        if (ret == -ENOENT) {
-+               /*
-+                * There are few platforms which don't want the OPP core to
-+                * manage device's clock settings. In such cases neither the
-+                * platform provides the clks explicitly to us, nor the DT
-+                * contains a valid clk entry. The OPP nodes in DT may still
-+                * contain "opp-hz" property though, which we need to parse and
-+                * allow the platform to find an OPP based on freq later on.
-+                *
-+                * This is a simple solution to take care of such corner cases,
-+                * i.e. make the clk_count 1, which lets us allocate space for
-+                * frequency in opp->rates and also parse the entries in DT.
-+                */
-+               opp_table->clk_count = 1;
-+
-                dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
-                return opp_table;
-        }
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
