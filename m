@@ -2,82 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CE0571EAE
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 17:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9BA571F2B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 17:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbiGLPQk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 11:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S233569AbiGLP33 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 11:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiGLPQ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 11:16:26 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD769FEE
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 08:10:49 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id j3so7722520pfb.6
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 08:10:49 -0700 (PDT)
+        with ESMTP id S233517AbiGLP32 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 11:29:28 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BAA74DD7
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 08:29:23 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id r10so5525276wrv.4
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 08:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=24GiY7xs/AOkZ2wDT+jq5qIaUGqPEUFDT83Dcdn41lc=;
-        b=AVewZ9GTLN8QUPIMpsumydhLhsrz+NGv835wkw3mm+S/6lHY4UmkHBvsMDSe0JlYj3
-         V1qjJgp280HVU6oPgPg0f0PUXQMNu4txo1kInSWDAtObw+rBlpfVRNPeiPN79aKkZrax
-         Fx8UIRGYezZYo8zxZOijVmX0NErwSDre/B7SlXbg76P31Yc+hxqrBnBdDhFY7jxzMyCE
-         qQ1P71xu2qxxhJyXlP7PXAmpPIqnLLl2vdk9IgL0D11dpPudP8+CnO5EE20062ZSrseK
-         Tb2gpymS1ha8RIG7wIkxZ/0/eRXiBPnHKISuAtL5KqxH1MfyOYOyUGsqqfof3Tv0Sy21
-         +uRQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Q+JH/qWaiP2eJjuYW7C2uW3S0RkJ71Ub5nbWi6ekYbU=;
+        b=OczFGqywfdpy/mS2TpodOJOjuQVYsPEbYTpYSvI59PBCT2BHt/vguhiU3Z+P/25Xy1
+         NX12SAQIPHWI4v65pWrdKecJzJ1ZGNsVrm4p4CkSKIuywvfuizpOzZ9Wqb5Jt0s0UHBp
+         T5PS8SW072ViH7TP9Q1PP6fDrZJHGcvg2WmV6fg5I4zrNV3XGkuRlHjgoLdrxTGYU28w
+         Z87I9ucdUZ9RkKjmGgpr804KkfSTtYBOnSa8OCgcdq8A7jMi3r48eOJ1/nJefL8+oJ9R
+         cLWhrGedBVWmNXkrHud8KRNz7PKK4gOV5vdbwVuBC3Im5EaXVYsYxBfTlWzC718rBE5u
+         DBkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=24GiY7xs/AOkZ2wDT+jq5qIaUGqPEUFDT83Dcdn41lc=;
-        b=Qy3DnlUitoFAEjFUbbexg2TfoOpF9KFYORw7bKiRzfY+7cjCI5FctjsfsL1BDgbCs0
-         ST4V5cpTyudSSTDbxoETk7y6pjY+dMiWdahDMvavRcw1ZubjB3SlJY8vRSHHK5FqOw/3
-         NQh1XXY+m4Zhmo3CSmUPA9Vlel0xdg4JlIV+xUO4gkl8mXkRhSFZmRCPEd6B4AcSUwYE
-         U2tgjNXhlRo/irEQfNf+ihM/XBL4U0U0kBai4Y/Ac31Pd70NH1/Cztv5pyszPcV88OC2
-         XnveQHQBIpmejl0WqlPiF/aE5Bt9Mi7zYUEs2YBz8Tf8pT8zY8JjNt8Hp6vSxZMyJbr2
-         kCMw==
-X-Gm-Message-State: AJIora+LykmW5qcZQNrUWsi+vf9zsm0ZMfThof6mMx8/5gwI9VvmjLrp
-        dQpphiJsZGvEiDNFbRgktzs+2A==
-X-Google-Smtp-Source: AGRyM1sTKabYGY8Tal+borECoY05ZOEAoZzgGr3flmGIjIegLuXUBFSTZFgOV0nRcYVZ5Ko1W5RjIw==
-X-Received: by 2002:a63:b50b:0:b0:412:b42c:6940 with SMTP id y11-20020a63b50b000000b00412b42c6940mr20638775pge.460.1657638648500;
-        Tue, 12 Jul 2022 08:10:48 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id o65-20020a625a44000000b0052ac99c2c1csm4888270pfb.83.2022.07.12.08.10.47
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Q+JH/qWaiP2eJjuYW7C2uW3S0RkJ71Ub5nbWi6ekYbU=;
+        b=0qWMWhoK0bdztSaKLRXXNwBEYSIz4a0wPV6K5pF5ajNvFCjEq6SLXeh8Q8U4dqwpi6
+         X/PqWhn1pHapc1/TItAWMYv5o2lkDxQZ67gGBDZ2tZmDr+1xVUJ0zdopH9vvMvB6hdkW
+         zlgvhcc75wQmiQs58G/2B4h0UF/YmkX7HP5BblRxJJ9tlCOEtjL2Ts4tfNw+phJIrZ+J
+         S+clmOUEnMzTmCVdOaN6xGu5KgBZ+mcP5d9RcvnkD7xXNF9+wddbpxC7dm8DfA+08MEn
+         Yhzfnp1PgdTEjIXEetCmCe2bQZDa/oVAxdBknBUNWAWMaF7e6QErfpLmdxPzx8Tc77sV
+         Fj4A==
+X-Gm-Message-State: AJIora96Pdxn6B0i5j/MH/s+NiExvXNiStvVNakKZF6f6QpzFCRf3yS2
+        FGa6fetfCL1N8kniEzwbKM86FA==
+X-Google-Smtp-Source: AGRyM1uSLPcm2Pav8BPF3Jx+Guud3701li2mH9y8hYpZuHdD2WZOCC/W4swCDeXJTVRAPp66ckDPSg==
+X-Received: by 2002:a5d:414a:0:b0:21d:6be5:1765 with SMTP id c10-20020a5d414a000000b0021d6be51765mr22980167wrq.419.1657639761463;
+        Tue, 12 Jul 2022 08:29:21 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id ay26-20020a05600c1e1a00b003a2e89d1fb5sm5149242wmb.42.2022.07.12.08.29.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 08:10:47 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 20:40:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <20220712151045.vn4tpat4c4cplndo@vireshk-i7>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <YsxSkswzsqgMOc0l@hovoldconsulting.com>
- <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
- <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
+        Tue, 12 Jul 2022 08:29:20 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 16:29:18 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v3 07/14] mfd: mt6370: Add Mediatek MT6370 support
+Message-ID: <Ys2TTsv1oU8n1fUE@google.com>
+References: <20220623115631.22209-1-peterwu.pub@gmail.com>
+ <20220623115631.22209-8-peterwu.pub@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220623115631.22209-8-peterwu.pub@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -88,122 +84,464 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-07-22, 16:29, Johan Hovold wrote:
-> On Tue, Jul 12, 2022 at 01:22:40PM +0530, Viresh Kumar wrote:
-> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> > index 666e1ebf91d1..4f4a285886fa 100644
-> > --- a/drivers/opp/core.c
-> > +++ b/drivers/opp/core.c
-> > @@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
-> >         }
-> > 
-> >         if (ret == -ENOENT) {
-> > +               /*
-> > +                * There are few platforms which don't want the OPP core to
-> > +                * manage device's clock settings. In such cases neither the
-> > +                * platform provides the clks explicitly to us, nor the DT
-> > +                * contains a valid clk entry. The OPP nodes in DT may still
-> > +                * contain "opp-hz" property though, which we need to parse and
-> > +                * allow the platform to find an OPP based on freq later on.
-> > +                *
-> > +                * This is a simple solution to take care of such corner cases,
-> > +                * i.e. make the clk_count 1, which lets us allocate space for
-> > +                * frequency in opp->rates and also parse the entries in DT.
-> > +                */
-> > +               opp_table->clk_count = 1;
-> > +
-> >                 dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
-> >                 return opp_table;
-> >         }
+On Thu, 23 Jun 2022, ChiaEn Wu wrote:
+
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> This looks like a hack.
+> Add Mediatek MT6370 MFD support.
 
-Yeah, a bit. Initially I wanted to solve it in a cleaner way, like it
-is done for Tegra, where you will pass the right clock name to the OPP
-core, so it can verify that the clk is there and parse the table. And
-then tell the OPP core not to configure the clk from
-dev_pm_opp_set_opp(), which is possible now. This would have done the
-things in the right way.
+No such thing as "MFD support".
 
-The problem with Qcom's DT is that the CPU node have the OPP table but
-doesn't contain the clocks, which are available with the
-qcom,cpufreq-hw node instead. Because of this, I couldn't pass the
-real clocks name to the OPP core, "xo", for the CPU device.
+And you're not getting away with submitting a 370 line patch with a 5
+word change log either. :)
 
-I really tried to avoid adding the above code for Tegra and found a
-better and cleaner way out. But I couldn't do the same here and
-figured it may be more generic of a problem, which is fine as well.
+Please at least tell us what the device is and what it's used for.
 
-The OPP core does two things currently:
-
-1) Parse the DT and provide helpers to find the right OPP, etc.
-
-2) Provide generic helper to configure all resources related to the
-   OPP.
-
-It is fine if some platforms only want to have the first and not the
-second. To have the second though, you need to have the first as well.
-
-The clk is required only for the second case, and the OPP core should
-parse the DT anyways, irrespective of the availability of the clock.
-Because of this reason, making the above change looked reasonable
-(this is what was happening before my new patches came in anyway). The
-clock isn't there, but there is "opp-hz" present in the DT, which
-needs to be parsed.
-
-> And it also triggers a bunch of new warning when
-> opp is trying to create debugfs entries for an entirely different table
-> which now gets clk_count set to 1:
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
 > 
-> [  +0.000979]  cx: _update_opp_table_clk: Couldn't find clock: -2
-> [  +0.000022] debugfs: Directory 'opp:0' with parent 'cx' already present!
-> [  +0.000004] debugfs: Directory 'opp:0' with parent 'cx' already present!
-> [  +0.000004] debugfs: Directory 'opp:0' with parent 'cx' already present!
-> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
-> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> v3
+> - Refine Kconfig help text
+> - Refine error message of unknown vendor ID in
+>   mt6370_check_vendor_info()
+> - Refine return value handling of mt6370_regmap_read()
+> - Refine all probe error by using dev_err_probe()
+> - Refine "bank_idx" and "bank_addr" in mt6370_regmap_read() and
+>   mt6370_regmap_write()
+> - Add "#define VENID*" and drop the comments in
+>   mt6370_check_vendor_info()
+> - Drop "MFD" in MODULE_DESCRIPTION()
+> ---
+>  drivers/mfd/Kconfig  |  13 ++
+>  drivers/mfd/Makefile |   1 +
+>  drivers/mfd/mt6370.c | 358 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 372 insertions(+)
+>  create mode 100644 drivers/mfd/mt6370.c
 > 
-> This is for the rpmhpd whose opp table does not have either opp-hz or
-> clocks (just opp-level).
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 3b59456..4c900c4 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -937,6 +937,19 @@ config MFD_MT6360
+>  	  PMIC part includes 2-channel BUCKs and 2-channel LDOs
+>  	  LDO part includes 4-channel LDOs
+>  
+> +config MFD_MT6370
+> +	tristate "Mediatek MT6370 SubPMIC"
+> +	select MFD_CORE
+> +	select REGMAP_I2C
+> +	select REGMAP_IRQ
+> +	depends on I2C
+> +	help
+> +	  Say Y here to enable MT6370 SubPMIC functional support.
+> +	  It consists of a single cell battery charger with ADC monitoring, RGB
+> +	  LEDs, dual channel flashlight, WLED backlight driver, display bias
+> +	  voltage supply, one general purpose LDO, and the USB Type-C & PD
+> +	  controller complies with the latest USB Type-C and PD standards.
+> +
+>  config MFD_MT6397
+>  	tristate "MediaTek MT6397 PMIC Support"
+>  	select MFD_CORE
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 858cacf..62b2712 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -242,6 +242,7 @@ obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)	+= intel_soc_pmic_bxtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)	+= intel_soc_pmic_chtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)	+= intel_soc_pmic_chtdc_ti.o
+>  obj-$(CONFIG_MFD_MT6360)	+= mt6360-core.o
+> +obj-$(CONFIG_MFD_MT6370)	+= mt6370.o
+>  mt6397-objs			:= mt6397-core.o mt6397-irq.o mt6358-irq.o
+>  obj-$(CONFIG_MFD_MT6397)	+= mt6397.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)	+= intel_soc_pmic_mrfld.o
+> diff --git a/drivers/mfd/mt6370.c b/drivers/mfd/mt6370.c
+> new file mode 100644
+> index 0000000..49f02b1
+> --- /dev/null
+> +++ b/drivers/mfd/mt6370.c
+> @@ -0,0 +1,358 @@
+> +// SPDX-License-Identifier: GPL-2.0
 
-Ahh, I missed switching back to the earlier code here. i.e. not use
-the frequency for OPP directory's name, when it is 0.
+No Copyright?
 
-This will fix it.
+> +#include <linux/bits.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/module.h>
+> +#include <linux/regmap.h>
+> +
+> +enum {
+> +	MT6370_USBC_I2C = 0,
+> +	MT6370_PMU_I2C,
+> +	MT6370_MAX_I2C
+> +};
+> +
+> +#define MT6370_REG_DEV_INFO	0x100
+> +#define MT6370_REG_CHG_IRQ1	0x1C0
+> +#define MT6370_REG_CHG_MASK1	0x1E0
+> +
+> +#define MT6370_VENID_MASK	GENMASK(7, 4)
+> +
+> +#define MT6370_NUM_IRQREGS	16
+> +#define MT6370_USBC_I2CADDR	0x4E
+> +#define MT6370_REG_ADDRLEN	2
+> +#define MT6370_REG_MAXADDR	0x1FF
+> +
+> +#define MT6370_VENID_RT5081	0x8
+> +#define MT6370_VENID_RT5081A	0xA
+> +#define MT6370_VENID_MT6370	0xE
+> +#define MT6370_VENID_MT6371	0xF
+> +#define MT6370_VENID_MT6372P	0x9
+> +#define MT6370_VENID_MT6372CP	0xB
+> +
+> +/* IRQ definitions */
+> +#define MT6370_IRQ_DIRCHGON		0
+> +#define MT6370_IRQ_CHG_TREG		4
+> +#define MT6370_IRQ_CHG_AICR		5
+> +#define MT6370_IRQ_CHG_MIVR		6
+> +#define MT6370_IRQ_PWR_RDY		7
+> +#define MT6370_IRQ_FL_CHG_VINOVP	11
+> +#define MT6370_IRQ_CHG_VSYSUV		12
+> +#define MT6370_IRQ_CHG_VSYSOV		13
+> +#define MT6370_IRQ_CHG_VBATOV		14
+> +#define MT6370_IRQ_CHG_VINOVPCHG	15
+> +#define MT6370_IRQ_TS_BAT_COLD		20
+> +#define MT6370_IRQ_TS_BAT_COOL		21
+> +#define MT6370_IRQ_TS_BAT_WARM		22
+> +#define MT6370_IRQ_TS_BAT_HOT		23
+> +#define MT6370_IRQ_TS_STATC		24
+> +#define MT6370_IRQ_CHG_FAULT		25
+> +#define MT6370_IRQ_CHG_STATC		26
+> +#define MT6370_IRQ_CHG_TMR		27
+> +#define MT6370_IRQ_CHG_BATABS		28
+> +#define MT6370_IRQ_CHG_ADPBAD		29
+> +#define MT6370_IRQ_CHG_RVP		30
+> +#define MT6370_IRQ_TSHUTDOWN		31
+> +#define MT6370_IRQ_CHG_IINMEAS		32
+> +#define MT6370_IRQ_CHG_ICCMEAS		33
+> +#define MT6370_IRQ_CHGDET_DONE		34
+> +#define MT6370_IRQ_WDTMR		35
+> +#define MT6370_IRQ_SSFINISH		36
+> +#define MT6370_IRQ_CHG_RECHG		37
+> +#define MT6370_IRQ_CHG_TERM		38
+> +#define MT6370_IRQ_CHG_IEOC		39
+> +#define MT6370_IRQ_ADC_DONE		40
+> +#define MT6370_IRQ_PUMPX_DONE		41
+> +#define MT6370_IRQ_BST_BATUV		45
+> +#define MT6370_IRQ_BST_MIDOV		46
+> +#define MT6370_IRQ_BST_OLP		47
+> +#define MT6370_IRQ_ATTACH		48
+> +#define MT6370_IRQ_DETACH		49
+> +#define MT6370_IRQ_HVDCP_STPDONE	51
+> +#define MT6370_IRQ_HVDCP_VBUSDET_DONE	52
+> +#define MT6370_IRQ_HVDCP_DET		53
+> +#define MT6370_IRQ_CHGDET		54
+> +#define MT6370_IRQ_DCDT			55
+> +#define MT6370_IRQ_DIRCHG_VGOK		59
+> +#define MT6370_IRQ_DIRCHG_WDTMR		60
+> +#define MT6370_IRQ_DIRCHG_UC		61
+> +#define MT6370_IRQ_DIRCHG_OC		62
+> +#define MT6370_IRQ_DIRCHG_OV		63
+> +#define MT6370_IRQ_OVPCTRL_SWON		67
+> +#define MT6370_IRQ_OVPCTRL_UVP_D	68
+> +#define MT6370_IRQ_OVPCTRL_UVP		69
+> +#define MT6370_IRQ_OVPCTRL_OVP_D	70
+> +#define MT6370_IRQ_OVPCTRL_OVP		71
+> +#define MT6370_IRQ_FLED_STRBPIN		72
+> +#define MT6370_IRQ_FLED_TORPIN		73
+> +#define MT6370_IRQ_FLED_TX		74
+> +#define MT6370_IRQ_FLED_LVF		75
+> +#define MT6370_IRQ_FLED2_SHORT		78
+> +#define MT6370_IRQ_FLED1_SHORT		79
+> +#define MT6370_IRQ_FLED2_STRB		80
+> +#define MT6370_IRQ_FLED1_STRB		81
+> +#define mT6370_IRQ_FLED2_STRB_TO	82
+> +#define MT6370_IRQ_FLED1_STRB_TO	83
+> +#define MT6370_IRQ_FLED2_TOR		84
+> +#define MT6370_IRQ_FLED1_TOR		85
+> +#define MT6370_IRQ_OTP			93
+> +#define MT6370_IRQ_VDDA_OVP		94
+> +#define MT6370_IRQ_VDDA_UV		95
+> +#define MT6370_IRQ_LDO_OC		103
+> +#define MT6370_IRQ_BLED_OCP		118
+> +#define MT6370_IRQ_BLED_OVP		119
+> +#define MT6370_IRQ_DSV_VNEG_OCP		123
+> +#define MT6370_IRQ_DSV_VPOS_OCP		124
+> +#define MT6370_IRQ_DSV_BST_OCP		125
+> +#define MT6370_IRQ_DSV_VNEG_SCP		126
+> +#define MT6370_IRQ_DSV_VPOS_SCP		127
 
-diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-index 402c507edac7..96a30a032c5f 100644
---- a/drivers/opp/debugfs.c
-+++ b/drivers/opp/debugfs.c
-@@ -138,7 +138,7 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
-         * - For some devices rate isn't available or there are multiple, use
-         *   index instead for them.
-         */
--       if (likely(opp_table->clk_count == 1))
-+       if (likely(opp_table->clk_count == 1 && opp->rates[0]))
-                id = opp->rates[0];
-        else
-                id = _get_opp_count(opp_table);
+Can you pop these into a header file please?
 
-I have merged this into:
+> +struct mt6370_info {
+> +	struct i2c_client *i2c[MT6370_MAX_I2C];
+> +	struct device *dev;
 
-commit 341df9889277 ("OPP: Allow multiple clocks for a device")
+You don't need both 'i2c' and 'dev'.
 
-and pushed out for linux-next.
+You can derive one from the other.
 
+> +	struct regmap *regmap;
+> +	struct regmap_irq_chip_data *irq_data;
+> +};
 
-Bjorn, Mani,
+This can do into the header file too.
 
-It would be really good if we can find a way to make following work on
-Qcom:
+> +static const struct regmap_irq mt6370_irqs[] = {
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHGON, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TREG, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_AICR, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_MIVR, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_PWR_RDY, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FL_CHG_VINOVP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VSYSUV, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VSYSOV, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VBATOV, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VINOVPCHG, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_COLD, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_COOL, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_WARM, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_HOT, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_STATC, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_FAULT, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_STATC, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TMR, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_BATABS, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_ADPBAD, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_RVP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_TSHUTDOWN, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_IINMEAS, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_ICCMEAS, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHGDET_DONE, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_WDTMR, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_SSFINISH, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_RECHG, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TERM, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_IEOC, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_ADC_DONE, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_PUMPX_DONE, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_BATUV, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_MIDOV, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_OLP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_ATTACH, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DETACH, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_STPDONE, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_VBUSDET_DONE, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_DET, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHGDET, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DCDT, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_VGOK, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_WDTMR, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_UC, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_OC, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_OV, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_SWON, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_UVP_D, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_UVP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_OVP_D, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_OVP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_STRBPIN, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_TORPIN, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_TX, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_LVF, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_SHORT, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_SHORT, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_STRB, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_STRB, 8),
+> +	REGMAP_IRQ_REG_LINE(mT6370_IRQ_FLED2_STRB_TO, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_STRB_TO, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_TOR, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_TOR, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_OTP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_VDDA_OVP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_VDDA_UV, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_LDO_OC, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_BLED_OCP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_BLED_OVP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VNEG_OCP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VPOS_OCP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_BST_OCP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VNEG_SCP, 8),
+> +	REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VPOS_SCP, 8)
+> +};
+> +
+> +static const struct regmap_irq_chip mt6370_irq_chip = {
+> +	.name		= "mt6370-irqs",
+> +	.status_base	= MT6370_REG_CHG_IRQ1,
+> +	.mask_base	= MT6370_REG_CHG_MASK1,
+> +	.num_regs	= MT6370_NUM_IRQREGS,
+> +	.irqs		= mt6370_irqs,
+> +	.num_irqs	= ARRAY_SIZE(mt6370_irqs),
+> +};
+> +
+> +static const struct resource mt6370_regulator_irqs[] = {
+> +	DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VPOS_SCP, "db_vpos_scp"),
+> +	DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VNEG_SCP, "db_vneg_scp"),
+> +	DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_BST_OCP, "db_vbst_ocp"),
+> +	DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VPOS_OCP, "db_vpos_ocp"),
+> +	DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VNEG_OCP, "db_vneg_ocp"),
+> +	DEFINE_RES_IRQ_NAMED(MT6370_IRQ_LDO_OC, "ldo_oc")
+> +};
+> +
+> +static const struct mfd_cell mt6370_devices[] = {
+> +	MFD_CELL_OF("adc", NULL, NULL, 0, 0, "mediatek,mt6370-adc"),
+> +	MFD_CELL_OF("charger", NULL, NULL, 0, 0, "mediatek,mt6370-charger"),
+> +	MFD_CELL_OF("backlight", NULL, NULL, 0, 0, "mediatek,mt6370-backlight"),
+> +	MFD_CELL_OF("flashlight", NULL, NULL, 0, 0, "mediatek,mt6370-flashlight"),
+> +	MFD_CELL_OF("indicator", NULL, NULL, 0, 0, "mediatek,mt6370-indicator"),
+> +	MFD_CELL_OF("tcpc", NULL, NULL, 0, 0, "mediatek,mt6370-tcpc"),
+> +	MFD_CELL_RES("regulator", mt6370_regulator_irqs)
 
-        clk_get(cpu_dev, NULL or "xo")
+The first parameters here should be prepended with something, perhaps
+"mt6370_"?
 
-If that happens, we can handle the special case just at the consumer
-driver (qcom-cpufreq-hw) and not in the core.
+> +};
+> +
+> +static int mt6370_check_vendor_info(struct mt6370_info *info)
+> +{
+> +	unsigned int devinfo;
+> +	int ret;
+> +
+> +	ret = regmap_read(info->regmap, MT6370_REG_DEV_INFO, &devinfo);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (FIELD_GET(MT6370_VENID_MASK, devinfo)) {
+> +	case MT6370_VENID_RT5081:
+> +	case MT6370_VENID_RT5081A:
+> +	case MT6370_VENID_MT6370:
+> +	case MT6370_VENID_MT6371:
+> +	case MT6370_VENID_MT6372P:
+> +	case MT6370_VENID_MT6372CP:
+> +		break;
+> +	default:
+> +		dev_err(info->dev, "Unknown Vendor ID 0x%02x\n", devinfo);
+> +		return -ENODEV;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6370_regmap_read(void *context, const void *reg_buf,
+> +			      size_t reg_size, void *val_buf, size_t val_size)
+> +{
+> +	struct mt6370_info *info = context;
+> +	u8 bank_idx, bank_addr;
+> +	int ret;
+> +
+> +	bank_idx = *(u8 *)reg_buf;
+> +	bank_addr = *(u8 *)(reg_buf + 1);
+> +
+> +	ret = i2c_smbus_read_i2c_block_data(info->i2c[bank_idx], bank_addr,
+> +					    val_size, val_buf);
+> +	if (ret < 0)
+> +		return ret;
+> +	else if (ret != val_size)
+> +		return -EIO;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6370_regmap_write(void *context, const void *data, size_t count)
+> +{
+> +	struct mt6370_info *info = context;
+> +	u8 bank_idx, bank_addr;
+> +	int len = count - MT6370_REG_ADDRLEN;
+> +
+> +	bank_idx = *(u8 *)data;
+> +	bank_addr = *(u8 *)(data + 1);
+> +
+> +	return i2c_smbus_write_i2c_block_data(info->i2c[bank_idx], bank_addr,
+> +					      len, data + MT6370_REG_ADDRLEN);
+> +}
+> +
+> +static const struct regmap_bus mt6370_regmap_bus = {
+> +	.read		= mt6370_regmap_read,
+> +	.write		= mt6370_regmap_write,
+> +};
+> +
+> +static const struct regmap_config mt6370_regmap_config = {
+> +	.reg_bits		= 16,
+> +	.val_bits		= 8,
+> +	.reg_format_endian	= REGMAP_ENDIAN_BIG,
+> +	.max_register		= MT6370_REG_MAXADDR,
+> +};
+> +
+> +static int mt6370_probe(struct i2c_client *i2c)
+> +{
+> +	struct mt6370_info *info;
+> +	struct i2c_client *usbc_i2c;
+> +	int ret;
+> +
+> +	info = devm_kzalloc(&i2c->dev, sizeof(*info), GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	info->dev = &i2c->dev;
+> +
+> +	usbc_i2c = devm_i2c_new_dummy_device(&i2c->dev, i2c->adapter,
+> +					     MT6370_USBC_I2CADDR);
+> +	if (IS_ERR(usbc_i2c))
+> +		return dev_err_probe(&i2c->dev, PTR_ERR(usbc_i2c),
+> +				     "Failed to register USBC I2C client\n");
+> +
+> +	/* Assign I2C client for PMU and TypeC */
+> +	info->i2c[MT6370_PMU_I2C] = i2c;
+> +	info->i2c[MT6370_USBC_I2C] = usbc_i2c;
+> +
+> +	info->regmap = devm_regmap_init(&i2c->dev, &mt6370_regmap_bus, info,
+> +					&mt6370_regmap_config);
+
+Apart from in mt6370_check_vendor_info() where is this actually used?
+
+> +	if (IS_ERR(info->regmap))
+> +		return dev_err_probe(&i2c->dev, PTR_ERR(info->regmap),
+> +				     "Failed to register regmap\n");
+> +
+> +	ret = mt6370_check_vendor_info(info);
+> +	if (ret)
+> +		return dev_err_probe(&i2c->dev, ret,
+> +				     "Failed to check vendor info\n");
+> +
+> +	ret = devm_regmap_add_irq_chip(&i2c->dev, info->regmap, i2c->irq,
+> +				       IRQF_ONESHOT, -1, &mt6370_irq_chip,
+> +				       &info->irq_data);
+> +	if (ret)
+> +		return dev_err_probe(&i2c->dev, ret,
+> +				     "Failed to add irq chip\n");
+> +
+> +	return devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO,
+> +				    mt6370_devices, ARRAY_SIZE(mt6370_devices),
+> +				    NULL, 0,
+> +				    regmap_irq_get_domain(info->irq_data));
+> +}
+> +
+> +static const struct of_device_id mt6370_match_table[] = {
+> +	{ .compatible = "mediatek,mt6370", },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, mt6370_match_table);
+> +
+> +static struct i2c_driver mt6370_driver = {
+> +	.driver = {
+> +		.name = "mt6370",
+> +		.of_match_table = mt6370_match_table,
+> +	},
+> +	.probe_new = mt6370_probe,
+> +};
+> +module_i2c_driver(mt6370_driver);
+> +
+> +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
+> +MODULE_DESCRIPTION("MT6370 I2C Driver");
+
+This is not an I2C driver.
+
+> +MODULE_LICENSE("GPL v2");
 
 -- 
-viresh
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
