@@ -2,75 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971EB571689
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 12:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1752D571772
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 12:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiGLKHQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 06:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S230113AbiGLKhu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 06:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbiGLKHP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 06:07:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED360AAB3E;
-        Tue, 12 Jul 2022 03:07:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7D5D1516;
-        Tue, 12 Jul 2022 03:07:14 -0700 (PDT)
-Received: from [192.168.33.14] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 58EA83F792;
-        Tue, 12 Jul 2022 03:07:13 -0700 (PDT)
-Message-ID: <20e4ffb8-905a-92e2-8ea2-6116e8031dac@arm.com>
-Date:   Tue, 12 Jul 2022 11:07:06 +0100
+        with ESMTP id S229782AbiGLKht (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 06:37:49 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC3C87F67
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 03:37:48 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id o19-20020a05600c511300b003a2de48b4bbso5127980wms.5
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 03:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tjMfaydTRTgJyx1lu/TEd/gXDLfuGAA5wpef6j4GRzs=;
+        b=R4iv9NvBHsHbnieGm9h9f54MNH0+1zPRKzpiK2MGZkozv3iDZAlNfvJQDe/A4rcUPE
+         gxriBYRtg9tuA0P86wjFAsQ5XjVLOYGjJwlOn/1NUDazoe7W7iQklaYkx1LyTAHegwkD
+         65bwZGo48jtxlB3sWxv7ajELEenWQ7iW2PPRFMnsq4si7ineLz4qM76VRdPzgQChUnKg
+         za1vfr+ej245kd8zePgStebBki2cmQqeULF2QSWaR3dWd3EArKqwA1o9GS30At9Bb0pv
+         M5dZuVjiIlzdLOHYyGt6Sr0gFsVNIz6Zqp/mX6tlw4seyPzUXlHiEBme5F8UgvTKi+/M
+         6Odw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tjMfaydTRTgJyx1lu/TEd/gXDLfuGAA5wpef6j4GRzs=;
+        b=k72AFv6tKurMr3hX7R9E4fvYLyJWPHsQV7i+8+iR054DybABs6tQzvBcPVpZHEMxZE
+         6fd+h9aMcmQD2TKvYg+ObQkNUNBM9GBthAZQykYY0MD/X4pXfDywGHsgCV/44me+MNRw
+         9EMiC6uDly8hf2B3/AyPeIDg6es60FVcv2ENtcwy9jYoTCGHT8TxCG6+0zNbu2eCWCoG
+         yyejWF3oBCsTvFf178K1uC6BXdAITkDgQdy5rQVk3kfy55DgcqBVhffzw0ohdIalcpKj
+         9sBvCBWDM9GP9RgLqv9v50qrjEtBKM677SCTHDPua7zYek1+7DJHavBsyUBrB0uQZoMW
+         N86g==
+X-Gm-Message-State: AJIora+FIaDHdSrXGAE79yGnMPuPGcRgh/DAmjVMDXxWMMg7OEJAOFYY
+        jHuQLvH/EnEMsYAGQCB3uM8aow==
+X-Google-Smtp-Source: AGRyM1sfOUCYpj+BD8dbeZW43gKGc/Indmn6Bn8YnBzgqcY8lr56+nAZA1BsTvjgfuTtBngF900Bmg==
+X-Received: by 2002:a05:600c:1908:b0:3a0:998c:313d with SMTP id j8-20020a05600c190800b003a0998c313dmr2898126wmq.19.1657622266938;
+        Tue, 12 Jul 2022 03:37:46 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:da26:64bf:ffc2:b735? ([2a05:6e02:1041:c10:da26:64bf:ffc2:b735])
+        by smtp.googlemail.com with ESMTPSA id k28-20020a5d525c000000b0020fcc655e4asm7955196wrc.5.2022.07.12.03.37.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 03:37:46 -0700 (PDT)
+Message-ID: <c1d3ed49-096e-00b5-7100-dc3dca523bb6@linaro.org>
+Date:   Tue, 12 Jul 2022 12:37:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+Subject: Re: [PATCH v2 1/3] thermal/core: Encapsulate the trip point crossed
+ function
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org
-References: <20220711124229.16516-1-lukasz.luba@arm.com>
- <20220712084137.pb24lolhuk2yln4e@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220712084137.pb24lolhuk2yln4e@vireshk-i7>
+To:     rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>
+References: <20220708183210.1334839-1-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220708183210.1334839-1-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 7/12/22 09:41, Viresh Kumar wrote:
-> On 11-07-22, 13:42, Lukasz Luba wrote:
->> There is no need to keep the max CPU capacity in the per_cpu instance.
->> Furthermore, there is no need to check and update that variable
->> (sg_cpu->max) everytime in the frequency change request, which is part
->> of hot path. Instead use struct sugov_policy to store that information.
->> Initialize the max CPU capacity during the setup and start callback.
->> We can do that since all CPUs in the same frequency domain have the same
->> max capacity (capacity setup and thermal pressure are based on that).
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
->>   1 file changed, 15 insertions(+), 15 deletions(-)
+On 08/07/2022 20:32, Daniel Lezcano wrote:
+> The routine where the trip point crossed is detected is a strategic
+> place where different processing will happen. Encapsulate the code in
+> a function, so all specific actions related with a trip point crossed
+> can be grouped.
 > 
-> I tried to check all possible combinations on how this can break, but
-> couldn't find one. I had to check that as this code is there since
-> ages and none of us thought of it, which was surprising.
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
 
-I thought the same.
+Is it ok if I pick this series?
 
-> 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> 
 
-Thanks for the ACK!
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
