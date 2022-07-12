@@ -2,60 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA46557129A
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 08:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 057505712A6
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 09:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbiGLG5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 02:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        id S232197AbiGLHCG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 03:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiGLG5G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 02:57:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDAB951CC;
-        Mon, 11 Jul 2022 23:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657609025; x=1689145025;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XiX0tAoOsmukuEMZ85nx4bGEwQxa5zwVfKa1CMZ4aRs=;
-  b=RLS2LEsDxc2sFIfFDVb5RFr/eWplbWibTTXeis3AS9xwdpLabAjBnVCx
-   stFjCwJocVuYL2m6K/MyC9tc9GovfxO/Sdv51YaE8FpcN0Tu/nL0KCz+w
-   HMWpxZ/HATaVOat8hblK1UbbQXMNvgChj4ARYIGawSGMHh5FNm5wYNO/Q
-   nyp5QQjXGw0sTwFi0ZutghLDml7AaF8BAah7TiVpzQXh/aXF8iwvAYGTx
-   p2aaamZYXwsR3S8vBI4B8UXM/Fn9bZ6pbw9CWH6RosNZbbPRxK9fJpgF5
-   +71K9fejx4BPccWepvtRKGRkgqxUE+SBJlpsErtNe6J1T+plnA0BOlmch
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="284882241"
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="284882241"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:57:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="922087011"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Jul 2022 23:57:03 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oB9pP-0001qv-8W;
-        Tue, 12 Jul 2022 06:57:03 +0000
-Date:   Tue, 12 Jul 2022 14:56:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- e71c5921cc5005d866e7acd0b501faff1f548897
-Message-ID: <62cd1b0a.0xr7VHPcLploJ134%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229670AbiGLHCF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 03:02:05 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B306B8CC87
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:02:03 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z25so12417366lfr.2
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 00:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rR4EvPz2QTL/uIlV/7u9u2k3BsIB6Cd/Y2fmLLbm+6Q=;
+        b=uv2LG7gzP10xj/mheaKVtOSrTN+X0UgE93fZG1uQNEpadxp50LH8Wy6Nb+ABdxSpFm
+         B4ik9P6lWDr3pkePBdZ5WVfIHNQJB1iZdsDBFbuKkGmwpvwVYB1mQ7TlzJreqpP/7y6q
+         Hpa3hqo05U29UPqt2oLIG4BsnlwCiJiPZtr/u1WI29lQpVbeGTgyyM5hVCiVpjX1yiZs
+         Q4NIrluD9usVxYsfHc9sGHN0SS1C7ElIyyy8ySmBekz5t4ckAnHO5F/8Nn3J06LO3FYz
+         ugCpqa4Ff8QbFTsnd1J0VBqMGRmvUbnYwJfz4hjJIstdQHANHF9OQPUcaRxCV7AWMPTc
+         eaKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rR4EvPz2QTL/uIlV/7u9u2k3BsIB6Cd/Y2fmLLbm+6Q=;
+        b=K8vSK+MDpu/l+JRUlOPJku7rXBG4aCyN7lxrHGNjDOw/e35QYeqBuMM9IXZqG2/q7V
+         Iqv+6Y31gf4warzGyEMfWPGwOsGOiSTdVJgiYi1LfSt8YwApxdDRGffH/W/mEDa37HCR
+         soU63yVgatPBgXEIWeqQiYB8fAjqtgGt1T8CuIx9t6/QddunBVyebTRPzNL1kFUr9290
+         AljBUxckx5YpJUWLbEAOEXeHKWm7g6IO2wtC9Sh1rmOq9kNgntt0UjmeFt5heZ8nG8y0
+         V5sLUayr3wlhj3Us2ESZemaBGG0YKORvweNHSDtkhwxBq8XMGR9wsJ3ergWXMkij3d75
+         NPAQ==
+X-Gm-Message-State: AJIora//I6W+MKBLtlZqLkf5O95iko/qvzRqf/OzQi/94YXV1E+1tlmw
+        ih+5BEyTfOz1nk1YeNQ7UUuOsA==
+X-Google-Smtp-Source: AGRyM1v8I7FEdMPilvPTeX/T5acQuHUvYJJlCGQqXlGNHZ8ieSAEOmPjfUgENxvwkU4d+kyg3znBVA==
+X-Received: by 2002:a19:520f:0:b0:489:dc56:df68 with SMTP id m15-20020a19520f000000b00489dc56df68mr6534018lfb.295.1657609322071;
+        Tue, 12 Jul 2022 00:02:02 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05651220ca00b00489da32ec80sm1387629lfr.238.2022.07.12.00.01.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 00:02:01 -0700 (PDT)
+Message-ID: <69e8195e-8d2b-3df0-0783-269f9aef1a83@linaro.org>
+Date:   Tue, 12 Jul 2022 09:01:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 2/3] dt-binding: power: power-domain: add
+ power-supply-needs-irq
+Content-Language: en-US
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>, rafael@kernel.org,
+        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        pavel@ucw.cz
+Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220711094549.3445566-1-martin.kepplinger@puri.sm>
+ <20220711094549.3445566-2-martin.kepplinger@puri.sm>
+ <c68e4ae9-c435-c74e-91cd-b153be6de92f@linaro.org>
+ <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,73 +82,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: e71c5921cc5005d866e7acd0b501faff1f548897  Merge branch 'thermal-core' into linux-next
+On 11/07/2022 15:17, Martin Kepplinger wrote:
+> Am Montag, dem 11.07.2022 um 12:38 +0200 schrieb Krzysztof Kozlowski:
+>> On 11/07/2022 11:45, Martin Kepplinger wrote:
+>>> Add the power-supply-needs-irq board description property for power
+>>> domains.
+>>
+>> Where is a board description here? I think you just meant
+>> "power-supply-needs-irq property"?
+>>>
+>>> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+>>> ---
+>>>  .../devicetree/bindings/power/power-domain.yaml        | 10
+>>> ++++++++++
+>>>  1 file changed, 10 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/power/power-
+>>> domain.yaml b/Documentation/devicetree/bindings/power/power-
+>>> domain.yaml
+>>> index 889091b9814f..e82c2f7ccb97 100644
+>>> --- a/Documentation/devicetree/bindings/power/power-domain.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
+>>> @@ -70,6 +70,16 @@ properties:
+>>>        by the given provider should be subdomains of the domain
+>>> specified
+>>>        by this binding.
+>>>  
+>>> +  power-supply: true
+>>
+>> This is a new property not described in the commit msg.
+> 
+> true, I think it's missing and could be added as a separate patch.
+> 
+>>
+>>> +
+>>> +  power-supply-needs-irq:
+>>> +    type: boolean
+>>> +    description:
+>>> +      A power-supply can link for example to a regulator
+>>> controlled via
+>>> +      i2c or otherwise needing interrupts enabled to be able to
+>>> enable and
+>>> +      disable. 
+>>
+>> Not really a property of power domain. How the regulator supply works
+>> is
+>> entirely up to regulator. Otherwise such property should appear for
+>> every device.
+> 
+> you're right. The power-domain driver could read the power-supply
+> regulator node directly. Still, I think then a new regulator property
+> is needed instead, or is it?
 
-elapsed time: 724m
+In case of regulator, I am not so sure it needs a dedicated property of
+DT. If it is I2C regulator - the parent node is I2C bus and regulator
+device is some child of I2C controller (could be via a MFD device), so
+no need for dedicated property.
 
-configs tested: 52
-configs skipped: 2
+If it uses interrupts, then:
+1. The presence of interrupts is already known - "interrupts" property.
+2. The actual use of interrupts is DT independent and only driver knows it.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220710
-s390                 randconfig-r044-20220710
-riscv                randconfig-r042-20220710
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r041-20220710
-hexagon              randconfig-r045-20220710
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof
