@@ -2,133 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AE5571ACC
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 15:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2ED571BEF
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 16:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiGLNGZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 09:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S229776AbiGLOGP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 10:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiGLNGZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 09:06:25 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5079AB41B5
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 06:06:23 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id a5so11081143wrx.12
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 06:06:23 -0700 (PDT)
+        with ESMTP id S232585AbiGLOGK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 10:06:10 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C0827154
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 07:06:09 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id g126so7577450pfb.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 07:06:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lU3R3A+FeDJtWJs7PhdGneGdJ2+vM2VZjpiEtp5grTY=;
-        b=ZMfiDEuasVobiKv5Ohs9XmZ7QtNpLP4qfbi/iHo9gMOYn2LhSwigwfjzvGj+EbmFhw
-         aZ58dSqXyat45qenKqs8JxIsJ7z8hseky5aaI1RGj1DtXp6W3n8A24FTRmJ9eUoIDNZQ
-         bNmDxAV0vu4pl60Z9CwuJRDizNi0yj4+KeATFNzJ96me2CGL64iFiiDvyoIS/1YXoFVm
-         iJx8oYfpXmlcOqiryh70NM5MXivRvv911FBZjOX3t0zelkuGBMRjxPB3jvPGcl4eN9O2
-         amonjn1YaBUh0zeqOjL40wXg0XpmxOAirgnvBphbeUtPtZkbuIgUt2gCzcHdudXEYJFy
-         6EgQ==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=6gh4QUvDsd0DsxRF/OcAKaDDHpmaIQsoMZ/l7RrbP5I=;
+        b=7d7JrX67ftxrriezRcg70hH/ZQ5P0hEB+812jm8NzWSmktl8XiiitLKURON9/vFyQY
+         fpzefwR9o8FdySFXYmaK2e20i15JfaNS9tbr7TmbfybW4F9Ug6c/2LV6OFj2Q1B6JnZN
+         Vzp2Ejdeu2AXu7VWiFSpknx400zewsCQ/j99sIChd5BcmutRQpVUUA3tMs3G1QQzGDWM
+         AX6TkhzFBqiISWkzrknd9mS1zfwD1pLAUnj+SKfgoVEw96zRH5XAEucDUK3JPVw566tb
+         os5U6ge3099r1v8Y9jYEjbJTUNFBpQTYE9tUJFTu9SnJeJgW7Lto/lhyFcVixubHunP9
+         relQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lU3R3A+FeDJtWJs7PhdGneGdJ2+vM2VZjpiEtp5grTY=;
-        b=0kaCMVVfmEgwe+ztEx2rgv+AXHegAHa6ZtGL0eSn8spcDeaaBi7/Qad2ua/cebgfBf
-         /mfPZHvmqTkivks0lV3x8mEfE3k1HlmHg+DVDBzKiMKQ0a8dUUCC6PSEPd1NYsvCA4+l
-         b7bMjlKOTJLujJmInuoMJn41lbD8bDFj+fwJ/zRtBp6TVRSv8D+pWcvrJPxoZTSDPkzs
-         GCv9SEpvIrXi/jI/n1AIEsINyZpcfhz6fgK5fE9s+bjdphkRZ54PHQ5CkF2/AE3lRZkk
-         gYJtXOZUW0p1I8qPEYqkZzJFSO7TTeGhdu0bmMiY2p7oLD75BTnEjzV1TzfTTFgJflKZ
-         6psA==
-X-Gm-Message-State: AJIora8UsiUquPGWgPkD2qAgHaiH+g3jucHvcZt6jnJEeo/4kQxuzpgZ
-        VuHx3wwBPq+q0jep1t3R1OiPmx+b/Ixuuw==
-X-Google-Smtp-Source: AGRyM1veNh1SFwFHd4ImrgxzvJoaw3xapybXwj312Gsclhhlcuj+v43yiNWXfZxbqbkHq5TpYqPklA==
-X-Received: by 2002:a05:6000:68e:b0:21d:76e3:cc80 with SMTP id bo14-20020a056000068e00b0021d76e3cc80mr22134673wrb.327.1657631181717;
-        Tue, 12 Jul 2022 06:06:21 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:da26:64bf:ffc2:b735? ([2a05:6e02:1041:c10:da26:64bf:ffc2:b735])
-        by smtp.googlemail.com with ESMTPSA id o14-20020a056000010e00b0021d7ad6b9fdsm8221792wrx.57.2022.07.12.06.06.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 06:06:21 -0700 (PDT)
-Message-ID: <af074493-d342-9439-8d78-c07c5df82203@linaro.org>
-Date:   Tue, 12 Jul 2022 15:06:19 +0200
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=6gh4QUvDsd0DsxRF/OcAKaDDHpmaIQsoMZ/l7RrbP5I=;
+        b=gsfzpvctFSt815Mc1qENnV6q4Wbqv4g/JIWSWh2C47pQAoHoCu5xg0zEFgklrIPJC1
+         k/Li1AQWrbJjdFO8ezC8FAl7Ll2M5fN7CCL3LRrJiFUbS0GNDK3DyOTxbPzwcqwlOhr8
+         8s3NqMkSTAPwF947oiEvipAy+vD3+C5itcBni+QPOX3MN2DBBlpsNwL3trbPn0hUpbRz
+         RqKpQ93hrm3icDVXgL+16xAlCl9pBBIDzdva1yBMUyVJIFJXvfRsh5idGZ43vHv7zb8y
+         6NUeskt4o6GNXFD2bUXTDEQLNhVaEMTmOUlxOV/UnLgqyjJ7dmemdngyZQTH9Vl7eE1r
+         HRlA==
+X-Gm-Message-State: AJIora/kZzTMqFvfPDMyY0QtkmFNQGSgp3afk/7qeAJdpKISlZB4y2tp
+        6jeAeGhdZElNuX4ZHSt0OyJws4KJ+u2fnKO6
+X-Google-Smtp-Source: AGRyM1vnUhYPHPLedR2lEwN3jOrWhNa9AePIQCybaiTic+CdhP5DQozYB+96QN9qzVZIC8KiWK5aWg==
+X-Received: by 2002:a63:314a:0:b0:412:b42c:693d with SMTP id x71-20020a63314a000000b00412b42c693dmr20327654pgx.20.1657634769322;
+        Tue, 12 Jul 2022 07:06:09 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x9-20020a170902ec8900b001636d95fe59sm6889929plg.172.2022.07.12.07.06.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 07:06:09 -0700 (PDT)
+Message-ID: <62cd7fd1.1c69fb81.74214.9cc2@mx.google.com>
+Date:   Tue, 12 Jul 2022 07:06:09 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 3/3] thermal/core: Fix thermal trip cross point
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     quic_manafm@quicinc.com, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>, rafael@kernel.org
-References: <20220708183210.1334839-1-daniel.lezcano@linaro.org>
- <20220708183210.1334839-3-daniel.lezcano@linaro.org>
- <6ce87fbb-1460-503b-f1f1-8cf53e702cdf@arm.com>
- <2d680cd9-9e97-e06c-55c2-2a3a1504488e@linaro.org>
- <5d513646-a917-b969-b2d2-9d5f4e0e6f4d@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <5d513646-a917-b969-b2d2-9d5f4e0e6f4d@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc6-53-ge71c5921cc50
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.19-rc6-53-ge71c5921cc50)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/07/2022 14:40, Lukasz Luba wrote:
-> 
-> 
-> On 7/12/22 13:30, Daniel Lezcano wrote:
->> On 12/07/2022 13:29, Lukasz Luba wrote:
->>
->> [ ... ]
->>
->>>> @@ -511,8 +528,13 @@ void thermal_zone_device_update(struct 
->>>> thermal_zone_device *tz,
->>>>       tz->notify_event = event;
->>>> -    for (count = 0; count < tz->trips; count++)
->>>> -        handle_thermal_trip(tz, count);
->>>> +    if (tz->last_temperature <= tz->temperature) {
->>>> +        for (count = 0; count < tz->trips; count++)
->>>> +            handle_thermal_trip(tz, count);
->>>> +    } else {
->>>> +        for (count = tz->prev_trip; count >= 0; count--)
->>>> +            handle_thermal_trip(tz, count);
->>>> +    }
->>>
->>> In general the code look good. I have one question, though:
->>> Is it always true that these trip points coming from the DT
->>> and parsed in thermal_of_build_thermal_zone() populated by
->>>      for_each_child_of_node(child, gchild) {
->>>           thermal_of_populate_trip(gchild, &tz->trips[i++]);
->>>
->>> are always defined in right order in DT?
->>
->> Hmm, that is a good question. Even if the convention is to put the 
->> trip point in the ascending order, I don't find any documentation 
->> telling it is mandatory. Given that I don't feel particularly 
->> comfortable to assume that is the case.
->>
->> Perhaps, it would make more sense to build a map of indexes telling 
->> the order in the trip points and work with it instead.
->>
->>
-> 
-> Sounds a reliable way to move forward. Maybe you could just sort in the
-> right order those trip points in the thermal_of_build_thermal_zone()
-> in an additional patch to this series?
-> Than this patch could stay as is, because it looks go
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc6-53-ge7=
+1c5921cc50)
 
-Unfortunately, there is the manual setup as well as the ACPI.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+19-rc6-53-ge71c5921cc50/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.19-rc6-53-ge71c5921cc50
+Git Commit: e71c5921cc5005d866e7acd0b501faff1f548897
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
 
 
+Warnings summary:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
