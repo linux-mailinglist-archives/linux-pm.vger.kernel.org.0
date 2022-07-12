@@ -2,44 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D275723F6
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 20:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E5557256B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 21:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbiGLSy3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 14:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S235879AbiGLTOw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 15:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234747AbiGLSxt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 14:53:49 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540CBDABBB;
-        Tue, 12 Jul 2022 11:45:38 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 75so14193728ybf.4;
-        Tue, 12 Jul 2022 11:45:38 -0700 (PDT)
+        with ESMTP id S236118AbiGLTO2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 15:14:28 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4C7E683E;
+        Tue, 12 Jul 2022 11:54:11 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id p129so15517362yba.7;
+        Tue, 12 Jul 2022 11:54:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OjvcswXUwB2Pb+ms5uvcJJXESqqNUnsytuAFqZsR5PY=;
-        b=NoqN1d/YxZlfDKChnAnq8d8NApqr7A4OewNwbHGZrtKTZO74v1PMF6Vx2SsY38kkxa
-         TdLR1vPKZmlMpx7lqFP5w1apMw8MKtWo5QTzrIGxfv5hZwEuDaCrKvtgQqPhgp4+MIdf
-         WUFhEQ1gNTHoBWPCjUKBjWvF/mZbd4cElbK3OHSmq6cgXXKVCLWA3wPs/kJt/RcKfAw7
-         i4LEJl4dCLViuKLNDvbZf77MN2xPh5PRUdh02uPkzV/AZpDD1k/tXfbOe8KQnM+iFQCx
-         A3pwxEnQzvZavJRD6NWICOiCpPWODYo7J1PAJQMedcYWwtO5wDDp+N4t7EQcojjtUbO/
-         Y96Q==
-X-Gm-Message-State: AJIora+tuvd0uYf6mmni1LjK0Ku2q/2bCohp6DpmplzaTwrZHIGlyr6q
-        rxJ0Qj1MOxAHOnbwZVTOzZIHTAgCzLlH00v6cSk=
-X-Google-Smtp-Source: AGRyM1tccpyquhG63LJBv3ExX2zg01BoYg2i4799MYW2qAlMgrgSmXwt0vB+DDtaTZhOd/qz2StJWxMWxld3lcwHUEc=
-X-Received: by 2002:a25:a2ca:0:b0:66e:719e:279 with SMTP id
- c10-20020a25a2ca000000b0066e719e0279mr22941849ybn.622.1657651529768; Tue, 12
- Jul 2022 11:45:29 -0700 (PDT)
+        bh=ayGO49PfhW5yn8VZVDZP2vCg6MktvihoyGEzbg3823A=;
+        b=vPdnYSEt92RVtKJX42PS/PjJkZCQ/HWjXXqD3qDgkEcvJFV1t5uKwIMUCK57lmFVAb
+         9J5Erv/RkOgb45plxXZfQ+hRVRIgyJIgg13XG7vZn1xuHiMpp/e/sbshXyYPdXskPxqL
+         wCrdVqYbhjiNlBYeKDAE1j9zLCVzevODIzi/wHXFb47rXQFrq3WPfkwPlyypqP2ASh+k
+         roRz1laKusUShTrXs2cv5+Z86wD+U8mrLZONxdAX7Kcj1LAI2u6/m0/7RBtNQV+BzpKD
+         o/I6CJVi4xM2w8wSZU/HVe1BC/KTQzeIRxXw3OHyF7LaLFldJ3HO6NUyEDRq5oUuJDEh
+         uDCg==
+X-Gm-Message-State: AJIora/fy40g51l5fcjYwa4dfW1vvalANJnypJ/DQBbUw2z4uVK4fhh3
+        uD0bDC4lZz1YhWoptk+6vlaVJquZ/GeLEIlpcNA=
+X-Google-Smtp-Source: AGRyM1t+aWUxZewPLwcIpwK1Ma3RA1r6QQ75+VBKPWZXevvL2PtzIyXroWnXqdtasPd086IfxhYKYyVlU+344UWm5jw=
+X-Received: by 2002:a25:d714:0:b0:66f:5898:9eb1 with SMTP id
+ o20-20020a25d714000000b0066f58989eb1mr8476398ybg.633.1657652050606; Tue, 12
+ Jul 2022 11:54:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629011146.299521-1-xiongxin@kylinos.cn> <20220629011146.299521-2-xiongxin@kylinos.cn>
-In-Reply-To: <20220629011146.299521-2-xiongxin@kylinos.cn>
+References: <20220629011146.299521-1-xiongxin@kylinos.cn> <20220629011146.299521-3-xiongxin@kylinos.cn>
+In-Reply-To: <20220629011146.299521-3-xiongxin@kylinos.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Jul 2022 20:45:18 +0200
-Message-ID: <CAJZ5v0hhdxnPRpmvB9SSs7X9bQ=zz7pZ-+KOE67WwMvEOwXCRA@mail.gmail.com>
-Subject: Re: [PATCH -next 1/2] PM: suspend: expand the assignment scope of the pm_suspend_target_state
+Date:   Tue, 12 Jul 2022 20:53:59 +0200
+Message-ID: <CAJZ5v0hURC-mhHszh=BhrGYfP9hwCs_nTQVxmtnV4Ot2yuajLA@mail.gmail.com>
+Subject: Re: [PATCH -next 2/2] PM: suspend: advanced pm_wakeup_clear() for
+ normal suspend/hibernate
 To:     xiongxin <xiongxin@kylinos.cn>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
@@ -59,55 +60,75 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Wed, Jun 29, 2022 at 5:35 AM xiongxin <xiongxin@kylinos.cn> wrote:
 >
-> The pm_suspend_target_state variable can be used as a suspend state
-> identifier and given to the specific device driver as a code judgment;
+> pm_wakeup_clear() will clear the wakeup source, which can ensure that it
+> is not disturbed by useless wakeup signals when doing suspend/hibernate;
 >
-> Because the suspend_prepare() function is time-consuming for the
-> operation of freezing processes, and this stage is actually in the suspend
-> stage, it is necessary to expand the scope of the pm_suspend_target_state
-> variable to be assigned to the suspend state at enter_state() function;
+> At the beginning of the suspend/hibernate process, the notifier
+> mechanism is used to notify other device drivers. This action is
+> time-consuming (second-level time-consuming). If the process fails due
+> to the received wakeup signal during the execution of these functions,
+> it can better improve the experience of failing suspend/hibernate
+> returns;
+>
+> Therefore, it is recommended here that for the suspend/hibernate process
+> normally called from /sys/power/state, the pm_wakeup_clear() function
+> should be brought before the notifier call; for the freeze_process()
+> function called from other places, the original logic is kept;
+>
+> The pm_suspend_target_state variable is used here to identify whether the
+> suspend process is going normally.
 
-I don't see why it is necessary, sorry.
-
-> Another reason is that the specific device driver can locate whether it is
-> in the suspend state based on this variable, so as to determine the
-> validity of its wake-up source.
-
-I think you have a specific use case in mind, so please explain why
-and how this change helps in your specific use case.
-
-So far I don't see a reason for applying this patch.
+You seem to be arguing that the previous wakeup IRQ should be cleared
+before invoking PM notifiers.  However, it is only set in
+pm_system_irq_wakeup() which is only called after
+suspend_device_irqs(), so clearing it anywhere before calling that
+function in the given cycle should be sufficient.
 
 > Signed-off-by: xiongxin <xiongxin@kylinos.cn>
 > ---
->  kernel/power/suspend.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  kernel/power/process.c | 5 ++++-
+>  kernel/power/suspend.c | 6 ++++++
+>  2 files changed, 10 insertions(+), 1 deletion(-)
 >
+> diff --git a/kernel/power/process.c b/kernel/power/process.c
+> index 3068601e585a..3fde0240b3d1 100644
+> --- a/kernel/power/process.c
+> +++ b/kernel/power/process.c
+> @@ -131,7 +131,10 @@ int freeze_processes(void)
+>         if (!pm_freezing)
+>                 atomic_inc(&system_freezing_cnt);
+>
+> -       pm_wakeup_clear(0);
+> +       if (pm_suspend_target_state != PM_SUSPEND_ON)
+> +               pm_wakeup_clear(1);
+
+This doesn't make sense.
+
+> +       else
+> +               pm_wakeup_clear(0);
+>         pr_info("Freezing user space processes ... ");
+>         pm_freezing = true;
+>         error = try_to_freeze_tasks(true);
 > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index 827075944d28..c754b084ec03 100644
+> index c754b084ec03..f4259f6c1cc2 100644
 > --- a/kernel/power/suspend.c
 > +++ b/kernel/power/suspend.c
-> @@ -564,6 +564,12 @@ static int enter_state(suspend_state_t state)
->         if (state == PM_SUSPEND_TO_IDLE)
->                 s2idle_begin();
->
+> @@ -569,6 +569,12 @@ static int enter_state(suspend_state_t state)
+>          * performed from the /sys/power/state entry.
+>          */
+>         pm_suspend_target_state = state;
 > +       /*
-> +        * Expand the scope of suspend state for suspend operations
-> +        * performed from the /sys/power/state entry.
+> +        * Put pm_wakeup_clear() before the notifier notification chain to
+> +        * optimize in the suspend process, the wakeup signal can interrupt
+> +        * the suspend in advance and fail to return.
 > +        */
-> +       pm_suspend_target_state = state;
-> +
+
+The comment above is too hard to understand for me, sorry.
+
+> +       pm_wakeup_clear(0);
+>
 >         if (sync_on_suspend_enabled) {
 >                 trace_suspend_resume(TPS("sync_filesystems"), 0, true);
->                 ksys_sync_helper();
-> @@ -590,6 +596,7 @@ static int enter_state(suspend_state_t state)
->         pm_pr_dbg("Finishing wakeup.\n");
->         suspend_finish();
->   Unlock:
-> +       pm_suspend_target_state = PM_SUSPEND_ON;
->         mutex_unlock(&system_transition_mutex);
->         return error;
->  }
 > --
 > 2.25.1
 >
