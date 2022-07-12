@@ -2,129 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434B0571FCA
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 17:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7A0572002
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 17:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbiGLPoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 11:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S231383AbiGLPzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 11:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbiGLPoG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 11:44:06 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA35BF561;
-        Tue, 12 Jul 2022 08:44:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D2ejDy7FIo7gX6f3IRvPEL5NPz6gQUMYCA2rsxSnqLBE1JZwfpXc1OkQh/OE1yk1qA13n+0XZb4yqHBgf3DoMTyHoqG+9qy2++3DqDiXn/BSJf504NkGVKI5C5LQ8YJ5wRp0f25Kga9K64+bK6zzZAQj6QsoVFCc0X/UAA1dchXqusHFDCHVRmOh0rg8+nLa34JM1lwzcVk3GcunERiZu8eipGg6vhv4M+VQS1SgTnWgFy2nc6ndHVlbqWmwX7In72Ue6I1A6XHrZc/4WIrNfowl8/3+xX4/1dwE7xRRJgSCGSRYQ5jhzDpYKp5PcTZfBnI0OvW2cBeMHzN4607iFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pg1W6FnKHehDtSxZjy9OOG/riwVCF9EOOqtUhcHbOHs=;
- b=YMI3W6iljJ+OQnwv1/26SJ4dFR3D2/O0TrvaKljNl1vjFgZ6ojEIwjJ+HIku1NnrQTVcF/SX31nP1E0kJ5twgtLY3VZVoVwEYmULEXJu4ro1SQIMxK4SJbidt9yUzPwRIn9yfYGrdexO6Tel/c6ARDDvmyVOIiBkXkNSEQjSRx+TFt7O9q47BiRr6RW6Ekim1noyatuH6gzmAUIyThN5PJu1sXvgmv7JGz6n6Vwc4/2o12ou4DkT+wWyRtU+QxYnam468oKzlvXgXbPlxt04DFMcJj6hF6heqgPXrRJYGoryKyBbRlnmBNa2RJHVuulxZv5KQskyAJdwUdior02VOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pg1W6FnKHehDtSxZjy9OOG/riwVCF9EOOqtUhcHbOHs=;
- b=yvONRESraAs0cjhWhyZLRRjvPn6ohfYcAAajeRB03Xm+NNEm7+oY0VP84hvckhgAxoWtKTCBvrGhDnf6NDFpE2HdfMNPX3UJWlgOT/wZ8WSQexNNOJrd4MIjPME9xFzJ9gjv/LWZ2UOlTh1S+icVKzZQ7B9F9di7nIyMlrR2KWY=
-Received: from MW4PR04CA0102.namprd04.prod.outlook.com (2603:10b6:303:83::17)
- by MN2PR12MB2896.namprd12.prod.outlook.com (2603:10b6:208:ab::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Tue, 12 Jul
- 2022 15:44:00 +0000
-Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:83:cafe::c8) by MW4PR04CA0102.outlook.office365.com
- (2603:10b6:303:83::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15 via Frontend
- Transport; Tue, 12 Jul 2022 15:44:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5417.15 via Frontend Transport; Tue, 12 Jul 2022 15:44:00 +0000
-Received: from pyuan-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 12 Jul
- 2022 10:43:55 -0500
-From:   Perry Yuan <Perry.Yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <viresh.kumar@linaro.org>,
-        <Ray.Huang@amd.com>
-CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
-        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
-        <Jinzhou.Su@amd.com>, <Xinmei.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v3 13/13] cpufreq: CPPC: remove the acpi_disabled check
-Date:   Tue, 12 Jul 2022 11:43:44 -0400
-Message-ID: <d36d38953cf819d89eb9be4d1a2baa5b5feeb52a.1657638462.git.Perry.Yuan@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1657638462.git.Perry.Yuan@amd.com>
-References: <cover.1657638462.git.Perry.Yuan@amd.com>
+        with ESMTP id S233803AbiGLPzF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 11:55:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283F1B8EAA;
+        Tue, 12 Jul 2022 08:55:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D72D6B819AC;
+        Tue, 12 Jul 2022 15:55:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E875C3411C;
+        Tue, 12 Jul 2022 15:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657641300;
+        bh=8tOgJxPDTATRCSBvm6zjfU2BJpjyIA7W/clNTO70iqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UqtUWrYcGEt3nT6wv8aAHmLUeR9RH/RuZJKpdUTTNZrwRUyf+Zrk8rbfUV2yv51Dc
+         4Ff4yqIYcb0iPi1whl2XwD9bS9VT+P6NmZjg42xCtlpuJl3tqUt3vGe6r7cmWGzkU6
+         s7VHxLFrOQtrAQfavCuVStaZNKDmTaw4QQee4UBAbPD0fIhy77URhFT++/CJ4ISvQH
+         n5ELoM4Mz1AN7B7YTMoBgBXQ3klFhQrKBOJeO+tC+r9boJq5EOFmBR1+EvgcHCrQpN
+         HhPPdEewFEGtR002rK40owGK5if/46AncBLHga7vQcb8y1U/E/Y5+1Y1TmLZ4I+4Qw
+         HCJQGDkivRriw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oBIE1-0003ol-SG; Tue, 12 Jul 2022 17:55:02 +0200
+Date:   Tue, 12 Jul 2022 17:55:01 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+Message-ID: <Ys2ZVeBHyhrUBC4m@hovoldconsulting.com>
+References: <cover.1657003420.git.viresh.kumar@linaro.org>
+ <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+ <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
+ <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
+ <20220712151045.vn4tpat4c4cplndo@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e50728f8-d7d0-4c87-6e21-08da641d5714
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2896:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t5uRrdzM0x2dEFIvf24kfRqdvYi79HMrQsKsqmCl3vKFzWKl4rSDc+TfxgFEHhcsHRv3UOCvc+IihKgEotF/4SC03cz016gQcBGdCItBRZxhQhjq8EXXAUkBXpJs9d9ec3f3vbw1TV/rSFfx+w9X5bDOap0M7TVXRY3hNlFoRyHySvRQOz/GZs37sf4k2DVXp95swNue8qL99O9mWRK9plGzaV8KSVaAn/sABZzTPMrgGEknvANHsD+UtBoHzfafECf0Hp/VdNy7Eyt9R+pkKsO+LYmCmVRpto76K4agL6e2am5f+sKUEjCucs/iKfMul6yYYep2XixBZdR2cMzwRRsIDHR8aJ7laTtHeFRSok9kiwy/rSCqHKa3NkrFg+jWnXhmLfdsbAaVz2Q14cKd0at8ofu26oGhXKl4qqCl63vwT9Xw5eTsWIjZcfyd5mLDApJUgXfg80hl9LRpvJBVTHXR9pIREjFrRueDuGW/GK3eb+PwH0aVgMWbczZ3VovWxhybR9GxkAaVTfpTcZgZpIs0sk55Ts1k+VrbX3hgfzEGlL3Hj3Td/3zCqbVdM2Q5VCvyIBlpUUL+EajTWtjjEsRMHG9dbdvPPcG9b6C7T2YG/BKvYGdxKpKmZZefXMgVD5QW3mGWV6xmmqw4F0WLKNk1gRFBlJAjYspAJk7ECmW5Cip4466XOc0vSds7np5bYNVIH6/oLgdS4cc6184OM6MzsJ3tJ+U1N8GgDJOu/T31aLFa52Qoqxp2Uz02FS1Jt2esZdSKabw2zbiPm6FYtOoIReRNP9Z+TpViaPzvnzKlsdPr8JjrcQmJKxeZgdw4LKNDtJHAjnnCa+qxM2hrItFxAnmMqtUi5L9V7+l7Wcc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(39860400002)(396003)(376002)(36840700001)(46966006)(40470700004)(82310400005)(26005)(4744005)(41300700001)(316002)(110136005)(54906003)(478600001)(8676002)(36756003)(4326008)(81166007)(356005)(82740400003)(70206006)(6636002)(7696005)(2906002)(83380400001)(40460700003)(6666004)(186003)(40480700001)(2616005)(8936002)(86362001)(36860700001)(5660300002)(336012)(426003)(16526019)(47076005)(70586007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 15:44:00.2413
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e50728f8-d7d0-4c87-6e21-08da641d5714
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2896
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712151045.vn4tpat4c4cplndo@vireshk-i7>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-"acpi_cpc_valid" function already includes the acpi_disabled check and we can
-remove the duplicated check here
+On Tue, Jul 12, 2022 at 08:40:45PM +0530, Viresh Kumar wrote:
+> On 12-07-22, 16:29, Johan Hovold wrote:
+> > On Tue, Jul 12, 2022 at 01:22:40PM +0530, Viresh Kumar wrote:
+> > > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > > index 666e1ebf91d1..4f4a285886fa 100644
+> > > --- a/drivers/opp/core.c
+> > > +++ b/drivers/opp/core.c
+> > > @@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+> > >         }
+> > > 
+> > >         if (ret == -ENOENT) {
+> > > +               /*
+> > > +                * There are few platforms which don't want the OPP core to
+> > > +                * manage device's clock settings. In such cases neither the
+> > > +                * platform provides the clks explicitly to us, nor the DT
+> > > +                * contains a valid clk entry. The OPP nodes in DT may still
+> > > +                * contain "opp-hz" property though, which we need to parse and
+> > > +                * allow the platform to find an OPP based on freq later on.
+> > > +                *
+> > > +                * This is a simple solution to take care of such corner cases,
+> > > +                * i.e. make the clk_count 1, which lets us allocate space for
+> > > +                * frequency in opp->rates and also parse the entries in DT.
+> > > +                */
+> > > +               opp_table->clk_count = 1;
+> > > +
+> > >                 dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+> > >                 return opp_table;
+> > >         }
+> > 
+> > This looks like a hack.
+> 
+> Yeah, a bit. Initially I wanted to solve it in a cleaner way, like it
+> is done for Tegra, where you will pass the right clock name to the OPP
+> core, so it can verify that the clk is there and parse the table. And
+> then tell the OPP core not to configure the clk from
+> dev_pm_opp_set_opp(), which is possible now. This would have done the
+> things in the right way.
+> 
+> The problem with Qcom's DT is that the CPU node have the OPP table but
+> doesn't contain the clocks, which are available with the
+> qcom,cpufreq-hw node instead. Because of this, I couldn't pass the
+> real clocks name to the OPP core, "xo", for the CPU device.
+> 
+> I really tried to avoid adding the above code for Tegra and found a
+> better and cleaner way out. But I couldn't do the same here and
+> figured it may be more generic of a problem, which is fine as well.
+> 
+> The OPP core does two things currently:
+> 
+> 1) Parse the DT and provide helpers to find the right OPP, etc.
+> 
+> 2) Provide generic helper to configure all resources related to the
+>    OPP.
+> 
+> It is fine if some platforms only want to have the first and not the
+> second. To have the second though, you need to have the first as well.
+> 
+> The clk is required only for the second case, and the OPP core should
+> parse the DT anyways, irrespective of the availability of the clock.
+> Because of this reason, making the above change looked reasonable
+> (this is what was happening before my new patches came in anyway). The
+> clock isn't there, but there is "opp-hz" present in the DT, which
+> needs to be parsed.
 
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ok, thanks for the details. I'd still look into if there's some way to
+avoid setting clk_count when there are no clocks as it sounds like an
+anti-pattern that will just make the code harder to understand and
+maintain.
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 24eaf0ec344d..9adb7612993e 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -947,7 +947,7 @@ static int __init cppc_cpufreq_init(void)
- {
- 	int ret;
- 
--	if ((acpi_disabled) || !acpi_cpc_valid())
-+	if (!acpi_cpc_valid())
- 		return -ENODEV;
- 
- 	cppc_check_hisi_workaround();
--- 
-2.25.1
+> > And it also triggers a bunch of new warning when
+> > opp is trying to create debugfs entries for an entirely different table
+> > which now gets clk_count set to 1:
+> > 
+> > [  +0.000979]  cx: _update_opp_table_clk: Couldn't find clock: -2
+> > [  +0.000022] debugfs: Directory 'opp:0' with parent 'cx' already present!
 
+> > This is for the rpmhpd whose opp table does not have either opp-hz or
+> > clocks (just opp-level).
+> 
+> Ahh, I missed switching back to the earlier code here. i.e. not use
+> the frequency for OPP directory's name, when it is 0.
+> 
+> This will fix it.
+> 
+> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+> index 402c507edac7..96a30a032c5f 100644
+> --- a/drivers/opp/debugfs.c
+> +++ b/drivers/opp/debugfs.c
+> @@ -138,7 +138,7 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
+>          * - For some devices rate isn't available or there are multiple, use
+>          *   index instead for them.
+>          */
+> -       if (likely(opp_table->clk_count == 1))
+> +       if (likely(opp_table->clk_count == 1 && opp->rates[0]))
+>                 id = opp->rates[0];
+>         else
+>                 id = _get_opp_count(opp_table);
+
+Indeed it does, thanks.
+
+> I have merged this into:
+> 
+> commit 341df9889277 ("OPP: Allow multiple clocks for a device")
+> 
+> and pushed out for linux-next.
+
+Thanks for addressing this quickly. With the two patches above applied,
+the issues I noticed are gone.
+
+Johan
