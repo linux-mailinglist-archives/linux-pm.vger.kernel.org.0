@@ -2,274 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAED571D41
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 16:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CE0571EAE
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 17:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiGLOtY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 10:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
+        id S231731AbiGLPQk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 11:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbiGLOtO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 10:49:14 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A1D54CAA
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 07:49:13 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id q82so7773211pgq.6
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 07:49:13 -0700 (PDT)
+        with ESMTP id S230152AbiGLPQ0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 11:16:26 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD769FEE
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 08:10:49 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id j3so7722520pfb.6
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 08:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=FO/mif2PB1na5ia79WNezqjCmfQFDt/29S89cTVyav0=;
-        b=AOh+2imMb8EWZX5YbqB59kbLfiHSIYzX1yH9n9HTkv5PULPvwunITMNcuwLhJgHbly
-         M/aJt5+P9tgJrsP/NmjzSDhltPS4yag/O/IRWh98MEpANHvEa2nJfiupr85C11F7hYYN
-         vguBl9BV/o51CoQeYUbtPjfBIEuu5HL2158lt5ckfLfn2szfHSH4zqEIausnKuG9QE+Z
-         +XPJf+7Jua5quIQFU9CQk2mMlGuqP/ngCxfTvlgIBKedq9LpuAf0U+qJgGTB4pC6m6qA
-         9THbVYgS4LGxc9B0WcQ5ZmqwsYwD3USRQGmjhxBldQgEAAJwArKcJivFaxrG4Z0334eK
-         aUGA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=24GiY7xs/AOkZ2wDT+jq5qIaUGqPEUFDT83Dcdn41lc=;
+        b=AVewZ9GTLN8QUPIMpsumydhLhsrz+NGv835wkw3mm+S/6lHY4UmkHBvsMDSe0JlYj3
+         V1qjJgp280HVU6oPgPg0f0PUXQMNu4txo1kInSWDAtObw+rBlpfVRNPeiPN79aKkZrax
+         Fx8UIRGYezZYo8zxZOijVmX0NErwSDre/B7SlXbg76P31Yc+hxqrBnBdDhFY7jxzMyCE
+         qQ1P71xu2qxxhJyXlP7PXAmpPIqnLLl2vdk9IgL0D11dpPudP8+CnO5EE20062ZSrseK
+         Tb2gpymS1ha8RIG7wIkxZ/0/eRXiBPnHKISuAtL5KqxH1MfyOYOyUGsqqfof3Tv0Sy21
+         +uRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=FO/mif2PB1na5ia79WNezqjCmfQFDt/29S89cTVyav0=;
-        b=Ed/Vd35iblJXeCiZw9c7fj0t9UKTnUXFj39VQRZuXdAFcLjy3vhVgUgbaYja+x9Mmn
-         81J/+i3y/dud0Vyt8JdySs2WbnaHy5zQ3qC4EsreIFPH48KkjCg8MoK1y001xZ/dqhQ0
-         PQLHe+as/jkBSmreuaFDBcuQvMxcQu4SKw7wpELgnfpTw+ss7JQN6VfNlNKx3h1wI5Lq
-         XBAuvmge+gLaMbkkuwtGEyLQ3CNA36Sac9kzrbDpHMbspgyHZE9/MQFhdBK7M+jEnsKA
-         KoEIlVJgXs620GGjZik+jHUSZH/2lAhTmBok6d64trV5o3tDuhsGysUblklv8JqDlAFP
-         MYeQ==
-X-Gm-Message-State: AJIora/cwH/Lw+xDa1DO2yfwJ1TLQMwKXbf9Mv3b28z/cFcnG5HEDaDa
-        jVTiLWPTkHcJdFKJATZt8wYhlw==
-X-Google-Smtp-Source: AGRyM1vySQrfQwA9c8hpGiU62MzipzBZeFXJ3nN/WwD3/c2x2fTeKAuJFFYbTP2xssEzSuM7Sqf2ew==
-X-Received: by 2002:a63:235f:0:b0:412:77a8:4fe5 with SMTP id u31-20020a63235f000000b0041277a84fe5mr21506357pgm.258.1657637352967;
-        Tue, 12 Jul 2022 07:49:12 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a20-20020a170902b59400b00161ac982b9esm6908633pls.185.2022.07.12.07.49.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=24GiY7xs/AOkZ2wDT+jq5qIaUGqPEUFDT83Dcdn41lc=;
+        b=Qy3DnlUitoFAEjFUbbexg2TfoOpF9KFYORw7bKiRzfY+7cjCI5FctjsfsL1BDgbCs0
+         ST4V5cpTyudSSTDbxoETk7y6pjY+dMiWdahDMvavRcw1ZubjB3SlJY8vRSHHK5FqOw/3
+         NQh1XXY+m4Zhmo3CSmUPA9Vlel0xdg4JlIV+xUO4gkl8mXkRhSFZmRCPEd6B4AcSUwYE
+         U2tgjNXhlRo/irEQfNf+ihM/XBL4U0U0kBai4Y/Ac31Pd70NH1/Cztv5pyszPcV88OC2
+         XnveQHQBIpmejl0WqlPiF/aE5Bt9Mi7zYUEs2YBz8Tf8pT8zY8JjNt8Hp6vSxZMyJbr2
+         kCMw==
+X-Gm-Message-State: AJIora+LykmW5qcZQNrUWsi+vf9zsm0ZMfThof6mMx8/5gwI9VvmjLrp
+        dQpphiJsZGvEiDNFbRgktzs+2A==
+X-Google-Smtp-Source: AGRyM1sTKabYGY8Tal+borECoY05ZOEAoZzgGr3flmGIjIegLuXUBFSTZFgOV0nRcYVZ5Ko1W5RjIw==
+X-Received: by 2002:a63:b50b:0:b0:412:b42c:6940 with SMTP id y11-20020a63b50b000000b00412b42c6940mr20638775pge.460.1657638648500;
+        Tue, 12 Jul 2022 08:10:48 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id o65-20020a625a44000000b0052ac99c2c1csm4888270pfb.83.2022.07.12.08.10.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 07:49:12 -0700 (PDT)
-Message-ID: <62cd89e8.1c69fb81.25b55.9ea8@mx.google.com>
-Date:   Tue, 12 Jul 2022 07:49:12 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 12 Jul 2022 08:10:47 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 20:40:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+Message-ID: <20220712151045.vn4tpat4c4cplndo@vireshk-i7>
+References: <cover.1657003420.git.viresh.kumar@linaro.org>
+ <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+ <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
+ <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.19-rc6-53-ge71c5921cc50
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 83 runs,
- 5 regressions (v5.19-rc6-53-ge71c5921cc50)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 83 runs, 5 regressions (v5.19-rc6-53-ge71c5921cc50)
+On 12-07-22, 16:29, Johan Hovold wrote:
+> On Tue, Jul 12, 2022 at 01:22:40PM +0530, Viresh Kumar wrote:
+> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > index 666e1ebf91d1..4f4a285886fa 100644
+> > --- a/drivers/opp/core.c
+> > +++ b/drivers/opp/core.c
+> > @@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+> >         }
+> > 
+> >         if (ret == -ENOENT) {
+> > +               /*
+> > +                * There are few platforms which don't want the OPP core to
+> > +                * manage device's clock settings. In such cases neither the
+> > +                * platform provides the clks explicitly to us, nor the DT
+> > +                * contains a valid clk entry. The OPP nodes in DT may still
+> > +                * contain "opp-hz" property though, which we need to parse and
+> > +                * allow the platform to find an OPP based on freq later on.
+> > +                *
+> > +                * This is a simple solution to take care of such corner cases,
+> > +                * i.e. make the clk_count 1, which lets us allocate space for
+> > +                * frequency in opp->rates and also parse the entries in DT.
+> > +                */
+> > +               opp_table->clk_count = 1;
+> > +
+> >                 dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+> >                 return opp_table;
+> >         }
+> 
+> This looks like a hack.
 
-Regressions Summary
--------------------
+Yeah, a bit. Initially I wanted to solve it in a cleaner way, like it
+is done for Tegra, where you will pass the right clock name to the OPP
+core, so it can verify that the clk is there and parse the table. And
+then tell the OPP core not to configure the clk from
+dev_pm_opp_set_opp(), which is possible now. This would have done the
+things in the right way.
 
-platform              | arch  | lab           | compiler | defconfig | regr=
-essions
-----------------------+-------+---------------+----------+-----------+-----=
--------
-kontron-kbox-a-230-ls | arm64 | lab-kontron   | gcc-10   | defconfig | 1   =
-       =
+The problem with Qcom's DT is that the CPU node have the OPP table but
+doesn't contain the clocks, which are available with the
+qcom,cpufreq-hw node instead. Because of this, I couldn't pass the
+real clocks name to the OPP core, "xo", for the CPU device.
 
-rk3328-rock64         | arm64 | lab-baylibre  | gcc-10   | defconfig | 2   =
-       =
+I really tried to avoid adding the above code for Tegra and found a
+better and cleaner way out. But I couldn't do the same here and
+figured it may be more generic of a problem, which is fine as well.
 
-rk3399-rock-pi-4b     | arm64 | lab-collabora | gcc-10   | defconfig | 2   =
-       =
+The OPP core does two things currently:
 
+1) Parse the DT and provide helpers to find the right OPP, etc.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.19-rc=
-6-53-ge71c5921cc50/plan/baseline/
+2) Provide generic helper to configure all resources related to the
+   OPP.
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.19-rc6-53-ge71c5921cc50
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      e71c5921cc5005d866e7acd0b501faff1f548897 =
+It is fine if some platforms only want to have the first and not the
+second. To have the second though, you need to have the first as well.
 
+The clk is required only for the second case, and the OPP core should
+parse the DT anyways, irrespective of the availability of the clock.
+Because of this reason, making the above change looked reasonable
+(this is what was happening before my new patches came in anyway). The
+clock isn't there, but there is "opp-hz" present in the DT, which
+needs to be parsed.
 
+> And it also triggers a bunch of new warning when
+> opp is trying to create debugfs entries for an entirely different table
+> which now gets clk_count set to 1:
+> 
+> [  +0.000979]  cx: _update_opp_table_clk: Couldn't find clock: -2
+> [  +0.000022] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> [  +0.000004] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> [  +0.000004] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> [  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+> 
+> This is for the rpmhpd whose opp table does not have either opp-hz or
+> clocks (just opp-level).
 
-Test Regressions
----------------- =
+Ahh, I missed switching back to the earlier code here. i.e. not use
+the frequency for OPP directory's name, when it is 0.
 
+This will fix it.
 
+diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+index 402c507edac7..96a30a032c5f 100644
+--- a/drivers/opp/debugfs.c
++++ b/drivers/opp/debugfs.c
+@@ -138,7 +138,7 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
+         * - For some devices rate isn't available or there are multiple, use
+         *   index instead for them.
+         */
+-       if (likely(opp_table->clk_count == 1))
++       if (likely(opp_table->clk_count == 1 && opp->rates[0]))
+                id = opp->rates[0];
+        else
+                id = _get_opp_count(opp_table);
 
-platform              | arch  | lab           | compiler | defconfig | regr=
-essions
-----------------------+-------+---------------+----------+-----------+-----=
--------
-kontron-kbox-a-230-ls | arm64 | lab-kontron   | gcc-10   | defconfig | 1   =
-       =
+I have merged this into:
 
+commit 341df9889277 ("OPP: Allow multiple clocks for a device")
 
-  Details:     https://kernelci.org/test/plan/id/62cd7ec3c6a7a6e526a39bcd
-
-  Results:     94 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
-921cc50/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
-921cc50/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220708.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/62=
-cd7ec4c6a7a6e526a39bda
-        failing since 35 days (last pass: v5.18-rc7-183-g45785e0ed597, firs=
-t fail: v5.19-rc1-2-g6a8964e282382)
-
-    2022-07-12T14:01:18.007369  /lava-139315/1/../bin/lava-test-case
-    2022-07-12T14:01:18.007900  <8>[   14.615481] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
-    2022-07-12T14:01:18.008068  /lava-139315/1/../bin/lava-test-case
-    2022-07-12T14:01:18.008247  <8>[   14.631579] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
-    2022-07-12T14:01:18.008454  /lava-139315/1/../bin/lava-test-case
-    2022-07-12T14:01:18.008679  <8>[   14.647215] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
-    2022-07-12T14:01:18.008844  /lava-139315/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform              | arch  | lab           | compiler | defconfig | regr=
-essions
-----------------------+-------+---------------+----------+-----------+-----=
--------
-rk3328-rock64         | arm64 | lab-baylibre  | gcc-10   | defconfig | 2   =
-       =
-
-
-  Details:     https://kernelci.org/test/plan/id/62cd7feddb719b7d3aa39be2
-
-  Results:     4 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
-921cc50/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
-921cc50/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220708.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/62cd7feddb719b7=
-d3aa39be5
-        new failure (last pass: v5.19-rc5-50-g3bc028d913bd)
-        2 lines
-
-    2022-07-12T14:06:17.418420  kern  :emerg : Internal error: Oops: 960000=
-06 [#1] PREEMPT SMP
-    2022-07-12T14:06:17.422044  kern  :emerg : Code: aa0003f4 a9025bf5 aa00=
-03f6 aa0103f5 (f8418e93) =
-
-    2022-07-12T14:06:17.428228  [   71.313063] <LAVA_SIGNAL_TESTCASE TEST_C=
-ASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
-    2022-07-12T14:06:17.428545  + set +x   =
+and pushed out for linux-next.
 
 
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/62cd7feddb719b7=
-d3aa39be6
-        new failure (last pass: v5.19-rc5-50-g3bc028d913bd)
-        12 lines
+Bjorn, Mani,
 
-    2022-07-12T14:06:17.397654  kern  :alert : Unable to handle kernel NULL=
- pointer dereference at virtual address 0000000000000005
-    2022-07-12T14:06:17.398178  kern  :alert : Mem abort info:
-    2022-07-12T14:06:17.398501  kern  :alert :   ESR =3D 0x0000000096000006
-    2022-07-12T14:06:17.398804  kern  :alert :   EC =3D 0x25: DABT (current=
- EL), IL =3D 32 bits
-    2022-07-12T14:06:17.399250  kern  :alert :   SET =3D 0, FnV =3D 0
-    2022-07-12T14:06:17.399502  kern  :alert :   EA =3D 0, S1PTW =3D 0
-    2022-07-12T14:06:17.399775  kern  :alert :   FSC =3D 0x06: level 2 tran=
-slation fault
-    2022-07-12T14:06:17.400202  kern  :alert : Data abort info:
-    2022-07-12T14:06:17.400373  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
-006
-    2022-07-12T14:06:17.400766  kern  :alert :   CM =3D 0, WnR =3D 0 =
+It would be really good if we can find a way to make following work on
+Qcom:
 
-    ... (3 line(s) more)  =
+        clk_get(cpu_dev, NULL or "xo")
 
- =
+If that happens, we can handle the special case just at the consumer
+driver (qcom-cpufreq-hw) and not in the core.
 
-
-
-platform              | arch  | lab           | compiler | defconfig | regr=
-essions
-----------------------+-------+---------------+----------+-----------+-----=
--------
-rk3399-rock-pi-4b     | arm64 | lab-collabora | gcc-10   | defconfig | 2   =
-       =
-
-
-  Details:     https://kernelci.org/test/plan/id/62cd7e884a9940910ea39bed
-
-  Results:     4 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
-921cc50/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc6-53-ge71c5=
-921cc50/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220708.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/62cd7e884a99409=
-10ea39bf0
-        new failure (last pass: v5.19-rc5-50-g3bc028d913bd)
-        2 lines
-
-    2022-07-12T14:00:23.512762  kern  :emerg : Code: aa0003f4 a9025bf5 aa00=
-03f6 aa0103f5 (f8418e93) =
-
-    2022-07-12T14:00:23.512979  <8>[   60.001281] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
-    2022-07-12T14:00:23.513097  + set +x
-    2022-07-12T14:00:23.513202  <8>[   60.003132] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 6800090_1.5.2.4.1>   =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/62cd7e884a99409=
-10ea39bf1
-        new failure (last pass: v5.19-rc5-50-g3bc028d913bd)
-        12 lines
-
-    2022-07-12T14:00:23.468978  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
-006
-    2022-07-12T14:00:23.469066  kern  :alert :   CM =3D 0, WnR =3D 0
-    2022-07-12T14:00:23.469135  kern  :alert : user pgtable: 4k pages, 48-b=
-it VAs, pgdp=3D0000000009326000
-    2022-07-12T14:00:23.469201  kern  :alert : [0000000000000005] pgd=3D080=
-0000009327003, p4d=3D0800000009327003, pud=3D0800000009328003, pmd=3D000000=
-0000000000
-    2022-07-12T14:00:23.469266  <8>[   59.975488] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D12>
-    2022-07-12T14:00:23.469328  kern  :emerg : Internal error: Oops: 960000=
-06 [#1] PREEMPT SMP   =
-
- =20
+-- 
+viresh
