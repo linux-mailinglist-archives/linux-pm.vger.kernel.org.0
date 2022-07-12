@@ -2,145 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1184C5719BC
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 14:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4005719D6
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Jul 2022 14:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiGLMTR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 08:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S232753AbiGLMYT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 08:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiGLMTK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 08:19:10 -0400
+        with ESMTP id S232516AbiGLMYS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 08:24:18 -0400
 Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60F013E13;
-        Tue, 12 Jul 2022 05:19:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3FCA5E4B;
+        Tue, 12 Jul 2022 05:24:17 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 27930DFF4B;
-        Tue, 12 Jul 2022 05:19:08 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 4375CDF286;
+        Tue, 12 Jul 2022 05:24:17 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id glJvJPJ7ZNPy; Tue, 12 Jul 2022 05:19:07 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+        with ESMTP id eSbaFB-KPugV; Tue, 12 Jul 2022 05:24:16 -0700 (PDT)
+Message-ID: <c6066da644dfd55a2c4a008ab5e70c9efd85dfed.camel@puri.sm>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1657628347; bh=acox3CFtKaZJSGeRCEd240f4YrVQ/SjtXIZA6ATfx3M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ws41I4BQ3pcDRYIvcUALYgsYe/hcXaliNlZcmu0vCfUT1LlNCGV73fHtci99eNBm9
-         yKRvdCGrNPRaGUm1ZK3daNPRJAY/puFTw0R2XZ7d1MJnq80pt5FCbIsBpqqVn8Hjii
-         byHQortrliQlK6Q4tmYCnLWExQCJdFdJGUEp+tVsdFC8A80PVoVQu9cETCN7Ar0ZKO
-         3KANVVsQ3NZRYxNpEWztD22AXiBnnxlhdHAT6MtGAkCYdHEPJRDfnteTXLd4zxi8VS
-         h4xYk6J4DcGzxkbW0s3lh74cQ1bsRtTpHzy5NnulqwMNeZ5wJiwcsKnJgrVPybopIg
-         7Q+BBaEc9LiFQ==
-To:     rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
-        robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        pavel@ucw.cz
+        t=1657628656; bh=zCJYAyelIRYW6p1Xe689vdRxKt59/Iy6VTbPWL4bSqI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=SI3SRLlPjJ26yGcRIHF57cq4bMyItFVgxu0DCpYrIBOS682Jrp1nkeREuVZbSyjiM
+         RRtbOXHWcQWOZNO2JfxHJizFqd780/aCxYM769pQOpdTgtvG8yTfofs9tejUEGJyx6
+         C96yqf4hFC/KwiaukQ4FU5dUKSbYmj4K3gsFApjn+0fulU+mumUYegrJPU3gBjUcZ1
+         01K3BZzizxGgpv9ej9ju2uVZ7UFafy/mZSu2x++QS+xXDe0G7T72Yp9EvjPB5HpI0v
+         k5809V7M1GZNuG/nC29XnvgmhKKLTyL4pfMlIdzyVghrps7TuxODNbLo6Omk6URxFN
+         wpJPb9f6Vlfkg==
+Subject: Re: [PATCH v1 2/3] dt-binding: power: power-domain: add
+ power-supply-needs-irq
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
+        robh@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, pavel@ucw.cz
 Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
         l.stach@pengutronix.de, aford173@gmail.com,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v2] power: domain: handle power supplies that need interrupts
-Date:   Tue, 12 Jul 2022 14:18:32 +0200
-Message-Id: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Tue, 12 Jul 2022 14:24:08 +0200
+In-Reply-To: <69e8195e-8d2b-3df0-0783-269f9aef1a83@linaro.org>
+References: <20220711094549.3445566-1-martin.kepplinger@puri.sm>
+         <20220711094549.3445566-2-martin.kepplinger@puri.sm>
+         <c68e4ae9-c435-c74e-91cd-b153be6de92f@linaro.org>
+         <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
+         <69e8195e-8d2b-3df0-0783-269f9aef1a83@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If the power-domains' power-supply node (regulator) needs
-interrupts to work, the current setup with noirq callbacks cannot
-work; for example a pmic regulator on i2c, when suspending, usually already
-times out during suspend_noirq:
+Am Dienstag, dem 12.07.2022 um 09:01 +0200 schrieb Krzysztof Kozlowski:
+> On 11/07/2022 15:17, Martin Kepplinger wrote:
+> > Am Montag, dem 11.07.2022 um 12:38 +0200 schrieb Krzysztof
+> > Kozlowski:
+> > > On 11/07/2022 11:45, Martin Kepplinger wrote:
+> > > > Add the power-supply-needs-irq board description property for
+> > > > power
+> > > > domains.
+> > > 
+> > > Where is a board description here? I think you just meant
+> > > "power-supply-needs-irq property"?
+> > > > 
+> > > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > > > ---
+> > > >  .../devicetree/bindings/power/power-domain.yaml        | 10
+> > > > ++++++++++
+> > > >  1 file changed, 10 insertions(+)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/power/power-
+> > > > domain.yaml b/Documentation/devicetree/bindings/power/power-
+> > > > domain.yaml
+> > > > index 889091b9814f..e82c2f7ccb97 100644
+> > > > --- a/Documentation/devicetree/bindings/power/power-domain.yaml
+> > > > +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
+> > > > @@ -70,6 +70,16 @@ properties:
+> > > >        by the given provider should be subdomains of the domain
+> > > > specified
+> > > >        by this binding.
+> > > >  
+> > > > +  power-supply: true
+> > > 
+> > > This is a new property not described in the commit msg.
+> > 
+> > true, I think it's missing and could be added as a separate patch.
+> > 
+> > > 
+> > > > +
+> > > > +  power-supply-needs-irq:
+> > > > +    type: boolean
+> > > > +    description:
+> > > > +      A power-supply can link for example to a regulator
+> > > > controlled via
+> > > > +      i2c or otherwise needing interrupts enabled to be able
+> > > > to
+> > > > enable and
+> > > > +      disable. 
+> > > 
+> > > Not really a property of power domain. How the regulator supply
+> > > works
+> > > is
+> > > entirely up to regulator. Otherwise such property should appear
+> > > for
+> > > every device.
+> > 
+> > you're right. The power-domain driver could read the power-supply
+> > regulator node directly. Still, I think then a new regulator
+> > property
+> > is needed instead, or is it?
+> 
+> In case of regulator, I am not so sure it needs a dedicated property
+> of
+> DT. If it is I2C regulator - the parent node is I2C bus and regulator
+> device is some child of I2C controller (could be via a MFD device),
+> so
+> no need for dedicated property.
+> 
+> If it uses interrupts, then:
+> 1. The presence of interrupts is already known - "interrupts"
+> property.
+> 2. The actual use of interrupts is DT independent and only driver
+> knows it.
 
-[   41.024193] buck4: failed to disable: -ETIMEDOUT
+thanks for this great suggestion! for the imx8mq devices this (1.)
+indeed is the case for exactly the 3 regulators I manually describe
+here. v2 of this patch looks very elegant (and I guess I could have
+removed the DT people from the email, I forgot). here it is:
 
-So fix system suspend and resume for these power-domains by using the
-"outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5
-board, but by looking at the dts, this will fix imx8mq-evk and possibly
-other boards too.
+https://lore.kernel.org/linux-arm-kernel/20220712121832.3659769-1-martin.kepplinger@puri.sm/T/#u
 
-Possibly one can find more changes than suspend/resume for this case. They
-can be added later when testing them.
+> 
+> Best regards,
+> Krzysztof
 
-Initially system suspend problems had been discussed at
-https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-which led to discussing the pmic that contains the regulators which
-serve as power-domain power-supplies:
-https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
-
-revision history
-----------------
-v2: (thank you Krzysztof)
-* rewrite: find possible regulators' interrupts property in parents
-  instead of inventing a new property.
-
-v1: (initial idea)
-https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
-
-
- drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 3e86772d5fac..ca3e3500939d 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2298,6 +2298,28 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
- 	return ret;
- }
- 
-+/**
-+ * of_genpd_get_power_supply_irq() - Adjust if power-supply needs interrupts
-+ * @genpd: Pointer to PM domain associated with the PM domain provider.
-+ */
-+static void of_genpd_get_power_supply_irq(struct generic_pm_domain *pd)
-+{
-+	struct device_node *dn;
-+
-+	dn = of_parse_phandle(pd->dev.of_node, "power-supply", 0);
-+	if (!dn)
-+		return;
-+
-+	while ((dn = of_get_next_parent(dn))) {
-+		if (of_get_property(dn, "interrupts", NULL)) {
-+			pd->domain.ops.suspend = genpd_suspend_noirq;
-+			pd->domain.ops.resume = genpd_resume_noirq;
-+			pd->domain.ops.suspend_noirq = NULL;
-+			pd->domain.ops.resume_noirq = NULL;
-+		}
-+	}
-+}
-+
- /**
-  * of_genpd_add_provider_simple() - Register a simple PM domain provider
-  * @np: Device node pointer associated with the PM domain provider.
-@@ -2343,6 +2365,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
- 	genpd->provider = &np->fwnode;
- 	genpd->has_provider = true;
- 
-+	of_genpd_get_power_supply_irq(genpd);
-+
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-@@ -2394,6 +2418,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
- 
- 		genpd->provider = &np->fwnode;
- 		genpd->has_provider = true;
-+
-+		of_genpd_get_power_supply_irq(genpd);
- 	}
- 
- 	ret = genpd_add_provider(np, data->xlate, data);
--- 
-2.30.2
 
