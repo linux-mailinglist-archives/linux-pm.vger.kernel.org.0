@@ -2,210 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E217C572ADE
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 03:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40865572AF9
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 03:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbiGMBeg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 21:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S233790AbiGMBks (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Jul 2022 21:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiGMBef (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 21:34:35 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A785C923F
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 18:34:33 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id b8so8503373pjo.5
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 18:34:33 -0700 (PDT)
+        with ESMTP id S230431AbiGMBkr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 21:40:47 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CC91FCCC
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 18:40:45 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31c8a1e9e33so98879527b3.5
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 18:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XGSpGU9y1qKiwBDHtAjINY9EHDaIDTEGfdXCP9bclWI=;
-        b=V4fBHAYghVFtCj/gyK9mu3PyvFXqcOoz2B2mKkJDh/adD4u9JvaBL253pjyTFBedRt
-         GVuAft2l+07Oz6wgg4sUN8GjywhMpSBY8JBWFfogIjh3h/wQnPJNZJ7+uzDvCbVEyy7c
-         TJy9acvtLuLwkUzPXiqBbcfn+02wtNDgmDZvo=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YZ6q4ZoU0Ir2Jz6gl3O36uWJiXB5Oh91BCPws+bH2j8=;
+        b=ji+wVu3QJM0EhDDfnd4KC9wcoUan+Y4cWT0Znkq7+Z2sCd7H2Mtlv/BU0ZX80Fo+Sl
+         n4eUmPnHjmuxgCyGAZJMEk2JlYP3g70GQ2456nRDKRzrHMK6ar5r2qs6UUbeIZmuwEyK
+         nwoo/EieD/MOWvL4dMjOFNdfvM6SlJ1T0LKwl0z9S4ZWP8LZFZAZTSXLmAU3LEuHla15
+         ui1zjdNwntrt1omjmMv2BbEWB9N8hi5MSJ/y9b9ltlGcaJehwox9JKSmLwNsxR5XjDHn
+         uTm3v+ral7SUpl85AD9hw413MEHq9ki2x7Hv1pXI3N6IXRcm40n1TubBkpT1GaMU/UVx
+         qwEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XGSpGU9y1qKiwBDHtAjINY9EHDaIDTEGfdXCP9bclWI=;
-        b=jGKYz55K+xcWpotseuxKw4geuJyyKJK/wGOhRIuSiuQblKXux0a2DgVmry75D2wnxF
-         1OIEM09aSZ8VZt8YP5bpTHqdlaur5SMQrItlFroUBgPRlmDgllpI9uUELEoouEvccPRn
-         RnzKEYea/E505lBR/6UohlMNKjFhZQHU8woZyBqMDJ9ytAXmUMvXaza41LzhHut/Dk0I
-         oZ/lmqs422rXV1gAOLEYNOw5Una1DQPcuOx4rroqShp4vfwnlKTct9f0NnCF3tb2euGq
-         QiPLNEBECzHJkRmQ7/rnSNkRssGPwEKrST7TjI6kSRs0SZJLffKVsihIgxgLzSyiBp+g
-         W1NA==
-X-Gm-Message-State: AJIora85nHon0d17LGVOYNoBBpheUXwvbGP7RM6yynBWRqUnzXm64Z3T
-        Wp+abT6wiHtuHdK1QHBZFzEZDA==
-X-Google-Smtp-Source: AGRyM1vI7qTqran/oYY9YxCvZJ1Kt81TzkURUZr5Ev/sRdQsuRtTkDpVmPEpjwtDdB06uhd4ToiPtA==
-X-Received: by 2002:a17:902:b7c4:b0:16b:e3d0:c0fe with SMTP id v4-20020a170902b7c400b0016be3d0c0femr842506plz.98.1657676072727;
-        Tue, 12 Jul 2022 18:34:32 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:e036:8c0d:9cf:7a45])
-        by smtp.gmail.com with UTF8SMTPSA id kk18-20020a17090b4a1200b001ec9dce6f10sm226231pjb.38.2022.07.12.18.34.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 18:34:32 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 18:34:30 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Pavan Kondeti <quic_pkondeti@quicinc.com>, saravanak@google.com,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <Ys4hJrWjkn+LREZL@google.com>
-References: <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
- <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
- <Yr5JmrSaus8xKpM9@google.com>
- <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
- <Yr8YUYJGJ5FRA3cv@google.com>
- <09f6a717-2bbb-6bd3-f7a8-5ac9e3db51f3@quicinc.com>
- <9f9f9abc-9b37-8bfb-3efa-6c860b5dba8d@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YZ6q4ZoU0Ir2Jz6gl3O36uWJiXB5Oh91BCPws+bH2j8=;
+        b=pRo69i1wm9vWcY4odWmZvb5IRgHFQV0NOkGBLdHQ3/BX/F/oiKQMSJOfYpsmL53AaI
+         9Rg7oGuG8j1F1hiAUCw9wybw1unaZcfTyjQKfThSeKRYrcNviU0I5+gVth4pnPCrrNrg
+         poUAVuMcM9YPkykXrzkQZWCP70NIUb59GCERcB3PsfX3VwI/w0ztGWl/jHfpiE90O8Wm
+         NOcwr+itKatLcKiNAChAqAR397TPmhSO5RlBzlDTgw3UcyJoX/niZVTsN2ZiiEyoEAso
+         1LEhRASxAVuGK00fsUEAKZEqPyxv4trV3RBKJPnb6lWcAz1ViZddR3DmiSdNULIQU4zu
+         xRVA==
+X-Gm-Message-State: AJIora8N9cAVA5p+gzUifPGgk7RwepAjQgZiOtyGs4zuISRwK2AL1wTO
+        zqPmeoaLP5ZJmsQVJ3gwEcObLu3n18gsU9WyPze90g==
+X-Google-Smtp-Source: AGRyM1vMvB5ytWB//zuy1WgkUbEH2A/pfANLOdqXAYxeYQCkgIpwtGZK6oswsKsqIzWkcI3ZmSNdp0rUWokDDKCmQSA=
+X-Received: by 2002:a81:9e50:0:b0:31c:840e:33a8 with SMTP id
+ n16-20020a819e50000000b0031c840e33a8mr1517792ywj.218.1657676444867; Tue, 12
+ Jul 2022 18:40:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9f9f9abc-9b37-8bfb-3efa-6c860b5dba8d@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-4-saravanak@google.com> <CAMuHMdWo_wRwV-i_iyTxVnEsf3Th9GBAG+wxUQMQGnw1t2ijTg@mail.gmail.com>
+In-Reply-To: <CAMuHMdWo_wRwV-i_iyTxVnEsf3Th9GBAG+wxUQMQGnw1t2ijTg@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 12 Jul 2022 18:40:08 -0700
+Message-ID: <CAGETcx-jU5+Tc0Qkt1e4QY0YprYSp-4A+MoaSRjpdPp_8tZm5g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/9] net: mdio: Delete usage of driver_deferred_probe_check_state()
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 04:37:19PM +0530, Krishna Kurapati PSSNV wrote:
->    On 7/6/2022 12:28 PM, Krishna Kurapati PSSNV wrote:
-> 
->    On 7/1/2022 9:22 PM, Matthias Kaehlcke wrote:
-> 
-> On Fri, Jul 01, 2022 at 03:45:26PM +0530, Pavan Kondeti wrote:
-> 
-> On Thu, Jun 30, 2022 at 06:10:50PM -0700, Matthias Kaehlcke wrote:
-> 
-> dwc3-qcom should wait for dwc3 core to call component_add() and then do
-> whatever needs to be done once the dwc3 core is registered in the
-> dwc3-qcom bind callback. Honestly this may all be a little overkill if
-> there's only two drivers here, dwc3-qcom and dwc3 core. It could
-> probably just be some callback from dwc3 core at the end of probe that
-> calls some function in dwc3-qcom.
-> 
-> Since the issue we are facing is that the ssphy device links are not ready
-> causing the dwc3 probe not being invoked, can we add an API as Pavan
-> suggested
-> to check if deferred_probe listfor dwc3 device is empty or not andbased on
-> that we can choose to defer our qcomprobe ? In this case, we don't need to
-> touch the dwc3 core driver and would be making changesonly in qcom glue
-> driver.
-> 
-> As mentioned above, it shouldn't be necessary to add component support to
-> all the glue drivers. An API to check for deferred probing is an option,
-> however there is a possible race condition: When the dwc3-qcom driver checks
-> for a deferred probe the core could still be probing, in that situation the
-> glue would proceed before the core driver is ready. That could be avoided
-> with the component based approach.
-> 
-> The race can happen only if asynchronous probe is enabled, otherwise the
-> child's probe happens synchronously in of_platform_populate()
-> 
-> I was thinking about the case where the dwc3-qcom probe is initially deferred,
-> then the deferred probe starts shortly after (asynchronously) and now the
-> dwc3-qcom driver does its check. Probably it's not very likely to happen ...
-> 
-> 
-> OTOH, would the below condition suffice for our needs here? if our device
-> is not bounded to a driver, we check the state of initcalls and return
-> either error or -EPROBE_DEFER
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 7b6eff5..519a503 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device
->  *pdev)
->                 dev_err(dev, "failed to get dwc3 platform device\n");
->         }
-> 
-> +       if (!qcom->dwc3->dev.driver)
-> +               return driver_deferred_probe_check_state(&qcom->dwc3->dev);
-> +
->  node_put:
->         of_node_put(dwc3_np);
-> 
-> I like the simplicity of it, no need for new APIs.
-> 
-> The components based approach would be slightly safer, but in practice I
-> think this should be good enough.
-> 
->    Hi Pavan, Mathias,
->      I have tested the suggested code and verified that it works on
->    sc7180. I see that the API has been removed recently in the following
->    patch :\
->    commit 9cbffc7a59561be950ecc675d19a3d2b45202b2b
->    Author: Saravana Kannan [1]<saravanak@google.com>
->    Date:   Wed Jun 1 00:07:05 2022 -0700
->    driver core: Delete driver_deferred_probe_check_state()
->    Can we make a patch and add it back to the kernel for this purpose ?
->    Hi Saravana,
->      Can you help suggest if we can revert your patch or make a new one to
->    add back the function.
+On Tue, Jul 5, 2022 at 2:11 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Saravana,
+>
+> On Wed, Jun 1, 2022 at 2:44 PM Saravana Kannan <saravanak@google.com> wrote:
+> > Now that fw_devlink=on by default and fw_devlink supports interrupt
+> > properties, the execution will never get to the point where
+> > driver_deferred_probe_check_state() is called before the supplier has
+> > probed successfully or before deferred probe timeout has expired.
+> >
+> > So, delete the call and replace it with -ENODEV.
+> >
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+>
+> Thanks for your patch, which is now commit f8217275b57aa48d ("net:
+> mdio: Delete usage of driver_deferred_probe_check_state()") in
+> driver-core/driver-core-next.
+>
+> Seems like I missed something when providing my T-b for this series,
+> sorry for that.
 
-The cover letter [1] of the 'deferred_probe_timeout logic clean up'
-series [2] has more context:
+No worries. Appreciate any testing help.
 
+>
+> arch/arm/boot/dts/r8a7791-koelsch.dts has:
+>
+>     &ether {
+>             pinctrl-0 = <&ether_pins>, <&phy1_pins>;
+>             pinctrl-names = "default";
+>
+>             phy-handle = <&phy1>;
+>             renesas,ether-link-active-low;
+>             status = "okay";
+>
+>             phy1: ethernet-phy@1 {
+>                     compatible = "ethernet-phy-id0022.1537",
+>                                  "ethernet-phy-ieee802.3-c22";
+>                     reg = <1>;
+>                     interrupt-parent = <&irqc0>;
+>                     interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+>                     micrel,led-mode = <1>;
+>                     reset-gpios = <&gpio5 22 GPIO_ACTIVE_LOW>;
+>             };
+>     };
+>
+> Despite the interrupts property, &ether is now probed before irqc0
+> (interrupt-controller@e61c0000 in arch/arm/boot/dts/r8a7791.dtsi),
+> causing the PHY not finding its interrupt, and resorting to polling:
 
-  A lot of the deferred_probe_timeout logic is redundant with
-  fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
-  a few cases.
+I'd still expect the device link to have been created properly for
+this phy device. Could you enable the logging in device_link_add() to
+check the link is created between the phy and the IRQ?
 
-  This series tries to delete the redundant logic, simplify the frameworks
-  that use driver_deferred_probe_check_state(), enable
-  deferred_probe_timeout=10 by default, and fixes the nfsroot failure
-  case.
+My guess is that this probably has something to do with phys being
+attached to drivers differently.
 
-  The overall idea of this series is to replace the global behavior of
-  driver_deferred_probe_check_state() where all devices give up waiting on
-  supplier at the same time with a more granular behavior:
+>
+>     -Micrel KSZ8041RNLI ee700000.ethernet-ffffffff:01: attached PHY
+> driver (mii_bus:phy_addr=ee700000.ethernet-ffffffff:01, irq=185)
+>     +Micrel KSZ8041RNLI ee700000.ethernet-ffffffff:01: attached PHY
+> driver (mii_bus:phy_addr=ee700000.ethernet-ffffffff:01, irq=POLL)
 
-  1. Devices with all their suppliers successfully probed by late_initcall
-     probe as usual and avoid unnecessary deferred probe attempts.
+Can you drop a WARN() where this is printed to get the stack trace to
+check my hypothesis?
 
-  2. At or after late_initcall, in cases where boot would break because of
-     fw_devlink=on being strict about the ordering, we
+-Saravana
 
-     a. Temporarily relax the enforcement to probe any unprobed devices
-        that can probe successfully in the current state of the system.
-        For example, when we boot with a NFS rootfs and no network device
-        has probed.
-     b. Go back to enforcing the ordering for any devices that haven't
-        probed.
-
-  3. After deferred probe timeout expires, we permanently give up waiting
-     on supplier devices without drivers. At this point, whatever devices
-     can probe without some of their optional suppliers end up probing.
-
-  In the case where module support is disabled, it's fairly
-  straightforward and all device probes are completed before the initcalls
-  are done.
-
-[1] https://lore.kernel.org/all/20220601070707.3946847-1-saravanak@google.com/
-[2] https://patchwork.kernel.org/project/linux-pm/list/?series=646471&archive=both&state=*
-
-
-Does anything speak against returning -EPROBE_DEFER directly from dwc3-qcom's
-probe()? Now with deferred_probe_timeout > 0 there should be at least no endless
-probing.
+>
+> Reverting this commit, and commit 9cbffc7a59561be9 ("driver core:
+> Delete driver_deferred_probe_check_state()") fixes that.
+>
+> > --- a/drivers/net/mdio/fwnode_mdio.c
+> > +++ b/drivers/net/mdio/fwnode_mdio.c
+> > @@ -47,9 +47,7 @@ int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+> >          * just fall back to poll mode
+> >          */
+> >         if (rc == -EPROBE_DEFER)
+> > -               rc = driver_deferred_probe_check_state(&phy->mdio.dev);
+> > -       if (rc == -EPROBE_DEFER)
+> > -               return rc;
+> > +               rc = -ENODEV;
+> >
+> >         if (rc > 0) {
+> >                 phy->irq = rc;
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
