@@ -2,179 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49385737BD
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 15:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B665737DD
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 15:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiGMNnF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 09:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S233546AbiGMNuP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 09:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiGMNnF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 09:43:05 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1407B8D;
-        Wed, 13 Jul 2022 06:43:03 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so3694889pjl.5;
-        Wed, 13 Jul 2022 06:43:03 -0700 (PDT)
+        with ESMTP id S229918AbiGMNuN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 09:50:13 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F887E31
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 06:50:09 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bf9so19121910lfb.13
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 06:50:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=chL/7eABLRjiJpnsmXXb4Y+aoKPBpp6nnBo71sEmir4=;
-        b=KoZr59vM4m2geDg1zKapoo7kcM6DqsjSNP2KOBrbgxMN50s7bE3xhfyJ+w/55c55u7
-         5PKxuhLljA9eakjfxHW5PWJ0SbzhS/Hd/oVPI25EO+fEjS+FWZFdCE8S+9ZCaE4nhb/s
-         6oTiW3BTEE7bSv7jJctkZnravBJtzf4fZNjjC4mOJ0Qk+uii4kzsz7AeXKxuB6UThOMA
-         ncftlFwj6sznn8SILve6M9BwjoUK6AUi4B6XN1EP2GFkaBXkLTWBd61+xZDIzGtvlJZ5
-         OQW3uXtk9f/xA8ICMbez1KjpcP2P7FPooVOPksCBqOQO0+MjFgXvQnx9IEs9X/k8FtN0
-         v/CQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hdLLLHosQ1sLvF2rzApRhs/cgJ52KrTVDElat0mNK1Y=;
+        b=c6p1/yLsOu0fZ1pvQNURB8hKJMV0IKIehOpBVFDXl4bZjlDxhlk3oQOK4ov0100Yes
+         AOEiwreROOVoCnjv2ykC79FBzKrjVxmDJWUcU1j2KwEoDBJsbu1/15sZr0XJ3icWpDDI
+         mJPpjrWUJXc5tKUsrp6ORHmmbWZQ4l3AEUcu+VDvu/pZ0Pv0Ke/hOhUNW3vaoiIR+CcH
+         9BtsCD9to16ItSy6UciEPsDl7WM0Ajn6d7iMjb6v6PPiH1nCZUGnxEa3IwrGMGklg6+T
+         gU6xmdwPmcE9ghunqmKr1++U9d0JlD3+P4LpB5Lzz7DjjOC+Aqosr/EMg6CS5+fuGUGu
+         1DVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=chL/7eABLRjiJpnsmXXb4Y+aoKPBpp6nnBo71sEmir4=;
-        b=YmxYit3B+gkBt2zOKStpUQFbnCAXKees2kuk0Fjl815wMf0cF8+HLpTJLPr/qXbG2S
-         YhAVlkH1fdjQWLajivdv9eOWhBEB1BwdXsq0Ko9nZjHp3KZBspb9whcnp6OXTLXcqB+/
-         mMLGsM5NFHye1WEBrJKAgpL5tk+9OnG8RQJu1W++/aC6m+23vmDJah5J5ipl73bPj/1E
-         aYo2AiaymlXeKCvr/aHYE0hc9RBfnjPGSeqa7hl8cMvF1Sdq4D75r/rPEoCgO7vH4m/O
-         uhldA9f8SuXYmdyx5z406UgBWT/TYn90eFfZgP9L0IlNWVo2KKX7h7I6v76cOPheL8M0
-         6Mtw==
-X-Gm-Message-State: AJIora+yCkf1LcDB7cJLyPOgjO8sRdf/+74D5MYyysKHvDJZ2mmExQLl
-        YnaYJByqWGg+2tTl2qAc0Jk=
-X-Google-Smtp-Source: AGRyM1sOCr2NCMR2knEBQu6KxZvsz331IgBRTFQAHd6MlzT+uL0KSNuOMOcmszgciPRfBPie7oVXLw==
-X-Received: by 2002:a17:902:ea0a:b0:168:d8ce:4a63 with SMTP id s10-20020a170902ea0a00b00168d8ce4a63mr3243442plg.57.1657719783382;
-        Wed, 13 Jul 2022 06:43:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f4-20020a655904000000b0041229183c8esm8104572pgu.8.2022.07.13.06.43.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 06:43:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 06:43:01 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        khilman@baylibre.com, abailon@baylibre.com, amitk@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v1 26/33] hwmon/drivers: Switch to new of thermal API
-Message-ID: <20220713134301.GA3798984@roeck-us.net>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-27-daniel.lezcano@linexp.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hdLLLHosQ1sLvF2rzApRhs/cgJ52KrTVDElat0mNK1Y=;
+        b=Q4NjJX18RpNM2vLXfY2+XoVBNvpXcSTqLFNubcIv9lSiYpn2Oy7Xc4STEHdoKxi52c
+         gcoBE3oAdrKGRqrL9pDg2IvMYG8IlAeGj7uPfx38LgNG3QO2EdO8WyBFS4KP+bsKakTw
+         fal3Uyoe2wLYrEVkDVxdHrPOaxgPwVGDUzgpsAAzZfqfd0yJPT/ERhsr3rh+jah+PyAm
+         McV5hX53wDVMZT1bY9io0iM1FvkFs4o3rc3XlTqox/lUJ6yqdJo9o2TLC9KLVkru+RN2
+         SS8ZxAnprhpjS0819tF4RC1y7c0tU8MwToRBZy/qUrOqjzJokInVdZbiJMMLHv392csD
+         VN4w==
+X-Gm-Message-State: AJIora8RW7gbV0V2YgvhZOgcZnfoliPOGQ5W8xGF8WIYw7QFfVVGWo+2
+        gB67LJQCtGNjlNhBBbF5m0+1yA==
+X-Google-Smtp-Source: AGRyM1sNVngn8FMJmdpIP6siehGCogcUhnvnih+EqAKBFOx/wSxPTbMdS7qqNH46hqZAizBPr+dsTA==
+X-Received: by 2002:a05:6512:a86:b0:489:42fd:de1e with SMTP id m6-20020a0565120a8600b0048942fdde1emr2012554lfu.174.1657720207884;
+        Wed, 13 Jul 2022 06:50:07 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id b21-20020a196455000000b0047f943112e3sm2810998lfj.285.2022.07.13.06.50.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 06:50:07 -0700 (PDT)
+Message-ID: <e160364f-68b9-2ab6-e48d-86d12e4a2f0c@linaro.org>
+Date:   Wed, 13 Jul 2022 16:50:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220710212423.681301-27-daniel.lezcano@linexp.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RESEND PATCH 4/5] cpufreq: qcom-cpufreq-nvmem: Rename qcs404
+ data to cpr_genpd
+Content-Language: en-GB
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, ilia.lin@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220629130303.3288306-1-bryan.odonoghue@linaro.org>
+ <20220629130303.3288306-5-bryan.odonoghue@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220629130303.3288306-5-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 11:24:16PM +0200, Daniel Lezcano wrote:
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach.
+On 29/06/2022 16:03, Bryan O'Donoghue wrote:
+> At the moment the CPR genpd based code is named after the qcs404 however
+> msm8936, msm8939 and other antecedent processors of the qcs404 can also
+> make use of this data.
 > 
-> Use this new API.
+> Rename it to reflect a more generic use.
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  drivers/hwmon/hwmon.c      | 14 +++++++-------
->  drivers/hwmon/scpi-hwmon.c | 14 +++++++-------
->  2 files changed, 14 insertions(+), 14 deletions(-)
+>   drivers/cpufreq/qcom-cpufreq-nvmem.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 2e2cd79d89eb..a98c35fbce87 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -151,9 +151,9 @@ static DEFINE_IDA(hwmon_ida);
->   * between hwmon and thermal_sys modules.
->   */
->  #ifdef CONFIG_THERMAL_OF
-> -static int hwmon_thermal_get_temp(void *data, int *temp)
-> +static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
->  {
-> -	struct hwmon_thermal_data *tdata = data;
-> +	struct hwmon_thermal_data *tdata = tz->devdata;
->  	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
->  	int ret;
->  	long t;
-> @@ -168,9 +168,9 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
->  	return 0;
->  }
->  
-> -static int hwmon_thermal_set_trips(void *data, int low, int high)
-> +static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
->  {
-> -	struct hwmon_thermal_data *tdata = data;
-> +	struct hwmon_thermal_data *tdata = tz->devdata;
->  	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
->  	const struct hwmon_chip_info *chip = hwdev->chip;
->  	const struct hwmon_channel_info **info = chip->info;
-> @@ -203,7 +203,7 @@ static int hwmon_thermal_set_trips(void *data, int low, int high)
->  	return 0;
->  }
->  
-> -static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
-> +static struct thermal_zone_device_ops hwmon_thermal_ops = {
->  	.get_temp = hwmon_thermal_get_temp,
->  	.set_trips = hwmon_thermal_set_trips,
->  };
-> @@ -227,8 +227,8 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
->  	tdata->dev = dev;
->  	tdata->index = index;
->  
-> -	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
-> -						   &hwmon_thermal_ops);
-> +	tzd = devm_thermal_of_zone_register(dev, index, tdata,
-> +					    &hwmon_thermal_ops);
->  	if (IS_ERR(tzd)) {
->  		if (PTR_ERR(tzd) != -ENODEV)
->  			return PTR_ERR(tzd);
-> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-> index 5187c6dd5a4f..9c89db8e56a7 100644
-> --- a/drivers/hwmon/scpi-hwmon.c
-> +++ b/drivers/hwmon/scpi-hwmon.c
-> @@ -62,9 +62,9 @@ static void scpi_scale_reading(u64 *value, struct sensor_data *sensor)
->  	}
->  }
->  
-> -static int scpi_read_temp(void *dev, int *temp)
-> +static int scpi_read_temp(struct thermal_zone_device *tz, int *temp)
->  {
-> -	struct scpi_thermal_zone *zone = dev;
-> +	struct scpi_thermal_zone *zone = tz->devdata;
->  	struct scpi_sensors *scpi_sensors = zone->scpi_sensors;
->  	struct scpi_ops *scpi_ops = scpi_sensors->scpi_ops;
->  	struct sensor_data *sensor = &scpi_sensors->data[zone->sensor_id];
-> @@ -121,7 +121,7 @@ scpi_show_label(struct device *dev, struct device_attribute *attr, char *buf)
->  	return sprintf(buf, "%s\n", sensor->info.name);
->  }
->  
-> -static const struct thermal_zone_of_device_ops scpi_sensor_ops = {
-> +static struct thermal_zone_device_ops scpi_sensor_ops = {
->  	.get_temp = scpi_read_temp,
->  };
->  
-> @@ -275,10 +275,10 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
->  
->  		zone->sensor_id = i;
->  		zone->scpi_sensors = scpi_sensors;
-> -		z = devm_thermal_zone_of_sensor_register(dev,
-> -							 sensor->info.sensor_id,
-> -							 zone,
-> -							 &scpi_sensor_ops);
-> +		z = devm_thermal_of_zone_register(dev,
-> +						  sensor->info.sensor_id,
-> +						  zone,
-> +						  &scpi_sensor_ops);
->  		/*
->  		 * The call to thermal_zone_of_sensor_register returns
->  		 * an error for sensors that are not associated with
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index 6dfa86971a757..355c8b99e974a 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -252,10 +252,10 @@ static const struct qcom_cpufreq_match_data match_data_krait = {
+>   	.get_version = qcom_cpufreq_krait_name_version,
+>   };
+>   
+> -static const char *qcs404_genpd_names[] = { "cpr", NULL };
+> +static const char *cpr_genpd_names[] = { "cpr", NULL };
+
+As a generic comment, as you are touching this piece of code, code you 
+please move cpr_genpd_names above match_data_kryo? So that all 
+match_data instances can use it.
+
+>   
+> -static const struct qcom_cpufreq_match_data match_data_qcs404 = {
+> -	.genpd_names = qcs404_genpd_names,
+> +static const struct qcom_cpufreq_match_data match_data_cpr_genpd = {
+> +	.genpd_names = cpr_genpd_names,
+>   };
+>   
+>   static int qcom_cpufreq_probe(struct platform_device *pdev)
+> @@ -454,7 +454,7 @@ static struct platform_driver qcom_cpufreq_driver = {
+>   static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+>   	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
+>   	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
+> -	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
+> +	{ .compatible = "qcom,qcs404", .data = &match_data_cpr_genpd },
+>   	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
+>   	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
+>   	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
+
+
+-- 
+With best wishes
+Dmitry
