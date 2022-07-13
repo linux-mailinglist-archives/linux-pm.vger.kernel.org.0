@@ -2,72 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC65572FA8
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 09:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9AC572FFF
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 10:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiGMHwi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 03:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S234989AbiGMIE3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 04:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiGMHwi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 03:52:38 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C20E683C
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 00:52:36 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bu42so17825321lfb.0
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 00:52:36 -0700 (PDT)
+        with ESMTP id S231708AbiGMIE2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 04:04:28 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAF3E146C
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 01:04:27 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id h17so14390143wrx.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 01:04:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TSYN2gdQpkM8ivcnEa62WHr83AOeOKe3JbqByJ/nhsg=;
-        b=eWSejaJkD1tOyO+uDXpezGFR+GAMaqW25mO39XDHuZQta+A0zTwjYqpY4l7dTGVz+O
-         Gqe2x6qOJcz4CIXZD4IrWYdD3YeKt6uzUTxcKJyCsg7+LhXsYYzefrIlBqRnFRV0JvXe
-         z4rquh67LnQIr/ZnsnjSeKwCjq5kpwtS/1Jb8d7L+lSeyfaia9X8KNR/r5HccU6sTnEO
-         601O2lS9PIHVmg8VFIi+8fd0v0FQPet5yN4WpekLU19wH/XS0slt4f9l78UgY6p0RiiQ
-         9Py+gQSfmfLE8D41t73XQNd7u85a9oIKQs7y1kfaLZPqYdXAaV2lawiKDEW9YjSOavSR
-         HxXg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=yaBi5+j2aB+gOEpu/CS6a4crTXK1oluI+G7cSMbxelM=;
+        b=MduZJ4LcUwia674sobuaUywFu/y9XJbPCqF8UXjn0wnRaCT+QZ3XOGx+YAje4xxfsx
+         x9gPEEwK6l26zgKylqiCX6kg+6Qcrx6/7WQ/ytwHvcda4vtybERuZ4s70YTn/BNqLy24
+         5MeZn8161zhdqCh3Gug8o1zPTpESCgZp9pNlebMEHS9aj8RGpd5fMetXcNCgQ8tnZWl2
+         oITFcoQoNbdZcmx8uMXLq2HS15pvFWibAtvysAkVPH+IejhAt1//CsNF6qnytW3Sp+Yo
+         iZrLyWZCZeToIHPCPlOTz9lFBuwhiDKL4zdw/LqWzu1dOoE8C4t19oUDKrZTd7BZsh3v
+         b4DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TSYN2gdQpkM8ivcnEa62WHr83AOeOKe3JbqByJ/nhsg=;
-        b=HzPv6cKh0eokFBqefuB+iiDDZm1Uo0RmqnrgDq4zWZtWU3qSWPQehNyQmMVMqcUH2e
-         6V2hEUmmVZwqysmGDWWnuRiMwG64eOqQFG1RSGbeblr8EeGnPCbmHWEBx01SvdHHeNZj
-         gyzwBEJYlwOsnZKKRSiogFQmQyGLyaHERFPLNJaPn3nbKbNbPoMpm66gI6tkpXt37wxu
-         jQUtuKbVd8GUyvRTWKLSupWjlDxpAOnanA7y5zX5SBdKyH711pPp9MPnu0eDGLDJBiLH
-         KZSEYBPkzy2/b2c/ByQoUaOuzPYglSDAi3l2/fd0HIPlsSXc5CKWmiI4O0wpv8EFw3Qz
-         eY3w==
-X-Gm-Message-State: AJIora/n9NBsudgqcQvgNpHoulIBIV+UMXiXLs3q9jclkU8mkXQlW1LT
-        kr7GrgOr2lbmjIW9oiKnjCINQvSVtbdr1Q==
-X-Google-Smtp-Source: AGRyM1sFojOEg7WcBCFLFgZZYS5/GEG635aOgfwKGZGop91VqjM/CXOZt6sU+u6iDRoIZSN2xABIdA==
-X-Received: by 2002:a05:6512:3409:b0:489:fd59:a78f with SMTP id i9-20020a056512340900b00489fd59a78fmr1179056lfr.654.1657698755188;
-        Wed, 13 Jul 2022 00:52:35 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id z5-20020a2e3505000000b0025d476dc71csm2850767ljz.106.2022.07.13.00.52.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 00:52:34 -0700 (PDT)
-Message-ID: <be752ee1-3732-bcbd-4d31-6d6fe0bd251f@linaro.org>
-Date:   Wed, 13 Jul 2022 09:52:32 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=yaBi5+j2aB+gOEpu/CS6a4crTXK1oluI+G7cSMbxelM=;
+        b=AODIAg7pMRzQv0soB+7yYJEzSdNVsLXorsYJuV1YTJPk9V1HyY3jj0a/Z4B+/AQQE0
+         KNjuffGz5s2xvftKMs3dHXRRTn1ZeF0jkNsU9f5bzbKmkG2rZwxF1IbA5VD7F+TK4D66
+         TWq0K51DVa+L4UkZgnllPUZdllmS1VOyjE2J+D7N1ITuYQtVEa0gppf7Jcn+d8MtgXqz
+         3IoLItZMP+hp8hpJ7CnBYEmJcShksfaYNqxjqxdD8a3Qr41QOshkTubKbrWBxml/e5zg
+         h5yHblyTJ8jV0DAQsbnknwlE8iQdZhkOCNF5V8WoPAfAcLKGw4AkWdIsszKrSipLI+WZ
+         fUdQ==
+X-Gm-Message-State: AJIora+GKDi39BRDlGoSuim8nS6BbzLwyrQhN467C6k7nvzHiS05bqVq
+        lMvAUeOJ/MuUDXjAwnTFngqm9w==
+X-Google-Smtp-Source: AGRyM1sox2gwD2oOUs0Po8YP6r0hOoKvkq7xKaXz/jSSA3VY7uq2zQIZPBxBD2yVdN4jLfilFwtkQw==
+X-Received: by 2002:a5d:4890:0:b0:21d:9bf3:89b5 with SMTP id g16-20020a5d4890000000b0021d9bf389b5mr1887795wrq.153.1657699465867;
+        Wed, 13 Jul 2022 01:04:25 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id l29-20020a05600c1d1d00b0039749b01ea7sm1616879wms.32.2022.07.13.01.04.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 01:04:25 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 09:04:22 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Subject: Re: [PATCH v3 07/14] mfd: mt6370: Add Mediatek MT6370 support
+Message-ID: <Ys58hr3AK/p/4/ng@google.com>
+References: <20220623115631.22209-1-peterwu.pub@gmail.com>
+ <20220623115631.22209-8-peterwu.pub@gmail.com>
+ <Ys2TTsv1oU8n1fUE@google.com>
+ <CABtFH5LMHrfOdLZZxpjwsHmyHZsHUmevpQJYDFqZtvfpC6AVxg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v10 1/2] thermal: Add thermal driver for Sunplus
-Content-Language: en-US
-To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lh.kuo@sunplus.com
-References: <cover.1654660009.git.lhjeff911@gmail.com>
- <b114b6f8ea51054561a61dc4982715bb73633ec5.1654660009.git.lhjeff911@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b114b6f8ea51054561a61dc4982715bb73633ec5.1654660009.git.lhjeff911@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABtFH5LMHrfOdLZZxpjwsHmyHZsHUmevpQJYDFqZtvfpC6AVxg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,39 +102,92 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/07/2022 09:30, Li-hao Kuo wrote:
-> Add thermal driver for Sunplus.
+On Wed, 13 Jul 2022, ChiaEn Wu wrote:
+
+> Hi Lee,
 > 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> Thanks for your reply.
+> 
+> Lee Jones <lee.jones@linaro.org> 於 2022年7月12日 週二 晚上11:29寫道：
+> >
+> > On Thu, 23 Jun 2022, ChiaEn Wu wrote:
+> >
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > Add Mediatek MT6370 MFD support.
+> >
+> > No such thing as "MFD support".
+> >
+> > And you're not getting away with submitting a 370 line patch with a 5
+> > word change log either. :)
+> >
+> > Please at least tell us what the device is and what it's used for.
+> 
+> I sincerely apologize.
+> We will add more descriptions of the MT6370 feature in the v5 patch.
+> 
+> >
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > ---
+> > >
+> > > v3
+> > > - Refine Kconfig help text
+> > > - Refine error message of unknown vendor ID in
+> > >   mt6370_check_vendor_info()
+> > > - Refine return value handling of mt6370_regmap_read()
+> > > - Refine all probe error by using dev_err_probe()
+> > > - Refine "bank_idx" and "bank_addr" in mt6370_regmap_read() and
+> > >   mt6370_regmap_write()
+> > > - Add "#define VENID*" and drop the comments in
+> > >   mt6370_check_vendor_info()
+> > > - Drop "MFD" in MODULE_DESCRIPTION()
+> > > ---
+> > >  drivers/mfd/Kconfig  |  13 ++
+> > >  drivers/mfd/Makefile |   1 +
+> > >  drivers/mfd/mt6370.c | 358 +++++++++++++++++++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 372 insertions(+)
+> > >  create mode 100644 drivers/mfd/mt6370.c
 
-Thank you for your patch. There is something to discuss/improve.
+[...]
 
-_data);
-> +	ret = sunplus_get_otp_temp_coef(sp_data, &pdev->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	sp_data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
-> +							    0,
-> +							    sp_data, &sp_of_thermal_ops);
-> +
-> +	if (IS_ERR(sp_data->pcb_tz)) {
-> +		ret = PTR_ERR(sp_data->pcb_tz);
-> +		dev_err(dev, "Failed to register tsensor: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int sunplus_thermal_remove(struct platform_device *pdev)
-> +{
-> +	struct sp_thermal_data *sp_data = platform_get_drvdata(pdev);
-> +
-> +	thermal_zone_of_sensor_unregister(&pdev->dev, sp_data->pcb_tz);
+> > > +static int mt6370_probe(struct i2c_client *i2c)
+> > > +{
+> > > +     struct mt6370_info *info;
+> > > +     struct i2c_client *usbc_i2c;
+> > > +     int ret;
+> > > +
+> > > +     info = devm_kzalloc(&i2c->dev, sizeof(*info), GFP_KERNEL);
+> > > +     if (!info)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     info->dev = &i2c->dev;
+> > > +
+> > > +     usbc_i2c = devm_i2c_new_dummy_device(&i2c->dev, i2c->adapter,
+> > > +                                          MT6370_USBC_I2CADDR);
+> > > +     if (IS_ERR(usbc_i2c))
+> > > +             return dev_err_probe(&i2c->dev, PTR_ERR(usbc_i2c),
+> > > +                                  "Failed to register USBC I2C client\n");
+> > > +
+> > > +     /* Assign I2C client for PMU and TypeC */
+> > > +     info->i2c[MT6370_PMU_I2C] = i2c;
+> > > +     info->i2c[MT6370_USBC_I2C] = usbc_i2c;
+> > > +
+> > > +     info->regmap = devm_regmap_init(&i2c->dev, &mt6370_regmap_bus, info,
+> > > +                                     &mt6370_regmap_config);
+> >
+> > Apart from in mt6370_check_vendor_info() where is this actually used?
+> 
+> Well... from my understanding, we use this MFD driver to make other
+> drivers of MT6370 (e.g. charger, ADC, led...) use the same regmap
+> settings.
+> Thus, this regmap is not only used in mt6370_check_vendor_info().
 
-You used devm to register, so this looks wrong and will lead to double free.
+Well for that to happen you need to store the data somewhere for the
+child devices to fetch from.  I don't see that happening in this
+patch?  What did I miss?
 
-
-Best regards,
-Krzysztof
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
