@@ -2,108 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C724B573017
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 10:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD82F5730F8
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 10:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbiGMIG5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 04:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S235145AbiGMIYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 04:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbiGMIGx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 04:06:53 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E92FDE9213;
-        Wed, 13 Jul 2022 01:06:51 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 268A680AE;
-        Wed, 13 Jul 2022 08:01:08 +0000 (UTC)
-Date:   Wed, 13 Jul 2022 11:06:49 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of
- driver_deferred_probe_check_state()
-Message-ID: <Ys59Gctsllu6GraU@atomide.com>
-References: <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
- <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
- <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
- <Yr6HQOtS4ctUYm9m@atomide.com>
- <Yr6QUzdoFWv/eAI6@atomide.com>
- <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
- <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
- <Yr7wA8d4J7xtjwsH@atomide.com>
- <Ys0ewNYFB25RWNju@atomide.com>
- <CAGETcx8H9je6Yg-fciU5-dh22xB0_h6XzAfH5UsCSeET97wrpA@mail.gmail.com>
+        with ESMTP id S235790AbiGMIYV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 04:24:21 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6C8F2E1A;
+        Wed, 13 Jul 2022 01:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657700513; x=1689236513;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/BVwHgKbbxWOqSuXtN/RD7Dtr4NeHdsRx9vnZHO82v4=;
+  b=l+pruWcJxMkZb8wXFfkpPIWJN8xlk4ryqSVkOENpIlJvFH1qzwQcoslf
+   fF3sCUpoN0AfmtBY8igWIp/t24msCYvx8kBnfVZ1iwO9wso0/TdF1lM5t
+   Wbx4BJKQtwamCAxfLwOLSx4eYN+Yq5rvuNbMN6OY4bhwwoBCjkjT1893k
+   VKfd09Gr0AXtlipAwJzAfSd7DgDJDl/EfGk+4NkptS30Ouw4pWRuWrYqJ
+   q9ZV+wz1Hwh9LB9rUeqKhtCJSzhNUsf2wZK/oYCX/haAyvbTuqtKCuqim
+   7fo8YqSaDROQxCSjtQBC1YVTXGPM06wRAV/SemoxcQfLMsc+Jz3+dJNvj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285173583"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="285173583"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:21:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="653277737"
+Received: from dmi-pnp-i7.sh.intel.com ([10.239.159.145])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Jul 2022 01:21:28 -0700
+From:   Dapeng Mi <dapeng1.mi@intel.com>
+To:     rafael@kernel.org, mst@redhat.com, arnd@arndb.de,
+        bvanassche@acm.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dapeng Mi <dapeng1.mi@intel.com>
+Subject: [PATCH] cpuidle: Move cpuidle driver forward before acpi driver in Makefile
+Date:   Wed, 13 Jul 2022 16:24:26 +0800
+Message-Id: <20220713082426.850911-1-dapeng1.mi@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx8H9je6Yg-fciU5-dh22xB0_h6XzAfH5UsCSeET97wrpA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Saravana Kannan <saravanak@google.com> [220713 00:44]:
-> On Tue, Jul 12, 2022 at 12:12 AM Tony Lindgren <tony@atomide.com> wrote:
-> >
-> > * Tony Lindgren <tony@atomide.com> [220701 16:00]:
-> > > Also, looks like both with the initcall change for prm, and the patch
-> > > below, there seems to be also another problem where my test devices no
-> > > longer properly idle somehow compared to reverting the your two patches
-> > > in next.
-> >
-> > Sorry looks like was a wrong conclusion. While trying to track down this
-> > issue, I cannot reproduce it. So I don't see issues idling with either
-> > the initcall change or your test patch.
-> >
-> > Not sure what caused my earlier tests to fail though. Maybe a config
-> > change to enable more debugging, or possibly some kind of warm reset vs
-> > cold reset type issue.
-> 
-> Thanks for getting back to me about the false alarm.
+As long as Kconfig ACPI_PROCESSOR is enabled, ACPI_PROCESSOR would
+select ACPI_PROCESSOR_IDLE and acpi_idle driver is enabled. But
+in current driver loading order acpi_idle driver is always loaded
+before cpuidle_haltpoll driver. This leads to cpuidle_hatpoll driver
+has no chance to be loaded when it's enabled.
 
-FYI I'm pretty sure I had also some pending sdhci related patches applied
-while testing causing extra issues.
+Thus, move cpuidle driver forward before acpi driver and make
+cpuidle-hatpoll driver has a chance to be run when it's enabled.
 
-> OK, so it looks like my patch to drivers/of/property.c fixed the issue
-> for you. In that case, let me test that a bit more thoroughly on my
-> end to make sure it's not breaking any existing functionality. And if
-> it's not breaking, I'll land that in the kernel eventually. Might be a
-> bit too late for 5.19. I'm considering temporarily reverting my series
-> depending on how the rest of the issues from my series go.
+Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
+---
+ drivers/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-OK. Seems the series is otherwise working and in case of issues, partial
-revert should be enough in the worst case. But yeah, probably some more
-testing is needed.
+diff --git a/drivers/Makefile b/drivers/Makefile
+index 9a30842b22c5..921ed481b520 100644
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -26,6 +26,7 @@ obj-y				+= idle/
+ # IPMI must come before ACPI in order to provide IPMI opregion support
+ obj-y				+= char/ipmi/
+ 
++obj-$(CONFIG_CPU_IDLE)		+= cpuidle/
+ obj-$(CONFIG_ACPI)		+= acpi/
+ 
+ # PnP must come after ACPI since it will eventually need to check if acpi
+@@ -126,7 +127,6 @@ obj-$(CONFIG_EDAC)		+= edac/
+ obj-$(CONFIG_EISA)		+= eisa/
+ obj-$(CONFIG_PM_OPP)		+= opp/
+ obj-$(CONFIG_CPU_FREQ)		+= cpufreq/
+-obj-$(CONFIG_CPU_IDLE)		+= cpuidle/
+ obj-y				+= mmc/
+ obj-y				+= ufs/
+ obj-$(CONFIG_MEMSTICK)		+= memstick/
+-- 
+2.30.2
 
-Regards,
-
-Tony
