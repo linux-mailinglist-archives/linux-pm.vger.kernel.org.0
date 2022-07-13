@@ -2,157 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AFB1573DAC
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 22:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15740573E46
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 22:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbiGMUR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 16:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S236945AbiGMUyD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 16:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiGMUR2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 16:17:28 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801A422BC6
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 13:17:27 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id j3so11199622pfb.6
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 13:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=zgn8G1O2TZu3407ejlFbewbhxfSi2i0EjyN0TFr2jUo=;
-        b=kXq0jjYyDEdJ7HGhDSRs0mUnq6sqbpYCAhdxAq+94sb1x95ovRMXFHZAFaH9zb/Bg6
-         G8KFEQxApJnGPe8ribeNyAwOkzM3OgUfBkVRjTwY9IPWozTkcWO+0clQfy6BEst/qaUG
-         bJdaYkRMRC5Meo7vODh8Peyx/iAxVX0CKiEI8ttqo0hLQXGcl7rUPOkYcZcGXMkvdzqM
-         NgBMB3TotlS25LKGVMi/fKfkPBtgdPW7tax2OyZzBBI7LYA6V4qVPvpkw3Pe3udZJOpU
-         6ECtno50FFTQASwWpHSBwPM9FmW+VhFbtNXg0dhylLAvakDAyJmLo7mpkIl5EgGJpSuG
-         XoDA==
+        with ESMTP id S237308AbiGMUx6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 16:53:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12C9FFD12
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 13:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657745636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7w7ot88ijPbnC1AT4LUHy9diGggomsBqgUbIEyfXDts=;
+        b=jWHXL3SdocT+ug47QGKOJKB+ajseToLpB0xFrV5jGdA+4Xo1qrsT1OxZwtOv0MqJRtJIVK
+        uCx3nZ+9p3MD8rfBwY1yGyseEVDtPDh7qvDmLG2dksEgwqScVautsInlSZZUcf5o3RBnwp
+        W3G+OoUhVlw1I/EMSvRvoUYUtpgqPig=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-20-BZAW553dNQ26dOuOBuV79A-1; Wed, 13 Jul 2022 16:53:54 -0400
+X-MC-Unique: BZAW553dNQ26dOuOBuV79A-1
+Received: by mail-ed1-f71.google.com with SMTP id h17-20020a056402281100b0043aa5c0493dso9184890ede.16
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 13:53:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=zgn8G1O2TZu3407ejlFbewbhxfSi2i0EjyN0TFr2jUo=;
-        b=J7EWp0JS9+gfz7IWQpvpM3foTXMDkcv7s3RY/Sh00JG3+KLzi8MFlSjL8jFPXIlnA1
-         Y86kNQtn80kxuRHrtE8oa8YRYlFZMHD/YEwjbgOPENl3pVD72YShl1PVF4gWEe2/xZcU
-         0MQ9faFzw59CHWdcvjJ3/1Tq2FrkxjkRMS52WFfEbHj71tUpCXAb36obIAH+zyDOlYbp
-         MW/5Ohx55chyZtNqLyj12kOHEYYiWIQRNYhA+Gm74RE2CEvuvZZxOPgM2DVXLg1aTUIX
-         fNuU7OHIoirfKhaRh1bVNOQbd/fajsrje/7TisiXkQeVKyuAY1CRay0sB1OI6QzkfVMV
-         UR0g==
-X-Gm-Message-State: AJIora9bNR+mOtitYB7vddmMPN9Z/dZ82+Nq6+ZjVUzkY4wb2QcCBiyL
-        oPShjW9ohBevulrtSsXW2nH8UA==
-X-Google-Smtp-Source: AGRyM1tAKbmrGd3gaRPibnq30diFVEsvqql6dtWEXa3YznKJCCvniJlttfyXB2WnGctDqNZcDXhkDw==
-X-Received: by 2002:a63:d94a:0:b0:412:6e04:dc26 with SMTP id e10-20020a63d94a000000b004126e04dc26mr4399365pgj.539.1657743447029;
-        Wed, 13 Jul 2022 13:17:27 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i15-20020a17090332cf00b0016a091eb88esm9284458plr.126.2022.07.13.13.17.26
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7w7ot88ijPbnC1AT4LUHy9diGggomsBqgUbIEyfXDts=;
+        b=TGk5vRSbfXfheYhCXRwhBG72ppII3gUVbKeUWl6nVJKeNoSvvMUrmNQme700iZc3+8
+         5BpjqcVqNRiBVW3s5LwSLafiPFeRto40eDk5NNgrKQUwFkIsQDe5l7OQBHGKndkmt4li
+         weoFDzDaOJJhEcXgJnaVdRj570nrL6qIwl/8ISJAy6LbgR67F1ioRZEQH3Zg8OjECdy4
+         44rKCATs927W8IB91Ui4Nj/Mz1EoxkLHzAvvKYXG2mMsqougz2ZEs/tSo5OYxj8rXrF5
+         dnp2f8jyDbvI4gOsgp2cSIdBttARGi9lqVIVSzaBqJDkCt/PI4YCmpZttq/4tja0V/Ze
+         o+4Q==
+X-Gm-Message-State: AJIora+ZYOBZcwt/G4P7ms6lIvFbS8MS/PjbPxqjD9iilraAbnNzbJ6b
+        8gYv1bg6SzeYcmh/ja2nebDqGsJux9l59EqX8ZanPhVn4TT5oIRAK8So54PacTrlq++r1V3xbez
+        E2imJFJTTClSKm+2c88w=
+X-Received: by 2002:a05:6402:3708:b0:433:2d3b:ed5 with SMTP id ek8-20020a056402370800b004332d3b0ed5mr7479257edb.246.1657745633674;
+        Wed, 13 Jul 2022 13:53:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vlR6EbNyJesEQMqku98sgLM5hgx+Yvs+X+nBn4vuLAei8AgslBbSskvA81sVT/7Kgffh06BA==
+X-Received: by 2002:a05:6402:3708:b0:433:2d3b:ed5 with SMTP id ek8-20020a056402370800b004332d3b0ed5mr7479238edb.246.1657745633446;
+        Wed, 13 Jul 2022 13:53:53 -0700 (PDT)
+Received: from redhat.com ([2.52.24.42])
+        by smtp.gmail.com with ESMTPSA id s17-20020a056402037100b00437938c731fsm8578946edw.97.2022.07.13.13.53.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 13:17:26 -0700 (PDT)
-Message-ID: <62cf2856.1c69fb81.cf90e.e138@mx.google.com>
-Date:   Wed, 13 Jul 2022 13:17:26 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 13 Jul 2022 13:53:52 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 16:53:49 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Dapeng Mi <dapeng1.mi@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi driver
+ in Makefile
+Message-ID: <20220713165237-mutt-send-email-mst@kernel.org>
+References: <20220713082426.850911-1-dapeng1.mi@intel.com>
+ <CAJZ5v0gsHPav5Ax6+9OMmeApqn7qdJPQmo5MMh=ba6Rtj5NnQA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.19-rc6-57-g524b6b1a1288
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.19-rc6-57-g524b6b1a1288)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gsHPav5Ax6+9OMmeApqn7qdJPQmo5MMh=ba6Rtj5NnQA@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc6-57-g52=
-4b6b1a1288)
+On Wed, Jul 13, 2022 at 07:53:13PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Jul 13, 2022 at 10:21 AM Dapeng Mi <dapeng1.mi@intel.com> wrote:
+> >
+> > As long as Kconfig ACPI_PROCESSOR is enabled, ACPI_PROCESSOR would
+> > select ACPI_PROCESSOR_IDLE and acpi_idle driver is enabled. But
+> > in current driver loading order acpi_idle driver is always loaded
+> > before cpuidle_haltpoll driver. This leads to cpuidle_hatpoll driver
+> > has no chance to be loaded when it's enabled.
+> >
+> > Thus, move cpuidle driver forward before acpi driver and make
+> > cpuidle-hatpoll driver has a chance to be run when it's enabled.
+> >
+> > Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
+> > ---
+> >  drivers/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/Makefile b/drivers/Makefile
+> > index 9a30842b22c5..921ed481b520 100644
+> > --- a/drivers/Makefile
+> > +++ b/drivers/Makefile
+> > @@ -26,6 +26,7 @@ obj-y                         += idle/
+> >  # IPMI must come before ACPI in order to provide IPMI opregion support
+> >  obj-y                          += char/ipmi/
+> >
+> > +obj-$(CONFIG_CPU_IDLE)         += cpuidle/
+> >  obj-$(CONFIG_ACPI)             += acpi/
+> >
+> >  # PnP must come after ACPI since it will eventually need to check if acpi
+> > @@ -126,7 +127,6 @@ obj-$(CONFIG_EDAC)          += edac/
+> >  obj-$(CONFIG_EISA)             += eisa/
+> >  obj-$(CONFIG_PM_OPP)           += opp/
+> >  obj-$(CONFIG_CPU_FREQ)         += cpufreq/
+> > -obj-$(CONFIG_CPU_IDLE)         += cpuidle/
+> >  obj-y                          += mmc/
+> >  obj-y                          += ufs/
+> >  obj-$(CONFIG_MEMSTICK)         += memstick/
+> > --
+> 
+> Well, this change doesn't guarantee loading haltpoll before ACPI idle.
+> 
+> Also what if haltpoll is enabled, but the user wants ACPI idle?
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-19-rc6-57-g524b6b1a1288/
+Exactly. For example while on real boxes BIOS might often present broken
+ACPI idle, on VMs I am guessing if ACPI is present one can assume it's
+actually correct.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.19-rc6-57-g524b6b1a1288
-Git Commit: 524b6b1a1288721f687931cf457a3216ad14742a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+-- 
+MST
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
