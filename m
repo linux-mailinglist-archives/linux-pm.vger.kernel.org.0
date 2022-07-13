@@ -2,74 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2D4572E86
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 08:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB385572E91
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 08:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiGMGxd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 02:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S230077AbiGMGzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 02:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234407AbiGMGxX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 02:53:23 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A37CE0F42
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 23:53:22 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so2195579pjn.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 23:53:22 -0700 (PDT)
+        with ESMTP id S229994AbiGMGzg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 02:55:36 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E2326C6
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 23:55:35 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y141so9452739pfb.7
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 23:55:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5aHj0ytiZKEihSrnp2qhb1SrtEXktEv4KFaJGbiz9Pg=;
-        b=XpO8/rsXcCanKBtKBiXpGSOJNSKUxBckuKYfiauHh7cekCe5w5giJy+0jd37kwxvV9
-         fOKQWXAFLdr/qhca2r5bBTzIyptlS/7ZaSd7RYK/8447lRDiLjTHUi0N1/rYdUQ7H7/H
-         iikBOdAC9AG511iY6fdnKCyK1dKAYW6BlU3rjGwnCCbAHpvcUoVzN0w5lyBIZ6uIqM1q
-         k7Uv/QUUte0e9L04w/XsaX43GiKzeTAV/O7kaZPNEpsFpcCM8ztVSgga+E3WBtJfIadO
-         vYKiL0t6Ttm6l6T6U1uKmeOCRrbPVTDQFlzosE+KNmvZXgsotbFb2Xvk+3G6GuH1EXKU
-         9WnQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LPiteU3ZIDPphGuDd6qhaM0GwMlw0tFWabPide3YTOc=;
+        b=A/kI71ePqkRtbdh4z6E8oeAEwMemeTtnsPnzauycFrQoDgCe+7rvrRi8TQvwCXXNyj
+         RFLSAMfWDCCpRvvNJBs6c3ToSnFVUsOCdltIm1Qbeux9Y6+Mn/i2mWVDL7LQa/yDFxqc
+         EMO9vGsRsf509RRlWOkCehzKiYr0eztVxUhdbzmelL2SSbnuoE7CJd0ypVnzhGEIB4/3
+         tJ9DsgdifTfpn787hTxrdhBpblSzUQ3Xueyk4JWpNBe3RVThL191Yt99vaZ/525Fve8M
+         JrZhOZ8tnZgkMYMhXTj2Yum+vqffdzlakiEqSwY+d+i4ij90oU1zd2xP+t8wC75XE77n
+         94Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5aHj0ytiZKEihSrnp2qhb1SrtEXktEv4KFaJGbiz9Pg=;
-        b=Apxv9vr7x+dt9VFVlCUhVcXO/rVABZ2MoMgJnYfQOqsVJLdO9mi90PVghq7O3ybI2M
-         dI3IBggN0W/dTJUChzVlr0vWv9QoYyuUc6mtgK0BXfIn1wsLHAvLM0dkfhEH4DG9ue4K
-         p2NE5jtCWQwEpnOvs/WhYZWnA81g/q2tWvSTDM5A/+ayb1NxxHG2rcbTG/DzQn5wfH2U
-         w86XJWukLuuzgUGdLkxOTXSzOtR7aoHrjjTCpztvAS8o7BCkYpKskj2HaLhsQangT3yV
-         1tLJatu6X0OHGER/fZZTe5jFeUENFLoUeq4OweaIxqYrrnlJWfX2TWAAiBwfNdc3R6e/
-         21lg==
-X-Gm-Message-State: AJIora/hhfbtypuSenbZT5tzjAgPvj0tguOtjdDICzMz1Krk5Rqz0ceL
-        wmzVS/beMMT5EF/Yk+a/otJNhw==
-X-Google-Smtp-Source: AGRyM1vFcCu6q1QE5BBd8h7B9QNugS3320PZsRU8m3bDS02OPXUAexxyu0eK2eiOq2n4JddEBfBDYw==
-X-Received: by 2002:a17:90a:7784:b0:1ef:c0fe:968c with SMTP id v4-20020a17090a778400b001efc0fe968cmr8513271pjk.26.1657695202115;
-        Tue, 12 Jul 2022 23:53:22 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LPiteU3ZIDPphGuDd6qhaM0GwMlw0tFWabPide3YTOc=;
+        b=ezBGD98Ut7CxX00k0UHswh7ixqOU52Ma+DhG+U8JkXIQxgXhSCql5+gjC7cPt3bd/6
+         eXIMaBqcPO7CfQxt23MqyBuqPzlf5kNPxDYby3TKWKEzu4hyAGvLIkSAkWD8ZWtssz1O
+         /d3vYhs5DKV4/DOsoz2n56Tmj2vUZVfdsV6ksh7xap4EmnjmO4XTAx5k2zFhSjD+zn2W
+         KWUCGHtqopEPxNg6q751OC4WROd8ivPKZr7YJxYIp3UfbE9J1TBtOFMwyqKa//Rkxtcj
+         8kgQyVTTQcHV40dtaoeE2aNX6UiQie/PovsNy0bQmwA0s9mI0Ul5AscPlud4ADw/3LYQ
+         6R2g==
+X-Gm-Message-State: AJIora9KGp6ni9MXFCl0nc7MzOzvF1CZK6G/3kkmKcRHz22+eBiyQBN8
+        BzngifFjwY3lNZ18b7cC6y7avw==
+X-Google-Smtp-Source: AGRyM1uSwqDpVinLdL7ntciXJbFOuFBhY5TCrb7J80kwb6l2HhsFvOzbue+FzpiDNyS4smvxav+8Og==
+X-Received: by 2002:a05:6a00:b8b:b0:51c:2487:57b5 with SMTP id g11-20020a056a000b8b00b0051c248757b5mr1916239pfj.56.1657695334722;
+        Tue, 12 Jul 2022 23:55:34 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id w185-20020a6362c2000000b0041292b732fdsm7245998pgb.38.2022.07.12.23.53.21
+        by smtp.gmail.com with ESMTPSA id p14-20020a170902780e00b001620960f1dfsm8061328pll.198.2022.07.12.23.55.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 23:53:21 -0700 (PDT)
+        Tue, 12 Jul 2022 23:55:34 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 12:25:32 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 4/4] cpufreq: qcom-cpufreq-hw: Register config_clks helper
-Date:   Wed, 13 Jul 2022 12:22:59 +0530
-Message-Id: <5f8db633c179608214c5e17a6927715f7acda993.1657695140.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1657695140.git.viresh.kumar@linaro.org>
-References: <cover.1657695140.git.viresh.kumar@linaro.org>
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+Message-ID: <20220713065532.qncnjpj5isjmsxf5@vireshk-i7>
+References: <cover.1657003420.git.viresh.kumar@linaro.org>
+ <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+ <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
+ <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
+ <20220712151045.vn4tpat4c4cplndo@vireshk-i7>
+ <Ys2ZVeBHyhrUBC4m@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys2ZVeBHyhrUBC4m@hovoldconsulting.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,106 +90,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a corner case with Qcom, where we want to skip clk
-configuration that happens via dev_pm_opp_set_opp(), but still want the
-OPP core to read the "opp-hz" property so we can find the right OPP via
-freq finding helpers.
+On 12-07-22, 17:55, Johan Hovold wrote:
+> Ok, thanks for the details. I'd still look into if there's some way to
+> avoid setting clk_count when there are no clocks as it sounds like an
+> anti-pattern that will just make the code harder to understand and
+> maintain.
 
-The OPP core provides support for the platforms to provide config_clks
-helpers now, lets use that to provide an empty callback to skip clock
-configuration.
+Here is an attempt from me :)
 
-The "table" wasn't getting freed properly on error, fix it as well which
-we are updating the code.
+https://lore.kernel.org/lkml/cover.1657695140.git.viresh.kumar@linaro.org/
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 32 ++++++++++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 05fce4a559ca..8d055a5f6575 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -59,6 +59,7 @@ struct qcom_cpufreq_data {
- 	bool per_core_dcvs;
- 	unsigned long cpu_hw_rate;
- 	unsigned long xo_rate;
-+	int opp_token;
- };
- 
- static bool icc_scaling_enabled;
-@@ -162,6 +163,15 @@ static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
- 	return policy->freq_table[index].frequency;
- }
- 
-+static int qcom_cpufreq_hw_config_clks_nop(struct device *dev,
-+					   struct opp_table *opp_table,
-+					   struct dev_pm_opp *opp, void *data,
-+					   bool scaling_down)
-+{
-+	/* We want to skip clk configuration via dev_pm_opp_set_opp() */
-+	return 0;
-+}
-+
- static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 				    struct cpufreq_policy *policy)
- {
-@@ -173,11 +183,23 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 	int ret;
- 	struct qcom_cpufreq_data *drv_data = policy->driver_data;
- 	const struct qcom_cpufreq_soc_data *soc_data = drv_data->soc_data;
-+	const char * const clk_names[] = { "xo", NULL };
-+	struct dev_pm_opp_config config = {
-+		.clk_names = clk_names,
-+		.config_clks = qcom_cpufreq_hw_config_clks_nop,
-+	};
- 
- 	table = kcalloc(LUT_MAX_ENTRIES + 1, sizeof(*table), GFP_KERNEL);
- 	if (!table)
- 		return -ENOMEM;
- 
-+	ret = dev_pm_opp_set_config(cpu_dev, &config);
-+	if (ret < 0) {
-+		dev_err(cpu_dev, "Failed to set OPP config: %d\n", ret);
-+		goto free_table;
-+	}
-+	drv_data->opp_token = ret;
-+
- 	ret = dev_pm_opp_of_add_table(cpu_dev);
- 	if (!ret) {
- 		/* Disable all opps and cross-validate against LUT later */
-@@ -192,7 +214,7 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 		}
- 	} else if (ret != -ENODEV) {
- 		dev_err(cpu_dev, "Invalid opp table in device tree\n");
--		return ret;
-+		goto clear_config;
- 	} else {
- 		policy->fast_switch_possible = true;
- 		icc_scaling_enabled = false;
-@@ -260,6 +282,13 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 	dev_pm_opp_set_sharing_cpus(cpu_dev, policy->cpus);
- 
- 	return 0;
-+
-+clear_config:
-+	dev_pm_opp_clear_config(drv_data->opp_token);
-+
-+free_table:
-+	kfree(table);
-+	return ret;
- }
- 
- static void qcom_get_related_cpus(int index, struct cpumask *m)
-@@ -614,6 +643,7 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
- 	dev_pm_opp_remove_all_dynamic(cpu_dev);
- 	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
- 	qcom_cpufreq_hw_lmh_exit(data);
-+	dev_pm_opp_clear_config(data->opp_token);
- 	kfree(policy->freq_table);
- 	kfree(data);
- 	iounmap(base);
 -- 
-2.31.1.272.g89b43f80a514
-
+viresh
