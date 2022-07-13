@@ -2,125 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6255735F1
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 14:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75ED573601
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 14:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbiGMMC0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 08:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
+        id S233523AbiGMMIE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 08:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiGMMCZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 08:02:25 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF9810401E
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 05:02:24 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id y12so288608ilq.10
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 05:02:24 -0700 (PDT)
+        with ESMTP id S236288AbiGMMH5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 08:07:57 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA17104034;
+        Wed, 13 Jul 2022 05:07:53 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id e69so18909626ybh.2;
+        Wed, 13 Jul 2022 05:07:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jLHlcD1BbkSesfBNiOV7YrrSdYxCd45IacaClX538P8=;
-        b=FuYVlgPktz9Me7uksXbfDI7RUzuvebE4l+KRaDjErf9W40BWskp58/1UBPGB03R7GK
-         x3yRxchO7XxZJk6dF/fN/sjLqn2MdgM9B6B6XNEhRFChkZoP0ebFbpSPpxphIDzahoNY
-         oBIXxRrjgGlu6nfmogxuHBwayX/9h/Sry94B6FSM4Xr9WkAQPh/IyaFMoyOw6rehgjSz
-         aWy9ZabK7rbif7ZaJ1ZTSeYG2Ud6/gKWP68rbDB6qZ8xiKkYL48dVYgTzMWoupl0PedM
-         UBb442k3MaLaEFQgrX3DM5UVorPsoDU5p1EdISuUpPuy7mXLTM0T9kycsywGBnwhsTHW
-         YcmA==
+         :cc:content-transfer-encoding;
+        bh=H60c6BQz+0PUGxMp0vbXoiihGTO7ZBPYPm+08N4mLfI=;
+        b=cFwaO0bDU4Rlt7N9UDqzRHYc/L/LXwPsecY5KlQfSKmfeHbUGfJju92GNvM+QXRy/A
+         MfFCd9EiEFbUqGG0Dk3UDyeTjK2mKB+J26YUCLsjwjV1AqSW8ALXoZ+QUWDjp8FbHEeY
+         dwnLTjlohJXN4MlqdlflbgJKO0LHlSOv3alwCbci2ARAUzjG69r4BZ9OGDCDuqQtQA7F
+         3fzpmlRGWBNYqAxA0gsKxiBlo4ApaOY7UboYG9JKS2cowDCyOJujzJrS984DN9KyXzOA
+         PlokWUEqgVaq6a1qwFa+85+pBBg3DMQ+qHXOl22B3dO6jAPN+bwQ7BsHm3cmgJ/HPnXL
+         vfmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jLHlcD1BbkSesfBNiOV7YrrSdYxCd45IacaClX538P8=;
-        b=b6HoT4Uh2z60EZugLMoDvBtOlKKnye4Df/8jZDoF25MNDedwU5vWwliMOvDZh9HgsM
-         ZAr6uZX8Bv2BBQkQ9OO/t+nB3sbym2i3w55tA6rsvW9Sgi4qojh2r6Rw2rNf9bzmQsZT
-         Z2fzL0JZ1X95rT0WJzlCyL9LQrgs9yIAk1wT71EbafSFX34sDKc4IldacBMhhksMmhyW
-         YIUl6qk0geOM3dkNEmjo3kMxMLnpfFmZnpgv6fjvc4dv7LtL3+6xgjP3jPvkI0LwlvsG
-         5m8rlre/Gl7Vdyrwo0W6yOxIsvLUbUzIgKsfAi6Cv2U/YugqrREN5kSE4vDu4ivMWwoo
-         CvLQ==
-X-Gm-Message-State: AJIora/wy+yq8Q4Vn9onUw4WAD6JZO0CdSxf+jGx7+fBimATUKIAAkB7
-        IPWugU1UGOafRTupWfAeei3/rdeC7nnrxKCRe5IXTA==
-X-Google-Smtp-Source: AGRyM1vzGnXMOueDPW7R9FdHXd7YskMys/eG99n7Q+joGp2dqTInmorSDef9SKArvVCV3S9SNR+0Ugv7B/RlfhV/bRA=
-X-Received: by 2002:a05:6e02:18c7:b0:2dc:404a:8416 with SMTP id
- s7-20020a056e0218c700b002dc404a8416mr1594696ilu.39.1657713744347; Wed, 13 Jul
- 2022 05:02:24 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=H60c6BQz+0PUGxMp0vbXoiihGTO7ZBPYPm+08N4mLfI=;
+        b=Fivb87gLnZouIU5+jpNhiWYCJYnKwvrl08ZulwjqKwexabykfs5NmueHwoe9axfZiM
+         WwgJ0XbWWxnl9f2Dr7hMUigRxHvlDBAtXjev0pmWh38OHPFq3aPJmrOASOnk+FlzZm+2
+         vRvb31GLWQxYLclInHmG5SXdolALn2TDcuE6TSswJfLi/gM9hWQhJ4cC4bFb1RYAfZnc
+         QpF/YFQitOwkM2PKC/EzIy89TucBS7SBD/zMYiB/kQ/GJLpOu+qNt8GkyLtCgfXFE9NI
+         +Ke+iAQMSaOzLWoM245iH/95uA5lup89eI9NKsAjxy3F/xP4Hn5xDPlxk8SWKw39Aar5
+         JuuQ==
+X-Gm-Message-State: AJIora+CSYWjUY8C4JxXpsIHgbUraLYgkFMLHQ3Sckf5ZK4tS2EQ4WEl
+        gUZbCPGR3ntZUUCQeVmB9KdqlYB2EZhuTxS094g=
+X-Google-Smtp-Source: AGRyM1sbQCBjmYhKYL+xb2AwlOmpuB0R1EP+WnPrRn0L3M4TSuIwm0awKcRUCK7kwFw6PIL77qpLuzj23J+O5rqZCJA=
+X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
+ x14-20020a25858e000000b0066e489863e2mr3559399ybk.296.1657714072552; Wed, 13
+ Jul 2022 05:07:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220705171649.969194-1-hsinyi@chromium.org>
-In-Reply-To: <20220705171649.969194-1-hsinyi@chromium.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 13 Jul 2022 14:01:47 +0200
-Message-ID: <CAPDyKFq1KLYEo9jtN4j-=+sRoYtb0su5LzcErEWAtTxEKEF-mA@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: domains: Ensure genpd_debugfs_dir exists before remove
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Pin-yen Lin <treapking@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-14-peterwu.pub@gmail.com>
+ <CAHp75VdwEc9AW1w8ejsxkw+sBTF1dumd99QyzTY9BZaXiViRWQ@mail.gmail.com> <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com>
+In-Reply-To: <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 13 Jul 2022 14:07:15 +0200
+Message-ID: <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
+Subject: Re: [PATCH v4 13/13] video: backlight: mt6370: Add Mediatek MT6370 support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 5 Jul 2022 at 19:17, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> Both genpd_debug_add() and genpd_debug_remove() may be called
-> indirectly by other drivers while genpd_debugfs_dir is not yet
-> set. For example, drivers can call pm_genpd_init() in probe or
-> pm_genpd_init() in probe fail/cleanup path:
->
-> pm_genpd_init()
->  --> genpd_debug_add()
->
-> pm_genpd_remove()
->  --> genpd_remove()
->    --> genpd_debug_remove()
->
-> At this time, genpd_debug_init() may not yet be called.
->
-> genpd_debug_add() checks that if genpd_debugfs_dir is NULL, it
-> will return directly. Make sure this is also checked
-> in pm_genpd_remove(), otherwise components under debugfs root
-> which has the same name as other components under pm_genpd may
-> be accidentally removed, since NULL represents debugfs root.
->
-> Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+On Wed, Jul 13, 2022 at 12:53 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:14=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > On Mon, Jul 4, 2022 at 7:43 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Please, remove unneeded context when replying!
 
-Kind regards
-Uffe
+...
 
-> ---
-> v1->v2: Add more context in commit message
-> ---
->  drivers/base/power/domain.c | 3 +++
->  1 file changed, 3 insertions(+)
+> > > +               brightness_val[0] =3D (brightness - 1) & MT6370_BL_DI=
+M2_MASK;
+> > > +               brightness_val[1] =3D (brightness - 1)
+> > > +                                   >> fls(MT6370_BL_DIM2_MASK);
+> >
+> > Bad indentation. One line?
 >
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 3e86772d5fac5..5a2e0232862e0 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -222,6 +222,9 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
->  {
->         struct dentry *d;
+> Well... if indent to one line, it will be over 80 characters(or called co=
+lumns?)
+> From my understanding, it is not allowed, right??
+
+It's allowed to some extent.Use your common sense.
+Here it's obviously broken indentation.
+
+...
+
+> > > +               prop_val =3D (ilog2(roundup_pow_of_two(prop_val)) + 1=
+) >> 1;
+> >
+> > Isn't something closer to get_order() or fls()?
 >
-> +       if (!genpd_debugfs_dir)
-> +               return;
-> +
->         d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
->         debugfs_remove(d);
->  }
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
+> I will revise it to "(get_order(prop_va * PAGE_SIZE) + 1) / 2" and
+> this change is meet your expectations??
+
+Nope. Try again. What about fls()?
+
+...
+
+> > > +       props->max_brightness =3D min_t(u32, brightness,
+> > > +                                     MT6370_BL_MAX_BRIGHTNESS);
+> >
+> > One line?
 >
+>  Ditto, it will be over 80 characters...
+
+As per above.
+
+--=20
+With Best Regards,
+Andy Shevchenko
