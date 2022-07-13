@@ -2,113 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBA2573D0D
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 21:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F51573D36
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 21:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbiGMTPq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 15:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S231799AbiGMTem (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 15:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiGMTPo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 15:15:44 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306E71F2D8;
-        Wed, 13 Jul 2022 12:15:43 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 64so20901012ybt.12;
-        Wed, 13 Jul 2022 12:15:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WadcFO2ofb7EmxBEnBo4nXzeB9hmmz1tEajKg3FY4pw=;
-        b=wQ1Ej2xwmFxM1BV1Bj/sR7phdL/sKceGh4e7NJ4a0k+gkDLXfiTi4+jCrn3Np0bx2I
-         MXC4TrhHRMlJw9OgALVMMWQcTePLzJdeXKvGcvhaCyrNtVXd7wHtIDT6nWQaUXgo0nTi
-         g8oVYj03EtQLBL982TlZMQUI+ORKX08tbcojwHReOuZesL/VMp6czRx52Z+lZG5WZ2m0
-         qPeX21J+1k/lmZN8nsTomkFfmDyWGr4GG3cHhx2C3F7Zdews3qweEzppJGI7P/GULrEb
-         CX5rpsJYZujTPpp3tOLR84i9cD0J3sq2NBrxiE2yvrUyP40WU7fBjWIsQMNsJcZQXgMb
-         ysvg==
-X-Gm-Message-State: AJIora9z3uI4ec9paqeQo0hymSgGypBPUieGcf6/bwWTr4U3uQvz0oHz
-        wRlHO+eLaQEsP7roSWhbrw+M3Ens7GhMRD6lWLw=
-X-Google-Smtp-Source: AGRyM1uhuP1kfMx0XnXYPp6aAIlao66vkvbDAB8FNec0u0hroyZAwmVi1g5v8ayI2pw1PKnj2S6J+zmCVyzAzoqiwWA=
-X-Received: by 2002:a25:a2ca:0:b0:66e:719e:279 with SMTP id
- c10-20020a25a2ca000000b0066e719e0279mr4946716ybn.622.1657739742431; Wed, 13
- Jul 2022 12:15:42 -0700 (PDT)
+        with ESMTP id S231329AbiGMTel (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 15:34:41 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBCA27160;
+        Wed, 13 Jul 2022 12:34:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657740880; x=1689276880;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uz2sgm8GjwPKR98F7NkplBl1G37I0DkhynDs1KtQ2sE=;
+  b=r7yTRg1H9U9gL4x7dfQXq6fzoViRdhQ5U523w+PmuubSam1Nxunn0Wkk
+   qzLx/f9nJCEuVWZh/Rsq2Oyux0FwRDlkyjygFBn9X59t6dWeyrnNJa8F2
+   HijAeU7EzhSWWQeHSCa7M6INfC49ZA/TSOKTCt1C85SZU4+EuZ2/AUDlM
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 12:34:40 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 12:34:40 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 12:34:39 -0700
+Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 12:34:38 -0700
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>
+Subject: [PATCH v3 0/2] add support for PON GEN3 device
+Date:   Wed, 13 Jul 2022 12:33:49 -0700
+Message-ID: <20220713193350.29796-1-quic_amelende@quicinc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220713175346.630-1-mario.limonciello@amd.com>
-In-Reply-To: <20220713175346.630-1-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Jul 2022 21:15:31 +0200
-Message-ID: <CAJZ5v0h4m+efJGQT6uKpPLdqLgHOpp1mXw5pLO_TBY+NimhMog@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: CPPC: Fix enabling CPPC on AMD systems with shared memory
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        "Yuan, Perry" <perry.yuan@amd.com>, Huang Rui <ray.huang@amd.com>,
-        Stable <stable@vger.kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 7:54 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> When commit 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all
-> and when CPPC_LIB is supported") was introduced, we found collateral
-> damage that a number of AMD systems that supported CPPC but
-> didn't advertise support in _OSC stopped having a functional
-> amd-pstate driver. The _OSC was only enforced on Intel systems at that
-> time.
->
-> This was fixed for the MSR based designs by commit 8b356e536e69f
-> ("ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supported")
-> but some shared memory based designs also support CPPC but haven't
-> advertised support in the _OSC.  Add support for those designs as well by
-> hardcoding the list of systems.
->
-> Fixes: 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all and when CPPC_LIB is supported")
-> Fixes: 8b356e536e69f ("ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supported")
-> Link: https://lore.kernel.org/all/3559249.JlDtxWtqDm@natalenko.name/
-> Cc: stable@vger.kernel.org # 5.18
-> Reported-and-tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  arch/x86/kernel/acpi/cppc.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
-> index 734b96454896..8d8752b44f11 100644
-> --- a/arch/x86/kernel/acpi/cppc.c
-> +++ b/arch/x86/kernel/acpi/cppc.c
-> @@ -16,6 +16,12 @@ bool cpc_supported_by_cpu(void)
->         switch (boot_cpu_data.x86_vendor) {
->         case X86_VENDOR_AMD:
->         case X86_VENDOR_HYGON:
-> +               if (boot_cpu_data.x86 == 0x19 && ((boot_cpu_data.x86_model <= 0x0f) ||
-> +                   (boot_cpu_data.x86_model >= 0x20 && boot_cpu_data.x86_model <= 0x2f)))
-> +                       return true;
-> +               else if (boot_cpu_data.x86 == 0x17 &&
-> +                        boot_cpu_data.x86_model >= 0x70 && boot_cpu_data.x86_model <= 0x7f)
-> +                       return true;
->                 return boot_cpu_has(X86_FEATURE_CPPC);
->         }
->         return false;
-> --
+Changes from v2:
+  - Added new "qcom,pmk8350-pon" compatible string as per Krysztof's
+    advice
+  - Updated dt logic to use comptaible strings to decide constraints
+    as per Krysztof's comment
+  - Added new patch (v3 2/2) to support new compatible string
 
-Applied as 5.19-rc material, thanks!
+Changes from v1:
+  - Updated path which was missing Documentation/devicetree prefix
+  - Updated CC list
+
+New patch series to seperate this patch from applied patches.
+Comments from original patch can be found
+https://lore.kernel.org/linux-arm-msm/27515993-18f3-8891-4835-9b6a8d7f86b0@quicinc.com/
+
+David Collins (1):
+  dt-bindings: power: reset: qcom-pon: update "reg" property details
+
+Anjelique Melendez (1):
+  power: reset: qcom-pon: add support for qcom,pmk8350-pon compatible string
+  
+
+ Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 73 ++++++++++++++++++++++++++++--
+ drivers/power/reset/qcom-pon.c | 1 +
+ 2 file changed, 70 insertions(+), 4 deletions(-)
+
+-- 
+2.35.1
+
