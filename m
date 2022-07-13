@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E54E572FA0
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 09:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC65572FA8
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 09:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiGMHu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 03:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        id S231359AbiGMHwi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 03:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiGMHux (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 03:50:53 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2034B32ED3
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 00:50:52 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id e28so14158892lfj.4
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 00:50:52 -0700 (PDT)
+        with ESMTP id S229689AbiGMHwi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 03:52:38 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C20E683C
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 00:52:36 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id bu42so17825321lfb.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 00:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NYflSyzJGWVmdo/FfUNnh/uWyzXsbzDiU5Kfi3yNT/s=;
-        b=T8PSBsSZ/kqgVoJWl1fOj4dHcsCxbJGi1zOLnZJzpdNI3O5NOJwql6sobP0r3Z1OQd
-         oFnUu6Vr5VpQoaF5ZA2ltfQIhfhw0KOj0IC7ZY6BXomA+yv50aY2SHmUkNJi1T7t1iuK
-         clsGR5WG4tBsWwsBQDdKv9WX3smAnXnZ1/NdCLShi1x1Aztc3iwzPdK2r7QbfLOgJ8SY
-         Bsctvhnv3CXHSZT1zMF9vzwZ8fBXuRXU0B0dcBY8wsCLgCTsR3y5JEc9lYDqF74bBdJU
-         ErJWwbjZs6rYngrmSRBQggbaEzWhRoPB6mj3QhoDpZVLZfjP5SK3mLs9nwpO/54HNeDt
-         rd2A==
+        bh=TSYN2gdQpkM8ivcnEa62WHr83AOeOKe3JbqByJ/nhsg=;
+        b=eWSejaJkD1tOyO+uDXpezGFR+GAMaqW25mO39XDHuZQta+A0zTwjYqpY4l7dTGVz+O
+         Gqe2x6qOJcz4CIXZD4IrWYdD3YeKt6uzUTxcKJyCsg7+LhXsYYzefrIlBqRnFRV0JvXe
+         z4rquh67LnQIr/ZnsnjSeKwCjq5kpwtS/1Jb8d7L+lSeyfaia9X8KNR/r5HccU6sTnEO
+         601O2lS9PIHVmg8VFIi+8fd0v0FQPet5yN4WpekLU19wH/XS0slt4f9l78UgY6p0RiiQ
+         9Py+gQSfmfLE8D41t73XQNd7u85a9oIKQs7y1kfaLZPqYdXAaV2lawiKDEW9YjSOavSR
+         HxXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=NYflSyzJGWVmdo/FfUNnh/uWyzXsbzDiU5Kfi3yNT/s=;
-        b=vyaQhNE/Jp3hYFTEf3anxA5Y8lMR70hXQzjuncV9LB4GdNfFm+vcdzhaabVBVAmVBR
-         zKaw0oggCAzCZVvE7eJLalv+cbU3IeeRhNwapCzax5R3YAp/bHL+zGxE7frfDsHPMVl2
-         BMqjfEJI8VKeDVtaRVNe+3uOJzUHUNRYlLxCfopqUYRhmQSfeQDdMMHmlNTs9hk3WL4g
-         rNBDZBTre+AVpFKnqWtc+uBfbVhOEtkhv4IH35cH+YLRCqeiPZlrOgxHvBG1l1ovpmmJ
-         xxm81833jCB3g9fVIksgmNApcYy02F50zWtqzO4d0Ays/kx6KN7wtMl+O9FpJugeYIdP
-         gqSQ==
-X-Gm-Message-State: AJIora/Qww6I1DfkT9eaBL6Cu2qhABiWp2pnRPxCduSnREdiIl68j1zh
-        0EZbCrQt69TI7HFMkxvXxdGfM+10xKfJBw==
-X-Google-Smtp-Source: AGRyM1uhLHRvLlcQa7QUDMxWa/Z5td7UZ9SmBf3XHNCP14Y3Qepv291ZjDvXremjm/dWmogsSMB6og==
-X-Received: by 2002:a05:6512:150e:b0:481:60af:a5a5 with SMTP id bq14-20020a056512150e00b0048160afa5a5mr1161136lfb.524.1657698650422;
-        Wed, 13 Jul 2022 00:50:50 -0700 (PDT)
+        bh=TSYN2gdQpkM8ivcnEa62WHr83AOeOKe3JbqByJ/nhsg=;
+        b=HzPv6cKh0eokFBqefuB+iiDDZm1Uo0RmqnrgDq4zWZtWU3qSWPQehNyQmMVMqcUH2e
+         6V2hEUmmVZwqysmGDWWnuRiMwG64eOqQFG1RSGbeblr8EeGnPCbmHWEBx01SvdHHeNZj
+         gyzwBEJYlwOsnZKKRSiogFQmQyGLyaHERFPLNJaPn3nbKbNbPoMpm66gI6tkpXt37wxu
+         jQUtuKbVd8GUyvRTWKLSupWjlDxpAOnanA7y5zX5SBdKyH711pPp9MPnu0eDGLDJBiLH
+         KZSEYBPkzy2/b2c/ByQoUaOuzPYglSDAi3l2/fd0HIPlsSXc5CKWmiI4O0wpv8EFw3Qz
+         eY3w==
+X-Gm-Message-State: AJIora/n9NBsudgqcQvgNpHoulIBIV+UMXiXLs3q9jclkU8mkXQlW1LT
+        kr7GrgOr2lbmjIW9oiKnjCINQvSVtbdr1Q==
+X-Google-Smtp-Source: AGRyM1sFojOEg7WcBCFLFgZZYS5/GEG635aOgfwKGZGop91VqjM/CXOZt6sU+u6iDRoIZSN2xABIdA==
+X-Received: by 2002:a05:6512:3409:b0:489:fd59:a78f with SMTP id i9-20020a056512340900b00489fd59a78fmr1179056lfr.654.1657698755188;
+        Wed, 13 Jul 2022 00:52:35 -0700 (PDT)
 Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id 3-20020a2e0503000000b0025d39993856sm2955769ljf.127.2022.07.13.00.50.48
+        by smtp.gmail.com with ESMTPSA id z5-20020a2e3505000000b0025d476dc71csm2850767ljz.106.2022.07.13.00.52.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 00:50:50 -0700 (PDT)
-Message-ID: <27cd6e98-50c6-14b2-aec0-b4bbd49a9da8@linaro.org>
-Date:   Wed, 13 Jul 2022 09:50:47 +0200
+        Wed, 13 Jul 2022 00:52:34 -0700 (PDT)
+Message-ID: <be752ee1-3732-bcbd-4d31-6d6fe0bd251f@linaro.org>
+Date:   Wed, 13 Jul 2022 09:52:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v10 2/2] dt-bindings: thermal: Add Sunplus schema
+Subject: Re: [PATCH v10 1/2] thermal: Add thermal driver for Sunplus
 Content-Language: en-US
 To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
         daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
@@ -61,14 +61,14 @@ To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     lh.kuo@sunplus.com
 References: <cover.1654660009.git.lhjeff911@gmail.com>
- <5d2c95959dd6efaa204bc80ca9b24a8be9293d2f.1654660009.git.lhjeff911@gmail.com>
+ <b114b6f8ea51054561a61dc4982715bb73633ec5.1654660009.git.lhjeff911@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5d2c95959dd6efaa204bc80ca9b24a8be9293d2f.1654660009.git.lhjeff911@gmail.com>
+In-Reply-To: <b114b6f8ea51054561a61dc4982715bb73633ec5.1654660009.git.lhjeff911@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,89 +77,38 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 12/07/2022 09:30, Li-hao Kuo wrote:
-> Add bindings for Sunplus thermal driver
+> Add thermal driver for Sunplus.
 > 
 > Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
-> ---
-> Changes in v10:
->  - Fix wrong indentation.
->  - Change the setting of compatible.
->  - Mosdify the setting of remove funciton.
-> 
->  .../bindings/thermal/sunplus,thermal.yaml          | 43 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> new file mode 100644
-> index 0000000..52094da
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sunplus,thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus Thermal controller
-> +
-> +maintainers:
-> +  - Li-hao Kuo <lhjeff911@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,sp7021-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  nvmem-cells:
-> +    maxItems: 1
-> +
-> +  nvmem-cell-names:
-> +    const: calib
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    thermal@9c000280 {
-> +        compatible = "sunplus,sp7021-thermal";
-> +        reg = <0x9c000280 0xc>;
-> +        nvmem-cells = <&calib>;
-> +        nvmem-cell-names = "calib";
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 23bde07..a8c44eb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19107,6 +19107,7 @@ SUNPLUS THERMAL DRIVER
->  M:	Li-hao Kuo <lhjeff911@gmail.com>
->  L:	linux-pm@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
 
-Not a correct path anymore.
+Thank you for your patch. There is something to discuss/improve.
 
-Around v7 I asked to name the file either sunplus,thermal.yaml or
-sunplus,sp7021-thermal.yaml, but actually that was my mistake a bit
-which I learnt later. The only recommended name is the latter, based on
-compatible, so:
-sunplus,sp7021-thermal.yaml
+_data);
+> +	ret = sunplus_get_otp_temp_coef(sp_data, &pdev->dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sp_data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
+> +							    0,
+> +							    sp_data, &sp_of_thermal_ops);
+> +
+> +	if (IS_ERR(sp_data->pcb_tz)) {
+> +		ret = PTR_ERR(sp_data->pcb_tz);
+> +		dev_err(dev, "Failed to register tsensor: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int sunplus_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data = platform_get_drvdata(pdev);
+> +
+> +	thermal_zone_of_sensor_unregister(&pdev->dev, sp_data->pcb_tz);
 
-Please name the bindings "sunplus,sp7021-thermal.yaml", change the $id
-and maintainers entry to new filename.
+You used devm to register, so this looks wrong and will lead to double free.
+
 
 Best regards,
 Krzysztof
