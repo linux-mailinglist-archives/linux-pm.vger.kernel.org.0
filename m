@@ -2,116 +2,286 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A57572BA5
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 05:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01DF1572C9B
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 06:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiGMDDE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Jul 2022 23:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S233545AbiGMEau (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 00:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiGMDDE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Jul 2022 23:03:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7FC7D64F4
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 20:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657681380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AKCW1VIPhBlGLtHiDdo2L+Ie0mqV5EcOVK4BKO6iRIQ=;
-        b=dSv47E/zuiuRvIbPP6S55Ck/+nRY6oDmlicfj0du0igGKgDE+nlxg3+dj66CN7JDxfNq5n
-        7orTMQQxu+lZG0PQSySqHezsa1GvQma1N56KegFg8+6SGGZAmAEKshFS/WBTeu1VD+2uKZ
-        g9dZO1rxdHHLxfQX3PF8w+LkVV5a5Vo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-PczGRwZgMKekaN68QBXEBA-1; Tue, 12 Jul 2022 23:02:50 -0400
-X-MC-Unique: PczGRwZgMKekaN68QBXEBA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FAE2101A586;
-        Wed, 13 Jul 2022 03:02:50 +0000 (UTC)
-Received: from [10.22.10.179] (unknown [10.22.10.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BB571400DC12;
-        Wed, 13 Jul 2022 03:02:48 +0000 (UTC)
-Message-ID: <a51a0a2e-d50d-c172-9403-034b13dff1a4@redhat.com>
-Date:   Tue, 12 Jul 2022 23:02:48 -0400
+        with ESMTP id S231837AbiGMEat (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 00:30:49 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B0726FD
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 21:30:48 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id t26-20020a9d775a000000b006168f7563daso7603978otl.2
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 21:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6N8ChIQx6pex81y/6RbqslzOiu4f4qETiQ5M4m/U06o=;
+        b=ndBc7G7nHdfY9KsFXFOIc14lB0MciSnICKLcYwkT7Yxg7a7iZ5+wTHd7UlW0Vmafyp
+         o48cUGAzBq6PyQ197/tEnmvHsxYXf2JTYGTxJw1PdywLdeS2QnFdZAvFu4KYEIdeCPyM
+         VUoIgG4/s4xZNycYVEDBqBVNsQzj/EXEV+KnyZKRg/gdjeJAOE+XEvKsVPQUb6fysAwi
+         VoelG78Hn72TqBqhRGiC+5yFloeUELMoLIZnxvuD0FWXRPKuTYkXL3y+FeR6gHH67ob4
+         QHCFG69XcPK63cJM8u6x7xRTsV2HvN4If8G2+g9BgdxeicdqDdUVF1BnNimzgk2OEFDU
+         27WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6N8ChIQx6pex81y/6RbqslzOiu4f4qETiQ5M4m/U06o=;
+        b=QiigHVVyE3mJYmXqPW0XzSZKc5/IqLJKvOCzJCHKbHsJC2lGwZy+kOV2k8DbPg6Z/o
+         lATUQQf92fD2+ZKKsQQiDuvsP8cuNKl+w1bN5KO6K4i6IRJxDndyNsySqRtW8Snlz+IU
+         aUO1WLVnb6RoQkv3RUaDTXkqJLYOeoSHtqD6L0SWse0U16zEiB7hA6B/Eysy4ULv/Q7x
+         69r47Rolsd2YRlHYsdoufeNAkMRd9a7WHxiHekjEz2EHZCCzeX5wKNoLEMKwOE1qjaUC
+         viiqLvRHSUdG7Uukntrf+WlA2ppdoOqg2G4HVBqSKe+fZ2ZayxK0gZP6wIEpiW/aSmPO
+         Tk5A==
+X-Gm-Message-State: AJIora9Fct6tsg4ctkK0Va2RbvUGwIzA6e2m6sUKvs4B2M9p8kx3nUCS
+        6ejjHC+9NKFECViv2ey+OrY/wA==
+X-Google-Smtp-Source: AGRyM1uCPT3DbFnOwTexzPekAoU8MyeLpj7KIV0wLNIHENFle2jyFGffI0fzdIBQZb7goZ/namEHlw==
+X-Received: by 2002:a9d:664a:0:b0:61c:312f:27d2 with SMTP id q10-20020a9d664a000000b0061c312f27d2mr584900otm.147.1657686647878;
+        Tue, 12 Jul 2022 21:30:47 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t67-20020a4a5446000000b0042bd87fd123sm4497755ooa.19.2022.07.12.21.30.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 21:30:47 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 23:30:45 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
+        david.brown@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bilbao@vt.edu
+Subject: Re: [PATCH] thermal/drivers/qcom: Code refactoring
+Message-ID: <Ys5KdVQmA9YTmfCT@builder.lan>
+References: <20220712173127.3677491-1-carlos.bilbao@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
- hotplug when using schedutil
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>, Tejun Heo <tj@kernel.org>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org
-References: <20220705123705.764-1-xuewen.yan@unisoc.com>
- <20220711174629.uehfmqegcwn2lqzu@wubuntu> <YsyO9GM9mCydaybo@slm.duckdns.org>
- <20220711171130.6390600b@gandalf.local.home>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220711171130.6390600b@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712173127.3677491-1-carlos.bilbao@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/11/22 17:11, Steven Rostedt wrote:
-> On Mon, 11 Jul 2022 10:58:28 -1000
-> Tejun Heo <tj@kernel.org> wrote:
->
->> I don't think lockdep would be able to track CPU1 -> CPU2 dependency here
->> unfortunately.
->>
->>> AFAIU:
->>>
->>>
->>> CPU0                                     CPU1                                   CPU2
->>>
->>> // attach task to a different
->>> // cpuset cgroup via sysfs
->>> __acquire(cgroup_threadgroup_rwsem)
->>>
->>>                                           // pring up CPU2 online
->>>                                           __acquire(cpu_hotplug_lock)
->>>                                           // wait for CPU2 to come online
-> Should there be some annotation here that tells lockdep that CPU1 is now
-> blocked on CPU2?
->
-> Then this case would be caught by lockdep.
->
-> -- Steve
->
->
->>>                                                                                  // bringup cpu online
->>>                                                                                  // call cpufreq_online() which tries to create sugov kthread
->>> __acquire(cpu_hotplug_lock)                                                     copy_process()
->>>                                                                                     cgroup_can_fork()
->>>                                                                                        cgroup_css_set_fork()
->>>                                                                                        __acquire(cgroup_threadgroup_rwsem)
->>> // blocks forever                        // blocks forever                            // blocks forever
+On Tue 12 Jul 12:31 CDT 2022, Carlos Bilbao wrote:
 
-Actually, the dependency can probably be coded by calling 
-lockdep_acquire_cpus_lock() in cpu2 (task 2) before acquiring 
-cgroup_threadgroup_rwsem to indicate the dependency between CPU1 and 
-CPU2 (task 1 and task 2). lockdep_release_cpus_lock() can then called 
-after release the rwsem.
+> Some functions in tsens-8960.c can directly return ret instead of doing an
+> extra check. In function calibrate_8960(), a second check for IS_ERR(data)
+> can also be avoided in some cases. A constant could be used to represent
+> the maximum number of sensors (11). Finally, function code_to_degc() can be
+> simplified, avoiding using an extra variable.
+> 
 
-Cheers,
-Longman
+Thanks for the patch Carlos. These are rather small fixes, but it would
+still be nice to keep them separate, so that in the even of there being
+some unforseen regression it would be easy to track down and fix the
+relevant patch.
 
+> Include these small refactoring changes.
+> 
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> ---
+>  drivers/thermal/qcom/tsens-8960.c   | 25 +++++++++----------------
+>  drivers/thermal/qcom/tsens-common.c | 18 ++++++++----------
+>  drivers/thermal/qcom/tsens-v0_1.c   |  6 +++---
+>  drivers/thermal/qcom/tsens-v1.c     |  2 +-
+>  drivers/thermal/qcom/tsens.h        |  1 +
+>  5 files changed, 22 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+> index 8d9b721dadb6..576bca871655 100644
+> --- a/drivers/thermal/qcom/tsens-8960.c
+> +++ b/drivers/thermal/qcom/tsens-8960.c
+> @@ -76,10 +76,8 @@ static int suspend_8960(struct tsens_priv *priv)
+>  		mask = SLP_CLK_ENA_8660 | EN;
+>  
+>  	ret = regmap_update_bits(map, CNTL_ADDR, mask, 0);
+
+Why not just do:
+
+	return regmap_writen(...);
+
+> -	if (ret)
+> -		return ret;
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static int resume_8960(struct tsens_priv *priv)
+> @@ -106,10 +104,8 @@ static int resume_8960(struct tsens_priv *priv)
+>  		return ret;
+>  
+>  	ret = regmap_write(map, CNTL_ADDR, priv->ctx.control);
+> -	if (ret)
+> -		return ret;
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static int enable_8960(struct tsens_priv *priv, int id)
+> @@ -132,10 +128,8 @@ static int enable_8960(struct tsens_priv *priv, int id)
+>  		reg |= mask | SLP_CLK_ENA_8660 | EN;
+>  
+>  	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg);
+> -	if (ret)
+> -		return ret;
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static void disable_8960(struct tsens_priv *priv)
+> @@ -206,10 +200,8 @@ static int init_8960(struct tsens_priv *priv)
+>  
+>  	reg_cntl |= EN;
+>  	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
+> -	if (ret)
+> -		return ret;
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static int calibrate_8960(struct tsens_priv *priv)
+> @@ -221,10 +213,11 @@ static int calibrate_8960(struct tsens_priv *priv)
+>  	struct tsens_sensor *s = priv->sensor;
+>  
+>  	data = qfprom_read(priv->dev, "calib");
+> -	if (IS_ERR(data))
+> +	if (IS_ERR(data)) {
+>  		data = qfprom_read(priv->dev, "calib_backup");
+> -	if (IS_ERR(data))
+> -		return PTR_ERR(data);
+> +		if (IS_ERR(data))
+> +			return PTR_ERR(data);
+> +	}
+>  
+>  	for (i = 0; i < num_read; i++, s++)
+>  		s->offset = data[i];
+> @@ -278,6 +271,6 @@ static const struct tsens_ops ops_8960 = {
+>  };
+>  
+>  const struct tsens_plat_data data_8960 = {
+> -	.num_sensors	= 11,
+> +	.num_sensors	= MAX_NUM_SENSORS,
+>  	.ops		= &ops_8960,
+>  };
+> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> index 528df8801254..fe5f4459e1cc 100644
+> --- a/drivers/thermal/qcom/tsens-common.c
+> +++ b/drivers/thermal/qcom/tsens-common.c
+> @@ -66,19 +66,17 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+>  
+>  static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
+>  {
+> -	int degc, num, den;
+> +	int degc, den;
+>  
+> -	num = (adc_code * SLOPE_FACTOR) - s->offset;
+> +	degc = (adc_code * SLOPE_FACTOR) - s->offset;
+
+At this point the variable name is misleading, it's not until you have
+reassigned degc below that it's value represent the temperature.
+
+>  	den = s->slope;
+>  
+> -	if (num > 0)
+> -		degc = num + (den / 2);
+> -	else if (num < 0)
+> -		degc = num - (den / 2);
+> -	else
+> -		degc = num;
+
+So the main part of this change is to rework the else case, how about
+just starting with:
+
+	if (!num)
+		return 0;
+
+> -
+> -	degc /= den;
+> +	if (degc != 0) {
+> +		if (degc > 0)
+> +			degc = (degc + (den / 2)) / den;
+> +		else
+> +			degc = (degc - (den / 2)) / den;
+> +	}
+>  
+>  	return degc;
+>  }
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index 6f26fadf4c27..42e897526345 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -188,7 +188,7 @@ static int calibrate_8916(struct tsens_priv *priv)
+>  static int calibrate_8974(struct tsens_priv *priv)
+>  {
+>  	int base1 = 0, base2 = 0, i;
+> -	u32 p1[11], p2[11];
+> +	u32 p1[MAX_NUM_SENSORS], p2[MAX_NUM_SENSORS];
+>  	int mode = 0;
+>  	u32 *calib, *bkp;
+>  	u32 calib_redun_sel;
+> @@ -324,7 +324,7 @@ static const struct tsens_features tsens_v0_1_feat = {
+>  	.crit_int	= 0,
+>  	.adc		= 1,
+>  	.srot_split	= 1,
+> -	.max_sensors	= 11,
+> +	.max_sensors	= MAX_NUM_SENSORS,
+>  };
+>  
+>  static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
+> @@ -374,7 +374,7 @@ static const struct tsens_ops ops_8974 = {
+>  };
+>  
+>  const struct tsens_plat_data data_8974 = {
+> -	.num_sensors	= 11,
+> +	.num_sensors	= MAX_NUM_SENSORS,
+>  	.ops		= &ops_8974,
+>  	.feat		= &tsens_v0_1_feat,
+>  	.fields	= tsens_v0_1_regfields,
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index 10b595d4f619..98acc9b64555 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -149,7 +149,7 @@ static const struct tsens_features tsens_v1_feat = {
+>  	.crit_int	= 0,
+>  	.adc		= 1,
+>  	.srot_split	= 1,
+> -	.max_sensors	= 11,
+> +	.max_sensors	= MAX_NUM_SENSORS,
+>  };
+>  
+>  static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index 2fd94997245b..d2d78c7e20c8 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -6,6 +6,7 @@
+>  #ifndef __QCOM_TSENS_H__
+>  #define __QCOM_TSENS_H__
+>  
+> +#define MAX_NUM_SENSORS		11
+
+This only seems to apply for the three cases you have listed here, e.g.
+tsens-v2 (which also includes tsens.h) has max_sensors = 16.
+
+Regards,
+Bjorn
+
+>  #define ONE_PT_CALIB		0x1
+>  #define ONE_PT_CALIB2		0x2
+>  #define TWO_PT_CALIB		0x3
+> -- 
+> 2.31.1
+> 
