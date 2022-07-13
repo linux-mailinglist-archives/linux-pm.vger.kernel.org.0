@@ -2,68 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DF1572C9B
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 06:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F737572D0D
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 07:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbiGMEau (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 00:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
+        id S230249AbiGMF1S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 01:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbiGMEat (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 00:30:49 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B0726FD
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 21:30:48 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id t26-20020a9d775a000000b006168f7563daso7603978otl.2
-        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 21:30:48 -0700 (PDT)
+        with ESMTP id S229487AbiGMF1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 01:27:17 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B374DC19C
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 22:27:16 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id i8-20020a17090a4b8800b001ef8a65bfbdso1809688pjh.1
+        for <linux-pm@vger.kernel.org>; Tue, 12 Jul 2022 22:27:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=6N8ChIQx6pex81y/6RbqslzOiu4f4qETiQ5M4m/U06o=;
-        b=ndBc7G7nHdfY9KsFXFOIc14lB0MciSnICKLcYwkT7Yxg7a7iZ5+wTHd7UlW0Vmafyp
-         o48cUGAzBq6PyQ197/tEnmvHsxYXf2JTYGTxJw1PdywLdeS2QnFdZAvFu4KYEIdeCPyM
-         VUoIgG4/s4xZNycYVEDBqBVNsQzj/EXEV+KnyZKRg/gdjeJAOE+XEvKsVPQUb6fysAwi
-         VoelG78Hn72TqBqhRGiC+5yFloeUELMoLIZnxvuD0FWXRPKuTYkXL3y+FeR6gHH67ob4
-         QHCFG69XcPK63cJM8u6x7xRTsV2HvN4If8G2+g9BgdxeicdqDdUVF1BnNimzgk2OEFDU
-         27WA==
+        bh=zvW+o5uKBthmVUls/1elyqXM1AaF9zOZaR17pydOr9o=;
+        b=SYYCkjjhLhUq1gG5HoagDvTiIsLUbkH6MbXPdcYFxwTa7DvOaT7vSoW7ajw+eK/ChO
+         JfahcowXhYw5aLQs3yxTZe3MZzQnyqcgRY5gj5BpT5tHKCZzDveN8agWbpkvEscSFCvD
+         Jb/NiGg1dAUq2LkIdGU3KdTcK8LDvo3NymQS+/eJzjhnPTevvsl1bH2j98uzi/QTdi+B
+         q9hxxeW6dFNUnGqRxLA1B1UEbSW/grWUGda80BDWqvwAAEu1KD3Gj8SchBt/TpZA4zvB
+         gSC6wvboTm55u6PjyiIB2a1CP5O+Vqp+TIMmBy+I1rZZ/Idkx3rwTw9xUPAP/r0lkAxK
+         08MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6N8ChIQx6pex81y/6RbqslzOiu4f4qETiQ5M4m/U06o=;
-        b=QiigHVVyE3mJYmXqPW0XzSZKc5/IqLJKvOCzJCHKbHsJC2lGwZy+kOV2k8DbPg6Z/o
-         lATUQQf92fD2+ZKKsQQiDuvsP8cuNKl+w1bN5KO6K4i6IRJxDndyNsySqRtW8Snlz+IU
-         aUO1WLVnb6RoQkv3RUaDTXkqJLYOeoSHtqD6L0SWse0U16zEiB7hA6B/Eysy4ULv/Q7x
-         69r47Rolsd2YRlHYsdoufeNAkMRd9a7WHxiHekjEz2EHZCCzeX5wKNoLEMKwOE1qjaUC
-         viiqLvRHSUdG7Uukntrf+WlA2ppdoOqg2G4HVBqSKe+fZ2ZayxK0gZP6wIEpiW/aSmPO
-         Tk5A==
-X-Gm-Message-State: AJIora9Fct6tsg4ctkK0Va2RbvUGwIzA6e2m6sUKvs4B2M9p8kx3nUCS
-        6ejjHC+9NKFECViv2ey+OrY/wA==
-X-Google-Smtp-Source: AGRyM1uCPT3DbFnOwTexzPekAoU8MyeLpj7KIV0wLNIHENFle2jyFGffI0fzdIBQZb7goZ/namEHlw==
-X-Received: by 2002:a9d:664a:0:b0:61c:312f:27d2 with SMTP id q10-20020a9d664a000000b0061c312f27d2mr584900otm.147.1657686647878;
-        Tue, 12 Jul 2022 21:30:47 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t67-20020a4a5446000000b0042bd87fd123sm4497755ooa.19.2022.07.12.21.30.46
+        bh=zvW+o5uKBthmVUls/1elyqXM1AaF9zOZaR17pydOr9o=;
+        b=HlyYqo/+kKtzSt8faKL9zxYl9B5BZkbjExyQ8m8CGzIw/uWqOSc8PtCzmYoEF1h3Ni
+         Kq2TIP3ZYvCFr7UHWdnLFpJHP9u3b3BmIfu8Of2oAf5Oylj+wdUvjw+fhpvZV5/dAbKt
+         +IqP/+uOXvMgjWxPFepOpArTvvYga0ZKMCQNcZYji089xOqTQ1uqA5YhXyxGaNaRjVdS
+         uLrkwoLNLimSQIsSYurnE1f0FMIngaSGlS5bYAlNPBBrmmZLckX6K269AL7ep4I+JZ2n
+         UfOlVWHOowMOEsKFOpNEm1/t9rNAx4/2DBvcwE7AJnKjwso7p515K6RIbIU3112aQp6n
+         QccA==
+X-Gm-Message-State: AJIora/PUcqimIH5uDzBpDzdx9IPcqznXQg+cf+IZKmw1RWzgSsPxcaR
+        dV2To8n6sZ4+oUI3PiyXUgd6tQ==
+X-Google-Smtp-Source: AGRyM1vDScV1/LupdvYjMPuAPAFZiWIRwwOXtpuzLfvL9zTRaTkz14x9qLC/jQlmlMV3eY/WX5xIKw==
+X-Received: by 2002:a17:902:a716:b0:16c:37fc:660c with SMTP id w22-20020a170902a71600b0016c37fc660cmr1514024plq.17.1657690035569;
+        Tue, 12 Jul 2022 22:27:15 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id c6-20020a621c06000000b00528c34f514dsm7760651pfc.121.2022.07.12.22.27.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 21:30:47 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 23:30:45 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
-        david.brown@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bilbao@vt.edu
-Subject: Re: [PATCH] thermal/drivers/qcom: Code refactoring
-Message-ID: <Ys5KdVQmA9YTmfCT@builder.lan>
-References: <20220712173127.3677491-1-carlos.bilbao@amd.com>
+        Tue, 12 Jul 2022 22:27:12 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 10:57:08 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Perry Yuan <Perry.Yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, Ray.Huang@amd.com,
+        Deepak.Sharma@amd.com, Mario.Limonciello@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Jinzhou.Su@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+        Li.Meng@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v3 04/13] cpufreq: amd-pstate: prefetch cppc_req_cached
+ value in amd_pstate_cpu_init()
+Message-ID: <20220713052708.2paskxzl6s32j4yd@vireshk-i7>
+References: <cover.1657638462.git.Perry.Yuan@amd.com>
+ <001d002ba93580763421c712247bf8d9faa67756.1657638462.git.Perry.Yuan@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712173127.3677491-1-carlos.bilbao@amd.com>
+In-Reply-To: <001d002ba93580763421c712247bf8d9faa67756.1657638462.git.Perry.Yuan@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,217 +76,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 12 Jul 12:31 CDT 2022, Carlos Bilbao wrote:
+On 12-07-22, 11:40, Perry Yuan wrote:
+> This cppc_req_cached valued should be prefetched during
+> amd_pstate_cpu_init call period, then the amd_pstate_update() will get
+> correct cached value before updating the perf to change the cpu perf
+> level.
 
-> Some functions in tsens-8960.c can directly return ret instead of doing an
-> extra check. In function calibrate_8960(), a second check for IS_ERR(data)
-> can also be avoided in some cases. A constant could be used to represent
-> the maximum number of sensors (11). Finally, function code_to_degc() can be
-> simplified, avoiding using an extra variable.
-> 
+You are doing more than this in the patch, either mention all the
+stuff with reasoning or split into two patches.
 
-Thanks for the patch Carlos. These are rather small fixes, but it would
-still be nice to keep them separate, so that in the even of there being
-some unforseen regression it would be easy to track down and fix the
-relevant patch.
-
-> Include these small refactoring changes.
-> 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 > ---
->  drivers/thermal/qcom/tsens-8960.c   | 25 +++++++++----------------
->  drivers/thermal/qcom/tsens-common.c | 18 ++++++++----------
->  drivers/thermal/qcom/tsens-v0_1.c   |  6 +++---
->  drivers/thermal/qcom/tsens-v1.c     |  2 +-
->  drivers/thermal/qcom/tsens.h        |  1 +
->  5 files changed, 22 insertions(+), 30 deletions(-)
+>  drivers/cpufreq/amd-pstate.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
-> index 8d9b721dadb6..576bca871655 100644
-> --- a/drivers/thermal/qcom/tsens-8960.c
-> +++ b/drivers/thermal/qcom/tsens-8960.c
-> @@ -76,10 +76,8 @@ static int suspend_8960(struct tsens_priv *priv)
->  		mask = SLP_CLK_ENA_8660 | EN;
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 43e6df9f67f6..e4904da54541 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -547,12 +547,17 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>  	cpudata->lowest_nonlinear_freq = lowest_nonlinear_freq;
 >  
->  	ret = regmap_update_bits(map, CNTL_ADDR, mask, 0);
+>  	policy->driver_data = cpudata;
+> +	if (!shared_mem) {
 
-Why not just do:
+This is a new change, which the commit log doesn't talk about.
 
-	return regmap_writen(...);
-
+> +		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_HW_CTL, &value);
+> +		if (ret)
+> +			return ret;
+> +		WRITE_ONCE(cpudata->cppc_hw_conf_cached, value);
+>  
+> -	ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_HW_CTL, &value);
 > -	if (ret)
 > -		return ret;
->  
-> -	return 0;
-> +	return ret;
->  }
->  
->  static int resume_8960(struct tsens_priv *priv)
-> @@ -106,10 +104,8 @@ static int resume_8960(struct tsens_priv *priv)
->  		return ret;
->  
->  	ret = regmap_write(map, CNTL_ADDR, priv->ctx.control);
-> -	if (ret)
-> -		return ret;
->  
-> -	return 0;
-> +	return ret;
->  }
->  
->  static int enable_8960(struct tsens_priv *priv, int id)
-> @@ -132,10 +128,8 @@ static int enable_8960(struct tsens_priv *priv, int id)
->  		reg |= mask | SLP_CLK_ENA_8660 | EN;
->  
->  	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg);
-> -	if (ret)
-> -		return ret;
->  
-> -	return 0;
-> +	return ret;
->  }
->  
->  static void disable_8960(struct tsens_priv *priv)
-> @@ -206,10 +200,8 @@ static int init_8960(struct tsens_priv *priv)
->  
->  	reg_cntl |= EN;
->  	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
-> -	if (ret)
-> -		return ret;
->  
-> -	return 0;
-> +	return ret;
->  }
->  
->  static int calibrate_8960(struct tsens_priv *priv)
-> @@ -221,10 +213,11 @@ static int calibrate_8960(struct tsens_priv *priv)
->  	struct tsens_sensor *s = priv->sensor;
->  
->  	data = qfprom_read(priv->dev, "calib");
-> -	if (IS_ERR(data))
-> +	if (IS_ERR(data)) {
->  		data = qfprom_read(priv->dev, "calib_backup");
-> -	if (IS_ERR(data))
-> -		return PTR_ERR(data);
-> +		if (IS_ERR(data))
-> +			return PTR_ERR(data);
-> +	}
->  
->  	for (i = 0; i < num_read; i++, s++)
->  		s->offset = data[i];
-> @@ -278,6 +271,6 @@ static const struct tsens_ops ops_8960 = {
->  };
->  
->  const struct tsens_plat_data data_8960 = {
-> -	.num_sensors	= 11,
-> +	.num_sensors	= MAX_NUM_SENSORS,
->  	.ops		= &ops_8960,
->  };
-> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-> index 528df8801254..fe5f4459e1cc 100644
-> --- a/drivers/thermal/qcom/tsens-common.c
-> +++ b/drivers/thermal/qcom/tsens-common.c
-> @@ -66,19 +66,17 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
->  
->  static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
->  {
-> -	int degc, num, den;
-> +	int degc, den;
->  
-> -	num = (adc_code * SLOPE_FACTOR) - s->offset;
-> +	degc = (adc_code * SLOPE_FACTOR) - s->offset;
-
-At this point the variable name is misleading, it's not until you have
-reassigned degc below that it's value represent the temperature.
-
->  	den = s->slope;
->  
-> -	if (num > 0)
-> -		degc = num + (den / 2);
-> -	else if (num < 0)
-> -		degc = num - (den / 2);
-> -	else
-> -		degc = num;
-
-So the main part of this change is to rework the else case, how about
-just starting with:
-
-	if (!num)
-		return 0;
-
+> -	WRITE_ONCE(cpudata->cppc_hw_conf_cached, value);
 > -
-> -	degc /= den;
-> +	if (degc != 0) {
-> +		if (degc > 0)
-> +			degc = (degc + (den / 2)) / den;
-> +		else
-> +			degc = (degc - (den / 2)) / den;
+> +		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &value);
+> +		if (ret)
+> +			return ret;
+> +		WRITE_ONCE(cpudata->cppc_req_cached, value);
 > +	}
+>  	amd_pstate_boost_init(cpudata);
 >  
->  	return degc;
->  }
-> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-> index 6f26fadf4c27..42e897526345 100644
-> --- a/drivers/thermal/qcom/tsens-v0_1.c
-> +++ b/drivers/thermal/qcom/tsens-v0_1.c
-> @@ -188,7 +188,7 @@ static int calibrate_8916(struct tsens_priv *priv)
->  static int calibrate_8974(struct tsens_priv *priv)
->  {
->  	int base1 = 0, base2 = 0, i;
-> -	u32 p1[11], p2[11];
-> +	u32 p1[MAX_NUM_SENSORS], p2[MAX_NUM_SENSORS];
->  	int mode = 0;
->  	u32 *calib, *bkp;
->  	u32 calib_redun_sel;
-> @@ -324,7 +324,7 @@ static const struct tsens_features tsens_v0_1_feat = {
->  	.crit_int	= 0,
->  	.adc		= 1,
->  	.srot_split	= 1,
-> -	.max_sensors	= 11,
-> +	.max_sensors	= MAX_NUM_SENSORS,
->  };
->  
->  static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
-> @@ -374,7 +374,7 @@ static const struct tsens_ops ops_8974 = {
->  };
->  
->  const struct tsens_plat_data data_8974 = {
-> -	.num_sensors	= 11,
-> +	.num_sensors	= MAX_NUM_SENSORS,
->  	.ops		= &ops_8974,
->  	.feat		= &tsens_v0_1_feat,
->  	.fields	= tsens_v0_1_regfields,
-> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-> index 10b595d4f619..98acc9b64555 100644
-> --- a/drivers/thermal/qcom/tsens-v1.c
-> +++ b/drivers/thermal/qcom/tsens-v1.c
-> @@ -149,7 +149,7 @@ static const struct tsens_features tsens_v1_feat = {
->  	.crit_int	= 0,
->  	.adc		= 1,
->  	.srot_split	= 1,
-> -	.max_sensors	= 11,
-> +	.max_sensors	= MAX_NUM_SENSORS,
->  };
->  
->  static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
-> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-> index 2fd94997245b..d2d78c7e20c8 100644
-> --- a/drivers/thermal/qcom/tsens.h
-> +++ b/drivers/thermal/qcom/tsens.h
-> @@ -6,6 +6,7 @@
->  #ifndef __QCOM_TSENS_H__
->  #define __QCOM_TSENS_H__
->  
-> +#define MAX_NUM_SENSORS		11
-
-This only seems to apply for the three cases you have listed here, e.g.
-tsens-v2 (which also includes tsens.h) has max_sensors = 16.
-
-Regards,
-Bjorn
-
->  #define ONE_PT_CALIB		0x1
->  #define ONE_PT_CALIB2		0x2
->  #define TWO_PT_CALIB		0x3
+>  	return 0;
 > -- 
-> 2.31.1
-> 
+> 2.25.1
+
+-- 
+viresh
