@@ -2,192 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9AC572FFF
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 10:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C724B573017
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 10:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234989AbiGMIE3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 04:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S234934AbiGMIG5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 04:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiGMIE2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 04:04:28 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAF3E146C
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 01:04:27 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h17so14390143wrx.0
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 01:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=yaBi5+j2aB+gOEpu/CS6a4crTXK1oluI+G7cSMbxelM=;
-        b=MduZJ4LcUwia674sobuaUywFu/y9XJbPCqF8UXjn0wnRaCT+QZ3XOGx+YAje4xxfsx
-         x9gPEEwK6l26zgKylqiCX6kg+6Qcrx6/7WQ/ytwHvcda4vtybERuZ4s70YTn/BNqLy24
-         5MeZn8161zhdqCh3Gug8o1zPTpESCgZp9pNlebMEHS9aj8RGpd5fMetXcNCgQ8tnZWl2
-         oITFcoQoNbdZcmx8uMXLq2HS15pvFWibAtvysAkVPH+IejhAt1//CsNF6qnytW3Sp+Yo
-         iZrLyWZCZeToIHPCPlOTz9lFBuwhiDKL4zdw/LqWzu1dOoE8C4t19oUDKrZTd7BZsh3v
-         b4DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=yaBi5+j2aB+gOEpu/CS6a4crTXK1oluI+G7cSMbxelM=;
-        b=AODIAg7pMRzQv0soB+7yYJEzSdNVsLXorsYJuV1YTJPk9V1HyY3jj0a/Z4B+/AQQE0
-         KNjuffGz5s2xvftKMs3dHXRRTn1ZeF0jkNsU9f5bzbKmkG2rZwxF1IbA5VD7F+TK4D66
-         TWq0K51DVa+L4UkZgnllPUZdllmS1VOyjE2J+D7N1ITuYQtVEa0gppf7Jcn+d8MtgXqz
-         3IoLItZMP+hp8hpJ7CnBYEmJcShksfaYNqxjqxdD8a3Qr41QOshkTubKbrWBxml/e5zg
-         h5yHblyTJ8jV0DAQsbnknwlE8iQdZhkOCNF5V8WoPAfAcLKGw4AkWdIsszKrSipLI+WZ
-         fUdQ==
-X-Gm-Message-State: AJIora+GKDi39BRDlGoSuim8nS6BbzLwyrQhN467C6k7nvzHiS05bqVq
-        lMvAUeOJ/MuUDXjAwnTFngqm9w==
-X-Google-Smtp-Source: AGRyM1sox2gwD2oOUs0Po8YP6r0hOoKvkq7xKaXz/jSSA3VY7uq2zQIZPBxBD2yVdN4jLfilFwtkQw==
-X-Received: by 2002:a5d:4890:0:b0:21d:9bf3:89b5 with SMTP id g16-20020a5d4890000000b0021d9bf389b5mr1887795wrq.153.1657699465867;
-        Wed, 13 Jul 2022 01:04:25 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id l29-20020a05600c1d1d00b0039749b01ea7sm1616879wms.32.2022.07.13.01.04.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 01:04:25 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 09:04:22 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        with ESMTP id S234828AbiGMIGx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 04:06:53 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E92FDE9213;
+        Wed, 13 Jul 2022 01:06:51 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 268A680AE;
+        Wed, 13 Jul 2022 08:01:08 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 11:06:49 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Subject: Re: [PATCH v3 07/14] mfd: mt6370: Add Mediatek MT6370 support
-Message-ID: <Ys58hr3AK/p/4/ng@google.com>
-References: <20220623115631.22209-1-peterwu.pub@gmail.com>
- <20220623115631.22209-8-peterwu.pub@gmail.com>
- <Ys2TTsv1oU8n1fUE@google.com>
- <CABtFH5LMHrfOdLZZxpjwsHmyHZsHUmevpQJYDFqZtvfpC6AVxg@mail.gmail.com>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of
+ driver_deferred_probe_check_state()
+Message-ID: <Ys59Gctsllu6GraU@atomide.com>
+References: <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
+ <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+ <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
+ <Yr6HQOtS4ctUYm9m@atomide.com>
+ <Yr6QUzdoFWv/eAI6@atomide.com>
+ <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
+ <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
+ <Yr7wA8d4J7xtjwsH@atomide.com>
+ <Ys0ewNYFB25RWNju@atomide.com>
+ <CAGETcx8H9je6Yg-fciU5-dh22xB0_h6XzAfH5UsCSeET97wrpA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABtFH5LMHrfOdLZZxpjwsHmyHZsHUmevpQJYDFqZtvfpC6AVxg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAGETcx8H9je6Yg-fciU5-dh22xB0_h6XzAfH5UsCSeET97wrpA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 13 Jul 2022, ChiaEn Wu wrote:
-
-> Hi Lee,
+* Saravana Kannan <saravanak@google.com> [220713 00:44]:
+> On Tue, Jul 12, 2022 at 12:12 AM Tony Lindgren <tony@atomide.com> wrote:
+> >
+> > * Tony Lindgren <tony@atomide.com> [220701 16:00]:
+> > > Also, looks like both with the initcall change for prm, and the patch
+> > > below, there seems to be also another problem where my test devices no
+> > > longer properly idle somehow compared to reverting the your two patches
+> > > in next.
+> >
+> > Sorry looks like was a wrong conclusion. While trying to track down this
+> > issue, I cannot reproduce it. So I don't see issues idling with either
+> > the initcall change or your test patch.
+> >
+> > Not sure what caused my earlier tests to fail though. Maybe a config
+> > change to enable more debugging, or possibly some kind of warm reset vs
+> > cold reset type issue.
 > 
-> Thanks for your reply.
-> 
-> Lee Jones <lee.jones@linaro.org> 於 2022年7月12日 週二 晚上11:29寫道：
-> >
-> > On Thu, 23 Jun 2022, ChiaEn Wu wrote:
-> >
-> > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > >
-> > > Add Mediatek MT6370 MFD support.
-> >
-> > No such thing as "MFD support".
-> >
-> > And you're not getting away with submitting a 370 line patch with a 5
-> > word change log either. :)
-> >
-> > Please at least tell us what the device is and what it's used for.
-> 
-> I sincerely apologize.
-> We will add more descriptions of the MT6370 feature in the v5 patch.
-> 
-> >
-> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > > ---
-> > >
-> > > v3
-> > > - Refine Kconfig help text
-> > > - Refine error message of unknown vendor ID in
-> > >   mt6370_check_vendor_info()
-> > > - Refine return value handling of mt6370_regmap_read()
-> > > - Refine all probe error by using dev_err_probe()
-> > > - Refine "bank_idx" and "bank_addr" in mt6370_regmap_read() and
-> > >   mt6370_regmap_write()
-> > > - Add "#define VENID*" and drop the comments in
-> > >   mt6370_check_vendor_info()
-> > > - Drop "MFD" in MODULE_DESCRIPTION()
-> > > ---
-> > >  drivers/mfd/Kconfig  |  13 ++
-> > >  drivers/mfd/Makefile |   1 +
-> > >  drivers/mfd/mt6370.c | 358 +++++++++++++++++++++++++++++++++++++++++++++++++++
-> > >  3 files changed, 372 insertions(+)
-> > >  create mode 100644 drivers/mfd/mt6370.c
+> Thanks for getting back to me about the false alarm.
 
-[...]
+FYI I'm pretty sure I had also some pending sdhci related patches applied
+while testing causing extra issues.
 
-> > > +static int mt6370_probe(struct i2c_client *i2c)
-> > > +{
-> > > +     struct mt6370_info *info;
-> > > +     struct i2c_client *usbc_i2c;
-> > > +     int ret;
-> > > +
-> > > +     info = devm_kzalloc(&i2c->dev, sizeof(*info), GFP_KERNEL);
-> > > +     if (!info)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     info->dev = &i2c->dev;
-> > > +
-> > > +     usbc_i2c = devm_i2c_new_dummy_device(&i2c->dev, i2c->adapter,
-> > > +                                          MT6370_USBC_I2CADDR);
-> > > +     if (IS_ERR(usbc_i2c))
-> > > +             return dev_err_probe(&i2c->dev, PTR_ERR(usbc_i2c),
-> > > +                                  "Failed to register USBC I2C client\n");
-> > > +
-> > > +     /* Assign I2C client for PMU and TypeC */
-> > > +     info->i2c[MT6370_PMU_I2C] = i2c;
-> > > +     info->i2c[MT6370_USBC_I2C] = usbc_i2c;
-> > > +
-> > > +     info->regmap = devm_regmap_init(&i2c->dev, &mt6370_regmap_bus, info,
-> > > +                                     &mt6370_regmap_config);
-> >
-> > Apart from in mt6370_check_vendor_info() where is this actually used?
-> 
-> Well... from my understanding, we use this MFD driver to make other
-> drivers of MT6370 (e.g. charger, ADC, led...) use the same regmap
-> settings.
-> Thus, this regmap is not only used in mt6370_check_vendor_info().
+> OK, so it looks like my patch to drivers/of/property.c fixed the issue
+> for you. In that case, let me test that a bit more thoroughly on my
+> end to make sure it's not breaking any existing functionality. And if
+> it's not breaking, I'll land that in the kernel eventually. Might be a
+> bit too late for 5.19. I'm considering temporarily reverting my series
+> depending on how the rest of the issues from my series go.
 
-Well for that to happen you need to store the data somewhere for the
-child devices to fetch from.  I don't see that happening in this
-patch?  What did I miss?
+OK. Seems the series is otherwise working and in case of issues, partial
+revert should be enough in the worst case. But yeah, probably some more
+testing is needed.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Regards,
+
+Tony
