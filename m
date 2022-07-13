@@ -2,50 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B419D573C28
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 19:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9B6573C32
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 19:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiGMRu1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 13:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S231494AbiGMRx0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 13:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiGMRu0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 13:50:26 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3731183B;
-        Wed, 13 Jul 2022 10:50:25 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 75so19249330ybf.4;
-        Wed, 13 Jul 2022 10:50:25 -0700 (PDT)
+        with ESMTP id S231329AbiGMRx0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 13:53:26 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274E62D1C9;
+        Wed, 13 Jul 2022 10:53:25 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id r3so20531451ybr.6;
+        Wed, 13 Jul 2022 10:53:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=O2ZB0zaBvuSigJ8wTixzYr0WCoqo0gk9Cx66gvFyjbU=;
-        b=Ip73G7DEceugIeRWXa5iePF8m8gmVdFo9Rl/Qc8gaIlH+Ju8WtNqC0FDdMn1R2SLaa
-         9scw3+semulEbWaUkGS1GZh07K1UW1itTL5pg9MBq/UOKpOYFLBqsAHgpzKnXSVxlyy3
-         hV+5t4yIBUIQqIudJA/lL8azQBTKC2ygelDzBhGL7KqNvFY4jF6/bDxGhmQZ7Cxa1km6
-         fyjPmRel/xfQqXWVAACC7B/ajznWslcvfqMBu2PiYPVOaebht9IkTfP8UdF08cgBxfsb
-         pwQKiDQ232EgtKSbH4Xn1i12R0zhunib/bNcfRbPNGHuYlpt83+8gc16lh7vFf/2846p
-         Ej/Q==
-X-Gm-Message-State: AJIora9WqU88sdlsRL/MjpLZL6A78CiMsgRN0KsjJ2gXyM9H2LEtxaaB
-        pXnj3QTFc2eaoUf3EG/6/4DtqDDjzJdspgd0deU=
-X-Google-Smtp-Source: AGRyM1uxYFBPZfrZx33fc81mpTSb3shrL42E4bhwZF0+lp1aDapUWl+W8lD9fdnwjC0wnaBWYIAv/EM/X4mqowxjsDY=
-X-Received: by 2002:a25:a2ca:0:b0:66e:719e:279 with SMTP id
- c10-20020a25a2ca000000b0066e719e0279mr4629988ybn.622.1657734625055; Wed, 13
- Jul 2022 10:50:25 -0700 (PDT)
+        bh=eWJYVhIsSaOySNu/uWyUWms8khqO/2XtexmfoLNvV70=;
+        b=wWomImL7HRJ8U5gV94PFrbJ5LovvWw4n1B17yPtaFC2UCbj3L+U3kUKJB+klh0RmeV
+         JB9QoQTJw8h70zfOwCrj2TnrQz8yimNLoaapK00txxD9rY2Ozc0PD06rVEg7Ov2Ur5V3
+         U6CY9eyw8ydrEAZAXcrYpIlUp8lw5YjBqgGZNXb+Kj3Ahp3sk6GFpD1m6qpeZE4c3ljU
+         rf3THJlDSw+/9nVGMOdrn8npYM5IldZr8L+BZBKYNwSmdbQEFc/+kL+5mOzIwLH3yEde
+         ZFVubpCZ+OOEDwM41CF+xcuFA5S4LyPlZcqeoqnQxPL6sgWhrxOpYRmYoWHqwbUs5s1n
+         /vWQ==
+X-Gm-Message-State: AJIora/PJMlJ002lDmxvZAK/GXDOG+tcorgPusvmRiOsslNXG1Vi13cS
+        1vrop1GmA9EsLa6e0G/qPse4xtDZvO1l5AVGLv0=
+X-Google-Smtp-Source: AGRyM1stj7HNu+Gwe80jnYn/KS7CMpoCF+eOJmC+kNikMigejw5Yf5InTmPNR76zSdmzBxS209OilDeV+DULcZs+3bc=
+X-Received: by 2002:a25:d714:0:b0:66f:5898:9eb1 with SMTP id
+ o20-20020a25d714000000b0066f58989eb1mr4809209ybg.633.1657734804438; Wed, 13
+ Jul 2022 10:53:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220623064605.2538969-1-quic_kshivnan@quicinc.com>
- <CAJZ5v0hX6H1Z-2bAJvV92YO95N_D=uNotVxJRcA9cmGQwsr1fQ@mail.gmail.com> <a4f9eefd-79fc-e9cf-88b8-efef424fb7c9@quicinc.com>
-In-Reply-To: <a4f9eefd-79fc-e9cf-88b8-efef424fb7c9@quicinc.com>
+References: <20220713082426.850911-1-dapeng1.mi@intel.com>
+In-Reply-To: <20220713082426.850911-1-dapeng1.mi@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Jul 2022 19:50:14 +0200
-Message-ID: <CAJZ5v0iK5zvyTj4F9cr8jNzpipqvYkYxZGG45u4YMFCQ_OwVTA@mail.gmail.com>
-Subject: Re: [PATCH] PM: QoS: Add check to make sure CPU freq is non-negative
-To:     Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Date:   Wed, 13 Jul 2022 19:53:13 +0200
+Message-ID: <CAJZ5v0gsHPav5Ax6+9OMmeApqn7qdJPQmo5MMh=ba6Rtj5NnQA@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi driver
+ in Makefile
+To:     Dapeng Mi <dapeng1.mi@intel.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -57,77 +59,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:37 AM Shivnandan Kumar
-<quic_kshivnan@quicinc.com> wrote:
+On Wed, Jul 13, 2022 at 10:21 AM Dapeng Mi <dapeng1.mi@intel.com> wrote:
 >
-> Hi Rafael,
+> As long as Kconfig ACPI_PROCESSOR is enabled, ACPI_PROCESSOR would
+> select ACPI_PROCESSOR_IDLE and acpi_idle driver is enabled. But
+> in current driver loading order acpi_idle driver is always loaded
+> before cpuidle_haltpoll driver. This leads to cpuidle_hatpoll driver
+> has no chance to be loaded when it's enabled.
 >
+> Thus, move cpuidle driver forward before acpi driver and make
+> cpuidle-hatpoll driver has a chance to be run when it's enabled.
 >
-> Thanks for taking the time to review my patch and providing feedback.
+> Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
+> ---
+>  drivers/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Please find answer inline.
+> diff --git a/drivers/Makefile b/drivers/Makefile
+> index 9a30842b22c5..921ed481b520 100644
+> --- a/drivers/Makefile
+> +++ b/drivers/Makefile
+> @@ -26,6 +26,7 @@ obj-y                         += idle/
+>  # IPMI must come before ACPI in order to provide IPMI opregion support
+>  obj-y                          += char/ipmi/
 >
-> Thanks,
+> +obj-$(CONFIG_CPU_IDLE)         += cpuidle/
+>  obj-$(CONFIG_ACPI)             += acpi/
 >
-> Shivnandan
->
-> On 7/13/2022 12:07 AM, Rafael J. Wysocki wrote:
-> > On Thu, Jun 23, 2022 at 8:47 AM Shivnandan Kumar
-> > <quic_kshivnan@quicinc.com> wrote:
-> >>          CPU frequency should never be negative.
-> > Do you mean "always be non-negative"?
-> Yes,corrected subject now.
-> >
-> >>          If some client driver calls freq_qos_update_request with some
-> >>          value greater than INT_MAX, then it will set max CPU freq at
-> >>          fmax but it will add plist node with some negative priority.
-> >>          plist node has priority from INT_MIN (highest) to INT_MAX
-> >>          (lowest). Once priority is set as negative, another client
-> >>          will not be able to reduce max CPU frequency. Adding check
-> >>          to make sure CPU freq is non-negative will fix this problem.
-> >> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
-> >>
-> >> ---
-> >>   kernel/power/qos.c | 6 ++++--
-> >>   1 file changed, 4 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> >> index ec7e1e85923e..41e96fe34bfd 100644
-> >> --- a/kernel/power/qos.c
-> >> +++ b/kernel/power/qos.c
-> >> @@ -531,7 +531,8 @@ int freq_qos_add_request(struct freq_constraints *qos,
-> >>   {
-> >>          int ret;
-> >>
-> >> -       if (IS_ERR_OR_NULL(qos) || !req)
-> >> +       if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE
-> >> +               || value > FREQ_QOS_MAX_DEFAULT_VALUE)
-> > Why do you check against the defaults?
-> Want to make sure to guard against negative value.
-> >
-> >>                  return -EINVAL;
-> >>
-> >>          if (WARN(freq_qos_request_active(req),
-> >> @@ -563,7 +564,8 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
-> >>    */
-> >>   int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
-> >>   {
-> >> -       if (!req)
-> >> +       if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE ||
-> >> +               new_value > FREQ_QOS_MAX_DEFAULT_VALUE)
-> >>                  return -EINVAL;
-> >>
-> >>          if (WARN(!freq_qos_request_active(req),
-> >> --
-> > I agree that it should guard against adding negative values, but I
-> > don't see why s32 can be greater than INT_MAX.
-> yes, checking against negative values will be sufficient.
-> I will share patch v2 with only check against negative values.
-> >
-> > Also why don't you put the guard into freq_qos_apply() instead of
-> > duplicating it in the callers of that function?
-> Because function  freq_qos_remove_request calls freq_qos_apply with
-> PM_QOS_DEFAULT_VALUE which is actually negative.
-> So I do not want to break that.
+>  # PnP must come after ACPI since it will eventually need to check if acpi
+> @@ -126,7 +127,6 @@ obj-$(CONFIG_EDAC)          += edac/
+>  obj-$(CONFIG_EISA)             += eisa/
+>  obj-$(CONFIG_PM_OPP)           += opp/
+>  obj-$(CONFIG_CPU_FREQ)         += cpufreq/
+> -obj-$(CONFIG_CPU_IDLE)         += cpuidle/
+>  obj-y                          += mmc/
+>  obj-y                          += ufs/
+>  obj-$(CONFIG_MEMSTICK)         += memstick/
+> --
 
-OK
+Well, this change doesn't guarantee loading haltpoll before ACPI idle.
+
+Also what if haltpoll is enabled, but the user wants ACPI idle?
