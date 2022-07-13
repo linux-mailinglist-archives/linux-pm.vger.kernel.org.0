@@ -2,116 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF0E573943
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 16:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C8C573960
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Jul 2022 16:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbiGMOwz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Jul 2022 10:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S236596AbiGMO5r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Jul 2022 10:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbiGMOwy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 10:52:54 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4190F3C8E4
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 07:52:53 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id o19-20020a05600c511300b003a2de48b4bbso1353197wms.5
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 07:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EGhT6oQLUBa+W/fyk6df1q5eONVnZeGwxski/kFteZ4=;
-        b=pSgcyEdw0OMPfVzZ7hiuBQyBxbiO6YQHB2bIzLkBznHKWZN4EhLPZRbkheBwgecffS
-         y6o8ok3k0AS+LxOIouzTFYnUgcr7U+cxElQI6CGLFnF01wFGbVlz6aqsFeI+m2TYw0Zj
-         /Bi5IalvL1Bx+FI8RpLH7xMPMBFiEjzVsz1SSRJLD41378cgiBFXKJtu2GPELRYYXj+o
-         XiDHAQYMzOMQX425adgDCdgUKQ6uNAumZEY8hgFtckWtoUPJXWHqZ/UIJRcviyYM1RLZ
-         TnsypqIv7164hUxOH7N8VxHkSuRX5fTUvRUA5pDnPxZ9JsBuzTfGdXFg3WxKELRPXHsj
-         SicQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EGhT6oQLUBa+W/fyk6df1q5eONVnZeGwxski/kFteZ4=;
-        b=HGsZhBzEMdOlfsZmXDmB6ObsQDU93031Sc+KUII7Rfj9gsf+wz/mYzpH3luP3hkLFr
-         46jcJfd7k4ABO+4L+nLh4TCsBIK9VluYLkMwlAkELxAh4QOmT2/PIBWWxGg2GKr2p1fo
-         zUb5OOtuAVUQGS5EcrR9DkRHvjenWWMkSgkciH9ADVzaPCMOw7Uhg1XZ9AkdXeJOJBxy
-         V2mcgTTtWIXH6sAxZ2S17oMgYaEWupngikBbJz2mbUEYK11U7XIqTUJIgEn5xbA5fAOG
-         q1YAat2zsoLI7RwPgaFo+fT6naZcLXy5QHFM5ETepnecw5bXhEnYEzJ3S8yavBc38nBp
-         eFDg==
-X-Gm-Message-State: AJIora/A9cwQOI38ckmxQpuljG+0ez3/0NCzwKLVUP2g+DtxO33rceWK
-        F7ZzKzUBMJpK41etM1J5h23U1ce0avYZ7Q==
-X-Google-Smtp-Source: AGRyM1t9d1sJ+OIQ8vqqOHKXJXvMUn1FrgqN+sm2nQFxkb6mskex0F72PB+c+DGmeQjKW9EjKpVOTg==
-X-Received: by 2002:a05:600c:1c0e:b0:3a1:9a4b:28ee with SMTP id j14-20020a05600c1c0e00b003a19a4b28eemr9744187wms.203.1657723971679;
-        Wed, 13 Jul 2022 07:52:51 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id bg11-20020a05600c3c8b00b003a1980d55c4sm2657615wmb.47.2022.07.13.07.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 07:52:51 -0700 (PDT)
-Message-ID: <ded0065e-0315-ce1f-01da-bdf3b83adf66@linaro.org>
-Date:   Wed, 13 Jul 2022 15:52:50 +0100
+        with ESMTP id S236632AbiGMO5p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Jul 2022 10:57:45 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E8F3E75E;
+        Wed, 13 Jul 2022 07:57:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eCWTyYeLTwLCaJXq3T85zOsbL+ub7uKuQsofd8QBgd9e0eV63QB4lw6yxRFvdvPM/NKaQLHyKoUWsYI3LGAnB4FNNSTlt3yyfIHmZiWW7/czg4NjHn5Kk4rzSiqrrmA30Y6YwYHKsLAAv4WWnpZpb8iPWRbWf06UXZ2uk8lPhcsZIin/RszBFvWqOsXbynJBpjLHqM+3ZJDV5+LB5sv1QLbX7Q6e1JGkA43SETitNAHxbpH1kIIdRpEu5HSFyjuovY7LoVr+ewYDQqYJp/skoq2S00jjWutSrptSiiHPRw5PDO1xtcD5bypqU1pQec2TCwwKHoQ5EmKf0lyY8x72kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4TdE5gMnaZ4RpqJ1/gBId6MFgb8G9NdwWxJ4JaBL//E=;
+ b=H/Yr05lThtHvGER2zlFZkd7RBPgi6Erq/piFjaovDFfHRQgU5baA672D90+vF3rttFIVwmxSdo9nQQ5uX38/drLByZuH7fz9Ytm0g5iggwIYKzUZEtwCQ2v4RGodAAMDDLbxXdYpCHh5xVanQbjlcSZiQ86s8+IpsFwC+L77vlrxS7SONmYKroC6YdX4OYwikbKwzNEQ1TgVaKzpa1MCl3XPJfKJ7aARcBegK4WCQw7jXgTu39f/XIa07MiMChSsLCmPHJLJD3S0nr/3mt9vxuSeV/Fz+3sxCA4a2VROZwoMZlca4f0GCIaQT05oLkXLs2ux9MN3uVRmdqzWVJfjUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4TdE5gMnaZ4RpqJ1/gBId6MFgb8G9NdwWxJ4JaBL//E=;
+ b=nfCd6IbEx84dfBcL78qDBxwvs0sPHOftIw6Gk35osmtNFusexogIxO+lyVcIq8vy9dgomWDegSIkobIoR/vrNTJRYRr5K8mYXRK8lyqTg0iN4kWi7I7to0kwUuMF858mvgMqV2jbl7kdt3dFq1qrGQ0yMGyJfnvSf5k5i9EUA1Y=
+Received: from DM6PR03CA0076.namprd03.prod.outlook.com (2603:10b6:5:333::9) by
+ BY5PR12MB4066.namprd12.prod.outlook.com (2603:10b6:a03:207::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Wed, 13 Jul
+ 2022 14:57:39 +0000
+Received: from DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:333:cafe::a8) by DM6PR03CA0076.outlook.office365.com
+ (2603:10b6:5:333::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.17 via Frontend
+ Transport; Wed, 13 Jul 2022 14:57:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT019.mail.protection.outlook.com (10.13.172.172) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5438.12 via Frontend Transport; Wed, 13 Jul 2022 14:57:38 +0000
+Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 13 Jul 2022 09:57:37 -0500
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     <bjorn.andersson@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <konrad.dybcio@somainline.org>
+CC:     <agross@kernel.org>, <david.brown@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bilbao@vt.edu>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: [PATCH 0/4] thermal/drivers/qcom: Code refactoring
+Date:   Wed, 13 Jul 2022 09:56:52 -0500
+Message-ID: <20220713145655.3844109-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RESEND PATCH 4/5] cpufreq: qcom-cpufreq-nvmem: Rename qcs404
- data to cpr_genpd
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        ilia.lin@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220629130303.3288306-1-bryan.odonoghue@linaro.org>
- <20220629130303.3288306-5-bryan.odonoghue@linaro.org>
- <e160364f-68b9-2ab6-e48d-86d12e4a2f0c@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <e160364f-68b9-2ab6-e48d-86d12e4a2f0c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b4f947ae-2aef-43c5-2eba-08da64e0075d
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4066:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NAEH9tBGSaeiuwRUyiC9RH1/v/WAypf+sNmLRfte8Uiwapf50cVEvImrpnsfRBWSkVqyrpUAyN6d8fvNpTqEuYFufpSb8HSq8LDOVrUQoFwogM95dUIjGsh8UWUhn73FWPs0HDNEmgfxix8GQQAWl+OSVQ2aWs7T8tMvPxm8u2OG0FyTve8ieFIFvEmbDgScmkaY2Cluw6uvW0wHTWL0rOcok2bVayaRMWrveRR8e8mLYkEy7Wf1kawYuwJpMS2vzIktkN2X5/j6iDBaoTRJ7d6zVC+eLoqIwwSf+9uIzVIgA9K/y76p3PnQ84YFxnPWgHjTPBWelEbDql7pXnfr7v06LpyqMQv6bhEtorZktRSdQzlW+65AJM7CdCqL66wXegK+4rWj/bfhje6fbVNaDdx8O4xMXKus7b0S2bM4JVkbZVcLWZYnwAX2YuX31jzj6dixJfGKbAyDvDQ6fexXbN36k6xFxEmv1gCOCQ4slwlg2wB4DuYvL7p7UMB7cHFYEiIITNq3O/9mHZhknsG+xx4Lgi+K+wVR62PGgFV76eZqt5mH/FNL3uQ5krrw/5NUJWVGw/Xxs2UrmvCOdNljQ9cxJYZFTyTsh7w5PjIiWTf+PjxWItC/EGkXHLw+P7n8Fgv5R10N8xrq66mA12/x+fYVDocuxucTE5ouj1mekfZPgx/yUOquoKOCHsmwrf2q9nSrWdrCnh+mZXQeA+4tmcXg3NbqhbPxYl3B5EiluEY0o83MQOEpNt8+8ALTUuvySRInn+SmdjH5ec3yuf31Yt1qknXdMox6Zo5u5tZsb8EgSpQuwZrELjGHZWlijsGVuOyPjJGMFqBueCDXfWBSwjVeAzqh1e1I9UJnrtVqoPo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(396003)(39860400002)(376002)(40470700004)(46966006)(36840700001)(40480700001)(83380400001)(356005)(86362001)(82740400003)(81166007)(40460700003)(36860700001)(82310400005)(8936002)(5660300002)(478600001)(2616005)(7416002)(41300700001)(2906002)(44832011)(54906003)(6666004)(110136005)(316002)(16526019)(4326008)(8676002)(70206006)(70586007)(186003)(36756003)(4744005)(426003)(26005)(1076003)(7696005)(336012)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 14:57:38.4408
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4f947ae-2aef-43c5-2eba-08da64e0075d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4066
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/07/2022 14:50, Dmitry Baryshkov wrote:
-> On 29/06/2022 16:03, Bryan O'Donoghue wrote:
->> At the moment the CPR genpd based code is named after the qcs404 however
->> msm8936, msm8939 and other antecedent processors of the qcs404 can also
->> make use of this data.
->>
->> Rename it to reflect a more generic use.
->>
->> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> ---
->>   drivers/cpufreq/qcom-cpufreq-nvmem.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c 
->> b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->> index 6dfa86971a757..355c8b99e974a 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->> @@ -252,10 +252,10 @@ static const struct qcom_cpufreq_match_data 
->> match_data_krait = {
->>       .get_version = qcom_cpufreq_krait_name_version,
->>   };
->> -static const char *qcs404_genpd_names[] = { "cpr", NULL };
->> +static const char *cpr_genpd_names[] = { "cpr", NULL };
-> 
-> As a generic comment, as you are touching this piece of code, code you 
-> please move cpr_genpd_names above match_data_kryo? So that all 
-> match_data instances can use it.
+This patchset refactors the code of Qualcomm thermal drivers, with simpler
+return values, logic for two functions, and a constant array for maximum
+number of sensors per version.
 
-NP.
-
-This has been dropped in V3 per Stephan's preference to not touch 
-anything CPR related until doing the whole thing for 8939.
-
+Carlos Bilbao (4):
+  thermal/drivers/qcom: Simplify returns for tsens-8060.c
+  thermal/drivers/qcom: Simplify function code_to_degc()
+  thermal/drivers/qcom: Simplify function calibrate_8960()
+  thermal/drivers/qcom: Use array for max num sensors per version
 ---
-bod
+ drivers/thermal/qcom/tsens-8960.c   | 33 ++++++++---------------------
+ drivers/thermal/qcom/tsens-common.c | 15 ++++++-------
+ drivers/thermal/qcom/tsens-v0_1.c   |  4 ++--
+ drivers/thermal/qcom/tsens-v1.c     |  2 +-
+ drivers/thermal/qcom/tsens-v2.c     |  2 +-
+ drivers/thermal/qcom/tsens.h        |  6 ++++++
+ 6 files changed, 25 insertions(+), 37 deletions(-)
 
