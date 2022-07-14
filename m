@@ -2,94 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8401E57527C
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jul 2022 18:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A709257554B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jul 2022 20:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237664AbiGNQLp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jul 2022 12:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S232681AbiGNSpd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jul 2022 14:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbiGNQLo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jul 2022 12:11:44 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4C2558F0
-        for <linux-pm@vger.kernel.org>; Thu, 14 Jul 2022 09:11:43 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id v185so1779588ioe.11
-        for <linux-pm@vger.kernel.org>; Thu, 14 Jul 2022 09:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1d6yUsmgcZyXfHlWcDV40Ru822KjO2Vp1bovNsGCg3U=;
-        b=bjar8jBBc6vxB7yyOkaWNdb/bGFKZkrTGaexhSMRamru03GoyAfL+yqdTWBcET1Hwg
-         brEoF0/BoU+x43lEBfA8zepa7ejS1DCFlYpw8dIt6BG1DtscLymVwhb0sjFlIyhXS4LT
-         hwerCxpEiaBb9q1q1k81NNjdhGZuRfahp0Oi0=
+        with ESMTP id S234681AbiGNSpd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jul 2022 14:45:33 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9914A2655A;
+        Thu, 14 Jul 2022 11:45:32 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-31c89111f23so26630097b3.0;
+        Thu, 14 Jul 2022 11:45:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1d6yUsmgcZyXfHlWcDV40Ru822KjO2Vp1bovNsGCg3U=;
-        b=ZqlK5S+gR7OvRMr5agCg6btnzuduksOenyemTbojKs1ek7jzqrCU1qzRNsgRm8j/ae
-         a/YMmHv4roOb5dbmHgMIrphWPXqpcxIn5bACqzvz//8KWwNOj6jpMMlNkvN+mFehLZtw
-         8tWbTLgmaoVLbMwPpK/UjppiEKZFhl4hJZ4/PbgUL1xT4zx0ftuG0XHIkUNb0USCx3cf
-         dDGFDdojD07PfkMsJ1sfz50+j756jBmVJNGm0fmlmPUZNX8KxseJVKzwFTWsWGElZbaU
-         r7KXSHqxCbBMtfLGnKiiQDwXYO1iYQab/L4HBtjo8xEtu0M/G4+CtO2imnIndIq+yOj9
-         gc2A==
-X-Gm-Message-State: AJIora8hzRfIdK9nHs//y5lAbY7j03Q19GoSWxM9e3UTJbROSuNw5OaU
-        DgAGGyU7MJq0Mw0UHZExTxcUkY6TkVnRVQ==
-X-Google-Smtp-Source: AGRyM1uejILq7/p4qKhE8hOoDA6ylBMb/lfIou0vdKNhJX35dfh1mgogWDOfmxpuHnShq61tgnMg9Q==
-X-Received: by 2002:a05:6638:2642:b0:33f:5172:e77 with SMTP id n2-20020a056638264200b0033f51720e77mr5014172jat.85.1657815102376;
-        Thu, 14 Jul 2022 09:11:42 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x9-20020a026f09000000b00339cdf821dasm874726jab.51.2022.07.14.09.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 09:11:41 -0700 (PDT)
-Subject: Re: [PATCH 2/2] cpupower: rapl monitor - shows the used power
- consumption in uj for each rapl domain
-To:     Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org
-References: <3720988.KDN6dyLT6n@c100>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <115847ff-a0b1-96fb-144f-00e8db9adf02@linuxfoundation.org>
-Date:   Thu, 14 Jul 2022 10:11:41 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vycimkfJJnUL5HYw9lyGFjZXDKTehh2hU0oCewywAvI=;
+        b=DV9o9bOE2Mdx4/RFGQGCclZB9ONoYZwFrhrQcgmJMPU9RAHghOel1DQ5ZfESTR7Ese
+         xYHU8czOYOLn5yGoBkwSzeRlaOVn1M6uYOeevraYU2caa+flKs0aiuFWfBowMOVXMnqX
+         wwGzbcWEmIGpQsmUkGHB0F5qx8qce1Wq4wjUaXqqpF2Lwm7nSvvDKyte7oh3DR8szb4/
+         u5LFiGnnbi9ZW2J3Upd+ygLkB7GmTtGaFDe8ySvQjk+QUKKWALMvYkzoCcBYkfIVPOcT
+         9zCTx3WXSTXuPSWyuzulFmU5aW5M5yxhSe2iVVUgVLwrx9G87wrTd+s07n7MklwAj5dh
+         JGfA==
+X-Gm-Message-State: AJIora9a4Gc7Q+xhBqjLNyoaOE6fnZSCic37yhnDBS8QS0RIA9eJI+ck
+        BcMU8h3Ssfdbte5OTu9RneBi9lQU8tti4IphAZU=
+X-Google-Smtp-Source: AGRyM1vHXH+1iJc3fePh9kl8IreHJ4qMF9LS3Ans67zy8K7b8p6RgOnh1NOLD+eu32cfeWgS06ViSKGFAASJAX1wdBc=
+X-Received: by 2002:a0d:d952:0:b0:31d:789d:221c with SMTP id
+ b79-20020a0dd952000000b0031d789d221cmr11204391ywe.515.1657824331896; Thu, 14
+ Jul 2022 11:45:31 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <3720988.KDN6dyLT6n@c100>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714134342.3498384-1-quic_kshivnan@quicinc.com>
+In-Reply-To: <20220714134342.3498384-1-quic_kshivnan@quicinc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 14 Jul 2022 20:45:21 +0200
+Message-ID: <CAJZ5v0hQ=YXEysP0vWruwiPV+ubQoc_rTwQ1K=Y3p7hjm8UFMg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] PM: QoS: Add check to make sure CPU freq is non-negative
+To:     Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/9/22 2:13 AM, Thomas Renninger wrote:
-> cpupower monitor -m RAPL
->      | RAPL
->   CPU| pack | dram | core | unco
->     0|11599641|308837|10748813|  3662
->     2|11599641|308837|10748813|  3662
->     1|11599641|308837|10748813|  3662
->     3|11599641|308837|10748813|  3662
-> 
-> Signed-off-by: Thomas Renninger <trenn@suse.com>
-> CC: Shuah Khan <skhan@linuxfoundation.org>
-> 
+On Thu, Jul 14, 2022 at 3:44 PM Shivnandan Kumar
+<quic_kshivnan@quicinc.com> wrote:
+>
+>         CPU frequency should never be negative.
+>         If some client driver calls freq_qos_update_request with some
+>         value greater than INT_MAX, then it will set max CPU freq at
+>         fmax but it will add plist node with some negative priority.
+>         plist node has priority from INT_MIN (highest) to INT_MAX
+>         (lowest). Once priority is set as negative, another client
+>         will not be able to reduce CPU frequency. Adding check to
+>         make sure CPU freq is non-negative will fix this problem.
 
-This is also corrupted format:
+The changelog doesn't match the patch any more, please rewrite it.
 
-In the email it wasn't clear to me, however the corruption was
-very clear in patchwork view:
-
-https://patchwork.kernel.org/project/linux-pm/patch/3720988.KDN6dyLT6n@c100/
-
-thanks,
--- Shuah
-
+>
+> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+>
+> ---
+> v1->v2
+>         -addressed comments from Rafael
+>         -changed commit text accordingly
+>
+>  kernel/power/qos.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> index ec7e1e85923e..27e6596f287a 100644
+> --- a/kernel/power/qos.c
+> +++ b/kernel/power/qos.c
+> @@ -531,7 +531,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
+>  {
+>         int ret;
+>
+> -       if (IS_ERR_OR_NULL(qos) || !req)
+> +       if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE)
+>                 return -EINVAL;
+>
+>         if (WARN(freq_qos_request_active(req),
+> @@ -563,7 +563,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
+>   */
+>  int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
+>  {
+> -       if (!req)
+> +       if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE)
+>                 return -EINVAL;
+>
+>         if (WARN(!freq_qos_request_active(req),
+> --
+> 2.25.1
+>
