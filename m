@@ -2,104 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FDF574545
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jul 2022 08:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C24C574595
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jul 2022 09:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbiGNGuJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jul 2022 02:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33814 "EHLO
+        id S235704AbiGNHNg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jul 2022 03:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiGNGuI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jul 2022 02:50:08 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD0627FF4
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 23:50:07 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q7so1028230lji.12
-        for <linux-pm@vger.kernel.org>; Wed, 13 Jul 2022 23:50:07 -0700 (PDT)
+        with ESMTP id S231127AbiGNHNe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jul 2022 03:13:34 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193049E;
+        Thu, 14 Jul 2022 00:13:32 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id v5so836724qvq.8;
+        Thu, 14 Jul 2022 00:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=kAMorpNPpq8Kl7mIQPaFEYYx6iRT5mkDQv6ldaOiuso=;
-        b=mCtgy7WJTcIR5VvYFE1mQpSdwHFub/JxquNNbGjOEDG5kerZcvfIWuR/Q4SfMdeLCM
-         LKPbhc4nez83WRVbxrYgZnSGGOfCShXYSZVg1nlUWSu3Nkz5eoiwG9GJ9dxxk8GZCVMj
-         0VGmzNW+39nIVWiAdU11NFp9Pqt0bKUKDpVd30O2rLoijaUPWKYITYSu52p4vyn1YxLK
-         itzn4rLQSdioMpwWIsLTXSl5Rm0aib09E33je8nhM053J2+ni+JPbwJds70N7qPumteu
-         aiRHfv0M8e3NXr0lJCxtybrL33+/GUf9upn7Agyqg7bvEbG8rpodGLO0VwrYap7piiPI
-         DA9A==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Q5UuNt5TPK0IuG39xN+NMro5LKgIqNbr9Zx7mA/mPiM=;
+        b=b0E3JTU5pYWhoLa3ap7YFqzgEMsmY9DzPinFwRbVIUxY93YXyUx7ZCDKj7KmfhQ21C
+         rbLfBjhA9+2Iw8+wRoHdzOZmhqnsY+50XpmOdqNkHbt1cSMSHEnAu5vgSo2cTU4Vp00E
+         OzftT9WeV+jRXDaaNmeyjhArEApdAVnDvnAaK0sb17BX1/wJ+erATO6cVT2LmSg5zo1C
+         AkB0gsToiInDLayKBxHHJLxYpaxBz2afFFQmHItaY08Jtmauimz5lnfp+bStbZf1nc6w
+         aPm7pRJ9mU/zUvlfPRnxcyejhyXF2kYZj0eimP7+p17pN8EvNWU5/v59Wtwmk5hE8TwL
+         aWyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kAMorpNPpq8Kl7mIQPaFEYYx6iRT5mkDQv6ldaOiuso=;
-        b=TEMFB1IgPekrInwzZZOljdeK7eE2Qbr6joxd93b3T8YvtBE5Dmur14br0G/Hvnj+g3
-         JrMTbpEdyX97cWg2yMJFux3Kzoe+4HsnbwDybHkSZcT0WiENia41hb32QR0igDrPZWC5
-         KABwokuZWQkhvZNp4asOZxhE9Mv/nNAga9vjG5kp+QW1vAiFKtY5TsZZBpF8bj7MMsHx
-         uuLmb2eyzNVaUOnj2bqznmAk+v6Z+HCX7gpuNxjIqSncaP7kkeF5zpJekIDmzfUKgZGD
-         TPpdybBMtwqCEW1bHLeURwF6MH9pAaKljQJMe3TbgyIhgyl6ANANKggLi5ELNqIGJYBU
-         etQA==
-X-Gm-Message-State: AJIora8G4m4X5miqLa/obyzxQV45NLT2e2DywtNxRh8dFSQVldzMfJpv
-        aIKRJWIh8Emp9Do/2up8A8XC1Q==
-X-Google-Smtp-Source: AGRyM1uugxfr8VnRrNRyLEftcuT/EW3N+W2M709baxf4ALu+7XKMmiU/fc1xj1s3byOkIhsLkTeYbw==
-X-Received: by 2002:a2e:968b:0:b0:25d:67ce:134c with SMTP id q11-20020a2e968b000000b0025d67ce134cmr3861590lji.277.1657781405298;
-        Wed, 13 Jul 2022 23:50:05 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id m1-20020a056512114100b00489fdc9ac15sm195626lfg.42.2022.07.13.23.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 23:50:04 -0700 (PDT)
-Message-ID: <32b30b60-26f7-50e9-7dca-c25bc3f4014d@linaro.org>
-Date:   Thu, 14 Jul 2022 08:50:02 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Q5UuNt5TPK0IuG39xN+NMro5LKgIqNbr9Zx7mA/mPiM=;
+        b=H2H0Hsh08lIl9isbT+fqX3nrppbpkgndA5kcwZBTP2zSZKk9UGbhT8rHlvYi4jXFYr
+         7fPQenKSeYkJNQx06LmB1pgkWEE3Kq/JYmEFMSpaO6lk5Lybisar1f2ynNayEsDqIfSY
+         c5BR2Ay+hdoWCJSX8cr4sAc3cpwP95sksn0veU/oM/yJcuo+id8EDWVCZYL12mMA6OSf
+         21slym93QeRbtzeRVEz2xju9enlIHq7I+Z++T15bxUOpHUQxIXxOO9Ix6GmBDN5fxhYV
+         s/ufVVA0tJXSIsy1HYQLG5TiO+1rQzKlzLu8MGjlc9L9DVvv9hLXWQBoCQ16P59Tq/0V
+         Lm0g==
+X-Gm-Message-State: AJIora+IrAq/ZLuM7OhYsw/pH3i9jr02WdTCP6aykSQuCeQfSvwSddn7
+        a1qHJ+WBzCD2fAIGRV6G994esdpGxksiKGfKGwY=
+X-Google-Smtp-Source: AGRyM1vJRbWeeJQDQ5VsDhXvc8TWmApQquCsp5U/iybMpcD3LNzACs5RVUGTHl5IJiCF7b4f25ZlvyBfRyQDbXD00iQ=
+X-Received: by 2002:a0c:9a0c:0:b0:470:54d7:cfd5 with SMTP id
+ p12-20020a0c9a0c000000b0047054d7cfd5mr6903769qvd.46.1657782811193; Thu, 14
+ Jul 2022 00:13:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v10 1/2] thermal: Add thermal driver for Sunplus
-Content-Language: en-US
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1654660009.git.lhjeff911@gmail.com>
- <b114b6f8ea51054561a61dc4982715bb73633ec5.1654660009.git.lhjeff911@gmail.com>
- <be752ee1-3732-bcbd-4d31-6d6fe0bd251f@linaro.org>
- <a510b35f89034f60a05d6dbe7245e789@sphcmbx01.sunplus.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a510b35f89034f60a05d6dbe7245e789@sphcmbx01.sunplus.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-14-peterwu.pub@gmail.com>
+ <CAHp75VdwEc9AW1w8ejsxkw+sBTF1dumd99QyzTY9BZaXiViRWQ@mail.gmail.com>
+ <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com> <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
+In-Reply-To: <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Thu, 14 Jul 2022 15:13:19 +0800
+Message-ID: <CABtFH5LT1Ct_9-B_XRrGwYFmL5kGS6KHR7dNVyUO5z4sTy_6oA@mail.gmail.com>
+Subject: Re: [PATCH v4 13/13] video: backlight: mt6370: Add Mediatek MT6370 support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/07/2022 07:32, Lh Kuo 郭力豪 wrote:
->>> +}
->>> +
->>> +static int sunplus_thermal_remove(struct platform_device *pdev) {
->>> +	struct sp_thermal_data *sp_data = platform_get_drvdata(pdev);
->>> +
->>> +	thermal_zone_of_sensor_unregister(&pdev->dev, sp_data->pcb_tz);
->>
->> You used devm to register, so this looks wrong and will lead to double free.
->>
->>
-> 
-> You mean the remove function is not needed.  ??
+Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
+=8813=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A8:07=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On Wed, Jul 13, 2022 at 12:53 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:14=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > > On Mon, Jul 4, 2022 at 7:43 AM ChiaEn Wu <peterwu.pub@gmail.com> wrot=
+e:
+>
+> Please, remove unneeded context when replying!
+>
+> ...
+>
+> > > > +               brightness_val[0] =3D (brightness - 1) & MT6370_BL_=
+DIM2_MASK;
+> > > > +               brightness_val[1] =3D (brightness - 1)
+> > > > +                                   >> fls(MT6370_BL_DIM2_MASK);
+> > >
+> > > Bad indentation. One line?
+> >
+> > Well... if indent to one line, it will be over 80 characters(or called =
+columns?)
+> > From my understanding, it is not allowed, right??
+>
+> It's allowed to some extent.Use your common sense.
+> Here it's obviously broken indentation.
+>
+> ...
+>
+> > > > +               prop_val =3D (ilog2(roundup_pow_of_two(prop_val)) +=
+ 1) >> 1;
+> > >
+> > > Isn't something closer to get_order() or fls()?
+> >
+> > I will revise it to "(get_order(prop_va * PAGE_SIZE) + 1) / 2" and
+> > this change is meet your expectations??
+>
+> Nope. Try again. What about fls()?
 
-At least this call but after its removal the entire function would be
-empty, I think.
+I have tried two methods so far, as follows
+-------------------------------------------------------------
+/*
+ * prop_val =3D  1      -->  1 steps --> b'00
+ * prop_val =3D  2 ~  4 -->  4 steps --> b'01
+ * prop_val =3D  5 ~ 16 --> 16 steps --> b'10
+ * prop_val =3D 17 ~ 64 --> 64 steps --> b'11
+*/
 
+// 1. use fls() and ffs() combination
+prop_val =3D ffs(prop_val) =3D=3D fls(prop_val) ? fls(prop_val) >> 1 :
+(fls(prop_val) + 1) >> 1;
 
-Best regards,
-Krzysztof
+// 2. use one line for-loop, but without fls()
+for (i =3D --prop_val, prop_val =3D 0; i >> 2 * prop_val !=3D 0; prop_val++=
+);
+-------------------------------------------------------------
+Do these changes meet your expectations??
+
+>
+> ...
+>
+> > > > +       props->max_brightness =3D min_t(u32, brightness,
+> > > > +                                     MT6370_BL_MAX_BRIGHTNESS);
+> > >
+> > > One line?
+> >
+> >  Ditto, it will be over 80 characters...
+>
+> As per above.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
