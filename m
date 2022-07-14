@@ -2,152 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DD6574A5F
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Jul 2022 12:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CF5574C72
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Jul 2022 13:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbiGNKQi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Jul 2022 06:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S239070AbiGNLsm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Jul 2022 07:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiGNKQh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jul 2022 06:16:37 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C4F120A5;
-        Thu, 14 Jul 2022 03:16:36 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id y195so2487074yby.0;
-        Thu, 14 Jul 2022 03:16:36 -0700 (PDT)
+        with ESMTP id S237484AbiGNLsl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Jul 2022 07:48:41 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252D39FD8
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jul 2022 04:48:38 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id u15so1836147lji.10
+        for <linux-pm@vger.kernel.org>; Thu, 14 Jul 2022 04:48:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DAB/V2thJrX7oNWAiw69xQ9s2yER1z6zgaPEDVTbARY=;
-        b=WzDjqq1pRDiX/e0JhdlBpio8zOrckRWFWYoqqx6oFzHppl1HXZKC0K0Vo9UvICBDx4
-         1IgGFxPhaOdHa0ijcMRnAWpg15ZqdMXn+A4AN+KbbyLfV+DLK/zGUswdeyoa6I/gMSWB
-         mLZcWexKeicX3ZsiBj8qG9KhT504M9qLDNPa+/3b4OVXUQmkey6iL5NUBSkO06Ql9xqx
-         7ABvX+TuwC6gjV6lZglt+ptPstfpEqlr1Yg9+65NKMHYYSOzn23aEysk+sSCVoQV5iL6
-         RIo+DgXA1m8aiBJ1aC+G2pOf803m52JzwysZxxKXTmLKrJdLDZZrFNf6ymvczZtUZHNx
-         NC+Q==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KmdkLZQTH7Au+8JqBR3UHKGQf5x82UafUt+CMJrqYow=;
+        b=ykwOYMW0SFy7xWmcHnQ1EXNmukntRLlae+V63adrgl2q5taon6yOi4QBkcZ5yYkq0F
+         rQsfSIfLMlr2bASl8+YqShrkKiUsmjlkMki8jt1v1AJPefxgpNEqfYsi89vCjKrWO1Rj
+         AX6abGCe7KI0Y1er2+nTRmPMc5vjSsiad5Pkuuo9wKclct88rO3JGyiig1nwiUo12CAS
+         BG9jzcvpXGiblYNyiaqNJopPjxPW+NcIpxwZ2Ob3nTWu6AoFjjNQL0Q2uvG/pPmfnP69
+         d3w5KMCdTj/hpHFJZxeTJj74fJ+lO0yYh0LbAuv9Xa0iZrO4TB5ahNUbpnlh47PzcJIt
+         oM8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DAB/V2thJrX7oNWAiw69xQ9s2yER1z6zgaPEDVTbARY=;
-        b=zd0TXa3ccyOwBBJjB+uQo+lzRSumxdbxEoV3qr/dCPj55C2RbbWDifNraEZm609qu0
-         w1QvJbffkV2WGGFkjggR4ZRI0Tb5w1O8PyrBoZcfILoHtN8621+mLzP6989YbrOaEFir
-         XVdMdrDPw4bN+fOZUSGWg4HmivMQHFqmU6w+5orxmrTaC4c+2fM+YtzsBVSNF/Wi8NYL
-         zznjtl6dwodcR2TGJwEpaCJ4RMMC2X6LYD3DhYvl+TfKTX+s9KRWu2yfxJ0cNZboDLHb
-         406SMFaviorzsXpObR8aQyJZSrubJhNBovqSc6d1tS74oC9wALA3XxgOSKHH1TJO/HaA
-         DYOw==
-X-Gm-Message-State: AJIora9n0DiigPni0fiNksHx987JPA6i7BH6qczxLrbSgkVRddkU6fGm
-        F9LhETRK4YMzSYuT6VG4aA0vySQCwqAg8E2ZLTw=
-X-Google-Smtp-Source: AGRyM1tsa04XdX6EoBLAKq/4vJYddIuWfRGN796P9MIbmkVyYowmMMx33Ee2ini1a+JW/8CzKBWdXOgF/S8Hwfl8jYQ=
-X-Received: by 2002:a05:6902:686:b0:66e:627f:4d29 with SMTP id
- i6-20020a056902068600b0066e627f4d29mr7320510ybt.385.1657793795448; Thu, 14
- Jul 2022 03:16:35 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KmdkLZQTH7Au+8JqBR3UHKGQf5x82UafUt+CMJrqYow=;
+        b=2cSnOL5u7nfu8w6BUTuhktzM3qPrD7tz2OUyl1ZkNKrKOi6R4tpdLjgPE3U7yh/MAD
+         bMVGLZG9vy4umTP2PwKmw7/d6sdXN5xQIaN9fzVV4FAA/VkpmClvWQ5C48VGn4XW31qL
+         gspsETUtGjXqcBNCcMfqMqSZ2DbtTi0fPJkHzVYr1OSX2wWw4+HymvVigNRp4AgHP3nb
+         OPWDuzAtwGP1T10HOri7BNy6xVJuwvi+zkD+DbvhMQ5j6gbnaIUdNaN8u7SbK0ke9smA
+         JVHwehK61RvODOQHAICzGbJz62IDapKTZmcrAgtVwYaslZmkalovsDBFyr5Nlj94rQk3
+         M8cw==
+X-Gm-Message-State: AJIora8KRxbff+gHWAxjjZBFUumxu5U82wGzvuwB9+gmoIAz9kAW0Dns
+        t0S7v1kcFxgpkHiiqOlWh05v6KekbRER5w==
+X-Google-Smtp-Source: AGRyM1uU3QSD8JP1L98Wd2/ma9Wp+GjizZuDEBOXcRlIFFWP8JTv+3GmZuQdlVAWpCpJL2ISRPH1Tg==
+X-Received: by 2002:a2e:b892:0:b0:25b:ce73:675f with SMTP id r18-20020a2eb892000000b0025bce73675fmr4185438ljp.67.1657799316481;
+        Thu, 14 Jul 2022 04:48:36 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id j28-20020ac2551c000000b0048329aa6c92sm318315lfk.139.2022.07.14.04.48.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 04:48:35 -0700 (PDT)
+Message-ID: <c129c748-4306-da64-fc18-2d224b2fc97c@linaro.org>
+Date:   Thu, 14 Jul 2022 13:48:33 +0200
 MIME-Version: 1.0
-References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-14-peterwu.pub@gmail.com>
- <CAHp75VdwEc9AW1w8ejsxkw+sBTF1dumd99QyzTY9BZaXiViRWQ@mail.gmail.com>
- <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com>
- <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
- <CABtFH5LT1Ct_9-B_XRrGwYFmL5kGS6KHR7dNVyUO5z4sTy_6oA@mail.gmail.com>
- <CAHp75VcU_9Ao2CoqiUDZHqhVOjEMZor+hctPp3YYP4HOjYLDUg@mail.gmail.com> <CAHp75VeMP4zDMmGfdya5Y1C0Hkb7=jeOQGE_HqyDdZcmd_Uyyg@mail.gmail.com>
-In-Reply-To: <CAHp75VeMP4zDMmGfdya5Y1C0Hkb7=jeOQGE_HqyDdZcmd_Uyyg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 14 Jul 2022 12:15:58 +0200
-Message-ID: <CAHp75VdXGJtPd_oZPGkS1=DoWjFYxbQu_7Vtfj547QQkpz2KNA@mail.gmail.com>
-Subject: Re: [PATCH v4 13/13] video: backlight: mt6370: Add Mediatek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: power: reset: qcom-pon: update "reg"
+ property details
+Content-Language: en-US
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, corbet@lwn.net,
+        sre@kernel.org, robh+dt@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Collins <quic_collinsd@quicinc.com>
+References: <20220713193350.29796-1-quic_amelende@quicinc.com>
+ <20220713193350.29796-2-quic_amelende@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220713193350.29796-2-quic_amelende@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 11:43 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Thu, Jul 14, 2022 at 11:27 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Thu, Jul 14, 2022 at 9:13 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote=
-:
-> > > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=
-=E6=9C=8813=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A8:07=E5=AF=AB=E9=
-=81=93=EF=BC=9A
+On 13/07/2022 21:33, Anjelique Melendez wrote:
+> From: David Collins <quic_collinsd@quicinc.com>
+> 
+> Update the description of "reg" property to add the PON_PBS base
+> address along with PON_HLOS base address.  Also add "reg-names"
+> property description.
+> 
+> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 73 ++++++++++++++++++++++++++++--
+>  1 file changed, 69 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> index 353f155d..562fe308 100644
+> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> @@ -15,18 +15,26 @@ description: |
+>  
+>    This DT node has pwrkey and resin as sub nodes.
+>  
+> -allOf:
+> -  - $ref: reboot-mode.yaml#
+> -
+>  properties:
+>    compatible:
+>      enum:
+>        - qcom,pm8916-pon
+>        - qcom,pms405-pon
+>        - qcom,pm8998-pon
+> +      - qcom,pmk8350-pon
+>  
+>    reg:
+> -    maxItems: 1
+> +    description: |
+> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
+> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
+> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
+> +      peripherals.  In that case, the PON_PBS address needs to be specified to
+> +      facilitate software debouncing on some PMIC.
 
-...
+You miss here min and maxItems
 
-> > >  * prop_val =3D  1      -->  1 steps --> b'00
-> > >  * prop_val =3D  2 ~  4 -->  4 steps --> b'01
-> > >  * prop_val =3D  5 ~ 16 --> 16 steps --> b'10
-> > >  * prop_val =3D 17 ~ 64 --> 64 steps --> b'11
-> >
-> > So, for 1 --> 0, for 2 --> 1, for 5 --> 2, and for 17 --> 3.
-> > Now, consider x - 1:
-> > 0  ( 0 ) --> 0
-> > 1  (2^0) --> 1
-> > 4  (2^2) --> 2
-> > 16 (2^4) --> 3
-> > 64 (2^6) --> ? (but let's consider that the range has been checked alre=
-ady)
-> >
-> > Since we take the lower limit, it means ffs():
-> >
-> >   y =3D (ffs(x - 1) + 1) / 2;
-> >
-> > Does it work for you?
->
-> It wouldn't, because we need to use fls() against it actually.
->
-> So,
-> 0..1   (-1..0)   --> 0
-> 2..4   (1..3)   --> 1
-> 5..16  (4..15)  --> 2
-> 17..64 (16..63) --> 3
->
-> y =3D x ? ((fls(x - 1) + 1) / 2 : 0;
+> +
+> +  reg-names:
+> +    description: |
+> +      For PON GEN1 and GEN2, it should be "pon". For PON GEN3 it should include
+> +      "hlos" and optionally "pbs".
 
-Okay, I nailed it down, but Daniel is right, it's simpler to have just
-conditionals.
+Skip description. You miss here min and maxItems.
 
-y =3D x >=3D2 ? __fls(x - 1) / 2 + 1 : 0;
+See
+https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
+for examples.
 
 
---
-With Best Regards,
-Andy Shevchenko
+>  
+>    pwrkey:
+>      type: object
+> @@ -42,6 +50,63 @@ required:
+>  
+>  unevaluatedProperties: false
+>  
+> +allOf:
+> +  - $ref: reboot-mode.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: qcom,pm8916-pon
+> +    then:
+> +      properties:
+> +        reg:
+> +          maxItems: 1
+> +        reg-names:
+> +          items:
+> +            - const: pon
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: qcom,pms405-pon
+> +    then:
+> +      properties:
+> +        reg:
+> +          maxItems: 1
+> +        reg-names:
+> +          items:
+> +            - const: pon
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: qcom,pm8998-pon
+> +    then:
+> +      properties:
+> +        reg:
+> +          maxItems: 1
+> +        reg-names:
+> +          items:
+> +            - const: pon
+
+No clue why you made three if statements. This is one if for all three
+variants.
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: qcom,pmk8350-pon
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 1
+> +          maxItems: 2
+> +        reg-names:
+> +          minItems: 1
+> +          items:
+> +            - const: hlos
+> +            - const: pbs
+> +
+>  examples:
+>    - |
+>     #include <dt-bindings/interrupt-controller/irq.h>
+
+
+Best regards,
+Krzysztof
