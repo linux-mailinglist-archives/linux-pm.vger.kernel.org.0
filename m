@@ -2,165 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818675762A7
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 15:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD385762C5
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 15:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbiGONS6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 09:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S229713AbiGON1q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 09:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGONSz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 09:18:55 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89EC10FE2;
-        Fri, 15 Jul 2022 06:18:53 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id f73so8362859yba.10;
-        Fri, 15 Jul 2022 06:18:53 -0700 (PDT)
+        with ESMTP id S234764AbiGON1o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 09:27:44 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB7179EF0
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 06:27:41 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id w7so3234587ply.12
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 06:27:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=semihalf.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RIDFbj9Nm/Hc84YphLe1TSejCss5csMsL3XGmdeREuc=;
-        b=LjTUeU/VvjExiFE7qVdoTT66INknzaksBvLAL0QX/hhMGm1S/DCmWjGAqEm1RDjTt0
-         nrI4wHZo/WK5aG8U5fIPVbESm+g18hEELTujXpx69+Azj8qnUnYXhFafWvDdYrxJWF8Q
-         n4alCS65LacwduwaUDBvHdbTO5eZ4k4tWaJ199RDLEdi+Nnbu8tJ4UTjcA2YPJBeHBKH
-         hWc3HEBwkV0/ygom4+Ivyr3ViE5siRsP8CdzKAgWRXLBXaArht7DgMtJUJb/WrGYsYt8
-         eWv+sETgNCGjxIJCtjEQJk1vVPGobtuRYELM3bihPsOKaqDcf5qzy1Ry+AVMll6TrQxi
-         eYjQ==
+         :cc:content-transfer-encoding;
+        bh=0w0kQnLZNCUoA67Subv68HnzjOpEtCqrqlpvwcv8QtQ=;
+        b=aQJTeA/7QYoqg4phh6dYbrQSrhVVwmYY+spKooPDbdK0/+3i5UXnK5MMw1/F6ry2/e
+         qTCtfYnU6xf2MfjFDlDdR4Ux7++iRsvOhr+NYVNSwL8ImRpCOv4ju2Kw1ED5ovrhkXsr
+         /3cPLPIg/KN8FEYj6D7UGhWwYiIEhQUQSDw7KC4kEul7gTCFVJ9pvBQ58S+OfNtCxWgo
+         Tex/aWXTs9mccMEc9BzY+3Uk5c7vb6x978y1fzzX8PMgEXdPShX1nGddytJLu2YVEbA9
+         fvNefAmRSSpOR2rEd+qpzYaH66WcfPMXIwBxfyCN5WRFZz0nc9XWxevPlzPZQUn66jwf
+         X4qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RIDFbj9Nm/Hc84YphLe1TSejCss5csMsL3XGmdeREuc=;
-        b=VxgiEGoFQGUYqSko+lJKnHxVGH2zZsKKIQ9+fWl5TxvFC5y30oyYNFiJiWM7qvcf/8
-         wgwp1K8xIJJaXJdX9tCKzsfm3phCcmJ8mn4KJgVmLKfgUaW8scedC4sDAnZLKvPa605J
-         Xuf6pJD58ZF1Uq0SiLTwAMC41+W9qucdY3imNc1goVEWJk+yv7ELXTuqzLpXctX4h627
-         6Lx5ATaLA/TKD/lMhN21bMGyH1IWyg+s8bol5BjNho6iSX3WeTGJRDKyemoCfAUju24d
-         SL+yk0pm9MaL8GAym0K3eMQjngBLoyRpIHnFKRNOiBj0VfNEQ/UeeZcjFVYKEv9XfV9g
-         UJGw==
-X-Gm-Message-State: AJIora8ahXY1qyFHIc3AhbqzjH9ZZJ6SH3aoUgptYOIiV2Qf7yH0i2ZL
-        +DxNEioZC3N5G67lqSRU5M1RnxHjoBI+bES87pM=
-X-Google-Smtp-Source: AGRyM1tX0Yj4hhKwKn8Wh56LVxsUs+zEZtzzOqfyiqtoMPojzsjlQH4dKqby9pg3kc6AYzvHnWHIojiIQybijv0fZ+I=
-X-Received: by 2002:a25:cbcf:0:b0:66e:8893:a02c with SMTP id
- b198-20020a25cbcf000000b0066e8893a02cmr14089485ybg.460.1657891133149; Fri, 15
- Jul 2022 06:18:53 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0w0kQnLZNCUoA67Subv68HnzjOpEtCqrqlpvwcv8QtQ=;
+        b=2Y9MxvhTrS8b4wGYCkZyGyABsj//ud4BkLhhEpqd+kmTQK0KKYH/hedr+LhJejazoY
+         b70VEDrla/yygHIxn4NT5oQhRa9q1uxRfh4/ZCZiOf/Ts6DtemYYuv168maD4EbA9d7r
+         p/nbXi47TCrb/DR6jowyzt7anUJd8T2wFWSPkULrHFi2H++N7w8w5bYIRUZjObmi9mlH
+         E0syNV+MjjIMiEWo2ONMj1959aDhgyG2PsTZggmH2AijmNEN1bvd7Yx8nasJcMr5WGlq
+         sAFDVj27rNazTD8yr1qqckKCG0l67xOCyIC3h0hAYKWgXFbZT2qTevb3aK5U0atP//C1
+         eiKg==
+X-Gm-Message-State: AJIora+52dG8CNOI/Rm8JOJb5rKTsaNpDo1VfvDPQG74Sf0+gKuyk8dQ
+        gjEiMC7ak8IXIt91W69qFr1omTKcCzNa6axtJ4zfRw==
+X-Google-Smtp-Source: AGRyM1uxobt3jQNw8mkgTNw7tHuEHXM0gZenwP8TKU40cNS4zzk/pNnAHQubPXJXXJpyrdH3FzItpK7St541HUkKyP4=
+X-Received: by 2002:a17:902:d510:b0:16c:3cd:db78 with SMTP id
+ b16-20020a170902d51000b0016c03cddb78mr13974279plg.17.1657891661082; Fri, 15
+ Jul 2022 06:27:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-10-peterwu.pub@gmail.com>
-In-Reply-To: <20220715112607.591-10-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 15 Jul 2022 15:18:16 +0200
-Message-ID: <CAHp75VfiBcaSbZy67Puwb2pBW2MHN8iQj3upA=h3VkKSFJbs0g@mail.gmail.com>
-Subject: Re: [PATCH v5 09/13] iio: adc: mt6370: Add MediaTek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
+References: <20220707125329.378277-1-jaz@semihalf.com> <MN0PR12MB610107D8E99AC05C7884AEE6E2839@MN0PR12MB6101.namprd12.prod.outlook.com>
+In-Reply-To: <MN0PR12MB610107D8E99AC05C7884AEE6E2839@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+Date:   Fri, 15 Jul 2022 15:27:30 +0200
+Message-ID: <CAH76GKM+bGM77gcPCz1yt=MULOxRW=-TCVFwsn6grP0aGRpsMg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] x86: allow to notify host about guest entering s2idle
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmy@semihalf.com" <dmy@semihalf.com>,
+        "dbehr@google.com" <dbehr@google.com>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        "zide.chen@intel.corp-partner.google.com" 
+        <zide.chen@intel.corp-partner.google.com>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Sachi King <nakato@nakato.io>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 1:28 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+czw., 7 lip 2022 o 17:27 Limonciello, Mario
+<Mario.Limonciello@amd.com> napisa=C5=82(a):
 >
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> [Public]
 >
-> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
-> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
-> driver, display bias voltage supply, one general purpose LDO, and the
-> USB Type-C & PD controller complies with the latest USB Type-C and PD
-> standards.
 >
-> This adds support the MT6370 ADC driver for system monitoring, including
+>
+> > -----Original Message-----
+> > From: Grzegorz Jaszczyk <jaz@semihalf.com>
+> > Sent: Thursday, July 7, 2022 07:53
+> > To: linux-kernel@vger.kernel.org
+> > Cc: jaz@semihalf.com; dmy@semihalf.com; Limonciello, Mario
+> > <Mario.Limonciello@amd.com>; seanjc@google.com; dbehr@google.com;
+> > upstream@semihalf.com; zide.chen@intel.corp-partner.google.com; Rafael =
+J.
+> > Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; Hans de Goede
+> > <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>; Pavel Machek
+> > <pavel@ucw.cz>; Mika Westerberg <mika.westerberg@linux.intel.com>; Sach=
+i
+> > King <nakato@nakato.io>; open list:ACPI <linux-acpi@vger.kernel.org>; o=
+pen
+> > list:X86 PLATFORM DRIVERS <platform-driver-x86@vger.kernel.org>; open
+> > list:HIBERNATION (aka Software Suspend, aka swsusp) <linux-
+> > pm@vger.kernel.org>
+> > Subject: [RFC PATCH 0/2] x86: allow to notify host about guest entering=
+ s2idle
+> >
+> > According to the mailing list discussion [1] about the preferred approa=
+ch
+> > for notifying hypervisor/VMM about guest entering s2idle state this RFC=
+ was
+> > implemented.
+> >
+> > Instead of original hypercall based approach, which involves KVM change=
+ [2]
+> > and makes it hypervisor specific, implement different mechanism, which
+> > takes advantage of MMIO/PIO trapping and makes it hypervisor independen=
+t.
+> >
+> > Patch #1 extends S2Idle ops by new notify handler which will be invoked=
+ as
+> > a very last command before system actually enters S2Idle states. It als=
+o
+> > allows to register and use driver specific notification hook which is u=
+sed
+> > in patch #2.
+> >
+> > Patch #2 introduces new driver for virtual PMC, which registers
+> > acpi_s2idle_dev_ops's notify handler. Its implementation is based on an
+> > ACPI _DSM evaluation, which in turn can perform MMIO access and allow t=
+o
+> > trap and therefore notify the VMM about guest entering S2Idle state.
+> >
+> > Please see individual patches and commit logs for more verbose descript=
+ion.
+> >
+> > This patchset is marked as RFC since patch #2 implements driver for non
+> > existing device "HYPE0001", which ACPI ID was not registered yet.
+> > Furthermore the required registration process [3] will not be started
+> > before getting positive feedback about this patchset.
+> >
+> > [1]
+> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpat=
+chw
+> > ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
+> > 2-
+> > jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
+> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
+> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
+> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
+> > 7C3000%7C%7C%7C&amp;sdata=3DRIDiHUNpHUsBYyK3pwGND%2BWJoioXZNCKt
+> > mML2%2F1LAxs%3D&amp;reserved=3D0
+> > [2]
+> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpat=
+chw
+> > ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
+> > 3-
+> > jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
+> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
+> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
+> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
+> > 7C3000%7C%7C%7C&amp;sdata=3DBqykAwWzO%2BfeGPSsAqTmX13O8F0Vvm3G
+> > PL56EpmdSJ8%3D&amp;reserved=3D0
+> > [3]
+> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fuef=
+i.org
+> > %2FPNP_ACPI_Registry&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
+> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
+> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
+> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
+> > 7C3000%7C%7C%7C&amp;sdata=3DQXK52zFXJGEBm6xIv6IFeF7Xxgz4Yp5UmgLSQ
+> > diXtlI%3D&amp;reserved=3D0
+> >
+> > Grzegorz Jaszczyk (2):
+> >   suspend: extend S2Idle ops by new notify handler
+> >   platform/x86: Add virtual PMC driver used for S2Idle
+> >
+> >  drivers/acpi/x86/s2idle.c       | 11 +++++
+> >  drivers/platform/x86/Kconfig    |  7 ++++
+> >  drivers/platform/x86/Makefile   |  1 +
+> >  drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
+> >  include/linux/acpi.h            |  1 +
+> >  include/linux/suspend.h         |  1 +
+> >  kernel/power/suspend.c          |  4 ++
+> >  7 files changed, 98 insertions(+)
+> >  create mode 100644 drivers/platform/x86/virt_pmc.c
+> >
+> > --
+> > 2.37.0.rc0.161.g10f37bed90-goog
+>
+> Thanks, you matched the implementation I was expecting.
+> This looks fine by me.
 
-This adds --> Add a
+Thank you Mario.
 
-> charger current, voltage, and temperature.
+Rafael, Sean, Hans - could you please kindly tell if this approach is
+ok by you? If so I will want to start the registration process of ACPI
+ID required for this series.
 
-...
+Previously Mario suggested that maybe Linux Foundation could own the
+namespace and ID for this Virtual PMC device - could you please advise
+in this matter?
 
-> +#include <linux/bits.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/sysfs.h>
-
-...
-
-> +#define MT6370_AICR_400MA              0x6
-> +#define MT6370_ICHG_500MA              0x4
-> +#define MT6370_ICHG_900MA              0x8
-
-_mA ?
-
-...
-
-> +       ret = regmap_read_poll_timeout(priv->regmap,
-> +                                      MT6370_REG_CHG_ADC, reg_val,
-> +                                      !(reg_val & MT6370_ADC_START_MASK),
-> +                                      ADC_CONV_POLLING_TIME_US,
-> +                                      ADC_CONV_TIME_MS * 1000 * 3);
-
-1000 --> MILLI ?
-
-...
-
-> +static int mt6370_adc_probe(struct platform_device *pdev)
-> +{
-
-Given comment in one place in the entire series would be good to use
-in another where appropriate. For example, here it would also be nice
-to have a temporary variable
-
-  struct device *dev = &pdev->dev;
-
-It will shorten some lines.
-
-> +       struct mt6370_adc_data *priv;
-> +       struct iio_dev *indio_dev;
-> +       struct regmap *regmap;
-> +       int ret;
-
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thank you in advance,
+Grzegorz
