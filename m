@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C5257645F
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 17:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63683576460
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 17:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiGOPUZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 11:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S234941AbiGOPUq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 11:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235426AbiGOPUU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 11:20:20 -0400
+        with ESMTP id S233509AbiGOPUp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 11:20:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B3C27FF3
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 08:20:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9895B54
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 08:20:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E47E2B82B3F
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 15:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D7B9C341CA
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 15:20:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AA03B82B3F
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 15:20:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D1EEC341CA
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 15:20:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657898416;
-        bh=q9g67ujdA1v6UzI34htdZTT2fsSIkcchhFQ1w8dcUtk=;
+        s=k20201202; t=1657898442;
+        bh=U46/GDok6rBsTnXlQGq9Q2K/glZRZ5zACvs5Hgzz+lU=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=MfLUbA2zYH1cfdoI+dvOm/5ijZg22aMJw8qRIAWDgYuAF/2Bcl3TlIRPT4KzIlAeC
-         voB/BWNvYCfW2zd9uPpjuLEXd3F9BQTqqmZjTGmXLVDTGeNqqVb2hCFyWzyqcIYAX8
-         HvL4hJEO3R5aGcBXWRSIa5Q787OhaKob61SWLSQgGNBLgUF6zcCU51STDGRNLnipbj
-         9gQiPHyqrBggfL5KSk757q9FfcdZQjFg1ceKrr8ZHBicxZE1JMFZxHtp7Y9TZZM1fV
-         I8AXersnLRX/D5ZJ99w4g8+vWWP3dzYl63rvVEVwbTeYcjnTShyba6j/PIezcqc5yC
-         DT9YSDNY29Qsw==
+        b=TatRfuUCIRq0hUdqyNWnI+mQ+8PUSLjVgK76jNcXYpTOzUyhQI8vhM95Zct4sVaW2
+         9KyqWEaECBPksmuJoBJIkBNJad+Aug/ZF6DnIQltRApvl6Inq/Q83QL018bEGyso03
+         FZZqSZSBv2NWdSlBrMbPMs+sw7xumpeVZen4NUGb4RWdr1ZtZd6E+4kIqEum3zrtD5
+         ZJ3iWjbAvXEmsXuertnCn8BbqkxhoD04vnzI2uzrIx8BYehjPki0H596uLewZFk8z1
+         vr4SJW1uu5Jm7zMauPk2yWLZ2S/stF9HP9UZFXLtjd4JXnF4JtMyxY5JRjyzYtG3Sy
+         kmsjPPTHYMotQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 766E1C05FD6; Fri, 15 Jul 2022 15:20:16 +0000 (UTC)
+        id 0AFA7CC13AD; Fri, 15 Jul 2022 15:20:42 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
 Subject: [Bug 216248] [Regression] amd-pstate stops working after [ACPI:
  CPPC: Check _OSC for flexible address space]
-Date:   Fri, 15 Jul 2022 15:20:16 +0000
+Date:   Fri, 15 Jul 2022 15:20:41 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -52,8 +52,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216248-137361-H9j6UeuqfH@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-216248-137361-TX3Ptoh3RE@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-216248-137361@https.bugzilla.kernel.org/>
 References: <bug-216248-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,15 +72,10 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D216248
 
---- Comment #14 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-> [    0.688308] ACPI CPPC: CPPC v2 _OSC not acked
-
-OK good, this confirms that your system had _OSC not advertising.
-> [    0.688392] ACPI CPPC: Flexible address space capability not supported
-
-That does confirm that your assertion of the bisect was the cause.
-
-I'm attaching a patch that I think can help the problem.
+--- Comment #15 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+Created attachment 301440
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D301440&action=3Dedit
+possible patch to avoid the error
 
 --=20
 You may reply to this email to add a comment.
