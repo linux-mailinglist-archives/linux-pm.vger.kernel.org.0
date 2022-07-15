@@ -2,86 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0485766D7
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 20:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE335767BD
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 21:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiGOSks (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 14:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
+        id S230181AbiGOTss (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 15:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiGOSks (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 14:40:48 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DB7747B7;
-        Fri, 15 Jul 2022 11:40:47 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-31c89653790so54897177b3.13;
-        Fri, 15 Jul 2022 11:40:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=EMw9QHnrLufeGtbJ9V3vzrZj5smnCF2Fpz3xrJ6YNUw=;
-        b=LFPmfcYPhuOYA/fuez5ue5GtUt6xWWjslQnrcF/JABbcT/U7TuOJBNrybZQX9DbEz8
-         4sAh9WmyYRwTDpAtCU/BS+YiikOkgCP8kVZ/YhvF/q/EIVRIbmaHVaKPifSQ8OyXiiab
-         OLo+cEOl8jEGbH/z9qhLF/8OHLL3FFvzoHaUg4WUNWXQMCdPy8FMYblkRK/r5kB98WEJ
-         fyxwEYjMGRBnia3Q4YGtnGGl92eiziJjq7IK9ShpaZwcka+uaXIVnQhPMgA2puHwKSJE
-         fb0VkJhO9sV43E9b7jOmH8pJSJ/QqB3QHd6xgq2nYlaQQAJclGVtoU5KJ9ll4Fh8RSGb
-         jpkg==
-X-Gm-Message-State: AJIora8UuSUTUpn1X46QTNnjUJdzajD2UhWNUDtxIvSEcfpuayW38YG8
-        6TLKYrXKMuPhS2zPsx7Lti6vq6D83VZfjNIuMlJU+/VUaBU=
-X-Google-Smtp-Source: AGRyM1ucLZ5sqx4zJwaUrwo8fh/KpupWF4k8qUwo7imzY8bvgahPMkTXqW8lU8Oq0fDA3Tnu90bZcF9vjL/uE/8En7o=
-X-Received: by 2002:a0d:d952:0:b0:31d:789d:221c with SMTP id
- b79-20020a0dd952000000b0031d789d221cmr17063299ywe.515.1657910447123; Fri, 15
- Jul 2022 11:40:47 -0700 (PDT)
+        with ESMTP id S229648AbiGOTsr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 15:48:47 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A5C624C;
+        Fri, 15 Jul 2022 12:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657914524; x=1689450524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MilUhzh+T5K7OKYmpSSzhAgM8qxY12ZE5AeVvwctYIg=;
+  b=ENLwp5TQ06MUqVsAaPm700pEs0mdqrZQRSSeOYviXkBea3L1EvJuaUA4
+   O2NB9xVtQg2Uy1Ge6rzaLSe6e3OEjx0+rIBTeQYmVtLuVtyu+ZYz0o/Xl
+   w5BJ4tCDrSGmp0Q7aEHLXJKZAFVSOnGVu+wj/xOIu/VxKt/SlYZ436HxY
+   o9xZ/rD9gsq2G2XtO+AcBtDzLBTYEdiZ3Q/RTB1jOTctZ4DDsBlvoWmSH
+   lTMVnURUMmd75z6VomrkmRW4JWOujgL4Qb8VjKxNWyW5l/UjbZjlk3Klc
+   bSXHw4QUpcoG3VtBNHZhpgFZyeVLuUPz9EeifumapwjwZaqhmtO/QlbY5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="266298361"
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="266298361"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 12:48:44 -0700
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="664319203"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 12:48:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oCRIl-001JDk-2o;
+        Fri, 15 Jul 2022 22:48:39 +0300
+Date:   Fri, 15 Jul 2022 22:48:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] powercap: RAPL: Add Power Limit4 support for Alder
+ Lake-N and Raptor Lake-P
+Message-ID: <YtHEl73BL1BRyl9r@smile.fi.intel.com>
+References: <20220715165228.28044-1-sumeet.r.pawnikar@intel.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Jul 2022 20:40:36 +0200
-Message-ID: <CAJZ5v0iVmVvMK3iv0gcTeWQzbfCWrNhRw+j+-YSPtbQcNMH52g@mail.gmail.com>
-Subject: [GIT PULL] Power management fix for v5.19-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715165228.28044-1-sumeet.r.pawnikar@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On Fri, Jul 15, 2022 at 10:22:28PM +0530, Sumeet Pawnikar wrote:
+> Add Alder Lake-N and Raptor Lake-P to the list of processor models
+> for which Power Limit4 is supported by the Intel RAPL driver.
+> 
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Please pull from the tag
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.19-rc7
+You may not convert people's review into a tag without their consent.
+But taking into account this is trivial patch, it's fine. Just follow
+the rules next time.
 
-with top-most commit 5a5adb1528e59e8a4b23ffa7dda4849b61e97cf8
+Also, where is v1? What are the differences to it?
 
- Merge tag 'cpufreq-arm-fixes-5.19-rc7' of
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
+> ---
+>  drivers/powercap/intel_rapl_msr.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+> index 9d23984d8931..bc6adda58883 100644
+> --- a/drivers/powercap/intel_rapl_msr.c
+> +++ b/drivers/powercap/intel_rapl_msr.c
+> @@ -140,7 +140,9 @@ static const struct x86_cpu_id pl4_support_ids[] = {
+>  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_TIGERLAKE_L, X86_FEATURE_ANY },
+>  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE, X86_FEATURE_ANY },
+>  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_L, X86_FEATURE_ANY },
+> +	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_N, X86_FEATURE_ANY },
+>  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE, X86_FEATURE_ANY },
+> +	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE_P, X86_FEATURE_ANY },
+>  	{}
+>  };
 
-on top of commit 32346491ddf24599decca06190ebca03ff9de7f8
-
- Linux 5.19-rc6
-
-to receive a power management fix for 5.19-rc7.
-
-This fixes a recent regression in the cpufreq mediatek driver
-related to incorrect handling of regulator_get_optional() return
-value (AngeloGioacchino Del Regno).
-
-Thanks!
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
----------------
-
-AngeloGioacchino Del Regno (1):
-      cpufreq: mediatek: Handle sram regulator probe deferral
-
----------------
-
- drivers/cpufreq/mediatek-cpufreq.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
