@@ -2,121 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F075762FC
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 15:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0535C57645E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 17:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbiGONnE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 09:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S235266AbiGOPTl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 11:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiGONnC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 09:43:02 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F8F7E006;
-        Fri, 15 Jul 2022 06:43:01 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id z132so3906892iof.0;
-        Fri, 15 Jul 2022 06:43:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=03wcnwqW6SswNVSW3NYFh+nPKkFyDcywCPMc3nrTTzo=;
-        b=TdH2JtsYB6QRHzBN/92KFqwdGYKhHjdyXCuZM2aotId2+++XH3D5mX4a+RmDrIHJRF
-         U4WJ9tIylHXl9VKUOX+NGL0TfB5FLrH9wpgzuy5jCNZP3Bp1MvzEIyGmLVFCqex+W12A
-         uUfauLWZrk6jRc/cI9hyxAyiHbFvvnWXIUSlZ2tWlV/osLK4UY2HQ8WDYbbXKS1RXVzk
-         n9QIzRg0xTloij76/vYsdCDaR38UuSPuRM2MVjLNdufq4oovPcj8Zb1+4HM8a5lorraU
-         Vg8TpjKC53Hv9mK2T4PgQmtUAKxEGVQiH/a2spjezQg9AWtDY4PZHNiK4mpFgvQQ7FTu
-         8jZA==
-X-Gm-Message-State: AJIora/9WOi3jRjfzDpdyk4s5MK2mprVAmOXui7m4wYtI7++wX9Ubv8G
-        yMtc6M7C56PWWWEK8sF3MQ==
-X-Google-Smtp-Source: AGRyM1uzHWN8yj4iBWno2bNl4tSBHdD45HjKJL19BAJUQTQyoHWpBthV9k3/tF7H+HVOqQ0U4hzPtA==
-X-Received: by 2002:a02:ac0a:0:b0:33f:713a:9589 with SMTP id a10-20020a02ac0a000000b0033f713a9589mr7633647jao.289.1657892580691;
-        Fri, 15 Jul 2022 06:43:00 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id g7-20020a92dd87000000b002dc789a3dddsm1703976iln.5.2022.07.15.06.42.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 06:43:00 -0700 (PDT)
-Received: (nullmailer pid 520291 invoked by uid 1000);
-        Fri, 15 Jul 2022 13:42:55 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        lee.jones@linaro.org, heikki.krogerus@linux.intel.com,
-        broonie@kernel.org, cy_huang@richtek.com, deller@gmx.de,
-        linux@roeck-us.net,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        szunichen@gmail.com, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org, daniel.thompson@linaro.org,
-        linux-fbdev@vger.kernel.org, jingoohan1@gmail.com,
-        chunfeng.yun@mediatek.com, lgirdwood@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jic23@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, lars@metafoo.de, alice_chen@richtek.com,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
-        sre@kernel.org, chiaen_wu@richtek.com,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-In-Reply-To: <20220715112607.591-7-peterwu.pub@gmail.com>
-References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-7-peterwu.pub@gmail.com>
-Subject: Re: [PATCH v5 06/13] dt-bindings: mfd: Add MediaTek MT6370
-Date:   Fri, 15 Jul 2022 07:42:55 -0600
-Message-Id: <1657892575.865405.520290.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S235313AbiGOPTO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 11:19:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C81C26C0;
+        Fri, 15 Jul 2022 08:19:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657898350; x=1689434350;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GzvdUNK0/elu+0B9zVMsBMPuRFb0YyLLTorGkbmlvI8=;
+  b=UgZbeJ3BBMavgSIrlXgy0//SpMC5YfN0sZ0jsNiB71ihAYiQ4fE0fNg6
+   dhCKbepJoAeS6H6GRuwDYjq2AqxrcPzB+mn6axHton/Nzj1JrKgY7XANm
+   nRsHDIa/a7EoXsppjQPZJoXY74AytxetSuhgCN0M7FTdt4eePzJ5GbBkJ
+   +4iyokd6tlQZdhV4H7VU40sTbfrW5WvzAqOuEXdZHlbMYLddEJFAUq8X5
+   GeGDNSvjDBXeTHnUs+W8pxF5G87O5OGWHO/PqTQ/RGUGRLQ7rdofr6Nsl
+   ZKzRzf5BAh8WtmcB+cch9gK8ChPj4YwqgIVISeA/EsVDlRa2PeTNgw4bW
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="372133247"
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="372133247"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 08:18:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="723110016"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Jul 2022 08:18:55 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCN5i-0000HJ-IN;
+        Fri, 15 Jul 2022 15:18:54 +0000
+Date:   Fri, 15 Jul 2022 19:01:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ bab5a415e184710d01c37547f706a0e85873bb74
+Message-ID: <62d1491d.sEAKmtLmVIxvS4zB%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 15 Jul 2022 19:26:00 +0800, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add MediaTek MT6370 binding documentation.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
->  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
->  2 files changed, 298 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
->  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: bab5a415e184710d01c37547f706a0e85873bb74  Merge branch 'pm-domains' into bleeding-edge
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+elapsed time: 896m
 
-yamllint warnings/errors:
+configs tested: 48
+configs skipped: 3
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: indicator:multi-led@0:led@0: Unevaluated properties are not allowed ('reg' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: indicator:multi-led@0:led@1: Unevaluated properties are not allowed ('reg' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: indicator:multi-led@0:led@2: Unevaluated properties are not allowed ('reg' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: indicator: multi-led@0:led@0: Unevaluated properties are not allowed ('reg' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: indicator: multi-led@0:led@1: Unevaluated properties are not allowed ('reg' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: indicator: multi-led@0:led@2: Unevaluated properties are not allowed ('reg' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-doc reference errors (make refcheckdocs):
+gcc tested configs:
+m68k                       m5275evb_defconfig
+arm                        oxnas_v6_defconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
 
-See https://patchwork.ozlabs.org/patch/
+clang tested configs:
+powerpc                 mpc8560_ads_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220714
+hexagon              randconfig-r041-20220714
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
