@@ -2,76 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD385762C5
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 15:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93EE5762D8
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 15:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiGON1q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 09:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S234854AbiGONeP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 09:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234764AbiGON1o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 09:27:44 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB7179EF0
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 06:27:41 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id w7so3234587ply.12
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 06:27:41 -0700 (PDT)
+        with ESMTP id S234835AbiGONeN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 09:34:13 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEE87CB52
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 06:34:11 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id os14so9027781ejb.4
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 06:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0w0kQnLZNCUoA67Subv68HnzjOpEtCqrqlpvwcv8QtQ=;
-        b=aQJTeA/7QYoqg4phh6dYbrQSrhVVwmYY+spKooPDbdK0/+3i5UXnK5MMw1/F6ry2/e
-         qTCtfYnU6xf2MfjFDlDdR4Ux7++iRsvOhr+NYVNSwL8ImRpCOv4ju2Kw1ED5ovrhkXsr
-         /3cPLPIg/KN8FEYj6D7UGhWwYiIEhQUQSDw7KC4kEul7gTCFVJ9pvBQ58S+OfNtCxWgo
-         Tex/aWXTs9mccMEc9BzY+3Uk5c7vb6x978y1fzzX8PMgEXdPShX1nGddytJLu2YVEbA9
-         fvNefAmRSSpOR2rEd+qpzYaH66WcfPMXIwBxfyCN5WRFZz0nc9XWxevPlzPZQUn66jwf
-         X4qw==
+        d=fairphone.com; s=fair;
+        h=mime-version:content-transfer-encoding:date:message-id:to:cc
+         :subject:from:references:in-reply-to;
+        bh=8n3GoEXR9Kkk97aGJD+78x7UsJH5H1Xj3Xfn857goUA=;
+        b=tqyVOSW4NZbEYE3o1b8R3/ISFMjNTzS+t4u89ICrhpZNOg6Vo4ea0M/Hxx8zRdmvm4
+         Ls+tb53zMCsvDAha6uyMzFs5ovpxI3yaUtASFLl8yIpS5CXBM/m0ovEw5Lw73BrMDrwp
+         2xGJgz7Ll3ubL3PqNXFzl+05YnVGS+kec2OZjEUnfmJffr5P1YNJ8Cxg/Dw7yKbSb8ut
+         uv45g31iXD1jC6GGGzYnikUBeMoVtTz4qgEWtVFsWRYXyXqCc3t9BmVnQdxDHZrVrsmU
+         NzpGy09f+lKzmzXU72w5SCHLhqb6+Xj9TZ2tKelwWOJY8MAjIiEILtx6WjuC/YkYErMv
+         jwLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0w0kQnLZNCUoA67Subv68HnzjOpEtCqrqlpvwcv8QtQ=;
-        b=2Y9MxvhTrS8b4wGYCkZyGyABsj//ud4BkLhhEpqd+kmTQK0KKYH/hedr+LhJejazoY
-         b70VEDrla/yygHIxn4NT5oQhRa9q1uxRfh4/ZCZiOf/Ts6DtemYYuv168maD4EbA9d7r
-         p/nbXi47TCrb/DR6jowyzt7anUJd8T2wFWSPkULrHFi2H++N7w8w5bYIRUZjObmi9mlH
-         E0syNV+MjjIMiEWo2ONMj1959aDhgyG2PsTZggmH2AijmNEN1bvd7Yx8nasJcMr5WGlq
-         sAFDVj27rNazTD8yr1qqckKCG0l67xOCyIC3h0hAYKWgXFbZT2qTevb3aK5U0atP//C1
-         eiKg==
-X-Gm-Message-State: AJIora+52dG8CNOI/Rm8JOJb5rKTsaNpDo1VfvDPQG74Sf0+gKuyk8dQ
-        gjEiMC7ak8IXIt91W69qFr1omTKcCzNa6axtJ4zfRw==
-X-Google-Smtp-Source: AGRyM1uxobt3jQNw8mkgTNw7tHuEHXM0gZenwP8TKU40cNS4zzk/pNnAHQubPXJXXJpyrdH3FzItpK7St541HUkKyP4=
-X-Received: by 2002:a17:902:d510:b0:16c:3cd:db78 with SMTP id
- b16-20020a170902d51000b0016c03cddb78mr13974279plg.17.1657891661082; Fri, 15
- Jul 2022 06:27:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220707125329.378277-1-jaz@semihalf.com> <MN0PR12MB610107D8E99AC05C7884AEE6E2839@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB610107D8E99AC05C7884AEE6E2839@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Fri, 15 Jul 2022 15:27:30 +0200
-Message-ID: <CAH76GKM+bGM77gcPCz1yt=MULOxRW=-TCVFwsn6grP0aGRpsMg@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] x86: allow to notify host about guest entering s2idle
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmy@semihalf.com" <dmy@semihalf.com>,
-        "dbehr@google.com" <dbehr@google.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>,
-        "zide.chen@intel.corp-partner.google.com" 
-        <zide.chen@intel.corp-partner.google.com>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sachi King <nakato@nakato.io>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:to:cc:subject:from:references:in-reply-to;
+        bh=8n3GoEXR9Kkk97aGJD+78x7UsJH5H1Xj3Xfn857goUA=;
+        b=D6VqpcFT6MwibF376Zi7A1JK/Iz4kas+D5Kh6dvGuMHUoAw+C5ADLPtB4qZ1LhgPdW
+         nnB8glHC6mDFr/7HzoJRx4tzpwmaA1mMMwB3WKlUgxlwWprRkvbam/gNFAF35lEYeRn5
+         cd8vJDHP0WzWx1autaC4fU/rKOQRiZmDjNMXsdhn9BrFKzWOIH3cNtpaIGcOslyiKMK4
+         HK1Z0rr5oU0w0R/U3/glB97jwH/0epWBgPQ2BkCEFPEfVuqxJJ1+uUjY8sKY8sp/c3kk
+         nXxCxpJsDFYohcwGa8T1DyhEBg+70iryGAxNjFz66OJku2yyRiZrB817+Ie9p9+5zCLO
+         jPIA==
+X-Gm-Message-State: AJIora+WvCtcqU2xCDQ4POi4BKFXEQ5TmPXrrN3Jrh+gfZrE3Y/+et+e
+        tqaWJK6oHYqhPL2/ZjJYJbyH+A==
+X-Google-Smtp-Source: AGRyM1vOHLDs/wDLOiBjr+Wk5BnQYKkiUmq25vsuDPItAluSfMnaVBZnFRiDBDuuWd85vrgSDnFI9Q==
+X-Received: by 2002:a17:907:2702:b0:72b:307b:98e6 with SMTP id w2-20020a170907270200b0072b307b98e6mr13898069ejk.658.1657892050062;
+        Fri, 15 Jul 2022 06:34:10 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id f23-20020a50fe17000000b0043a734c7393sm2824102edt.31.2022.07.15.06.34.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 06:34:09 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 15 Jul 2022 15:34:08 +0200
+Message-Id: <CLG9OKW0OMLX.2XWU1ZHFRR9RQ@otso>
+To:     "Luca Weiss" <luca.weiss@fairphone.com>,
+        <linux-arm-msm@vger.kernel.org>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        "Georgi Djakov" <georgi.djakov@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Odelu Kukatla" <okukatla@codeaurora.org>
+Subject: Re: [PATCH v3 0/5] Add interconnect support for SM6350
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+X-Mailer: aerc 0.9.0
+References: <20220525144404.200390-1-luca.weiss@fairphone.com>
+In-Reply-To: <20220525144404.200390-1-luca.weiss@fairphone.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -82,128 +76,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-czw., 7 lip 2022 o 17:27 Limonciello, Mario
-<Mario.Limonciello@amd.com> napisa=C5=82(a):
->
-> [Public]
->
->
->
-> > -----Original Message-----
-> > From: Grzegorz Jaszczyk <jaz@semihalf.com>
-> > Sent: Thursday, July 7, 2022 07:53
-> > To: linux-kernel@vger.kernel.org
-> > Cc: jaz@semihalf.com; dmy@semihalf.com; Limonciello, Mario
-> > <Mario.Limonciello@amd.com>; seanjc@google.com; dbehr@google.com;
-> > upstream@semihalf.com; zide.chen@intel.corp-partner.google.com; Rafael =
-J.
-> > Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; Hans de Goede
-> > <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>; Pavel Machek
-> > <pavel@ucw.cz>; Mika Westerberg <mika.westerberg@linux.intel.com>; Sach=
-i
-> > King <nakato@nakato.io>; open list:ACPI <linux-acpi@vger.kernel.org>; o=
-pen
-> > list:X86 PLATFORM DRIVERS <platform-driver-x86@vger.kernel.org>; open
-> > list:HIBERNATION (aka Software Suspend, aka swsusp) <linux-
-> > pm@vger.kernel.org>
-> > Subject: [RFC PATCH 0/2] x86: allow to notify host about guest entering=
- s2idle
-> >
-> > According to the mailing list discussion [1] about the preferred approa=
-ch
-> > for notifying hypervisor/VMM about guest entering s2idle state this RFC=
- was
-> > implemented.
-> >
-> > Instead of original hypercall based approach, which involves KVM change=
- [2]
-> > and makes it hypervisor specific, implement different mechanism, which
-> > takes advantage of MMIO/PIO trapping and makes it hypervisor independen=
-t.
-> >
-> > Patch #1 extends S2Idle ops by new notify handler which will be invoked=
- as
-> > a very last command before system actually enters S2Idle states. It als=
-o
-> > allows to register and use driver specific notification hook which is u=
-sed
-> > in patch #2.
-> >
-> > Patch #2 introduces new driver for virtual PMC, which registers
-> > acpi_s2idle_dev_ops's notify handler. Its implementation is based on an
-> > ACPI _DSM evaluation, which in turn can perform MMIO access and allow t=
-o
-> > trap and therefore notify the VMM about guest entering S2Idle state.
-> >
-> > Please see individual patches and commit logs for more verbose descript=
-ion.
-> >
-> > This patchset is marked as RFC since patch #2 implements driver for non
-> > existing device "HYPE0001", which ACPI ID was not registered yet.
-> > Furthermore the required registration process [3] will not be started
-> > before getting positive feedback about this patchset.
-> >
-> > [1]
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpat=
-chw
-> > ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
-> > 2-
-> > jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> > 7C3000%7C%7C%7C&amp;sdata=3DRIDiHUNpHUsBYyK3pwGND%2BWJoioXZNCKt
-> > mML2%2F1LAxs%3D&amp;reserved=3D0
-> > [2]
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpat=
-chw
-> > ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
-> > 3-
-> > jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> > 7C3000%7C%7C%7C&amp;sdata=3DBqykAwWzO%2BfeGPSsAqTmX13O8F0Vvm3G
-> > PL56EpmdSJ8%3D&amp;reserved=3D0
-> > [3]
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fuef=
-i.org
-> > %2FPNP_ACPI_Registry&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> > 7C3000%7C%7C%7C&amp;sdata=3DQXK52zFXJGEBm6xIv6IFeF7Xxgz4Yp5UmgLSQ
-> > diXtlI%3D&amp;reserved=3D0
-> >
-> > Grzegorz Jaszczyk (2):
-> >   suspend: extend S2Idle ops by new notify handler
-> >   platform/x86: Add virtual PMC driver used for S2Idle
-> >
-> >  drivers/acpi/x86/s2idle.c       | 11 +++++
-> >  drivers/platform/x86/Kconfig    |  7 ++++
-> >  drivers/platform/x86/Makefile   |  1 +
-> >  drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
-> >  include/linux/acpi.h            |  1 +
-> >  include/linux/suspend.h         |  1 +
-> >  kernel/power/suspend.c          |  4 ++
-> >  7 files changed, 98 insertions(+)
-> >  create mode 100644 drivers/platform/x86/virt_pmc.c
-> >
-> > --
-> > 2.37.0.rc0.161.g10f37bed90-goog
->
-> Thanks, you matched the implementation I was expecting.
-> This looks fine by me.
+Hi all,
 
-Thank you Mario.
+On Wed May 25, 2022 at 4:43 PM CEST, Luca Weiss wrote:
+> This series adds interconnect support for the various NoCs found on
+> sm6350.
+>
+> A more special modification is allowing child NoC devices, like done for
+> rpm-based qcm2290 which was already merged, but now for rpmh-based
+> interconnect.
 
-Rafael, Sean, Hans - could you please kindly tell if this approach is
-ok by you? If so I will want to start the registration process of ACPI
-ID required for this series.
+any feedback on the two interconnect patches and the dts patch?
+Georgi? Bjorn?
 
-Previously Mario suggested that maybe Linux Foundation could own the
-namespace and ID for this Virtual PMC device - could you please advise
-in this matter?
+Thanks Krzysztof for the dt-binding review!
 
-Thank you in advance,
-Grzegorz
+Regards
+Luca
+
+>
+> See also downstream dts:
+> https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/tags/=
+android-11.0.0_r0.81/qcom/lagoon-bus.dtsi
+>
+> Luca Weiss (5):
+>   interconnect: qcom: icc-rpmh: Support child NoC device probe
+>   dt-bindings: interconnect: qcom: Split out rpmh-common bindings
+>   dt-bindings: interconnect: Add Qualcomm SM6350 NoC support
+>   interconnect: qcom: Add SM6350 driver support
+>   arm64: dts: qcom: sm6350: Add interconnect support
+>
+>  .../interconnect/qcom,rpmh-common.yaml        |  43 ++
+>  .../bindings/interconnect/qcom,rpmh.yaml      |  22 +-
+>  .../interconnect/qcom,sm6350-rpmh.yaml        |  82 +++
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi          | 109 ++++
+>  drivers/interconnect/qcom/Kconfig             |   9 +
+>  drivers/interconnect/qcom/Makefile            |   2 +
+>  drivers/interconnect/qcom/icc-rpmh.c          |   4 +
+>  drivers/interconnect/qcom/sm6350.c            | 493 ++++++++++++++++++
+>  drivers/interconnect/qcom/sm6350.h            | 139 +++++
+>  .../dt-bindings/interconnect/qcom,sm6350.h    | 148 ++++++
+>  10 files changed, 1034 insertions(+), 17 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,r=
+pmh-common.yaml
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,s=
+m6350-rpmh.yaml
+>  create mode 100644 drivers/interconnect/qcom/sm6350.c
+>  create mode 100644 drivers/interconnect/qcom/sm6350.h
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
+>
+> --=20
+> 2.36.1
+
