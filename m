@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CD8575F89
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 12:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C1E575FA3
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 13:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiGOKwN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 06:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S232147AbiGOLAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 07:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiGOKwI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 06:52:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6884C7FE40
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 03:52:07 -0700 (PDT)
+        with ESMTP id S232133AbiGOLAb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 07:00:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD26C85FB9
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 04:00:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F2E8B82B61
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 10:52:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9427AC3411E
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 10:52:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 605C762272
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 11:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C79EEC341C8
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 11:00:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657882324;
-        bh=SZ59goTl2L49whhcpE8L9HYxrnUPH9mKzRutGCU/w2E=;
+        s=k20201202; t=1657882828;
+        bh=aTZ+idjntyNAszM+ZQUeUW0P9KTnUMIeVJIje6hC3v4=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=fPh699dQgImsHmH+14+4T1yR3dAXPdkduIfbHY9z4UXZo9MZwOj51LPPZ7ffwQWbF
-         qbK3KnEHqVAqWLTDHaFMd3/NJoBxS5gvQ29badNtVSQJfR4RoDBlxMUWpO5WtEygr9
-         qzq6YTyxm3i7aGEZBHVr8pTa7g8vaCZ1I4KetY15P1ljopFWBZzCpJPa1io17WxZer
-         3cthD3ic52NNMl9AgkkyqSbyxjiQa8NZMTXsNQ1Qh8tKABnC8r/iqQvCl4qCiWjdJL
-         L48DW1ouQgrDpti6sC71gawcAbdjCjqfaO/9vslHqGYaT4qgBnm7H+hXr+s04U5BLr
-         PfAL2Hk8YG2xQ==
+        b=WsOaIZdtWlAyZdohULXdkqaRv5/l3jN/Ww95rgMaTn1Bc8PRdb86VOhb7vGIbXEQK
+         fH4paYSr9kWc2Ova0QmEWP8pwn1gSjT1xz1gbEpv51E2u5HHhJ3MbhtDGwny1tOLDU
+         TzLBFQ290va91CwhlV+9jMZIEyrFYSzwui66tw1RtcJhZGV7VQDjvsbsKLO6rgVpg8
+         q49l3imuHXv0+3T+Od1bLDlIPCGm7vKjoH+H25ACHIbd1FMflzLYPHwanDnsOXAJDu
+         6rWBWy4L6DpOg3QeNa7VBSAEz/6Z5AuZYYhvu3ob9OQ6GvHOK3qPVA2k448UTbtEVk
+         qpraqUVC1szkA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 7B7E8CC13BA; Fri, 15 Jul 2022 10:52:04 +0000 (UTC)
+        id B46F7CC13B0; Fri, 15 Jul 2022 11:00:28 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
 Subject: [Bug 216248] [Regression] amd-pstate stops working after [ACPI:
  CPPC: Check _OSC for flexible address space]
-Date:   Fri, 15 Jul 2022 10:52:04 +0000
+Date:   Fri, 15 Jul 2022 11:00:28 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216248-137361-JJyGtmAbqG@https.bugzilla.kernel.org/>
+Message-ID: <bug-216248-137361-svYg8CM19M@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-216248-137361@https.bugzilla.kernel.org/>
 References: <bug-216248-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,16 +72,8 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D216248
 
---- Comment #12 from Jos=C3=A9 Luis Lara Carrascal (manualinux@yahoo.es) ---
-(In reply to Arek Ru=C5=9Bniak from comment #11)
-> Hi Jose, did you try:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
-t/
-> ?h=3Dnext-20220714&id=3Dfbd74d16890b9f5d08ea69b5282b123c894f8860
->=20
-> It's fixing issue I've mentioned in #1
-
-Thank you, I will try it.
+--- Comment #13 from Jos=C3=A9 Luis Lara Carrascal (manualinux@yahoo.es) ---
+Problem solved. Thanks to all.
 
 --=20
 You may reply to this email to add a comment.
