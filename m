@@ -2,85 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB648576108
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 14:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40559576142
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 14:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiGOMA1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 08:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S229771AbiGOM1C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 08:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbiGOMA1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 08:00:27 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B6E7BE0C
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 05:00:26 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2ef5380669cso44548817b3.9
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 05:00:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nijEymS4YNW8RpPL8kWLJ0t7tbSQdoXb7j4hInSSjF4=;
-        b=zIsh8DDorr05m9CBypiLWrNKpSeFTxcOgkTSRdZiuzCB+Duuu+DkC/WJaEJFGkTWV2
-         ecDLxmK8Eb2rawoJW27ZiKfyYNZEkqUS1+2lak+685Tns03l5s1zA0iACxWiZarBNoZJ
-         vgHH20QJ2q6sEvt5rlvYq7a6obQb+5TdiD40DpMuxGjW+6K+wQRIW2djmn5JbtdTRYXw
-         U1utdKpPJTq3N6EMYDQ+ZjqjkA9dCHrBDwDIhrKnfA/wv5/dDtRj16bnk7Rdrb2nK0RO
-         mEAO0zdSNzpRB74Yxu0lpL1JM/AnJ087sRjL0UG+FbjduNW0oCfGqlP98BQNQCuJVTIo
-         ewxA==
-X-Gm-Message-State: AJIora8A2vGtGoSceLnx188dvkJZ0coDtcypWU6cGr9lgfx/6fMsNHAj
-        kUXs5zt1MXpyFV0Ovl4uZgxYlEYnKdTr5XdOK+hnWAzP
-X-Google-Smtp-Source: AGRyM1u0dH3uBrLu36el6ygG5haeH3d79KQoePJqaaVNw5Pjuc0Q/ZFdbJRBBQZLXJgMI6JqBR4Ie48mTu37yOctsX8=
-X-Received: by 2002:a81:5957:0:b0:31c:f620:17ef with SMTP id
- n84-20020a815957000000b0031cf62017efmr14928765ywb.19.1657886425340; Fri, 15
- Jul 2022 05:00:25 -0700 (PDT)
+        with ESMTP id S229725AbiGOM1B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 08:27:01 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F487820C2;
+        Fri, 15 Jul 2022 05:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657888021; x=1689424021;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9PzAlK3XwGr2L3CaJM9u4+5spJ/TFu+eRcQmE0ngfMc=;
+  b=ri0utD3vBK7XltfRMdNdHU93QoviRT+gD8aZjwX627ETx+7rOtxk41qE
+   aEI3oVu+zrkPv7wWkZrv644BUb18Z+WHgW4TDSag5NUHbXObzhfqMpKAf
+   ymHYXoz4MlGFu+kOdQWihgeT84aZAE8fv6XEf+TwCVTEZDJgdo6VaZgtw
+   g=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 15 Jul 2022 05:27:01 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 05:27:00 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 05:26:20 -0700
+Received: from hu-kshivnan-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 05:26:17 -0700
+From:   Shivnandan Kumar <quic_kshivnan@quicinc.com>
+To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Shivnandan Kumar" <quic_kshivnan@quicinc.com>
+Subject: [PATCH v4]PM: QoS: Add check to make sure CPU freq is non-negative
+Date:   Fri, 15 Jul 2022 17:55:39 +0530
+Message-ID: <20220715122539.3978614-1-quic_kshivnan@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220715045936.xsrxduwit4beijzi@vireshk-i7>
-In-Reply-To: <20220715045936.xsrxduwit4beijzi@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Jul 2022 14:00:13 +0200
-Message-ID: <CAJZ5v0ioZCPLXOOFxeNOV_OKHS1fe-foaSkVj+Ta_u+j9mS=YQ@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm fixes for 5.19-rc7
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 6:59 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> The following changes since commit be4b61ec45b3efe5e9077525fc92d544305eb2a6:
->
->   cpufreq: Add MT8186 to cpufreq-dt-platdev blocklist (2022-06-28 13:34:56 +0530)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-fixes-5.19-rc7
->
-> for you to fetch changes up to d2394860b45c3c1484e4b0a5d09909a1e3f6569e:
->
->   cpufreq: mediatek: Handle sram regulator probe deferral (2022-07-13 16:51:32 +0530)
->
-> ----------------------------------------------------------------
-> cpufreq arm fixes for 5.19-rc6
->
-> - mediatek: Handle sram regulator probe deferral
->
-> ----------------------------------------------------------------
-> AngeloGioacchino Del Regno (1):
->       cpufreq: mediatek: Handle sram regulator probe deferral
->
->  drivers/cpufreq/mediatek-cpufreq.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+	CPU frequency should never be negative.
+	If some client driver calls freq_qos_update_request with
+	negative value which will be very high in absolute terms,
+	then qos driver sets max CPU freq at fmax as it considers
+	it's absolute value but it will add plist node with negative
+	priority. plist node has priority from INT_MIN (highest)
+	to INT_MAX(lowest). Once priority is set as negative,
+	another client will not be able to reduce CPU frequency.
+	Adding check to make sure CPU freq is non-negative will
+	fix this problem.
 
-Pulled and pushed out, but I would appreciate getting pull requests
-somewhat earlier before the -rc I'm supposed to be pushing them for.
+Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+---
+v3->v4
+	-used 0 instead of FREQ_QOS_MIN_DEFAULT_VALUE
+v2->v3 
+	-changed commit text
+v1->v2
+	-addressed comments from Rafael
+	-changed commit text accordingly
+ kernel/power/qos.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
+diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+index ec7e1e85923e..af51ed6d45ef 100644
+--- a/kernel/power/qos.c
++++ b/kernel/power/qos.c
+@@ -531,7 +531,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
+ {
+ 	int ret;
+ 
+-	if (IS_ERR_OR_NULL(qos) || !req)
++	if (IS_ERR_OR_NULL(qos) || !req || value < 0)
+ 		return -EINVAL;
+ 
+ 	if (WARN(freq_qos_request_active(req),
+@@ -563,7 +563,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
+  */
+ int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
+ {
+-	if (!req)
++	if (!req || new_value < 0)
+ 		return -EINVAL;
+ 
+ 	if (WARN(!freq_qos_request_active(req),
+-- 
+2.25.1
+
