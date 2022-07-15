@@ -2,45 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC02576471
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 17:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE77957651D
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 18:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiGOPbw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 11:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
+        id S232535AbiGOQJv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 12:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiGOPbu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 11:31:50 -0400
+        with ESMTP id S229778AbiGOQJu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 12:09:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDD0BCA3;
-        Fri, 15 Jul 2022 08:31:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C613ED47;
+        Fri, 15 Jul 2022 09:09:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4B24B82B2F;
-        Fri, 15 Jul 2022 15:31:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8467BC34115;
-        Fri, 15 Jul 2022 15:31:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8B7B82D2C;
+        Fri, 15 Jul 2022 16:09:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331FFC34115;
+        Fri, 15 Jul 2022 16:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657899106;
-        bh=VfQPKfXNcwguHoDHoNuITmpfBRm1lER8pLdeYGeSRs4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=n/NwjCgzUdfSoDCdsWEcWeJ9RRkSDX5eBvJTuDBCNZpazKblw17xXzZ4cM4Y/I70z
-         06ZqodonnqKSicz58S780QRNeseUjsvWp3AXq01F9Xscy2BEt/cpqLHCZwM8dOMl0R
-         T1vx6nLVAf0+5kZ3Uv9d/HD4szwsRQqd2j+Q0vqkaB8RPJ9zU1w4Z/xxds4uXYbpn6
-         5xS0w1+AkDcULG78o94Hj/cwNnhIJudS4DTY3kOffHCs2uDapwtdYqeHyP+1ab2bgP
-         /jWbar7sKCX6/DKVi8KpXjLkQ2sH4yqOLPevKdKPktW9x6muZ6ZCipog2vTqxDLWrF
-         VixgCIYhwDm3w==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL v2] interconnect changes for 5.20
-Date:   Fri, 15 Jul 2022 18:31:46 +0300
-Message-Id: <20220715153146.26134-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.29.0
+        s=k20201202; t=1657901387;
+        bh=BjSbIr+2Nq9y04Bvcith1dzZyRMQ2BPB5HQmV40tK+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IONll5Bl8RuRVB5WgFNBRujgBOHSRrA7LH+JNiXzk27U+8RZEzQpKokOWinstWW1U
+         kC+iHFPIkI3Us1AjnpHNh2bIfNPm6dhg6ICGUoWjMirxoTBA1fBwjHUZXPezlEj9AA
+         78+KT0xlfJgzgwOPWVGoyY1R/5rPpuSQ1/Fc803Ac9eKPUMAUUjl0m4I6qCLq+AVmc
+         GC6SuM1/9uGb3b3w0HYulz5Xw8J8meMUAZl/PWKNNEKMP0rY9N1MP5vcFRgnaOdBfg
+         5QM1gLHlIpVTsI2IZ+6TM4Kp3qoOv7F1k6u/j6EvWc60jebWqP2bHVUwowxwmAinxr
+         e4M1JPNZnzt/Q==
+Date:   Fri, 15 Jul 2022 21:39:33 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
+Message-ID: <20220715160933.GD12197@workstation>
+References: <cover.1657695140.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1657695140.git.viresh.kumar@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,116 +60,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Greg,
+On Wed, Jul 13, 2022 at 12:22:55PM +0530, Viresh Kumar wrote:
+> Hi,
+> 
+> A recent patch series, targeting enhancements in the OPP core, ended up breaking
+> cpufreq on some of the Qualcomm platforms [1]. Necessary adjustments are made in
+> the OPP core, a bit hacky though, to get it working for now but it would be
+> better to solve the problem at hand in a cleaner way. And this patchset is an
+> attempt towards the same.
+> 
+> cpufreq-hw is a hardware engine, which takes care of frequency
+> management for CPUs. The engine manages the clocks for CPU devices, but
+> it isn't the end consumer of the clocks, which are the CPUs in this
+> case.
+> 
+> For this reason, it looks incorrect to keep the clock related properties
+> in the cpufreq-hw node. They should really be present at the end user,
+> i.e. the CPUs.
+> 
+> The case was simple currently as all the devices, i.e. the CPUs, that
+> the engine manages share the same clock names. What if the clock names
+> are different for different CPUs or clusters ? How will keeping the
+> clock properties in the cpufreq-hw node work in that case ?
+> 
+> This design creates further problems for frameworks like OPP, which
+> expects all such details (clocks) to be present in the end device node
+> itself, instead of another related node.
+> 
+> This patchset moves the clock properties to the node that uses them instead,
+> i.e. the CPU nodes and makes necessary adjustments at other places.
+> 
+> After this is applied, I can drop the unnecessary change from the OPP core, but
+> I wanted to discuss if this is a step in the right direction or not first and so
+> the RFC.
+> 
 
-This is the v2 pull request with interconnect changes for the 5.20-rc1 merge
-window. It contains driver updates. The details are in the signed tag.
+The clocks defined in the devicetree currently (CXO, GPLL) are the source
+clocks of the EPSS block (cpufreq-hw). And EPSS will supply clock and
+voltage through other blocks to the CPU domains. Even though the end
+consumer of the source clocks are the CPUs, those clocks are not
+directly reachign the CPUs but instead through some other blocks in EPSS.
 
-I have fixed the "Fixes" tag, so now we should be all good. Please pull 
-into char-misc-next when possible.
+Initially I was temped to add cpufreq-hw as the clock provider and have
+it source clocks to the individual CPUs. This somehow models the clock
+topology also, but after having a discussion with Bjorn we concluded that
+it is best to leave it as it is.
+
+The main issue that Bjorn pointed out was the fact that the clocks coming
+out of EPSS are not exactly of the same frequency that was requested.
+EPSS will do its own logic to generate the clocks to the CPUs based on
+the input frequency vote and limits.
 
 Thanks,
-Georgi
+Mani
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.20-rc1-v2
-
-for you to fetch changes up to 009c963eefa058384052d32d5b06fbc738195bdb:
-
-  Merge branch 'icc-rpm' into icc-next (2022-07-15 17:56:31 +0300)
-
-----------------------------------------------------------------
-interconnect changes for 5.20
-
-Here are the interconnect changes for the 5.20-rc1 merge window consisting
-of two new drivers, misc driver improvements and new device managed API.
-
- Core change:
-- Add device managed bulk API
-
- Driver changes:
-- New driver for NXP i.MX8MP platforms
-- New driver for Qualcomm SM6350 platforms
-- Multiple bucket support for Qualcomm RPM-based drivers.
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Bryan O'Donoghue (1):
-      interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth
-
-Georgi Djakov (3):
-      Merge branch 'icc-sm6350' into icc-next
-      Merge branch 'icc-imx8mp' into icc-next
-      Merge branch 'icc-rpm' into icc-next
-
-Leo Yan (6):
-      interconnect: qcom: msm8939: Use icc_sync_state
-      dt-bindings: interconnect: Update property for icc-rpm path tag
-      interconnect: qcom: Move qcom_icc_xlate_extended() to a common file
-      interconnect: qcom: icc-rpm: Change to use qcom_icc_xlate_extended()
-      interconnect: qcom: icc-rpm: Support multiple buckets
-      interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
-
-Luca Weiss (4):
-      interconnect: qcom: icc-rpmh: Support child NoC device probe
-      dt-bindings: interconnect: qcom: Split out rpmh-common bindings
-      dt-bindings: interconnect: Add Qualcomm SM6350 NoC support
-      interconnect: qcom: Add SM6350 driver support
-
-Peng Fan (9):
-      dt-bindings: interconnect: imx8m: Add bindings for imx8mp noc
-      dt-bindings: interconnect: add fsl,imx8mp.h
-      interconnect: add device managed bulk API
-      interconnect: imx: fix max_node_id
-      interconnect: imx: set src node
-      interconnect: imx: introduce imx_icc_provider
-      interconnect: imx: configure NoC mode/prioriry/ext_control
-      interconnect: imx: Add platform driver for imx8mp
-      PM / devfreq: imx: Register i.MX8MP interconnect device
-
- .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         |   6 +-
- Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml    |   6 +-
- .../devicetree/bindings/interconnect/qcom,rpmh-common.yaml      |  43 +
- Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml   |  22 +-
- .../devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml      |  82 ++
- drivers/devfreq/imx-bus.c                                       |   1 +
- drivers/interconnect/bulk.c                                     |  42 +
- drivers/interconnect/imx/Kconfig                                |   4 +
- drivers/interconnect/imx/Makefile                               |   2 +
- drivers/interconnect/imx/imx.c                                  |  84 +-
- drivers/interconnect/imx/imx.h                                  |  49 +-
- drivers/interconnect/imx/imx8mm.c                               |   2 +-
- drivers/interconnect/imx/imx8mn.c                               |   2 +-
- drivers/interconnect/imx/imx8mp.c                               | 259 ++++
- drivers/interconnect/imx/imx8mq.c                               |   2 +-
- drivers/interconnect/qcom/Kconfig                               |   9 +
- drivers/interconnect/qcom/Makefile                              |   5 +
- drivers/interconnect/qcom/icc-common.c                          |  34 +
- drivers/interconnect/qcom/icc-common.h                          |  13 +
- drivers/interconnect/qcom/icc-rpm.c                             | 168 ++-
- drivers/interconnect/qcom/icc-rpm.h                             |   6 +
- drivers/interconnect/qcom/icc-rpmh.c                            |  30 +-
- drivers/interconnect/qcom/icc-rpmh.h                            |   1 -
- drivers/interconnect/qcom/msm8939.c                             |   1 +
- drivers/interconnect/qcom/sm6350.c                              | 493 ++++++++
- drivers/interconnect/qcom/sm6350.h                              | 139 ++
- drivers/interconnect/qcom/sm8450.c                              |   1 +
- include/dt-bindings/interconnect/fsl,imx8mp.h                   |  59 +
- include/dt-bindings/interconnect/qcom,sm6350.h                  | 148 +++
- include/linux/interconnect.h                                    |   7 +
- 30 files changed, 1627 insertions(+), 93 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
- create mode 100644 drivers/interconnect/imx/imx8mp.c
- create mode 100644 drivers/interconnect/qcom/icc-common.c
- create mode 100644 drivers/interconnect/qcom/icc-common.h
- create mode 100644 drivers/interconnect/qcom/sm6350.c
- create mode 100644 drivers/interconnect/qcom/sm6350.h
- create mode 100644 include/dt-bindings/interconnect/fsl,imx8mp.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
+> --
+> Viresh
+> 
+> [1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+> 
+> Viresh Kumar (4):
+>   dt-bindings: cpufreq-qcom-hw: Move clocks to CPU nodes
+>   arm64: dts: qcom: Move clocks to CPU nodes
+>   cpufreq: qcom-cpufreq-hw: Clocks are moved to CPU nodes
+>   cpufreq: qcom-cpufreq-hw: Register config_clks helper
+> 
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 31 ++++----
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi          | 19 ++++-
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi          | 18 ++++-
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi          | 19 ++++-
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi          | 18 ++++-
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi          | 19 ++++-
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi          | 18 ++++-
+>  arch/arm64/boot/dts/qcom/sm8350.dtsi          | 19 ++++-
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi          | 18 ++++-
+>  drivers/cpufreq/qcom-cpufreq-hw.c             | 75 ++++++++++++++-----
+>  10 files changed, 199 insertions(+), 55 deletions(-)
+> 
+> -- 
+> 2.31.1.272.g89b43f80a514
+> 
