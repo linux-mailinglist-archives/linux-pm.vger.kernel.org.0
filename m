@@ -2,50 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88685765CC
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 19:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9BB5765D1
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 19:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiGOROq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 13:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S233045AbiGORTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 13:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiGOROp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 13:14:45 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB213DF2E
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 10:14:43 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id e69so9504445ybh.2
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 10:14:43 -0700 (PDT)
+        with ESMTP id S231818AbiGORTK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 13:19:10 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4DD27B2F;
+        Fri, 15 Jul 2022 10:19:08 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31cf1adbf92so53355287b3.4;
+        Fri, 15 Jul 2022 10:19:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=s6lgkGF27ppP4xIoTblKRaWHla5PJC44YCQpQrJaz3s=;
-        b=fEgpW8YjkuiNdzC9ilB//9WCGQgORjqMicLz0vjje1VmKCh68GmFoDKvCMhz0ScHdx
-         9W+4s4N2QdyIUNQI7H5Tuq1Xqa7Y+fRd39rSmYfHWCCFj+xvH59FP3QHoC+3Jyz17NBG
-         RdLMRld9Nuyrhkz+7A0fZ+FFsTnRCUnQQc+6BWW4LwnrxIN1NNHurvC/YZEi8TC9RJ6V
-         E5zYtWwUcEUXd2+Lc+zItePLBS4KQUGiFpqHsbHrVbSB2+IQh+PU+Qh9CC59vAu89QIl
-         5nkWAf2ORA4Xj9F+pIPsSKwg0/ePMZwZSjaFFS9c2AEBiJG4UhiTystwnRc89A8EiVzP
-         e7gw==
-X-Gm-Message-State: AJIora9o2IXStmRawtKGbN6UwQuLNz4/jgLZB+OlFi8g1/l723OOaq+W
-        BVrO5EkxWcScnK25CNpoYo9VbIeGSdDwM31SJxU+TFFFwDA=
-X-Google-Smtp-Source: AGRyM1vkNSQ21QZqsZulKBGy+2qDPlxNJXA3x9Y2UbUz7ve46Qb54484FtDud/JneW0b1sgy/XWSOgmJqLB1ZDEY+ls=
-X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
- z15-20020a25664f000000b0066cd0f436ccmr14544906ybm.482.1657905283136; Fri, 15
- Jul 2022 10:14:43 -0700 (PDT)
+        bh=RV4CgMt4Uhdx+RPlbigIu5+LuSwk2m9JdabT6Izy3ss=;
+        b=jpMiC0hKRVWeMFyemVgo+LMt9O+GJeCbV00wNsQChCPKVkFtsvV+NP+sEvcirfda2J
+         qSq2JelO0W2E/tcsqU6FJmTOWC6AlVdlUBWW9e2z9LpTiI5ruEOtsAM977viYYxjl3a/
+         FhbkS1zA7P9HbRkKGpoCBXA3faeBuD3HZuXfRCfR3ubtET01szgO0m7GNiKxKWYudDfD
+         rOiTgnOOFgaHQHuu9qzftTN/MmSg7GtsYf8klYSFRHYC1nEjCx+FdNelBXM/zMbWLOjC
+         GmsXH7qgj+mD4IpJWQUHmNFRQNQsSqj6tdFCw9MRNWDMZcr1xArFryg7697r0Sw5LDxE
+         gEsg==
+X-Gm-Message-State: AJIora/3/dFB7cABQqn0gHPgySYS0lQa9IeR+8PiOuL8pQMPn/Euj2zT
+        RuEKZFr8Uf9Fa303xLYGqZ7KrVnuxms/ayiRVwY=
+X-Google-Smtp-Source: AGRyM1taAq+iVG6nrCvqbpzS3ZVBPbzQldku4nRuJGDklibMRpmYSt09XTo2pnmCZnRhRQIuFgU+qvp3vDt6Vn3VASc=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr16470414ywb.326.1657905547640; Fri, 15
+ Jul 2022 10:19:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707062112.308239-1-windhl@126.com>
-In-Reply-To: <20220707062112.308239-1-windhl@126.com>
+References: <20220707071555.10085-1-lukasz.luba@arm.com> <41c333e1-2545-f6be-2db2-9061297d0b9a@arm.com>
+ <c334d692-9787-7591-54d7-f152ecbd559e@arm.com>
+In-Reply-To: <c334d692-9787-7591-54d7-f152ecbd559e@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Jul 2022 19:14:31 +0200
-Message-ID: <CAJZ5v0iOF3n98byY5C4zAjM=AbxDiUHF9vqEp78i6_jg8M5MqQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal/core: Fix refcount bugs in __thermal_cooling_device_register()
-To:     Liang He <windhl@126.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+Date:   Fri, 15 Jul 2022 19:18:56 +0200
+Message-ID: <CAJZ5v0iKT5nK56PYjnXJP__TrZs0v0B5h+Zi1=3ZNKCOF=ByxA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Energy Model power in micro-Watts and SCMI v3.1 alignment
+To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -57,85 +68,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 8:21 AM Liang He <windhl@126.com> wrote:
+On Fri, Jul 15, 2022 at 10:56 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> For each new reference of 'device_node', we should increase its
-> refcount. Otherwise, there will be premature free.
+> Hi Rafael,
 >
-> For example, in drivers\thermal\tegra\soctherm.c, the function
-> soctherm_init_hw_throt_cdev() will use for_each_child_of_node() to
-> iterate its child device_node which will be then passed into
->  __thermal_cooling_device_register(). As for_each_xxx OF APIs will
-> automatically increase and decrease the refcount of 'device_node',
-> we should use additional of_node_get() to record the new refernece.
-
-reference
-
+> gentle ping.
 >
-> NOTE, we should also call the corresponding of_node_put() in fail path
-> or when the *_unregister() function is called.
-
-The NOTE in capitals above is somewhat confusing.  I would just say
-"Accordingly, the corresponding of_node_put() needs to be run in the
-error code path and on cooling device unregistration."
-
+> On 7/7/22 11:46, Lukasz Luba wrote:
+> > Hi Rafael,
+> >
+> > On 7/7/22 08:15, Lukasz Luba wrote:
+> >> Hi all,
+> >>
+> >> This is a patch set which changes Energy Model power values scale to
+> >> micro-Watts. It also upgrades the SCMI performance layer + scmi-cpufreq
+> >> driver to leverage the SCMI v3.1 spec and process micro-Watts power
+> >> values
+> >> coming from FW. The higher precision in EM power field solves an issue
+> >> of a rounding error, which then can be misinterpreted as 'inefficient
+> >> OPP'.
+> >> An example rounding issue calculation is present in patch 1/4
+> >> description.
+> >>
+> >> Changes:
+> >> v2
+> >> - simplified 32bit checks for max number of CPUs preventing energy
+> >>    estimation overflow
+> >> - added Reviewed-by and ACKs
+> >> v1 [1]
+> >>
+> >> Regards,
+> >> Lukasz Luba
+> >>
+> >> [1]
+> >> https://lore.kernel.org/lkml/20220622145802.13032-1-lukasz.luba@arm.com/
+> >>
+> >> Lukasz Luba (4):
+> >>    PM: EM: convert power field to micro-Watts precision and align drivers
+> >>    Documentation: EM: Switch to micro-Watts scale
+> >>    firmware: arm_scmi: Get detailed power scale from perf
+> >>    cpufreq: scmi: Support the power scale in micro-Watts in SCMI v3.1
+> >>
+> >>   Documentation/power/energy-model.rst  | 14 +++----
+> >>   drivers/cpufreq/mediatek-cpufreq-hw.c |  7 ++--
+> >>   drivers/cpufreq/scmi-cpufreq.c        | 15 +++++++-
+> >>   drivers/firmware/arm_scmi/perf.c      | 18 +++++----
+> >>   drivers/opp/of.c                      | 15 ++++----
+> >>   drivers/powercap/dtpm_cpu.c           |  5 +--
+> >>   drivers/thermal/cpufreq_cooling.c     | 13 ++++++-
+> >>   drivers/thermal/devfreq_cooling.c     | 19 ++++++++--
+> >>   include/linux/energy_model.h          | 54 +++++++++++++++++++--------
+> >>   include/linux/scmi_protocol.h         |  8 +++-
+> >>   kernel/power/energy_model.c           | 24 ++++++++----
+> >>   11 files changed, 132 insertions(+), 60 deletions(-)
+> >>
+> >
+> > I got ACKs (and on Reviewed-by) for this patch set.
+> > Could you take this via your PM tree, please?
 >
-> Fixes: a116b5d44f14 ("thermal: core: introduce thermal_of_cooling_device_register")
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
->  I cannot confirm, in *_unregister, we should put of_node_put() in or
-> out of the *_lock/*_unlock functions. Please check it carefully.
-
-This doesn't matter too much AFAICS.
-
-Please note that the of_node_put() can still "leak" into the critical
-section through the "unlock" operation, because the latter is not a
-full memory barrier.
-
-Moreover, dropping the reference means that the object in question
-won't be used any more by the holder of that reference and it is no
-reason I can see why it would be necessary to hold the lock while
-doing that.
-
->  drivers/thermal/thermal_core.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> This patch set is on our roadmap and would be good if it could
+> go as v5.20 material.
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index cdc0552e8c42..c459e2958b7b 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -919,7 +919,7 @@ __thermal_cooling_device_register(struct device_node *np,
+> There are Acks for these patch set. If you need some
+> help with this (like rebasing, etc), just ping me.
 >
->         mutex_init(&cdev->lock);
->         INIT_LIST_HEAD(&cdev->thermal_instances);
-> -       cdev->np = np;
-> +       cdev->np = of_node_get(np);
->         cdev->ops = ops;
->         cdev->updated = false;
->         cdev->device.class = &thermal_class;
-> @@ -947,6 +947,7 @@ __thermal_cooling_device_register(struct device_node *np,
->         return cdev;
->
->  out_kfree_type:
-> +       of_node_put(cdev->np);
->         thermal_cooling_device_destroy_sysfs(cdev);
->         kfree(cdev->type);
->         put_device(&cdev->device);
-> @@ -1111,6 +1112,7 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
->
->         mutex_unlock(&thermal_list_lock);
->
-> +       of_node_put(cdev->np);
+> Could you take them, please?
 
-Could this be done right before the
-thermal_cooling_device_destroy_sysfs() below?  Then the sequence would
-be completely analogous to the error code path above.
-
->         ida_simple_remove(&thermal_cdev_ida, cdev->id);
->         device_del(&cdev->device);
->         thermal_cooling_device_destroy_sysfs(cdev);
-> --
-
-Overall, this looks like a genuine fix to me.
-
-Daniel, what do you think?
+All patches in the series applied as 5.20 material, thanks!
