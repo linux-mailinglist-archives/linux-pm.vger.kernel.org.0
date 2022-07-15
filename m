@@ -2,79 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C5D5760CF
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 13:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011285760E1
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 13:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234585AbiGOLrn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 07:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
+        id S232829AbiGOLu3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 07:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234538AbiGOLrm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 07:47:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5A9E88F12;
-        Fri, 15 Jul 2022 04:47:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E705B1474;
-        Fri, 15 Jul 2022 04:47:40 -0700 (PDT)
-Received: from [10.57.11.112] (unknown [10.57.11.112])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48E533F73D;
-        Fri, 15 Jul 2022 04:47:39 -0700 (PDT)
-Message-ID: <deddd9cc-f517-cff9-e304-e1f09c6784b7@arm.com>
-Date:   Fri, 15 Jul 2022 12:47:37 +0100
+        with ESMTP id S229747AbiGOLu2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 07:50:28 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF533CBE9;
+        Fri, 15 Jul 2022 04:50:28 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-31bf3656517so44253307b3.12;
+        Fri, 15 Jul 2022 04:50:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ODlRaYl4nNRZcLflmQwFsIPgbljwKqGpNV/7h9powFk=;
+        b=2lChuzPi2HlMc6hYANmHzd4zeumeQTXQU+F1ZkMNmwD625scgBW5FGYlV5zk4iJfkY
+         bmjY5tg7uzkndb1j2kWL+Ihaj/Go/18glCSUpJYMikKwRcDX5Bzj7pW9djFSX6eSCgFh
+         VJ/Rw4N54fBe8xNCoxKJzFiwuCfZhbwfpqjhCxaGlXg6taAkmgjikDRqdQ3jaeLOp6KI
+         ULL1YuhYcf4/ef/i+mWQ+OouI95d11s8ISDHFStn087R/41C5EgYUecMsz39MHvvsBsO
+         owloJcnUtS6QkKfkyovsuFE+v3pwpqgGOSWpL6+ScmpPCCqNPBaBWMG+gNrtCO8O+AnC
+         sT5g==
+X-Gm-Message-State: AJIora9uRE9GB5p9HsSPoFlECyJLes5MYf8uiZhbVAnsnEHVyvRZZNxq
+        2xOr1Qy0g92f45ynW2aIl+/mdCsmfWiyPLy9KczA2ybSGJU=
+X-Google-Smtp-Source: AGRyM1tpHdel1yo/M53zZ2Ww9xBIekgUzwaULf7gOTm7kr6pdXL+fsmU3yQDoD7D+tAriRliTJE2Ah2eDdXb0IXHako=
+X-Received: by 2002:a81:5957:0:b0:31c:f620:17ef with SMTP id
+ n84-20020a815957000000b0031cf62017efmr14883687ywb.19.1657885827529; Fri, 15
+ Jul 2022 04:50:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <20220715040949.3807070-1-quic_kshivnan@quicinc.com>
+In-Reply-To: <20220715040949.3807070-1-quic_kshivnan@quicinc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Jul 2022 13:50:15 +0200
+Message-ID: <CAJZ5v0hBTGJ3K5VMnef22-6yEU7rDn1wMBmgqeu41wKQyydNgA@mail.gmail.com>
+Subject: Re: [PATCH v3]PM: QoS: Add check to make sure CPU freq is non-negative
+To:     Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-References: <20220711124229.16516-1-lukasz.luba@arm.com>
- <1198724e-d94f-0b7c-9c4a-90595f8426d2@arm.com>
- <CAJZ5v0gh78z3tw6simaZ5S6dmGvDc-OE6t02N8vQYk-2eoFQgA@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0gh78z3tw6simaZ5S6dmGvDc-OE6t02N8vQYk-2eoFQgA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Jul 15, 2022 at 6:10 AM Shivnandan Kumar
+<quic_kshivnan@quicinc.com> wrote:
+>
+>         CPU frequency should never be negative.
+>         If some client driver calls freq_qos_update_request with
+>         negative value which will be very high in absolute terms,
+>         then qos driver set max CPU freq at fmax as it consider
+>         it's absolute value but it will add plist node with negative
+>         priority. plist node has priority from INT_MIN (highest)
+>         to INT_MAX(lowest). Once priority is set as negative,
+>         another client will not be able to reduce CPU frequency.
+>         Adding check to make sure CPU freq is non-negative will
+>         fix this problem.
+>
+> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+> ---
+> v2->v3
+>         -changed commit text
+> v1->v2
+>         -addressed comments from Rafael
+>         -changed commit text accordingly
+>  kernel/power/qos.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> index ec7e1e85923e..27e6596f287a 100644
+> --- a/kernel/power/qos.c
+> +++ b/kernel/power/qos.c
+> @@ -531,7 +531,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
+>  {
+>         int ret;
+>
+> -       if (IS_ERR_OR_NULL(qos) || !req)
+> +       if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE)
 
+Why not just put 0 in there directly instead of FREQ_QOS_MIN_DEFAULT_VALUE?
 
-On 7/15/22 12:44, Rafael J. Wysocki wrote:
-> On Fri, Jul 15, 2022 at 10:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Rafael,
->>
->> gentle ping.
->>
->> On 7/11/22 13:42, Lukasz Luba wrote:
->>> There is no need to keep the max CPU capacity in the per_cpu instance.
->>> Furthermore, there is no need to check and update that variable
->>> (sg_cpu->max) everytime in the frequency change request, which is part
->>> of hot path. Instead use struct sugov_policy to store that information.
->>> Initialize the max CPU capacity during the setup and start callback.
->>> We can do that since all CPUs in the same frequency domain have the same
->>> max capacity (capacity setup and thermal pressure are based on that).
->>>
->>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>> ---
->>>    kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
->>>    1 file changed, 15 insertions(+), 15 deletions(-)
->>
->> The patch got Ack from Viresh.
->> Could you take it?
-> 
-> Yes, it's there in my queue.  Same for the EM changes.
+As is, it is somewhat confusing (and same below).
 
-Thank you Rafael!
+>                 return -EINVAL;
+>
+>         if (WARN(freq_qos_request_active(req),
+> @@ -563,7 +563,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
+>   */
+>  int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
+>  {
+> -       if (!req)
+> +       if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE)
+>                 return -EINVAL;
+>
+>         if (WARN(!freq_qos_request_active(req),
+> --
+> 2.25.1
+>
