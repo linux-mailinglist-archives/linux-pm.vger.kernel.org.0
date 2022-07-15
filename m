@@ -2,152 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1B8576838
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 22:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFD25768AC
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 23:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiGOUhT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 16:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S230041AbiGOVJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 17:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbiGOUhQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 16:37:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A37B8721C
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 13:37:15 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oCS3Z-0004u2-Sr; Fri, 15 Jul 2022 22:37:01 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oCS3Z-001BFu-4w; Fri, 15 Jul 2022 22:37:01 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oCS3Y-005PyZ-3F; Fri, 15 Jul 2022 22:37:00 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] interconnect: imx: Make imx_icc_unregister() return void
-Date:   Fri, 15 Jul 2022 22:36:52 +0200
-Message-Id: <20220715203652.89912-9-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
-References: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230000AbiGOVJW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 17:09:22 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF6A70E4E
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 14:09:17 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id bk26so8328907wrb.11
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 14:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uxbEsFkRpuwGSHkFCYXm35Pz3gor1PXEdEjjZ4dDIso=;
+        b=ECmqWgF0/iWw8OYnFSCpnZrLQzFvpZ5Wlcl8Qk4xM83h11NVTftDk+p8Mlq3jY/MyJ
+         42oTvGWj10aYYQNuw+YtlAau9zvQuI0CRMe0jLmVk4CeyQgBCuc7UDrMjIGMl9WvkLqs
+         u9BO3xzcLDJoyFV6dvjCTQU09yhh+vQoTuEd18/Y4pxcWJ6PxFjT+W1WhTmYaHR5c61t
+         867vz+XfF4iEbP8YgZFSDFGzMjjj34jaKb0s41Yf+y54i38dafN3VN0BhW5oa8YmTD6L
+         Des2VcZw8kC5oDAQySjKol5oMfJEddJldCRPz+4Rz9dlKnJtggvCix2mdT0CojHikeW+
+         hvOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uxbEsFkRpuwGSHkFCYXm35Pz3gor1PXEdEjjZ4dDIso=;
+        b=k4WzFahvE1/e7Vl5cDmQXUcHBJKHxFStuYqvMDLvznFXS0lzUuj0UQvWDCUlR3ZLlf
+         rbuv52aVsfYWN1X2KTZq7eqTNS8NfkZftyG7uFEByADtu+RxGxAt0ZRE9819GzSOkFpy
+         zOhaIQ4+gaW0PM3jK6Xqwi2J6p5QGrdKS+YADTBWMw8ApgZcyic36iJ6DQQdV/ko54wg
+         zfg2Q4p4LuLYF1lhTBOWH2cvsjUcZuKSua1N3fTz+fSpJkQoB0BL9pKSftgMeWjCPJ72
+         vdeHqgnWEuVK+sYg8lrPDqVoC5oylz+t7kLoWCrQ4wNjiL0+8bwnEi7sAPpGHfG9RPiH
+         4Rmg==
+X-Gm-Message-State: AJIora/7vHI8BB/00MiV4cDEOtpy1+04RUH0tYDF3vRFdkoVoJ6u1aOT
+        J/UB9ThrEIXwTb/WV6WARUMryA==
+X-Google-Smtp-Source: AGRyM1tfI/a0XswTl9zWy7klWOZegxdyf+AgVvsQqVZ2RN6hG8W2eCK3caMais/j2oseH5w5i6M4xw==
+X-Received: by 2002:a5d:64c7:0:b0:21d:a742:5e2c with SMTP id f7-20020a5d64c7000000b0021da7425e2cmr14376966wri.178.1657919355571;
+        Fri, 15 Jul 2022 14:09:15 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:a223:f4b3:40c9:43fa])
+        by smtp.gmail.com with ESMTPSA id b14-20020a5d40ce000000b0021a56cda047sm4567752wrq.60.2022.07.15.14.09.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 14:09:14 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, rui.zhang@intel.com, amitk@kernel.org,
+        lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/4] thermal/core: Encapsulate the trip point crossed function
+Date:   Fri, 15 Jul 2022 23:09:08 +0200
+Message-Id: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3164; h=from:subject; bh=7KukAtvH5Bq30kuEwIg28LJ8PMRL6qo8BHa0A2/HLbM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi0c+s0VFV3l2yU6+MVs4rL1Au6U6sq+5+aOG/8TLT qP+54gSJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtHPrAAKCRDB/BR4rcrsCZtiB/ 9expsimli0HRq4gZeoNwXXHWa4FF8Vi+Gx33WCUGQSEO0uNn7xgHpwXJ+/OdUZHxEHtd91a/z8b6tp FokDkOWE43yZytFeV/ijQtsrKu0WWxqMjcNCrZYhFapYNwk0Qe3IKHexvcnLRcyuqc0BT5gMjv1jzI zt3OI5iATd75X93YPw/JRLHESRzvHkbZw5gTeQA5N2NE+Z1BpFZGFp1rSYQNaaQoJatKsThWL+U6OY 0Yleds6GaTdRLpIlBRszfuCDQSo2H5dQvK6TSaWuYqztHVh4NViL3/98u8C2ruw3Arxg1Pa/T/GXgc erOvv92Vkx41h9uTWkqj34Xwq2Nz8G
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function imx_icc_unregister() returns zero unconditionally. Make it
-return void.
+The routine where the trip point crossed is detected is a strategic
+place where different processing will happen. Encapsulate the code in
+a function, so all specific actions related with a trip point crossed
+can be grouped.
 
-This is a preparation for making platform remove callbacks return void.
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/interconnect/imx/imx.c    | 4 +---
- drivers/interconnect/imx/imx.h    | 2 +-
- drivers/interconnect/imx/imx8mm.c | 4 +++-
- drivers/interconnect/imx/imx8mn.c | 4 +++-
- drivers/interconnect/imx/imx8mq.c | 4 +++-
- 5 files changed, 11 insertions(+), 7 deletions(-)
+ drivers/thermal/thermal_core.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-index 4c70530e3064..e96794acad59 100644
---- a/drivers/interconnect/imx/imx.c
-+++ b/drivers/interconnect/imx/imx.c
-@@ -274,15 +274,13 @@ int imx_icc_register(struct platform_device *pdev,
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index cdc0552e8c42..d9f771b15ed8 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -358,6 +358,25 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
+ 		tz->ops->critical(tz);
  }
- EXPORT_SYMBOL_GPL(imx_icc_register);
  
--int imx_icc_unregister(struct platform_device *pdev)
-+void imx_icc_unregister(struct platform_device *pdev)
- {
- 	struct icc_provider *provider = platform_get_drvdata(pdev);
- 
- 	imx_icc_unregister_nodes(provider);
- 
- 	icc_provider_del(provider);
--
--	return 0;
- }
- EXPORT_SYMBOL_GPL(imx_icc_unregister);
- 
-diff --git a/drivers/interconnect/imx/imx.h b/drivers/interconnect/imx/imx.h
-index 75da51076c68..b533c9a99710 100644
---- a/drivers/interconnect/imx/imx.h
-+++ b/drivers/interconnect/imx/imx.h
-@@ -56,6 +56,6 @@ struct imx_icc_node_desc {
- int imx_icc_register(struct platform_device *pdev,
- 		     struct imx_icc_node_desc *nodes,
- 		     int nodes_count);
--int imx_icc_unregister(struct platform_device *pdev);
-+void imx_icc_unregister(struct platform_device *pdev);
- 
- #endif /* __DRIVERS_INTERCONNECT_IMX_H */
-diff --git a/drivers/interconnect/imx/imx8mm.c b/drivers/interconnect/imx/imx8mm.c
-index 1083490bb391..fa9639c6ea37 100644
---- a/drivers/interconnect/imx/imx8mm.c
-+++ b/drivers/interconnect/imx/imx8mm.c
-@@ -88,7 +88,9 @@ static int imx8mm_icc_probe(struct platform_device *pdev)
- 
- static int imx8mm_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
++static void handle_thermal_trip_crossed(struct thermal_zone_device *tz, int trip,
++					int trip_temp, int trip_hyst, enum thermal_trip_type trip_type)
++{
++	if (tz->last_temperature == THERMAL_TEMP_INVALID)
++		return;
 +
-+	return 0;
- }
- 
- static struct platform_driver imx8mm_icc_driver = {
-diff --git a/drivers/interconnect/imx/imx8mn.c b/drivers/interconnect/imx/imx8mn.c
-index ad97e55fd4e5..3b11571c23d0 100644
---- a/drivers/interconnect/imx/imx8mn.c
-+++ b/drivers/interconnect/imx/imx8mn.c
-@@ -77,7 +77,9 @@ static int imx8mn_icc_probe(struct platform_device *pdev)
- 
- static int imx8mn_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
++	if (tz->last_temperature < trip_temp &&
++	    tz->temperature >= trip_temp) {
++		thermal_notify_tz_trip_up(tz->id, trip,
++					  tz->temperature);
++	}
 +
-+	return 0;
- }
- 
- static struct platform_driver imx8mn_icc_driver = {
-diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
-index d7768d3c6d8a..fb19b90d6767 100644
---- a/drivers/interconnect/imx/imx8mq.c
-+++ b/drivers/interconnect/imx/imx8mq.c
-@@ -87,7 +87,9 @@ static int imx8mq_icc_probe(struct platform_device *pdev)
- 
- static int imx8mq_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
++	if (tz->last_temperature >= trip_temp &&
++	    tz->temperature < (trip_temp - trip_hyst)) {
++		thermal_notify_tz_trip_down(tz->id, trip,
++					    tz->temperature);
++	}
++}
 +
-+	return 0;
- }
+ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+ {
+ 	enum thermal_trip_type type;
+@@ -372,16 +391,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+ 	if (tz->ops->get_trip_hyst)
+ 		tz->ops->get_trip_hyst(tz, trip, &hyst);
  
- static struct platform_driver imx8mq_icc_driver = {
+-	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
+-		if (tz->last_temperature < trip_temp &&
+-		    tz->temperature >= trip_temp)
+-			thermal_notify_tz_trip_up(tz->id, trip,
+-						  tz->temperature);
+-		if (tz->last_temperature >= trip_temp &&
+-		    tz->temperature < (trip_temp - hyst))
+-			thermal_notify_tz_trip_down(tz->id, trip,
+-						    tz->temperature);
+-	}
++	handle_thermal_trip_crossed(tz, trip, trip_temp, hyst, type);
+ 
+ 	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
+ 		handle_critical_trips(tz, trip, type);
 -- 
-2.36.1
+2.25.1
 
