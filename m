@@ -2,130 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0535C57645E
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 17:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E2E576394
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 16:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiGOPTl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 11:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S232893AbiGOOZ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 10:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235313AbiGOPTO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 11:19:14 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C81C26C0;
-        Fri, 15 Jul 2022 08:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657898350; x=1689434350;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GzvdUNK0/elu+0B9zVMsBMPuRFb0YyLLTorGkbmlvI8=;
-  b=UgZbeJ3BBMavgSIrlXgy0//SpMC5YfN0sZ0jsNiB71ihAYiQ4fE0fNg6
-   dhCKbepJoAeS6H6GRuwDYjq2AqxrcPzB+mn6axHton/Nzj1JrKgY7XANm
-   nRsHDIa/a7EoXsppjQPZJoXY74AytxetSuhgCN0M7FTdt4eePzJ5GbBkJ
-   +4iyokd6tlQZdhV4H7VU40sTbfrW5WvzAqOuEXdZHlbMYLddEJFAUq8X5
-   GeGDNSvjDBXeTHnUs+W8pxF5G87O5OGWHO/PqTQ/RGUGRLQ7rdofr6Nsl
-   ZKzRzf5BAh8WtmcB+cch9gK8ChPj4YwqgIVISeA/EsVDlRa2PeTNgw4bW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="372133247"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="372133247"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 08:18:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="723110016"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Jul 2022 08:18:55 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCN5i-0000HJ-IN;
-        Fri, 15 Jul 2022 15:18:54 +0000
-Date:   Fri, 15 Jul 2022 19:01:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- bab5a415e184710d01c37547f706a0e85873bb74
-Message-ID: <62d1491d.sEAKmtLmVIxvS4zB%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229846AbiGOOZy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 10:25:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A865D0C9;
+        Fri, 15 Jul 2022 07:25:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B7E1134DD1;
+        Fri, 15 Jul 2022 14:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657895152; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Tle2lhJhQp2g1mDXUt7ZR3944PM4JXbq65HXWxNQb9s=;
+        b=Q72RTBuD7k4s6+lQaBTvP7XBaVckub1f8rXxhmEYqk15ECh+YhcXULfMBDLX5wgm3sUevt
+        Sy7CZREhmcgK5mvyF/r2pt77ayU0bXXrwGbDnpImxAQ+rgRtXXPu8V7PVQ1DGDimwk99Ch
+        U5mq93BlCh5EhiuDrT92+X1e6paGPnE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2F88F13754;
+        Fri, 15 Jul 2022 14:25:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wkAkCvB40WK+QQAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 15 Jul 2022 14:25:52 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     brchuckz@netscape.net, jbeulich@suse.com,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "# 5 . 17" <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Subject: [PATCH 0/3] x86: make pat and mtrr independent from each other
+Date:   Fri, 15 Jul 2022 16:25:46 +0200
+Message-Id: <20220715142549.25223-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: bab5a415e184710d01c37547f706a0e85873bb74  Merge branch 'pm-domains' into bleeding-edge
+Today PAT can't be used without MTRR being available, unless MTRR is at
+least configured via CONFIG_MTRR and the system is running as Xen PV
+guest. In this case PAT is automatically available via the hypervisor,
+but the PAT MSR can't be modified by the kernel and MTRR is disabled.
 
-elapsed time: 896m
+As an additional complexity the availability of PAT can't be queried
+via pat_enabled() in the Xen PV case, as the lack of MTRR will set PAT
+to be disabled. This leads to some drivers believing that not all cache
+modes are available, resulting in failures or degraded functionality.
 
-configs tested: 48
-configs skipped: 3
+The same applies to a kernel built with no MTRR support: it won't
+allow to use the PAT MSR, even if there is no technical reason for
+that, other than setting up PAT on all cpus the same way (which is a
+requirement of the processor's cache management) is relying on some
+MTRR specific code.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Fix all of that by:
 
-gcc tested configs:
-m68k                       m5275evb_defconfig
-arm                        oxnas_v6_defconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
+- moving the function needed by PAT from MTRR specific code one level
+  up
+- adding a PAT indirection layer supporting the 3 cases "no or disabled
+  PAT", "PAT under kernel control", and "PAT under Xen control"
+- removing the dependency of PAT on MTRR
 
-clang tested configs:
-powerpc                 mpc8560_ads_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220714
-hexagon              randconfig-r041-20220714
+Juergen Gross (3):
+  x86: move some code out of arch/x86/kernel/cpu/mtrr
+  x86: add wrapper functions for mtrr functions handling also pat
+  x86: decouple pat and mtrr handling
+
+ arch/x86/include/asm/memtype.h     |  13 ++-
+ arch/x86/include/asm/mtrr.h        |  27 ++++--
+ arch/x86/include/asm/processor.h   |  10 +++
+ arch/x86/kernel/cpu/common.c       | 123 +++++++++++++++++++++++++++-
+ arch/x86/kernel/cpu/mtrr/generic.c |  90 ++------------------
+ arch/x86/kernel/cpu/mtrr/mtrr.c    |  58 ++++---------
+ arch/x86/kernel/cpu/mtrr/mtrr.h    |   1 -
+ arch/x86/kernel/setup.c            |  12 +--
+ arch/x86/kernel/smpboot.c          |   8 +-
+ arch/x86/mm/pat/memtype.c          | 127 +++++++++++++++++++++--------
+ arch/x86/power/cpu.c               |   2 +-
+ arch/x86/xen/enlighten_pv.c        |   4 +
+ 12 files changed, 289 insertions(+), 186 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.3
+
