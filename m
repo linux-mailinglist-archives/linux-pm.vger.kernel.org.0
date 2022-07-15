@@ -2,119 +2,285 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC175766A4
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 20:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733D55766C4
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 20:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiGOSSY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 14:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S229787AbiGOSaX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 14:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiGOSSX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 14:18:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187175C34D;
-        Fri, 15 Jul 2022 11:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657909102; x=1689445102;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TUQ7avMuLxhf37gvjWMg7acpWzikzJL0j5/UqprSQsU=;
-  b=VLY+ZEqYYlBuqI9K36GnEjSd5+TQlc0/aS8oLYwbmKCpkCg7Xn2oGzDN
-   1BmBS/wICldkzQQXpAFAy/pTFcMoZttRJ9jwsDYVU3FOy8ojbzdCqZZpR
-   ipZDExGamnghdGeFO6OioVUy/U6MOpCOZdgZUiZ9TjAAMLHZoA2Nknufc
-   vB7qt1s/9xleRDdssPLi6SNhECYudSbPhLsp2DFbQTUIdJvrWpS8MkWTJ
-   T/pzxJt91d6BJR65CqQ2vggcGiWMc6Xil3TcyH+fCFxV3emYlBCxsZFoZ
-   iUuuX2RaZ3CdXf9nkmcBLgcDF8IjAqXD3UQEJPokyH8/9Rjw/YjftGTvE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="266280341"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="266280341"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 11:18:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="571621269"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 15 Jul 2022 11:18:21 -0700
-Received: from rjingar-desk5.amr.corp.intel.com (unknown [10.213.176.154])
-        by linux.intel.com (Postfix) with ESMTP id 4C168580BDB;
-        Fri, 15 Jul 2022 11:18:21 -0700 (PDT)
-From:   Rajvi Jingar <rajvi.jingar@linux.intel.com>
-To:     rafael.j.wysocki@intel.com, bhelgaas@google.com
-Cc:     rajvi.jingar@linux.intel.com, david.e.box@linux.intel.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3 2/2] PCI/PTM: fix to maintain pci_dev->ptm_enabled
-Date:   Fri, 15 Jul 2022 11:18:09 -0700
-Message-Id: <20220715181809.232147-2-rajvi.jingar@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220715181809.232147-1-rajvi.jingar@linux.intel.com>
-References: <20220715181809.232147-1-rajvi.jingar@linux.intel.com>
+        with ESMTP id S229549AbiGOSaV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 14:30:21 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5F1747B7;
+        Fri, 15 Jul 2022 11:30:19 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31caffa4a45so55017947b3.3;
+        Fri, 15 Jul 2022 11:30:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nt4bJMHyhYZZNJmsHG+jvKocDnQ/uRBuL8blfA1ku0E=;
+        b=JugXTEP6dHNPhtEvF7a+5JHtnQB0Wezxj3mXkDrGYozqfRojDQsyF1yaMm4ScB7/Jm
+         WsEkXJ0SEUGVVrZkC8BCoP0SfwdVW7GCvaD3VfdXQIsQWYFdR6LU4jAozR5eLknvx1TA
+         ImyChQqdYXJ0emEU0f1Dn5cGjmGGfK8hvylIv7olh1kv26+7rkg/ROqYp55f4+j0shBF
+         rb8dsgfz2gABDl/R7/RQA/+frn3Nz/VTzWGjxNJ696EP7aWkPhW2AZ98uCXxLlWzju6y
+         gW9J1WwQmK2wGdyYn3ZQfH/AHS1DVivoCmAvm5pg5MqTybZj012lhFCUjYCBV37kdAdW
+         bB7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nt4bJMHyhYZZNJmsHG+jvKocDnQ/uRBuL8blfA1ku0E=;
+        b=3GYe1k6x2hqr9kIsNoQ/zb7wc0Ujbfox0Zajs6Ld4jLgZ/63llqcZgvumMs+wU6+tM
+         b7lDsmPUY11ZDNVej89c5CM7IVSivkJZ5Gjs81v+n31srnyVKtR28fmcfOxctvePtOfC
+         rlT4a3Q+A+rJyKa6Nx6QEbQ3UZJb87KQQNsE6FBxZqzFtD2uPROmeXwmQLmVbXll9oyx
+         imX8wppsjv3p8AEw4uMsBEfCCIh3Obyspi6E757DinJvwuTFFYKk0DgDRbixTozp/zjZ
+         nNSbbrB0mqOHesAYESI9gO0n+ToarpMjRh8q5oP582zc6milmVeyiSaxdaNKLp7IT3zl
+         wp3g==
+X-Gm-Message-State: AJIora/YuE7Gq4sb0NRHl0/Mw8jVopFPnVqoYK5bUa3tA6WOz7UHA23l
+        W++HU9yCQQ0I8MYYgDhXsQbRtrodTq6qnaN2Vhs=
+X-Google-Smtp-Source: AGRyM1vzP7L4rkzgqFevRJH1d667ZKPy7GjYyztLTPXytxkGqbpO4dyGE5UlcSEsEn68hi2rmxg67+K7y1Uib8FAXL0=
+X-Received: by 2002:a81:54c1:0:b0:31d:ec18:fd5d with SMTP id
+ i184-20020a8154c1000000b0031dec18fd5dmr7586417ywb.277.1657909819017; Fri, 15
+ Jul 2022 11:30:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-12-peterwu.pub@gmail.com>
+In-Reply-To: <20220715112607.591-12-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 15 Jul 2022 20:29:42 +0200
+Message-ID: <CAHp75VfyVufzf7CK38BVu_j0B4ax_d1gLAGYDE3H1zaKkuUB=A@mail.gmail.com>
+Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
+ type LED Indicator support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pci_dev->ptm_enabled needs to be maintained to reflect the current PTM
-state of the device. In pci_ptm_disable(), clear ptm_enabled from
-'struct pci_dev' on disabling PTM state for the device.
-In pci_restore_ptm_state(), set dev->ptm_enabled based on the restored
-PTM state of the device.
+On Fri, Jul 15, 2022 at 1:29 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> The MediaTek MT6370 is a highly-integrated smart power management IC,
+> which includes a single cell Li-Ion/Li-Polymer switching battery
+> charger, a USB Type-C & Power Delivery (PD) controller, dual
+> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
+> a display bias driver and a general LDO for portable devices.
+>
+> In MediaTek MT6370, there are four channel current-sink RGB LEDs that
+> support hardware pattern for constant current, PWM, and breath mode.
+> Isink4 channel can also be used as a CHG_VIN power good indicator.
 
-In pci_ptm_disable(), perform ptm_enabled check to avoid config space
-access in case if PTM is already disabled for the device. ptm_enabled
-won't be set for non-PCIe devices so pci_is_pcie(dev) check is not
-needed anymore.
+...
 
-Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- v1->v2:
-   - add ptm_enabled check in pci_ptm_disable().
-   - set the dev->ptm_enabled value in pci_restore_ptm_state().
- v2->v3:
-   - remove pci_is_pcie(dev) check in pci_ptm_disable().
-   - add Reviewed-by tag in commit message
----
- drivers/pci/pcie/ptm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> +         This driver can also be built as a module. If so the module
 
-diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-index 368a254e3124..1ce241d4538f 100644
---- a/drivers/pci/pcie/ptm.c
-+++ b/drivers/pci/pcie/ptm.c
-@@ -34,7 +34,7 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	int ptm;
- 	u16 ctrl;
- 
--	if (!pci_is_pcie(dev))
-+	if (!dev->ptm_enabled)
- 		return;
- 
- 	ptm = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
-@@ -44,6 +44,7 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
- 	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
-+	dev->ptm_enabled = 0;
- }
- 
- void pci_save_ptm_state(struct pci_dev *dev)
-@@ -83,6 +84,7 @@ void pci_restore_ptm_state(struct pci_dev *dev)
- 
- 	cap = (u16 *)&save_state->cap.data[0];
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, *cap);
-+	dev->ptm_enabled = !!(*cap & PCI_PTM_CTRL_ENABLE);
- }
- 
- void pci_ptm_init(struct pci_dev *dev)
+so, the
+
+> +         will be called "leds-mt6370.ko".
+
+No ".ko".
+
+Why did you ignore these comments? Please go and fix _everywhere_ in
+your series.
+It's basically the rule of thumb, if the reviewer gives a comment
+against an occurrence of something, go through entire series and check
+if there are other places like commented one and address them all.
+
+...
+
+> + * Author: Alice Chen <alice_chen@richtek.com>
+
+Strange, the commit message doesn't have a corresponding SoB, why?
+
+...
+
+> +#define MT6370_PWM_DUTY                                31
+> +#define MT6372_PMW_DUTY                                255
+
+Looks like these are limits by hardware?
+Check with the datasheet if (BIT(x) - 1) makes more sense here.
+
+...
+
+> +       switch (led_no) {
+> +       case MT6370_LED_ISNK1:
+> +               sel_field = F_LED1_DUTY;
+> +               break;
+> +       case MT6370_LED_ISNK2:
+> +               sel_field = F_LED2_DUTY;
+> +               break;
+> +       case MT6370_LED_ISNK3:
+> +               sel_field = F_LED3_DUTY;
+> +               break;
+> +       default:
+> +               sel_field = F_LED4_DUTY;
+
+Missed break;
+
+> +       }
+
+...
+
+> +       switch (led_no) {
+> +       case MT6370_LED_ISNK1:
+> +               sel_field = F_LED1_FREQ;
+> +               break;
+> +       case MT6370_LED_ISNK2:
+> +               sel_field = F_LED2_FREQ;
+> +               break;
+> +       case MT6370_LED_ISNK3:
+> +               sel_field = F_LED3_FREQ;
+> +               break;
+> +       default:
+> +               sel_field = F_LED4_FREQ;
+
+Ditto.
+
+> +       }
+
+...
+
+> +       switch (led_no) {
+> +       case MT6370_LED_ISNK1:
+> +       case MT6370_LED_ISNK2:
+> +       case MT6370_LED_ISNK3:
+> +               *base = MT6370_REG_RGB1_TR + led_no * 3;
+> +               break;
+> +       default:
+> +               *base = MT6370_REG_RGB_CHRIND_TR;
+
+Ditto.
+It seems you dropped them for all switch-cases. It's not goot, please
+restore them back.
+
+> +       }
+
+...
+
+> +       u8 val[P_MAX_PATTERNS / 2] = {0};
+
+{ } should suffice
+
+
+> +       /*
+> +        * Pattern list
+> +        * tr1: byte 0, b'[7: 4]
+> +        * tr2: byte 0, b'[3: 0]
+> +        * tf1: byte 1, b'[7: 4]
+> +        * tf2: byte 1, b'[3: 0]
+> +        * ton: byte 2, b'[7: 4]
+> +        * toff: byte 2, b'[3: 0]
+> +        */
+> +       for (i = 0; i < P_MAX_PATTERNS; i++) {
+> +               curr = pattern + i;
+> +
+> +               sel_range = i == P_LED_TOFF ? R_LED_TOFF : R_LED_TRFON;
+> +
+> +               linear_range_get_selector_within(priv->ranges + sel_range,
+> +                                                curr->delta_t, &sel);
+> +
+> +               val[i / 2] |= sel << (4 * ((i + 1) % 2));
+> +       }
+> +
+> +       memcpy(pattern_val, val, 3);
+> +       return 0;
+> +}
+
+...
+
+> +out:
+
+out_unlock:
+
+> +       mutex_unlock(&priv->lock);
+> +
+> +       return ret;
+
+...
+
+> +out:
+
+Ditto. And so on.
+
+> +       mutex_unlock(&priv->lock);
+> +
+> +       return ret;
+
+...
+
+> +               sub_led = devm_kzalloc(priv->dev,
+> +                                      sizeof(*sub_led) * MC_CHANNEL_NUM,
+> +                                      GFP_KERNEL);
+
+NIH devm_kcalloc(). Also check if you really need zeroed data.
+
+> +               if (!sub_led)
+> +                       return -ENOMEM;
+
+...
+
+> +                       ret = fwnode_property_read_u32(child, "color", &color);
+> +                       if (ret) {
+> +                               dev_err(priv->dev,
+> +                                       "led %d, no color specified\n",
+> +                                       led->index);
+> +                               return ret;
+
+return dev_err_probe(...) ; ?
+
+Ditto for many places in your entire series.
+
+> +                       }
+
+...
+
+> +       priv = devm_kzalloc(&pdev->dev,
+> +                           struct_size(priv, leds, count), GFP_KERNEL);
+
+At least one parameter can be placed on the previous line.
+
+> +       if (!priv)
+> +               return -ENOMEM;
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko
