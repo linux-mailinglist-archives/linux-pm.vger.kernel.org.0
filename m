@@ -2,96 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21136576602
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 19:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2198457660A
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 19:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiGOR3b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 13:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
+        id S229933AbiGORat (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 13:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiGOR32 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 13:29:28 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5121A3BD;
-        Fri, 15 Jul 2022 10:29:27 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-31cf1adbf92so53604967b3.4;
-        Fri, 15 Jul 2022 10:29:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y3B/xuKwwDaDPj70H09iMM0q55vMJN+NwGOuzYtaHOE=;
-        b=c+zhcPzJ0hSb99mKoy42nxtkX8UqM6uzFWUiQCxxPXv8m81qY9CgLF0+vrfZhidPx9
-         eA7CBpjwRcapaKIYdi28RxXpWrX+n1twBH7MK54aLEC6OAmoMxtaTEZgHIqUT9YAJQs0
-         oeSNqY0HGikV7zKFdlXQOY2XKYKj1Bg8y35y4dS98GxtSIgxyuCJGFb+s9Vzom+J47/K
-         nO6jThQnlRophfn/abHlAYQf491KGKZD5S/9jESraHOXai5NB0X/MO7W/cV6j9oJQiuK
-         FyFGVQOLMprDZsXaOtjWnbCan5J5nu6F36xS3FQP9vStytP1K4XERM4E1H5YTEGf+Evj
-         Gb1Q==
-X-Gm-Message-State: AJIora9ErYNNHDPk27FqmgpVglLxMpHTsbnwDOSuoFFkuSPIAffjNEe2
-        9UDhQzS+K7Sk7WL0YVJaEIFZfrzec8Jf/Xz6MkLSRGTq
-X-Google-Smtp-Source: AGRyM1tGYZ7fsHIo9OGZG2RI/etkx1iNvTt1xx/TgiT8ZJTO5dWNv2skwUxICBEv6+O1/Asthqf6I0zlz5smXYKZu+M=
-X-Received: by 2002:a81:17d0:0:b0:31c:c5e2:fc1e with SMTP id
- 199-20020a8117d0000000b0031cc5e2fc1emr17464866ywx.196.1657906167225; Fri, 15
- Jul 2022 10:29:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220711124229.16516-1-lukasz.luba@arm.com> <1198724e-d94f-0b7c-9c4a-90595f8426d2@arm.com>
- <CAJZ5v0gh78z3tw6simaZ5S6dmGvDc-OE6t02N8vQYk-2eoFQgA@mail.gmail.com> <deddd9cc-f517-cff9-e304-e1f09c6784b7@arm.com>
-In-Reply-To: <deddd9cc-f517-cff9-e304-e1f09c6784b7@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Jul 2022 19:29:16 +0200
-Message-ID: <CAJZ5v0jYzJo2BU-qKkaJog6pYx7SkpgmWGd6vTTkc2T=gx8abw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
+        with ESMTP id S229716AbiGORas (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 13:30:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E766F326EE
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 10:30:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4EA7B82D72
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 17:30:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4B719C341CE
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 17:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657906245;
+        bh=nGFqpo8vN5HQLq44nugRuhbbDnxbC61FlCY5T3fQzUE=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=KvGOZ/+MyCiG81phjDXsuIozuxn9Cu++BvSo79ZNuNpP+fSA7ScTClK2OmIIsVmuq
+         +N1143b7PBw2lwXa3K/n3vuJvTbdqk3Bq0KiaQjVoHcbrd2TDc8+dorzTfV3gVstC8
+         uB4ObVMnVDnhZz+KeZh7EnO3wDBogQgsXPTUbqTefWabPpifGP+gaaVhaWdXtp9i+o
+         NO96WgWpN+/UzX9qFSFp+5sTdrEHocRYWVatAxtt4FOThlktFdZPYMVOSqW81Az0xc
+         EMyfrYKigEBg/c+Q54dOSonT64N4qselydNXoPAIfVcqpPT2GnHzzrwZ/RfO122OVT
+         3dm4SxfWK3Afw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 2EFF1CC13BB; Fri, 15 Jul 2022 17:30:45 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 216248] [Regression] amd-pstate stops working after [ACPI:
+ CPPC: Check _OSC for flexible address space]
+Date:   Fri, 15 Jul 2022 17:30:44 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: arek.rusi@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-216248-137361-sTshmSIVm9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216248-137361@https.bugzilla.kernel.org/>
+References: <bug-216248-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 1:47 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 7/15/22 12:44, Rafael J. Wysocki wrote:
-> > On Fri, Jul 15, 2022 at 10:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >> Hi Rafael,
-> >>
-> >> gentle ping.
-> >>
-> >> On 7/11/22 13:42, Lukasz Luba wrote:
-> >>> There is no need to keep the max CPU capacity in the per_cpu instance.
-> >>> Furthermore, there is no need to check and update that variable
-> >>> (sg_cpu->max) everytime in the frequency change request, which is part
-> >>> of hot path. Instead use struct sugov_policy to store that information.
-> >>> Initialize the max CPU capacity during the setup and start callback.
-> >>> We can do that since all CPUs in the same frequency domain have the same
-> >>> max capacity (capacity setup and thermal pressure are based on that).
-> >>>
-> >>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> >>> ---
-> >>>    kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
-> >>>    1 file changed, 15 insertions(+), 15 deletions(-)
-> >>
-> >> The patch got Ack from Viresh.
-> >> Could you take it?
-> >
-> > Yes, it's there in my queue.  Same for the EM changes.
->
-> Thank you Rafael!
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216248
 
-Well, the patch doesn't apply on top of 5.19-rc6, because
-sugov_get_util() is somewhat different.
+Arek Ru=C5=9Bniak (arek.rusi@gmail.com) changed:
 
-Please rebase it and resend.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
+
+--- Comment #16 from Arek Ru=C5=9Bniak (arek.rusi@gmail.com) ---
+Mario, Perry thanks a lot for help.
+I've testing patch onto 5.18.2 and it works as before.=20
+
+[    3.337866] amd_pstate: AMD CPPC MSR based functionality is supported
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
