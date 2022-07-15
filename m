@@ -2,102 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE335767BD
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 21:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0685657683C
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 22:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiGOTss (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 15:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
+        id S231351AbiGOUhU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 16:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiGOTsr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 15:48:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A5C624C;
-        Fri, 15 Jul 2022 12:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657914524; x=1689450524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MilUhzh+T5K7OKYmpSSzhAgM8qxY12ZE5AeVvwctYIg=;
-  b=ENLwp5TQ06MUqVsAaPm700pEs0mdqrZQRSSeOYviXkBea3L1EvJuaUA4
-   O2NB9xVtQg2Uy1Ge6rzaLSe6e3OEjx0+rIBTeQYmVtLuVtyu+ZYz0o/Xl
-   w5BJ4tCDrSGmp0Q7aEHLXJKZAFVSOnGVu+wj/xOIu/VxKt/SlYZ436HxY
-   o9xZ/rD9gsq2G2XtO+AcBtDzLBTYEdiZ3Q/RTB1jOTctZ4DDsBlvoWmSH
-   lTMVnURUMmd75z6VomrkmRW4JWOujgL4Qb8VjKxNWyW5l/UjbZjlk3Klc
-   bSXHw4QUpcoG3VtBNHZhpgFZyeVLuUPz9EeifumapwjwZaqhmtO/QlbY5
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="266298361"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="266298361"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 12:48:44 -0700
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="664319203"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 12:48:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oCRIl-001JDk-2o;
-        Fri, 15 Jul 2022 22:48:39 +0300
-Date:   Fri, 15 Jul 2022 22:48:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] powercap: RAPL: Add Power Limit4 support for Alder
- Lake-N and Raptor Lake-P
-Message-ID: <YtHEl73BL1BRyl9r@smile.fi.intel.com>
-References: <20220715165228.28044-1-sumeet.r.pawnikar@intel.com>
+        with ESMTP id S231357AbiGOUhS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 16:37:18 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E3D8735B
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 13:37:16 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCS3Z-0004t4-Jc; Fri, 15 Jul 2022 22:37:01 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCS3X-001BFO-Du; Fri, 15 Jul 2022 22:36:59 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCS3W-005Py7-JW; Fri, 15 Jul 2022 22:36:58 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/8] interconnect: Prepare making platform remove callbacks return void
+Date:   Fri, 15 Jul 2022 22:36:44 +0200
+Message-Id: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715165228.28044-1-sumeet.r.pawnikar@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1932; h=from:subject; bh=30zNokyf8YZwSDZQy06W7iHbrLyu4dV/qd1gRi70Sj4=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi0c+Qsn7Xi1xjD4vKuEnIUbi32DWFn6eT2LpOtDIY +ZSGdXCJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtHPkAAKCRDB/BR4rcrsCRZkB/ 9/w/c2Vn2dLfjlz8s0HbijZiKGzYnXhAcfRV12GhRtIJNguQ6J45oGG8Ew0EfRIJXcFACSR7G7PDT5 F5dcYMy+vB0xFytQQC0UB53LPfS5ueMW4z+8yFpBm7ieUo4VUH7GCTAihPOoRVSP+hcMO2rst9SiAd LaHB/4dpx5OJWId4FlzlWDjo6JhrfD3M/5i9WIGzm7ugu5HoJaRcpJvQFKlWkWf3hZckJvYJDOyYyt 589QBqb2cfYagzeY3q+2roA8J8XoVJeVEMoeqd+OppFEnFBh8KLVOZ8RoGecMGNCT2xiVANfUBBXsf ppacJQ82G9nOQJrUvqQUUZWIwWWgY9
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 10:22:28PM +0530, Sumeet Pawnikar wrote:
-> Add Alder Lake-N and Raptor Lake-P to the list of processor models
-> for which Power Limit4 is supported by the Intel RAPL driver.
-> 
-> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Hello,
 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+today remove callbacks of platform devices return an int. This is unfortunate
+because the device core ignores the return value and so the platform code only
+emits a warning (and still removes the device).
 
-You may not convert people's review into a tag without their consent.
-But taking into account this is trivial patch, it's fine. Just follow
-the rules next time.
+My longterm quest is to make these remove callbacks return void instead.
+This series is a preparation for that, with the goal to make the remove
+callbacks obviously always return 0. This way when the prototype of
+these functions is changed to return void, the change is straigt forward
+and easy to review.
 
-Also, where is v1? What are the differences to it?
+Best regards
+Uwe
 
-> ---
->  drivers/powercap/intel_rapl_msr.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-> index 9d23984d8931..bc6adda58883 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -140,7 +140,9 @@ static const struct x86_cpu_id pl4_support_ids[] = {
->  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_TIGERLAKE_L, X86_FEATURE_ANY },
->  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE, X86_FEATURE_ANY },
->  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_L, X86_FEATURE_ANY },
-> +	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_N, X86_FEATURE_ANY },
->  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE, X86_FEATURE_ANY },
-> +	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE_P, X86_FEATURE_ANY },
->  	{}
->  };
+Uwe Kleine-König (8):
+  interconnect: imx: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: icc-rpm: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: icc-rpmh: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: msm8974: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: osm-l3: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: sm8450: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: Make icc_provider_del() return void
+  interconnect: imx: Make imx_icc_unregister() return void
 
+ drivers/interconnect/core.c           | 10 +++-------
+ drivers/interconnect/imx/imx.c        |  4 ++--
+ drivers/interconnect/imx/imx.h        |  2 +-
+ drivers/interconnect/imx/imx8mm.c     |  4 +++-
+ drivers/interconnect/imx/imx8mn.c     |  4 +++-
+ drivers/interconnect/imx/imx8mq.c     |  4 +++-
+ drivers/interconnect/qcom/icc-rpm.c   |  4 +++-
+ drivers/interconnect/qcom/icc-rpmh.c  |  4 +++-
+ drivers/interconnect/qcom/msm8974.c   |  4 +++-
+ drivers/interconnect/qcom/osm-l3.c    |  4 +++-
+ drivers/interconnect/qcom/sm8450.c    |  4 +++-
+ include/linux/interconnect-provider.h |  2 +-
+ 12 files changed, 31 insertions(+), 19 deletions(-)
+
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.36.1
 
