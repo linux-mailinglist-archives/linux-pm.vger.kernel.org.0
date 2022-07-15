@@ -2,164 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A361C57665B
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 19:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3BF576686
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 20:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiGORrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 13:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S229771AbiGOSDY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 14:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiGORro (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 13:47:44 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5732F3A5;
-        Fri, 15 Jul 2022 10:47:43 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31c89111f23so54414037b3.0;
-        Fri, 15 Jul 2022 10:47:43 -0700 (PDT)
+        with ESMTP id S229506AbiGOSDX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 14:03:23 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D625542AD0;
+        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id s21so6279256pjq.4;
+        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=82CEaTbPG5hRrKufgDuMl8R+gnz9vTnIDmFc+J3kvLs=;
+        b=mS6SGZnqBxs6zBiQDMMbYqq1t1OADDFPaNO8IC2b1/cmmQF4XjF8YZYPKhTRECATiv
+         LLG8iEG2GZDAqIloJ/l+7k1dezrL+UyuU6ScAVfOBgxZkgbnFJNvTYLtYdRIUlxgvtQS
+         MGf35eiT1yZDjjYJp7IrVVs09i5buYYi1wPr9RiGKYH0wLJ61T266xZ+JaMRPp0OSR1L
+         jdUAd58fQSGD1b0WBfBIkMQVT0L/4BqRGJbQsASXnRZ6lObtPCFUoOInvqU8YFYaqbJH
+         AYztprdigI6blCGWs65eK4U7aCYX0cZJ5ZkAzktbNWAB7Mtx60vbecICHEwHP79pp9ec
+         xfAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QLat8Q/2ROY2Kt2jHQc4a4l6+yIDdGjl086waEjxxKE=;
-        b=XL/J2hlgksL1wbvaFMJVRCZJZjdsoBfyLKhywFoDx/Kv0npGAy3ykA3+yOdAaPLAYW
-         dxLNfyQMUnTPsNlZzMw4C3QN8iBPLll5/kWGwkAqhh2Noy7nMESMVDNj2+SEi+JgNNAb
-         jRUK5w6izhfqlkcvZihN4JK2tFiwAVhfhQ3FFPi7WSGla9uI4RoYKckBQoDWdmfKTAbR
-         j84gf1h14OeVOllj9DJKod6Y2Q5/Y7AxTxJMmcCtH+eec9dqwou2nJEQQ41QienVe73z
-         X3gM1O6D5YAZkDSv30PHPEgU1H/jrAF7C6g8NrECz2pP7dmqFuUj53ZnxInH5suRLBxG
-         cuCg==
-X-Gm-Message-State: AJIora+zweu0sLM5XIG5fLKU9kJR1EVkZQ3Akos8Xvp6bsMAI3TA4HyS
-        kIcNxELkNelNUqr4n57j36ysrhghj0+IUTbVEaB3Ze7A
-X-Google-Smtp-Source: AGRyM1u2kEEEFmdEOQxahhMYKJGY6tuAPHAaxtme8gcImgb36PXMz5xzib4wQEKqNyLKPEXkYJZobj+k727mYZWXYTc=
-X-Received: by 2002:a81:17d0:0:b0:31c:c5e2:fc1e with SMTP id
- 199-20020a8117d0000000b0031cc5e2fc1emr17548698ywx.196.1657907262218; Fri, 15
- Jul 2022 10:47:42 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=82CEaTbPG5hRrKufgDuMl8R+gnz9vTnIDmFc+J3kvLs=;
+        b=mUQgILbXevU5fglEbfd1Wm7xVk7yAFvImx8Q0wHJ/LsQEfzDygKHwNLFHdVKVcqZ4e
+         hLWu13v2Vs9qV0c1uLtHJ3qGI2Kvrh+NHdy8Z8hbaudqt8OV9qlniLTP5530l8MXV6/E
+         Oa5rYZCobfRSGNBD9dVh7n+pRbGvtfz33VyYh7zlwR4q275qGP3YjLSthsEOOq1X4qG3
+         lCgkg+MhtxQLDmXVd57VCbZJYTHnvwWm7rmBqg/Jyq00GU90DddlPLDdw/6Vll6npEID
+         yYff5DNcOrPggLH7Kj2KM6aL3F2H2uH2KOt//s2xh8rdK7bqkpL0CVZMfJIjfdIKDK81
+         nY9g==
+X-Gm-Message-State: AJIora+3qkvuvnllkMFHgA6b5uQaWbYABHkqFA0hDZyEpqu/ppoMTunJ
+        nDFNz40YxpHaGPrYhIU83S1yR+qR0vc=
+X-Google-Smtp-Source: AGRyM1vERXA6u2bO16oEvEDdFxRpgtr5+ZU6yasU0gnfdlN9ZH5WlAbBu+BHoT5EVFKk6OtHITRArQ==
+X-Received: by 2002:a17:90b:1b48:b0:1ef:a90d:eae1 with SMTP id nv8-20020a17090b1b4800b001efa90deae1mr22951161pjb.68.1657908202280;
+        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
+Received: from [172.30.1.47] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id x1-20020a170902a38100b0015ee60ef65bsm3870042pla.260.2022.07.15.11.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 11:03:21 -0700 (PDT)
+Message-ID: <06ba1e63-16a5-5659-e062-3c7e12f7e5cd@gmail.com>
+Date:   Sat, 16 Jul 2022 03:03:12 +0900
 MIME-Version: 1.0
-References: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
-In-Reply-To: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Jul 2022 19:47:31 +0200
-Message-ID: <CAJZ5v0g_2Lwpdks6+NSuemxSKvdTbM0Rhot9vAy=psEiCn+MMQ@mail.gmail.com>
-Subject: Re: [PATCH v2] power: domain: handle power supplies that need interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Kevin Hilman <khilman@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, kernel@puri.sm,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>, aford173@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Subject: [GIT PULL] devfreq next for 5.20
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 2:19 PM Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> If the power-domains' power-supply node (regulator) needs
-> interrupts to work, the current setup with noirq callbacks cannot
-> work; for example a pmic regulator on i2c, when suspending, usually already
-> times out during suspend_noirq:
->
-> [   41.024193] buck4: failed to disable: -ETIMEDOUT
->
-> So fix system suspend and resume for these power-domains by using the
-> "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5
-> board, but by looking at the dts, this will fix imx8mq-evk and possibly
-> other boards too.
->
-> Possibly one can find more changes than suspend/resume for this case. They
-> can be added later when testing them.
->
-> Initially system suspend problems had been discussed at
-> https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> which led to discussing the pmic that contains the regulators which
-> serve as power-domain power-supplies:
-> https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+Dear Rafael,
 
-I need Ulf to look at this.  Ulf?
+This is devfreq-next pull request for v5.20-rc1. I add detailed description of
+this pull request on the following tag. Please pull devfreq with
+following updates.
 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
->
-> revision history
-> ----------------
-> v2: (thank you Krzysztof)
-> * rewrite: find possible regulators' interrupts property in parents
->   instead of inventing a new property.
->
-> v1: (initial idea)
-> https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
->
->
->  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 3e86772d5fac..ca3e3500939d 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2298,6 +2298,28 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
->         return ret;
->  }
->
-> +/**
-> + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs interrupts
-> + * @genpd: Pointer to PM domain associated with the PM domain provider.
-> + */
-> +static void of_genpd_get_power_supply_irq(struct generic_pm_domain *pd)
-> +{
-> +       struct device_node *dn;
-> +
-> +       dn = of_parse_phandle(pd->dev.of_node, "power-supply", 0);
-> +       if (!dn)
-> +               return;
-> +
-> +       while ((dn = of_get_next_parent(dn))) {
-> +               if (of_get_property(dn, "interrupts", NULL)) {
-> +                       pd->domain.ops.suspend = genpd_suspend_noirq;
-> +                       pd->domain.ops.resume = genpd_resume_noirq;
-> +                       pd->domain.ops.suspend_noirq = NULL;
-> +                       pd->domain.ops.resume_noirq = NULL;
-> +               }
-> +       }
-> +}
-> +
->  /**
->   * of_genpd_add_provider_simple() - Register a simple PM domain provider
->   * @np: Device node pointer associated with the PM domain provider.
-> @@ -2343,6 +2365,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
->         genpd->provider = &np->fwnode;
->         genpd->has_provider = true;
->
-> +       of_genpd_get_power_supply_irq(genpd);
-> +
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-> @@ -2394,6 +2418,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->
->                 genpd->provider = &np->fwnode;
->                 genpd->has_provider = true;
-> +
-> +               of_genpd_get_power_supply_irq(genpd);
->         }
->
->         ret = genpd_add_provider(np, data->xlate, data);
-> --
-> 2.30.2
->
+Best Regards,
+Chanwoo Choi
+
+
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.20
+
+for you to fetch changes up to 53f853d55e312a639eaa910154248ce06eb754ac:
+
+  PM / devfreq: tegra30: Add error message for devm_devfreq_add_device() (2022-07-15 11:40:08 +0900)
+----------------------------------------------------------------
+
+Update devfreq next for v5.20
+
+Detailed description for this pull request:
+1. Add new Mediatek CCI (Cache Coherent Interconnect) devfreq driver
+- Add new MediaTek Cache Coherent Interconnect (CCI) devfreq drviver
+  which supports the dynamic voltage and clock scaling.
+  This driver uses the passive devfreq governor to get target frequencies
+  and adjust voltages because it depends on MediaTek cpu frequency
+  driver. In MT8183 and MT8186, the MediaTek CCI is supplied
+  by the same regulators with the little core CPUs.
+
+2. Update the devfreq drivers
+- Convert the Samsung Exynos SoC Bus bindings to DT schema of exynos-bus.c
+
+- Remove kernel-doc warnings by adding the description for unused
+  fucntio parameters on devfreq core.
+
+- Use NULL to pass a null pointer rather than zero according to function
+  propotype on imx-bus.c
+
+- Print error message instead of error interger value on tegra30-devfreq.c
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      PM / devfreq: imx-bus: use NULL to pass a null pointer rather than zero
+
+Dmitry Osipenko (1):
+      PM / devfreq: tegra30: Add error message for devm_devfreq_add_device()
+
+Johnson Wang (2):
+      dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+      PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
+
+Krzysztof Kozlowski (1):
+      dt-bindings: interconnect: samsung,exynos-bus: convert to dtschema
+
+Mauro Carvalho Chehab (1):
+      PM / devfreq: shut up kernel-doc warnings
+
+ .../devicetree/bindings/devfreq/exynos-bus.txt     | 488 ---------------------
+ .../bindings/interconnect/mediatek,cci.yaml        | 141 ++++++
+ .../bindings/interconnect/samsung,exynos-bus.yaml  | 290 ++++++++++++
+ MAINTAINERS                                        |   3 +-
+ drivers/devfreq/Kconfig                            |  10 +
+ drivers/devfreq/Makefile                           |   1 +
+ drivers/devfreq/devfreq.c                          |   4 +
+ drivers/devfreq/imx-bus.c                          |   2 +-
+ drivers/devfreq/mtk-cci-devfreq.c                  | 440 +++++++++++++++++++
+ drivers/devfreq/tegra30-devfreq.c                  |   4 +-
+ 10 files changed, 892 insertions(+), 491 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+ create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/samsung,exynos-bus.yaml
+ create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
