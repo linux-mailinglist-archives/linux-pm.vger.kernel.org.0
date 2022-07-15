@@ -2,262 +2,382 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91815768B5
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 23:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E745769BA
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Jul 2022 00:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiGOVJe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 17:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
+        id S232848AbiGOWN6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 18:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiGOVJY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 17:09:24 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FDA72ED1
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 14:09:21 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r2so7331710wrs.3
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 14:09:21 -0700 (PDT)
+        with ESMTP id S232172AbiGOWNi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 18:13:38 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C3417AAB
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 15:08:52 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31bf3656517so59157297b3.12
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 15:08:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LBjVlwEWddWqbpURHhNM+E5xvdeghhlzqBOLCULhmQI=;
-        b=e+S3BjS1PpKKswxkGI0iY7c0b0IKGpkD/DW+G3E/R+nDJKFDxGYujI2jryqm4pXs05
-         AD6t9NACr3CQZFw9nzkZgk/VNlYe9RYROB9Osq8LVylf1S8ra3H91gsTO6I3f70JKhwD
-         3THBQeDdNE+nCVncBkzTPYdr9Kmab1jkIfPCmK5KNcc7de6UpWbayWGKher0vQoMLEa8
-         2F1GPS+6za/UiSVPn+c4oe6o6pF98cQUifJqDYwIm2VaVz1X9EiAD6NfgvgSXkN8PVrE
-         Qng3FU5exou1FoUeLfIAxp38tY1KnjQdde91hdT20wT+xeg6qMsemRXbos5S2jd2TINu
-         2bRQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=izcD1HnHb6lJxMaZm59KAnOWoNAatpAmAKZnItVmAVs=;
+        b=ApKlwkDvFAtogzg5Em18xQHqDMazDxjj8wvfsl2QZ/FA85GqR2OHyB6bNXvnTqi/+a
+         nS5RDQln03OGLmxvD4R87jiBQoJqC/G1LUOr7J/BuD5QWpwRAhDhAlNXe/PPdCLfOeG9
+         ylk9j3M3Mc3fTEYVoAfyxKooSc+WoZsMas0XqG6q3rpiFMpuiynljbowF7PdC3Q8T7Nm
+         9jLCLyQXrNzX+kQbSrv8c32kD346RW13sSH14J+II30usTKOTRNt3c5LLOZA1ug2Sqi9
+         N8YbkELAKL0fCLJbuqOm6P1utw4OcsBjUjrbB+WM0tCDIUlW6mXrDJUEy2qgBOyIYyiX
+         GjQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LBjVlwEWddWqbpURHhNM+E5xvdeghhlzqBOLCULhmQI=;
-        b=h5TBp+H7TTvMdCnrPkIAKZ1e6uhxGpeeBD9vyc2MYklGU4ReJ3fH5NfBieqZo/EUJ1
-         PG1jijIXng7oF493EIzXiKA4Z2Qf+Be/7NCN79UHZshWG7T7kbXjk0ppMa6H9zAkQbZ+
-         Xkvb3aQkPon2y2xEXL/dFnaV8iqcYxgCyP4isBpexJQpVlRdFkMoQG+YNOa2SlurjY5j
-         7JWLwhk2kHVD9qOyF6TX0Hu/DQgtLAtL8SZaUefjNf22KbMYNf/4N6AlwCAMXDMHE+pp
-         qDdWEoly4xkTpREA6PN9tpSOZOU5tr5jFGG48/HXuPXYa2Hw+fJ/H3jzc/bPFlmlmcNK
-         S71A==
-X-Gm-Message-State: AJIora988Y/59Y+K0r7L9z187iWikxmwlZz8iPPRdiOKnLhwgy5RJZ0a
-        4jE08CmF9mX6qd6ASTNf4/sCFA==
-X-Google-Smtp-Source: AGRyM1tDc7pmR2AackU3bPHpp8kYvctzGvgmIQNpLv9oO+3tgwGp0K8GBsfnKkbGElv2cXlWsF7JBA==
-X-Received: by 2002:a5d:5a99:0:b0:21d:cb28:7468 with SMTP id bp25-20020a5d5a99000000b0021dcb287468mr6316741wrb.289.1657919360359;
-        Fri, 15 Jul 2022 14:09:20 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:a223:f4b3:40c9:43fa])
-        by smtp.gmail.com with ESMTPSA id b14-20020a5d40ce000000b0021a56cda047sm4567752wrq.60.2022.07.15.14.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 14:09:19 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     quic_manafm@quicinc.com, rui.zhang@intel.com, amitk@kernel.org,
-        lukasz.luba@arm.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] thermal/core: Fix thermal trip cross point
-Date:   Fri, 15 Jul 2022 23:09:11 +0200
-Message-Id: <20220715210911.714479-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220715210911.714479-1-daniel.lezcano@linaro.org>
-References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=izcD1HnHb6lJxMaZm59KAnOWoNAatpAmAKZnItVmAVs=;
+        b=x/tb3oBEi0d5qNVClL+u6744dQ0pfJZUaD7ejObGPhQx951mI6b9jhXsnggdGZgbw2
+         TxqtxitaPNdINpJx5jW4h9MimQ64XKcXzUTa660Z7LW6TsTQSM/2kgpM8R5M0i6XX/2+
+         u2kdJgqBGbToPL7Hq7HWV4AqhHaTHdI2hKwcKPCrKwM4L+1gI3hjT01dLiL+kzsyoGU7
+         DK5pfKqWPcOQ6crSI0kqxmmnk9olwsjNM+Y7UfhuMGEdWPPNiE5Vhd+e3V0j+9SIqnSv
+         RYGdReL7MWMu9ERuSgUBg82HjGHr5Q29r/mNkxYn6HXiUu2YBcE3aEwCQpwoyveepjBo
+         wKpQ==
+X-Gm-Message-State: AJIora/GGsI7gU2zOZhb3NUCc03kI8oKt4emlxARQGh2XODBw4shh1pv
+        uiwE5Qoqk/h0OXbIoEZ95jTfOp6zlmStwMBVhH79cg==
+X-Google-Smtp-Source: AGRyM1s6lD3+S3MaeEqIv8ER+1Q/n5NS5AlYeg7rFAFlRdDaCxlbMW3MnyaB8Y3RCXdl1QCA2dgnEiqF7RumJd4RBXc=
+X-Received: by 2002:a0d:eb83:0:b0:31c:8741:a033 with SMTP id
+ u125-20020a0deb83000000b0031c8741a033mr18690024ywe.455.1657922924688; Fri, 15
+ Jul 2022 15:08:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <6079032.MhkbZ0Pkbq@steina-w> <CAGETcx8-kx7RGTPhdyEHfFoxCyaojn5BnAr_f1==b=qeWZ6itQ@mail.gmail.com>
+ <1822575.tdWV9SEqCh@steina-w>
+In-Reply-To: <1822575.tdWV9SEqCh@steina-w>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 15 Jul 2022 15:08:08 -0700
+Message-ID: <CAGETcx_SNicqGG62y+n-jPH-peW4j6SB=bekTOs3KqEq8z0wSQ@mail.gmail.com>
+Subject: Re: Re: Re: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     l.stach@pengutronix.de, Tony Lindgren <tony@atomide.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The routine doing trip point crossing the way up or down is actually
-wrong.
+On Wed, Jul 13, 2022 at 11:41 PM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> Am Mittwoch, 13. Juli 2022, 02:45:06 CEST schrieb Saravana Kannan:
+> > On Wed, Jul 6, 2022 at 6:02 AM Alexander Stein
+> > <alexander.stein@ew.tq-group.com> wrote:
+> >
+> >
+> > Thanks for testing all my patches and helping me debug this.
+> >
+> > Btw, can you try to keep the subject the same please? Looks like
+> > somewhere in your path [EXT] is added sometimes. lore.kernel.org keeps
+> > the thread together, but my email client (gmail) gets confused.
+>
+> Sorry about that. Unfortunately [EXT] is inserted automatically and it is
+> tedious and error-prone to remove it manually...
+>
+> > > Am Dienstag, 5. Juli 2022, 03:24:33 CEST schrieb Saravana Kannan:
+> > > > On Mon, Jul 4, 2022 at 12:07 AM Alexander Stein
+> > > >
+> > > > <alexander.stein@ew.tq-group.com> wrote:
+> > > > > Am Freitag, 1. Juli 2022, 09:02:22 CEST schrieb Saravana Kannan:
+> > > > > > On Thu, Jun 30, 2022 at 11:02 PM Alexander Stein
+> > > > > >
+> > > > > > <alexander.stein@ew.tq-group.com> wrote:
+> > > > > > > Hi Saravana,
+> > > > > > >
+> > > > > > > Am Freitag, 1. Juli 2022, 02:37:14 CEST schrieb Saravana Kannan:
+> > > > > > > > On Thu, Jun 23, 2022 at 5:08 AM Alexander Stein
+> > > > > > > >
+> > > > > > > > <alexander.stein@ew.tq-group.com> wrote:
+> > > > > > > > > Hi,
+> > > > > > > > >
+> > > > > > > > > Am Dienstag, 21. Juni 2022, 09:28:43 CEST schrieb Tony
+> Lindgren:
+> > > > > > > > > > Hi,
+> > > > > > > > > >
+> > > > > > > > > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
+> > > > > > > > > > > Now that fw_devlink=on by default and fw_devlink supports
+> > > > > > > > > > > "power-domains" property, the execution will never get to
+> > > > > > > > > > > the
+> > > > > > > > > > > point
+> > > > > > > > > > > where driver_deferred_probe_check_state() is called before
+> > > > > > > > > > > the
+> > > > > > > > > > > supplier
+> > > > > > > > > > > has probed successfully or before deferred probe timeout
+> > > > > > > > > > > has
+> > > > > > > > > > > expired.
+> > > > > > > > > > >
+> > > > > > > > > > > So, delete the call and replace it with -ENODEV.
+> > > > > > > > > >
+> > > > > > > > > > Looks like this causes omaps to not boot in Linux next. With
+> > > > > > > > > > this
+> > > > > > > > > > simple-pm-bus fails to probe initially as the power-domain
+> > > > > > > > > > is
+> > > > > > > > > > not
+> > > > > > > > > > yet available. On platform_probe() genpd_get_from_provider()
+> > > > > > > > > > returns
+> > > > > > > > > > -ENOENT.
+> > > > > > > > > >
+> > > > > > > > > > Seems like other stuff is potentially broken too, any ideas
+> > > > > > > > > > on
+> > > > > > > > > > how to fix this?
+> > > > > > > > >
+> > > > > > > > > I think I'm hit by this as well, although I do not get a
+> > > > > > > > > lockup.
+> > > > > > > > > In my case I'm using
+> > > > > > > > > arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dts and
+> > > > > > > > > probing of
+> > > > > > > > > 38320000.blk-ctrl fails as the power-domain is not (yet)
+> > > > > > > > > registed.
+> > > > > > > >
+> > > > > > > > Ok, took a look.
+> > > > > > > >
+> > > > > > > > The problem is that there are two drivers for the same device
+> > > > > > > > and
+> > > > > > > > they
+> > > > > > > > both initialize this device.
+> > > > > > > >
+> > > > > > > >     gpc: gpc@303a0000 {
+> > > > > > > >
+> > > > > > > >         compatible = "fsl,imx8mq-gpc";
+> > > > > > > >
+> > > > > > > >     }
+> > > > > > > >
+> > > > > > > > $ git grep -l "fsl,imx7d-gpc" -- drivers/
+> > > > > > > > drivers/irqchip/irq-imx-gpcv2.c
+> > > > > > > > drivers/soc/imx/gpcv2.c
+> > > > > > > >
+> > > > > > > > IMHO, this is a bad/broken design.
+> > > > > > > >
+> > > > > > > > So what's happening is that fw_devlink will block the probe of
+> > > > > > > > 38320000.blk-ctrl until 303a0000.gpc is initialized. And it
+> > > > > > > > stops
+> > > > > > > > blocking the probe of 38320000.blk-ctrl as soon as the first
+> > > > > > > > driver
+> > > > > > > > initializes the device. In this case, it's the irqchip driver.
+> > > > > > > >
+> > > > > > > > I'd recommend combining these drivers into one. Something like
+> > > > > > > > the
+> > > > > > > > patch I'm attaching (sorry for the attachment, copy-paste is
+> > > > > > > > mangling
+> > > > > > > > the tabs). Can you give it a shot please?
+> > > > > > >
+> > > > > > > I tried this patch and it delayed the driver initialization (those
+> > > > > > > of
+> > > > > > > UART
+> > > > > > > as
+> > > > > >
+> > > > > > > well BTW). Unfortunately the driver fails the same way:
+> > > > > > Thanks for testing the patch!
+> > > > > >
+> > > > > > > > [    1.125253] imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV:
+> > > > > > > > failed
+> > > > > > > > to
+> > > > > > >
+> > > > > > > attach power domain "bus"
+> > > > > > >
+> > > > > > > More than that it even introduced some more errors:
+> > > > > > > > [    0.008160] irq: no irq domain found for gpc@303a0000 !
+> > > > > >
+> > > > > > So the idea behind my change was that as long as the irqchip isn't
+> > > > > > the
+> > > > > > root of the irqdomain (might be using the terms incorrectly) like
+> > > > > > the
+> > > > > > gic, you can make it a platform driver. And I was trying to hack up
+> > > > > > a
+> > > > > > patch that's the equivalent of platform_irqchip_probe() (which just
+> > > > > > ends up eventually calling the callback you use in
+> > > > > > IRQCHIP_DECLARE().
+> > > > > > I probably made some mistake in the quick hack that I'm sure if
+> > > > > > fixable.
+> > > > > >
+> > > > > > > > [    0.013251] Failed to map interrupt for
+> > > > > > > > /soc@0/bus@30400000/timer@306a0000
+> > > > > >
+> > > > > > However, this timer driver also uses TIMER_OF_DECLARE() which can't
+> > > > > > handle failure to get the IRQ (because it's can't -EPROBE_DEFER).
+> > > > > > So,
+> > > > > > this means, the timer driver inturn needs to be converted to a
+> > > > > > platform driver if it's supposed to work with the IRQCHIP_DECLARE()
+> > > > > > being converted to a platform driver.
+> > > > > >
+> > > > > > But that's a can of worms not worth opening. But then I remembered
+> > > > > > this simpler workaround will work and it is pretty much a variant of
+> > > > > > the workaround that's already in the gpc's irqchip driver to allow
+> > > > > > two
+> > > > > > drivers to probe the same device (people really should stop doing
+> > > > > > that).
+> > > > > >
+> > > > > > Can you drop my previous hack patch and try this instead please? I'm
+> > > > > > 99% sure this will work.
+> > > > > >
+> > > > > > diff --git a/drivers/irqchip/irq-imx-gpcv2.c
+> > > > > > b/drivers/irqchip/irq-imx-gpcv2.c index b9c22f764b4d..8a0e82067924
+> > > > > > 100644
+> > > > > > --- a/drivers/irqchip/irq-imx-gpcv2.c
+> > > > > > +++ b/drivers/irqchip/irq-imx-gpcv2.c
+> > > > > > @@ -283,6 +283,7 @@ static int __init imx_gpcv2_irqchip_init(struct
+> > > > > > device_node *node,
+> > > > > >
+> > > > > >          * later the GPC power domain driver will not be skipped.
+> > > > > >          */
+> > > > > >
+> > > > > >         of_node_clear_flag(node, OF_POPULATED);
+> > > > > >
+> > > > > > +       fwnode_dev_initialized(domain->fwnode, false);
+> > > > > >
+> > > > > >         return 0;
+> > > > > >
+> > > > > >  }
+> > > > >
+> > > > > Just to be sure here, I tried this patch on top of next-20220701 but
+> > > > > unfortunately this doesn't fix the original problem either. The timer
+> > > > > errors are gone though.
+> > > >
+> > > > To clarify, you had the timer issue only with my "combine drivers"
+> > > > patch,
+> > > > right?
+> > >
+> > > That's correct.
+> > >
+> > > > > The probe of imx8m-blk-ctrl got slightly delayed (from 0.74 to 0.90s
+> > > > > printk
+> > > > > time) but results in the identical error message.
+> > > >
+> > > > My guess is that the probe attempt of blk-ctrl is delayed now till gpc
+> > > > probes (because of the device links getting created with the
+> > > > fwnode_dev_initialized() fix), but by the time gpc probe finishes, the
+> > > > power domains aren't registered yet because of the additional level of
+> > > > device addition and probing.
+> > > >
+> > > > Can you try the attached patch please?
+> > >
+> > > Sure, it needed some small fixes though. But the error still is present.
+> > >
+> > > > And if that doesn't fix the issues, then enable the debug logs in the
+> > > > following functions please and share the logs from boot till the
+> > > > failure? If you can enable CONFIG_PRINTK_CALLER, that'd help too.
+> > > > device_link_add()
+> > > > fwnode_link_add()
+> > > > fw_devlink_relax_cycle()
+> > >
+> > > I switched fw_devlink_relax_cycle() for fw_devlink_relax_link() as the
+> > > former has no debug output here.
+> > >
+> > > For the record I added the following line to my kernel command line:
+> > > > dyndbg="func device_link_add +p; func fwnode_link_add +p; func
+> > >
+> > > fw_devlink_relax_link +p"
+> > >
+> > > I attached the dmesg until the probe error to this mail. But I noticed the
+> > >
+> > > following lines which seem interesting:
+> > > > [    1.466620][    T8] imx-pgc imx-pgc-domain.5: Linked as a consumer to
+> > > > regulator.8
+> > > > [    1.466743][    T8] imx-pgc imx-pgc-domain.5: imx_pgc_domain_probe:
+> > > > Probe>
+> > > succeeded
+> > >
+> > > > [    1.474733][    T8] imx-pgc imx-pgc-domain.6: Linked as a consumer to
+> > >
+> > > regulator.9
+> > >
+> > > > [    1.474774][    T8] imx-pgc imx-pgc-domain.6: imx_pgc_domain_probe:
+> > > > Probe>
+> > > succeeded
+> >
+> > I'm guessing this happens after the probe error.
+> >
+> > Ok, I looked at the dmesg logs and this pretty much confirms my
+> > thought on why the probe ordering wasn't maintained.
+> >
+> > The power domains lack a compatible property, so the blk-ctrl is
+> > linked as a consumer of the gpc instead:
+> > [    0.343905][    T1] blk-ctrl@38320000 Linked as a fwnode consumer
+> > to gpc@303a0000
+> > [    0.343943][    T1] blk-ctrl@38320000 Linked as a fwnode consumer
+> > to clock-controller@30380000
+> > This ^^ is the device tree parsing figuring out the dependencies
+> > between the DT nodes.
+> >
+> > [    0.368462][    T1] platform 38320000.blk-ctrl: Linked as a
+> > consumer to 30380000.clock-controller
+> > [    0.368542][    T1] platform 38320000.blk-ctrl: Linked as a
+> > consumer to 303a0000.gpc
+> > This ^^ is converting the DT node dependencies into device links.
+> >
+> > So, the only real options are:
+> > 1. Fix DT and add a compatible string to the DT nodes.
+> > 2. Move the initcall level of the regulator driver so the powerdomain
+> > probe doesn't get deferred. Not ideal that we are playing initcall
+> > chicken to handle the feature meant to remove the need for initcall
+> > chicken. But I see these "device, but won't have a compatible
+> > property" as exceptions and feel it's okay to have to play with
+> > initcall levels to handle those.
+> > 3. Provide a helper function that driver that do this (creating
+> > devices for child DT nodes without compatible property) can use to
+> > move/copy their consumer device links to the child devices they add.
+> > And then fix up the gpc driver so that it copies the gpc -- blk-ctrl
+> > device link to the proper power domain.
+> > 4. I have another idea for how I could fix that at a driver core
+> > level, but I'm not sure it'll work yet and its definitely not
+> > something I want to try and get in for 5.19 -- too late for that IMHO.
+> >
+> > Want to give (2) a shot so that I can still try to keep the cleanup
+> > series that caused this problem (that's the long term goal) while I
+> > give (3) and (4) a shot for 5.20?
+>
+> Sure, I can give (2) a shot. Which initcall needs to be modified? You have a
+> diff snippet?
 
-A trip point is composed with a trip temperature and a hysteresis.
+All initcall for all the regulator drivers that feed this gpc power domain.
 
-The trip temperature is used to detect when the trip point is crossed
-the way up.
+> BTW: this potentially affects all imx8m and imx7d as they have the same gpc
+> binding.
 
-The trip temperature minus the hysteresis is used to detect when the
-trip point is crossed the way down.
+Good point. That's why I was asking for your help :) -- you have more
+context on these hardware.
 
-|-----------low--------high------------|
-             |<--------->|
-             |    hyst   |
-             |           |
-             |          -|--> crossed the way up
-             |
-         <---|-- crossed the way down
+> Can't say much about (1). I added Lucas Stach to recipients, he did a lot on
+> this gpc driver.
+> @Lucas: Do you have some input why the gpc power domains do not have a
+> compatible? Is it reasonable to add them?
 
-For that, there is a two point comparison: the current temperature and
-the previous temperature.
+It's generally frowned upon to update the kernel in a way that it
+breaks backwards compatibility with an older DT binary. That's why I
+didn't ask about (1).
 
-The actual code assumes if the current temperature is greater than the
-trip temperature and the previous temperature was lesser, then the
-trip point is crossed the way up. That is true only if we crossed the
-way down the low temperature boundary from the previous temperature or
-if the hysteresis is zero. The temperature can decrease between the
-low and high, so the trip point is not crossed the way down and then
-increase again and cross the high temperature raising a new trip point
-crossed detection which is incorrect. The same scenario happens when
-crossing the way down.
+It's fairly trivial to get it to work if we (who is "we" here?) agree
+it's okay to add the compatible property and break DT backwards
+compatibility in this case.
 
-The trip point crossing the way up and down must act as parenthesis, a
-trip point down must close a trip point up. Today we have multiple
-trip point up without the corresponding trip point down.
-
-In order to fix that, we store the previous trip point which gives the
-information about the previous trip and we change the trip point
-browsing order depending on the temperature trend: in the ascending
-order when the temperature trend is raising, otherwise in the
-descending order.
-
-As a sidenote, the thermal_zone_device structure has already the
-prev_trip_low and prev_trip_high information which are used by the
-thermal_zone_set_trips() function. This one can be changed to be
-triggered by the trip temperature crossing function, which makes more
-sense, and the two fields will disappear.
-
-Tested on a rk3399-rock960 with thermal stress and 4 trip points. Also
-tested with temperature emulation to create a temperature jump
-directly to the second trip point.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
-V3:
-
-  - Use the ordered indexes introduced in the previous patch as the
-    trip could be not ordered
-
-V2:
-  - As spotted by Zhang Rui, the trip cross notification does not
-  work if the temperature drops and crosses two trip points in the
-  same update interval. In order to fix that, we browse the trip point
-  in the ascending order when the temperature trend is raising,
-  otherwise in the descending order.
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.c | 54 ++++++++++++++++++++++++----------
- include/linux/thermal.h        |  2 ++
- 2 files changed, 41 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index f02f38b66445..a5c5f6f4e42b 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -354,30 +354,48 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
- 		tz->ops->critical(tz);
- }
- 
--static void handle_thermal_trip_crossed(struct thermal_zone_device *tz, int trip,
-+static void handle_thermal_trip_crossed(struct thermal_zone_device *tz, int index,
- 					int trip_temp, int trip_hyst,
- 					enum thermal_trip_type trip_type)
- {
-+	int trip_low_temp = trip_temp - trip_hyst;
-+	int trip = tz->trips_indexes[index];
-+	
- 	if (tz->last_temperature == THERMAL_TEMP_INVALID)
- 		return;
- 
--	if (tz->last_temperature < trip_temp &&
--	    tz->temperature >= trip_temp) {
--		thermal_notify_tz_trip_up(tz->id, trip,
--					  tz->temperature);
--	}
--
--	if (tz->last_temperature >= trip_temp &&
--	    tz->temperature < (trip_temp - trip_hyst)) {
--		thermal_notify_tz_trip_down(tz->id, trip,
--					    tz->temperature);
-+	/*
-+	 * Due to the hysteresis, a third information is needed to
-+	 * detect when the temperature is wavering between the
-+	 * trip_low_temp and the trip_temp. A trip point is crossed
-+	 * the way up only if the temperature is above it while the
-+	 * previous temperature was below *and* we crossed the
-+	 * trip_temp_low before. The previous trip point give us the
-+	 * previous trip point transition. The similar problem exists
-+	 * when crossing the way down.
-+	 *
-+	 * Note the mechanism works only if the caller of the function
-+	 * invoke the function with the trip point ascending or
-+	 * descending regarding the temperature trend. A temperature
-+	 * drop trend will browse the trip point in the descending
-+	 * order
-+	 */
-+	if (tz->last_temperature < trip_temp && tz->temperature >= trip_temp &&
-+	    index != tz->prev_index) {
-+		thermal_notify_tz_trip_up(tz->id, trip, tz->temperature);
-+		tz->prev_index = index;
-+	} else if (tz->last_temperature >= trip_low_temp && tz->temperature < trip_low_temp &&
-+		   index == tz->prev_index) {
-+		thermal_notify_tz_trip_down(tz->id, trip, tz->temperature);
-+		tz->prev_index--;
- 	}
- }
- 
--static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
-+static void handle_thermal_trip(struct thermal_zone_device *tz, int index)
- {
- 	enum thermal_trip_type type;
- 	int trip_temp, hyst = 0;
-+	int trip = tz->trips_indexes[index];
- 
- 	/* Ignore disabled trip points */
- 	if (test_bit(trip, &tz->trips_disabled))
-@@ -388,7 +406,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
- 	if (tz->ops->get_trip_hyst)
- 		tz->ops->get_trip_hyst(tz, trip, &hyst);
- 
--	handle_thermal_trip_crossed(tz, trip, trip_temp, hyst, type);
-+	handle_thermal_trip_crossed(tz, index, trip_temp, hyst, type);
- 
- 	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
- 		handle_critical_trips(tz, trip, trip_temp, type);
-@@ -428,6 +446,7 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
- {
- 	struct thermal_instance *pos;
- 	tz->temperature = THERMAL_TEMP_INVALID;
-+	tz->prev_index = -1;
- 	tz->prev_low_trip = -INT_MAX;
- 	tz->prev_high_trip = INT_MAX;
- 	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
-@@ -512,8 +531,13 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
- 
- 	tz->notify_event = event;
- 
--	for (count = 0; count < tz->trips; count++)
--		handle_thermal_trip(tz, count);
-+	if (tz->last_temperature <=  tz->temperature) {
-+		for (count = 0; count < tz->trips; count++)
-+			handle_thermal_trip(tz, count);
-+	} else {
-+		for (count = tz->trips; count >= 0; count--)
-+			handle_thermal_trip(tz, count);
-+	}
- }
- EXPORT_SYMBOL_GPL(thermal_zone_device_update);
- 
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 4c3b72536772..d512f21561f1 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -125,6 +125,7 @@ struct thermal_cooling_device {
-  * @last_temperature:	previous temperature read
-  * @emul_temperature:	emulated temperature when using CONFIG_THERMAL_EMULATION
-  * @passive:		1 if you've crossed a passive trip point, 0 otherwise.
-+ * @prev_index:		previous index pointing to the trip point the thermal zone was
-  * @prev_low_trip:	the low current temperature if you've crossed a passive
- 			trip point.
-  * @prev_high_trip:	the above current temperature if you've crossed a
-@@ -161,6 +162,7 @@ struct thermal_zone_device {
- 	int last_temperature;
- 	int emul_temperature;
- 	int passive;
-+	int prev_index;
- 	int prev_low_trip;
- 	int prev_high_trip;
- 	atomic_t need_update;
--- 
-2.25.1
-
+-Saravana
