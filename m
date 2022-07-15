@@ -2,141 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE77957651D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 18:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D852576547
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 18:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbiGOQJv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 12:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S233428AbiGOQ3Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 12:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiGOQJu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 12:09:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C613ED47;
-        Fri, 15 Jul 2022 09:09:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8B7B82D2C;
-        Fri, 15 Jul 2022 16:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331FFC34115;
-        Fri, 15 Jul 2022 16:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657901387;
-        bh=BjSbIr+2Nq9y04Bvcith1dzZyRMQ2BPB5HQmV40tK+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IONll5Bl8RuRVB5WgFNBRujgBOHSRrA7LH+JNiXzk27U+8RZEzQpKokOWinstWW1U
-         kC+iHFPIkI3Us1AjnpHNh2bIfNPm6dhg6ICGUoWjMirxoTBA1fBwjHUZXPezlEj9AA
-         78+KT0xlfJgzgwOPWVGoyY1R/5rPpuSQ1/Fc803Ac9eKPUMAUUjl0m4I6qCLq+AVmc
-         GC6SuM1/9uGb3b3w0HYulz5Xw8J8meMUAZl/PWKNNEKMP0rY9N1MP5vcFRgnaOdBfg
-         5QM1gLHlIpVTsI2IZ+6TM4Kp3qoOv7F1k6u/j6EvWc60jebWqP2bHVUwowxwmAinxr
-         e4M1JPNZnzt/Q==
-Date:   Fri, 15 Jul 2022 21:39:33 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
-Message-ID: <20220715160933.GD12197@workstation>
-References: <cover.1657695140.git.viresh.kumar@linaro.org>
+        with ESMTP id S233293AbiGOQ3U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 12:29:20 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A7823171
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 09:29:18 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id q9so7411050wrd.8
+        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 09:29:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g4utnIEpgUH8SrFacOeGCRYGCTX0362lTOZoYsGdnLU=;
+        b=OzC/9QXaaDqxoCP/B7s3PFEoW1r/3BL4QbU0Itu4yM/SSqwTf9zl3vnXpqm6D9/wLg
+         u9IULLjrR/XGDkdPfCpFCJs5/QboFpLuQOffp2IKLY+TcH8l8BzzHthtTM5hML+jlRHO
+         FG6Cxp7CivJKWEJLvCIuG26LkXP6sxJbO1IKctA1ERVcnJsmcMUdeLVDCwMA4onz9+H1
+         1MNjc+56N5uGO0uP7FpLmEqEBd9LvV4yyBSj2q2kCVBKFG5yQDPjhzHOHdM+unWA77AD
+         SzvLrlWu0scXmQGI3iWJ+50TPqZt4sVHUFRyHKBkMNQSgWZ1mUzUSIa7VQPGG7NvSDCO
+         TFOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g4utnIEpgUH8SrFacOeGCRYGCTX0362lTOZoYsGdnLU=;
+        b=bdqq3UICAJXei0BJOs2yrrsOb6OCC1iMlcl8aKoOtESXNroB7ChWgOAGUw++iMXoLa
+         uZbwPFv6PsA3LVeJgpAboCMPVWfzokku/RPK1w+39HMUUoxztO2+TuGbTkHViNEFn/TA
+         cBrimbdqXHNfXQik/xrL98roB8jqmLG5g7Ql/JRxulJyJNLBhLfNS6ftKx1W6xxjaQhN
+         s0d8pqxWUiKOnyAksemgB+M3qxgAFRSMSXBK6WpHHL8K1Dt6VqlrhQlyQgU1bFQbeBnW
+         pD1V68Ypt8wnwZpp/Y763aE67LUzTTTCcjYotIagac8wpvI1w3sU+Kg56hoa40DoEu1D
+         j8Rw==
+X-Gm-Message-State: AJIora9buqrL6AUW9EA+qzTnuCcafDc8J8ugKIkTfgtXF/yq+yOi6amX
+        d8AherufBBGbMwkdpqm5W41swA==
+X-Google-Smtp-Source: AGRyM1tSF48yUDKFkMabG1ZK0Ufn2HDShLc1rfkqldFR9s050thAUB7FUGwV6hpIfcU96gErNHiZ9Q==
+X-Received: by 2002:a05:6000:16cb:b0:21d:7b9e:d0af with SMTP id h11-20020a05600016cb00b0021d7b9ed0afmr13306509wrf.139.1657902556488;
+        Fri, 15 Jul 2022 09:29:16 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id h7-20020adffd47000000b0021d650e4df4sm4283198wrs.87.2022.07.15.09.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 09:29:16 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 17:29:13 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v5 13/13] video: backlight: mt6370: Add MediaTek MT6370
+ support
+Message-ID: <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
+References: <20220715112607.591-1-peterwu.pub@gmail.com>
+ <20220715112607.591-14-peterwu.pub@gmail.com>
+ <ec3bdfb8-0e42-a772-28b1-165811872afa@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1657695140.git.viresh.kumar@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ec3bdfb8-0e42-a772-28b1-165811872afa@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 12:22:55PM +0530, Viresh Kumar wrote:
-> Hi,
-> 
-> A recent patch series, targeting enhancements in the OPP core, ended up breaking
-> cpufreq on some of the Qualcomm platforms [1]. Necessary adjustments are made in
-> the OPP core, a bit hacky though, to get it working for now but it would be
-> better to solve the problem at hand in a cleaner way. And this patchset is an
-> attempt towards the same.
-> 
-> cpufreq-hw is a hardware engine, which takes care of frequency
-> management for CPUs. The engine manages the clocks for CPU devices, but
-> it isn't the end consumer of the clocks, which are the CPUs in this
-> case.
-> 
-> For this reason, it looks incorrect to keep the clock related properties
-> in the cpufreq-hw node. They should really be present at the end user,
-> i.e. the CPUs.
-> 
-> The case was simple currently as all the devices, i.e. the CPUs, that
-> the engine manages share the same clock names. What if the clock names
-> are different for different CPUs or clusters ? How will keeping the
-> clock properties in the cpufreq-hw node work in that case ?
-> 
-> This design creates further problems for frameworks like OPP, which
-> expects all such details (clocks) to be present in the end device node
-> itself, instead of another related node.
-> 
-> This patchset moves the clock properties to the node that uses them instead,
-> i.e. the CPU nodes and makes necessary adjustments at other places.
-> 
-> After this is applied, I can drop the unnecessary change from the OPP core, but
-> I wanted to discuss if this is a step in the right direction or not first and so
-> the RFC.
-> 
+On Fri, Jul 15, 2022 at 02:38:45PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 15/07/22 13:26, ChiaEn Wu ha scritto:
+> > From: ChiaEn Wu <chiaen_wu@richtek.com>
+> >
+> > MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> > with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> > driver, display bias voltage supply, one general purpose LDO, and the
+> > USB Type-C & PD controller complies with the latest USB Type-C and PD
+> > standards.
+> >
+> > This adds support for MediaTek MT6370 Backlight driver. It's commonly used
+> > to drive the display WLED. There are 4 channels inside, and each channel
+> > supports up to 30mA of current capability with 2048 current steps in
+> > exponential or linear mapping curves.
+> >
+> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+>
+> Hello ChiaEn,
+>
+> I propose to move this one to drivers/leds (or drivers/pwm) and, instead of
+> registering a backlight device, register a PWM device.
+>
+> This way you will be able to reuse the generic backlight-pwm driver, as you'd
+> be feeding the PWM device exposed by this driver to the generic one: this will
+> most importantly make it easy to chain it with MTK_DISP_PWM (mtk-pwm-disp)
+> with a devicetree that looks like...
 
-The clocks defined in the devicetree currently (CXO, GPLL) are the source
-clocks of the EPSS block (cpufreq-hw). And EPSS will supply clock and
-voltage through other blocks to the CPU domains. Even though the end
-consumer of the source clocks are the CPUs, those clocks are not
-directly reachign the CPUs but instead through some other blocks in EPSS.
+Out of interest, does MT6370 have the same structure for backlights as the prior
+systems using mtk-pwm-disp or was mtk-pwm-disp simply a normal(-ish) PWM
+that relied on something on the board for all the constant current
+driver hardware?
 
-Initially I was temped to add cpufreq-hw as the clock provider and have
-it source clocks to the individual CPUs. This somehow models the clock
-topology also, but after having a discussion with Bjorn we concluded that
-it is best to leave it as it is.
 
-The main issue that Bjorn pointed out was the fact that the clocks coming
-out of EPSS are not exactly of the same frequency that was requested.
-EPSS will do its own logic to generate the clocks to the CPUs based on
-the input frequency vote and limits.
+>
+> 	pwmleds-disp {
+> 		compatible = "pwm-leds";
+>
+> 		disp_led: disp-pwm {
+> 			label = "backlight-pwm";
+> 			pwms = <&pwm0 0 500000>;
+> 			max-brightness = <1024>;
+> 		};
+> 	};
+>
+> 	backlight_lcd0: backlight {
+> 		compatible = "led-backlight";
+> 		leds = <&disp_led>, <&pmic_bl_led>;
+> 		default-brightness-level = <300>;
+> 	};
 
-Thanks,
-Mani
+I think this proposal has to start with the devicetree bindings rather
+than the driver. Instead I think the question is: does this proposal
+result in DT bindings that better describe the underlying hardware?
 
-> --
-> Viresh
-> 
-> [1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
-> 
-> Viresh Kumar (4):
->   dt-bindings: cpufreq-qcom-hw: Move clocks to CPU nodes
->   arm64: dts: qcom: Move clocks to CPU nodes
->   cpufreq: qcom-cpufreq-hw: Clocks are moved to CPU nodes
->   cpufreq: qcom-cpufreq-hw: Register config_clks helper
-> 
->  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 31 ++++----
->  arch/arm64/boot/dts/qcom/sc7180.dtsi          | 19 ++++-
->  arch/arm64/boot/dts/qcom/sc7280.dtsi          | 18 ++++-
->  arch/arm64/boot/dts/qcom/sdm845.dtsi          | 19 ++++-
->  arch/arm64/boot/dts/qcom/sm6350.dtsi          | 18 ++++-
->  arch/arm64/boot/dts/qcom/sm8150.dtsi          | 19 ++++-
->  arch/arm64/boot/dts/qcom/sm8250.dtsi          | 18 ++++-
->  arch/arm64/boot/dts/qcom/sm8350.dtsi          | 19 ++++-
->  arch/arm64/boot/dts/qcom/sm8450.dtsi          | 18 ++++-
->  drivers/cpufreq/qcom-cpufreq-hw.c             | 75 ++++++++++++++-----
->  10 files changed, 199 insertions(+), 55 deletions(-)
-> 
-> -- 
-> 2.31.1.272.g89b43f80a514
-> 
+This device has lots of backlight centric features (OCP, OVP, single
+control with multiple outputs, exponential curves, etc) and its not
+clear where they would fit into the "PWM" bindings.
+
+Come to think of it I'm also a little worried also about the whole linear
+versus exponential curve thing since I thought LED drivers were required
+to use exponential curves.
+
+
+Daniel.
