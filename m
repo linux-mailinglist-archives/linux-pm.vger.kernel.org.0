@@ -2,45 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A6557663B
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 19:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DA0576657
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 19:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiGORmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 13:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S230256AbiGORrR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 13:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiGORmv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 13:42:51 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE617D1D9;
-        Fri, 15 Jul 2022 10:42:50 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31d7db3e6e5so53649757b3.11;
-        Fri, 15 Jul 2022 10:42:50 -0700 (PDT)
+        with ESMTP id S231296AbiGORrB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 13:47:01 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E1C85FA8;
+        Fri, 15 Jul 2022 10:46:27 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-31c8bb90d09so53882477b3.8;
+        Fri, 15 Jul 2022 10:46:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tZzHbptN4npbvAsNflMEYdWtbeIwv+tCQbrW3jRFX6I=;
-        b=mda/P2oyn2oITazcwco2EADDjX1W77mx1x2mWb+SM/u1yfIyjEBtYYOG7gX8EFdQg2
-         8K3aMUZJPaHvaMolasaI5+jjniOA0nBRqwH9MVizc58oY/ATaqBlbbHZErN56s8dOMeR
-         SyUs0at31asSonQ5lpVzfuTc41ysJYKhW7ClYVyBq8wtQtLhhc1gFlOOefxhfrldbFWQ
-         mCnkOMq/Mf7iX2O54t46JoXp7psTYHW2IPhrbf+V5Mo04QL3J16D7o3HrcW+e1/32Ylp
-         rZurOE+llC6mLk7H9BHg8U0mHxnMkUOsgROP8bJ+u15VqmHsl0V5k6R9FBEcI7IG2zI/
-         t8Mg==
-X-Gm-Message-State: AJIora+3dTMfTZuZ3DHyX3wcIYb/FN++QtetELv78M4JZDSRszYHS68r
-        Zjp6SwPykLAw6t4uVhc9USBu5Lf5KzZGk+FSSOg=
-X-Google-Smtp-Source: AGRyM1vJTUz0uFCWS6vTGAjlF+3d70DmG++vO6PflMLdEJq9B54+FHW3i4BdNSHJS4iuCs4r9fIkS9a4+9imZBG+oEQ=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr16578235ywb.326.1657906969944; Fri, 15
- Jul 2022 10:42:49 -0700 (PDT)
+        bh=gCtUxpEgLriEFjbBJCI6PHjSEJZkybZsvm0/K7MOLjk=;
+        b=H8wodtbiYxVJoZk1f7ZlhOXyNFZijLkoFaxqRZrnOVhNXJl2SrlUexKOSHOAgh4Npq
+         EosnneoWCEu+lL6TOtM52tC6WQKu8GvDqYOFiNADl5ywaDGE2xko3yUdvCb5zXx6n7Kd
+         Z2Kr5g9ywSimwLsr8/CqzskroomOGDmBOOFqz+ZrLpGZsbo3z9GhYDp9jTmf9vGgaqBM
+         i1n1G6vZ9RVSIKKO3tMf4TJYmJh41pwHtmZCAetJmoPThdCSEfv7jHAQx1opG64INnQi
+         Rx1pgOZEGNf37ZALWtS3QtITO50dza/9E/gMAfKqH7wbXr7k3rwU3ws9iCflF3rPoCp3
+         jwcg==
+X-Gm-Message-State: AJIora+B2DBX1H9uZLW5icjqkhMEY23unb+wVEamZbx4tr2jvtvwLX84
+        L96p/v8NsjD56CBkR35GYFIHRgQJfOUI+3J4a+0=
+X-Google-Smtp-Source: AGRyM1t3a401uD3BV4mbB4Zad2yp0MBh5FsQkSToei8hQ694wkOGzR0WuWi+WKuWGAYYqZujog6ddop5ojrFD+upljo=
+X-Received: by 2002:a81:5957:0:b0:31c:f620:17ef with SMTP id
+ n84-20020a815957000000b0031cf62017efmr16671677ywb.19.1657907186515; Fri, 15
+ Jul 2022 10:46:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp> <48d01ce7-e028-c103-ea7f-5a4ea4c8930b@I-love.SAKURA.ne.jp>
-In-Reply-To: <48d01ce7-e028-c103-ea7f-5a4ea4c8930b@I-love.SAKURA.ne.jp>
+References: <03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp>
+ <48d01ce7-e028-c103-ea7f-5a4ea4c8930b@I-love.SAKURA.ne.jp>
+ <2646e8a3-cc9f-c2c5-e4d6-c86de6e1b739@I-love.SAKURA.ne.jp> <273ec8c8-8b70-0a0e-4688-5b943ac8e648@I-love.SAKURA.ne.jp>
+In-Reply-To: <273ec8c8-8b70-0a0e-4688-5b943ac8e648@I-love.SAKURA.ne.jp>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Jul 2022 19:42:39 +0200
-Message-ID: <CAJZ5v0hPc8cSivEykTGcGRtcARfNcSkrTKQuag6-PYJOWwQ91A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] PM: hibernate: call wait_for_device_probe()
- without system_transition_mutex held
+Date:   Fri, 15 Jul 2022 19:46:15 +0200
+Message-ID: <CAJZ5v0gMZ1mPOJ697buOmCWxj8TkJmP3bazGQQOXb5tVvymJdQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] PM: hibernate: don't set PF_FREEZER_SKIP flag when
+ manipulating /dev/snapshot
 To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         Oliver Neukum <oneukum@suse.com>,
@@ -62,111 +64,117 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 4:25 AM Tetsuo Handa
+On Sun, Jul 10, 2022 at 4:26 AM Tetsuo Handa
 <penguin-kernel@i-love.sakura.ne.jp> wrote:
 >
-> syzbot is reporting hung task at misc_open() [1], for there is a race
-> window of AB-BA deadlock which involves probe_count variable.
+> Since khungtaskd skips threads with PF_FREEZER_SKIP flag set, currently
+> we can't report unbounded uninterruptible sleep when something went wrong
+> while manipulating /dev/snapshot interface.
 >
-> Even with "char: misc: allow calling open() callback without misc_mtx
-> held", wait_for_device_probe() (w_f_d_p() afterward) from
-> snapshot_open() can sleep forever if probe_count cannot become 0.
+> Let's change snapshot_{open,read,write}() to use mutex_lock_killable()
+> and change snapshot_release() to use mutex_lock(), so that khungtaskd can
+> report unbounded uninterruptible sleep, by not setting PF_FREEZER_SKIP
+> flag.
 >
-> w_f_d_p() in snapshot_open() was added by commit c751085943362143
-> ("PM/Hibernate: Wait for SCSI devices scan to complete during resume"),
+> Since /dev/snapshot is exclusive due to hibernate_acquire(), we could
+> choose mutex_trylock() for snapshot_{open,read,write}() as with
+> snapshot_ioctl(). But until we confirm that this patch does not
+> break something, let's stay mutex_lock_killable().
 >
->    "In addition, if the resume from hibernation is userland-driven, it's
->     better to wait for all device probes in the kernel to complete before
->     attempting to open the resume device."
->
-> but that commit did not take into account possibility of unresponsive
-> hardware, for the timeout is supposed to come from the SCSI layer in the
-> general case. syzbot is reporting that USB storage, which is a very tiny
-> wrapper around the whole SCSI protocol, is failing to apply timeout.
->
-> Fortunately, holding system_transition_mutex is not required when waiting
-> for device probe. Therefore, as one of steps for making it possible to
-> recover from such situation, this patch changes snapshot_open() to call
-> w_f_d_p() before calling lock_system_sleep().
->
-> Note that the problem that w_f_d_p() can sleep too long to wait remains.
-> But how to fix that part deserves different patches.
->
-> Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
-> Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
 > Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Cc: Greg KH <gregkh@linuxfoundation.org>
-> Cc: Oliver Neukum <oneukum@suse.com>
-> Cc: Wedson Almeida Filho <wedsonaf@google.com>
-> Cc: Rafael J. Wysocki <rjw@sisk.pl>
-> Cc: Arjan van de Ven <arjan@linux.intel.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
 > ---
->  kernel/power/user.c | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
+> This patch is only compile tested. Need to review if somewhere depends
+> on PF_FREEZER_SKIP flag being set.
+
+Yes, it does.  The process operating the snapshot device cannot be
+frozen, which is why it sets PF_FREEZER_SKIP in the first place.
+
+>
+>  kernel/power/user.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
 >
 > diff --git a/kernel/power/user.c b/kernel/power/user.c
-> index 59912060109f..db98a028dfdd 100644
+> index 32dd5a855e8c..9936efa07022 100644
 > --- a/kernel/power/user.c
 > +++ b/kernel/power/user.c
-> @@ -51,6 +51,18 @@ static int snapshot_open(struct inode *inode, struct file *filp)
->         if (!hibernation_available())
->                 return -EPERM;
->
-> +       switch (filp->f_flags & O_ACCMODE) {
-> +       case O_RDWR: /* Can't do both at the same time. */
-> +               return -ENOSYS;
-
-if ((filp->f_flags & O_ACCMODE) == O_RDWR)
-              return -ENOSYS;
-
-/* On resume, we may need to wait for the image device to appear. */
-if ((filp->f_flags & O_ACCMODE) == O_WRONLY)
-              wait_for_device_probe();
-
-> +       case O_RDONLY: /* Hibernating */
-> +               /* The image device should be already ready. */
-> +               break;
-> +       default: /* Resuming */
-> +               /* We may need to wait for the image device to appear. */
-> +               wait_for_device_probe();
-> +               break;
-> +       }
-> +
->         lock_system_sleep();
->
->         if (!hibernate_acquire()) {
-> @@ -58,28 +70,16 @@ static int snapshot_open(struct inode *inode, struct file *filp)
->                 goto Unlock;
+> @@ -68,7 +68,8 @@ static int snapshot_open(struct inode *inode, struct file *filp)
+>                 break;
 >         }
 >
-> -       if ((filp->f_flags & O_ACCMODE) == O_RDWR) {
-> -               hibernate_release();
-> -               error = -ENOSYS;
-> -               goto Unlock;
-> -       }
->         nonseekable_open(inode, filp);
->         data = &snapshot_state;
->         filp->private_data = data;
->         memset(&data->handle, 0, sizeof(struct snapshot_handle));
->         if ((filp->f_flags & O_ACCMODE) == O_RDONLY) {
-> -               /* Hibernating.  The image device should be accessible. */
-
-No need to remove this comment.
-
->                 data->swap = swap_type_of(swsusp_resume_device, 0);
->                 data->mode = O_RDONLY;
->                 data->free_bitmaps = false;
->                 error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
->         } else {
-> -               /*
-> -                * Resuming.  We may need to wait for the image device to
-> -                * appear.
-> -                */
-> -               wait_for_device_probe();
-> -
->                 data->swap = -1;
->                 data->mode = O_WRONLY;
->                 error = pm_notifier_call_chain_robust(PM_RESTORE_PREPARE, PM_POST_RESTORE);
+> -       lock_system_sleep();
+> +       if (mutex_lock_killable(&system_transition_mutex))
+> +               return -EINTR;
+>
+>         if (!hibernate_acquire()) {
+>                 error = -EBUSY;
+> @@ -102,7 +103,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
+>         data->dev = 0;
+>
+>   Unlock:
+> -       unlock_system_sleep();
+> +       mutex_unlock(&system_transition_mutex);
+>
+>         return error;
+>  }
+> @@ -111,7 +112,7 @@ static int snapshot_release(struct inode *inode, struct file *filp)
+>  {
+>         struct snapshot_data *data;
+>
+> -       lock_system_sleep();
+> +       mutex_lock(&system_transition_mutex);
+>
+>         swsusp_free();
+>         data = filp->private_data;
+> @@ -128,7 +129,7 @@ static int snapshot_release(struct inode *inode, struct file *filp)
+>                         PM_POST_HIBERNATION : PM_POST_RESTORE);
+>         hibernate_release();
+>
+> -       unlock_system_sleep();
+> +       mutex_unlock(&system_transition_mutex);
+>
+>         return 0;
+>  }
+> @@ -140,7 +141,8 @@ static ssize_t snapshot_read(struct file *filp, char __user *buf,
+>         ssize_t res;
+>         loff_t pg_offp = *offp & ~PAGE_MASK;
+>
+> -       lock_system_sleep();
+> +       if (mutex_lock_killable(&system_transition_mutex))
+> +               return -EINTR;
+>
+>         data = filp->private_data;
+>         if (!data->ready) {
+> @@ -161,7 +163,7 @@ static ssize_t snapshot_read(struct file *filp, char __user *buf,
+>                 *offp += res;
+>
+>   Unlock:
+> -       unlock_system_sleep();
+> +       mutex_unlock(&system_transition_mutex);
+>
+>         return res;
+>  }
+> @@ -173,7 +175,8 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+>         ssize_t res;
+>         loff_t pg_offp = *offp & ~PAGE_MASK;
+>
+> -       lock_system_sleep();
+> +       if (mutex_lock_killable(&system_transition_mutex))
+> +               return -EINTR;
+>
+>         data = filp->private_data;
+>
+> @@ -195,7 +198,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+>         if (res > 0)
+>                 *offp += res;
+>  unlock:
+> -       unlock_system_sleep();
+> +       mutex_unlock(&system_transition_mutex);
+>
+>         return res;
+>  }
 > --
 > 2.18.4
 >
