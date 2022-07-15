@@ -2,322 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B23576563
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 18:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0AB576571
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 18:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbiGOQlc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 12:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S232948AbiGOQwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 12:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGOQlb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 12:41:31 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA72624A0;
-        Fri, 15 Jul 2022 09:41:29 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id r3so9328008ybr.6;
-        Fri, 15 Jul 2022 09:41:29 -0700 (PDT)
+        with ESMTP id S229771AbiGOQwG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 12:52:06 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958684AD40;
+        Fri, 15 Jul 2022 09:52:04 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31c9b70c382so52578327b3.6;
+        Fri, 15 Jul 2022 09:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y3fEn7k6DEbC0BSZl5T1cKqr6t4t3jgvkJEo6o2VWJg=;
+        b=MXGzp2L91pEJL+AcTAycFNXQ1RlDsP6v+gpGIgwODuesPa+p9Vkg4kB7S9nocynJGw
+         Z6eSLqvXs18KQxUaf2JoIzf80wNgEBx5lb8hmQls/pYl5cmqKU6ZV2U293CPRD7pHPxN
+         oVoCyNl0NZggmwruE29B+fIK5bXDrw9tjgIG3C8Nq+6m6OWBSRplWoiH96JI+OT2GKU0
+         e+tCPQwL8IYMCW95SAqKMM4ZmBlz4myO2waTWwKa21CY9s4W7s12O0mKU6NbZpFIBwjv
+         WQndJpk7ul+2kIlNcx4SEPMyoKdY46YyQ2MP3qjPVvRdKZ8R3yH3WQfj2xLINnsHUnDO
+         ZohA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UvwfLw66R/P7k8ZVdzukFQ8abYNVRPzG+g6tIH2YHJ8=;
-        b=u+lxk9HmSPeoxjEpwUXOP4UO+Oc9nLb9TJdk2lB9ykLc1GafHzls0lOHx+G1dYPgu7
-         9xwBgtk8qBpxAFiuziIjV20SxEGIpaWViAYQAbEORCs365z3yQUPpEgm6wohGHM8mQB6
-         fQErpxP6d1qsk3Rj9Yx3i4QiENJEZQpqYDXnY4N21vlCLZMqrtTau2qCvkd2/w8uMvHf
-         mmDFV4OVdZ7H4siNQOmfaFOcp+8mSrx57A/jnEdBh2a4p99ojtjgXU5trUi2shOMj1Lc
-         hx/dem5eZn9Xq+puCHJLitmfW70wc4QIL6jitsagADdhusCS89YhyN2YAf+sbp/mzNrS
-         WCkg==
-X-Gm-Message-State: AJIora88f39VOVuXvRWxD8VrDXiU/5KXMKRllM+1bEORn0ASg33LGGW3
-        rH1tR4CKBc0sN4nT+Q+v/E9pfCzFoCx+mwStKnZ9x4+l
-X-Google-Smtp-Source: AGRyM1vbk52b4PTIMyepiNCX50Et3/hR2FYDZGF2luietd8kabCMCwcigDx9h7LkJfN+B4X89PhLum0ZlW4vpxO2Ga8=
-X-Received: by 2002:a05:6902:1207:b0:66e:f2d2:6e91 with SMTP id
- s7-20020a056902120700b0066ef2d26e91mr15502657ybu.153.1657903288940; Fri, 15
- Jul 2022 09:41:28 -0700 (PDT)
+        bh=Y3fEn7k6DEbC0BSZl5T1cKqr6t4t3jgvkJEo6o2VWJg=;
+        b=S8bBgDCaTx7vYdVu0Yek0FMny4kKKl+WrwSl5TTRd2XKbCkeygR8pl/TDjO1YjF8AG
+         4Z1aGufvqgTM35RWcjWnc5n5EY6OIe1Rnr0UzEbRL0JNpmX4jrDjHZLv0gK/H6d7GHXa
+         Vy5Q69AfmUylfx/bILXyy4N6lU/zWToat/amV+aXqQRkHQjheDt747SAFibf1JmkBaf7
+         /Btl3we1bhiVeeuzFtrD2Ix3i6YgWuQ0+W1T+ZRHn9u39P7fZBr7ReQP1SzfmSe5uM19
+         3q56cYFxZBKDIQZSNQiXVKM/icdnVtgjRR4MkU37fRBFixED1tFTnfqIh4CQGlJDuRC+
+         EB+g==
+X-Gm-Message-State: AJIora/z0DRec7AclL7m7KjlxLTV9vQI201wOsVYKCzi8pBbzuaHubgN
+        U7d39gjiA8yqx5HRvpiTr7KIvmn31RuS/QU+B1A=
+X-Google-Smtp-Source: AGRyM1sCY24F2pEPhG1uDrQQmbeNKcxn2P0g2UtmOwj7faRUDuEi5O71VSZCHL0+DLUg4GOwi/Ey7mykcBwsz36AuRU=
+X-Received: by 2002:a81:54c1:0:b0:31d:ec18:fd5d with SMTP id
+ i184-20020a8154c1000000b0031dec18fd5dmr7130568ywb.277.1657903923745; Fri, 15
+ Jul 2022 09:52:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715142549.25223-1-jgross@suse.com> <20220715142549.25223-3-jgross@suse.com>
-In-Reply-To: <20220715142549.25223-3-jgross@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Jul 2022 18:41:17 +0200
-Message-ID: <CAJZ5v0hY_D3n3m51gG6r+7P0MVGAObLTDGy4stXYFKwLqtX6ew@mail.gmail.com>
-Subject: Re: [PATCH 2/3] x86: add wrapper functions for mtrr functions
- handling also pat
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-11-peterwu.pub@gmail.com>
+In-Reply-To: <20220715112607.591-11-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 15 Jul 2022 18:51:27 +0200
+Message-ID: <CAHp75Ve_WRAUyy=h9_F-tC1dDkb_=-F1uf7_h7R0p7xZgBAd-w@mail.gmail.com>
+Subject: Re: [PATCH v5 10/13] power: supply: mt6370: Add MediaTek MT6370
+ charger driver
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, brchuckz@netscape.net,
-        Jan Beulich <jbeulich@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Stable <stable@vger.kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 4:25 PM Juergen Gross <jgross@suse.com> wrote:
+On Fri, Jul 15, 2022 at 1:29 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 >
-> There are several MTRR functions which also do PAT handling. In order
-> to support PAT handling without MTRR in the future, add some wrappers
-> for those functions.
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 >
-> Cc: <stable@vger.kernel.org> # 5.17
-> Fixes: bdd8b6c98239 ("drm/i915: replace X86_FEATURE_PAT with pat_enabled()")
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> driver, display bias voltage supply, one general purpose LDO, and the
+> USB Type-C & PD controller complies with the latest USB Type-C and PD
+> standards.
+>
+> This adds MediaTek MT6370 Charger driver support. The charger module
+> of MT6370 supports High-Accuracy Voltage/Current Regulation,
+> Average Input Current Regulation, Battery Temperature Sensing,
+> Over-Temperature Protection, DPDM Detection for BC1.2.
 
-Do I understand correctly that this particular patch doesn't change
-the behavior?
+...
 
-If so, it would be good to mention that in the changelog.
+> +static int mt6370_chg_probe(struct platform_device *pdev)
+> +{
+> +       int ret;
+> +       struct mt6370_priv *priv;
+> +
+> +       priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +
+> +       priv->dev = &pdev->dev;
+> +
+> +       priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +       if (!priv->regmap)
+> +               return dev_err_probe(&pdev->dev, -ENODEV,
+> +                                    "Failed to get regmap\n");
+> +
+> +       ret = mt6370_chg_init_rmap_fields(priv);
+> +       if (ret)
+> +               return dev_err_probe(&pdev->dev, ret,
+> +                                    "Failed to init regmap fields\n");
+> +
+> +       platform_set_drvdata(pdev, priv);
+> +
+> +       priv->iio_adcs = devm_iio_channel_get_all(priv->dev);
+> +       if (IS_ERR(priv->iio_adcs))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(priv->iio_adcs),
+> +                                    "Failed to get iio adc\n");
+> +
+> +       ret = mt6370_chg_init_otg_regulator(priv);
+> +       if (ret)
+> +               return dev_err_probe(&pdev->dev, ret,
+> +                                    "Failed to init otg regulator\n");
+> +
+> +       ret = mt6370_chg_init_psy(priv);
+> +       if (ret)
+> +               return dev_err_probe(&pdev->dev, ret, "Failed to init psy\n");
+> +
+> +       mutex_init(&priv->attach_lock);
+> +       priv->attach = MT6370_ATTACH_STAT_DETACH;
+> +
+> +       priv->wq = create_singlethread_workqueue(dev_name(priv->dev));
+> +       if (IS_ERR(priv->wq))
 
-> ---
->  arch/x86/include/asm/mtrr.h      |  2 --
->  arch/x86/include/asm/processor.h |  7 +++++
->  arch/x86/kernel/cpu/common.c     | 44 +++++++++++++++++++++++++++++++-
->  arch/x86/kernel/cpu/mtrr/mtrr.c  | 25 +++---------------
->  arch/x86/kernel/setup.c          |  5 +---
->  arch/x86/kernel/smpboot.c        |  8 +++---
->  arch/x86/power/cpu.c             |  2 +-
->  7 files changed, 59 insertions(+), 34 deletions(-)
->
-> diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
-> index 12a16caed395..900083ac9f60 100644
-> --- a/arch/x86/include/asm/mtrr.h
-> +++ b/arch/x86/include/asm/mtrr.h
-> @@ -43,7 +43,6 @@ extern int mtrr_del(int reg, unsigned long base, unsigned long size);
->  extern int mtrr_del_page(int reg, unsigned long base, unsigned long size);
->  extern void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi);
->  extern void mtrr_ap_init(void);
-> -extern void set_mtrr_aps_delayed_init(void);
->  extern void mtrr_aps_init(void);
->  extern void mtrr_bp_restore(void);
->  extern int mtrr_trim_uncached_memory(unsigned long end_pfn);
-> @@ -86,7 +85,6 @@ static inline void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi)
->  {
->  }
->  #define mtrr_ap_init() do {} while (0)
-> -#define set_mtrr_aps_delayed_init() do {} while (0)
->  #define mtrr_aps_init() do {} while (0)
->  #define mtrr_bp_restore() do {} while (0)
->  #define mtrr_disable() do {} while (0)
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> index 5c934b922450..e2140204fb7e 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -865,7 +865,14 @@ bool arch_is_platform_page(u64 paddr);
->  #define arch_is_platform_page arch_is_platform_page
->  #endif
->
-> +extern bool cache_aps_delayed_init;
+> +               return dev_err_probe(priv->dev, PTR_ERR(priv->wq),
+> +                                    "Failed to create workqueue\n");
+
+You need either wrap mutex to be deallocated by devm or don't use
+dev_err_probe() here.
+
+> +       INIT_WORK(&priv->bc12_work, mt6370_chg_bc12_work_func);
+> +       INIT_DELAYED_WORK(&priv->mivr_dwork, mt6370_chg_mivr_dwork_func);
 > +
->  void cache_disable(void);
->  void cache_enable(void);
-> +void cache_bp_init(void);
-> +void cache_ap_init(void);
-> +void cache_set_aps_delayed_init(void);
-> +void cache_aps_init(void);
-> +void cache_bp_restore(void);
->
->  #endif /* _ASM_X86_PROCESSOR_H */
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index e43322f8a4ef..0a1bd14f7966 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -1929,7 +1929,7 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
->  #ifdef CONFIG_X86_32
->         enable_sep_cpu();
->  #endif
-> -       mtrr_ap_init();
-> +       cache_ap_init();
->         validate_apic_and_package_id(c);
->         x86_spec_ctrl_setup_ap();
->         update_srbds_msr();
-> @@ -2403,3 +2403,45 @@ void cache_enable(void) __releases(cache_disable_lock)
->
->         raw_spin_unlock(&cache_disable_lock);
->  }
+> +       ret = mt6370_chg_init_setting(priv);
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "Failed to init mt6370 charger setting\n");
+> +               goto probe_out;
+> +       }
 > +
-> +void __init cache_bp_init(void)
-> +{
-> +       if (IS_ENABLED(CONFIG_MTRR))
-> +               mtrr_bp_init();
-> +       else
-> +               pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
+> +       ret = mt6370_chg_init_irq(priv);
+> +       if (ret)
+> +               goto probe_out;
+> +
+> +       mt6370_chg_pwr_rdy_check(priv);
+> +
+> +       return 0;
+> +
+> +probe_out:
+> +       cancel_delayed_work_sync(&priv->mivr_dwork);
+> +       flush_workqueue(priv->wq);
+> +       destroy_workqueue(priv->wq);
+> +       mutex_destroy(&priv->attach_lock);
+> +
+> +       return ret;
 > +}
 > +
-> +void cache_ap_init(void)
+> +static int mt6370_chg_remove(struct platform_device *pdev)
 > +{
-> +       if (cache_aps_delayed_init)
-> +               return;
+> +       struct mt6370_priv *priv = platform_get_drvdata(pdev);
 > +
-> +       mtrr_ap_init();
+> +       cancel_delayed_work_sync(&priv->mivr_dwork);
+> +       flush_workqueue(priv->wq);
+> +       destroy_workqueue(priv->wq);
+> +       mutex_destroy(&priv->attach_lock);
+> +
+> +       return 0;
 > +}
-> +
-> +bool cache_aps_delayed_init;
-> +
-> +void cache_set_aps_delayed_init(void)
-> +{
-> +       cache_aps_delayed_init = true;
-> +}
-> +
-> +void cache_aps_init(void)
-> +{
-> +       /*
-> +        * Check if someone has requested the delay of AP cache initialization,
-> +        * by doing cache_set_aps_delayed_init(), prior to this point. If not,
-> +        * then we are done.
-> +        */
-> +       if (!cache_aps_delayed_init)
-> +               return;
-> +
-> +       mtrr_aps_init();
-> +       cache_aps_delayed_init = false;
-> +}
-> +
-> +void cache_bp_restore(void)
-> +{
-> +       mtrr_bp_restore();
-> +}
-> diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-> index 2746cac9d8a9..c1593cfae641 100644
-> --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-> +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-> @@ -69,7 +69,6 @@ unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
->  static DEFINE_MUTEX(mtrr_mutex);
->
->  u64 size_or_mask, size_and_mask;
-> -static bool mtrr_aps_delayed_init;
->
->  static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
->
-> @@ -176,7 +175,8 @@ static int mtrr_rendezvous_handler(void *info)
->         if (data->smp_reg != ~0U) {
->                 mtrr_if->set(data->smp_reg, data->smp_base,
->                              data->smp_size, data->smp_type);
-> -       } else if (mtrr_aps_delayed_init || !cpu_online(smp_processor_id())) {
-> +       } else if ((use_intel() && cache_aps_delayed_init) ||
-> +                  !cpu_online(smp_processor_id())) {
->                 mtrr_if->set_all();
->         }
->         return 0;
-> @@ -789,7 +789,7 @@ void mtrr_ap_init(void)
->         if (!mtrr_enabled())
->                 return;
->
-> -       if (!use_intel() || mtrr_aps_delayed_init)
-> +       if (!use_intel())
->                 return;
->
->         /*
-> @@ -823,16 +823,6 @@ void mtrr_save_state(void)
->         smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
->  }
->
-> -void set_mtrr_aps_delayed_init(void)
-> -{
-> -       if (!mtrr_enabled())
-> -               return;
-> -       if (!use_intel())
-> -               return;
-> -
-> -       mtrr_aps_delayed_init = true;
-> -}
-> -
->  /*
->   * Delayed MTRR initialization for all AP's
->   */
-> @@ -841,16 +831,7 @@ void mtrr_aps_init(void)
->         if (!use_intel() || !mtrr_enabled())
->                 return;
->
-> -       /*
-> -        * Check if someone has requested the delay of AP MTRR initialization,
-> -        * by doing set_mtrr_aps_delayed_init(), prior to this point. If not,
-> -        * then we are done.
-> -        */
-> -       if (!mtrr_aps_delayed_init)
-> -               return;
-> -
->         set_mtrr(~0U, 0, 0, 0);
-> -       mtrr_aps_delayed_init = false;
->  }
->
->  void mtrr_bp_restore(void)
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index bd6c6fd373ae..27d61f73c68a 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -1001,10 +1001,7 @@ void __init setup_arch(char **cmdline_p)
->         max_pfn = e820__end_of_ram_pfn();
->
->         /* update e820 for memory not covered by WB MTRRs */
-> -       if (IS_ENABLED(CONFIG_MTRR))
-> -               mtrr_bp_init();
-> -       else
-> -               pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
-> +       cache_bp_init();
->
->         if (mtrr_trim_uncached_memory(max_pfn))
->                 max_pfn = e820__end_of_ram_pfn();
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 5e7f9532a10d..535d73a47062 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1432,7 +1432,7 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
->
->         uv_system_init();
->
-> -       set_mtrr_aps_delayed_init();
-> +       cache_set_aps_delayed_init();
->
->         smp_quirk_init_udelay();
->
-> @@ -1443,12 +1443,12 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
->
->  void arch_thaw_secondary_cpus_begin(void)
->  {
-> -       set_mtrr_aps_delayed_init();
-> +       cache_set_aps_delayed_init();
->  }
->
->  void arch_thaw_secondary_cpus_end(void)
->  {
-> -       mtrr_aps_init();
-> +       cache_aps_init();
->  }
->
->  /*
-> @@ -1491,7 +1491,7 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
->
->         nmi_selftest();
->         impress_friends();
-> -       mtrr_aps_init();
-> +       cache_aps_init();
->  }
->
->  static int __initdata setup_possible_cpus = -1;
-> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> index bb176c72891c..21e014715322 100644
-> --- a/arch/x86/power/cpu.c
-> +++ b/arch/x86/power/cpu.c
-> @@ -261,7 +261,7 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
->         do_fpu_end();
->         tsc_verify_tsc_adjust(true);
->         x86_platform.restore_sched_clock_state();
-> -       mtrr_bp_restore();
-> +       cache_bp_restore();
->         perf_restore_debug_store();
->
->         c = &cpu_data(smp_processor_id());
-> --
-> 2.35.3
->
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
