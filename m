@@ -2,83 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4F3575D1B
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 10:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27563575DD9
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Jul 2022 10:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiGOIMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Jul 2022 04:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
+        id S231838AbiGOIrb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Jul 2022 04:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiGOIMT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 04:12:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83867E828
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 01:12:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54181618BF
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 08:12:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3E5BC341C8
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 08:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657872737;
-        bh=lbXmW925DZiRWEhZAzwJ7uVbN9T1lDyYmhekd8Nr7uk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=XmIwUWpqkvN4/DNpJxVLBOPEApAkZA66ICM9JxNx1ddxjKkGb2QMe8ESPExtifN6u
-         f7YTijoTDYup4OtQrQNd0U8zdi+BX8xFMSSJMr6JQe+2x1oaixSOlbqMdz3svY9zLV
-         AQmDbXiac5+1GLGzSx7m922+K7n2dN1z5o/KQ2NzmP9yEdQNaFBLA6JBp5bPlyFLkz
-         17LoyUuNMEaYb4xQjxzvJ0TSntiAmfzfQ9tisk93bE2kCfrH9qpFKdDnCYzYFXwjbo
-         dJpT0t1MUshRAWQxYnBjRZTKITku7sKzbKgt2ygCMYw5cUKA2Hz/stox3wusgkoqFO
-         Y9s/QHRpAEUDg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id A2153CC13BA; Fri, 15 Jul 2022 08:12:17 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 216248] [Regression] amd-pstate stops working after [ACPI:
- CPPC: Check _OSC for flexible address space]
-Date:   Fri, 15 Jul 2022 08:12:17 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: arek.rusi@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-216248-137361-D5QTMww0Qw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216248-137361@https.bugzilla.kernel.org/>
-References: <bug-216248-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231512AbiGOIrb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Jul 2022 04:47:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFE4E814AE;
+        Fri, 15 Jul 2022 01:47:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B74171474;
+        Fri, 15 Jul 2022 01:47:30 -0700 (PDT)
+Received: from [10.57.11.112] (unknown [10.57.11.112])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 203983F792;
+        Fri, 15 Jul 2022 01:47:28 -0700 (PDT)
+Message-ID: <1198724e-d94f-0b7c-9c4a-90595f8426d2@arm.com>
+Date:   Fri, 15 Jul 2022 09:47:27 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+Content-Language: en-US
+To:     rafael@kernel.org
+Cc:     viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dietmar.eggemann@arm.com,
+        vincent.guittot@linaro.org
+References: <20220711124229.16516-1-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220711124229.16516-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216248
+Hi Rafael,
 
---- Comment #5 from Arek Ru=C5=9Bniak (arek.rusi@gmail.com) ---
-Created attachment 301432
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D301432&action=3Dedit
-acpidump
+gentle ping.
 
---=20
-You may reply to this email to add a comment.
+On 7/11/22 13:42, Lukasz Luba wrote:
+> There is no need to keep the max CPU capacity in the per_cpu instance.
+> Furthermore, there is no need to check and update that variable
+> (sg_cpu->max) everytime in the frequency change request, which is part
+> of hot path. Instead use struct sugov_policy to store that information.
+> Initialize the max CPU capacity during the setup and start callback.
+> We can do that since all CPUs in the same frequency domain have the same
+> max capacity (capacity setup and thermal pressure are based on that).
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
+>   1 file changed, 15 insertions(+), 15 deletions(-)
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+The patch got Ack from Viresh.
+Could you take it?
+
+Regards,
+Lukasz
