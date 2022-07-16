@@ -2,147 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106F2576C3D
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Jul 2022 08:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D161D576CA0
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Jul 2022 10:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbiGPGbq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Jul 2022 02:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S230046AbiGPIuY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Jul 2022 04:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiGPGbc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 02:31:32 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF2F7C189;
-        Fri, 15 Jul 2022 23:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657953064; x=1689489064;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=f1+wvjfXxGXpf3L37oJl18eujoMaSMdPMFUctu6Zo0A=;
-  b=ND+lnoSj+7TqBX/jNkU3WRdq3d1zP7YABvouYYDwYG5q7aj38vsDBGT/
-   KxEKVJ+QThStNDAfE3OrHfRyG7W7BOX0ScWHvhvvmNlr+GSUhEbcRLTF1
-   Jf/8jLnJ72FCGDpInItw5yxDdr157MCEGd/iH/4gRJGoOoLlNR6h3fcpI
-   oIMUbwmOrsIj9ALK8j8BB1udMMSTjji4YXHY/JKPgHXq9lwvJMM8l+q1h
-   QRYJilrUF9uXuRrdjQKGtXIUYwE339Mv1z3VxAB6G8vq0NU8FPIs9iqO6
-   E7UUcJS6d+vbxALMwHEAHUy99K54hPFHlIEnM6cUlxggnIR8bURW5VseW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="283520331"
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="283520331"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 23:31:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="629360092"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 15 Jul 2022 23:31:00 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCbKO-0001E0-8n;
-        Sat, 16 Jul 2022 06:31:00 +0000
-Date:   Sat, 16 Jul 2022 14:30:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 940a7197e7544d2c88df2826b84fc324dd54ba47
-Message-ID: <62d25b1e.6LLu6+/fikrj8XaM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229571AbiGPIuX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 04:50:23 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB6B1D32F;
+        Sat, 16 Jul 2022 01:50:21 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id u14so8104lju.0;
+        Sat, 16 Jul 2022 01:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=gPKSfw7yr5duwtVwsapF6h4VldWJ9CPAFxSNGvj8x70=;
+        b=Yr6yBntqRAH+wU+yWZjfB2L8a+t7oaZTbke2uqW480njLX32A7Mv5jVHUeogCxWqnl
+         VpI83y0h7PwcLNuqIEmb4fygspadRBAPRID9hbjtsaCxmKLdHOUEzLEK2lfNhS+CI4H7
+         k23C6WjDJblbeeG2f1FRW/X+jgTsex2NzhlVk8DdM9vGoTkeobqF8InN34YLUzKoQbd3
+         8QbEQaN9ngG36NykMr8R8+pNaYPlWmi0+eBGiDhZwubrpusAsGV9S61W2k9aDxtKBDoc
+         YB1RCb9ffNgMk1xHvB6oEBZMzikvZmmLE0G7I5l1OUcgrqDdL8hbj9sEkFh8OtQsjeR2
+         NEMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=gPKSfw7yr5duwtVwsapF6h4VldWJ9CPAFxSNGvj8x70=;
+        b=1ODptqaa1xx8N/1PrOieWZOhW2hTkJw7TY6GzYqFV98smdO/Bdrd7Xa0cYt+5QxO2A
+         CrLoqdjXwr7vMaERC3DnB39cfQI6WqoMm26haLr8vI+rQJDDsHRSKXsUxGKT/nPaPAem
+         AmI0Sp9S18ScR9MDv39ImT+Tq31ytfMCLss/bUpaPo3eR4PznRuIB/BPmS2p71TD0bTG
+         gkZVQh2z9cFvc7fp47G3b793IWeYgR+OLSXFmXfFQ8MuoSCtb0EVUoiMnNqPQL3ORM2l
+         Q3G9TRgM+kup0M9hxFbByK1PoNLt1wUhHf9GrpiImHl6u0XBhib5u6Mom0NeamZgKW1P
+         PJKQ==
+X-Gm-Message-State: AJIora9glW4cyCJ9Avc1+3xz27+TzyeHZvVL16KQ+HQ3d2DaStmt0lbg
+        aDby6EzR7z+XdN48H4pSpbOvZ25QVeWfZmmWd3arhUibJ9dbsac=
+X-Google-Smtp-Source: AGRyM1u1ABXRVnxJl0iLO11wO+tyJ5lSuTr3FC0r6N1wtpUXU5lyBliYXTuh2shcD8ou9/+f4m8BdPT7PydMv5po4DI=
+X-Received: by 2002:a2e:8785:0:b0:25d:473b:b60f with SMTP id
+ n5-20020a2e8785000000b0025d473bb60fmr8813612lji.354.1657961420160; Sat, 16
+ Jul 2022 01:50:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Sat, 16 Jul 2022 16:50:08 +0800
+Message-ID: <CAMhUBjkMyRP2iyMpovN7=GFP2SSpt+Na453RR6nNSBeyQR6oww@mail.gmail.com>
+Subject: [BUG] power: supply: cw2015: Found a bug when removing the module
+To:     t.schramm@manjaro.org, sre@kernel.org
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 940a7197e7544d2c88df2826b84fc324dd54ba47  Merge branch 'acpi-video' into bleeding-edge
+Hello,
 
-elapsed time: 721m
+I found a bug in the cw2015 driver.
 
-configs tested: 66
-configs skipped: 2
+When I insmod the kernel module, I get the following log:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+[  199.445154] cw2015 0-0010: probe
+[  199.445447] cw2015 0-0010: No battery-profile found, using current
+flash contents
+[  199.447198] cw2015 0-0010: Can't check current battery profile, no
+profile provided
+[  199.448577] cw2015 0-0010: No monitored battery, some properties
+will be missing
+[  199.449556] i2c-core: driver [cw2015] registered
+[  199.482970] cw2015 0-0010: No profile specified, continuing without profile
+[  199.486086] cw2015 0-0010: Failed to get supply state: -19
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                        mvebu_v7_defconfig
-parisc                generic-32bit_defconfig
-mips                           jazz_defconfig
-arm                          simpad_defconfig
-arm                       multi_v4t_defconfig
-ia64                             allmodconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220715
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
+And when I remove the module, I got the following warning:
 
-clang tested configs:
-arm                       versatile_defconfig
-arm                          pcm027_defconfig
-powerpc                      acadia_defconfig
-powerpc                     mpc5200_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220715
-hexagon              randconfig-r041-20220715
-riscv                randconfig-r042-20220715
-s390                 randconfig-r044-20220715
+[  200.470198] cw2015 0-0010: remove
+[  200.471445] ------------[ cut here ]------------
+[  200.472752] WARNING: CPU: 0 PID: 413 at drivers/base/devres.c:1058
+devm_kfree+0x2a8/0x330
+[  200.478314] RIP: 0010:devm_kfree+0x2a8/0x330
+[  200.485019] Call Trace:
+[  200.485226]  <TASK>
+[  200.485405]  ? power_supply_put_battery_info+0xc2/0xe0
+[  200.486169]  cw_bat_remove+0x89/0xa0 [cw2015_battery]
+[  200.486570]  i2c_device_remove+0x181/0x1f0
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I think the problem is that the driver fails to call the function
+power_supply_get_battery_info(). However, when removing the module,
+the driver executes power_supply_put_battery_info(), causing a
+warning.
+
+Since I'm not familiar with this driver, I will just report the bug to you.
+
+regards,
+
+Zheyu Ma
