@@ -2,127 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7E8576C2E
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Jul 2022 08:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106F2576C3D
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Jul 2022 08:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiGPG1D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Jul 2022 02:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        id S231857AbiGPGbq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Jul 2022 02:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiGPG1A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 02:27:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA4A1261B
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 23:26:57 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="284713178"
+        with ESMTP id S231657AbiGPGbc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 02:31:32 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF2F7C189;
+        Fri, 15 Jul 2022 23:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657953064; x=1689489064;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=f1+wvjfXxGXpf3L37oJl18eujoMaSMdPMFUctu6Zo0A=;
+  b=ND+lnoSj+7TqBX/jNkU3WRdq3d1zP7YABvouYYDwYG5q7aj38vsDBGT/
+   KxEKVJ+QThStNDAfE3OrHfRyG7W7BOX0ScWHvhvvmNlr+GSUhEbcRLTF1
+   Jf/8jLnJ72FCGDpInItw5yxDdr157MCEGd/iH/4gRJGoOoLlNR6h3fcpI
+   oIMUbwmOrsIj9ALK8j8BB1udMMSTjji4YXHY/JKPgHXq9lwvJMM8l+q1h
+   QRYJilrUF9uXuRrdjQKGtXIUYwE339Mv1z3VxAB6G8vq0NU8FPIs9iqO6
+   E7UUcJS6d+vbxALMwHEAHUy99K54hPFHlIEnM6cUlxggnIR8bURW5VseW
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="283520331"
 X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="284713178"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 23:26:57 -0700
+   d="scan'208";a="283520331"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 23:31:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="593967595"
-Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jul 2022 23:26:56 -0700
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Subject: [PATCH] intel_idle: make SPR C1 and C1E be independent
-Date:   Sat, 16 Jul 2022 09:26:55 +0300
-Message-Id: <20220716062655.704893-1-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.35.1
+   d="scan'208";a="629360092"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 15 Jul 2022 23:31:00 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCbKO-0001E0-8n;
+        Sat, 16 Jul 2022 06:31:00 +0000
+Date:   Sat, 16 Jul 2022 14:30:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 940a7197e7544d2c88df2826b84fc324dd54ba47
+Message-ID: <62d25b1e.6LLu6+/fikrj8XaM%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
-        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 940a7197e7544d2c88df2826b84fc324dd54ba47  Merge branch 'acpi-video' into bleeding-edge
 
-This patch partially reverts the changes made by the following commit:
+elapsed time: 721m
 
-da0e58c038e6 intel_idle: add 'preferred_cstates' module argument
+configs tested: 66
+configs skipped: 2
 
-As that commit describes, on early Sapphire Rapids Xeon platforms the C1 and
-C1E states were mutually exclusive, so that users could only have either C1 and
-C6, or C1E and C6.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-However, Intel firmware engineers managed to remove this limitation and make C1
-and C1E to be completely independent, just like on previous Xeon platforms.
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                        mvebu_v7_defconfig
+parisc                generic-32bit_defconfig
+mips                           jazz_defconfig
+arm                          simpad_defconfig
+arm                       multi_v4t_defconfig
+ia64                             allmodconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+csky                              allnoconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220715
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
 
-Therefore, this patch:
- * Removes commentary describing the old, and now non-existing SPR C1E
-   limitation.
- * Marks SPR C1E as available by default.
- * Removes the 'preferred_cstates' parameter handling for SPR. Both C1 and
-   C1E will be available regardless of 'preferred_cstates' value.
+clang tested configs:
+arm                       versatile_defconfig
+arm                          pcm027_defconfig
+powerpc                      acadia_defconfig
+powerpc                     mpc5200_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220715
+hexagon              randconfig-r041-20220715
+riscv                randconfig-r042-20220715
+s390                 randconfig-r044-20220715
 
-We expect that all SPR systems are shipping with new firmware, which includes
-the C1/C1E improvement.
-
-Cc: stable@vger.kernel.org # v5.18+
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
----
- drivers/idle/intel_idle.c | 24 +-----------------------
- 1 file changed, 1 insertion(+), 23 deletions(-)
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 424ef470223d..ba2b485a03ed 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -879,16 +879,6 @@ static struct cpuidle_state adl_l_cstates[] __initdata = {
- 		.enter = NULL }
- };
- 
--/*
-- * On Sapphire Rapids Xeon C1 has to be disabled if C1E is enabled, and vice
-- * versa. On SPR C1E is enabled only if "C1E promotion" bit is set in
-- * MSR_IA32_POWER_CTL. But in this case there effectively no C1, because C1
-- * requests are promoted to C1E. If the "C1E promotion" bit is cleared, then
-- * both C1 and C1E requests end up with C1, so there is effectively no C1E.
-- *
-- * By default we enable C1 and disable C1E by marking it with
-- * 'CPUIDLE_FLAG_UNUSABLE'.
-- */
- static struct cpuidle_state spr_cstates[] __initdata = {
- 	{
- 		.name = "C1",
-@@ -901,8 +891,7 @@ static struct cpuidle_state spr_cstates[] __initdata = {
- 	{
- 		.name = "C1E",
- 		.desc = "MWAIT 0x01",
--		.flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE |
--					   CPUIDLE_FLAG_UNUSABLE,
-+		.flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
- 		.exit_latency = 2,
- 		.target_residency = 4,
- 		.enter = &intel_idle,
-@@ -1724,17 +1713,6 @@ static void __init spr_idle_state_table_update(void)
- {
- 	unsigned long long msr;
- 
--	/* Check if user prefers C1E over C1. */
--	if ((preferred_states_mask & BIT(2)) &&
--	    !(preferred_states_mask & BIT(1))) {
--		/* Disable C1 and enable C1E. */
--		spr_cstates[0].flags |= CPUIDLE_FLAG_UNUSABLE;
--		spr_cstates[1].flags &= ~CPUIDLE_FLAG_UNUSABLE;
--
--		/* Enable C1E using the "C1E promotion" bit. */
--		c1e_promotion = C1E_PROMOTION_ENABLE;
--	}
--
- 	/*
- 	 * By default, the C6 state assumes the worst-case scenario of package
- 	 * C6. However, if PC6 is disabled, we update the numbers to match
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
