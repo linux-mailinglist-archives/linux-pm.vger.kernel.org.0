@@ -2,50 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEE957721C
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Jul 2022 01:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B80457722B
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Jul 2022 01:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiGPXHp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Jul 2022 19:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S232904AbiGPXIq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Jul 2022 19:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiGPXHo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 19:07:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5EF186D4
-        for <linux-pm@vger.kernel.org>; Sat, 16 Jul 2022 16:07:43 -0700 (PDT)
+        with ESMTP id S232873AbiGPXIZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 19:08:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE7D20BF7
+        for <linux-pm@vger.kernel.org>; Sat, 16 Jul 2022 16:08:19 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.172])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0212D66015C4;
-        Sun, 17 Jul 2022 00:07:42 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 533C166015C4;
+        Sun, 17 Jul 2022 00:08:18 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658012862;
-        bh=6tmUuXU5FOkUnkbO/ntgxJ+Ac8p4cYlNZjt5d7YI7m8=;
+        s=mail; t=1658012898;
+        bh=fOXepmQGdVD0J7ZN1PRnhmPW9wplr/+QLS4lPg9kc0w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VZOY9bx2GDw92H0Zzjpz8C5dOIYVmyKNYla0zyLR6csbWHsOgyVX0+oq3t8fmwy2i
-         2d4yQDBJvMrFyZ2haUhBiBssNZ1P5gKzrbmxAf1JtLnpi2ptnRZxvMZcxunZ+h1PkV
-         PIG07KXmjTEiZAwvC3wXD+QDJWv2b5nZNvfMKBzcK3UyBlJiRo49HMalzhDBwOrnsZ
-         z31Y7b281ZOzk3A/J6NcDopHSYaxyK8xvRq+aP/bEssBTP9+ruEbSXi8hIMGjhwcJw
-         okQnp0R6OGgO8TNCXJ+2UQ7mZ/FaRrNCgvCUjphh9ZB3bdI2TC5wgcKlA51FW+8kCT
-         82TwijAugrY1Q==
+        b=JOHNl2UYGT9iJzhdb1VSsoWekzPGbq8fLdOU5C9GzUoK+PzTkY8Gqeoek1GOZ+SVF
+         OHvFIItLsuAGPr38Q65xBS5T5UsjsYlt9y5pwbSQdIusFQzw+ocSZsl+M6a6emO2rG
+         7bbhkaHzK9GoZRyVpJYDMIN8Q7yBK1E45d2HS8O4w39P0Vn2icTww/nrgIuQFjuTG0
+         ppBkLXLRGRso8b5SfKAQw4+jf+4wkD3NOokCiCdy4IAcOPADe63wVX/0QKaUYgzcfd
+         Rjis0qvMXIq39vmayWrQcpCVovH7zFqSghcba9v41BE7v9oWO//UdA2glrXhThFUY9
+         9o33Cu2DCbj9w==
 Received: by mercury (Postfix, from userid 1000)
-        id 278261060428; Sun, 17 Jul 2022 01:07:39 +0200 (CEST)
-Date:   Sun, 17 Jul 2022 01:07:39 +0200
+        id 5B1ED1060428; Sun, 17 Jul 2022 01:08:15 +0200 (CEST)
+Date:   Sun, 17 Jul 2022 01:08:15 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Liang He <windhl@126.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] power/supply/olpc_battery: Hold the reference
- returned by of_find_compatible_node
-Message-ID: <20220716230739.dwqv5ynts5j74433@mercury.elektranox.org>
-References: <20220621151720.4083639-1-windhl@126.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: ab8500: Remove flush_scheduled_work() call.
+Message-ID: <20220716230815.c5wdysxkrl3abkjx@mercury.elektranox.org>
+References: <50d84193-a933-1301-b9d9-bf6cc01ee126@I-love.SAKURA.ne.jp>
+ <20220609194329.bkvnxmxovnbqxuxg@mercury.elektranox.org>
+ <CACRpkdaGAXvSEgR_k3obRv+yjaEDeaKfsYk1R9bvjQ9MY=WHBg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xjqw3pjjsnl73wzh"
+        protocol="application/pgp-signature"; boundary="vxlggpunwp3hmwuj"
 Content-Disposition: inline
-In-Reply-To: <20220621151720.4083639-1-windhl@126.com>
+In-Reply-To: <CACRpkdaGAXvSEgR_k3obRv+yjaEDeaKfsYk1R9bvjQ9MY=WHBg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -56,81 +58,68 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---xjqw3pjjsnl73wzh
+--vxlggpunwp3hmwuj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Jun 21, 2022 at 11:17:20PM +0800, Liang He wrote:
-> In olpc_battery_probe(), we should hold the reference returned by
-> of_find_compatible_node() and use it to call of_node_put() for
-> refcount balance.
+On Thu, Jun 23, 2022 at 04:24:09PM +0200, Linus Walleij wrote:
+> On Thu, Jun 9, 2022 at 9:43 PM Sebastian Reichel
+> <sebastian.reichel@collabora.com> wrote:
+> > On Thu, Jun 09, 2022 at 01:58:04PM +0900, Tetsuo Handa wrote:
+> > > It seems to me that ab8500 driver is using dedicated workqueues and
+> > > is not calling schedule{,_delayed}_work{,_on}(). Then, there will be
+> > > no work to flush using flush_scheduled_work().
+> > >
+> > > Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > > ---
+> > > Please see commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue()
+> > > using a macro") for background.
+> >
+> > Looks sensible to me. Adding Linus to Cc and waiting a bit so that
+> > he has time to review/test.
 >=20
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
+> Makes perfect sense.
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Thanks, queued.
 
+> > @Linus I think it makes sense to add something like this to
+> > MAINTAINERS or add the files to the "ARM/NOMADIK/Ux500 ARCHITECTURES"
+> > entry, so that you will be CC'd.
+> >
+> > AB8500 BATTERY AND CHARGER DRIVERS
+> > M:      Linus Walleij <linus.walleij@linaro.org>
+> > S:      Maintained
+> > F:      Documentation/devicetree/bindings/power/supply/*ab8500*
+> > F:      Documentation/devicetree/bindings/power/supply/*ab8500*
+>=20
+> OK I fix something.
+
+Thanks.
+
 -- Sebastian
 
->  changelog:
->=20
->  v2: fix bug intro-ed by v1, reported by lkp.
->  v1: add hold-ref code.
->=20
->  drivers/power/supply/olpc_battery.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/olpc_battery.c b/drivers/power/supply/o=
-lpc_battery.c
-> index e0476ec06601..a5da20ffd685 100644
-> --- a/drivers/power/supply/olpc_battery.c
-> +++ b/drivers/power/supply/olpc_battery.c
-> @@ -635,6 +635,7 @@ static int olpc_battery_probe(struct platform_device =
-*pdev)
->  	struct power_supply_config bat_psy_cfg =3D {};
->  	struct power_supply_config ac_psy_cfg =3D {};
->  	struct olpc_battery_data *data;
-> +	struct device_node *np;
->  	uint8_t status;
->  	uint8_t ecver;
->  	int ret;
-> @@ -649,7 +650,9 @@ static int olpc_battery_probe(struct platform_device =
-*pdev)
->  	if (ret)
->  		return ret;
-> =20
-> -	if (of_find_compatible_node(NULL, NULL, "olpc,xo1.75-ec")) {
-> +	np =3D of_find_compatible_node(NULL, NULL, "olpc,xo1.75-ec");
-> +	if (np) {
-> +		of_node_put(np);
->  		/* XO 1.75 */
->  		data->new_proto =3D true;
->  		data->little_endian =3D true;
-> --=20
-> 2.25.1
->=20
-
---xjqw3pjjsnl73wzh
+--vxlggpunwp3hmwuj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmLTRLoACgkQ2O7X88g7
-+povOxAAk7ZkYpoNxkHlLrrWOUkdAFvvvMJZDL1133ulFZ+kgDXyP3IgjrOaHmy0
-QiYc8rJ757+dA3SRnpEYxTbbS3dEe8ZFwKoo+UONoJayGqduQ2UilGeyqBtwvVXs
-kXhzEgNEvlObqFfrhKKntY5sQzTr8hfPxdV6YbmSOe82lJ6pTpJPHuEIZB3XonFM
-UjAq2B+ulTpEBZKDjYmjPdm61mDNAmorYvCdgEhbAp9Dm7BSx0xoQRe62haAXPaG
-aeVlQmnlYLkSj2xwy/WIx5wVkpbd+9v7LW7cC/9SwVs65Dpi7fgKFEmP5YGiXhg2
-wWwW1Ho3FviUkjLZ0VE3fQAsV+cKbkpw1CMcjALtdP/K+1mW3rG/eRIjtSwpnNrO
-e5PxEZ0wPGb00B57lU9ePyFke/ivDJYuoUTrZ6l/YivzPO00Mk3BSku4C6q2BRh2
-HqK344vHWYbgrbKrtlH9MSpw/eWTPunDI/CBFlDFLn5bdTqggI7GUpkI/WDSLmhY
-zjREJyYGYDrrm9+J4LQC1wezNrPDAolS9GbGU3J2zeUkq9gQXwTEcrUmmaSequ/8
-2ph2bVsb7eVKI9hQpEEgfzRsrJkrV1BL9ZD1kiuXrZoyVzzzeSvwIN3MEtgRZEbF
-QevPG9FIMRJmIV3XYiuzQoTFAGR8K2P9/hegiB4CzhvK2n3Z8Uw=
-=CnBh
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmLTRN8ACgkQ2O7X88g7
++ppUaBAAjxTBZFQHqtjYcpgByS2yYkXqZ/o7cWN+rdPWVZVmf3GR7khX6qVjlnfW
+hoNvFJVGIg1O34JtG//hPeyCsj/uhA78d7nXYdK559UXJQjHIxi7jfNu+C/NUO1g
+s/25TeU706AiWjM1/RQJGaL5Gif05VI4cMHJYrDPljEH5RAgXY93S1363jeZTBZd
+wmvIhRTPyLj7asjbl0etWjsT7CJiypd/Lxnuun/PJXp0o6nzR8ectQB2dgTEtEYD
+EZYyIoX0AONvwxJrveV4IItocm7yvKr8lEuVHXyHMl1G4arCa9WBWlyT2+BcZYbK
+mUrNvu0+fI2v6rb5JxVPOBWH2nXMIJ1CYARc0LtAWqotZaC+lLh5H+1gjQyfQDQb
+FytGjHayVjWk7+lyuYJHF9S4dwo6t0KaBuZqWhnLSmqd9cOtasbyBVIhMYpIwrRA
+xAkPYeRB3ChryqHbijYuM2t+l1CkhOjRr97HdQ1QoATlprV/45ZjSR+nxSztuQLB
+mhSB0dSE0VWi7+4cz8Sf+qg/7pQzAIhYp/W/Z1DHGlWPVKeS8M3tCwLgzrihtI/w
+z8TurTwc1rD1R/f45uXVZA+IjAntkKfTJ0vhRzTTHg98P12p9kz+gbLT4l98hFdx
+CH7HqtwSnzJmTa0YKXuln1iFaNmVS0i2oXT52JCzl80uhEdLQgM=
+=ZWCM
 -----END PGP SIGNATURE-----
 
---xjqw3pjjsnl73wzh--
+--vxlggpunwp3hmwuj--
