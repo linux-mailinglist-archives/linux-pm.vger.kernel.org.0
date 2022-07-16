@@ -2,157 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1618576C0A
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Jul 2022 07:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04243576C18
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Jul 2022 07:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiGPFbl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Jul 2022 01:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
+        id S231178AbiGPFuH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Jul 2022 01:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGPFbk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 01:31:40 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC6642AFF
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 22:31:39 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso7974135pjo.0
-        for <linux-pm@vger.kernel.org>; Fri, 15 Jul 2022 22:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ufXQLgvxfQATp+6B9xk3/GngBY38LwvZE1w0CMC8btg=;
-        b=7AF528bJ81mqzahl/zWOFg5bj4j5lgcC18NKdMKX9KFdCL9fllbTBIRF1xZWtossSp
-         39nwSAxhJpMfmvmPEdPpOCZddJ5wuc4kQUhbzJYsnIY0rRnuICjQi7zIENWzeZ17KEYD
-         Lqi2PHNofMR+QNBD0y5K9eU5WsWgpJBPHTRuOTfiYYj4ed1VZ0fUQ5mWDURdo0xcLAfS
-         Aesu7YqCstqshWBnRz2xMwkL4xY33SGZYs//SFe9C8qBOIr3y5PUp/i7Uwtc4HcwXmk+
-         +hlwA/VuwtuBI52JLVpTBk7HxtYN8sIuy+e2g7rm9S0Bs+UuqpOwsnbnJKexE50rLuv+
-         JGEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ufXQLgvxfQATp+6B9xk3/GngBY38LwvZE1w0CMC8btg=;
-        b=vdXzomPxRNWOVnIJvzIzPsnWm5zwDVCcNjM1CEIh+fvKDu03mX7QgFxJXx2wzcwriF
-         W2c8z1PnJT2mamdmVlT2APzPShWT16j3dMJ1Ujcl+uHhzG/FLZaBJeRwzI6q0Uiyc7hF
-         GlzRM3Cvk60wGGX8g62XeSrpXD3dR5qqCJyTUoWg+yjG7e1FiPJWMSu6H7TDeIeV7N7T
-         IK3lMCb9WrKGQQwCO6cnA4MthgGR+VtjKY1H76exqLVwJT/won9cazxm1xfJGc+lfAy8
-         yiZlMdpGoWpmZPT4B5kM44+xY5yT2NCqnZBxBAAP24QN4s732aczfUikPiMz4BnZR5sc
-         hQtQ==
-X-Gm-Message-State: AJIora+8IQlzDC1ehOOA5Hb42WHfYG9gm0bvKNOVsBsiaVJ5sixuAcZy
-        zJKuYBAXdRZJBT1wseqR3ffCfg==
-X-Google-Smtp-Source: AGRyM1uC6u+AYENUusLTvjTF21t/2tBdPMzXu+Al0x8EYMzWLkfcH0iUZyLZkMJlkxQPwIrrg53EzQ==
-X-Received: by 2002:a17:902:c411:b0:16c:28e3:c33d with SMTP id k17-20020a170902c41100b0016c28e3c33dmr17377724plk.126.1657949498729;
-        Fri, 15 Jul 2022 22:31:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y184-20020a6264c1000000b00528d7d27211sm4919059pfb.178.2022.07.15.22.31.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 22:31:38 -0700 (PDT)
-Message-ID: <62d24d3a.1c69fb81.6446b.824d@mx.google.com>
-Date:   Fri, 15 Jul 2022 22:31:38 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229589AbiGPFuG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 01:50:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E292C12F;
+        Fri, 15 Jul 2022 22:50:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6BC55CE3201;
+        Sat, 16 Jul 2022 05:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AF6C34114;
+        Sat, 16 Jul 2022 05:50:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657950601;
+        bh=j9DY9DQQSNgpJa+BVztQyf+TI2vr1A3e+XnYNtviNmQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RvSrOKDhe+8YNtHNwgIs2yzPR5fWTQWiYtplEMa5AnFuXeMlVvZ67lVZYaXczNJLD
+         LX3yzNsKxy5FOk/Q7nXYWYBX4KC7ChQKYTT545BT6N2cBmXdlxMl4chZ9TS+85SruH
+         VtuHl2CvsFOjuxYn9sEOdVz2+FY17xY4SROs/7CbG3subb0FwUAmwEvwakckW59bXj
+         nd7p9jyTBefw2Gi6ZCVVQq7cF6XtIYsl7BmcDQ8NbK0dOXQaXXUp6MULSrvhTQYOTG
+         fkeVz9Wiic5m+ihqUNrIvWMkm9f7B4ClFEgBFdo2O3/sHDM92lQSkQw1Tn5QmiHSJj
+         YATVkuyNxJc0Q==
+Message-ID: <7d7fc496-e990-07b6-0118-d54bf8d30651@kernel.org>
+Date:   Sat, 16 Jul 2022 08:49:56 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: pm-5.19-rc7-63-g1b41824f2ecfc
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (pm-5.19-rc7-63-g1b41824f2ecfc)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [GIT PULL] interconnect changes for 5.20
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220715101021.30109-1-djakov@kernel.org>
+ <YtFjOW77wGnToYt8@kroah.com> <YtFjbhn3pveplLQb@kroah.com>
+ <2a2bb00a-28ae-ecd8-760a-a83cc14c02fa@kernel.org>
+ <YtJK4UYMrvlAs3il@kroah.com>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <YtJK4UYMrvlAs3il@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (pm-5.19-rc7-63-g=
-1b41824f2ecfc)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
-5.19-rc7-63-g1b41824f2ecfc/
+On 16.07.22 8:21, Greg KH wrote:
+> On Fri, Jul 15, 2022 at 06:30:36PM +0300, Georgi Djakov wrote:
+>>
+>> On 15.07.22 15:54, Greg KH wrote:
+>>> On Fri, Jul 15, 2022 at 02:53:13PM +0200, Greg KH wrote:
+>>>> On Fri, Jul 15, 2022 at 01:10:21PM +0300, Georgi Djakov wrote:
+>>>>> Hello Greg,
+>>>>>
+>>>>> This is the pull request with interconnect changes for the 5.20-rc1 merge
+>>>>> window. It contains driver updates. The details are in the signed tag.
+>>>>>
+>>>>> All patches have been in linux-next during the last few days. No issues have
+>>>>> been reported so far. Please pull into char-misc-next.
+>>>>>
+>>>>> Thanks,
+>>>>> Georgi
+>>>>>
+>>>>> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+>>>>>
+>>>>>     Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+>>>>>
+>>>>> are available in the Git repository at:
+>>>>>
+>>>>>     git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.20-rc1
+>>>>
+>>>> Pulled and pushed out, thanks.
+>>>
+>>> Oops, nope, I got the following error:
+>>>
+>>> Fixes tag: Fixes: f0d8048525d7d("interconnect: Add imx core driver")
+>>> 	Has these problem(s):
+>>> 		- missing space between the SHA1 and the subject
+>>>
+>>
+>> Apologies for missing this. This was in linux-next for more than a week, but nobody
+>> reported it. I'll create a script to check for this problem to my workflow.
+>> Now sending you v2 pull request.
+> 
+> That's odd, as my scripts come from Stephen's linux-next scripts, I
+> would have thought he would have caught it before me.
 
-Tree: pm
-Branch: testing
-Git Describe: pm-5.19-rc7-63-g1b41824f2ecfc
-Git Commit: 1b41824f2ecfca03c667d33921100965fe537722
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+I also thought the same, but anyway, now added your verify_fixes.sh checks to my workflow.
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Thanks,
+Georgi
