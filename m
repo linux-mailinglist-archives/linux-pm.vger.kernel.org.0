@@ -2,75 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05D55774DC
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Jul 2022 09:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6DE577503
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Jul 2022 09:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiGQHGP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Jul 2022 03:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S232868AbiGQHzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Jul 2022 03:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiGQHGP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jul 2022 03:06:15 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CEE10FC4
-        for <linux-pm@vger.kernel.org>; Sun, 17 Jul 2022 00:06:13 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id j1so8185600wrs.4
-        for <linux-pm@vger.kernel.org>; Sun, 17 Jul 2022 00:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DpXvb+159lHHY+DSPGureqUWpwkD7K36EBaSI7Y/StY=;
-        b=CAZi4fYzdEpbAfBvFdSM5vTE//uBenSfFAkP7lDLsNxOhSQb9l+XqzJtxBUkdVBjYy
-         juZ579GH2WsP/qtEa67jSOR5E5hdYOXiszbdP9v0pfSy6CTgbX2Dd5jVSbQZAxnhaUMj
-         kh438yUhx1gGEdl6DRreIvRS/pwukV4mW+yTam5ZFo5wu8kuzKNRW5uEJMpxO/OF8/JV
-         t0DpISR3VM0k3Am+3SntbgXrfz58TiEADsVey+EoWd6SRZ0VU/cwqccN+fgPYDjzFRoq
-         dheJgNOgcVTvKFHIAEFRNkysPPduo5JNv9G4ZFJI1ypIzi5wEf6J+d36j20v7VlujnAk
-         qulg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DpXvb+159lHHY+DSPGureqUWpwkD7K36EBaSI7Y/StY=;
-        b=XhbGCHMiCbzS2V7wwi/4Wal78FqnPF5ohlLJMVIjVbv8UFaattaa1vqYycLnsh90E0
-         aaY3NqKzSARaEalWQcdzIR9rERIbJPAKcpAisAaIXh0MBPQzNiPiJmpXMtwB3vwxWXOe
-         Mowd+NcyKYHkggYVMqHOWSGC/5R5v+PtbT473MksSXNoIE/x6HsP9sWemNajJHAVxB8H
-         FyJvUmFp9SsCzZPHnL5nw7upY4kqIPrBTHgu2KmwMhSphP9+pMPMUGAlo+cT5qPwNQCg
-         Ni8ylfjsTBYEbjGFPr4Px/e7mUzSB1GAvn69abxE/AKOlADoxMAxMiVCUjRHqiJ+NVRO
-         065Q==
-X-Gm-Message-State: AJIora81ECHmfp7VjQyjdFciciJVsF2gqVxsaU2jhKa6Qxq8bC1ZDDJu
-        Erx+sYmNhbPWk7gslCjwGNGK8olEKTFPmA==
-X-Google-Smtp-Source: AGRyM1s/fmAk7a9lUun+xsUg0xaF+6mVSfcv67EYEoEQaVSEModqrDt5FOM5a19BAjGJB/qr20mlTQ==
-X-Received: by 2002:a5d:4806:0:b0:21d:66a2:5a52 with SMTP id l6-20020a5d4806000000b0021d66a25a52mr18315530wrq.632.1658041572041;
-        Sun, 17 Jul 2022 00:06:12 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6a38:5652:1b0c:da5e? ([2a05:6e02:1041:c10:6a38:5652:1b0c:da5e])
-        by smtp.googlemail.com with ESMTPSA id i4-20020a05600c354400b003a2c7bf0497sm9146800wmq.16.2022.07.17.00.06.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 00:06:11 -0700 (PDT)
-Message-ID: <7e6a5e80-6864-d1d4-4ac9-d90bec8dcf31@linaro.org>
-Date:   Sun, 17 Jul 2022 09:06:10 +0200
+        with ESMTP id S229476AbiGQHzJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jul 2022 03:55:09 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9377115834;
+        Sun, 17 Jul 2022 00:55:08 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oCz7G-0003PZ-5e; Sun, 17 Jul 2022 09:55:02 +0200
+Message-ID: <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+Date:   Sun, 17 Jul 2022 09:55:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] thermal/core: Fix refcount bugs in
- __thermal_cooling_device_register()
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
 Content-Language: en-US
-To:     Liang He <windhl@126.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220707062112.308239-1-windhl@126.com>
- <CAJZ5v0iOF3n98byY5C4zAjM=AbxDiUHF9vqEp78i6_jg8M5MqQ@mail.gmail.com>
- <f9e72fdf-ec3e-d2bf-691e-70b51123566c@linaro.org>
- <1cf907bc.6f2.1820a1695f9.Coremail.windhl@126.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <1cf907bc.6f2.1820a1695f9.Coremail.windhl@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     brchuckz@netscape.net, jbeulich@suse.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "# 5 . 17" <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220715142549.25223-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1658044508;3110b8b4;
+X-HE-SMSGID: 1oCz7G-0003PZ-5e
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,31 +52,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/07/2022 04:57, Liang He wrote:
+Hi Juergen!
 
-[ ... ]
-
->> Yes, the of_node_put() is often missing when there is the for_each_xxx
->> OF API. But here the cdev->np is only used to compare pointers so used
->> as an identifier, not de-referenced just comparing the addresses.
+On 15.07.22 16:25, Juergen Gross wrote:
+> Today PAT can't be used without MTRR being available, unless MTRR is at
+> least configured via CONFIG_MTRR and the system is running as Xen PV
+> guest. In this case PAT is automatically available via the hypervisor,
+> but the PAT MSR can't be modified by the kernel and MTRR is disabled.
 > 
->>
+> As an additional complexity the availability of PAT can't be queried
+> via pat_enabled() in the Xen PV case, as the lack of MTRR will set PAT
+> to be disabled. This leads to some drivers believing that not all cache
+> modes are available, resulting in failures or degraded functionality.
 > 
-> Thanks, this is a good lesson that explains when there is no need
-> to refcount new reference.
-> So I think there is also no need to patch anything, right?
+> The same applies to a kernel built with no MTRR support: it won't
+> allow to use the PAT MSR, even if there is no technical reason for
+> that, other than setting up PAT on all cpus the same way (which is a
+> requirement of the processor's cache management) is relying on some
+> MTRR specific code.
+> 
+> Fix all of that by:
+> 
+> - moving the function needed by PAT from MTRR specific code one level
+>   up
+> - adding a PAT indirection layer supporting the 3 cases "no or disabled
+>   PAT", "PAT under kernel control", and "PAT under Xen control"
+> - removing the dependency of PAT on MTRR
 
+Thx for working on this. If you need to respin these patches for one
+reason or another, could you do me a favor and add proper 'Link:' tags
+pointing to all reports about this issue? e.g. like this:
 
-Right, no need a change for this.
+ Link: https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
 
-Thanks anyway for tracking down the refcount in the code
+These tags are considered important by Linus[1] and others, as they
+allow anyone to look into the backstory weeks or years from now. That is
+why they should be placed in cases like this, as
+Documentation/process/submitting-patches.rst and
+Documentation/process/5.Posting.rst explain in more detail. I care
+personally, because these tags make my regression tracking efforts a
+whole lot easier, as they allow my tracking bot 'regzbot' to
+automatically connect reports with patches posted or committed to fix
+tracked regressions.
 
+[1] see for example:
+https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
 
-[ ... ]
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+BTW, let me tell regzbot to monitor this thread:
+
+#regzbot ^backmonitor:
+https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
