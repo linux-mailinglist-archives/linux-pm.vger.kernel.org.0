@@ -2,128 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772E7577385
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Jul 2022 04:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C42B5773F2
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Jul 2022 06:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbiGQC67 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Jul 2022 22:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S232067AbiGQEGX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Jul 2022 00:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233390AbiGQC6s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Jul 2022 22:58:48 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AB65581;
-        Sat, 16 Jul 2022 19:58:37 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so15108740pjm.2;
-        Sat, 16 Jul 2022 19:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/VI7YUfA5Fsxh+qRIziCTYBbz2ocw98Lfn29Sh44rrA=;
-        b=qTDxMO+v4qvRl/qq+VwyHKx/LIEmhLdzp2ZDtJNh+F+ks0Kv0UflWGQnkdGOioltiO
-         +a9O+WP5yke0yyO5t/u9BSJt7JzmoTsr76CIPP837tIaXbp4QE9pDOozcVHlM+qYo891
-         rPTgyiWJzq232b3kf3W5MXLMaYJrB6zqGwaVqrZ/hWkBBJuSLpWXeWlRf2BA6o9ko9sa
-         kQ830ZFfi4J2s7XTpaZyGuY85/gj3FkFECHczXTbZWW17ILMsu6YjZa+sXCbqSn4JUzP
-         3jzbeO3u8SuWFwHwt2KkxBmQsnhZsd3etZXVZFwppQk3xrQPJH6THmn7feblsFoD6pJV
-         7MJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/VI7YUfA5Fsxh+qRIziCTYBbz2ocw98Lfn29Sh44rrA=;
-        b=jMF1Gglc9FjISpzfV9zXI75PP7qK55Nbg2AuEIkbHpxr5M2pc1MBFQd9sJPexTwe2K
-         ujioDpRDZZY3gd8o7unXXjqB403SdHnznAezEkU2FKpKBRCcG93JHCZ1y5RuQAhxwHjT
-         GaniIf9cPjuySBFo6rR2FpGpoCVk++sXzMhRitNPyL1tse+i9bgCgmBXcbPN97l/k8W6
-         PCPT/uOn15+JREBGl9ih5He2dVoSbjjIvt/QRVnbwO89mRqLgQ84h0B0PQ4WSdQQLjj2
-         L1Jp/93Qehwf3q5xsFJi8Ld3V2FC1va2HAx/V0X8TPVjQ9Siid75vooE1Ti78po6wZ6z
-         Aw9g==
-X-Gm-Message-State: AJIora8LmxvGiW2PPfmMTfMRcbcijwwf6Q/e1ZIktfwn1wuF+x2Xvbah
-        UV7RVFys8qad3Vwe1Ln1Qg==
-X-Google-Smtp-Source: AGRyM1sXw6VE5tW7ajLmW2A1FcYbP7hd9CuyNXGLTTzWc42ZEJQwTEWapwlZBorABnPBw5jEmcKe8A==
-X-Received: by 2002:a17:902:a513:b0:16c:e25e:16b with SMTP id s19-20020a170902a51300b0016ce25e016bmr3744596plq.86.1658026717073;
-        Sat, 16 Jul 2022 19:58:37 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id n18-20020aa79852000000b005252a06750esm1693975pfq.182.2022.07.16.19.58.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jul 2022 19:58:36 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     t.schramm@manjaro.org, sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] power: supply: cw2015: Use device managed API to simplify the code
-Date:   Sun, 17 Jul 2022 10:58:20 +0800
-Message-Id: <20220717025820.1610091-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232022AbiGQEGW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jul 2022 00:06:22 -0400
+Received: from sonic315-8.consmr.mail.gq1.yahoo.com (sonic315-8.consmr.mail.gq1.yahoo.com [98.137.65.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBC51EC43
+        for <linux-pm@vger.kernel.org>; Sat, 16 Jul 2022 21:06:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1658030780; bh=cFQdqAlSWQ4CBg5sHoVyAua4lSY5DokrLNSjD/d1ri4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=jlq14HhZZg105Ye1jFmKak3k9TWx6zGR/HCyAi8rDZpN78Y2mq5IxgDNeMZVZr/mjmQKjxIU4wVI7kHRonFTtCsa34JhoRl+QWl9XgG6SGKnSeavMRGUYvyCS9kh8jZNyLLGkoJzyGb2FWywrbXNtBmDiI1KC32j5iEnfsvK9WpgMws4bav7jmB1nL5iuw59pZeSH/GDa6x+g/xtgLr34m5dhTebcnKDDu56H5hf/tuxYE7f+UM8m+a9jv7uiPl+Z4alZjeFu4W0M+xm/2MU5VUZrsikuJKwIIdGrB8EeDDFoIYtIUU469chlwg1pquOmgzbzgL/Y8YGDtf4Np2sjA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1658030780; bh=iqlz8AX8cYnQt049OzKCHJ20MTwlqIp5A81Hb3meSLv=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=txQuTHr8TkO44ag8sFyCZovVaIm3cTq7sp1ozY3hZJhGEPayLXVGNB43AYtk6ZDjz2lxQbYzHGwGrfD8+SjUVxpEb3ilYjqjUVco5HKOL6NVAoR44L/zmGVPYTAqV65WyySECJlucQo2J0QphTVRAT4ixGnC3Xnsm5LrwHf4j7cAaCiCNh69/8unfBqAdO9rkj7irJTwk/dIXwEct1QoP3xGb7m9vk2wQNfJyEX3CieyqKimHpce+RKEChdCn4DYNr+W4R6kAM3t3OTDPLf/Wa6U2fLEGtG/R4HvRuc9P/gSpGkgL0MJZuSzneeWKALjAbjpGDQteC33Z2uLa/6MTg==
+X-YMail-OSG: i677T34VM1nRFvOlQ3CCChOdXznGaiPU.aGmFRK_C5Z0TVS00794IZFEwFz_kyn
+ 9Nc6NrfdrpuOvsnHiTaj0xHKidH3hubleVWZ5XrrRgMcloj3XI3QONjdrJsS9BAH.PhwsnlcDM7r
+ oX9TnVbiSP9H53xdguWFFAASAzYTrcyppaGUTWbe9yQJYv1SKQ9sUCb8IlqG3Xvb0T1YffT8MGOX
+ YaFlpxqWkUAbBAHilV9sXSfwN2oALmHXvdwpGulX5.N7VyxJNZuryKayCL0m6vbm72ID7vOUbzCr
+ YbqboJ6.1bfeshChIFsH41YH1fSx5xAGcROZjhMvGfmajrToL4w40OoMegiUNL_FPBZrOeze419M
+ WhvwxdLmG1QK.5yHopdGWX7B0YdpgEkPS9Fbc0B.qgOqR.f4VUwmXe5CSvVeWZdTx1.C55fLWWRS
+ 5X5.R7W.FNqAgAql5e7saQxs8bEEKbifrPm1vunCxjA_FMunrqqQIKNtk3sTnxQ8ZEuZb2Z4wozF
+ SVKmt2B2.sSKMmPCL7qXpDW7.KZWAhL4bps1YCENARRU61_qAXcNYFmikoCS0ICkDMEveSi4lTS5
+ 5CE2LqN0el6eue1c4PwXxUevtF38NFbBhHCUZFpXe0fM8TECcYoRddz8DP6KGHCgEO_HBLslJctn
+ E0xqfygKY7FpAkkkVRmt2UozB55x_F_sLFxNK8W1qPTYZGF5ydzozQA5lxnfdVDyAeYjl4S2hOQh
+ Ak6UrhLbYQB_6XV.pSXPQDcjFHBJqkPT1GMidS0ACDu70drY_sYfrS5mT8RaMxY98WVqux7WAKXf
+ 1sD59mhWSHXOOX7jTGqmWYsDtPuaCu1RldLFyoIofwFB3_VYJJvXhXeEqiuupAWptn7ugbd1QTNw
+ SzclM2wbfLOTqkjgvGc3ndx1BQbzlZNZbmMQLhJQUwi1hwqB_KS7XU9xqhUB2ch4YMpulSsup2Iw
+ cxfHmZzQOkgOzLyt7wSZyLvL2aObHZ_uIheeT22LZkUtz2Um8ggvtjMY7tD7aS3S6nr45_aeLlI1
+ R4e3WWFIGPFx3.B2ps5fVDO.oz8c_YA3dxcoPaodI4F0DyEQ3ARoW8M5FSv0_YsKnwryVMnS3Y0Q
+ _NfuBIA2rO1s4gJQ_hlEiStezgo5Ce.PwkPsbkidKcmwCul.LNsnz1gkrlzSzegmKbwi1k0N2fCw
+ x0HQ72QgngGu5u3jF_yhdlqDiBs_SB_ICafXzCea6ai8LQT_VUAqvi2ynWvR66yOHEyb7Q5AT_ti
+ lPAoC.TD6Oaj9oT1kaGtk2PWfllLm0cp759hUmvX0Rj7YrpajkkMnYKyOFV0ZyiJ89jFFCsE7Tn9
+ wPzqS.9A_4eM_wqPUvQOFGs8QJeEyKYd2MTxrGLb..8o5AQU19lvRrZx.YQv1H4tr1DiGHO84LtD
+ bGaLHQCuqdfqh.kdri1IB7YcuPoD_vMz8O_exeyf3pqG9iISuvflxA.KM0X0bdZIcb2Ur12nLVov
+ avgfc.RWbTNRAjGGQ21cKhbPDUv_3HpMHnHmbV_mIw08k2.pJHpRYJ57IsuiLhqwowLLSW3LnfQw
+ lv5vMGJPtSCaK64q2UGhEGH34DUEfpQEH_WptKgJZM5G0PSQqz80FWTyW5fUpYc03U7czk9xBd8e
+ umCsMznxG4L1dyPf7neH1twIhhCeMvKswhyeIEKOSHG0R_hwo0mfNLPJU11lw96NjRaFuCxrI.4S
+ WOnDzoTA2jHUZ2HC6dKrSOKW2qNH0QS6XYNrkCAldD0EG6JF2u.ON9imN7WD_H9CbbgUyWKoivpu
+ Als7OCsSAHQe_plMn0T.cOmrPDkQBFl.GWjLR7bTnFOVyNfzHweeellsvyOYqnbivFCdR_ZuBz5x
+ r2VjjG9z0aKHSiJagHCbixvCyB_nVY4UK7_bcXEqHkq3oVefKZOvEPgqgrpT0djYJnLmdYevGxrZ
+ fBXgS_zjvO9wddpe7JQx3Fzf5H9iugb8_uhllHbocmx4wZRHYh.JpTRIl_gPGZeZlJM3w4yrdNEH
+ LhjB27QhfECh1grgbAhreJKhl81b4XeHLZXbp322Y6YInoBTnLQu0wHNEL0hzmZj6B19M9ExTfFd
+ EGdLjVAkUzlKmUqPWCkcg2GWH3ZZ7YxyWDJx6tFXaK0HQ0w4QOCaQVw2wIXdTzCMVKkL9cATc2Ok
+ U_YZSTW7N73UeJlrKZTUbT20qh6J94YR961j9l6hzoYvDuyyO2llJOX32qR4gSQwNMVEcdZQ2w9d
+ 6oJ9KzDZw_yU-
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.gq1.yahoo.com with HTTP; Sun, 17 Jul 2022 04:06:20 +0000
+Received: by hermes--production-ne1-7864dcfd54-jmsp4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 76f19ee75a50bf95f5392cd0b76efdaa;
+          Sun, 17 Jul 2022 04:06:19 +0000 (UTC)
+Message-ID: <3be26f87-78d4-c2fb-0e27-db0196f9d62f@netscape.net>
+Date:   Sun, 17 Jul 2022 00:06:17 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "# 5 . 17" <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <7bf307c7-0b05-781b-a2a3-19b47589eb8a@netscape.net>
+ <YtKkECIpM5q+TCT9@zn.tnic>
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <YtKkECIpM5q+TCT9@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use devm_delayed_work_autocancel() instead of the INIT_DELAYED_WORK() to
-remove the cw_bat_remove() function.
+On 7/16/2022 7:42 AM, Borislav Petkov wrote:
+> On Sat, Jul 16, 2022 at 07:32:46AM -0400, Chuck Zmudzinski wrote:
+> > Can you confirm that with this patch series you are trying
+> > to fix that regression?
+>
+> Yes, this patchset is aimed to fix the whole situation but please don't
+> do anything yet - I need to find time and look at the whole approach
+> before you can test it. Just be patient and we'll ping you when the time
+> comes.
+>
+> Thx.
+>
 
-And power_supply_put_battery_info() can also be removed because the
-power_supply_get_battery_info() uses device managed memory allocation.
+I will wait until I get the ping before trying it.
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/power/supply/cw2015_battery.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+Thanks,
 
-diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-index 728e2a6cc9c3..6d52641151d9 100644
---- a/drivers/power/supply/cw2015_battery.c
-+++ b/drivers/power/supply/cw2015_battery.c
-@@ -21,6 +21,7 @@
- #include <linux/regmap.h>
- #include <linux/time.h>
- #include <linux/workqueue.h>
-+#include <linux/devm-helpers.h>
- 
- #define CW2015_SIZE_BATINFO		64
- 
-@@ -698,7 +699,8 @@ static int cw_bat_probe(struct i2c_client *client)
- 	}
- 
- 	cw_bat->battery_workqueue = create_singlethread_workqueue("rk_battery");
--	INIT_DELAYED_WORK(&cw_bat->battery_delay_work, cw_bat_work);
-+	devm_delayed_work_autocancel(&client->dev,
-+							  &cw_bat->battery_delay_work, cw_bat_work);
- 	queue_delayed_work(cw_bat->battery_workqueue,
- 			   &cw_bat->battery_delay_work, msecs_to_jiffies(10));
- 	return 0;
-@@ -725,15 +727,6 @@ static int __maybe_unused cw_bat_resume(struct device *dev)
- 
- static SIMPLE_DEV_PM_OPS(cw_bat_pm_ops, cw_bat_suspend, cw_bat_resume);
- 
--static int cw_bat_remove(struct i2c_client *client)
--{
--	struct cw_battery *cw_bat = i2c_get_clientdata(client);
--
--	cancel_delayed_work_sync(&cw_bat->battery_delay_work);
--	power_supply_put_battery_info(cw_bat->rk_bat, cw_bat->battery);
--	return 0;
--}
--
- static const struct i2c_device_id cw_bat_id_table[] = {
- 	{ "cw2015", 0 },
- 	{ }
-@@ -752,7 +745,6 @@ static struct i2c_driver cw_bat_driver = {
- 		.pm = &cw_bat_pm_ops,
- 	},
- 	.probe_new = cw_bat_probe,
--	.remove = cw_bat_remove,
- 	.id_table = cw_bat_id_table,
- };
- 
--- 
-2.25.1
-
+Chuck
