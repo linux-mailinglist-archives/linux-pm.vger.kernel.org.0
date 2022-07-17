@@ -2,109 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C42B5773F2
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Jul 2022 06:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17655774C6
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Jul 2022 08:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbiGQEGX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Jul 2022 00:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S232022AbiGQGOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Jul 2022 02:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbiGQEGW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jul 2022 00:06:22 -0400
-Received: from sonic315-8.consmr.mail.gq1.yahoo.com (sonic315-8.consmr.mail.gq1.yahoo.com [98.137.65.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBC51EC43
-        for <linux-pm@vger.kernel.org>; Sat, 16 Jul 2022 21:06:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1658030780; bh=cFQdqAlSWQ4CBg5sHoVyAua4lSY5DokrLNSjD/d1ri4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=jlq14HhZZg105Ye1jFmKak3k9TWx6zGR/HCyAi8rDZpN78Y2mq5IxgDNeMZVZr/mjmQKjxIU4wVI7kHRonFTtCsa34JhoRl+QWl9XgG6SGKnSeavMRGUYvyCS9kh8jZNyLLGkoJzyGb2FWywrbXNtBmDiI1KC32j5iEnfsvK9WpgMws4bav7jmB1nL5iuw59pZeSH/GDa6x+g/xtgLr34m5dhTebcnKDDu56H5hf/tuxYE7f+UM8m+a9jv7uiPl+Z4alZjeFu4W0M+xm/2MU5VUZrsikuJKwIIdGrB8EeDDFoIYtIUU469chlwg1pquOmgzbzgL/Y8YGDtf4Np2sjA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1658030780; bh=iqlz8AX8cYnQt049OzKCHJ20MTwlqIp5A81Hb3meSLv=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=txQuTHr8TkO44ag8sFyCZovVaIm3cTq7sp1ozY3hZJhGEPayLXVGNB43AYtk6ZDjz2lxQbYzHGwGrfD8+SjUVxpEb3ilYjqjUVco5HKOL6NVAoR44L/zmGVPYTAqV65WyySECJlucQo2J0QphTVRAT4ixGnC3Xnsm5LrwHf4j7cAaCiCNh69/8unfBqAdO9rkj7irJTwk/dIXwEct1QoP3xGb7m9vk2wQNfJyEX3CieyqKimHpce+RKEChdCn4DYNr+W4R6kAM3t3OTDPLf/Wa6U2fLEGtG/R4HvRuc9P/gSpGkgL0MJZuSzneeWKALjAbjpGDQteC33Z2uLa/6MTg==
-X-YMail-OSG: i677T34VM1nRFvOlQ3CCChOdXznGaiPU.aGmFRK_C5Z0TVS00794IZFEwFz_kyn
- 9Nc6NrfdrpuOvsnHiTaj0xHKidH3hubleVWZ5XrrRgMcloj3XI3QONjdrJsS9BAH.PhwsnlcDM7r
- oX9TnVbiSP9H53xdguWFFAASAzYTrcyppaGUTWbe9yQJYv1SKQ9sUCb8IlqG3Xvb0T1YffT8MGOX
- YaFlpxqWkUAbBAHilV9sXSfwN2oALmHXvdwpGulX5.N7VyxJNZuryKayCL0m6vbm72ID7vOUbzCr
- YbqboJ6.1bfeshChIFsH41YH1fSx5xAGcROZjhMvGfmajrToL4w40OoMegiUNL_FPBZrOeze419M
- WhvwxdLmG1QK.5yHopdGWX7B0YdpgEkPS9Fbc0B.qgOqR.f4VUwmXe5CSvVeWZdTx1.C55fLWWRS
- 5X5.R7W.FNqAgAql5e7saQxs8bEEKbifrPm1vunCxjA_FMunrqqQIKNtk3sTnxQ8ZEuZb2Z4wozF
- SVKmt2B2.sSKMmPCL7qXpDW7.KZWAhL4bps1YCENARRU61_qAXcNYFmikoCS0ICkDMEveSi4lTS5
- 5CE2LqN0el6eue1c4PwXxUevtF38NFbBhHCUZFpXe0fM8TECcYoRddz8DP6KGHCgEO_HBLslJctn
- E0xqfygKY7FpAkkkVRmt2UozB55x_F_sLFxNK8W1qPTYZGF5ydzozQA5lxnfdVDyAeYjl4S2hOQh
- Ak6UrhLbYQB_6XV.pSXPQDcjFHBJqkPT1GMidS0ACDu70drY_sYfrS5mT8RaMxY98WVqux7WAKXf
- 1sD59mhWSHXOOX7jTGqmWYsDtPuaCu1RldLFyoIofwFB3_VYJJvXhXeEqiuupAWptn7ugbd1QTNw
- SzclM2wbfLOTqkjgvGc3ndx1BQbzlZNZbmMQLhJQUwi1hwqB_KS7XU9xqhUB2ch4YMpulSsup2Iw
- cxfHmZzQOkgOzLyt7wSZyLvL2aObHZ_uIheeT22LZkUtz2Um8ggvtjMY7tD7aS3S6nr45_aeLlI1
- R4e3WWFIGPFx3.B2ps5fVDO.oz8c_YA3dxcoPaodI4F0DyEQ3ARoW8M5FSv0_YsKnwryVMnS3Y0Q
- _NfuBIA2rO1s4gJQ_hlEiStezgo5Ce.PwkPsbkidKcmwCul.LNsnz1gkrlzSzegmKbwi1k0N2fCw
- x0HQ72QgngGu5u3jF_yhdlqDiBs_SB_ICafXzCea6ai8LQT_VUAqvi2ynWvR66yOHEyb7Q5AT_ti
- lPAoC.TD6Oaj9oT1kaGtk2PWfllLm0cp759hUmvX0Rj7YrpajkkMnYKyOFV0ZyiJ89jFFCsE7Tn9
- wPzqS.9A_4eM_wqPUvQOFGs8QJeEyKYd2MTxrGLb..8o5AQU19lvRrZx.YQv1H4tr1DiGHO84LtD
- bGaLHQCuqdfqh.kdri1IB7YcuPoD_vMz8O_exeyf3pqG9iISuvflxA.KM0X0bdZIcb2Ur12nLVov
- avgfc.RWbTNRAjGGQ21cKhbPDUv_3HpMHnHmbV_mIw08k2.pJHpRYJ57IsuiLhqwowLLSW3LnfQw
- lv5vMGJPtSCaK64q2UGhEGH34DUEfpQEH_WptKgJZM5G0PSQqz80FWTyW5fUpYc03U7czk9xBd8e
- umCsMznxG4L1dyPf7neH1twIhhCeMvKswhyeIEKOSHG0R_hwo0mfNLPJU11lw96NjRaFuCxrI.4S
- WOnDzoTA2jHUZ2HC6dKrSOKW2qNH0QS6XYNrkCAldD0EG6JF2u.ON9imN7WD_H9CbbgUyWKoivpu
- Als7OCsSAHQe_plMn0T.cOmrPDkQBFl.GWjLR7bTnFOVyNfzHweeellsvyOYqnbivFCdR_ZuBz5x
- r2VjjG9z0aKHSiJagHCbixvCyB_nVY4UK7_bcXEqHkq3oVefKZOvEPgqgrpT0djYJnLmdYevGxrZ
- fBXgS_zjvO9wddpe7JQx3Fzf5H9iugb8_uhllHbocmx4wZRHYh.JpTRIl_gPGZeZlJM3w4yrdNEH
- LhjB27QhfECh1grgbAhreJKhl81b4XeHLZXbp322Y6YInoBTnLQu0wHNEL0hzmZj6B19M9ExTfFd
- EGdLjVAkUzlKmUqPWCkcg2GWH3ZZ7YxyWDJx6tFXaK0HQ0w4QOCaQVw2wIXdTzCMVKkL9cATc2Ok
- U_YZSTW7N73UeJlrKZTUbT20qh6J94YR961j9l6hzoYvDuyyO2llJOX32qR4gSQwNMVEcdZQ2w9d
- 6oJ9KzDZw_yU-
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.gq1.yahoo.com with HTTP; Sun, 17 Jul 2022 04:06:20 +0000
-Received: by hermes--production-ne1-7864dcfd54-jmsp4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 76f19ee75a50bf95f5392cd0b76efdaa;
-          Sun, 17 Jul 2022 04:06:19 +0000 (UTC)
-Message-ID: <3be26f87-78d4-c2fb-0e27-db0196f9d62f@netscape.net>
-Date:   Sun, 17 Jul 2022 00:06:17 -0400
+        with ESMTP id S229980AbiGQGOv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jul 2022 02:14:51 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A95175BB;
+        Sat, 16 Jul 2022 23:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658038489; x=1689574489;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=S1WgjQRPa4Uwj335+S4W8dF8LPgNSePYpZLtsiEAM9I=;
+  b=nM8/Os6wETRcSTlnOzaZZ4Od7vhHu4wExXRf8URou+qfqYTHn5rLrz1k
+   ErIhiTPJYq4ptqS8LRVYNo5Y7eJ5+OTsckSANqIsXdjYianwT2qVcmvp2
+   y1dBpFZZ6ztf6opNaAEbd1fYiGaOOzCbL1w3DuBNOtvBHvPl79xiK+91Q
+   F+4FlaCEAw/9TzEZQWrUieov/BjU4STra/37dVQs4PBrnisqzBpx/MS0s
+   WYUpPFddxKnBHVuTWb4hB5J0NEn3FRsHn7lF7ri0Xn4c+zeJbpRZwoRWT
+   XYTcwIDftQmInREjYmxORXVEXD7lOBDkwP9tukvZanrTrW77x557+Ai6I
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="372343457"
+X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
+   d="scan'208";a="372343457"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 23:14:49 -0700
+X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
+   d="scan'208";a="624329999"
+Received: from agupta4-mobl3.gar.corp.intel.com ([10.215.155.220])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 23:14:46 -0700
+Message-ID: <61311732eeea1f45e85537e911e4bb024c0a30b7.camel@intel.com>
+Subject: Re: [PATCH] intel: thermal: PCH: Drop ACPI_FADT_LOW_POWER_S0 check
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Date:   Sun, 17 Jul 2022 14:14:42 +0800
+In-Reply-To: <12013659.O9o76ZdvQC@kreacher>
+References: <12013659.O9o76ZdvQC@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "# 5 . 17" <stable@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-References: <20220715142549.25223-1-jgross@suse.com>
- <7bf307c7-0b05-781b-a2a3-19b47589eb8a@netscape.net>
- <YtKkECIpM5q+TCT9@zn.tnic>
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-In-Reply-To: <YtKkECIpM5q+TCT9@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/16/2022 7:42 AM, Borislav Petkov wrote:
-> On Sat, Jul 16, 2022 at 07:32:46AM -0400, Chuck Zmudzinski wrote:
-> > Can you confirm that with this patch series you are trying
-> > to fix that regression?
->
-> Yes, this patchset is aimed to fix the whole situation but please don't
-> do anything yet - I need to find time and look at the whole approach
-> before you can test it. Just be patient and we'll ping you when the time
-> comes.
->
-> Thx.
->
+On Thu, 2022-07-14 at 21:11 +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> If ACPI_FADT_LOW_POWER_S0 is not set, this doesn't mean that low-
+> power
+> S0 idle is not usable.=C2=A0 It merely means that using S3 on the given
+> system is more beneficial from the energy saving perspective than
+> using
+> low-power S0 idle, as long as S3 is supported.
 
-I will wait until I get the ping before trying it.
+Agreed.
 
-Thanks,
+>=20
+> Suspend-to-idle is still a valid suspend mode if
+> ACPI_FADT_LOW_POWER_S0
+> is not set and the pm_suspend_via_firmware() check in
+> pch_wpt_suspend()
+> is sufficient to distinguish suspend-to-idle from S3, so drop the
+> confusing ACPI_FADT_LOW_POWER_S0 check.
 
-Chuck
+the cooling delay in the suspend callback is to make sure PCH
+temperature won't block S0ix during s2idle. So if S0ix is not
+supported, it is meaningless to invoke the cooling delay during s2idle.
+
+so the problem is that we don't have an indicator for S0ix capability.
+And this also applies to drivers/rtc/rtc-cmos.c, where we use ACPI SCI
+for runtime RTC wakeup instead of HPET interrupt on "S0ix capable"
+platforms because the HPET timer may block S0ix.
+
+thanks,
+rui
+
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> =C2=A0drivers/thermal/intel/intel_pch_thermal.c |=C2=A0=C2=A0=C2=A0 8 ---=
+-----
+> =C2=A01 file changed, 8 deletions(-)
+>=20
+> Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
+> +++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
+> @@ -207,14 +207,6 @@ static int pch_wpt_suspend(struct pch_th
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Do not check temperature if=
+ it is not a S0ix capable
+> platform */
+> -#ifdef CONFIG_ACPI
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!(acpi_gbl_FADT.flags & AC=
+PI_FADT_LOW_POWER_S0))
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0return 0;
+> -#else
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> -#endif
+> -
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Do not check temperatu=
+re if it is not s2idle */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (pm_suspend_via_firmwa=
+re())
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+>=20
+>=20
+>=20
+
