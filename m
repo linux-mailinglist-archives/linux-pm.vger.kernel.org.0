@@ -2,180 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB7E578049
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 12:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7DF578091
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 13:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbiGRKzI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 06:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
+        id S234482AbiGRLST (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 07:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbiGRKzH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 06:55:07 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE076DF3D
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 03:55:05 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id v15so9371408ljc.1
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 03:55:05 -0700 (PDT)
+        with ESMTP id S234213AbiGRLSS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 07:18:18 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2F1180B;
+        Mon, 18 Jul 2022 04:18:17 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id r21so7734860qtn.11;
+        Mon, 18 Jul 2022 04:18:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=65axDZrjnZBXcWUayw3QWyz90285gEottBlBhu/SSjw=;
-        b=KOV72CPlJAzzABIbu0WidxJcA9FDNi+RPjMmY1JwIFq4HWTsbk1pXpuOMx8vfFC+2m
-         ETOgPopA64TUimrM7ZNTmR5Zc+A6vS0qMSiH92/pZqRqflnU/WfrbQkXeDlZgQBeFtZW
-         nRBbOmODI3dwNDqiCcbmH4nQFTsrEJ+mzCzdRM2a2dbEraNpUnm8aVzx39RdHoOnHA0z
-         iSkafeqeEamKXA1cH65YNaoC3g0DWok1l5JymZNgHGDH3ftqDjUB7c19BGtMqTXy0MsH
-         3N31glBP054j3nBIVo1tqDAnVf2e09+xu6xMHzXJg4WaauY8Lfm7ZbW32ku2bLqK7IBh
-         2iBg==
+        bh=wSoYENXBgH2mwK4hdRwcr5ZngBoL0AeSrBZrHAlbPeQ=;
+        b=qFnFWPwvGVggO9eAAgTTMi5N3kU74UfugZ/F1ND8Dh1XwEYNQq9hleridz+UuErbjp
+         kKXke5m5utIeYESJxdI+Imw1dN7Ky712JivV5EepwVudgfHjmTqzT/4Csy8a5PRWaYcW
+         WT7WNRwPzbR88elpVuCiYFy314nf03iGRthvnSl47bKymr5iw2ISiSCilphKmc3sjDBm
+         wiODnzpQ5ZhUPmt72MGydEbUEk8Tl3V01TfyuGjdP3zZ6dMAa1QHvvhfxlrb1Fhq/iC3
+         p3s1kljCg7uX6D1BpJ/6XC9U0bCN4LfKIpfi4lFkm26bo4VkK/Gcyeu4o/iFLsYdoMKG
+         BZIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=65axDZrjnZBXcWUayw3QWyz90285gEottBlBhu/SSjw=;
-        b=hM6KzOsTWkCDVI4oRWgxEQwmJpSGt0ZfCi1+YFxXfD2K2zFFBnkZ3PX4iWhlHEEoEK
-         X7bj0X52+AWClTKYH7TDGmLVx21jDRmQtncgO9VHn2V3zGhXuRK3Jw0eRBfg0V3DwAf8
-         owujxVfvuR96h0CNvxOa1ctl9XPpac6TGJtotriCC2+XWApZIFsRBzUW2Gvcd3+ZYweS
-         uCJ4bgRpnrDQVf/2D2eHYCL4OSuB7B941P4p4SuuuelE649oDwaGqY0oXJzz+osDeCyt
-         riyiLSGgchBjVk3MHsOsEKZB7HP/i3nzgFhZZTYFaDxcmNyg/uxDt2oesMBsroEHz+4e
-         98vw==
-X-Gm-Message-State: AJIora9SVXn7pohGWCC1HIMx2kx48YTNwIhgSOhjQFXuDl+N/bcpc6ht
-        5u1fdzqVXK5A5vWap3qoPGO1FGNh0LTtxYyhaxsXWA==
-X-Google-Smtp-Source: AGRyM1tvOUNdvPqHOEw1A9rLm7e4DBk5vbwRTdNKP1qGAo/AUT5hGNImOjZ4ODG65HsAHFNOTdXmh64ni2qNbjiPU3E=
-X-Received: by 2002:a2e:9b0e:0:b0:25d:9ded:7b4f with SMTP id
- u14-20020a2e9b0e000000b0025d9ded7b4fmr8786108lji.4.1658141703976; Mon, 18 Jul
- 2022 03:55:03 -0700 (PDT)
+        bh=wSoYENXBgH2mwK4hdRwcr5ZngBoL0AeSrBZrHAlbPeQ=;
+        b=nAuIO1vKX1NU9KD9WZt/ADfLuy3A7qszMDimDHxlqaZNKiNBICNqSGdJf+KGlJ5GSN
+         9jh/83KeH8d2xYTZTvRjMNgiuT6YP5YpuhdFtkdRuu9Sr4swdAxdqWrrW0JK5QZOPsmo
+         OX9eHtVoHgHJOffb81gvsfVkCk59WZxOileVjnt59Xn7cMKfm891XfkwdMi4aBhXSSTN
+         byOM2cGxeeECrES+rL/9VCtZuVq5NbQ1h3N0SY8AisBDucOJnGbsTGsqUUZT80Ccb67P
+         siMwC6B2fOCFxGpNVI3O95ngzH1rx8AVT4W3ezP5oLlSSGltmAT4t0YjexC8AoY++Jlu
+         lPcA==
+X-Gm-Message-State: AJIora8nZVdcLVY+wrYat7Q6QmyBIIjKQ98pRxZSPuAJFPFs4Al58ljV
+        DxLHvxVoX5QrxQ3MRFDskLsn1UhrV9EXQMg7Y8M=
+X-Google-Smtp-Source: AGRyM1sDQntCUf7aWlvIzBrAp3ngAMq6sCK0MNxJ0IaoTAwyexPRWMVJcAdASNSTm/k1fe6tXf81WYvadsLxzbGsFLI=
+X-Received: by 2002:ac8:5a8c:0:b0:31d:2826:d14f with SMTP id
+ c12-20020ac85a8c000000b0031d2826d14fmr20168056qtc.198.1658143096830; Mon, 18
+ Jul 2022 04:18:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
-In-Reply-To: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 18 Jul 2022 12:54:27 +0200
-Message-ID: <CAPDyKFr0Lnp_3rUWcdZMcgtcFW050hOiGVZV_bVu=pqCLE8dEw@mail.gmail.com>
-Subject: Re: [PATCH v2] power: domain: handle power supplies that need interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-14-peterwu.pub@gmail.com>
+ <ec3bdfb8-0e42-a772-28b1-165811872afa@collabora.com> <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
+ <ee88aec0-f6f8-c554-6752-447cb0f34e16@collabora.com>
+In-Reply-To: <ee88aec0-f6f8-c554-6752-447cb0f34e16@collabora.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Mon, 18 Jul 2022 19:17:40 +0800
+Message-ID: <CABtFH5J3tjx6mLfXkx_MySXdYg3qms09gX0wxpuFQxWpz3gowQ@mail.gmail.com>
+Subject: Re: [PATCH v5 13/13] video: backlight: mt6370: Add MediaTek MT6370 support
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 14:19, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
+On Mon, Jul 18, 2022 at 4:27 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> If the power-domains' power-supply node (regulator) needs
-> interrupts to work, the current setup with noirq callbacks cannot
-> work; for example a pmic regulator on i2c, when suspending, usually already
-> times out during suspend_noirq:
->
-> [   41.024193] buck4: failed to disable: -ETIMEDOUT
->
-> So fix system suspend and resume for these power-domains by using the
-> "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5
-> board, but by looking at the dts, this will fix imx8mq-evk and possibly
-> other boards too.
->
-> Possibly one can find more changes than suspend/resume for this case. They
-> can be added later when testing them.
->
-> Initially system suspend problems had been discussed at
-> https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> which led to discussing the pmic that contains the regulators which
-> serve as power-domain power-supplies:
-> https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
->
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
->
-> revision history
-> ----------------
-> v2: (thank you Krzysztof)
-> * rewrite: find possible regulators' interrupts property in parents
->   instead of inventing a new property.
->
-> v1: (initial idea)
-> https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
->
->
->  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 3e86772d5fac..ca3e3500939d 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2298,6 +2298,28 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
->         return ret;
->  }
->
-> +/**
-> + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs interrupts
-> + * @genpd: Pointer to PM domain associated with the PM domain provider.
-> + */
-> +static void of_genpd_get_power_supply_irq(struct generic_pm_domain *pd)
-> +{
-> +       struct device_node *dn;
-> +
-> +       dn = of_parse_phandle(pd->dev.of_node, "power-supply", 0);
-> +       if (!dn)
-> +               return;
-> +
-> +       while ((dn = of_get_next_parent(dn))) {
-> +               if (of_get_property(dn, "interrupts", NULL)) {
-> +                       pd->domain.ops.suspend = genpd_suspend_noirq;
-> +                       pd->domain.ops.resume = genpd_resume_noirq;
-> +                       pd->domain.ops.suspend_noirq = NULL;
-> +                       pd->domain.ops.resume_noirq = NULL;
-> +               }
-> +       }
-> +}
-> +
->  /**
->   * of_genpd_add_provider_simple() - Register a simple PM domain provider
->   * @np: Device node pointer associated with the PM domain provider.
-> @@ -2343,6 +2365,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
->         genpd->provider = &np->fwnode;
->         genpd->has_provider = true;
->
-> +       of_genpd_get_power_supply_irq(genpd);
-> +
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-> @@ -2394,6 +2418,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->
->                 genpd->provider = &np->fwnode;
->                 genpd->has_provider = true;
-> +
-> +               of_genpd_get_power_supply_irq(genpd);
->         }
->
->         ret = genpd_add_provider(np, data->xlate, data);
 
-Overall I understand the need for this, but let me suggest a slightly
-different approach to solve this. See below.
+<snip>
 
-I think the OF parsing looks quite platform specific. Rather than
-adding this in the generic layer of genpd, I suggest that we move the
-OF parsing into the genpd provider code.
+> >>
+> >> Hello ChiaEn,
+> >>
+> >> I propose to move this one to drivers/leds (or drivers/pwm) and, instead of
+> >> registering a backlight device, register a PWM device.
+> >>
+> >> This way you will be able to reuse the generic backlight-pwm driver, as you'd
+> >> be feeding the PWM device exposed by this driver to the generic one: this will
+> >> most importantly make it easy to chain it with MTK_DISP_PWM (mtk-pwm-disp)
+> >> with a devicetree that looks like...
+> >
+> > Out of interest, does MT6370 have the same structure for backlights as the prior
+> > systems using mtk-pwm-disp or was mtk-pwm-disp simply a normal(-ish) PWM
+> > that relied on something on the board for all the constant current
+> > driver hardware?
+> >
+> >
+>
+> As per my understanding, mtk-pwm-disp is chained to other multimedia features of
+> the display block of MediaTek SoCs, such as the AAL (adaptive ambient light),
+> CABC (content adaptive backlight control) etc, other than being a normal(ish)
+> PWM... that's the reason of my request.
+>
+> Moreover, in the end, this PMIC's backlight controller is just a "fancy" PWM
+> controller, with OCP/OVP.
+>
+> >>
+> >>      pwmleds-disp {
+> >>              compatible = "pwm-leds";
+> >>
+> >>              disp_led: disp-pwm {
+> >>                      label = "backlight-pwm";
+> >>                      pwms = <&pwm0 0 500000>;
+> >>                      max-brightness = <1024>;
+> >>              };
+> >>      };
+> >>
+> >>      backlight_lcd0: backlight {
+> >>              compatible = "led-backlight";
+> >>              leds = <&disp_led>, <&pmic_bl_led>;
+> >>              default-brightness-level = <300>;
+> >>      };
+> >
+> > I think this proposal has to start with the devicetree bindings rather
+> > than the driver. Instead I think the question is: does this proposal
+> > result in DT bindings that better describe the underlying hardware?
+> >
+>
+>  From how I understand it - yes: we have a fancy PWM (&pwm0) that we use
+> to control display backlight (backlight-pwm)...
+>
+> Obviously, here we're not talking about OLEDs, but LCDs, where the backlight
+> is made of multiple strings of WhiteLED (effectively, a "pwm-leds" controlled
+> "led-backlight").
+>
+> Using PWM will also allow for a little more fine-grained board specific
+> configuration, as I think that this PMIC (and/or variants of it) will be
+> used in completely different form factors: I think that's going to be both
+> smartphones and tablets/laptops... and I want to avoid vendor properties
+> to configure the PWM part in a somehow different way.
+>
+> > This device has lots of backlight centric features (OCP, OVP, single
+> > control with multiple outputs, exponential curves, etc) and its not
+> > clear where they would fit into the "PWM" bindings.
+> >
+>
+> For OCP and OVP, the only bindings that fit would be regulators, but that's
+> not a regulator... and that's about it - I don't really have arguments for
+> that.
+>
+> What I really want to see here is usage of "generic" drivers like led_bl
+> and/or pwm_bl as to get some "standardization" around with all the benefits
+> that this carries.
+>
+> > Come to think of it I'm also a little worried also about the whole linear
+> > versus exponential curve thing since I thought LED drivers were required
+> > to use exponential curves.
+> >
+>
+> That probably depends on how the controller interprets the data, I guess,
+> but I agree with you on this thought.
 
-Moreover, to inform genpd that it should use the other set of
-callbacks for system suspend/resume, let's add a new genpd
-configuration bit. The genpd provider should then set the genpd->flag,
-prior to calling pm_genpd_init(), to let it know that it should pick
-the other callbacks.
+Hi Angelo,
 
-Does it make sense?
+MT6370 is just a SubPMIC, not an SoC, and is applied in cellular
+telephones, tablet PCs, and portable instruments.
+And the PWM mode of the MT6370 backlight driver is optional, and not
+must be enabled.
+From our perspective, this MT6370 backlight driver is not the same as
+mtk-pwm-disp related driver.
+Thanks!
 
-Kind regards
-Uffe
+>
+> Regards,
+> Angelo
+
+-- 
+Best Regards,
+ChiaEn Wu
