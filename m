@@ -2,177 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296B05781FE
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 14:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6F857823E
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 14:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbiGRMQ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 08:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        id S233757AbiGRMY5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 08:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbiGRMQ1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 08:16:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1546C19C2C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 05:16:27 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPfj-0006Vm-1w; Mon, 18 Jul 2022 14:16:23 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPfi-001i4a-BF; Mon, 18 Jul 2022 14:16:22 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPfh-005xWL-MB; Mon, 18 Jul 2022 14:16:21 +0200
-Date:   Mon, 18 Jul 2022 14:16:18 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 7/8] interconnect: Make icc_provider_del() return void
-Message-ID: <20220718121618.rpagy3vinzgdokxa@pengutronix.de>
-References: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
- <20220715203652.89912-8-u.kleine-koenig@pengutronix.de>
- <7bd4f2fb-70ce-3724-130f-f5c75ee7bde2@kernel.org>
+        with ESMTP id S234186AbiGRMYq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 08:24:46 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E85121
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 05:24:43 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 26ICORKL076857
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Mon, 18 Jul 2022 20:24:27 +0800 (CST)
+        (envelope-from Di.Shen@unisoc.com)
+Received: from bj10906pcu1.spreadtrum.com (10.0.74.51) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Mon, 18 Jul 2022 20:24:28 +0800
+From:   Di Shen <di.shen@unisoc.com>
+To:     <lukasz.luba@arm.com>, <amitk@kernel.org>, <rui.zhang@intel.com>
+CC:     <amit.kachhap@gmail.com>, <daniel.lezcano@linaro.org>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xuewen.yan@unisoc.com>, <xuewen.yan94@gmail.com>
+Subject: [PATCH] thermal: cpufreq_cooling: Avoid all cluster using global cooling_ops
+Date:   Mon, 18 Jul 2022 20:24:19 +0800
+Message-ID: <20220718122419.9409-1-di.shen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qrigaio6mwohcagq"
-Content-Disposition: inline
-In-Reply-To: <7bd4f2fb-70ce-3724-130f-f5c75ee7bde2@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.51]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 26ICORKL076857
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Now, all the cooling device use the globle cpufreq_cooling_ops. When the
+CONFIG_THERMAL_GOV_POWER_ALLOCATOR is enabled, once one cluster init the
+cpufreq_cooling_ops, it would make all cooling device use the power allocator's
+ops. If one's em is error because of the "em_is_sane", it would cause the
+em NULL, but the cooling device's ops is exist, as a result, it would cause
+panic because of the em.
 
---qrigaio6mwohcagq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add cpufreq_power_cooling_ops to avoid this case.
 
-On Mon, Jul 18, 2022 at 12:10:34PM +0300, Georgi Djakov wrote:
->=20
-> Hi Uwe,
->=20
-> Thanks for the patchset!
->=20
-> On 15.07.22 23:36, Uwe Kleine-K=F6nig wrote:
-> > All users ignore the return value of icc_provider_del(). Consequently
-> > make it not return an error code.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >   drivers/interconnect/core.c           | 10 +++-------
-> >   include/linux/interconnect-provider.h |  2 +-
-> >   2 files changed, 4 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> > index 808f6e7a8048..25debded65a8 100644
-> > --- a/drivers/interconnect/core.c
-> > +++ b/drivers/interconnect/core.c
-> > @@ -1057,29 +1057,25 @@ EXPORT_SYMBOL_GPL(icc_provider_add);
-> >   /**
-> >    * icc_provider_del() - delete previously added interconnect provider
-> >    * @provider: the interconnect provider that will be removed from top=
-ology
-> > - *
-> > - * Return: 0 on success, or an error code otherwise
-> >    */
-> > -int icc_provider_del(struct icc_provider *provider)
-> > +void icc_provider_del(struct icc_provider *provider)
-> >   {
-> >   	mutex_lock(&icc_lock);
-> >   	if (provider->users) {
-> >   		pr_warn("interconnect provider still has %d users\n",
-> >   			provider->users);
-> >   		mutex_unlock(&icc_lock);
-> > -		return -EBUSY;
-> > +		return;
-> >   	}
->=20
-> Looks like provider->users is now useless, so we should remove it. But th=
-at
-> could be a separate clean-up.
+Signed-off-by: Di Shen <di.shen@unisoc.com>
+Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+---
+ drivers/thermal/cpufreq_cooling.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-Well, it's still used to emit the warning. If this can trigger there is
-indeed a problem though. If there are still users, they should hold a
-reference to the device preventing its release.
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index b8151d95a806..af5cfb458370 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -493,6 +493,17 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+ 	.set_cur_state		= cpufreq_set_cur_state,
+ };
+ 
++#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
++static struct thermal_cooling_device_ops cpufreq_power_cooling_ops = {
++	.get_max_state		= cpufreq_get_max_state,
++	.get_cur_state		= cpufreq_get_cur_state,
++	.set_cur_state		= cpufreq_set_cur_state,
++	.get_requested_power	= cpufreq_get_requested_power,
++	.state2power		= cpufreq_state2power,
++	.power2state		= cpufreq_power2state,
++};
++#endif
++
+ /**
+  * __cpufreq_cooling_register - helper function to create cpufreq cooling device
+  * @np: a valid struct device_node to the cooling device device tree node
+@@ -559,9 +570,7 @@ __cpufreq_cooling_register(struct device_node *np,
+ #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+ 	if (em_is_sane(cpufreq_cdev, em)) {
+ 		cpufreq_cdev->em = em;
+-		cooling_ops->get_requested_power = cpufreq_get_requested_power;
+-		cooling_ops->state2power = cpufreq_state2power;
+-		cooling_ops->power2state = cpufreq_power2state;
++		cooling_ops = &cpufreq_power_cooling_ops;
+ 	} else
+ #endif
+ 	if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED) {
+-- 
+2.17.1
 
-> >   	if (!list_empty(&provider->nodes)) {
-> >   		pr_warn("interconnect provider still has nodes\n");
-> >   		mutex_unlock(&icc_lock);
-> > -		return -EBUSY;
-> > +		return;
-> >   	}
-> >   	list_del(&provider->provider_list);
-> >   	mutex_unlock(&icc_lock);
-> > -
-> > -	return 0;
-> >   }
-> >   EXPORT_SYMBOL_GPL(icc_provider_del);
-> > diff --git a/include/linux/interconnect-provider.h b/include/linux/inte=
-rconnect-provider.h
-> > index 6bd01f7159c6..191f083d1f3b 100644
-> > --- a/include/linux/interconnect-provider.h
-> > +++ b/include/linux/interconnect-provider.h
-> > @@ -123,7 +123,7 @@ void icc_node_add(struct icc_node *node, struct icc=
-_provider *provider);
-> >   void icc_node_del(struct icc_node *node);
-> >   int icc_nodes_remove(struct icc_provider *provider);
-> >   int icc_provider_add(struct icc_provider *provider);
-> > -int icc_provider_del(struct icc_provider *provider);
-> > +void icc_provider_del(struct icc_provider *provider);
-> >   struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args=
- *spec);
-> >   void icc_sync_state(struct device *dev);
->=20
-> We should also squash the following:
->=20
-> --- a/include/linux/interconnect-provider.h
-> +++ b/include/linux/interconnect-provider.h
-> @@ -172,7 +172,7 @@ static inline int icc_provider_add(struct icc_provide=
-r *provider)
->  	return -ENOTSUPP;
->  }
->=20
-> -static inline int icc_provider_del(struct icc_provider *provider)
-> +static inline void icc_provider_del(struct icc_provider *provider)
->  {
->  	return -ENOTSUPP;
->  }
-
-Sent a v2 with this change (and also removed the return statement).
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---qrigaio6mwohcagq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLVTw8ACgkQwfwUeK3K
-7AlgaQf/YQ7Rlm1PuTAUzeYj/3/wPqSWlFti8aneEGYZgWJJ+iUMHr/pGtlbfXcD
-QpFrCgYd36+g12jHddOV8zz5inPSyArQSjg34Vgs3lyWsdPYi9O3Kex49ht7SnOW
-YKLl+zD/jIB1RayidwBoRE2cPzXZAdERrXy9vI9LR6lSQKluCDvJEPqfDWIzSXgB
-k/mnHwhGwcg5BScnOh9rWkasFkqxMSwCVIx43CFaYmG1S/ykLAErzxBXDRUyUlSq
-b3+pmqInTaJQDYR8xkhoBLn4wkS52e01e8EV7t501CPJbkpnn5/oyNmUOjKIbRoM
-/XqT/KuSugVftsGc96nrCWZnj6brpw==
-=72Cu
------END PGP SIGNATURE-----
-
---qrigaio6mwohcagq--
