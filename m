@@ -2,238 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B5F578B4E
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 21:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0413A578C04
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 22:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbiGRT5Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 15:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
+        id S236095AbiGRUq7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 16:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbiGRT5N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 15:57:13 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657FD2E9F0;
-        Mon, 18 Jul 2022 12:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658174232; x=1689710232;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JnA8EvXdeEwN8pRQP0MpQ7Bwix3rW1cV6V4o1jd2WMY=;
-  b=BfHZJ0PLsOssmCOiB6NoK44Hn/Ww8NGdc3ifMyWjgI7nr6VvSFWXr+bO
-   2W5DOWHvi/4nq6KcZUEWnD9d8S7J5bofPqdQWOkyrurNiQVtOafLjgai+
-   FSaL9JmSjfoWLqTWe5D7XghTLgkJb16JykCZrLAFhQARsk7iej4odl0c8
-   k=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 Jul 2022 12:57:12 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:57:11 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 18 Jul 2022 12:57:10 -0700
-Received: from [10.110.0.218] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 18 Jul
- 2022 12:57:10 -0700
-Message-ID: <ffb31b6f-8ed3-e890-976d-64a48478d404@quicinc.com>
-Date:   Mon, 18 Jul 2022 12:57:09 -0700
+        with ESMTP id S236090AbiGRUq6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 16:46:58 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0A30F58;
+        Mon, 18 Jul 2022 13:46:54 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id w9so3162146ilg.1;
+        Mon, 18 Jul 2022 13:46:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nsrM3GN1ydAPWBx+VmK+tAx9zDddS8+cskMqenrufDM=;
+        b=GUpbDkukWeUh0gi9gpp4DZ27HOJ1x6R2wadJ96f/uBueb6T9rq5Cv7RGYNtmDNyk3w
+         /8W3bm4oaWTQSMYd8/4dtcgWK2AjV02BchGdHlUxDYK/ECt0j88HBnXHXzRWaWEHOAES
+         iL91RwJu/fRySH2QWhc2E2WLBxJey2dB10CPt6HK4PDAQvIkM718ATn2JWdrQ5YD1FKR
+         pu4x8zyaV2MI+UbXn20Vjb/EUAzIR2Ejde/yX/7azwMT068IT50ZZW4iB+Fuo9HkqfK8
+         C/zjX0rOyE4q3tPq9JfT9v/RflSlb6yv8WSjF9XnA79Q2w29g0rrWWpsXLQ9SrhNVqo5
+         HkQg==
+X-Gm-Message-State: AJIora+TDAXLkmxKEuN7h+nkNzVEaoYOW65ZfbjAslhXiM3xqR1sL35l
+        GLOg30R1Olta+qtjR2fdRg==
+X-Google-Smtp-Source: AGRyM1sZBw1swY7XFZ3jNeHehuSXsWVnT5WjqKZCO9YVkFSU78+mGn1KYtm41y69GdS5z/ch9rmqCA==
+X-Received: by 2002:a05:6e02:102:b0:2dc:8fa:5f9d with SMTP id t2-20020a056e02010200b002dc08fa5f9dmr14637160ilm.231.1658177214050;
+        Mon, 18 Jul 2022 13:46:54 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id ch23-20020a0566383e9700b003415f2fb081sm3047498jab.125.2022.07.18.13.46.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 13:46:53 -0700 (PDT)
+Received: (nullmailer pid 3523017 invoked by uid 1000);
+        Mon, 18 Jul 2022 20:46:51 -0000
+Date:   Mon, 18 Jul 2022 14:46:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] dt-bindings: cpufreq-qcom-hw: Move clocks to CPU
+ nodes
+Message-ID: <20220718204651.GA3505083-robh@kernel.org>
+References: <cover.1657695140.git.viresh.kumar@linaro.org>
+ <035fe13689dad6d3867a1d33f7d5e91d4637d14a.1657695140.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: power: reset: qcom-pon: update "reg"
- property details
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>
-References: <20220713193350.29796-1-quic_amelende@quicinc.com>
- <20220713193350.29796-2-quic_amelende@quicinc.com>
- <c129c748-4306-da64-fc18-2d224b2fc97c@linaro.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <c129c748-4306-da64-fc18-2d224b2fc97c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <035fe13689dad6d3867a1d33f7d5e91d4637d14a.1657695140.git.viresh.kumar@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Jul 13, 2022 at 12:22:56PM +0530, Viresh Kumar wrote:
+> cpufreq-hw is a hardware engine, which takes care of frequency
+> management for CPUs. The engine manages the clocks for CPU devices, but
+> it isn't the end consumer of the clocks, which are the CPUs in this
+> case.
 
+The question is really where does the clock mux live?
 
-On 7/14/2022 4:48 AM, Krzysztof Kozlowski wrote:
-> On 13/07/2022 21:33, Anjelique Melendez wrote:
->> From: David Collins <quic_collinsd@quicinc.com>
->>
->> Update the description of "reg" property to add the PON_PBS base
->> address along with PON_HLOS base address.  Also add "reg-names"
->> property description.
->>
->> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
->> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->> ---
->>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 73 ++++++++++++++++++++++++++++--
->>  1 file changed, 69 insertions(+), 4 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> index 353f155d..562fe308 100644
->> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> @@ -15,18 +15,26 @@ description: |
->>  
->>    This DT node has pwrkey and resin as sub nodes.
->>  
->> -allOf:
->> -  - $ref: reboot-mode.yaml#
->> -
->>  properties:
->>    compatible:
->>      enum:
->>        - qcom,pm8916-pon
->>        - qcom,pms405-pon
->>        - qcom,pm8998-pon
->> +      - qcom,pmk8350-pon
->>  
->>    reg:
->> -    maxItems: 1
->> +    description: |
->> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
->> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
->> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
->> +      peripherals.  In that case, the PON_PBS address needs to be specified to
->> +      facilitate software debouncing on some PMIC.
-> 
-> You miss here min and maxItems
-ACK
-> 
->> +
->> +  reg-names:
->> +    description: |
->> +      For PON GEN1 and GEN2, it should be "pon". For PON GEN3 it should include
->> +      "hlos" and optionally "pbs".
-> 
-> Skip description. You miss here min and maxItems.
-> 
-> See
-> https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
-> for examples.
-ACK
-> 
-> 
->>  
->>    pwrkey:
->>      type: object
->> @@ -42,6 +50,63 @@ required:
->>  
->>  unevaluatedProperties: false
->>  
->> +allOf:
->> +  - $ref: reboot-mode.yaml#
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,pm8916-pon
->> +    then:
->> +      properties:
->> +        reg:
->> +          maxItems: 1
->> +        reg-names:
->> +          items:
->> +            - const: pon
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,pms405-pon
->> +    then:
->> +      properties:
->> +        reg:
->> +          maxItems: 1
->> +        reg-names:
->> +          items:
->> +            - const: pon
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,pm8998-pon
->> +    then:
->> +      properties:
->> +        reg:
->> +          maxItems: 1
->> +        reg-names:
->> +          items:
->> +            - const: pon
-> 
-> No clue why you made three if statements. This is one if for all three
-> variants.
-> 
-Sorry about that was not sure how to combine the if statements originally.
-Found that you could do:
+> For this reason, it looks incorrect to keep the clock related properties
+> in the cpufreq-hw node. They should really be present at the end user,
+> i.e. the CPUs.
 
-- if:
-      properties:
-        compatible:
-          contains:
-            enum:
-              - qcom,pm8916-pon
-              - qcom,pms405-pon
-              - qcom,pm8998-pon
-    then:
-     ...
+The issue is that the CPU itself probably only has 1 clock input (at 
+least for its core frequency). Listing out all possible clock sources in 
+CPU node 'clocks' is wrong too.
 
-I was wondering if for the "qcom,pmk8350-pon" compatible would you rather
-have the if statement the way it is or have it follow the same pattern as
-above i.e.
-
-contains:
-  const: qcom,pmk8350-pon
-
-vs
-
-contains:
-  enum:
-    - qcom,pmk8350-pon
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,pmk8350-pon
->> +    then:
->> +      properties:
->> +        reg:
->> +          minItems: 1
->> +          maxItems: 2
->> +        reg-names:
->> +          minItems: 1
->> +          items:
->> +            - const: hlos
->> +            - const: pbs
->> +
->>  examples:
->>    - |
->>     #include <dt-bindings/interrupt-controller/irq.h>
+> The case was simple currently as all the devices, i.e. the CPUs, that
+> the engine manages share the same clock names. What if the clock names
+> are different for different CPUs or clusters ? How will keeping the
+> clock properties in the cpufreq-hw node work in that case ?
 > 
+> This design creates further problems for frameworks like OPP, which
+> expects all such details (clocks) to be present in the end device node
+> itself, instead of another related node.
 > 
-> Best regards,
-> Krzysztof
+> Move the clocks properties to the node that uses them instead.
 
-Thanks,
-Anjelique
+What's the purpose of freq-domain binding now? I thought the idea was to 
+use that instead of clocks directly.
+
+Rob
