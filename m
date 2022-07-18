@@ -2,175 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61BE577D7A
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 10:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E95577D82
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 10:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbiGRI1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 04:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S230089AbiGRI3G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 04:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiGRI1b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 04:27:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD70211A0C;
-        Mon, 18 Jul 2022 01:27:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 78F986601A08;
-        Mon, 18 Jul 2022 09:27:27 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658132848;
-        bh=3wSuhWp2P2ZyIQrwtaWVzGC8uMFmX+0xQ1Qp+Gq760s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MEYN6sSMnl1b1jGZam3vGPUhszK6Kka5I6EgC7NQr3Q36fJmBTBNdXMzktsez5qIj
-         y+s+XdM0YgKFkp9EXPOn+L1Cz+Oxd1XhKLcE2IBo0ISLE3PVkCNEzlzehYjysaiuWG
-         Zo51GGkWRKk8PczsWqR8TmMapo+ER+hjgV4sjVLPFHsPVY4Qf/tMhapXsuArRIxERi
-         5Mf2Iqmq2tvvOG65/uZIKGF7a1cWG0Qn+VqDzTx0mD+1qYHnorumujxfSLaFnON56Z
-         IAxKex2js5tEg95LQVFjSdehcwbr2FzRLtQrHYbNSh7clnBnGfAggQdU5fxiHr3DM+
-         lRudS6QdbjYdQ==
-Message-ID: <ee88aec0-f6f8-c554-6752-447cb0f34e16@collabora.com>
-Date:   Mon, 18 Jul 2022 10:27:23 +0200
+        with ESMTP id S232768AbiGRI3G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 04:29:06 -0400
+Received: from m151.mail.126.com (m151.mail.126.com [220.181.15.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AA2F63DC
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 01:28:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=9VKME
+        ScUdfVnh7PDAM2MGpF7yFEY8NBIlwMOuI14sbw=; b=Adm7UwskyixnVeBiIrbzv
+        8jUxyx6zalsR44KAACnoJK1cVXv8UMmMyhCPy8XytV8ahMrwdHC/mELum631Fn4b
+        5V/Qq0pN3xpTSvdRkV5vE03MGfKArdwrMcuqqPY4oQ7NNTpQvlSmQfHS1aWlvuEv
+        0V/K3Hk7mA62akLxvWzzhM=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr1
+ (Coremail) ; Mon, 18 Jul 2022 16:28:15 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Mon, 18 Jul 2022 16:28:15 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Viresh Kumar" <viresh.kumar@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re:Re: [PATCH] OPP: Fix two refcount bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <20220718070848.s6qziqkr3nmv32fc@vireshk-i7>
+References: <20220715144712.444104-1-windhl@126.com>
+ <20220718070848.s6qziqkr3nmv32fc@vireshk-i7>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 13/13] video: backlight: mt6370: Add MediaTek MT6370
- support
-Content-Language: en-US
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-References: <20220715112607.591-1-peterwu.pub@gmail.com>
- <20220715112607.591-14-peterwu.pub@gmail.com>
- <ec3bdfb8-0e42-a772-28b1-165811872afa@collabora.com>
- <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <4af1805a.2b51.182106c170c.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AcqowADH2LCgGdViEOYiAA--.56170W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizgBCF18RPg79WQAAsB
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 15/07/22 18:29, Daniel Thompson ha scritto:
-> On Fri, Jul 15, 2022 at 02:38:45PM +0200, AngeloGioacchino Del Regno wrote:
->> Il 15/07/22 13:26, ChiaEn Wu ha scritto:
->>> From: ChiaEn Wu <chiaen_wu@richtek.com>
->>>
->>> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
->>> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
->>> driver, display bias voltage supply, one general purpose LDO, and the
->>> USB Type-C & PD controller complies with the latest USB Type-C and PD
->>> standards.
->>>
->>> This adds support for MediaTek MT6370 Backlight driver. It's commonly used
->>> to drive the display WLED. There are 4 channels inside, and each channel
->>> supports up to 30mA of current capability with 2048 current steps in
->>> exponential or linear mapping curves.
->>>
->>> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
->>
->> Hello ChiaEn,
->>
->> I propose to move this one to drivers/leds (or drivers/pwm) and, instead of
->> registering a backlight device, register a PWM device.
->>
->> This way you will be able to reuse the generic backlight-pwm driver, as you'd
->> be feeding the PWM device exposed by this driver to the generic one: this will
->> most importantly make it easy to chain it with MTK_DISP_PWM (mtk-pwm-disp)
->> with a devicetree that looks like...
-> 
-> Out of interest, does MT6370 have the same structure for backlights as the prior
-> systems using mtk-pwm-disp or was mtk-pwm-disp simply a normal(-ish) PWM
-> that relied on something on the board for all the constant current
-> driver hardware?
-> 
-> 
-
-As per my understanding, mtk-pwm-disp is chained to other multimedia features of
-the display block of MediaTek SoCs, such as the AAL (adaptive ambient light),
-CABC (content adaptive backlight control) etc, other than being a normal(ish)
-PWM... that's the reason of my request.
-
-Moreover, in the end, this PMIC's backlight controller is just a "fancy" PWM
-controller, with OCP/OVP.
-
->>
->> 	pwmleds-disp {
->> 		compatible = "pwm-leds";
->>
->> 		disp_led: disp-pwm {
->> 			label = "backlight-pwm";
->> 			pwms = <&pwm0 0 500000>;
->> 			max-brightness = <1024>;
->> 		};
->> 	};
->>
->> 	backlight_lcd0: backlight {
->> 		compatible = "led-backlight";
->> 		leds = <&disp_led>, <&pmic_bl_led>;
->> 		default-brightness-level = <300>;
->> 	};
-> 
-> I think this proposal has to start with the devicetree bindings rather
-> than the driver. Instead I think the question is: does this proposal
-> result in DT bindings that better describe the underlying hardware?
-> 
-
- From how I understand it - yes: we have a fancy PWM (&pwm0) that we use
-to control display backlight (backlight-pwm)...
-
-Obviously, here we're not talking about OLEDs, but LCDs, where the backlight
-is made of multiple strings of WhiteLED (effectively, a "pwm-leds" controlled
-"led-backlight").
-
-Using PWM will also allow for a little more fine-grained board specific
-configuration, as I think that this PMIC (and/or variants of it) will be
-used in completely different form factors: I think that's going to be both
-smartphones and tablets/laptops... and I want to avoid vendor properties
-to configure the PWM part in a somehow different way.
-
-> This device has lots of backlight centric features (OCP, OVP, single
-> control with multiple outputs, exponential curves, etc) and its not
-> clear where they would fit into the "PWM" bindings.
-> 
-
-For OCP and OVP, the only bindings that fit would be regulators, but that's
-not a regulator... and that's about it - I don't really have arguments for
-that.
-
-What I really want to see here is usage of "generic" drivers like led_bl
-and/or pwm_bl as to get some "standardization" around with all the benefits
-that this carries.
-
-> Come to think of it I'm also a little worried also about the whole linear
-> versus exponential curve thing since I thought LED drivers were required
-> to use exponential curves.
-> 
-
-That probably depends on how the controller interprets the data, I guess,
-but I agree with you on this thought.
-
-Regards,
-Angelo
+CkF0IDIwMjItMDctMTggMTU6MDg6NDgsICJWaXJlc2ggS3VtYXIiIDx2aXJlc2gua3VtYXJAbGlu
+YXJvLm9yZz4gd3JvdGU6Cj5PbiAxNS0wNy0yMiwgMjI6NDcsIExpYW5nIEhlIHdyb3RlOgo+PiBJ
+biBkcml2ZXJzL29wcC9vZi5jLCB0aGVyZSBhcmUgdHdvIHJlZmNvdW50IGJ1Z3M6Cj4+ICgxKSBp
+biBfb2ZfaW5pdF9vcHBfdGFibGUoKSwgb2ZfcHV0X25vZGUoKSBpbiB0aGUgbGFzdCBsaW5lIGlz
+IG5vdAo+PiBuZWVkZWQgYXMgdGhlICdvcHBfbnAnIGlzIGVzY2FwZWQgb3V0IGludG8gJ29wcF90
+YWJsZS0+bnAnIGFuZAo+PiChr29wcF90YWJsZScgaXMgYW4gb3V0IHBhcmFtZXRlci4KPj4gKDIp
+IGluIF9vcHBfYWRkX3N0YXRpY192MigpLCB3ZSBuZWVkIGNhbGwgb2Zfbm9kZV9nZXQoKSBmb3Ig
+dGhlIG5ldwo+PiByZWZlcmVuY2UgY3JlYXRlZCB3aGVuICJuZXdfb3BwLT5ucCA9IG5wOyIgYXMg
+bmV3X29wcCBpcyBlc2NhcGVkIG91dC4KPj4gSGVyZSB3ZSBzaG91bGQgYWxzbyB0YWtlIGNhcmUg
+b2YgdGhlIG9mX25vZGVfcHV0KCkgd2hlbiAnbmV3X29wcCcgaXMKPj4gZnJlZWQgYmFzZWQgb24g
+dGhlIGZ1bmN0aW9uIGRlc2NyaXB0aW9uOiAiVGhlIG9wcCBjYW4gYmUgY29udHJvbGxlZAo+PiAu
+Li4gYW5kIG1heSBiZSByZW1vdmVkIGJ5IGRldl9wbV9vcHBfcmVtb3ZlIi4KPj4gTk9URTogX29w
+cF9hZGRfc3RhdGljX3YyKCkgaXMgY2FsbGVkIGJ5IF9vZl9hZGRfb3BwX3RhYmxlX3YyKCkgaW4g
+YQo+PiBmb3JfZWFjaF9hdmFpbGFibGVfY2hpbGRfb2Zfbm9kZSgpIHdoaWNoIHdpbGwgYXV0b21h
+dGljYWxseSBpbmNyZWFzZQo+PiBhbmQgZGVjcmVhc2UgdGhlIHJlZmNvdW50LiBTbyB3ZSBuZWVk
+IGFuIGFkZGl0aW9uYWwgb2Zfbm9kZV9nZXQoKQo+PiBmb3IgdGhlIG5ldyByZWZlcmVuY2UgY3Jl
+YXRlZCBpbiBfb3BwX2FkZF9zdGF0aWNfdjIoKS4KPj4gCj4+IEZpeGVzOiBmMDZlZDkwZTcwNTEg
+KCJPUFA6IFBhcnNlIE9QUCB0YWJsZSdzIERUIHByb3BlcnRpZXMgZnJvbSBfb2ZfaW5pdF9vcHBf
+dGFibGUoKSIpCj4+IEZpeGVzOiAyNzQ2NTkwMjljOWQgKCJQTSAvIE9QUDogQWRkIHN1cHBvcnQg
+dG8gcGFyc2UgIm9wZXJhdGluZy1wb2ludHMtdjIiIGJpbmRpbmdzIikKPgo+VGhlIHdheSBJIGRl
+c2lnbmVkIHRoZSBPUFAgY29yZSB0aGVuIHdhcyB0byBtYWtlIHN1cmUgdGhhdCBucCBpcyBvbmx5
+IHVzZWQgZm9yCj5wb2ludGVyIGNvbXBhcmlzb24gYW5kIG5vdGhpbmcgZWxzZSBhZnRlciBpdCBp
+cyBmcmVlZCBieSBjYWxsaW5nIG9mX25vZGVfcHV0KCkuCj5TbyBpdCBpc24ndCBhIGJ1Zy4KPgo+
+QnV0IEkgZG8gdW5kZXJzdGFuZCB0aGF0IGl0IGhhcyBiZWNvbWUgZGlmZmljdWx0IHRvIHRyYWNr
+IG5vdyBpZiBucCBjYW4gZ2V0IHVzZWQKPmxhdGVyIG9uIGZvciBvdGhlciBzdHVmZiBhcyB3ZWxs
+IG9yIG5vdCBhbmQgaXQgd291bGQgYmUgYmV0dGVyIHRvIGtlZXAgdGhlCj5yZWZlcmVuY2UgdXAg
+aW4gc3VjaCBhIGNhc2UuCj4KPlRoYXQgaXMsIHlvdSBjYW4gZHJvcCB0aGUgRml4ZXMgdGFnIGFz
+IEkgZG9uJ3Qgd2FudCB0aGVzZSB0byBnZXQgYmFja3BvcnRlZCwgYnV0Cj55ZXMgcGF0Y2hlcyBh
+cmUgd2VsY29tZS4KPgoKSSB3aWxsIGRyb3AgdGhlIGZpeCB0YWdzIGluIG5ldyBwYXRjaGVzLgoK
+PlBsZWFzZSBwcmVwYXJlIHR3byBzZXBhcmF0ZSBwYXRjaGVzLCBvbmUgZm9yIG9wcF90YWJsZS0+
+bnAgYW5kIG9uZSBmb3Igb3BwLT5ucC4KPkl0IGlzIGZpbmUgdG8gYWRkIG11bHRpcGxlIHBhdGNo
+ZXMgZXZlbiBmb3IgdGhlIG9wcC0+bnAgY2FzZSwgaWYgdGhlIHJlYXNvbmluZwo+aXMgZGlmZmVy
+ZW50Lgo+CgpUaGFua3MsIFZpcmVzaCwKCkJ1dCBpcyBpdCBPSyBpZiB0aGUgdHdvIHBhdGNoZXMg
+Y2hhbmdlIHRoZSBzYW1lIGZpbGUgYXQgc2FtZSB0aW1lo78KCkkgd29uZGVyIGlmIHRoaXMgd2ls
+bCB0cm91YmxlIHlvdSB0byBtZXJnZSB0aGVtIGxhdGVyLgoKSWYgaXQgaXMgT0ssIEkgd2lsbCBi
+ZWdpbiB0byBwcmVwYXJlIHRoZSB0d28gcGF0Y2hlcyBiYXNlZCBvbiBzYW1lIGZpbGUuCgoKPj4g
+U2lnbmVkLW9mZi1ieTogTGlhbmcgSGUgPHdpbmRobEAxMjYuY29tPgo+PiAtLS0KPj4gIGRyaXZl
+cnMvb3BwL2NvcmUuYyB8IDEgKwo+PiAgZHJpdmVycy9vcHAvb2YuYyAgIHwgMyArLS0KPj4gIDIg
+ZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+PiAKPj4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvb3BwL2NvcmUuYyBiL2RyaXZlcnMvb3BwL2NvcmUuYwo+PiBpbmRl
+eCA4NDA2M2VhZWJiOTEuLjcwNzc1MzYyZWIwNSAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy9vcHAv
+Y29yZS5jCj4+ICsrKyBiL2RyaXZlcnMvb3BwL2NvcmUuYwo+PiBAQCAtMTU3Niw2ICsxNTc2LDcg
+QEAgc3RhdGljIHZvaWQgX29wcF9rcmVmX3JlbGVhc2Uoc3RydWN0IGtyZWYgKmtyZWYpCj4+ICAJ
+bGlzdF9kZWwoJm9wcC0+bm9kZSk7Cj4+ICAJbXV0ZXhfdW5sb2NrKCZvcHBfdGFibGUtPmxvY2sp
+Owo+PiAgCj4+ICsJb2Zfbm9kZV9wdXQob3BwLT5ucCk7Cj4+ICAJLyoKPj4gIAkgKiBOb3RpZnkg
+dGhlIGNoYW5nZXMgaW4gdGhlIGF2YWlsYWJpbGl0eSBvZiB0aGUgb3BlcmFibGUKPj4gIAkgKiBm
+cmVxdWVuY3kvdm9sdGFnZSBsaXN0Lgo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9vcHAvb2YuYyBi
+L2RyaXZlcnMvb3BwL29mLmMKPj4gaW5kZXggMzAzOTQ5MjlkNzAwLi4wYTM4ZmMyYzBmMDUgMTAw
+NjQ0Cj4+IC0tLSBhL2RyaXZlcnMvb3BwL29mLmMKPj4gKysrIGIvZHJpdmVycy9vcHAvb2YuYwo+
+PiBAQCAtMjQyLDcgKzI0Miw2IEBAIHZvaWQgX29mX2luaXRfb3BwX3RhYmxlKHN0cnVjdCBvcHBf
+dGFibGUgKm9wcF90YWJsZSwgc3RydWN0IGRldmljZSAqZGV2LAo+PiAgCW9wcF90YWJsZS0+bnAg
+PSBvcHBfbnA7Cj4+ICAKPj4gIAlfb3BwX3RhYmxlX2FsbG9jX3JlcXVpcmVkX3RhYmxlcyhvcHBf
+dGFibGUsIGRldiwgb3BwX25wKTsKPj4gLQlvZl9ub2RlX3B1dChvcHBfbnApOwo+Cj5XaGVyZSBk
+b2VzIHRoaXMgZ2V0IGRyb3BwZWQgbm93ID8KPgoKQWZ0ZXIgSSByZWFkIHRoZSBjb2RlLCBJIHRo
+aW5rIGl0IGlzIGJldHRlciB0byBkcm9wIG9wcF90YWJsZS0+bnAgaW4gJ19vcHBfdGFibGVfa3Jl
+Zl9yZWxlYXNlJwpqdXN0IGxpa2Ugd2UgZG8gZm9yIHRoZSAnb3BwLT5ucCcgaW4gJ19vcHBfa3Jl
+Zl9yZWxlYXNlJy4KCklmIGl0IGlzIG5vdCBPSywgcGxlYXNlIGNvcnJlY3QgbWUuCgo+WyAuLi4g
+XQoKPkFsc28sIHBsZWFzZSByZWJhc2Ugb24gbGludXgtbmV4dC9tYXN0ZXIsIGluIGNhc2UgeW91
+IGhhdmVuJ3QuCgpJIHdpbGwgcmViYXNlIG9uIGxpbnV4LW5leHQvbWFzdGVyIGluIGZ1dHVyZSBw
+YXRjaCB3b3JrLgoKVGhhbmtzLCAKCkxpYW5nCgoKCgoK
