@@ -2,108 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D01D577985
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 04:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68275779B2
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 05:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbiGRCF7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Jul 2022 22:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S230179AbiGRDKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Jul 2022 23:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbiGRCF5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jul 2022 22:05:57 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8199B1263E
-        for <linux-pm@vger.kernel.org>; Sun, 17 Jul 2022 19:05:56 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id 5so7801334plk.9
-        for <linux-pm@vger.kernel.org>; Sun, 17 Jul 2022 19:05:56 -0700 (PDT)
+        with ESMTP id S229535AbiGRDKp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jul 2022 23:10:45 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34DC10FC4;
+        Sun, 17 Jul 2022 20:10:44 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id c139so3209563pfc.2;
+        Sun, 17 Jul 2022 20:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3BjGRHLy/P5muSoNU/Pz9GHQ5lT79yzzrjudG9IvvpQ=;
-        b=U0y4ZBls7dp+IJthAqtm3XZcN2mDc6Moz9aOky11OGh5xiAsXPqmRYsA3ASCViImED
-         vpJrYT4RAU/o8wPtQhqFHjcYkKJzY5G5DVfPTTfa0UUkzrJwXVN0Wm7mGz7f//bYkaRf
-         uLDbNup6TOEzG9s3eL6z4z+h8Ena/JD34EfCsDDgjVc6CkEZMz602FQys6VUr388b92k
-         mzcoV/yWkXI3Qs5gRCQGujTZ9y0IGWwMSULp+rPXNnTsMJGgNXBV3cabDo+FHSn+JhT8
-         VJyK66uhR9Un2xnPRr02kdIGF0IdJIE5fAEvK+BGY9dLg3/K81yUur3oPa0Vc6PxR/eb
-         9Vng==
+        bh=WIaE5p7vCRM9cDug48fSPQP1o+yx7BsuW/zADg9iL9Y=;
+        b=H4VlsetGoWMJVh4Px0oF4oDgKOQpVXlMTlBAEaCy7vNhN4+TWj6X1gyqrRQSUjBuy/
+         fSmRCEstccIDgf57/7GNfQAVKKCdrADBNj6Q//Vm5Vif3TYaaHGEWOwdvFqANObkbpQM
+         g/xJBpgJQbdJJpP4rupDlQLbiTR+shwFwpwyEWMpDp9Q+O5YJPvYcgpYb+PsFOlC8CMk
+         t8uHhJNMYdDYIUDaDzrm/l4u+ShAH1oFyEidP2HccWAuRhUOMshMT+xh4dZJ5ZJZiRLM
+         mufQyMa+ZNgrvTMgMWq1m3WrA7ZrxnedjqFJNpfm9qNlYtCPF02EcYDQ3UxDiDOKIV6R
+         LGRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3BjGRHLy/P5muSoNU/Pz9GHQ5lT79yzzrjudG9IvvpQ=;
-        b=U/HzcN10lnZcNdxm7NUXgHyL4kuFt5pmc85vH1Jc4cLEQM25BiJn3UJltSa4yT9SyZ
-         FQAPGDfbIaHkMNxLZBcTjIeji0Q7MMQSkxpfvaHFI+vP2CxYTwk/o60HRoTW2HDXyJdu
-         +p0+9ws4jWKVMrIwQ0DaDW2/CiemLrAG9LakKti/oi3Q2n9edvjZrs15QZARKDCrAVTR
-         zNopjuwPBVF+FQ3N1Fj9ie3o0OKJxCVlDwvbwRYCr3vVMzht+A7QaNwru4JA96jOm+up
-         NrRSTmVjOJQ6KLCBLAWlQeNA98PIidqdNotdp2mPgAHSSmog800Y0+DSjWEdzuCD3plw
-         uQ2Q==
-X-Gm-Message-State: AJIora/9o7ycYF8vzfw4728rvPPbxauQLvCyAXouhYeDI/ZeSO5TInnU
-        jau1xeAP8WD0X0U6Ukb7drAchA==
-X-Google-Smtp-Source: AGRyM1uvcp85DEmyxiSH3PvubO+xKzXk2te9CDJYpnpmn6NbRBOkzE7RuaKMYrS+kcgYBbSLzhJsTA==
-X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id mw7-20020a17090b4d0700b001ef521cf051mr36153656pjb.164.1658109956039;
-        Sun, 17 Jul 2022 19:05:56 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id b18-20020aa78ed2000000b00525302fe9c4sm7863809pfr.190.2022.07.17.19.05.55
+        bh=WIaE5p7vCRM9cDug48fSPQP1o+yx7BsuW/zADg9iL9Y=;
+        b=PpwIumsQmsZ5ACJ8OqLWypWwIhUm9Rxf3A/SWF1SiQUSA2Dd0mepZqz9ZFoNPXQwSv
+         pk0NpZceQcLfKJKLUGSEzvb349xRGPceW8/OgZ1JT1grGQlH4PzQLaQCIE5hYObGpyjG
+         7zWjpqmfwTAK7NGJz0WfUn94ey3VH35a9cGO7XkLhLrAUmXHHgCMkOT5Lv5ewQtO0smy
+         2AfO0/Xhhkn8LrbQTzSoiiPXJaWafnTKGP61V7p6yRvtBeN32HqQftAV0jiYQnrfmdRT
+         mShNY37u70nE0qLugArBSC0KoNbXRULY/ekihDf95bRK8ch+gzUqHlEYwSXPyNQefTT0
+         MyBA==
+X-Gm-Message-State: AJIora89WduZsorZGKgIqU/eeoFbe1L1aJbuASB+jAwjgbrX0a5pujJP
+        7oCqyFJPScLA9UEtWLMkifQoOFIkBvg=
+X-Google-Smtp-Source: AGRyM1uOq/dKA8d1NkOzk7wlRIXuQQGLWgGguMrm0lT16hF4+vm14igker82UjlG/K1+WEyLMIwatw==
+X-Received: by 2002:a05:6a00:1daa:b0:52a:c51d:d36a with SMTP id z42-20020a056a001daa00b0052ac51dd36amr25829909pfw.61.1658113843836;
+        Sun, 17 Jul 2022 20:10:43 -0700 (PDT)
+Received: from localhost.localdomain (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id n8-20020a170902e54800b0016b81679c1fsm8038889plf.216.2022.07.17.20.10.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 19:05:55 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel test robot <lkp@intel.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: tegra194: Staticize struct tegra_cpufreq_soc instances
-Date:   Mon, 18 Jul 2022 07:35:48 +0530
-Message-Id: <5c1a9b405d96848f2dac9aefcef121ad178872f4.1658109927.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        Sun, 17 Jul 2022 20:10:43 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Markus Mayer <mmayer@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= 
+        <alejandro.gonzalez.correo@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <markus.mayer@broadcom.com>,
+        linux-pm@vger.kernel.org (open list:THERMAL)
+Subject: [PATCH RESEND] tools/thermal: tmon: include pthread and time headers in tmon.h
+Date:   Sun, 17 Jul 2022 20:10:39 -0700
+Message-Id: <20220718031040.44714-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix sparse warnings by marking these structures static.
+From: Markus Mayer <mmayer@broadcom.com>
 
-Fixes: 273bc890a2a8 ("cpufreq: tegra194: Add support for Tegra234")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Include sys/time.h and pthread.h in tmon.h, so that types
+"pthread_mutex_t" and "struct timeval tv" are known when tmon.h
+references them.
+
+Without these headers, compiling tmon against musl-libc will fail with
+these errors:
+
+In file included from sysfs.c:31:0:
+tmon.h:47:8: error: unknown type name 'pthread_mutex_t'
+ extern pthread_mutex_t input_lock;
+        ^~~~~~~~~~~~~~~
+make[3]: *** [<builtin>: sysfs.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+In file included from tui.c:31:0:
+tmon.h:54:17: error: field 'tv' has incomplete type
+  struct timeval tv;
+                 ^~
+make[3]: *** [<builtin>: tui.o] Error 1
+make[2]: *** [Makefile:83: tmon] Error 2
+
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Acked-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
+Tested-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
 ---
- drivers/cpufreq/tegra194-cpufreq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This patch was first submitted here:
 
-diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-index 2a6a98764a8c..1216046cf4c2 100644
---- a/drivers/cpufreq/tegra194-cpufreq.c
-+++ b/drivers/cpufreq/tegra194-cpufreq.c
-@@ -162,7 +162,7 @@ static struct tegra_cpufreq_ops tegra234_cpufreq_ops = {
- 	.set_cpu_ndiv = tegra234_set_cpu_ndiv,
- };
+https://lore.kernel.org/all/20200617235809.6817-1-mmayer@broadcom.com/
+
+but never applied, meanwhile the issue is still present
+
+ tools/thermal/tmon/tmon.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/thermal/tmon/tmon.h b/tools/thermal/tmon/tmon.h
+index c9066ec104dd..44d16d778f04 100644
+--- a/tools/thermal/tmon/tmon.h
++++ b/tools/thermal/tmon/tmon.h
+@@ -27,6 +27,9 @@
+ #define NR_LINES_TZDATA 1
+ #define TMON_LOG_FILE "/var/tmp/tmon.log"
  
--const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
-+static const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
- 	.ops = &tegra234_cpufreq_ops,
- 	.actmon_cntr_base = 0x9000,
- 	.maxcpus_per_cluster = 4,
-@@ -430,7 +430,7 @@ static struct tegra_cpufreq_ops tegra194_cpufreq_ops = {
- 	.set_cpu_ndiv = tegra194_set_cpu_ndiv,
- };
- 
--const struct tegra_cpufreq_soc tegra194_cpufreq_soc = {
-+static const struct tegra_cpufreq_soc tegra194_cpufreq_soc = {
- 	.ops = &tegra194_cpufreq_ops,
- 	.maxcpus_per_cluster = 2,
- };
++#include <sys/time.h>
++#include <pthread.h>
++
+ extern unsigned long ticktime;
+ extern double time_elapsed;
+ extern unsigned long target_temp_user;
 -- 
-2.31.1.272.g89b43f80a514
+2.25.1
 
