@@ -2,191 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714B257819E
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 14:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33125781E6
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 14:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiGRMII (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 08:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
+        id S234951AbiGRMOa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 08:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbiGRMIH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 08:08:07 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F2E240A4;
-        Mon, 18 Jul 2022 05:08:00 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 871D8DF67F;
-        Mon, 18 Jul 2022 05:07:59 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id U0NUDL-x45sf; Mon, 18 Jul 2022 05:07:58 -0700 (PDT)
-Message-ID: <06ee17dfd5f5fb0cb3db4ddfee863c7b8351096e.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658146078; bh=RCI3Sddocud6yQEbFUjII8wgubmlHfYg4RGudGkMD68=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=CCY+pdrZ0UssUf9cZRMTgkrNZp1iU8647VRqCdKgDKpslQAcqpisXtRDgBU00KPff
-         w+RDjDLqHg16yAydys8hXLkeMVdY8VamOBMzIXv889DrftLimEAlLkXZvCOd9CpfZn
-         5BeXBqAELkHZoJYiO/KuSyCRn60c8cWBIBsjwJc03nElgbgFbutOn3NPEUD3CMygO7
-         30AENz0Ksz3g10rTyD/XRB7OK2k28jUV/cuXQcOkK3ANwwUODs0HCFrXv6LGnXhH/A
-         2XNd2WIUmOBud89e/FoMG++qzHLnJ5V1hf2H57ddAxsnTyAxlJDxgG7tRQEnjJtKt+
-         H17wvW9EA9TUA==
-Subject: Re: [PATCH v2] power: domain: handle power supplies that need
- interrupts
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Mon, 18 Jul 2022 14:07:51 +0200
-In-Reply-To: <CAPDyKFr0Lnp_3rUWcdZMcgtcFW050hOiGVZV_bVu=pqCLE8dEw@mail.gmail.com>
-References: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
-         <CAPDyKFr0Lnp_3rUWcdZMcgtcFW050hOiGVZV_bVu=pqCLE8dEw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S234967AbiGRMO2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 08:14:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5A823171
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 05:14:27 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDPdh-0005d9-6f; Mon, 18 Jul 2022 14:14:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDPde-001i3t-V6; Mon, 18 Jul 2022 14:14:14 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDPdd-005xVJ-Tg; Mon, 18 Jul 2022 14:14:13 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 0/8] interconnect: Prepare making platform remove callbacks return void
+Date:   Mon, 18 Jul 2022 14:14:01 +0200
+Message-Id: <20220718121409.171773-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2079; h=from:subject; bh=A1o6I6OVHVljeru//hO3heJNwTEoskPv4jVq/tRtPrU=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi1U5yX+wocJskVFzESoSjYSC+vn/AZDq7N/GEq/7P iSSPhf2JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtVOcgAKCRDB/BR4rcrsCUibB/ 47wzVcYBIAkJNgLQcmiGSY2Q/hmyILxPtnC8l3I6ItMfwGWDNsSGrU85nv3M+eyZwJmM6m5OY69WKd Fa7l2eVvJqtGd67ruxhY62HcsWi4vIfRgPxBXGpbCEYO8ciL6F39a283INNAj5Ji5vdR61fP1bPWHK Fdb1XoLU1+RZiabYBX9CVHqw9iTlcigkzF5sSXVx/4HbECAwxn4+H83YHh0v8Kp+RQer7uuWm9cYh6 Pu03j5zzEzG9lNwaWokGEWqQ2/NNxzALHxANDZzVVavN/FpBGOjqeLNd7xBy3bjGUToV71XC1Mw3so mS6a+jj9zfFlaHrhT/3p5UxJT65Vnz
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Montag, dem 18.07.2022 um 12:54 +0200 schrieb Ulf Hansson:
-> On Tue, 12 Jul 2022 at 14:19, Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> > 
-> > If the power-domains' power-supply node (regulator) needs
-> > interrupts to work, the current setup with noirq callbacks cannot
-> > work; for example a pmic regulator on i2c, when suspending, usually
-> > already
-> > times out during suspend_noirq:
-> > 
-> > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > 
-> > So fix system suspend and resume for these power-domains by using
-> > the
-> > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
-> > librem5
-> > board, but by looking at the dts, this will fix imx8mq-evk and
-> > possibly
-> > other boards too.
-> > 
-> > Possibly one can find more changes than suspend/resume for this
-> > case. They
-> > can be added later when testing them.
-> > 
-> > Initially system suspend problems had been discussed at
-> > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > which led to discussing the pmic that contains the regulators which
-> > serve as power-domain power-supplies:
-> > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> > 
-> > revision history
-> > ----------------
-> > v2: (thank you Krzysztof)
-> > * rewrite: find possible regulators' interrupts property in parents
-> >   instead of inventing a new property.
-> > 
-> > v1: (initial idea)
-> > https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
-> > 
-> > 
-> >  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> > 
-> > diff --git a/drivers/base/power/domain.c
-> > b/drivers/base/power/domain.c
-> > index 3e86772d5fac..ca3e3500939d 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -2298,6 +2298,28 @@ static bool genpd_present(const struct
-> > generic_pm_domain *genpd)
-> >         return ret;
-> >  }
-> > 
-> > +/**
-> > + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs
-> > interrupts
-> > + * @genpd: Pointer to PM domain associated with the PM domain
-> > provider.
-> > + */
-> > +static void of_genpd_get_power_supply_irq(struct generic_pm_domain
-> > *pd)
-> > +{
-> > +       struct device_node *dn;
-> > +
-> > +       dn = of_parse_phandle(pd->dev.of_node, "power-supply", 0);
-> > +       if (!dn)
-> > +               return;
-> > +
-> > +       while ((dn = of_get_next_parent(dn))) {
-> > +               if (of_get_property(dn, "interrupts", NULL)) {
-> > +                       pd->domain.ops.suspend =
-> > genpd_suspend_noirq;
-> > +                       pd->domain.ops.resume = genpd_resume_noirq;
-> > +                       pd->domain.ops.suspend_noirq = NULL;
-> > +                       pd->domain.ops.resume_noirq = NULL;
-> > +               }
-> > +       }
-> > +}
-> > +
-> >  /**
-> >   * of_genpd_add_provider_simple() - Register a simple PM domain
-> > provider
-> >   * @np: Device node pointer associated with the PM domain
-> > provider.
-> > @@ -2343,6 +2365,8 @@ int of_genpd_add_provider_simple(struct
-> > device_node *np,
-> >         genpd->provider = &np->fwnode;
-> >         genpd->has_provider = true;
-> > 
-> > +       of_genpd_get_power_supply_irq(genpd);
-> > +
-> >         return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-> > @@ -2394,6 +2418,8 @@ int of_genpd_add_provider_onecell(struct
-> > device_node *np,
-> > 
-> >                 genpd->provider = &np->fwnode;
-> >                 genpd->has_provider = true;
-> > +
-> > +               of_genpd_get_power_supply_irq(genpd);
-> >         }
-> > 
-> >         ret = genpd_add_provider(np, data->xlate, data);
-> 
-> Overall I understand the need for this, but let me suggest a slightly
-> different approach to solve this. See below.
-> 
-> I think the OF parsing looks quite platform specific. Rather than
-> adding this in the generic layer of genpd, I suggest that we move the
-> OF parsing into the genpd provider code.
-> 
-> Moreover, to inform genpd that it should use the other set of
-> callbacks for system suspend/resume, let's add a new genpd
-> configuration bit. The genpd provider should then set the genpd-
-> >flag,
-> prior to calling pm_genpd_init(), to let it know that it should pick
-> the other callbacks.
-> 
-> Does it make sense?
+Hello,
 
-the provider here would be gpcv2, right? Conceptually I know what you
-mean and will try to make it work later. thanks a lot!
+today remove callbacks of platform devices return an int. This is unfortunate
+because the device core ignores the return value and so the platform code only
+emits a warning (and still removes the device).
 
-> 
-> Kind regards
-> Uffe
+My longterm quest is to make these remove callbacks return void instead.
+This series is a preparation for that, with the goal to make the remove
+callbacks obviously always return 0. This way when the prototype of
+these functions is changed to return void, the change is straight
+forward and easy to review.
 
+Changes since (implict) v1:
+
+ - Also make the icc_provider_del() stub for the CONFIG_INTERCONNECT=n
+   case void. Found by Georgi Djakov
+
+Best regards
+Uwe
+
+Uwe Kleine-König (8):
+  interconnect: imx: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: icc-rpm: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: icc-rpmh: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: msm8974: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: osm-l3: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: sm8450: Ignore return value of icc_provider_del() in
+    .remove()
+  interconnect: Make icc_provider_del() return void
+  interconnect: imx: Make imx_icc_unregister() return void
+
+ drivers/interconnect/core.c           | 10 +++-------
+ drivers/interconnect/imx/imx.c        |  4 ++--
+ drivers/interconnect/imx/imx.h        |  2 +-
+ drivers/interconnect/imx/imx8mm.c     |  4 +++-
+ drivers/interconnect/imx/imx8mn.c     |  4 +++-
+ drivers/interconnect/imx/imx8mq.c     |  4 +++-
+ drivers/interconnect/qcom/icc-rpm.c   |  4 +++-
+ drivers/interconnect/qcom/icc-rpmh.c  |  4 +++-
+ drivers/interconnect/qcom/msm8974.c   |  4 +++-
+ drivers/interconnect/qcom/osm-l3.c    |  4 +++-
+ drivers/interconnect/qcom/sm8450.c    |  4 +++-
+ include/linux/interconnect-provider.h |  5 ++---
+ 12 files changed, 32 insertions(+), 21 deletions(-)
+
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+-- 
+2.36.1
 
