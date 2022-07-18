@@ -2,67 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D5757824D
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 14:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20197578397
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 15:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiGRM1S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 08:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
+        id S235384AbiGRNVg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 09:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234465AbiGRM1Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 08:27:16 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2407626105
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 05:27:14 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id r9so18993368lfp.10
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 05:27:14 -0700 (PDT)
+        with ESMTP id S235377AbiGRNVe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 09:21:34 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE68248E4
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 06:21:33 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d16so16988102wrv.10
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 06:21:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SvNSiy3Bwyzzmb9hWm5P2ubOF+K0KPQR5bua58V/jh0=;
-        b=fvzJULg7DRCWCIpeJrHd8MszLKI1FCkIqUIlpfMgk4Y9DoLijatc6bknHRhlef65cQ
-         WSkxz+dMpXpDQuTDLRcjqChHLNrmSK1htOi3Q1Ap1XjPzlitOiadSO1j5WrlV2PdnB8E
-         bqtRarasBZWlUSAezWCCVo4ExQZu8B52noAfuFmdP/NsR5T0xIJ0in5tQtPG9DFaHdi4
-         QqCuJ6LqHK5C0/OdDwFCLUCvvBdyfHNx5u4y8d6miqg6/gZsHqeGlcNHyGb1dc6KnZPy
-         +41xCZsvOhgvrTLuk8Ii1L0cwh6uist3zpQZdMgbIFTbjXXsz50iwd/HBs+TbaV7xxiy
-         tFug==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=q5w09ckeGgEvgHwxmxmc3ezqZGQDYExZynBvXnLIt8E=;
+        b=Jvw9Klhi275DuZ9tfIlA+0LOiDjcu4UC/lQXpku3IUYsCJcdQRc2yjejIMCUi/tMmW
+         MVaI3dFPVAxTn911Zi6stVQadx1r0FgkmgKUhm5sXh0xa6v1wNNDVCDYr3PhdRDVqcXs
+         kX3/9so11EWGonn7ZJyol1ezeYbYL4ICmZt6wOFDyRVOjfTYJdun000KEazDXOreeKdR
+         Byxkidt2r8nvpMd4do4vkia8lTNb7UcD9T0aeDvm/wiA/JoTEzGupd3eVCNWIsiIvOBT
+         aOj50A27mZH5IdYJ1DKYt1oPVWl7bZigyXAuTm/DC/tXwc/zJ/a77nX3/FDFq8TK3t02
+         7LAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SvNSiy3Bwyzzmb9hWm5P2ubOF+K0KPQR5bua58V/jh0=;
-        b=wMl51RTYORwoGj3BVk0KH8Jdv4xg7IGkuyaUXkoqtOM9SjlRk0iDte+l3lHLVKdKMq
-         JgFzq9PgMiA/v6kJhSWqjh69gCBs++0wKArb8gTer2ixiAwlLO78T2ZLb6RFTvZopUrN
-         WX1eqnT2GmNxbLSZuMHy8dr7y8gryh5l6oxw2ElBV/bKgRMfQXsUizziUWvB3hTfB7Cd
-         74sotEd6LLh5tDzqYy7B/iJ+GftSOK/ReJCstvE4o8rEFMFm84FkBsYMq7A9acnHS1JS
-         w82Ffgl0Kpro+cBfCCdxwhrGpyp143KNeGIzUHr2wvO9W/a6lCTH3nHTk+l3CM/7LBLw
-         sU4w==
-X-Gm-Message-State: AJIora/37ycSHCjjqfe161IPixpZISr1gHZmFk4kqv4bWNdGEwiTJkxl
-        /16I3u5jyWnK6wJD9ZbT04LLanv9I6o+MldYEeDpGw==
-X-Google-Smtp-Source: AGRyM1uKiFktgrEzxlm7H0kdDSoycjmIDjrn5dKMTQroWG6UyBZUIQ/Ro4Bg+FkT/p4F94gX2lwF5GGf0OM1CfmattE=
-X-Received: by 2002:a05:6512:aca:b0:48a:1a70:d0d8 with SMTP id
- n10-20020a0565120aca00b0048a1a70d0d8mr11279481lfu.167.1658147232435; Mon, 18
- Jul 2022 05:27:12 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q5w09ckeGgEvgHwxmxmc3ezqZGQDYExZynBvXnLIt8E=;
+        b=8LIJIsYLQaCCIexy+knY9co8GyDocUjbiuqRzl5pyNHzVOy202hYJeg3mFcmUVefSY
+         r5G8j+MSX35P/Dtn6QTmuQDN5XdanVGOsg8s6sXmZ/x2ECPsol52SRXg0ws2eVhoKPra
+         xYhhIigh8kOwU5WTOJtMzh9ZTwYlzcTttUg81ljaDQM/loOdfaRNW2e9PQoAJb5BRSh+
+         7gag82Qeq1qts9JpK+jPEhM+jG6oTiWtde3/qwuVWeI7a/MKHPJNxYtybUofKoIQhw+A
+         yqGH1ihbeKvJsb2696Q3YDXB4ZGfBlzZaDpdgoz3GaktiSgSwW1c2Y0h2DAbiAQIdksx
+         fjFg==
+X-Gm-Message-State: AJIora9u8Zv0azsgUGxLONPkYMxKPbEkGQ5zSaEOW1UOE3b0iTRCMwbe
+        9ZGBmPY3Uu+YzajHWC2UV2apIQILyDW68A==
+X-Google-Smtp-Source: AGRyM1tk/pPv7/XveZl11s7JDIiES5VnzaW5an5ZDKMfD/k7nS/W8eSDip40/dfligRm1fRO3UAxRQ==
+X-Received: by 2002:adf:d1c8:0:b0:21d:a082:9290 with SMTP id b8-20020adfd1c8000000b0021da0829290mr23641028wrd.246.1658150491428;
+        Mon, 18 Jul 2022 06:21:31 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e? ([2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e])
+        by smtp.googlemail.com with ESMTPSA id f9-20020a05600c4e8900b003a31fd05e0fsm2491063wmq.2.2022.07.18.06.21.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 06:21:30 -0700 (PDT)
+Message-ID: <04bd27a8-5148-c8eb-5687-83ef511618df@linaro.org>
+Date:   Mon, 18 Jul 2022 15:21:29 +0200
 MIME-Version: 1.0
-References: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
- <CAPDyKFr0Lnp_3rUWcdZMcgtcFW050hOiGVZV_bVu=pqCLE8dEw@mail.gmail.com> <06ee17dfd5f5fb0cb3db4ddfee863c7b8351096e.camel@puri.sm>
-In-Reply-To: <06ee17dfd5f5fb0cb3db4ddfee863c7b8351096e.camel@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 18 Jul 2022 14:26:35 +0200
-Message-ID: <CAPDyKFpm1nMEeUjygapfwtBcr25AQerX4j14MPKd5NW2-BW33g@mail.gmail.com>
-Subject: Re: [PATCH v2] power: domain: handle power supplies that need interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes for
+ the trip points
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, amitk@kernel.org, lukasz.luba@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+ <20220715210911.714479-3-daniel.lezcano@linaro.org>
+ <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,141 +75,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 18 Jul 2022 at 14:08, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Am Montag, dem 18.07.2022 um 12:54 +0200 schrieb Ulf Hansson:
-> > On Tue, 12 Jul 2022 at 14:19, Martin Kepplinger
-> > <martin.kepplinger@puri.sm> wrote:
-> > >
-> > > If the power-domains' power-supply node (regulator) needs
-> > > interrupts to work, the current setup with noirq callbacks cannot
-> > > work; for example a pmic regulator on i2c, when suspending, usually
-> > > already
-> > > times out during suspend_noirq:
-> > >
-> > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > >
-> > > So fix system suspend and resume for these power-domains by using
-> > > the
-> > > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
-> > > librem5
-> > > board, but by looking at the dts, this will fix imx8mq-evk and
-> > > possibly
-> > > other boards too.
-> > >
-> > > Possibly one can find more changes than suspend/resume for this
-> > > case. They
-> > > can be added later when testing them.
-> > >
-> > > Initially system suspend problems had been discussed at
-> > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > > which led to discussing the pmic that contains the regulators which
-> > > serve as power-domain power-supplies:
-> > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > >
-> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > ---
-> > >
-> > > revision history
-> > > ----------------
-> > > v2: (thank you Krzysztof)
-> > > * rewrite: find possible regulators' interrupts property in parents
-> > >   instead of inventing a new property.
-> > >
-> > > v1: (initial idea)
-> > > https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
-> > >
-> > >
-> > >  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
-> > >  1 file changed, 26 insertions(+)
-> > >
-> > > diff --git a/drivers/base/power/domain.c
-> > > b/drivers/base/power/domain.c
-> > > index 3e86772d5fac..ca3e3500939d 100644
-> > > --- a/drivers/base/power/domain.c
-> > > +++ b/drivers/base/power/domain.c
-> > > @@ -2298,6 +2298,28 @@ static bool genpd_present(const struct
-> > > generic_pm_domain *genpd)
-> > >         return ret;
-> > >  }
-> > >
-> > > +/**
-> > > + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs
-> > > interrupts
-> > > + * @genpd: Pointer to PM domain associated with the PM domain
-> > > provider.
-> > > + */
-> > > +static void of_genpd_get_power_supply_irq(struct generic_pm_domain
-> > > *pd)
-> > > +{
-> > > +       struct device_node *dn;
-> > > +
-> > > +       dn = of_parse_phandle(pd->dev.of_node, "power-supply", 0);
-> > > +       if (!dn)
-> > > +               return;
-> > > +
-> > > +       while ((dn = of_get_next_parent(dn))) {
-> > > +               if (of_get_property(dn, "interrupts", NULL)) {
-> > > +                       pd->domain.ops.suspend =
-> > > genpd_suspend_noirq;
-> > > +                       pd->domain.ops.resume = genpd_resume_noirq;
-> > > +                       pd->domain.ops.suspend_noirq = NULL;
-> > > +                       pd->domain.ops.resume_noirq = NULL;
-> > > +               }
-> > > +       }
-> > > +}
-> > > +
-> > >  /**
-> > >   * of_genpd_add_provider_simple() - Register a simple PM domain
-> > > provider
-> > >   * @np: Device node pointer associated with the PM domain
-> > > provider.
-> > > @@ -2343,6 +2365,8 @@ int of_genpd_add_provider_simple(struct
-> > > device_node *np,
-> > >         genpd->provider = &np->fwnode;
-> > >         genpd->has_provider = true;
-> > >
-> > > +       of_genpd_get_power_supply_irq(genpd);
-> > > +
-> > >         return 0;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-> > > @@ -2394,6 +2418,8 @@ int of_genpd_add_provider_onecell(struct
-> > > device_node *np,
-> > >
-> > >                 genpd->provider = &np->fwnode;
-> > >                 genpd->has_provider = true;
-> > > +
-> > > +               of_genpd_get_power_supply_irq(genpd);
-> > >         }
-> > >
-> > >         ret = genpd_add_provider(np, data->xlate, data);
-> >
-> > Overall I understand the need for this, but let me suggest a slightly
-> > different approach to solve this. See below.
-> >
-> > I think the OF parsing looks quite platform specific. Rather than
-> > adding this in the generic layer of genpd, I suggest that we move the
-> > OF parsing into the genpd provider code.
-> >
-> > Moreover, to inform genpd that it should use the other set of
-> > callbacks for system suspend/resume, let's add a new genpd
-> > configuration bit. The genpd provider should then set the genpd-
-> > >flag,
-> > prior to calling pm_genpd_init(), to let it know that it should pick
-> > the other callbacks.
-> >
-> > Does it make sense?
->
-> the provider here would be gpcv2, right?
 
-Correct.
+Hi Zhang,
 
-> Conceptually I know what you
-> mean and will try to make it work later. thanks a lot!
+thanks for the review
 
-Great! Feel free to ping me if you need some help to put it together.
+On 18/07/2022 07:28, Zhang Rui wrote:
+> On Fri, 2022-07-15 at 23:09 +0200, Daniel Lezcano wrote:
 
-Kind regards
-Uffe
+[ ... ]
+
+>> Instead of taking the risk of breaking the existing platforms, use an
+>> array of temperature ordered trip identifiers and make it available
+>> for the code needing to browse the trip points in an ordered way.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+
+[ ... ]
+
+>> +static void sort_trips_indexes(struct thermal_zone_device *tz)
+>> +{
+>> +       int i, j;
+>> +
+>> +       for (i = 0; i < tz->trips; i++)
+>> +               tz->trips_indexes[i] = i;
+>> +
+>> +       for (i = 0; i < tz->trips; i++) {
+>> +               for (j = i + 1; j < tz->trips; j++) {
+>> +                       int t1, t2;
+>> +
+>> +                       tz->ops->get_trip_temp(tz, tz-
+>>> trips_indexes[i], &t1);
+> 
+> This line can be moved to the upper loop.
+
+Right, thanks!
+
+>> +                       tz->ops->get_trip_temp(tz, tz-
+>>> trips_indexes[j], &t2);
+>> +
+> 
+> what about the disabled trip points?
+> 
+> we should ignore those trip points and check the return value to make
+> sure we're comparing the valid trip_temp values.
+
+We don't have to care about, whatever the position, the corresponding 
+trip id will be disabled by the trip init function before calling this 
+one and ignored in the handle_thermal_trip() function
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
