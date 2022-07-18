@@ -2,132 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68275779B2
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 05:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A88577A33
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 06:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiGRDKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Jul 2022 23:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
+        id S233120AbiGRE6T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 00:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGRDKp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Jul 2022 23:10:45 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34DC10FC4;
-        Sun, 17 Jul 2022 20:10:44 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id c139so3209563pfc.2;
-        Sun, 17 Jul 2022 20:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WIaE5p7vCRM9cDug48fSPQP1o+yx7BsuW/zADg9iL9Y=;
-        b=H4VlsetGoWMJVh4Px0oF4oDgKOQpVXlMTlBAEaCy7vNhN4+TWj6X1gyqrRQSUjBuy/
-         fSmRCEstccIDgf57/7GNfQAVKKCdrADBNj6Q//Vm5Vif3TYaaHGEWOwdvFqANObkbpQM
-         g/xJBpgJQbdJJpP4rupDlQLbiTR+shwFwpwyEWMpDp9Q+O5YJPvYcgpYb+PsFOlC8CMk
-         t8uHhJNMYdDYIUDaDzrm/l4u+ShAH1oFyEidP2HccWAuRhUOMshMT+xh4dZJ5ZJZiRLM
-         mufQyMa+ZNgrvTMgMWq1m3WrA7ZrxnedjqFJNpfm9qNlYtCPF02EcYDQ3UxDiDOKIV6R
-         LGRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WIaE5p7vCRM9cDug48fSPQP1o+yx7BsuW/zADg9iL9Y=;
-        b=PpwIumsQmsZ5ACJ8OqLWypWwIhUm9Rxf3A/SWF1SiQUSA2Dd0mepZqz9ZFoNPXQwSv
-         pk0NpZceQcLfKJKLUGSEzvb349xRGPceW8/OgZ1JT1grGQlH4PzQLaQCIE5hYObGpyjG
-         7zWjpqmfwTAK7NGJz0WfUn94ey3VH35a9cGO7XkLhLrAUmXHHgCMkOT5Lv5ewQtO0smy
-         2AfO0/Xhhkn8LrbQTzSoiiPXJaWafnTKGP61V7p6yRvtBeN32HqQftAV0jiYQnrfmdRT
-         mShNY37u70nE0qLugArBSC0KoNbXRULY/ekihDf95bRK8ch+gzUqHlEYwSXPyNQefTT0
-         MyBA==
-X-Gm-Message-State: AJIora89WduZsorZGKgIqU/eeoFbe1L1aJbuASB+jAwjgbrX0a5pujJP
-        7oCqyFJPScLA9UEtWLMkifQoOFIkBvg=
-X-Google-Smtp-Source: AGRyM1uOq/dKA8d1NkOzk7wlRIXuQQGLWgGguMrm0lT16hF4+vm14igker82UjlG/K1+WEyLMIwatw==
-X-Received: by 2002:a05:6a00:1daa:b0:52a:c51d:d36a with SMTP id z42-20020a056a001daa00b0052ac51dd36amr25829909pfw.61.1658113843836;
-        Sun, 17 Jul 2022 20:10:43 -0700 (PDT)
-Received: from localhost.localdomain (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id n8-20020a170902e54800b0016b81679c1fsm8038889plf.216.2022.07.17.20.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 20:10:43 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Markus Mayer <mmayer@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= 
-        <alejandro.gonzalez.correo@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <markus.mayer@broadcom.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL)
-Subject: [PATCH RESEND] tools/thermal: tmon: include pthread and time headers in tmon.h
-Date:   Sun, 17 Jul 2022 20:10:39 -0700
-Message-Id: <20220718031040.44714-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230264AbiGRE6T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 00:58:19 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3877412AC3;
+        Sun, 17 Jul 2022 21:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658120298; x=1689656298;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=Tf6RP+3TW2VwpFfY2QBBHXXDIuJugJ+MQ70PeiCqSWs=;
+  b=LAsRy+MbAqqqe55RmOooa+scf/HR/PlKJ1V+H+XLdnp/UsEh/+sfAGgP
+   0SQizVtCQYOFjqnjFYSfuBiHMqp2pUsYhIXdQj0TYQl9cA/wHQ5JkBL9D
+   JPWx+Ksstq8SSHjsbqTn53WoeXSA7YYl5qiZNE5vh95x2TkVVbMGoEd1K
+   kGtlmveyylKsDze8FVmx6WFRjmGSvMI8ms5FMSv2du+pVwWjBIiruV+/S
+   uTdAPHFilWsL6wR7WKbSyDFzpwwSzzvemwXlZryPZon8j4snF3vN5jTn6
+   b10DsV+zL1dixZs/GmTyxPl5Xx4pOiX2j9hGv+6GT6sk9ANXUHML0C8pz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347821121"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="347821121"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 21:58:18 -0700
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="547342170"
+Received: from lananhtr-mobl3.ccr.corp.intel.com ([10.215.250.14])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 21:58:07 -0700
+Message-ID: <77906f0518ea8c56d8967455b7315c150d443ec9.camel@intel.com>
+Subject: Re: [PATCH v3 1/4] thermal/core: Encapsulate the trip point crossed
+ function
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, amitk@kernel.org, lukasz.luba@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 18 Jul 2022 12:58:04 +0800
+In-Reply-To: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Markus Mayer <mmayer@broadcom.com>
-
-Include sys/time.h and pthread.h in tmon.h, so that types
-"pthread_mutex_t" and "struct timeval tv" are known when tmon.h
-references them.
-
-Without these headers, compiling tmon against musl-libc will fail with
-these errors:
-
-In file included from sysfs.c:31:0:
-tmon.h:47:8: error: unknown type name 'pthread_mutex_t'
- extern pthread_mutex_t input_lock;
-        ^~~~~~~~~~~~~~~
-make[3]: *** [<builtin>: sysfs.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-In file included from tui.c:31:0:
-tmon.h:54:17: error: field 'tv' has incomplete type
-  struct timeval tv;
-                 ^~
-make[3]: *** [<builtin>: tui.o] Error 1
-make[2]: *** [Makefile:83: tmon] Error 2
-
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Acked-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
-Tested-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
----
-This patch was first submitted here:
-
-https://lore.kernel.org/all/20200617235809.6817-1-mmayer@broadcom.com/
-
-but never applied, meanwhile the issue is still present
-
- tools/thermal/tmon/tmon.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/thermal/tmon/tmon.h b/tools/thermal/tmon/tmon.h
-index c9066ec104dd..44d16d778f04 100644
---- a/tools/thermal/tmon/tmon.h
-+++ b/tools/thermal/tmon/tmon.h
-@@ -27,6 +27,9 @@
- #define NR_LINES_TZDATA 1
- #define TMON_LOG_FILE "/var/tmp/tmon.log"
- 
-+#include <sys/time.h>
-+#include <pthread.h>
-+
- extern unsigned long ticktime;
- extern double time_elapsed;
- extern unsigned long target_temp_user;
--- 
-2.25.1
+T24gRnJpLCAyMDIyLTA3LTE1IGF0IDIzOjA5ICswMjAwLCBEYW5pZWwgTGV6Y2FubyB3cm90ZToK
+PiBUaGUgcm91dGluZSB3aGVyZSB0aGUgdHJpcCBwb2ludCBjcm9zc2VkIGlzIGRldGVjdGVkIGlz
+IGEgc3RyYXRlZ2ljCj4gcGxhY2Ugd2hlcmUgZGlmZmVyZW50IHByb2Nlc3Npbmcgd2lsbCBoYXBw
+ZW4uIEVuY2Fwc3VsYXRlIHRoZSBjb2RlIGluCj4gYSBmdW5jdGlvbiwgc28gYWxsIHNwZWNpZmlj
+IGFjdGlvbnMgcmVsYXRlZCB3aXRoIGEgdHJpcCBwb2ludCBjcm9zc2VkCj4gY2FuIGJlIGdyb3Vw
+ZWQuCj4gCj4gUmV2aWV3ZWQtYnk6IEx1a2FzeiBMdWJhIDxsdWthc3oubHViYUBhcm0uY29tPgo+
+IFNpZ25lZC1vZmYtYnk6IERhbmllbCBMZXpjYW5vIDxkYW5pZWwubGV6Y2Fub0BsaW5hcm8ub3Jn
+PgoKUmV2aWV3ZWQgYnk6IFpoYW5nIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4KCj4gLS0tCj4g
+wqBkcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMgfCAzMCArKysrKysrKysrKysrKysrKysr
+Ky0tLS0tLS0tLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspLCAxMCBkZWxl
+dGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aGVybWFsL3RoZXJtYWxfY29yZS5j
+Cj4gYi9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMKPiBpbmRleCBjZGMwNTUyZThjNDIu
+LmQ5Zjc3MWIxNWVkOCAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3Jl
+LmMKPiArKysgYi9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMKPiBAQCAtMzU4LDYgKzM1
+OCwyNSBAQCBzdGF0aWMgdm9pZCBoYW5kbGVfY3JpdGljYWxfdHJpcHMoc3RydWN0Cj4gdGhlcm1h
+bF96b25lX2RldmljZSAqdHosCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0ei0+
+b3BzLT5jcml0aWNhbCh0eik7Cj4gwqB9Cj4gwqAKPiArc3RhdGljIHZvaWQgaGFuZGxlX3RoZXJt
+YWxfdHJpcF9jcm9zc2VkKHN0cnVjdCB0aGVybWFsX3pvbmVfZGV2aWNlCj4gKnR6LCBpbnQgdHJp
+cCwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50IHRyaXBfdGVtcCwgaW50IHRyaXBfaHlzdCwK
+PiBlbnVtIHRoZXJtYWxfdHJpcF90eXBlIHRyaXBfdHlwZSkKPiArewo+ICvCoMKgwqDCoMKgwqDC
+oGlmICh0ei0+bGFzdF90ZW1wZXJhdHVyZSA9PSBUSEVSTUFMX1RFTVBfSU5WQUxJRCkKPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBp
+ZiAodHotPmxhc3RfdGVtcGVyYXR1cmUgPCB0cmlwX3RlbXAgJiYKPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgdHotPnRlbXBlcmF0dXJlID49IHRyaXBfdGVtcCkgewo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB0aGVybWFsX25vdGlmeV90el90cmlwX3VwKHR6LT5pZCwgdHJpcCwKPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdHotPnRlbXBlcmF0dXJlKTsKPiArwqDCoMKgwqDCoMKg
+wqB9Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmICh0ei0+bGFzdF90ZW1wZXJhdHVyZSA+PSB0cmlw
+X3RlbXAgJiYKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqAgdHotPnRlbXBlcmF0dXJlIDwgKHRyaXBf
+dGVtcCAtIHRyaXBfaHlzdCkpIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGhl
+cm1hbF9ub3RpZnlfdHpfdHJpcF9kb3duKHR6LT5pZCwgdHJpcCwKPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHR6LT50ZW1wZXJhdHVyZSk7Cj4gK8KgwqDCoMKgwqDCoMKgfQo+ICt9Cj4g
+Kwo+IMKgc3RhdGljIHZvaWQgaGFuZGxlX3RoZXJtYWxfdHJpcChzdHJ1Y3QgdGhlcm1hbF96b25l
+X2RldmljZSAqdHosIGludAo+IHRyaXApCj4gwqB7Cj4gwqDCoMKgwqDCoMKgwqDCoGVudW0gdGhl
+cm1hbF90cmlwX3R5cGUgdHlwZTsKPiBAQCAtMzcyLDE2ICszOTEsNyBAQCBzdGF0aWMgdm9pZCBo
+YW5kbGVfdGhlcm1hbF90cmlwKHN0cnVjdAo+IHRoZXJtYWxfem9uZV9kZXZpY2UgKnR6LCBpbnQg
+dHJpcCkKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHR6LT5vcHMtPmdldF90cmlwX2h5c3QpCj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0ei0+b3BzLT5nZXRfdHJpcF9oeXN0KHR6LCB0
+cmlwLCAmaHlzdCk7Cj4gwqAKPiAtwqDCoMKgwqDCoMKgwqBpZiAodHotPmxhc3RfdGVtcGVyYXR1
+cmUgIT0gVEhFUk1BTF9URU1QX0lOVkFMSUQpIHsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJlIDwgdHJpcF90ZW1wICYmCj4gLcKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVyYXR1cmUgPj0gdHJpcF90ZW1w
+KQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGhlcm1h
+bF9ub3RpZnlfdHpfdHJpcF91cCh0ei0+aWQsIHRyaXAsCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVyYXR1cmUpOwo+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBpZiAodHotPmxhc3RfdGVtcGVyYXR1cmUgPj0gdHJpcF90ZW1wICYmCj4g
+LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ei0+dGVtcGVyYXR1cmUgPCAo
+dHJpcF90ZW1wIC0gaHlzdCkpCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqB0aGVybWFsX25vdGlmeV90el90cmlwX2Rvd24odHotPmlkLCB0cmlwLAo+IC3C
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHR6LT50ZW1wZXJhdHVy
+ZSk7Cj4gLcKgwqDCoMKgwqDCoMKgfQo+ICvCoMKgwqDCoMKgwqDCoGhhbmRsZV90aGVybWFsX3Ry
+aXBfY3Jvc3NlZCh0eiwgdHJpcCwgdHJpcF90ZW1wLCBoeXN0LCB0eXBlKTsKPiDCoAo+IMKgwqDC
+oMKgwqDCoMKgwqBpZiAodHlwZSA9PSBUSEVSTUFMX1RSSVBfQ1JJVElDQUwgfHwgdHlwZSA9PQo+
+IFRIRVJNQUxfVFJJUF9IT1QpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBoYW5k
+bGVfY3JpdGljYWxfdHJpcHModHosIHRyaXAsIHR5cGUpOwoK
 
