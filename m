@@ -2,121 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5795784B0
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 16:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8818457857A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 16:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbiGROE4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 10:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
+        id S233278AbiGROcx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 10:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbiGROE4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 10:04:56 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBDEDF2A
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 07:04:55 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id r2so16197741wrs.3
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 07:04:55 -0700 (PDT)
+        with ESMTP id S233264AbiGROce (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 10:32:34 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9815A23156
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 07:32:31 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b26so17346156wrc.2
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 07:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/WttLzw94XQkCQWodug0xdDBqbm5qnEWCGk1phYboOA=;
-        b=L1ps4mlah3U0D4p1OSfLazp+LQ5WIvllYV6mhGgUoiz60a5DiZPNc0x1mBtg5t3wRP
-         hlBCmRuJwxdi1f/BsTGiG2Whlx0DaYX6S8CWObZx90FKG/YTiyXi5ry1wkpiCb/FSKhC
-         /5IyzNl6P1/O+Urqklm3DpQ40lnFZKKwu6otsfN8fs3K5HpkY43i6K52irKEUz7/N+zb
-         +pWgI03DjiZu3YqbSqr7lpxdeu7pxiDdg7bFG/x7GNmknYVe21TJ/nnoRW04ktKTAnLe
-         gPCTm6tLBPQxfNFDP3tNz9kUnyspk3ZlYEBUmeyhQhbX5fxKANvMM+Dli3165c9gr66C
-         bfUA==
+        bh=+oIZvUc7KLTZV54ucVUZOCZ07lzjTyHDr3kQM7WCFuU=;
+        b=z2uVDjUAaatUdkjrpAzIZl4A5tH46jGYaymAHqbE17uTOSI3vGoj3g8TCXtaKmAlSz
+         ekXKmv73ENyKMAeJlTW/OTnokKmjYAVwkp1ljAbLCGeOQM2pFXQ4rA4I2S6PZpV4a04P
+         e9KEi4ZJmJ274MwMC2q/bj59Rlz1jMYZb9SYeISN5PdssXDhCkqjxwM+3jnU4aAuNTCR
+         rsYNX9ub2Eb0lqQRaehyXl9MMrpUx3ORuRVKSjRLiaT9hzljB3nXagzYIphgxseo4jug
+         O3+BKMra32JWvuTArmzjeGD3+21PA7KfwHR8VOH/NHujAUysTIYGyTtFZgxZzL/R2CkA
+         T4kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=/WttLzw94XQkCQWodug0xdDBqbm5qnEWCGk1phYboOA=;
-        b=EunqhI/t8aHE1lUCARfIyIoidAL7Oft6yQ/W4gjCrxX1dYJhJ2pURweuQ5IiVmt+Eq
-         qJLOHo0UWeH7CTxoapX/GGTnlSVyHonF+3PPw/BUSZkpvbX1/lEk4fcXN/fS7BD711Q7
-         W1ip9fqFba7fCME4QsLha9o+Ao0E8NXCypD11X+t5L++kAJTxOXnN/1E0GvJ9kVA0JEx
-         ZJbNFa73Ebb2mni1DKNy+EIhgMoont9L3XuTOymZ0i9L+s8scGd9uhL2O+Ql3KFrXGqG
-         SuApYECxUFVfRQygkZAKxcUxqn2xmKPKgcahQRgEE/PFuIHkU4e6lrjRgPKj8YsS75xR
-         HYJg==
-X-Gm-Message-State: AJIora9bvqDoCueA5191uDiyJJUStmr+uC5TLix7HG+ZRslsn9QSxeS3
-        UCXHHVPcHx29VDU1bOl4e3bEkg==
-X-Google-Smtp-Source: AGRyM1usZMBXkhiz17covDRrDryIq/jaFNtFhiNpEqklOOn+jiYIyQyjaUDZ2WsJu8gO7Tov9lzGVw==
-X-Received: by 2002:adf:dd0d:0:b0:21d:666b:298e with SMTP id a13-20020adfdd0d000000b0021d666b298emr23410128wrm.412.1658153093631;
-        Mon, 18 Jul 2022 07:04:53 -0700 (PDT)
+        bh=+oIZvUc7KLTZV54ucVUZOCZ07lzjTyHDr3kQM7WCFuU=;
+        b=sEFjmIrt8V1eQdm80wW7XqheozVTkVweOkf39e+4WVWmfeMHnLEBevk1OJpiv97mAo
+         mU8wbqeeIiVIEr90GqqerJdFvuvoJm862Lz3bH846GOPd0SOdUeNcXeUQ3xGGUO+Ek3p
+         XRPXeD3xZdksjU2EXaP5qwHm3Moj1wYjIuyV31FUo7qDrJQx1x6df7YEE5ZCGuEF6QU8
+         Nb8t80/tYScUw6AWyt9tmmbVwn0HDzm8zZC3MYR/9eExbjTmuy+wHPHNu70zf2YK4iKw
+         nMfsz3FWYobHiVgEQCAhbq6//EsDKBdwTzgyh3F306kfIzwj+5InUsCxnXCMMT6xSvdF
+         gycA==
+X-Gm-Message-State: AJIora/RTdM/XKIgVMEppUa1lkhFQE5Ut4shF4IWxLQy/JP6lHSF1mwd
+        oaU/if1j/1rF3RD26TWPd53Aig==
+X-Google-Smtp-Source: AGRyM1sCRv3oioroEQ8pJ8k3RNEmGNzpl4tMeoMiDvoDgXeZO1GV8U++X8MoVjzH/PIQbyQBVxHDyA==
+X-Received: by 2002:adf:d0c7:0:b0:21d:764b:12d5 with SMTP id z7-20020adfd0c7000000b0021d764b12d5mr23582331wrh.516.1658154749822;
+        Mon, 18 Jul 2022 07:32:29 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e? ([2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e])
-        by smtp.googlemail.com with ESMTPSA id be9-20020a05600c1e8900b003a30cfb859asm14446695wmb.5.2022.07.18.07.04.52
+        by smtp.googlemail.com with ESMTPSA id a16-20020adfdd10000000b0021d6e917442sm13038842wrm.72.2022.07.18.07.32.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 07:04:52 -0700 (PDT)
-Message-ID: <70a992e3-bf1c-0c33-c122-3c4730ffb232@linaro.org>
-Date:   Mon, 18 Jul 2022 16:04:51 +0200
+        Mon, 18 Jul 2022 07:32:29 -0700 (PDT)
+Message-ID: <387c126a-0106-2227-4b4a-db284965b6ca@linaro.org>
+Date:   Mon, 18 Jul 2022 16:32:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v3 2/4] thermal/core: Avoid calling ->get_trip_temp()
- unnecessarily
+Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes for
+ the trip points
 Content-Language: en-US
 To:     Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
 Cc:     quic_manafm@quicinc.com, amitk@kernel.org, lukasz.luba@arm.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
- <20220715210911.714479-2-daniel.lezcano@linaro.org>
- <aeb6a9d2447a8bbd7d386f88a7f72b33253776c7.camel@intel.com>
+ <20220715210911.714479-3-daniel.lezcano@linaro.org>
+ <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <aeb6a9d2447a8bbd7d386f88a7f72b33253776c7.camel@intel.com>
+In-Reply-To: <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/07/2022 06:59, Zhang Rui wrote:
+On 18/07/2022 07:28, Zhang Rui wrote:
 > On Fri, 2022-07-15 at 23:09 +0200, Daniel Lezcano wrote:
->> As the trip temperature is already available when calling the
->> function
->> handle_critical_trips(), pass it as a parameter instead of having
->> this
->> function calling the ops again to retrieve the same data.
+>> By convention the trips points are declared in the ascending
+>> temperature order. However, no specification for the device tree,
+>> ACPI
+>> or documentation tells the trip points must be ordered this way.
 >>
->> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+>> In the other hand, we need those to be ordered to browse them at the
+>> thermal events. But if we assume they are ordered and change the code
+>> based on this assumption, any platform with shuffled trip points
+>> description will be broken (if they exist).
+>>
+>> Instead of taking the risk of breaking the existing platforms, use an
+>> array of temperature ordered trip identifiers and make it available
+>> for the code needing to browse the trip points in an ordered way.
+>>
 >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>    v3:
->>     - Massaged the patch title and the description
->> ---
->>   drivers/thermal/thermal_core.c | 8 ++------
->>   1 file changed, 2 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/thermal/thermal_core.c
->> b/drivers/thermal/thermal_core.c
->> index d9f771b15ed8..f66036b3daae 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -340,12 +340,8 @@ void thermal_zone_device_critical(struct
->> thermal_zone_device *tz)
->>   EXPORT_SYMBOL(thermal_zone_device_critical);
->>   
->>   static void handle_critical_trips(struct thermal_zone_device *tz,
->> -                                 int trip, enum thermal_trip_type
->> trip_type)
->> +                                 int trip, int trip_temp, enum
->> thermal_trip_type trip_type)
-> 
-> This indent cleanup belongs to patch 1/4.
-
-It is not an indent cleanup, the 'int trip_temp' is added in the parameters.
-
-> Other than that,
-> 
-> Reviewed-by: Zhang Rui <rui.zhang@intel.com>
 
 [ ... ]
+
+>> +static void sort_trips_indexes(struct thermal_zone_device *tz)
+>> +{
+>> +       int i, j;
+>> +
+>> +       for (i = 0; i < tz->trips; i++)
+>> +               tz->trips_indexes[i] = i;
+>> +
+>> +       for (i = 0; i < tz->trips; i++) {
+>> +               for (j = i + 1; j < tz->trips; j++) {
+>> +                       int t1, t2;
+>> +
+>> +                       tz->ops->get_trip_temp(tz, tz-
+>>> trips_indexes[i], &t1);
+> 
+> This line can be moved to the upper loop.
+> 
+>> +                       tz->ops->get_trip_temp(tz, tz-
+>>> trips_indexes[j], &t2);
+
+
+Actually, we can not move the line up because of the swap below
+
+>> +                       if (t1 > t2)
+>> +                               swap(tz->trips_indexes[i], tz-
+>>> trips_indexes[j]);
+>> +               }
+>> +       }
+>> +}
+
+
 
 
 -- 
