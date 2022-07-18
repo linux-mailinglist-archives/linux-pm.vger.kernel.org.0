@@ -2,152 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEAC5781E9
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 14:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BF65781F2
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 14:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234984AbiGRMOd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 08:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S234966AbiGRMPE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 08:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbiGRMOb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 08:14:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051D819C2C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 05:14:31 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPdh-0005dj-6e; Mon, 18 Jul 2022 14:14:17 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPdg-001i4I-A7; Mon, 18 Jul 2022 14:14:16 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPdf-005xVl-CK; Mon, 18 Jul 2022 14:14:15 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/8] interconnect: imx: Make imx_icc_unregister() return void
-Date:   Mon, 18 Jul 2022 14:14:09 +0200
-Message-Id: <20220718121409.171773-9-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220718121409.171773-1-u.kleine-koenig@pengutronix.de>
-References: <20220718121409.171773-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S235031AbiGRMO6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 08:14:58 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 585B425C59;
+        Mon, 18 Jul 2022 05:14:47 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,281,1650898800"; 
+   d="scan'208";a="126508832"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 18 Jul 2022 21:14:45 +0900
+Received: from biju-VirtualBox.ree.adwin.renesas.com (unknown [10.226.36.116])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 552CF40062DF;
+        Mon, 18 Jul 2022 21:14:42 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, Pavel Machek <pavel@denx.de>
+Subject: [PATCH] thermal/drivers/rzg2l: Fix comments
+Date:   Mon, 18 Jul 2022 13:14:40 +0100
+Message-Id: <20220718121440.556408-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3164; h=from:subject; bh=7KukAtvH5Bq30kuEwIg28LJ8PMRL6qo8BHa0A2/HLbM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi1U6L0VFV3l2yU6+MVs4rL1Au6U6sq+5+aOG/8TLT qP+54gSJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtVOiwAKCRDB/BR4rcrsCQAkB/ sExEC9/a27LpzoAmm9arvb2mSjacbH8owpFfCIgl8F7PQfxRwhHjc/VjVMcRUT/MeeZmW7PYgoTYQp ea0+dM9bMjLYCbwOcFUBJDta9yJkHl1YCMk5r/LqB8i61ZOrJF4XilbKfNHMk6uHkg/t3tPirVSIqA DRZAL6KBkXgczR0l3x8tOlWFRrhKu+xEN0jh5Ub+6oQoCfjCzYe2+z8PasllWb5KgkTjLMeWi3jEN8 TP7Wm38wOcOsMDTDgZ6Z0fCNFbD6J3uS48fb4baB2hZ36qLlOPzOddEfa7qtLGZ5m34Hq5/A6Y3xm6 6UYB8QCu+wKFP3YjFC4eXGhITtsIN3
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function imx_icc_unregister() returns zero unconditionally. Make it
-return void.
+This patch replaces 'Capture times'->'Total number of ADC data samples' as
+the former does not really explain much.
 
-This is a preparation for making platform remove callbacks return void.
+It also fixes the typo
+ * caliberation->calibration
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Lastly, as per the coding style /* should be on a separate line.
+This patch fixes this issue.
+
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- drivers/interconnect/imx/imx.c    | 4 +---
- drivers/interconnect/imx/imx.h    | 2 +-
- drivers/interconnect/imx/imx8mm.c | 4 +++-
- drivers/interconnect/imx/imx8mn.c | 4 +++-
- drivers/interconnect/imx/imx8mq.c | 4 +++-
- 5 files changed, 11 insertions(+), 7 deletions(-)
+ drivers/thermal/rzg2l_thermal.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-index 4c70530e3064..e96794acad59 100644
---- a/drivers/interconnect/imx/imx.c
-+++ b/drivers/interconnect/imx/imx.c
-@@ -274,15 +274,13 @@ int imx_icc_register(struct platform_device *pdev,
- }
- EXPORT_SYMBOL_GPL(imx_icc_register);
+diff --git a/drivers/thermal/rzg2l_thermal.c b/drivers/thermal/rzg2l_thermal.c
+index be07e04c6926..51ae80eda6af 100644
+--- a/drivers/thermal/rzg2l_thermal.c
++++ b/drivers/thermal/rzg2l_thermal.c
+@@ -47,7 +47,7 @@
  
--int imx_icc_unregister(struct platform_device *pdev)
-+void imx_icc_unregister(struct platform_device *pdev)
- {
- 	struct icc_provider *provider = platform_get_drvdata(pdev);
+ #define TS_CODE_AVE_SCALE(x)	((x) * 1000000)
+ #define MCELSIUS(temp)		((temp) * MILLIDEGREE_PER_DEGREE)
+-#define TS_CODE_CAP_TIMES	8	/* Capture  times */
++#define TS_CODE_CAP_TIMES	8	/* Total number of ADC data samples */
  
- 	imx_icc_unregister_nodes(provider);
+ #define RZG2L_THERMAL_GRAN	500	/* milli Celsius */
+ #define RZG2L_TSU_SS_TIMEOUT_US	1000
+@@ -80,7 +80,8 @@ static int rzg2l_thermal_get_temp(void *devdata, int *temp)
+ 	int val, i;
  
- 	icc_provider_del(provider);
--
--	return 0;
- }
- EXPORT_SYMBOL_GPL(imx_icc_unregister);
+ 	for (i = 0; i < TS_CODE_CAP_TIMES ; i++) {
+-		/* TSU repeats measurement at 20 microseconds intervals and
++		/*
++		 * TSU repeats measurement at 20 microseconds intervals and
+ 		 * automatically updates the results of measurement. As per
+ 		 * the HW manual for measuring temperature we need to read 8
+ 		 * values consecutively and then take the average.
+@@ -92,16 +93,18 @@ static int rzg2l_thermal_get_temp(void *devdata, int *temp)
  
-diff --git a/drivers/interconnect/imx/imx.h b/drivers/interconnect/imx/imx.h
-index 75da51076c68..b533c9a99710 100644
---- a/drivers/interconnect/imx/imx.h
-+++ b/drivers/interconnect/imx/imx.h
-@@ -56,6 +56,6 @@ struct imx_icc_node_desc {
- int imx_icc_register(struct platform_device *pdev,
- 		     struct imx_icc_node_desc *nodes,
- 		     int nodes_count);
--int imx_icc_unregister(struct platform_device *pdev);
-+void imx_icc_unregister(struct platform_device *pdev);
+ 	ts_code_ave = result / TS_CODE_CAP_TIMES;
  
- #endif /* __DRIVERS_INTERCONNECT_IMX_H */
-diff --git a/drivers/interconnect/imx/imx8mm.c b/drivers/interconnect/imx/imx8mm.c
-index 1083490bb391..fa9639c6ea37 100644
---- a/drivers/interconnect/imx/imx8mm.c
-+++ b/drivers/interconnect/imx/imx8mm.c
-@@ -88,7 +88,9 @@ static int imx8mm_icc_probe(struct platform_device *pdev)
+-	/* Calculate actual sensor value by applying curvature correction formula
++	/*
++	 * Calculate actual sensor value by applying curvature correction formula
+ 	 * dsensor = ts_code_ave / (1 + ts_code_ave * 0.000013). Here we are doing
+ 	 * integer calculation by scaling all the values by 1000000.
+ 	 */
+ 	dsensor = TS_CODE_AVE_SCALE(ts_code_ave) /
+ 		(TS_CODE_AVE_SCALE(1) + (ts_code_ave * CURVATURE_CORRECTION_CONST));
  
- static int imx8mm_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
-+
-+	return 0;
- }
+-	/* The temperature Tj is calculated by the formula
++	/*
++	 * The temperature Tj is calculated by the formula
+ 	 * Tj = (dsensor − calib1) * 165/ (calib0 − calib1) − 40
+-	 * where calib0 and calib1 are the caliberation values.
++	 * where calib0 and calib1 are the calibration values.
+ 	 */
+ 	val = ((dsensor - priv->calib1) * (MCELSIUS(165) /
+ 		(priv->calib0 - priv->calib1))) - MCELSIUS(40);
+@@ -122,7 +125,8 @@ static int rzg2l_thermal_init(struct rzg2l_thermal_priv *priv)
+ 	rzg2l_thermal_write(priv, TSU_SM, TSU_SM_NORMAL_MODE);
+ 	rzg2l_thermal_write(priv, TSU_ST, 0);
  
- static struct platform_driver imx8mm_icc_driver = {
-diff --git a/drivers/interconnect/imx/imx8mn.c b/drivers/interconnect/imx/imx8mn.c
-index ad97e55fd4e5..3b11571c23d0 100644
---- a/drivers/interconnect/imx/imx8mn.c
-+++ b/drivers/interconnect/imx/imx8mn.c
-@@ -77,7 +77,9 @@ static int imx8mn_icc_probe(struct platform_device *pdev)
+-	/* Before setting the START bit, TSU should be in normal operating
++	/*
++	 * Before setting the START bit, TSU should be in normal operating
+ 	 * mode. As per the HW manual, it will take 60 µs to place the TSU
+ 	 * into normal operating mode.
+ 	 */
+@@ -217,7 +221,7 @@ static int rzg2l_thermal_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err;
  
- static int imx8mn_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
-+
-+	return 0;
- }
+-	dev_dbg(dev, "TSU probed with %s caliberation values",
++	dev_dbg(dev, "TSU probed with %s calibration values",
+ 		rzg2l_thermal_read(priv, OTPTSUTRIM_REG(0)) ?  "hw" : "sw");
  
- static struct platform_driver imx8mn_icc_driver = {
-diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
-index d7768d3c6d8a..fb19b90d6767 100644
---- a/drivers/interconnect/imx/imx8mq.c
-+++ b/drivers/interconnect/imx/imx8mq.c
-@@ -87,7 +87,9 @@ static int imx8mq_icc_probe(struct platform_device *pdev)
- 
- static int imx8mq_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
-+
-+	return 0;
- }
- 
- static struct platform_driver imx8mq_icc_driver = {
+ 	return 0;
 -- 
-2.36.1
+2.25.1
 
