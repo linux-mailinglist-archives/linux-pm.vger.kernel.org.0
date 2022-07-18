@@ -2,213 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2E6578C33
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 22:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F043578C5F
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 23:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235450AbiGRU4d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 16:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S231285AbiGRVEJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 17:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiGRU4c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 16:56:32 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAD32D1C9;
-        Mon, 18 Jul 2022 13:56:32 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id h16so6694282ila.2;
-        Mon, 18 Jul 2022 13:56:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w+SGKaM5PYTsp4dhMAWOhMPFfu9JfJuU7ytqSJNiIms=;
-        b=5TPnRoEzSr838C4NPVwGBRquPX8VJZW0P7Fy3FrLhuYEGan4DZTOiBGtOWcts8n+bN
-         d/CRR35YV5+5SzxIXzrTg8CfvO5VOXuKbci2jDTrbPV9CHM1qtXAmVz99Cym488wTvOw
-         cOPaqoc3h6RzIhD4fe7LPM4wZvuM+9AOPMe5opF/UclyqhOCop2+H2U+ISCDI+9/zB9x
-         +lDVWgVqCVBAeosQAebfVpmcQ7Kq38CC8bERkS3wdcrL0+/wo+mDgjZvLF39T69caUj0
-         YKiEpnOS4przGuOwuNiJ4vXEJTIynpr5lMWg/i70Cos5zyRyZWxl9OIbjsW4AL3/dxh8
-         HO3A==
-X-Gm-Message-State: AJIora8akNrTXShGObzknVBaQpz3bOKrpLgl5RcoaC9d1ergyNwpB5nw
-        ledptN1MXPG7FsHCu826uA==
-X-Google-Smtp-Source: AGRyM1uPgmdQ612VJUv7DoaDaQzxx0K/+K4/OCALhKicgiTopdQ9Q9lnfZD+zIBNMNlHcAaLbS8awA==
-X-Received: by 2002:a92:7f12:0:b0:2d9:1e05:6310 with SMTP id a18-20020a927f12000000b002d91e056310mr14135053ild.317.1658177791313;
-        Mon, 18 Jul 2022 13:56:31 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c10-20020a02a60a000000b0033ebf04f624sm5970875jam.152.2022.07.18.13.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 13:56:30 -0700 (PDT)
-Received: (nullmailer pid 3538882 invoked by uid 1000);
-        Mon, 18 Jul 2022 20:56:27 -0000
-Date:   Mon, 18 Jul 2022 14:56:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Anjelique Melendez <quic_amelende@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        corbet@lwn.net, sre@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, linux-doc@vger.kernel.org,
+        with ESMTP id S229742AbiGRVEI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 17:04:08 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0595F9C;
+        Mon, 18 Jul 2022 14:04:07 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 63568DFD98;
+        Mon, 18 Jul 2022 14:03:37 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id qLf0g0JBxtjg; Mon, 18 Jul 2022 14:03:36 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1658178216; bh=coP93VScilORteduQuspHDA/cmepu8F3rCapfkKamXU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o8u2lijPpxMwj6UcIJq3GTRFoqULSI+vFOJDaXoGwlPe7jki14OBaFjh0SpWC47I9
+         khPQgNpdKMO2zrkwZOs9LqaTO7+q58e0l1hQkrjJeahg7qnDMmINO5tu/wyKNIog8N
+         URnKCcYpTetjlOL/JCEqHsaRp93q720uTk1dRAp8e9+8qTGfFKceFPlulyVUG1ib1B
+         sDHcwBJ6a/08SztCvvTeEvrfaBHPOBs+BMDn/wIVE/w9p9UrFPDBKPNK4RihF2eMfh
+         a6n+PuFKU+DrspB+KayZIORRt58Zccpq3VbtediElkyAuMVFJHvTqzwANUiunFWdGR
+         yTOLhz55MAZ8w==
+To:     rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
+        robh@kernel.org, krzysztof.kozlowski@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        pavel@ucw.cz
+Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Collins <quic_collinsd@quicinc.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: power: reset: qcom-pon: update "reg"
- property details
-Message-ID: <20220718205627.GA3535152-robh@kernel.org>
-References: <20220713193350.29796-1-quic_amelende@quicinc.com>
- <20220713193350.29796-2-quic_amelende@quicinc.com>
- <c129c748-4306-da64-fc18-2d224b2fc97c@linaro.org>
- <ffb31b6f-8ed3-e890-976d-64a48478d404@quicinc.com>
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH v3 1/2] power: domain: handle power supplies that need interrupts
+Date:   Mon, 18 Jul 2022 23:03:01 +0200
+Message-Id: <20220718210302.674897-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ffb31b6f-8ed3-e890-976d-64a48478d404@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:57:09PM -0700, Anjelique Melendez wrote:
-> 
-> 
-> On 7/14/2022 4:48 AM, Krzysztof Kozlowski wrote:
-> > On 13/07/2022 21:33, Anjelique Melendez wrote:
-> >> From: David Collins <quic_collinsd@quicinc.com>
-> >>
-> >> Update the description of "reg" property to add the PON_PBS base
-> >> address along with PON_HLOS base address.  Also add "reg-names"
-> >> property description.
-> >>
-> >> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-> >> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> >> ---
-> >>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 73 ++++++++++++++++++++++++++++--
-> >>  1 file changed, 69 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> >> index 353f155d..562fe308 100644
-> >> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> >> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> >> @@ -15,18 +15,26 @@ description: |
-> >>  
-> >>    This DT node has pwrkey and resin as sub nodes.
-> >>  
-> >> -allOf:
-> >> -  - $ref: reboot-mode.yaml#
-> >> -
-> >>  properties:
-> >>    compatible:
-> >>      enum:
-> >>        - qcom,pm8916-pon
-> >>        - qcom,pms405-pon
-> >>        - qcom,pm8998-pon
-> >> +      - qcom,pmk8350-pon
-> >>  
-> >>    reg:
-> >> -    maxItems: 1
-> >> +    description: |
-> >> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
-> >> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
-> >> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
-> >> +      peripherals.  In that case, the PON_PBS address needs to be specified to
-> >> +      facilitate software debouncing on some PMIC.
-> > 
-> > You miss here min and maxItems
-> ACK
-> > 
-> >> +
-> >> +  reg-names:
-> >> +    description: |
-> >> +      For PON GEN1 and GEN2, it should be "pon". For PON GEN3 it should include
-> >> +      "hlos" and optionally "pbs".
-> > 
-> > Skip description. You miss here min and maxItems.
-> > 
-> > See
-> > https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
-> > for examples.
-> ACK
-> > 
-> > 
-> >>  
-> >>    pwrkey:
-> >>      type: object
-> >> @@ -42,6 +50,63 @@ required:
-> >>  
-> >>  unevaluatedProperties: false
-> >>  
-> >> +allOf:
-> >> +  - $ref: reboot-mode.yaml#
-> >> +  - if:
-> >> +      properties:
-> >> +        compatible:
-> >> +          contains:
-> >> +            const: qcom,pm8916-pon
-> >> +    then:
-> >> +      properties:
-> >> +        reg:
-> >> +          maxItems: 1
-> >> +        reg-names:
-> >> +          items:
-> >> +            - const: pon
-> >> +
-> >> +  - if:
-> >> +      properties:
-> >> +        compatible:
-> >> +          contains:
-> >> +            const: qcom,pms405-pon
-> >> +    then:
-> >> +      properties:
-> >> +        reg:
-> >> +          maxItems: 1
-> >> +        reg-names:
-> >> +          items:
-> >> +            - const: pon
-> >> +
-> >> +  - if:
-> >> +      properties:
-> >> +        compatible:
-> >> +          contains:
-> >> +            const: qcom,pm8998-pon
-> >> +    then:
-> >> +      properties:
-> >> +        reg:
-> >> +          maxItems: 1
-> >> +        reg-names:
-> >> +          items:
-> >> +            - const: pon
-> > 
-> > No clue why you made three if statements. This is one if for all three
-> > variants.
-> > 
-> Sorry about that was not sure how to combine the if statements originally.
-> Found that you could do:
-> 
-> - if:
->       properties:
->         compatible:
->           contains:
->             enum:
->               - qcom,pm8916-pon
->               - qcom,pms405-pon
->               - qcom,pm8998-pon
->     then:
->      ...
-> 
-> I was wondering if for the "qcom,pmk8350-pon" compatible would you rather
-> have the if statement the way it is or have it follow the same pattern as
-> above i.e.
-> 
-> contains:
->   const: qcom,pmk8350-pon
-> 
-> vs
-> 
-> contains:
->   enum:
->     - qcom,pmk8350-pon
+If the power-domains' power-supply node (regulator) needs
+interrupts to work, the current setup with noirq callbacks cannot
+work; for example a pmic regulator on i2c, when suspending, usually already
+times out during suspend_noirq:
 
-The former. If only 1 possibility, use 'const'.
+[   41.024193] buck4: failed to disable: -ETIMEDOUT
 
-Rob
+So fix system suspend and resume for these power-domains by using the
+"outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5 board,
+but by looking at the dts, this will fix imx8mq-evk and possibly other boards
+too.
+
+Possibly one can find more changes than suspend/resume for this case. They
+can be added later when testing them: This is designed so that genpd
+providers just say "this power-supply" needs interrupts - without implying
+what exactly should be configured in genpd.
+
+Initially system suspend problems had been discussed at
+https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+which led to discussing the pmic that contains the regulators which
+serve as power-domain power-supplies:
+https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+---
+
+revision history
+----------------
+v3: (thank you Ulf)
+* move DT parsing to gpcv2 and create a genpd flag that gets set
+
+v2: (thank you Krzysztof)
+* rewrite: find possible regulators' interrupts property in parents
+  instead of inventing a new property.
+https://lore.kernel.org/linux-arm-kernel/20220712121832.3659769-1-martin.kepplinger@puri.sm/
+
+v1: (initial idea)
+https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
+
+
+ drivers/base/power/domain.c | 19 +++++++++++++++++++
+ drivers/soc/imx/gpcv2.c     |  9 +++++++++
+ include/linux/pm_domain.h   |  6 ++++++
+ 3 files changed, 34 insertions(+)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 739e52cd4aba..1437476c9086 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+ #define genpd_is_active_wakeup(genpd)	(genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+ #define genpd_is_cpu_domain(genpd)	(genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+ #define genpd_is_rpm_always_on(genpd)	(genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
++#define genpd_ps_needs_irq(genpd)	(genpd->flags & GENPD_FLAG_IRQ_POWER_SUPPLY)
+ 
+ static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
+ 		const struct generic_pm_domain *genpd)
+@@ -2298,6 +2299,20 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
+ 	return ret;
+ }
+ 
++/**
++ * of_genpd_get_power_supply_irq() - Adjust if power-supply needs interrupts
++ * @genpd: Pointer to PM domain associated with the PM domain provider.
++ */
++static void of_genpd_config_power_supply_irq(struct generic_pm_domain *pd)
++{
++	if (genpd_ps_needs_irq(pd)) {
++		pd->domain.ops.suspend = genpd_suspend_noirq;
++		pd->domain.ops.resume = genpd_resume_noirq;
++		pd->domain.ops.suspend_noirq = NULL;
++		pd->domain.ops.resume_noirq = NULL;
++	}
++}
++
+ /**
+  * of_genpd_add_provider_simple() - Register a simple PM domain provider
+  * @np: Device node pointer associated with the PM domain provider.
+@@ -2343,6 +2358,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
+ 	genpd->provider = &np->fwnode;
+ 	genpd->has_provider = true;
+ 
++	of_genpd_config_power_supply_irq(genpd);
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
+@@ -2394,6 +2411,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+ 
+ 		genpd->provider = &np->fwnode;
+ 		genpd->has_provider = true;
++
++		of_genpd_config_power_supply_irq(genpd);
+ 	}
+ 
+ 	ret = genpd_add_provider(np, data->xlate, data);
+diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+index 85aa86e1338a..3a22bad07534 100644
+--- a/drivers/soc/imx/gpcv2.c
++++ b/drivers/soc/imx/gpcv2.c
+@@ -1303,6 +1303,7 @@ static const struct imx_pgc_domain_data imx8mn_pgc_domain_data = {
+ static int imx_pgc_domain_probe(struct platform_device *pdev)
+ {
+ 	struct imx_pgc_domain *domain = pdev->dev.platform_data;
++	struct device_node *dn;
+ 	int ret;
+ 
+ 	domain->dev = &pdev->dev;
+@@ -1333,6 +1334,14 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+ 		regmap_update_bits(domain->regmap, domain->regs->map,
+ 				   domain->bits.map, domain->bits.map);
+ 
++	dn = of_parse_phandle(domain->dev->of_node, "power-supply", 0);
++	if (dn) {
++		while ((dn = of_get_next_parent(dn))) {
++			if (of_get_property(dn, "interrupts", NULL))
++				domain->genpd.flags |= GENPD_FLAG_IRQ_POWER_SUPPLY;
++		}
++	}
++
+ 	ret = pm_genpd_init(&domain->genpd, NULL, true);
+ 	if (ret) {
+ 		dev_err(domain->dev, "Failed to init power domain\n");
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index ebc351698090..bcceaf376f36 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -60,6 +60,11 @@
+  * GENPD_FLAG_MIN_RESIDENCY:	Enable the genpd governor to consider its
+  *				components' next wakeup when determining the
+  *				optimal idle state.
++ *
++ * GENPD_FLAG_IRQ_POWER_SUPPLY:	The power-domains' power-supply (regulator)
++ *				needs interrupts to work. Adjust accordingly.
++ *				Use the outer suspend/resume callbacks instead
++ *				of noirq for example.
+  */
+ #define GENPD_FLAG_PM_CLK	 (1U << 0)
+ #define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
+@@ -68,6 +73,7 @@
+ #define GENPD_FLAG_CPU_DOMAIN	 (1U << 4)
+ #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+ #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
++#define GENPD_FLAG_IRQ_POWER_SUPPLY (1U << 7)
+ 
+ enum gpd_status {
+ 	GENPD_STATE_ON = 0,	/* PM domain is on */
+-- 
+2.30.2
+
