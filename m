@@ -2,111 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831F4577DD0
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 10:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372B0577E5E
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 11:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbiGRIqd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 04:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S233328AbiGRJKo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 05:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiGRIqc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 04:46:32 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEBEF1F
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 01:46:32 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o15so11115652pjh.1
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 01:46:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y957zCpGlniV/Si1gB7hyzzV3GqFvEOSGpTrCkRJ3N4=;
-        b=TS8oWTsNuIKrdwz7CdqkNr+Kyt2Fkt1mCq4Ny+Vw68yXzZfoO6nk5PfGIF2Vslrs9Q
-         EYzquS26tAqK23AjcRIws+7QPlLihZjNPF472zGRnEorq852UPp1qrL1WzeXhy5VU7/j
-         7JZxDDdj/8qS2cZBVMmkrUpIJUTd6SXj5fEWvo1MXFfovv6aivByO5jqhq7Jr0RHw5w9
-         qL13T/B01oDW0cpgjGtu+2p/4Y3Y+P7R5LCBTlnU8RuSEOppyblLrsuvMD3XtiNarh0B
-         rRhKoA+ktuLOw4zwOCrhtwCxXMis2U5gYd0IaJBSll6lFTdH/O1pPkNhiyvDOI3aewKl
-         EVcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y957zCpGlniV/Si1gB7hyzzV3GqFvEOSGpTrCkRJ3N4=;
-        b=qbiQxK5nvc4VGqGprv0bVbxBlwhrqC3Q0htxLV7CqKotia7lQhKTdc5ZdJQysTNNTF
-         lZ4lA7vLDC5h2ZHFY2Nc0/FrqWj0NQDNZ6dg01QE3qo3QkLqwXudAjUKhij1pJzSM5ly
-         c7eZQtHMFPWd2U3WAahXwcfsEPCrFnFrL9NXowUe+QWcQRdLwiqCle6NBWTjEquWZLPs
-         +xGRDAG/O/5snVeoNWlc/IPCHhYxANPcz3Ls0jK7OZBvxOIZA7JLG82S9X+wArmxvFGd
-         ve+s2yGGHnDkBBR3mmVsPKnMi063dwYBDHhLaY/zgDJeY9qbucur1qlyjqh/RJRL0pJd
-         gjgA==
-X-Gm-Message-State: AJIora8uSDm3udlBdVIENfGVNEiBag3rj837stm9geQ2OGFXfHReCjWs
-        rGElIYQRKB0akfy3mWVyv7pVdA==
-X-Google-Smtp-Source: AGRyM1v0lb2Qi2Gd06NKDrEvEWrU5c3+56Zc1hPsUTR+a7AE9/OC+/MnWmQuOOiqrIueE72+pTFq7Q==
-X-Received: by 2002:a17:90b:4b50:b0:1f0:5643:fa5c with SMTP id mi16-20020a17090b4b5000b001f05643fa5cmr38855624pjb.131.1658133991458;
-        Mon, 18 Jul 2022 01:46:31 -0700 (PDT)
-Received: from anup-ubuntu64-vm.. ([122.171.37.148])
-        by smtp.gmail.com with ESMTPSA id t6-20020a635f06000000b0040dffa7e3d7sm7556487pgb.16.2022.07.18.01.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 01:46:30 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH] cpuidle: riscv-sbi: Fix CPU_PM_CPU_IDLE_ENTER_xyz() macro usage
-Date:   Mon, 18 Jul 2022 14:15:53 +0530
-Message-Id: <20220718084553.2056169-1-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230491AbiGRJKn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 05:10:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E225F58;
+        Mon, 18 Jul 2022 02:10:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA8CAB8107E;
+        Mon, 18 Jul 2022 09:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A91C341C0;
+        Mon, 18 Jul 2022 09:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658135439;
+        bh=o1w/414mT/mu4Ne8x1FYZpKVbby4IR+rfL+Mp7Ca0zQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d43HkvOwZ+XvpcGhTj41nlophjfoP6HEXuATshkV/7XTgG98QQORD0D1UqmZzSSaK
+         fCGZk8/hobxTJ+ks00S4I+EsbyKm9dvDvy+BdlaNpyf3Ao/RFCMVsVr0tIdWJPaY6A
+         mkGiuG0u2aenLfPHtw8GGf1kdE19r9jUpH9ii+46IIu9okQxfClxuKrM1UdG8j5z2v
+         bVR+mgQZGKjuxksFLQNqBIezt63z586UUPQAkbeNE0cUjkkT/wBmQZ4NZrC6fZIHLh
+         tVgRBVEowFC0CMb8uXc4stAT01ofvi22Tp/fmNfYlPqq//M5HmRqRyRwmqgHub6j2R
+         nZk8zb7jIevYg==
+Message-ID: <7bd4f2fb-70ce-3724-130f-f5c75ee7bde2@kernel.org>
+Date:   Mon, 18 Jul 2022 12:10:34 +0300
 MIME-Version: 1.0
+Subject: Re: [PATCH 7/8] interconnect: Make icc_provider_del() return void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
+ <20220715203652.89912-8-u.kleine-koenig@pengutronix.de>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220715203652.89912-8-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently, we are using CPU_PM_CPU_IDLE_ENTER_PARAM() for all SBI HSM
-suspend types so retentive suspend types are also treated non-retentive
-and kernel will do redundant additional work for these states.
 
-The BIT[31] of SBI HSM suspend types allows us to differentiate between
-retentive and non-retentive suspend types so we should use this BIT
-to call appropriate CPU_PM_CPU_IDLE_ENTER_xyz() macro.
+Hi Uwe,
 
-Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- drivers/cpuidle/cpuidle-riscv-sbi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Thanks for the patchset!
 
-diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-index 1151e5e2ba82..33c92fec4365 100644
---- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-+++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-@@ -97,8 +97,13 @@ static int sbi_cpuidle_enter_state(struct cpuidle_device *dev,
- 				   struct cpuidle_driver *drv, int idx)
- {
- 	u32 *states = __this_cpu_read(sbi_cpuidle_data.states);
-+	u32 state = states[idx];
- 
--	return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, states[idx]);
-+	if (state & SBI_HSM_SUSP_NON_RET_BIT)
-+		return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, state);
-+	else
-+		return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM(sbi_suspend,
-+							     idx, state);
- }
- 
- static int __sbi_enter_domain_idle_state(struct cpuidle_device *dev,
--- 
-2.34.1
+On 15.07.22 23:36, Uwe Kleine-König wrote:
+> All users ignore the return value of icc_provider_del(). Consequently
+> make it not return an error code.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>   drivers/interconnect/core.c           | 10 +++-------
+>   include/linux/interconnect-provider.h |  2 +-
+>   2 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 808f6e7a8048..25debded65a8 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -1057,29 +1057,25 @@ EXPORT_SYMBOL_GPL(icc_provider_add);
+>   /**
+>    * icc_provider_del() - delete previously added interconnect provider
+>    * @provider: the interconnect provider that will be removed from topology
+> - *
+> - * Return: 0 on success, or an error code otherwise
+>    */
+> -int icc_provider_del(struct icc_provider *provider)
+> +void icc_provider_del(struct icc_provider *provider)
+>   {
+>   	mutex_lock(&icc_lock);
+>   	if (provider->users) {
+>   		pr_warn("interconnect provider still has %d users\n",
+>   			provider->users);
+>   		mutex_unlock(&icc_lock);
+> -		return -EBUSY;
+> +		return;
+>   	}
 
+Looks like provider->users is now useless, so we should remove it. But that could be a separate 
+clean-up.
+
+>   
+>   	if (!list_empty(&provider->nodes)) {
+>   		pr_warn("interconnect provider still has nodes\n");
+>   		mutex_unlock(&icc_lock);
+> -		return -EBUSY;
+> +		return;
+>   	}
+>   
+>   	list_del(&provider->provider_list);
+>   	mutex_unlock(&icc_lock);
+> -
+> -	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(icc_provider_del);
+>   
+> diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+> index 6bd01f7159c6..191f083d1f3b 100644
+> --- a/include/linux/interconnect-provider.h
+> +++ b/include/linux/interconnect-provider.h
+> @@ -123,7 +123,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider);
+>   void icc_node_del(struct icc_node *node);
+>   int icc_nodes_remove(struct icc_provider *provider);
+>   int icc_provider_add(struct icc_provider *provider);
+> -int icc_provider_del(struct icc_provider *provider);
+> +void icc_provider_del(struct icc_provider *provider);
+>   struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec);
+>   void icc_sync_state(struct device *dev);
+
+We should also squash the following:
+
+--- a/include/linux/interconnect-provider.h
++++ b/include/linux/interconnect-provider.h
+@@ -172,7 +172,7 @@ static inline int icc_provider_add(struct icc_provider *provider)
+  	return -ENOTSUPP;
+  }
+
+-static inline int icc_provider_del(struct icc_provider *provider)
++static inline void icc_provider_del(struct icc_provider *provider)
+  {
+  	return -ENOTSUPP;
+  }
+
+Thanks,
+Georgi
