@@ -2,117 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92132578856
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 19:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968A5578994
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Jul 2022 20:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbiGRR1z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 13:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
+        id S235003AbiGRS3m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 14:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbiGRR1y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 13:27:54 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FF72C13B
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 10:27:52 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id sz17so22533804ejc.9
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 10:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kGv4Dzn3NGROuY+ZnagFOTMoVDNdaJpTmvteY9zyqDw=;
-        b=k7OtEKw8ePt0J1gLOCtaDbhJFTnNEB9nIdz7gNXp+iOw2AbBV0Wss1w4VdVBKCfwaV
-         sksMG9FHNQ8hNf8txKjO48pwrlEcbcGT1TQYDofR6d0i9AExPeHT6wROP3UiQnTjKaNr
-         RRG9b7k+cRbjIH/kk4RzVRophBDuJiIBIAmYiHo+tVbqtn1yfapzRlKTTvL5La9+zKVK
-         bVdbVZOgzSGligYwiFAgUtdcG/sy6R/jR8/qDcreQ90gvQkPkXDPMyAb7y6aj24OErz+
-         yvvk3pWoEfO1cbAv4EuHrxFtXo7d3P/FubxWcez8WiA3ZvV5QBgnuBKq8phcEImce+IN
-         SQcg==
+        with ESMTP id S235987AbiGRS3k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 14:29:40 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59391FCF9
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 11:29:39 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id i206so22406327ybc.5
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 11:29:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kGv4Dzn3NGROuY+ZnagFOTMoVDNdaJpTmvteY9zyqDw=;
-        b=6j2fi6tl1Osh0M6PGmpS/P8uVkc4WfKjmXasVGgeutOXkSj03IDLQ9+6jCiMpuK2nD
-         0hIZqffUKsHkWObDPBbbpVHuFFUnm8xRs/DjPE98iWNTCoCErpxmUZF3tVHGxO8V/32Z
-         yzWhyA0iYYkKb9utTVVj4vy0N/MiiB79L4omgvvPL8VHloTqQADIooSBY0XEUxXPPWQm
-         PwRqimAfkBzl3U8n5A0YJcAZT1mhe5teFyOrc91ALBJcTlQsiDt819FhrKUG2aGp4Ip9
-         bov9Q2aaF5KrRBmVrgCt43BTAlN0MHxjfDY0dl6zRDwLI9W4XgI+bJ5bhPoYchM+i0dj
-         vo+g==
-X-Gm-Message-State: AJIora/smLcJgq9Q0aGHjo4iuzxiM2QS5A9ChoV+Mvfa5IYGcTVT4qVJ
-        XhufCOpzOpSMTngXU8Jefww9/w==
-X-Google-Smtp-Source: AGRyM1vp3STBBc6tMp8I3dy4hT2FX66C1r3IVgqXJ3Y6W67ZB1jyxwhCyt9fhwf+SetmiC6fhIAPUA==
-X-Received: by 2002:a17:906:ef8c:b0:72e:dd32:4163 with SMTP id ze12-20020a170906ef8c00b0072edd324163mr21073322ejb.430.1658165271505;
-        Mon, 18 Jul 2022 10:27:51 -0700 (PDT)
-Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id gr19-20020a170906e2d300b0072b592ee073sm5803535ejb.147.2022.07.18.10.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 10:27:51 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 19:27:50 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpuidle: riscv-sbi: Fix CPU_PM_CPU_IDLE_ENTER_xyz()
- macro usage
-Message-ID: <20220718172750.fgncyl3egnrykt5a@kamzik>
-References: <20220718084553.2056169-1-apatel@ventanamicro.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g0Bc7l5criB4x7LkOzVEj1BOEM3pqGkDt4Vacsn1cYU=;
+        b=qPoIADPYfzfhWv/vheJIExgWZ+udnNLpcwzuBsdbrTmYMLTUTsFM01/Wvgxw2tLOdg
+         A126oIUEWixMoQG8n9Ym8i+2rIre0Tpd65fcWaTkNeDXf3O9vJhHVplBDWd5jm9ZutPm
+         YeXUP7o5+M5Jc9aqpyQ6z9GqYbmuuITgdAxXlfWhO6Dlc8xFg+htiMTAf2T3tSd/Fyui
+         VCgBejYgJhhh435OMpX6EI4F87PlFNWxRUHRNPvoIANf7qnTPJx4pqWSitaHzcKQRDpy
+         3fo9hpYgSoP2nDdKnlnjdeHydLz5Pi+OfigLZFpWE50w3DAXUHVezDloo6w4s/1C19vh
+         yNPw==
+X-Gm-Message-State: AJIora+oRFo6KoIxN+zuTpjfXRViWPc2LQurheM7uFQPXJhfV3JHL1Yk
+        Q/qnMVok7EkSpzbgYUDLpTP5QXO0poCY/Sk+s2WBe/FP
+X-Google-Smtp-Source: AGRyM1vpxcb0uzPycpJXUCRiNElC9SaY08GPh0rTa96bBGgNMx60k5c9ui/swz00QbT456jXtY7Vj1P8nfUZs4lvsYc=
+X-Received: by 2002:a25:a2ca:0:b0:66e:719e:279 with SMTP id
+ c10-20020a25a2ca000000b0066e719e0279mr26712613ybn.622.1658168978906; Mon, 18
+ Jul 2022 11:29:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718084553.2056169-1-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220715045936.xsrxduwit4beijzi@vireshk-i7> <CAJZ5v0ioZCPLXOOFxeNOV_OKHS1fe-foaSkVj+Ta_u+j9mS=YQ@mail.gmail.com>
+ <20220718014132.uammson5fsnr2ri2@vireshk-i7>
+In-Reply-To: <20220718014132.uammson5fsnr2ri2@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 18 Jul 2022 20:29:22 +0200
+Message-ID: <CAJZ5v0jVFrK+Z=pfVohAfJDC2OmwNqQ-neMAaChkTt-M2Quh4g@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm fixes for 5.19-rc7
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 02:15:53PM +0530, Anup Patel wrote:
-> Currently, we are using CPU_PM_CPU_IDLE_ENTER_PARAM() for all SBI HSM
-> suspend types so retentive suspend types are also treated non-retentive
-> and kernel will do redundant additional work for these states.
-> 
-> The BIT[31] of SBI HSM suspend types allows us to differentiate between
-> retentive and non-retentive suspend types so we should use this BIT
-> to call appropriate CPU_PM_CPU_IDLE_ENTER_xyz() macro.
-> 
-> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  drivers/cpuidle/cpuidle-riscv-sbi.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> index 1151e5e2ba82..33c92fec4365 100644
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -97,8 +97,13 @@ static int sbi_cpuidle_enter_state(struct cpuidle_device *dev,
->  				   struct cpuidle_driver *drv, int idx)
->  {
->  	u32 *states = __this_cpu_read(sbi_cpuidle_data.states);
-> +	u32 state = states[idx];
->  
-> -	return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, states[idx]);
-> +	if (state & SBI_HSM_SUSP_NON_RET_BIT)
-> +		return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, state);
-> +	else
-> +		return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM(sbi_suspend,
-> +							     idx, state);
->  }
->  
->  static int __sbi_enter_domain_idle_state(struct cpuidle_device *dev,
-> -- 
-> 2.34.1
+On Mon, Jul 18, 2022 at 3:41 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
+> On 15-07-22, 14:00, Rafael J. Wysocki wrote:
+> > Pulled and pushed out, but I would appreciate getting pull requests
+> > somewhat earlier before the -rc I'm supposed to be pushing them for.
+>
+> Yeah, that's what I try too. But this time the patch itself came in on
+> July 13th and I sent the pull request on July 15th.
+>
+> I mentioned -rc7 as that was the next rc in line, but it was actually
+> fine for this to be applied after rc7 too, before the 5.19 release
+> though. Should I send the pull request (and tag) without mentioning
+> the rc number in future ?
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+It definitely helps to indicate that it is a "fixes" one that should
+be pushed for one of the upcoming -rcs, so I'm not sure.
+
+Perhaps, if you say "-rc7" it is better to mention that -rc8 or later
+will work too.
