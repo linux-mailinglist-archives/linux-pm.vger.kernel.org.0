@@ -2,316 +2,242 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469E0579CBA
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 14:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887DE57A058
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 16:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241460AbiGSMmM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jul 2022 08:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S233967AbiGSOEv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jul 2022 10:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241088AbiGSMkL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 08:40:11 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2042.outbound.protection.outlook.com [40.107.100.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1165A7D1EA;
-        Tue, 19 Jul 2022 05:16:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YT4fYvXCdhXGr81K3mNyXQFKFW6lAoGci7JwmHVBThBOLhsNVXjOP4gxu2RX2ELoHM4G5xRPNCWTgg91tCwjO0EYAiryUkI3ECbOHxJo9Oz/bQqKOZstIkVq3wqB09Lp9ERiLKQg2Q5TzgJa4SrHjMks09NrLOVhZtxST80bD8gfEeMSesMyESGmN/vA79VcXrHzCUko8NzetM7YcXaVcMtI6FeQFoWnDFs2OALJHu5faBzQqzZDWd+30zTpzq5hGzdaANpt2XDN6rZpbJfbMUfFe3yousFtwAyAeXXHMk99qDzfNvPHU4RgLD8jv7a6id6dMYmwvno9a7iYhynTyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sUj3qxu9m27AIc6jOuXv8oWnuMFNUnpK1oh7Wdq8gSE=;
- b=kwN7rKGsSs31x6X+PJNNE6Eg8EmDEimv2wNFK1UIOrpI5toE5cLYb1urz2Bqd6k9QlB5pX/8SRokJXZEwsDs3UmeZD1XYWjYk0O88aDzcsqn+5bibD+MNWfL+O+rbsrmOsRyIf6Kl54LcppkTVXSUaXqV65ivXSVLDrrMajIZ7L0OnFUOMdlv6CJ7rH5p8exMiBOwXYWBlQPPYGfKRZNpfR3X6KtzsuLmXL6wdETuxjysQbEZtKSi0LB8Pv9TV9fKkpOfY3AWqXgnm1MoTJxppG2b9tHEz71QT8pIzMBKjvkyzQYEOyuuqtEeXxwu8XpNbG7XGd32mfI9zOuLEzEBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sUj3qxu9m27AIc6jOuXv8oWnuMFNUnpK1oh7Wdq8gSE=;
- b=bGtchpVJzArZ3rakp+E2jsE62dt/SIFh/ltmxtxecuSRQfFgiHVIOwR2ptcjJtTZj95h4m3Y0LbCPQEr6qphxb7ZAHLdRVXI1/O/bFTTTHBRxmaGtYIDPd52pe0rwybuthHTXJK/9dsU+YpvBvthjHDrxhVha4Ji8KEDI53GY0Q7VYd48wPVVcHasPva/8B2XLCZvVwyF1O2GOyDRTS/7pbUDnv0JIf3zpax61iVuW03GgftV+Nn5g9C5lbP3RePpeMZrPnU2ZYuWGFf1cKq5/fv1RllbuszQl0G1vftD/q6npOvVH5V7MrElcpmn1Hkk4AcFEhVzBg6hFqnzzHnLg==
-Received: from DS7PR06CA0018.namprd06.prod.outlook.com (2603:10b6:8:2a::9) by
- BY5PR12MB4966.namprd12.prod.outlook.com (2603:10b6:a03:1da::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Tue, 19 Jul
- 2022 12:16:07 +0000
-Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2a:cafe::71) by DS7PR06CA0018.outlook.office365.com
- (2603:10b6:8:2a::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12 via Frontend
- Transport; Tue, 19 Jul 2022 12:16:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5438.12 via Frontend Transport; Tue, 19 Jul 2022 12:16:07 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Tue, 19 Jul 2022 12:16:06 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Tue, 19 Jul 2022 05:16:05 -0700
-Received: from nvidia-abhsahu-1.nvidia.com (10.127.8.12) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server id 15.2.986.26 via Frontend
- Transport; Tue, 19 Jul 2022 05:16:00 -0700
-From:   Abhishek Sahu <abhsahu@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-CC:     Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        Abhishek Sahu <abhsahu@nvidia.com>
-Subject: [PATCH v5 5/5] vfio/pci: Implement VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
-Date:   Tue, 19 Jul 2022 17:45:23 +0530
-Message-ID: <20220719121523.21396-6-abhsahu@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220719121523.21396-1-abhsahu@nvidia.com>
-References: <20220719121523.21396-1-abhsahu@nvidia.com>
-X-NVConfidentiality: public
+        with ESMTP id S232355AbiGSOEZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 10:04:25 -0400
+Received: from sonic307-54.consmr.mail.gq1.yahoo.com (sonic307-54.consmr.mail.gq1.yahoo.com [98.137.64.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E396B0E
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 06:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1658236600; bh=i+MHmC3f3nRIa71TZ5V0lJfoBtcQ3Szmjn8VPRGZXig=; h=Date:Subject:From:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=PhWZ53ZTCllywnY+bGq0JlI3RLYHN0ZT1uacDe2L7F0rbnShp3mHCGZP9YkrXkDpmzCSlcvcCMXiPUJZOgeJuGNZ2hjQXMSaKht5YfahbgXhncWgDPxjEPdeBgETpSg2fzoKFTPEN4YIyu6Klt+nU4WIO1dpwtUSSrZ9qGQ+dAibun//+9W7rG1UM1yDc8HbJ+qen+Lw+4XJxxoV1gHD2eV1sZ+R4Y/N/6MwZ0DvtLbb6w5f4DZfcZzrFxIYIex0VYJJARh1HBTHIuxYC6IWzdZ1r1A78w/de+3p0tSSx4x6eyCbwy2md4yjxwpWUUeNTLISqCiqA/NJveZ8mJqQZA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1658236600; bh=ZwKFe3NDbpGlvjCIECpC3Bpp0uLTj2n6XiB4+GzCk2F=; h=X-Sonic-MF:Date:Subject:From:To:From:Subject; b=AwG8XX1e6kdTM2RygujQzsKa2StldLZff6uUm4NC0VyNfPIw0XtzKBlZVpBg4vGAxXQsUCGLNuyTV+S69B0ZkWndf6+hghQIcdYP/jGqSs7WMUs8Se6NPnxMwR76UMaTQVWTJTpS0kIxfO8lnAbn/+pCTwIgnUVN+GkzG2r12CpqR3FmtRyrqBCzKA8g29mAvXPOJPEjHYsAYVXyo2JW+SikAFpBXIS0iXmTBQBICDvENxkCmBtcxCyfKDRvMsIYKJLqOGDuz8I82EJTw3K7whZ3xaML0u88FFYT7uWndfJwyS7LEolKe1TsMIEY+S8E+u4EqdDmJsDR1eVRZkPoow==
+X-YMail-OSG: idGw8U4VM1niBTlOcwHK07XhbPiQyi2sNeAnUxpcgKMxFFgZwZJYqEr3JochjSn
+ hRikbd48hubP3r5AzQy7TYEX2ZrK79Jj83hzVIEkykqFFOokkAHuAhg_LTPE3FDoEz430_ePwVM0
+ OsgrNhZ1vFeyus4S3VPxrVsyvMWv2UhDQJQYSBG8uUJRiFQCaHbknpX0bLXhxjYEo1iVQFj3UgTF
+ jyMQtETf45nryFUUkhMuKETJ6pPLqXo9TmRu6rSKghOL4Flg7MErYW6WevwtN_3izKNhv6FGEHPG
+ U0iqC_fwVSUk8aaGghfVZR2lBTeoeHL_PKefNGLMivM99jweL1GiiRtAkTPae9tqlACNv4am8i82
+ iCvchdvB0quGk6ks9xS7C6Le7bRSD9MK.tHv69w6qsBNJCQuHzNKAVh.qodQYAZDH_Je.xG5sVmG
+ DUoL.VOlBlQF2275FhitN9QnKIIQpvFLgK1Q.ZlgIGoj45Z1T_qI.vC94F6hFrWuPL6elz7JbBqK
+ .BwbaMl8CeZkgtnX67T85_cB9aKoO9GdERn2WrrdAmf1e2dB178ZsTc3U0jQ3VMzADW.WQH0QWqd
+ lLTkGDYpI5eJlZIQCg9W4mFJ5AZoZTrJOyPgJ3mLakhqsAKR64RSkJrqkhjFhfJttcuTDOucBoTz
+ cV42iSMP4bSY.n5WaOCeO0layGsJmgA4_YKMeZUYCTfoV92pYARCcwm.32o0V_MxuFOBKzop6rRZ
+ sOyy.578hrtxADgo_MGc5rhqt3vcQJOTzotB9V3e.ldXrx6dkI.ocRj8eNYZJEmxieE5p.0ijDlc
+ bNCNSqqapVvWZjHpOmNUVQSiWA8JG7tEvKdMZ3yU4.DepJoxgoIoZJDlMvNvyo6Twzr.o.ZEkkzH
+ zRZMiCNIFZXTptBzEOtQq4.Br_dRIWyijvLhhGf1_2D_tXWYDQbRYitaKO7C42VIy27Ga.v6hUht
+ tWnZaJVxNyNONSAmNAt8t33z7Z.lkjj.eQsXAoWGiGzCg7O2lpRT1DqdskzfSeKH7oUEEr_NVOOA
+ TMNIzoGETM3O0H0thXCU7aRFo5ssZ6jQpXhkf_Uo7j1bdx_CILNPneqkIFKcwUihbGrxvNDW2Otq
+ zrVARYNrtGpMNjHlathA7RJOJSeZWAcO9c9i3n7vQd0mv1DOzpeHBhQ786sEtpc.tByw1U9Px1Gr
+ 7DcbAPfXnVA5fOddpdV9JmctZnRIM_2_LBWUbLaz_j2ftEY44y3PjwQvsELIGa11i1U1O1k_loIc
+ whn.1xPQSDNGNmgA.adcNGVt5CakQGFYcNr4ZVrgRBeP.Yv0deXBXDseUduByPu65JP9ES3TkpbD
+ O2nEBDIEvKNNWkHs.d40g6hRIlPh3_FfiizQlpMl12W.BKAil2v3qJP65wDNZKPKZ2ZQ6omCALyt
+ NtyFuC.SyuhCJY6cF_t_I79GtpUmSlM2GNLuoY0xo4R6caC4CYO5LimcwNESFGmmcvvzUyIqUmm5
+ CMIoxjWs7gs5rtX8J5Mz2MRlMWyIGDflFYBXGHJZv.ibn.8VGXIF1H_h1HnQNoQpK1PtI1SKJekI
+ Trcwky8SIft7Lsj.GSexwiG.qJrChCnb.ItU1MdFio3VHRIv2UFDIurjctQz1r.EJ8tk3d_9Xy53
+ ERon6OqshmOiQjLBSy_BUherSuotY49.ep4ZoVSB_zB2kYpPkv936g3hs_8dMyxOYoLKD.UaotwU
+ SwbIIGnGfnXaGnPI9gfKqzRNIo7KlZg.oaZpjwYTyuZAFIAWKJm6dhCBrYzWJ0SbNPNeQO28IbWU
+ f.60f7uxIx23V6kkX7VDQVj9MtBeMkhHBD4Tnd_oPmX0WuuMCtq9D179prWGZfkHcQOkrBPd1ULF
+ 9XvZxJjwZFTt7Pq_kWmroFMnV50vQ15Jx6yk1.Mukkg8kcEJdRq8JikSUTE2vXJ8wc.lhijLkb_L
+ JA.RjuVr4pyrzm.B6.DKQgVJmUBrH9AT6tZX20nALWqXkAw2MVhfqzLaAWyhfjSYPwoWwlNpQIFH
+ VUb42Ke5l5DrN91uYVrlLfD5a12FMbh1UP2h8DYlISzx0q8U7X5mRf4z8CQ2jf5acDHdTewQiw3l
+ TFdyWCXIEWIGIXD7uPaNsxDxKCp74_Y.x09zd0dF7J0da_7Ky8CIuAdCMMas4BS0_dhe9FES0.Yu
+ 2Pl28pA.HFv65DJ8xmTolmQkRLFvRNuCNXWxB8NXWzCQpA9Y0zHbF_1iRBtIMAxfkarKCWExrbDc
+ LJg9ZJfbwojhVOeZC2xpJ7nFG7O4_P9.DpAUMmL5FGhy.HYx4zT05zrCEmm.Kzmamf0rvgRGm7ip
+ V9m6ymQ--
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.gq1.yahoo.com with HTTP; Tue, 19 Jul 2022 13:16:40 +0000
+Received: by hermes--production-ne1-7864dcfd54-zcbtw (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f8a194b32ac8dff4c07ef190f4a5c24b;
+          Tue, 19 Jul 2022 13:16:36 +0000 (UTC)
+Message-ID: <c93c7153-f062-df46-5ff4-416b14ff1e92@netscape.net>
+Date:   Tue, 19 Jul 2022 09:16:32 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 57cbd838-601b-4f56-0922-08da69807554
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4966:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WfmQxHTvEx8kNKj16NuKjH2orlyCj0WPhf5YWeEfgwHUDOhOXCZYRQTnahH26AzdjgpQ97iNC7iLbMuag340mo3OOSQ3DoARPToli4n2DScKQOG8dPW3s3kWJrKeFmegcml/irBFB1yQaUkQzdsl3YNXfbM2TTAh4LTgi3mpmmtWEmG0huTCtYiOL2oAIq4zI10FPl//8BqbB08q6GfJEfCHqp5kfBUDXTI54vepXgCSdUIbjhBtIBZ10HjfHNq2x+ezvyVfFtFoB2koaZsYK4YaG/sEZVl/zymy3NSX/PyEOuFh9ZsRfDUtTN8G9VCeNHTTJZtnStrmSFFSARuKHf+rvCaQ2MIzfloAZpaBFqx2ja1iFDJuIg6xRKRbyURBlif4yhvX426IrLPgfU9o/rfTRgFNn/b3mrxb2QP9g5z7pcxislSc1qrMQEqwQLDS6u7hgSWBfcwEcz+gr0KG9pV+zWiUorCB8pPw0XkBcoM5/p3oo088jKofL44Rh4clUBser9dTcBcBxkK6PBh5VKKh/xRcr2aCNgpv5+EdBpRrx+5MeGZ9ESQ6Ealh8Cmdf0hvYL5N1dwBUjatqQ+3RlJXkfLeHDVNJ75A1HHaLwEj6wbEHXUY4H9H3PW4mJwhPKJiioReaFNXnQGX+XWnWSHXG2ACftDdNK0aN+elqvmAn10DxGHjSLJCYNs1Bz8qaILhLKQOlo3qI79k161kdv8MO07zv2uCLU4MtZ2gsH/CWlPkQnlU0hBZ/Nj7HEmY0xVsUm+V/qC+FLGq4wUkk5XYXkBw5C5RtSZpGMVa3z6b3diV8/FAP6P0n/E8HFVRJj098I+y9Jut/2DrqzXEwA==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(136003)(396003)(46966006)(36840700001)(40470700004)(8936002)(7416002)(5660300002)(2906002)(356005)(82310400005)(82740400003)(81166007)(26005)(54906003)(316002)(110136005)(2616005)(107886003)(7696005)(478600001)(1076003)(6666004)(70586007)(4326008)(70206006)(8676002)(36860700001)(426003)(47076005)(336012)(186003)(40460700003)(83380400001)(36756003)(41300700001)(40480700001)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 12:16:07.0424
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57cbd838-601b-4f56-0922-08da69807554
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4966
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+Content-Language: en-US
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "# 5 . 17" <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <4ef8c3ae-b365-03ba-0e8e-9f4a2bf53748@netscape.net>
+In-Reply-To: <4ef8c3ae-b365-03ba-0e8e-9f4a2bf53748@netscape.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch implements VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
-device feature. In the VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY, if there is
-any access for the VFIO device on the host side, then the device will
-be moved out of the low power state without the user's guest driver
-involvement. Once the device access has been finished, then the device
-will be moved again into low power state. With the low power
-entry happened through VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP,
-the device will not be moved back into the low power state and
-a notification will be sent to the user by triggering wakeup eventfd.
+On 7/18/2022 7:32 AM, Chuck Zmudzinski wrote:
+> On 7/17/2022 3:55 AM, Thorsten Leemhuis wrote:
+> > Hi Juergen!
+> >
+> > On 15.07.22 16:25, Juergen Gross wrote:
+> > > Today PAT can't be used without MTRR being available, unless MTRR is at
+> > > least configured via CONFIG_MTRR and the system is running as Xen PV
+> > > guest. In this case PAT is automatically available via the hypervisor,
+> > > but the PAT MSR can't be modified by the kernel and MTRR is disabled.
+> > > 
+> > > As an additional complexity the availability of PAT can't be queried
+> > > via pat_enabled() in the Xen PV case, as the lack of MTRR will set PAT
+> > > to be disabled. This leads to some drivers believing that not all cache
+> > > modes are available, resulting in failures or degraded functionality.
+> > > 
+> > > The same applies to a kernel built with no MTRR support: it won't
+> > > allow to use the PAT MSR, even if there is no technical reason for
+> > > that, other than setting up PAT on all cpus the same way (which is a
+> > > requirement of the processor's cache management) is relying on some
+> > > MTRR specific code.
+> > > 
+> > > Fix all of that by:
+> > > 
+> > > - moving the function needed by PAT from MTRR specific code one level
+> > >   up
+> > > - adding a PAT indirection layer supporting the 3 cases "no or disabled
+> > >   PAT", "PAT under kernel control", and "PAT under Xen control"
+> > > - removing the dependency of PAT on MTRR
+> >
+> > Thx for working on this. If you need to respin these patches for one
+> > reason or another, could you do me a favor and add proper 'Link:' tags
+> > pointing to all reports about this issue? e.g. like this:
+> >
+> >  Link: https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
+> >
+> > These tags are considered important by Linus[1] and others, as they
+> > allow anyone to look into the backstory weeks or years from now. That is
+> > why they should be placed in cases like this, as
+> > Documentation/process/submitting-patches.rst and
+> > Documentation/process/5.Posting.rst explain in more detail. I care
+> > personally, because these tags make my regression tracking efforts a
+> > whole lot easier, as they allow my tracking bot 'regzbot' to
+> > automatically connect reports with patches posted or committed to fix
+> > tracked regressions.
+> >
+> > [1] see for example:
+> > https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
+> > https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+> > https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
+> >
+> > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> >
+>
+> I echo Thorsten's thx for starting on this now instead of waiting until
+> September which I think is when Juergen said he could start working
+> on this last week. I agree with Thorsten that Link tags are needed.
+> Since multiple patches have been proposed to fix this regression,
+> perhaps a Link to each proposed patch, and a note that
+> the original report identified a specific commit which when reverted
+> also fixes it. IMO, this is all part of the backstory Thorsten refers to.
+>
+> It looks like with this approach, a fix will not be coming real soon,
+> and Borislav Petkov also discouraged me from testing this
+> patch set until I receive a ping telling me it is ready for testing,
+> which seems to confirm that this regression will not be fixed
+> very soon. Please correct me if I am wrong about how long
+> it will take to fix it with this approach.
+>
+> Also, is there any guarantee this approach is endorsed by
+> all the maintainers who will need to sign-off, especially
+> Linus? I say this because some of the discussion on the
+> earlier proposed patches makes me doubt this. I am especially
+> referring to this discussion:
+>
+> https://lore.kernel.org/lkml/4c8c9d4c-1c6b-8e9f-fa47-918a64898a28@leemhuis.info/
+>
+> and also, here:
+>
+> https://lore.kernel.org/lkml/YsRjX%2FU1XN8rq+8u@zn.tnic/
+>
+> where Borislav Petkov argues that Linux should not be
+> patched at all to fix this regression but instead the fix
+> should come by patching the Xen hypervisor.
+>
+> So I have several questions, presuming at least the fix is going
+> to be delayed for some time, and also presuming this approach
+> is not yet an approach that has the blessing of the maintainers
+> who will need to sign-off:
+>
+> 1. Can you estimate when the patch series will be ready for
+> testing and suitable for a prepatch or RC release?
+>
+> 2. Can you estimate when the patch series will be ready to be
+> merged into the mainline release? Is there any hope it will be
+> fixed before the next longterm release hosted on kernel.org?
+>
+> 3. Since a fix is likely not coming soon, can you explain
+> why the commit that was mentioned in the original
+> report cannot be reverted as a temporary solution while
+> we wait for the full fix to come later? I can say that
+> reverting that commit (It was a commit affecting
+> drm/i915) does fix the issue on my system with no
+> negative side effects at all. In such a case, it seems
+> contrary to Linus' regression rule to not revert the
+> offending commit, even if reverting the offending
+> commit is not going to be the final solution. IOW,
+> I am trying to argue that an important corollary to
+> the Linus regression rule is that we revert commits
+> that introduce regressions, especially when there
+> are no negative effects when reverting the offending
+> commit. Why are we not doing that in this case?
+>
+> 4. Can you explain why this patch series is superior
+> to the other proposed patches that are much more
+> simple and have been reported to fix the regression?
+>
+> 5. This approach seems way too aggressive for backporting
+> to the stable releases. Is that correct? Or, will the patches
+> be backported to the stable releases? I was told that
+> backports to the stable releases are needed to keep things
+> consistent across all the supported versions when I submitted
+> a patch to fix this regression that identified a specific five year
+> old commit that my proposed patch would fix.
+>
+> Remember, this is a regression that is really bothering
+> people now. For example, I am now in a position where
+> I cannot install the updates of the Linux kernel that Debian
+> pushes out to me without patching the kernel with my
+> own private build that has one of the known fixes that
+> have already been identified as ways to workaround this
+> regression while we wait for the full solution that will
+> hopefully come later.
+>
+> Chuck
+>
+> > P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> > reports and sometimes miss something important when writing mails like
+> > this. If that's the case here, don't hesitate to tell me in a public
+> > reply, it's in everyone's interest to set the public record straight.
+> >
+> > BTW, let me tell regzbot to monitor this thread:
+> >
+> > #regzbot ^backmonitor:
+> > https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
+>
 
-vfio_pci_core_pm_entry() will be called for both the variants of low
-power feature entry so add an extra argument for wakeup eventfd context
-and store locally in 'struct vfio_pci_core_device'.
+OK, the comments Boris made on the individual patches of
+this patch set answers most of my questions. Thx, Boris.
 
-For the entry happened without wakeup eventfd, all the exit related
-handling will be done by the LOW_POWER_EXIT device feature only.
-When the LOW_POWER_EXIT will be called, then the vfio core layer
-vfio_device_pm_runtime_get() will increment the usage count and will
-resume the device. In the driver runtime_resume callback,
-the 'pm_wake_eventfd_ctx' will be NULL so the vfio_pci_runtime_pm_exit()
-will return early. Then vfio_pci_core_pm_exit() will again call
-vfio_pci_runtime_pm_exit() and now the exit related handling will be done.
-
-For the entry happened with wakeup eventfd, in the driver resume
-callback, eventfd will be triggered and all the exit related handling will
-be done. When vfio_pci_runtime_pm_exit() will be called by
-vfio_pci_core_pm_exit(), then it will return early. But if the user has
-disabled the runtime PM on the host side, the device will never go
-runtime suspended state and in this case, all the exit related handling
-will be done during vfio_pci_core_pm_exit() only. Also, the eventfd will
-not be triggered since the device power state has not been changed by the
-host driver.
-
-For vfio_pci_core_disable() also, all the exit related handling
-needs to be done if user has closed the device after putting into
-low power. In this case eventfd will not be triggered since
-the device close has been initiated by the user only.
-
-Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
----
- drivers/vfio/pci/vfio_pci_core.c | 78 ++++++++++++++++++++++++++++++--
- include/linux/vfio_pci_core.h    |  1 +
- 2 files changed, 74 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index 726a6f282496..dbe942bcaa67 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -259,7 +259,8 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
- 	return ret;
- }
- 
--static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev)
-+static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev,
-+				     struct eventfd_ctx *efdctx)
- {
- 	/*
- 	 * The vdev power related flags are protected with 'memory_lock'
-@@ -272,6 +273,7 @@ static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev)
- 	}
- 
- 	vdev->pm_runtime_engaged = true;
-+	vdev->pm_wake_eventfd_ctx = efdctx;
- 	pm_runtime_put_noidle(&vdev->pdev->dev);
- 	up_write(&vdev->memory_lock);
- 
-@@ -295,21 +297,67 @@ static int vfio_pci_core_pm_entry(struct vfio_device *device, u32 flags,
- 	 * while returning from the ioctl and then the device can go into
- 	 * runtime suspended state.
- 	 */
--	return vfio_pci_runtime_pm_entry(vdev);
-+	return vfio_pci_runtime_pm_entry(vdev, NULL);
- }
- 
--static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev)
-+static int
-+vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
-+				   void __user *arg, size_t argsz)
-+{
-+	struct vfio_pci_core_device *vdev =
-+		container_of(device, struct vfio_pci_core_device, vdev);
-+	struct vfio_device_low_power_entry_with_wakeup entry;
-+	struct eventfd_ctx *efdctx;
-+	int ret;
-+
-+	ret = vfio_check_feature(flags, argsz, VFIO_DEVICE_FEATURE_SET,
-+				 sizeof(entry));
-+	if (ret != 1)
-+		return ret;
-+
-+	if (copy_from_user(&entry, arg, sizeof(entry)))
-+		return -EFAULT;
-+
-+	if (entry.wakeup_eventfd < 0)
-+		return -EINVAL;
-+
-+	efdctx = eventfd_ctx_fdget(entry.wakeup_eventfd);
-+	if (IS_ERR(efdctx))
-+		return PTR_ERR(efdctx);
-+
-+	ret = vfio_pci_runtime_pm_entry(vdev, efdctx);
-+	if (ret)
-+		eventfd_ctx_put(efdctx);
-+
-+	return ret;
-+}
-+
-+static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev,
-+				     bool resume_callback)
- {
- 	/*
- 	 * The vdev power related flags are protected with 'memory_lock'
- 	 * semaphore.
- 	 */
- 	down_write(&vdev->memory_lock);
-+	if (resume_callback && !vdev->pm_wake_eventfd_ctx) {
-+		up_write(&vdev->memory_lock);
-+		return;
-+	}
-+
- 	if (vdev->pm_runtime_engaged) {
- 		vdev->pm_runtime_engaged = false;
- 		pm_runtime_get_noresume(&vdev->pdev->dev);
- 	}
- 
-+	if (vdev->pm_wake_eventfd_ctx) {
-+		if (resume_callback)
-+			eventfd_signal(vdev->pm_wake_eventfd_ctx, 1);
-+
-+		eventfd_ctx_put(vdev->pm_wake_eventfd_ctx);
-+		vdev->pm_wake_eventfd_ctx = NULL;
-+	}
-+
- 	up_write(&vdev->memory_lock);
- }
- 
-@@ -329,8 +377,18 @@ static int vfio_pci_core_pm_exit(struct vfio_device *device, u32 flags,
- 	 * vfio_pci_runtime_pm_exit() will internally increment the usage
- 	 * count corresponding to pm_runtime_put() called during low power
- 	 * feature entry.
-+	 *
-+	 * For the low power entry happened with wakeup eventfd, there will
-+	 * be two cases:
-+	 *
-+	 * 1. The device has gone into runtime suspended state. In this case,
-+	 *    the runtime resume by the vfio core layer should already have
-+	 *    performed all exit related handling and the
-+	 *    vfio_pci_runtime_pm_exit() will return early.
-+	 * 2. The device was in runtime active state. In this case, the
-+	 *    vfio_pci_runtime_pm_exit() will do all the required handling.
- 	 */
--	vfio_pci_runtime_pm_exit(vdev);
-+	vfio_pci_runtime_pm_exit(vdev, false);
- 	return 0;
- }
- 
-@@ -370,6 +428,13 @@ static int vfio_pci_core_runtime_resume(struct device *dev)
- 	if (vdev->pm_intx_masked)
- 		vfio_pci_intx_unmask(vdev);
- 
-+	/*
-+	 * Only for the low power entry happened with wakeup eventfd,
-+	 * the vfio_pci_runtime_pm_exit() will perform exit related handling
-+	 * and will trigger eventfd. For the other cases, it will return early.
-+	 */
-+	vfio_pci_runtime_pm_exit(vdev, true);
-+
- 	return 0;
- }
- #endif /* CONFIG_PM */
-@@ -488,7 +553,7 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
- 	 * the vfio_pci_set_power_state() will change the device power state
- 	 * to D0.
- 	 */
--	vfio_pci_runtime_pm_exit(vdev);
-+	vfio_pci_runtime_pm_exit(vdev, false);
- 	pm_runtime_resume(&pdev->dev);
- 
- 	/*
-@@ -1325,6 +1390,9 @@ int vfio_pci_core_ioctl_feature(struct vfio_device *device, u32 flags,
- 		return vfio_pci_core_feature_token(device, flags, arg, argsz);
- 	case VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY:
- 		return vfio_pci_core_pm_entry(device, flags, arg, argsz);
-+	case VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP:
-+		return vfio_pci_core_pm_entry_with_wakeup(device, flags,
-+							  arg, argsz);
- 	case VFIO_DEVICE_FEATURE_LOW_POWER_EXIT:
- 		return vfio_pci_core_pm_exit(device, flags, arg, argsz);
- 	default:
-diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-index 7ec81271bd05..fb25214e85c8 100644
---- a/include/linux/vfio_pci_core.h
-+++ b/include/linux/vfio_pci_core.h
-@@ -131,6 +131,7 @@ struct vfio_pci_core_device {
- 	int			ioeventfds_nr;
- 	struct eventfd_ctx	*err_trigger;
- 	struct eventfd_ctx	*req_trigger;
-+	struct eventfd_ctx	*pm_wake_eventfd_ctx;
- 	struct list_head	dummy_resources_list;
- 	struct mutex		ioeventfds_lock;
- 	struct list_head	ioeventfds_list;
--- 
-2.17.1
-
+Chuck
