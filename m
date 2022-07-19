@@ -2,101 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2935797C8
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 12:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381195797D8
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 12:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiGSKjj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jul 2022 06:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        id S233747AbiGSKsA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jul 2022 06:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiGSKji (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 06:39:38 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBC5248F5;
-        Tue, 19 Jul 2022 03:39:38 -0700 (PDT)
-Received: from [192.168.1.101] (abxj77.neoplus.adsl.tpnet.pl [83.9.3.77])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        with ESMTP id S230483AbiGSKr7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 06:47:59 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C65CE3D;
+        Tue, 19 Jul 2022 03:47:57 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 605F63F715;
-        Tue, 19 Jul 2022 12:39:36 +0200 (CEST)
-Message-ID: <d5dd721e-b0d7-f76d-d40c-b4927c236460@somainline.org>
-Date:   Tue, 19 Jul 2022 12:39:35 +0200
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 315601EC04D6;
+        Tue, 19 Jul 2022 12:47:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658227671;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=itxQexl6sj7uyxfVl7DeFw4Cg1ss0IG70VFcnixr/7s=;
+        b=b410x885IhieOidIYERnkO1GPUK8UXT1/Gg40HuooGSEIOMVEqdU50oUWHTW0ynG2CFaSG
+        0XoVc9VJ8bWoc0/oiJGGsJTwl9ggAbSOWZA2mrAcVVPKGagDAQ9Wu23YoQc3Uk2nEnP61G
+        Yj0BYs0RVoahETfOz+/Ju8GVDm+Chwg=
+Date:   Tue, 19 Jul 2022 12:47:38 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        brchuckz@netscape.net, jbeulich@suse.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH 2/3] x86: add wrapper functions for mtrr functions
+ handling also pat
+Message-ID: <YtaLtNYXsntADBMs@zn.tnic>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <20220715142549.25223-3-jgross@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
- workaround quirk
-Content-Language: en-US
-To:     bhupesh.sharma@linaro.org, linux-pm@vger.kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
- <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
- <09ff7e3a-7dd5-db35-3795-89151afb5363@somainline.org>
- <e69cb444-2bee-870e-08ca-bbe3237d8166@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <e69cb444-2bee-870e-08ca-bbe3237d8166@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220715142549.25223-3-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Drop stable.
 
+On Fri, Jul 15, 2022 at 04:25:48PM +0200, Juergen Gross wrote:
+> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+> index 5c934b922450..e2140204fb7e 100644
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -865,7 +865,14 @@ bool arch_is_platform_page(u64 paddr);
+>  #define arch_is_platform_page arch_is_platform_page
+>  #endif
+>  
+> +extern bool cache_aps_delayed_init;
+> +
+>  void cache_disable(void);
+>  void cache_enable(void);
+> +void cache_bp_init(void);
+> +void cache_ap_init(void);
+> +void cache_set_aps_delayed_init(void);
+> +void cache_aps_init(void);
+> +void cache_bp_restore(void);
+>  
+>  #endif /* _ASM_X86_PROCESSOR_H */
 
-On 18.07.2022 08:34, bhupesh.sharma@linaro.org wrote:
-> Hi Konrad,
-> 
-> On 7/15/22 8:26 PM, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
->>
->>
->> On 1.07.2022 16:58, Bhupesh Sharma wrote:
->> > Since for some QCoM tsens controllers, its suggested to
->> > monitor the controller health periodically and in case an
->> > issue is detected, to re-initialize the tsens controller
->> > via trustzone, add the support for the same in the
->> > qcom tsens driver.
->> >
->> > Note that Once the tsens controller is reset using scm call,
->> > all SROT and TM region registers will enter the reset mode.
->> >
->> > While all the SROT registers will be re-programmed and
->> > re-enabled in trustzone prior to the scm call exit, the TM
->> > region registers will not re-initialized in trustzone and thus
->> > need to be handled by the tsens driver.
->> >
->> > Cc: Amit Kucheria <amitk@kernel.org>
->> > Cc: Thara Gopinath <thara.gopinath@gmail.com>
->> > Cc: linux-pm@vger.kernel.org
->> > Cc: linux-arm-msm@vger.kernel.org
->> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> > Reported-by: kernel test robot <lkp@intel.com>
->> > ---
->> Hi, I think this should be also checked and applied on init. This
->> seems required for at least SM6375, as the controller starts (or
->> well, doesn't start...) in an unknown state and the driver does
->> not like it, as the TSENS_EN indicates it is disabled.
->> Downstream runs this right at probe..
-> 
-> Hmm.. very interesting. I was not aware of the SM6375 case, as for SM8150
-> the controller starts in a valid state but may require reinit during operation.
-> 
-> So, I did not use the downstream approach to do it right at _probe() and then
-> later while get_temp() is called.
-> 
-> Let me add that in v2. BTW do you want me to set the need_reinit_wa as true
-> for SM6375 as well, or would you like to add that with a followup-patch ?
-Please set it, I'll happily test it!
+Use arch/x86/include/asm/cacheinfo.h instead.
 
-Konrad
-> 
-> Regards,
-> Bhupesh
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index e43322f8a4ef..0a1bd14f7966 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -1929,7 +1929,7 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
+>  #ifdef CONFIG_X86_32
+>  	enable_sep_cpu();
+>  #endif
+> -	mtrr_ap_init();
+> +	cache_ap_init();
+>  	validate_apic_and_package_id(c);
+>  	x86_spec_ctrl_setup_ap();
+>  	update_srbds_msr();
+> @@ -2403,3 +2403,45 @@ void cache_enable(void) __releases(cache_disable_lock)
+>  
+>  	raw_spin_unlock(&cache_disable_lock);
+>  }
+> +
+> +void __init cache_bp_init(void)
+> +{
+> +	if (IS_ENABLED(CONFIG_MTRR))
+> +		mtrr_bp_init();
+> +	else
+> +		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
+> +}
+> +
+> +void cache_ap_init(void)
+> +{
+> +	if (cache_aps_delayed_init)
+> +		return;
+> +
+> +	mtrr_ap_init();
+> +}
+> +
+> +bool cache_aps_delayed_init;
+> +
+> +void cache_set_aps_delayed_init(void)
+> +{
+> +	cache_aps_delayed_init = true;
+> +}
+
+What's the point of a variable and a setter function?
+
+You can either make this var __ro_after_init and then use it everywhere
+or make it static and use a setter and getter.
+
+> +
+> +void cache_aps_init(void)
+> +{
+> +	/*
+> +	 * Check if someone has requested the delay of AP cache initialization,
+> +	 * by doing cache_set_aps_delayed_init(), prior to this point. If not,
+> +	 * then we are done.
+> +	 */
+> +	if (!cache_aps_delayed_init)
+> +		return;
+> +
+> +	mtrr_aps_init();
+> +	cache_aps_delayed_init = false;
+> +}
+> +
+> +void cache_bp_restore(void)
+> +{
+> +	mtrr_bp_restore();
+> +}
+> diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+> index 2746cac9d8a9..c1593cfae641 100644
+> --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
+> +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+> @@ -69,7 +69,6 @@ unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
+>  static DEFINE_MUTEX(mtrr_mutex);
+>  
+>  u64 size_or_mask, size_and_mask;
+> -static bool mtrr_aps_delayed_init;
+>  
+>  static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
+>  
+> @@ -176,7 +175,8 @@ static int mtrr_rendezvous_handler(void *info)
+>  	if (data->smp_reg != ~0U) {
+>  		mtrr_if->set(data->smp_reg, data->smp_base,
+>  			     data->smp_size, data->smp_type);
+> -	} else if (mtrr_aps_delayed_init || !cpu_online(smp_processor_id())) {
+> +	} else if ((use_intel() && cache_aps_delayed_init) ||
+
+What's the use_intel() for?
+
+> +		   !cpu_online(smp_processor_id())) {
+>  		mtrr_if->set_all();
+>  	}
+>  	return 0;
+> @@ -789,7 +789,7 @@ void mtrr_ap_init(void)
+>  	if (!mtrr_enabled())
+>  		return;
+>  
+> -	if (!use_intel() || mtrr_aps_delayed_init)
+> +	if (!use_intel())
+
+And here you remove the mtrr_aps_delayed_init check but you have the
+corresponding check of cache_aps_delayed_init in the caller. Hmm.
+
+So it looks like you're pushing some of the logic into the cache_*
+functions, one level up.
+
+But it is really hard to follow what you're doing here.
+
+And that mtrr_aps_delayed_init thing is not making it any easier. It
+gets set during init unconditionally and once APs have been setup, it
+gets cleared.
+
+And, AFAICT, it is used so that the MTRRs are not set when single APs
+get onlined but it is all done in one fell swoop in mtrr_aps_init() and
+then that delayed_init var gets cleared.
+
+But then I don't understand what the point is of that pushing of
+cache_aps_delayed_init up into the cache_* functions.
+
+/me greps a while longer...
+
+Ah, ok, I think I see where this is going. The delayed thing is relevant
+for PAT too because pat_init() happens also as part of the ->set_all()
+rendezvous dance.
+
+Right, so, this patch needs a *lot* more commit message text. You need
+to explain why you're doing what you're doing and explain it in detail.
+
+Perhaps even split the patch further into one adding the cache_* helpers
+and another converting to them.
+
+And, also, you probably should stick the small fix for the whole deal
+in front of the patchset so that we have a stable backport - I wouldn't
+want to backport all that more involved rework to stable.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
