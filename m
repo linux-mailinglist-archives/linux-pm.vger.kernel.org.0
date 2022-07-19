@@ -2,158 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDA4578F85
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 03:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67374578F8B
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 03:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236305AbiGSBF0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 21:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S229533AbiGSBHD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 21:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiGSBF0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 21:05:26 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2051.outbound.protection.outlook.com [40.107.101.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3132E2DD5;
-        Mon, 18 Jul 2022 18:05:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RkcI/OrVQ4a4IJOnhCwGwvFW9D2lTeVWkBGT8JDWPVMiJ150AqNFR5UqGufXceKs0dmHjsSgdTkecvSHrMttT4ue2xM46mma2puJ+wLEa9QwXH4PMgU/RnD1632DYbXu5XyLFAapjIhN9n8MH6BZIzfNCKQZf6/kvbeYLK7kJWo/RBfQ8NLSIWS28FmwpY6vL+t83G1tyZlOFO4qsL1f91Onc8TBb581lCCbeWVi1zHoYDApgL6jE8LFLT2g3b03tYImsBcoDsNaKklUeNmq8UmxVh04g36sc7pUlL9NQG6ZnTUazKuMDoeAJywTz4P8uea1adVzaoHWCdl8tKjWNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UncImfzFgy/hy07v4TQos3HZvOK+fMVry/IOU1uK1MY=;
- b=GbI9TJK1UWO868iiLdaXh0jYH1SX2fAskd5vCg1NAAK7kArbDnn9kHMMUUt5c4ycuGyQ27xX4TfZKBrdmKtp71sRG3mtlBMUfz1jsOOuCEAvFlBD8hA1RbB5tM5Ka+qKdYGzhHW7nBWLaBcu3ZxTzBAkyAXQa9iez/BGVdzR5WMunI+/NWPohhVHJ4AI6dOSrKKObX9wLOcEee9RUqVs05RFuzhHiidqnMFVLpGokuJs81nPmaIPDOT83J5N1QaSjhMS5uky8enK6L2gm5GsRVsq4TOb85lp+yj/ALd+678CUqq73clL8iaflo4WQLQNnfx0i39aOQCbJzmbWfKEnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UncImfzFgy/hy07v4TQos3HZvOK+fMVry/IOU1uK1MY=;
- b=ysFaOxmA+cAtgQ5wznbsbp2dSNPVTOay5SKkq5Rld6bhgJnhfc3be/N12lG+2GnEYQ5qdI56B2SGKcxAx7UOcK0J5WlDWZQ7XuK5WF0iZ+tC9oQSaTqncRXpbgKGXItKJmWNb7thBLy0TtOBHrm0TrVyfGjjprl2olgrgc3bL+w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- BN8PR12MB2850.namprd12.prod.outlook.com (2603:10b6:408:95::25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5438.20; Tue, 19 Jul 2022 01:05:23 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::ec80:e3fd:e3e2:605d]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::ec80:e3fd:e3e2:605d%5]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
- 01:05:23 +0000
-Date:   Tue, 19 Jul 2022 09:04:59 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 11/13] cpufreq: amd_pstate: update transition delay
- time to 1ms
-Message-ID: <YtYDO+tXShYLKh2B@amd.com>
-References: <cover.1657876961.git.Perry.Yuan@amd.com>
- <c1b46c68d521ff2c8ed49a6e8f5ad75ce51fb772.1657876961.git.Perry.Yuan@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1b46c68d521ff2c8ed49a6e8f5ad75ce51fb772.1657876961.git.Perry.Yuan@amd.com>
-X-ClientProxiedBy: SG2PR01CA0126.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::30) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+        with ESMTP id S236451AbiGSBHD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 21:07:03 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A2D1183D;
+        Mon, 18 Jul 2022 18:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658192822; x=1689728822;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=xvWlsHi150ZObwwbHbVESUt2dAgbWc4I4gwhOB0n8uM=;
+  b=EvXDZ6SoJ5+ocUVb86rZlBanx7EkF0psYEH8W7/ljWGvTCyFsYYo1rHp
+   Oryflt7CVBjV4eaGZ0Z6xNBx3xcmasfKHgrPGj/mHg7tltO36Yu/yXi0s
+   awjexp0M4ck0rojrk0lqAnKDPBX2QOTOHEGPgDbECeK80gjHPu89zdNJ0
+   1Hy0KpPDi19RNSDXHzoRxJ1DsbcmVGvjsEpBI9kFsMyXgBzvzRM0wX4pZ
+   s4Dw1KgRZ6a6VQiRuRgThTbdVcVlNKJPONovpCFu9DeFE7597oW8RHdgD
+   RCa6qkJAMeYmseATwSnVk7a9IiKebStpPaVirGyni6qJbnIAzAHqBxu0k
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="312042304"
+X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
+   d="scan'208";a="312042304"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 18:07:02 -0700
+X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
+   d="scan'208";a="665224839"
+Received: from dukechan-mobl.gar.corp.intel.com ([10.215.250.179])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 18:06:59 -0700
+Message-ID: <b83d6630bb133b2c02b4a4e5e7777ad27f8fe159.camel@intel.com>
+Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes
+ for the trip points
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, amitk@kernel.org, lukasz.luba@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 19 Jul 2022 09:07:01 +0800
+In-Reply-To: <387c126a-0106-2227-4b4a-db284965b6ca@linaro.org>
+References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+         <20220715210911.714479-3-daniel.lezcano@linaro.org>
+         <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
+         <387c126a-0106-2227-4b4a-db284965b6ca@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b9315b68-e2e8-4e9d-cd43-08da6922c1f9
-X-MS-TrafficTypeDiagnostic: BN8PR12MB2850:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cYzYWfIjvJN2xiWeXhJo7+sEO3SnhDabVYTD4t9WNdL3r2B6DJ2ABssc/25vJ4PQiJaazHjZI25ilVuUI/vPybZzrP2j826nEv7DrTkKMcVZG6DvfrRf3FaYEq5qAhGJxBJ1w/k9Q19hRwYK8PE9YnA6ksM88aWwzfANax6YzTNJUEWoJ6MHEHwvzBtFu6dPdwciFGWk+MJ0dRCHzocGJD13fQdbLu27AKdnsxzGAxGeQJAalr+dDMpsD2UXJbIPqA9ZeNdgCetZ+2xYWMcyZKAsuPs70+tv/sK8wfDXtifhyQYocZBLPzftAx3QIqya7MsFrL4eTcr/DMpFloF+KhxUzJhCLQ9AYo8uugSimWa7S0+k2pPG7jOlnfR+2wW0rkCGkk196REBhsCPmKsP7uoto72OSj+Y7SYZbHF4eDapAxbjNrsy3sOuRGnM9MzkxsnwzzvLdEbXM7a5AcnL3X/EgKFZUwQQSlrBcq1XqXlp3DsEZn5KiRArB68sKjN9DAbcuwxzW0AfyCdhmzBZuMu/mCXJsyJpYg17Cj+uC4/m7jf3qemz2vd0uLxYyZ5FMmOzOqF2ZT7DAB0tn3+MWUwYYKJ090xyKljNsy3EPKV6MeQKResNiou+WF80mvWhMy+LdZA+fvfvkM6EcfcDpj45UOA05WYMS4wvR7+t1CoNyGBHYLJvlq+F0bai2DjNyFBFj2WcXwuRzOFLwiqPl5RM0WhZ9h0zxkeQnkBFFR2vdh8sZhAa3pp9M/1w9P7Pqh4hm9DUpymolCwPY5Q5hg6wRq5iM4oianH0i/EESHA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(366004)(376002)(346002)(4326008)(54906003)(37006003)(5660300002)(6636002)(66946007)(316002)(2906002)(66556008)(66476007)(6862004)(8936002)(15650500001)(8676002)(83380400001)(36756003)(38100700002)(86362001)(6666004)(41300700001)(26005)(186003)(6506007)(478600001)(2616005)(6486002)(6512007)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/jImK9ohTeGFPniV0+nIOQ9jxmlgKiPcxHyjSwriMeD1agvLEKrGNfU3Pem6?=
- =?us-ascii?Q?EZF8xbfd8VVI2lfl8IIqUJZY3y6vvAeloZAQuU7GT3KXa/z7tawLcXhIGB0i?=
- =?us-ascii?Q?jkBiAYRHtWf21iic8APfTTFqwx0zAeDxkbiEd/BUeqTE2U8Dn0JgfbjIzvrT?=
- =?us-ascii?Q?A2+lTguEEqnOl9OMyf99ekOLcwo0Njy5n4LYVfh/xZ/BBGXJWOtePoZofeol?=
- =?us-ascii?Q?3dTeDVVpgvmElQaZYVtEGQcybv6m6lwVhOtXrZuIHX9wQAZ4LZzKnIGu/DHJ?=
- =?us-ascii?Q?xAgLR6RxvhZRsyh9B0msd0HQlamxj0a2XP8WA3PvPA0RLvoSXefOmnhiDtG1?=
- =?us-ascii?Q?9BYe7rSa4Vbiu6FYnwz2s2aGwJPHzFOt5fvDSHoavIKzHAf4Kz3MQuDFLlGK?=
- =?us-ascii?Q?vCPs00JEHMkH60FZHjr54b1eMkyv1Mrxli3KabkNWZIzn48uWpcYLXDu2kJ7?=
- =?us-ascii?Q?oKCI4K6yn7+zuzdLGgoC0MZJrcOID4emT+qR0L5xeNvf2ovwGHOY2KNMFPAZ?=
- =?us-ascii?Q?2OIkSL2ztGnJWxAaqLr5dstwbjoV4qjvqduUSGm2+UjVQhwn1sFarAgHZULe?=
- =?us-ascii?Q?nfT43LDgu2d1nF42CaRqwrSQZ0sD9V5kybwswTEQ9DFE4mcyIO1PzaUxGKTe?=
- =?us-ascii?Q?dvOK+SCqYSfAEfO3xouF1QeHx6FM0RL+HZEqpnclLwzS1EMg7JP7nYAprsHy?=
- =?us-ascii?Q?7ONyCT0xgDm8Npnm7XNdqVq9zwvU92gujgwFTShhqlLiMETqgoN7pGKfuRoB?=
- =?us-ascii?Q?52FRmvNi+M0xQpJmkC/8aJcm7ywkFBGYY0viWJzV7NKDgcttdKzplDn/pJJe?=
- =?us-ascii?Q?9PqvZzQmXyewDjp28kDhMS4jZ2gc5tu2iFBu8g9/HXoEA7bq9w60J3RfuvM8?=
- =?us-ascii?Q?9VGIWYTpZDzkGNH80RFujq3tXqPQVX81htc4+EV8coU1IsQ3Gin6PE+5HHOR?=
- =?us-ascii?Q?N5ROCA5S7gVloVUn463Ekf6m01zVavP2iJSanjBCr+LeEKKLyg76nPxlX+sd?=
- =?us-ascii?Q?iKM/vMJR3cGzg/KWisJ7aObsZiTvAQ4LVVlBLbREbYGNadQSFUcirngcQdPY?=
- =?us-ascii?Q?HENSp9HvNxq68QhOs1b7IT8ijhCBaIagQD4QNB3It4u6aVOGNQRE4SMm/QeI?=
- =?us-ascii?Q?Amz2PgxySclqeIqXDcKlbHa2+d0vyWJwJQ4H596VolpelrFc62JuXurkNzG3?=
- =?us-ascii?Q?2ncQgrPX5ROvyqM3kPZcV3Juquqh+/eP/IColAhszed4gRA7ITOB6KXHOOQ9?=
- =?us-ascii?Q?p0YJsdFWvTO7y+wBeywSwOg+E36292bL/w1el/LonzbTKMLNDyU0KOinrxbt?=
- =?us-ascii?Q?xaAg//fM5PuPG3qJAQddJpSMcQgeBO9yRYzjrEdkuGCviddPEpc/RG0zCtWx?=
- =?us-ascii?Q?INgiTL9KcmAJGJZ7MQF7Yvh0nFJlTblA11A05Khlh1ZYxa9byxUOjAmbyQrZ?=
- =?us-ascii?Q?u+SK8b3hdi45zCwsUpR+OmM5A12uTAxiC5Bd8A8BDmCBLSU+OGVnLqm2VYgE?=
- =?us-ascii?Q?+eC2XeCFzy8xdFSPBxba47NN1TicaIt7jooZKB7PgfLXhRB0n4iZacmCrCFJ?=
- =?us-ascii?Q?5G9XBy4E+RitOzfGAn7gdAAB45wfy9FbAmO5gcw2?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9315b68-e2e8-4e9d-cd43-08da6922c1f9
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 01:05:23.1618
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Uaz9naOviaG9TcOg5r40Ei6Nnd7vuiJ+YEQQ4CYemmVEMfOaWK7i1Onf6NUcdbFiBoYeip20LWjD+jegXuTrsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2850
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 06:04:30PM +0800, Yuan, Perry wrote:
-> Update transition delay time to 1ms, in the AMD CPU autonomous mode and
-> non-autonomous mode, CPPC firmware will decide frequency at 1ms timescale
-> based on the workload utilization.
-> 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> Signed-off-by: Su Jinzhou <Jinzhou.Su@amd.com>
+T24gTW9uLCAyMDIyLTA3LTE4IGF0IDE2OjMyICswMjAwLCBEYW5pZWwgTGV6Y2FubyB3cm90ZToK
+PiBPbiAxOC8wNy8yMDIyIDA3OjI4LCBaaGFuZyBSdWkgd3JvdGU6Cj4gPiBPbiBGcmksIDIwMjIt
+MDctMTUgYXQgMjM6MDkgKzAyMDAsIERhbmllbCBMZXpjYW5vIHdyb3RlOgo+ID4gPiBCeSBjb252
+ZW50aW9uIHRoZSB0cmlwcyBwb2ludHMgYXJlIGRlY2xhcmVkIGluIHRoZSBhc2NlbmRpbmcKPiA+
+ID4gdGVtcGVyYXR1cmUgb3JkZXIuIEhvd2V2ZXIsIG5vIHNwZWNpZmljYXRpb24gZm9yIHRoZSBk
+ZXZpY2UgdHJlZSwKPiA+ID4gQUNQSQo+ID4gPiBvciBkb2N1bWVudGF0aW9uIHRlbGxzIHRoZSB0
+cmlwIHBvaW50cyBtdXN0IGJlIG9yZGVyZWQgdGhpcyB3YXkuCj4gPiA+IAo+ID4gPiBJbiB0aGUg
+b3RoZXIgaGFuZCwgd2UgbmVlZCB0aG9zZSB0byBiZSBvcmRlcmVkIHRvIGJyb3dzZSB0aGVtIGF0
+Cj4gPiA+IHRoZQo+ID4gPiB0aGVybWFsIGV2ZW50cy4gQnV0IGlmIHdlIGFzc3VtZSB0aGV5IGFy
+ZSBvcmRlcmVkIGFuZCBjaGFuZ2UgdGhlCj4gPiA+IGNvZGUKPiA+ID4gYmFzZWQgb24gdGhpcyBh
+c3N1bXB0aW9uLCBhbnkgcGxhdGZvcm0gd2l0aCBzaHVmZmxlZCB0cmlwIHBvaW50cwo+ID4gPiBk
+ZXNjcmlwdGlvbiB3aWxsIGJlIGJyb2tlbiAoaWYgdGhleSBleGlzdCkuCj4gPiA+IAo+ID4gPiBJ
+bnN0ZWFkIG9mIHRha2luZyB0aGUgcmlzayBvZiBicmVha2luZyB0aGUgZXhpc3RpbmcgcGxhdGZv
+cm1zLAo+ID4gPiB1c2UgYW4KPiA+ID4gYXJyYXkgb2YgdGVtcGVyYXR1cmUgb3JkZXJlZCB0cmlw
+IGlkZW50aWZpZXJzIGFuZCBtYWtlIGl0Cj4gPiA+IGF2YWlsYWJsZQo+ID4gPiBmb3IgdGhlIGNv
+ZGUgbmVlZGluZyB0byBicm93c2UgdGhlIHRyaXAgcG9pbnRzIGluIGFuIG9yZGVyZWQgd2F5Lgo+
+ID4gPiAKPiA+ID4gU2lnbmVkLW9mZi1ieTogRGFuaWVsIExlemNhbm8gPGRhbmllbC5sZXpjYW5v
+QGxpbmFyby5vcmc+Cj4gCj4gWyAuLi4gXQo+IAo+ID4gPiArc3RhdGljIHZvaWQgc29ydF90cmlw
+c19pbmRleGVzKHN0cnVjdCB0aGVybWFsX3pvbmVfZGV2aWNlICp0eikKPiA+ID4gK3sKPiA+ID4g
+K8KgwqDCoMKgwqDCoMKgaW50IGksIGo7Cj4gPiA+ICsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgZm9y
+IChpID0gMDsgaSA8IHR6LT50cmlwczsgaSsrKQo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgdHotPnRyaXBzX2luZGV4ZXNbaV0gPSBpOwo+ID4gPiArCj4gPiA+ICvCoMKgwqDC
+oMKgwqDCoGZvciAoaSA9IDA7IGkgPCB0ei0+dHJpcHM7IGkrKykgewo+ID4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgZm9yIChqID0gaSArIDE7IGogPCB0ei0+dHJpcHM7IGorKykg
+ewo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlu
+dCB0MSwgdDI7Cj4gPiA+ICsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB0ei0+b3BzLT5nZXRfdHJpcF90ZW1wKHR6LCB0ei0KPiA+ID4gPiB0cmlw
+c19pbmRleGVzW2ldLCAmdDEpOwo+ID4gCj4gPiBUaGlzIGxpbmUgY2FuIGJlIG1vdmVkIHRvIHRo
+ZSB1cHBlciBsb29wLgo+ID4gCj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgdHotPm9wcy0+Z2V0X3RyaXBfdGVtcCh0eiwgdHotCj4gPiA+ID4gdHJp
+cHNfaW5kZXhlc1tqXSwgJnQyKTsKPiAKPiAKPiBBY3R1YWxseSwgd2UgY2FuIG5vdCBtb3ZlIHRo
+ZSBsaW5lIHVwIGJlY2F1c2Ugb2YgdGhlIHN3YXAgYmVsb3cKCk9oLCByaWdodC4KCkJ1dCBJIHN0
+aWxsIHRoaW5rIHRoYXQgd2Ugc2hvdWxkIGNoZWNrIHRoZSBkaXNhYmxlZCB0cmlwcyBhcyB3ZWxs
+IGFzCnRoZSAuZ2V0X3RyaXBfdGVtcCgpIHJldHVybiB2YWx1ZSBoZXJlLCBvciBlbHNlLCB3ZSBt
+YXkgY29tcGFyaW5nIHNvbWUKcmFuZG9tIHRyaXBfdGVtcCB2YWx1ZSBoZXJlLgoKdGhhbmtzLApy
+dWkKCj4gCj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgaWYgKHQxID4gdDIpCj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN3YXAodHotPnRyaXBzX2luZGV4ZXNbaV0sIHR6
+LQo+ID4gPiA+IHRyaXBzX2luZGV4ZXNbal0pOwo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgfQo+ID4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gPiA+ICt9Cj4gCj4gCj4gCj4gCgo=
 
-Please squeeze this patch into patch 9. I don't really want to separate the
-transition marco update as two patches.
-
-Thanks,
-Ray
-
-> ---
->  drivers/cpufreq/amd-pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 4f8600a36194..d3bc441b3923 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -42,7 +42,7 @@
->  #include "amd-pstate-trace.h"
->  
->  #define AMD_PSTATE_TRANSITION_LATENCY	20000
-> -#define AMD_PSTATE_TRANSITION_DELAY	500
-> +#define AMD_PSTATE_TRANSITION_DELAY	1000
->  
->  /*
->   * TODO: We need more time to fine tune processors with shared memory solution
-> -- 
-> 2.32.0
-> 
