@@ -2,158 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB7457940C
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 09:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDFA57948F
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 09:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbiGSHWI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jul 2022 03:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
+        id S236990AbiGSHun (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jul 2022 03:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiGSHWI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 03:22:08 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68D93204A
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 00:22:06 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h17so20299701wrx.0
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 00:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zhZx7OelFktddqeuw5G8PgvrBIH+jYWzqpM0BySOSho=;
-        b=jHwP4d8nPt5m3OcG9yygEJvr3q4paVLcrXvrPkHX+dNeG1La0W38p54fQvK9useFj6
-         K10OGAWmVX+PF8YBZZyY5C6rjsoY+WBDDFMXtTtwCB0EiW7I1z/07kcUG3WY4LcdhOoC
-         4xp7QbrtqlZOYOu9smorDW68ehKkUi8cSl6FlzVQn+It2SPxDhOdzUpwHqOxxlRzbLr5
-         khqoa3oSaJOXDFvkSUVmvBC2NEADAduVoleA0tb+ZI3dq17VLzoVVS0mpsNV4GnbGRI2
-         UDTgiFZ5rs9wN4PSwImYHipQ0T3zbcSSS43vLRrD8v/eFUCSYVf2VfT4kVPca8EjHSCX
-         0JPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zhZx7OelFktddqeuw5G8PgvrBIH+jYWzqpM0BySOSho=;
-        b=umFXIrDlmEdp1tb1I9k0Inum9SXWPeEzrswnc4wumGCzHFBviDIUcAUk1Td1zaf3zE
-         p5ICJ3uwV23kQaJRR5E+X9S+enN6pUDjzOtli4TeecZnvcRD3IoxmSJsZ5Ob8hBEevcd
-         +RfVsNi66yCmPWItL0+dQXuycInUdI41sgRVFftboMIqzHbKPX+IaFIbEB3kmCDVovXs
-         sP0uvyH5EM7JWxaXdD06s1tFlIPrzss2LEQb9DKqOt6/04rXeocHhcYL8krnNf8G/+F9
-         d5uZLykInS5QYfpmCKGnxEQEMFRtttkPIkmxB0IGz1Rz29sqit/bZ8O8ceqNOCBJN4k8
-         QmTQ==
-X-Gm-Message-State: AJIora9NdoCr81gSCcz3P58MeyVH2KIJY1UvQfZbtlxNwwMnPGf8bbmc
-        tpzv0DdsDlEjlQXbQcCZgaiRsQv5Q1K6/Q==
-X-Google-Smtp-Source: AGRyM1txegwX6PPB6J4yWQk8XjE3s0d4QXmt0iUioRmC+ZAaCuKV2FCUQYXYXT5kwow3JR5z+bvdNg==
-X-Received: by 2002:adf:e28a:0:b0:210:b31:722 with SMTP id v10-20020adfe28a000000b002100b310722mr25735689wri.65.1658215325276;
-        Tue, 19 Jul 2022 00:22:05 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e? ([2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e])
-        by smtp.googlemail.com with ESMTPSA id az36-20020a05600c602400b003a31ba538c2sm6018930wmb.40.2022.07.19.00.22.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 00:22:04 -0700 (PDT)
-Message-ID: <c0d3e523-d75a-d837-313f-bf46f3fab3b4@linaro.org>
-Date:   Tue, 19 Jul 2022 09:22:02 +0200
+        with ESMTP id S236991AbiGSHun (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 03:50:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB981E3E1;
+        Tue, 19 Jul 2022 00:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658217041; x=1689753041;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=f5B7I15nH+XgLc0qgVLlVZ13NYHCNK62nx8dUX5Z29I=;
+  b=ko9EdA0ShYDDfTfghGT98OaSTP7FLBerTf2gWetYp1+sWOBCKgJTlWX9
+   lso3uhn9Ut34YoTfQ0nBs/dI35QjOuwMNwDXfKcmPQ/UNdEJE6Y7M1koY
+   g0EySxVWmk9OM3mP5CoAbhnkL69IETmlhGULanFiJzIiyZeq/UGGKuAY0
+   6KY8xH0AO2ZrOgVnD/MdWcJkEIIdURmPz4l1k09pjD16ZScshnoVqzbIW
+   1do3AqoEMNE6NK+pkCgutshJpS24hlEEwhVWnO4PM1KrwUUUiLdUhAbOG
+   miyYKKIa6KJjuRYuZ6fU/PIJd4nf5C0hUJK7yC1FLMVtpIz+c7QwUtKCd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="372727913"
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="372727913"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 00:50:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="655641472"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Jul 2022 00:50:40 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDi07-0005P8-Ar;
+        Tue, 19 Jul 2022 07:50:39 +0000
+Date:   Tue, 19 Jul 2022 15:50:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 54ae2293921fc535ed38a0511bf2c96f7f28cf57
+Message-ID: <62d66243.bIOQls4SY8FBE0Wg%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes for
- the trip points
-Content-Language: en-US
-To:     Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
-Cc:     quic_manafm@quicinc.com, amitk@kernel.org, lukasz.luba@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
- <20220715210911.714479-3-daniel.lezcano@linaro.org>
- <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
- <04bd27a8-5148-c8eb-5687-83ef511618df@linaro.org>
- <7ee301b76beb679f89e946dfb5921a2d853bd8dc.camel@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <7ee301b76beb679f89e946dfb5921a2d853bd8dc.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/07/2022 03:14, Zhang Rui wrote:
-> On Mon, 2022-07-18 at 15:21 +0200, Daniel Lezcano wrote:
->>
->> Hi Zhang,
->>
->> thanks for the review
->>
->> On 18/07/2022 07:28, Zhang Rui wrote:
->>> On Fri, 2022-07-15 at 23:09 +0200, Daniel Lezcano wrote:
->>
->> [ ... ]
->>
->>>> Instead of taking the risk of breaking the existing platforms,
->>>> use an
->>>> array of temperature ordered trip identifiers and make it
->>>> available
->>>> for the code needing to browse the trip points in an ordered way.
->>>>
->>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>> ---
->>
->> [ ... ]
->>
->>>> +static void sort_trips_indexes(struct thermal_zone_device *tz)
->>>> +{
->>>> +       int i, j;
->>>> +
->>>> +       for (i = 0; i < tz->trips; i++)
->>>> +               tz->trips_indexes[i] = i;
->>>> +
->>>> +       for (i = 0; i < tz->trips; i++) {
->>>> +               for (j = i + 1; j < tz->trips; j++) {
->>>> +                       int t1, t2;
->>>> +
->>>> +                       tz->ops->get_trip_temp(tz, tz-
->>>>> trips_indexes[i], &t1);
->>>
->>> This line can be moved to the upper loop.
->>
->> Right, thanks!
->>
->>>> +                       tz->ops->get_trip_temp(tz, tz-
->>>>> trips_indexes[j], &t2);
->>>> +
->>>
->>> what about the disabled trip points?
->>>
->>> we should ignore those trip points and check the return value to
->>> make
->>> sure we're comparing the valid trip_temp values.
->>
->> We don't have to care about, whatever the position, the corresponding
->> trip id will be disabled by the trip init function before calling
->> this
->> one and ignored in the handle_thermal_trip() function
-> 
-> hah, I missed this one and replied to your latest reply directly.
-> 
-> The thing I'm concerning is that if we don't check the return value,
-> for a disabled trip point, the trip_temp (t1/t2) returned is some
-> random value, it all depends on the previous value set by last
-> successful .get_trip_temp(), and this may screw up the sorting.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 54ae2293921fc535ed38a0511bf2c96f7f28cf57  Merge branch 'acpi-cppc' into bleeding-edge
 
-The indexes array is the same size as the trip array, that makes the 
-code much less prone to errors.
+elapsed time: 721m
 
-To have the same number of trip points, the index of the disabled trip 
-must be inserted also in the array. We don't care about its position in 
-the indexes array because it is discarded in the handle_trip_point() 
-function anyway. For this reason, the random temperature of the disabled 
-trip point and the resulting position in the sorting is harmless.
+configs tested: 54
+configs skipped: 2
 
-It is made on purpose to ignore the return value, so we have a simpler code.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+arc                               allnoconfig
+alpha                             allnoconfig
+riscv                             allnoconfig
+csky                              allnoconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64               randconfig-a013-20220718
+x86_64               randconfig-a012-20220718
+x86_64               randconfig-a014-20220718
+x86_64               randconfig-a011-20220718
+x86_64               randconfig-a015-20220718
+x86_64               randconfig-a016-20220718
+i386                 randconfig-a011-20220718
+i386                 randconfig-a013-20220718
+i386                 randconfig-a012-20220718
+i386                 randconfig-a016-20220718
+i386                 randconfig-a015-20220718
+i386                 randconfig-a014-20220718
+arc                  randconfig-r043-20220718
+riscv                randconfig-r042-20220718
+s390                 randconfig-r044-20220718
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                 randconfig-a003-20220718
+i386                 randconfig-a001-20220718
+i386                 randconfig-a002-20220718
+i386                 randconfig-a006-20220718
+i386                 randconfig-a004-20220718
+i386                 randconfig-a005-20220718
+hexagon              randconfig-r041-20220718
+hexagon              randconfig-r045-20220718
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+0-DAY CI Kernel Test Service
+https://01.org/lkp
