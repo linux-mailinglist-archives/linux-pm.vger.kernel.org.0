@@ -2,67 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766C75791B7
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 06:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41E25791C2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 06:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236811AbiGSEOx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jul 2022 00:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S236893AbiGSETO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jul 2022 00:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236616AbiGSEOw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 00:14:52 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3DE3ED5B
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so20196709pjn.0
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
+        with ESMTP id S236856AbiGSETK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 00:19:10 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8C23AE6A
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 21:19:08 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y141so12450260pfb.7
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 21:19:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=PcoM/2VxSazYw3xrD2Doehr//Sh1eaqhYJJVE4GDy34=;
-        b=Opm4hi3omHyUJfxTX7A6AUKYKxH6SF2hvwXsFMaHw5vuVLEi1Nibi2mNaMXkfehTBR
-         WVtr/AdJ9d9ciIxMs8K6zTCGUiceENfLjIBKKjJBNhpV9xjHmfP/s5rg3Im4Hnsoax89
-         0DjC9YfKQuIUbrKs8sATbBnBaK0I2zihi67vJUSaWj/BtmCF1XuFyqwqOC4sT44FUNtX
-         iCYoNaY9rmSjFz/oKpdDoeq3OY6TnwglIlZYosgKCuKpvaUg3igxTi50q2nro5h515Z4
-         hL01oin4i/6j3NXa86htkVgHjC8ZcAP/WGYQrP/IRj5pFl62xB4GEmtBo3fTsBJPZth+
-         RJFA==
+        bh=DRXpkzFCaONc6uIVW7OHVXWrx1/ZSo2vjvlOlBazeIk=;
+        b=DRjY/k5F4uoLY5Z0MV/U+eii0rcgt1LVT/Y9xiRMLQK6sfxMwKS2pQCYV5UtxxNINV
+         ZNkZCzHhp4anjvWElcaBFa8siXkTy+1bJlYkPeevoaw7Vh9KU/WJ81vqGSeJ6Z1AzQDK
+         q9x8HPbiHIslAVdLTn4VnJk6yH0j4actgvI9GEbHj4LNlSJgf1m2pPaIpP3Uij6Dz36c
+         ddzx9vNbyZV7ZneqH8qdgq7YYtJVJbPNXuGZ0wrvXKo0zva2x8QejMUu8ykJ3g2Q2bk6
+         X9OG1LiWF9ofE3uYZJSLvbVKNd4I0tbmbhRsNr29Fb77EOiJALCR5tTRzBLzuVRxA8Ie
+         Ie3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=PcoM/2VxSazYw3xrD2Doehr//Sh1eaqhYJJVE4GDy34=;
-        b=bIrhaoJuVXXN83TxXBBprVbst4tAOlSsN4euLstQcDdEnsvOXxj3GcF4gzju7azUYx
-         aFo9B9JwJO7/xQY2MEPfX9VC9Ll98IXQeZZXObNcVUoRG18hN2BJN8bSlsFPClKRkCLJ
-         i0iWrMqJLvA3t//WRHz3eJaCJfr4xOejhj29TTACB+6f+xT5+WHjkk18w+cRbvP/+puF
-         VJMqtn3NbCeVZwKa6IZZ8cJ0GrNNX6o0j6JnQLoyGuHfJRSZqr/VRqwiDD2SltO13zuN
-         GZzpXErkxMfjVn2lwkwT7cBkwfYzjf4IbpYgPE1V9sujHrhlvuRZiyp3KXS/sjHvxxlY
-         CMlw==
-X-Gm-Message-State: AJIora/ekFJkRNLPA3rJoRr1VoIIzgFc5a/6gPySxq6+MSsh99IeC2v8
-        C5AT6r1Tj2WUoP8a/XCpWen1mg==
-X-Google-Smtp-Source: AGRyM1tI6zyRWQfdZYvlnOak1NVPcELyI5ONB78Ywca0UFqiJ9+fItFi1nzNJgxXXUHg2SLi20/X1Q==
-X-Received: by 2002:a17:90b:3a88:b0:1f0:56d5:460e with SMTP id om8-20020a17090b3a8800b001f056d5460emr41219754pjb.208.1658204091145;
-        Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
+        bh=DRXpkzFCaONc6uIVW7OHVXWrx1/ZSo2vjvlOlBazeIk=;
+        b=GG1wDAIS6AiuPnkidLmuqXFzYkI20F7lVdlCg3Skya9AttwrVaB9s0bgRMYljvBdMK
+         RyuIjSAYbDvlrQiNsZUguEfml0MB+5mMyhitcjKxS1KwctEymI/QSqcu6kGWMnanb8ND
+         D/GYrXY4dcCQ4msqN6OaO85NWZbkyDxPYuE0KXH9EEyRs05SQaH1fBs7zrZ3VdYcz6RS
+         P1mC1WiKUWe9nQFL2kdejGKKewadUl5vNQvtUwm10PLpA8qxkH/IvxveJTYQao151yts
+         i2LDjhG0ns3fO4hwpzaD28ttASLQyKWilgV/xsKhTBJ2+Q2JQ+sV926vyuxlWLyBk2Aq
+         r7gw==
+X-Gm-Message-State: AJIora+o8PLx5t2TPI/b+SvOzosrot89o3RhZziC0j+K1h4UB2pWGp56
+        D87YPaMEfzImAQ0m06OgW+BLiQ==
+X-Google-Smtp-Source: AGRyM1vRiMVK3BuNDcvKsw/Kos77pHtWi9dvCe41+Gc7wm8NhqjA4yMjwKTxFTF8yIkK5RM+258btA==
+X-Received: by 2002:a63:97:0:b0:41a:3c2:6238 with SMTP id 145-20020a630097000000b0041a03c26238mr11549036pga.499.1658204348031;
+        Mon, 18 Jul 2022 21:19:08 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id b32-20020a631b60000000b0040d48cf046csm8935574pgm.55.2022.07.18.21.14.50
+        by smtp.gmail.com with ESMTPSA id x9-20020a170902a38900b0016c0c82e85csm10379725pla.75.2022.07.18.21.19.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 21:14:50 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 09:44:48 +0530
+        Mon, 18 Jul 2022 21:19:07 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 09:49:05 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Di Shen <di.shen@unisoc.com>
-Cc:     lukasz.luba@arm.com, amitk@kernel.org, rui.zhang@intel.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
-        xuewen.yan94@gmail.com
-Subject: Re: [PATCH] thermal: cpufreq_cooling: Avoid all cluster using global
- cooling_ops
-Message-ID: <20220719041448.iyavinsv3jzs3au4@vireshk-i7>
-References: <20220718122419.9409-1-di.shen@unisoc.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] dt-bindings: cpufreq-qcom-hw: Move clocks to CPU
+ nodes
+Message-ID: <20220719041905.idpo5uemowgtu6yp@vireshk-i7>
+References: <cover.1657695140.git.viresh.kumar@linaro.org>
+ <035fe13689dad6d3867a1d33f7d5e91d4637d14a.1657695140.git.viresh.kumar@linaro.org>
+ <20220718204651.GA3505083-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220718122419.9409-1-di.shen@unisoc.com>
+In-Reply-To: <20220718204651.GA3505083-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,61 +78,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-07-22, 20:24, Di Shen wrote:
-> Now, all the cooling device use the globle cpufreq_cooling_ops. When the
-> CONFIG_THERMAL_GOV_POWER_ALLOCATOR is enabled, once one cluster init the
-> cpufreq_cooling_ops, it would make all cooling device use the power allocator's
-> ops. If one's em is error because of the "em_is_sane", it would cause the
-> em NULL, but the cooling device's ops is exist, as a result, it would cause
-> panic because of the em.
+On 18-07-22, 14:46, Rob Herring wrote:
+> On Wed, Jul 13, 2022 at 12:22:56PM +0530, Viresh Kumar wrote:
+> > cpufreq-hw is a hardware engine, which takes care of frequency
+> > management for CPUs. The engine manages the clocks for CPU devices, but
+> > it isn't the end consumer of the clocks, which are the CPUs in this
+> > case.
 > 
-> Add cpufreq_power_cooling_ops to avoid this case.
+> The question is really where does the clock mux live?
+
+As Manivannan clarified in another email, these clocks are actually consumed by
+the cpufreq-hw node, so existing code was fine.
+
+> > For this reason, it looks incorrect to keep the clock related properties
+> > in the cpufreq-hw node. They should really be present at the end user,
+> > i.e. the CPUs.
 > 
-> Signed-off-by: Di Shen <di.shen@unisoc.com>
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> ---
->  drivers/thermal/cpufreq_cooling.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+> The issue is that the CPU itself probably only has 1 clock input (at 
+> least for its core frequency).
+
+Right, and they (Qcom) have skipped adding that in DT currently. I have
+suggested to him to add it there, which will solve the issue as well.
+
+> Listing out all possible clock sources in CPU node 'clocks' is wrong too.
+
+Yes, we need to mention only the clocks which are consumed directly by the CPU,
+maybe just one of them which comes out of cpufreq-hw node.
+
+> > The case was simple currently as all the devices, i.e. the CPUs, that
+> > the engine manages share the same clock names. What if the clock names
+> > are different for different CPUs or clusters ? How will keeping the
+> > clock properties in the cpufreq-hw node work in that case ?
+> > 
+> > This design creates further problems for frameworks like OPP, which
+> > expects all such details (clocks) to be present in the end device node
+> > itself, instead of another related node.
+> > 
+> > Move the clocks properties to the node that uses them instead.
 > 
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index b8151d95a806..af5cfb458370 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -493,6 +493,17 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
->  	.set_cur_state		= cpufreq_set_cur_state,
->  };
->  
-> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
-> +static struct thermal_cooling_device_ops cpufreq_power_cooling_ops = {
-> +	.get_max_state		= cpufreq_get_max_state,
-> +	.get_cur_state		= cpufreq_get_cur_state,
-> +	.set_cur_state		= cpufreq_set_cur_state,
-> +	.get_requested_power	= cpufreq_get_requested_power,
-> +	.state2power		= cpufreq_state2power,
-> +	.power2state		= cpufreq_power2state,
-> +};
-> +#endif
-> +
->  /**
->   * __cpufreq_cooling_register - helper function to create cpufreq cooling device
->   * @np: a valid struct device_node to the cooling device device tree node
-> @@ -559,9 +570,7 @@ __cpufreq_cooling_register(struct device_node *np,
->  #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
->  	if (em_is_sane(cpufreq_cdev, em)) {
->  		cpufreq_cdev->em = em;
-> -		cooling_ops->get_requested_power = cpufreq_get_requested_power;
-> -		cooling_ops->state2power = cpufreq_state2power;
-> -		cooling_ops->power2state = cpufreq_power2state;
-> +		cooling_ops = &cpufreq_power_cooling_ops;
->  	} else
->  #endif
->  	if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED) {
+> What's the purpose of freq-domain binding now? I thought the idea was to 
+> use that instead of clocks directly.
 
-Please have a look at this patch in linux-next.
-
-commit 6ee324afdf30 ("drivers/thermal/cpufreq_cooling: Use private callback ops for each cooling device")
-
-This already fixes the problem, right ?
+Not always I think. It provides register access for programming or voting for
+the clock, etc. Yes, the code won't do clk_set_rate() but the DT should still
+mention the clock in the CPU node if it mentions an OPP table with frequencies
+in it.
 
 -- 
 viresh
