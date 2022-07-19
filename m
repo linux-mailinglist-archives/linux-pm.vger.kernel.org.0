@@ -2,223 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381195797D8
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 12:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 377C55798AE
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 13:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbiGSKsA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jul 2022 06:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
+        id S234056AbiGSLnh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jul 2022 07:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbiGSKr7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 06:47:59 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C65CE3D;
-        Tue, 19 Jul 2022 03:47:57 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 315601EC04D6;
-        Tue, 19 Jul 2022 12:47:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658227671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=itxQexl6sj7uyxfVl7DeFw4Cg1ss0IG70VFcnixr/7s=;
-        b=b410x885IhieOidIYERnkO1GPUK8UXT1/Gg40HuooGSEIOMVEqdU50oUWHTW0ynG2CFaSG
-        0XoVc9VJ8bWoc0/oiJGGsJTwl9ggAbSOWZA2mrAcVVPKGagDAQ9Wu23YoQc3Uk2nEnP61G
-        Yj0BYs0RVoahETfOz+/Ju8GVDm+Chwg=
-Date:   Tue, 19 Jul 2022 12:47:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        brchuckz@netscape.net, jbeulich@suse.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH 2/3] x86: add wrapper functions for mtrr functions
- handling also pat
-Message-ID: <YtaLtNYXsntADBMs@zn.tnic>
-References: <20220715142549.25223-1-jgross@suse.com>
- <20220715142549.25223-3-jgross@suse.com>
+        with ESMTP id S233953AbiGSLnh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 07:43:37 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA243F304
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 04:43:35 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id u14so9058774lju.0
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 04:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u8k7Jf5aTFxu0icKTRZ2sE0N8FLv2IMIzpwDjXshk98=;
+        b=cSwe5PvnXwn3X0icLxJOtCwPVN/kjhYx9fYT1YB7s6QdgCGaSwdmuWaImDd3dghmxO
+         xUa7duWnbLNT2Wpzzan4HDm0qCUm7QYMgIr2paUoiGHpzlQjc44qdW1bMovhI1RCNdA8
+         aozQwwH4rq+nF6c6EMUYiWLJEHBBFM+TcCCvfUAhPG1KWDHy+R1pfuSM+xxt/1AITXbC
+         U7JTl7UgQ+gl3co0C/P0kfA3wa+yb+cHHgDaBrOUrb303YP1UmxAjHJLXxwTq25nY45X
+         9VDMo6w8TWV+OwMdbDJsyxJDkXSMmd7wswSa0bHPZI1UC8nftQJQtizbxUqMbrSY1HMl
+         A4Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u8k7Jf5aTFxu0icKTRZ2sE0N8FLv2IMIzpwDjXshk98=;
+        b=Y8fiB76K0GxcrXboxosISEO22iGBNLGxltdpSdmOcMarX+CAgA3SRHHcIWoEcRQCIM
+         kBgE6hmxmhLHRojt7FUYQrqGmztD01qdy1RkXAuUn4TsFAjQsg0E4NWFq3kViXnjr0Jk
+         ZldVhkjmWmQvI4uN15FHtTdd/jqeRBuuOoFKsYkq+L1ua6vGK9v3aJsQL1VOstI6a46C
+         J8KXeL/kLHLStu8TQ3GromfoRgBpw+TwKc3E9uRaFiaL4SR+yCWXEBg4n6syRQPXh6eN
+         2nwhzQy4p/ZcJvbTP7Mmxnfmi2L0XMorUvuC+oLQsfXvJpmFAWMbDflDudXXqXYBPSsW
+         MB4A==
+X-Gm-Message-State: AJIora/PfncraaBA4mydIL6xlgKjfPy2HLL7riLsEro8quYbBPFdAilJ
+        Gs8PEhnIme+CncYm8CAx7gqjyeJ2BKFag9Ee
+X-Google-Smtp-Source: AGRyM1vcRgL48RnejKUjwqB8IqMKdJD4CzKqiUBkc/e9/ooKx7NuJoexZW7atEdWRnm1rPmsGrNx/A==
+X-Received: by 2002:a2e:a317:0:b0:25d:83e8:ce60 with SMTP id l23-20020a2ea317000000b0025d83e8ce60mr15124649lje.111.1658231013636;
+        Tue, 19 Jul 2022 04:43:33 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id u14-20020a19790e000000b00489da8b29e8sm3179255lfc.123.2022.07.19.04.43.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 04:43:33 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Matti Vaittineen <matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH] power: supply: Explain maintenance charging
+Date:   Tue, 19 Jul 2022 13:41:31 +0200
+Message-Id: <20220719114131.62470-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220715142549.25223-3-jgross@suse.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Drop stable.
+In order for everyone to understand clearly why we want to use
+maintenance charging for batteries, expand the description with two
+diagrams and some text.
 
-On Fri, Jul 15, 2022 at 04:25:48PM +0200, Juergen Gross wrote:
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> index 5c934b922450..e2140204fb7e 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -865,7 +865,14 @@ bool arch_is_platform_page(u64 paddr);
->  #define arch_is_platform_page arch_is_platform_page
->  #endif
->  
-> +extern bool cache_aps_delayed_init;
-> +
->  void cache_disable(void);
->  void cache_enable(void);
-> +void cache_bp_init(void);
-> +void cache_ap_init(void);
-> +void cache_set_aps_delayed_init(void);
-> +void cache_aps_init(void);
-> +void cache_bp_restore(void);
->  
->  #endif /* _ASM_X86_PROCESSOR_H */
+Cc: Matti Vaittineen <matti.vaittinen@fi.rohmeurope.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ include/linux/power_supply.h | 48 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 42 insertions(+), 6 deletions(-)
 
-Use arch/x86/include/asm/cacheinfo.h instead.
-
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index e43322f8a4ef..0a1bd14f7966 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -1929,7 +1929,7 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
->  #ifdef CONFIG_X86_32
->  	enable_sep_cpu();
->  #endif
-> -	mtrr_ap_init();
-> +	cache_ap_init();
->  	validate_apic_and_package_id(c);
->  	x86_spec_ctrl_setup_ap();
->  	update_srbds_msr();
-> @@ -2403,3 +2403,45 @@ void cache_enable(void) __releases(cache_disable_lock)
->  
->  	raw_spin_unlock(&cache_disable_lock);
->  }
-> +
-> +void __init cache_bp_init(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_MTRR))
-> +		mtrr_bp_init();
-> +	else
-> +		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
-> +}
-> +
-> +void cache_ap_init(void)
-> +{
-> +	if (cache_aps_delayed_init)
-> +		return;
-> +
-> +	mtrr_ap_init();
-> +}
-> +
-> +bool cache_aps_delayed_init;
-> +
-> +void cache_set_aps_delayed_init(void)
-> +{
-> +	cache_aps_delayed_init = true;
-> +}
-
-What's the point of a variable and a setter function?
-
-You can either make this var __ro_after_init and then use it everywhere
-or make it static and use a setter and getter.
-
-> +
-> +void cache_aps_init(void)
-> +{
-> +	/*
-> +	 * Check if someone has requested the delay of AP cache initialization,
-> +	 * by doing cache_set_aps_delayed_init(), prior to this point. If not,
-> +	 * then we are done.
-> +	 */
-> +	if (!cache_aps_delayed_init)
-> +		return;
-> +
-> +	mtrr_aps_init();
-> +	cache_aps_delayed_init = false;
-> +}
-> +
-> +void cache_bp_restore(void)
-> +{
-> +	mtrr_bp_restore();
-> +}
-> diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-> index 2746cac9d8a9..c1593cfae641 100644
-> --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-> +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-> @@ -69,7 +69,6 @@ unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
->  static DEFINE_MUTEX(mtrr_mutex);
->  
->  u64 size_or_mask, size_and_mask;
-> -static bool mtrr_aps_delayed_init;
->  
->  static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
->  
-> @@ -176,7 +175,8 @@ static int mtrr_rendezvous_handler(void *info)
->  	if (data->smp_reg != ~0U) {
->  		mtrr_if->set(data->smp_reg, data->smp_base,
->  			     data->smp_size, data->smp_type);
-> -	} else if (mtrr_aps_delayed_init || !cpu_online(smp_processor_id())) {
-> +	} else if ((use_intel() && cache_aps_delayed_init) ||
-
-What's the use_intel() for?
-
-> +		   !cpu_online(smp_processor_id())) {
->  		mtrr_if->set_all();
->  	}
->  	return 0;
-> @@ -789,7 +789,7 @@ void mtrr_ap_init(void)
->  	if (!mtrr_enabled())
->  		return;
->  
-> -	if (!use_intel() || mtrr_aps_delayed_init)
-> +	if (!use_intel())
-
-And here you remove the mtrr_aps_delayed_init check but you have the
-corresponding check of cache_aps_delayed_init in the caller. Hmm.
-
-So it looks like you're pushing some of the logic into the cache_*
-functions, one level up.
-
-But it is really hard to follow what you're doing here.
-
-And that mtrr_aps_delayed_init thing is not making it any easier. It
-gets set during init unconditionally and once APs have been setup, it
-gets cleared.
-
-And, AFAICT, it is used so that the MTRRs are not set when single APs
-get onlined but it is all done in one fell swoop in mtrr_aps_init() and
-then that delayed_init var gets cleared.
-
-But then I don't understand what the point is of that pushing of
-cache_aps_delayed_init up into the cache_* functions.
-
-/me greps a while longer...
-
-Ah, ok, I think I see where this is going. The delayed thing is relevant
-for PAT too because pat_init() happens also as part of the ->set_all()
-rendezvous dance.
-
-Right, so, this patch needs a *lot* more commit message text. You need
-to explain why you're doing what you're doing and explain it in detail.
-
-Perhaps even split the patch further into one adding the cache_* helpers
-and another converting to them.
-
-And, also, you probably should stick the small fix for the whole deal
-in front of the patchset so that we have a stable backport - I wouldn't
-want to backport all that more involved rework to stable.
-
-Thx.
-
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index cb380c1d9459..aa2c4a7c4826 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -374,9 +374,37 @@ struct power_supply_vbat_ri_table {
+  *   These timers should be chosen to align with the typical discharge curve
+  *   for the battery.
+  *
+- * When the main CC/CV charging is complete the battery can optionally be
+- * maintenance charged at the voltages from this table: a table of settings is
+- * traversed using a slightly lower current and voltage than what is used for
++ * Ordinary CC/CV charging will stop charging when the charge current goes
++ * below charge_term_current_ua, and then restart it (if the device is still
++ * plugged into the charger) at charge_restart_voltage_uv. This happens in most
++ * consumer products because the power usage while connected to a charger is
++ * not zero, and devices are not manufactured to draw power directly from the
++ * charger: instead they will at all times dissipate the battery a little, like
++ * the power used in standby mode. This will over time give a charge graph
++ * such as this:
++ *
++ * Energy
++ *  ^      ...        ...      ...      ...      ...      ...      ...
++ *  |    .   .       .  .     .  .     .  .     .  .     .  .     .
++ *  |  ..     .   ..     .  ..    .  ..    .  ..    .  ..    .  ..
++ *  |.          ..        ..       ..       ..       ..       ..
++ *  +-------------------------------------------------------------------> t
++ *
++ * Practically this means that the Li-ions are wandering back and forth in the
++ * battery and this causes degeneration of the battery anode and cathode.
++ * To prolong the life of the battery, maintenance charging is applied after
++ * reaching charge_term_current_ua to hold up the charge in the battery while
++ * consuming power, thus lowering the wear on the battery:
++ *
++ * Energy
++ *  ^      .......................................
++ *  |    .                                        ......................
++ *  |  ..
++ *  |.
++ *  +-------------------------------------------------------------------> t
++ *
++ * Maintenance charging uses the voltages from this table: a table of settings
++ * is traversed using a slightly lower current and voltage than what is used for
+  * CC/CV charging. The maintenance charging will for safety reasons not go on
+  * indefinately: we lower the current and voltage with successive maintenance
+  * settings, then disable charging completely after we reach the last one,
+@@ -385,14 +413,22 @@ struct power_supply_vbat_ri_table {
+  * ordinary CC/CV charging from there.
+  *
+  * As an example, a Samsung EB425161LA Lithium-Ion battery is CC/CV charged
+- * at 900mA to 4340mV, then maintenance charged at 600mA and 4150mV for
+- * 60 hours, then maintenance charged at 600mA and 4100mV for 200 hours.
++ * at 900mA to 4340mV, then maintenance charged at 600mA and 4150mV for up to
++ * 60 hours, then maintenance charged at 600mA and 4100mV for up to 200 hours.
+  * After this the charge cycle is restarted waiting for
+  * charge_restart_voltage_uv.
+  *
+  * For most mobile electronics this type of maintenance charging is enough for
+  * the user to disconnect the device and make use of it before both maintenance
+- * charging cycles are complete.
++ * charging cycles are complete, if the current and voltage has been chosen
++ * appropriately. These need to be determined from battery discharge curves
++ * and expected standby current.
++ *
++ * If the voltage anyway drops to charge_restart_voltage_uv during maintenance
++ * charging, ordinary CC/CV charging is restarted. This can happen if the
++ * device is e.g. actively used during charging, so more current is drawn than
++ * the expected stand-by current. Also overvoltage protection will be applied
++ * as usual.
+  */
+ struct power_supply_maintenance_charge_table {
+ 	int charge_current_max_ua;
 -- 
-Regards/Gruss,
-    Boris.
+2.36.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
