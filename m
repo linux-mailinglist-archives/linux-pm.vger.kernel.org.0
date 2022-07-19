@@ -2,177 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B73457928B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 07:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20935792B2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 07:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233873AbiGSFje (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jul 2022 01:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S236924AbiGSFtq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jul 2022 01:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiGSFjc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 01:39:32 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CCA24F05
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 22:39:31 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q41-20020a17090a1b2c00b001f2043c727aso419460pjq.1
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 22:39:31 -0700 (PDT)
+        with ESMTP id S236925AbiGSFtp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 01:49:45 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C26D30F50
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 22:49:44 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id u19so14169461lfs.0
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 22:49:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J4mj/y3zzzOwIMyeEm4vzXsiFjJCLeFIn0BY8mFqYK8=;
-        b=hz0E6J5Oo0K0ZNXDSkOcGl7/HazTGHtm0UtsngiLXK6kOcVZb+L82wSUkRVLmJ67Ua
-         Kau4HqRr6zzqRNJK0od3FLR6NFsWf7QjdmYltgMyD3cUbY64J5STAlGJvcUmnKKF1HGh
-         265mqvAGaaRCj3qLKCTle7fiMmelGZmL17ZtDTmAfBYw4i93dBsICFgMBv+JcZFAAmYk
-         omHawabK/79a6V2o1eUp5PMRfuJ8LbNnXD3wiPIReGf3IKa45J0b71NBnFrUkMMNHs51
-         mLx4G0/YRk7gPeDRkzAmlarvtc/hMTagXiFAcxtwgVCJv5CXJAZJEHrl9beWNz+DQ/XT
-         9waA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EV7J2evjbv3FZUZN1eeFth4oNvs49+wln9t6xNZ58P4=;
+        b=BVePoaWkGV7zZKFou3iA9JV9G1g1TzYhf2PN1ioevNsOvkF+DwdLQdWbZbHLzDd31w
+         Fl1hcDZi15cFUVjMl8CD1d+oMSf7W9T0Ly86gs35Nzps5xuqvn1k2D0yJ/TytoNnbZGO
+         9qLR0Rmn6V3PQTbYroplo0aY53Fzhbv2EtdmrCWr2JLx3eOlHEEe3LJjrjgeEn++khy0
+         z2AMYIJEhCxZgCD1lpS51rGnBXdkH0XsXyfe2m1gU16ExC9njyGzQqESF6ex/Bzm1JmI
+         1XO+pDMJ7Hhe/7QXfmznMJhUNLYXeKgo/3OyEvsmTyr4agBe0FCsXsyGHlIYQFRL+XkC
+         HglA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J4mj/y3zzzOwIMyeEm4vzXsiFjJCLeFIn0BY8mFqYK8=;
-        b=48Sxt1DqWhNmyRoKl//nY/l5iiT0fYZcTewKU5fGgWL8BOeijpUJJlqkupIP4FrXDs
-         kBgtdV7A+ez3aD3zkpOImkpwlFaN9+rwVrUBQ9CXk/yzaoBp/rpEoaZ+hJXhl4/bPJpH
-         nJmcAIe66HR4yRNtFpILqgTLAI84epXngXlpAROf4zeKgQlmd/ibLsrlqzj+Z95QEKoZ
-         188GeOaj3BnM1rL3z2U95v2gJWmNoO9I7LUFlp8ZBPAouu89x6fd56XhfCoiAtXXmoOK
-         uWzxSAONgGOZHIGLpM+IvAz3jbv6MH7AV+FODT5O5zTk0tFuFK/5ManMs9v9u1XCtGDW
-         Jnmg==
-X-Gm-Message-State: AJIora8K+UC84v1p/hqFr7QuYs0db/EhnVVG64LUcEOEiFEjLb4vt7m1
-        usgyTD6tYALz1UeqDth9IIs5Jw0/2YMgHQ==
-X-Google-Smtp-Source: AGRyM1uJVjsWWRPHHI2QdUrdatOqu+M1tt25VYsco4q/WAfG1niuOqJHLyt7DeXPYvQQ6dXWr+8x3A==
-X-Received: by 2002:a17:902:a413:b0:156:15b:524a with SMTP id p19-20020a170902a41300b00156015b524amr32758467plq.106.1658209171289;
-        Mon, 18 Jul 2022 22:39:31 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170903124e00b0016bee3caabesm10585015plh.270.2022.07.18.22.39.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EV7J2evjbv3FZUZN1eeFth4oNvs49+wln9t6xNZ58P4=;
+        b=75oDUP5cLMR9qRq5Wp0g2lBGZVK7WvDUaW5FolCqPsnlvCQOEcMPbjLpAZyfjPIOOl
+         It2ad/yLPcgKnPZpR2S0pdJ8wA66D1c5nlHpmhBs3ZrPdA6PWgnqCXMpxnI1GSc7RsoW
+         tBWzp2d6+6BRE1Hi927srQKIZ2tdAuEAHmrmRMvCfjsIizsjvqUWPW3swvaBIenP/tiJ
+         CiK6mQjl+rbKPkO4/KDyWpiim2tnQ/Tjv/1i/JFZPuHwEZ9nfNm1pdDsAzbns8fIx94p
+         iawSjMHSPJ5v137L7yIFg1U7YYBTesyPz3PI5VyEc9u1sj4fUVwSJ8rEWiFHRSOptZTQ
+         bKEQ==
+X-Gm-Message-State: AJIora/YOlU5a6OIG8XpAGfrn2F52c+dmvawoJOn87ZPl/JcolIcxbkD
+        gQxXrFZSnLT+Fkc9W6RauTNxPg==
+X-Google-Smtp-Source: AGRyM1s50HLvXHw1o/rk7nFQkMWxClg3l9vwg65DaAkfly0jvgRlJkvYI3Gdo8qek7W02gBo68lTDg==
+X-Received: by 2002:ac2:51a6:0:b0:489:c578:cf75 with SMTP id f6-20020ac251a6000000b00489c578cf75mr15931550lfk.24.1658209782349;
+        Mon, 18 Jul 2022 22:49:42 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id s10-20020a195e0a000000b0048137a6486bsm3005120lfb.228.2022.07.18.22.49.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 22:39:30 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 11:09:27 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Liang He <windhl@126.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] OPP: Fix refcount leak bug for opp
-Message-ID: <20220719053927.j4xi6fjsjddaoub7@vireshk-i7>
-References: <20220718133632.937290-1-windhl@126.com>
- <20220718133632.937290-2-windhl@126.com>
+        Mon, 18 Jul 2022 22:49:41 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 1/2] thermal/drivers/qcom/temp-alarm: register thermal zones as hwmon sensors
+Date:   Tue, 19 Jul 2022 08:49:39 +0300
+Message-Id: <20220719054940.755907-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718133632.937290-2-windhl@126.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-07-22, 21:36, Liang He wrote:
-> In _opp_add_static_v2(), we need call of_node_get() for the new
-> reference created when "new_opp->np = np;" as new_opp is escaped out.
-> Here we should also take care of the of_node_put() when 'new_opp' is
-> freed based on the function description: "The opp can be controlled
-> ... and may be removed by dev_pm_opp_remove".
-> For example, _opp_add_static_v2() is called by _of_add_opp_table_v2()
-> in a for_each_available_child_of_node() which will automatically
-> increase and decrease the refcount. So we need an additional
-> of_node_get() for the new reference created in _opp_add_static_v2().
-> 
-> Signed-off-by: Liang He <windhl@126.com>
+Register thermal zones as hwmon sensors to let userspace read
+temperatures using standard hwmon interface.
 
-Applied with few changes. Thanks.
-
-commit 3466ea2cd6b66e4647a9af2381c0d0cd3d579354
-Author: Liang He <windhl@126.com>
-Date:   Mon Jul 18 21:36:32 2022 +0800
-
-    OPP: Don't drop opp->np reference while it is still in use
-
-    The struct dev_pm_opp contains a reference of the DT node, opp->np,
-    throughout its lifetime. We should increase the refcount for the same
-    from _opp_add_static_v2(), and drop it while removing the OPP finally.
-
-    Signed-off-by: Liang He <windhl@126.com>
-    [ Viresh: Updated subject / commit log, create _of_clear_opp() and drop
-              reference from it]
-    Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/opp/core.c |  2 +-
- drivers/opp/of.c   | 12 +++++++++---
- drivers/opp/opp.h  |  6 ++----
- 3 files changed, 12 insertions(+), 8 deletions(-)
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 4f4a285886fa..77d1ba3a4154 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1553,7 +1553,7 @@ static void _opp_kref_release(struct kref *kref)
-         * frequency/voltage list.
-         */
-        blocking_notifier_call_chain(&opp_table->head, OPP_EVENT_REMOVE, opp);
--       _of_opp_free_required_opps(opp_table, opp);
-+       _of_clear_opp(opp_table, opp);
-        opp_debug_remove_one(opp);
-        kfree(opp);
- }
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index e4002b075422..7fa8263e38cb 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -254,8 +254,8 @@ void _of_clear_opp_table(struct opp_table *opp_table)
-  * Release all resources previously acquired with a call to
-  * _of_opp_alloc_required_opps().
-  */
--void _of_opp_free_required_opps(struct opp_table *opp_table,
--                               struct dev_pm_opp *opp)
-+static void _of_opp_free_required_opps(struct opp_table *opp_table,
-+                                      struct dev_pm_opp *opp)
- {
-        struct dev_pm_opp **required_opps = opp->required_opps;
-        int i;
-@@ -275,6 +275,12 @@ void _of_opp_free_required_opps(struct opp_table *opp_table,
-        kfree(required_opps);
- }
-
-+void _of_clear_opp(struct opp_table *opp_table, struct dev_pm_opp *opp)
-+{
-+       _of_opp_free_required_opps(opp_table, opp);
-+       of_node_put(opp->np);
-+}
+diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+index 7419e196dbb0..770f82cc9bca 100644
+--- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
++++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+@@ -16,6 +16,7 @@
+ #include <linux/thermal.h>
+ 
+ #include "../thermal_core.h"
++#include "../thermal_hwmon.h"
+ 
+ #define QPNP_TM_REG_DIG_MAJOR		0x01
+ #define QPNP_TM_REG_TYPE		0x04
+@@ -458,6 +459,10 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	if (devm_thermal_add_hwmon_sysfs(chip->tz_dev))
++		dev_warn(&pdev->dev,
++			 "Failed to add hwmon sysfs attributes\n");
 +
- /* Populate all required OPPs which are part of "required-opps" list */
- static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
-                                       struct dev_pm_opp *opp)
-@@ -938,7 +944,7 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
-
-        new_opp->turbo = of_property_read_bool(np, "turbo-mode");
-
--       new_opp->np = np;
-+       new_opp->np = of_node_get(np);
-        new_opp->dynamic = false;
-        new_opp->available = true;
-
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 816009eaafee..3a6e077df386 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -267,14 +267,12 @@ static inline bool lazy_linking_pending(struct opp_table *opp_table)
- void _of_init_opp_table(struct opp_table *opp_table, struct device *dev, int index);
- void _of_clear_opp_table(struct opp_table *opp_table);
- struct opp_table *_managed_opp(struct device *dev, int index);
--void _of_opp_free_required_opps(struct opp_table *opp_table,
--                               struct dev_pm_opp *opp);
-+void _of_clear_opp(struct opp_table *opp_table, struct dev_pm_opp *opp);
- #else
- static inline void _of_init_opp_table(struct opp_table *opp_table, struct device *dev, int index) {}
- static inline void _of_clear_opp_table(struct opp_table *opp_table) {}
- static inline struct opp_table *_managed_opp(struct device *dev, int index) { return NULL; }
--static inline void _of_opp_free_required_opps(struct opp_table *opp_table,
--                                             struct dev_pm_opp *opp) {}
-+static inline void _of_clear_opp(struct opp_table *opp_table, struct dev_pm_opp *opp) {}
- #endif
-
- #ifdef CONFIG_DEBUG_FS
+ 	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL, qpnp_tm_isr,
+ 					IRQF_ONESHOT, node->name, chip);
+ 	if (ret < 0)
+-- 
+2.35.1
 
