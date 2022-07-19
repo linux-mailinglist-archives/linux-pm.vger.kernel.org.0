@@ -2,246 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D554D5795C1
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 11:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2BB5795D2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 11:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbiGSJGY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Jul 2022 05:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
+        id S235304AbiGSJLE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Jul 2022 05:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGSJGX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 05:06:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741A710E2
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 02:06:22 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oDjB6-000469-41; Tue, 19 Jul 2022 11:06:04 +0200
-Message-ID: <60cda0c11ce004c8e019b7bb7523d46b373dac58.camel@pengutronix.de>
-Subject: Re: [PATCH v3 1/2] power: domain: handle power supplies that need
- interrupts
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        aford173@gmail.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Tue, 19 Jul 2022 11:06:02 +0200
-In-Reply-To: <CAPDyKFrkwKrvEsPHjfXUhGPcRg8z7J4OkOKq8KDp_0xj78Gudg@mail.gmail.com>
-References: <20220718210302.674897-1-martin.kepplinger@puri.sm>
-         <CAPDyKFrkwKrvEsPHjfXUhGPcRg8z7J4OkOKq8KDp_0xj78Gudg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        with ESMTP id S235161AbiGSJLC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Jul 2022 05:11:02 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE32D248DF
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 02:10:59 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id z22so10048021lfu.7
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 02:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=7Mtd3J+03yO0iS9XA8aLlV/pFtrHZmqJ3Z5d/M8D54g=;
+        b=6r+6877vSw2e0oYl9YY2c9JqBLTeh8tvGJGT4G5S7u9KlAlSMuXJBp23Wa+pL4r2dx
+         R0a8DqA8j1b9HYRXUZ9t5HEv3GOVCpm289/Ja4VSH/OhKISr1M6hUk1L3MAoSXjuR6MP
+         fOKJhAXrKSHQCY42apgBmR/vPclqr7x45EgLiGh0rq8HifeS9N3n95BrT3mdKiL5BOY5
+         N5Dlo//MMiXlGKl4bnAFueqOVkv6fJ75IyWFc0w5UF+Wwd03k2pufDm9xt7/va+D3Xpg
+         Kx2j3nB+SCeE3ldTaTnJ3FhSVQyXeXMhcyftCP4FsgNzt3UWYp5cuYX100FXJ356I6fj
+         /LlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=7Mtd3J+03yO0iS9XA8aLlV/pFtrHZmqJ3Z5d/M8D54g=;
+        b=MMQv1csnB2/H+AXAYufiVwnvhym+PQX7TY2Ss6kOoVCcXY4tUaShrLxrOnX9u0WkCr
+         VXLCgxRf7DpahQKIDlUAE6PNiXuJ7qIghaD+WTHvb1d2z83Jpjhd4xrhpWDGb0JqXGLY
+         /fP/ayeU1A/EkNiotVshTqeZwQRZREXXwY7+jWLlcRTpPrJq3WcdJ1GAW6KfXCCJTbZJ
+         JDTIiwHr7Ntsz0K8um77z7jx8CkPvxN6xABHK6e6b9h54ThASXvXZ6ScE9iOhU1dxC07
+         lay1Nb1zxNRu0qfPSCHGcFmfNdOF6AAMKfztKrajf8mf+hEhstUXBwi7XXf+dnWD4nnE
+         sj6A==
+X-Gm-Message-State: AJIora8RyKOcIuthpssmC3Q4gY8Z9H5nafl7KAjbCHydNRtWKYALjFhQ
+        UqTyxfkpEutpFDYIgdEPu6E+tQ==
+X-Google-Smtp-Source: AGRyM1uans68sAZ4YjjIACUwqygWHqFjMkoEiQApgqu5BOyWtuTmGobWzZZ9+zPY+tmvKUTiyagkGg==
+X-Received: by 2002:a05:6512:3e28:b0:48a:a4b:c474 with SMTP id i40-20020a0565123e2800b0048a0a4bc474mr15554335lfv.254.1658221858236;
+        Tue, 19 Jul 2022 02:10:58 -0700 (PDT)
+Received: from localhost (h-46-59-88-103.A463.priv.bahnhof.se. [46.59.88.103])
+        by smtp.gmail.com with ESMTPSA id m9-20020a05651202e900b0047f8cb9401fsm3107245lfq.89.2022.07.19.02.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 02:10:57 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 11:10:56 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        khilman@baylibre.com, abailon@baylibre.com, amitk@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
+Message-ID: <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
+References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
+ <20220710212423.681301-18-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220710212423.681301-18-daniel.lezcano@linexp.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Dienstag, dem 19.07.2022 um 10:53 +0200 schrieb Ulf Hansson:
-> On Mon, 18 Jul 2022 at 23:04, Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> > 
-> > If the power-domains' power-supply node (regulator) needs
-> > interrupts to work, the current setup with noirq callbacks cannot
-> > work; for example a pmic regulator on i2c, when suspending, usually already
-> > times out during suspend_noirq:
-> > 
-> > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > 
-> > So fix system suspend and resume for these power-domains by using the
-> > "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5 board,
-> > but by looking at the dts, this will fix imx8mq-evk and possibly other boards
-> > too.
-> > 
-> > Possibly one can find more changes than suspend/resume for this case. They
-> > can be added later when testing them: This is designed so that genpd
-> > providers just say "this power-supply" needs interrupts - without implying
-> > what exactly should be configured in genpd.
-> > 
-> > Initially system suspend problems had been discussed at
-> > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > which led to discussing the pmic that contains the regulators which
-> > serve as power-domain power-supplies:
-> > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> > 
-> > revision history
-> > ----------------
-> > v3: (thank you Ulf)
-> > * move DT parsing to gpcv2 and create a genpd flag that gets set
-> > 
-> > v2: (thank you Krzysztof)
-> > * rewrite: find possible regulators' interrupts property in parents
-> >   instead of inventing a new property.
-> > https://lore.kernel.org/linux-arm-kernel/20220712121832.3659769-1-martin.kepplinger@puri.sm/
-> > 
-> > v1: (initial idea)
-> > https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
-> > 
-> > 
-> >  drivers/base/power/domain.c | 19 +++++++++++++++++++
-> >  drivers/soc/imx/gpcv2.c     |  9 +++++++++
-> >  include/linux/pm_domain.h   |  6 ++++++
-> >  3 files changed, 34 insertions(+)
-> > 
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 739e52cd4aba..1437476c9086 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
-> >  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
-> >  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
-> >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
-> > +#define genpd_ps_needs_irq(genpd)      (genpd->flags & GENPD_FLAG_IRQ_POWER_SUPPLY)
-> > 
-> >  static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
-> >                 const struct generic_pm_domain *genpd)
-> > @@ -2298,6 +2299,20 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
-> >         return ret;
-> >  }
-> > 
-> > +/**
-> > + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs interrupts
-> > + * @genpd: Pointer to PM domain associated with the PM domain provider.
-> > + */
-> > +static void of_genpd_config_power_supply_irq(struct generic_pm_domain *pd)
-> 
-> This isn't an "of" function. Moreover, I think we just skip the
-> function all together and have the code in pm_genpd_init() instead.
-> 
-> > +{
-> > +       if (genpd_ps_needs_irq(pd)) {
-> > +               pd->domain.ops.suspend = genpd_suspend_noirq;
-> > +               pd->domain.ops.resume = genpd_resume_noirq;
-> > +               pd->domain.ops.suspend_noirq = NULL;
-> > +               pd->domain.ops.resume_noirq = NULL;
-> > +       }
-> > +}
-> > +
-> >  /**
-> >   * of_genpd_add_provider_simple() - Register a simple PM domain provider
-> >   * @np: Device node pointer associated with the PM domain provider.
-> > @@ -2343,6 +2358,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
-> >         genpd->provider = &np->fwnode;
-> >         genpd->has_provider = true;
-> > 
-> > +       of_genpd_config_power_supply_irq(genpd);
-> 
-> Drop this. As stated above, I think the code belongs in pm_genpd_init().
-> 
-> > +
-> >         return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-> > @@ -2394,6 +2411,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
-> > 
-> >                 genpd->provider = &np->fwnode;
-> >                 genpd->has_provider = true;
-> > +
-> > +               of_genpd_config_power_supply_irq(genpd);
-> 
-> Ditto.
-> 
-> >         }
-> > 
-> >         ret = genpd_add_provider(np, data->xlate, data);
-> > diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-> > index 85aa86e1338a..3a22bad07534 100644
-> > --- a/drivers/soc/imx/gpcv2.c
-> > +++ b/drivers/soc/imx/gpcv2.c
-> > @@ -1303,6 +1303,7 @@ static const struct imx_pgc_domain_data imx8mn_pgc_domain_data = {
-> >  static int imx_pgc_domain_probe(struct platform_device *pdev)
-> >  {
-> >         struct imx_pgc_domain *domain = pdev->dev.platform_data;
-> > +       struct device_node *dn;
-> >         int ret;
-> > 
-> >         domain->dev = &pdev->dev;
-> > @@ -1333,6 +1334,14 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
-> >                 regmap_update_bits(domain->regmap, domain->regs->map,
-> >                                    domain->bits.map, domain->bits.map);
-> > 
-> > +       dn = of_parse_phandle(domain->dev->of_node, "power-supply", 0);
-> > +       if (dn) {
-> > +               while ((dn = of_get_next_parent(dn))) {
-> > +                       if (of_get_property(dn, "interrupts", NULL))
-> > +                               domain->genpd.flags |= GENPD_FLAG_IRQ_POWER_SUPPLY;
-> > +               }
-> > +       }
-> > +
-> >         ret = pm_genpd_init(&domain->genpd, NULL, true);
-> >         if (ret) {
-> >                 dev_err(domain->dev, "Failed to init power domain\n");
-> > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> > index ebc351698090..bcceaf376f36 100644
-> > --- a/include/linux/pm_domain.h
-> > +++ b/include/linux/pm_domain.h
-> > @@ -60,6 +60,11 @@
-> >   * GENPD_FLAG_MIN_RESIDENCY:   Enable the genpd governor to consider its
-> >   *                             components' next wakeup when determining the
-> >   *                             optimal idle state.
-> > + *
-> > + * GENPD_FLAG_IRQ_POWER_SUPPLY:        The power-domains' power-supply (regulator)
-> > + *                             needs interrupts to work. Adjust accordingly.
-> > + *                             Use the outer suspend/resume callbacks instead
-> > + *                             of noirq for example.
-> 
-> I prefer a more generic name. How about GENPD_FLAG_IRQ_ON.
-> 
-> For the description, I would rather state that the genpd needs irqs to
-> stay on to be able to manage power on/off. Or something along those
-> lines.
-> 
-> >   */
-> >  #define GENPD_FLAG_PM_CLK       (1U << 0)
-> >  #define GENPD_FLAG_IRQ_SAFE     (1U << 1)
-> > @@ -68,6 +73,7 @@
-> >  #define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
-> >  #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
-> >  #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
-> > +#define GENPD_FLAG_IRQ_POWER_SUPPLY (1U << 7)
-> > 
-> >  enum gpd_status {
-> >         GENPD_STATE_ON = 0,     /* PM domain is on */
-> > --
-> > 2.30.2
-> > 
-> 
-> BTW, a more generic question. If you move away from using the *noirq
-> callbacks to the other suspend/resume callbacks in genpd to solve this
-> problem, that requires all devices that is attached to the PM domain
-> (genpd) to also *not* be managed with the "late/early" or the "noirq"
-> callbacks too. In other case, we may power off the PM domain while
-> some devices may still rely on it to be on.
-> 
-> Are you sure that this is the case?
+Hi Daniel,
 
-For the i.MX8M* it should be fine. While we have some devices that are
-using the noirq supend/resume callbacks, like PCIe, those are not in a
-power-domain where we would like to control an external regulator, so
-things should work fine for the targeted use-case.
+Thanks for your work.
 
-However, it may be a good idea to introduce some kind of kernel warning
-when a driver with noirq suspend/resume callbacks is attached to a
-GENPD_FLAG_IRQ_ON domain.
+On 2022-07-10 23:24:07 +0200, Daniel Lezcano wrote:
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach.
+> 
+> Use this new API.
 
-Regards,
-Lucas
+I tested this together with the series it depends on and while 
+temperature monitoring seems to work fine it breaks the emul_temp 
+interface (/sys/class/thermal/thermal_zone2/emul_temp).
 
+Before this change I can write a temperature to this file and have it 
+trigger actions, in my test-case changing the cooling state, which I 
+observe in /sys/class/thermal/cooling_device0/cur_state.
+
+Likewise before this change I could trip the critical trip-point that 
+would power off the board using the emul_temp interface, this too no 
+longer works,
+
+    echo 120000 > /sys/class/thermal/thermal_zone2/emul_temp
+
+Is this an intention change of the new API?
+
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> ---
+>  drivers/thermal/rcar_gen3_thermal.c | 16 ++++++++--------
+>  drivers/thermal/rcar_thermal.c      | 13 +++----------
+>  2 files changed, 11 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index 43eb25b167bc..29946114a8f9 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -164,9 +164,9 @@ static int rcar_gen3_thermal_round(int temp)
+>  	return result * RCAR3_THERMAL_GRAN;
+>  }
+>  
+> -static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
+> +static int rcar_gen3_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
+> +	struct rcar_gen3_thermal_tsc *tsc = tz->devdata;
+>  	int mcelsius, val;
+>  	int reg;
+>  
+> @@ -203,9 +203,9 @@ static int rcar_gen3_thermal_mcelsius_to_temp(struct rcar_gen3_thermal_tsc *tsc,
+>  	return INT_FIXPT(val);
+>  }
+>  
+> -static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
+> +static int rcar_gen3_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+>  {
+> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
+> +	struct rcar_gen3_thermal_tsc *tsc = tz->devdata;
+>  	u32 irqmsk = 0;
+>  
+>  	if (low != -INT_MAX) {
+> @@ -225,7 +225,7 @@ static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
+>  	return 0;
+>  }
+>  
+> -static struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops = {
+> +static struct thermal_zone_device_ops rcar_gen3_tz_of_ops = {
+>  	.get_temp	= rcar_gen3_thermal_get_temp,
+>  	.set_trips	= rcar_gen3_thermal_set_trips,
+>  };
+> @@ -504,8 +504,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>  	for (i = 0; i < priv->num_tscs; i++) {
+>  		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
+>  
+> -		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
+> -							    &rcar_gen3_tz_of_ops);
+> +		zone = devm_thermal_of_zone_register(dev, i, tsc,
+> +						     &rcar_gen3_tz_of_ops);
+>  		if (IS_ERR(zone)) {
+>  			dev_err(dev, "Can't register thermal zone\n");
+>  			ret = PTR_ERR(zone);
+> @@ -556,7 +556,7 @@ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
+>  
+>  		priv->thermal_init(tsc);
+>  		if (zone->ops->set_trips)
+> -			rcar_gen3_thermal_set_trips(tsc, zone->prev_low_trip,
+> +			rcar_gen3_thermal_set_trips(zone, zone->prev_low_trip,
+>  						    zone->prev_high_trip);
+>  	}
+>  
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index 1d729ed4d685..4df42d70d867 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -271,13 +271,6 @@ static int rcar_thermal_get_current_temp(struct rcar_thermal_priv *priv,
+>  	return 0;
+>  }
+>  
+> -static int rcar_thermal_of_get_temp(void *data, int *temp)
+> -{
+> -	struct rcar_thermal_priv *priv = data;
+> -
+> -	return rcar_thermal_get_current_temp(priv, temp);
+> -}
+> -
+>  static int rcar_thermal_get_temp(struct thermal_zone_device *zone, int *temp)
+>  {
+>  	struct rcar_thermal_priv *priv = rcar_zone_to_priv(zone);
+> @@ -323,8 +316,8 @@ static int rcar_thermal_get_trip_temp(struct thermal_zone_device *zone,
+>  	return 0;
+>  }
+>  
+> -static const struct thermal_zone_of_device_ops rcar_thermal_zone_of_ops = {
+> -	.get_temp	= rcar_thermal_of_get_temp,
+> +static struct thermal_zone_device_ops rcar_thermal_zone_of_ops = {
+> +	.get_temp	= rcar_thermal_get_temp,
+>  };
+>  
+>  static struct thermal_zone_device_ops rcar_thermal_zone_ops = {
+> @@ -534,7 +527,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  			goto error_unregister;
+>  
+>  		if (chip->use_of_thermal) {
+> -			priv->zone = devm_thermal_zone_of_sensor_register(
+> +			priv->zone = devm_thermal_of_zone_register(
+>  						dev, i, priv,
+>  						&rcar_thermal_zone_of_ops);
+>  		} else {
+> -- 
+> 2.25.1
+> 
+
+-- 
+Kind Regards,
+Niklas Söderlund
