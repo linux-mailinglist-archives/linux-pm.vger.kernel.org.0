@@ -2,177 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B56579111
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 04:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95535579152
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Jul 2022 05:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236628AbiGSC6S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Jul 2022 22:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
+        id S235364AbiGSDaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Jul 2022 23:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234952AbiGSC6S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 22:58:18 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3624CFD20
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 19:58:17 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10bec750eedso28872146fac.8
-        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 19:58:17 -0700 (PDT)
+        with ESMTP id S234554AbiGSDay (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Jul 2022 23:30:54 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F5826AFD
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 20:30:54 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id s21so13512861pjq.4
+        for <linux-pm@vger.kernel.org>; Mon, 18 Jul 2022 20:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Eey/mlcn0iZn7YvUPtdPvc+GsjTEbI3FrOyrwI+lxmE=;
-        b=ZMXp3m+VNVa8SBxaN189tL1hyrusPfPOQYV/vZUiyFQf2gjECZ9i8zYImHSZV/4ocN
-         o5h6k3MiJ1L5DR+iPVg7mFdfFdc9g2MfIAwSx9no9unNVIaHi0chNA/UVCwmMGquRhsh
-         vzkKxhtbWiZoNt6rcnllLxnlQU5EMCGCJP1vxgj+t3QwtWJ4G5IewuJrnAUNiHu2EYxv
-         2qe09+O4z9Mzv1ku/cYg4RjeNIAjNqU6b6sSmL4W3GP4W9B5FpjZ09SOzfKj8a2LDWmR
-         Hvo/4I1Rwes4PsscS96teKhus1GkgA3QJtyhjuxWs81pJtuIJD5elicTewhr6q7TZtKw
-         jUGw==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=B3vqNQXUPHLiidrsRquKDvdq06DoB7DEh5Ci8FLXtVI=;
+        b=70MNsDc3V7bEpSiMtgiyP3PySZd9aagcwmx/JuIxz8JBgZockp4Sc8egvWkyae1ydD
+         kWYCP4kJxITibG2RLmxtcfnRPXKK1fcrgWks5Un2hoRkenCcBLrFGJX7aMPXVvF8Nki+
+         SZVNs+BRC+QITiARn8o4OrKDkGCyF0RnGBZRkBKtjcC39+UpqmeMDGR2CIHAoq+1sN+e
+         MkpaW9gzlisZCvFF8yBxvLm78OsdvFubq1JzkomkfOFbFE9BBGqG4VsUopWVpPRGwqnE
+         noti66NzhTrLt5YBIrCr7QgOCDFIbJ29MAiXi3eTMOFUL4/S/g89l00xfoAAkW4qTfGy
+         7d8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Eey/mlcn0iZn7YvUPtdPvc+GsjTEbI3FrOyrwI+lxmE=;
-        b=OrtiUEOGXWa3FtwA60zoaowC8z9XYPSeUOak7tlmqCbpJDymu6sSqaDbEcWQT5JBhf
-         N81u82BECjyKj+xPSSUthET8dlA8MGnULU/X0XdbYx8WtOh/rA3VfTXinmrZRrJzN0rv
-         AUKvC+zkG+/jeovLyZdw3oLOX6OHmt8xAmAgIFRSo+fcQ8x6hXiuG6JPPxfa4aVk24kT
-         jvDpLLLIcSY2X8ttV3vkGTYyXMLSyfWQuQ4H1QHEqPE7yIOZOE0WH0qQqh54eOj7rPRe
-         ME9QqLBk12h62E1rhAQitLiu2p70ECHDjdLsr6hKfKZGOssfFflhC6o0HKxAjrMgji4U
-         c6pw==
-X-Gm-Message-State: AJIora+uulbrXBN/RFX0vQeRUtlt2fj/EVyz4JvZUF+mcpwDS2HMY1ig
-        IrUui+8iq3Bn0XsJr+fo89vUxQ==
-X-Google-Smtp-Source: AGRyM1u4/Mww72cHaz85JtwsrJHw6H11b/VYu7bFd0tgYs6OhXAqCxjrjp+hypUrMABUPoovelVaJw==
-X-Received: by 2002:a05:6870:73d3:b0:10c:2c40:2ead with SMTP id a19-20020a05687073d300b0010c2c402eadmr19995793oan.160.1658199496509;
-        Mon, 18 Jul 2022 19:58:16 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e65-20020aca3744000000b0033a169f9282sm4759834oia.52.2022.07.18.19.58.15
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=B3vqNQXUPHLiidrsRquKDvdq06DoB7DEh5Ci8FLXtVI=;
+        b=jh28uoi5CMw0VY/g2oitQNFggXA4daddIr+7dS4Zm1zvzNWsbSaIpURcjS2gFnOt+0
+         feLp5ofd2EeZI7EtkWd9zRKHsJsvmfnDlicccHVfwotQnd3sKs2HETrOu3ebJNTlADmC
+         7O2JIt1fDG+4thbfSKRJIas1ez5LCNzdMcqd4pcLKq9TJY9CGEmW/zCvfeANnTMuzGdn
+         DWOT4W5zOFuVMrDjApWjGK6WcrgflZPn7SBdUJH1Kyg2IEWQBRMJrvcZ55TQE12egiE0
+         gMfFX5J5TgK4rEBUHuA+uII/vdV/d/kKgQU8tSKKDB1QHBwXY8hCHX1aaRiw5eRPPUJG
+         kRmA==
+X-Gm-Message-State: AJIora+F2i9Emav1cBmb8R1JxP79sxGpl+GWHrWtzWl/HX7xw3RXN6L0
+        6ytoEHJnm1GaOutfG70Tk3MVHA==
+X-Google-Smtp-Source: AGRyM1sBOZjTQPTltZSrPDNEd9E7aViAx+eHi2m29mc8h95rPGy9jWCjb1NDu5S3ov8vNdDr7yHDwg==
+X-Received: by 2002:a17:902:8a86:b0:16c:4292:9f56 with SMTP id p6-20020a1709028a8600b0016c42929f56mr31328468plo.36.1658201453500;
+        Mon, 18 Jul 2022 20:30:53 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y21-20020a170902d65500b0016c19417495sm10321795plh.239.2022.07.18.20.30.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 19:58:15 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 21:58:14 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/3] firmware: qcom_scm: Add support for tsens reinit
- workaround
-Message-ID: <YtYdxlbLvgimN2MQ@builder.lan>
-References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
- <20220701145815.2037993-2-bhupesh.sharma@linaro.org>
+        Mon, 18 Jul 2022 20:30:53 -0700 (PDT)
+Message-ID: <62d6256d.1c69fb81.83513.f079@mx.google.com>
+Date:   Mon, 18 Jul 2022 20:30:53 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701145815.2037993-2-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc7-69-gcd720ad594e64
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.19-rc7-69-gcd720ad594e64)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 01 Jul 09:58 CDT 2022, Bhupesh Sharma wrote:
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc7-69-gcd=
+720ad594e64)
 
-Please update $subject to match the most uses prefix for the qcom_scm
-driver.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+19-rc7-69-gcd720ad594e64/
 
-> Some versions of QCoM tsens controller might enter a
+Tree: pm
+Branch: testing
+Git Describe: v5.19-rc7-69-gcd720ad594e64
+Git Commit: cd720ad594e64894f94f2b011e281c9b85ac1cdd
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-s/QCoM/Qualcomm/ please.
+Warnings Detected:
 
-> 'bad state' while running stability tests causing sensor
-> temperatures/interrupts status to be in an 'invalid' state.
-> 
-> It is recommended to re-initialize the tsens controller
-> via trustzone (secure registers) using scm call(s) when that
-> happens.
-> 
-> Add support for the same in the qcom_scm driver.
-> 
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  drivers/firmware/qcom_scm.c | 17 +++++++++++++++++
->  drivers/firmware/qcom_scm.h |  4 ++++
->  include/linux/qcom_scm.h    |  2 ++
->  3 files changed, 23 insertions(+)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index 3163660fa8e2..0bc7cc466218 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -796,6 +796,23 @@ int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
->  }
->  EXPORT_SYMBOL(qcom_scm_mem_protect_video_var);
->  
-> +int qcom_scm_tsens_reinit(int *tsens_ret)
-> +{
-> +	unsigned int ret;
+arc:
 
-qcom_scm_call() returns negative numbers on error, so this should be
-signed.
+arm64:
 
-> +	struct qcom_scm_desc desc = {
+arm:
 
-const?
+i386:
 
-> +		.svc = QCOM_SCM_SVC_TSENS,
-> +		.cmd = QCOM_SCM_TSENS_INIT_ID,
-> +	};
-> +	struct qcom_scm_res res;
-> +
-> +	ret = qcom_scm_call(__scm->dev, &desc, &res);
-> +	if (tsens_ret)
-> +		*tsens_ret = res.result[0];
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
 
-Most similar qcom_scm functions use negative return value for errors and
-positive (including 0) values for the returned data.
+riscv:
 
-Looking at patch 3, the only thing you seem to care about is tsens_ret
-being 0 or not, so I do think you would be fine returning both using the
-return value.
+x86_64:
 
-Regards,
-Bjorn
 
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(qcom_scm_tsens_reinit);
-> +
->  static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
->  				 size_t mem_sz, phys_addr_t src, size_t src_sz,
->  				 phys_addr_t dest, size_t dest_sz)
-> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-> index 0d51eef2472f..495fa00230c7 100644
-> --- a/drivers/firmware/qcom_scm.h
-> +++ b/drivers/firmware/qcom_scm.h
-> @@ -94,6 +94,10 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
->  #define QCOM_SCM_PIL_PAS_IS_SUPPORTED	0x07
->  #define QCOM_SCM_PIL_PAS_MSS_RESET	0x0a
->  
-> +/* TSENS Services and Function IDs */
-> +#define QCOM_SCM_SVC_TSENS		0x1E
-> +#define QCOM_SCM_TSENS_INIT_ID		0x5
-> +
->  #define QCOM_SCM_SVC_IO			0x05
->  #define QCOM_SCM_IO_READ		0x01
->  #define QCOM_SCM_IO_WRITE		0x02
-> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-> index f8335644a01a..f8c9eb739df1 100644
-> --- a/include/linux/qcom_scm.h
-> +++ b/include/linux/qcom_scm.h
-> @@ -124,4 +124,6 @@ extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
->  extern int qcom_scm_lmh_profile_change(u32 profile_id);
->  extern bool qcom_scm_lmh_dcvsh_available(void);
->  
-> +extern int qcom_scm_tsens_reinit(int *tsens_ret);
-> +
->  #endif
-> -- 
-> 2.35.3
-> 
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
