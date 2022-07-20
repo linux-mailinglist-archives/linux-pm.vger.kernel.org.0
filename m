@@ -2,159 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FE757BCC8
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 19:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C78D57BD95
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 20:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241223AbiGTRhX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 13:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S231843AbiGTSTl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 14:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241392AbiGTRhV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 13:37:21 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9FF5D0F3;
-        Wed, 20 Jul 2022 10:37:20 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id g20-20020a9d6a14000000b0061c84e679f5so12002675otn.2;
-        Wed, 20 Jul 2022 10:37:20 -0700 (PDT)
+        with ESMTP id S229971AbiGTSTi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 14:19:38 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F5B67583
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 11:19:35 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id z13so7717914wro.13
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 11:19:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NY9cJreJS+8dTIRGmrgidqYE3b7KxSEOo/TVdrxG4d8=;
+        b=HeBQ+q8vwmoOwDim0LlmLDOVVnf5cKWvW0P3ll0FGcUCRb7AxtuiwiFdCqRdELVcHf
+         u2+sBwsBRkKubwJrcwmj6RLl+gCNPmN5HdZ9nV52WUPxLFrpIGWnmnxhRPMY51CYzK87
+         vDrGNNisSkftJhPZ8zboSC3K9w2zazdIg+620CqaxA8+oTw958VJwH4orw87YYz+QGp9
+         Pw9ruxLn85LfjfXwo8EHVacwXBtDJB5rTE1o0ctARmKCdQidRUYTdgkp1ZMIVRVGhNrf
+         U2ooXPBg1xW/EA56cugFZEEsyQUyZIZg3BAIcgE2z+1QnY9GF48RMDUMX5vPninvfaHO
+         GYpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u6J3sgJghVNNrzVGnT5K48UuGJ4l1PbhybPRZEBzs0E=;
-        b=3KqcPs8xLw9RVr8PUyvtV2BZDB18UdZi7DJO5dwMB7xlPfXLK++8KO7r7rUp1VZp4y
-         P26d2KVGg1lC062cvS8kLuw7gtiiGlYG2OcRrmh3BaxCuhXEeJhnDcvzHybXZIdIbF86
-         wp55/cvRZZrAVKxu7VFNT30/YO7vVureOHIrw5oAmV3YKaVqYhejqnJEwxYMqLqmIKEE
-         hJclyHhD/90cAjGOKBMSiS4Tn+7O1jcxx1Drcvw4ydbMlStBDZ51hqy+7oE9G8GEEe9o
-         E1al7c/nNL23JYS4hZoXo4sr+CG2VOHwTsKcIFTtWHbtFDyejLErNoupPdNMSQ7Cxy59
-         td+A==
-X-Gm-Message-State: AJIora8R9Z089RLwM8LxcYEf481RIP8kV3qRNgkyPUPGmv/Kyw8RC6aG
-        qbQAmHqXSX4WyBaTEDQu3LZoT604SOffBg==
-X-Google-Smtp-Source: AGRyM1uWUiRSYgmsaey0YHY1R3UkAoG51F5i1h90Z0ue23FKaAxTTOY2d97DvYFGRIMcfSpuPK62gw==
-X-Received: by 2002:a05:6830:268c:b0:618:5cc0:417d with SMTP id l12-20020a056830268c00b006185cc0417dmr15965672otu.196.1658338639544;
-        Wed, 20 Jul 2022 10:37:19 -0700 (PDT)
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com. [209.85.210.50])
-        by smtp.gmail.com with ESMTPSA id j21-20020a4a7515000000b0043565888e72sm7175234ooc.2.2022.07.20.10.37.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 10:37:19 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id by10-20020a056830608a00b0061c1ac80e1dso14651380otb.13;
-        Wed, 20 Jul 2022 10:37:19 -0700 (PDT)
-X-Received: by 2002:a05:6902:701:b0:66e:a06d:53d7 with SMTP id
- k1-20020a056902070100b0066ea06d53d7mr36038192ybt.604.1658338272504; Wed, 20
- Jul 2022 10:31:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NY9cJreJS+8dTIRGmrgidqYE3b7KxSEOo/TVdrxG4d8=;
+        b=vmfLcqlebusYf2cAsS3MzJAoswVoiN1lGGCw411pC4en4RFv8THDMGsxx9aseO5nT/
+         UeZqMIOHoSSPdGkKf/7BecBAjdk3/RMNKwJIFpCw7ZZY0DXpeKABDSbGc1msZnFSLyAY
+         rBhCqbNi/I8rLHzdv/btYj9MijZJIpFDZ7QA1anTczbfSKE484/430Zb/5yZfPu7gq2f
+         xQEaghqg+ismB/gbForITfdits1MwsHHZTewP9owscWECOd93Mu1j+zTvNMQU1iqcaan
+         PexnPrzb1KQMdRo1PKR71nx3TxlDZ5MmR/CjJ9EsZZTMKeFtujH2j1cRPiRwQVNj2ygk
+         R9UA==
+X-Gm-Message-State: AJIora/T5OJFSzuFoX8Rm86QBX/W3oenaBi6syha8GJnH6fD+Cr1xt6O
+        3RkEPWVuNdCiKZC6sqXc/o8mcg==
+X-Google-Smtp-Source: AGRyM1uOSnTxFw11JEDWcRNpBDAT1cS/8w7zBzTLAlxFhmOCrLYwrxJYzMip4iynsppCZeNaBxrrjg==
+X-Received: by 2002:a05:6000:156e:b0:21d:c50a:7cdb with SMTP id 14-20020a056000156e00b0021dc50a7cdbmr26493839wrz.16.1658341174422;
+        Wed, 20 Jul 2022 11:19:34 -0700 (PDT)
+Received: from amjad-ThinkPad-T490.home (2a01cb040613180084408ac44a1fa242.ipv6.abo.wanadoo.fr. [2a01:cb04:613:1800:8440:8ac4:4a1f:a242])
+        by smtp.googlemail.com with ESMTPSA id z17-20020a05600c0a1100b003a31d200a7dsm3400093wmp.9.2022.07.20.11.19.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 11:19:33 -0700 (PDT)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     matthias.bgg@gmail.com
+Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
+        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        robh+dt@kernel.org, rui.zhang@intel.com,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Subject: [PATCH v2 0/4] thermal: mediatek: Add support for MT8365 SoC
+Date:   Wed, 20 Jul 2022 20:18:50 +0200
+Message-Id: <20220720181854.547881-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com> <20220601070707.3946847-7-saravanak@google.com>
-In-Reply-To: <20220601070707.3946847-7-saravanak@google.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 20 Jul 2022 19:31:01 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
-Message-ID: <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] Revert "driver core: Set default
- deferred_probe_timeout back to 0."
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
+This patchset adds thermal support for MT8365 SoC which contains three
+thermal sensors.
 
-On Wed, Jun 1, 2022 at 9:45 AM Saravana Kannan <saravanak@google.com> wrote:
-> This reverts commit 11f7e7ef553b6b93ac1aa74a3c2011b9cc8aeb61.
->
-> Let's take another shot at getting deferred_probe_timeout=10 to work.
->
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+Note that the V1 [0] was originally introduced by Fabien Parent [1]. He
+requested that I take over this patchset.
 
-Thanks for your patch, which is now commit f516d01b9df2782b
-("Revert "driver core: Set default deferred_probe_timeout
-back to 0."") in driver-core/driver-core-next.
+[0]: https://lore.kernel.org/linux-arm-kernel/20220530183833.863040-1-fparent@baylibre.com/
+[1]: Fabien Parent <fparent@baylibre.com>
 
-Wolfram found an issue on a Renesas board where disabling the IOMMU
-driver (CONFIG_IPMMU_VMSA=n) causes the system to fail to boot,
-and bisected this to a merge of driver-core/driver-core-next.
-After some trials, I managed to reproduce the issue, and bisected it
-further to commit f516d01b9df2782b.
+Amjad Ouled-Ameur (1):
+  thermal: mediatek: add another get_temp ops for thermal sensors
 
-The affected config has:
-    CONFIG_MODULES=y
-    CONFIG_RCAR_DMAC=y
-    CONFIG_IPMMU_VMSA=n
+Fabien Parent (2):
+  dt-bindings: thermal: mediatek: add binding documentation for MT8365
+    SoC
+  thermal: mediatek: add support for MT8365 SoC
 
-In arch/arm64/boot/dts/renesas/r8a77951-salvator-xs.dtb,
-e6e88000.serial links to a dmac, and the dmac links to an iommu,
-for which no driver is available.
+Markus Schneider-Pargmann (1):
+  thermal: mediatek: control buffer enablement tweaks
 
-Playing with deferred_probe_timeout values doesn't help.
+ .../bindings/thermal/mediatek-thermal.txt     |   1 +
+ drivers/thermal/mtk_thermal.c                 | 191 +++++++++++++++---
+ 2 files changed, 162 insertions(+), 30 deletions(-)
 
-However, the above options do not seem to be sufficient to trigger
-the issue, as I had other configs with those three options that do
-boot fine.
+-- 
+2.37.1
 
-After bisecting configs, I found the culprit: CONFIG_IP_PNP.
-As Wolfram was using an initramfs, CONFIG_IP_PNP was not needed.
-If CONFIG_IP_PNP=n, booting fails.
-If CONFIG_IP_PNP=y, booting succeeds.
-In fact, just disabling late_initcall(ip_auto_config) makes it fail,
-too.
-Reducing ip_auto_config(), it turns out the call to
-wait_for_init_devices_probe() is what is needed to unblock booting.
-
-So I guess wait_for_init_devices_probe() needs to be called (where?)
-if CONFIG_IP_PNP=n, too?
-
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -256,7 +256,12 @@ static int deferred_devs_show(struct seq_file *s, void *data)
->  }
->  DEFINE_SHOW_ATTRIBUTE(deferred_devs);
->
-> +#ifdef CONFIG_MODULES
-> +int driver_deferred_probe_timeout = 10;
-> +#else
->  int driver_deferred_probe_timeout;
-> +#endif
-> +
->  EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
->
->  static int __init deferred_probe_timeout_setup(char *str)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
