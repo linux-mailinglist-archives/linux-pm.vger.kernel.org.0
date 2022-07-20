@@ -2,89 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A2157B472
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 12:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EC157B47B
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 12:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbiGTKZb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 06:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S236004AbiGTK2H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 06:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbiGTKZa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 06:25:30 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBD014D08
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 03:25:29 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id z12so25482855wrq.7
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 03:25:29 -0700 (PDT)
+        with ESMTP id S234888AbiGTK2F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 06:28:05 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09192CDE7
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 03:28:02 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id n12so12632880wrc.8
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 03:28:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yejlrYISSFvhPNBKBdxPZvCzF3/CE0/YpMN2GnONxr4=;
-        b=sYQhUBG62rxyDAci/Tms08U2qkKt3Np3EY5j29crS/8TSutBlBXpXsxu21EOroVzzO
-         z3OX17bQ468fhmS3sQap454H4jl/eLMVKdAx8zl5NpPQND2C6NTbL9WLFOIuxDwCLb7M
-         Hzip5AXITWaoIqx6OD+WN9oCVsGCD9MR78XBBLSJt+/l0ZLGgoRJOJQRPSwRVXMEY0pc
-         wD86/tD5zIq0T4YISfadrOwgk1L/sYNCjitGV2WCr/Qa60jZHIufoHK6opqHGzl6xfIa
-         6IcfDR4Aj/OpmRtq1sqLxlynlIJczDDt6Lzhl/XTzc0jO6CtL3vCbQ/msxoJmMwW/Q9C
-         FA0g==
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=HDPGW+0VbU3HlGqsVgCK1SSNUaqROvFzsq51vzca6Qw=;
+        b=KrPJmTtMuvZR7p6XRqQ/OrPLQA7Zzg3FcZINYhW2sciW/ZPl/VlBV5i6Wg1VVk1KMb
+         6lFWLqiLIcmuXtIwXaDp8Cy7prJnf303iyzNVbmvvLCl0RHLIalMJxeycb7UhFk4PTsL
+         PbWa+gwT+nfPXG+BHHgGrBgE859UslhzNc0d4nVszRb7+ClQRwS/ycBKtbkmw1hB8vNf
+         +ONm+9s1+1m5MpwvOs5sphs8g83uJc4c6hlKENogyJ5Do+rDBAHjV4JtoZ6njYaO7m7a
+         zjq04NqUOr/uL1gmTlnszNwIoGYruLGFM3ti+dsKGC9EhWtkt+/gnbrDcRaEeez3gGSd
+         HHow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=yejlrYISSFvhPNBKBdxPZvCzF3/CE0/YpMN2GnONxr4=;
-        b=sw/nloyuSeWOkvdDG2kP5gbJARDRRc7lqFJX0/b+cuxWdAkbBIuwPfukhGstLWaHwA
-         +QAaI9WLLd8qui8AAinvzhk94nCU+KqtzyHU8tLIbmA8ud4RxnNUPy7iUCdVb7UwHiLf
-         mQPNWsqVkBhVVx/G0ak3Sw+S7zNmn08mDCXEJfKlEi3ekJWdiXPFKKVg6LShJmyr6HfA
-         iIrYw01d9WQNyldkWQ9yOdEWgU628EgM+b9+oSv/f8I/ExVuJvaClL8ljUt+bu2TXCiE
-         xL5+qgC/XFQ3v+jmtxNbK+BnvuBTwe1yYpK6bn1GjPO8JRLJuiZr1SxVLhWOhFHG9NSa
-         C2ZA==
-X-Gm-Message-State: AJIora/HG8QxXK4yaM9HobU43WUI1IxCneanfz/0qvhcMmBQXA8b5Ejw
-        AbzNJcEvJpV/DWKIgjkmrWzQOw==
-X-Google-Smtp-Source: AGRyM1ubms2QeI4CFrNlI7wGZGAyw8ZhcZq3U30rSIxFd1xLqoC+dvvDB5eDe3YHJXftDWwxykpcbw==
-X-Received: by 2002:adf:fb43:0:b0:21a:22eb:da43 with SMTP id c3-20020adffb43000000b0021a22ebda43mr30106888wrs.347.1658312727696;
-        Wed, 20 Jul 2022 03:25:27 -0700 (PDT)
+        bh=HDPGW+0VbU3HlGqsVgCK1SSNUaqROvFzsq51vzca6Qw=;
+        b=WB7Xp0eznnis//LgreY0XZMkksbxMYq36DP1bzWqYhAyxa0SxQ1CfgZJk7y3SITQvC
+         OCm869sN5n+JYWFTYsDb69oBlSfNlVqDWdRUsKR4W6d+DFhIDueEC0RHxy5Mfv/fX0sI
+         rmGSL9XOVcuxCwjRUtkOGeLAEKbRHQtl4b4T4cqBfav42y8Bw/erdBRDBQuWnmiX9PzE
+         dG/dtRCMAP8EEHUduOg8IWsT7jlMlXDvR6Gho5KGRyV3Uz/AdSLzpXQSAbBG1UmGAt8k
+         7TUT7VllW0niMo/GBQa9FZHxq7SYmDzjQQSZao8j07rVMlaXIcbskNCsvCX1SVqKRHGL
+         xV0g==
+X-Gm-Message-State: AJIora/n0G+EEvPCQ1fX1Zp+5EgjJyHnWjY9fxugffcogYWInXrCOCix
+        0hHnykOM6uA6MgE7cDZuiTA+hw==
+X-Google-Smtp-Source: AGRyM1vh2LF8NITrJVM5B8R6LREdsrVgV6SJqBUhJgCSK1MiAprdXWFnFxJAT4Imf0CwVtLf+pQQsQ==
+X-Received: by 2002:a5d:56d1:0:b0:21d:78ad:c8bf with SMTP id m17-20020a5d56d1000000b0021d78adc8bfmr30739964wrw.175.1658312880843;
+        Wed, 20 Jul 2022 03:28:00 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:b579:e7b5:219d:267c? ([2a05:6e02:1041:c10:b579:e7b5:219d:267c])
-        by smtp.googlemail.com with ESMTPSA id c7-20020a05600c0a4700b003a31f71c5b8sm2398969wmq.27.2022.07.20.03.25.26
+        by smtp.googlemail.com with ESMTPSA id v130-20020a1cac88000000b003a03be171b1sm1980057wme.43.2022.07.20.03.27.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 03:25:27 -0700 (PDT)
-Message-ID: <43bc1bf8-a734-e184-e38f-5e2f16a31f1b@linaro.org>
-Date:   Wed, 20 Jul 2022 12:25:26 +0200
+        Wed, 20 Jul 2022 03:28:00 -0700 (PDT)
+Message-ID: <0861a79e-f2b0-143e-b09e-9b088a4568a7@linaro.org>
+Date:   Wed, 20 Jul 2022 12:27:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH -next] thermal/drivers/u8500: Remove unnecessary print
- function dev_err()
+Subject: Re: [PATCH v6 2/5] drivers: thermal: tsens: Add support for combined
+ interrupt
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, rafael@kernel.org
-Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220719003556.74460-1-yang.lee@linux.alibaba.com>
+References: <20220714101451.198211-1-robimarko@gmail.com>
+ <20220714101451.198211-2-robimarko@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220719003556.74460-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20220714101451.198211-2-robimarko@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/07/2022 02:35, Yang Li wrote:
-> The print function dev_err() is redundant because platform_get_irq()
-> already prints an error.
-> 
-> Eliminate the follow coccicheck warnings:
-> ./drivers/thermal/db8500_thermal.c:162:2-9: line 162 is redundant because platform_get_irq() already prints an error
-> ./drivers/thermal/db8500_thermal.c:176:2-9: line 176 is redundant because platform_get_irq() already prints an error
-> 
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
 
-Applied, thanks
+Hi,
+
+On 14/07/2022 12:14, Robert Marko wrote:
+> Despite using tsens v2.3 IP, IPQ8074 and IPQ6018 only have one IRQ for
+> signaling both up/low and critical trips.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+
+Bjorn, are these changes ok for you ?
+
+> ---
+> Changes in v6:
+> * Check critical IRQ handler return, simplify up/low return
+> ---
+>   drivers/thermal/qcom/tsens-8960.c |  1 +
+>   drivers/thermal/qcom/tsens-v0_1.c |  1 +
+>   drivers/thermal/qcom/tsens-v1.c   |  1 +
+>   drivers/thermal/qcom/tsens-v2.c   |  1 +
+>   drivers/thermal/qcom/tsens.c      | 38 ++++++++++++++++++++++++++-----
+>   drivers/thermal/qcom/tsens.h      |  2 ++
+>   6 files changed, 38 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+> index 67c1748cdf73..ee584e5b07e5 100644
+> --- a/drivers/thermal/qcom/tsens-8960.c
+> +++ b/drivers/thermal/qcom/tsens-8960.c
+> @@ -269,6 +269,7 @@ static const struct tsens_ops ops_8960 = {
+>   static struct tsens_features tsens_8960_feat = {
+>   	.ver_major	= VER_0,
+>   	.crit_int	= 0,
+> +	.combo_int	= 0,
+>   	.adc		= 1,
+>   	.srot_split	= 0,
+>   	.max_sensors	= 11,
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index f136cb350238..6effb822bf3c 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -539,6 +539,7 @@ static int calibrate_9607(struct tsens_priv *priv)
+>   static struct tsens_features tsens_v0_1_feat = {
+>   	.ver_major	= VER_0_1,
+>   	.crit_int	= 0,
+> +	.combo_int	= 0,
+>   	.adc		= 1,
+>   	.srot_split	= 1,
+>   	.max_sensors	= 11,
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index 573e261ccca7..a4f561a6e582 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -302,6 +302,7 @@ static int calibrate_8976(struct tsens_priv *priv)
+>   static struct tsens_features tsens_v1_feat = {
+>   	.ver_major	= VER_1_X,
+>   	.crit_int	= 0,
+> +	.combo_int	= 0,
+>   	.adc		= 1,
+>   	.srot_split	= 1,
+>   	.max_sensors	= 11,
+> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+> index b293ed32174b..129cdb247381 100644
+> --- a/drivers/thermal/qcom/tsens-v2.c
+> +++ b/drivers/thermal/qcom/tsens-v2.c
+> @@ -31,6 +31,7 @@
+>   static struct tsens_features tsens_v2_feat = {
+>   	.ver_major	= VER_2_X,
+>   	.crit_int	= 1,
+> +	.combo_int	= 0,
+>   	.adc		= 0,
+>   	.srot_split	= 1,
+>   	.max_sensors	= 16,
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 7963ee33bf75..5c7f9ec6ab1c 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -532,6 +532,27 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+>   	return IRQ_HANDLED;
+>   }
+>   
+> +/**
+> + * tsens_combined_irq_thread - Threaded interrupt handler for combined interrupts
+> + * @irq: irq number
+> + * @data: tsens controller private data
+> + *
+> + * Handle the combined interrupt as if it were 2 separate interrupts, so call the
+> + * critical handler first and then the up/low one.
+> + *
+> + * Return: IRQ_HANDLED
+> + */
+> +static irqreturn_t tsens_combined_irq_thread(int irq, void *data)
+> +{
+> +	irqreturn_t ret;
+> +
+> +	ret = tsens_critical_irq_thread(irq, data);
+> +	if (ret != IRQ_HANDLED)
+> +		return ret;
+> +
+> +	return tsens_irq_thread(irq, data);
+> +}
+> +
+>   static int tsens_set_trips(void *_sensor, int low, int high)
+>   {
+>   	struct tsens_sensor *s = _sensor;
+> @@ -1083,13 +1104,18 @@ static int tsens_register(struct tsens_priv *priv)
+>   				   tsens_mC_to_hw(priv->sensor, 0));
+>   	}
+>   
+> -	ret = tsens_register_irq(priv, "uplow", tsens_irq_thread);
+> -	if (ret < 0)
+> -		return ret;
+> +	if (priv->feat->combo_int) {
+> +		ret = tsens_register_irq(priv, "combined",
+> +					 tsens_combined_irq_thread);
+> +	} else {
+> +		ret = tsens_register_irq(priv, "uplow", tsens_irq_thread);
+> +		if (ret < 0)
+> +			return ret;
+>   
+> -	if (priv->feat->crit_int)
+> -		ret = tsens_register_irq(priv, "critical",
+> -					 tsens_critical_irq_thread);
+> +		if (priv->feat->crit_int)
+> +			ret = tsens_register_irq(priv, "critical",
+> +						 tsens_critical_irq_thread);
+> +	}
+>   
+>   	return ret;
+>   }
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index 1471a2c00f15..4614177944d6 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -495,6 +495,7 @@ enum regfield_ids {
+>    * struct tsens_features - Features supported by the IP
+>    * @ver_major: Major number of IP version
+>    * @crit_int: does the IP support critical interrupts?
+> + * @combo_int: does the IP use one IRQ for up, low and critical thresholds?
+>    * @adc:      do the sensors only output adc code (instead of temperature)?
+>    * @srot_split: does the IP neatly splits the register space into SROT and TM,
+>    *              with SROT only being available to secure boot firmware?
+> @@ -504,6 +505,7 @@ enum regfield_ids {
+>   struct tsens_features {
+>   	unsigned int ver_major;
+>   	unsigned int crit_int:1;
+> +	unsigned int combo_int:1;
+>   	unsigned int adc:1;
+>   	unsigned int srot_split:1;
+>   	unsigned int has_watchdog:1;
+
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
