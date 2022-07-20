@@ -2,52 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB31357B45F
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 12:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B94C57B46E
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 12:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233156AbiGTKTY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 20 Jul 2022 06:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
+        id S232547AbiGTKYe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 06:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbiGTKTW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 06:19:22 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4720E9FD2;
-        Wed, 20 Jul 2022 03:19:21 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id i14so31343642yba.1;
-        Wed, 20 Jul 2022 03:19:21 -0700 (PDT)
+        with ESMTP id S229618AbiGTKYe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 06:24:34 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CD72E6B8;
+        Wed, 20 Jul 2022 03:24:32 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id f73so31100736yba.10;
+        Wed, 20 Jul 2022 03:24:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gmnaYydXeu6KmnaPeDNjcb+0LYhzy8t1JjW01YQWpj0=;
-        b=Q/tdzyjmjuKnYw/+8CGQM63mEbRWB/x592lqa9BM7rdEKsNVhNr3srRUUIADQRFROC
-         Iy86rF2pEM/es1n6w230RsEFFEixHXh7GK2ZrBu04aBdWpH3BvYnPLdMAi7TXsoo024V
-         Vydsjun7LziABtxjTabE03L5Hj6/2TWhyI01AAPkA++2M5PU0oBNIwWnEC2dIMm5z3vr
-         pAc+C7bs+tq+1973cti+3OHtXeNVn0ZA0M/JyGaUfqgqFk0tHpHh1oBS4mxLwh62zY26
-         21eKnbQCofBfC0sFWyzWMYNUestmziCBpxV9WpqnnYnRrh0qpfpqLl0OYk+KVYCL5drO
-         emUQ==
-X-Gm-Message-State: AJIora8W6XWCGwzvlpkUREPJcunyhOwsetPgLyx5RlAaKjXod91n3sTu
-        T92CLY5BWOvsxnd1Z53WFgL45G2cSjAUDQIad93TAS9S
-X-Google-Smtp-Source: AGRyM1tTbLGKrKq5D0At+VDdq6SY/8i+nzsabVbfGCPQPNKykLXmqlyKpG7RE4WIPiPcFjTg4ftXplEHFvcozTlioz4=
-X-Received: by 2002:a25:828f:0:b0:670:22f9:f7eb with SMTP id
- r15-20020a25828f000000b0067022f9f7ebmr18861407ybk.137.1658312360538; Wed, 20
- Jul 2022 03:19:20 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=pmZJUUSv06iSFaoqgQbNFrLQMcY9cXPC++//tPskyCc=;
+        b=aWKW018NnOG5uQJjPqudraPpJ7Q2b+++hqUF3mvMCaC6Kbkg2/DYP7DW35Q0VSw4M/
+         3FsPN0JHi8SCwbnBs5aEL2ONsVHRpUL+TWl9Xju/aPZrbMfuPwxIhsQDfWA84Uxv55wT
+         /TAP9XBKHSRi840jzV6SRT95KOB3aX6j8z42gmedwR9/rchG9NG88AKrxsVPS+ztHfd5
+         vxr139p9V7lwJNH4eJjTY7lTpe/SQC8LykijM/jXRMo0gHFseTyAXpW6QmiNYOY6ko/w
+         Bf8b3tq4eHJzZA4D+V9b7XrxQkCbXs99MQJ6oPTBmvnuzle9hs1gpEjHX6Bz1txOjk2l
+         IiSg==
+X-Gm-Message-State: AJIora+dV2TGvmacweh2QA1V52iU9oWlAruArA7GmgSfJq4nBeZ+Hpsk
+        p6RbWzZ3yUMPib6uFkk4YG53a26VGJ5hKAkA97W4tNeJ
+X-Google-Smtp-Source: AGRyM1tzI547gyHnjhqOynV2vuxO4TggTKKuQCyTk+sVmRGIS4zRS1p4Gschk7tmsQt4hTHFeGE0OieGFw9aGKNuy84=
+X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
+ z15-20020a25664f000000b0066cd0f436ccmr34552255ybm.482.1658312672231; Wed, 20
+ Jul 2022 03:24:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
- <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com> <20220720060627.r7ifcxu6uopgsasw@pengutronix.de>
-In-Reply-To: <20220720060627.r7ifcxu6uopgsasw@pengutronix.de>
+References: <20220713082426.850911-1-dapeng1.mi@intel.com> <CAJZ5v0gsHPav5Ax6+9OMmeApqn7qdJPQmo5MMh=ba6Rtj5NnQA@mail.gmail.com>
+ <PH0PR11MB4824DAE06FE50711C3252D93CD889@PH0PR11MB4824.namprd11.prod.outlook.com>
+ <PH0PR11MB482497A0CC93F430DA208EDDCD8E9@PH0PR11MB4824.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB482497A0CC93F430DA208EDDCD8E9@PH0PR11MB4824.namprd11.prod.outlook.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 20 Jul 2022 12:19:09 +0200
-Message-ID: <CAJZ5v0gxg+igNpfe1_xyPS=L8jzgS0v7dzCPcZUueRtF68oQSA@mail.gmail.com>
-Subject: Re: pm_runtime_resume_and_get in .remove callbacks
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
+Date:   Wed, 20 Jul 2022 12:24:21 +0200
+Message-ID: <CAJZ5v0j57iCNcz8i2P6JtkbiCHB1QS8M6QTngKoiJrm0pnkgUg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi driver
+ in Makefile
+To:     "Mi, Dapeng1" <dapeng1.mi@intel.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Zhenyu Wang <zhenyuw@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -58,81 +62,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 8:06 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
+On Wed, Jul 20, 2022 at 5:00 AM Mi, Dapeng1 <dapeng1.mi@intel.com> wrote:
 >
-> Hello Rafael,
->
-> On Wed, Jul 13, 2022 at 07:47:39PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Jul 13, 2022 at 10:47 AM Uwe Kleine-König
-> > <u.kleine-koenig@pengutronix.de> wrote:
+> > > From: Rafael J. Wysocki <rafael@kernel.org>
+> > > Sent: Thursday, July 14, 2022 1:53 AM
+> > > To: Mi, Dapeng1 <dapeng1.mi@intel.com>
+> > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Michael S. Tsirkin
+> > > <mst@redhat.com>; Arnd Bergmann <arnd@arndb.de>; Bart Van Assche
+> > > <bvanassche@acm.org>; Linux Kernel Mailing List <linux-
+> > > kernel@vger.kernel.org>; Linux PM <linux-pm@vger.kernel.org>
+> > > Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi
+> > > driver in Makefile
 > > >
-> > > Hello,
+> > > On Wed, Jul 13, 2022 at 10:21 AM Dapeng Mi <dapeng1.mi@intel.com>
+> > wrote:
+> > > >
+> > > > As long as Kconfig ACPI_PROCESSOR is enabled, ACPI_PROCESSOR would
+> > > > select ACPI_PROCESSOR_IDLE and acpi_idle driver is enabled. But in
+> > > > current driver loading order acpi_idle driver is always loaded
+> > > > before cpuidle_haltpoll driver. This leads to cpuidle_hatpoll driver
+> > > > has no chance to be loaded when it's enabled.
+> > > >
+> > > > Thus, move cpuidle driver forward before acpi driver and make
+> > > > cpuidle-hatpoll driver has a chance to be run when it's enabled.
+> > > >
+> > > > Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
+> > > > ---
+> > > >  drivers/Makefile | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/Makefile b/drivers/Makefile index
+> > > > 9a30842b22c5..921ed481b520 100644
+> > > > --- a/drivers/Makefile
+> > > > +++ b/drivers/Makefile
+> > > > @@ -26,6 +26,7 @@ obj-y                         += idle/
+> > > >  # IPMI must come before ACPI in order to provide IPMI opregion
+> > support
+> > > >  obj-y                          += char/ipmi/
+> > > >
+> > > > +obj-$(CONFIG_CPU_IDLE)         += cpuidle/
+> > > >  obj-$(CONFIG_ACPI)             += acpi/
+> > > >
+> > > >  # PnP must come after ACPI since it will eventually need to check if acpi
+> > > > @@ -126,7 +127,6 @@ obj-$(CONFIG_EDAC)          += edac/
+> > > >  obj-$(CONFIG_EISA)             += eisa/
+> > > >  obj-$(CONFIG_PM_OPP)           += opp/
+> > > >  obj-$(CONFIG_CPU_FREQ)         += cpufreq/
+> > > > -obj-$(CONFIG_CPU_IDLE)         += cpuidle/
+> > > >  obj-y                          += mmc/
+> > > >  obj-y                          += ufs/
+> > > >  obj-$(CONFIG_MEMSTICK)         += memstick/
+> > > > --
 > > >
-> > > there is a big bunch of kernel drivers (here:
-> > > drivers/i2c/busses/i2c-sprd.c) that have a remove callback that looks as
-> > > follows:
+> > > Well, this change doesn't guarantee loading haltpoll before ACPI idle.
 > > >
-> > >         static int sprd_i2c_remove(struct platform_device *pdev)
-> > >         {
-> > >                 struct sprd_i2c *i2c_dev = platform_get_drvdata(pdev);
-> > >                 int ret;
-> > >
-> > >                 ret = pm_runtime_resume_and_get(i2c_dev->dev);
-> > >                 if (ret < 0)
-> > >                         return ret;
-> > >
-> > >                 i2c_del_adapter(&i2c_dev->adap);
-> > >                 clk_disable_unprepare(i2c_dev->clk);
-> > >
-> > >                 pm_runtime_put_noidle(i2c_dev->dev);
-> > >                 pm_runtime_disable(i2c_dev->dev);
-> > >
-> > >                 return 0;
-> > >         }
-> > >
-> > > If pm_runtime_resume_and_get fails, the i2c adapter isn't removed, but
-> > > as the memory backing i2c_dev goes away---it was allocated using
-> > > devm_kzalloc in .probe()---the next i2c action will probably access
-> > > freed memory.
-> > >
-> > > I'm not familiar enough with pm-runtime stuff, but wonder what
-> > > can/should be done about that. The obvious (to me) candidates are:
-> > >
-> > >  - log an error if pm_runtime_resume_and_get() fails, but continue to
-> > >    clean up
-> > >  - don't check the return value at all
-> > >
-> > > What do you think?
+> > > Also what if haltpoll is enabled, but the user wants ACPI idle?
 > >
-> > (1) Use pm_runtime_get_sync() instead of pm_runtime_resume_and_get()
-> > and don't check its return value,
+> > Thanks Rafael for reviewing this patch.
 > >
-> > or if that is not viable, because something really can run if and only
-> > if the device is operational,
+> > acpi_idle driver and cpuidle_haltpoll driver have same initialization level and
+> > both are initialized on the level device_initcall. So the building order would
+> > decide the loading sequence. Just like the intel_idle driver which also has
+> > same initialization level (device_initcall), but as it's built before acpi_idle
+> > driver, it would be loaded first before acpi_driver if intel_idle driver is
+> > enabled.
 > >
-> > (2) do something like
+> > There is another method to make cpuidle_haltpoll driver loaded first before
+> > acpi_driver, it's change the initialization level to postcore_initcall. I'm not sure
+> > which one is better, but it seems current patch is more reasonable.
 > >
-> > ret = pm_runtime_resume_and_get(i2c_dev->dev);
-> > i2c_del_adapter(&i2c_dev->adap);
-> > if (ret >= 0)
-> >         clk_disable_unprepare(i2c_dev->clk);
-> >
-> > pm_runtime_put_noidle(i2c_dev->dev);
-> > pm_runtime_disable(i2c_dev->dev);
->
-> Why would you not disable the clk if the resume failed?
+> > There is an parameter "force" to manage the haltpoll enabling. If user want
+> > to use ACPI idle, it can change this parameter to disable haltpolll driver.
 
-I thought that it might lead to problems if the device that failed to
-resume was expected to be accessible.
+That would require things to be appended to the kernel command line in
+cases where that's not necessary today and that's not acceptable.
 
-If that's not the case, you can simply do (1).
-
-> Is it an option to not call one of the resume variants at all and only
-> call pm_runtime_disable()?
-
-That depends on whether or not you need to manipulate the hardware in
-the del/disable part.  If you need to access it there, it is better to
-resume I think.  Otherwise, you don't have to do anything, but then
-the next probe needs to be prepared for finding the device in the
-suspended state.
+What you really seem to be wanting to do is to use haltpoll instead of
+ACPI idle.  Is that correct?
