@@ -2,472 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E422857B2DE
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 10:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B542857B414
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 11:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240269AbiGTI17 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 04:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
+        id S231281AbiGTJpK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 05:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiGTI1z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 04:27:55 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA3966AFF
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 01:27:52 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id n4-20020a17090a73c400b001f1e87432c2so1437499pjk.3
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 01:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gXBxRQpMX1ksYgI8KBkW485Tta+lGkkd8IYaTPQBLnE=;
-        b=OLdBIlttf2Nvu6WeZXtOMFmF8e9TU7DaUih3ls7ZvqevmhrB1om/FAg3HvVZHFwgAs
-         n7RX/kLx7i5w8C1L1QF/69uD/Uv0ZvpE24RfuPjRrhbgV0m/TyPsJ63x4rV+BnkUFBjt
-         WNnHb1yWUU9Arzwlt9xuRFbPRwPjM7o4NHAOXTztkzyizSjR7OLnl7m/qhw60UFtJLY+
-         Y8BwgNCPHnf3/cCIt1u4yD7dHcvVtXxS7tI8Wki0neIBlGcLM3+6l94w+2DDRKmtcLlO
-         hD6XXrzWUA2YoECnxrgVhd/Mdmo0KmuB4DdHx00S8FnV4qxb8saWxBETNQrZgCjjFBZ9
-         DBkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gXBxRQpMX1ksYgI8KBkW485Tta+lGkkd8IYaTPQBLnE=;
-        b=KDs2aFNY4++DR1iY3R6R/Nf5VQfpq1Jg7kZ4ZSXCaShhdB/S4F0AV1bFdO/9L5OO9y
-         A4ltV0IW4JB8jMIFXBbuLJahZEkUVNjAPIW+FOAccuDo8B5Q74LRdfIP2LsjUEgzN5CI
-         w5rXAXYXK1McqzFv6UUe6rLE5m9S3/O8IDTVH2ddWKSmmY3BI9oaEDU6sg0D80W2ctXH
-         a2EXrFoIsUgI5bXnF3zNhUlu2YG2cI6vJyCq5LVXu7kF6HspV6ZYzgMKB9nThoW9R6Mk
-         9n1yOYKnuJGX2tUledifQt1TmUbR0vzu+4Fa96s0I1InNyo1ahonWaKVwwZpbiaXOSvZ
-         3WKA==
-X-Gm-Message-State: AJIora+h3WhPkG8JMbsjYJlmWwSBoIe/KYNKuhjqK79IdW92gs6jQnaB
-        2NAiLvAb2eYHrjkEOn5GB8ur2g==
-X-Google-Smtp-Source: AGRyM1sD61HGTvbb4tKezKF1kHI+msPPDI533+jJcAdUGnhAbo1EHZDi23xEXrU0ReVG9nC4fs1Dpw==
-X-Received: by 2002:a17:90b:4b01:b0:1f0:1aa7:928 with SMTP id lx1-20020a17090b4b0100b001f01aa70928mr3928702pjb.195.1658305671455;
-        Wed, 20 Jul 2022 01:27:51 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170903124e00b0016bee3caabesm13186021plh.270.2022.07.20.01.27.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 01:27:50 -0700 (PDT)
-Message-ID: <50a432af-eb40-8692-78f3-f200222bb2c7@linaro.org>
-Date:   Wed, 20 Jul 2022 13:57:47 +0530
+        with ESMTP id S230101AbiGTJpJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 05:45:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3742FA
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 02:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658310306; x=1689846306;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=jQOvsjd42lbv4OTsnYXpryOWxWCegP4Hp2WVQhVhPuQ=;
+  b=H3JmBj7jEo+F+ayxt8e/qEwDLVLKlh0N/Q8zwqSZVD+jKpryPN9hj0Xe
+   Pzrj7+DieNpO3A3U+CQDIhGeojCmtcpw22z9re2Pi92KwiFNsV1DyxrlG
+   P+MPUhXPGzVSMmUIkXvqfGwYLizwJLA267rbOhlyMSODYcZadu0aHZlrz
+   5uMINEj3+gXvqOZPd9ZPD3zVQp/om1NdarGv4v6UfOxHciK0dBztVCaig
+   rFfQ+7SvkFV0BkuXzmFYEitD24pNKCEU5DLCHzKHXEmzJRhSOpEbYak2p
+   0JRfhqUyd6qR+alsG/dKZBEpKO0aeCVkVvNelPQNpYnstKiYcJufwqJ85
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="269758384"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="269758384"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 02:45:06 -0700
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="656193568"
+Received: from mmohdtaj-mobl.gar.corp.intel.com ([10.213.149.231])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 02:45:04 -0700
+Message-ID: <62c11a15028d27d3c4f50c2d34f47be02b15c965.camel@intel.com>
+Subject: Re: [PATCH 0/2] Introduce powercap userspace frontend
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org
+Cc:     skhan@linuxfoundation.org
+Date:   Wed, 20 Jul 2022 17:45:08 +0800
+In-Reply-To: <4954139.fJS9391jLT@c100>
+References: <4954139.fJS9391jLT@c100>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
- workaround quirk
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
- <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
- <YtYlcEBszITSZ5on@builder.lan>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <YtYlcEBszITSZ5on@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Bjorn,
+Hi, Thomas,
 
-Thanks for your review.
+I want to give the patches a try but it seems that the patch format is
+corrupted, and I can not find them in patchwork neither.
 
-On 7/19/22 9:00 AM, Bjorn Andersson wrote:
-> On Fri 01 Jul 09:58 CDT 2022, Bhupesh Sharma wrote:
-> 
->> Since for some QCoM tsens controllers, its suggested to
->> monitor the controller health periodically and in case an
->> issue is detected, to re-initialize the tsens controller
->> via trustzone, add the support for the same in the
->> qcom tsens driver.
->>
->> Note that Once the tsens controller is reset using scm call,
->> all SROT and TM region registers will enter the reset mode.
->>
->> While all the SROT registers will be re-programmed and
->> re-enabled in trustzone prior to the scm call exit, the TM
->> region registers will not re-initialized in trustzone and thus
->> need to be handled by the tsens driver.
->>
->> Cc: Amit Kucheria <amitk@kernel.org>
->> Cc: Thara Gopinath <thara.gopinath@gmail.com>
->> Cc: linux-pm@vger.kernel.org
->> Cc: linux-arm-msm@vger.kernel.org
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->>   drivers/thermal/qcom/tsens-v2.c |   3 +
->>   drivers/thermal/qcom/tsens.c    | 237 +++++++++++++++++++++++++++++++-
->>   drivers/thermal/qcom/tsens.h    |   6 +
->>   3 files changed, 239 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
->> index 61d38a56d29a..9bb542f16482 100644
->> --- a/drivers/thermal/qcom/tsens-v2.c
->> +++ b/drivers/thermal/qcom/tsens-v2.c
->> @@ -88,6 +88,9 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
->>   
->>   	/* TRDY: 1=ready, 0=in progress */
->>   	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
->> +
->> +	/* FIRST_ROUND_COMPLETE: 1=complete, 0=not complete */
->> +	[FIRST_ROUND_COMPLETE] = REG_FIELD(TM_TRDY_OFF, 3, 3),
->>   };
->>   
->>   static const struct tsens_ops ops_generic_v2 = {
->> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
->> index 97f4d4454f20..28d42ae0eb47 100644
->> --- a/drivers/thermal/qcom/tsens.c
->> +++ b/drivers/thermal/qcom/tsens.c
->> @@ -7,6 +7,7 @@
->>   #include <linux/debugfs.h>
->>   #include <linux/err.h>
->>   #include <linux/io.h>
->> +#include <linux/qcom_scm.h>
->>   #include <linux/module.h>
->>   #include <linux/nvmem-consumer.h>
->>   #include <linux/of.h>
->> @@ -21,6 +22,8 @@
->>   #include "../thermal_hwmon.h"
->>   #include "tsens.h"
->>   
->> +LIST_HEAD(tsens_device_list);
->> +
->>   /**
->>    * struct tsens_irq_data - IRQ status and temperature violations
->>    * @up_viol:        upper threshold violated
->> @@ -594,19 +597,159 @@ static void tsens_disable_irq(struct tsens_priv *priv)
->>   	regmap_field_write(priv->rf[INT_EN], 0);
->>   }
->>   
->> +static int tsens_reenable_hw_after_scm(struct tsens_priv *priv)
->> +{
->> +	unsigned long flags;
->> +
->> +	spin_lock_irqsave(&priv->ul_lock, flags);
->> +
->> +	/* Re-enable watchdog, unmask the bark and
->> +	 * disable cycle completion monitoring.
->> +	 */
->> +	regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 1);
->> +	regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 0);
->> +	regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
->> +	regmap_field_write(priv->rf[CC_MON_MASK], 1);
->> +
->> +	/* Re-enable interrupts */
->> +	tsens_enable_irq(priv);
->> +
->> +	spin_unlock_irqrestore(&priv->ul_lock, flags);
->> +
->> +	return 0;
->> +}
->> +
->>   int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
->>   {
->> -	struct tsens_priv *priv = s->priv;
->> +	struct tsens_priv *priv = s->priv, *priv_reinit;
->>   	int hw_id = s->hw_id;
->>   	u32 temp_idx = LAST_TEMP_0 + hw_id;
->>   	u32 valid_idx = VALID_0 + hw_id;
->>   	u32 valid;
->> -	int ret;
->> +	int ret, trdy, first_round, tsens_ret, sw_reg;
->> +	unsigned long timeout;
->> +	static atomic_t in_tsens_reinit;
-> 
-> This is a global state, I suggest you move it to the top of the file to
-> make that obvious.
+thanks,
+rui
 
-Sure.
+On Sat, 2022-07-09 at 10:13 +0200, Thomas Renninger wrote:
+> cpupower powercap-info
+> cpupower monitor -m RAPL
+>=20
+> further development could provide:
+> cpupower powercap-set
+> to enable/disable RAPL domains, etc.
+>=20
+> Thomas Renninger (2):
+> =C2=A0 cpupower: Introduce powercap intel-rapl library helpers and
+> =C2=A0=C2=A0=C2=A0 powercap-info command
+> =C2=A0 cpupower: rapl monitor - shows the used power consumption in uj fo=
+r
+> =C2=A0=C2=A0=C2=A0 each rapl domain
+>=20
+> =C2=A0tools/power/cpupower/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 12 +-
+> =C2=A0tools/power/cpupower/lib/powercap.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 290
+> ++++++++++++++++++
+> =C2=A0tools/power/cpupower/lib/powercap.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 54 ++++
+> =C2=A0.../cpupower/man/cpupower-powercap-info.1=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0 25 ++
+> =C2=A0tools/power/cpupower/utils/builtin.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 2 +
+> =C2=A0tools/power/cpupower/utils/cpupower.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> =C2=A0.../utils/idle_monitor/cpupower-monitor.c=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0=C2=A0 7 +-
+> =C2=A0.../utils/idle_monitor/idle_monitors.def=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0=C2=A0 1 +
+> =C2=A0.../utils/idle_monitor/rapl_monitor.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 141 +++++++++
+> =C2=A0tools/power/cpupower/utils/powercap-info.c=C2=A0=C2=A0=C2=A0 | 113 =
++++++++
+> =C2=A010 files changed, 639 insertions(+), 7 deletions(-)
+> =C2=A0create mode 100644 tools/power/cpupower/lib/powercap.c
+> =C2=A0create mode 100644 tools/power/cpupower/lib/powercap.h
+> =C2=A0create mode 100644 tools/power/cpupower/man/cpupower-powercap-info.=
+1
+> =C2=A0create mode 100644
+> tools/power/cpupower/utils/idle_monitor/rapl_monitor.c
+> =C2=A0create mode 100644 tools/power/cpupower/utils/powercap-info.c
+>=20
 
->>   	/* VER_0 doesn't have VALID bit */
->>   	if (tsens_version(priv) == VER_0)
->>   		goto get_temp;
->>   
->> +	/* For some tsens controllers, its suggested to
->> +	 * monitor the controller health periodically
->> +	 * and in case an issue is detected to reinit
->> +	 * tsens controller via trustzone.
->> +	 */
->> +	if (priv->needs_reinit_wa) {
-> 
-> I would suggest that you move all this entire block to a separate
-> function, maybe something:
-> 
-> int tsens_health_check_and_reinit()
-
-Ok. Will fix in v2.
-
->> +		/* First check if TRDY is SET */
->> +		timeout = jiffies + usecs_to_jiffies(TIMEOUT_US);
->> +		do {
->> +			ret = regmap_field_read(priv->rf[TRDY], &trdy);
->> +			if (ret)
->> +				goto err;
->> +			if (!trdy)
->> +				continue;
->> +		} while (time_before(jiffies, timeout));
-> 
-> This looks like a regmap_field_read()
-
-Not sure, I completely understand this comment. Can you please elaborate?
-
->> +
->> +		if (!trdy) {
->> +			ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
->> +			if (ret)
->> +				goto err;
->> +
->> +			if (!first_round) {
->> +				if (atomic_read(&in_tsens_reinit)) {
->> +					dev_dbg(priv->dev, "tsens re-init is in progress\n");
->> +					ret = -EAGAIN;
-> 
-> Is it preferred to return -EAGAIN here, over just serializing this whole
-> thing using a mutex?
-
-Right, using a mutex to serialize here makes sense. Will fix in v2.
-
->> +					goto err;
->> +				}
->> +
->> +				/* Wait for 2 ms for tsens controller to recover */
->> +				timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
->> +				do {
->> +					ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE],
->> +								&first_round);
->> +					if (ret)
->> +						goto err;
->> +
->> +					if (first_round) {
->> +						dev_dbg(priv->dev, "tsens controller recovered\n");
->> +						goto sensor_read;
->> +					}
->> +				} while (time_before(jiffies, timeout));
->> +
->> +				/*
->> +				 * tsens controller did not recover,
->> +				 * proceed with SCM call to re-init it
->> +				 */
->> +				if (atomic_read(&in_tsens_reinit)) {
->> +					dev_dbg(priv->dev, "tsens re-init is in progress\n");
->> +					ret = -EAGAIN;
->> +					goto err;
->> +				}
->> +
->> +				atomic_set(&in_tsens_reinit, 1);
-> 
-> Afaict nothing prevents two different processes to run the remainder of
-> the recovery in parallel. I think you need some locking here.
-
-Ack.
-
->> +
->> +				/*
->> +				 * Invoke scm call only if SW register write is
->> +				 * reflecting in controller. Try it for 2 ms.
->> +				 */
->> +				timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
->> +				do {
->> +					ret = regmap_field_write(priv->rf[INT_EN], BIT(2));
-> 
-> Do we know what BIT(2) is and would we be allowed to give it a define?
-
-Sure, I will add a define here.
-
->> +					if (ret)
->> +						goto err_unset;
->> +
->> +					ret = regmap_field_read(priv->rf[INT_EN], &sw_reg);
->> +					if (ret)
->> +						goto err_unset;
->> +
->> +					if (!(sw_reg & BIT(2)))
->> +						continue;
-> 
-> Why not:
-> 
-> } while (sw_reg & BIT(2) && time_before(jiffies, timeout));
-
-Sure.
-
->> +				} while (time_before(jiffies, timeout));
->> +
->> +				if (!(sw_reg & BIT(2))) {
->> +					ret = -ENOTRECOVERABLE;
->> +					goto err_unset;
->> +				}
->> +
->> +				ret = qcom_scm_tsens_reinit(&tsens_ret);
->> +				if (ret || tsens_ret) {
->> +					dev_err(priv->dev, "tsens reinit scm call failed (%d : %d)\n",
->> +							ret, tsens_ret);
->> +					if (tsens_ret)
->> +						ret = -ENOTRECOVERABLE;
-> 
-> If that's the api for the SCM, feel free to move the -ENOTRECOVERABLE to
-> the scm function.
-
-Ok, let me check and fix this in v2.
-
->> +
->> +					goto err_unset;
->> +				}
->> +
->> +				/* After the SCM call, we need to re-enable
->> +				 * the interrupts and also set active threshold
->> +				 * for each sensor.
->> +				 */
->> +				list_for_each_entry(priv_reinit,
->> +						&tsens_device_list, list) {
->> +					ret = tsens_reenable_hw_after_scm(priv_reinit);
->> +					if (ret) {
->> +						dev_err(priv->dev,
->> +							"tsens re-enable after scm call failed (%d)\n",
->> +							ret);
->> +						ret = -ENOTRECOVERABLE;
->> +						goto err_unset;
->> +					}
->> +				}
->> +
->> +				atomic_set(&in_tsens_reinit, 0);
->> +
->> +				/* Notify reinit wa worker */
->> +				list_for_each_entry(priv_reinit,
-> 
-> Do you need to loop twice over the tsens instances?
-> 
->> +						&tsens_device_list, list) {
->> +					queue_work(priv_reinit->reinit_wa_worker,
->> +							&priv_reinit->reinit_wa_notify);
->> +				}
->> +			}
->> +		}
->> +	}
->> +
->> +sensor_read:
->>   	/* Valid bit is 0 for 6 AHB clock cycles.
->>   	 * At 19.2MHz, 1 AHB clock is ~60ns.
->>   	 * We should enter this loop very, very rarely.
->> @@ -623,6 +766,12 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
->>   	*temp = tsens_hw_to_mC(s, temp_idx);
->>   
->>   	return 0;
->> +
->> +err_unset:
->> +	atomic_set(&in_tsens_reinit, 0);
->> +
->> +err:
->> +	return ret;
->>   }
->>   
->>   int get_temp_common(const struct tsens_sensor *s, int *temp)
->> @@ -860,6 +1009,14 @@ int __init init_common(struct tsens_priv *priv)
->>   		goto err_put_device;
->>   	}
->>   
->> +	priv->rf[FIRST_ROUND_COMPLETE] = devm_regmap_field_alloc(dev,
->> +								priv->tm_map,
->> +								priv->fields[FIRST_ROUND_COMPLETE]);
->> +	if (IS_ERR(priv->rf[FIRST_ROUND_COMPLETE])) {
->> +		ret = PTR_ERR(priv->rf[FIRST_ROUND_COMPLETE]);
->> +		goto err_put_device;
->> +	}
->> +
->>   	/* This loop might need changes if enum regfield_ids is reordered */
->>   	for (j = LAST_TEMP_0; j <= UP_THRESH_15; j += 16) {
->>   		for (i = 0; i < priv->feat->max_sensors; i++) {
->> @@ -1097,6 +1254,43 @@ static int tsens_register(struct tsens_priv *priv)
->>   	return ret;
->>   }
->>   
->> +static void tsens_reinit_worker_notify(struct work_struct *work)
->> +{
->> +	int i, ret, temp;
-> 
-> priv->num_sensors is unsigned, so i could be too.
-
-Ok.
-
->> +	struct tsens_irq_data d;
->> +	struct tsens_priv *priv = container_of(work, struct tsens_priv,
->> +					       reinit_wa_notify);
->> +
->> +	for (i = 0; i < priv->num_sensors; i++) {
->> +		const struct tsens_sensor *s = &priv->sensor[i];
->> +		u32 hw_id = s->hw_id;
->> +
->> +		if (!s->tzd)
->> +			continue;
->> +		if (!tsens_threshold_violated(priv, hw_id, &d))
->> +			continue;
->> +
->> +		ret = get_temp_tsens_valid(s, &temp);
->> +		if (ret) {
->> +			dev_err(priv->dev, "[%u] %s: error reading sensor\n",
->> +				hw_id, __func__);
-> 
-> Please express yourself in the message, instead of using __func__.
-
-This was a reuse from the existing tsens irq handler code, but I agree.
-Let me fix it in v2.
-
->> +			continue;
->> +		}
->> +
->> +		tsens_read_irq_state(priv, hw_id, s, &d);
->> +
->> +		if ((d.up_thresh < temp) || (d.low_thresh > temp)) {
->> +			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
->> +				hw_id, __func__, temp);
->> +			thermal_zone_device_update(s->tzd,
->> +						   THERMAL_EVENT_UNSPECIFIED);
-> 
-> This is just 86 chars long, no need to wrap the line.
-
-Sure.
-
->> +		} else {
->> +			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
-> 
-> Double space after ':'
-
-Again this is a reuse from the existing tsens irq handler code, but I 
-agree. Let me fix it in v2.
-
->> +				hw_id, __func__, temp);
->> +		}
->> +	}
->> +}
->> +
->>   static int tsens_probe(struct platform_device *pdev)
->>   {
->>   	int ret, i;
->> @@ -1139,6 +1333,19 @@ static int tsens_probe(struct platform_device *pdev)
->>   	priv->dev = dev;
->>   	priv->num_sensors = num_sensors;
->>   	priv->needs_reinit_wa = data->needs_reinit_wa;
->> +
->> +	if (priv->needs_reinit_wa && !qcom_scm_is_available())
->> +		return -EPROBE_DEFER;
->> +
->> +	if (priv->needs_reinit_wa) {
->> +		priv->reinit_wa_worker = alloc_workqueue("tsens_reinit_work",
->> +							 WQ_HIGHPRI, 0);
-> 
-> Do you really need your own work queue for this, how about just
-> scheduling the work on system_highpri_wq?
-
-Ok, let me use 'system_highpri_wq' in v2.
-
-Regards,
-Bhupesh
