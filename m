@@ -2,54 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FA257B44E
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 12:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB31357B45F
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 12:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbiGTKL5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 20 Jul 2022 06:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S233156AbiGTKTY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 20 Jul 2022 06:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiGTKL5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 06:11:57 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC2545E8;
-        Wed, 20 Jul 2022 03:11:56 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id l11so31253227ybu.13;
-        Wed, 20 Jul 2022 03:11:56 -0700 (PDT)
+        with ESMTP id S232415AbiGTKTW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 06:19:22 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4720E9FD2;
+        Wed, 20 Jul 2022 03:19:21 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id i14so31343642yba.1;
+        Wed, 20 Jul 2022 03:19:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HPxfGl62Grx8smrWYOlzrFoO6DOehrIgEYjXrU1sD0o=;
-        b=xkNsGZGVYeood3x9zDpxV25KOZEQt/cuyR4STO1so5VkHbdXzhJuBYDAxyN+Fl4D0Y
-         TH/W2gcloj/S7SgSRYnlRA2fUYNzmggBYMZoyz4mxr99N17jIfXpXlN2/4dvfEliCCmk
-         Iz3y7pTzSGdPYKtSMUE3N2NibNJHOvLoN3x1t1oE4V5D0mwuYu1LxUaXNkEvNEfsGfp2
-         xWd9YcY2lwBRsRpddxMgM+mCQweh8KLFmE6vhC3mAJLkqpiuuKBBCxe22BeeU/QB1d1x
-         E4VFwDOBQcbvTZwWe9jap7pC/lgrYEyCsMCKC8Pw/RmgYCeVHaOoogtpTnBZw1xElHN8
-         F8bw==
-X-Gm-Message-State: AJIora9F/G3DMIqmSHI6m5bbYjla3POb2ELUDSq3WvpNTvZLIc922hWv
-        WHxkPaP+a4RqTd47rj74Usqd0yZgxjuRDY1DVBLKIEWW
-X-Google-Smtp-Source: AGRyM1t+W3Hm0oVvCSceKj5BBeNajD+cXnrdGlvpODvEOlVC6+3nCFWc6wPhP0rzw9VzQXuULX4Qg/afdDiytzTYfLE=
-X-Received: by 2002:a05:6902:154f:b0:66e:e2d3:ce1 with SMTP id
- r15-20020a056902154f00b0066ee2d30ce1mr33331218ybu.365.1658311915502; Wed, 20
- Jul 2022 03:11:55 -0700 (PDT)
+        bh=gmnaYydXeu6KmnaPeDNjcb+0LYhzy8t1JjW01YQWpj0=;
+        b=Q/tdzyjmjuKnYw/+8CGQM63mEbRWB/x592lqa9BM7rdEKsNVhNr3srRUUIADQRFROC
+         Iy86rF2pEM/es1n6w230RsEFFEixHXh7GK2ZrBu04aBdWpH3BvYnPLdMAi7TXsoo024V
+         Vydsjun7LziABtxjTabE03L5Hj6/2TWhyI01AAPkA++2M5PU0oBNIwWnEC2dIMm5z3vr
+         pAc+C7bs+tq+1973cti+3OHtXeNVn0ZA0M/JyGaUfqgqFk0tHpHh1oBS4mxLwh62zY26
+         21eKnbQCofBfC0sFWyzWMYNUestmziCBpxV9WpqnnYnRrh0qpfpqLl0OYk+KVYCL5drO
+         emUQ==
+X-Gm-Message-State: AJIora8W6XWCGwzvlpkUREPJcunyhOwsetPgLyx5RlAaKjXod91n3sTu
+        T92CLY5BWOvsxnd1Z53WFgL45G2cSjAUDQIad93TAS9S
+X-Google-Smtp-Source: AGRyM1tTbLGKrKq5D0At+VDdq6SY/8i+nzsabVbfGCPQPNKykLXmqlyKpG7RE4WIPiPcFjTg4ftXplEHFvcozTlioz4=
+X-Received: by 2002:a25:828f:0:b0:670:22f9:f7eb with SMTP id
+ r15-20020a25828f000000b0067022f9f7ebmr18861407ybk.137.1658312360538; Wed, 20
+ Jul 2022 03:19:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAFv23QmH4ooXJzX9A0CBObrETZgb9sT4dfh03NZA--fKfZnHDA@mail.gmail.com>
- <87fsixz8cb.wl-maz@kernel.org> <CAFv23Q=O29J4K_bdTi_SuThsEZN_SFNNz+bBPQSA+RGCANm6=w@mail.gmail.com>
- <CAAd53p7GGjqpo97VP=uXnJQstKzxCf9Si+ZCD98UsbdJ7oS=SA@mail.gmail.com>
-In-Reply-To: <CAAd53p7GGjqpo97VP=uXnJQstKzxCf9Si+ZCD98UsbdJ7oS=SA@mail.gmail.com>
+References: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
+ <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com> <20220720060627.r7ifcxu6uopgsasw@pengutronix.de>
+In-Reply-To: <20220720060627.r7ifcxu6uopgsasw@pengutronix.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 20 Jul 2022 12:11:44 +0200
-Message-ID: <CAJZ5v0jYJxk1B1XORLQkGf=R9HDPbUzAjb3_2GUM0XtfmyXfZA@mail.gmail.com>
-Subject: Re: There are not enough CPU0 APIC IRQs while doing IRQ migration
- during S3
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     AceLan Kao <acelan.kao@canonical.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Wed, 20 Jul 2022 12:19:09 +0200
+Message-ID: <CAJZ5v0gxg+igNpfe1_xyPS=L8jzgS0v7dzCPcZUueRtF68oQSA@mail.gmail.com>
+Subject: Re: pm_runtime_resume_and_get in .remove callbacks
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -62,86 +58,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 5:16 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
+On Wed, Jul 20, 2022 at 8:06 AM Uwe Kleine-König
+<u.kleine-koenig@pengutronix.de> wrote:
 >
-> [+Cc Rafael, linux-pm]
+> Hello Rafael,
 >
-> On Wed, Jul 20, 2022 at 10:53 AM AceLan Kao <acelan.kao@canonical.com> wrote:
+> On Wed, Jul 13, 2022 at 07:47:39PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Jul 13, 2022 at 10:47 AM Uwe Kleine-König
+> > <u.kleine-koenig@pengutronix.de> wrote:
+> > >
+> > > Hello,
+> > >
+> > > there is a big bunch of kernel drivers (here:
+> > > drivers/i2c/busses/i2c-sprd.c) that have a remove callback that looks as
+> > > follows:
+> > >
+> > >         static int sprd_i2c_remove(struct platform_device *pdev)
+> > >         {
+> > >                 struct sprd_i2c *i2c_dev = platform_get_drvdata(pdev);
+> > >                 int ret;
+> > >
+> > >                 ret = pm_runtime_resume_and_get(i2c_dev->dev);
+> > >                 if (ret < 0)
+> > >                         return ret;
+> > >
+> > >                 i2c_del_adapter(&i2c_dev->adap);
+> > >                 clk_disable_unprepare(i2c_dev->clk);
+> > >
+> > >                 pm_runtime_put_noidle(i2c_dev->dev);
+> > >                 pm_runtime_disable(i2c_dev->dev);
+> > >
+> > >                 return 0;
+> > >         }
+> > >
+> > > If pm_runtime_resume_and_get fails, the i2c adapter isn't removed, but
+> > > as the memory backing i2c_dev goes away---it was allocated using
+> > > devm_kzalloc in .probe()---the next i2c action will probably access
+> > > freed memory.
+> > >
+> > > I'm not familiar enough with pm-runtime stuff, but wonder what
+> > > can/should be done about that. The obvious (to me) candidates are:
+> > >
+> > >  - log an error if pm_runtime_resume_and_get() fails, but continue to
+> > >    clean up
+> > >  - don't check the return value at all
+> > >
+> > > What do you think?
 > >
-> > Marc Zyngier <maz@kernel.org> 於 2022年7月19日 週二 下午6:48寫道：
-> > >
-> > > [- Jason]
-> > >
-> > > On Tue, 19 Jul 2022 06:55:21 +0100,
-> > > AceLan Kao <acelan.kao@canonical.com> wrote:
-> > > >
-> > > > HI all,
-> > > >
-> > > > I encountered an issue while doing S3, it shows below message and then
-> > > > failed to enter S3
-> > > > [  106.731140] CPU 31 has 116 vectors, 85 available. Cannot disable CPU
-> > > > [  106.731551] ACPI: \_PR_.C01F: Found 2 idle states
-> > > > [  106.732610] Error taking CPU31 down: -28
-> > > > [  106.732612] Non-boot CPUs are not disabled
-> > > >
-> > > > CPU: AMD Ryzen Threadripper PRO 3955WX 16-Cores
-> > > > Kernel: v5.19-rc7
-> > > > There are 5 PCI to 4 type-c ports USB cards on the machine, and It
-> > > > wouldn't lead to the issue if only 4 cards are plugged. So, it looks
-> > > > like it can't handle 5 cards, and failed on the IRQ migration.
-> > > >
-> > > > The workaround provided by kaiheng is to release the irq while
-> > > > suspending and request irq while resuming.
-> > > > I'm wondering do we have a better solution for this kind of issue?
-> > > > Thanks.
-> > > >
-> > > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > > > index edc6881c8a1b..91c79b21cb57 100644
-> > > > --- a/drivers/usb/host/xhci.c
-> > > > +++ b/drivers/usb/host/xhci.c
-> > > > @@ -17,6 +17,7 @@
-> > > > #include <linux/slab.h>
-> > > > #include <linux/dmi.h>
-> > > > #include <linux/dma-mapping.h>
-> > > > +#include <linux/suspend.h>
-> > > >
-> > > > #include "xhci.h"
-> > > > #include "xhci-trace.h"
-> > > > @@ -1079,6 +1080,9 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
-> > > >                                __func__);
-> > > >        }
-> > > >
-> > > > +       if (pm_suspend_via_firmware())
-> > > > +               xhci_cleanup_msix(xhci);
-> > >
-> > > I'm a bit clueless when it comes to the combination of x86 and xhci,
-> > > but doesn't this prevent resuming on a xhci interrupt?
-> > The PCI cards provide 4 type-c USB ports, and in the beginning we
-> > found that removing one PCI card fixed the issue, so we were trying to
-> > fix the issue in xhci driver.
-> > The USB ports on the PCI cards can't resume the system from S3 even
-> > without the workaround,
-> > but the USB ports on the rear panel of the motherboard still work with
-> > the workaround.
+> > (1) Use pm_runtime_get_sync() instead of pm_runtime_resume_and_get()
+> > and don't check its return value,
+> >
+> > or if that is not viable, because something really can run if and only
+> > if the device is operational,
+> >
+> > (2) do something like
+> >
+> > ret = pm_runtime_resume_and_get(i2c_dev->dev);
+> > i2c_del_adapter(&i2c_dev->adap);
+> > if (ret >= 0)
+> >         clk_disable_unprepare(i2c_dev->clk);
+> >
+> > pm_runtime_put_noidle(i2c_dev->dev);
+> > pm_runtime_disable(i2c_dev->dev);
 >
-> The isn't xHCI specific. The issue here is that CPU0 APIC doesn't have
-> enough IRQ vector for ACPI S3 suspend.
-> Ideally we don't want to tear down IRQs during suspend, but for this
-> case minimizing IRQ numbers means successful S3.
->
-> So maybe we can have a suspend flow like this:
-> - At the beginning of suspend, check if there's enough free IRQ for
-> CPU0 migration.
-> - If there isn't enough free slots, hint drivers to tear down non-wake
-> IRQs. Maybe use a global variable if we don't want to add a new
-> parameter to current PM ops.
-> - If it's still not enough, abort suspend.
->
-> For suspend that doesn't unplug CPU like suspend-to-idle, no
-> modification is needed.
-> I wonder if that makes sense?
+> Why would you not disable the clk if the resume failed?
 
-Quite probably, IRQs need not be migrated during system suspend, so it
-should be possible to avoid doing that entirely on "hot remove" if it
-is part of the suspend flow.
+I thought that it might lead to problems if the device that failed to
+resume was expected to be accessible.
+
+If that's not the case, you can simply do (1).
+
+> Is it an option to not call one of the resume variants at all and only
+> call pm_runtime_disable()?
+
+That depends on whether or not you need to manipulate the hardware in
+the del/disable part.  If you need to access it there, it is better to
+resume I think.  Otherwise, you don't have to do anything, but then
+the next probe needs to be prepared for finding the device in the
+suspended state.
