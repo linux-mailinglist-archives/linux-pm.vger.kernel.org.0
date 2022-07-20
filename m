@@ -2,203 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93BE57BE35
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 21:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C02057BE68
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 21:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbiGTTCN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 15:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S229578AbiGTT2R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 15:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiGTTCJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 15:02:09 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9737F70E6A
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 12:02:07 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 64so33695044ybt.12
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 12:02:07 -0700 (PDT)
+        with ESMTP id S229579AbiGTT2Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 15:28:16 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326D6481F8
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 12:28:14 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id t1so31828901lft.8
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 12:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZrLA67cwNZVETS1ZHuCD/RT+6Ux5ZfCBf4rowrb0zk0=;
-        b=YT3DmTiyfkNmNptMHmutH4aCptYOfYRcFG5iGz+vPj1xh91hftwgRZVbF/wRHhgFCW
-         1yP86FQRWdyvxo3CPjgvnAYFhKYsg4xRdhZAvb8fEmhoefgT03SVJLFYubN1htgW4In8
-         t6tNVr6ozTt06SPfaEt4t0hjTV1L36J3WR01kFU5ZNbxj6GCZ743km1XpjzuQHn+RR1i
-         jytsYhkdsZViX0r1R/6noErQEJfi5bpHwxr3gD8SgyAPCv7vWZfI56uCK7HWM7r7/PFy
-         SmvPNalQP0Ie215MNTJOK1vcSRgDWta0erJ4se7iwmpkVwf7aKNEFOMppZgPMGsnyAwV
-         GblA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0GjIsq4ywCMZXZcSe/Hf1BCEstclfZZ3cilI89j5ThU=;
+        b=VUIJn85eBQCXeFv5mdrrzsLBNUAt9WG148HwPKkxPIcLV9nQdHlwKzSyZPCWNsDu0D
+         EaZkrTRZGwFT/hxSAAnrfAXenbIZ58SsfWIUeKq4izcEqyMRWcUZv3J2WclotkCp0lGv
+         7ZqMyX5kbGy7HceJWeP5YwKHaX5MDYQoY/RDOh/1q/XZN4+sYHuKKEU79nCLtstDrPd2
+         0LT+hMFVZ/AEpnOWYdRaj7RuplQVQUie04hkklYQnDwWj4ie9EYDNVKLljVIrEAc4VMK
+         1wBraaAyDep6BKeNvif0NmPXd8URKcDOwN6hf0k9BokK7W5UrPJr9RGhBXyoaACgl2a8
+         1TnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZrLA67cwNZVETS1ZHuCD/RT+6Ux5ZfCBf4rowrb0zk0=;
-        b=ljA/9aJ4YnCfdsuW6g1T0/WSPInVMmjWqnJgsaz8Momg9S1tooleQM4dIFZrlI87cd
-         e4FgtskeRhleiZpyTrZSWweeo5s0QHfokiRxypKjeLfghJENZ1R2hz4AohLc+DTJHJGA
-         +pLbcrSNPQvzkEALZgqwDJtVCzM/y+BpUXYzu+pBq1iFiwLXqtrZHq9pIGf21kIn4OEs
-         5ptveTPTAJ9xZUo9cgpFrab0pLKmN2IT3NmvBWrKJKtGTW4S/7u+HC8uu/f5lokKqSNh
-         /2H+2l//e+l5kV31/hbVX/arHte/JcZCvRRGeMmXG5IOapHna+wX7Hx4FGk/ml8HBwHb
-         eO9A==
-X-Gm-Message-State: AJIora/RJK8MyrkmwImoemfCwBKMPUr6HIyhS9DlfV7z7PavlOUjpABj
-        +BWOyBVv/LIUlX9jCZbKlGb+xlVF/FInap/E/KLoJg==
-X-Google-Smtp-Source: AGRyM1uk+awIxg+8Ie0mI4x1EeK/QSvobPmBqLZR8RQ7K+Gyc23VhWoJ9xFtopJENev37KrbfMD18GZF9BwnX6/O8DQ=
-X-Received: by 2002:a25:aaa9:0:b0:66e:c6ba:15dd with SMTP id
- t38-20020a25aaa9000000b0066ec6ba15ddmr37815606ybi.242.1658343726294; Wed, 20
- Jul 2022 12:02:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0GjIsq4ywCMZXZcSe/Hf1BCEstclfZZ3cilI89j5ThU=;
+        b=DLQj5MpF7SiCg7Yk7qIqhl7Xy9Hflj1ZCiigUGnyUIL6gDW/Qpay/I4xfZKn+2dumC
+         MusYTUZdGBiCUCv+QelJDRxOgQDMRvTxteFpK5Wtw7dGbrzwY9ZI3uAjdgftoxGxqZKu
+         i7iy+EzSiT3W4TjhpNxC4BGf38c3Ws1wSFSohMQTTf6Dra20pbw/UAGei9ag+bXY3dgL
+         1skM2IDpc0YGoAPMbhxzzoQlvuwAIrPWbqrvQZ+WgezZlVUKqRiKaGc322ha8zCFXt7W
+         M4MusjVSAzQ/CPmfv2gRkSQsRblVBdMiVWpmDVgBQ/maD+0N+wPB1aRJ+MQnPMMRgkXS
+         oKzQ==
+X-Gm-Message-State: AJIora9kez9Pq5kDYxpuiPf1H1SX9ZEsIWH+oDNDVKUDSKkG/SsUmWfi
+        ywBItwcM1jwTEvYYH0nma6eMqw==
+X-Google-Smtp-Source: AGRyM1vxjzudKtDoj2CRWGRK26Dg2bD6DVCG7roFoWMzGuV6/hnE3BtccVtN9boNXJVFpSnhFh5U/g==
+X-Received: by 2002:a05:6512:1054:b0:489:d273:be3a with SMTP id c20-20020a056512105400b00489d273be3amr21837278lfb.615.1658345292532;
+        Wed, 20 Jul 2022 12:28:12 -0700 (PDT)
+Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id h32-20020a0565123ca000b0047fac0f34absm3985771lfv.196.2022.07.20.12.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 12:28:11 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: [PATCH 00/10] soc/arm64: qcom: Add LLCC BWMON on SDM845
+Date:   Wed, 20 Jul 2022 21:27:57 +0200
+Message-Id: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-7-saravanak@google.com> <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
-In-Reply-To: <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 20 Jul 2022 12:01:30 -0700
-Message-ID: <CAGETcx-5-241=CxaPsGTTHhCSAZuGb742J9Xrhbj56+2yG6OhQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] Revert "driver core: Set default
- deferred_probe_timeout back to 0."
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 10:31 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Saravana,
->
-> On Wed, Jun 1, 2022 at 9:45 AM Saravana Kannan <saravanak@google.com> wrote:
-> > This reverts commit 11f7e7ef553b6b93ac1aa74a3c2011b9cc8aeb61.
-> >
-> > Let's take another shot at getting deferred_probe_timeout=10 to work.
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
->
-> Thanks for your patch, which is now commit f516d01b9df2782b
-> ("Revert "driver core: Set default deferred_probe_timeout
-> back to 0."") in driver-core/driver-core-next.
->
-> Wolfram found an issue on a Renesas board where disabling the IOMMU
-> driver (CONFIG_IPMMU_VMSA=n) causes the system to fail to boot,
-> and bisected this to a merge of driver-core/driver-core-next.
-> After some trials, I managed to reproduce the issue, and bisected it
-> further to commit f516d01b9df2782b.
->
-> The affected config has:
->     CONFIG_MODULES=y
->     CONFIG_RCAR_DMAC=y
->     CONFIG_IPMMU_VMSA=n
->
-> In arch/arm64/boot/dts/renesas/r8a77951-salvator-xs.dtb,
-> e6e88000.serial links to a dmac, and the dmac links to an iommu,
-> for which no driver is available.
+Hi,
 
-Thanks for digging into this and giving more details.
+Description
+===========
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
 
-Is e6e88000.serial being blocked the reason for the boot failure?
+Qualcomm SoCs might several BWMON instances.  Extend existing support for CPU
+BWMON (called v4) to LLCC BWMON (called v5).
 
-If so, can you give this a shot?
-https://lore.kernel.org/lkml/20220701012647.2007122-1-saravanak@google.com/
+Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
 
-> Playing with deferred_probe_timeout values doesn't help.
+Best regards,
+Krzysztof
 
-This part is strange though. If you set deferred_probe_timeout=1,
-fw_devlink will stop blocking all probes 1 second after
-late_initcall()s finish. So, similar to the ip autoconfig issue, is
-the issue caused by something that needs to be finished before we hit
-late_initcall() but is getting blocked?
+Krzysztof Kozlowski (10):
+  dt-bindings: interconnect: qcom,msm8998-bwmon: add support for SDM845
+    LLCC BWMON
+  soc: qcom: icc-bwmon: re-use IRQ enable/clear define
+  soc: qcom: icc-bwmon: drop unused BWMON_ZONE_COUNT
+  soc: qcom: icc-bwmon: store reference to varian data in container
+  soc: qcom: icc-bwmon: clear all registers on init
+  soc: qcom: icc-bwmon: store count unit per variant
+  soc: qcom: icc-bwmon: use regmap and prepare for BWMON v5
+  soc: qcom: icc-bwmon: add per-variant quirks
+  soc: qcom: icc-bwmon: add support for SDM845 LLCC BWMON
+  arm64: dts: qcom: sdm845: add LLCC BWMON
 
-> However, the above options do not seem to be sufficient to trigger
-> the issue, as I had other configs with those three options that do
-> boot fine.
->
-> After bisecting configs, I found the culprit: CONFIG_IP_PNP.
-> As Wolfram was using an initramfs, CONFIG_IP_PNP was not needed.
-> If CONFIG_IP_PNP=n, booting fails.
-> If CONFIG_IP_PNP=y, booting succeeds.
-> In fact, just disabling late_initcall(ip_auto_config) makes it fail,
-> too.
-> Reducing ip_auto_config(), it turns out the call to
-> wait_for_init_devices_probe() is what is needed to unblock booting.
->
-> So I guess wait_for_init_devices_probe() needs to be called (where?)
-> if CONFIG_IP_PNP=n, too?
+ .../interconnect/qcom,msm8998-bwmon.yaml      |   1 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  37 ++
+ drivers/soc/qcom/icc-bwmon.c                  | 465 ++++++++++++++----
+ 3 files changed, 405 insertions(+), 98 deletions(-)
 
-That function just unblocks all devices and allows them to try and
-probe and then waits for all possible probes to finish before
-returning. They problem with call it randomly/every time is that it
-breaks functionality where an optional supplier will probe after a few
-modules are loaded in the future.
+-- 
+2.34.1
 
-I guess one possible issue with the timeout not helping is that once
-the timeout expires, things are still being probed and nothing is
-being blocked till they finish probing.
-
-I'm trying to have the default config (in terms of fw_devlink,
-deferred probe behavior, timeouts, etc) be the same between a fully
-static kernel (but CONFIG_MODULES still enabled) and a fully modular
-kernel (like GKI). But it might end up being an untenable problem.
-
-I'll wait to see what specifically is the issue in this case and then
-I'll go from there.
-
--Saravana
-
-> > --- a/drivers/base/dd.c
-> > +++ b/drivers/base/dd.c
-> > @@ -256,7 +256,12 @@ static int deferred_devs_show(struct seq_file *s, void *data)
-> >  }
-> >  DEFINE_SHOW_ATTRIBUTE(deferred_devs);
-> >
-> > +#ifdef CONFIG_MODULES
-> > +int driver_deferred_probe_timeout = 10;
-> > +#else
-> >  int driver_deferred_probe_timeout;
-> > +#endif
-> > +
-> >  EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
-> >
-> >  static int __init deferred_probe_timeout_setup(char *str)
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
