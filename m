@@ -2,147 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211E657B0CB
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 08:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3C157B0FE
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 08:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238995AbiGTGGi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 02:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S239754AbiGTGWN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 02:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239005AbiGTGGf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 02:06:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF076871C
-        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 23:06:34 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oE2qu-00026Y-C6; Wed, 20 Jul 2022 08:06:32 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oE2qt-0023uC-Gn; Wed, 20 Jul 2022 08:06:31 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oE2qs-006JuG-Fl; Wed, 20 Jul 2022 08:06:30 +0200
-Date:   Wed, 20 Jul 2022 08:06:27 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: pm_runtime_resume_and_get in .remove callbacks
-Message-ID: <20220720060627.r7ifcxu6uopgsasw@pengutronix.de>
-References: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
- <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com>
+        with ESMTP id S239753AbiGTGWN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 02:22:13 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769B2459B2;
+        Tue, 19 Jul 2022 23:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658298132; x=1689834132;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VIoqvMQmlC7JWo+InrzK5qG2yjqzCb7CCmaAG3iKzz0=;
+  b=GIiteMqXL1jvW9+iX0s6J6LPG6tc7f/2Wru8t5WT+jJZZGxvClmeF3og
+   ypeZ9dYvpw2klpZgAoCV3AiQcesQtPnyAKicuKzMps3+K5iP1QwavYEr1
+   FHgx4CzM+D2RbDv6B4sKdnfEbHf7IJKn6BB1KM8IWjETPQ4/4Ui6dPZ0s
+   q6BhHc7BAeF0OhyXUdo0OkHd7T/RQ2rs7BKjCmp1Qn2cQk8qLhay0JA8V
+   rFQETsGj3QAMJlB+SA78/ZAGiEoab2mHyx/QdJLDQik4hfGzBWYQzJ394
+   68is/hQOLAGjUEwzODnSTTk1jlxqIIfQy4r/5GPwofdG1nSs5MNaF5xDJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="266466670"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="266466670"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 23:22:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="625527167"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 19 Jul 2022 23:22:10 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE361-00005t-NP;
+        Wed, 20 Jul 2022 06:22:09 +0000
+Date:   Wed, 20 Jul 2022 14:21:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 66de314cd08fc4a7830333025d6a9c61ed12cd30
+Message-ID: <62d79ef9.PGF5BxVHQU6Ey7/c%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7bjlrlae5aaqwhvp"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 66de314cd08fc4a7830333025d6a9c61ed12cd30  Merge branch 'pm-devfreq' into linux-next
 
---7bjlrlae5aaqwhvp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 722m
 
-Hello Rafael,
+configs tested: 98
+configs skipped: 2
 
-On Wed, Jul 13, 2022 at 07:47:39PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Jul 13, 2022 at 10:47 AM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > Hello,
-> >
-> > there is a big bunch of kernel drivers (here:
-> > drivers/i2c/busses/i2c-sprd.c) that have a remove callback that looks as
-> > follows:
-> >
-> >         static int sprd_i2c_remove(struct platform_device *pdev)
-> >         {
-> >                 struct sprd_i2c *i2c_dev =3D platform_get_drvdata(pdev);
-> >                 int ret;
-> >
-> >                 ret =3D pm_runtime_resume_and_get(i2c_dev->dev);
-> >                 if (ret < 0)
-> >                         return ret;
-> >
-> >                 i2c_del_adapter(&i2c_dev->adap);
-> >                 clk_disable_unprepare(i2c_dev->clk);
-> >
-> >                 pm_runtime_put_noidle(i2c_dev->dev);
-> >                 pm_runtime_disable(i2c_dev->dev);
-> >
-> >                 return 0;
-> >         }
-> >
-> > If pm_runtime_resume_and_get fails, the i2c adapter isn't removed, but
-> > as the memory backing i2c_dev goes away---it was allocated using
-> > devm_kzalloc in .probe()---the next i2c action will probably access
-> > freed memory.
-> >
-> > I'm not familiar enough with pm-runtime stuff, but wonder what
-> > can/should be done about that. The obvious (to me) candidates are:
-> >
-> >  - log an error if pm_runtime_resume_and_get() fails, but continue to
-> >    clean up
-> >  - don't check the return value at all
-> >
-> > What do you think?
->=20
-> (1) Use pm_runtime_get_sync() instead of pm_runtime_resume_and_get()
-> and don't check its return value,
->=20
-> or if that is not viable, because something really can run if and only
-> if the device is operational,
->=20
-> (2) do something like
->=20
-> ret =3D pm_runtime_resume_and_get(i2c_dev->dev);
-> i2c_del_adapter(&i2c_dev->adap);
-> if (ret >=3D 0)
->         clk_disable_unprepare(i2c_dev->clk);
->=20
-> pm_runtime_put_noidle(i2c_dev->dev);
-> pm_runtime_disable(i2c_dev->dev);
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Why would you not disable the clk if the resume failed?
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220718
+arm                        realview_defconfig
+arm                             rpc_defconfig
+powerpc                     sequoia_defconfig
+powerpc                 mpc837x_rdb_defconfig
+powerpc                    sam440ep_defconfig
+xtensa                    smp_lx200_defconfig
+m68k                             alldefconfig
+arc                     haps_hs_smp_defconfig
+powerpc                     pq2fads_defconfig
+sh                         microdev_defconfig
+arc                     nsimosci_hs_defconfig
+powerpc                      ep88xc_defconfig
+arm                      footbridge_defconfig
+mips                      loongson3_defconfig
+sh                        dreamcast_defconfig
+xtensa                       common_defconfig
+mips                            gpr_defconfig
+sh                          lboxre2_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+ia64                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64               randconfig-a014-20220718
+x86_64               randconfig-a016-20220718
+x86_64               randconfig-a012-20220718
+x86_64               randconfig-a013-20220718
+x86_64               randconfig-a015-20220718
+x86_64               randconfig-a011-20220718
+i386                 randconfig-a015-20220718
+i386                 randconfig-a011-20220718
+i386                 randconfig-a012-20220718
+i386                 randconfig-a014-20220718
+i386                 randconfig-a016-20220718
+i386                 randconfig-a013-20220718
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220718
+riscv                randconfig-r042-20220718
+s390                 randconfig-r044-20220718
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
 
-Is it an option to not call one of the resume variants at all and only
-call pm_runtime_disable()?
+clang tested configs:
+arm                     am200epdkit_defconfig
+riscv                            alldefconfig
+arm                        magician_defconfig
+mips                          malta_defconfig
+hexagon                          alldefconfig
+powerpc                    gamecube_defconfig
+mips                      maltaaprp_defconfig
+mips                        maltaup_defconfig
+powerpc                     mpc5200_defconfig
+mips                          ath25_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                 randconfig-a004-20220718
+i386                 randconfig-a001-20220718
+i386                 randconfig-a005-20220718
+i386                 randconfig-a006-20220718
+i386                 randconfig-a002-20220718
+i386                 randconfig-a003-20220718
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220718
+hexagon              randconfig-r045-20220718
 
-Thanks for your input,
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7bjlrlae5aaqwhvp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLXm2AACgkQwfwUeK3K
-7AnUVwf+NJQmrHAC8PO84y3YoH+UcogkLEtujYKH3Szi7UVwc62Vh/Yh3PaBQBDQ
-tanx/cr/pzEbdyXfa5KWFgy+Vwrv3YUzyxsUC51q6CToxsfLgz4Flqc6RG/6WYrv
-QOqtGRmXNqVD+gks9ySlKyecLAoFOyPVOJMARgaxTGBjgOZFIDgrAujm7fVwqvNw
-yKJ2x3c7JEFJV3qFRlHy5C5de/YjKpvUBJdXSeGSfs6in7tLCMIOzDcGsxgPwqic
-NM3V5C6sh9eek/Oq4G1R6n7ld0qz5rr3vPy+6cYGpBdSHb1TSw44HAhb/pVPR1CD
-fvbwJSBm3s+sLHj7lZnEW2NK3F0oJQ==
-=IbjU
------END PGP SIGNATURE-----
-
---7bjlrlae5aaqwhvp--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
