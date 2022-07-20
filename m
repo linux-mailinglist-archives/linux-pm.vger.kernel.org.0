@@ -2,77 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F60157B2A3
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 10:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EE057B2C3
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 10:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235783AbiGTIQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 04:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S230265AbiGTIV6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 04:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiGTIQT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 04:16:19 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A638550B3
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 01:16:17 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id z3so1939044plb.1
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 01:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=uYiZZ6ipbb2NI+48VeJC83llK7+Y+q8f+kaW8ZK56qQ=;
-        b=GSOr7+oSOYZ/HHofdLRGWf7k+M9K2gU22l7qTUKTZaQEh8qUJj3v/Ej72xu80mI6lz
-         spE4kQmyPcFETNdZ+H0CT+H2J4xPSpPYIYH4HmPX2HrmqKPs43O1wuYFEimeVENrU9L6
-         jCsQtYl9Ra4BJwOD4k2M3DDYBARaRreeeYtXPyDZw+aAQso6eXcOcWdbSIuK+wRkSWDK
-         hFveXJXq6uqt99HSbW4X9Ql7IT5LFcmKuTkoWCh31X1kqFCdOYpcrQBJEvDb1kdKaeD6
-         aViBY/KiP8EtTgXstnGx9Urto+fqRmguifbhyONYbpJvCtqtaKaxGa4d26l+mGjX9IOG
-         pDlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uYiZZ6ipbb2NI+48VeJC83llK7+Y+q8f+kaW8ZK56qQ=;
-        b=kb2BvJjuSQtgl6sbRd0+zPoPFGW+g0VJspSdnxIxn3W2O7YB6PaN62O820Jo6vvAw3
-         ETxgvmHCZnZls4MWF5Nr1DgPlKf7mVoOPTvORRNy5yGA4U0/1o1OmecJGp4LJAHA1iIb
-         m0CYymioB3agu4T6NOLJXBtJpw+eQbwWB/B+oQx4ywGSmq+LDN0O5l/02NJl7Zi+3maL
-         J8bfGElAh8f913QofP1DTqAUsda3pmmtf/O1IOfgCgBgiQRYBMYLIEbWLGfaYQTTZ/+a
-         KkBceuQikKJSFI9XQiPwXH9cseZb8AkbG1fq0xSm0QnurnFe41OqCGRjZAcg0L2oBFyO
-         /RYA==
-X-Gm-Message-State: AJIora8K5mJZPn5N+qdGDR0iM7eIsrh35i3GzoQCoSWIxWViEx5l+O++
-        W0HcHATPvh0/RYlySxm8bBqNeA==
-X-Google-Smtp-Source: AGRyM1uQvco9Cf0V2sKG+aFCbvjKaKE2vSku+wKQT4wBMmvJp5xjDkDd8ETcYz/zgb2jrhASk6/q5g==
-X-Received: by 2002:a17:903:22cf:b0:16c:4145:75c5 with SMTP id y15-20020a17090322cf00b0016c414575c5mr37211144plg.127.1658304977031;
-        Wed, 20 Jul 2022 01:16:17 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
-        by smtp.gmail.com with ESMTPSA id u16-20020a170903125000b001690d398401sm13419432plh.88.2022.07.20.01.16.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 01:16:16 -0700 (PDT)
-Message-ID: <507fec10-7ef8-e043-b4f6-70cd17b8334f@linaro.org>
-Date:   Wed, 20 Jul 2022 13:46:12 +0530
+        with ESMTP id S229686AbiGTIV5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 04:21:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43D66B275
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 01:21:55 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oE4xj-0003c1-JD; Wed, 20 Jul 2022 10:21:43 +0200
+Message-ID: <5b4019dc8f3f797941037ebbbafb30b8541b2b4b.camel@pengutronix.de>
+Subject: Re: [PATCH v4 3/3] soc: imx: gpcv2: fix suspend/resume by setting
+ GENPD_FLAG_IRQ_ON
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>, rafael@kernel.org,
+        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz
+Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        aford173@gmail.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 20 Jul 2022 10:21:42 +0200
+In-Reply-To: <5a6bfd6827f8ad838bdab8dfb208753ad258b1ec.camel@puri.sm>
+References: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
+         <20220720043444.1289952-4-martin.kepplinger@puri.sm>
+         <a7d51c154693881523e5d96c443a7dc9b3cc216d.camel@pengutronix.de>
+         <5a6bfd6827f8ad838bdab8dfb208753ad258b1ec.camel@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
- workaround quirk
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
- <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
- <09ff7e3a-7dd5-db35-3795-89151afb5363@somainline.org>
- <e69cb444-2bee-870e-08ca-bbe3237d8166@linaro.org>
- <d5dd721e-b0d7-f76d-d40c-b4927c236460@somainline.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <d5dd721e-b0d7-f76d-d40c-b4927c236460@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,55 +53,119 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/19/22 4:09 PM, Konrad Dybcio wrote:
+Am Mittwoch, dem 20.07.2022 um 10:05 +0200 schrieb Martin Kepplinger:
+> Am Mittwoch, dem 20.07.2022 um 09:53 +0200 schrieb Lucas Stach:
+> > Am Mittwoch, dem 20.07.2022 um 06:34 +0200 schrieb Martin Kepplinger:
+> > > For boards that use power-domains' power-supplies that need
+> > > interrupts
+> > > to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
+> > > This will tell genpd to adjust accordingly. Currently it "only"
+> > > sets the
+> > > correct suspend/resume callbacks.
+> > > 
+> > > This fixes suspend/resume on imx8mq-librem5 boards (tested) and
+> > > imx8mq-evk (by looking at dts) and possibly more.
+> > > 
+> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > > ---
+> > >  drivers/soc/imx/gpcv2.c | 9 +++++++++
+> > >  1 file changed, 9 insertions(+)
+> > > 
+> > > diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+> > > index 85aa86e1338a..46d2ead2352b 100644
+> > > --- a/drivers/soc/imx/gpcv2.c
+> > > +++ b/drivers/soc/imx/gpcv2.c
+> > > @@ -1303,6 +1303,7 @@ static const struct imx_pgc_domain_data
+> > > imx8mn_pgc_domain_data = {
+> > >  static int imx_pgc_domain_probe(struct platform_device *pdev)
+> > >  {
+> > >         struct imx_pgc_domain *domain = pdev->dev.platform_data;
+> > > +       struct device_node *dn;
+> > >         int ret;
+> > >  
+> > >         domain->dev = &pdev->dev;
+> > > @@ -1333,6 +1334,14 @@ static int imx_pgc_domain_probe(struct
+> > > platform_device *pdev)
+> > >                 regmap_update_bits(domain->regmap, domain->regs-
+> > > > map,
+> > >                                    domain->bits.map, domain-
+> > > > bits.map);
+> > >  
+> > > +       dn = of_parse_phandle(domain->dev->of_node, "power-supply",
+> > > 0);
+> > > +       if (dn) {
+> > > +               while ((dn = of_get_next_parent(dn))) {
+> > > +                       if (of_get_property(dn, "interrupts",
+> > > NULL))
+> > > +                               domain->genpd.flags |=
+> > > GENPD_FLAG_IRQ_ON;
+> > > +               }
+> > > +       }
+> > > +
+> > While I understand the intention, I think the DT walking is overkill.
+> > I
+> > believe that there are no cases where we have a external regulator
+> > attached to the PD and the devices in the domain needing noirq
+> > support.
+> > I think it's sufficient to simply set the IRQ_ON flag based on
+> > presence
+> > of the power-supply property on the domain DT node.
 > 
+> Are you sure? Can't boards just *describe* a power-supply that doesn't
+> really do much, where noirq would work? looking for "interrupts" in any
+> parent feels very stable and makes sure we only change behaviour when
+> really needed. But for the boards I'm looking at, I have to admit it
+> wouldn't change anything afaik. So if you insist, I'll happily remove
+> that.
 > 
-> On 18.07.2022 08:34, bhupesh.sharma@linaro.org wrote:
->> Hi Konrad,
->>
->> On 7/15/22 8:26 PM, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
->>>
->>>
->>> On 1.07.2022 16:58, Bhupesh Sharma wrote:
->>>> Since for some QCoM tsens controllers, its suggested to
->>>> monitor the controller health periodically and in case an
->>>> issue is detected, to re-initialize the tsens controller
->>>> via trustzone, add the support for the same in the
->>>> qcom tsens driver.
->>>>
->>>> Note that Once the tsens controller is reset using scm call,
->>>> all SROT and TM region registers will enter the reset mode.
->>>>
->>>> While all the SROT registers will be re-programmed and
->>>> re-enabled in trustzone prior to the scm call exit, the TM
->>>> region registers will not re-initialized in trustzone and thus
->>>> need to be handled by the tsens driver.
->>>>
->>>> Cc: Amit Kucheria <amitk@kernel.org>
->>>> Cc: Thara Gopinath <thara.gopinath@gmail.com>
->>>> Cc: linux-pm@vger.kernel.org
->>>> Cc: linux-arm-msm@vger.kernel.org
->>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>> ---
->>> Hi, I think this should be also checked and applied on init. This
->>> seems required for at least SM6375, as the controller starts (or
->>> well, doesn't start...) in an unknown state and the driver does
->>> not like it, as the TSENS_EN indicates it is disabled.
->>> Downstream runs this right at probe..
->>
->> Hmm.. very interesting. I was not aware of the SM6375 case, as for SM8150
->> the controller starts in a valid state but may require reinit during operation.
->>
->> So, I did not use the downstream approach to do it right at _probe() and then
->> later while get_temp() is called.
->>
->> Let me add that in v2. BTW do you want me to set the need_reinit_wa as true
->> for SM6375 as well, or would you like to add that with a followup-patch ?
-> Please set it, I'll happily test it!
+I'm pretty sure that this holds for all boards. Yes, it might introduce
+some more runtime changes than your option, but it will be more
+consistent.
 
-Thanks. Will share v2 shortly.
+One could possibly have a simple GPIO regulator, which could work in
+noirq if the GPIO is internal MMIO, but it already breaks when the GPIO
+is from an i2c attached GPIO expander. This might even be a good
+example where your DT parsing breaks: a GPIO regulator is not
+necessarily a child device of the i2c GPIO expander, so the DT walking
+will miss that IRQs need to be functional in order to toggle the GPIO.
+
+Just keying the IRQ_ON flag on the presence of the power-supply
+property will have less surprises, I think.
+
+> 
+> 
+> Also, I forgot to say earlier: We could even add "if not regulator-
+> always-on" to the DT parsing above, because in that case noirq is fine
+> even for external regulators. Should I add that? I'd like as little
+> runtime change as possible so I would add that (and keep the
+> "interrupts" search above for the same reason). 
+> 
+Yea, one could make this even more complex to preserve the current
+behavior as much as possible, but I just don't think that the current
+behavior is relevant enough to warrant the complexity and possible
+inconsistent behavior on different systems.
+
+Thanks for working on this!
 
 Regards,
-Bhupesh
+Lucas
+
+> thanks for looking at this,
+> 
+>                              martin
+> 
+> 
+> > 
+> > Regards,
+> > Lucas
+> > 
+> > >         ret = pm_genpd_init(&domain->genpd, NULL, true);
+> > >         if (ret) {
+> > >                 dev_err(domain->dev, "Failed to init power
+> > > domain\n");
+> > 
+> > 
+> 
+> 
+
 
