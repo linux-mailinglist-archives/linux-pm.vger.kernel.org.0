@@ -2,99 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F4F57B00A
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 06:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211E657B0CB
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 08:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237481AbiGTEgW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 00:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S238995AbiGTGGi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 02:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238057AbiGTEgU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 00:36:20 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A330C2CDD0;
-        Tue, 19 Jul 2022 21:36:19 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 69A90DFF7B;
-        Tue, 19 Jul 2022 21:35:49 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Oeqpp57CYaXJ; Tue, 19 Jul 2022 21:35:48 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658291748; bh=cKfjsoRcWsaq1BiSf8wfxCOkxO8OBT+dw6FA+RdONSg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MhOpSk469URVTq/qzhbzDBrb1obyApeVgx6oareYHG0KOfLR/sGNlqPir80WQa0S3
-         vZ/LVBE9diDaIKhJiqlnNAs1Fs/2AfNy6Ro5KlJP57ctMne3k37jVD9nimn1uH0zHi
-         4KcnjG11tpk2DFz12Lk8DUUD9mbudTH/HRa+L+Taf+90vU2nD+OrcXNaf8AOOh8M3D
-         1WRqNaB28DwQCK/DJECQuil8L5nOd4MogK62x/IZUhvRuXKQy3aRUX7TzPec7SSBS1
-         UkPbmCAg3DvA5V6DN7vF80kT/RM0bY/VPEczuyOU3qfa3EUj54c9OwlgyFuH1j1Rts
-         Xs9gA7P+ynP0Q==
-To:     rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
-        robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        pavel@ucw.cz
-Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v4 3/3] soc: imx: gpcv2: fix suspend/resume by setting GENPD_FLAG_IRQ_ON
-Date:   Wed, 20 Jul 2022 06:34:44 +0200
-Message-Id: <20220720043444.1289952-4-martin.kepplinger@puri.sm>
-In-Reply-To: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
-References: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
+        with ESMTP id S239005AbiGTGGf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 02:06:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF076871C
+        for <linux-pm@vger.kernel.org>; Tue, 19 Jul 2022 23:06:34 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oE2qu-00026Y-C6; Wed, 20 Jul 2022 08:06:32 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oE2qt-0023uC-Gn; Wed, 20 Jul 2022 08:06:31 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oE2qs-006JuG-Fl; Wed, 20 Jul 2022 08:06:30 +0200
+Date:   Wed, 20 Jul 2022 08:06:27 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: pm_runtime_resume_and_get in .remove callbacks
+Message-ID: <20220720060627.r7ifcxu6uopgsasw@pengutronix.de>
+References: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
+ <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7bjlrlae5aaqwhvp"
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For boards that use power-domains' power-supplies that need interrupts
-to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
-This will tell genpd to adjust accordingly. Currently it "only" sets the
-correct suspend/resume callbacks.
 
-This fixes suspend/resume on imx8mq-librem5 boards (tested) and
-imx8mq-evk (by looking at dts) and possibly more.
+--7bjlrlae5aaqwhvp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- drivers/soc/imx/gpcv2.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Hello Rafael,
 
-diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-index 85aa86e1338a..46d2ead2352b 100644
---- a/drivers/soc/imx/gpcv2.c
-+++ b/drivers/soc/imx/gpcv2.c
-@@ -1303,6 +1303,7 @@ static const struct imx_pgc_domain_data imx8mn_pgc_domain_data = {
- static int imx_pgc_domain_probe(struct platform_device *pdev)
- {
- 	struct imx_pgc_domain *domain = pdev->dev.platform_data;
-+	struct device_node *dn;
- 	int ret;
- 
- 	domain->dev = &pdev->dev;
-@@ -1333,6 +1334,14 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
- 		regmap_update_bits(domain->regmap, domain->regs->map,
- 				   domain->bits.map, domain->bits.map);
- 
-+	dn = of_parse_phandle(domain->dev->of_node, "power-supply", 0);
-+	if (dn) {
-+		while ((dn = of_get_next_parent(dn))) {
-+			if (of_get_property(dn, "interrupts", NULL))
-+				domain->genpd.flags |= GENPD_FLAG_IRQ_ON;
-+		}
-+	}
-+
- 	ret = pm_genpd_init(&domain->genpd, NULL, true);
- 	if (ret) {
- 		dev_err(domain->dev, "Failed to init power domain\n");
--- 
-2.30.2
+On Wed, Jul 13, 2022 at 07:47:39PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Jul 13, 2022 at 10:47 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> >
+> > Hello,
+> >
+> > there is a big bunch of kernel drivers (here:
+> > drivers/i2c/busses/i2c-sprd.c) that have a remove callback that looks as
+> > follows:
+> >
+> >         static int sprd_i2c_remove(struct platform_device *pdev)
+> >         {
+> >                 struct sprd_i2c *i2c_dev =3D platform_get_drvdata(pdev);
+> >                 int ret;
+> >
+> >                 ret =3D pm_runtime_resume_and_get(i2c_dev->dev);
+> >                 if (ret < 0)
+> >                         return ret;
+> >
+> >                 i2c_del_adapter(&i2c_dev->adap);
+> >                 clk_disable_unprepare(i2c_dev->clk);
+> >
+> >                 pm_runtime_put_noidle(i2c_dev->dev);
+> >                 pm_runtime_disable(i2c_dev->dev);
+> >
+> >                 return 0;
+> >         }
+> >
+> > If pm_runtime_resume_and_get fails, the i2c adapter isn't removed, but
+> > as the memory backing i2c_dev goes away---it was allocated using
+> > devm_kzalloc in .probe()---the next i2c action will probably access
+> > freed memory.
+> >
+> > I'm not familiar enough with pm-runtime stuff, but wonder what
+> > can/should be done about that. The obvious (to me) candidates are:
+> >
+> >  - log an error if pm_runtime_resume_and_get() fails, but continue to
+> >    clean up
+> >  - don't check the return value at all
+> >
+> > What do you think?
+>=20
+> (1) Use pm_runtime_get_sync() instead of pm_runtime_resume_and_get()
+> and don't check its return value,
+>=20
+> or if that is not viable, because something really can run if and only
+> if the device is operational,
+>=20
+> (2) do something like
+>=20
+> ret =3D pm_runtime_resume_and_get(i2c_dev->dev);
+> i2c_del_adapter(&i2c_dev->adap);
+> if (ret >=3D 0)
+>         clk_disable_unprepare(i2c_dev->clk);
+>=20
+> pm_runtime_put_noidle(i2c_dev->dev);
+> pm_runtime_disable(i2c_dev->dev);
 
+Why would you not disable the clk if the resume failed?
+
+Is it an option to not call one of the resume variants at all and only
+call pm_runtime_disable()?
+
+Thanks for your input,
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7bjlrlae5aaqwhvp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLXm2AACgkQwfwUeK3K
+7AnUVwf+NJQmrHAC8PO84y3YoH+UcogkLEtujYKH3Szi7UVwc62Vh/Yh3PaBQBDQ
+tanx/cr/pzEbdyXfa5KWFgy+Vwrv3YUzyxsUC51q6CToxsfLgz4Flqc6RG/6WYrv
+QOqtGRmXNqVD+gks9ySlKyecLAoFOyPVOJMARgaxTGBjgOZFIDgrAujm7fVwqvNw
+yKJ2x3c7JEFJV3qFRlHy5C5de/YjKpvUBJdXSeGSfs6in7tLCMIOzDcGsxgPwqic
+NM3V5C6sh9eek/Oq4G1R6n7ld0qz5rr3vPy+6cYGpBdSHb1TSw44HAhb/pVPR1CD
+fvbwJSBm3s+sLHj7lZnEW2NK3F0oJQ==
+=IbjU
+-----END PGP SIGNATURE-----
+
+--7bjlrlae5aaqwhvp--
