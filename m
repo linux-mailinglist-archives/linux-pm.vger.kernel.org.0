@@ -2,147 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E027657B242
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 10:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BD657B258
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 10:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbiGTIGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 04:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        id S238262AbiGTIJ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 04:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiGTIGk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 04:06:40 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F7140BDC;
-        Wed, 20 Jul 2022 01:06:38 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 8670ADFEEB;
-        Wed, 20 Jul 2022 01:06:08 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jy-yr_GXHRZu; Wed, 20 Jul 2022 01:06:04 -0700 (PDT)
-Message-ID: <5a6bfd6827f8ad838bdab8dfb208753ad258b1ec.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658304364; bh=W7oFWT03XGGKOHW68rUNi/F6WDaxeRdYnn8x89UH2q4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=tgShpVNJhE4DH6cDe9LhF9t8ZZg9HXaPlW8oWfyhGAcHv8s3NwE9jbyTJHxMhFg22
-         6ElNPXOH4RXR2EGuIsvXkdAdNMoxN5trZEXQlHzXH6q7IQQhdKTvd4/+bFz1TWrZge
-         RMvnaNYzed+5RDRKbE6aJo7bZZo3ROTkunoclenpcuTrB4O2HXbtDLkXGvVxUPNQwP
-         cthdfqn00Oad/ePytXnfQRnXRKbcmclvTAxObe4BE3zrJpuDpcIaXI5o9Mmjo5D2mK
-         ZIKwjwFHmCKoZY5fObJV3F6a7ew+qkzJnUWVkw+Fzsp44ySZ9Buh9gzrat0Ebts0F6
-         nl99fXMXnPEFw==
-Subject: Re: [PATCH v4 3/3] soc: imx: gpcv2: fix suspend/resume by setting
- GENPD_FLAG_IRQ_ON
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Lucas Stach <l.stach@pengutronix.de>, rafael@kernel.org,
-        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz
-Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        aford173@gmail.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 20 Jul 2022 10:05:57 +0200
-In-Reply-To: <a7d51c154693881523e5d96c443a7dc9b3cc216d.camel@pengutronix.de>
-References: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
-         <20220720043444.1289952-4-martin.kepplinger@puri.sm>
-         <a7d51c154693881523e5d96c443a7dc9b3cc216d.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S238879AbiGTIJ0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 04:09:26 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0088068DCC
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 01:09:24 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso3207738pjz.0
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 01:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Vjmj1e5ilZcHzSooiVXEelOD0/GPuv/+UYY6S2crjho=;
+        b=Dh/g9kBBDMqVx5ZQJKzdmPQxju8VIfV+7OtnNU7UZ688mgBItp/7drGha8nZQL7iRG
+         TMzI9mLhcuWQ6poeV1p8tuG5NY6TjirXtpPQqZP6xu+Om+RRTBgXsgEw6jzhUR34k7tl
+         MbtJaqDe1s1VwggvF69/LGKhJeJJ/SF6ipBVcOUTZFUyEtUxmeUAcHzyo98hGHiczJ3p
+         XuI+1+6TtrhbLhHNTOc86779nvmxuS2MI834rBCPoqBr4fD68ve/xc4eSmXTN2GF4gxm
+         2yEbQrbVlkssAbP31nBkRA1bFfnYIGPg0ERIjzbYCGH/bNLx2szEX9IWufRpyw19VRml
+         jdvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vjmj1e5ilZcHzSooiVXEelOD0/GPuv/+UYY6S2crjho=;
+        b=JuxAn87SAyxkeLrvlofo5rzs/8J4BuLapOq/xagwDyTKJAXxAGGMG3/ATkcNF9EW8o
+         mjtbk5WTR9DYwhvLhzm5oea9ki/PaPWZbZoqBaYPV7aG2pkFhqhQAVJ5aH0XyhifTbb0
+         wLJ71taHrbk7EYKljqv46aADILZr0GUvlbG6GeumWRgIsXDEjbQKE0gMN2Cctg6CNExb
+         syknUIC1HAJp54KdD5cmkRtBwcXmfw7LtjLMnN2meXcYQzSRxBcq1I7BCDe+I57gAqCb
+         owJ0Xk6SRiCmLC/GLIOESMSkMmDUw0nTe74dyTefLkRQ1Tgp9cjnv6kW+VYk0668Y+Gd
+         b4Pg==
+X-Gm-Message-State: AJIora+sRSmrUCOIRmlU+quFlnyFbJcuuyZH94beM2Zqpm2e9HRn0rM1
+        gyEVQ776v6NZiZqkUBX4gx8fcQ==
+X-Google-Smtp-Source: AGRyM1sVwohh0bM9m4mMkOvgMH8V+/8FfdM5gU1oqT8RRazle84Lm9koabhiRV9BxMroh0zPZorBiw==
+X-Received: by 2002:a17:903:4094:b0:16b:df0e:6312 with SMTP id z20-20020a170903409400b0016bdf0e6312mr39531338plc.61.1658304564419;
+        Wed, 20 Jul 2022 01:09:24 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
+        by smtp.gmail.com with ESMTPSA id q7-20020a17090311c700b0016cf195eb16sm6086244plh.185.2022.07.20.01.09.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 01:09:23 -0700 (PDT)
+Message-ID: <e0637b5f-572f-5db8-e546-22f69d7c1e09@linaro.org>
+Date:   Wed, 20 Jul 2022 13:39:19 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] thermal: qcom: tsens: Add support for
+ 'needs_reinit_wa' for sm8150
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
+ <20220701145815.2037993-3-bhupesh.sharma@linaro.org>
+ <YtYdPG8ofmmiVe4P@builder.lan>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <YtYdPG8ofmmiVe4P@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Mittwoch, dem 20.07.2022 um 09:53 +0200 schrieb Lucas Stach:
-> Am Mittwoch, dem 20.07.2022 um 06:34 +0200 schrieb Martin Kepplinger:
-> > For boards that use power-domains' power-supplies that need
-> > interrupts
-> > to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
-> > This will tell genpd to adjust accordingly. Currently it "only"
-> > sets the
-> > correct suspend/resume callbacks.
-> > 
-> > This fixes suspend/resume on imx8mq-librem5 boards (tested) and
-> > imx8mq-evk (by looking at dts) and possibly more.
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> >  drivers/soc/imx/gpcv2.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-> > index 85aa86e1338a..46d2ead2352b 100644
-> > --- a/drivers/soc/imx/gpcv2.c
-> > +++ b/drivers/soc/imx/gpcv2.c
-> > @@ -1303,6 +1303,7 @@ static const struct imx_pgc_domain_data
-> > imx8mn_pgc_domain_data = {
-> >  static int imx_pgc_domain_probe(struct platform_device *pdev)
-> >  {
-> >         struct imx_pgc_domain *domain = pdev->dev.platform_data;
-> > +       struct device_node *dn;
-> >         int ret;
-> >  
-> >         domain->dev = &pdev->dev;
-> > @@ -1333,6 +1334,14 @@ static int imx_pgc_domain_probe(struct
-> > platform_device *pdev)
-> >                 regmap_update_bits(domain->regmap, domain->regs-
-> > >map,
-> >                                    domain->bits.map, domain-
-> > >bits.map);
-> >  
-> > +       dn = of_parse_phandle(domain->dev->of_node, "power-supply",
-> > 0);
-> > +       if (dn) {
-> > +               while ((dn = of_get_next_parent(dn))) {
-> > +                       if (of_get_property(dn, "interrupts",
-> > NULL))
-> > +                               domain->genpd.flags |=
-> > GENPD_FLAG_IRQ_ON;
-> > +               }
-> > +       }
-> > +
-> While I understand the intention, I think the DT walking is overkill.
-> I
-> believe that there are no cases where we have a external regulator
-> attached to the PD and the devices in the domain needing noirq
-> support.
-> I think it's sufficient to simply set the IRQ_ON flag based on
-> presence
-> of the power-supply property on the domain DT node.
+Hi Bjorn,
 
-Are you sure? Can't boards just *describe* a power-supply that doesn't
-really do much, where noirq would work? looking for "interrupts" in any
-parent feels very stable and makes sure we only change behaviour when
-really needed. But for the boards I'm looking at, I have to admit it
-wouldn't change anything afaik. So if you insist, I'll happily remove
-that.
+Thanks for your review.
 
-Also, I forgot to say earlier: We could even add "if not regulator-
-always-on" to the DT parsing above, because in that case noirq is fine
-even for external regulators. Should I add that? I'd like as little
-runtime change as possible so I would add that (and keep the
-"interrupts" search above for the same reason). 
-
-thanks for looking at this,
-
-                             martin
-
-
+On 7/19/22 8:25 AM, Bjorn Andersson wrote:
+> On Fri 01 Jul 09:58 CDT 2022, Bhupesh Sharma wrote:
 > 
-> Regards,
-> Lucas
+>> QCoM sm8150 tsens controller might require re-initialization
 > 
-> >         ret = pm_genpd_init(&domain->genpd, NULL, true);
-> >         if (ret) {
-> >                 dev_err(domain->dev, "Failed to init power
-> > domain\n");
-> 
-> 
+> Please spell out Qualcomm.
 
+Ok.
 
+>> via trustzone [via scm call(s)] when it enters a 'bad state'
+>> causing sensor temperatures/interrupts status to be in an
+>> 'invalid' state.
+>>
+>> Add hooks for the same in the qcom tsens driver which
+>> can be used by followup patch(es).
+>>
+> 
+> This patch enables needs_reinit_wa, which is actually implemented in
+> patch 3, wouldn't it make more sense to flip them around; to first
+> implement the feature and then enable it in this patch?
+
+Yes, this was reported by the kernel test bot as well.
+I will address this in v2.
+
+>> Cc: Amit Kucheria <amitk@kernel.org>
+>> Cc: Thara Gopinath <thara.gopinath@gmail.com>
+>> Cc: linux-pm@vger.kernel.org
+>> Cc: linux-arm-msm@vger.kernel.org
+>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> ---
+>>   drivers/thermal/qcom/tsens-v2.c | 11 +++++++++++
+>>   drivers/thermal/qcom/tsens.c    |  4 ++++
+>>   drivers/thermal/qcom/tsens.h    |  6 +++++-
+>>   3 files changed, 20 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+>> index b293ed32174b..61d38a56d29a 100644
+>> --- a/drivers/thermal/qcom/tsens-v2.c
+>> +++ b/drivers/thermal/qcom/tsens-v2.c
+>> @@ -101,6 +101,17 @@ struct tsens_plat_data data_tsens_v2 = {
+>>   	.fields	= tsens_v2_regfields,
+>>   };
+>>   
+>> +/* For sm8150 tsens, its suggested to monitor the controller health
+> 
+> /*
+>   * Outside the network stack, the first line should be left empty in
+>   * multiline comments.
+>   */
+
+Ok.
+
+>> + * periodically and in case an issue is detected to reinit tsens
+>> + * controller via trustzone.
+>> + */
+>> +struct tsens_plat_data data_tsens_sm8150 = {
+> 
+> I doubt this is sm8150-specific, so the first question is if this should
+> be attempted on all data_tsens_v2 platforms. Otherwise, how about naming
+> this data_tsens_v2_reinit?
+
+I agree. Konrad reported one more use case of the same.
+So, I will take care of the same in v2.
+
+'data_tsens_v2_reinit' makes sense to me.
+
+Regards,
+Bhupesh
+
+>> +	.ops		= &ops_generic_v2,
+>> +	.feat		= &tsens_v2_feat,
+>> +	.needs_reinit_wa = true,
+>> +	.fields	= tsens_v2_regfields,
+>> +};
+>> +
+>>   /* Kept around for backward compatibility with old msm8996.dtsi */
+>>   struct tsens_plat_data data_8996 = {
+>>   	.num_sensors	= 13,
+>> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+>> index 7963ee33bf75..97f4d4454f20 100644
+>> --- a/drivers/thermal/qcom/tsens.c
+>> +++ b/drivers/thermal/qcom/tsens.c
+>> @@ -991,6 +991,9 @@ static const struct of_device_id tsens_table[] = {
+>>   	}, {
+>>   		.compatible = "qcom,msm8996-tsens",
+>>   		.data = &data_8996,
+>> +	}, {
+>> +		.compatible = "qcom,sm8150-tsens",
+>> +		.data = &data_tsens_sm8150,
+>>   	}, {
+>>   		.compatible = "qcom,tsens-v1",
+>>   		.data = &data_tsens_v1,
+>> @@ -1135,6 +1138,7 @@ static int tsens_probe(struct platform_device *pdev)
+>>   
+>>   	priv->dev = dev;
+>>   	priv->num_sensors = num_sensors;
+>> +	priv->needs_reinit_wa = data->needs_reinit_wa;
+>>   	priv->ops = data->ops;
+>>   	for (i = 0;  i < priv->num_sensors; i++) {
+>>   		if (data->hw_ids)
+>> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+>> index 1471a2c00f15..48a7bda902c1 100644
+>> --- a/drivers/thermal/qcom/tsens.h
+>> +++ b/drivers/thermal/qcom/tsens.h
+>> @@ -515,6 +515,7 @@ struct tsens_features {
+>>    * @num_sensors: Number of sensors supported by platform
+>>    * @ops: operations the tsens instance supports
+>>    * @hw_ids: Subset of sensors ids supported by platform, if not the first n
+>> + * @needs_reinit_wa: tsens controller might need reinit via trustzone
+>>    * @feat: features of the IP
+>>    * @fields: bitfield locations
+>>    */
+>> @@ -522,6 +523,7 @@ struct tsens_plat_data {
+>>   	const u32		num_sensors;
+>>   	const struct tsens_ops	*ops;
+>>   	unsigned int		*hw_ids;
+>> +	bool			needs_reinit_wa;
+>>   	struct tsens_features	*feat;
+>>   	const struct reg_field		*fields;
+>>   };
+>> @@ -544,6 +546,7 @@ struct tsens_context {
+>>    * @srot_map: pointer to SROT register address space
+>>    * @tm_offset: deal with old device trees that don't address TM and SROT
+>>    *             address space separately
+>> + * @needs_reinit_wa: tsens controller might need reinit via trustzone
+>>    * @ul_lock: lock while processing upper/lower threshold interrupts
+>>    * @crit_lock: lock while processing critical threshold interrupts
+>>    * @rf: array of regmap_fields used to store value of the field
+>> @@ -561,6 +564,7 @@ struct tsens_priv {
+>>   	struct regmap			*tm_map;
+>>   	struct regmap			*srot_map;
+>>   	u32				tm_offset;
+>> +	bool				needs_reinit_wa;
+>>   
+>>   	/* lock for upper/lower threshold interrupts */
+>>   	spinlock_t			ul_lock;
+>> @@ -593,6 +597,6 @@ extern struct tsens_plat_data data_8916, data_8939, data_8974, data_9607;
+>>   extern struct tsens_plat_data data_tsens_v1, data_8976;
+>>   
+>>   /* TSENS v2 targets */
+>> -extern struct tsens_plat_data data_8996, data_tsens_v2;
+>> +extern struct tsens_plat_data data_8996, data_tsens_sm8150, data_tsens_v2;
+>>   
+>>   #endif /* __QCOM_TSENS_H__ */
+>> -- 
+>> 2.35.3
+>>
