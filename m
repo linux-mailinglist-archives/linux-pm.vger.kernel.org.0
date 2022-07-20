@@ -2,309 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAC957B42C
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 11:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FA257B44E
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 12:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238067AbiGTJsw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 05:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S232228AbiGTKL5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 20 Jul 2022 06:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiGTJst (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 05:48:49 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E39655AF;
-        Wed, 20 Jul 2022 02:48:48 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id z13so5771235wro.13;
-        Wed, 20 Jul 2022 02:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=c+pvmwXxIE3jKXaJBEBBqNcZCeI+2ftzet1Ejv5LXxE=;
-        b=Bl/Uxa8xKm77kppS+zbyPUqMX6ThytrscVsgl1YNbRNeKe8x3wNYy9xN2LJQgC4b+m
-         CVtxDHN3+NlCmmeGfSPK3c/2bgbcIaqjyJ8UOOrc7fgYnHXVJpL9/jlthv7pWdx9kOH1
-         LZ8Ke+TTociEGnkw6Kb2NrqYVzWsyeo9vazoQxsfc7PDfRMUmtJMmZ2JjxhubAt8pfFH
-         oIQiGQ/fJdWsK3BswigHb/+Qw2e86Dg2TDS2EAHuCLGkXQC7NROzCqqyLHBKgPM7Xxl8
-         znyAJjdKjHqrO6ONRWcA3n3b8veOJmnjbOX7I+MBtOPTMpYlt0dx+flde0eKnhS9oZA+
-         5LkA==
+        with ESMTP id S231133AbiGTKL5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 06:11:57 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC2545E8;
+        Wed, 20 Jul 2022 03:11:56 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id l11so31253227ybu.13;
+        Wed, 20 Jul 2022 03:11:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=c+pvmwXxIE3jKXaJBEBBqNcZCeI+2ftzet1Ejv5LXxE=;
-        b=zm/QX45d+Mq9PhohE71568aOFJBPpbFe7wxDQk34r2O2J8cCArx5iVOiwWhmnBxQWz
-         e+9/7NCWMYxGOdb450CFH13Xs8+wD2HvMjZk/aK6teRylv4EcO6sf9FL9nfI9X+GuljY
-         t3TApFUPaqbN8SzVKt7cmA4B+ge5/uDhjLKArCJBjIARuUMM0OnGD230e8JujxssWXpA
-         ncDZooT4JZLS1TApVC5i7jHiDNBp1TW4MU3h9OFf49Gg4IiBfOETKvmE0V1KGvqOUt7G
-         Yn46NBlMQ32/2eWQpyrnkCg/4ajf4fEUizgM/0V6jqmusoQFIMh9PPQDNirhY47+Mo8D
-         azwA==
-X-Gm-Message-State: AJIora9Nws0kRDpeOhHskrMn3R+TY5xMg7/PGShiCuaPk8hajCH7cOxJ
-        VllcfJuzXjYnrG+pFKpJr8H1BNSdRGiwZA+0bTU=
-X-Google-Smtp-Source: AGRyM1s8IpIYDGuU/DLqKsFdsmyV+rKVmTfi/oduAoH5rNHnTn85/TiMyb4eENWpu+Y5Z15JoqFBASYG/TlH/hH8hGo=
-X-Received: by 2002:a05:6000:98b:b0:21d:b70f:2726 with SMTP id
- by11-20020a056000098b00b0021db70f2726mr29986145wrb.237.1658310526656; Wed, 20
- Jul 2022 02:48:46 -0700 (PDT)
+        bh=HPxfGl62Grx8smrWYOlzrFoO6DOehrIgEYjXrU1sD0o=;
+        b=xkNsGZGVYeood3x9zDpxV25KOZEQt/cuyR4STO1so5VkHbdXzhJuBYDAxyN+Fl4D0Y
+         TH/W2gcloj/S7SgSRYnlRA2fUYNzmggBYMZoyz4mxr99N17jIfXpXlN2/4dvfEliCCmk
+         Iz3y7pTzSGdPYKtSMUE3N2NibNJHOvLoN3x1t1oE4V5D0mwuYu1LxUaXNkEvNEfsGfp2
+         xWd9YcY2lwBRsRpddxMgM+mCQweh8KLFmE6vhC3mAJLkqpiuuKBBCxe22BeeU/QB1d1x
+         E4VFwDOBQcbvTZwWe9jap7pC/lgrYEyCsMCKC8Pw/RmgYCeVHaOoogtpTnBZw1xElHN8
+         F8bw==
+X-Gm-Message-State: AJIora9F/G3DMIqmSHI6m5bbYjla3POb2ELUDSq3WvpNTvZLIc922hWv
+        WHxkPaP+a4RqTd47rj74Usqd0yZgxjuRDY1DVBLKIEWW
+X-Google-Smtp-Source: AGRyM1t+W3Hm0oVvCSceKj5BBeNajD+cXnrdGlvpODvEOlVC6+3nCFWc6wPhP0rzw9VzQXuULX4Qg/afdDiytzTYfLE=
+X-Received: by 2002:a05:6902:154f:b0:66e:e2d3:ce1 with SMTP id
+ r15-20020a056902154f00b0066ee2d30ce1mr33331218ybu.365.1658311915502; Wed, 20
+ Jul 2022 03:11:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-12-peterwu.pub@gmail.com>
- <CAHp75VfyVufzf7CK38BVu_j0B4ax_d1gLAGYDE3H1zaKkuUB=A@mail.gmail.com> <20220720094510.GA29755@cyhuang-hp-elitebook-840-g3.rt>
-In-Reply-To: <20220720094510.GA29755@cyhuang-hp-elitebook-840-g3.rt>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Wed, 20 Jul 2022 17:48:34 +0800
-Message-ID: <CADiBU3_rtVXFX3qdSoc=F-zs9CYiNRmNPOa3RffRJD1Qc5N-bA@mail.gmail.com>
-Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
- type LED Indicator support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
+References: <CAFv23QmH4ooXJzX9A0CBObrETZgb9sT4dfh03NZA--fKfZnHDA@mail.gmail.com>
+ <87fsixz8cb.wl-maz@kernel.org> <CAFv23Q=O29J4K_bdTi_SuThsEZN_SFNNz+bBPQSA+RGCANm6=w@mail.gmail.com>
+ <CAAd53p7GGjqpo97VP=uXnJQstKzxCf9Si+ZCD98UsbdJ7oS=SA@mail.gmail.com>
+In-Reply-To: <CAAd53p7GGjqpo97VP=uXnJQstKzxCf9Si+ZCD98UsbdJ7oS=SA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 20 Jul 2022 12:11:44 +0200
+Message-ID: <CAJZ5v0jYJxk1B1XORLQkGf=R9HDPbUzAjb3_2GUM0XtfmyXfZA@mail.gmail.com>
+Subject: Re: There are not enough CPU0 APIC IRQs while doing IRQ migration
+ during S3
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     AceLan Kao <acelan.kao@canonical.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-ChiYuan Huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=8820=E6=
-=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:45=E5=AF=AB=E9=81=93=EF=BC=9A
+On Wed, Jul 20, 2022 at 5:16 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
 >
-> On Fri, Jul 15, 2022 at 08:29:42PM +0200, Andy Shevchenko wrote:
-> > On Fri, Jul 15, 2022 at 1:29 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote=
-:
-> > >
-> > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > >
-> > > The MediaTek MT6370 is a highly-integrated smart power management IC,
-> > > which includes a single cell Li-Ion/Li-Polymer switching battery
-> > > charger, a USB Type-C & Power Delivery (PD) controller, dual
-> > > Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> > > a display bias driver and a general LDO for portable devices.
-> > >
-> > > In MediaTek MT6370, there are four channel current-sink RGB LEDs that
-> > > support hardware pattern for constant current, PWM, and breath mode.
-> > > Isink4 channel can also be used as a CHG_VIN power good indicator.
-> >
-> > ...
-> >
-> > > +         This driver can also be built as a module. If so the module
-> >
-> > so, the
-> >
-> > > +         will be called "leds-mt6370.ko".
-> >
-> > No ".ko".
-> >
-> > Why did you ignore these comments? Please go and fix _everywhere_ in
-> > your series.
-> > It's basically the rule of thumb, if the reviewer gives a comment
-> > against an occurrence of something, go through entire series and check
-> > if there are other places like commented one and address them all.
-> >
-> > ...
-> >
-> > > + * Author: Alice Chen <alice_chen@richtek.com>
-> >
-> > Strange, the commit message doesn't have a corresponding SoB, why?
-> >
-> Yes, there're two authors Alice and me.
-> I'll correct it in next.
-> > ...
-> >
-> > > +#define MT6370_PWM_DUTY                                31
-> > > +#define MT6372_PMW_DUTY                                255
-> >
-> > Looks like these are limits by hardware?
-> > Check with the datasheet if (BIT(x) - 1) makes more sense here.
-> >
-> > ...
-> >
-> > > +       switch (led_no) {
-> > > +       case MT6370_LED_ISNK1:
-> > > +               sel_field =3D F_LED1_DUTY;
-> > > +               break;
-> > > +       case MT6370_LED_ISNK2:
-> > > +               sel_field =3D F_LED2_DUTY;
-> > > +               break;
-> > > +       case MT6370_LED_ISNK3:
-> > > +               sel_field =3D F_LED3_DUTY;
-> > > +               break;
-> > > +       default:
-> > > +               sel_field =3D F_LED4_DUTY;
-> >
-> > Missed break;
-> >
-> > > +       }
-> >
-> > ...
-> >
-> > > +       switch (led_no) {
-> > > +       case MT6370_LED_ISNK1:
-> > > +               sel_field =3D F_LED1_FREQ;
-> > > +               break;
-> > > +       case MT6370_LED_ISNK2:
-> > > +               sel_field =3D F_LED2_FREQ;
-> > > +               break;
-> > > +       case MT6370_LED_ISNK3:
-> > > +               sel_field =3D F_LED3_FREQ;
-> > > +               break;
-> > > +       default:
-> > > +               sel_field =3D F_LED4_FREQ;
-> >
-> > Ditto.
-> >
-> > > +       }
-> >
-> > ...
-> >
-> > > +       switch (led_no) {
-> > > +       case MT6370_LED_ISNK1:
-> > > +       case MT6370_LED_ISNK2:
-> > > +       case MT6370_LED_ISNK3:
-> > > +               *base =3D MT6370_REG_RGB1_TR + led_no * 3;
-> > > +               break;
-> > > +       default:
-> > > +               *base =3D MT6370_REG_RGB_CHRIND_TR;
-> >
-> > Ditto.
-> > It seems you dropped them for all switch-cases. It's not goot, please
-> > restore them back.
-> >
-> > > +       }
-> >
-> > ...
-> >
-> > > +       u8 val[P_MAX_PATTERNS / 2] =3D {0};
-> >
-> > { } should suffice
-> >
-> >
-> In the above range selector, we use the 'logic or' to generate the
-typo, it's 'below'.
-> pattern values.
+> [+Cc Rafael, linux-pm]
 >
-> If to change it from '{0} to '{ }', is it correct?
-> > > +       /*
-> > > +        * Pattern list
-> > > +        * tr1: byte 0, b'[7: 4]
-> > > +        * tr2: byte 0, b'[3: 0]
-> > > +        * tf1: byte 1, b'[7: 4]
-> > > +        * tf2: byte 1, b'[3: 0]
-> > > +        * ton: byte 2, b'[7: 4]
-> > > +        * toff: byte 2, b'[3: 0]
-> > > +        */
-> > > +       for (i =3D 0; i < P_MAX_PATTERNS; i++) {
-> > > +               curr =3D pattern + i;
-> > > +
-> > > +               sel_range =3D i =3D=3D P_LED_TOFF ? R_LED_TOFF : R_LE=
-D_TRFON;
-> > > +
-> > > +               linear_range_get_selector_within(priv->ranges + sel_r=
-ange,
-> > > +                                                curr->delta_t, &sel)=
-;
-> > > +
-> > > +               val[i / 2] |=3D sel << (4 * ((i + 1) % 2));
-> > > +       }
-> > > +
-> > > +       memcpy(pattern_val, val, 3);
-> > > +       return 0;
-> > > +}
+> On Wed, Jul 20, 2022 at 10:53 AM AceLan Kao <acelan.kao@canonical.com> wrote:
 > >
-> > ...
-> >
-> > > +out:
-> >
-> > out_unlock:
-> >
-> > > +       mutex_unlock(&priv->lock);
-> > > +
-> > > +       return ret;
-> >
-> > ...
-> >
-> > > +out:
-> >
-> > Ditto. And so on.
-> >
-> > > +       mutex_unlock(&priv->lock);
-> > > +
-> > > +       return ret;
-> >
-> > ...
-> >
-> > > +               sub_led =3D devm_kzalloc(priv->dev,
-> > > +                                      sizeof(*sub_led) * MC_CHANNEL_=
-NUM,
-> > > +                                      GFP_KERNEL);
-> >
-> > NIH devm_kcalloc(). Also check if you really need zeroed data.
-> >
-> Ok, and after the check, I also need to add one line to set the intensity=
- to 0.
-> > > +               if (!sub_led)
-> > > +                       return -ENOMEM;
-> >
-> > ...
-> >
-> > > +                       ret =3D fwnode_property_read_u32(child, "colo=
-r", &color);
-> > > +                       if (ret) {
-> > > +                               dev_err(priv->dev,
-> > > +                                       "led %d, no color specified\n=
-",
-> > > +                                       led->index);
-> > > +                               return ret;
-> >
-> > return dev_err_probe(...) ; ?
-> >
-> > Ditto for many places in your entire series.
-> >
-> > > +                       }
-> >
-> > ...
-> >
-> > > +       priv =3D devm_kzalloc(&pdev->dev,
-> > > +                           struct_size(priv, leds, count), GFP_KERNE=
-L);
-> >
-> > At least one parameter can be placed on the previous line.
-> >
-> > > +       if (!priv)
-> > > +               return -ENOMEM;
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko
+> > Marc Zyngier <maz@kernel.org> 於 2022年7月19日 週二 下午6:48寫道：
+> > >
+> > > [- Jason]
+> > >
+> > > On Tue, 19 Jul 2022 06:55:21 +0100,
+> > > AceLan Kao <acelan.kao@canonical.com> wrote:
+> > > >
+> > > > HI all,
+> > > >
+> > > > I encountered an issue while doing S3, it shows below message and then
+> > > > failed to enter S3
+> > > > [  106.731140] CPU 31 has 116 vectors, 85 available. Cannot disable CPU
+> > > > [  106.731551] ACPI: \_PR_.C01F: Found 2 idle states
+> > > > [  106.732610] Error taking CPU31 down: -28
+> > > > [  106.732612] Non-boot CPUs are not disabled
+> > > >
+> > > > CPU: AMD Ryzen Threadripper PRO 3955WX 16-Cores
+> > > > Kernel: v5.19-rc7
+> > > > There are 5 PCI to 4 type-c ports USB cards on the machine, and It
+> > > > wouldn't lead to the issue if only 4 cards are plugged. So, it looks
+> > > > like it can't handle 5 cards, and failed on the IRQ migration.
+> > > >
+> > > > The workaround provided by kaiheng is to release the irq while
+> > > > suspending and request irq while resuming.
+> > > > I'm wondering do we have a better solution for this kind of issue?
+> > > > Thanks.
+> > > >
+> > > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > > > index edc6881c8a1b..91c79b21cb57 100644
+> > > > --- a/drivers/usb/host/xhci.c
+> > > > +++ b/drivers/usb/host/xhci.c
+> > > > @@ -17,6 +17,7 @@
+> > > > #include <linux/slab.h>
+> > > > #include <linux/dmi.h>
+> > > > #include <linux/dma-mapping.h>
+> > > > +#include <linux/suspend.h>
+> > > >
+> > > > #include "xhci.h"
+> > > > #include "xhci-trace.h"
+> > > > @@ -1079,6 +1080,9 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+> > > >                                __func__);
+> > > >        }
+> > > >
+> > > > +       if (pm_suspend_via_firmware())
+> > > > +               xhci_cleanup_msix(xhci);
+> > >
+> > > I'm a bit clueless when it comes to the combination of x86 and xhci,
+> > > but doesn't this prevent resuming on a xhci interrupt?
+> > The PCI cards provide 4 type-c USB ports, and in the beginning we
+> > found that removing one PCI card fixed the issue, so we were trying to
+> > fix the issue in xhci driver.
+> > The USB ports on the PCI cards can't resume the system from S3 even
+> > without the workaround,
+> > but the USB ports on the rear panel of the motherboard still work with
+> > the workaround.
+>
+> The isn't xHCI specific. The issue here is that CPU0 APIC doesn't have
+> enough IRQ vector for ACPI S3 suspend.
+> Ideally we don't want to tear down IRQs during suspend, but for this
+> case minimizing IRQ numbers means successful S3.
+>
+> So maybe we can have a suspend flow like this:
+> - At the beginning of suspend, check if there's enough free IRQ for
+> CPU0 migration.
+> - If there isn't enough free slots, hint drivers to tear down non-wake
+> IRQs. Maybe use a global variable if we don't want to add a new
+> parameter to current PM ops.
+> - If it's still not enough, abort suspend.
+>
+> For suspend that doesn't unplug CPU like suspend-to-idle, no
+> modification is needed.
+> I wonder if that makes sense?
+
+Quite probably, IRQs need not be migrated during system suspend, so it
+should be possible to avoid doing that entirely on "hot remove" if it
+is part of the suspend flow.
