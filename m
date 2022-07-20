@@ -2,179 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3C157B0FE
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 08:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B381F57B1FB
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 09:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbiGTGWN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 02:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S231546AbiGTHpo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 03:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239753AbiGTGWN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 02:22:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769B2459B2;
-        Tue, 19 Jul 2022 23:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658298132; x=1689834132;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VIoqvMQmlC7JWo+InrzK5qG2yjqzCb7CCmaAG3iKzz0=;
-  b=GIiteMqXL1jvW9+iX0s6J6LPG6tc7f/2Wru8t5WT+jJZZGxvClmeF3og
-   ypeZ9dYvpw2klpZgAoCV3AiQcesQtPnyAKicuKzMps3+K5iP1QwavYEr1
-   FHgx4CzM+D2RbDv6B4sKdnfEbHf7IJKn6BB1KM8IWjETPQ4/4Ui6dPZ0s
-   q6BhHc7BAeF0OhyXUdo0OkHd7T/RQ2rs7BKjCmp1Qn2cQk8qLhay0JA8V
-   rFQETsGj3QAMJlB+SA78/ZAGiEoab2mHyx/QdJLDQik4hfGzBWYQzJ394
-   68is/hQOLAGjUEwzODnSTTk1jlxqIIfQy4r/5GPwofdG1nSs5MNaF5xDJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="266466670"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="266466670"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 23:22:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="625527167"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jul 2022 23:22:10 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oE361-00005t-NP;
-        Wed, 20 Jul 2022 06:22:09 +0000
-Date:   Wed, 20 Jul 2022 14:21:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 66de314cd08fc4a7830333025d6a9c61ed12cd30
-Message-ID: <62d79ef9.PGF5BxVHQU6Ey7/c%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S231868AbiGTHpl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 03:45:41 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA4021E3C;
+        Wed, 20 Jul 2022 00:45:39 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id o7so28874173lfq.9;
+        Wed, 20 Jul 2022 00:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tVPIkcHFbrIBqwWvbgKoMairnWOWXDJLFc+/HEF3fRk=;
+        b=TvwRSCVDrRciTpOnKLMfyHifAJeyTe5WXyx5ysgT2EPtGU05SCryU9kIUgyHW4kqR9
+         EBaLbVU/27CKoVZLHD4EI4UbEJKJuU02+DzFI3TSmKuXYkVRl+soRhLc4NQMyQ4eZa9D
+         Zr2M1A6XuTHZSPLLhQYBdSC9rIgXAcxpYM9YVlXXoMj2HNJs0lqrUyFzfcNe2jKsnOE/
+         RJKNLUgBLZ1Iaza/7BOUpvblYMIj1thXugwy+f81/8tsODb2glK69wBixB3SnotUfGzL
+         Vah626GD6k40pZjo6zpYRoH9/S2sKqMPE7FyvN/hDDPav2Qwc+VwpXP/aBxhmlHCAjJg
+         /Z8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tVPIkcHFbrIBqwWvbgKoMairnWOWXDJLFc+/HEF3fRk=;
+        b=WuCmJjwzZdD9gqtQl5EQF45cVp1zIWdcpQKLlyoK5w11OD0cwqrOImD12PGet4rfyU
+         Um3M/Bs0wiTi36/UqPeeSDGgNwsQgVE8wtyij7s/PYA72t0HfP4WJoycWQDqwEz8Aeg2
+         C4BeDHLf/T0m3jvnLnJXc72kHsMejtkDQOiDh0LOda2on5ykBHsIcCxMTcCTN3ICJTl2
+         PDCzRCQV1yruEcEwrj4H7Yq4QVUCvonImNzXbchii0cWtbhI8/qo5j1XvLy7LjwVugYB
+         JvYYik41R6QsfM7gRQ2p7hmKC2024mralpsXuutnoVOjr1naTcvWLmFdcZsu7e6N8wVV
+         m+Kw==
+X-Gm-Message-State: AJIora+GdF2li8uXb/QH5mpWyarSNOH1JhqPNwmCqHl6ClbM/bEVF2tG
+        RxkIR0P3sjPhluW6FG+hhuY/XU8EMz2XsGVf/iY=
+X-Google-Smtp-Source: AGRyM1vVIrLVpzkiPr5QbQtV3lohS4xPfbNPKVz8ES1xANkNSPGUrstUkzAZwc68FHS3SJPGuxGCEjBl1ND2WEO5BNo=
+X-Received: by 2002:a05:6512:23a0:b0:489:d19c:602d with SMTP id
+ c32-20020a05651223a000b00489d19c602dmr19783960lfv.89.1658303138187; Wed, 20
+ Jul 2022 00:45:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220705123705.764-1-xuewen.yan@unisoc.com> <20220711174629.uehfmqegcwn2lqzu@wubuntu>
+ <YsyO9GM9mCydaybo@slm.duckdns.org> <c1426573-92a7-9f0d-a6b8-aa612248b9a9@redhat.com>
+ <Ys41ZF5TmSnLLNRB@slm.duckdns.org>
+In-Reply-To: <Ys41ZF5TmSnLLNRB@slm.duckdns.org>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Wed, 20 Jul 2022 15:45:27 +0800
+Message-ID: <CAB8ipk-8cbur-m733py-cw4bXCt7gkd8gAOXtKO+-fV1B2EeZw@mail.gmail.com>
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Waiman Long <longman@redhat.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
+        Lukasz Luba <Lukasz.Luba@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 66de314cd08fc4a7830333025d6a9c61ed12cd30  Merge branch 'pm-devfreq' into linux-next
+Dear all
 
-elapsed time: 722m
+On Wed, Jul 13, 2022 at 11:20 AM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Tue, Jul 12, 2022 at 10:49:57PM -0400, Waiman Long wrote:
+> > > Well, the only thing I can think of is always grabbing cpus_read_lock()
+> > > before grabbing threadgroup_rwsem. Waiman, what do you think?
+> >
+> > That is a possible solution as cpus_read_lock() is rather lightweight. It is
+> > a good practice to acquire it first.
+>
+> On a similar note, I think we probably should re-enable percpu operations on
+> threadgroup_rwsem too by default and allow users who are affected by slower
+> write path operations to opt-in. After the new CLONE_INTO_CGROUP which
+> doesn't need the rwsem, we have far fewer write lockers after all.
+>
 
-configs tested: 98
-configs skipped: 2
+ If there's any patch for me to try? I would be very grateful.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks!
 
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-i386                 randconfig-c001-20220718
-arm                        realview_defconfig
-arm                             rpc_defconfig
-powerpc                     sequoia_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                    sam440ep_defconfig
-xtensa                    smp_lx200_defconfig
-m68k                             alldefconfig
-arc                     haps_hs_smp_defconfig
-powerpc                     pq2fads_defconfig
-sh                         microdev_defconfig
-arc                     nsimosci_hs_defconfig
-powerpc                      ep88xc_defconfig
-arm                      footbridge_defconfig
-mips                      loongson3_defconfig
-sh                        dreamcast_defconfig
-xtensa                       common_defconfig
-mips                            gpr_defconfig
-sh                          lboxre2_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-ia64                             allmodconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64               randconfig-a014-20220718
-x86_64               randconfig-a016-20220718
-x86_64               randconfig-a012-20220718
-x86_64               randconfig-a013-20220718
-x86_64               randconfig-a015-20220718
-x86_64               randconfig-a011-20220718
-i386                 randconfig-a015-20220718
-i386                 randconfig-a011-20220718
-i386                 randconfig-a012-20220718
-i386                 randconfig-a014-20220718
-i386                 randconfig-a016-20220718
-i386                 randconfig-a013-20220718
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220718
-riscv                randconfig-r042-20220718
-s390                 randconfig-r044-20220718
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-arm                     am200epdkit_defconfig
-riscv                            alldefconfig
-arm                        magician_defconfig
-mips                          malta_defconfig
-hexagon                          alldefconfig
-powerpc                    gamecube_defconfig
-mips                      maltaaprp_defconfig
-mips                        maltaup_defconfig
-powerpc                     mpc5200_defconfig
-mips                          ath25_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-i386                 randconfig-a004-20220718
-i386                 randconfig-a001-20220718
-i386                 randconfig-a005-20220718
-i386                 randconfig-a006-20220718
-i386                 randconfig-a002-20220718
-i386                 randconfig-a003-20220718
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220718
-hexagon              randconfig-r045-20220718
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+---
+xw.yan
