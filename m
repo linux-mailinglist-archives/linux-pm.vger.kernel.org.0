@@ -2,257 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C39857BE1E
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 20:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93BE57BE35
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 21:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiGTSyW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 14:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S232045AbiGTTCN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 15:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbiGTSyV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 14:54:21 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A0A48C9F
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 11:54:20 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id EEpmoHJmwGWJJEEpmovpQ1; Wed, 20 Jul 2022 20:54:19 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 20 Jul 2022 20:54:19 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <92540bf4-f2de-0aae-d764-ce6edfda1ab1@wanadoo.fr>
-Date:   Wed, 20 Jul 2022 20:54:09 +0200
+        with ESMTP id S232094AbiGTTCJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 15:02:09 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9737F70E6A
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 12:02:07 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 64so33695044ybt.12
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 12:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZrLA67cwNZVETS1ZHuCD/RT+6Ux5ZfCBf4rowrb0zk0=;
+        b=YT3DmTiyfkNmNptMHmutH4aCptYOfYRcFG5iGz+vPj1xh91hftwgRZVbF/wRHhgFCW
+         1yP86FQRWdyvxo3CPjgvnAYFhKYsg4xRdhZAvb8fEmhoefgT03SVJLFYubN1htgW4In8
+         t6tNVr6ozTt06SPfaEt4t0hjTV1L36J3WR01kFU5ZNbxj6GCZ743km1XpjzuQHn+RR1i
+         jytsYhkdsZViX0r1R/6noErQEJfi5bpHwxr3gD8SgyAPCv7vWZfI56uCK7HWM7r7/PFy
+         SmvPNalQP0Ie215MNTJOK1vcSRgDWta0erJ4se7iwmpkVwf7aKNEFOMppZgPMGsnyAwV
+         GblA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZrLA67cwNZVETS1ZHuCD/RT+6Ux5ZfCBf4rowrb0zk0=;
+        b=ljA/9aJ4YnCfdsuW6g1T0/WSPInVMmjWqnJgsaz8Momg9S1tooleQM4dIFZrlI87cd
+         e4FgtskeRhleiZpyTrZSWweeo5s0QHfokiRxypKjeLfghJENZ1R2hz4AohLc+DTJHJGA
+         +pLbcrSNPQvzkEALZgqwDJtVCzM/y+BpUXYzu+pBq1iFiwLXqtrZHq9pIGf21kIn4OEs
+         5ptveTPTAJ9xZUo9cgpFrab0pLKmN2IT3NmvBWrKJKtGTW4S/7u+HC8uu/f5lokKqSNh
+         /2H+2l//e+l5kV31/hbVX/arHte/JcZCvRRGeMmXG5IOapHna+wX7Hx4FGk/ml8HBwHb
+         eO9A==
+X-Gm-Message-State: AJIora/RJK8MyrkmwImoemfCwBKMPUr6HIyhS9DlfV7z7PavlOUjpABj
+        +BWOyBVv/LIUlX9jCZbKlGb+xlVF/FInap/E/KLoJg==
+X-Google-Smtp-Source: AGRyM1uk+awIxg+8Ie0mI4x1EeK/QSvobPmBqLZR8RQ7K+Gyc23VhWoJ9xFtopJENev37KrbfMD18GZF9BwnX6/O8DQ=
+X-Received: by 2002:a25:aaa9:0:b0:66e:c6ba:15dd with SMTP id
+ t38-20020a25aaa9000000b0066ec6ba15ddmr37815606ybi.242.1658343726294; Wed, 20
+ Jul 2022 12:02:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-Content-Language: en-US
-To:     aouledameur@baylibre.com
-Cc:     amitk@kernel.org, daniel.lezcano@linaro.org,
-        devicetree@vger.kernel.org, fparent@baylibre.com,
-        hsinyi@chromium.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        matthias.bgg@gmail.com, michael.kao@mediatek.com,
-        rafael@kernel.org, robh+dt@kernel.org, rui.zhang@intel.com
-References: <20220720181854.547881-1-aouledameur@baylibre.com>
- <20220720181854.547881-5-aouledameur@baylibre.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220720181854.547881-5-aouledameur@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-7-saravanak@google.com> <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 20 Jul 2022 12:01:30 -0700
+Message-ID: <CAGETcx-5-241=CxaPsGTTHhCSAZuGb742J9Xrhbj56+2yG6OhQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/9] Revert "driver core: Set default
+ deferred_probe_timeout back to 0."
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le 20/07/2022 à 20:18, Amjad Ouled-Ameur a écrit :
-> Provide thermal zone to read thermal sensor in the SoC. We can read all the
-> thermal sensors value in the SoC by the node /sys/class/thermal/
-> 
-> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-> on the first read of sensor that often are bogus values.
-> This can avoid following warning on boot:
-> 
->    thermal thermal_zone6: failed to read out thermal zone (-13)
-> 
-> Signed-off-by: default avatarMichael Kao <michael.kao-NuS5LvNUpcJWk0Htik3J/w@public.gmane.org>
-> Signed-off-by: default avatarHsin-Yi Wang <hsinyi-F7+t8E8rja9g9hUCZPvPmw@public.gmane.org>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
-> Tested-by: Amjad Ouled-Ameur <aouledameur-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
-> ---
->   drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
->   1 file changed, 76 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 1dc276f8c4f1..79b14ce1a08d 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
->   
->   struct mtk_thermal;
->   
-> +struct mtk_thermal_zone {
-> +	struct mtk_thermal *mt;
-> +	int id;
-> +};
-> +
->   struct thermal_bank_cfg {
->   	unsigned int num_sensors;
->   	const int *sensors;
-> @@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
->   		mutex_unlock(&mt->lock);
->   }
->   
-> +static u32 _get_sensor_temp(struct mtk_thermal *mt, int id)
-> +{
-> +	u32 raw;
-> +	int temp;
-> +
-> +	const struct mtk_thermal_data *conf = mt->conf;
-> +
-> +	raw = readl(mt->thermal_base + conf->msr[id]);
-> +
-> +	if (mt->conf->version == MTK_THERMAL_V1)
-> +		temp = raw_to_mcelsius_v1(mt, id, raw);
-> +	else
-> +		temp = raw_to_mcelsius_v2(mt, id, raw);
-> +
-> +	/*
-> +	 * The first read of a sensor often contains very high bogus
-> +	 * temperature value. Filter these out so that the system does
-> +	 * not immediately shut down.
-> +	 */
-> +
-> +	if (temp > 200000)
-> +		return  -EAGAIN;
+On Wed, Jul 20, 2022 at 10:31 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Saravana,
+>
+> On Wed, Jun 1, 2022 at 9:45 AM Saravana Kannan <saravanak@google.com> wrote:
+> > This reverts commit 11f7e7ef553b6b93ac1aa74a3c2011b9cc8aeb61.
+> >
+> > Let's take another shot at getting deferred_probe_timeout=10 to work.
+> >
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+>
+> Thanks for your patch, which is now commit f516d01b9df2782b
+> ("Revert "driver core: Set default deferred_probe_timeout
+> back to 0."") in driver-core/driver-core-next.
+>
+> Wolfram found an issue on a Renesas board where disabling the IOMMU
+> driver (CONFIG_IPMMU_VMSA=n) causes the system to fail to boot,
+> and bisected this to a merge of driver-core/driver-core-next.
+> After some trials, I managed to reproduce the issue, and bisected it
+> further to commit f516d01b9df2782b.
+>
+> The affected config has:
+>     CONFIG_MODULES=y
+>     CONFIG_RCAR_DMAC=y
+>     CONFIG_IPMMU_VMSA=n
+>
+> In arch/arm64/boot/dts/renesas/r8a77951-salvator-xs.dtb,
+> e6e88000.serial links to a dmac, and the dmac links to an iommu,
+> for which no driver is available.
 
-This function returns a u32. Is it ok to return -EAGAIN?
+Thanks for digging into this and giving more details.
 
-There is also 2 spaces here...
+Is e6e88000.serial being blocked the reason for the boot failure?
 
-> +	else
-> +		return	temp;
+If so, can you give this a shot?
+https://lore.kernel.org/lkml/20220701012647.2007122-1-saravanak@google.com/
 
-... and a tab here.
+> Playing with deferred_probe_timeout values doesn't help.
 
-> +}
-> +
->   /**
->    * mtk_thermal_bank_temperature - get the temperature of a bank
->    * @bank:	The bank
-> @@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->   	struct mtk_thermal *mt = bank->mt;
->   	const struct mtk_thermal_data *conf = mt->conf;
->   	int i, temp = INT_MIN, max = INT_MIN;
-> -	u32 raw;
->   
->   	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
-> -		raw = readl(mt->thermal_base + conf->msr[i]);
-> -
-> -		if (mt->conf->version == MTK_THERMAL_V1) {
-> -			temp = raw_to_mcelsius_v1(
-> -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		} else {
-> -			temp = raw_to_mcelsius_v2(
-> -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		}
-> -
-> -		/*
-> -		 * The first read of a sensor often contains very high bogus
-> -		 * temperature value. Filter these out so that the system does
-> -		 * not immediately shut down.
-> -		 */
-> -		if (temp > 200000)
-> -			temp = 0;
-> +		temp = _get_sensor_temp(mt, i);
+This part is strange though. If you set deferred_probe_timeout=1,
+fw_devlink will stop blocking all probes 1 second after
+late_initcall()s finish. So, similar to the ip autoconfig issue, is
+the issue caused by something that needs to be finished before we hit
+late_initcall() but is getting blocked?
 
-Is it ok if _get_sensor_temp() returns -EAGAIN?
+> However, the above options do not seem to be sufficient to trigger
+> the issue, as I had other configs with those three options that do
+> boot fine.
+>
+> After bisecting configs, I found the culprit: CONFIG_IP_PNP.
+> As Wolfram was using an initramfs, CONFIG_IP_PNP was not needed.
+> If CONFIG_IP_PNP=n, booting fails.
+> If CONFIG_IP_PNP=y, booting succeeds.
+> In fact, just disabling late_initcall(ip_auto_config) makes it fail,
+> too.
+> Reducing ip_auto_config(), it turns out the call to
+> wait_for_init_devices_probe() is what is needed to unblock booting.
+>
+> So I guess wait_for_init_devices_probe() needs to be called (where?)
+> if CONFIG_IP_PNP=n, too?
 
->   
->   		if (temp > max)
->   			max = temp;
-> @@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->   
->   static int mtk_read_temp(void *data, int *temperature)
->   {
-> -	struct mtk_thermal *mt = data;
-> +	struct mtk_thermal_zone *tz = data;
-> +	struct mtk_thermal *mt = tz->mt;
->   	int i;
->   	int tempmax = INT_MIN;
->   
-> @@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int *temperature)
->   	return 0;
->   }
->   
-> +static int mtk_read_sensor_temp(void *data, int *temperature)
-> +{
-> +	struct mtk_thermal_zone *tz = data;
-> +	struct mtk_thermal *mt = tz->mt;
-> +	int id = tz->id - 1;
-> +
-> +	if (id < 0)
-> +		return  -EACCES;
+That function just unblocks all devices and allows them to try and
+probe and then waits for all possible probes to finish before
+returning. They problem with call it randomly/every time is that it
+breaks functionality where an optional supplier will probe after a few
+modules are loaded in the future.
 
-2 spaces.
+I guess one possible issue with the timeout not helping is that once
+the timeout expires, things are still being probed and nothing is
+being blocked till they finish probing.
 
-> +
-> +	*temperature = _get_sensor_temp(mt, id);
+I'm trying to have the default config (in terms of fw_devlink,
+deferred probe behavior, timeouts, etc) be the same between a fully
+static kernel (but CONFIG_MODULES still enabled) and a fully modular
+kernel (like GKI). But it might end up being an untenable problem.
 
-If _get_sensor_temp() returns -EAGAIN, should this be propagated to the 
-caller?
+I'll wait to see what specifically is the issue in this case and then
+I'll go from there.
 
-> +
-> +	return 0;
-> +}
-> +
->   static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
->   	.get_temp = mtk_read_temp,
->   };
->   
-> +static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
-> +	.get_temp = mtk_read_sensor_temp,
-> +};
-> +
->   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->   				  u32 apmixed_phys_base, u32 auxadc_phys_base,
->   				  int ctrl_id)
-> @@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   	u64 auxadc_phys_base, apmixed_phys_base;
->   	struct thermal_zone_device *tzdev;
->   	void __iomem *apmixed_base, *auxadc_base;
-> +	struct mtk_thermal_zone *tz;
->   
->   	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->   	if (!mt)
-> @@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   
->   	platform_set_drvdata(pdev, mt);
->   
-> -	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
-> -						     &mtk_thermal_ops);
-> -	if (IS_ERR(tzdev)) {
-> -		ret = PTR_ERR(tzdev);
-> -		goto err_disable_clk_peri_therm;
-> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-> +		tz = kmalloc(sizeof(*tz), GFP_KERNEL);
+-Saravana
 
-Should this memory allocation be a devm_kmalloc(), or is this memory 
-freed at some point by the framework?
-
-(I don't know the thermal_zone API and the patch has no kfree())
-
-CJ
-
-> +		if (!tz)
-> +			return -ENOMEM;
-> +
-> +		tz->mt = mt;
-> +		tz->id = i;
-> +
-> +		tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, tz, (i == 0) ?
-> +							     &mtk_thermal_ops :
-> +							     &mtk_thermal_sensor_ops);
-> +
-> +		if (IS_ERR(tzdev)) {
-> +			if (PTR_ERR(tzdev) == -ENODEV) {
-> +				dev_warn(&pdev->dev,
-> +					 "sensor %d not registered in thermal zone in dt\n", i);
-> +				continue;
-> +			}
-> +			if (PTR_ERR(tzdev) == -EACCES) {
-> +				ret = PTR_ERR(tzdev);
-> +				goto err_disable_clk_peri_therm;
-> +			}
-> +		}
->   	}
->   
->   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
-
+> > --- a/drivers/base/dd.c
+> > +++ b/drivers/base/dd.c
+> > @@ -256,7 +256,12 @@ static int deferred_devs_show(struct seq_file *s, void *data)
+> >  }
+> >  DEFINE_SHOW_ATTRIBUTE(deferred_devs);
+> >
+> > +#ifdef CONFIG_MODULES
+> > +int driver_deferred_probe_timeout = 10;
+> > +#else
+> >  int driver_deferred_probe_timeout;
+> > +#endif
+> > +
+> >  EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
+> >
+> >  static int __init deferred_probe_timeout_setup(char *str)
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
