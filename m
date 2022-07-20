@@ -2,143 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3865C57BAEA
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 17:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FE757BCC8
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 19:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbiGTPzK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 11:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S241223AbiGTRhX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 13:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbiGTPzJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 11:55:09 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F10FFD8
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 08:55:08 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id b9so16843908pfp.10
-        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 08:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PxGJvhLtJuqRKmxgyWTr3dyw5v1u+NUlBmHboKdNo9s=;
-        b=mWWCpocdFnO3thggu3OhtEeoCRaOv3M5lOueJvcCQTDYgBpsXplJkCW9pyIUUD1KJo
-         E1hjJYf//4wroHUvXHMsE89HyiUxh2cadFeyDwjm8H3bp+YubwWJMW6md4/xf7QxpeLT
-         OiI539zgmrx3amHbiNUlt4Y+2Acmt60Q3rRp4hqagxGPa1rW250S91jBO3DN3OGjk+pC
-         R5s9iq+e7RljNkCwuICuNxnAv6/U+3x+1uLG5epJ7fNFAjbHsg7h/uj+sQjR3AoxAHlk
-         4MFxlyk0PIdFFqfJnyzfhaozFX7vBmRSO8fReDtFSyaRdislkq+L19Vf2qT05MkQc8Zf
-         9Vig==
+        with ESMTP id S241392AbiGTRhV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 13:37:21 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9FF5D0F3;
+        Wed, 20 Jul 2022 10:37:20 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id g20-20020a9d6a14000000b0061c84e679f5so12002675otn.2;
+        Wed, 20 Jul 2022 10:37:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PxGJvhLtJuqRKmxgyWTr3dyw5v1u+NUlBmHboKdNo9s=;
-        b=o6xWUKv9hyRYXEbVw9l/92oBNegAaDueA40JPnRgrjXvC/cwm0Bl+akp758DfPsQ7t
-         wOgg0FnyeMwn/ikDYNrA5VeeU/d/fzD7FIcEc2LhJZI61/JXG7rTpm8hawLCzH1ZP9Id
-         Qn4p0+yLMcws3ni1m2Bx+kKZXMz4YvI1JlOFSnLvXbAHnGqhtVlOIqp1LC5cc5fU3kAy
-         c2gMQiaQG1QR6aPkNBFQgq9gMruCpd3hMO2qKLnVMlCr/3bojG+C3X9jeAX98yCM0Pnn
-         g3MVhur2q/WbfHTVfVev3ybNr3SEhp2Z4pLroM1pPllmDMd3Nd2NStLa1YFqYssblwlr
-         yGHQ==
-X-Gm-Message-State: AJIora/VLe1SdnfReVaOGaukwYutsf0bvQJtRGghUkMKMM//bI5Vm8BC
-        w35cMpuKZa6HwhojsU+M0tUegH1rZ9eVFb20M1KCOQ==
-X-Google-Smtp-Source: AGRyM1ul7/N7Zqa3MQFIdsZV6cTIm2wPxyfvuArvrrqMeepFbTobVgzG+U4Ck6m1AkuT7qqmt0jbBh1ZDj00OgWkUwU=
-X-Received: by 2002:a63:e946:0:b0:41a:7350:6cd5 with SMTP id
- q6-20020a63e946000000b0041a73506cd5mr1530570pgj.247.1658332507848; Wed, 20
- Jul 2022 08:55:07 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=u6J3sgJghVNNrzVGnT5K48UuGJ4l1PbhybPRZEBzs0E=;
+        b=3KqcPs8xLw9RVr8PUyvtV2BZDB18UdZi7DJO5dwMB7xlPfXLK++8KO7r7rUp1VZp4y
+         P26d2KVGg1lC062cvS8kLuw7gtiiGlYG2OcRrmh3BaxCuhXEeJhnDcvzHybXZIdIbF86
+         wp55/cvRZZrAVKxu7VFNT30/YO7vVureOHIrw5oAmV3YKaVqYhejqnJEwxYMqLqmIKEE
+         hJclyHhD/90cAjGOKBMSiS4Tn+7O1jcxx1Drcvw4ydbMlStBDZ51hqy+7oE9G8GEEe9o
+         E1al7c/nNL23JYS4hZoXo4sr+CG2VOHwTsKcIFTtWHbtFDyejLErNoupPdNMSQ7Cxy59
+         td+A==
+X-Gm-Message-State: AJIora8R9Z089RLwM8LxcYEf481RIP8kV3qRNgkyPUPGmv/Kyw8RC6aG
+        qbQAmHqXSX4WyBaTEDQu3LZoT604SOffBg==
+X-Google-Smtp-Source: AGRyM1uWUiRSYgmsaey0YHY1R3UkAoG51F5i1h90Z0ue23FKaAxTTOY2d97DvYFGRIMcfSpuPK62gw==
+X-Received: by 2002:a05:6830:268c:b0:618:5cc0:417d with SMTP id l12-20020a056830268c00b006185cc0417dmr15965672otu.196.1658338639544;
+        Wed, 20 Jul 2022 10:37:19 -0700 (PDT)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com. [209.85.210.50])
+        by smtp.gmail.com with ESMTPSA id j21-20020a4a7515000000b0043565888e72sm7175234ooc.2.2022.07.20.10.37.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 10:37:19 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id by10-20020a056830608a00b0061c1ac80e1dso14651380otb.13;
+        Wed, 20 Jul 2022 10:37:19 -0700 (PDT)
+X-Received: by 2002:a05:6902:701:b0:66e:a06d:53d7 with SMTP id
+ k1-20020a056902070100b0066ea06d53d7mr36038192ybt.604.1658338272504; Wed, 20
+ Jul 2022 10:31:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707125329.378277-1-jaz@semihalf.com> <20220707125329.378277-2-jaz@semihalf.com>
- <CAJZ5v0gdCN3P52ko44LQMqWJvDArHxZ7p4aSiQamML7aG_kRAA@mail.gmail.com>
- <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com> <352edf44-5983-403f-b8f8-5dfbd92ea32d@amd.com>
-In-Reply-To: <352edf44-5983-403f-b8f8-5dfbd92ea32d@amd.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Wed, 20 Jul 2022 17:54:56 +0200
-Message-ID: <CAH76GKNie4m=SOEEJGks+CEyR9=aB+dJzDA1wxTuUo=uUjmZog@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] suspend: extend S2Idle ops by new notify handler
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+References: <20220601070707.3946847-1-saravanak@google.com> <20220601070707.3946847-7-saravanak@google.com>
+In-Reply-To: <20220601070707.3946847-7-saravanak@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 20 Jul 2022 19:31:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
+Message-ID: <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
+Subject: Re: [PATCH v2 6/9] Revert "driver core: Set default
+ deferred_probe_timeout back to 0."
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmytro Maluka <dmy@semihalf.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Dominik Behr <dbehr@google.com>, upstream@semihalf.com,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sachi King <nakato@nakato.io>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=C5=9Br., 20 lip 2022 o 17:22 Limonciello, Mario
-<mario.limonciello@amd.com> napisa=C5=82(a):
->
-> >> It looks like you want suspend-to-idle to behave like S3 and it won't.
-> >
-> > In a way, yes, we compensate for the lack of something like PM1_CNT to
-> > trap on for detecting that the guest is suspending.
-> > We could instead force the guest to use S3 but IMO it is undesirable,
-> > since it generally does make a difference which suspend mode is used
-> > in the guest, s2idle or S3, e.g some drivers check which suspend type
-> > is used and based on that behaves differently during suspend. One of
-> > the example is:
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Feli=
-xir.bootlin.com%2Flinux%2Fv5.18.12%2Fsource%2Fdrivers%2Fgpu%2Fdrm%2Famd%2Fa=
-mdgpu%2Famdgpu_drv.c%23L2323&amp;data=3D05%7C01%7Cmario.limonciello%40amd.c=
-om%7C7bdd972291324d03847e08da6a51ff4f%7C3dd8961fe4884e608e11a82d994e183d%7C=
-0%7C0%7C637939197694682503%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQ=
-IjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3D5M1s=
-n3iRybQzSFi3ojQ4YTJuW41DlgJNl5sxbWEvLBQ%3D&amp;reserved=3D0
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Feli=
-xir.bootlin.com%2Flinux%2Fv5.18.12%2Fsource%2Fdrivers%2Fgpu%2Fdrm%2Famd%2Fa=
-mdgpu%2Famdgpu_acpi.c%23L1069&amp;data=3D05%7C01%7Cmario.limonciello%40amd.=
-com%7C7bdd972291324d03847e08da6a51ff4f%7C3dd8961fe4884e608e11a82d994e183d%7=
-C0%7C0%7C637939197694682503%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ=
-QIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DfIr=
-LmZAgpIRPYO4to4uYUoBSEWXmz1lr%2BTnR14kAfvM%3D&amp;reserved=3D0
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Feli=
-xir.bootlin.com%2Flinux%2Fv5.18.12%2Fsource%2Fdrivers%2Fgpu%2Fdrm%2Famd%2Fa=
-mdgpu%2Famdgpu_gfx.c%23L583&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co=
-m%7C7bdd972291324d03847e08da6a51ff4f%7C3dd8961fe4884e608e11a82d994e183d%7C0=
-%7C0%7C637939197694682503%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQI=
-joiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DSNsbm=
-pV4HrgA%2Bkff4JzRodNDzKvwM5tnkGDvrKO44dc%3D&amp;reserved=3D0
-> >
->
-> Actually I recently was suggesting a change to add this detection to
-> another driver to set a policy and Rafael pushed back.  He's actively
-> removing it from other places in the kernel.
->
-> For amdgpu stuff you pointed above, are you wanting to pass through the
-> PCIe GPU device to a guest and then suspend that guest? Or is this just
-> illustrative?
+Hi Saravana,
 
-Just illustrative. I am not focused on amdgpu stuff right now.
-
-Thank you,
-Grzegorz
-
+On Wed, Jun 1, 2022 at 9:45 AM Saravana Kannan <saravanak@google.com> wrote:
+> This reverts commit 11f7e7ef553b6b93ac1aa74a3c2011b9cc8aeb61.
 >
-> For a dGPU I would expect it works, but I don't think passing an APU's
-> GPU PCIe endpoint would functionally work (there were bugs reported on
-> this I recall).
+> Let's take another shot at getting deferred_probe_timeout=10 to work.
 >
-> That code path you point out only has special handling for APU when
-> headed to S0ix and that's because the GPU driver happens to be where the
-> control point is for some common silicon functions.  If the bug I
-> mentioned about PCIe passthrough of the APU GPU endpoint to the guest is
-> fixed and the guest needs to do s0ix when the host doesn't we're going
-> to have other breakage to worry about because of that common silicon
-> functionality I mentioned.
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+
+Thanks for your patch, which is now commit f516d01b9df2782b
+("Revert "driver core: Set default deferred_probe_timeout
+back to 0."") in driver-core/driver-core-next.
+
+Wolfram found an issue on a Renesas board where disabling the IOMMU
+driver (CONFIG_IPMMU_VMSA=n) causes the system to fail to boot,
+and bisected this to a merge of driver-core/driver-core-next.
+After some trials, I managed to reproduce the issue, and bisected it
+further to commit f516d01b9df2782b.
+
+The affected config has:
+    CONFIG_MODULES=y
+    CONFIG_RCAR_DMAC=y
+    CONFIG_IPMMU_VMSA=n
+
+In arch/arm64/boot/dts/renesas/r8a77951-salvator-xs.dtb,
+e6e88000.serial links to a dmac, and the dmac links to an iommu,
+for which no driver is available.
+
+Playing with deferred_probe_timeout values doesn't help.
+
+However, the above options do not seem to be sufficient to trigger
+the issue, as I had other configs with those three options that do
+boot fine.
+
+After bisecting configs, I found the culprit: CONFIG_IP_PNP.
+As Wolfram was using an initramfs, CONFIG_IP_PNP was not needed.
+If CONFIG_IP_PNP=n, booting fails.
+If CONFIG_IP_PNP=y, booting succeeds.
+In fact, just disabling late_initcall(ip_auto_config) makes it fail,
+too.
+Reducing ip_auto_config(), it turns out the call to
+wait_for_init_devices_probe() is what is needed to unblock booting.
+
+So I guess wait_for_init_devices_probe() needs to be called (where?)
+if CONFIG_IP_PNP=n, too?
+
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -256,7 +256,12 @@ static int deferred_devs_show(struct seq_file *s, void *data)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(deferred_devs);
+>
+> +#ifdef CONFIG_MODULES
+> +int driver_deferred_probe_timeout = 10;
+> +#else
+>  int driver_deferred_probe_timeout;
+> +#endif
+> +
+>  EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
+>
+>  static int __init deferred_probe_timeout_setup(char *str)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
