@@ -2,99 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B381F57B1FB
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 09:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E5F57B222
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Jul 2022 09:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbiGTHpo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Jul 2022 03:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S232561AbiGTHx4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Jul 2022 03:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiGTHpl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 03:45:41 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA4021E3C;
-        Wed, 20 Jul 2022 00:45:39 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id o7so28874173lfq.9;
-        Wed, 20 Jul 2022 00:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tVPIkcHFbrIBqwWvbgKoMairnWOWXDJLFc+/HEF3fRk=;
-        b=TvwRSCVDrRciTpOnKLMfyHifAJeyTe5WXyx5ysgT2EPtGU05SCryU9kIUgyHW4kqR9
-         EBaLbVU/27CKoVZLHD4EI4UbEJKJuU02+DzFI3TSmKuXYkVRl+soRhLc4NQMyQ4eZa9D
-         Zr2M1A6XuTHZSPLLhQYBdSC9rIgXAcxpYM9YVlXXoMj2HNJs0lqrUyFzfcNe2jKsnOE/
-         RJKNLUgBLZ1Iaza/7BOUpvblYMIj1thXugwy+f81/8tsODb2glK69wBixB3SnotUfGzL
-         Vah626GD6k40pZjo6zpYRoH9/S2sKqMPE7FyvN/hDDPav2Qwc+VwpXP/aBxhmlHCAjJg
-         /Z8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tVPIkcHFbrIBqwWvbgKoMairnWOWXDJLFc+/HEF3fRk=;
-        b=WuCmJjwzZdD9gqtQl5EQF45cVp1zIWdcpQKLlyoK5w11OD0cwqrOImD12PGet4rfyU
-         Um3M/Bs0wiTi36/UqPeeSDGgNwsQgVE8wtyij7s/PYA72t0HfP4WJoycWQDqwEz8Aeg2
-         C4BeDHLf/T0m3jvnLnJXc72kHsMejtkDQOiDh0LOda2on5ykBHsIcCxMTcCTN3ICJTl2
-         PDCzRCQV1yruEcEwrj4H7Yq4QVUCvonImNzXbchii0cWtbhI8/qo5j1XvLy7LjwVugYB
-         JvYYik41R6QsfM7gRQ2p7hmKC2024mralpsXuutnoVOjr1naTcvWLmFdcZsu7e6N8wVV
-         m+Kw==
-X-Gm-Message-State: AJIora+GdF2li8uXb/QH5mpWyarSNOH1JhqPNwmCqHl6ClbM/bEVF2tG
-        RxkIR0P3sjPhluW6FG+hhuY/XU8EMz2XsGVf/iY=
-X-Google-Smtp-Source: AGRyM1vVIrLVpzkiPr5QbQtV3lohS4xPfbNPKVz8ES1xANkNSPGUrstUkzAZwc68FHS3SJPGuxGCEjBl1ND2WEO5BNo=
-X-Received: by 2002:a05:6512:23a0:b0:489:d19c:602d with SMTP id
- c32-20020a05651223a000b00489d19c602dmr19783960lfv.89.1658303138187; Wed, 20
- Jul 2022 00:45:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220705123705.764-1-xuewen.yan@unisoc.com> <20220711174629.uehfmqegcwn2lqzu@wubuntu>
- <YsyO9GM9mCydaybo@slm.duckdns.org> <c1426573-92a7-9f0d-a6b8-aa612248b9a9@redhat.com>
- <Ys41ZF5TmSnLLNRB@slm.duckdns.org>
-In-Reply-To: <Ys41ZF5TmSnLLNRB@slm.duckdns.org>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Wed, 20 Jul 2022 15:45:27 +0800
-Message-ID: <CAB8ipk-8cbur-m733py-cw4bXCt7gkd8gAOXtKO+-fV1B2EeZw@mail.gmail.com>
-Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
- hotplug when using schedutil
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
-        Lukasz Luba <Lukasz.Luba@arm.com>
+        with ESMTP id S230095AbiGTHxz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Jul 2022 03:53:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7576053D
+        for <linux-pm@vger.kernel.org>; Wed, 20 Jul 2022 00:53:55 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oE4WZ-0005Qh-Uh; Wed, 20 Jul 2022 09:53:40 +0200
+Message-ID: <a7d51c154693881523e5d96c443a7dc9b3cc216d.camel@pengutronix.de>
+Subject: Re: [PATCH v4 3/3] soc: imx: gpcv2: fix suspend/resume by setting
+ GENPD_FLAG_IRQ_ON
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>, rafael@kernel.org,
+        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz
+Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        aford173@gmail.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 20 Jul 2022 09:53:35 +0200
+In-Reply-To: <20220720043444.1289952-4-martin.kepplinger@puri.sm>
+References: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
+         <20220720043444.1289952-4-martin.kepplinger@puri.sm>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear all
+Am Mittwoch, dem 20.07.2022 um 06:34 +0200 schrieb Martin Kepplinger:
+> For boards that use power-domains' power-supplies that need interrupts
+> to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
+> This will tell genpd to adjust accordingly. Currently it "only" sets the
+> correct suspend/resume callbacks.
+> 
+> This fixes suspend/resume on imx8mq-librem5 boards (tested) and
+> imx8mq-evk (by looking at dts) and possibly more.
+> 
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>  drivers/soc/imx/gpcv2.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+> index 85aa86e1338a..46d2ead2352b 100644
+> --- a/drivers/soc/imx/gpcv2.c
+> +++ b/drivers/soc/imx/gpcv2.c
+> @@ -1303,6 +1303,7 @@ static const struct imx_pgc_domain_data imx8mn_pgc_domain_data = {
+>  static int imx_pgc_domain_probe(struct platform_device *pdev)
+>  {
+>  	struct imx_pgc_domain *domain = pdev->dev.platform_data;
+> +	struct device_node *dn;
+>  	int ret;
+>  
+>  	domain->dev = &pdev->dev;
+> @@ -1333,6 +1334,14 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+>  		regmap_update_bits(domain->regmap, domain->regs->map,
+>  				   domain->bits.map, domain->bits.map);
+>  
+> +	dn = of_parse_phandle(domain->dev->of_node, "power-supply", 0);
+> +	if (dn) {
+> +		while ((dn = of_get_next_parent(dn))) {
+> +			if (of_get_property(dn, "interrupts", NULL))
+> +				domain->genpd.flags |= GENPD_FLAG_IRQ_ON;
+> +		}
+> +	}
+> +
+While I understand the intention, I think the DT walking is overkill. I
+believe that there are no cases where we have a external regulator
+attached to the PD and the devices in the domain needing noirq support.
+I think it's sufficient to simply set the IRQ_ON flag based on presence
+of the power-supply property on the domain DT node.
 
-On Wed, Jul 13, 2022 at 11:20 AM Tejun Heo <tj@kernel.org> wrote:
->
-> On Tue, Jul 12, 2022 at 10:49:57PM -0400, Waiman Long wrote:
-> > > Well, the only thing I can think of is always grabbing cpus_read_lock()
-> > > before grabbing threadgroup_rwsem. Waiman, what do you think?
-> >
-> > That is a possible solution as cpus_read_lock() is rather lightweight. It is
-> > a good practice to acquire it first.
->
-> On a similar note, I think we probably should re-enable percpu operations on
-> threadgroup_rwsem too by default and allow users who are affected by slower
-> write path operations to opt-in. After the new CLONE_INTO_CGROUP which
-> doesn't need the rwsem, we have far fewer write lockers after all.
->
+Regards,
+Lucas
 
- If there's any patch for me to try? I would be very grateful.
+>  	ret = pm_genpd_init(&domain->genpd, NULL, true);
+>  	if (ret) {
+>  		dev_err(domain->dev, "Failed to init power domain\n");
 
-Thanks!
 
----
-xw.yan
