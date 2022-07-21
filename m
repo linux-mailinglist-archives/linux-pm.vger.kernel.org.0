@@ -2,76 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949ED57C96E
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 12:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051DB57C980
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 13:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbiGUK7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 06:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        id S232345AbiGULFS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 07:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiGUK7G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 06:59:06 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B8581483
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 03:59:05 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so609999wmm.4
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 03:59:05 -0700 (PDT)
+        with ESMTP id S232508AbiGULFR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 07:05:17 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDD12B610
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 04:05:15 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id u14so1412972lju.0
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 04:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fBZXdbMaIyk36U5hEKPOdPBFqAAcCzL3k7olq+kmY9U=;
-        b=KTH1rb16f1KimVK0JWIgAMHb7kqjKy2jWlZIymA4cyN3Si/Qu8IVjMMHTvrxHRYrNh
-         jpqBPA+biP3CnWGuTfD3HroTtzN3fr6OblG9R3BaRwqdldZ2UAAvF6NmDIEnmCOCo/CG
-         NJRMvyRXe0FOe+qEnpaljpXTjcTUtM2vVmT2r0kGRiHnnv2mae1HXdNwhhymRHiDn38Z
-         vzcjwd3zzhOBYe/NHP9WUP4wYsuCYpiBbIw5Aa6joQ7HGRpvR96vHItNSphEsTKQEw2o
-         ZaXw3YXkFpTLILQzn/Wqc7FpQteC0HCOPlkjq6sb+NScHX2do3d/Z7QTiFhy4HRGLn/M
-         E7UQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yJ/vHPCzm1f2d//qmF68sXf6yNTReQ0ju6ClzshBRoI=;
+        b=WYXA1xzOXuyrZ3dBHDunm5dy+Ue2dNxXFJBMKycIK+S3seEprfABLkefA2RuFkHR/F
+         qThOZ+oBVw1Ez2sRJm9WW6pfc8iM0YYJHn+/vYPDZ9ji0Q4DvIir49gCBzBJfhBDQdj/
+         JLzjmJIP/mahXqvfp3jgazyX0x5psXSenRy5RlfzLBfg4E0ghufWCysQ2QNb0yJmXR3/
+         Bzrxe5cyKTEEwiCHPViQ0ZPffooVyF2wbl+mUs1EGMAtYr8a/Hf/QERvT/1gNrlkKE+Q
+         TEEA1OZ7FVM7AFcQjMpaiBwUO2vxQpegPERArDO8LvyYRvHxEzrZYALWyuLPS2wZI4V5
+         aGBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fBZXdbMaIyk36U5hEKPOdPBFqAAcCzL3k7olq+kmY9U=;
-        b=XaGvq+70qZJg1tAFhKESR0qO/BHI77fHpjaIXSOU147RaGdfn+FNu9dS+DUFpsaEOS
-         UJq65+a7FwQ6+d8Pe16Bt/T16hzv32PFtLQFv1hhfjMVTBVMJeY1CMf7FHXr/buCoKcA
-         sn2hlhf4fzeJNx91RZc4bYn1PPIPx5uyMFJDzcA/nTtquO7VAsKtgRxVqPmK3vuBc0XD
-         kqBjWv4Qc6qd6u4irwasKk9hhfoEgyhgbN3MC7IH99c1E5cHzFs1+T6zK7mvYQ0UZS/T
-         kJnNbz4fM5QURt6RUqxk60llrJWF7wsfnwhqQ+7NR2cCN6tceadWTejmFpN9UjnepjE0
-         0nbA==
-X-Gm-Message-State: AJIora/TBTAW677Hnu67iqvohfOzbYPqY3zLz8aFLuLCpawe6eU2ieLD
-        FX8WTyM6my+QcmMzkLJiKqBpqQ==
-X-Google-Smtp-Source: AGRyM1tNVGfGQr664Nk+tWORjPREQrDamx6Pnw7DakdRXd/gnGPnZo9esViXQ2BwLpKy5cSqrAvMPA==
-X-Received: by 2002:a1c:2944:0:b0:3a2:fece:29de with SMTP id p65-20020a1c2944000000b003a2fece29demr7844515wmp.115.1658401143632;
-        Thu, 21 Jul 2022 03:59:03 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:5c9a:ee80:52f5:6a1? ([2a05:6e02:1041:c10:5c9a:ee80:52f5:6a1])
-        by smtp.googlemail.com with ESMTPSA id k1-20020adff5c1000000b0020fff0ea0a3sm1491753wrp.116.2022.07.21.03.59.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 03:59:03 -0700 (PDT)
-Message-ID: <117c778a-4496-4d49-e73d-06fa3efa4d09@linaro.org>
-Date:   Thu, 21 Jul 2022 12:59:01 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yJ/vHPCzm1f2d//qmF68sXf6yNTReQ0ju6ClzshBRoI=;
+        b=y4QszouVsFVOBW1XZqUoha9oC6SKwsifE/40jlEs1i2oLwq3zxN8tXKyqabV0ZCEMw
+         4n/a9uJSeexDdNeTjWPMnMII2Lw+BkZNgvRaPJmYi9L7ldy5AhCmgLkxbgSM141EEJDW
+         WQOHalGrWV1M79jdSdR5qZ7uJ7BsI2Wy4X1CToGEbG/ALJmHAE04qgnPXnP/H9enC0SZ
+         FAldHkm4VtqaMFJYUEJ3FD3cERdHpbCpFh1+sIc55VCUJjsP+HtzpAq5Q8VEn1J23hfT
+         ECwus+lupAM1sTlyz/LpI95iTIyProoVkE8PdK8MErQdQzTkdKMAFWReUll/O3zVJEaq
+         3ixQ==
+X-Gm-Message-State: AJIora/KtirUqN6RTlf4VTMCgcUkU/S15pF3UFpyWJylwPWoUcPAGdym
+        il7Dd5ndMyo9phJE4/uKtLZBznYbhBZDcQjPmaP9Zw==
+X-Google-Smtp-Source: AGRyM1vcvJjCP/hw4nnWQPdUZUzdVTMwbnE0GxM/EXfiRGf+G3w+JBmm/xpG4NFQmXvYIMkJMMthdgPcgvTzijzMINU=
+X-Received: by 2002:a05:651c:158:b0:25d:d59c:85bd with SMTP id
+ c24-20020a05651c015800b0025dd59c85bdmr3473477ljd.463.1658401514066; Thu, 21
+ Jul 2022 04:05:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 3/4] thermal/core: Build ascending ordered indexes for
- the trip points
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220718145038.1114379-1-daniel.lezcano@linaro.org>
- <20220718145038.1114379-3-daniel.lezcano@linaro.org>
- <CAJZ5v0hj0kMRNBqO_0SqsAAY8Rb8h2NrWOYogDLgGZnCtiTEwg@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hj0kMRNBqO_0SqsAAY8Rb8h2NrWOYogDLgGZnCtiTEwg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220721043608.1527686-1-martin.kepplinger@puri.sm> <20220721043608.1527686-2-martin.kepplinger@puri.sm>
+In-Reply-To: <20220721043608.1527686-2-martin.kepplinger@puri.sm>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 21 Jul 2022 13:04:37 +0200
+Message-ID: <CAPDyKFpTauJeRS0W34Cz7v_HzJzBCsOk-M2PvrWoYR=cth=j5Q@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] PM: domain: fix indentation and use BIT macro for flags
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
+        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,55 +69,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/07/2022 20:56, Rafael J. Wysocki wrote:
-> On Mon, Jul 18, 2022 at 4:50 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> By convention the trips points are declared in the ascending
->> temperature order. However, no specification for the device tree, ACPI
->> or documentation tells the trip points must be ordered this way.
->>
->> In the other hand, we need those to be ordered to browse them at the
-> 
-> s/In/On/
-> 
->> thermal events.
-> 
-> What if they are all inspected every time?
+On Thu, 21 Jul 2022 at 06:36, Martin Kepplinger
+<martin.kepplinger@puri.sm> wrote:
+>
+> Use the BIT macro for flags and simply do 2 tags indentation.
+>
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 
-My bad, my sentence is confusing. The trip point are browsed every time 
-and we need to have them ordered to detect correctly the thermal events.
+I prefer to keep the advantages with doing a git blame on this file,
+over this cleanup. Unless you feel strongly about this I would
+appreciate it if you can drop $subject patch from the series.
 
->> But if we assume they are ordered and change the code
->> based on this assumption, any platform with shuffled trip points
->> description will be broken (if they exist).
->>
->> Instead of taking the risk of breaking the existing platforms, use an
->> array of temperature ordered trip identifiers and make it available
->> for the code needing to browse the trip points in an ordered way.
-> 
-> Well, having ops->get_trip_temp() suggests that the trip temperatures
-> can be dynamic.  Is the ordering guaranteed to be preserved in that
-> case?
+Kind regards
+Uffe
 
-The number of trips can not be changed. It is fixed when the thermal 
-zone is created AFAICT. The get_trip_temp() is just a way to let the 
-different driver declare their own trip structure which is actually 
-something I'm trying to fix by moving the structure thermal_trip inside 
-the thermal zone. But that is a longer and separate work.
-
-> Anyway, if they need to be sorted, why don't we just sort them
-> properly instead of adding this extra array?
-
-We can not because ATM the trip points array is private to the different 
-sensors.
-
-[ ... ]
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> ---
+>  include/linux/pm_domain.h | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index ebc351698090..76bc9e3ef5ff 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -8,6 +8,7 @@
+>  #ifndef _LINUX_PM_DOMAIN_H
+>  #define _LINUX_PM_DOMAIN_H
+>
+> +#include <linux/bits.h>
+>  #include <linux/device.h>
+>  #include <linux/ktime.h>
+>  #include <linux/mutex.h>
+> @@ -61,13 +62,13 @@
+>   *                             components' next wakeup when determining the
+>   *                             optimal idle state.
+>   */
+> -#define GENPD_FLAG_PM_CLK       (1U << 0)
+> -#define GENPD_FLAG_IRQ_SAFE     (1U << 1)
+> -#define GENPD_FLAG_ALWAYS_ON    (1U << 2)
+> -#define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
+> -#define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
+> -#define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+> -#define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
+> +#define GENPD_FLAG_PM_CLK              BIT(0)
+> +#define GENPD_FLAG_IRQ_SAFE            BIT(1)
+> +#define GENPD_FLAG_ALWAYS_ON           BIT(2)
+> +#define GENPD_FLAG_ACTIVE_WAKEUP       BIT(3)
+> +#define GENPD_FLAG_CPU_DOMAIN          BIT(4)
+> +#define GENPD_FLAG_RPM_ALWAYS_ON       BIT(5)
+> +#define GENPD_FLAG_MIN_RESIDENCY       BIT(6)
+>
+>  enum gpd_status {
+>         GENPD_STATE_ON = 0,     /* PM domain is on */
+> --
+> 2.30.2
+>
