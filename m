@@ -2,183 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66DE57C9A4
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 13:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6644B57C9B5
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 13:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbiGULR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 07:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S231383AbiGUL0H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 07:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbiGULR1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 07:17:27 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550EA81B10
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 04:17:26 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id m12so1158001lfj.4
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 04:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+Gnykwqd+vC3rtS/nAL/QcRf2AMrtCwB3O4EvfAVjzA=;
-        b=SsWd2HFWk3HD7Vve3jWvBMiFYz2xlV1iuCcNI1hf1Pe3eQbCY9fQ6y7s2p7dtloGaW
-         K4KbTs3WKfikTRIKNZ+c8UE9rh+Ynrqla9S2D4c+Vii0LGxdgvElm3SIgY73d7fC5Hw+
-         Faov0A3TvfEWzaTXZzYFobBNw1zCI07mvWpShuCzlXHOzPyb5LOU37S7KEQybaXfnSph
-         ob/sxUFS8ezn1s5fLLEZQ+0MPEDfRhXJ/uIjm63zIsywl1Z90Z3CvfRG5xxNn80j/42a
-         iWOddqGBdLUFKgWlOFOGqeV7NixO73OVyVZSdN17uhfhC/8p2XPCoCst9b4MeM1mXiPH
-         +EEA==
+        with ESMTP id S230036AbiGUL0G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 07:26:06 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24941101DF;
+        Thu, 21 Jul 2022 04:26:05 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31e560aa854so13647197b3.6;
+        Thu, 21 Jul 2022 04:26:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+Gnykwqd+vC3rtS/nAL/QcRf2AMrtCwB3O4EvfAVjzA=;
-        b=fgXtdgaIpsXCMLnhlW0LPya90iGo5H3phwCywWxtUEcsVbxd72rF4VFoLeMgu7Sav2
-         JmEZ9FZBk4DuP6w7pboddOuM8x7awGnSt/sNKjYJQ7VmIJVAgDik0rWnN6xgneBjvVB/
-         PGenW/2p1hpWVlb9dRkwrd6VpB1By58pBaP4rTtXEK7gFk7gYfa7yLs71f3YMlaipW4M
-         NITmwZM0urcqI75t+wwTL0pt/pho9aX3DWRYIy0PLJnQ+LDXpxKJIRpt9vJFiwo5Ol+h
-         jDMlCsucnMJwxm/kwTCC1HxxRW0iLYl3zkhCFJR7GOUDGvreVl1wqF/1HctNQ1r9zg1l
-         kXTg==
-X-Gm-Message-State: AJIora8MdChFwMzWdQWEvUvwpcrzclnJhf+jFZ9jedCJZmtIsuuOZI+u
-        3xVEEm71GqT/6eaVHv8oXE8p2X0/Ix58c7bV5w/Bvw==
-X-Google-Smtp-Source: AGRyM1u4WCa5dVOpwiSGbwj5+e4+HoZPSzrKuwLqe3XWV/GuvfojaqnCF6tjyW1ACqqbj1qL8pgL9f4sBUpYR3ASWo0=
-X-Received: by 2002:a05:6512:32c6:b0:48a:18a1:2d2b with SMTP id
- f6-20020a05651232c600b0048a18a12d2bmr19594098lfg.373.1658402244436; Thu, 21
- Jul 2022 04:17:24 -0700 (PDT)
+        bh=y3aH26Tt0fov+wN+dziNA4MJLDOlPeS6/aeyAPgNAKs=;
+        b=3EIrm4O/Lfk3+4uxM/71zDRe3/koVmWLFM9P3manGnin2LdbYLeg/upp+mwTCzR9ZV
+         MRPJmwpw5u2kYT1Tzxnpty66elJqDX4lI9sMz3HwlmLilVvSpfxyRhGAzO5TJ/gkTYOh
+         FLQzwJfdCU11ChjCa7innwrkWSDM/0mxRnTICaMli/P5DpWde40H+gKE+6FeWKDY46kv
+         2l3tgGr03ddEZHSDNxlPn86dVvCOR7gDBWDEEZbE/N4NX0JHEpgslsMYl5pOs4gkIh3b
+         DuZh6kX35Nz7Rar7sp0fVL99quVjJaTHBmdvA0VlLrORIoo1jTBY44761wrhXRx+PsN7
+         iHig==
+X-Gm-Message-State: AJIora8jiiRFtDWd5GGxdfLa0tQdldkyB763bQ4Ig+HySLr53VomhEjB
+        KyhCAlzW5byRQzNd+3fJ6NXu9DdFQh/ohIl5j3E=
+X-Google-Smtp-Source: AGRyM1udwHaTCh3Lm0psHK2LHkSbxBfKdfvBaU4qSeul2vjAkQ+H3vW7FVuR7eqNJDtROz2TrSyVB5zTTGnB1WB7TyI=
+X-Received: by 2002:a81:1a11:0:b0:31e:4549:d667 with SMTP id
+ a17-20020a811a11000000b0031e4549d667mr17201713ywa.196.1658402764395; Thu, 21
+ Jul 2022 04:26:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721043608.1527686-1-martin.kepplinger@puri.sm> <20220721043608.1527686-3-martin.kepplinger@puri.sm>
-In-Reply-To: <20220721043608.1527686-3-martin.kepplinger@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 21 Jul 2022 13:16:47 +0200
-Message-ID: <CAPDyKFouWMVcbDyrs=KgC+R4E61nb45Y0yOjt3PZ3JfcRyY9dA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] power: domain: handle genpd correctly when needing interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220718145038.1114379-1-daniel.lezcano@linaro.org>
+ <20220718145038.1114379-3-daniel.lezcano@linaro.org> <CAJZ5v0hj0kMRNBqO_0SqsAAY8Rb8h2NrWOYogDLgGZnCtiTEwg@mail.gmail.com>
+ <117c778a-4496-4d49-e73d-06fa3efa4d09@linaro.org>
+In-Reply-To: <117c778a-4496-4d49-e73d-06fa3efa4d09@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 21 Jul 2022 13:25:53 +0200
+Message-ID: <CAJZ5v0gjfeyiS8rUoPpa3sMrofw1ZyQe=+P6pvPbeirs07F+Qw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] thermal/core: Build ascending ordered indexes for
+ the trip points
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Jul 2022 at 06:37, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
+On Thu, Jul 21, 2022 at 12:59 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> If for example the power-domains' power-supply node (regulator) needs
-> interrupts to work, the current setup with noirq callbacks cannot
-> work; for example a pmic regulator on i2c, when suspending, usually already
-> times out during suspend_noirq:
+> On 19/07/2022 20:56, Rafael J. Wysocki wrote:
+> > On Mon, Jul 18, 2022 at 4:50 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> By convention the trips points are declared in the ascending
+> >> temperature order. However, no specification for the device tree, ACPI
+> >> or documentation tells the trip points must be ordered this way.
+> >>
+> >> In the other hand, we need those to be ordered to browse them at the
+> >
+> > s/In/On/
+> >
+> >> thermal events.
+> >
+> > What if they are all inspected every time?
 >
-> [   41.024193] buck4: failed to disable: -ETIMEDOUT
->
-> So fix system suspend and resume for these power-domains by using the
-> "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5 board,
-> but by looking at the dts, this will fix imx8mq-evk and possibly many other
-> boards too.
->
-> This is designed so that genpd providers just say "this genpd needs
-> interrupts" (by setting the flag) - without implying an implementation.
->
-> Initially system suspend problems had been discussed at
-> https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> which led to discussing the pmic that contains the regulators which
-> serve as power-domain power-supplies:
-> https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
->
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
->  drivers/base/power/domain.c | 13 +++++++++++++
->  include/linux/pm_domain.h   |  5 +++++
->  2 files changed, 18 insertions(+)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5a2e0232862e..ef77700e0def 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
->  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
->  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
->  #define genpd_is_rpm_always_on(genpd)  (genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
-> +#define genpd_irq_on(genpd)            (genpd->flags & GENPD_FLAG_IRQ_ON)
->
->  static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
->                 const struct generic_pm_domain *genpd)
-> @@ -2079,6 +2080,13 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
->                 genpd->dev_ops.start = pm_clk_resume;
->         }
->
-> +       if (genpd_irq_on(genpd)) {
-> +               genpd->domain.ops.suspend = genpd_suspend_noirq;
-> +               genpd->domain.ops.resume = genpd_resume_noirq;
-> +               genpd->domain.ops.suspend_noirq = NULL;
-> +               genpd->domain.ops.resume_noirq = NULL;
+> My bad, my sentence is confusing. The trip point are browsed every time
+> and we need to have them ordered to detect correctly the thermal events.
 
-Please move this a few lines above, just before we assign the _*noirq
-callbacks. In this way you don't need to reset thosepointers.
+I see.
 
-> +       }
-> +
->         /* The always-on governor works better with the corresponding flag. */
->         if (gov == &pm_domain_always_on_gov)
->                 genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-> @@ -2769,6 +2777,11 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                         goto err;
->                 dev_gpd_data(dev)->default_pstate = pstate;
->         }
-> +
-> +       if (pd->domain.ops.suspend_noirq && (pd->flags & GENPD_FLAG_IRQ_ON))
-> +               dev_err(dev, "PM domain %s needs irqs but uses noirq suspend\n",
-> +                       pd->name);
-> +
+So this mostly is a preparation for patch 4, isn't it?
 
-This doesn't make sense, as it can never happen according to what we
-do in pm_genpd_init().
-
-What Lucas suggested in the other thread was to log a warning if a
-device's (that gets attached to genpd) bus/driver has _*noirq
-callbacks. That would make sense.
-
-Thinking more about this, perhaps we should move to use the
-_*late/early callbacks instead for genpd. This would decrease the
-window of potential problematic consumers users (drivers/buses).
-
->         return 1;
+> >> But if we assume they are ordered and change the code
+> >> based on this assumption, any platform with shuffled trip points
+> >> description will be broken (if they exist).
+> >>
+> >> Instead of taking the risk of breaking the existing platforms, use an
+> >> array of temperature ordered trip identifiers and make it available
+> >> for the code needing to browse the trip points in an ordered way.
+> >
+> > Well, having ops->get_trip_temp() suggests that the trip temperatures
+> > can be dynamic.  Is the ordering guaranteed to be preserved in that
+> > case?
 >
->  err:
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 76bc9e3ef5ff..03bb86e43550 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -61,6 +61,10 @@
->   * GENPD_FLAG_MIN_RESIDENCY:   Enable the genpd governor to consider its
->   *                             components' next wakeup when determining the
->   *                             optimal idle state.
-> + *
-> + * GENPD_FLAG_IRQ_ON:          genpd needs irqs to be able to manage power
-> + *                             on/off. Use the outer suspend/resume callbacks
-> + *                             instead of noirq for example.
->   */
->  #define GENPD_FLAG_PM_CLK              BIT(0)
->  #define GENPD_FLAG_IRQ_SAFE            BIT(1)
-> @@ -69,6 +73,7 @@
->  #define GENPD_FLAG_CPU_DOMAIN          BIT(4)
->  #define GENPD_FLAG_RPM_ALWAYS_ON       BIT(5)
->  #define GENPD_FLAG_MIN_RESIDENCY       BIT(6)
-> +#define GENPD_FLAG_IRQ_ON              BIT(7)
->
->  enum gpd_status {
->         GENPD_STATE_ON = 0,     /* PM domain is on */
-> --
-> 2.30.2
->
+> The number of trips can not be changed. It is fixed when the thermal
+> zone is created AFAICT.
 
-Kind regards
-Uffe
+The current code appears to assume that and I think that this is a
+reasonable expectation.
+
+> The get_trip_temp() is just a way to let the
+> different driver declare their own trip structure which is actually
+> something I'm trying to fix by moving the structure thermal_trip inside
+> the thermal zone. But that is a longer and separate work.
+
+Well, I'm not sure.
+
+Trip point temperatures can be set via trip_point_temp_store() at
+least in principle.  How is it guaranteed that this won't affect the
+ordering?
+
+> > Anyway, if they need to be sorted, why don't we just sort them
+> > properly instead of adding this extra array?
+>
+> We can not because ATM the trip points array is private to the different
+> sensors.
+
+Well, the core could create an array or list of trip points for the
+thermal zone during registration and populate it from the
+driver-provided data.  Then, it could be sorted at the creation time.
+
+However, the above question needs to be addressed first.
