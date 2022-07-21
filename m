@@ -2,75 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5409A57D1A6
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 18:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFA557D1E9
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 18:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiGUQhS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 12:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S231713AbiGUQsu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 12:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiGUQhS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 12:37:18 -0400
+        with ESMTP id S229471AbiGUQsu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 12:48:50 -0400
 Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E037B1D7
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 09:37:16 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z22so3637286lfu.7
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 09:37:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F218965F
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 09:48:49 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id bf9so3645947lfb.13
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 09:48:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=egOPuEF9TqE75gZWwUjjn7qf+5eCfzce3I3zf+IUXOo=;
-        b=lMktJyzrq1TEYow7Koe8TieEr0tXpOkNUlPK+blhOL7s0Kdtidyp+G2N+ZZ4qxbmXJ
-         Rp4er8nUP2ZdowjxcqDVBUkgezKRr5hUiYpnrx98MPVLhAM3+X+EQhVKwNyndbiAlJp3
-         VH6Olpyynvcz84fZOsOVU59G2lmJ4LI6pWUQxKBLL94P2AplGDGP8lN4I2DLdhUhz7kY
-         1xByz8ImHNXldbxUkRDgSNOH5Nawi7AdKQpzfQ1W4cAQ/W4xVS3tx5VH3pskOBv8zBfz
-         UlF+ESATrroO7a3GCavLz6U6tF1XOePATh4c/zdgh17bppeuyk23VaHEMB81w+UmMGn9
-         deiw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1c4NqFsQq1mqeLVqaBN4q3GogL5AF4iqMOI42mtV1ks=;
+        b=K58M7u82t6s38vHDPjhyWIPtWJe5jwwdA+/oCAg+1F90YAkXIj0j3xQjuV87JP2KIj
+         vw/mqL6vrXJvm5/3iuFzxj6nxE+nnNFmzulKJHJMl4YnmsQgu47zJReSVKf1YbY+V/Xy
+         syQK/8cziYQEwK6nO2WZmNTbQsTDp6yHGDRmrYa9Uh9Drzij5oH/LrpFPlR5b7d8Ewt5
+         Jokrly/12sz+Cgjw7e5de2x3yFmodFo+SZAA3njI4EZmqLSF8kdAfyIrzr8QFc1TnzJQ
+         XB24LOXgbsq7q+3mb803tI/U26AsUKI8MHsOOLTTSsC30WNpuHQKwNM1NsLjooDEWt8+
+         ifow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=egOPuEF9TqE75gZWwUjjn7qf+5eCfzce3I3zf+IUXOo=;
-        b=Xl3DQE+A8Ndm6FDTAX84X2DtwEWVNTQNrA+LeEFWyWn0GqQ81aroeiMr7d5wpS1JPr
-         IzW3RLsa2E2UsVE8bndQRDqNrsEQs2O0xomERFz5NafoZiBkhG0Fly6jPIjbU6DeGlW9
-         d60z8DNlxAvpO/W8l2DdgEF3bzueU8yWfB4ZOHdlAE4lSIwzUaWMEoHlPnpoZWBSpBg0
-         cqnSRGxDf0a2L3qlLgog7idWAUONaZ0SUNHGe5G93+1wfEWZxKYuTpiI002TZI9ROX5o
-         eKjtFVfeupngfvKCi1dpcL075H9lSbHSRi1B0OWNu024EYZUkApU2hf0SEStZEUq8hbF
-         oxgA==
-X-Gm-Message-State: AJIora/ad1j85l1gE3pMmMjFLJEZACB1dz4X105ih3v0eNG2h52RbQcZ
-        2jRqc2Pu5GS1Nx76b01mTz0ykp9TMluFb47e
-X-Google-Smtp-Source: AGRyM1si6G1spc2SptdyuVnAcORyTN034fH8EFU/ukJye3I59DI2LMn3mMICtmSEXg4uCa3HJG1r2A==
-X-Received: by 2002:a05:6512:3996:b0:489:d526:93e5 with SMTP id j22-20020a056512399600b00489d52693e5mr23205070lfu.534.1658421435329;
-        Thu, 21 Jul 2022 09:37:15 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id k6-20020a192d06000000b0047f674838a5sm188263lfj.231.2022.07.21.09.37.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 09:37:14 -0700 (PDT)
-Message-ID: <67796aa8-6509-620f-f96a-ff22218f1b0c@linaro.org>
-Date:   Thu, 21 Jul 2022 18:37:13 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1c4NqFsQq1mqeLVqaBN4q3GogL5AF4iqMOI42mtV1ks=;
+        b=hvMQ1wN1XKRS7Fk8Up9XSqMDTlrup8f7MMCg7FU5gJyrJhxWqr76wmSvSFknzvvKXL
+         qPaHmOicSeVOmhFqpFOdyC3pDXW6CuXW3K6dAbnsvzwww1/Eh88ko9IJrspmnHyS69N4
+         eENaPg03LcFygJcYf+nHSz4ceijUHKK8XjGyVwASOkoQe819LjBq9nnNiEiYiTHikzKc
+         zuuldB+IlTNCwxyShf3WcQrP5R8yDSfd4UPm2vWZdLCs5+fjQsEi3uegZNGbA9LKxWDV
+         B1f/Sus6HlAioq+wdIAc7hVJBa16JdeGGltDBZ4O6sIlEuNUuzTfRLjUDahfqbzSQuvE
+         kDVg==
+X-Gm-Message-State: AJIora98oTtMCtig9C3ZDn0pmp8Is7cB0MH2szP4EbfLWaLpILhKOytT
+        QHOG1IEkFhrU6lbEvLSwRHODFbFppZZjiOj1ZTbnkQ==
+X-Google-Smtp-Source: AGRyM1vf94GzeFtRMIlmmxhByAj4WoC6FcVXZ0jwy7R2sxr9A9EAsQH+XJMiaqWAs2cKvs/94mFVMaKDWRwbZeQe1SQ=
+X-Received: by 2002:a05:6512:15a8:b0:489:ed48:24 with SMTP id
+ bp40-20020a05651215a800b00489ed480024mr21657228lfb.184.1658422127039; Thu, 21
+ Jul 2022 09:48:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/4] thermal: mediatek: add support for MT8365 SoC
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        matthias.bgg@gmail.com
-Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        robh+dt@kernel.org, rui.zhang@intel.com
-References: <20220720181854.547881-1-aouledameur@baylibre.com>
- <20220720181854.547881-3-aouledameur@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720181854.547881-3-aouledameur@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220720110246.762939-1-abel.vesa@linaro.org>
+In-Reply-To: <20220720110246.762939-1-abel.vesa@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 21 Jul 2022 18:48:10 +0200
+Message-ID: <CAPDyKFoh8UV=QC6RhOkc=FSvoeqF_UiWp97h0Qp8dniB=sS+8A@mail.gmail.com>
+Subject: Re: [RFC] PM: domains: Reverse the order of performance and enabling ops
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,20 +69,135 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/07/2022 20:18, Amjad Ouled-Ameur wrote:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> MT8365 is similar to the other SoCs supported by the driver. It has only
-> one bank and 3 actual sensors that can be multiplexed. There is another
-> one sensor that does not have usable data.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Reviewed-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Tested-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+On Wed, 20 Jul 2022 at 13:03, Abel Vesa <abel.vesa@linaro.org> wrote:
+>
+> Rather than enabling and then setting the performance state, which usually
+> translates into two different levels (voltages) in order to get to the
+> one required by the consumer, we could give a chance to the providers to
+> cache the performance state needed by the consumer and then, when powering
+> on the power domain, the provider could use the cached level instead.
 
-Just like in all other cases - you miss your SoB which is necessary for
-the chain.
+I don't think it's really clear what you want to do here. Let's see
+what the discussion below brings us to, but for the next version
+please elaborate a bit more in the commit message.
 
+Although, if I understand correctly (also from our offlist
+discussions), you want to make it possible to move from two calls,
+into one call into the FW from the genpd provider. So it's basically
+an optimization, which to me, certainly sounds worth doing.
 
-Best regards,
-Krzysztof
+Furthermore, to get the complete picture, in the Qcom case, we set a
+"default" low performance level from the genpd's ->power_on()
+callback, which is needed to enable basic functionality for some
+consumers.
+
+The second call that I refer to is made when genpd calls the
+->set_performance() callback (from genpd_runtime_suspend()), which is
+done by genpd to potentially set a new value for an aggregated
+performance state of the PM domain. In case when there actually is a
+new performance state set in this path, we end up calling the FW twice
+for the Qcom case, where this first one is unnecessary.
+
+Did I get that right?
+
+> Also the drop_performance and power_off have to be reversed so that
+> when the last active consumer suspends, the level doesn't actually drop
+> until the pd is disabled.
+
+I don't quite get what this part helps with, is it really needed to
+improve the behaviour?
+
+>
+> For the power domains that do not provide the set_performance, things
+> remain unchanged, as does for the power domains that only provide the
+> set_performance but do not provide the power_on/off.
+
+Right, good points!
+
+I get back to review the code soon, just wanted to make sure I have
+the complete picture first.
+
+Kind regards
+Uffe
+
+>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  drivers/base/power/domain.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 5a2e0232862e..38647c304b73 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -939,8 +939,8 @@ static int genpd_runtime_suspend(struct device *dev)
+>                 return 0;
+>
+>         genpd_lock(genpd);
+> -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>         genpd_power_off(genpd, true, 0);
+> +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>         genpd_unlock(genpd);
+>
+>         return 0;
+> @@ -978,9 +978,8 @@ static int genpd_runtime_resume(struct device *dev)
+>                 goto out;
+>
+>         genpd_lock(genpd);
+> +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+>         ret = genpd_power_on(genpd, 0);
+> -       if (!ret)
+> -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+>         genpd_unlock(genpd);
+>
+>         if (ret)
+> @@ -1018,8 +1017,8 @@ static int genpd_runtime_resume(struct device *dev)
+>  err_poweroff:
+>         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
+>                 genpd_lock(genpd);
+> -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>                 genpd_power_off(genpd, true, 0);
+> +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>                 genpd_unlock(genpd);
+>         }
+>
+> @@ -2747,17 +2746,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>         dev->pm_domain->detach = genpd_dev_pm_detach;
+>         dev->pm_domain->sync = genpd_dev_pm_sync;
+>
+> -       if (power_on) {
+> -               genpd_lock(pd);
+> -               ret = genpd_power_on(pd, 0);
+> -               genpd_unlock(pd);
+> -       }
+> -
+> -       if (ret) {
+> -               genpd_remove_device(pd, dev);
+> -               return -EPROBE_DEFER;
+> -       }
+> -
+>         /* Set the default performance state */
+>         pstate = of_get_required_opp_performance_state(dev->of_node, index);
+>         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
+> @@ -2769,6 +2757,18 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                         goto err;
+>                 dev_gpd_data(dev)->default_pstate = pstate;
+>         }
+> +
+> +       if (power_on) {
+> +               genpd_lock(pd);
+> +               ret = genpd_power_on(pd, 0);
+> +               genpd_unlock(pd);
+> +       }
+> +
+> +       if (ret) {
+> +               genpd_remove_device(pd, dev);
+> +               return -EPROBE_DEFER;
+> +       }
+> +
+>         return 1;
+>
+>  err:
+> --
+> 2.34.3
+>
