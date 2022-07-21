@@ -2,131 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0474157C89F
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 12:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949ED57C96E
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 12:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiGUKJ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 06:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
+        id S232362AbiGUK7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 06:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbiGUKJy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 06:09:54 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4DA691D2;
-        Thu, 21 Jul 2022 03:09:52 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id w185so1329655pfb.4;
-        Thu, 21 Jul 2022 03:09:52 -0700 (PDT)
+        with ESMTP id S230149AbiGUK7G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 06:59:06 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B8581483
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 03:59:05 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so609999wmm.4
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 03:59:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JsNvQYgS7LcjVv/c6iexGN5Si+fKRd5f5BAbC7QtYk4=;
-        b=eAa08a3+tl/ZofuTfcSSlCIRAq8gzsE5weAOP7UsxCGX7Y3mEwbV149NCokUNAuKe5
-         EN8JAjfmhP9N9CspG2jqaZSyIaGbkZUhDaW7qofKWFu8aKMXKSZIN/OslbLhdpG3vXAe
-         Ur/lyWqy91Q56Es+2f1zy2dzQ+hj8jlo3qE0YiObY2S52rcdXtLGShkNUGJiecJGeLOG
-         GtukmBHV1TgkmoL4837XnIBFnmUr7cQbqEUii+cPTEyr6HZ7158GO1PQ1FREaPNHpO3p
-         +zxpj8UH5CIEkJ0zMqYXxrZuHhPdN0LgPYLVzbKBbdgveUmcPeMuT3v6VXPjNd763lsV
-         k55Q==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fBZXdbMaIyk36U5hEKPOdPBFqAAcCzL3k7olq+kmY9U=;
+        b=KTH1rb16f1KimVK0JWIgAMHb7kqjKy2jWlZIymA4cyN3Si/Qu8IVjMMHTvrxHRYrNh
+         jpqBPA+biP3CnWGuTfD3HroTtzN3fr6OblG9R3BaRwqdldZ2UAAvF6NmDIEnmCOCo/CG
+         NJRMvyRXe0FOe+qEnpaljpXTjcTUtM2vVmT2r0kGRiHnnv2mae1HXdNwhhymRHiDn38Z
+         vzcjwd3zzhOBYe/NHP9WUP4wYsuCYpiBbIw5Aa6joQ7HGRpvR96vHItNSphEsTKQEw2o
+         ZaXw3YXkFpTLILQzn/Wqc7FpQteC0HCOPlkjq6sb+NScHX2do3d/Z7QTiFhy4HRGLn/M
+         E7UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JsNvQYgS7LcjVv/c6iexGN5Si+fKRd5f5BAbC7QtYk4=;
-        b=8NhrzcyPq8vo0eJhwJoQ3PDeYP8gtUM6T0S3PS/2iBRqpZ3WK2j2d02LCAXJWtijR0
-         ZFvkCFt7LxfEH8kXTYAjO0gcI5ex1sCbl9kXXPbGpcCgyVfZF98nBjeLtPCrC8g/S+SO
-         pxurZMjOnsWUN+dNGLSeEGRZiOkednYQcxjbSWD5mkkfGPVGdPTuqiHBSbrGwx/yRqiB
-         wCgknT25M6Brs+Nsf2EWbgIUr+MNm5+v0mfKt96EF+qkLkzV+gfxtAqD+/fp/354Y303
-         xSRxpMLc2M9FfDSGGgaMo6M1TwuVkktvB7K8nrE13H9RnKLNeXTCPaD6xVAorDH+Eu76
-         4Ylw==
-X-Gm-Message-State: AJIora/WFL/93eMT8Q7EgbhNiTf0wbblbTmaLkYxrNNSsd+bq8GvxdwU
-        ygFMao6IanLXTjJ5GnbX6kM=
-X-Google-Smtp-Source: AGRyM1tMdDKZ5ydOiuf36WZNOlcNoDOh7UeG2Wl5nFnV3DeSsvm2YGSyx3q8fnZshmx3L5mTpd0DGQ==
-X-Received: by 2002:a05:6a00:23c9:b0:52a:cedd:3992 with SMTP id g9-20020a056a0023c900b0052acedd3992mr42915651pfc.43.1658398191449;
-        Thu, 21 Jul 2022 03:09:51 -0700 (PDT)
-Received: from cyhuang-hp-elitebook-840-g3.rt ([2402:7500:56a:cec2:d9ce:3b52:7023:4b90])
-        by smtp.gmail.com with ESMTPSA id x187-20020a6286c4000000b0052ac2e23295sm1351501pfd.44.2022.07.21.03.09.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Jul 2022 03:09:50 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 18:09:37 +0800
-From:   ChiYuan Huang <u0084500@gmail.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
- type LED Indicator support
-Message-ID: <20220721100933.GA17618@cyhuang-hp-elitebook-840-g3.rt>
-References: <20220715112607.591-1-peterwu.pub@gmail.com>
- <20220715112607.591-12-peterwu.pub@gmail.com>
- <20220717084643.GA14285@duo.ucw.cz>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fBZXdbMaIyk36U5hEKPOdPBFqAAcCzL3k7olq+kmY9U=;
+        b=XaGvq+70qZJg1tAFhKESR0qO/BHI77fHpjaIXSOU147RaGdfn+FNu9dS+DUFpsaEOS
+         UJq65+a7FwQ6+d8Pe16Bt/T16hzv32PFtLQFv1hhfjMVTBVMJeY1CMf7FHXr/buCoKcA
+         sn2hlhf4fzeJNx91RZc4bYn1PPIPx5uyMFJDzcA/nTtquO7VAsKtgRxVqPmK3vuBc0XD
+         kqBjWv4Qc6qd6u4irwasKk9hhfoEgyhgbN3MC7IH99c1E5cHzFs1+T6zK7mvYQ0UZS/T
+         kJnNbz4fM5QURt6RUqxk60llrJWF7wsfnwhqQ+7NR2cCN6tceadWTejmFpN9UjnepjE0
+         0nbA==
+X-Gm-Message-State: AJIora/TBTAW677Hnu67iqvohfOzbYPqY3zLz8aFLuLCpawe6eU2ieLD
+        FX8WTyM6my+QcmMzkLJiKqBpqQ==
+X-Google-Smtp-Source: AGRyM1tNVGfGQr664Nk+tWORjPREQrDamx6Pnw7DakdRXd/gnGPnZo9esViXQ2BwLpKy5cSqrAvMPA==
+X-Received: by 2002:a1c:2944:0:b0:3a2:fece:29de with SMTP id p65-20020a1c2944000000b003a2fece29demr7844515wmp.115.1658401143632;
+        Thu, 21 Jul 2022 03:59:03 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:5c9a:ee80:52f5:6a1? ([2a05:6e02:1041:c10:5c9a:ee80:52f5:6a1])
+        by smtp.googlemail.com with ESMTPSA id k1-20020adff5c1000000b0020fff0ea0a3sm1491753wrp.116.2022.07.21.03.59.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 03:59:03 -0700 (PDT)
+Message-ID: <117c778a-4496-4d49-e73d-06fa3efa4d09@linaro.org>
+Date:   Thu, 21 Jul 2022 12:59:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220717084643.GA14285@duo.ucw.cz>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 3/4] thermal/core: Build ascending ordered indexes for
+ the trip points
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220718145038.1114379-1-daniel.lezcano@linaro.org>
+ <20220718145038.1114379-3-daniel.lezcano@linaro.org>
+ <CAJZ5v0hj0kMRNBqO_0SqsAAY8Rb8h2NrWOYogDLgGZnCtiTEwg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hj0kMRNBqO_0SqsAAY8Rb8h2NrWOYogDLgGZnCtiTEwg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 10:46:43AM +0200, Pavel Machek wrote:
-> Hi!
+On 19/07/2022 20:56, Rafael J. Wysocki wrote:
+> On Mon, Jul 18, 2022 at 4:50 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> By convention the trips points are declared in the ascending
+>> temperature order. However, no specification for the device tree, ACPI
+>> or documentation tells the trip points must be ordered this way.
+>>
+>> In the other hand, we need those to be ordered to browse them at the
 > 
-> > The MediaTek MT6370 is a highly-integrated smart power management IC,
-> > which includes a single cell Li-Ion/Li-Polymer switching battery
-> > charger, a USB Type-C & Power Delivery (PD) controller, dual
-> > Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> > a display bias driver and a general LDO for portable devices.
-> > 
-> > In MediaTek MT6370, there are four channel current-sink RGB LEDs that
-> > support hardware pattern for constant current, PWM, and breath mode.
-> > Isink4 channel can also be used as a CHG_VIN power good indicator.
-> > 
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> s/In/On/
 > 
-> > index a49979f..71bacb5 100644
-> > --- a/drivers/leds/Kconfig
-> > +++ b/drivers/leds/Kconfig
-> > @@ -244,6 +244,20 @@ config LEDS_MT6323
-> >  	  This option enables support for on-chip LED drivers found on
-> >  	  Mediatek MT6323 PMIC.
-> >  
-> > +config LEDS_MT6370_RGB
-> > +	tristate "LED Support for MediaTek MT6370 PMIC"
-> > +	depends on LEDS_CLASS
-> > +	depends on MFD_MT6370
-> > +	select LINEAR_RANGE
-> > +	help
-> > +	  Say Y here to enable support for MT6370_RGB LED device.
-> > +	  In MT6370, there are four channel current-sink LED drivers that
-> > +	  support hardware pattern for constant current, PWM, and breath mode.
-> > +	  Isink4 channel can also be used as a CHG_VIN power good
+>> thermal events.
 > 
-> Should this go to leds/rgb directory, and should it depend on
-> multicolor framework?
-Yes, and I may also want to change the file name from 'leds-mt6370'
-to 'leds-mt6370-rgb'. Is it ok?
+> What if they are all inspected every time?
+
+My bad, my sentence is confusing. The trip point are browsed every time 
+and we need to have them ordered to detect correctly the thermal events.
+
+>> But if we assume they are ordered and change the code
+>> based on this assumption, any platform with shuffled trip points
+>> description will be broken (if they exist).
+>>
+>> Instead of taking the risk of breaking the existing platforms, use an
+>> array of temperature ordered trip identifiers and make it available
+>> for the code needing to browse the trip points in an ordered way.
 > 
-> Best regards,
-> 							Pavel
-> -- 
-> People of Russia, stop Putin before his war on Ukraine escalates.
+> Well, having ops->get_trip_temp() suggests that the trip temperatures
+> can be dynamic.  Is the ordering guaranteed to be preserved in that
+> case?
+
+The number of trips can not be changed. It is fixed when the thermal 
+zone is created AFAICT. The get_trip_temp() is just a way to let the 
+different driver declare their own trip structure which is actually 
+something I'm trying to fix by moving the structure thermal_trip inside 
+the thermal zone. But that is a longer and separate work.
+
+> Anyway, if they need to be sorted, why don't we just sort them
+> properly instead of adding this extra array?
+
+We can not because ATM the trip points array is private to the different 
+sensors.
+
+[ ... ]
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
