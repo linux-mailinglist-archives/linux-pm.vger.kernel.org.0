@@ -2,213 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8580757D249
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 19:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D88F57D2AD
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 19:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiGURPe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 13:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S230006AbiGURlP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 13:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiGURPd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 13:15:33 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C264767E;
-        Thu, 21 Jul 2022 10:15:25 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 94B2DDF900;
-        Thu, 21 Jul 2022 10:14:54 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3105FPhhJ2dY; Thu, 21 Jul 2022 10:14:53 -0700 (PDT)
-Message-ID: <885c4c97e32148d4acdbb5fa2f4401f41ae76084.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658423693; bh=Yf0fpqX233oiOoDb4KXCi8yX/cXwrPg0zmJEHKFEDq4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=bCNUG+tQ1QaS8nOnqtxb/xbwBDJmgiqVosDxfvTQf7iAdt6EecnF5JmnXtk1+idvC
-         lunGGWtshAzTjsoDzTXW3Q1vVyQ6vPYtZ6Go2DnENey4+uPl4lXsp2Mdwl/GaDSege
-         +EcE+YwSABQBYHolZXF4QDcoTX6zDSZIW7Lfh6ISiw3o4L191JmfybRkuRac0y2X7K
-         A7oGzz6k6vqIcKPOgBZ7Hyp90tVAvvFqYXRlPe2BmNMRFmA1uyJedZQ1cDxewhsdvZ
-         hssKVKGd2coWCVOww5LDagwPkKV7TOcOisCQRR1gjuNeYyG3jO8fU9n7LYUD61FkS2
-         Mwd70cdGSgbPQ==
-Subject: Re: [PATCH v5 2/3] power: domain: handle genpd correctly when
- needing interrupts
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Thu, 21 Jul 2022 19:14:46 +0200
-In-Reply-To: <CAPDyKFouWMVcbDyrs=KgC+R4E61nb45Y0yOjt3PZ3JfcRyY9dA@mail.gmail.com>
-References: <20220721043608.1527686-1-martin.kepplinger@puri.sm>
-         <20220721043608.1527686-3-martin.kepplinger@puri.sm>
-         <CAPDyKFouWMVcbDyrs=KgC+R4E61nb45Y0yOjt3PZ3JfcRyY9dA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S229471AbiGURlP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 13:41:15 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C351804B1;
+        Thu, 21 Jul 2022 10:41:13 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 57a2f1e4dff59ed9; Thu, 21 Jul 2022 19:41:12 +0200
+Received: from kreacher.localnet (unknown [213.134.181.148])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 7008866CD1E;
+        Thu, 21 Jul 2022 19:41:11 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Prashanth Prakash <pprakash@codeaurora.org>
+Subject: [PATCH] ACPI: CPPC: Do not prevent CPPC from working in the future
+Date:   Thu, 21 Jul 2022 19:41:10 +0200
+Message-ID: <12041179.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.148
+X-CLIENT-HOSTNAME: 213.134.181.148
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudelkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudekuddrudegkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddugeekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgv
+ lhdrtghomhdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhgpdhrtghpthhtohepphhprhgrkhgrshhhsegtohguvggruhhrohhrrgdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Donnerstag, dem 21.07.2022 um 13:16 +0200 schrieb Ulf Hansson:
-> On Thu, 21 Jul 2022 at 06:37, Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> > 
-> > If for example the power-domains' power-supply node (regulator)
-> > needs
-> > interrupts to work, the current setup with noirq callbacks cannot
-> > work; for example a pmic regulator on i2c, when suspending, usually
-> > already
-> > times out during suspend_noirq:
-> > 
-> > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > 
-> > So fix system suspend and resume for these power-domains by using
-> > the
-> > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
-> > librem5 board,
-> > but by looking at the dts, this will fix imx8mq-evk and possibly
-> > many other
-> > boards too.
-> > 
-> > This is designed so that genpd providers just say "this genpd needs
-> > interrupts" (by setting the flag) - without implying an
-> > implementation.
-> > 
-> > Initially system suspend problems had been discussed at
-> >  
-> > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > which led to discussing the pmic that contains the regulators which
-> > serve as power-domain power-supplies:
-> >  
-> > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> >  drivers/base/power/domain.c | 13 +++++++++++++
-> >  include/linux/pm_domain.h   |  5 +++++
-> >  2 files changed, 18 insertions(+)
-> > 
-> > diff --git a/drivers/base/power/domain.c
-> > b/drivers/base/power/domain.c
-> > index 5a2e0232862e..ef77700e0def 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
-> > genpd_spin_ops = {
-> >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
-> > GENPD_FLAG_ACTIVE_WAKEUP)
-> >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
-> > GENPD_FLAG_CPU_DOMAIN)
-> >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
-> > GENPD_FLAG_RPM_ALWAYS_ON)
-> > +#define genpd_irq_on(genpd)            (genpd->flags &
-> > GENPD_FLAG_IRQ_ON)
-> > 
-> >  static inline bool irq_safe_dev_in_sleep_domain(struct device
-> > *dev,
-> >                 const struct generic_pm_domain *genpd)
-> > @@ -2079,6 +2080,13 @@ int pm_genpd_init(struct generic_pm_domain
-> > *genpd,
-> >                 genpd->dev_ops.start = pm_clk_resume;
-> >         }
-> > 
-> > +       if (genpd_irq_on(genpd)) {
-> > +               genpd->domain.ops.suspend = genpd_suspend_noirq;
-> > +               genpd->domain.ops.resume = genpd_resume_noirq;
-> > +               genpd->domain.ops.suspend_noirq = NULL;
-> > +               genpd->domain.ops.resume_noirq = NULL;
-> 
-> Please move this a few lines above, just before we assign the _*noirq
-> callbacks. In this way you don't need to reset thosepointers.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-good point, thanks.
+There is a problem with the current revision checks in
+is_cppc_supported() that they essentially prevent the CPPC support
+from working if a new _CPC package format revision being a proper
+superset of the v3 and only causing _CPC to return a package with more
+entries (while retaining the types and meaning of the entries defined by
+the v3) is introduced in the future and used by the platform firmware.
 
-> 
-> > +       }
-> > +
-> >         /* The always-on governor works better with the
-> > corresponding flag. */
-> >         if (gov == &pm_domain_always_on_gov)
-> >                 genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-> > @@ -2769,6 +2777,11 @@ static int __genpd_dev_pm_attach(struct
-> > device *dev, struct device *base_dev,
-> >                         goto err;
-> >                 dev_gpd_data(dev)->default_pstate = pstate;
-> >         }
-> > +
-> > +       if (pd->domain.ops.suspend_noirq && (pd->flags &
-> > GENPD_FLAG_IRQ_ON))
-> > +               dev_err(dev, "PM domain %s needs irqs but uses
-> > noirq suspend\n",
-> > +                       pd->name);
-> > +
-> 
-> This doesn't make sense, as it can never happen according to what we
-> do in pm_genpd_init().
-> 
-> What Lucas suggested in the other thread was to log a warning if a
-> device's (that gets attached to genpd) bus/driver has _*noirq
-> callbacks. That would make sense.
-> 
-> Thinking more about this, perhaps we should move to use the
-> _*late/early callbacks instead for genpd. This would decrease the
-> window of potential problematic consumers users (drivers/buses).
-> 
+In that case, as long as the number of entries in the _CPC return
+package is at least CPPC_V3_NUM_ENT, it should be perfectly fine to
+use the v3 support code and disregard the additional package entries
+added by the new package format revision.
 
-ok, I'll probably send another version without this. I'm leaving for
-vacations for a few weeks soon, so I'd rather do the essentials only
-here and take notes about what could be added later, if that's ok.
+For this reason, drop is_cppc_supported() altogether, put the revision
+checks directly into acpi_cppc_processor_probe() so they are easier to
+follow and rework them to take the case mentioned above into account.
 
-thank you very much!
+Fixes: 4773e77cdc9b ("ACPI / CPPC: Add support for CPPC v3")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/cppc_acpi.c |   54 ++++++++++++++++++++---------------------------
+ include/acpi/cppc_acpi.h |    2 -
+ 2 files changed, 25 insertions(+), 31 deletions(-)
 
-                        martin
+Index: linux-pm/drivers/acpi/cppc_acpi.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/cppc_acpi.c
++++ linux-pm/drivers/acpi/cppc_acpi.c
+@@ -618,33 +618,6 @@ static int pcc_data_alloc(int pcc_ss_id)
+ 	return 0;
+ }
+ 
+-/* Check if CPPC revision + num_ent combination is supported */
+-static bool is_cppc_supported(int revision, int num_ent)
+-{
+-	int expected_num_ent;
+-
+-	switch (revision) {
+-	case CPPC_V2_REV:
+-		expected_num_ent = CPPC_V2_NUM_ENT;
+-		break;
+-	case CPPC_V3_REV:
+-		expected_num_ent = CPPC_V3_NUM_ENT;
+-		break;
+-	default:
+-		pr_debug("Firmware exports unsupported CPPC revision: %d\n",
+-			revision);
+-		return false;
+-	}
+-
+-	if (expected_num_ent != num_ent) {
+-		pr_debug("Firmware exports %d entries. Expected: %d for CPPC rev:%d\n",
+-			num_ent, expected_num_ent, revision);
+-		return false;
+-	}
+-
+-	return true;
+-}
+-
+ /*
+  * An example CPC table looks like the following.
+  *
+@@ -733,7 +706,6 @@ int acpi_cppc_processor_probe(struct acp
+ 			 cpc_obj->type, pr->id);
+ 		goto out_free;
+ 	}
+-	cpc_ptr->num_entries = num_ent;
+ 
+ 	/* Second entry should be revision. */
+ 	cpc_obj = &out_obj->package.elements[1];
+@@ -744,10 +716,32 @@ int acpi_cppc_processor_probe(struct acp
+ 			 cpc_obj->type, pr->id);
+ 		goto out_free;
+ 	}
+-	cpc_ptr->version = cpc_rev;
+ 
+-	if (!is_cppc_supported(cpc_rev, num_ent))
++	if (cpc_rev < CPPC_V2_REV) {
++		pr_debug("Unsupported _CPC Revision (%d) for CPU:%d\n", cpc_rev,
++			 pr->id);
+ 		goto out_free;
++	}
++
++	/*
++	 * Disregard _CPC if the number of entries in the return pachage is not
++	 * as expected, but support future revisions being proper supersets of
++	 * the v3 and only causing more entries to be returned by _CPC.
++	 */
++	if ((cpc_rev == CPPC_V2_REV && num_ent != CPPC_V2_NUM_ENT) ||
++	    (cpc_rev == CPPC_V3_REV && num_ent != CPPC_V3_NUM_ENT) ||
++	    (cpc_rev > CPPC_V3_REV && num_ent <= CPPC_V3_NUM_ENT)) {
++		pr_debug("Unexpected number of _CPC return package entries (%d) for CPU:%d\n",
++			 num_ent, pr->id);
++		goto out_free;
++	}
++	if (cpc_rev > CPPC_V3_REV) {
++		num_ent = CPPC_V3_NUM_ENT;
++		cpc_rev = CPPC_V3_REV;
++	}
++
++	cpc_ptr->num_entries = num_ent;
++	cpc_ptr->version = cpc_rev;
+ 
+ 	/* Iterate through remaining entries in _CPC */
+ 	for (i = 2; i < num_ent; i++) {
+Index: linux-pm/include/acpi/cppc_acpi.h
+===================================================================
+--- linux-pm.orig/include/acpi/cppc_acpi.h
++++ linux-pm/include/acpi/cppc_acpi.h
+@@ -17,7 +17,7 @@
+ #include <acpi/pcc.h>
+ #include <acpi/processor.h>
+ 
+-/* Support CPPCv2 and CPPCv3  */
++/* CPPCv2 and CPPCv3 support */
+ #define CPPC_V2_REV	2
+ #define CPPC_V3_REV	3
+ #define CPPC_V2_NUM_ENT	21
 
-
-> >         return 1;
-> > 
-> >  err:
-> > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> > index 76bc9e3ef5ff..03bb86e43550 100644
-> > --- a/include/linux/pm_domain.h
-> > +++ b/include/linux/pm_domain.h
-> > @@ -61,6 +61,10 @@
-> >   * GENPD_FLAG_MIN_RESIDENCY:   Enable the genpd governor to
-> > consider its
-> >   *                             components' next wakeup when
-> > determining the
-> >   *                             optimal idle state.
-> > + *
-> > + * GENPD_FLAG_IRQ_ON:          genpd needs irqs to be able to
-> > manage power
-> > + *                             on/off. Use the outer
-> > suspend/resume callbacks
-> > + *                             instead of noirq for example.
-> >   */
-> >  #define GENPD_FLAG_PM_CLK              BIT(0)
-> >  #define GENPD_FLAG_IRQ_SAFE            BIT(1)
-> > @@ -69,6 +73,7 @@
-> >  #define GENPD_FLAG_CPU_DOMAIN          BIT(4)
-> >  #define GENPD_FLAG_RPM_ALWAYS_ON       BIT(5)
-> >  #define GENPD_FLAG_MIN_RESIDENCY       BIT(6)
-> > +#define GENPD_FLAG_IRQ_ON              BIT(7)
-> > 
-> >  enum gpd_status {
-> >         GENPD_STATE_ON = 0,     /* PM domain is on */
-> > --
-> > 2.30.2
-> > 
-> 
-> Kind regards
-> Uffe
 
 
