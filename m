@@ -2,121 +2,355 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0232957D603
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 23:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB9A57D6ED
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 00:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbiGUVbd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 17:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S232331AbiGUWew (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 18:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiGUVbc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 17:31:32 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAC71A804
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 14:31:31 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id a11so1740782wmq.3
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 14:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=A2h9OhkusgdirRF83rSBWXog+SzGCnXMH7foJlVkPkI=;
-        b=JkJtha8Q2/QgMtGxqubVcYBGwAwK5MfVfg+dnrP+G34k60Y3xjhLiLCVxgbQniWy4Y
-         ocsjnl8z9s9QsjZVQko3FBqVSAxR9tl/UvLHtD50LANWvDTMv0fqNKkrwhBil8Ld8kF/
-         trfDsuYTokVvwwiHci+z1Uvf+wWamd9IvCW8GagRbkBXgN0pVZFt/eWRqmBDMBkVWQ1j
-         WfzKQutEmleLjzitVEocUMUogbiT52AxPrGFkH3YicXcgYSzZQrySONQ2S6ISkodGPF/
-         CI3cxHY2QOgj+hf0RVAGaK7xdJeCrdU4rTbha6mPJGDAx9EgQrbxhr5WVA9nlhwLvJXH
-         0SvA==
+        with ESMTP id S229740AbiGUWev (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 18:34:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC64076E9D
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 15:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658442888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FbHoTM5Rt91OdmCyo1W3xeRtGZ9iC9uA5MFK7g8w+Fg=;
+        b=Ks/h8aZhClK8Mk9OFL7G+GvG2Lee+T28pMQg03UYyqdtxjUpJ1usCuql1H8WRYvDTB86at
+        WuUjVSreMIpEuMUvcXYJPh4La+EHk4VYukIpOLW/ruNqc+DeTOz2opHqYJ/gQATxU4oiYQ
+        y1/r2mFbxbZIJ69TSkhAuSTbI3z2jaU=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-380-q4RrLh1_MfOOIcHRZkOS7Q-1; Thu, 21 Jul 2022 18:34:46 -0400
+X-MC-Unique: q4RrLh1_MfOOIcHRZkOS7Q-1
+Received: by mail-il1-f200.google.com with SMTP id a10-20020a921a0a000000b002dd0f494a8dso1619032ila.18
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 15:34:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A2h9OhkusgdirRF83rSBWXog+SzGCnXMH7foJlVkPkI=;
-        b=vufLnsOP7Gda6WcNIMScKIv/l2CTlxi0pD897Z1lvFxjlxml4MTk6qtaXR9sE7wm2Z
-         IDtMV5Ku/FN2iYYF+1j7fbk1OdRem/L44LbD0yEI8fJeoKqjjMEAcM6GnY7llrzPoT+I
-         /JpzVE51Aabw8qPNDa+CVOIzKBntMxXWTIG6h9sSbojwJ4DEe6woWKKFKmy3fjpqToAS
-         ETjpUk+o4iZ7cwUG+1c6DQxNXCAy+aR+XJIqKOv7DU2k1AUAL5AoJweve1UCo4jk8LDT
-         M1+eqzG5mHMS8YhRH578bFuIXJ7xXl9fIXPk9BiWcBOSIL6R4vvmXYY1Ey0kF/E5orQR
-         ph9g==
-X-Gm-Message-State: AJIora/Va4KURMNeLmOLh11Ydb+3oZ9pwyrbG0XbuvvDZ9h6cshE+3Xi
-        ngWaLxGWIIaoCt/iOuiB6lOox1aXuFIzoQ==
-X-Google-Smtp-Source: AGRyM1sahWrxiJgQ9tceO4ZjUSOjwMwFzVxE2R0QwgXfmYhHOg40BEjLOlS+DR7sz5exkFUmi5rmhw==
-X-Received: by 2002:a05:600c:224c:b0:3a3:17b7:a229 with SMTP id a12-20020a05600c224c00b003a317b7a229mr10050746wmm.1.1658439089920;
-        Thu, 21 Jul 2022 14:31:29 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:a2a9:428c:224b:c919? ([2a05:6e02:1041:c10:a2a9:428c:224b:c919])
-        by smtp.gmail.com with ESMTPSA id co30-20020a0560000a1e00b0021e434c7867sm3475455wrb.36.2022.07.21.14.31.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 14:31:29 -0700 (PDT)
-Message-ID: <c75d5dca-17d5-6542-b0aa-46ed036567c7@linexp.org>
-Date:   Thu, 21 Jul 2022 23:31:28 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=FbHoTM5Rt91OdmCyo1W3xeRtGZ9iC9uA5MFK7g8w+Fg=;
+        b=QoRSFuDvieFvt7mb4AfI/FpwPOq6/0I2ANO10PwflfZqZdBlHnhLHQ6fzEt05fjoN+
+         xC1Z8Wh/z5Zkbk4LqX4hSr28QQZM7wIy/k381nu1WZ48P2swb3t2u42wCMTNgzIJjcLF
+         rTjovzbjmOPOvX+POvdOqsosNDf55gg30Ev36UO7zTHCVNQrZLPgtJ/RI5Fr2QibHDUW
+         3vrNM/vtcYpPsSXXi4lMfBAVDdczWXJouimo/JSQFy3j8+hF+b7g8kOgOObtHURDIMKk
+         QZ9TlXstkUzdBNdrdhJtT5UGz6frhHN99QSEp2URFBxySG+zvdJxlmBi/KQqCuCP/IWv
+         Pc7g==
+X-Gm-Message-State: AJIora/CIDYRRikiQO/D8q9x0WERkDAAu8YXAKXBjGlLxUb/4aULVqyt
+        zAMETKDqy8gmjow86jySciupvK1t7EqcPcDLs3hMDP7I7QzX4bMo9KpjDal8LpvVuF/IigoX/0Z
+        6siS4NzG8vI5X853FtcU=
+X-Received: by 2002:a05:6638:3589:b0:33f:88f2:2545 with SMTP id v9-20020a056638358900b0033f88f22545mr311978jal.229.1658442885841;
+        Thu, 21 Jul 2022 15:34:45 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u3YiP6JXEgjAKXrBeop0N46j1B+Tfjsl9+kS03iKFvuVf+mnHSNfypqaXgylDjjdtyx72oZQ==
+X-Received: by 2002:a05:6638:3589:b0:33f:88f2:2545 with SMTP id v9-20020a056638358900b0033f88f22545mr311963jal.229.1658442885478;
+        Thu, 21 Jul 2022 15:34:45 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id x8-20020a0566022c4800b0067c09fd0b53sm1330034iov.21.2022.07.21.15.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 15:34:44 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 16:34:42 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v5 5/5] vfio/pci: Implement
+ VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+Message-ID: <20220721163442.7d2ae47f.alex.williamson@redhat.com>
+In-Reply-To: <20220719121523.21396-6-abhsahu@nvidia.com>
+References: <20220719121523.21396-1-abhsahu@nvidia.com>
+        <20220719121523.21396-6-abhsahu@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 10/12] thermal/of: Store the trips in the thermal zone
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>
-References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
- <20220710123512.1714714-12-daniel.lezcano@linexp.org>
- <CAJZ5v0hJNUm1kyF7XdK1EiLNg6DmihBMbrZZsxgOjvi-xq3=cQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-In-Reply-To: <CAJZ5v0hJNUm1kyF7XdK1EiLNg6DmihBMbrZZsxgOjvi-xq3=cQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/07/2022 20:24, Rafael J. Wysocki wrote:
-> On Sun, Jul 10, 2022 at 2:35 PM Daniel Lezcano
-> <daniel.lezcano@linexp.org> wrote:
->> As the thermal zone contains the trip point, we can store them
->> directly when registering the thermal zone. That will allow another
->> step forward to remove the duplicate thermal zone structure we find in
->> the thermal_of code.
->>
->> Cc: Alexandre Bailon <abailon@baylibre.com>
->> Cc: Kevin Hilman <khilman@baylibre.com>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
->> ---
->>   drivers/thermal/thermal_of.c | 8 +++-----
->>   1 file changed, 3 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
->> index 19243c57b3f4..e187461dd396 100644
->> --- a/drivers/thermal/thermal_of.c
->> +++ b/drivers/thermal/thermal_of.c
->> @@ -1119,11 +1119,9 @@ int __init of_parse_thermal_zones(void)
->>                  tzp->slope = tz->slope;
->>                  tzp->offset = tz->offset;
->>
->> -               zone = thermal_zone_device_register(child->name, tz->ntrips,
->> -                                                   mask, tz,
->> -                                                   ops, tzp,
->> -                                                   tz->passive_delay,
->> -                                                   tz->polling_delay);
->> +               zone = thermal_zone_device_register_with_trips(child->name, tz->trips, tz->ntrips,
->> +                                                              mask, tz, ops, tzp, tz->passive_delay,
->> +                                                              tz->polling_delay);
->>                  if (IS_ERR(zone)) {
->>                          pr_err("Failed to build %pOFn zone %ld\n", child,
->>                                 PTR_ERR(zone));
->> --
-> IMO it would be less confusing if this was merged with the patch
-> introducing thermal_zone_device_register_with_trips().
+On Tue, 19 Jul 2022 17:45:23 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-You suggest to merge 8,9 and 10, right ?
+> This patch implements VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+> device feature. In the VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY, if there is
+> any access for the VFIO device on the host side, then the device will
+> be moved out of the low power state without the user's guest driver
+> involvement. Once the device access has been finished, then the device
+> will be moved again into low power state. With the low power
+> entry happened through VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP,
+> the device will not be moved back into the low power state and
+> a notification will be sent to the user by triggering wakeup eventfd.
+> 
+> vfio_pci_core_pm_entry() will be called for both the variants of low
+> power feature entry so add an extra argument for wakeup eventfd context
+> and store locally in 'struct vfio_pci_core_device'.
+> 
+> For the entry happened without wakeup eventfd, all the exit related
+> handling will be done by the LOW_POWER_EXIT device feature only.
+> When the LOW_POWER_EXIT will be called, then the vfio core layer
+> vfio_device_pm_runtime_get() will increment the usage count and will
+> resume the device. In the driver runtime_resume callback,
+> the 'pm_wake_eventfd_ctx' will be NULL so the vfio_pci_runtime_pm_exit()
+> will return early. Then vfio_pci_core_pm_exit() will again call
+> vfio_pci_runtime_pm_exit() and now the exit related handling will be done.
+> 
+> For the entry happened with wakeup eventfd, in the driver resume
+> callback, eventfd will be triggered and all the exit related handling will
+> be done. When vfio_pci_runtime_pm_exit() will be called by
+> vfio_pci_core_pm_exit(), then it will return early. But if the user has
+> disabled the runtime PM on the host side, the device will never go
+> runtime suspended state and in this case, all the exit related handling
+> will be done during vfio_pci_core_pm_exit() only. Also, the eventfd will
+> not be triggered since the device power state has not been changed by the
+> host driver.
+> 
+> For vfio_pci_core_disable() also, all the exit related handling
+> needs to be done if user has closed the device after putting into
+> low power. In this case eventfd will not be triggered since
+> the device close has been initiated by the user only.
+> 
+> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> ---
+>  drivers/vfio/pci/vfio_pci_core.c | 78 ++++++++++++++++++++++++++++++--
+>  include/linux/vfio_pci_core.h    |  1 +
+>  2 files changed, 74 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index 726a6f282496..dbe942bcaa67 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -259,7 +259,8 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
+>  	return ret;
+>  }
+>  
+> -static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev)
+> +static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev,
+> +				     struct eventfd_ctx *efdctx)
+>  {
+>  	/*
+>  	 * The vdev power related flags are protected with 'memory_lock'
+> @@ -272,6 +273,7 @@ static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev)
+>  	}
+>  
+>  	vdev->pm_runtime_engaged = true;
+> +	vdev->pm_wake_eventfd_ctx = efdctx;
+>  	pm_runtime_put_noidle(&vdev->pdev->dev);
+>  	up_write(&vdev->memory_lock);
+>  
+> @@ -295,21 +297,67 @@ static int vfio_pci_core_pm_entry(struct vfio_device *device, u32 flags,
+>  	 * while returning from the ioctl and then the device can go into
+>  	 * runtime suspended state.
+>  	 */
+> -	return vfio_pci_runtime_pm_entry(vdev);
+> +	return vfio_pci_runtime_pm_entry(vdev, NULL);
+>  }
+>  
+> -static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev)
+> +static int
+> +vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
+> +				   void __user *arg, size_t argsz)
+> +{
+> +	struct vfio_pci_core_device *vdev =
+> +		container_of(device, struct vfio_pci_core_device, vdev);
+> +	struct vfio_device_low_power_entry_with_wakeup entry;
+> +	struct eventfd_ctx *efdctx;
+> +	int ret;
+> +
+> +	ret = vfio_check_feature(flags, argsz, VFIO_DEVICE_FEATURE_SET,
+> +				 sizeof(entry));
+> +	if (ret != 1)
+> +		return ret;
+> +
+> +	if (copy_from_user(&entry, arg, sizeof(entry)))
+> +		return -EFAULT;
+> +
+> +	if (entry.wakeup_eventfd < 0)
+> +		return -EINVAL;
+> +
+> +	efdctx = eventfd_ctx_fdget(entry.wakeup_eventfd);
+> +	if (IS_ERR(efdctx))
+> +		return PTR_ERR(efdctx);
+> +
+> +	ret = vfio_pci_runtime_pm_entry(vdev, efdctx);
+> +	if (ret)
+> +		eventfd_ctx_put(efdctx);
+> +
+> +	return ret;
+> +}
+> +
+> +static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev,
+> +				     bool resume_callback)
+>  {
+>  	/*
+>  	 * The vdev power related flags are protected with 'memory_lock'
+>  	 * semaphore.
+>  	 */
+>  	down_write(&vdev->memory_lock);
+> +	if (resume_callback && !vdev->pm_wake_eventfd_ctx) {
+> +		up_write(&vdev->memory_lock);
+> +		return;
+> +	}
+> +
+>  	if (vdev->pm_runtime_engaged) {
+>  		vdev->pm_runtime_engaged = false;
+>  		pm_runtime_get_noresume(&vdev->pdev->dev);
+>  	}
+>  
+> +	if (vdev->pm_wake_eventfd_ctx) {
+> +		if (resume_callback)
+> +			eventfd_signal(vdev->pm_wake_eventfd_ctx, 1);
+> +
+> +		eventfd_ctx_put(vdev->pm_wake_eventfd_ctx);
+> +		vdev->pm_wake_eventfd_ctx = NULL;
+> +	}
+> +
+>  	up_write(&vdev->memory_lock);
+>  }
+>  
+
+I find the pm_exit handling here confusing.  We only have one caller
+that can signal the eventfd, so it seems cleaner to me to have that
+caller do the eventfd signal.  We can then remove the arg to pm_exit
+and pull the core of it out to a pre-locked function for that call
+path.  Sometime like below (applies on top of this patch).  Also moved
+the intx unmasking until after the eventfd signaling.  What do you
+think?  Thanks,
+
+Alex
+
+diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+index dbe942bcaa67..93169b7d6da2 100644
+--- a/drivers/vfio/pci/vfio_pci_core.c
++++ b/drivers/vfio/pci/vfio_pci_core.c
+@@ -332,32 +332,27 @@ vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
+ 	return ret;
+ }
+ 
+-static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev,
+-				     bool resume_callback)
++static void __vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev)
+ {
+-	/*
+-	 * The vdev power related flags are protected with 'memory_lock'
+-	 * semaphore.
+-	 */
+-	down_write(&vdev->memory_lock);
+-	if (resume_callback && !vdev->pm_wake_eventfd_ctx) {
+-		up_write(&vdev->memory_lock);
+-		return;
+-	}
+-
+ 	if (vdev->pm_runtime_engaged) {
+ 		vdev->pm_runtime_engaged = false;
+ 		pm_runtime_get_noresume(&vdev->pdev->dev);
+-	}
+-
+-	if (vdev->pm_wake_eventfd_ctx) {
+-		if (resume_callback)
+-			eventfd_signal(vdev->pm_wake_eventfd_ctx, 1);
+ 
+-		eventfd_ctx_put(vdev->pm_wake_eventfd_ctx);
+-		vdev->pm_wake_eventfd_ctx = NULL;
++		if (vdev->pm_wake_eventfd_ctx) {
++			eventfd_ctx_put(vdev->pm_wake_eventfd_ctx);
++			vdev->pm_wake_eventfd_ctx = NULL;
++		}
+ 	}
++}
+ 
++static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev)
++{
++	/*
++	 * The vdev power related flags are protected with 'memory_lock'
++	 * semaphore.
++	 */
++	down_write(&vdev->memory_lock);
++	__vfio_pci_runtime_pm_exit(vdev);
+ 	up_write(&vdev->memory_lock);
+ }
+ 
+@@ -373,22 +368,13 @@ static int vfio_pci_core_pm_exit(struct vfio_device *device, u32 flags,
+ 		return ret;
+ 
+ 	/*
+-	 * The device should already be resumed by the vfio core layer.
+-	 * vfio_pci_runtime_pm_exit() will internally increment the usage
+-	 * count corresponding to pm_runtime_put() called during low power
+-	 * feature entry.
+-	 *
+-	 * For the low power entry happened with wakeup eventfd, there will
+-	 * be two cases:
+-	 *
+-	 * 1. The device has gone into runtime suspended state. In this case,
+-	 *    the runtime resume by the vfio core layer should already have
+-	 *    performed all exit related handling and the
+-	 *    vfio_pci_runtime_pm_exit() will return early.
+-	 * 2. The device was in runtime active state. In this case, the
+-	 *    vfio_pci_runtime_pm_exit() will do all the required handling.
++	 * The device is always in the active state here due to pm wrappers
++	 * around ioctls.  If the device had entered a low power state and
++	 * pm_wake_eventfd_ctx is valid, vfio_pci_core_runtime_resume() has 
++	 * already signaled the eventfd and exited low power mode itself.
++	 * pm_runtime_engaged protects the redundant call here.
+ 	 */
+-	vfio_pci_runtime_pm_exit(vdev, false);
++	vfio_pci_runtime_pm_exit(vdev);
+ 	return 0;
+ }
+ 
+@@ -425,15 +411,19 @@ static int vfio_pci_core_runtime_resume(struct device *dev)
+ {
+ 	struct vfio_pci_core_device *vdev = dev_get_drvdata(dev);
+ 
+-	if (vdev->pm_intx_masked)
+-		vfio_pci_intx_unmask(vdev);
+-
+ 	/*
+-	 * Only for the low power entry happened with wakeup eventfd,
+-	 * the vfio_pci_runtime_pm_exit() will perform exit related handling
+-	 * and will trigger eventfd. For the other cases, it will return early.
++	 * Resume with a pm_wake_eventfd_ctx signals the eventfd and exits
++	 * low power mode.
+ 	 */
+-	vfio_pci_runtime_pm_exit(vdev, true);
++	down_write(&vdev->memory_lock);
++	if (vdev->pm_wake_eventfd_ctx) {
++		eventfd_signal(vdev->pm_wake_eventfd_ctx, 1);
++		__vfio_pci_runtime_pm_exit(vdev);
++	}
++	up_write(&vdev->memory_lock);
++
++	if (vdev->pm_intx_masked)
++		vfio_pci_intx_unmask(vdev);
+ 
+ 	return 0;
+ }
+@@ -553,7 +543,7 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
+ 	 * the vfio_pci_set_power_state() will change the device power state
+ 	 * to D0.
+ 	 */
+-	vfio_pci_runtime_pm_exit(vdev, false);
++	vfio_pci_runtime_pm_exit(vdev);
+ 	pm_runtime_resume(&pdev->dev);
+ 
+ 	/*
 
