@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051DB57C980
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 13:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66DE57C9A4
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 13:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbiGULFS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 07:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
+        id S232754AbiGULR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 07:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbiGULFR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 07:05:17 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDD12B610
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 04:05:15 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id u14so1412972lju.0
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 04:05:15 -0700 (PDT)
+        with ESMTP id S232453AbiGULR1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 07:17:27 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550EA81B10
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 04:17:26 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m12so1158001lfj.4
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 04:17:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yJ/vHPCzm1f2d//qmF68sXf6yNTReQ0ju6ClzshBRoI=;
-        b=WYXA1xzOXuyrZ3dBHDunm5dy+Ue2dNxXFJBMKycIK+S3seEprfABLkefA2RuFkHR/F
-         qThOZ+oBVw1Ez2sRJm9WW6pfc8iM0YYJHn+/vYPDZ9ji0Q4DvIir49gCBzBJfhBDQdj/
-         JLzjmJIP/mahXqvfp3jgazyX0x5psXSenRy5RlfzLBfg4E0ghufWCysQ2QNb0yJmXR3/
-         Bzrxe5cyKTEEwiCHPViQ0ZPffooVyF2wbl+mUs1EGMAtYr8a/Hf/QERvT/1gNrlkKE+Q
-         TEEA1OZ7FVM7AFcQjMpaiBwUO2vxQpegPERArDO8LvyYRvHxEzrZYALWyuLPS2wZI4V5
-         aGBQ==
+        bh=+Gnykwqd+vC3rtS/nAL/QcRf2AMrtCwB3O4EvfAVjzA=;
+        b=SsWd2HFWk3HD7Vve3jWvBMiFYz2xlV1iuCcNI1hf1Pe3eQbCY9fQ6y7s2p7dtloGaW
+         K4KbTs3WKfikTRIKNZ+c8UE9rh+Ynrqla9S2D4c+Vii0LGxdgvElm3SIgY73d7fC5Hw+
+         Faov0A3TvfEWzaTXZzYFobBNw1zCI07mvWpShuCzlXHOzPyb5LOU37S7KEQybaXfnSph
+         ob/sxUFS8ezn1s5fLLEZQ+0MPEDfRhXJ/uIjm63zIsywl1Z90Z3CvfRG5xxNn80j/42a
+         iWOddqGBdLUFKgWlOFOGqeV7NixO73OVyVZSdN17uhfhC/8p2XPCoCst9b4MeM1mXiPH
+         +EEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yJ/vHPCzm1f2d//qmF68sXf6yNTReQ0ju6ClzshBRoI=;
-        b=y4QszouVsFVOBW1XZqUoha9oC6SKwsifE/40jlEs1i2oLwq3zxN8tXKyqabV0ZCEMw
-         4n/a9uJSeexDdNeTjWPMnMII2Lw+BkZNgvRaPJmYi9L7ldy5AhCmgLkxbgSM141EEJDW
-         WQOHalGrWV1M79jdSdR5qZ7uJ7BsI2Wy4X1CToGEbG/ALJmHAE04qgnPXnP/H9enC0SZ
-         FAldHkm4VtqaMFJYUEJ3FD3cERdHpbCpFh1+sIc55VCUJjsP+HtzpAq5Q8VEn1J23hfT
-         ECwus+lupAM1sTlyz/LpI95iTIyProoVkE8PdK8MErQdQzTkdKMAFWReUll/O3zVJEaq
-         3ixQ==
-X-Gm-Message-State: AJIora/KtirUqN6RTlf4VTMCgcUkU/S15pF3UFpyWJylwPWoUcPAGdym
-        il7Dd5ndMyo9phJE4/uKtLZBznYbhBZDcQjPmaP9Zw==
-X-Google-Smtp-Source: AGRyM1vcvJjCP/hw4nnWQPdUZUzdVTMwbnE0GxM/EXfiRGf+G3w+JBmm/xpG4NFQmXvYIMkJMMthdgPcgvTzijzMINU=
-X-Received: by 2002:a05:651c:158:b0:25d:d59c:85bd with SMTP id
- c24-20020a05651c015800b0025dd59c85bdmr3473477ljd.463.1658401514066; Thu, 21
- Jul 2022 04:05:14 -0700 (PDT)
+        bh=+Gnykwqd+vC3rtS/nAL/QcRf2AMrtCwB3O4EvfAVjzA=;
+        b=fgXtdgaIpsXCMLnhlW0LPya90iGo5H3phwCywWxtUEcsVbxd72rF4VFoLeMgu7Sav2
+         JmEZ9FZBk4DuP6w7pboddOuM8x7awGnSt/sNKjYJQ7VmIJVAgDik0rWnN6xgneBjvVB/
+         PGenW/2p1hpWVlb9dRkwrd6VpB1By58pBaP4rTtXEK7gFk7gYfa7yLs71f3YMlaipW4M
+         NITmwZM0urcqI75t+wwTL0pt/pho9aX3DWRYIy0PLJnQ+LDXpxKJIRpt9vJFiwo5Ol+h
+         jDMlCsucnMJwxm/kwTCC1HxxRW0iLYl3zkhCFJR7GOUDGvreVl1wqF/1HctNQ1r9zg1l
+         kXTg==
+X-Gm-Message-State: AJIora8MdChFwMzWdQWEvUvwpcrzclnJhf+jFZ9jedCJZmtIsuuOZI+u
+        3xVEEm71GqT/6eaVHv8oXE8p2X0/Ix58c7bV5w/Bvw==
+X-Google-Smtp-Source: AGRyM1u4WCa5dVOpwiSGbwj5+e4+HoZPSzrKuwLqe3XWV/GuvfojaqnCF6tjyW1ACqqbj1qL8pgL9f4sBUpYR3ASWo0=
+X-Received: by 2002:a05:6512:32c6:b0:48a:18a1:2d2b with SMTP id
+ f6-20020a05651232c600b0048a18a12d2bmr19594098lfg.373.1658402244436; Thu, 21
+ Jul 2022 04:17:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721043608.1527686-1-martin.kepplinger@puri.sm> <20220721043608.1527686-2-martin.kepplinger@puri.sm>
-In-Reply-To: <20220721043608.1527686-2-martin.kepplinger@puri.sm>
+References: <20220721043608.1527686-1-martin.kepplinger@puri.sm> <20220721043608.1527686-3-martin.kepplinger@puri.sm>
+In-Reply-To: <20220721043608.1527686-3-martin.kepplinger@puri.sm>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 21 Jul 2022 13:04:37 +0200
-Message-ID: <CAPDyKFpTauJeRS0W34Cz7v_HzJzBCsOk-M2PvrWoYR=cth=j5Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] PM: domain: fix indentation and use BIT macro for flags
+Date:   Thu, 21 Jul 2022 13:16:47 +0200
+Message-ID: <CAPDyKFouWMVcbDyrs=KgC+R4E61nb45Y0yOjt3PZ3JfcRyY9dA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] power: domain: handle genpd correctly when needing interrupts
 To:     Martin Kepplinger <martin.kepplinger@puri.sm>
 Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
         krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
@@ -69,57 +69,116 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Jul 2022 at 06:36, Martin Kepplinger
+On Thu, 21 Jul 2022 at 06:37, Martin Kepplinger
 <martin.kepplinger@puri.sm> wrote:
 >
-> Use the BIT macro for flags and simply do 2 tags indentation.
+> If for example the power-domains' power-supply node (regulator) needs
+> interrupts to work, the current setup with noirq callbacks cannot
+> work; for example a pmic regulator on i2c, when suspending, usually already
+> times out during suspend_noirq:
+>
+> [   41.024193] buck4: failed to disable: -ETIMEDOUT
+>
+> So fix system suspend and resume for these power-domains by using the
+> "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5 board,
+> but by looking at the dts, this will fix imx8mq-evk and possibly many other
+> boards too.
+>
+> This is designed so that genpd providers just say "this genpd needs
+> interrupts" (by setting the flag) - without implying an implementation.
+>
+> Initially system suspend problems had been discussed at
+> https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+> which led to discussing the pmic that contains the regulators which
+> serve as power-domain power-supplies:
+> https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
 >
 > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-
-I prefer to keep the advantages with doing a git blame on this file,
-over this cleanup. Unless you feel strongly about this I would
-appreciate it if you can drop $subject patch from the series.
-
-Kind regards
-Uffe
-
 > ---
->  include/linux/pm_domain.h | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+>  drivers/base/power/domain.c | 13 +++++++++++++
+>  include/linux/pm_domain.h   |  5 +++++
+>  2 files changed, 18 insertions(+)
 >
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 5a2e0232862e..ef77700e0def 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+>  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+>  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+>  #define genpd_is_rpm_always_on(genpd)  (genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
+> +#define genpd_irq_on(genpd)            (genpd->flags & GENPD_FLAG_IRQ_ON)
+>
+>  static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
+>                 const struct generic_pm_domain *genpd)
+> @@ -2079,6 +2080,13 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>                 genpd->dev_ops.start = pm_clk_resume;
+>         }
+>
+> +       if (genpd_irq_on(genpd)) {
+> +               genpd->domain.ops.suspend = genpd_suspend_noirq;
+> +               genpd->domain.ops.resume = genpd_resume_noirq;
+> +               genpd->domain.ops.suspend_noirq = NULL;
+> +               genpd->domain.ops.resume_noirq = NULL;
+
+Please move this a few lines above, just before we assign the _*noirq
+callbacks. In this way you don't need to reset thosepointers.
+
+> +       }
+> +
+>         /* The always-on governor works better with the corresponding flag. */
+>         if (gov == &pm_domain_always_on_gov)
+>                 genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
+> @@ -2769,6 +2777,11 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                         goto err;
+>                 dev_gpd_data(dev)->default_pstate = pstate;
+>         }
+> +
+> +       if (pd->domain.ops.suspend_noirq && (pd->flags & GENPD_FLAG_IRQ_ON))
+> +               dev_err(dev, "PM domain %s needs irqs but uses noirq suspend\n",
+> +                       pd->name);
+> +
+
+This doesn't make sense, as it can never happen according to what we
+do in pm_genpd_init().
+
+What Lucas suggested in the other thread was to log a warning if a
+device's (that gets attached to genpd) bus/driver has _*noirq
+callbacks. That would make sense.
+
+Thinking more about this, perhaps we should move to use the
+_*late/early callbacks instead for genpd. This would decrease the
+window of potential problematic consumers users (drivers/buses).
+
+>         return 1;
+>
+>  err:
 > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index ebc351698090..76bc9e3ef5ff 100644
+> index 76bc9e3ef5ff..03bb86e43550 100644
 > --- a/include/linux/pm_domain.h
 > +++ b/include/linux/pm_domain.h
-> @@ -8,6 +8,7 @@
->  #ifndef _LINUX_PM_DOMAIN_H
->  #define _LINUX_PM_DOMAIN_H
->
-> +#include <linux/bits.h>
->  #include <linux/device.h>
->  #include <linux/ktime.h>
->  #include <linux/mutex.h>
-> @@ -61,13 +62,13 @@
+> @@ -61,6 +61,10 @@
+>   * GENPD_FLAG_MIN_RESIDENCY:   Enable the genpd governor to consider its
 >   *                             components' next wakeup when determining the
 >   *                             optimal idle state.
+> + *
+> + * GENPD_FLAG_IRQ_ON:          genpd needs irqs to be able to manage power
+> + *                             on/off. Use the outer suspend/resume callbacks
+> + *                             instead of noirq for example.
 >   */
-> -#define GENPD_FLAG_PM_CLK       (1U << 0)
-> -#define GENPD_FLAG_IRQ_SAFE     (1U << 1)
-> -#define GENPD_FLAG_ALWAYS_ON    (1U << 2)
-> -#define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
-> -#define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
-> -#define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
-> -#define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
-> +#define GENPD_FLAG_PM_CLK              BIT(0)
-> +#define GENPD_FLAG_IRQ_SAFE            BIT(1)
-> +#define GENPD_FLAG_ALWAYS_ON           BIT(2)
-> +#define GENPD_FLAG_ACTIVE_WAKEUP       BIT(3)
-> +#define GENPD_FLAG_CPU_DOMAIN          BIT(4)
-> +#define GENPD_FLAG_RPM_ALWAYS_ON       BIT(5)
-> +#define GENPD_FLAG_MIN_RESIDENCY       BIT(6)
+>  #define GENPD_FLAG_PM_CLK              BIT(0)
+>  #define GENPD_FLAG_IRQ_SAFE            BIT(1)
+> @@ -69,6 +73,7 @@
+>  #define GENPD_FLAG_CPU_DOMAIN          BIT(4)
+>  #define GENPD_FLAG_RPM_ALWAYS_ON       BIT(5)
+>  #define GENPD_FLAG_MIN_RESIDENCY       BIT(6)
+> +#define GENPD_FLAG_IRQ_ON              BIT(7)
 >
 >  enum gpd_status {
 >         GENPD_STATE_ON = 0,     /* PM domain is on */
 > --
 > 2.30.2
 >
+
+Kind regards
+Uffe
