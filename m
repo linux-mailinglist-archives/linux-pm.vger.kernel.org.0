@@ -2,29 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2652757D5BE
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 23:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A9A57D58C
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 23:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbiGUVQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 17:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S232170AbiGUVHl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 17:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbiGUVQE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 17:16:04 -0400
+        with ESMTP id S229671AbiGUVHk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 17:07:40 -0400
+X-Greylist: delayed 376 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 14:07:39 PDT
 Received: from luna (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net [86.15.83.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6A15C347
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 14:15:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E351904C6;
+        Thu, 21 Jul 2022 14:07:39 -0700 (PDT)
 Received: from ben by luna with local (Exim 4.96)
         (envelope-from <ben@luna.fluff.org>)
-        id 1oEdIP-001std-11;
-        Thu, 21 Jul 2022 22:01:21 +0100
+        id 1oEdOT-001tMd-0R;
+        Thu, 21 Jul 2022 22:07:37 +0100
 From:   Ben Dooks <ben-linux@fluff.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-pm@vger.kernel.org, sre@kernel.org,
         Ben Dooks <ben-linux@fluff.org>
-Subject: [PATCH] power: supply: bq27xxx: fix NULL vs 0 warnings
-Date:   Thu, 21 Jul 2022 22:01:20 +0100
-Message-Id: <20220721210120.449340-1-ben-linux@fluff.org>
+Subject: [PATCH] power: supply: bq27xxx: fix __be16 warnings
+Date:   Thu, 21 Jul 2022 22:07:35 +0100
+Message-Id: <20220721210735.451138-1-ben-linux@fluff.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -37,119 +38,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver has a lot of sparse warnings for using 0 as a NULL
-pointer when NULL would be appropriate. Change the 0 values
-to NULL to fix the warnings, some of which are shown here:
+The bq27xxx_dm_reg_ptr() should return a __be16 as the result
+is being passed to be16_to_cpup() to convert to the proper
+cpu endian value. Move to using __be16 as appropriate to fix
+the following sparse warnings:
 
-drivers/power/supply/bq27xxx_battery.c:984:23: warning: Using plain integer as NULL pointer
-drivers/power/supply/bq27xxx_battery.c:985:23: warning: Using plain integer as NULL pointer
-drivers/power/supply/bq27xxx_battery.c:986:23: warning: Using plain integer as NULL pointer
-drivers/power/supply/bq27xxx_battery.c:987:23: warning: Using plain integer as NULL pointer
-drivers/power/supply/bq27xxx_battery.c:988:23: warning: Using plain integer as NULL pointer
+drivers/power/supply/bq27xxx_battery.c:1293:26: warning: incorrect type in argument 1 (different base types)
+drivers/power/supply/bq27xxx_battery.c:1293:26:    expected restricted __be16 const [usertype] *p
+drivers/power/supply/bq27xxx_battery.c:1293:26:    got unsigned short [usertype] *prev
+drivers/power/supply/bq27xxx_battery.c:1304:17: warning: incorrect type in argument 1 (different base types)
+drivers/power/supply/bq27xxx_battery.c:1304:17:    expected restricted __be16 const [usertype] *p
+drivers/power/supply/bq27xxx_battery.c:1304:17:    got unsigned short [usertype] *prev
+drivers/power/supply/bq27xxx_battery.c:1316:15: warning: incorrect type in assignment (different base types)
+drivers/power/supply/bq27xxx_battery.c:1316:15:    expected unsigned short [usertype]
+drivers/power/supply/bq27xxx_battery.c:1316:15:    got restricted __be16 [usertype]
 
 Signed-off-by: Ben Dooks <ben-linux@fluff.org>
 ---
- drivers/power/supply/bq27xxx_battery.c | 54 +++++++++++++-------------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+ drivers/power/supply/bq27xxx_battery.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 35e6a394c0df..dccc2683455a 100644
+index dccc2683455a..8bf048fbd36a 100644
 --- a/drivers/power/supply/bq27xxx_battery.c
 +++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -868,11 +868,11 @@ enum bq27xxx_dm_reg_id {
- 	BQ27XXX_DM_TERMINATE_VOLTAGE,
- };
+@@ -1044,12 +1044,12 @@ struct bq27xxx_dm_buf {
+ 	.block = (di)->dm_regs[i].offset / BQ27XXX_DM_SZ, \
+ }
  
--#define bq27000_dm_regs 0
--#define bq27010_dm_regs 0
--#define bq2750x_dm_regs 0
--#define bq2751x_dm_regs 0
--#define bq2752x_dm_regs 0
-+#define bq27000_dm_regs NULL
-+#define bq27010_dm_regs NULL
-+#define bq2750x_dm_regs NULL
-+#define bq2751x_dm_regs NULL
-+#define bq2752x_dm_regs NULL
+-static inline u16 *bq27xxx_dm_reg_ptr(struct bq27xxx_dm_buf *buf,
++static inline __be16 *bq27xxx_dm_reg_ptr(struct bq27xxx_dm_buf *buf,
+ 				      struct bq27xxx_dm_reg *reg)
+ {
+ 	if (buf->class == reg->subclass_id &&
+ 	    buf->block == reg->offset / BQ27XXX_DM_SZ)
+-		return (u16 *) (buf->data + reg->offset % BQ27XXX_DM_SZ);
++		return (__be16 *) (buf->data + reg->offset % BQ27XXX_DM_SZ);
  
- #if 0 /* not yet tested */
- static struct bq27xxx_dm_reg bq27500_dm_regs[] = {
-@@ -881,24 +881,24 @@ static struct bq27xxx_dm_reg bq27500_dm_regs[] = {
- 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 80, 48, 2, 1000, 32767 },
- };
- #else
--#define bq27500_dm_regs 0
-+#define bq27500_dm_regs NULL
- #endif
+ 	return NULL;
+ }
+@@ -1275,7 +1275,7 @@ static void bq27xxx_battery_update_dm_block(struct bq27xxx_device_info *di,
+ {
+ 	struct bq27xxx_dm_reg *reg = &di->dm_regs[reg_id];
+ 	const char *str = bq27xxx_dm_reg_name[reg_id];
+-	u16 *prev = bq27xxx_dm_reg_ptr(buf, reg);
++	__be16 *prev = bq27xxx_dm_reg_ptr(buf, reg);
  
- /* todo create data memory definitions from datasheets and test on chips */
--#define bq27510g1_dm_regs 0
--#define bq27510g2_dm_regs 0
--#define bq27510g3_dm_regs 0
--#define bq27520g1_dm_regs 0
--#define bq27520g2_dm_regs 0
--#define bq27520g3_dm_regs 0
--#define bq27520g4_dm_regs 0
--#define bq27521_dm_regs 0
--#define bq27530_dm_regs 0
--#define bq27531_dm_regs 0
--#define bq27541_dm_regs 0
--#define bq27542_dm_regs 0
--#define bq27546_dm_regs 0
--#define bq27742_dm_regs 0
-+#define bq27510g1_dm_regs NULL
-+#define bq27510g2_dm_regs NULL
-+#define bq27510g3_dm_regs NULL
-+#define bq27520g1_dm_regs NULL
-+#define bq27520g2_dm_regs NULL
-+#define bq27520g3_dm_regs NULL
-+#define bq27520g4_dm_regs NULL
-+#define bq27521_dm_regs NULL
-+#define bq27530_dm_regs NULL
-+#define bq27531_dm_regs NULL
-+#define bq27541_dm_regs NULL
-+#define bq27542_dm_regs NULL
-+#define bq27546_dm_regs NULL
-+#define bq27742_dm_regs NULL
- 
- #if 0 /* not yet tested */
- static struct bq27xxx_dm_reg bq27545_dm_regs[] = {
-@@ -907,7 +907,7 @@ static struct bq27xxx_dm_reg bq27545_dm_regs[] = {
- 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 80, 67, 2, 2800,  3700 },
- };
- #else
--#define bq27545_dm_regs 0
-+#define bq27545_dm_regs NULL
- #endif
- 
- static struct bq27xxx_dm_reg bq27411_dm_regs[] = {
-@@ -937,7 +937,7 @@ static struct bq27xxx_dm_reg bq27426_dm_regs[] = {
- #if 0 /* not yet tested */
- #define bq27441_dm_regs bq27421_dm_regs
- #else
--#define bq27441_dm_regs 0
-+#define bq27441_dm_regs NULL
- #endif
- 
- #if 0 /* not yet tested */
-@@ -947,13 +947,13 @@ static struct bq27xxx_dm_reg bq27621_dm_regs[] = {
- 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 82, 9, 2, 2500,  3700 },
- };
- #else
--#define bq27621_dm_regs 0
-+#define bq27621_dm_regs NULL
- #endif
- 
--#define bq27z561_dm_regs 0
--#define bq28z610_dm_regs 0
--#define bq34z100_dm_regs 0
--#define bq78z100_dm_regs 0
-+#define bq27z561_dm_regs NULL
-+#define bq28z610_dm_regs NULL
-+#define bq34z100_dm_regs NULL
-+#define bq78z100_dm_regs NULL
- 
- #define BQ27XXX_O_ZERO		BIT(0)
- #define BQ27XXX_O_OTDC		BIT(1) /* has OTC/OTD overtemperature flags */
+ 	if (prev == NULL) {
+ 		dev_warn(di->dev, "buffer does not match %s dm spec\n", str);
 -- 
 2.35.1
 
