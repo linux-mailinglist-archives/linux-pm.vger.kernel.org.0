@@ -2,119 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DED57D4BA
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 22:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2652757D5BE
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Jul 2022 23:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbiGUUTZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Jul 2022 16:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
+        id S233828AbiGUVQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Jul 2022 17:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbiGUUTX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 16:19:23 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4988A8EEE7
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 13:19:22 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id mh14so2102574qvb.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 13:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nHZhsJvZuU8x8cSV7hJ3bwYV3pDJsGuu8QgGpzsHbKI=;
-        b=i3M7DR7R/92yls/0qJasv9Mdrw0PUg60oMhsu7k2wXs0clqJcf4XZSIidylzk7XvNm
-         Kj/G/ydgomlXntOBztn/Xdn11KSc5WdAoY0Y98B9SjtG7qXeu8Ai66pmjl5aLDea1jH6
-         0pqUs7UHObk7IUP2TZ+CUM0aGIEq8wMAd5Kpw9F57ezZuApAFUyLG7o+As22AxiOcu8/
-         RRZp2gGNATKlUqyJ8xiQ20dmkbLmWUg5jXtCtg9l7Tw6Pq6TnQL6nB3X0+sBh+J8xaSE
-         4X08lxqqGKlXulgEKo7uuexd/DISTQ7DXsnKkWnk3TmdZ0FjvxAqL8V0io6NMRXUEc96
-         sFTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nHZhsJvZuU8x8cSV7hJ3bwYV3pDJsGuu8QgGpzsHbKI=;
-        b=oQ8wusNJB7E++rOH1Le/s2nRWyMI/mxChq0vnqzJttBC3QgBqXoadaOL5uC+Q1vO1N
-         A0+bnDHCmw9gxy6rrAh/mqzllGhOV0so+5xF++tlOIvNO1KpRcgFZQvPzV4zaCZzY7EE
-         y8RFIE623WLTgfkiircQZLoTLVBA+PsNcxwcAtuiJRXLPS1VePGHnR2WVbmAca6pQ0mV
-         ibaNPV6F5BrYvbVtrnqY6WJTMxqmp7VZbDQJK36KcPTaLbIwip7jNy4JgvzqMdBzk8UF
-         KVzxsBLesnJIOP1XcKWm17TkQuIwno4oEpTgn85/oOW5DkZ1vaYyJr0RO+g+mlDQus6Z
-         FRTw==
-X-Gm-Message-State: AJIora81Yd5oALo9cbuHCDrmnpMHyv/kIWRXhkkjYIu0ymTZUGja2p5Y
-        n/T8YvGOd7cMUj7QQf3eLKuNYyBBMgBjgbvenj8aYA==
-X-Google-Smtp-Source: AGRyM1tmIb9QZW3GuI3H9geW6F1Yo2ZDUH8ndpTeEDQeOHPdXB96hnQnvYJMducw/HqOnVQWQTotOyM59G4sVGFAdbY=
-X-Received: by 2002:a05:6214:d03:b0:473:7764:2ab with SMTP id
- 3-20020a0562140d0300b00473776402abmr247073qvh.119.1658434761411; Thu, 21 Jul
- 2022 13:19:21 -0700 (PDT)
+        with ESMTP id S233728AbiGUVQE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Jul 2022 17:16:04 -0400
+Received: from luna (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net [86.15.83.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6A15C347
+        for <linux-pm@vger.kernel.org>; Thu, 21 Jul 2022 14:15:56 -0700 (PDT)
+Received: from ben by luna with local (Exim 4.96)
+        (envelope-from <ben@luna.fluff.org>)
+        id 1oEdIP-001std-11;
+        Thu, 21 Jul 2022 22:01:21 +0100
+From:   Ben Dooks <ben-linux@fluff.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, sre@kernel.org,
+        Ben Dooks <ben-linux@fluff.org>
+Subject: [PATCH] power: supply: bq27xxx: fix NULL vs 0 warnings
+Date:   Thu, 21 Jul 2022 22:01:20 +0100
+Message-Id: <20220721210120.449340-1-ben-linux@fluff.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220721195502.1525214-1-bhupesh.sharma@linaro.org>
-In-Reply-To: <20220721195502.1525214-1-bhupesh.sharma@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 21 Jul 2022 23:19:10 +0300
-Message-ID: <CAA8EJppGS38aP7gyd1c3kNgraAVJDoqUef2cDfZpu2aL_iwW0g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: leds: Describe optional 'reg' property used
- for Qualcomm LPG nodes
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org, pavel@ucw.cz
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
+        HELO_NO_DOMAIN,KHOP_HELO_FCRDNS,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Jul 2022 at 22:55, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
->
-> As Bjorn noted in [1], it is useful to describe the optional
-> 'reg' property for Qualcomm LPG nodes as it is used in
-> some Qualcomm dts files.
+The driver has a lot of sparse warnings for using 0 as a NULL
+pointer when NULL would be appropriate. Change the 0 values
+to NULL to fix the warnings, some of which are shown here:
 
-I don't think this is correct. LPG block maps to several regions, so
-using just one of them in reg doesn't look correct.
+drivers/power/supply/bq27xxx_battery.c:984:23: warning: Using plain integer as NULL pointer
+drivers/power/supply/bq27xxx_battery.c:985:23: warning: Using plain integer as NULL pointer
+drivers/power/supply/bq27xxx_battery.c:986:23: warning: Using plain integer as NULL pointer
+drivers/power/supply/bq27xxx_battery.c:987:23: warning: Using plain integer as NULL pointer
+drivers/power/supply/bq27xxx_battery.c:988:23: warning: Using plain integer as NULL pointer
 
-> This fixes the following 'make dtbs_check' error reported for
-> pm8350c & sc8280xp pwm nodes:
->
-> arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dtb:
->  pwm@e800: 'reg' does not match any of the regexes:
->  '^led@[0-9a-f]$', 'pinctrl-[0-9]+'
+Signed-off-by: Ben Dooks <ben-linux@fluff.org>
+---
+ drivers/power/supply/bq27xxx_battery.c | 54 +++++++++++++-------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
 
-I'd prefer to follow the existing schema and to drop the region from
-those files.
-
->
-> [1]. https://lore.kernel.org/linux-arm-msm/Ytg3tIaL5h5b9ewH@builder.lan/
->
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: robh@kernel.org
-> Cc: pavel@ucw.cz
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> index fe336fa16518..f394ab7a757b 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> @@ -27,6 +27,9 @@ properties:
->        - qcom,pmi8994-lpg
->        - qcom,pmi8998-lpg
->
-> +  reg:
-> +    maxItems: 1
-> +
->    "#pwm-cells":
->      const: 2
->
-> --
-> 2.35.3
->
-
-
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 35e6a394c0df..dccc2683455a 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -868,11 +868,11 @@ enum bq27xxx_dm_reg_id {
+ 	BQ27XXX_DM_TERMINATE_VOLTAGE,
+ };
+ 
+-#define bq27000_dm_regs 0
+-#define bq27010_dm_regs 0
+-#define bq2750x_dm_regs 0
+-#define bq2751x_dm_regs 0
+-#define bq2752x_dm_regs 0
++#define bq27000_dm_regs NULL
++#define bq27010_dm_regs NULL
++#define bq2750x_dm_regs NULL
++#define bq2751x_dm_regs NULL
++#define bq2752x_dm_regs NULL
+ 
+ #if 0 /* not yet tested */
+ static struct bq27xxx_dm_reg bq27500_dm_regs[] = {
+@@ -881,24 +881,24 @@ static struct bq27xxx_dm_reg bq27500_dm_regs[] = {
+ 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 80, 48, 2, 1000, 32767 },
+ };
+ #else
+-#define bq27500_dm_regs 0
++#define bq27500_dm_regs NULL
+ #endif
+ 
+ /* todo create data memory definitions from datasheets and test on chips */
+-#define bq27510g1_dm_regs 0
+-#define bq27510g2_dm_regs 0
+-#define bq27510g3_dm_regs 0
+-#define bq27520g1_dm_regs 0
+-#define bq27520g2_dm_regs 0
+-#define bq27520g3_dm_regs 0
+-#define bq27520g4_dm_regs 0
+-#define bq27521_dm_regs 0
+-#define bq27530_dm_regs 0
+-#define bq27531_dm_regs 0
+-#define bq27541_dm_regs 0
+-#define bq27542_dm_regs 0
+-#define bq27546_dm_regs 0
+-#define bq27742_dm_regs 0
++#define bq27510g1_dm_regs NULL
++#define bq27510g2_dm_regs NULL
++#define bq27510g3_dm_regs NULL
++#define bq27520g1_dm_regs NULL
++#define bq27520g2_dm_regs NULL
++#define bq27520g3_dm_regs NULL
++#define bq27520g4_dm_regs NULL
++#define bq27521_dm_regs NULL
++#define bq27530_dm_regs NULL
++#define bq27531_dm_regs NULL
++#define bq27541_dm_regs NULL
++#define bq27542_dm_regs NULL
++#define bq27546_dm_regs NULL
++#define bq27742_dm_regs NULL
+ 
+ #if 0 /* not yet tested */
+ static struct bq27xxx_dm_reg bq27545_dm_regs[] = {
+@@ -907,7 +907,7 @@ static struct bq27xxx_dm_reg bq27545_dm_regs[] = {
+ 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 80, 67, 2, 2800,  3700 },
+ };
+ #else
+-#define bq27545_dm_regs 0
++#define bq27545_dm_regs NULL
+ #endif
+ 
+ static struct bq27xxx_dm_reg bq27411_dm_regs[] = {
+@@ -937,7 +937,7 @@ static struct bq27xxx_dm_reg bq27426_dm_regs[] = {
+ #if 0 /* not yet tested */
+ #define bq27441_dm_regs bq27421_dm_regs
+ #else
+-#define bq27441_dm_regs 0
++#define bq27441_dm_regs NULL
+ #endif
+ 
+ #if 0 /* not yet tested */
+@@ -947,13 +947,13 @@ static struct bq27xxx_dm_reg bq27621_dm_regs[] = {
+ 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 82, 9, 2, 2500,  3700 },
+ };
+ #else
+-#define bq27621_dm_regs 0
++#define bq27621_dm_regs NULL
+ #endif
+ 
+-#define bq27z561_dm_regs 0
+-#define bq28z610_dm_regs 0
+-#define bq34z100_dm_regs 0
+-#define bq78z100_dm_regs 0
++#define bq27z561_dm_regs NULL
++#define bq28z610_dm_regs NULL
++#define bq34z100_dm_regs NULL
++#define bq78z100_dm_regs NULL
+ 
+ #define BQ27XXX_O_ZERO		BIT(0)
+ #define BQ27XXX_O_OTDC		BIT(1) /* has OTC/OTD overtemperature flags */
 -- 
-With best wishes
-Dmitry
+2.35.1
+
