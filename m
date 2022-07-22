@@ -2,228 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C15E57E7C9
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 22:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFCE57E7EA
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 22:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236686AbiGVUA7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jul 2022 16:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S236659AbiGVUHw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jul 2022 16:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236644AbiGVUAx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 16:00:53 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF03AF733
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 13:00:46 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h8so7883937wrw.1
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 13:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iVtxa+vuykpc9jPpe/gzYZEspPiDTyEIGx5jh5o8tcM=;
-        b=4+janghD8Dw6whSA55KQShCIG1hZCMxlZM8n3+d/7DyuGeEXbFzq9kO106S8vbPv0+
-         Rgb0Chkf9UnhCrktg7tnuJ8YPcyuOuy5Wdf2OVrqtFfOAFiYEzWaJ4RJ59SdW2oUTHki
-         VzGLtrgcdcwNNFjXPCH4f64jjS2RI5PtEf+JjwHeQ2Rd0QDaRUvNMjsen2h8QAp5f1Db
-         9POiG7MQRrFZWZwI8bL69nhoDPP9mDpsukBcfkO4doPLV77OCnBiRvx/IEmmWZ4ip+4/
-         fBskA+67+Po0owOmuknbOboqvxzSrYl2HGjn7iJebU1koBjkMfFKsAnPaqCbsfqP1oz0
-         XSNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iVtxa+vuykpc9jPpe/gzYZEspPiDTyEIGx5jh5o8tcM=;
-        b=VZ8kFuP4G/apRMntDk8kwzwsNbpQ/k5ng7mI1XXOPtWJVIq+41vwiNFEtwl4bOacfk
-         9DU/Huubs5V8S/hsw8DUgBMHabviKxSBFiXZlTmkpeBXCpvHGhL5aeEJJNmT8lvPeqYJ
-         WmW993Bw634yJvL/TWfkBJDjBnEqdWcp5KmJl2jkHH7Krq9okuDdzthzIiOAZxpNAMz4
-         YFJrUJxnFrECcZjJkyJ3c7ZMMcZnmVu17Cx4ujKzoZ+o58UNJbm/4+iY6ForksB2ilms
-         NcIfWUiu0+1uvEdHizixSQ8aWh6+mKp6h/zUOQ/FXPMbxAvaiz2eWwl7Vt9D7bIERfNB
-         aJyg==
-X-Gm-Message-State: AJIora9+zEUnYmIDKdlPyxc3QTTlw1I3F355F13aguGWbzfH95uY7vvx
-        gFbCBp6UfQrQ3T4C6/UdGDObYQ==
-X-Google-Smtp-Source: AGRyM1vYAZglTmENhkJtrAMPgyidh7bkVjeuKlt0YW+4lqn+1k/roXGT0kDvWuZy7s2DD6CN9VB5zw==
-X-Received: by 2002:a5d:460e:0:b0:21e:6d12:d308 with SMTP id t14-20020a5d460e000000b0021e6d12d308mr795545wrq.419.1658520045826;
-        Fri, 22 Jul 2022 13:00:45 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:957f:d36d:87f9:5c17])
-        by smtp.gmail.com with ESMTPSA id k23-20020a05600c1c9700b003a31b00c216sm6429008wms.0.2022.07.22.13.00.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 13:00:45 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v6 10/10] thermal/of: Initialize trip points separately
-Date:   Fri, 22 Jul 2022 22:00:07 +0200
-Message-Id: <20220722200007.1839356-11-daniel.lezcano@linexp.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220722200007.1839356-1-daniel.lezcano@linexp.org>
-References: <20220722200007.1839356-1-daniel.lezcano@linexp.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S236524AbiGVUHw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 16:07:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B188CEA3;
+        Fri, 22 Jul 2022 13:07:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B57A61F5E;
+        Fri, 22 Jul 2022 20:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C831C341CF;
+        Fri, 22 Jul 2022 20:07:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658520470;
+        bh=zXjsmvBAsiSw9hapsUw62g4sy4pazcAUd5siAJriP0o=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=fQnH/50gj3clIQTRW2GLKqSA0X/QFtVf6fbFv0eArH0V7tvbHVlqd75U+78OnZN3x
+         mzogVLkdkCAjp+leAfqX29qJZufQ7rJcr2E5yRHHM6CvxFTisjQeynpPuiAzHq2Gxa
+         OY8V2R+E9ReMj1DP03dQJPy8bRviYvlxUKRWn1BhzxxLWk5BAanJZsQD0qjNHAwF+Z
+         7Z4W420k33EERdPnc0w6g3vGxchoHR171jcLAyJ8q8xyDSCLFIRyjBsZEuC/Or8473
+         YbUYFILio9meLKdVOuciOE7mjbCAbh9ZiBqEeS634MsWXlUCRW8sw0jgJHvmMJdUSA
+         Wjs3Ajjmq3t+Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50EB6D9DDDD;
+        Fri, 22 Jul 2022 20:07:50 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI fix for v5.19-rc8
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0guJm8F0myVa2DG3mxkStPQ-+vzuY6Gob2hk3Jk=guWCQ@mail.gmail.com>
+References: <CAJZ5v0guJm8F0myVa2DG3mxkStPQ-+vzuY6Gob2hk3Jk=guWCQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0guJm8F0myVa2DG3mxkStPQ-+vzuY6Gob2hk3Jk=guWCQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.19-rc8
+X-PR-Tracked-Commit-Id: 09073396ea62d0a10b03f5661dcabfd8eca3f098
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ae21fbac18b980ecfd895ff32833a2543c157ee2
+Message-Id: <165852047032.15752.12993410208862785353.pr-tracker-bot@kernel.org>
+Date:   Fri, 22 Jul 2022 20:07:50 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Self contain the trip initialization from the device tree in a single
-function for the sake of making the code flow more clear.
+The pull request you sent on Fri, 22 Jul 2022 20:17:13 +0200:
 
-Cc: Alexandre Bailon <abailon@baylibre.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
----
- drivers/thermal/thermal_of.c | 86 ++++++++++++++++++++++++------------
- 1 file changed, 57 insertions(+), 29 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.19-rc8
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index b59eec4af0eb..0693edc00f60 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -693,7 +693,8 @@ static int of_find_trip_id(struct device_node *np, struct device_node *trip)
-  *
-  * Return: 0 on success, proper error code otherwise
-  */
--static int thermal_of_populate_bind_params(struct device_node *np,
-+static int thermal_of_populate_bind_params(struct device_node *tz_np,
-+					   struct device_node *np,
- 					   struct __thermal_bind_params *__tbp)
- {
- 	struct of_phandle_args cooling_spec;
-@@ -715,7 +716,7 @@ static int thermal_of_populate_bind_params(struct device_node *np,
- 		return -ENODEV;
- 	}
- 
--	trip_id = of_find_trip_id(np, trip);
-+	trip_id = of_find_trip_id(tz_np, trip);
- 	if (trip_id < 0) {
- 		ret = trip_id;
- 		goto end;
-@@ -849,6 +850,53 @@ static int thermal_of_populate_trip(struct device_node *np,
- 	return 0;
- }
- 
-+static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *ntrips)
-+{
-+	struct thermal_trip *tt;
-+	struct device_node *trips, *trip;
-+	int ret, count;
-+
-+	trips = of_get_child_by_name(np, "trips");
-+	if (!trips) {
-+		pr_err("Failed to find 'trips' node\n");
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	count = of_get_child_count(trips);
-+	if (!count) {
-+		pr_err("No trip point defined\n");
-+		ret = -EINVAL;
-+		goto out_of_node_put;
-+	}
-+
-+	tt = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
-+	if (!tt) {
-+		ret = -ENOMEM;
-+		goto out_of_node_put;
-+	}
-+
-+	*ntrips = count;
-+
-+	count = 0;
-+	for_each_child_of_node(trips, trip) {
-+		ret = thermal_of_populate_trip(trip, &tt[count++]);
-+		if (ret)
-+			goto out_kfree;
-+	}
-+
-+	of_node_put(trips);
-+	
-+	return tt;
-+	
-+out_kfree:
-+	kfree(tt);
-+	*ntrips = 0;
-+out_of_node_put:
-+	of_node_put(trips);
-+
-+	return ERR_PTR(ret);
-+}
-+
- /**
-  * thermal_of_build_thermal_zone - parse and fill one thermal zone data
-  * @np: DT node containing a thermal zone node
-@@ -867,7 +915,6 @@ static struct __thermal_zone
- __init *thermal_of_build_thermal_zone(struct device_node *np)
- {
- 	struct device_node *child = NULL, *gchild;
--	struct device_node *trips;
- 	struct __thermal_zone *tz;
- 	int ret, i;
- 	u32 prop, coef[2];
-@@ -909,28 +956,10 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 		tz->offset = 0;
- 	}
- 
--	/* trips */
--	trips = of_get_child_by_name(np, "trips");
--
--	/* No trips provided */
--	if (!trips)
-+	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
-+	if (IS_ERR(tz->trips)) {
-+		ret = PTR_ERR(tz->trips);
- 		goto finish;
--
--	tz->ntrips = of_get_child_count(trips);
--	if (tz->ntrips == 0) /* must have at least one child */
--		goto finish;
--
--	tz->trips = kcalloc(tz->ntrips, sizeof(*tz->trips), GFP_KERNEL);
--	if (!tz->trips) {
--		ret = -ENOMEM;
--		goto free_tz;
--	}
--
--	i = 0;
--	for_each_child_of_node(trips, gchild) {
--		ret = thermal_of_populate_trip(gchild, &tz->trips[i++]);
--		if (ret)
--			goto free_trips;
- 	}
- 
- 	/* cooling-maps */
-@@ -952,13 +981,14 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 
- 	i = 0;
- 	for_each_child_of_node(child, gchild) {
--		ret = thermal_of_populate_bind_params(gchild, &tz->tbps[i++]);
--		if (ret)
-+		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
-+		if (ret) {
-+			of_node_put(gchild);
- 			goto free_tbps;
-+		}
- 	}
- 
- finish:
--	of_node_put(trips);
- 	of_node_put(child);
- 
- 	return tz;
-@@ -977,8 +1007,6 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 	kfree(tz->tbps);
- free_trips:
- 	kfree(tz->trips);
--	of_node_put(trips);
--	of_node_put(gchild);
- free_tz:
- 	kfree(tz);
- 	of_node_put(child);
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ae21fbac18b980ecfd895ff32833a2543c157ee2
+
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
