@@ -2,56 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0885357E4EE
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 19:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B1557E53E
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 19:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbiGVRAJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jul 2022 13:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S235994AbiGVRS6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jul 2022 13:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiGVRAH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 13:00:07 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC3B2DD;
-        Fri, 22 Jul 2022 10:00:05 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31e7055a61dso53783087b3.11;
-        Fri, 22 Jul 2022 10:00:05 -0700 (PDT)
+        with ESMTP id S235584AbiGVRS5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 13:18:57 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DD31CFDD;
+        Fri, 22 Jul 2022 10:18:57 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id r3so9115324ybr.6;
+        Fri, 22 Jul 2022 10:18:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=iD/RsD0e1/AY5YXptAbQ0YMY7CfmX34mV0YyWFWCnqY=;
-        b=m1HhRMi+IPTMR8AN+GCcbZdn0588cFlebn8ZHzuKk6x1XQS5IyGaPNZwDizzkRffiW
-         uu04K9lwD6JCxvjRQwDmkMW/PQnN0aDWUjKSHkflb+fYJtwXUo7rjlO3m30PKApE1aFM
-         87AkmpuE03kfrwTic4VD0KxdWD6kSp6AclEEZj6GOjwbxaBUlLKC/9UXrfm0WCygo+P1
-         4yY2gBh5zPddRN4uyZGQxO0FpEPM9iDxihiYQ/UtztykAa+BUHYHAUp0A91e0Lput2xV
-         LQIiS6+WoU72BCj3q9dyEv/fb9zVfpYrkC56RbQi+z4gjg46gD/RWFyHVEUpBZWPDp8I
-         7Jcg==
-X-Gm-Message-State: AJIora8r9g2JNASlFQXjvP859kkL6VYZDcPzRpBrLEZyq+EVZ5JayabN
-        FqTcj6odfp+yp7fMdKTRpVyv6Aj9ETuWfS347EwHpqlb
-X-Google-Smtp-Source: AGRyM1vVDTvs9u/fVT6+LQGTnjmfn8/vtK5YhSrI2f4pW7OswwplMRiqcFXJjK9N2b34/RT3MAD2F11GXSBgn9JhYWE=
-X-Received: by 2002:a81:1a11:0:b0:31e:4549:d667 with SMTP id
- a17-20020a811a11000000b0031e4549d667mr667631ywa.196.1658509204641; Fri, 22
- Jul 2022 10:00:04 -0700 (PDT)
+        bh=XPCuVtxNHlRTKlO2xHRASVydOgpgbtbD+QagU1qAmdw=;
+        b=E0nwYNvI+c9quWZTSwOlaQIz4pxQSrj+7jYBh82UKaXW4U+LszwK/gzPXV3ppfwDTs
+         UdLeecCLIFFy6c1yIYvTmC0ix6HUwvFcUxe2GL6zD8T/mNce6rF3dEZn8xHAT464e3lQ
+         s8c+XW6KEnrhQWPKj4hXpJ8y+7nwhs/c1UWgNcdjnx46QlhNasDHnG8Lht36LW1qP8eG
+         BUemZgjvIsGIQJ4CseeW7SGdwyFTYzeN87PlQ6df8fk9gf4V2pO0i1G83gdSazQ04hD7
+         VD8g4HU4FovGlgJWL07HLmJnr/rBFhdSqzewGUGASupHko8Z+EorrmVparToIyDG0/A2
+         9wow==
+X-Gm-Message-State: AJIora+WYj9MFP/NYbPMVI31yxJU794LzFTY5aTPEHdym8ww7VOyAxYJ
+        sW3c9qHSf+NtsR2zw9sSq+EDCdBJ1ytKAye3CgA=
+X-Google-Smtp-Source: AGRyM1u/k29rH+6mfzpP04mnE9lq4/p8jyPsJI0js3/dd3ZYQr8IymakHorHfnCiVLMkno5891dJtRYcDioDw+Vq7E4=
+X-Received: by 2002:a25:828f:0:b0:670:22f9:f7eb with SMTP id
+ r15-20020a25828f000000b0067022f9f7ebmr879346ybk.137.1658510336244; Fri, 22
+ Jul 2022 10:18:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
- <20220710123512.1714714-12-daniel.lezcano@linexp.org> <CAJZ5v0hJNUm1kyF7XdK1EiLNg6DmihBMbrZZsxgOjvi-xq3=cQ@mail.gmail.com>
- <c75d5dca-17d5-6542-b0aa-46ed036567c7@linexp.org>
-In-Reply-To: <c75d5dca-17d5-6542-b0aa-46ed036567c7@linexp.org>
+References: <20220722084314.17816-1-di.shen@unisoc.com>
+In-Reply-To: <20220722084314.17816-1-di.shen@unisoc.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 22 Jul 2022 18:59:51 +0200
-Message-ID: <CAJZ5v0gOeoz7ifDWwKW0D2h8WUJmLeDCF2bD8hu5Sm--BOPLVA@mail.gmail.com>
-Subject: Re: [PATCH v5 10/12] thermal/of: Store the trips in the thermal zone
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Date:   Fri, 22 Jul 2022 19:18:42 +0200
+Message-ID: <CAJZ5v0iKWH2QkztewmJXiqGwnzBxCo5MWni9Q3VODwV+huvuQA@mail.gmail.com>
+Subject: Re: [PATCH V2 1/1] thermal/sysfs: Clear cooling_device_stats_attr_group
+ before initialized
+To:     Di Shen <di.shen@unisoc.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         "Zhang, Rui" <rui.zhang@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>
+        jeson.gao@unisoc.com, xuewen.yan@unisoc.com, cindygm567@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -63,51 +61,79 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 11:31 PM Daniel Lezcano
-<daniel.lezcano@linexp.org> wrote:
+On Fri, Jul 22, 2022 at 10:44 AM Di Shen <di.shen@unisoc.com> wrote:
 >
-> On 19/07/2022 20:24, Rafael J. Wysocki wrote:
-> > On Sun, Jul 10, 2022 at 2:35 PM Daniel Lezcano
-> > <daniel.lezcano@linexp.org> wrote:
-> >> As the thermal zone contains the trip point, we can store them
-> >> directly when registering the thermal zone. That will allow another
-> >> step forward to remove the duplicate thermal zone structure we find in
-> >> the thermal_of code.
-> >>
-> >> Cc: Alexandre Bailon <abailon@baylibre.com>
-> >> Cc: Kevin Hilman <khilman@baylibre.com>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> >> ---
-> >>   drivers/thermal/thermal_of.c | 8 +++-----
-> >>   1 file changed, 3 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> >> index 19243c57b3f4..e187461dd396 100644
-> >> --- a/drivers/thermal/thermal_of.c
-> >> +++ b/drivers/thermal/thermal_of.c
-> >> @@ -1119,11 +1119,9 @@ int __init of_parse_thermal_zones(void)
-> >>                  tzp->slope = tz->slope;
-> >>                  tzp->offset = tz->offset;
-> >>
-> >> -               zone = thermal_zone_device_register(child->name, tz->ntrips,
-> >> -                                                   mask, tz,
-> >> -                                                   ops, tzp,
-> >> -                                                   tz->passive_delay,
-> >> -                                                   tz->polling_delay);
-> >> +               zone = thermal_zone_device_register_with_trips(child->name, tz->trips, tz->ntrips,
-> >> +                                                              mask, tz, ops, tzp, tz->passive_delay,
-> >> +                                                              tz->polling_delay);
-> >>                  if (IS_ERR(zone)) {
-> >>                          pr_err("Failed to build %pOFn zone %ld\n", child,
-> >>                                 PTR_ERR(zone));
-> >> --
-> > IMO it would be less confusing if this was merged with the patch
-> > introducing thermal_zone_device_register_with_trips().
+> There's a space allocated for cooling_device_stats_attr_group
+> within cooling_device_attr_groups. This space is shared by all
+> cooling devices.
+
+That's correct.
+
+> If the stats structure of one cooling device successfully
+> creates stats sysfs. After that, another cooling device fails
+> to get max_states in cooling_device_stats_setup(). It can
+> return directly without initializing the stats structure, but
+> the cooling_device_stats_attr_group is still the attribute
+> group of the last cooling device.
+
+I cannot parse the above, sorry.
+
+For example, how can a "stats structure of one cooling device" create
+anything?   As a data structure, it is a passive entity, so it doesn't
+carry out any actions.
+
+I think (but I am not sure) that you are referring to the error code
+path in which the ->get_max_state() callback fails for a cooling
+device after cooling_device_stats_setup() has completed successfully
+for another one.
+
+> At this time, read or write stats sysfs nodes can cause kernel
+> crash. Like the following, kernel crashed when
+> 'cat time_in_state_ms'.
 >
-> You suggest to merge 8,9 and 10, right ?
-
-Yes, if that makes sense.
-
-Generally speaking, I prefer the changes in every patch to be
-self-contained, unless the patch would be too large this way or it
-would cross boundaries of many subsystems.
+> [<5baac8d4>] panic+0x1b4/0x3c8
+> [<9d287b0f>] arm_notify_die+0x0/0x78
+> [<094fc22c>] __do_kernel_fault+0x94/0xa4
+> [<3b4b69a4>] do_page_fault+0xd4/0x364
+> [<23793e7a>] do_translation_fault+0x38/0xc0
+> [<6e5cc52a>] do_DataAbort+0x4c/0xd0
+> [<a28c16b8>] __dabt_svc+0x5c/0xa0
+> [<747516ae>] _raw_spin_lock+0x20/0x60
+> [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
+> [<cb78325e>] dev_attr_show+0x38/0x64
+> [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
+> [<c0a843ab>] seq_read+0x244/0x620
+> [<b316b374>] vfs_read+0xd8/0x218
+> [<3aebf5fa>] sys_read+0x80/0xe4
+> [<7cf100f5>] ret_fast_syscall+0x0/0x28
+> [<08cbe22f>] 0xbe8c1198
+>
+> stats sysfs:
+> phone:/sys/class/thermal/cooling_device2/stats # ls
+> reset  time_in_state_ms  total_trans  trans_table
+>
+> The same as cat total_trans, trans_table, and echo reset.
+>
+> To avoid kernel crash, this patch set clears the
+> cooling_device_attr_groups before stats structure is initialized.
+>
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> ---
+>  drivers/thermal/thermal_sysfs.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 1c4aac8464a7..e3fae63fa0f7 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -817,6 +817,9 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+>         unsigned long states;
+>         int var;
+>
+> +       var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
+> +       cooling_device_attr_groups[var] = NULL;
+> +
+>         if (cdev->ops->get_max_state(cdev, &states))
+>                 return;
+>
+> --
