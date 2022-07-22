@@ -2,114 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C158A57E776
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 21:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C628C57E7BB
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 22:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236340AbiGVTen (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jul 2022 15:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S235459AbiGVUAd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jul 2022 16:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbiGVTem (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 15:34:42 -0400
+        with ESMTP id S233326AbiGVUAc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 16:00:32 -0400
 Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6EB7AC2B
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 12:34:40 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id v13so21954wru.12
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 12:34:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171865007E
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 13:00:31 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id u5so7889226wrm.4
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 13:00:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hH95XjXDX7HfOaSlIRmgwv/BqeTgRb6XTDE5kgrObnw=;
-        b=Y8kB1Cm6Ke5WUBLa2g5aeGLuqzWiz6e83CNVVFUNCaPFbl+6aviz0oAIgpcLgWeOhy
-         8AU1egNqYttU1lL2dKfSgzutc0j+z3ioqjaDVks7OJS2alo52xnMwjeS+IpIWdVdcIhC
-         Dw9RKhkBZBQZA+PF7D1CxXNC03o3HSsx8+ROsSlrH54kmv27qMC/+CofeRS3IoFNMgfP
-         /nKdIoelZyposoh9WDt1Z3E5Fh6GcMo7bTiBnL3U6jSpaln49HOvCnq9isFeYc60Zkr4
-         Npa5rEUcKkDb89O8uxo3m4HyaiYSKVIFs/p64TC1MHDan7molZifCYIep1kJu1FWSvmw
-         h1/Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V3j7KdP9diKndVr49hY7R5tOEchn8S7gnNI8IEoVqXc=;
+        b=hV0JT1g0753+tBm9fMshVZ2sEgZ5B9ZEa18ZoTNcWXQWia4/LtRgE6ce5WR9uyzOC4
+         03JYij9aZYnX5dGL1imPWcDgZul1UjnJqRIK/xREy6SsE7SRkYzAq//LQ7oX8iyy00Xf
+         YgymQNCb3tvEBq0p+SJz+jCvdhVXmZxKREvd7WgHE1ZanYZQ9cvFy22UADXJiAH05sES
+         8DVOH1dCpQFEaS0rm4fZTPLFo4z6ULt5i8z3kellO8C8Jdw8fs6087PzTKmFqJ40AGtM
+         D5VtU40bdww/LIY/YDKOfb8h+G/tPAJAUyGdaysJzKx06HsxfbUNnICGO7xDu8G72izg
+         RyWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hH95XjXDX7HfOaSlIRmgwv/BqeTgRb6XTDE5kgrObnw=;
-        b=5wlvDULXZ3TP24PZG2jeDS3xVVWYbUsUfNUjC3ec2RFqARoKtT1M5OwNHQxbjs65d8
-         lCeuvNQbHUNVxFkowt5ung6CV2MQqHZ7XTVddwVDXmns42QQrziTIfGqwNBmdAJ7iN6c
-         m2MigW2MVam4VxbeQd24tVUKlsM1fAEwGTOuL8knz+T55vSzD0yPH97doKBsM6IhbhCm
-         7FyuXuIETGi7Oo8TXyKYBbo7vmVciB6gQNfktezyUNxFU8w4QRNPxadj6QjiT8OPahMC
-         gDPHM46QOt7MUbN/0S6Jvt5003/z6nxTidQKCLEJ+xS09q9p9YLEKQ7wDO762GzZ/kH+
-         9p7A==
-X-Gm-Message-State: AJIora/7CQDTKg3TLiS1FykqYL1Lsg4uRVjXATPVceo87lbZXoqKJoug
-        9LOD4awlaH/fBe1dZMkrrhSRAQ==
-X-Google-Smtp-Source: AGRyM1sqYvtOfD5ZxusSG6eF2G7NJ/wP0OsL7fzH4mLrjxzusTUieovR6ixH239LoIGCoCpWBeA7+g==
-X-Received: by 2002:a05:6000:100d:b0:21e:69b3:1901 with SMTP id a13-20020a056000100d00b0021e69b31901mr892749wrx.622.1658518479213;
-        Fri, 22 Jul 2022 12:34:39 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:957f:d36d:87f9:5c17? ([2a05:6e02:1041:c10:957f:d36d:87f9:5c17])
-        by smtp.gmail.com with ESMTPSA id k23-20020a05600c1c9700b003a31b00c216sm6380839wms.0.2022.07.22.12.34.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 12:34:38 -0700 (PDT)
-Message-ID: <f5bd819d-2292-c247-5141-1dec8bd657f8@linexp.org>
-Date:   Fri, 22 Jul 2022 21:34:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
-Content-Language: en-US
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        khilman@baylibre.com, abailon@baylibre.com, amitk@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-18-daniel.lezcano@linexp.org>
- <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
+        bh=V3j7KdP9diKndVr49hY7R5tOEchn8S7gnNI8IEoVqXc=;
+        b=qRGuniG13tonaeEHYyrG7M4eXw2UPW9P4uHpELL3iVjbjNscUIVPo4to9Kc3bx4i+k
+         GTzjVO2VBdgyeX9zgn5Jm380rsgy31+kGCLttK4VAjxGlY1lVYsSF3jLb95cF+IF0ctz
+         GZW4DGAgx8+po7I6peTaHjk2mmud/lr9/eKa3kZcTsShcSyqh3vyVQlYnkzHQaQxun9Y
+         M3RnK6WtMzjFOZ3/XsPpNAnWIMUr16B1Kcivi9BR4zjUkU8dvCeosHHSbo9w9wE62zSL
+         3pTlj/cCcqFSWsdjL2GKGL78v46dpJst0dpU0obBRiyxtSyYKRw2B0myteH3x/hJ+wjS
+         wUkw==
+X-Gm-Message-State: AJIora872aK6QqHtM8XyURSWjUTwnt2s2Tw93TOOEJ4HHeZDwE3Tfwnh
+        6lJilGqmnh4E9eT2WIZtuMDJRA==
+X-Google-Smtp-Source: AGRyM1uUeYLs8NrRNK1OIGIy/VCdePWCDGTvxbwnaShq1ewnyjm/o5XlQ69K8zBXapP6wnjwY5+lNw==
+X-Received: by 2002:a05:6000:18c1:b0:21e:4712:b284 with SMTP id w1-20020a05600018c100b0021e4712b284mr894689wrq.545.1658520029437;
+        Fri, 22 Jul 2022 13:00:29 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:957f:d36d:87f9:5c17])
+        by smtp.gmail.com with ESMTPSA id k23-20020a05600c1c9700b003a31b00c216sm6429008wms.0.2022.07.22.13.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 13:00:29 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-In-Reply-To: <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com
+Subject: [PATCH v6 00/12] thermal OF rework
+Date:   Fri, 22 Jul 2022 21:59:57 +0200
+Message-Id: <20220722200007.1839356-1-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The thermal framework initialization with the device tree appears to
+be complicated and hard to make it to evolve.
 
-Hi Niklas,
+It contains duplication of almost the same thermal generic structures
+and has an assymetric initialization making hard any kind of serious
+changes for more complex features. One of them is the multiple sensors
+support per thermal zone.
 
-On 19/07/2022 11:10, Niklas Söderlund wrote:
-> Hi Daniel,
-> 
-> Thanks for your work.
-> 
-> On 2022-07-10 23:24:07 +0200, Daniel Lezcano wrote:
->> The thermal OF code has a new API allowing to migrate the OF
->> initialization to a simpler approach.
->>
->> Use this new API.
-> 
-> I tested this together with the series it depends on and while
-> temperature monitoring seems to work fine it breaks the emul_temp
-> interface (/sys/class/thermal/thermal_zone2/emul_temp).
-> 
-> Before this change I can write a temperature to this file and have it
-> trigger actions, in my test-case changing the cooling state, which I
-> observe in /sys/class/thermal/cooling_device0/cur_state.
-> 
-> Likewise before this change I could trip the critical trip-point that
-> would power off the board using the emul_temp interface, this too no
-> longer works,
-> 
->      echo 120000 > /sys/class/thermal/thermal_zone2/emul_temp
-> 
-> Is this an intention change of the new API?
+In order to set the scene for the aforementioned feature with generic
+code, we need to cleanup and rework the device tree initialization.
 
-Absolutely not :)
+However this rework is not obvious because of the multiple components
+entering in the composition of a thermal zone and being initialized at
+different moments. For instance, a cooling device can be initialized
+before a sensor, so the thermal zones must exist before the cooling
+device as well as the sensor. This asynchronous initialization forces
+the thermal zone to be created with fake ops because they are
+mandotory and build a list of cooling devices which is used to lookup
+afterwards when the cooling device driver is registering itself.
 
-Thanks for taking the time to test and report back the issue. I'll 
-investigate that.
+As there could be a large number of changes, this first series provide
+some steps forward for a simpler device tree initialization.
 
-   -- D.
+More series for cleanup and code duplication removal will follow.
+
+Changelog:
+
+ - v6:
+    - Folded patches 8, 9, 10
+    - Removed thermal_zone_get_trips() and thermal_zone_get_num_trips()
+    - Moved tz->ntrips => tz->num_trips changes into patch 11 to fix the
+      git bisecting
+
+ - v5:
+    - Remove extra of_node_put() reported by lkp
+
+ - V4:
+    - Added of_node_put(trips)
+    - Changed naming 'ntrips' -> 'num_trips'
+    - Updated documentation for added and renamed fields in the thermal
+      zone structure
+    - Fixed bad parameter type 'thermal_zone' -> 'thermal_zone_device'
+    - Clarified there is more cleanups coming in the changelog
+    - Put 'trips' and 'num_trips' fields all together
+    - Made git-bisect safe the series
+
+ - V3:
+    - Removed patch 1 and 2 from the V2 which consist in renaming the
+      thermal_zone_device_ops to thermal_sensor_ops and separating the
+      structure. I'll do a separate proposal for that after the incoming
+      cleanups
+
+ - V2:
+   - Drop patch 1/15 which contains too many changes for a simple
+     structure renaming. This could be addressed in a separate series as
+     it is not necessary for the OF rework
+
+   - Fixed of_node_put with gchild not initialized as reported by
+     kbuild and Dan Carpenter
+
+ - V1:
+   - Initial post
+
+
+Daniel Lezcano (10):
+  thermal/core: Remove duplicate information when an error occurs
+  thermal/of: Replace device node match with device node search
+  thermal/of: Remove the device node pointer for thermal_trip
+  thermal/of: Move thermal_trip structure to thermal.h
+  thermal/core: Remove unneeded EXPORT_SYMBOLS
+  thermal/core: Move thermal_set_delay_jiffies to static
+  thermal/core: Rename 'trips' to 'num_trips'
+  thermal/core: Add thermal_trip in thermal_zone
+  thermal/of: Use thermal trips stored in the thermal zone
+  thermal/of: Initialize trip points separately
+
+ drivers/thermal/gov_fair_share.c        |   6 +-
+ drivers/thermal/gov_power_allocator.c   |   4 +-
+ drivers/thermal/tegra/tegra30-tsensor.c |   2 +-
+ drivers/thermal/thermal_core.c          |  53 +++++--
+ drivers/thermal/thermal_core.h          |  15 --
+ drivers/thermal/thermal_helpers.c       |  13 +-
+ drivers/thermal/thermal_netlink.c       |   2 +-
+ drivers/thermal/thermal_of.c            | 201 +++++++++++++-----------
+ drivers/thermal/thermal_sysfs.c         |  22 +--
+ include/linux/thermal.h                 |  24 ++-
+ 10 files changed, 189 insertions(+), 153 deletions(-)
+
+-- 
+2.25.1
+
