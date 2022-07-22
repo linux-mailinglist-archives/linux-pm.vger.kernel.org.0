@@ -2,111 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2182B57DCA3
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 10:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDCC57DF04
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 12:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235043AbiGVIpX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jul 2022 04:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        id S234433AbiGVJko (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jul 2022 05:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234578AbiGVIo4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 04:44:56 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46A99F077;
-        Fri, 22 Jul 2022 01:44:53 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 26M8hgAv073488
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Fri, 22 Jul 2022 16:43:42 +0800 (CST)
-        (envelope-from Di.Shen@unisoc.com)
-Received: from bj10906pcu1.spreadtrum.com (10.0.74.51) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 22 Jul 2022 16:43:43 +0800
-From:   Di Shen <di.shen@unisoc.com>
-To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <rui.zhang@intel.com>
-CC:     <viresh.kumar@linaro.org>, <amitk@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jeson.gao@unisoc.com>, <xuewen.yan@unisoc.com>,
-        <cindygm567@gmail.com>
-Subject: [PATCH V2 1/1] thermal/sysfs: Clear cooling_device_stats_attr_group before initialized
-Date:   Fri, 22 Jul 2022 16:43:14 +0800
-Message-ID: <20220722084314.17816-1-di.shen@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S234639AbiGVJkc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 05:40:32 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2243FFE;
+        Fri, 22 Jul 2022 02:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=qIKYj
+        gj5lpl2LIg188S6dzOSHartE4lDmNN4vgXZ9yI=; b=enKLWYD5dSvqxjQVLd3Dn
+        P8aQOqraphoDLNa7RhHCtiSuFocrHX2qADzq6j8AcqPMK8tf9gJFAjDSzZjwjNYq
+        5zfJU0Nnin3ZQSUROK6UqrDPUrfOAPXCrRUA2+jMEwyqmsTzL8PpJwAVMgzwE6PZ
+        gL348uGrTx2hTdtRxexBBU=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp3 (Coremail) with SMTP id G9xpCgD3hH75bdpisZ+RQg--.7373S2;
+        Fri, 22 Jul 2022 17:29:30 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     sre@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] power: supply: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 17:29:27 +0800
+Message-Id: <20220722092927.77315-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.51]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 26M8hgAv073488
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgD3hH75bdpisZ+RQg--.7373S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyfKFWrur1kGw1DCF4kWFg_yoW8Ww4Upa
+        n5CrsYk398KFW7J3Wjy3WUWa45Ga1rA3s0krWxJ3y5u3W3A3y09r1UGFZxK343XrZ3AF4S
+        qry3tr1IvF13Gr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pijjgrUUUUU=
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiGRpGZFyPdmzQ2AAAsg
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There's a space allocated for cooling_device_stats_attr_group
-within cooling_device_attr_groups. This space is shared by all
-cooling devices.
+Replace 'the the' with 'the' in the comment.
 
-If the stats structure of one cooling device successfully
-creates stats sysfs. After that, another cooling device fails
-to get max_states in cooling_device_stats_setup(). It can
-return directly without initializing the stats structure, but
-the cooling_device_stats_attr_group is still the attribute
-group of the last cooling device.
-
-At this time, read or write stats sysfs nodes can cause kernel
-crash. Like the following, kernel crashed when
-'cat time_in_state_ms'.
-
-[<5baac8d4>] panic+0x1b4/0x3c8
-[<9d287b0f>] arm_notify_die+0x0/0x78
-[<094fc22c>] __do_kernel_fault+0x94/0xa4
-[<3b4b69a4>] do_page_fault+0xd4/0x364
-[<23793e7a>] do_translation_fault+0x38/0xc0
-[<6e5cc52a>] do_DataAbort+0x4c/0xd0
-[<a28c16b8>] __dabt_svc+0x5c/0xa0
-[<747516ae>] _raw_spin_lock+0x20/0x60
-[<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
-[<cb78325e>] dev_attr_show+0x38/0x64
-[<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
-[<c0a843ab>] seq_read+0x244/0x620
-[<b316b374>] vfs_read+0xd8/0x218
-[<3aebf5fa>] sys_read+0x80/0xe4
-[<7cf100f5>] ret_fast_syscall+0x0/0x28
-[<08cbe22f>] 0xbe8c1198
-
-stats sysfs:
-phone:/sys/class/thermal/cooling_device2/stats # ls
-reset  time_in_state_ms  total_trans  trans_table
-
-The same as cat total_trans, trans_table, and echo reset.
-
-To avoid kernel crash, this patch set clears the
-cooling_device_attr_groups before stats structure is initialized.
-
-Signed-off-by: Di Shen <di.shen@unisoc.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
- drivers/thermal/thermal_sysfs.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/power/supply/power_supply_sysfs.c | 2 +-
+ drivers/power/supply/tps65217_charger.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 1c4aac8464a7..e3fae63fa0f7 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -817,6 +817,9 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
- 	unsigned long states;
- 	int var;
- 
-+	var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
-+	cooling_device_attr_groups[var] = NULL;
-+
- 	if (cdev->ops->get_max_state(cdev, &states))
- 		return;
- 
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index 4239591e1522..5369abaceb5c 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -442,7 +442,7 @@ static int add_prop_uevent(struct device *dev, struct kobj_uevent_env *env,
+ 	if (ret == -ENODEV || ret == -ENODATA) {
+ 		/*
+ 		 * When a battery is absent, we expect -ENODEV. Don't abort;
+-		 * send the uevent with at least the the PRESENT=0 property
++		 * send the uevent with at least the PRESENT=0 property
+ 		 */
+ 		return 0;
+ 	}
+diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supply/tps65217_charger.c
+index ba33d1617e0b..a4bc9f2a10bc 100644
+--- a/drivers/power/supply/tps65217_charger.c
++++ b/drivers/power/supply/tps65217_charger.c
+@@ -50,7 +50,7 @@ static int tps65217_config_charger(struct tps65217_charger *charger)
+ 	 * tps65217 rev. G, p. 31 (see p. 32 for NTC schematic)
+ 	 *
+ 	 * The device can be configured to support a 100k NTC (B = 3960) by
+-	 * setting the the NTC_TYPE bit in register CHGCONFIG1 to 1. However it
++	 * setting the NTC_TYPE bit in register CHGCONFIG1 to 1. However it
+ 	 * is not recommended to do so. In sleep mode, the charger continues
+ 	 * charging the battery, but all register values are reset to default
+ 	 * values. Therefore, the charger would get the wrong temperature
 -- 
-2.17.1
+2.25.1
 
