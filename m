@@ -2,371 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21D257E2F9
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 16:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4C657E4C6
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 18:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbiGVOTu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jul 2022 10:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S235899AbiGVQtp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jul 2022 12:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiGVOTt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 10:19:49 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FE9A6FBB;
-        Fri, 22 Jul 2022 07:19:48 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c6so608041plc.5;
-        Fri, 22 Jul 2022 07:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T1q/5UEvjKnmrGkeFgZRytr5DU5kdabjES1IFoO/gqw=;
-        b=N5b2E48s3MFxEm4zDb2HCPhQHt4Urn8emhJOhYSUlZ5Y57Ig163ukqY7GWAh8urYCS
-         HoNK8KFmrEWeuERbb5IRJDMLkwGWh8d6gFpumktZTx0iitGevy10Z/qaTUWKsPNCQefi
-         tgBpDzACKUqQ3W04Vse8a3Ym5LbgWuccclVvYtR+iXeeBcT8306sbxShnNhR+FkoELQE
-         RgJE3w9ydSuqJoeZ5XqQT8lRdGQe7VOQ9EYrs+whGEOfoUv54IzpxHuvLRMOI+Y7qnjJ
-         0ZTHyjIGqCWUJ4pDWCaeRp19ymx/h7u0u11UzLCg29nhJyqlZ4YsiPxey1skCyps7Zm9
-         f8Hg==
+        with ESMTP id S235994AbiGVQtg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 12:49:36 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DEC9C27E;
+        Fri, 22 Jul 2022 09:49:29 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31bf3656517so53509437b3.12;
+        Fri, 22 Jul 2022 09:49:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T1q/5UEvjKnmrGkeFgZRytr5DU5kdabjES1IFoO/gqw=;
-        b=MlfIlU20NUsVVV1N6hgkyh9Zqbxk1/HGNG+MfsJ8GetCLkYOvra05Uk3wah+9eH0eq
-         MlYwQMV/hDPQ7TEMNoDc78N+iGfooTBHIa3XbzT1uUhXVorueFkAR9rzPjGviBUV2opX
-         /NXM4sstVqwFn2vi3bZgnUDbsB+y5SJaJJdAE3s9Nutc3vk94+RZnrnHdqnFkk/FHvMv
-         NGHIHwD75pHig5oHWgHhZ3dAFBlyWndZ8TDO52buo6eOty/1zODzkuEXu2nGnF/wmNyg
-         ZZkR6gGFIRS5vgEroNjL8g1GB9hzeGvK9nmgmZ2Z6a3ReW9rw6EpZ4iF1xJpcQtKResS
-         YM/g==
-X-Gm-Message-State: AJIora+s0aIpMf6y+1h/LZta50HaoWBrjODjZTqD012812gdokdfNfgO
-        s5pbW2QkkqyXchirb/qQixw=
-X-Google-Smtp-Source: AGRyM1tXVqYNUy+NFgrAHlDcM01iNexAN7CaAL0uAROXCpeeVwkXmKhPFoUuKttLJzcQ4dpaFH8V7g==
-X-Received: by 2002:a17:903:120f:b0:15f:99f:9597 with SMTP id l15-20020a170903120f00b0015f099f9597mr651270plh.45.1658499587396;
-        Fri, 22 Jul 2022 07:19:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y12-20020aa79aec000000b005252a06750esm3913898pfp.182.2022.07.22.07.19.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 07:19:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d0c94078-eec5-5924-a2c1-8c94c06364b8@roeck-us.net>
-Date:   Fri, 22 Jul 2022 07:19:42 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=XlVG1J1L13g8n0Juu1ACYs1Nai1pz7dh7rrSSLxUXqI=;
+        b=KHSRknrzqH6ODv/jL23Srrey3xY7tWsSSTNbXf/ZnwmoCIqe9Cw+uVvyQahxvpaNfe
+         rmJhFnztQMmVsvoGF5V4/kbznV5aZtn6nWypJ20MeyevjpoitJCNBw8gHT/tL5pTKIyo
+         NBB/I1Ca3SWOHh+6VIThPRj4Te+h6zqdHlz6e0gISg8TFoQQX3S9knoDSuYVzU1OibM+
+         7hAM/1MJdY78+1GmgpuaxlOD6Z1SDaXqp5hbIunA1C/o1XBJqfVe3RdhzFmasoW8hA0o
+         aHYpSJt8z//Vpx7Su9MTHwfyujuxTcX1OmQ3E4FlBBH+bDx8ZBd6mTiSxx/R4BMjrfrS
+         VBAw==
+X-Gm-Message-State: AJIora8HyNlnjNzIS5UxdS47SgDDdG6juXyAzji7SIBwAJ/qnyw4h2k4
+        FNSwwae6Kb/jjOoRB6dnchTlvhxCds1rMFUbKYRJYajh
+X-Google-Smtp-Source: AGRyM1t3KCYXk5YdIf5W7so+hcjqOwZRODAFomTq9XPauCiB9UK3TZLho9b5OQp5aNPlTo5HFLyrUbAM3hU9bVfIRRI=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr584764ywb.326.1658508568111; Fri, 22
+ Jul 2022 09:49:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 08/13] usb: typec: tcpci_mt6370: Add MediaTek MT6370
- tcpci driver
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        andy.shevchenko@gmail.com
-Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20220722102407.2205-1-peterwu.pub@gmail.com>
- <20220722102407.2205-9-peterwu.pub@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220722102407.2205-9-peterwu.pub@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+ <20220715210911.714479-3-daniel.lezcano@linaro.org> <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
+ <04bd27a8-5148-c8eb-5687-83ef511618df@linaro.org> <7ee301b76beb679f89e946dfb5921a2d853bd8dc.camel@intel.com>
+ <c0d3e523-d75a-d837-313f-bf46f3fab3b4@linaro.org> <e3bfb483aa6ce09756b38b3a568fac819b154beb.camel@intel.com>
+ <f0c217a2-7df0-c8ed-d2ae-c6019c7600d8@linaro.org> <86eac26233874ff389498e24c8253e0c@intel.com>
+In-Reply-To: <86eac26233874ff389498e24c8253e0c@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Jul 2022 18:49:14 +0200
+Message-ID: <CAJZ5v0jLWLJ3ej1Faf+n48Q1OSNb7+Hn9K57ZLk9FmKTzrVUfA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes for
+ the trip points
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "quic_manafm@quicinc.com" <quic_manafm@quicinc.com>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/22/22 03:24, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual
-> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
-> 
-> Add support for the Type-C & Power Delivery controller in
-> MediaTek MT6370 IC.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Fri, Jul 22, 2022 at 9:16 AM Zhang, Rui <rui.zhang@intel.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Sent: Thursday, July 21, 2022 5:35 PM
+> > To: Zhang, Rui <rui.zhang@intel.com>; rafael@kernel.org
+> > Cc: quic_manafm@quicinc.com; amitk@kernel.org; lukasz.luba@arm.com;
+> > linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes
+> > for the trip points
+> > Importance: High
+> >
+> > On 19/07/2022 16:17, Zhang Rui wrote:
+> > > On Tue, 2022-07-19 at 09:22 +0200, Daniel Lezcano wrote:
+> > >> On 19/07/2022 03:14, Zhang Rui wrote:
+> > >>> On Mon, 2022-07-18 at 15:21 +0200, Daniel Lezcano wrote:
+> > >>>>
+> > >>>> Hi Zhang,
+> > >>>>
+> > >>>> thanks for the review
+> > >>>>
+> > >>>> On 18/07/2022 07:28, Zhang Rui wrote:
+> > >>>>> On Fri, 2022-07-15 at 23:09 +0200, Daniel Lezcano wrote:
+> > >>>>
+> > >>>> [ ... ]
+> > >>>>
+> > >>>>>> Instead of taking the risk of breaking the existing platforms,
+> > >>>>>> use an array of temperature ordered trip identifiers and make it
+> > >>>>>> available for the code needing to browse the trip points in an
+> > >>>>>> ordered way.
+> > >>>>>>
+> > >>>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > >>>>>> ---
+> > >>>>
+> > >>>> [ ... ]
+> > >>>>
+> > >>>>>> +static void sort_trips_indexes(struct thermal_zone_device
+> > >>>>>> *tz)
+> > >>>>>> +{
+> > >>>>>> +       int i, j;
+> > >>>>>> +
+> > >>>>>> +       for (i = 0; i < tz->trips; i++)
+> > >>>>>> +               tz->trips_indexes[i] = i;
+> > >>>>>> +
+> > >>>>>> +       for (i = 0; i < tz->trips; i++) {
+> > >>>>>> +               for (j = i + 1; j < tz->trips; j++) {
+> > >>>>>> +                       int t1, t2;
+> > >>>>>> +
+> > >>>>>> +                       tz->ops->get_trip_temp(tz, tz-
+> > >>>>>>> trips_indexes[i], &t1);
+> > >>>>>
+> > >>>>> This line can be moved to the upper loop.
+> > >>>>
+> > >>>> Right, thanks!
+> > >>>>
+> > >>>>>> +                       tz->ops->get_trip_temp(tz, tz-
+> > >>>>>>> trips_indexes[j], &t2);
+> > >>>>>> +
+> > >>>>>
+> > >>>>> what about the disabled trip points?
+> > >>>>>
+> > >>>>> we should ignore those trip points and check the return value to
+> > >>>>> make sure we're comparing the valid trip_temp values.
+> > >>>>
+> > >>>> We don't have to care about, whatever the position, the
+> > >>>> corresponding trip id will be disabled by the trip init function
+> > >>>> before calling this one and ignored in the handle_thermal_trip()
+> > >>>> function
+> > >>>
+> > >>> hah, I missed this one and replied to your latest reply directly.
+> > >>>
+> > >>> The thing I'm concerning is that if we don't check the return value,
+> > >>> for a disabled trip point, the trip_temp (t1/t2) returned is some
+> > >>> random value, it all depends on the previous value set by last
+> > >>> successful .get_trip_temp(), and this may screw up the sorting.
+> > >>
+> > >> The indexes array is the same size as the trip array, that makes the
+> > >> code much less prone to errors.
+> > >>
+> > >> To have the same number of trip points, the index of the disabled
+> > >> trip must be inserted also in the array. We don't care about its
+> > >> position in the indexes array because it is discarded in the
+> > >> handle_trip_point() function anyway. For this reason, the random
+> > >> temperature of the disabled trip point and the resulting position in
+> > >> the sorting is harmless.
+> > >>
+> > >> It is made on purpose to ignore the return value, so we have a
+> > >> simpler code.
+> > >>
+> > > Let's take below case for example,
+> > > say, we have three trip points 0, 1, 2, and trip point 1 is broken and
+> > > disabled.
+> > >
+> > > trip temp for trip point 0 is 10 and for trip point 2 is 20.
+> > > .get_trip_temp(tz, 1, &t) fails, and t is an uninitialized random
+> > > value
+> > >
+> > >
+> > > Initial:
+> > >     trip_indexes[0]=0,trip_indexes[1]=1,trip_indexes[2]=2
+> > > step1:
+> > >     i=0,j=1
+> > >     get trip temp for trip point trip_indexes[0]=0 and trip_indexes[1]=1
+> > >     trip point 1 returns trip temp 5, and it swaps with trip point 0
+> > >     so
+> > >     trip_indexes[0]=1,trip_indexes[1]=0,trip_indexes[2]=2
+> > > step2:
+> > >     i=0,j=2
+> > >     get trip temp for trip point trip_indexes[0]=1 and trip_indexes[2]=2
+> > >     trip point 1 returns trip temp 25, and it swaps with trip point 2
+> > >     so
+> > >     trip_indexes[0]=2,trip_indexes[1]=0,trip_indexes[2]=1
+> > >
+> > > And the sorting is broken now.
+> > >
+> > > please correct me if I'm missing anything.
+> >
+> > Oh, nice! Thanks for the detailed explanation.
+> >
+> > We can initialize t1 and t2 to INT_MAX, so if the get_trip_temp() fails, they
+> > will be set to the maximum temperature and it will be at the end of the array.
+> >
+> > Alternatively, we check the disabled bit and set the temperature to INT_MAX.
+>
+> IMO, we can
+> 1. get the trip temp for each trip point and cache them
+> 2. set the trips_disabled bit
+> 3. do the sorting using the cached trip temp values
+> in thermal_zone_device_trip_init() altogether.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> 
-> v6
-> - Convert tcpci as device resource managed with 'devm_add_action_or_reset' API.
-> - Refine remvoe callback.
-> - Refine the commit text from 'This commit add' to 'Add'.
-> ---
->   drivers/usb/typec/tcpm/Kconfig        |  11 ++
->   drivers/usb/typec/tcpm/Makefile       |   1 +
->   drivers/usb/typec/tcpm/tcpci_mt6370.c | 208 ++++++++++++++++++++++++++++++++++
->   3 files changed, 220 insertions(+)
->   create mode 100644 drivers/usb/typec/tcpm/tcpci_mt6370.c
-> 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 073fd2e..e6b88ca 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -35,6 +35,17 @@ config TYPEC_MT6360
->   	  USB Type-C. It works with Type-C Port Controller Manager
->   	  to provide USB PD and USB Type-C functionalities.
->   
-> +config TYPEC_TCPCI_MT6370
-> +	tristate "MediaTek MT6370 Type-C driver"
-> +	depends on MFD_MT6370
-> +	help
-> +	  MediaTek MT6370 is a multi-functional IC that includes
-> +	  USB Type-C. It works with Type-C Port Controller Manager
-> +	  to provide USB PD and USB Type-C functionalities.
-> +
-> +	  This driver can also be built as a module. The module
-> +	  will be called "tcpci_mt6370".
-> +
->   config TYPEC_TCPCI_MAXIM
->   	tristate "Maxim TCPCI based Type-C chip driver"
->   	help
-> diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
-> index 7d499f3..906d9dc 100644
-> --- a/drivers/usb/typec/tcpm/Makefile
-> +++ b/drivers/usb/typec/tcpm/Makefile
-> @@ -6,4 +6,5 @@ typec_wcove-y				:= wcove.o
->   obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
->   obj-$(CONFIG_TYPEC_RT1711H)		+= tcpci_rt1711h.o
->   obj-$(CONFIG_TYPEC_MT6360)		+= tcpci_mt6360.o
-> +obj-$(CONFIG_TYPEC_TCPCI_MT6370)	+= tcpci_mt6370.o
->   obj-$(CONFIG_TYPEC_TCPCI_MAXIM)		+= tcpci_maxim.o
-> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6370.c b/drivers/usb/typec/tcpm/tcpci_mt6370.c
-> new file mode 100644
-> index 0000000..4f53319
-> --- /dev/null
-> +++ b/drivers/usb/typec/tcpm/tcpci_mt6370.c
-> @@ -0,0 +1,208 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2022 Richtek Technology Corp.
-> + *
-> + * Author: ChiYuan Huang <cy_huang@richtek.com>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_wakeup.h>
-> +#include <linux/pm_wakeirq.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/usb/tcpm.h>
-> +#include "tcpci.h"
-> +
-> +#define MT6370_REG_SYSCTRL8	0x9B
-> +
-> +#define MT6370_AUTOIDLE_MASK	BIT(3)
-> +
-> +#define MT6370_VENDOR_ID	0x29CF
-> +#define MT6370_TCPC_DID_A	0x2170
-> +
-> +struct mt6370_priv {
-> +	struct device *dev;
-> +	struct regulator *vbus;
-> +	struct tcpci *tcpci;
-> +	struct tcpci_data tcpci_data;
-> +};
-> +
-> +static const struct reg_sequence mt6370_reg_init[] = {
-> +	REG_SEQ(0xA0, 0x1, 1000),
-> +	REG_SEQ(0x81, 0x38, 0),
-> +	REG_SEQ(0x82, 0x82, 0),
-> +	REG_SEQ(0xBA, 0xFC, 0),
-> +	REG_SEQ(0xBB, 0x50, 0),
-> +	REG_SEQ(0x9E, 0x8F, 0),
-> +	REG_SEQ(0xA1, 0x5, 0),
-> +	REG_SEQ(0xA2, 0x4, 0),
-> +	REG_SEQ(0xA3, 0x4A, 0),
-> +	REG_SEQ(0xA4, 0x01, 0),
-> +	REG_SEQ(0x95, 0x01, 0),
-> +	REG_SEQ(0x80, 0x71, 0),
-> +	REG_SEQ(0x9B, 0x3A, 1000),
-> +};
-> +
-> +static int mt6370_tcpc_init(struct tcpci *tcpci, struct tcpci_data *data)
-> +{
-> +	u16 did;
-> +	int ret;
-> +
-> +	ret = regmap_register_patch(data->regmap, mt6370_reg_init,
-> +				    ARRAY_SIZE(mt6370_reg_init));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_raw_read(data->regmap, TCPC_BCD_DEV, &did, sizeof(u16));
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (did == MT6370_TCPC_DID_A)
-> +		return regmap_write(data->regmap, TCPC_FAULT_CTRL, 0x80);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mt6370_tcpc_set_vconn(struct tcpci *tcpci, struct tcpci_data *data,
-> +				 bool enable)
-> +{
-> +	return regmap_update_bits(data->regmap, MT6370_REG_SYSCTRL8,
-> +				  MT6370_AUTOIDLE_MASK,
-> +				  !enable ? MT6370_AUTOIDLE_MASK : 0);
-> +}
-> +
-> +static int mt6370_tcpc_set_vbus(struct tcpci *tcpci, struct tcpci_data *data,
-> +				bool source, bool sink)
-> +{
-> +	struct mt6370_priv *priv = container_of(data, struct mt6370_priv,
-> +						tcpci_data);
-> +	int ret;
-> +
-> +	ret = regulator_is_enabled(priv->vbus);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (ret && !source)
-> +		return regulator_disable(priv->vbus);
-> +
-> +	if (!ret && source)
-> +		return regulator_enable(priv->vbus);
-> +
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t mt6370_irq_handler(int irq, void *dev_id)
-> +{
-> +	struct mt6370_priv *priv = dev_id;
-> +
-> +	return tcpci_irq(priv->tcpci);
-> +}
-> +
-> +static int mt6370_check_vendor_info(struct mt6370_priv *priv)
-> +{
-> +	struct regmap *regmap = priv->tcpci_data.regmap;
-> +	u16 vid;
-> +	int ret;
-> +
-> +	ret = regmap_raw_read(regmap, TCPC_VENDOR_ID, &vid, sizeof(u16));
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (vid != MT6370_VENDOR_ID)
-> +		return dev_err_probe(priv->dev, -ENODEV,
-> +				     "Vendor ID not correct 0x%02x\n", vid);
-> +
-> +	return 0;
-> +}
-> +
-> +static void mt6370_unregister_tcpci_port(void *tcpci)
-> +{
-> +	tcpci_unregister_port(tcpci);
-> +}
-> +
-> +static int mt6370_tcpc_probe(struct platform_device *pdev)
-> +{
-> +	struct mt6370_priv *priv;
-> +	struct device *dev = &pdev->dev;
-> +	int irq, ret;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->dev = dev;
-> +
-> +	priv->tcpci_data.regmap = dev_get_regmap(dev->parent, NULL);
-> +	if (!priv->tcpci_data.regmap)
-> +		return dev_err_probe(dev, -ENODEV, "Failed to init regmap\n");
-> +
-> +	ret = mt6370_check_vendor_info(priv);
-> +	if (ret)
-> +		return ret;
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return dev_err_probe(dev, irq, "Failed to get irq\n");
-> +
-> +	/* Assign TCPCI feature and ops */
-> +	priv->tcpci_data.auto_discharge_disconnect = 1;
-> +	priv->tcpci_data.init = mt6370_tcpc_init;
-> +	priv->tcpci_data.set_vconn = mt6370_tcpc_set_vconn;
-> +
-> +	priv->vbus = devm_regulator_get_optional(dev, "vbus");
-> +	if (!IS_ERR(priv->vbus))
-> +		priv->tcpci_data.set_vbus = mt6370_tcpc_set_vbus;
-> +
-> +	priv->tcpci = tcpci_register_port(dev, &priv->tcpci_data);
-> +	if (IS_ERR(priv->tcpci))
-> +		return dev_err_probe(dev, PTR_ERR(priv->tcpci),
-> +				     "Failed to register tcpci port\n");
-> +
-> +	ret = devm_add_action_or_reset(dev, mt6370_unregister_tcpci_port,
-> +				       priv->tcpci);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_request_threaded_irq(dev, irq, NULL, mt6370_irq_handler,
-> +					IRQF_ONESHOT, dev_name(dev), priv);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to allocate irq\n");
-> +
-> +	device_init_wakeup(dev, true);
-> +	dev_pm_set_wake_irq(dev, irq);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mt6370_tcpc_remove(struct platform_device *pdev)
-> +{
-> +	dev_pm_clear_wake_irq(&pdev->dev);
-> +	device_init_wakeup(&pdev->dev, false);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id mt6370_tcpc_devid_table[] = {
-> +	{ .compatible = "mediatek,mt6370-tcpc" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, mt6370_tcpc_devid_table);
-> +
-> +static struct platform_driver mt6370_tcpc_driver = {
-> +	.driver = {
-> +		.name = "mt6370-tcpc",
-> +		.of_match_table = mt6370_tcpc_devid_table,
-> +	},
-> +	.probe = mt6370_tcpc_probe,
-> +	.remove = mt6370_tcpc_remove,
-> +};
-> +module_platform_driver(mt6370_tcpc_driver);
-> +
-> +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-> +MODULE_DESCRIPTION("MT6370 USB Type-C Port Controller Interface Driver");
-> +MODULE_LICENSE("GPL v2");
-
+What about the case when the trip temperature can be set from user
+space?  I guess we replace the cached value then, but it may be
+necessary to sort them again in theory?
