@@ -2,161 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8D357E6C2
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 20:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C158A57E776
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 21:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235881AbiGVSme (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jul 2022 14:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S236340AbiGVTen (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jul 2022 15:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236438AbiGVSmX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 14:42:23 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40647A8763;
-        Fri, 22 Jul 2022 11:42:21 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 51971c5b48ec7a62; Fri, 22 Jul 2022 20:42:19 +0200
-Received: from kreacher.localnet (unknown [213.134.181.41])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9CC5B66CAF7;
-        Fri, 22 Jul 2022 20:42:18 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Di Shen <di.shen@unisoc.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jeson.gao@unisoc.com, xuewen.yan@unisoc.com, cindygm567@gmail.com
-Subject: Re: [PATCH V2 1/1] thermal/sysfs: Clear cooling_device_stats_attr_group before initialized
-Date:   Fri, 22 Jul 2022 20:42:17 +0200
-Message-ID: <12043680.O9o76ZdvQC@kreacher>
-In-Reply-To: <CAJZ5v0iKWH2QkztewmJXiqGwnzBxCo5MWni9Q3VODwV+huvuQA@mail.gmail.com>
-References: <20220722084314.17816-1-di.shen@unisoc.com> <CAJZ5v0iKWH2QkztewmJXiqGwnzBxCo5MWni9Q3VODwV+huvuQA@mail.gmail.com>
+        with ESMTP id S236254AbiGVTem (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 15:34:42 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6EB7AC2B
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 12:34:40 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id v13so21954wru.12
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 12:34:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hH95XjXDX7HfOaSlIRmgwv/BqeTgRb6XTDE5kgrObnw=;
+        b=Y8kB1Cm6Ke5WUBLa2g5aeGLuqzWiz6e83CNVVFUNCaPFbl+6aviz0oAIgpcLgWeOhy
+         8AU1egNqYttU1lL2dKfSgzutc0j+z3ioqjaDVks7OJS2alo52xnMwjeS+IpIWdVdcIhC
+         Dw9RKhkBZBQZA+PF7D1CxXNC03o3HSsx8+ROsSlrH54kmv27qMC/+CofeRS3IoFNMgfP
+         /nKdIoelZyposoh9WDt1Z3E5Fh6GcMo7bTiBnL3U6jSpaln49HOvCnq9isFeYc60Zkr4
+         Npa5rEUcKkDb89O8uxo3m4HyaiYSKVIFs/p64TC1MHDan7molZifCYIep1kJu1FWSvmw
+         h1/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hH95XjXDX7HfOaSlIRmgwv/BqeTgRb6XTDE5kgrObnw=;
+        b=5wlvDULXZ3TP24PZG2jeDS3xVVWYbUsUfNUjC3ec2RFqARoKtT1M5OwNHQxbjs65d8
+         lCeuvNQbHUNVxFkowt5ung6CV2MQqHZ7XTVddwVDXmns42QQrziTIfGqwNBmdAJ7iN6c
+         m2MigW2MVam4VxbeQd24tVUKlsM1fAEwGTOuL8knz+T55vSzD0yPH97doKBsM6IhbhCm
+         7FyuXuIETGi7Oo8TXyKYBbo7vmVciB6gQNfktezyUNxFU8w4QRNPxadj6QjiT8OPahMC
+         gDPHM46QOt7MUbN/0S6Jvt5003/z6nxTidQKCLEJ+xS09q9p9YLEKQ7wDO762GzZ/kH+
+         9p7A==
+X-Gm-Message-State: AJIora/7CQDTKg3TLiS1FykqYL1Lsg4uRVjXATPVceo87lbZXoqKJoug
+        9LOD4awlaH/fBe1dZMkrrhSRAQ==
+X-Google-Smtp-Source: AGRyM1sqYvtOfD5ZxusSG6eF2G7NJ/wP0OsL7fzH4mLrjxzusTUieovR6ixH239LoIGCoCpWBeA7+g==
+X-Received: by 2002:a05:6000:100d:b0:21e:69b3:1901 with SMTP id a13-20020a056000100d00b0021e69b31901mr892749wrx.622.1658518479213;
+        Fri, 22 Jul 2022 12:34:39 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:957f:d36d:87f9:5c17? ([2a05:6e02:1041:c10:957f:d36d:87f9:5c17])
+        by smtp.gmail.com with ESMTPSA id k23-20020a05600c1c9700b003a31b00c216sm6380839wms.0.2022.07.22.12.34.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 12:34:38 -0700 (PDT)
+Message-ID: <f5bd819d-2292-c247-5141-1dec8bd657f8@linexp.org>
+Date:   Fri, 22 Jul 2022 21:34:37 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.41
-X-CLIENT-HOSTNAME: 213.134.181.41
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudelkedguddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrddukedurdegudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdeguddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepuddupdhrtghpthhtohepughirdhshhgvnhesuhhnihhsohgtrdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgr
- rhhordhorhhgpdhrtghpthhtoheprghmihhtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhgvshhonhdrghgrohesuhhnihhsohgtrdgtohhmpdhrtghpthhtohepgihuvgifvghnrdihrghnsehunhhishhotgdrtghomhdprhgtphhtthhopegtihhnugihghhmheeijeesghhmrghilhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
+Content-Language: en-US
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        khilman@baylibre.com, abailon@baylibre.com, amitk@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>
+References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
+ <20220710212423.681301-18-daniel.lezcano@linexp.org>
+ <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+In-Reply-To: <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, July 22, 2022 7:18:42 PM CEST Rafael J. Wysocki wrote:
-> On Fri, Jul 22, 2022 at 10:44 AM Di Shen <di.shen@unisoc.com> wrote:
-> >
-> > There's a space allocated for cooling_device_stats_attr_group
-> > within cooling_device_attr_groups. This space is shared by all
-> > cooling devices.
-> 
-> That's correct.
-> 
-> > If the stats structure of one cooling device successfully
-> > creates stats sysfs. After that, another cooling device fails
-> > to get max_states in cooling_device_stats_setup(). It can
-> > return directly without initializing the stats structure, but
-> > the cooling_device_stats_attr_group is still the attribute
-> > group of the last cooling device.
-> 
-> I cannot parse the above, sorry.
-> 
-> For example, how can a "stats structure of one cooling device" create
-> anything?   As a data structure, it is a passive entity, so it doesn't
-> carry out any actions.
-> 
-> I think (but I am not sure) that you are referring to the error code
-> path in which the ->get_max_state() callback fails for a cooling
-> device after cooling_device_stats_setup() has completed successfully
-> for another one.
-> 
-> > At this time, read or write stats sysfs nodes can cause kernel
-> > crash. Like the following, kernel crashed when
-> > 'cat time_in_state_ms'.
-> >
-> > [<5baac8d4>] panic+0x1b4/0x3c8
-> > [<9d287b0f>] arm_notify_die+0x0/0x78
-> > [<094fc22c>] __do_kernel_fault+0x94/0xa4
-> > [<3b4b69a4>] do_page_fault+0xd4/0x364
-> > [<23793e7a>] do_translation_fault+0x38/0xc0
-> > [<6e5cc52a>] do_DataAbort+0x4c/0xd0
-> > [<a28c16b8>] __dabt_svc+0x5c/0xa0
-> > [<747516ae>] _raw_spin_lock+0x20/0x60
-> > [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
-> > [<cb78325e>] dev_attr_show+0x38/0x64
-> > [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
-> > [<c0a843ab>] seq_read+0x244/0x620
-> > [<b316b374>] vfs_read+0xd8/0x218
-> > [<3aebf5fa>] sys_read+0x80/0xe4
-> > [<7cf100f5>] ret_fast_syscall+0x0/0x28
-> > [<08cbe22f>] 0xbe8c1198
-> >
-> > stats sysfs:
-> > phone:/sys/class/thermal/cooling_device2/stats # ls
-> > reset  time_in_state_ms  total_trans  trans_table
-> >
-> > The same as cat total_trans, trans_table, and echo reset.
 
-So does the (untested) patch below work too?
+Hi Niklas,
 
----
- drivers/thermal/thermal_sysfs.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+On 19/07/2022 11:10, Niklas Söderlund wrote:
+> Hi Daniel,
+> 
+> Thanks for your work.
+> 
+> On 2022-07-10 23:24:07 +0200, Daniel Lezcano wrote:
+>> The thermal OF code has a new API allowing to migrate the OF
+>> initialization to a simpler approach.
+>>
+>> Use this new API.
+> 
+> I tested this together with the series it depends on and while
+> temperature monitoring seems to work fine it breaks the emul_temp
+> interface (/sys/class/thermal/thermal_zone2/emul_temp).
+> 
+> Before this change I can write a temperature to this file and have it
+> trigger actions, in my test-case changing the cooling state, which I
+> observe in /sys/class/thermal/cooling_device0/cur_state.
+> 
+> Likewise before this change I could trip the critical trip-point that
+> would power off the board using the emul_temp interface, this too no
+> longer works,
+> 
+>      echo 120000 > /sys/class/thermal/thermal_zone2/emul_temp
+> 
+> Is this an intention change of the new API?
 
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -813,12 +813,13 @@ static const struct attribute_group cool
- 
- static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
- {
-+	const struct attribute_group *stats_attr_group = NULL;
- 	struct cooling_dev_stats *stats;
- 	unsigned long states;
- 	int var;
- 
- 	if (cdev->ops->get_max_state(cdev, &states))
--		return;
-+		goto out;
- 
- 	states++; /* Total number of states is highest state + 1 */
- 
-@@ -828,7 +829,7 @@ static void cooling_device_stats_setup(s
- 
- 	stats = kzalloc(var, GFP_KERNEL);
- 	if (!stats)
--		return;
-+		goto out;
- 
- 	stats->time_in_state = (ktime_t *)(stats + 1);
- 	stats->trans_table = (unsigned int *)(stats->time_in_state + states);
-@@ -838,9 +839,12 @@ static void cooling_device_stats_setup(s
- 
- 	spin_lock_init(&stats->lock);
- 
-+	stats_attr_group = &cooling_device_stats_attr_group;
-+
-+out:
- 	/* Fill the empty slot left in cooling_device_attr_groups */
- 	var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
--	cooling_device_attr_groups[var] = &cooling_device_stats_attr_group;
-+	cooling_device_attr_groups[var] = stats_attr_group;
- }
- 
- static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
+Absolutely not :)
 
+Thanks for taking the time to test and report back the issue. I'll 
+investigate that.
 
-
+   -- D.
