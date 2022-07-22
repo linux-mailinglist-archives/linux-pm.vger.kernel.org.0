@@ -2,123 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04A157DC0F
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 10:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2182B57DCA3
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 10:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiGVIOl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jul 2022 04:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
+        id S235043AbiGVIpX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jul 2022 04:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiGVIOk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 04:14:40 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A841A9D1E9
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 01:14:39 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso4698254wma.2
-        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 01:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=9DVxnFJwaerV12jgXMK3zBLGoxl8v4zlAcL2+s+9gAM=;
-        b=fCqnxqTTH+E1xRh3T7QQ2zSDiYbfwW+3g9ru9OX3UopVRra0sKnKDGorsmKMWA1RGd
-         k6TsTfDigwah7v8EoqIOYptREO8GMYZkrYG8g0VCu548fTIXtGSCGd4x1Bx+rji48mwA
-         R3CFjikMPFSdYVrxtD34DPbMsyQIAqw9qOLcqOEad+xVMlP7a8Nz8UdB6YQ4yXdn2RCA
-         +b5/eFidS8NP8my+rlZMh04sx/UgRlc9ITddUVpka4zCFTcPFkSKwt/1SzoHkzrOpezU
-         sxmAC/nnpezPVXhgOJH/YXffp0MolN04badm69WIOT4O0OEO4429qdUSN+FycMUb9OWY
-         6qRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9DVxnFJwaerV12jgXMK3zBLGoxl8v4zlAcL2+s+9gAM=;
-        b=xcJZz70YzugietTcjyA3ZnkHo1P2NaPOE0y4DOALRPXyx1ijSE7dM04Xp/0AwiKE0q
-         v2c/0OTFAZf9aCMLfsZQK5PhGsZT+J0NusN6EBOaXfZpB1Os744DWajFtfZDdYqS01HY
-         n+36io/0oKrgU5lLAYaZBPcsqjI+lZHdZyjVx6LF6nooYuVM/RNMtCo6mg+IRmdi4yD8
-         yPhGWKLwO66SEK9Don37N8HdV0A7uxyl+iMe/b4T6gwbyZuu9VxZvMKdRX69FIs6L7xG
-         d0vvzLyX3ZFNLAcdM0zhzR7sSzoLqi38/nl2Pa/euILJTr0PIAt34D+bXKbRgkvcUcMN
-         E8QQ==
-X-Gm-Message-State: AJIora+5FTWN8ntZhESuIlNj0p23AGvCOroYMpuraR3FuuINBe7juytY
-        eRZ5PmYLfxkUEE1rK+UWFkwp9g==
-X-Google-Smtp-Source: AGRyM1vVqORhBY4QZ5CAvwiaAPx2Tb3NLOQb5UCE7K6q3cn72VM359jXqnVIY+ofcGDmAGvG1c5Szg==
-X-Received: by 2002:a1c:21c3:0:b0:3a2:fdba:3f39 with SMTP id h186-20020a1c21c3000000b003a2fdba3f39mr1620970wmh.194.1658477678048;
-        Fri, 22 Jul 2022 01:14:38 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id a21-20020a05600c349500b003a317ee3036sm4515726wmq.2.2022.07.22.01.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 01:14:37 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 09:14:35 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     saravanan sekar <sravanhome@gmail.com>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        lars@metafoo.de, krzysztof.kozlowski+dt@linaro.org,
-        andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org
-Subject: Re: [PATCH v3 0/6] Add support for mp2733 battery charger
-Message-ID: <Ytpca2oosxjjQo0C@google.com>
-References: <20220615145357.2370044-1-sravanhome@gmail.com>
- <7d20978f-e17c-9bea-1436-68bcf4bd8524@gmail.com>
+        with ESMTP id S234578AbiGVIo4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 04:44:56 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46A99F077;
+        Fri, 22 Jul 2022 01:44:53 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 26M8hgAv073488
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Fri, 22 Jul 2022 16:43:42 +0800 (CST)
+        (envelope-from Di.Shen@unisoc.com)
+Received: from bj10906pcu1.spreadtrum.com (10.0.74.51) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Fri, 22 Jul 2022 16:43:43 +0800
+From:   Di Shen <di.shen@unisoc.com>
+To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>
+CC:     <viresh.kumar@linaro.org>, <amitk@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jeson.gao@unisoc.com>, <xuewen.yan@unisoc.com>,
+        <cindygm567@gmail.com>
+Subject: [PATCH V2 1/1] thermal/sysfs: Clear cooling_device_stats_attr_group before initialized
+Date:   Fri, 22 Jul 2022 16:43:14 +0800
+Message-ID: <20220722084314.17816-1-di.shen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7d20978f-e17c-9bea-1436-68bcf4bd8524@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.51]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 26M8hgAv073488
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Jul 2022, saravanan sekar wrote:
+There's a space allocated for cooling_device_stats_attr_group
+within cooling_device_attr_groups. This space is shared by all
+cooling devices.
 
-> On 15/06/22 16:53, Saravanan Sekar wrote:
-> > changes in v3:
-> >   - fixed dt_binding_check error
-> >   - fixed spelling usb->USB
-> > 
-> > changes in v2:
-> >   - fixed spelling
-> >   - revert back probe to probe_new in mfd driver
-> > 
-> > I do not see a cover letter, but FWIW,
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > for all patches except DT binding
-> > Note, some of the comments regarding spelling were given, I believe
-> > you are going to address them in v3.
-> > 
-> > 
-> > add support for mp2733 Battery charger control driver for Monolithic
-> > Power System's MP2733 chipset
-> > 
-> > Saravanan Sekar (6):
-> >    iio: adc: mp2629: fix wrong comparison of channel
-> >    dt-bindings: mfd: Add mp2733 compatible
-> >    mfd: mp2629: Add support for mps mp2733 battery charger
-> >    iio: adc: mp2629: restrict input voltage mask for mp2629
-> >    power: supply: Add support for mp2733 battery charger
-> >    power: supply: mp2629: Add USB fast charge settings
-> > 
-> >   .../ABI/testing/sysfs-class-power-mp2629      |  16 ++
-> >   .../devicetree/bindings/mfd/mps,mp2629.yaml   |   4 +-
-> >   drivers/iio/adc/mp2629_adc.c                  |   5 +-
-> >   drivers/mfd/mp2629.c                          |   5 +-
-> >   drivers/power/supply/mp2629_charger.c         | 208 +++++++++++++++---
-> >   include/linux/mfd/mp2629.h                    |   6 +
-> >   6 files changed, 212 insertions(+), 32 deletions(-)
+If the stats structure of one cooling device successfully
+creates stats sysfs. After that, another cooling device fails
+to get max_states in cooling_device_stats_setup(). It can
+return directly without initializing the stats structure, but
+the cooling_device_stats_attr_group is still the attribute
+group of the last cooling device.
 
-> May I know what is the plan for merge this change-set !
+At this time, read or write stats sysfs nodes can cause kernel
+crash. Like the following, kernel crashed when
+'cat time_in_state_ms'.
 
-It's due for v5.21.
+[<5baac8d4>] panic+0x1b4/0x3c8
+[<9d287b0f>] arm_notify_die+0x0/0x78
+[<094fc22c>] __do_kernel_fault+0x94/0xa4
+[<3b4b69a4>] do_page_fault+0xd4/0x364
+[<23793e7a>] do_translation_fault+0x38/0xc0
+[<6e5cc52a>] do_DataAbort+0x4c/0xd0
+[<a28c16b8>] __dabt_svc+0x5c/0xa0
+[<747516ae>] _raw_spin_lock+0x20/0x60
+[<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
+[<cb78325e>] dev_attr_show+0x38/0x64
+[<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
+[<c0a843ab>] seq_read+0x244/0x620
+[<b316b374>] vfs_read+0xd8/0x218
+[<3aebf5fa>] sys_read+0x80/0xe4
+[<7cf100f5>] ret_fast_syscall+0x0/0x28
+[<08cbe22f>] 0xbe8c1198
 
-If you're not planning on making any more changes, please collect all
-of your tags and submit a [RESEND].
+stats sysfs:
+phone:/sys/class/thermal/cooling_device2/stats # ls
+reset  time_in_state_ms  total_trans  trans_table
 
+The same as cat total_trans, trans_table, and echo reset.
+
+To avoid kernel crash, this patch set clears the
+cooling_device_attr_groups before stats structure is initialized.
+
+Signed-off-by: Di Shen <di.shen@unisoc.com>
+---
+ drivers/thermal/thermal_sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 1c4aac8464a7..e3fae63fa0f7 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -817,6 +817,9 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+ 	unsigned long states;
+ 	int var;
+ 
++	var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
++	cooling_device_attr_groups[var] = NULL;
++
+ 	if (cdev->ops->get_max_state(cdev, &states))
+ 		return;
+ 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.17.1
+
