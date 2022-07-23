@@ -2,109 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310CE57ECC5
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Jul 2022 10:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8EA57F13D
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Jul 2022 22:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232942AbiGWIgS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Jul 2022 04:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        id S234066AbiGWUA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 Jul 2022 16:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiGWIgR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Jul 2022 04:36:17 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7EE18E22
-        for <linux-pm@vger.kernel.org>; Sat, 23 Jul 2022 01:36:16 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id u14so7826143lju.0
-        for <linux-pm@vger.kernel.org>; Sat, 23 Jul 2022 01:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UFNgKWXdIG6DQFBmwM7XyaYQFbIAlbR9vbv7ZA7sYD4=;
-        b=xwby9q+fB01FO2mS7fKnVXiA1AOLFxxqsXAyshQcITRU+HVTULFKnJSAu0rpdTWLdX
-         7J7diRX15MjxeNOZGeSr/07eAe/qSCX7eVlEkSFYgobhDZR7ziVahvfHAXCW+k1L+vX4
-         0Tq77hQKLtiO7q4eAfrlSk24CTRpnW2l8+V0hGbg0q/jNEDZaLlMoE1lPA/ZkMdmPdPl
-         6u0KQAyda3jodzgnPQQbkr5+Jzp8KNvPsGr2JsH8/5hupplxS2yisBLWF2T2rQPNum52
-         m9MMvJ3Mm0x13S+SghtoKKKEsExJmqk8ewdaF9e/lAlQ02cgTzTAqGu5ZSV1AHoUmBll
-         xypQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UFNgKWXdIG6DQFBmwM7XyaYQFbIAlbR9vbv7ZA7sYD4=;
-        b=UTMsHQGkIFoRz2xSp2LpBOGz2vBXwBw0PEVDvL5kBZ+MVbzJhAOAXnxHprtoEsBYjT
-         9VvpjxWO+cUes8nUp5xD2gg2dwSpucg6ou3kTXwvd4vModscOn7imSyCVCkFpnUC4Mi0
-         59gponhDsyAexa9TKI8n1ZfgmuzvsXd6kDKFHYYEXwk4E2gnzjnvWK+1muCHF+gTpBjx
-         a8g/zImYk+UA6ySX4ndDyL+h9ghs0x1I90JLM4sFDCLLJ4Osfy/rf8ZUOJkqo7eJJPOJ
-         Gc38Al8cOMy2+Qnknzq783Wu3SS2bz8THSAlUnubybtplZeiQkaeh00IYnfx6GQgn/UN
-         gngw==
-X-Gm-Message-State: AJIora+mkb/SHgfBdaYnPW67XwQZrtFrXIT4o6b13V+oDiuhgLrlCeI2
-        e4dKHNsHsKC80O6VPIRJda2EnA==
-X-Google-Smtp-Source: AGRyM1tC6obcKeJ8XV3Kqpjx1vuO1ZcdPvxoiANz+5GuluNWs+REVtSy3fdPz4vCVsjZoHNtum4bUQ==
-X-Received: by 2002:a2e:a36a:0:b0:25d:d73d:d8c9 with SMTP id i10-20020a2ea36a000000b0025dd73dd8c9mr1160570ljn.68.1658565374570;
-        Sat, 23 Jul 2022 01:36:14 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id x14-20020a056512078e00b0047f79c636f7sm1541978lfr.167.2022.07.23.01.36.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jul 2022 01:36:14 -0700 (PDT)
-Message-ID: <fec6bd98-5efd-fe34-6d75-1765219acd82@linaro.org>
-Date:   Sat, 23 Jul 2022 10:36:11 +0200
+        with ESMTP id S233302AbiGWUAZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Jul 2022 16:00:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF50515709
+        for <linux-pm@vger.kernel.org>; Sat, 23 Jul 2022 13:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658606421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YO9dcmk0QXd/wQEuwbD9vAV95IqlIKI9spJSz1SGPuU=;
+        b=ibRAEwO+4C4xWFuS7ezXjxay1DrrGH3VBf75OUNi8eP180eUCXzBxbzYCjCt2MJLjwksPj
+        +oI2kKCSC3H9rCgR8hTnExee+BP0tD9RWoP1lcR8Fec0a/qtOPjeH/rsMm+rswasSOmge6
+        fiFlxb1KO7vD0J8N4uvoVehsAbGG/kE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-y-FHcB0FM-OKSTN-i7bgAw-1; Sat, 23 Jul 2022 16:00:18 -0400
+X-MC-Unique: y-FHcB0FM-OKSTN-i7bgAw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19B598037AA;
+        Sat, 23 Jul 2022 20:00:18 +0000 (UTC)
+Received: from llong.com (unknown [10.22.16.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A878F492C3B;
+        Sat, 23 Jul 2022 20:00:17 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] intel_idle: Fix false positive RCU splats due to incorrect hardirqs state
+Date:   Sat, 23 Jul 2022 15:59:32 -0400
+Message-Id: <20220723195932.1302575-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
-Content-Language: en-US
-To:     Steev Klimaszewski <steev@kali.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
- <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
- <25673493-4171-62b0-f696-1316d115f388@kali.org>
- <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
- <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
- <d89a540f-672d-83de-d19d-00f10e4370d1@kali.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d89a540f-672d-83de-d19d-00f10e4370d1@kali.org>
-Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/07/2022 04:37, Steev Klimaszewski wrote:
->>
->> Currently it's 5.19.0-rc7 (torvalds tree at 4ba1329c) with a few extra 
->> patches on top, the bwmon set included.  It's possible that secure 
->> world uses it, but I do not know enough about that to say one way or 
->> the other.
+Commit 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
+uses raw_local_irq_enable/local_irq_disable() around call to
+__intel_idle() in intel_idle_irq().
 
-To test patches you should apply them on maintainer's tree or
-linux-next. Applying on other trees of course might be useful for
-testing some backports, but it is independent process and different issue.
+With interrupt enabled, timer tick interrupt can happen and a
+subsequently call to __do_softirq() may change the lockdep hardirqs state
+of a debug kernel back to 'on'. This will result in a mismatch between
+the cpu hardirqs state (off) and the lockdep hardirqs state (on) causing
+a number of false positive "WARNING: suspicious RCU usage" splats.
 
->>
->> -- steev
->>
-> I think you may be right; I just applied this patchset to -next 
-> (20220722) and i do not see the error message there.  On my 5.19-rc7 
-> tree, i am also testing a patchset that enables qcom devices to access 
-> efivars, so possibly we are ending up in secure world there?
+Fix that by using local_irq_disable() to disable interrupt in
+intel_idle_irq().
 
-Actually mapping of IO space should not touch secure world, so this was
-a long shot assuming you test it on the next.
+Fixes: 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ drivers/idle/intel_idle.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index f5c6802aa6c3..907700d1e78e 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -162,7 +162,13 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
+ 
+ 	raw_local_irq_enable();
+ 	ret = __intel_idle(dev, drv, index);
+-	raw_local_irq_disable();
++
++	/*
++	 * The lockdep hardirqs state may be changed to 'on' with timer
++	 * tick interrupt followed by __do_softirq(). Use local_irq_disable()
++	 * to keep the hardirqs state correct.
++	 */
++	local_irq_disable();
+ 
+ 	return ret;
+ }
+-- 
+2.31.1
 
-Best regards,
-Krzysztof
