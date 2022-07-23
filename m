@@ -2,74 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFCE57E7EA
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Jul 2022 22:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7C957EA9F
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Jul 2022 02:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236659AbiGVUHw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Jul 2022 16:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S233041AbiGWA31 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Jul 2022 20:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236524AbiGVUHw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 16:07:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B188CEA3;
-        Fri, 22 Jul 2022 13:07:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B57A61F5E;
-        Fri, 22 Jul 2022 20:07:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C831C341CF;
-        Fri, 22 Jul 2022 20:07:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658520470;
-        bh=zXjsmvBAsiSw9hapsUw62g4sy4pazcAUd5siAJriP0o=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=fQnH/50gj3clIQTRW2GLKqSA0X/QFtVf6fbFv0eArH0V7tvbHVlqd75U+78OnZN3x
-         mzogVLkdkCAjp+leAfqX29qJZufQ7rJcr2E5yRHHM6CvxFTisjQeynpPuiAzHq2Gxa
-         OY8V2R+E9ReMj1DP03dQJPy8bRviYvlxUKRWn1BhzxxLWk5BAanJZsQD0qjNHAwF+Z
-         7Z4W420k33EERdPnc0w6g3vGxchoHR171jcLAyJ8q8xyDSCLFIRyjBsZEuC/Or8473
-         YbUYFILio9meLKdVOuciOE7mjbCAbh9ZiBqEeS634MsWXlUCRW8sw0jgJHvmMJdUSA
-         Wjs3Ajjmq3t+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50EB6D9DDDD;
-        Fri, 22 Jul 2022 20:07:50 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI fix for v5.19-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0guJm8F0myVa2DG3mxkStPQ-+vzuY6Gob2hk3Jk=guWCQ@mail.gmail.com>
-References: <CAJZ5v0guJm8F0myVa2DG3mxkStPQ-+vzuY6Gob2hk3Jk=guWCQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0guJm8F0myVa2DG3mxkStPQ-+vzuY6Gob2hk3Jk=guWCQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.19-rc8
-X-PR-Tracked-Commit-Id: 09073396ea62d0a10b03f5661dcabfd8eca3f098
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ae21fbac18b980ecfd895ff32833a2543c157ee2
-Message-Id: <165852047032.15752.12993410208862785353.pr-tracker-bot@kernel.org>
-Date:   Fri, 22 Jul 2022 20:07:50 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230462AbiGWA30 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Jul 2022 20:29:26 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9B68C5B2
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 17:29:25 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10bd4812c29so8135478fac.11
+        for <linux-pm@vger.kernel.org>; Fri, 22 Jul 2022 17:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XMJLK4N2d4z2/xpDSbgYVPQ0Elbz9cHd//yyo9mjRjE=;
+        b=Jhr3P4pTESjuxQwPIictRPqfMcuCjWtUBrDyroeCNcICrJc6LxCb4H0EyET5JnpSMd
+         XDx6lLSrqEOtCnpGAe2AExylN9Agt6X7Zqbb6FcRf7NdFKEGcx95RF+/Z8J6bP5ONORO
+         wG1OMLM7lhCQAxPhd/NbHo632jhBUqU+NN4pS5iereARDmvcU0lod/1KdbUs32GcNnUd
+         xo6G3S5D/tiCbuRAvoUuWlw46UH+hPIlaLjH0xI2mHweheNtAtPoYArDRG3DTVd87hSJ
+         W0wQqtjb+XWZ0TXUtD8JifIwS2UCdctr2gHw2zHhmm+GQ95/1roZg+LzCoBqXVT1MQ7H
+         BuSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XMJLK4N2d4z2/xpDSbgYVPQ0Elbz9cHd//yyo9mjRjE=;
+        b=3SdISxeoNiK9L6FFq6DfvMPtYPxVRTQUV2XuGP3kdIhCeOJAp+j54rIIAqaUxYEbKT
+         Pzjrpli7vIRYBMWo+HoTkrhFYCo9Tbn4g0UtjnCXsYGiGjJq1IFtcon3gIa5gMm51BRp
+         YJpY3sv0LbsdtteE5XuGxf+a4ZorLllfRpDB6vZxMq4DInzRIRdhjEG4tfLrEH9/7wfn
+         fahjVIp/2WtuYwcjqMMbaEiL8Vr8ewIhmVB56VQTUPCOFAY3IauzjZIbdVr0Ebj7+RCB
+         nrbFerb88J4BlFtbFYYjQAVqv3ohJpi7eSy5YSNgTxNfTiTceegi+DtkkEHnob136lXM
+         CK9g==
+X-Gm-Message-State: AJIora/SotiEmWQNXYLLKacvyxEtyo0/DrFUiG3NcIieSW3E5VBsO7jo
+        HaCIYT/KRQwbyVtBjRlGp5r3gYdmrQYsOaC1y9w=
+X-Google-Smtp-Source: AGRyM1tCTcWe90z0MM9J9/c7EoRTCWxHMKek0a8/PeZFTw2MzmGKZsUe/j9Ar7345GylSDGdj8qm9Q==
+X-Received: by 2002:a05:6870:c189:b0:101:b203:d870 with SMTP id h9-20020a056870c18900b00101b203d870mr8788813oad.267.1658536164645;
+        Fri, 22 Jul 2022 17:29:24 -0700 (PDT)
+Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id cm36-20020a056870b62400b000fb2aa6eef2sm2939297oab.32.2022.07.22.17.29.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 17:29:24 -0700 (PDT)
+Message-ID: <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
+Date:   Fri, 22 Jul 2022 19:29:21 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+ <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
+ <25673493-4171-62b0-f696-1316d115f388@kali.org>
+ <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 22 Jul 2022 20:17:13 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.19-rc8
+On 7/22/22 12:30 PM, Krzysztof Kozlowski wrote:
+> On 22/07/2022 03:22, Steev Klimaszewski wrote:
+>> Hi Krzysztof,
+>>
+>> On 7/20/22 2:28 PM, Krzysztof Kozlowski wrote:
+>>> The SDM845 comes with few instances of Bandwidth Monitor.  The already
+>>> supported one monitors traffic between CPU and Last Level Cache
+>>> Controller (LLCC) and in downstream sources is called BWMON v4 (or v4 of
+>>> register layout).
+>>>
+>>> SDM845 also has also BWMON instance measuring traffic between LLCC and
+>>> memory with different register layout: called v5.
+>>>
+>>> Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>    arch/arm64/boot/dts/qcom/sdm845.dtsi | 37 ++++++++++++++++++++++++++++
+>>>    1 file changed, 37 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>> index fe14f7e7523b..4aab464e2bd6 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>> @@ -2053,6 +2053,43 @@ llcc: system-cache-controller@1100000 {
+>>>    			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+>>>    		};
+>>>    
+>>> +		pmu@114a000 {
+>>> +			compatible = "qcom,sdm845-llcc-bwmon";
+>>> +			reg = <0 0x0114a000 0 0x1000>;
+>>> +			interrupts = <GIC_SPI 580 IRQ_TYPE_LEVEL_HIGH>;
+>>> +			interconnects = <&mem_noc MASTER_LLCC 3 &mem_noc SLAVE_EBI1 3>;
+>>> +
+>>> +			operating-points-v2 = <&llcc_bwmon_opp_table>;
+>>> +
+>>> +			llcc_bwmon_opp_table: opp-table {
+>>> +				compatible = "operating-points-v2";
+>>> +
+>>> +				/*
+>>> +				 * The interconnect path bandwidth taken from
+>>> +				 * cpu4_opp_table bandwidth for gladiator_noc-mem_noc
+>>> +				 * interconnect.  This also matches the
+>>> +				 * bandwidth table of qcom,llccbw (qcom,bw-tbl,
+>>> +				 * bus width: 4 bytes) from msm-4.9 downstream
+>>> +				 * kernel.
+>>> +				 */
+>>> +				opp-0 {
+>>> +					opp-peak-kBps = <800000>;
+>>> +				};
+>>> +				opp-1 {
+>>> +					opp-peak-kBps = <1804000>;
+>>> +				};
+>>> +				opp-2 {
+>>> +					opp-peak-kBps = <3072000>;
+>>> +				};
+>>> +				opp-3 {
+>>> +					opp-peak-kBps = <5412000>;
+>>> +				};
+>>> +				opp-4 {
+>>> +					opp-peak-kBps = <7216000>;
+>>> +				};
+>>> +			};
+>>> +		};
+>>> +
+>>>    		pmu@1436400 {
+>>>    			compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
+>>>    			reg = <0 0x01436400 0 0x600>;
+>>
+>> With this series applied, testing on a Lenovo Yoga C630, which has an
+>> SDM850, I see the following:
+>>
+>> [    3.673660] qcom-bwmon 114a000.pmu: can't request region for resource
+>> [mem 0x0114a000-0x0114afff]
+>> [    3.673673] qcom-bwmon 114a000.pmu: error -EBUSY: failed to map bwmon
+>> registers
+>> [    3.673678] qcom-bwmon: probe of 114a000.pmu failed with error -16
+>>
+> Thanks for the report. What are you running there? `uname -r`? Maybe
+> your secure world uses it?
+>
+> Best regards,
+> Krzysztof
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ae21fbac18b980ecfd895ff32833a2543c157ee2
+Currently it's 5.19.0-rc7 (torvalds tree at 4ba1329c) with a few extra 
+patches on top, the bwmon set included.  It's possible that secure world 
+uses it, but I do not know enough about that to say one way or the other.
 
-Thank you!
+-- steev
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
