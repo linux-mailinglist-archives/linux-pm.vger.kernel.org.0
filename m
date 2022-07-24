@@ -2,101 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8EA57F13D
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Jul 2022 22:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CD257F4E9
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Jul 2022 14:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234066AbiGWUA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Jul 2022 16:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S232110AbiGXMYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Jul 2022 08:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbiGWUAZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Jul 2022 16:00:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF50515709
-        for <linux-pm@vger.kernel.org>; Sat, 23 Jul 2022 13:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658606421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=YO9dcmk0QXd/wQEuwbD9vAV95IqlIKI9spJSz1SGPuU=;
-        b=ibRAEwO+4C4xWFuS7ezXjxay1DrrGH3VBf75OUNi8eP180eUCXzBxbzYCjCt2MJLjwksPj
-        +oI2kKCSC3H9rCgR8hTnExee+BP0tD9RWoP1lcR8Fec0a/qtOPjeH/rsMm+rswasSOmge6
-        fiFlxb1KO7vD0J8N4uvoVehsAbGG/kE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-y-FHcB0FM-OKSTN-i7bgAw-1; Sat, 23 Jul 2022 16:00:18 -0400
-X-MC-Unique: y-FHcB0FM-OKSTN-i7bgAw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19B598037AA;
-        Sat, 23 Jul 2022 20:00:18 +0000 (UTC)
-Received: from llong.com (unknown [10.22.16.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A878F492C3B;
-        Sat, 23 Jul 2022 20:00:17 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH] intel_idle: Fix false positive RCU splats due to incorrect hardirqs state
-Date:   Sat, 23 Jul 2022 15:59:32 -0400
-Message-Id: <20220723195932.1302575-1-longman@redhat.com>
+        with ESMTP id S229618AbiGXMYf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Jul 2022 08:24:35 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FCD13F80
+        for <linux-pm@vger.kernel.org>; Sun, 24 Jul 2022 05:24:34 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id bk6-20020a17090b080600b001f2138a2a7bso9402306pjb.1
+        for <linux-pm@vger.kernel.org>; Sun, 24 Jul 2022 05:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l+btaMwUX7v8ihc2NfU+GcnNfj68sCUMhrZsdXfz3fc=;
+        b=LQbS1Q5tT8sKQMuJa2PUmTLNPX1oC6UJahF2ymKRWfYZWAuKu0Q2OyyG7o9DrO21c/
+         OzCE4OfpdV5WEYRM5sgEgoVbcfQ0uzxzmgOUJCl5PDDx0SuGJMlLB4MPd/9KpGNjWDwO
+         2xPMExcLzg4ySr5zSFw9dpQhhZ+OWYsWT7He5jMr/Cr6PKvsSCSeUQqj5fKpZ816OGxm
+         MvRdH8YKxrImk2zF1qmXtrp7QAuzM0R4+j8Xl002IJ0AApJBk/XuS6umo6Zi4EO7F1jY
+         8lzbFi/SIg0QAE7lzjukjdGmy4+5TEyyeYYCdmBm3M2JlydxMHkRH8wBu62jrLtsZWxk
+         eR5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l+btaMwUX7v8ihc2NfU+GcnNfj68sCUMhrZsdXfz3fc=;
+        b=CyGVlQLtbXtOIaJLx3mfCR4/Ei8Oi3HzUdjyXWiSIHJuogYgjK6fU8HPM0oga/UD0o
+         NSKt6iBvw1A1hAxRN1v3TPv3x+G/wTNwQLbGtIwDVMp7tS95t050+z7tt/6j3baAsr4h
+         F+FBM2Km59ps4CQEHtbxf4D5msV8VSve2OVV8lc+DEHz+Pve4COOBcQoxlnvnTtmJ8+b
+         cAr1q3M7wN5WcwchVGPfusYaIgnJGaHkJ5gnTeJJXpBMIkvyPZtXr/YSnkzKKLF6UuhH
+         sEqLZk2Zo8tdVAHy6BMrMpfAH8yTdFWcLefbhZDNXu50d0xmRCjM1XHCOGFTkV2mA8Sl
+         S+Qg==
+X-Gm-Message-State: AJIora/QZ+TIV7XvT47CKJFBxxaPvKLOniIBWARv8ZmQKCwN4FWEK4DD
+        2CwHgcoTO/u8JvnAUJP2f/KylSx3XnAyEw==
+X-Google-Smtp-Source: AGRyM1sYCvCsRCtt9w8IPY37YxQScow1V24ahLiJixa54hS9ywLAnMc+zhN4WByor+lecg8MO6xl5A==
+X-Received: by 2002:a17:90b:1d01:b0:1f2:104:6424 with SMTP id on1-20020a17090b1d0100b001f201046424mr9063527pjb.101.1658665473874;
+        Sun, 24 Jul 2022 05:24:33 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1f3a:5a45:a9cd:d7dd:fd01:73c0])
+        by smtp.gmail.com with ESMTPSA id p23-20020a1709027ed700b0016c0474fbd0sm7048133plb.34.2022.07.24.05.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 05:24:33 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-pm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Subject: [PATCH v2 0/5] Add support for tsens controller reinit via trustzone
+Date:   Sun, 24 Jul 2022 17:54:19 +0530
+Message-Id: <20220724122424.2509021-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
-uses raw_local_irq_enable/local_irq_disable() around call to
-__intel_idle() in intel_idle_irq().
+Changes since v1:
+-----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220701145815.2037993-1-bhupesh.sharma@linaro.org/
+- Addressed several comments from Bjorn regarding locking, serialization
+  etc received on v1.
+- Addressed Konrad's concerns about the tsens controller found on sm6375
+  SoC which seems to start in a bad state or is disabled when entering
+  the linux world.
+- This series would depend on sm6375 tsens controller changes being
+  added by Konrad. It is based on linux-next (master branch) tip.
 
-With interrupt enabled, timer tick interrupt can happen and a
-subsequently call to __do_softirq() may change the lockdep hardirqs state
-of a debug kernel back to 'on'. This will result in a mismatch between
-the cpu hardirqs state (off) and the lockdep hardirqs state (on) causing
-a number of false positive "WARNING: suspicious RCU usage" splats.
+Some versions of Qualcomm tsens controller might enter a
+'bad state' causing sensor temperatures/interrupts status
+to be in an 'invalid' state.
 
-Fix that by using local_irq_disable() to disable interrupt in
-intel_idle_irq().
+It is recommended to re-initialize the tsens controller
+via trustzone (secure registers) using scm call(s) when that
+happens.
 
-Fixes: 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- drivers/idle/intel_idle.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+This patchset adds the support for the same.
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index f5c6802aa6c3..907700d1e78e 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -162,7 +162,13 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
- 
- 	raw_local_irq_enable();
- 	ret = __intel_idle(dev, drv, index);
--	raw_local_irq_disable();
-+
-+	/*
-+	 * The lockdep hardirqs state may be changed to 'on' with timer
-+	 * tick interrupt followed by __do_softirq(). Use local_irq_disable()
-+	 * to keep the hardirqs state correct.
-+	 */
-+	local_irq_disable();
- 
- 	return ret;
- }
+Cc: bjorn.andersson@linaro.org
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Thara Gopinath <thara.gopinath@gmail.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
+
+Bhupesh Sharma (5):
+  firmware: qcom: scm: Add support for tsens reinit workaround
+  thermal: qcom: tsens: Add hooks for supplying platform specific reinit
+    quirks
+  thermal: qcom: tsens: Add driver support for re-initialization quirk
+  thermal: qcom: tsens: Add reinit quirk support for tsens v2
+    controllers
+  thermal: qcom: tsens: Add reinit quirk support for sm6375 controller
+
+ drivers/firmware/qcom_scm.c     |  15 +++
+ drivers/firmware/qcom_scm.h     |   4 +
+ drivers/thermal/qcom/tsens-v2.c |  15 +++
+ drivers/thermal/qcom/tsens.c    | 213 ++++++++++++++++++++++++++++++++
+ drivers/thermal/qcom/tsens.h    |  18 ++-
+ include/linux/qcom_scm.h        |   2 +
+ 6 files changed, 266 insertions(+), 1 deletion(-)
+
 -- 
-2.31.1
+2.35.3
 
