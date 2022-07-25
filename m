@@ -2,75 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF00557FEC6
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 14:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC5F57FF0B
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 14:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234459AbiGYMJx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 08:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
+        id S233335AbiGYMfY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 08:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiGYMJw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 08:09:52 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018C7DF6E
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 05:09:51 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d7so10197055plr.9
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 05:09:51 -0700 (PDT)
+        with ESMTP id S232450AbiGYMfX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 08:35:23 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9F3A1BB
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 05:35:21 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u5so15762557wrm.4
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 05:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/vAlD2Uj4JArMK2xat0u8itYglD8Kk8L5ACdFaAlxqs=;
-        b=A2oNuiPlEVJtYLXgw2uTDbD5XoOkhTkRZ+TgJG9T0B0UnRIol8tNmoj+OnwvNTiEZc
-         hle3V416mtDl6YnRY54Uz7ZYoma7m8kzIx8/sH8Zt/v1ff/uW63BeM/ei5HFh8fLCpNv
-         6C0RZ+0axhJRxw1pbu0Wwk1xEj3iHOxBSS0IUpvGlOJDhX99a4BSryMuaAVVRNaigVCz
-         Eezn91YMhIcU+BzP8pmyW2Cpxua8a69l8hJMfGFixyqsWwuCm1AYWNB+kPUmtzHc+fak
-         63ETFIbHFLKullcdOwvTPZNIOwkGv8O/GjgK0UZ4M5Gg3dCujVbmnz3mHGPBMdy9JpDu
-         nh2w==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JCziedm4VsI0JyKxRR8HuqE2xr15IJT2FvFr4HkbAys=;
+        b=U+mrpd9LNpGmAP3SfYjz6gtSgwo66PCEUslFJW5DZlqum7KNdCF04NYy912hYs8JOl
+         VR+ZMy5Q/sKyEqrRAYIPlolkFWg6DMEvRZk8SlxoKJeGgz8xvviAahdrQ2ZCE1/p/5Hq
+         zc+80zHj8BXsZ0L9wU/ilfc9lfGUAVPRxFzRb2gpXWzXPBibBxm8iGRAJxihVoQGhakK
+         DdxqEm/hu/MwcsDtudyvFN2rR3U14MmvplpMwoZ+H7Pe46Wm5fyHb/UeQQi7Prkw0QSw
+         smen0BQx3Xg9rduq1t0ZI8w7QsFPy+Pa+rvGVHnJ+eVjA9efNUjVu5P0dC+P3WCMnsV+
+         qopQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/vAlD2Uj4JArMK2xat0u8itYglD8Kk8L5ACdFaAlxqs=;
-        b=TaDxHpLEGFAtJufi+MZ3eps3iZnObsp8YddXxiYgCvDkvRdrhqcFeWX+TW0BdKV6ak
-         mA1xBVNJEnMDc2l6tqr/EROTJcZL/5iFnaK0e7lSiDUNHbUTP1DuydE+OCVFwd/J/g37
-         6FIGVqSNijoruW+GsnhKpy/lAJ1oh6vOCe4VKlfUDBgGJAagIzKzgXF2TuPhv5CwXWk8
-         Xa4sTOCgd9+cDrDbxMQS1hK1PvvZM6K/3xexqlMmi9oj4lzpTO06qFEBB+IUhcGfBOeL
-         TMP2n3ReTPWyJHikH+8tZ7gOmJk3N9jhwxc4ndK6mNVHnc7S8UQFeusgq0cOeKHmzfPs
-         1+Ow==
-X-Gm-Message-State: AJIora/NGnygQrs9MgU4qRnwA3EJj3sX4IUbUtO0Gsq+Y6IEHvIXT0B0
-        zTB2kG7snw0+PKi3cIii0G/0yw==
-X-Google-Smtp-Source: AGRyM1sSBp98T6cTNyv8vujrNsns4paivHQuBGy782p0vi4eo2Asxwnq5ntBEh1AcH0145Y434mvdQ==
-X-Received: by 2002:a17:90a:f003:b0:1f2:49f8:19d5 with SMTP id bt3-20020a17090af00300b001f249f819d5mr14573096pjb.28.1658750991448;
-        Mon, 25 Jul 2022 05:09:51 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id r13-20020aa7962d000000b0052acb753b8bsm9325800pfg.158.2022.07.25.05.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 05:09:51 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 17:39:49 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
- dev_pm_opp_set_config+0x344/0x620
-Message-ID: <20220725120949.fofc7chlsnrgfpvm@vireshk-i7>
-References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
- <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
- <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JCziedm4VsI0JyKxRR8HuqE2xr15IJT2FvFr4HkbAys=;
+        b=uE/fHfNy6kbCSuJMH3v47seTzrjJ2qYV2b46+u65FXIorooHsLOrDTL9EwTAUAp8Z+
+         DXLy9PYaS6Nbj/EJdVRG/xubtvZP1NF+H6yR3skPS5Nq5Rl19xPwmVdMeM2KFQbA51AI
+         1q6ianM9OEq2o6nxS4zQoqkBw3ur9luWC8jTY2Q1NOfS3/NoyD87calaDXM7lBE7a1W8
+         aP3O1L3h5b1FnQiBE8ulRx8hzuncpHrk54mSECP4GFzGVO5pllyCTHT7p9X8bTlYzhgB
+         pu0momKHApLUI6lT5wolVZ4hsM6QE3Cb8mYT+Vl22ctNfGY9v911StrDQLiDUFJZfRyZ
+         9k3w==
+X-Gm-Message-State: AJIora+rAlClUvlkMVlzo3ctKcRqclfQylmLxBjofM/cW6HvJkJOS+BZ
+        z+QrXUt3iF3CLfDkC1mFhPX8jKMSXZqaZQ==
+X-Google-Smtp-Source: AGRyM1uln4UZKBIVdu3PXTPZC/SWMyl/3hMznU7MW8sraTZW+pc7/dQtLrrEkBidd9Seo4x0JaqmDg==
+X-Received: by 2002:a5d:64cf:0:b0:21e:84da:de2 with SMTP id f15-20020a5d64cf000000b0021e84da0de2mr4210754wri.578.1658752520013;
+        Mon, 25 Jul 2022 05:35:20 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:1780:8e54:dd38:6668? ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
+        by smtp.googlemail.com with ESMTPSA id i6-20020a5d5226000000b0021d6d9c0bd9sm11782356wra.82.2022.07.25.05.35.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 05:35:19 -0700 (PDT)
+Message-ID: <32657ad8-eb1a-1b70-d903-916640b2eeef@linaro.org>
+Date:   Mon, 25 Jul 2022 14:35:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] thermal: imx8mm: register with hwmon subsystem
+Content-Language: en-US
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, patchwork-lst@pengutronix.de
+References: <20220722165815.1601124-1-l.stach@pengutronix.de>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220722165815.1601124-1-l.stach@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,18 +76,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-07-22, 14:55, Stanimir Varbanov wrote:
-> Hi Viresh,
+On 22/07/2022 18:58, Lucas Stach wrote:
+> Provide standard sensor monitoring via the HWMON subsystem by
+> registering the sensors with hwmon when CONFIG_THERMAL_HWMON is
+> enabled.
 > 
-> I can take a look and provide a patch to fix that.
-> 
-> But, is this a new warn or it is a consequence of new changes in
-> opp/core.c ?
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> ---
 
-This WARN was missing earlier (by mistake) and is added now after some
-redesigning. You can reproduce it on the OPP tree:
+Applied, thanks
 
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
 
 -- 
-viresh
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
