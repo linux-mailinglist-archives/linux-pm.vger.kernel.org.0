@@ -2,154 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E06F57FD81
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 12:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BCE57FDAC
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 12:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234405AbiGYKbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 06:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S230036AbiGYKiJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 06:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233423AbiGYKbe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 06:31:34 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F1C15A29
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 03:31:32 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id u5so15324311wrm.4
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 03:31:32 -0700 (PDT)
+        with ESMTP id S234649AbiGYKiJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 06:38:09 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD15F183B6
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 03:38:07 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id a13so12427534ljr.11
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 03:38:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QR4thViojhLm7m3iVqTAzOPrEuZ+oboQVEbkcRYR7U0=;
-        b=hcY3ebDhxmUgKAKSOPUOX7d/LMYdV3cijN2N6OfC0kvVYjMwOvmOolx+2NETIKYqUp
-         GPy3YFMR7smmOlatz8CKT+4p2UQ+6lI9Ejv06f+y6zEFBSmLUPFbbscFbBBsOCvH434Q
-         ke8WXFQ+uXl36Kdevvs6uhTIaQQgtIFRovUfQ/RDq3AHQ469OhSceGOKRnPmFWjpxVnH
-         VERQ2rtptnToPx6leEXxAAby7RDypiZaQady2IbBpsvPlsYJ0uSwLW6l0adFiFhqOZ8D
-         XJZDsGiJcpWWsVtF7ngMWVpb9VQHwHEkKK2RVLip5CsQWVUMkj1jqMMhHMjq3wvU4bke
-         J0IA==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=WblVDAGa7l0gl09iYHhJiD3c+VrUQlVzxlQgD2JVeC8=;
+        b=sC6Kvd2H6jTgkv3SWYSI3sn4WpwdtYcRbUhpTWHjvf6/Kqz7WH1XaUBINpI8HQWR1R
+         RV77bjMwWs7pxdwi7LhuUBOR0uPrpOHXQH+4z4kYxgbqM3mlNAi/sqFV7PjDEMLIrBaA
+         IMaCfPJmtdRwODD71kibngt65K4oZwKfRhx9q1OfvgV/aiau9F6g9J5TXt8qMvijBm4A
+         j6iPaLrm0YWe7x2ywD0ulnG01UW+qN2eTr2fJCifGW2GvBxsVt9JPknsS8pj5ScUlcHF
+         USxamzkubzS4jEVKlGd3ucLFGNGmfn/HAkKMnRrm+eXJeYOA4uB33X3z2k3A5DuZ4s7k
+         y+PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QR4thViojhLm7m3iVqTAzOPrEuZ+oboQVEbkcRYR7U0=;
-        b=0EsTB7wGHo+ve0zlQVCxrF+dwtTdsT0mOBiw3vX49u9WJ3vASoHEk1oRu7O2Ckv5f3
-         /2Vu2pggLFnIXwQt9sHrayZHmX8zr1NO8kUPl4KcSU94he0C565e9C9jhRHnsHwn+DQu
-         lc5DzhhpAEf73zhX+F6spPZLMuOfcTVWM7wSBawBGoifqyn7yq3WGIEITb9psB8WIVJX
-         YS71JFGmIzGWNmJVG8B+e9vgT6xDqjBVaa1UlvIyyi+n6msHHXJSgkzj3BOX/+Avbpw1
-         NwMpthqLiARreeXkSvVYYuYEizuR2QX17g8Tc5MFxdPcjmX/IEsClTaparmzfJq3cAD+
-         Vf8g==
-X-Gm-Message-State: AJIora9AXgoD1spxfEt6HFtW7oZO5CuzFyb9ks8fj6dN5FXWjipDpQ0L
-        FUkKHSY4ckY4LkyP8+ILOd03wA==
-X-Google-Smtp-Source: AGRyM1uhInd5p9lSRbYGnaq9oTNYSYBtNWlkq9wyaVzmMkSkg4hYhWboyJgYIo9QbRHYBeJSc2cjCg==
-X-Received: by 2002:a5d:584c:0:b0:21e:7f48:bf19 with SMTP id i12-20020a5d584c000000b0021e7f48bf19mr5190179wrf.474.1658745090915;
-        Mon, 25 Jul 2022 03:31:30 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id l18-20020a05600c1d1200b003a04d19dab3sm29367538wms.3.2022.07.25.03.31.29
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=WblVDAGa7l0gl09iYHhJiD3c+VrUQlVzxlQgD2JVeC8=;
+        b=aDAOk6GH4lZPXtUHaJVLLUHbhRZ0z6NkG6CTZG47I2bis4yV+Sn5B5QdciTyVolvD2
+         ec5c/zrrEVREVY2e7Y6ZVfmHWKnB97RPqUEaXj4boLt7W5IWYJjcSwf9uv820elC0IBI
+         RtRuhSQGc22E1/yBTNkICZhDSKyMMxOQbuGdwLyNwzwZhkcwLeMf2rlCz96Erkcw2BG4
+         TAHJd61xXA56Glv91dLTNnx9yx/jwj7igueOEGkot+jeSG0GuxMPGby7aM0b8T3r+aGx
+         t5jcB6GS5R6LPedfgJTQOq2lTeksCqyofV+gmCIIh9J4v/DNRyTt9a0riPuNfzwP0FR3
+         3Pkg==
+X-Gm-Message-State: AJIora/+RUtThgU9179mbM7NCyvo/MePMH+I1DAHRRDxM49xAXEU1zSB
+        P7o8cMvIi5IncuRnVXoq6YQlLg==
+X-Google-Smtp-Source: AGRyM1u+F4emxtEcYdg76LJLGmbLthvfxGhEC0/SmLXlx3VdnfeG4Ds3qoY8sUa+JZvKuMuBUxfcHw==
+X-Received: by 2002:a2e:721a:0:b0:25d:eaf8:6a5b with SMTP id n26-20020a2e721a000000b0025deaf86a5bmr3968228ljc.257.1658745486130;
+        Mon, 25 Jul 2022 03:38:06 -0700 (PDT)
+Received: from localhost (h-46-59-88-103.A463.priv.bahnhof.se. [46.59.88.103])
+        by smtp.gmail.com with ESMTPSA id z19-20020a05651c11d300b00253ceefb668sm2583065ljo.60.2022.07.25.03.38.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 03:31:30 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 11:31:28 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     lee.jones@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370
- support
-Message-ID: <20220725103128.xtaw2c4y5fobowg7@maple.lan>
-References: <20220722102407.2205-1-peterwu.pub@gmail.com>
- <20220722102407.2205-14-peterwu.pub@gmail.com>
+        Mon, 25 Jul 2022 03:38:05 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 12:38:04 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org,
+        rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
+        amitk@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
+Message-ID: <Yt5yjAAT3y4YSgl1@oden.dyn.berto.se>
+References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
+ <20220710212423.681301-18-daniel.lezcano@linexp.org>
+ <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
+ <18ade2d0-ebda-0526-71f3-65a0b2685068@linexp.org>
+ <Yt2W5UCXaB3Memzg@oden.dyn.berto.se>
+ <e2a56ac3-057c-2b17-7bde-7e860a86807d@linexp.org>
+ <Yt3KDSO248WebZ/w@oden.dyn.berto.se>
+ <Yt3Vmt/AAzqzDzBF@oden.dyn.berto.se>
+ <28e915c2-4871-b648-f5ac-78d6ecb32768@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220722102407.2205-14-peterwu.pub@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <28e915c2-4871-b648-f5ac-78d6ecb32768@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 06:24:07PM +0800, ChiaEn Wu wrote:
-> diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-> index a003e02..846dbe7 100644
-> --- a/drivers/video/backlight/Kconfig
-> +++ b/drivers/video/backlight/Kconfig
-> @@ -268,6 +268,18 @@ config BACKLIGHT_MAX8925
->  	  If you have a LCD backlight connected to the WLED output of MAX8925
->  	  WLED output, say Y here to enable this driver.
->
-> +config BACKLIGHT_MT6370
-> +	tristate "MediaTek MT6370 Backlight Driver"
-> +	depends on MFD_MT6370
-> +	help
-> +	  This enables support for Mediatek MT6370 Backlight driver.
-> +	  It's commonly used to drive the display WLED. There are 4 channels
-> +	  inside, and each channel supports up to 30mA of current capability
-> +	  with 2048 current steps in exponential or linear mapping curves.
+Hi Daniel,
 
-Does the MT6372 support more steps than this? In other words does it use
-a fourteen bit scale or does it use an 11-bit scale at a different
-register location?
+On 2022-07-25 12:00:30 +0200, Daniel Lezcano wrote:
+> 
+> Hi Niklas,
+> 
+> On 25/07/2022 01:28, Niklas Söderlund wrote:
+> > Hi (again) Daniel,
+> > 
+> > I figured it out, the thermal zone is disabled after this change. For
+> > both rcar sensors with the new API thermal_zone_device_enable() is never
+> > called.
+> > 
+> > In the old API the zone is enabled in the call chain of
+> > devm_thermal_zone_of_sensor_register(). While after this change the zone
+> > is not enabled by the core when calling thermal_zone_device_enable().
+> > 
+> > If I add a call to thermal_zone_device_enable() together with the new
+> > API everything works as before. But I'm not sure if the correct solution
+> > is to add a call to thermal_zone_device_enable() in the sensor drivers
+> > or in the call chain of the new API?
+> > 
+> > On 2022-07-25 00:39:10 +0200, Niklas Söderlund wrote:
+> > > Hi Daniel,
+> > > 
+> > > I tested your branch, unfortunately with the same result for
+> > > rcar_gen3_thermal. Manipulation of emul_temp file do not trigger
+> > > actions.
+> 
+> Thanks for investigating, I updated the branch. Does it fix the issue ?
 
+I tested the branch with the head [1] and it restores the expected 
+operation for both rcar_gen3_thermal and rcar_thermal sensors.
 
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called "mt6370-backlight".
-> +
-> [...]
-> diff --git a/drivers/video/backlight/mt6370-backlight.c b/drivers/video/backlight/mt6370-backlight.c
-> new file mode 100644
-> index 0000000..ba00a8f
-> --- /dev/null
-> +++ b/drivers/video/backlight/mt6370-backlight.c
-> [...]
-> +static int mt6370_bl_update_status(struct backlight_device *bl_dev)
-> +{
-> +	struct mt6370_priv *priv = bl_get_data(bl_dev);
-> +	int brightness = backlight_get_brightness(bl_dev);
-> +	unsigned int enable_val;
-> +	u8 brightness_val[2];
-> +	int ret;
-> +
-> +	if (brightness) {
-> +		brightness_val[0] = (brightness - 1) & MT6370_BL_DIM2_MASK;
-> +		brightness_val[1] = (brightness - 1) >> fls(MT6370_BL_DIM2_MASK);
-> +
-> +		/*
-> +		 * To make MT6372 using 14 bits to control the brightness
-> +		 * backward compatible with 11 bits brightness control
-> +		 * (like MT6370 and MT6371 do), we left shift the value
-> +		 * and pad with 1 to remaining bits. Hence, the MT6372's
-> +		 * backlight brightness will be almost the same as MT6370's
-> +		 * and MT6371's.
-> +		 */
-> +		if (priv->vid_type == MT6370_VID_6372) {
-> +			brightness_val[0] <<= MT6370_BL_DIM2_6372_SHIFT;
-> +			brightness_val[0] |= MT6370_BL_DUMMY_6372_MASK;
-> +		}
+Thanks for the fix, with this change I'm happy with this new API.
 
-This somewhat depends on the answer to the first question above, but
-what is the point of this shifting? If the range is 14-bit then the
-driver should set max_brightness to 16384 and present the full range of
-the MT6372 to the user.
+1. commit e9b792a531c10756 ("thermal/of: Remove old OF code")
 
-Especially when using linear mappings (which are a totally pointless
-scale to use for a backlight) the extra steps are useful for backlight
-animation.
-
-
-Daniel.
+-- 
+Kind Regards,
+Niklas Söderlund
