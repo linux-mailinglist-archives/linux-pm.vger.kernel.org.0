@@ -2,125 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BCE57FDAC
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 12:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C938857FEA9
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 13:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiGYKiJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 06:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S234991AbiGYLzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 07:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234649AbiGYKiJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 06:38:09 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD15F183B6
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 03:38:07 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a13so12427534ljr.11
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 03:38:07 -0700 (PDT)
+        with ESMTP id S235050AbiGYLzN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 07:55:13 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B895FC7
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 04:55:11 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id r188-20020a1c44c5000000b003a34ac64bdfso2303575wma.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 04:55:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WblVDAGa7l0gl09iYHhJiD3c+VrUQlVzxlQgD2JVeC8=;
-        b=sC6Kvd2H6jTgkv3SWYSI3sn4WpwdtYcRbUhpTWHjvf6/Kqz7WH1XaUBINpI8HQWR1R
-         RV77bjMwWs7pxdwi7LhuUBOR0uPrpOHXQH+4z4kYxgbqM3mlNAi/sqFV7PjDEMLIrBaA
-         IMaCfPJmtdRwODD71kibngt65K4oZwKfRhx9q1OfvgV/aiau9F6g9J5TXt8qMvijBm4A
-         j6iPaLrm0YWe7x2ywD0ulnG01UW+qN2eTr2fJCifGW2GvBxsVt9JPknsS8pj5ScUlcHF
-         USxamzkubzS4jEVKlGd3ucLFGNGmfn/HAkKMnRrm+eXJeYOA4uB33X3z2k3A5DuZ4s7k
-         y+PA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vt+9UWINelja7/eVYkTwzACFJWbF+8Sl4+g6ehzdmOA=;
+        b=qJZN2x/qxxZE1byccFd9AiFVVdNFBqOYtQ4QrVhKtArgFOv/CBHIZCni6KJe6cGr62
+         xwjQlba3Mofw1w+mO1Mc8tbRdiJ/1nuoiGMsheWC18S51+XDFQn+GlsA1AyelJqqoukc
+         foFvt9sYQK0yk8DCHBEDcUDs3oDwjCV7u4E5oL6zeqCMd6sp4t74gAkN3amXaIXNrQG3
+         mFbqPsoGJqSLHUMGalwXyT2c1RtRfDJ+56DEdp0aUQyHKbKHa32wE/iujGFgQ2C5Vw9R
+         EYrvckbF9xg4qBD+nRnzXDpUriax7kznajBiXn0xRn689/099dQfcu831ku8qbusgGHx
+         MTkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WblVDAGa7l0gl09iYHhJiD3c+VrUQlVzxlQgD2JVeC8=;
-        b=aDAOk6GH4lZPXtUHaJVLLUHbhRZ0z6NkG6CTZG47I2bis4yV+Sn5B5QdciTyVolvD2
-         ec5c/zrrEVREVY2e7Y6ZVfmHWKnB97RPqUEaXj4boLt7W5IWYJjcSwf9uv820elC0IBI
-         RtRuhSQGc22E1/yBTNkICZhDSKyMMxOQbuGdwLyNwzwZhkcwLeMf2rlCz96Erkcw2BG4
-         TAHJd61xXA56Glv91dLTNnx9yx/jwj7igueOEGkot+jeSG0GuxMPGby7aM0b8T3r+aGx
-         t5jcB6GS5R6LPedfgJTQOq2lTeksCqyofV+gmCIIh9J4v/DNRyTt9a0riPuNfzwP0FR3
-         3Pkg==
-X-Gm-Message-State: AJIora/+RUtThgU9179mbM7NCyvo/MePMH+I1DAHRRDxM49xAXEU1zSB
-        P7o8cMvIi5IncuRnVXoq6YQlLg==
-X-Google-Smtp-Source: AGRyM1u+F4emxtEcYdg76LJLGmbLthvfxGhEC0/SmLXlx3VdnfeG4Ds3qoY8sUa+JZvKuMuBUxfcHw==
-X-Received: by 2002:a2e:721a:0:b0:25d:eaf8:6a5b with SMTP id n26-20020a2e721a000000b0025deaf86a5bmr3968228ljc.257.1658745486130;
-        Mon, 25 Jul 2022 03:38:06 -0700 (PDT)
-Received: from localhost (h-46-59-88-103.A463.priv.bahnhof.se. [46.59.88.103])
-        by smtp.gmail.com with ESMTPSA id z19-20020a05651c11d300b00253ceefb668sm2583065ljo.60.2022.07.25.03.38.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 03:38:05 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 12:38:04 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org,
-        rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
-        amitk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
-Message-ID: <Yt5yjAAT3y4YSgl1@oden.dyn.berto.se>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-18-daniel.lezcano@linexp.org>
- <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
- <18ade2d0-ebda-0526-71f3-65a0b2685068@linexp.org>
- <Yt2W5UCXaB3Memzg@oden.dyn.berto.se>
- <e2a56ac3-057c-2b17-7bde-7e860a86807d@linexp.org>
- <Yt3KDSO248WebZ/w@oden.dyn.berto.se>
- <Yt3Vmt/AAzqzDzBF@oden.dyn.berto.se>
- <28e915c2-4871-b648-f5ac-78d6ecb32768@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vt+9UWINelja7/eVYkTwzACFJWbF+8Sl4+g6ehzdmOA=;
+        b=CK2uf62nFM+WqTE3rxOQDfG5wQ5Sb3Zy2cenoIOfIWA9T660aMvKVbhcxlmOggawKI
+         wf/ydEfF6VnpEDAPaVGDGIF7byf0QWzw5VB0lLEENRW+uLQUykgfGs0Bp+s8WvP+PYPh
+         ld4sFmpPQ5SAKg97p5cDrg3HUlACFCxuI7pMS2H33vumwXlVC+aEWLNPxn3NaJRr/KZ1
+         vZKAsm6AKj/QO7wyFUt2sVcdlvdTHSLzLPdse/MBMWsvXUGLGw1XDeMAOZvxz98ZQMaB
+         hxl925Jb5wbgKONTyp6bipx1XbmT9o/+gCNLJVCWSB0pSQKh0jIt4BZQGd5eNe3EDmiV
+         4nYg==
+X-Gm-Message-State: AJIora+vbfOH8g1fm2kjnuo2xZbtWIxRTwutwoPzYRM7rhUfGTbtLV6k
+        iSOlYwBCeXqDX9k+CUZgC1vD0A==
+X-Google-Smtp-Source: AGRyM1uyMTMBHd+S2NwJGkXCMlnQ9Wp04KeH98Q0zowwEOcqZMiNODRIlJSNFH+jEmFfGXt8DsmGZg==
+X-Received: by 2002:a05:600c:34c9:b0:3a3:561d:4f32 with SMTP id d9-20020a05600c34c900b003a3561d4f32mr4235673wmq.30.1658750109452;
+        Mon, 25 Jul 2022 04:55:09 -0700 (PDT)
+Received: from [192.168.1.6] ([195.24.90.54])
+        by smtp.googlemail.com with ESMTPSA id u16-20020a05600c00d000b003a31c4f6f74sm20937729wmm.32.2022.07.25.04.55.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 04:55:08 -0700 (PDT)
+Message-ID: <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+Date:   Mon, 25 Jul 2022 14:55:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <28e915c2-4871-b648-f5ac-78d6ecb32768@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
+ dev_pm_opp_set_config+0x344/0x620
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
+ <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+In-Reply-To: <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi Viresh,
 
-On 2022-07-25 12:00:30 +0200, Daniel Lezcano wrote:
+I can take a look and provide a patch to fix that.
+
+But, is this a new warn or it is a consequence of new changes in
+opp/core.c ?
+
+On 7/25/22 13:27, Viresh Kumar wrote:
+> On 22-07-22, 11:01, Naresh Kamboju wrote:
+>> I have found this warning on db845c while booting Linux next-20220720.
+>> Please find more details in the below link,
+>>
+>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>
+>> [    9.769688] WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
+>> dev_pm_opp_set_config+0x344/0x620
+>> [    9.769698] i2c 16-0010: Fixing up cyclic dependency with acb3000.camss
+>> [    9.810991] msm-mdss ae00000.mdss: Adding to iommu group 15
+>> [    9.811082] Modules linked in: hci_uart qcom_camss msm(+) videobuf2_dma_sg
+>> [    9.823435] ath10k_snoc 18800000.wifi: supply vdd-3.3-ch1 not
+>> found, using dummy regulator
+>> [    9.827664]  ath10k_snoc(+) btqca v4l2_fwnode btbcm ath10k_core
+>> venus_core(+) gpu_sched camcc_sdm845 reset_qcom_pdc v4l2_async
+>> v4l2_mem2mem i2c_qcom_geni videobuf2_memops ath drm_dp_aux_bus
+>> drm_display_helper videobuf2_v4l2 bluetooth mac80211 i2c_qcom_cci
+>> videobuf2_common qcom_rng spi_geni_qcom gpi(+) qcom_q6v5_mss xhci_pci
+>> qrtr xhci_pci_renesas cfg80211 rfkill slim_qcom_ngd_ctrl lmh
+>> icc_osm_l3 pdr_interface slimbus qcom_wdt display_connector icc_bwmon
+>> qcom_q6v5_pas qcom_pil_info qcom_q6v5 qcom_sysmon drm_kms_helper
+>> qcom_common qcom_glink_smem qmi_helpers mdt_loader drm socinfo
+>> rmtfs_mem fuse
+>> [    9.885445] qcom-camss acb3000.camss: Adding to iommu group 16
+>> [    9.911179] platform ae94000.dsi: Fixing up cyclic dependency with
+>> ae01000.display-controller
+>> [[0;32m  OK  [0m] Started D-Bus System Message Bus.[    9.911593]
+>> Bluetooth: hci0: setting up wcn399x
+>> [    9.928261] CPU: 4 PID: 326 Comm: systemd-udevd Not tainted
+>> 5.19.0-rc7-next-20220720 #1
+>>
+>> [    9.928265] Hardware name: Thundercomm Dragonboard 845c (DT)
+>> [    9.928267] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [    9.928269] pc : dev_pm_opp_set_config+0x344/0x620
+>> [    9.977763] lr : dev_pm_opp_set_config+0x68/0x620
+>> [    9.982508] sp : ffff8000089337b0
+>> [    9.985846] x29: ffff8000089337b0 x28: ffff800008933c90 x27: ffff3e2780f9bc10
+>> [    9.993030] x26: ffffb9048f76dd40 x25: ffffb904d98c8de8 x24: ffff3e278da60080
+>> [   10.000226] x23: ffff3e2780f9bc10 x22: ffff8000089338b0 x21: ffff3e278eda0d80
+>> [   10.007416] x20: ffff3e2780f9bc10 x19: ffff3e2786ffe000 x18: ffffffffffffffff
+>> [   10.014602] x17: 0000000000000000 x16: ffffb904d7d90f50 x15: 6f63713d305f454c
+>> [   10.021795] x14: ffffb904d9df6a20 x13: 0000000000000040 x12: 0000000000000228
+>> [   10.028981] x11: 0000000000000000 x10: 0000000000000bd0 x9 : ffffb904d7d905e0
+>> [   10.036166] x8 : ffff3e27833a8c30 x7 : 0000000000000018 x6 : 0000000000000001
+>> [   10.043361] x5 : ffffb904d982f000 x4 : ffff3e27833a8000 x3 : ffffb904d9bf2c20
+>> [   10.043365] x2 : 0000000000000000 x1 : ffff3e2786f70d00 x0 : ffff3e2786ffe060
+>> [   10.043368] Call trace:
+>> [   10.043369]  dev_pm_opp_set_config+0x344/0x620
+>> [   10.043373]  devm_pm_opp_set_config+0x24/0x80
+>> [   10.043376]  core_get_v4+0x244/0x360 [venus_core]
+>> [   10.043393]  venus_probe+0x100/0x470 [venus_core]
+>> [   10.043404]  platform_probe+0x74/0xf0
 > 
-> Hi Niklas,
+> Stanimir / Bjorn,
 > 
-> On 25/07/2022 01:28, Niklas Söderlund wrote:
-> > Hi (again) Daniel,
-> > 
-> > I figured it out, the thermal zone is disabled after this change. For
-> > both rcar sensors with the new API thermal_zone_device_enable() is never
-> > called.
-> > 
-> > In the old API the zone is enabled in the call chain of
-> > devm_thermal_zone_of_sensor_register(). While after this change the zone
-> > is not enabled by the core when calling thermal_zone_device_enable().
-> > 
-> > If I add a call to thermal_zone_device_enable() together with the new
-> > API everything works as before. But I'm not sure if the correct solution
-> > is to add a call to thermal_zone_device_enable() in the sensor drivers
-> > or in the call chain of the new API?
-> > 
-> > On 2022-07-25 00:39:10 +0200, Niklas Söderlund wrote:
-> > > Hi Daniel,
-> > > 
-> > > I tested your branch, unfortunately with the same result for
-> > > rcar_gen3_thermal. Manipulation of emul_temp file do not trigger
-> > > actions.
+> The OPP core expects all configuration options to be provided before the OPP
+> table is added. i.e. (for your case here), we need to call
+> devm_pm_opp_set_clkname() and devm_pm_opp_attach_genpd(), before calling
+> devm_pm_opp_of_add_table(). This is a hard requirement, it was a hard
+> requirement earlier (before the new changes in OPP core came in) too, just that
+> devm_pm_opp_attach_genpd() was missing the necessary WARN(), which was there in
+> every other helper.
 > 
-> Thanks for investigating, I updated the branch. Does it fix the issue ?
-
-I tested the branch with the head [1] and it restores the expected 
-operation for both rcar_gen3_thermal and rcar_thermal sensors.
-
-Thanks for the fix, with this change I'm happy with this new API.
-
-1. commit e9b792a531c10756 ("thermal/of: Remove old OF code")
+> Can someone from Qcom team reorder things a bit provide a patch to fix this
+> WARN() ? I will carry that in my tree then.
+> 
+> It may look like this, I don't want to touch code that I don't understand at
+> all:
+> 
+> diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+> index cb48c5ff3dee..c93d2906e4c7 100644
+> --- a/drivers/media/platform/qcom/venus/pm_helpers.c
+> +++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+> @@ -875,7 +875,7 @@ static int vcodec_domains_get(struct venus_core *core)
+>         }
+> 
+>  skip_pmdomains:
+> -       if (!core->has_opp_table)
+> +       if (!core->res->opp_pmdomain)
+>                 return 0;
+> 
+>         /* Attach the power domain for setting performance state */
+> @@ -1007,6 +1007,10 @@ static int core_get_v4(struct venus_core *core)
+>         if (ret)
+>                 return ret;
+> 
+> +       ret = vcodec_domains_get(core);
+> +       if (ret)
+> +               return ret;
+> +
+>         if (core->res->opp_pmdomain) {
+>                 ret = devm_pm_opp_of_add_table(dev);
+>                 if (!ret) {
+> @@ -1017,10 +1021,6 @@ static int core_get_v4(struct venus_core *core)
+>                 }
+>         }
+> 
+> -       ret = vcodec_domains_get(core);
+> -       if (ret)
+> -               return ret;
+> -
+>         return 0;
+>  }
+> 
 
 -- 
-Kind Regards,
-Niklas Söderlund
+regards,
+Stan
