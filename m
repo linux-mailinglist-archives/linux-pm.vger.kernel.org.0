@@ -2,53 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4DB58041F
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 20:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 956A5580428
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 20:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbiGYSjR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 14:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S232047AbiGYSmF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 14:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235752AbiGYSjO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 14:39:14 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8994812606;
-        Mon, 25 Jul 2022 11:39:13 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id k85so21629298ybk.7;
-        Mon, 25 Jul 2022 11:39:13 -0700 (PDT)
+        with ESMTP id S230468AbiGYSmE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 14:42:04 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE191C914
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 11:42:02 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id i14so21722475yba.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 11:42:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=KNBJWlyA9+07rg2cUyhq9BlXYJZB1wgorDKxzUoss4M=;
-        b=EVpfLVATxqGT4MAojDA8Agv3hxQH671FH00YMJMC85q8ddhnVawmHAovD0CLN1XTid
-         SGS/eAagH1yvxA3Q2yx4Fq1YPcYXP9+JoCPnVA322D87ZXaWPYXOXCW6Y7/xh1FjZZpv
-         upyX5twC7NqUASvakYBc2Q2Q0J1WJpr17LFYmkGiKyAlA8vP4YV0B5a0kFxI6L9PkHAX
-         DnrOW7Fz36mymHgVvSeN1Go6XCeFjCnM5XrsMBG5sMEPJL6U149szq6U9CCCkbIkvY7m
-         dF1Xl7M6MhSVPUCDN3ITLKHN+D0WNl+ozqvgNTpDmgwcAu5cGF1XrjBCxugtOZQwDHY+
-         gckQ==
-X-Gm-Message-State: AJIora/M0mFmPOu6Uw8ojE7cNfbgHqJ6dSo1CVMYZ2gi2gKFOC7FPess
-        45qVMv0GCCkcbaBEdFuw4xh1JHRUYA8ov1hniaE=
-X-Google-Smtp-Source: AGRyM1vh9F2FnMVnL1T6X58l+ieZbZtky/9sMNYl4tilyONYlbyKjxKkf81saKpTjncV4jZOSZKjfUh6W9RA0GdOs+I=
-X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
- z15-20020a25664f000000b0066cd0f436ccmr9894684ybm.482.1658774352789; Mon, 25
- Jul 2022 11:39:12 -0700 (PDT)
+        bh=eGJ/EyemtwiclRDOY6J0pieoHL35ja71OCA+705OUww=;
+        b=GD+RyKMn+8XCzDI0EBp1Ve1xaxOTUripYLD4RLqINl24jSSUFLzLxkLwy5WQminLuB
+         QoMva0ePM7mCR1YHtLYPIfymJxFzHi61H4yyxtweFQnljNvFsVJBMuG9C30hf7PZXcqW
+         9bBt1BwjeaXWhK6KezLYECfztyzO+/Yx2Vm2hA9Gh5zG0vDyt4GCPGbNyakl1xGafWyh
+         NoEQho+Gqmni2NYOhTrKyX7yMbeQ7jbwfc4FG2nNBxDP6t2odgfePszVID/Z16YnOL3C
+         vriIghGa92LCt3/xmzhAq7wizNESm3z9PnNGL8XBiAOVB+78sCBqv6Z1tsT27rLPL3sw
+         tn5A==
+X-Gm-Message-State: AJIora8Z8vM/muR4B0byPrI8ilASH/ZcW4NInBb+wDUP7rODOpaBB4Lj
+        qGmBuc2I1JZc5J/b5fGSQaPDksyqU47cxOLGsapdCLE7
+X-Google-Smtp-Source: AGRyM1tXhT5VN3m0BdiiYsJuZhGyzLs41L7u+jneF2q4auDCrKG+7wfwNhu/7zUsWjS0/zV0HcM0ps9O0MwdxITmDEk=
+X-Received: by 2002:a5b:202:0:b0:66f:aab4:9c95 with SMTP id
+ z2-20020a5b0202000000b0066faab49c95mr10373463ybl.81.1658774521973; Mon, 25
+ Jul 2022 11:42:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722025024.454626-1-zhao1.liu@linux.intel.com> <20220725103053.o45ly6rnq7vyfdup@vireshk-i7>
-In-Reply-To: <20220725103053.o45ly6rnq7vyfdup@vireshk-i7>
+References: <20220716062655.704893-1-dedekind1@gmail.com>
+In-Reply-To: <20220716062655.704893-1-dedekind1@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 25 Jul 2022 20:39:01 +0200
-Message-ID: <CAJZ5v0hMTNGWGd881_6hdeqL_69DA90m-wrePt0-aUu0RV6J3Q@mail.gmail.com>
-Subject: Re: [patch] cpufreq: ondemand: Use cpumask_var_t for on-stack cpu mask
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Rusty Russell <rusty@rustcorp.com.au>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
+Date:   Mon, 25 Jul 2022 20:41:51 +0200
+Message-ID: <CAJZ5v0iy_yH4bdJO+tCYrZMMDUFN81rFymR=b7Q6MfE4smzoPw@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: make SPR C1 and C1E be independent
+To:     Artem Bityutskiy <dedekind1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM Mailing List <linux-pm@vger.kernel.org>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,73 +55,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 12:30 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Sat, Jul 16, 2022 at 8:27 AM Artem Bityutskiy <dedekind1@gmail.com> wrote:
 >
-> On 22-07-22, 10:50, Zhao Liu wrote:
-> > A cpumask structure on the stack can cause a warning with
-> > CONFIG_NR_CPUS=8192 (e.g. Ubuntu 22.04 uses this):
-> >
-> > drivers/cpufreq/cpufreq_ondemand.c: In function 'od_set_powersave_bias':
-> > drivers/cpufreq/cpufreq_ondemand.c:449:1: warning: the frame size of
-> >       1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> >   449 | }
-> >       | ^
-> >
-> > CONFIG_CPUMASK_OFFSTACK=y is enabled by default for most distros, and
-> > hence we can work around the warning by using cpumask_var_t.
-> >
-> > Signed-off-by: Zhao Liu <zhao1.liu@linux.intel.com>
-> > ---
-> >  drivers/cpufreq/cpufreq_ondemand.c | 13 +++++++++----
-> >  1 file changed, 9 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-> > index e8fbf970ff07..c52d19d67557 100644
-> > --- a/drivers/cpufreq/cpufreq_ondemand.c
-> > +++ b/drivers/cpufreq/cpufreq_ondemand.c
-> > @@ -416,10 +416,13 @@ static struct dbs_governor od_dbs_gov = {
-> >  static void od_set_powersave_bias(unsigned int powersave_bias)
-> >  {
-> >       unsigned int cpu;
-> > -     cpumask_t done;
-> > +     cpumask_var_t done;
-> > +
-> > +     if (!alloc_cpumask_var(&done, GFP_KERNEL))
-> > +             return;
-> >
-> >       default_powersave_bias = powersave_bias;
-> > -     cpumask_clear(&done);
-> > +     cpumask_clear(done);
-> >
-> >       cpus_read_lock();
-> >       for_each_online_cpu(cpu) {
-> > @@ -428,7 +431,7 @@ static void od_set_powersave_bias(unsigned int powersave_bias)
-> >               struct dbs_data *dbs_data;
-> >               struct od_dbs_tuners *od_tuners;
-> >
-> > -             if (cpumask_test_cpu(cpu, &done))
-> > +             if (cpumask_test_cpu(cpu, done))
-> >                       continue;
-> >
-> >               policy = cpufreq_cpu_get_raw(cpu);
-> > @@ -439,13 +442,15 @@ static void od_set_powersave_bias(unsigned int powersave_bias)
-> >               if (!policy_dbs)
-> >                       continue;
-> >
-> > -             cpumask_or(&done, &done, policy->cpus);
-> > +             cpumask_or(done, done, policy->cpus);
-> >
-> >               dbs_data = policy_dbs->dbs_data;
-> >               od_tuners = dbs_data->tuners;
-> >               od_tuners->powersave_bias = default_powersave_bias;
-> >       }
-> >       cpus_read_unlock();
-> > +
-> > +     free_cpumask_var(done);
-> >  }
-> >
-> >  void od_register_powersave_bias_handler(unsigned int (*f)
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 >
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> This patch partially reverts the changes made by the following commit:
+>
+> da0e58c038e6 intel_idle: add 'preferred_cstates' module argument
+>
+> As that commit describes, on early Sapphire Rapids Xeon platforms the C1 and
+> C1E states were mutually exclusive, so that users could only have either C1 and
+> C6, or C1E and C6.
+>
+> However, Intel firmware engineers managed to remove this limitation and make C1
+> and C1E to be completely independent, just like on previous Xeon platforms.
+>
+> Therefore, this patch:
+>  * Removes commentary describing the old, and now non-existing SPR C1E
+>    limitation.
+>  * Marks SPR C1E as available by default.
+>  * Removes the 'preferred_cstates' parameter handling for SPR. Both C1 and
+>    C1E will be available regardless of 'preferred_cstates' value.
+>
+> We expect that all SPR systems are shipping with new firmware, which includes
+> the C1/C1E improvement.
+>
+> Cc: stable@vger.kernel.org # v5.18+
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> ---
+>  drivers/idle/intel_idle.c | 24 +-----------------------
+>  1 file changed, 1 insertion(+), 23 deletions(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index 424ef470223d..ba2b485a03ed 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -879,16 +879,6 @@ static struct cpuidle_state adl_l_cstates[] __initdata = {
+>                 .enter = NULL }
+>  };
+>
+> -/*
+> - * On Sapphire Rapids Xeon C1 has to be disabled if C1E is enabled, and vice
+> - * versa. On SPR C1E is enabled only if "C1E promotion" bit is set in
+> - * MSR_IA32_POWER_CTL. But in this case there effectively no C1, because C1
+> - * requests are promoted to C1E. If the "C1E promotion" bit is cleared, then
+> - * both C1 and C1E requests end up with C1, so there is effectively no C1E.
+> - *
+> - * By default we enable C1 and disable C1E by marking it with
+> - * 'CPUIDLE_FLAG_UNUSABLE'.
+> - */
+>  static struct cpuidle_state spr_cstates[] __initdata = {
+>         {
+>                 .name = "C1",
+> @@ -901,8 +891,7 @@ static struct cpuidle_state spr_cstates[] __initdata = {
+>         {
+>                 .name = "C1E",
+>                 .desc = "MWAIT 0x01",
+> -               .flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE |
+> -                                          CPUIDLE_FLAG_UNUSABLE,
+> +               .flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
+>                 .exit_latency = 2,
+>                 .target_residency = 4,
+>                 .enter = &intel_idle,
+> @@ -1724,17 +1713,6 @@ static void __init spr_idle_state_table_update(void)
+>  {
+>         unsigned long long msr;
+>
+> -       /* Check if user prefers C1E over C1. */
+> -       if ((preferred_states_mask & BIT(2)) &&
+> -           !(preferred_states_mask & BIT(1))) {
+> -               /* Disable C1 and enable C1E. */
+> -               spr_cstates[0].flags |= CPUIDLE_FLAG_UNUSABLE;
+> -               spr_cstates[1].flags &= ~CPUIDLE_FLAG_UNUSABLE;
+> -
+> -               /* Enable C1E using the "C1E promotion" bit. */
+> -               c1e_promotion = C1E_PROMOTION_ENABLE;
+> -       }
+> -
+>         /*
+>          * By default, the C6 state assumes the worst-case scenario of package
+>          * C6. However, if PC6 is disabled, we update the numbers to match
+> --
 
 Applied as 5.20 material, thanks!
