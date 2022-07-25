@@ -2,76 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6525806C5
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 23:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFF05806D0
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 23:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237166AbiGYVaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 17:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
+        id S229708AbiGYVcU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 17:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237101AbiGYV3u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 17:29:50 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6D624BF7
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:28:14 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so7119214wmo.0
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xX3SYFJR4mHf53n4Vr/aR0/yh4w8JyaFawqhxn05BL8=;
-        b=Ij4HLpscxBF9TaBrmvC4jgjWX3nCj9PE4cjntfxI+kjCwEjGjE0jASpWEiIe0JyjMw
-         68GFDgQyFcEAVuIcHCD3vIAJAQiL3s07sT/UgRTzH3YpiTDpc5jqjdG+s5ytQzya3hsh
-         /JOTwfVIReRW5WuL4HrWAf8rlAUodd6gkEuFdakB7XkeFPIPvKWYOoVzNynTlcBfXo5i
-         T9kqnVDMIpj8HemQAVKP1qlfb4cMRFHFG+oFIY+bnn2UVVZNn1m8hM6KlKslLiEf5bq2
-         7P8joIMVHOFojnuxU2/nKnnXOwC72hbXIMMg0sg0+JEHqLIXoZAI6aUWI7ldieAKu9NL
-         mLGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xX3SYFJR4mHf53n4Vr/aR0/yh4w8JyaFawqhxn05BL8=;
-        b=v4/vRmQS5dRIriz70VyT2AJ/HVW2kLqx9QIn4JUwxSurSH+1XGwbZDsNH0Ybc67nj0
-         ItQcPuhXIoJMtQwLgppbCT8NMqkz+7wbZIqFYOFKLIsb+l9AhlcN16ofGvm4PF+P6CgM
-         9mC08kOhTm9Jzb6lXn7CvuiEX0gW9iXEXyVQsHKzaHgTy80onrbk3PJIX7RRGUVYimyl
-         SN1Tlo0pIOlTEmBeQJh269YG1f2j8ncCz863i6OE0BoLBcXeRrTAMehgNYvpXzw3FPRr
-         AMhAUn2PVmrJdcD6n6o1KK/j71i4rrSB6QMjPsZIvWlr48J2jnaHo7pv2dv7UNWRMtWR
-         ouXw==
-X-Gm-Message-State: AJIora8/ug2G6U+SxsCq4PotW2No7mZO98pMu8X3RXhAxJ14zl/+Un+K
-        RKP8TKjFJF37kMGHj4hQkKvIjw==
-X-Google-Smtp-Source: AGRyM1srmjZFMbbbTxNh4Hul6RThQDeLZ4SGw+sxbQuZTUWUwSNyWuis7XllbaW+eW244KBoWS7ykA==
-X-Received: by 2002:a05:600c:1549:b0:3a3:2aa2:6f60 with SMTP id f9-20020a05600c154900b003a32aa26f60mr9662642wmg.57.1658784492943;
-        Mon, 25 Jul 2022 14:28:12 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
-        by smtp.gmail.com with ESMTPSA id r17-20020a5d52d1000000b0021d68a504cbsm12668772wrv.94.2022.07.25.14.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 14:28:12 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
-        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
-        baolin.wang7@gmail.com, f.fainelli@gmail.com,
-        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
-        glaroque@baylibre.com, miquel.raynal@bootlin.com,
-        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
-        matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v2 32/32] thermal/of: Remove old OF code
-Date:   Mon, 25 Jul 2022 23:26:37 +0200
-Message-Id: <20220725212637.2818207-33-daniel.lezcano@linexp.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
-References: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
+        with ESMTP id S237367AbiGYVcF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 17:32:05 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B308127158
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1658784580;
+        bh=u4HDdWPvN05bSLIganNCuV3jz2/4cky6kcX3uhX6Vcs=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=Aogy8sTF2lUOFm6O8CGpJuZWskAA25532H2cQhoPY0fZmtWNqjrpBBTecljz2iVuu
+         OfujB67KSVqBscP6WEKYc9YO9ZT6LocEZg35kXyKz2pnlYnKUtbI0QrtDSciD81XYE
+         DRWP4z2Td+ucK4QYMBKPv6sF7Edoaj6Iti9rszlw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.33.85]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M3lcJ-1oFGIS3En5-000tnx for
+ <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 23:29:39 +0200
+Message-ID: <485de1a2-4e6d-e458-7c1e-b1cc22600304@gmx.de>
+Date:   Mon, 25 Jul 2022 23:29:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-pm@vger.kernel.org
+Content-Language: de-DE
+Subject: idle CPU freq with kernel 5.19-rcX
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xL4LaWeJpJAbyxmIyBxTeik1Dl0Lp5ynmNAYMmCwK9qzlTgyzNk
+ d9boTndDXe4AGK9/a30ccbTM1os7zn3pAVo9syVQAjI0UMiyGiRf3zrq++fllsXkgNu9rDB
+ Ii/UuIEEYbNjcntNpuCEjlIOvEEaKNFPEVpFVA+tUoS1XaoMmop7D1YkaVHGBMiLteym5uw
+ m03jkJj+5GsrshrESynbg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4Fs8j1bAozY=:Wi5pjDpz38lssyRfsmQ0Pu
+ cXtJyIM+n++c/00wUmrNE8KE1rTvoBKazpBRoXPptcVlItal8vbmPJeg55hGZ1Sqp+WfRSmj8
+ VAbY2l15LzFPlNErPFrmpb6+aqklhCLP3kILMdNRuMUKAjmz0dYhkjYJ+os7nlusx3+xxwnRg
+ 9w5Frc/7xsaB+Jv6IHiltYkle4pDFQGt5bjoC36FCMfoo5vgVoIo6MvOuXGPlfUwkpRtruXkN
+ e82UYsXT8WahctHcfQem3Y9YReHTw02/dPjulElxFUOM9fQUnCq5cWP+l7fbeQJ6gJbAQT/Re
+ NFd+anKTyQ4texfJD5mjajWiHCKItJxdd0ySxRdFGFmeIt7iGbjJ/wM08oCox9W7PRIh8r8tR
+ 88saPbZbqPylCrshGEXc2G7q7bAlI5er2wlT+68qYQ0cQ9+JEGxn8/xu/jPv/Ov0x/dSmO8ML
+ agfMwim96WwvB9ptkKdRJEpRw2rCM0oo0UB1nSSFhK3VDbsHjhIzpG9QVZR8czhk1JCa95LMw
+ BTxaVg94ei6cjN29CQ+7dWU0xJLeuC+jXeXahmyaOB9R0tyRcjEfQjtDp9gnTAuZaGclKnAmQ
+ ZYsibhB9bNSsM6P6m1d7a4rFZHSRgRwytxqS2DjEh6bIX6VfzVV0sFiMPtxCGhqmzBBpEc2B9
+ Z3wq1QaDJZ4efphX6IPqsrxEDOUZWTtUEYe4aTcntap1VsgwzrS+lLnunPRW1pb9m+gVw4M+F
+ X8Tsdgq6SKJfM/XJ0wyzQAXsU9CIzVMD5QQcxJro0Zg8F3xyXg/W8WIFm6tpPcC0UTtycey47
+ 9wdrDBkzowTqcyD3xshumQ1seoszjon6TJ6Ejq+/cqC2HJEMwBaYd6/qStyhDImispKAk0hBp
+ EThNCCkkne5jHIgeOee60fwpvYlWSA3ctNX/A4LMJlVrkLV8sK7HG2lJjJFxSDJBMWJdd4Y9V
+ GmWFclE2d9K9cQgZMbO1KQW1caP7yJIDht4+9nsxh0+ethxdhkGDUfdHj/7R2/+BQZlt0dbLv
+ AwbdjfVZKSUCEOLoeAB0cwLfuP4QS6mMRyPRfDcVoR5IQrNt4fq8Ykzh3mhbSl0JjJ7dh2IjG
+ h7eTYO9Q+JLLa5F2VR/x+v/6XzJOL4o7y9jlfWwxNmYtWsEBBqk/e1TvQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_75_100 autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,1011 +67,1253 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-All the drivers are converted to the new OF API, remove the old OF code.
+hallo
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
----
- drivers/thermal/thermal_core.h |   2 -
- drivers/thermal/thermal_of.c   | 810 +--------------------------------
- include/linux/thermal.h        |  75 +--
- 3 files changed, 19 insertions(+), 868 deletions(-)
+compiled kernel 5.19-rc8 with the same config as with 5.18.14 on Fedora 36
 
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index c991bb290512..2241d2dce017 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -135,13 +135,11 @@ thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
- 
- /* device tree support */
- #ifdef CONFIG_THERMAL_OF
--int of_parse_thermal_zones(void);
- int of_thermal_get_ntrips(struct thermal_zone_device *);
- bool of_thermal_is_trip_valid(struct thermal_zone_device *, int);
- const struct thermal_trip *
- of_thermal_get_trip_points(struct thermal_zone_device *);
- #else
--static inline int of_parse_thermal_zones(void) { return 0; }
- static inline int of_thermal_get_ntrips(struct thermal_zone_device *tz)
- {
- 	return 0;
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 988470d44fb6..12dbf0a415c4 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -19,93 +19,6 @@
- 
- #include "thermal_core.h"
- 
--/***   Private data structures to represent thermal device tree data ***/
--
--/**
-- * struct __thermal_cooling_bind_param - a cooling device for a trip point
-- * @cooling_device: a pointer to identify the referred cooling device
-- * @min: minimum cooling state used at this trip point
-- * @max: maximum cooling state used at this trip point
-- */
--
--struct __thermal_cooling_bind_param {
--	struct device_node *cooling_device;
--	unsigned long min;
--	unsigned long max;
--};
--
--/**
-- * struct __thermal_bind_params - a match between trip and cooling device
-- * @tcbp: a pointer to an array of cooling devices
-- * @count: number of elements in array
-- * @trip_id: the trip point index
-- * @usage: the percentage (from 0 to 100) of cooling contribution
-- */
--
--struct __thermal_bind_params {
--	struct __thermal_cooling_bind_param *tcbp;
--	unsigned int count;
--	unsigned int trip_id;
--	unsigned int usage;
--};
--
--/**
-- * struct __thermal_zone - internal representation of a thermal zone
-- * @passive_delay: polling interval while passive cooling is activated
-- * @polling_delay: zone polling interval
-- * @slope: slope of the temperature adjustment curve
-- * @offset: offset of the temperature adjustment curve
-- * @ntrips: number of trip points
-- * @trips: an array of trip points (0..ntrips - 1)
-- * @num_tbps: number of thermal bind params
-- * @tbps: an array of thermal bind params (0..num_tbps - 1)
-- * @sensor_data: sensor private data used while reading temperature and trend
-- * @ops: set of callbacks to handle the thermal zone based on DT
-- */
--
--struct __thermal_zone {
--	int passive_delay;
--	int polling_delay;
--	int slope;
--	int offset;
--
--	/* trip data */
--	int ntrips;
--	struct thermal_trip *trips;
--
--	/* cooling binding data */
--	int num_tbps;
--	struct __thermal_bind_params *tbps;
--
--	/* sensor interface */
--	void *sensor_data;
--	const struct thermal_zone_of_device_ops *ops;
--};
--
--/***   DT thermal zone device callbacks   ***/
--
--static int of_thermal_get_temp(struct thermal_zone_device *tz,
--			       int *temp)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	if (!data->ops || !data->ops->get_temp)
--		return -EINVAL;
--
--	return data->ops->get_temp(data->sensor_data, temp);
--}
--
--static int of_thermal_set_trips(struct thermal_zone_device *tz,
--				int low, int high)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	if (!data->ops || !data->ops->set_trips)
--		return -EINVAL;
--
--	return data->ops->set_trips(data->sensor_data, low, high);
--}
--
- /**
-  * of_thermal_get_ntrips - function to export number of available trip
-  *			   points.
-@@ -158,114 +71,6 @@ of_thermal_get_trip_points(struct thermal_zone_device *tz)
- }
- EXPORT_SYMBOL_GPL(of_thermal_get_trip_points);
- 
--/**
-- * of_thermal_set_emul_temp - function to set emulated temperature
-- *
-- * @tz:	pointer to a thermal zone
-- * @temp:	temperature to set
-- *
-- * This function gives the ability to set emulated value of temperature,
-- * which is handy for debugging
-- *
-- * Return: zero on success, error code otherwise
-- */
--static int of_thermal_set_emul_temp(struct thermal_zone_device *tz,
--				    int temp)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	if (!data->ops || !data->ops->set_emul_temp)
--		return -EINVAL;
--
--	return data->ops->set_emul_temp(data->sensor_data, temp);
--}
--
--static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
--				enum thermal_trend *trend)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	if (!data->ops || !data->ops->get_trend)
--		return -EINVAL;
--
--	return data->ops->get_trend(data->sensor_data, trip, trend);
--}
--
--static int of_thermal_change_mode(struct thermal_zone_device *tz,
--				enum thermal_device_mode mode)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	return data->ops->change_mode(data->sensor_data, mode);
--}
--
--static int of_thermal_bind(struct thermal_zone_device *thermal,
--			   struct thermal_cooling_device *cdev)
--{
--	struct __thermal_zone *data = thermal->devdata;
--	struct __thermal_bind_params *tbp;
--	struct __thermal_cooling_bind_param *tcbp;
--	int i, j;
--
--	if (!data || IS_ERR(data))
--		return -ENODEV;
--
--	/* find where to bind */
--	for (i = 0; i < data->num_tbps; i++) {
--		tbp = data->tbps + i;
--
--		for (j = 0; j < tbp->count; j++) {
--			tcbp = tbp->tcbp + j;
--
--			if (tcbp->cooling_device == cdev->np) {
--				int ret;
--
--				ret = thermal_zone_bind_cooling_device(thermal,
--						tbp->trip_id, cdev,
--						tcbp->max,
--						tcbp->min,
--						tbp->usage);
--				if (ret)
--					return ret;
--			}
--		}
--	}
--
--	return 0;
--}
--
--static int of_thermal_unbind(struct thermal_zone_device *thermal,
--			     struct thermal_cooling_device *cdev)
--{
--	struct __thermal_zone *data = thermal->devdata;
--	struct __thermal_bind_params *tbp;
--	struct __thermal_cooling_bind_param *tcbp;
--	int i, j;
--
--	if (!data || IS_ERR(data))
--		return -ENODEV;
--
--	/* find where to unbind */
--	for (i = 0; i < data->num_tbps; i++) {
--		tbp = data->tbps + i;
--
--		for (j = 0; j < tbp->count; j++) {
--			tcbp = tbp->tcbp + j;
--
--			if (tcbp->cooling_device == cdev->np) {
--				int ret;
--
--				ret = thermal_zone_unbind_cooling_device(thermal,
--							tbp->trip_id, cdev);
--				if (ret)
--					return ret;
--			}
--		}
--	}
--
--	return 0;
--}
--
- static int of_thermal_get_trip_type(struct thermal_zone_device *tz, int trip,
- 				    enum thermal_trip_type *type)
- {
-@@ -325,61 +130,6 @@ static int of_thermal_get_crit_temp(struct thermal_zone_device *tz,
- 	return -EINVAL;
- }
- 
--static struct thermal_zone_device_ops of_thermal_ops = {
--	.get_trip_type = of_thermal_get_trip_type,
--	.get_trip_temp = of_thermal_get_trip_temp,
--	.get_trip_hyst = of_thermal_get_trip_hyst,
--	.set_trip_hyst = of_thermal_set_trip_hyst,
--	.get_crit_temp = of_thermal_get_crit_temp,
--
--	.bind = of_thermal_bind,
--	.unbind = of_thermal_unbind,
--};
--
--/***   sensor API   ***/
--
--static struct thermal_zone_device *
--thermal_zone_of_add_sensor(struct device_node *zone,
--			   struct device_node *sensor, void *data,
--			   const struct thermal_zone_of_device_ops *ops)
--{
--	struct thermal_zone_device *tzd;
--	struct __thermal_zone *tz;
--
--	tzd = thermal_zone_get_zone_by_name(zone->name);
--	if (IS_ERR(tzd))
--		return ERR_PTR(-EPROBE_DEFER);
--
--	tz = tzd->devdata;
--
--	if (!ops)
--		return ERR_PTR(-EINVAL);
--
--	mutex_lock(&tzd->lock);
--	tz->ops = ops;
--	tz->sensor_data = data;
--
--	tzd->ops->get_temp = of_thermal_get_temp;
--	tzd->ops->get_trend = of_thermal_get_trend;
--
--	/*
--	 * The thermal zone core will calculate the window if they have set the
--	 * optional set_trips pointer.
--	 */
--	if (ops->set_trips)
--		tzd->ops->set_trips = of_thermal_set_trips;
--
--	if (ops->set_emul_temp)
--		tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
--
--	if (ops->change_mode)
--		tzd->ops->change_mode = of_thermal_change_mode;
--
--	mutex_unlock(&tzd->lock);
--
--	return tzd;
--}
--
- /**
-  * thermal_zone_of_get_sensor_id - get sensor ID from a DT thermal zone
-  * @tz_np: a valid thermal zone device node.
-@@ -424,216 +174,6 @@ int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
- }
- EXPORT_SYMBOL_GPL(thermal_zone_of_get_sensor_id);
- 
--/**
-- * thermal_zone_of_sensor_register - registers a sensor to a DT thermal zone
-- * @dev: a valid struct device pointer of a sensor device. Must contain
-- *       a valid .of_node, for the sensor node.
-- * @sensor_id: a sensor identifier, in case the sensor IP has more
-- *             than one sensors
-- * @data: a private pointer (owned by the caller) that will be passed
-- *        back, when a temperature reading is needed.
-- * @ops: struct thermal_zone_of_device_ops *. Must contain at least .get_temp.
-- *
-- * This function will search the list of thermal zones described in device
-- * tree and look for the zone that refer to the sensor device pointed by
-- * @dev->of_node as temperature providers. For the zone pointing to the
-- * sensor node, the sensor will be added to the DT thermal zone device.
-- *
-- * The thermal zone temperature is provided by the @get_temp function
-- * pointer. When called, it will have the private pointer @data back.
-- *
-- * The thermal zone temperature trend is provided by the @get_trend function
-- * pointer. When called, it will have the private pointer @data back.
-- *
-- * TODO:
-- * 01 - This function must enqueue the new sensor instead of using
-- * it as the only source of temperature values.
-- *
-- * 02 - There must be a way to match the sensor with all thermal zones
-- * that refer to it.
-- *
-- * Return: On success returns a valid struct thermal_zone_device,
-- * otherwise, it returns a corresponding ERR_PTR(). Caller must
-- * check the return value with help of IS_ERR() helper.
-- */
--struct thermal_zone_device *
--thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
--				const struct thermal_zone_of_device_ops *ops)
--{
--	struct device_node *np, *child, *sensor_np;
--	struct thermal_zone_device *tzd = ERR_PTR(-ENODEV);
--	static int old_tz_initialized;
--	int ret;
--
--	if (!old_tz_initialized) {
--		ret = of_parse_thermal_zones();
--		if (ret)
--			return ERR_PTR(ret);
--		old_tz_initialized = 1;
--	}
--
--	np = of_find_node_by_name(NULL, "thermal-zones");
--	if (!np)
--		return ERR_PTR(-ENODEV);
--
--	if (!dev || !dev->of_node) {
--		of_node_put(np);
--		return ERR_PTR(-ENODEV);
--	}
--
--	sensor_np = of_node_get(dev->of_node);
--
--	for_each_available_child_of_node(np, child) {
--		int ret, id;
--
--		/* For now, thermal framework supports only 1 sensor per zone */
--		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
--		if (ret)
--			continue;
--
--		if (id == sensor_id) {
--			tzd = thermal_zone_of_add_sensor(child, sensor_np,
--							 data, ops);
--			if (!IS_ERR(tzd))
--				thermal_zone_device_enable(tzd);
--
--			of_node_put(child);
--			goto exit;
--		}
--	}
--exit:
--	of_node_put(sensor_np);
--	of_node_put(np);
--
--	return tzd;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_of_sensor_register);
--
--/**
-- * thermal_zone_of_sensor_unregister - unregisters a sensor from a DT thermal zone
-- * @dev: a valid struct device pointer of a sensor device. Must contain
-- *       a valid .of_node, for the sensor node.
-- * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
-- *
-- * This function removes the sensor callbacks and private data from the
-- * thermal zone device registered with thermal_zone_of_sensor_register()
-- * API. It will also silent the zone by remove the .get_temp() and .get_trend()
-- * thermal zone device callbacks.
-- *
-- * TODO: When the support to several sensors per zone is added, this
-- * function must search the sensor list based on @dev parameter.
-- *
-- */
--void thermal_zone_of_sensor_unregister(struct device *dev,
--				       struct thermal_zone_device *tzd)
--{
--	struct __thermal_zone *tz;
--
--	if (!dev || !tzd || !tzd->devdata)
--		return;
--
--	tz = tzd->devdata;
--
--	/* no __thermal_zone, nothing to be done */
--	if (!tz)
--		return;
--
--	/* stop temperature polling */
--	thermal_zone_device_disable(tzd);
--
--	mutex_lock(&tzd->lock);
--	tzd->ops->get_temp = NULL;
--	tzd->ops->get_trend = NULL;
--	tzd->ops->set_emul_temp = NULL;
--	tzd->ops->change_mode = NULL;
--
--	tz->ops = NULL;
--	tz->sensor_data = NULL;
--	mutex_unlock(&tzd->lock);
--}
--EXPORT_SYMBOL_GPL(thermal_zone_of_sensor_unregister);
--
--static void devm_thermal_zone_of_sensor_release(struct device *dev, void *res)
--{
--	thermal_zone_of_sensor_unregister(dev,
--					  *(struct thermal_zone_device **)res);
--}
--
--static int devm_thermal_zone_of_sensor_match(struct device *dev, void *res,
--					     void *data)
--{
--	struct thermal_zone_device **r = res;
--
--	if (WARN_ON(!r || !*r))
--		return 0;
--
--	return *r == data;
--}
--
--/**
-- * devm_thermal_zone_of_sensor_register - Resource managed version of
-- *				thermal_zone_of_sensor_register()
-- * @dev: a valid struct device pointer of a sensor device. Must contain
-- *       a valid .of_node, for the sensor node.
-- * @sensor_id: a sensor identifier, in case the sensor IP has more
-- *	       than one sensors
-- * @data: a private pointer (owned by the caller) that will be passed
-- *	  back, when a temperature reading is needed.
-- * @ops: struct thermal_zone_of_device_ops *. Must contain at least .get_temp.
-- *
-- * Refer thermal_zone_of_sensor_register() for more details.
-- *
-- * Return: On success returns a valid struct thermal_zone_device,
-- * otherwise, it returns a corresponding ERR_PTR(). Caller must
-- * check the return value with help of IS_ERR() helper.
-- * Registered thermal_zone_device device will automatically be
-- * released when device is unbounded.
-- */
--struct thermal_zone_device *devm_thermal_zone_of_sensor_register(
--	struct device *dev, int sensor_id,
--	void *data, const struct thermal_zone_of_device_ops *ops)
--{
--	struct thermal_zone_device **ptr, *tzd;
--
--	ptr = devres_alloc(devm_thermal_zone_of_sensor_release, sizeof(*ptr),
--			   GFP_KERNEL);
--	if (!ptr)
--		return ERR_PTR(-ENOMEM);
--
--	tzd = thermal_zone_of_sensor_register(dev, sensor_id, data, ops);
--	if (IS_ERR(tzd)) {
--		devres_free(ptr);
--		return tzd;
--	}
--
--	*ptr = tzd;
--	devres_add(dev, ptr);
--
--	return tzd;
--}
--EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_register);
--
--/**
-- * devm_thermal_zone_of_sensor_unregister - Resource managed version of
-- *				thermal_zone_of_sensor_unregister().
-- * @dev: Device for which which resource was allocated.
-- * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
-- *
-- * This function removes the sensor callbacks and private data from the
-- * thermal zone device registered with devm_thermal_zone_of_sensor_register()
-- * API. It will also silent the zone by remove the .get_temp() and .get_trend()
-- * thermal zone device callbacks.
-- * Normally this function will not need to be called and the resource
-- * management code will ensure that the resource is freed.
-- */
--void devm_thermal_zone_of_sensor_unregister(struct device *dev,
--					    struct thermal_zone_device *tzd)
--{
--	WARN_ON(devres_release(dev, devm_thermal_zone_of_sensor_release,
--			       devm_thermal_zone_of_sensor_match, tzd));
--}
--EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_unregister);
--
- /***   functions parsing device tree nodes   ***/
- 
- static int of_find_trip_id(struct device_node *np, struct device_node *trip)
-@@ -665,98 +205,6 @@ static int of_find_trip_id(struct device_node *np, struct device_node *trip)
- 	return i;
- }
- 
--/**
-- * thermal_of_populate_bind_params - parse and fill cooling map data
-- * @np: DT node containing a cooling-map node
-- * @__tbp: data structure to be filled with cooling map info
-- * @trips: array of thermal zone trip points
-- * @ntrips: number of trip points inside trips.
-- *
-- * This function parses a cooling-map type of node represented by
-- * @np parameter and fills the read data into @__tbp data structure.
-- * It needs the already parsed array of trip points of the thermal zone
-- * in consideration.
-- *
-- * Return: 0 on success, proper error code otherwise
-- */
--static int thermal_of_populate_bind_params(struct device_node *tz_np,
--					   struct device_node *np,
--					   struct __thermal_bind_params *__tbp)
--{
--	struct of_phandle_args cooling_spec;
--	struct __thermal_cooling_bind_param *__tcbp;
--	struct device_node *trip;
--	int ret, i, count;
--	int trip_id;
--	u32 prop;
--
--	/* Default weight. Usage is optional */
--	__tbp->usage = THERMAL_WEIGHT_DEFAULT;
--	ret = of_property_read_u32(np, "contribution", &prop);
--	if (ret == 0)
--		__tbp->usage = prop;
--
--	trip = of_parse_phandle(np, "trip", 0);
--	if (!trip) {
--		pr_err("missing trip property\n");
--		return -ENODEV;
--	}
--
--	trip_id = of_find_trip_id(tz_np, trip);
--	if (trip_id < 0) {
--		ret = trip_id;
--		goto end;
--	}
--
--	__tbp->trip_id = trip_id;
--	
--	count = of_count_phandle_with_args(np, "cooling-device",
--					   "#cooling-cells");
--	if (count <= 0) {
--		pr_err("Add a cooling_device property with at least one device\n");
--		ret = -ENOENT;
--		goto end;
--	}
--
--	__tcbp = kcalloc(count, sizeof(*__tcbp), GFP_KERNEL);
--	if (!__tcbp) {
--		ret = -ENOMEM;
--		goto end;
--	}
--
--	for (i = 0; i < count; i++) {
--		ret = of_parse_phandle_with_args(np, "cooling-device",
--				"#cooling-cells", i, &cooling_spec);
--		if (ret < 0) {
--			pr_err("Invalid cooling-device entry\n");
--			goto free_tcbp;
--		}
--
--		__tcbp[i].cooling_device = cooling_spec.np;
--
--		if (cooling_spec.args_count >= 2) { /* at least min and max */
--			__tcbp[i].min = cooling_spec.args[0];
--			__tcbp[i].max = cooling_spec.args[1];
--		} else {
--			pr_err("wrong reference to cooling device, missing limits\n");
--		}
--	}
--
--	__tbp->tcbp = __tcbp;
--	__tbp->count = count;
--
--	goto end;
--
--free_tcbp:
--	for (i = i - 1; i >= 0; i--)
--		of_node_put(__tcbp[i].cooling_device);
--	kfree(__tcbp);
--end:
--	of_node_put(trip);
--
--	return ret;
--}
--
- /*
-  * It maps 'enum thermal_trip_type' found in include/linux/thermal.h
-  * into the device tree binding of 'trip', property type.
-@@ -873,174 +321,6 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
- 	return ERR_PTR(ret);
- }
- 
--/**
-- * thermal_of_build_thermal_zone - parse and fill one thermal zone data
-- * @np: DT node containing a thermal zone node
-- *
-- * This function parses a thermal zone type of node represented by
-- * @np parameter and fills the read data into a __thermal_zone data structure
-- * and return this pointer.
-- *
-- * TODO: Missing properties to parse: thermal-sensor-names
-- *
-- * Return: On success returns a valid struct __thermal_zone,
-- * otherwise, it returns a corresponding ERR_PTR(). Caller must
-- * check the return value with help of IS_ERR() helper.
-- */
--static struct __thermal_zone
--__init *thermal_of_build_thermal_zone(struct device_node *np)
--{
--	struct device_node *child = NULL, *gchild;
--	struct __thermal_zone *tz;
--	int ret, i;
--	u32 prop, coef[2];
--
--	if (!np) {
--		pr_err("no thermal zone np\n");
--		return ERR_PTR(-EINVAL);
--	}
--
--	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
--	if (!tz)
--		return ERR_PTR(-ENOMEM);
--
--	ret = of_property_read_u32(np, "polling-delay-passive", &prop);
--	if (ret < 0) {
--		pr_err("%pOFn: missing polling-delay-passive property\n", np);
--		goto free_tz;
--	}
--	tz->passive_delay = prop;
--
--	ret = of_property_read_u32(np, "polling-delay", &prop);
--	if (ret < 0) {
--		pr_err("%pOFn: missing polling-delay property\n", np);
--		goto free_tz;
--	}
--	tz->polling_delay = prop;
--
--	/*
--	 * REVIST: for now, the thermal framework supports only
--	 * one sensor per thermal zone. Thus, we are considering
--	 * only the first two values as slope and offset.
--	 */
--	ret = of_property_read_u32_array(np, "coefficients", coef, 2);
--	if (ret == 0) {
--		tz->slope = coef[0];
--		tz->offset = coef[1];
--	} else {
--		tz->slope = 1;
--		tz->offset = 0;
--	}
--
--	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
--	if (IS_ERR(tz->trips)) {
--		ret = PTR_ERR(tz->trips);
--		goto finish;
--	}
--
--	/* cooling-maps */
--	child = of_get_child_by_name(np, "cooling-maps");
--
--	/* cooling-maps not provided */
--	if (!child)
--		goto finish;
--
--	tz->num_tbps = of_get_child_count(child);
--	if (tz->num_tbps == 0)
--		goto finish;
--
--	tz->tbps = kcalloc(tz->num_tbps, sizeof(*tz->tbps), GFP_KERNEL);
--	if (!tz->tbps) {
--		ret = -ENOMEM;
--		goto free_trips;
--	}
--
--	i = 0;
--	for_each_child_of_node(child, gchild) {
--		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
--		if (ret) {
--			of_node_put(gchild);
--			goto free_tbps;
--		}
--	}
--
--finish:
--	of_node_put(child);
--
--	return tz;
--
--free_tbps:
--	for (i = i - 1; i >= 0; i--) {
--		struct __thermal_bind_params *tbp = tz->tbps + i;
--		int j;
--
--		for (j = 0; j < tbp->count; j++)
--			of_node_put(tbp->tcbp[j].cooling_device);
--
--		kfree(tbp->tcbp);
--	}
--
--	kfree(tz->tbps);
--free_trips:
--	kfree(tz->trips);
--free_tz:
--	kfree(tz);
--	of_node_put(child);
--
--	return ERR_PTR(ret);
--}
--
--static void of_thermal_free_zone(struct __thermal_zone *tz)
--{
--	struct __thermal_bind_params *tbp;
--	int i, j;
--
--	for (i = 0; i < tz->num_tbps; i++) {
--		tbp = tz->tbps + i;
--
--		for (j = 0; j < tbp->count; j++)
--			of_node_put(tbp->tcbp[j].cooling_device);
--
--		kfree(tbp->tcbp);
--	}
--
--	kfree(tz->tbps);
--	kfree(tz->trips);
--	kfree(tz);
--}
--
--/**
-- * of_thermal_destroy_zones - remove all zones parsed and allocated resources
-- *
-- * Finds all zones parsed and added to the thermal framework and remove them
-- * from the system, together with their resources.
-- *
-- */
--static __init void of_thermal_destroy_zones(void)
--{
--	struct device_node *np, *child;
--
--	np = of_find_node_by_name(NULL, "thermal-zones");
--	if (!np) {
--		pr_debug("unable to find thermal zones\n");
--		return;
--	}
--
--	for_each_available_child_of_node(np, child) {
--		struct thermal_zone_device *zone;
--
--		zone = thermal_zone_get_zone_by_name(child->name);
--		if (IS_ERR(zone))
--			continue;
--
--		thermal_zone_device_unregister(zone);
--		kfree(zone->tzp);
--		kfree(zone->ops);
--		of_thermal_free_zone(zone->devdata);
--	}
--	of_node_put(np);
--}
--
- static struct device_node *of_thermal_zone_find(struct device_node *sensor, int id)
- {
- 	struct device_node *np, *tz;
-@@ -1486,95 +766,7 @@ EXPORT_SYMBOL_GPL(devm_thermal_of_zone_register);
-  */
- void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
- {
--	WARN_ON(devres_release(dev, devm_thermal_zone_of_sensor_release,
-+	WARN_ON(devres_release(dev, devm_thermal_of_zone_release,
- 			       devm_thermal_of_zone_match, tz));
- }
- EXPORT_SYMBOL_GPL(devm_thermal_of_zone_unregister);
--
--/**
-- * of_parse_thermal_zones - parse device tree thermal data
-- *
-- * Initialization function that can be called by machine initialization
-- * code to parse thermal data and populate the thermal framework
-- * with hardware thermal zones info. This function only parses thermal zones.
-- * Cooling devices and sensor devices nodes are supposed to be parsed
-- * by their respective drivers.
-- *
-- * Return: 0 on success, proper error code otherwise
-- *
-- */
--int of_parse_thermal_zones(void)
--{
--	struct device_node *np, *child;
--	struct __thermal_zone *tz;
--	struct thermal_zone_device_ops *ops;
--
--	np = of_find_node_by_name(NULL, "thermal-zones");
--	if (!np) {
--		pr_debug("unable to find thermal zones\n");
--		return 0; /* Run successfully on systems without thermal DT */
--	}
--
--	for_each_available_child_of_node(np, child) {
--		struct thermal_zone_device *zone;
--		struct thermal_zone_params *tzp;
--		int i, mask = 0;
--		u32 prop;
--
--		tz = thermal_of_build_thermal_zone(child);
--		if (IS_ERR(tz)) {
--			pr_err("failed to build thermal zone %pOFn: %ld\n",
--			       child,
--			       PTR_ERR(tz));
--			continue;
--		}
--
--		ops = kmemdup(&of_thermal_ops, sizeof(*ops), GFP_KERNEL);
--		if (!ops)
--			goto exit_free;
--
--		tzp = kzalloc(sizeof(*tzp), GFP_KERNEL);
--		if (!tzp) {
--			kfree(ops);
--			goto exit_free;
--		}
--
--		/* No hwmon because there might be hwmon drivers registering */
--		tzp->no_hwmon = true;
--
--		if (!of_property_read_u32(child, "sustainable-power", &prop))
--			tzp->sustainable_power = prop;
--
--		for (i = 0; i < tz->ntrips; i++)
--			mask |= 1 << i;
--
--		/* these two are left for temperature drivers to use */
--		tzp->slope = tz->slope;
--		tzp->offset = tz->offset;
--
--		zone = thermal_zone_device_register_with_trips(child->name, tz->trips, tz->ntrips,
--							       mask, tz, ops, tzp, tz->passive_delay,
--							       tz->polling_delay);
--		if (IS_ERR(zone)) {
--			pr_err("Failed to build %pOFn zone %ld\n", child,
--			       PTR_ERR(zone));
--			kfree(tzp);
--			kfree(ops);
--			of_thermal_free_zone(tz);
--			/* attempting to build remaining zones still */
--		}
--	}
--	of_node_put(np);
--
--	return 0;
--
--exit_free:
--	of_node_put(child);
--	of_node_put(np);
--	of_thermal_free_zone(tz);
--
--	/* no memory available, so free what we have built */
--	of_thermal_destroy_zones();
--
--	return -ENOMEM;
--}
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index eb1a16f038c5..0c7a64b31821 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -298,33 +298,6 @@ struct thermal_zone_params {
- 	int offset;
- };
- 
--/**
-- * struct thermal_zone_of_device_ops - callbacks for handling DT based zones
-- *
-- * Mandatory:
-- * @get_temp: a pointer to a function that reads the sensor temperature.
-- *
-- * Optional:
-- * @get_trend: a pointer to a function that reads the sensor temperature trend.
-- * @set_trips: a pointer to a function that sets a temperature window. When
-- *	       this window is left the driver must inform the thermal core via
-- *	       thermal_zone_device_update.
-- * @set_emul_temp: a pointer to a function that sets sensor emulated
-- *		   temperature.
-- * @set_trip_temp: a pointer to a function that sets the trip temperature on
-- *		   hardware.
-- * @change_mode: a pointer to a function that notifies the thermal zone
-- *		   mode change.
-- */
--struct thermal_zone_of_device_ops {
--	int (*get_temp)(void *, int *);
--	int (*get_trend)(void *, int, enum thermal_trend *);
--	int (*set_trips)(void *, int, int);
--	int (*set_emul_temp)(void *, int);
--	int (*set_trip_temp)(void *, int, int);
--	int (*change_mode) (void *, enum thermal_device_mode);
--};
--
- /* Function declarations */
- #ifdef CONFIG_THERMAL_OF
- struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-@@ -337,45 +310,28 @@ void thermal_of_zone_unregister(struct thermal_zone_device *tz);
- 
- void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz);
- 
-+void thermal_of_zone_unregister(struct thermal_zone_device *tz);
-+
- int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
- 				  struct device_node *sensor_np,
- 				  u32 *id);
--struct thermal_zone_device *
--thermal_zone_of_sensor_register(struct device *dev, int id, void *data,
--				const struct thermal_zone_of_device_ops *ops);
--void thermal_zone_of_sensor_unregister(struct device *dev,
--				       struct thermal_zone_device *tz);
--struct thermal_zone_device *devm_thermal_zone_of_sensor_register(
--		struct device *dev, int id, void *data,
--		const struct thermal_zone_of_device_ops *ops);
--void devm_thermal_zone_of_sensor_unregister(struct device *dev,
--					    struct thermal_zone_device *tz);
- #else
--
--static inline int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
--					 struct device_node *sensor_np,
--					 u32 *id)
--{
--	return -ENOENT;
--}
--static inline struct thermal_zone_device *
--thermal_zone_of_sensor_register(struct device *dev, int id, void *data,
--				const struct thermal_zone_of_device_ops *ops)
-+static inline
-+struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id,
-+						     void *data, struct thermal_sensor_ops *ops)
- {
--	return ERR_PTR(-ENODEV);
-+	return ERR_PTR(-ENOTSUPP);
- }
- 
- static inline
--void thermal_zone_of_sensor_unregister(struct device *dev,
--				       struct thermal_zone_device *tz)
-+struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id,
-+							  void *data, struct thermal_sensor_ops *ops)
- {
-+	return ERR_PTR(-ENOTSUPP);
- }
- 
--static inline struct thermal_zone_device *devm_thermal_zone_of_sensor_register(
--		struct device *dev, int id, void *data,
--		const struct thermal_zone_of_device_ops *ops)
-+static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
- {
--	return ERR_PTR(-ENODEV);
- }
- 
- static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
-@@ -386,12 +342,17 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev, struct th
- {
- }
- 
--static inline
--void devm_thermal_zone_of_sensor_unregister(struct device *dev,
--					    struct thermal_zone_device *tz)
-+static inline void devm_thermal_of_zone_unregister(struct device *dev,
-+						   struct thermal_zone_device *tz)
- {
- }
- 
-+static inline int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
-+					 struct device_node *sensor_np,
-+					 u32 *id)
-+{
-+	return -ENOENT;
-+}
- #endif
- 
- #ifdef CONFIG_THERMAL
--- 
-2.25.1
+I see with my Intel i5-11400 (6 core with HT) running
+
+while true; do for i in /sys/devices/system/cpu/cpufreq/policy*; do
+FREQ=3D$(cat $i/scaling_cur_freq); echo $((FREQ/1000)) ; done; echo -e
+"\n"; sleep 3; done
+
+as idle CPU Freq.:
+- kernel 5.18.11: mostly ~800 MHz on all
+- kernel 5.19-rc7 mostly ~2600 MHz on at least 3-4
+
+no issue in dmesg
+no programs running wild
+
+what is wrong/my mistake ?
+
+Ronald
+
+=3D=3D=3D
+
+config from 5.18.14 is:
+
+CONFIG_UAPI_HEADER_TEST=3Dy
+CONFIG_LOCALVERSION=3D"_MY"
+CONFIG_KERNEL_ZSTD=3Dy
+CONFIG_SYSVIPC=3Dy
+CONFIG_POSIX_MQUEUE=3Dy
+CONFIG_WATCH_QUEUE=3Dy
+# CONFIG_USELIB is not set
+CONFIG_AUDIT=3Dy
+CONFIG_NO_HZ_FULL=3Dy
+CONFIG_NO_HZ=3Dy
+CONFIG_HIGH_RES_TIMERS=3Dy
+CONFIG_BPF_JIT=3Dy
+CONFIG_BPF_JIT_ALWAYS_ON=3Dy
+CONFIG_BPF_PRELOAD=3Dy
+CONFIG_BPF_LSM=3Dy
+CONFIG_PREEMPT_VOLUNTARY=3Dy
+CONFIG_SCHED_CORE=3Dy
+CONFIG_IRQ_TIME_ACCOUNTING=3Dy
+CONFIG_BSD_PROCESS_ACCT=3Dy
+CONFIG_BSD_PROCESS_ACCT_V3=3Dy
+CONFIG_TASKSTATS=3Dy
+CONFIG_TASK_DELAY_ACCT=3Dy
+CONFIG_TASK_XACCT=3Dy
+CONFIG_TASK_IO_ACCOUNTING=3Dy
+CONFIG_PSI=3Dy
+CONFIG_IKCONFIG=3Dy
+CONFIG_LOG_BUF_SHIFT=3D18
+CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=3D12
+CONFIG_NUMA_BALANCING=3Dy
+CONFIG_MEMCG=3Dy
+CONFIG_BLK_CGROUP=3Dy
+CONFIG_CFS_BANDWIDTH=3Dy
+CONFIG_CGROUP_PIDS=3Dy
+CONFIG_CGROUP_FREEZER=3Dy
+CONFIG_CGROUP_HUGETLB=3Dy
+CONFIG_CPUSETS=3Dy
+CONFIG_CGROUP_DEVICE=3Dy
+CONFIG_CGROUP_CPUACCT=3Dy
+CONFIG_CGROUP_PERF=3Dy
+CONFIG_CGROUP_BPF=3Dy
+CONFIG_CGROUP_MISC=3Dy
+CONFIG_USER_NS=3Dy
+CONFIG_CHECKPOINT_RESTORE=3Dy
+CONFIG_SCHED_AUTOGROUP=3Dy
+CONFIG_USERFAULTFD=3Dy
+# CONFIG_COMPAT_BRK is not set
+# CONFIG_SLAB_MERGE_DEFAULT is not set
+CONFIG_SLAB_FREELIST_RANDOM=3Dy
+CONFIG_SLAB_FREELIST_HARDENED=3Dy
+CONFIG_PROFILING=3Dy
+CONFIG_SMP=3Dy
+CONFIG_X86_X2APIC=3Dy
+CONFIG_X86_CPU_RESCTRL=3Dy
+# CONFIG_X86_EXTENDED_PLATFORM is not set
+CONFIG_X86_INTEL_LPSS=3Dy
+CONFIG_MCORE2=3Dy
+CONFIG_MAXSMP=3Dy
+CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS=3Dy
+CONFIG_X86_MCELOG_LEGACY=3Dy
+# CONFIG_X86_MCE_AMD is not set
+CONFIG_X86_MCE_INJECT=3Dm
+# CONFIG_PERF_EVENTS_AMD_UNCORE is not set
+CONFIG_X86_MSR=3Dy
+CONFIG_X86_CPUID=3Dy
+CONFIG_X86_CPA_STATISTICS=3Dy
+CONFIG_NUMA=3Dy
+# CONFIG_AMD_NUMA is not set
+CONFIG_X86_PMEM_LEGACY=3Dm
+CONFIG_X86_CHECK_BIOS_CORRUPTION=3Dy
+# CONFIG_X86_BOOTPARAM_MEMORY_CORRUPTION_CHECK is not set
+CONFIG_X86_SGX=3Dy
+CONFIG_EFI=3Dy
+CONFIG_EFI_STUB=3Dy
+CONFIG_EFI_MIXED=3Dy
+CONFIG_HZ_1000=3Dy
+CONFIG_KEXEC=3Dy
+CONFIG_KEXEC_FILE=3Dy
+CONFIG_KEXEC_SIG=3Dy
+CONFIG_KEXEC_BZIMAGE_VERIFY_SIG=3Dy
+CONFIG_KEXEC_JUMP=3Dy
+CONFIG_PHYSICAL_ALIGN=3D0x1000000
+CONFIG_SLS=3Dy
+CONFIG_HIBERNATION=3Dy
+CONFIG_PM_DEBUG=3Dy
+CONFIG_PM_TEST_SUSPEND=3Dy
+CONFIG_PM_TRACE_RTC=3Dy
+CONFIG_ENERGY_MODEL=3Dy
+CONFIG_ACPI_FPDT=3Dy
+CONFIG_ACPI_TAD=3Dy
+CONFIG_ACPI_DOCK=3Dy
+CONFIG_ACPI_PROCESSOR_AGGREGATOR=3Dy
+CONFIG_ACPI_PCI_SLOT=3Dy
+CONFIG_ACPI_BGRT=3Dy
+CONFIG_ACPI_NFIT=3Dm
+CONFIG_ACPI_HMAT=3Dy
+CONFIG_ACPI_APEI=3Dy
+CONFIG_ACPI_APEI_GHES=3Dy
+CONFIG_ACPI_APEI_PCIEAER=3Dy
+CONFIG_ACPI_APEI_MEMORY_FAILURE=3Dy
+CONFIG_PMIC_OPREGION=3Dy
+CONFIG_CPU_FREQ_STAT=3Dy
+CONFIG_CPU_FREQ_GOV_POWERSAVE=3Dy
+CONFIG_CPU_FREQ_GOV_USERSPACE=3Dy
+CONFIG_CPU_FREQ_GOV_ONDEMAND=3Dy
+CONFIG_CPU_FREQ_GOV_CONSERVATIVE=3Dy
+CONFIG_X86_PCC_CPUFREQ=3Dm
+CONFIG_X86_ACPI_CPUFREQ=3Dy
+# CONFIG_X86_ACPI_CPUFREQ_CPB is not set
+CONFIG_INTEL_IDLE=3Dy
+CONFIG_IA32_EMULATION=3Dy
+CONFIG_KVM=3Dm
+CONFIG_KVM_INTEL=3Dm
+CONFIG_X86_SGX_KVM=3Dy
+CONFIG_KPROBES=3Dy
+CONFIG_JUMP_LABEL=3Dy
+# CONFIG_STACKPROTECTOR_STRONG is not set
+CONFIG_MODULES=3Dy
+CONFIG_MODULE_UNLOAD=3Dy
+# CONFIG_MODULE_SIG_ALL is not set
+CONFIG_MODULE_SIG_SHA512=3Dy
+CONFIG_MODPROBE_PATH=3D"/usr/sbin/modprobe"
+CONFIG_BLK_DEV_BSGLIB=3Dy
+CONFIG_BLK_DEV_INTEGRITY=3Dy
+CONFIG_BLK_DEV_ZONED=3Dy
+CONFIG_BLK_DEV_THROTTLING=3Dy
+CONFIG_BLK_WBT=3Dy
+CONFIG_BLK_CGROUP_IOLATENCY=3Dy
+CONFIG_BLK_CGROUP_IOCOST=3Dy
+CONFIG_BLK_CGROUP_IOPRIO=3Dy
+CONFIG_BLK_SED_OPAL=3Dy
+CONFIG_BLK_INLINE_ENCRYPTION=3Dy
+CONFIG_PARTITION_ADVANCED=3Dy
+CONFIG_LDM_PARTITION=3Dy
+CONFIG_IOSCHED_BFQ=3Dy
+CONFIG_BFQ_GROUP_IOSCHED=3Dy
+CONFIG_BINFMT_MISC=3Dy
+CONFIG_PAGE_REPORTING=3Dy
+CONFIG_KSM=3Dy
+CONFIG_DEFAULT_MMAP_MIN_ADDR=3D65536
+CONFIG_MEMORY_FAILURE=3Dy
+CONFIG_HWPOISON_INJECT=3Dm
+CONFIG_TRANSPARENT_HUGEPAGE=3Dy
+CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=3Dy
+CONFIG_CMA=3Dy
+CONFIG_CMA_SYSFS=3Dy
+CONFIG_CMA_AREAS=3D7
+CONFIG_MEM_SOFT_DIRTY=3Dy
+CONFIG_ZSWAP=3Dy
+CONFIG_Z3FOLD=3Dy
+CONFIG_ZSMALLOC=3Dy
+CONFIG_NET=3Dy
+CONFIG_PACKET=3Dy
+CONFIG_PACKET_DIAG=3Dy
+CONFIG_UNIX=3Dy
+CONFIG_UNIX_DIAG=3Dy
+CONFIG_TLS=3Dy
+CONFIG_TLS_DEVICE=3Dy
+CONFIG_XFRM_USER=3Dy
+CONFIG_XFRM_INTERFACE=3Dy
+CONFIG_XFRM_SUB_POLICY=3Dy
+CONFIG_XFRM_STATISTICS=3Dy
+CONFIG_NET_KEY=3Dy
+CONFIG_NET_KEY_MIGRATE=3Dy
+CONFIG_XDP_SOCKETS=3Dy
+CONFIG_XDP_SOCKETS_DIAG=3Dy
+CONFIG_INET=3Dy
+CONFIG_IP_MULTICAST=3Dy
+CONFIG_IP_ADVANCED_ROUTER=3Dy
+CONFIG_IP_FIB_TRIE_STATS=3Dy
+CONFIG_IP_MULTIPLE_TABLES=3Dy
+CONFIG_IP_ROUTE_MULTIPATH=3Dy
+CONFIG_IP_ROUTE_VERBOSE=3Dy
+CONFIG_NET_IPIP=3Dy
+CONFIG_NET_IPGRE_DEMUX=3Dy
+CONFIG_NET_IPGRE=3Dy
+CONFIG_NET_IPGRE_BROADCAST=3Dy
+CONFIG_IP_MROUTE=3Dy
+CONFIG_IP_MROUTE_MULTIPLE_TABLES=3Dy
+CONFIG_IP_PIMSM_V1=3Dy
+CONFIG_IP_PIMSM_V2=3Dy
+CONFIG_NET_IPVTI=3Dy
+CONFIG_NET_FOU_IP_TUNNELS=3Dy
+CONFIG_INET_AH=3Dy
+CONFIG_INET_ESP=3Dy
+CONFIG_INET_ESP_OFFLOAD=3Dy
+CONFIG_INET_ESPINTCP=3Dy
+CONFIG_INET_IPCOMP=3Dy
+CONFIG_INET_UDP_DIAG=3Dy
+CONFIG_INET_RAW_DIAG=3Dy
+CONFIG_INET_DIAG_DESTROY=3Dy
+CONFIG_TCP_CONG_ADVANCED=3Dy
+CONFIG_TCP_CONG_HSTCP=3Dm
+CONFIG_TCP_CONG_HYBLA=3Dm
+CONFIG_TCP_CONG_NV=3Dm
+CONFIG_TCP_CONG_SCALABLE=3Dm
+CONFIG_TCP_CONG_LP=3Dm
+CONFIG_TCP_CONG_VENO=3Dm
+CONFIG_TCP_CONG_YEAH=3Dm
+CONFIG_TCP_CONG_ILLINOIS=3Dm
+CONFIG_TCP_CONG_DCTCP=3Dm
+CONFIG_TCP_CONG_CDG=3Dm
+CONFIG_TCP_CONG_BBR=3Dm
+CONFIG_TCP_MD5SIG=3Dy
+CONFIG_IPV6_ROUTER_PREF=3Dy
+CONFIG_IPV6_ROUTE_INFO=3Dy
+CONFIG_IPV6_OPTIMISTIC_DAD=3Dy
+CONFIG_INET6_AH=3Dm
+CONFIG_INET6_ESP=3Dm
+CONFIG_INET6_ESP_OFFLOAD=3Dm
+CONFIG_INET6_ESPINTCP=3Dy
+CONFIG_INET6_IPCOMP=3Dm
+CONFIG_IPV6_MIP6=3Dy
+CONFIG_IPV6_ILA=3Dm
+CONFIG_IPV6_VTI=3Dm
+CONFIG_IPV6_SIT=3Dm
+CONFIG_IPV6_SIT_6RD=3Dy
+CONFIG_IPV6_GRE=3Dm
+CONFIG_IPV6_SUBTREES=3Dy
+CONFIG_IPV6_MROUTE=3Dy
+CONFIG_IPV6_MROUTE_MULTIPLE_TABLES=3Dy
+CONFIG_IPV6_PIMSM_V2=3Dy
+CONFIG_IPV6_SEG6_LWTUNNEL=3Dy
+CONFIG_IPV6_SEG6_HMAC=3Dy
+CONFIG_IPV6_RPL_LWTUNNEL=3Dy
+CONFIG_IPV6_IOAM6_LWTUNNEL=3Dy
+CONFIG_NETLABEL=3Dy
+CONFIG_MPTCP=3Dy
+CONFIG_NETWORK_PHY_TIMESTAMPING=3Dy
+CONFIG_NETFILTER=3Dy
+CONFIG_BRIDGE_NETFILTER=3Dy
+CONFIG_NF_CONNTRACK=3Dm
+CONFIG_NF_CONNTRACK_SECMARK=3Dy
+CONFIG_NF_CONNTRACK_ZONES=3Dy
+CONFIG_NF_CONNTRACK_EVENTS=3Dy
+CONFIG_NF_CONNTRACK_TIMESTAMP=3Dy
+CONFIG_NF_CONNTRACK_AMANDA=3Dm
+CONFIG_NF_CONNTRACK_FTP=3Dm
+CONFIG_NF_CONNTRACK_H323=3Dm
+CONFIG_NF_CONNTRACK_IRC=3Dm
+CONFIG_NF_CONNTRACK_NETBIOS_NS=3Dm
+CONFIG_NF_CONNTRACK_SNMP=3Dm
+CONFIG_NF_CONNTRACK_PPTP=3Dm
+CONFIG_NF_CONNTRACK_SANE=3Dm
+CONFIG_NF_CONNTRACK_SIP=3Dm
+CONFIG_NF_CONNTRACK_TFTP=3Dm
+CONFIG_NF_CT_NETLINK=3Dm
+CONFIG_NF_TABLES=3Dy
+CONFIG_NF_TABLES_INET=3Dy
+CONFIG_NF_TABLES_NETDEV=3Dy
+CONFIG_NFT_NUMGEN=3Dm
+CONFIG_NFT_CT=3Dm
+CONFIG_NFT_FLOW_OFFLOAD=3Dm
+CONFIG_NFT_LOG=3Dm
+CONFIG_NFT_LIMIT=3Dm
+CONFIG_NFT_MASQ=3Dm
+CONFIG_NFT_REDIR=3Dm
+CONFIG_NFT_NAT=3Dm
+CONFIG_NFT_TUNNEL=3Dm
+CONFIG_NFT_OBJREF=3Dm
+CONFIG_NFT_QUEUE=3Dm
+CONFIG_NFT_QUOTA=3Dm
+CONFIG_NFT_REJECT=3Dm
+CONFIG_NFT_COMPAT=3Dm
+CONFIG_NFT_HASH=3Dm
+CONFIG_NFT_FIB_INET=3Dm
+CONFIG_NFT_XFRM=3Dm
+CONFIG_NFT_SOCKET=3Dm
+CONFIG_NFT_TPROXY=3Dm
+CONFIG_NFT_SYNPROXY=3Dm
+CONFIG_NFT_DUP_NETDEV=3Dm
+CONFIG_NFT_FWD_NETDEV=3Dm
+CONFIG_NFT_FIB_NETDEV=3Dm
+CONFIG_NFT_REJECT_NETDEV=3Dm
+CONFIG_NF_FLOW_TABLE_INET=3Dm
+CONFIG_NF_FLOW_TABLE=3Dm
+CONFIG_NETFILTER_XTABLES=3Dy
+CONFIG_NETFILTER_XT_SET=3Dm
+CONFIG_NETFILTER_XT_TARGET_AUDIT=3Dm
+CONFIG_NETFILTER_XT_TARGET_CHECKSUM=3Dm
+CONFIG_NETFILTER_XT_TARGET_CLASSIFY=3Dm
+CONFIG_NETFILTER_XT_TARGET_CONNMARK=3Dm
+CONFIG_NETFILTER_XT_TARGET_CONNSECMARK=3Dm
+CONFIG_NETFILTER_XT_TARGET_DSCP=3Dm
+CONFIG_NETFILTER_XT_TARGET_HMARK=3Dm
+CONFIG_NETFILTER_XT_TARGET_IDLETIMER=3Dm
+CONFIG_NETFILTER_XT_TARGET_LED=3Dm
+CONFIG_NETFILTER_XT_TARGET_LOG=3Dm
+CONFIG_NETFILTER_XT_TARGET_MARK=3Dm
+CONFIG_NETFILTER_XT_TARGET_NFLOG=3Dm
+CONFIG_NETFILTER_XT_TARGET_NFQUEUE=3Dm
+CONFIG_NETFILTER_XT_TARGET_NOTRACK=3Dm
+CONFIG_NETFILTER_XT_TARGET_TEE=3Dm
+CONFIG_NETFILTER_XT_TARGET_TPROXY=3Dm
+CONFIG_NETFILTER_XT_TARGET_TRACE=3Dm
+CONFIG_NETFILTER_XT_TARGET_SECMARK=3Dm
+CONFIG_NETFILTER_XT_TARGET_TCPMSS=3Dm
+CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP=3Dm
+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=3Dm
+CONFIG_NETFILTER_XT_MATCH_BPF=3Dm
+CONFIG_NETFILTER_XT_MATCH_CGROUP=3Dm
+CONFIG_NETFILTER_XT_MATCH_CLUSTER=3Dm
+CONFIG_NETFILTER_XT_MATCH_COMMENT=3Dm
+CONFIG_NETFILTER_XT_MATCH_CONNBYTES=3Dm
+CONFIG_NETFILTER_XT_MATCH_CONNLABEL=3Dm
+CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=3Dm
+CONFIG_NETFILTER_XT_MATCH_CONNMARK=3Dm
+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=3Dm
+CONFIG_NETFILTER_XT_MATCH_CPU=3Dm
+CONFIG_NETFILTER_XT_MATCH_DCCP=3Dm
+CONFIG_NETFILTER_XT_MATCH_DEVGROUP=3Dm
+CONFIG_NETFILTER_XT_MATCH_DSCP=3Dm
+CONFIG_NETFILTER_XT_MATCH_ESP=3Dm
+CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=3Dm
+CONFIG_NETFILTER_XT_MATCH_HELPER=3Dm
+CONFIG_NETFILTER_XT_MATCH_IPCOMP=3Dm
+CONFIG_NETFILTER_XT_MATCH_IPRANGE=3Dm
+CONFIG_NETFILTER_XT_MATCH_IPVS=3Dm
+CONFIG_NETFILTER_XT_MATCH_L2TP=3Dm
+CONFIG_NETFILTER_XT_MATCH_LENGTH=3Dm
+CONFIG_NETFILTER_XT_MATCH_LIMIT=3Dm
+CONFIG_NETFILTER_XT_MATCH_MAC=3Dm
+CONFIG_NETFILTER_XT_MATCH_MARK=3Dm
+CONFIG_NETFILTER_XT_MATCH_MULTIPORT=3Dm
+CONFIG_NETFILTER_XT_MATCH_NFACCT=3Dm
+CONFIG_NETFILTER_XT_MATCH_OSF=3Dm
+CONFIG_NETFILTER_XT_MATCH_OWNER=3Dm
+CONFIG_NETFILTER_XT_MATCH_POLICY=3Dm
+CONFIG_NETFILTER_XT_MATCH_PHYSDEV=3Dm
+CONFIG_NETFILTER_XT_MATCH_PKTTYPE=3Dm
+CONFIG_NETFILTER_XT_MATCH_QUOTA=3Dm
+CONFIG_NETFILTER_XT_MATCH_RATEEST=3Dm
+CONFIG_NETFILTER_XT_MATCH_REALM=3Dm
+CONFIG_NETFILTER_XT_MATCH_RECENT=3Dm
+CONFIG_NETFILTER_XT_MATCH_SCTP=3Dm
+CONFIG_NETFILTER_XT_MATCH_SOCKET=3Dm
+CONFIG_NETFILTER_XT_MATCH_STATE=3Dm
+CONFIG_NETFILTER_XT_MATCH_STATISTIC=3Dm
+CONFIG_NETFILTER_XT_MATCH_STRING=3Dm
+CONFIG_NETFILTER_XT_MATCH_TCPMSS=3Dm
+CONFIG_NETFILTER_XT_MATCH_TIME=3Dm
+CONFIG_NETFILTER_XT_MATCH_U32=3Dm
+CONFIG_IP_SET=3Dm
+CONFIG_IP_SET_BITMAP_IP=3Dm
+CONFIG_IP_SET_BITMAP_IPMAC=3Dm
+CONFIG_IP_SET_BITMAP_PORT=3Dm
+CONFIG_IP_SET_HASH_IP=3Dm
+CONFIG_IP_SET_HASH_IPMARK=3Dm
+CONFIG_IP_SET_HASH_IPPORT=3Dm
+CONFIG_IP_SET_HASH_IPPORTIP=3Dm
+CONFIG_IP_SET_HASH_IPPORTNET=3Dm
+CONFIG_IP_SET_HASH_IPMAC=3Dm
+CONFIG_IP_SET_HASH_MAC=3Dm
+CONFIG_IP_SET_HASH_NETPORTNET=3Dm
+CONFIG_IP_SET_HASH_NET=3Dm
+CONFIG_IP_SET_HASH_NETNET=3Dm
+CONFIG_IP_SET_HASH_NETPORT=3Dm
+CONFIG_IP_SET_HASH_NETIFACE=3Dm
+CONFIG_IP_SET_LIST_SET=3Dm
+CONFIG_IP_VS=3Dm
+CONFIG_IP_VS_IPV6=3Dy
+CONFIG_IP_VS_PROTO_TCP=3Dy
+CONFIG_IP_VS_PROTO_UDP=3Dy
+CONFIG_IP_VS_PROTO_ESP=3Dy
+CONFIG_IP_VS_PROTO_AH=3Dy
+CONFIG_IP_VS_PROTO_SCTP=3Dy
+CONFIG_IP_VS_RR=3Dm
+CONFIG_IP_VS_WRR=3Dm
+CONFIG_IP_VS_LC=3Dm
+CONFIG_IP_VS_WLC=3Dm
+CONFIG_IP_VS_FO=3Dm
+CONFIG_IP_VS_OVF=3Dm
+CONFIG_IP_VS_LBLC=3Dm
+CONFIG_IP_VS_LBLCR=3Dm
+CONFIG_IP_VS_DH=3Dm
+CONFIG_IP_VS_SH=3Dm
+CONFIG_IP_VS_MH=3Dm
+CONFIG_IP_VS_SED=3Dm
+CONFIG_IP_VS_NQ=3Dm
+CONFIG_IP_VS_TWOS=3Dm
+CONFIG_IP_VS_FTP=3Dm
+CONFIG_IP_VS_PE_SIP=3Dm
+CONFIG_NF_SOCKET_IPV4=3Dy
+CONFIG_NF_TPROXY_IPV4=3Dy
+CONFIG_NFT_DUP_IPV4=3Dm
+CONFIG_NFT_FIB_IPV4=3Dm
+CONFIG_NF_TABLES_ARP=3Dy
+CONFIG_NF_LOG_ARP=3Dm
+CONFIG_NF_LOG_IPV4=3Dm
+CONFIG_IP_NF_IPTABLES=3Dm
+CONFIG_IP_NF_MATCH_AH=3Dm
+CONFIG_IP_NF_MATCH_ECN=3Dm
+CONFIG_IP_NF_MATCH_RPFILTER=3Dm
+CONFIG_IP_NF_MATCH_TTL=3Dm
+CONFIG_IP_NF_FILTER=3Dm
+CONFIG_IP_NF_TARGET_REJECT=3Dm
+CONFIG_IP_NF_TARGET_SYNPROXY=3Dm
+CONFIG_IP_NF_NAT=3Dm
+CONFIG_IP_NF_TARGET_MASQUERADE=3Dm
+CONFIG_IP_NF_TARGET_NETMAP=3Dm
+CONFIG_IP_NF_TARGET_REDIRECT=3Dm
+CONFIG_IP_NF_MANGLE=3Dm
+CONFIG_IP_NF_TARGET_CLUSTERIP=3Dm
+CONFIG_IP_NF_TARGET_ECN=3Dm
+CONFIG_IP_NF_TARGET_TTL=3Dm
+CONFIG_IP_NF_RAW=3Dm
+CONFIG_IP_NF_SECURITY=3Dm
+CONFIG_IP_NF_ARPTABLES=3Dm
+CONFIG_IP_NF_ARPFILTER=3Dm
+CONFIG_IP_NF_ARP_MANGLE=3Dm
+CONFIG_NFT_DUP_IPV6=3Dm
+CONFIG_NFT_FIB_IPV6=3Dm
+CONFIG_IP6_NF_IPTABLES=3Dm
+CONFIG_IP6_NF_MATCH_AH=3Dm
+CONFIG_IP6_NF_MATCH_EUI64=3Dm
+CONFIG_IP6_NF_MATCH_FRAG=3Dm
+CONFIG_IP6_NF_MATCH_OPTS=3Dm
+CONFIG_IP6_NF_MATCH_HL=3Dm
+CONFIG_IP6_NF_MATCH_IPV6HEADER=3Dm
+CONFIG_IP6_NF_MATCH_MH=3Dm
+CONFIG_IP6_NF_MATCH_RPFILTER=3Dm
+CONFIG_IP6_NF_MATCH_RT=3Dm
+CONFIG_IP6_NF_MATCH_SRH=3Dm
+CONFIG_IP6_NF_TARGET_HL=3Dm
+CONFIG_IP6_NF_FILTER=3Dm
+CONFIG_IP6_NF_TARGET_REJECT=3Dm
+CONFIG_IP6_NF_TARGET_SYNPROXY=3Dm
+CONFIG_IP6_NF_MANGLE=3Dm
+CONFIG_IP6_NF_RAW=3Dm
+CONFIG_IP6_NF_SECURITY=3Dm
+CONFIG_IP6_NF_NAT=3Dm
+CONFIG_IP6_NF_TARGET_MASQUERADE=3Dm
+CONFIG_IP6_NF_TARGET_NPT=3Dm
+CONFIG_NF_TABLES_BRIDGE=3Dm
+CONFIG_NFT_BRIDGE_META=3Dm
+CONFIG_NFT_BRIDGE_REJECT=3Dm
+CONFIG_NF_CONNTRACK_BRIDGE=3Dm
+CONFIG_BRIDGE_NF_EBTABLES=3Dm
+CONFIG_BRIDGE_EBT_BROUTE=3Dm
+CONFIG_BRIDGE_EBT_T_FILTER=3Dm
+CONFIG_BRIDGE_EBT_T_NAT=3Dm
+CONFIG_BRIDGE_EBT_802_3=3Dm
+CONFIG_BRIDGE_EBT_AMONG=3Dm
+CONFIG_BRIDGE_EBT_ARP=3Dm
+CONFIG_BRIDGE_EBT_IP=3Dm
+CONFIG_BRIDGE_EBT_IP6=3Dm
+CONFIG_BRIDGE_EBT_LIMIT=3Dm
+CONFIG_BRIDGE_EBT_MARK=3Dm
+CONFIG_BRIDGE_EBT_PKTTYPE=3Dm
+CONFIG_BRIDGE_EBT_STP=3Dm
+CONFIG_BRIDGE_EBT_VLAN=3Dm
+CONFIG_BRIDGE_EBT_ARPREPLY=3Dm
+CONFIG_BRIDGE_EBT_DNAT=3Dm
+CONFIG_BRIDGE_EBT_MARK_T=3Dm
+CONFIG_BRIDGE_EBT_REDIRECT=3Dm
+CONFIG_BRIDGE_EBT_SNAT=3Dm
+CONFIG_BRIDGE_EBT_LOG=3Dm
+CONFIG_BRIDGE_EBT_NFLOG=3Dm
+CONFIG_BPFILTER=3Dy
+CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1=3Dy
+CONFIG_SCTP_COOKIE_HMAC_MD5=3Dy
+CONFIG_RDS=3Dy
+CONFIG_RDS_TCP=3Dy
+CONFIG_TIPC=3Dy
+CONFIG_TIPC_DIAG=3Dm
+CONFIG_L2TP=3Dy
+CONFIG_L2TP_DEBUGFS=3Dm
+CONFIG_L2TP_V3=3Dy
+CONFIG_L2TP_IP=3Dm
+CONFIG_L2TP_ETH=3Dm
+CONFIG_BRIDGE=3Dy
+CONFIG_BRIDGE_MRP=3Dy
+CONFIG_BRIDGE_CFM=3Dy
+CONFIG_6LOWPAN=3Dm
+CONFIG_NET_SCHED=3Dy
+CONFIG_NET_SCH_CBQ=3Dm
+CONFIG_NET_SCH_HTB=3Dm
+CONFIG_NET_SCH_HFSC=3Dm
+CONFIG_NET_SCH_PRIO=3Dm
+CONFIG_NET_SCH_MULTIQ=3Dm
+CONFIG_NET_SCH_RED=3Dm
+CONFIG_NET_SCH_SFB=3Dm
+CONFIG_NET_SCH_SFQ=3Dm
+CONFIG_NET_SCH_TEQL=3Dm
+CONFIG_NET_SCH_TBF=3Dm
+CONFIG_NET_SCH_CBS=3Dm
+CONFIG_NET_SCH_ETF=3Dm
+CONFIG_NET_SCH_TAPRIO=3Dm
+CONFIG_NET_SCH_GRED=3Dm
+CONFIG_NET_SCH_DSMARK=3Dm
+CONFIG_NET_SCH_NETEM=3Dm
+CONFIG_NET_SCH_DRR=3Dm
+CONFIG_NET_SCH_MQPRIO=3Dm
+CONFIG_NET_SCH_CHOKE=3Dm
+CONFIG_NET_SCH_QFQ=3Dm
+CONFIG_NET_SCH_CODEL=3Dm
+CONFIG_NET_SCH_FQ_CODEL=3Dy
+CONFIG_NET_SCH_CAKE=3Dm
+CONFIG_NET_SCH_FQ=3Dm
+CONFIG_NET_SCH_HHF=3Dm
+CONFIG_NET_SCH_PIE=3Dm
+CONFIG_NET_SCH_INGRESS=3Dm
+CONFIG_NET_SCH_PLUG=3Dm
+CONFIG_NET_SCH_ETS=3Dm
+CONFIG_NET_CLS_BASIC=3Dm
+CONFIG_NET_CLS_TCINDEX=3Dm
+CONFIG_NET_CLS_ROUTE4=3Dm
+CONFIG_NET_CLS_FW=3Dm
+CONFIG_NET_CLS_U32=3Dm
+CONFIG_CLS_U32_PERF=3Dy
+CONFIG_CLS_U32_MARK=3Dy
+CONFIG_NET_CLS_RSVP=3Dm
+CONFIG_NET_CLS_RSVP6=3Dm
+CONFIG_NET_CLS_FLOW=3Dm
+CONFIG_NET_CLS_CGROUP=3Dy
+CONFIG_NET_CLS_BPF=3Dm
+CONFIG_NET_CLS_FLOWER=3Dm
+CONFIG_NET_CLS_MATCHALL=3Dm
+CONFIG_NET_EMATCH=3Dy
+CONFIG_NET_EMATCH_CMP=3Dm
+CONFIG_NET_EMATCH_NBYTE=3Dm
+CONFIG_NET_EMATCH_U32=3Dm
+CONFIG_NET_EMATCH_META=3Dm
+CONFIG_NET_EMATCH_TEXT=3Dm
+CONFIG_NET_EMATCH_IPSET=3Dm
+CONFIG_NET_EMATCH_IPT=3Dm
+CONFIG_NET_CLS_ACT=3Dy
+CONFIG_NET_ACT_POLICE=3Dm
+CONFIG_NET_ACT_GACT=3Dm
+CONFIG_GACT_PROB=3Dy
+CONFIG_NET_ACT_MIRRED=3Dm
+CONFIG_NET_ACT_SAMPLE=3Dm
+CONFIG_NET_ACT_IPT=3Dm
+CONFIG_NET_ACT_NAT=3Dm
+CONFIG_NET_ACT_PEDIT=3Dm
+CONFIG_NET_ACT_SIMP=3Dm
+CONFIG_NET_ACT_SKBEDIT=3Dm
+CONFIG_NET_ACT_CSUM=3Dm
+CONFIG_NET_ACT_MPLS=3Dm
+CONFIG_NET_ACT_VLAN=3Dm
+CONFIG_NET_ACT_BPF=3Dm
+CONFIG_NET_ACT_CONNMARK=3Dm
+CONFIG_NET_ACT_CTINFO=3Dm
+CONFIG_NET_ACT_SKBMOD=3Dm
+CONFIG_NET_ACT_IFE=3Dm
+CONFIG_NET_ACT_TUNNEL_KEY=3Dm
+CONFIG_NET_ACT_CT=3Dm
+CONFIG_NET_ACT_GATE=3Dm
+CONFIG_NET_IFE_SKBMARK=3Dm
+CONFIG_NET_IFE_SKBPRIO=3Dm
+CONFIG_NET_IFE_SKBTCINDEX=3Dm
+CONFIG_NET_TC_SKB_EXT=3Dy
+CONFIG_VSOCKETS=3Dy
+CONFIG_VIRTIO_VSOCKETS=3Dy
+CONFIG_NETLINK_DIAG=3Dy
+CONFIG_MPLS=3Dy
+CONFIG_NET_MPLS_GSO=3Dm
+CONFIG_MPLS_ROUTING=3Dm
+CONFIG_MPLS_IPTUNNEL=3Dm
+CONFIG_NET_SWITCHDEV=3Dy
+CONFIG_NET_L3_MASTER_DEV=3Dy
+CONFIG_NET_NCSI=3Dy
+CONFIG_NCSI_OEM_CMD_GET_MAC=3Dy
+CONFIG_NCSI_OEM_CMD_KEEP_PHY=3Dy
+CONFIG_CGROUP_NET_PRIO=3Dy
+CONFIG_BPF_STREAM_PARSER=3Dy
+CONFIG_NET_PKTGEN=3Dm
+CONFIG_BT=3Dm
+CONFIG_BT_RFCOMM=3Dm
+CONFIG_BT_RFCOMM_TTY=3Dy
+CONFIG_BT_BNEP=3Dm
+CONFIG_BT_BNEP_MC_FILTER=3Dy
+CONFIG_BT_BNEP_PROTO_FILTER=3Dy
+CONFIG_BT_HIDP=3Dm
+CONFIG_BT_6LOWPAN=3Dm
+CONFIG_BT_LEDS=3Dy
+CONFIG_BT_MSFTEXT=3Dy
+CONFIG_BT_HCIBTUSB=3Dm
+CONFIG_BT_HCIBTUSB_AUTOSUSPEND=3Dy
+# CONFIG_BT_HCIBTUSB_BCM is not set
+# CONFIG_BT_HCIBTUSB_RTL is not set
+CONFIG_BT_HCIBTSDIO=3Dm
+CONFIG_BT_HCIUART=3Dm
+CONFIG_BT_HCIUART_BCSP=3Dy
+CONFIG_BT_HCIUART_LL=3Dy
+CONFIG_BT_HCIUART_INTEL=3Dy
+CONFIG_BT_HCIUART_AG6XX=3Dy
+CONFIG_BT_HCIVHCI=3Dm
+CONFIG_BT_VIRTIO=3Dm
+CONFIG_AF_RXRPC=3Dm
+CONFIG_AF_RXRPC_IPV6=3Dy
+CONFIG_AF_RXRPC_DEBUG=3Dy
+CONFIG_RXKAD=3Dy
+CONFIG_AF_KCM=3Dy
+CONFIG_MCTP=3Dy
+CONFIG_CFG80211=3Dm
+CONFIG_CFG80211_DEBUGFS=3Dy
+CONFIG_CFG80211_WEXT=3Dy
+CONFIG_MAC80211=3Dm
+CONFIG_MAC80211_MESH=3Dy
+CONFIG_MAC80211_DEBUGFS=3Dy
+CONFIG_RFKILL=3Dm
+CONFIG_RFKILL_GPIO=3Dm
+CONFIG_PCI=3Dy
+CONFIG_PCIEPORTBUS=3Dy
+CONFIG_HOTPLUG_PCI_PCIE=3Dy
+CONFIG_PCIEAER=3Dy
+CONFIG_PCIEAER_INJECT=3Dm
+CONFIG_PCIE_ECRC=3Dy
+CONFIG_PCIE_DPC=3Dy
+CONFIG_PCIE_PTM=3Dy
+CONFIG_PCIE_EDR=3Dy
+CONFIG_PCI_MSI=3Dy
+CONFIG_PCI_STUB=3Dy
+CONFIG_PCI_PF_STUB=3Dy
+CONFIG_PCI_IOV=3Dy
+CONFIG_HOTPLUG_PCI=3Dy
+CONFIG_DEVTMPFS=3Dy
+CONFIG_DEVTMPFS_MOUNT=3Dy
+CONFIG_DEVTMPFS_SAFE=3Dy
+CONFIG_FW_LOADER_USER_HELPER=3Dy
+CONFIG_FW_LOADER_COMPRESS=3Dy
+CONFIG_DEBUG_DEVRES=3Dy
+CONFIG_CONNECTOR=3Dy
+CONFIG_DMI_SYSFS=3Dy
+CONFIG_SYSFB_SIMPLEFB=3Dy
+# CONFIG_EFI_VARS_PSTORE is not set
+CONFIG_EFI_RCI2_TABLE=3Dy
+# CONFIG_PNP_DEBUG_MESSAGES is not set
+CONFIG_ZRAM=3Dy
+CONFIG_ZRAM_DEF_COMP_ZSTD=3Dy
+CONFIG_ZRAM_WRITEBACK=3Dy
+CONFIG_BLK_DEV_LOOP=3Dy
+CONFIG_BLK_DEV_LOOP_MIN_COUNT=3D0
+CONFIG_BLK_DEV_DRBD=3Dm
+CONFIG_BLK_DEV_RAM=3Dy
+CONFIG_BLK_DEV_RAM_SIZE=3D16384
+CONFIG_VIRTIO_BLK=3Dm
+CONFIG_BLK_DEV_NVME=3Dy
+CONFIG_NVME_MULTIPATH=3Dy
+CONFIG_NVME_HWMON=3Dy
+CONFIG_EEPROM_AT24=3Dy
+CONFIG_EEPROM_EE1004=3Dy
+CONFIG_INTEL_MEI_TXE=3Dm
+CONFIG_INTEL_MEI_HDCP=3Dm
+CONFIG_INTEL_MEI_PXP=3Dm
+CONFIG_UACCE=3Dm
+CONFIG_BLK_DEV_SD=3Dy
+CONFIG_BLK_DEV_SR=3Dy
+CONFIG_CHR_DEV_SG=3Dy
+CONFIG_SCSI_CONSTANTS=3Dy
+CONFIG_SCSI_LOGGING=3Dy
+CONFIG_SCSI_SCAN_ASYNC=3Dy
+# CONFIG_SCSI_LOWLEVEL is not set
+CONFIG_ATA=3Dy
+CONFIG_SATA_AHCI=3Dy
+CONFIG_SATA_MOBILE_LPM_POLICY=3D3
+# CONFIG_ATA_SFF is not set
+CONFIG_MD=3Dy
+CONFIG_BLK_DEV_DM=3Dy
+CONFIG_DM_INIT=3Dy
+CONFIG_DM_UEVENT=3Dy
+CONFIG_DM_VERITY=3Dy
+CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=3Dy
+CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING=3Dy
+CONFIG_DM_VERITY_FEC=3Dy
+CONFIG_DM_AUDIT=3Dy
+CONFIG_NETDEVICES=3Dy
+CONFIG_BONDING=3Dm
+CONFIG_DUMMY=3Dm
+CONFIG_WIREGUARD=3Dm
+CONFIG_NET_TEAM=3Dm
+CONFIG_NET_TEAM_MODE_BROADCAST=3Dm
+CONFIG_NET_TEAM_MODE_ROUNDROBIN=3Dm
+CONFIG_NET_TEAM_MODE_RANDOM=3Dm
+CONFIG_NET_TEAM_MODE_ACTIVEBACKUP=3Dm
+CONFIG_NET_TEAM_MODE_LOADBALANCE=3Dm
+CONFIG_GENEVE=3Dm
+CONFIG_BAREUDP=3Dm
+CONFIG_AMT=3Dm
+CONFIG_MACSEC=3Dm
+CONFIG_NETCONSOLE=3Dy
+CONFIG_NETCONSOLE_DYNAMIC=3Dy
+CONFIG_TUN=3Dm
+CONFIG_VETH=3Dm
+CONFIG_VIRTIO_NET=3Dm
+CONFIG_NLMON=3Dm
+CONFIG_NET_VRF=3Dm
+# CONFIG_NET_VENDOR_3COM is not set
+# CONFIG_NET_VENDOR_ADAPTEC is not set
+# CONFIG_NET_VENDOR_AGERE is not set
+# CONFIG_NET_VENDOR_ALACRITECH is not set
+# CONFIG_NET_VENDOR_ALTEON is not set
+# CONFIG_NET_VENDOR_AMAZON is not set
+# CONFIG_NET_VENDOR_AMD is not set
+# CONFIG_NET_VENDOR_AQUANTIA is not set
+# CONFIG_NET_VENDOR_ARC is not set
+# CONFIG_NET_VENDOR_ASIX is not set
+# CONFIG_NET_VENDOR_ATHEROS is not set
+# CONFIG_NET_VENDOR_BROADCOM is not set
+# CONFIG_NET_VENDOR_CADENCE is not set
+# CONFIG_NET_VENDOR_CAVIUM is not set
+# CONFIG_NET_VENDOR_CHELSIO is not set
+# CONFIG_NET_VENDOR_CISCO is not set
+# CONFIG_NET_VENDOR_CORTINA is not set
+# CONFIG_NET_VENDOR_DEC is not set
+# CONFIG_NET_VENDOR_DLINK is not set
+# CONFIG_NET_VENDOR_EMULEX is not set
+# CONFIG_NET_VENDOR_ENGLEDER is not set
+# CONFIG_NET_VENDOR_EZCHIP is not set
+# CONFIG_NET_VENDOR_GOOGLE is not set
+# CONFIG_NET_VENDOR_HUAWEI is not set
+# CONFIG_NET_VENDOR_I825XX is not set
+CONFIG_IGC=3Dy
+# CONFIG_NET_VENDOR_LITEX is not set
+# CONFIG_NET_VENDOR_MARVELL is not set
+# CONFIG_NET_VENDOR_MELLANOX is not set
+# CONFIG_NET_VENDOR_MICREL is not set
+# CONFIG_NET_VENDOR_MICROCHIP is not set
+# CONFIG_NET_VENDOR_MICROSEMI is not set
+# CONFIG_NET_VENDOR_MICROSOFT is not set
+# CONFIG_NET_VENDOR_MYRI is not set
+# CONFIG_NET_VENDOR_NI is not set
+# CONFIG_NET_VENDOR_NATSEMI is not set
+# CONFIG_NET_VENDOR_NETERION is not set
+# CONFIG_NET_VENDOR_NETRONOME is not set
+# CONFIG_NET_VENDOR_NVIDIA is not set
+# CONFIG_NET_VENDOR_OKI is not set
+CONFIG_HAMACHI=3Dm
+CONFIG_YELLOWFIN=3Dm
+# CONFIG_NET_VENDOR_PENSANDO is not set
+# CONFIG_NET_VENDOR_QLOGIC is not set
+# CONFIG_NET_VENDOR_BROCADE is not set
+# CONFIG_NET_VENDOR_QUALCOMM is not set
+# CONFIG_NET_VENDOR_RDC is not set
+# CONFIG_NET_VENDOR_REALTEK is not set
+# CONFIG_NET_VENDOR_RENESAS is not set
+# CONFIG_NET_VENDOR_ROCKER is not set
+# CONFIG_NET_VENDOR_SAMSUNG is not set
+# CONFIG_NET_VENDOR_SEEQ is not set
+# CONFIG_NET_VENDOR_SILAN is not set
+# CONFIG_NET_VENDOR_SIS is not set
+# CONFIG_NET_VENDOR_SOLARFLARE is not set
+# CONFIG_NET_VENDOR_SMSC is not set
+# CONFIG_NET_VENDOR_SOCIONEXT is not set
+# CONFIG_NET_VENDOR_STMICRO is not set
+# CONFIG_NET_VENDOR_SUN is not set
+# CONFIG_NET_VENDOR_SYNOPSYS is not set
+# CONFIG_NET_VENDOR_TEHUTI is not set
+# CONFIG_NET_VENDOR_TI is not set
+# CONFIG_NET_VENDOR_VERTEXCOM is not set
+# CONFIG_NET_VENDOR_VIA is not set
+# CONFIG_NET_VENDOR_WIZNET is not set
+# CONFIG_NET_VENDOR_XILINX is not set
+CONFIG_PHYLIB=3Dy
+CONFIG_LED_TRIGGER_PHY=3Dy
+CONFIG_MDIO_BITBANG=3Dm
+# CONFIG_USB_NET_DRIVERS is not set
+# CONFIG_WLAN_VENDOR_ADMTEK is not set
+# CONFIG_WLAN_VENDOR_ATH is not set
+# CONFIG_WLAN_VENDOR_ATMEL is not set
+# CONFIG_WLAN_VENDOR_BROADCOM is not set
+# CONFIG_WLAN_VENDOR_CISCO is not set
+CONFIG_IWLWIFI=3Dm
+CONFIG_IWLDVM=3Dm
+CONFIG_IWLMVM=3Dm
+CONFIG_IWLWIFI_DEBUG=3Dy
+CONFIG_IWLWIFI_DEBUGFS=3Dy
+# CONFIG_WLAN_VENDOR_INTERSIL is not set
+# CONFIG_WLAN_VENDOR_MARVELL is not set
+# CONFIG_WLAN_VENDOR_MEDIATEK is not set
+# CONFIG_WLAN_VENDOR_MICROCHIP is not set
+# CONFIG_WLAN_VENDOR_RALINK is not set
+# CONFIG_WLAN_VENDOR_REALTEK is not set
+# CONFIG_WLAN_VENDOR_RSI is not set
+# CONFIG_WLAN_VENDOR_ST is not set
+# CONFIG_WLAN_VENDOR_TI is not set
+# CONFIG_WLAN_VENDOR_ZYDAS is not set
+# CONFIG_WLAN_VENDOR_QUANTENNA is not set
+CONFIG_NETDEVSIM=3Dm
+CONFIG_INPUT_SPARSEKMAP=3Dy
+CONFIG_INPUT_MOUSEDEV=3Dy
+CONFIG_INPUT_EVDEV=3Dy
+# CONFIG_MOUSE_PS2 is not set
+CONFIG_INPUT_MISC=3Dy
+CONFIG_INPUT_PCSPKR=3Dy
+# CONFIG_LEGACY_PTYS is not set
+CONFIG_SERIAL_8250=3Dy
+# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
+CONFIG_SERIAL_8250_CONSOLE=3Dy
+# CONFIG_SERIAL_8250_EXAR is not set
+CONFIG_SERIAL_8250_NR_UARTS=3D32
+CONFIG_SERIAL_8250_RUNTIME_UARTS=3D32
+# CONFIG_SERIAL_8250_PERICOM is not set
+CONFIG_SERIAL_DEV_BUS=3Dy
+CONFIG_HW_RANDOM=3Dy
+CONFIG_HW_RANDOM_TIMERIOMEM=3Dy
+# CONFIG_HW_RANDOM_AMD is not set
+# CONFIG_HW_RANDOM_VIA is not set
+CONFIG_NVRAM=3Dy
+CONFIG_HPET=3Dy
+# CONFIG_HPET_MMAP is not set
+CONFIG_TCG_TIS_SPI=3Dm
+CONFIG_TCG_TIS_SPI_CR50=3Dy
+CONFIG_TCG_TIS_I2C_ATMEL=3Dm
+CONFIG_TCG_TIS_I2C_INFINEON=3Dm
+CONFIG_TCG_TIS_I2C_NUVOTON=3Dm
+CONFIG_TCG_NSC=3Dm
+CONFIG_TCG_ATMEL=3Dm
+CONFIG_TCG_INFINEON=3Dm
+CONFIG_TCG_VTPM_PROXY=3Dm
+# CONFIG_ACPI_I2C_OPREGION is not set
+# CONFIG_I2C_COMPAT is not set
+CONFIG_I2C_CHARDEV=3Dy
+CONFIG_I2C_I801=3Dy
+CONFIG_SPI=3Dy
+CONFIG_PINCTRL_TIGERLAKE=3Dy
+CONFIG_SENSORS_DRIVETEMP=3Dy
+CONFIG_SENSORS_CORETEMP=3Dy
+CONFIG_SENSORS_JC42=3Dy
+CONFIG_SENSORS_NCT6775=3Dy
+CONFIG_SENSORS_ACPI_POWER=3Dm
+CONFIG_SENSORS_ATK0110=3Dm
+CONFIG_SENSORS_ASUS_WMI=3Dm
+CONFIG_SENSORS_ASUS_WMI_EC=3Dm
+CONFIG_THERMAL_NETLINK=3Dy
+CONFIG_THERMAL_STATISTICS=3Dy
+CONFIG_THERMAL_GOV_FAIR_SHARE=3Dy
+CONFIG_THERMAL_GOV_BANG_BANG=3Dy
+CONFIG_INTEL_POWERCLAMP=3Dy
+CONFIG_X86_PKG_TEMP_THERMAL=3Dy
+CONFIG_INTEL_PCH_THERMAL=3Dy
+CONFIG_INTEL_TCC_COOLING=3Dy
+CONFIG_LPC_ICH=3Dm
+CONFIG_LPC_SCH=3Dm
+CONFIG_MFD_INTEL_LPSS_ACPI=3Dy
+CONFIG_MFD_INTEL_LPSS_PCI=3Dy
+CONFIG_MFD_SYSCON=3Dy
+CONFIG_MFD_INTEL_M10_BMC=3Dm
+CONFIG_AGP=3Dy
+CONFIG_AGP_INTEL=3Dy
+CONFIG_DRM=3Dy
+CONFIG_DRM_DP_AUX_CHARDEV=3Dy
+CONFIG_DRM_LOAD_EDID_FIRMWARE=3Dy
+CONFIG_DRM_I915=3Dm
+CONFIG_DRM_I915_GVT=3Dy
+CONFIG_DRM_I915_PXP=3Dy
+CONFIG_DRM_VGEM=3Dm
+CONFIG_DRM_VKMS=3Dm
+CONFIG_DRM_QXL=3Dm
+CONFIG_DRM_BOCHS=3Dm
+CONFIG_DRM_CIRRUS_QEMU=3Dm
+CONFIG_DRM_SIMPLEDRM=3Dy
+CONFIG_FB=3Dy
+CONFIG_FB_TILEBLITTING=3Dy
+CONFIG_FB_VESA=3Dy
+CONFIG_LCD_CLASS_DEVICE=3Dy
+CONFIG_LCD_PLATFORM=3Dm
+CONFIG_BACKLIGHT_CLASS_DEVICE=3Dy
+CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=3Dy
+CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER=3Dy
+CONFIG_LOGO=3Dy
+# CONFIG_LOGO_LINUX_MONO is not set
+# CONFIG_LOGO_LINUX_VGA16 is not set
+CONFIG_SOUND=3Dy
+CONFIG_SND=3Dy
+CONFIG_SND_OSSEMUL=3Dy
+CONFIG_SND_HRTIMER=3Dy
+# CONFIG_SND_SUPPORT_OLD_API is not set
+# CONFIG_SND_DRIVERS is not set
+CONFIG_SND_HDA_INTEL=3Dm
+CONFIG_SND_HDA_HWDEP=3Dy
+CONFIG_SND_HDA_INPUT_BEEP=3Dy
+CONFIG_SND_HDA_PATCH_LOADER=3Dy
+CONFIG_SND_HDA_CODEC_REALTEK=3Dm
+CONFIG_SND_HDA_CODEC_HDMI=3Dm
+CONFIG_SND_HDA_POWER_SAVE_DEFAULT=3D10
+# CONFIG_SND_SPI is not set
+CONFIG_SND_USB_AUDIO=3Dy
+# CONFIG_SND_X86 is not set
+CONFIG_SND_VIRTIO=3Dm
+CONFIG_HID_BATTERY_STRENGTH=3Dy
+CONFIG_HIDRAW=3Dy
+# CONFIG_HID_A4TECH is not set
+# CONFIG_HID_APPLE is not set
+# CONFIG_HID_BELKIN is not set
+# CONFIG_HID_CHERRY is not set
+# CONFIG_HID_CHICONY is not set
+# CONFIG_HID_CYPRESS is not set
+# CONFIG_HID_EZKEY is not set
+# CONFIG_HID_ITE is not set
+# CONFIG_HID_KENSINGTON is not set
+CONFIG_HID_LOGITECH_DJ=3Dy
+# CONFIG_HID_REDRAGON is not set
+# CONFIG_HID_MICROSOFT is not set
+# CONFIG_HID_MONTEREY is not set
+CONFIG_HID_PID=3Dy
+CONFIG_USB_HIDDEV=3Dy
+CONFIG_USB_LED_TRIG=3Dy
+CONFIG_USB=3Dy
+CONFIG_USB_ANNOUNCE_NEW_DEVICES=3Dy
+CONFIG_USB_MON=3Dy
+CONFIG_USB_XHCI_HCD=3Dy
+CONFIG_USB_XHCI_DBGCAP=3Dy
+CONFIG_USB_XHCI_PCI_RENESAS=3Dy
+CONFIG_USB_PRINTER=3Dy
+CONFIG_USB_WDM=3Dy
+CONFIG_USB_STORAGE=3Dy
+CONFIG_USB_UAS=3Dy
+CONFIG_USB_SERIAL=3Dy
+CONFIG_USB_SERIAL_CONSOLE=3Dy
+CONFIG_USB_SERIAL_PL2303=3Dy
+CONFIG_MMC=3Dm
+CONFIG_LEDS_CLASS=3Dy
+CONFIG_LEDS_TRIGGER_TIMER=3Dy
+CONFIG_LEDS_TRIGGER_ONESHOT=3Dy
+CONFIG_LEDS_TRIGGER_DISK=3Dy
+CONFIG_LEDS_TRIGGER_HEARTBEAT=3Dy
+CONFIG_LEDS_TRIGGER_BACKLIGHT=3Dy
+CONFIG_LEDS_TRIGGER_CPU=3Dy
+CONFIG_LEDS_TRIGGER_ACTIVITY=3Dy
+CONFIG_LEDS_TRIGGER_GPIO=3Dy
+CONFIG_LEDS_TRIGGER_DEFAULT_ON=3Dy
+CONFIG_LEDS_TRIGGER_TRANSIENT=3Dy
+CONFIG_LEDS_TRIGGER_CAMERA=3Dy
+CONFIG_LEDS_TRIGGER_PANIC=3Dy
+CONFIG_LEDS_TRIGGER_NETDEV=3Dy
+CONFIG_LEDS_TRIGGER_PATTERN=3Dy
+CONFIG_LEDS_TRIGGER_AUDIO=3Dy
+CONFIG_LEDS_TRIGGER_TTY=3Dy
+CONFIG_EDAC=3Dy
+CONFIG_EDAC_GHES=3Dy
+CONFIG_RTC_CLASS=3Dy
+CONFIG_DMADEVICES=3Dy
+CONFIG_INTEL_IDMA64=3Dy
+CONFIG_ASYNC_TX_DMA=3Dy
+CONFIG_UDMABUF=3Dy
+CONFIG_DMABUF_HEAPS=3Dy
+CONFIG_DMABUF_SYSFS_STATS=3Dy
+CONFIG_DMABUF_HEAPS_SYSTEM=3Dy
+CONFIG_DMABUF_HEAPS_CMA=3Dy
+# CONFIG_VIRTIO_MENU is not set
+# CONFIG_VHOST_MENU is not set
+CONFIG_ACPI_WMI=3Dy
+CONFIG_INTEL_PMC_CORE=3Dy
+CONFIG_INTEL_SPEED_SELECT_INTERFACE=3Dm
+CONFIG_INTEL_UNCORE_FREQ_CONTROL=3Dm
+CONFIG_INTEL_RST=3Dy
+CONFIG_INTEL_SMARTCONNECT=3Dy
+CONFIG_INTEL_TURBO_MAX_3=3Dy
+CONFIG_INTEL_IPS=3Dy
+# CONFIG_SURFACE_PLATFORMS is not set
+CONFIG_INTEL_IOMMU=3Dy
+CONFIG_INTEL_IOMMU_SVM=3Dy
+CONFIG_IRQ_REMAP=3Dy
+CONFIG_PWM=3Dy
+CONFIG_PWM_LPSS_PCI=3Dm
+CONFIG_PWM_LPSS_PLATFORM=3Dm
+CONFIG_USB_LGM_PHY=3Dm
+CONFIG_PHY_INTEL_LGM_EMMC=3Dm
+CONFIG_POWERCAP=3Dy
+CONFIG_INTEL_RAPL=3Dy
+CONFIG_RAS_CEC=3Dy
+CONFIG_LIBNVDIMM=3Dy
+CONFIG_DEV_DAX=3Dm
+# CONFIG_DEV_DAX_HMEM is not set
+CONFIG_TEE=3Dm
+CONFIG_VALIDATE_FS_PARSER=3Dy
+CONFIG_EXT4_FS=3Dy
+CONFIG_EXT4_FS_POSIX_ACL=3Dy
+CONFIG_EXT4_FS_SECURITY=3Dy
+CONFIG_BTRFS_FS=3Dy
+CONFIG_BTRFS_FS_POSIX_ACL=3Dy
+CONFIG_F2FS_FS=3Dy
+CONFIG_F2FS_FS_SECURITY=3Dy
+CONFIG_F2FS_FS_COMPRESSION=3Dy
+CONFIG_FS_ENCRYPTION=3Dy
+CONFIG_FS_ENCRYPTION_INLINE_CRYPT=3Dy
+CONFIG_FS_VERITY=3Dy
+CONFIG_FANOTIFY=3Dy
+CONFIG_FANOTIFY_ACCESS_PERMISSIONS=3Dy
+CONFIG_QUOTA=3Dy
+CONFIG_QUOTA_NETLINK_INTERFACE=3Dy
+# CONFIG_PRINT_QUOTA_WARNING is not set
+CONFIG_QFMT_V2=3Dy
+CONFIG_AUTOFS4_FS=3Dy
+CONFIG_FUSE_FS=3Dy
+CONFIG_CUSE=3Dy
+CONFIG_VIRTIO_FS=3Dy
+CONFIG_OVERLAY_FS=3Dy
+CONFIG_FSCACHE=3Dy
+CONFIG_FSCACHE_STATS=3Dy
+CONFIG_CACHEFILES=3Dy
+CONFIG_ISO9660_FS=3Dy
+CONFIG_JOLIET=3Dy
+CONFIG_ZISOFS=3Dy
+CONFIG_UDF_FS=3Dy
+CONFIG_MSDOS_FS=3Dy
+CONFIG_VFAT_FS=3Dy
+CONFIG_FAT_DEFAULT_IOCHARSET=3D"ascii"
+CONFIG_FAT_DEFAULT_UTF8=3Dy
+CONFIG_EXFAT_FS=3Dy
+CONFIG_NTFS3_FS=3Dy
+CONFIG_NTFS3_LZX_XPRESS=3Dy
+CONFIG_NTFS3_FS_POSIX_ACL=3Dy
+CONFIG_PROC_KCORE=3Dy
+CONFIG_TMPFS_POSIX_ACL=3Dy
+CONFIG_TMPFS_INODE64=3Dy
+CONFIG_HUGETLBFS=3Dy
+CONFIG_CONFIGFS_FS=3Dy
+CONFIG_EFIVAR_FS=3Dy
+CONFIG_ECRYPT_FS=3Dy
+CONFIG_SQUASHFS=3Dy
+CONFIG_SQUASHFS_FILE_DIRECT=3Dy
+CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=3Dy
+CONFIG_SQUASHFS_XATTR=3Dy
+CONFIG_SQUASHFS_LZ4=3Dy
+CONFIG_SQUASHFS_LZO=3Dy
+CONFIG_SQUASHFS_XZ=3Dy
+CONFIG_SQUASHFS_ZSTD=3Dy
+CONFIG_PSTORE_LZO_COMPRESS=3Dy
+CONFIG_PSTORE_LZ4_COMPRESS=3Dy
+CONFIG_PSTORE_LZ4HC_COMPRESS=3Dy
+CONFIG_PSTORE_842_COMPRESS=3Dy
+CONFIG_PSTORE_ZSTD_COMPRESS=3Dy
+CONFIG_PSTORE_ZSTD_COMPRESS_DEFAULT=3Dy
+CONFIG_PSTORE_RAM=3Dy
+CONFIG_NFS_FS=3Dy
+# CONFIG_NFS_V2 is not set
+CONFIG_NFS_V3_ACL=3Dy
+CONFIG_NFS_V4=3Dy
+CONFIG_NFS_SWAP=3Dy
+CONFIG_NFS_V4_1=3Dy
+CONFIG_NFS_V4_2=3Dy
+CONFIG_NFS_FSCACHE=3Dy
+CONFIG_NFSD=3Dy
+CONFIG_NFSD_V3_ACL=3Dy
+CONFIG_NFSD_V4=3Dy
+CONFIG_NFSD_BLOCKLAYOUT=3Dy
+CONFIG_NFSD_SCSILAYOUT=3Dy
+CONFIG_NFSD_FLEXFILELAYOUT=3Dy
+CONFIG_NFSD_V4_2_INTER_SSC=3Dy
+CONFIG_NFSD_V4_SECURITY_LABEL=3Dy
+CONFIG_RPCSEC_GSS_KRB5=3Dm
+CONFIG_SUNRPC_DISABLE_INSECURE_ENCTYPES=3Dy
+CONFIG_SUNRPC_DEBUG=3Dy
+CONFIG_CIFS=3Dy
+# CONFIG_CIFS_STATS2 is not set
+CONFIG_CIFS_UPCALL=3Dy
+CONFIG_CIFS_XATTR=3Dy
+CONFIG_CIFS_POSIX=3Dy
+CONFIG_CIFS_DFS_UPCALL=3Dy
+CONFIG_CIFS_SWN_UPCALL=3Dy
+CONFIG_CIFS_FSCACHE=3Dy
+CONFIG_NLS_DEFAULT=3D"utf8"
+CONFIG_NLS_CODEPAGE_437=3Dy
+CONFIG_NLS_CODEPAGE_850=3Dy
+CONFIG_NLS_CODEPAGE_852=3Dy
+CONFIG_NLS_CODEPAGE_1250=3Dy
+CONFIG_NLS_ASCII=3Dy
+CONFIG_NLS_ISO8859_1=3Dy
+CONFIG_NLS_ISO8859_2=3Dy
+CONFIG_NLS_ISO8859_15=3Dy
+CONFIG_NLS_MAC_TURKISH=3Dy
+CONFIG_NLS_UTF8=3Dy
+CONFIG_DLM=3Dy
+CONFIG_DLM_DEBUG=3Dy
+CONFIG_UNICODE=3Dy
+CONFIG_KEYS_REQUEST_CACHE=3Dy
+CONFIG_PERSISTENT_KEYRINGS=3Dy
+CONFIG_BIG_KEYS=3Dy
+CONFIG_TRUSTED_KEYS=3Dy
+CONFIG_KEY_DH_OPERATIONS=3Dy
+CONFIG_KEY_NOTIFICATIONS=3Dy
+CONFIG_SECURITY=3Dy
+CONFIG_SECURITY_NETWORK=3Dy
+CONFIG_SECURITY_NETWORK_XFRM=3Dy
+CONFIG_INTEL_TXT=3Dy
+CONFIG_LSM_MMAP_MIN_ADDR=3D65535
+CONFIG_HARDENED_USERCOPY=3Dy
+CONFIG_FORTIFY_SOURCE=3Dy
+CONFIG_SECURITY_SELINUX=3Dy
+CONFIG_SECURITY_SELINUX_BOOTPARAM=3Dy
+CONFIG_SECURITY_YAMA=3Dy
+CONFIG_SECURITY_LOCKDOWN_LSM=3Dy
+CONFIG_SECURITY_LOCKDOWN_LSM_EARLY=3Dy
+CONFIG_SECURITY_LANDLOCK=3Dy
+CONFIG_INTEGRITY_SIGNATURE=3Dy
+CONFIG_INTEGRITY_ASYMMETRIC_KEYS=3Dy
+CONFIG_INTEGRITY_PLATFORM_KEYRING=3Dy
+CONFIG_IMA=3Dy
+CONFIG_IMA_DEFAULT_HASH_SHA256=3Dy
+CONFIG_IMA_WRITE_POLICY=3Dy
+CONFIG_IMA_APPRAISE=3Dy
+CONFIG_IMA_ARCH_POLICY=3Dy
+CONFIG_IMA_APPRAISE_MODSIG=3Dy
+# CONFIG_IMA_TRUSTED_KEYRING is not set
+CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY=3Dy
+CONFIG_EVM=3Dy
+CONFIG_LSM=3D"lockdown,yama,integrity,selinux,bpf,landlock"
+CONFIG_INIT_STACK_NONE=3Dy
+CONFIG_CRYPTO_FIPS=3Dy
+CONFIG_CRYPTO_USER=3Dy
+# CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
+CONFIG_CRYPTO_PCRYPT=3Dy
+CONFIG_CRYPTO_ECDH=3Dy
+CONFIG_CRYPTO_ECDSA=3Dy
+CONFIG_CRYPTO_ECRDSA=3Dy
+CONFIG_CRYPTO_SM2=3Dy
+CONFIG_CRYPTO_CURVE25519=3Dy
+CONFIG_CRYPTO_CURVE25519_X86=3Dy
+CONFIG_CRYPTO_CHACHA20POLY1305=3Dy
+CONFIG_CRYPTO_AEGIS128=3Dy
+CONFIG_CRYPTO_AEGIS128_AESNI_SSE2=3Dy
+CONFIG_CRYPTO_CFB=3Dy
+CONFIG_CRYPTO_LRW=3Dy
+CONFIG_CRYPTO_OFB=3Dy
+CONFIG_CRYPTO_PCBC=3Dy
+CONFIG_CRYPTO_KEYWRAP=3Dy
+CONFIG_CRYPTO_NHPOLY1305_SSE2=3Dy
+CONFIG_CRYPTO_NHPOLY1305_AVX2=3Dy
+CONFIG_CRYPTO_ADIANTUM=3Dy
+CONFIG_CRYPTO_ESSIV=3Dy
+CONFIG_CRYPTO_XCBC=3Dy
+CONFIG_CRYPTO_VMAC=3Dy
+CONFIG_CRYPTO_CRC32C_INTEL=3Dy
+CONFIG_CRYPTO_CRC32_PCLMUL=3Dy
+CONFIG_CRYPTO_BLAKE2S=3Dy
+CONFIG_CRYPTO_BLAKE2S_X86=3Dy
+CONFIG_CRYPTO_CRCT10DIF_PCLMUL=3Dy
+CONFIG_CRYPTO_POLY1305_X86_64=3Dy
+CONFIG_CRYPTO_MD4=3Dy
+CONFIG_CRYPTO_MICHAEL_MIC=3Dy
+CONFIG_CRYPTO_RMD160=3Dy
+CONFIG_CRYPTO_SHA1_SSSE3=3Dy
+CONFIG_CRYPTO_SHA256_SSSE3=3Dy
+CONFIG_CRYPTO_SHA512_SSSE3=3Dy
+CONFIG_CRYPTO_SHA3=3Dy
+CONFIG_CRYPTO_WP512=3Dy
+CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL=3Dy
+CONFIG_CRYPTO_AES_TI=3Dy
+CONFIG_CRYPTO_AES_NI_INTEL=3Dy
+CONFIG_CRYPTO_BLOWFISH=3Dy
+CONFIG_CRYPTO_BLOWFISH_X86_64=3Dy
+CONFIG_CRYPTO_CAMELLIA=3Dy
+CONFIG_CRYPTO_CAMELLIA_AESNI_AVX2_X86_64=3Dy
+CONFIG_CRYPTO_CAST5_AVX_X86_64=3Dy
+CONFIG_CRYPTO_CAST6_AVX_X86_64=3Dy
+CONFIG_CRYPTO_DES=3Dy
+CONFIG_CRYPTO_DES3_EDE_X86_64=3Dy
+CONFIG_CRYPTO_FCRYPT=3Dy
+CONFIG_CRYPTO_CHACHA20_X86_64=3Dy
+CONFIG_CRYPTO_SERPENT_SSE2_X86_64=3Dy
+CONFIG_CRYPTO_SERPENT_AVX2_X86_64=3Dy
+CONFIG_CRYPTO_SM4_AESNI_AVX2_X86_64=3Dy
+CONFIG_CRYPTO_TWOFISH=3Dy
+CONFIG_CRYPTO_TWOFISH_AVX_X86_64=3Dy
+CONFIG_CRYPTO_ANSI_CPRNG=3Dy
+CONFIG_CRYPTO_DRBG_HASH=3Dy
+CONFIG_CRYPTO_DRBG_CTR=3Dy
+CONFIG_CRYPTO_USER_API_HASH=3Dy
+CONFIG_CRYPTO_USER_API_SKCIPHER=3Dy
+CONFIG_CRYPTO_USER_API_RNG=3Dy
+CONFIG_CRYPTO_USER_API_AEAD=3Dy
+# CONFIG_CRYPTO_USER_API_ENABLE_OBSOLETE is not set
+CONFIG_CRYPTO_STATS=3Dy
+CONFIG_PKCS8_PRIVATE_KEY_PARSER=3Dy
+CONFIG_SIGNED_PE_FILE_VERIFICATION=3Dy
+CONFIG_SYSTEM_EXTRA_CERTIFICATE=3Dy
+CONFIG_SECONDARY_TRUSTED_KEYRING=3Dy
+CONFIG_SYSTEM_BLACKLIST_KEYRING=3Dy
+# CONFIG_RAID6_PQ_BENCHMARK is not set
+CONFIG_PACKING=3Dy
+CONFIG_CORDIC=3Dy
+CONFIG_CRYPTO_LIB_CURVE25519=3Dy
+CONFIG_CRYPTO_LIB_CHACHA20POLY1305=3Dy
+CONFIG_CRC4=3Dy
+CONFIG_CRC7=3Dy
+CONFIG_CRC8=3Dy
+CONFIG_XZ_DEC_MICROLZMA=3Dy
+CONFIG_DMA_CMA=3Dy
+CONFIG_IRQ_POLL=3Dy
+CONFIG_PRINTK_TIME=3Dy
+CONFIG_CONSOLE_LOGLEVEL_QUIET=3D3
+CONFIG_BOOT_PRINTK_DELAY=3Dy
+CONFIG_DYNAMIC_DEBUG=3Dy
+CONFIG_DEBUG_KERNEL=3Dy
+# CONFIG_DEBUG_MISC is not set
+CONFIG_STRIP_ASM_SYMS=3Dy
+CONFIG_HEADERS_INSTALL=3Dy
+CONFIG_MAGIC_SYSRQ=3Dy
+CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=3D0x0
+CONFIG_PAGE_OWNER=3Dy
+CONFIG_PAGE_POISONING=3Dy
+CONFIG_DEBUG_RODATA_TEST=3Dy
+CONFIG_DEBUG_WX=3Dy
+CONFIG_SCHED_STACK_END_CHECK=3Dy
+CONFIG_DEBUG_VM=3Dy
+# CONFIG_DEBUG_VM_PGTABLE is not set
+CONFIG_KFENCE=3Dy
+CONFIG_KFENCE_SAMPLE_INTERVAL=3D0
+CONFIG_DEBUG_SHIRQ=3Dy
+CONFIG_HARDLOCKUP_DETECTOR=3Dy
+CONFIG_BUG_ON_DATA_CORRUPTION=3Dy
+CONFIG_RCU_CPU_STALL_TIMEOUT=3D60
+# CONFIG_RCU_TRACE is not set
+CONFIG_LATENCYTOP=3Dy
+CONFIG_BOOTTIME_TRACING=3Dy
+CONFIG_FUNCTION_PROFILER=3Dy
+CONFIG_STACK_TRACER=3Dy
+CONFIG_SCHED_TRACER=3Dy
+CONFIG_HWLAT_TRACER=3Dy
+CONFIG_TIMERLAT_TRACER=3Dy
+CONFIG_MMIOTRACE=3Dy
+CONFIG_FTRACE_SYSCALLS=3Dy
+CONFIG_BLK_DEV_IO_TRACE=3Dy
+CONFIG_HIST_TRIGGERS=3Dy
+CONFIG_TRACE_EVAL_MAP_FILE=3Dy
+CONFIG_IO_STRICT_DEVMEM=3Dy
+# CONFIG_X86_VERBOSE_BOOTUP is not set
+CONFIG_EARLY_PRINTK_DBGP=3Dy
+CONFIG_EARLY_PRINTK_USB_XDBC=3Dy
+CONFIG_DEBUG_BOOT_PARAMS=3Dy
+# CONFIG_X86_DEBUG_FPU is not set
+CONFIG_TEST_BPF=3Dm
 
