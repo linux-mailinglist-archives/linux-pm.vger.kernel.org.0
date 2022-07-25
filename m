@@ -2,136 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D23E5802CC
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 18:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1D8580395
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 19:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbiGYQgA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 12:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
+        id S235188AbiGYRia (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 13:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236229AbiGYQf7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 12:35:59 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20FB165B3
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 09:35:57 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v13so8995959wru.12
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 09:35:57 -0700 (PDT)
+        with ESMTP id S229921AbiGYRi3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 13:38:29 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB06F1C916;
+        Mon, 25 Jul 2022 10:38:28 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y9so11045189pff.12;
+        Mon, 25 Jul 2022 10:38:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=31q2utBSsnk2x39WVe31RkGyMadtJlJYuR1YdJT4pXc=;
-        b=MSaZJBSvWpSvy4L5Fg188Hmm2wB9JnuH7Nd/WC9YRxQ7YbNiKk15ziAt6n9WHhtdX6
-         M2Rsa9oqxpIJtus6rGmmGSgWXWyylxFbD5v1tRlM2/6m1pi0T8NpkTKOno8dnW/G+TeJ
-         wl1va5ditDu9LmnpZeGeabmMLCe2eIWxtOBGcfObwm5T+qIqf2e2Azbm1g+wyb9STsml
-         NH+iAYxnLPHzE3RDzvh0gnPcsXLZQF8AzGn9wae8znKhJNQD1JGzvxcGyFuibyRHa2CF
-         0i6cU7NlytFSOvAbrGdtrTPyXeifxMreyeB40wdCTSf7I3/5H768z/DMIPX73WJSW8JM
-         bnvw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9CQxdN0UuCCTwqKPx83Nzu7fLirKahxtUNngDAmtuPY=;
+        b=RRNd2A2HkQ6hbJaE13qKf/tqqRa1cdyvaSFzq5KJAbWtgKTUwcqQqUcH88F6odiq3R
+         mSUzI/nwKgT/i6FE3aoj/YGbP4lwOcM+bFgdFCH0Xshfxjey9DvbZ5W5vo2LspgPtAAa
+         Uk1wwa9m6rhTSjIFiUjREkJm+ZSnmTl80EBUo4N29HXVWI5puU/uxfc4Q0N9MYPpOe7i
+         cmAMtBSjdJ6TyhcajUq9m9VorSpMwt7GJz2Fz8oijxRXXYFhe0A0+cc0DmiNlPN2ip2n
+         7QA5zZBd45nA9fxvtKLPXhdYYB8YTGc27q1078F9cezra1NOnmZHtVaWwIP0nsFdbley
+         egGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=31q2utBSsnk2x39WVe31RkGyMadtJlJYuR1YdJT4pXc=;
-        b=SlAM+aPrTJGu8p2UlPnewSsxATSZPQgbNy2fMXgh2FLzL9/rsUhwZ/Txmmh1OAG+H8
-         rkku0Tahnm7vu1bluDgGpnku8HB674z74Z+sqvWgGZ2656eWhWRGyhWRjwZoFYx60isr
-         E2xqAJnZHW5z6J3r6iw3jaC61GjbeQ2l6opXtghPBaetNL0dUGCZuUkuuRGBjCfhgyAR
-         MDUYTnjVNeA8zhJE9TPNnNBf5rvezC802Cgea1VFUMf1WtHVJ8vc6JsqSLaBfyc+EObT
-         KDXofvO5Kfoxeb7S1zPvSiD1efJQBkTQCSBMsl1fCrNkMvOT/5d2Xh14yG9u70ZcWkrF
-         apQg==
-X-Gm-Message-State: AJIora/393ZxNaFQ3MpjPGMNO9BB4kubS5Vt02YQM0uP4CV8lDUE8pnA
-        5Jsf62qo9Fj+cqiRfdr4aJBAptgEKwJ4CA==
-X-Google-Smtp-Source: AGRyM1umkE+Alf6ZYxWq0oLgCfbbPiPYIRINPFWQUYEZiqj/WPI+KzU3dXTwuH3KqzDZJOC2Gmc8Mg==
-X-Received: by 2002:a05:6000:16ce:b0:21e:8450:1b6a with SMTP id h14-20020a05600016ce00b0021e84501b6amr5001312wrf.372.1658766956418;
-        Mon, 25 Jul 2022 09:35:56 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:1780:8e54:dd38:6668? ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
-        by smtp.googlemail.com with ESMTPSA id az14-20020adfe18e000000b0021e529efa60sm6631059wrb.1.2022.07.25.09.35.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 09:35:56 -0700 (PDT)
-Message-ID: <89e7974b-516c-bc37-6ca9-4bcc4e884089@linaro.org>
-Date:   Mon, 25 Jul 2022 18:35:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 3/4] thermal/core: Build ascending ordered indexes for
- the trip points
-Content-Language: en-US
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
+        bh=9CQxdN0UuCCTwqKPx83Nzu7fLirKahxtUNngDAmtuPY=;
+        b=lfd2vCL+MvpouwCAK7bTz7B8T8hi8k2nE6+DDSb1L1iL7IvqMh+CuPc3Yr6nJNhOn/
+         dT1G1l3UvobQ6tIoRZksH8zC0TEGCaWDu+/jXusvnAqWAQn8MvQZ+55fwPIgcXTK2VhW
+         ttSL9Ysd+/538SzkVeiJtn7SiGeFPxJ/u9h9CqpNz4/m0io+coLtmndny/y/XpzJdJHq
+         kcyeiaFvW801Pjy7kOXxq0/HlJcl4A1O1PPBO4R3V9fXpWNgWE2FPrscdP33lEOM0kuf
+         Ef3G54Ifuhk7WHV2lOMgjbTjSA1uhS8BjMxziJKhXE3Tgqt6uDSOKsHO5Ho0CrV0bBix
+         7PDA==
+X-Gm-Message-State: AJIora8aEZ6tUIrnlAqa9mu0p6OkUVFCN89BW/wd2baRhwXMNd9v3yYs
+        wykQcGpJG8iQOaUQ7ReX92roDkEwqYk=
+X-Google-Smtp-Source: AGRyM1vgKz/ifCaiCr8JOoIJjb7/GeKixT5F/X1KEdo30UBhdFvBcugFAnTbTxwXUuYIqmCDYr1w8Q==
+X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr14054362pfi.84.1658770707922;
+        Mon, 25 Jul 2022 10:38:27 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id i188-20020a6287c5000000b005251b9102dbsm10219146pfe.144.2022.07.25.10.38.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 10:38:27 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     mmayer@broadcom.com, Florian Fainelli <f.fainelli@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220718145038.1114379-1-daniel.lezcano@linaro.org>
- <20220718145038.1114379-3-daniel.lezcano@linaro.org>
- <CAJZ5v0hj0kMRNBqO_0SqsAAY8Rb8h2NrWOYogDLgGZnCtiTEwg@mail.gmail.com>
- <117c778a-4496-4d49-e73d-06fa3efa4d09@linaro.org>
- <CAJZ5v0gjfeyiS8rUoPpa3sMrofw1ZyQe=+P6pvPbeirs07F+Qw@mail.gmail.com>
- <8926eed7-436f-5f1a-7036-0e1520bd3a0b@linaro.org>
- <CAJZ5v0icAE1t4+VsEq71FiUjQXr1LJeokBiuGTxvsHByedfmhw@mail.gmail.com>
- <1ec4d34d-6700-0f99-81e3-1c7129a80246@linaro.org>
-In-Reply-To: <1ec4d34d-6700-0f99-81e3-1c7129a80246@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Zhang Rui <rui.zhang@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        linux-pm@vger.kernel.org (open list:THERMAL)
+Subject: [PATCH] tools/thermal: Fix possible path truncations
+Date:   Mon, 25 Jul 2022 10:37:54 -0700
+Message-Id: <20220725173755.2993805-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/07/2022 18:29, Daniel Lezcano wrote:
-> 
-> Hi Rafael,
-> 
-> On 22/07/2022 19:40, Rafael J. Wysocki wrote:
-> 
-> [ ... ]
-> 
->> They can be made in the opposite direction, starting at the core
->> level.  Then, it would be clear where you were going.
->>
->>> I would like to
->>> keep the indexes trip array approach to fix the trip cross events which
->>> is broken right now and then go forward with the struct thermal_trip
->>> changes and the thermal-of cleanups I've sent last week.
->>>
->>> Does it sound reasonable ?
->>
->> I'm not convinced about the need to make the code more complicated if
->> the overall direction is to simplify it.
->>
->> I understand that you want to avoid regressing things, but you want to
->> make these changes eventually anyway, so why to you think that the
->> risk of regressing things would be smaller in the future, after making
->> the code more complicated than it is now?  Sounds counter-intuitive to
->> me.
-> 
-> Ok, I'll rework the core code for that.
-> 
-> Having the series [1] and the new version of [2] will have the trip 
-> point partly reworked.
-> 
-> Thanks
->    -- Daniel
+A build with -D_FORTIFY_SOURCE=2 enabled will produce the following warnings:
 
-Adding missing pointers:
+sysfs.c:63:30: warning: '%s' directive output may be truncated writing up to 255 bytes into a region of size between 0 and 255 [-Wformat-truncation=]
+  snprintf(filepath, 256, "%s/%s", path, filename);
+                              ^~
+Bump up the buffer to PATH_MAX which is the limit and account for all of
+the possible NUL and separators that could lead to exceeding the
+allocated buffer sizes.
 
-[1] 
-https://lore.kernel.org/lkml/20220722200007.1839356-7-daniel.lezcano@linexp.org/T/
+Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal subsystem")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ tools/thermal/tmon/sysfs.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
-[2] 
-https://lore.kernel.org/lkml/20220710212423.681301-1-daniel.lezcano@linexp.org/
-
-
-
+diff --git a/tools/thermal/tmon/sysfs.c b/tools/thermal/tmon/sysfs.c
+index b00b1bfd9d8e..cb1108bc9249 100644
+--- a/tools/thermal/tmon/sysfs.c
++++ b/tools/thermal/tmon/sysfs.c
+@@ -13,6 +13,7 @@
+ #include <stdint.h>
+ #include <dirent.h>
+ #include <libintl.h>
++#include <limits.h>
+ #include <ctype.h>
+ #include <time.h>
+ #include <syslog.h>
+@@ -33,9 +34,9 @@ int sysfs_set_ulong(char *path, char *filename, unsigned long val)
+ {
+ 	FILE *fd;
+ 	int ret = -1;
+-	char filepath[256];
++	char filepath[PATH_MAX + 2]; /* NUL and '/' */
+ 
+-	snprintf(filepath, 256, "%s/%s", path, filename);
++	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
+ 
+ 	fd = fopen(filepath, "w");
+ 	if (!fd) {
+@@ -57,9 +58,9 @@ static int sysfs_get_ulong(char *path, char *filename, unsigned long *p_ulong)
+ {
+ 	FILE *fd;
+ 	int ret = -1;
+-	char filepath[256];
++	char filepath[PATH_MAX + 2]; /* NUL and '/' */
+ 
+-	snprintf(filepath, 256, "%s/%s", path, filename);
++	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
+ 
+ 	fd = fopen(filepath, "r");
+ 	if (!fd) {
+@@ -76,9 +77,9 @@ static int sysfs_get_string(char *path, char *filename, char *str)
+ {
+ 	FILE *fd;
+ 	int ret = -1;
+-	char filepath[256];
++	char filepath[PATH_MAX + 2]; /* NUL and '/' */
+ 
+-	snprintf(filepath, 256, "%s/%s", path, filename);
++	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
+ 
+ 	fd = fopen(filepath, "r");
+ 	if (!fd) {
+@@ -199,8 +200,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
+ {
+ 	unsigned long trip_instance = 0;
+ 	char cdev_name_linked[256];
+-	char cdev_name[256];
+-	char cdev_trip_name[256];
++	char cdev_name[PATH_MAX];
++	char cdev_trip_name[PATH_MAX];
+ 	int cdev_id;
+ 
+ 	if (nl->d_type == DT_LNK) {
+@@ -213,7 +214,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
+ 			return -EINVAL;
+ 		}
+ 		/* find the link to real cooling device record binding */
+-		snprintf(cdev_name, 256, "%s/%s", tz_name, nl->d_name);
++		snprintf(cdev_name, sizeof(cdev_name) - 2, "%s/%s",
++			 tz_name, nl->d_name);
+ 		memset(cdev_name_linked, 0, sizeof(cdev_name_linked));
+ 		if (readlink(cdev_name, cdev_name_linked,
+ 				sizeof(cdev_name_linked) - 1) != -1) {
+@@ -226,8 +228,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
+ 			/* find the trip point in which the cdev is binded to
+ 			 * in this tzone
+ 			 */
+-			snprintf(cdev_trip_name, 256, "%s%s", nl->d_name,
+-				"_trip_point");
++			snprintf(cdev_trip_name, sizeof(cdev_trip_name) - 1,
++				"%s%s", nl->d_name, "_trip_point");
+ 			sysfs_get_ulong(tz_name, cdev_trip_name,
+ 					&trip_instance);
+ 			/* validate trip point range, e.g. trip could return -1
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.25.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
