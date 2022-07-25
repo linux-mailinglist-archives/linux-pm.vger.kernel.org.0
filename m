@@ -2,81 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C54A58062D
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 23:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF7F58067C
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 23:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbiGYVJU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 17:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        id S237262AbiGYV0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 17:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235324AbiGYVJT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 17:09:19 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F67023BDB
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:09:18 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k11so17214950wrx.5
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:09:18 -0700 (PDT)
+        with ESMTP id S237218AbiGYV0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 17:26:53 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DF123BF3
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:26:52 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 8-20020a05600c024800b003a2fe343db1so7103493wmj.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:26:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=g6vKqwcDorJnFDkLzImjodXLaiwTUKwPPEi2tmiVDTI=;
-        b=hEcGrGkHeC0ej+nkTzc4RixqUra1HE+XtbKCMVhqy/GifLdqA0KWYwOhJlnu/fm4fO
-         ls8A8gJJMcBK9UVj+no5qPBdVHVDECGXesaJ2vgjewzAEuFRWDauWrbIkoZ/M1G2GB3l
-         9p5hh36+LEauR4i1PO46+bbtvT0NGVROX1upS22nlPPwOafkDeCZDzfoG6ad+RoX0ZWY
-         443cY1XLJBMnwqK9fnMjQDe57LlICF6VBuMmQLEXQJ1OFu7YCh6J1Bx/8XWcAA6nvkxk
-         kV9V7s2kJyOhNcmJu/YzOuYP0kQNkQ6Un5aX6wPVY4Hs9LRhIN7iOp4UdkAapvhSSGDp
-         /VLA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZSTDZhNWu94fb7Dl5Y72bWhB6a1jNF2UJdjaWf10fts=;
+        b=Pw0G43QyErozbi9UHmoSWLnIHg92Zt/OLZ4S1plD/E9y6XWr3oDt4UVpNP6XZvfxKA
+         0dXc3JN8N50E4KFsBTQ7Luc1dcecejExnyU+AhSu9eVg95Bd3jd7HbV+vVuTmrzDJ+iO
+         Q3ct5SwRBKPD5cA8ucAZOVggb8rmDoFcgjPF9oGA/wuJSG3OKXMOpCLQPU+S5I7UZTyy
+         l8ykkGhYQY70upJ7fS9uiTPyJJGYemE6khCg0DBkvfH+Q4ZT/d0OXC+SY4Rr8trGdTCY
+         sj0ojxkI0v0TZkTFF7QuztU5+wY4rRM3ZzuFUUK1uwvapC/vF5hAndw9bpymXz5sJUqL
+         FVwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=g6vKqwcDorJnFDkLzImjodXLaiwTUKwPPEi2tmiVDTI=;
-        b=PuV/l8MsrmbieZ+FAKIjga1k/jpgns0OFitWFLdEOYDSjJ5jRlhoAwX9fsaKtOjG3J
-         0oSqESIABOKpzi4MhJ5jHhgc+V01rhxVfgWZ8hPtkJjJHQCy354KtnjQ42OHUcDGXha/
-         bHEQ94OvxQ7pxBa+LjWH6YTCmxQ0lY8rIAyTpVVVCKeYEIAl/AzPdXxiUddLpkwK34Lc
-         lSWy2tRnrsxDLyRKi2ng7k645yTBv74JBeq/sIfpUDOClE+/bp/1WyuuRfSugKZHhT2b
-         +2ahIYTkfGNDmrI1drHY0ZHzudZ0noTNjaa3xcP4tZ3DmaNMoGDMKQMACwRI8seozC/i
-         SKjg==
-X-Gm-Message-State: AJIora9L1CZwYOMgxHb6E9dAyzwljzaeVfnahVjXTd5ePp6/ObPrcx+Q
-        EcnfbyKMMUzdgOFqOlf2rT0XQA==
-X-Google-Smtp-Source: AGRyM1udi1a3P7ONOJajQ7XKx00GcnNxC9sX/S4Q3xHcqtjDA4bb76X6+JQDFo5gbjVYqKpzDSGUGg==
-X-Received: by 2002:a5d:5a12:0:b0:21e:8327:7e03 with SMTP id bq18-20020a5d5a12000000b0021e83277e03mr5634195wrb.567.1658783356790;
-        Mon, 25 Jul 2022 14:09:16 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:1780:8e54:dd38:6668? ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
-        by smtp.gmail.com with ESMTPSA id u7-20020a5d5147000000b0021e83cb98cbsm5219573wrt.106.2022.07.25.14.09.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 14:09:16 -0700 (PDT)
-Message-ID: <f0e4e6de-6b55-aeaf-d059-b1b2d1a2bd9c@linexp.org>
-Date:   Mon, 25 Jul 2022 23:09:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
-Content-Language: en-US
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, khilman@baylibre.com,
-        abailon@baylibre.com, amitk@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-18-daniel.lezcano@linexp.org>
- <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
- <18ade2d0-ebda-0526-71f3-65a0b2685068@linexp.org>
- <Yt2W5UCXaB3Memzg@oden.dyn.berto.se>
- <e2a56ac3-057c-2b17-7bde-7e860a86807d@linexp.org>
- <Yt3KDSO248WebZ/w@oden.dyn.berto.se> <Yt3Vmt/AAzqzDzBF@oden.dyn.berto.se>
- <28e915c2-4871-b648-f5ac-78d6ecb32768@linaro.org>
- <Yt5yjAAT3y4YSgl1@oden.dyn.berto.se>
+        bh=ZSTDZhNWu94fb7Dl5Y72bWhB6a1jNF2UJdjaWf10fts=;
+        b=He9i5/F2K+Yo1zAzHUR4HnV+wub401wa8ikdPfq0IoqnM6OigujpugfUqG8Em70bUs
+         1ALBZ15khQnSv1tauInif7NZfdh1u3wyOg6SMAdogAny21aggwcUHKho4leZUODrHb/+
+         oIkGwjDPCjMNUao4n59J8Yfzr8fu9nV9KF8wGusIS9nldZv9+sBIvyFrFv2/PuaaTJ8Z
+         KhxEW9SjuCOqIG718lHB5EmKvCGJKE5e92pxRSIfnjdz/MY7atkT+rTb2xT4lLS/sHeE
+         yin1RmYjkt+7nT6ZdVxfv+u5mDNIolliDEgdcZ6KAOh4zRDOQExCuwP9jJ5UIKDIMMdk
+         KGvg==
+X-Gm-Message-State: AJIora9HxVeZnLN/UFFhCIzOEOy7HzhCqMvtdSXuzzASibSzLeWjo2Oc
+        Pq5WIylXgwF6i4EC3OO58qPKgw==
+X-Google-Smtp-Source: AGRyM1urbOVv5MziOD8ZSt275KMb2E2uBKmNBQ12CZRvzfhAHLLnDMnFKfzn5FMxXg1StKHnGCGc8Q==
+X-Received: by 2002:a1c:2783:0:b0:3a2:fd82:bf46 with SMTP id n125-20020a1c2783000000b003a2fd82bf46mr22259312wmn.29.1658784410340;
+        Mon, 25 Jul 2022 14:26:50 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
+        by smtp.gmail.com with ESMTPSA id r17-20020a5d52d1000000b0021d68a504cbsm12668772wrv.94.2022.07.25.14.26.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 14:26:49 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-In-Reply-To: <Yt5yjAAT3y4YSgl1@oden.dyn.berto.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com
+Subject: [PATCH v2 00/32] New thermal OF code
+Date:   Mon, 25 Jul 2022 23:26:05 +0200
+Message-Id: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,44 +76,122 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/07/2022 12:38, Niklas Söderlund wrote:
-> Hi Daniel,
-> 
-> On 2022-07-25 12:00:30 +0200, Daniel Lezcano wrote:
->>
->> Hi Niklas,
->>
->> On 25/07/2022 01:28, Niklas Söderlund wrote:
->>> Hi (again) Daniel,
->>>
->>> I figured it out, the thermal zone is disabled after this change. For
->>> both rcar sensors with the new API thermal_zone_device_enable() is never
->>> called.
->>>
->>> In the old API the zone is enabled in the call chain of
->>> devm_thermal_zone_of_sensor_register(). While after this change the zone
->>> is not enabled by the core when calling thermal_zone_device_enable().
->>>
->>> If I add a call to thermal_zone_device_enable() together with the new
->>> API everything works as before. But I'm not sure if the correct solution
->>> is to add a call to thermal_zone_device_enable() in the sensor drivers
->>> or in the call chain of the new API?
->>>
->>> On 2022-07-25 00:39:10 +0200, Niklas Söderlund wrote:
->>>> Hi Daniel,
->>>>
->>>> I tested your branch, unfortunately with the same result for
->>>> rcar_gen3_thermal. Manipulation of emul_temp file do not trigger
->>>> actions.
->>
->> Thanks for investigating, I updated the branch. Does it fix the issue ?
-> 
-> I tested the branch with the head [1] and it restores the expected
-> operation for both rcar_gen3_thermal and rcar_thermal sensors.
-> 
-> Thanks for the fix, with this change I'm happy with this new API.
-> 
-> 1. commit e9b792a531c10756 ("thermal/of: Remove old OF code")
+The following changes are depending on:
 
-Thanks !!
+ - 20220722200007.1839356-1-daniel.lezcano@linexp.org
+
+which are present in the thermal/linux-next branch:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
+
+The series introduces a new thermal OF code. The patch description gives
+a detailed explanation of the changes. Basically we write new OF parsing
+functions, we migrate all the users of the old thermal OF API to the new
+one and then we finish by removing the old OF code.
+
+That is the second step to rework the thermal OF code. More patches will
+come after that to remove the duplication of the trip definitions in the
+different drivers which will result in more code duplication removed and
+consolidation of the core thermal framework.
+
+Thanks for those who tested the series on their platform and
+investigated the regression with the disabled by default thermal zones.
+
+Changelog:
+ v2:
+   - Changed the code in the register thermal zone function to prevent
+     the 'const' annotation being removed in the different drivers
+   - Collected the tags and adding Cc for more context
+   - Changed the first line patch description to comply to the 'input'
+     subsystem format
+   - Give a more detailed description in the changelog for the drivers
+   - Remove pointless calls to unregister as the devm version is used
+     instead
+   - Moved dummy functions from one patch to another to prevent git
+     bisecting issue when THERMAL_OF=n
+   - Fixed thermal zone disabled by default
+
+Daniel Lezcano (32):
+  thermal/of: Rework the thermal device tree initialization
+  thermal/of: Make new code and old code co-exist
+  thermal/drivers/rockchip: Switch to new of API
+  thermal/drivers/uniphier: Switch to new of API
+  thermal/drivers/generic-adc: Switch to new of API
+  thermal/drivers/mmio: Switch to new of API
+  thermal/drivers/tegra: Switch to new of API
+  thermal/drivers/sun8i: Switch to new of API
+  thermal/drivers/sprd: Switch to new of API
+  thermal/drivers/broadcom: Switch to new of API
+  thermal/drivers/qcom: Switch to new of API
+  thermal/drivers/st: Switch to new of API
+  thermal/drivers/amlogic: Switch to new of API
+  thermal/drivers/armada: Switch to new of API
+  thermal/drivers/db8500: Switch to new of API
+  thermal/drivers/imx: Switch to new of API
+  thermal/drivers/rcar: Switch to new of API
+  thermal/drivers/rzg2l: Switch to new of API
+  thermal/drivers/qoriq: Switch to new of API
+  thermal/drivers/mtk: Switch to new of API
+  thermal/drivers/banggap: Switch to new of API
+  thermal/drivers/maxim: Switch to new of API
+  thermal/drivers/hisilicon: Switch to new of API
+  thermal/drivers/ti-soc: Switch to new of API
+  ata/drivers/ahci_imx: Switch to new of thermal API
+  hwmon/drivers: Switch to new of thermal API
+  iio/drivers/sun4i_gpadc: Switch to new of thermal API
+  Input: sun4i-ts - switch to new of thermal API
+  regulator/drivers/max8976: Switch to new of thermal API
+  thermal/drivers/samsung: Switch to new of thermal API
+  thermal/core: Move set_trip_temp ops to the sysfs code
+  thermal/of: Remove old OF code
+
+ drivers/ata/ahci_imx.c                        |   15 +-
+ drivers/hwmon/hwmon.c                         |   14 +-
+ drivers/hwmon/scpi-hwmon.c                    |   14 +-
+ drivers/iio/adc/sun4i-gpadc-iio.c             |   12 +-
+ drivers/input/touchscreen/sun4i-ts.c          |   10 +-
+ drivers/regulator/max8973-regulator.c         |   10 +-
+ drivers/thermal/amlogic_thermal.c             |   16 +-
+ drivers/thermal/armada_thermal.c              |   12 +-
+ drivers/thermal/broadcom/bcm2711_thermal.c    |   14 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c    |   14 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c    |   20 +-
+ drivers/thermal/broadcom/ns-thermal.c         |   50 +-
+ drivers/thermal/broadcom/sr-thermal.c         |   16 +-
+ drivers/thermal/db8500_thermal.c              |   12 +-
+ drivers/thermal/hisi_thermal.c                |   14 +-
+ drivers/thermal/imx8mm_thermal.c              |   14 +-
+ drivers/thermal/imx_sc_thermal.c              |   14 +-
+ drivers/thermal/k3_bandgap.c                  |   12 +-
+ drivers/thermal/k3_j72xx_bandgap.c            |   12 +-
+ drivers/thermal/max77620_thermal.c            |    8 +-
+ drivers/thermal/mtk_thermal.c                 |   10 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |   19 +-
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |   12 +-
+ drivers/thermal/qcom/tsens.c                  |   20 +-
+ drivers/thermal/qoriq_thermal.c               |   12 +-
+ drivers/thermal/rcar_gen3_thermal.c           |   16 +-
+ drivers/thermal/rcar_thermal.c                |   13 +-
+ drivers/thermal/rockchip_thermal.c            |   14 +-
+ drivers/thermal/rzg2l_thermal.c               |   10 +-
+ drivers/thermal/samsung/exynos_tmu.c          |   24 +-
+ drivers/thermal/sprd_thermal.c                |   18 +-
+ drivers/thermal/st/stm_thermal.c              |   16 +-
+ drivers/thermal/sun8i_thermal.c               |   14 +-
+ drivers/thermal/tegra/soctherm.c              |   27 +-
+ drivers/thermal/tegra/tegra-bpmp-thermal.c    |   19 +-
+ drivers/thermal/tegra/tegra30-tsensor.c       |   12 +-
+ drivers/thermal/thermal-generic-adc.c         |   10 +-
+ drivers/thermal/thermal_core.c                |    6 -
+ drivers/thermal/thermal_core.h                |    2 -
+ drivers/thermal/thermal_mmio.c                |   17 +-
+ drivers/thermal/thermal_of.c                  | 1140 ++++++-----------
+ drivers/thermal/thermal_sysfs.c               |    5 +-
+ .../ti-soc-thermal/ti-thermal-common.c        |   16 +-
+ drivers/thermal/uniphier_thermal.c            |   10 +-
+ include/linux/thermal.h                       |   89 +-
+ 45 files changed, 715 insertions(+), 1139 deletions(-)
+
+-- 
+2.25.1
 
