@@ -2,108 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8713C58039C
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 19:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD8858040B
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 20:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235786AbiGYRlT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 13:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S233055AbiGYScz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 14:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiGYRlS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 13:41:18 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B1E14D0E;
-        Mon, 25 Jul 2022 10:41:17 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31f379a0754so15250787b3.2;
-        Mon, 25 Jul 2022 10:41:17 -0700 (PDT)
+        with ESMTP id S230445AbiGYScy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 14:32:54 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE30514D3E;
+        Mon, 25 Jul 2022 11:32:53 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-31d85f82f0bso119380697b3.7;
+        Mon, 25 Jul 2022 11:32:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=3IhhclTIPbl2mf4VpDDOOj1WY1RyO1WWUZZG7ltuKqA=;
-        b=lMAXG3CQzNQ86IggIF+zCZQhm+33FohG7/XYdhD8iXOZinZjmYh6KNZkY0nFF6SKdI
-         t16o64jdfklhHp7pvAV3MJ8JI2shJSy+SJPtoTsoYjUvh4OcZnkmjVnWcndGgGeY8RKv
-         LnYDXdMVTuI/VuTZV4gIYJGAKPuYqOjE1Q5fliZBWR4fAxPBcQNToKYL6j041+QM8Bmq
-         YUE2hUNg/veXYSPGk044RE3RvukD5esKp/iuKxZNgyRVzhscm3mPpaDVmDF7PRjE5PYJ
-         r/ao1Q3hRsTNtCeEU1LQWLZu+Lu18QFFTmUhcp4LZFKfRlMGibBLenvxRDV51eCiKb7F
-         vwhQ==
-X-Gm-Message-State: AJIora8QOJGDzkp6PmEkFT8pHiCeEb7cW3LTltO3BiGb0w65NOmt94Qz
-        t2HMTmIhh7LZ6YT5KrhamPaKuJMiAuJt41f6UUY=
-X-Google-Smtp-Source: AGRyM1tHl+f3lwTtEqzX/f9XwP9tyLK3+t2hWM95ATK/qXh4QeDQlnZwrVm0LS3uqiJctWDDwMlqHVFs617zoMC8dBM=
-X-Received: by 2002:a81:78c6:0:b0:31e:848b:6e2 with SMTP id
- t189-20020a8178c6000000b0031e848b06e2mr11086109ywc.301.1658770876326; Mon, 25
- Jul 2022 10:41:16 -0700 (PDT)
+        bh=diB3p1SRruuk8rIBb0m/5aPwGr+R0gunx/X4Cv4OA/4=;
+        b=jpH8UdkDgAs7SBVH5iWPtBLuR1LJbHnGGsm4yKT2HycOscXFUvoxM3b64W+acVBrP7
+         Gifjb6K2YWoVn7w4Zt6eGcbc9bwkf7Zi28dufL5s2uKO07xsDgtJLfPZr0Vc9ajx+Jy7
+         pdSpyp7vNZdNeQM6mQgutb+kjusZjL7qljUKpp8no9U8ZaL6K0p9hdOIemeLmf+6sCVp
+         w3yxWeM3uo9k9s6Ks5XYv/KDDHZuJlrGyCcboItURzXZ8Kgm7iidTt+ZvBuQYilEjBs2
+         1aPwrLcYnVo3trXXb+Keigyh1MC4kcHFapkcdUpgSnCLqru+RvnrNpfBy+fowYY7Fmyj
+         hzsA==
+X-Gm-Message-State: AJIora9V5OdwkZfRic7uFuiVTC/0mddBjp8BRXQD/Z/dqGSrR8MALeqt
+        qox6GZx1465lGmCOPCuMsluuCY02KNZT8mOuKiM=
+X-Google-Smtp-Source: AGRyM1t/2yqolCuy7NvaFFlADeAVfE18diU9YwO/Ko6oHTgQU6Qlo6mbYZ8Fa/A/2bJ4VJfg7HFrVwBrJmSRNZFY1jw=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr10873566ywb.326.1658773972961; Mon, 25
+ Jul 2022 11:32:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220723195932.1302575-1-longman@redhat.com>
-In-Reply-To: <20220723195932.1302575-1-longman@redhat.com>
+References: <20220722200007.1839356-1-daniel.lezcano@linexp.org> <1aa3ae56-84ae-8a96-7a52-3181c47dcb07@linaro.org>
+In-Reply-To: <1aa3ae56-84ae-8a96-7a52-3181c47dcb07@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 25 Jul 2022 19:41:05 +0200
-Message-ID: <CAJZ5v0hL7P2miQjivtirzUhuTzqkM091GYCr+OjQARyi7TXSYQ@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: Fix false positive RCU splats due to
- incorrect hardirqs state
-To:     Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+Date:   Mon, 25 Jul 2022 20:32:41 +0200
+Message-ID: <CAJZ5v0gvHqUy7c_Bo=wj9nDS0xzB-driY5Uyu813vPnMDQZCOw@mail.gmail.com>
+Subject: Re: [PATCH v6 00/12] thermal OF rework
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 10:00 PM Waiman Long <longman@redhat.com> wrote:
->
-> Commit 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
-> uses raw_local_irq_enable/local_irq_disable() around call to
-> __intel_idle() in intel_idle_irq().
->
-> With interrupt enabled, timer tick interrupt can happen and a
-> subsequently call to __do_softirq() may change the lockdep hardirqs state
-> of a debug kernel back to 'on'. This will result in a mismatch between
-> the cpu hardirqs state (off) and the lockdep hardirqs state (on) causing
-> a number of false positive "WARNING: suspicious RCU usage" splats.
->
-> Fix that by using local_irq_disable() to disable interrupt in
-> intel_idle_irq().
->
-> Fixes: 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
-> Signed-off-by: Waiman Long <longman@redhat.com>
+Hi Daniel,
 
-Applied as 5.19-rc material.
+On Mon, Jul 25, 2022 at 6:34 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> On 22/07/2022 21:59, Daniel Lezcano wrote:
+> > The thermal framework initialization with the device tree appears to
+> > be complicated and hard to make it to evolve.
+> >
+> > It contains duplication of almost the same thermal generic structures
+> > and has an assymetric initialization making hard any kind of serious
+> > changes for more complex features. One of them is the multiple sensors
+> > support per thermal zone.
+> >
+> > In order to set the scene for the aforementioned feature with generic
+> > code, we need to cleanup and rework the device tree initialization.
+> >
+> > However this rework is not obvious because of the multiple components
+> > entering in the composition of a thermal zone and being initialized at
+> > different moments. For instance, a cooling device can be initialized
+> > before a sensor, so the thermal zones must exist before the cooling
+> > device as well as the sensor. This asynchronous initialization forces
+> > the thermal zone to be created with fake ops because they are
+> > mandotory and build a list of cooling devices which is used to lookup
+> > afterwards when the cooling device driver is registering itself.
+> >
+> > As there could be a large number of changes, this first series provide
+> > some steps forward for a simpler device tree initialization.
+> >
+> > More series for cleanup and code duplication removal will follow.
+> >
+> > Changelog:
+> >
+> >   - v6:
+> >      - Folded patches 8, 9, 10
+> >      - Removed thermal_zone_get_trips() and thermal_zone_get_num_trips()
+> >      - Moved tz->ntrips => tz->num_trips changes into patch 11 to fix the
+> >        git bisecting
+> >
+>
+> I believe all the comments were addressed, is it fine if I merge this
+> series ?
 
-Peter, please let me know if you have concerns.
-
-> ---
->  drivers/idle/intel_idle.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index f5c6802aa6c3..907700d1e78e 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -162,7 +162,13 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
->
->         raw_local_irq_enable();
->         ret = __intel_idle(dev, drv, index);
-> -       raw_local_irq_disable();
-> +
-> +       /*
-> +        * The lockdep hardirqs state may be changed to 'on' with timer
-> +        * tick interrupt followed by __do_softirq(). Use local_irq_disable()
-> +        * to keep the hardirqs state correct.
-> +        */
-> +       local_irq_disable();
->
->         return ret;
->  }
-> --
-> 2.31.1
->
+Yes, please!
