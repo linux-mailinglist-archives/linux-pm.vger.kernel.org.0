@@ -2,171 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1D8580395
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 19:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8713C58039C
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 19:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiGYRia (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 13:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S235786AbiGYRlT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 13:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiGYRi3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 13:38:29 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB06F1C916;
-        Mon, 25 Jul 2022 10:38:28 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id y9so11045189pff.12;
-        Mon, 25 Jul 2022 10:38:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9CQxdN0UuCCTwqKPx83Nzu7fLirKahxtUNngDAmtuPY=;
-        b=RRNd2A2HkQ6hbJaE13qKf/tqqRa1cdyvaSFzq5KJAbWtgKTUwcqQqUcH88F6odiq3R
-         mSUzI/nwKgT/i6FE3aoj/YGbP4lwOcM+bFgdFCH0Xshfxjey9DvbZ5W5vo2LspgPtAAa
-         Uk1wwa9m6rhTSjIFiUjREkJm+ZSnmTl80EBUo4N29HXVWI5puU/uxfc4Q0N9MYPpOe7i
-         cmAMtBSjdJ6TyhcajUq9m9VorSpMwt7GJz2Fz8oijxRXXYFhe0A0+cc0DmiNlPN2ip2n
-         7QA5zZBd45nA9fxvtKLPXhdYYB8YTGc27q1078F9cezra1NOnmZHtVaWwIP0nsFdbley
-         egGQ==
+        with ESMTP id S229921AbiGYRlS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 13:41:18 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B1E14D0E;
+        Mon, 25 Jul 2022 10:41:17 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31f379a0754so15250787b3.2;
+        Mon, 25 Jul 2022 10:41:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9CQxdN0UuCCTwqKPx83Nzu7fLirKahxtUNngDAmtuPY=;
-        b=lfd2vCL+MvpouwCAK7bTz7B8T8hi8k2nE6+DDSb1L1iL7IvqMh+CuPc3Yr6nJNhOn/
-         dT1G1l3UvobQ6tIoRZksH8zC0TEGCaWDu+/jXusvnAqWAQn8MvQZ+55fwPIgcXTK2VhW
-         ttSL9Ysd+/538SzkVeiJtn7SiGeFPxJ/u9h9CqpNz4/m0io+coLtmndny/y/XpzJdJHq
-         kcyeiaFvW801Pjy7kOXxq0/HlJcl4A1O1PPBO4R3V9fXpWNgWE2FPrscdP33lEOM0kuf
-         Ef3G54Ifuhk7WHV2lOMgjbTjSA1uhS8BjMxziJKhXE3Tgqt6uDSOKsHO5Ho0CrV0bBix
-         7PDA==
-X-Gm-Message-State: AJIora8aEZ6tUIrnlAqa9mu0p6OkUVFCN89BW/wd2baRhwXMNd9v3yYs
-        wykQcGpJG8iQOaUQ7ReX92roDkEwqYk=
-X-Google-Smtp-Source: AGRyM1vgKz/ifCaiCr8JOoIJjb7/GeKixT5F/X1KEdo30UBhdFvBcugFAnTbTxwXUuYIqmCDYr1w8Q==
-X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr14054362pfi.84.1658770707922;
-        Mon, 25 Jul 2022 10:38:27 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i188-20020a6287c5000000b005251b9102dbsm10219146pfe.144.2022.07.25.10.38.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 10:38:27 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     mmayer@broadcom.com, Florian Fainelli <f.fainelli@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL)
-Subject: [PATCH] tools/thermal: Fix possible path truncations
-Date:   Mon, 25 Jul 2022 10:37:54 -0700
-Message-Id: <20220725173755.2993805-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3IhhclTIPbl2mf4VpDDOOj1WY1RyO1WWUZZG7ltuKqA=;
+        b=lMAXG3CQzNQ86IggIF+zCZQhm+33FohG7/XYdhD8iXOZinZjmYh6KNZkY0nFF6SKdI
+         t16o64jdfklhHp7pvAV3MJ8JI2shJSy+SJPtoTsoYjUvh4OcZnkmjVnWcndGgGeY8RKv
+         LnYDXdMVTuI/VuTZV4gIYJGAKPuYqOjE1Q5fliZBWR4fAxPBcQNToKYL6j041+QM8Bmq
+         YUE2hUNg/veXYSPGk044RE3RvukD5esKp/iuKxZNgyRVzhscm3mPpaDVmDF7PRjE5PYJ
+         r/ao1Q3hRsTNtCeEU1LQWLZu+Lu18QFFTmUhcp4LZFKfRlMGibBLenvxRDV51eCiKb7F
+         vwhQ==
+X-Gm-Message-State: AJIora8QOJGDzkp6PmEkFT8pHiCeEb7cW3LTltO3BiGb0w65NOmt94Qz
+        t2HMTmIhh7LZ6YT5KrhamPaKuJMiAuJt41f6UUY=
+X-Google-Smtp-Source: AGRyM1tHl+f3lwTtEqzX/f9XwP9tyLK3+t2hWM95ATK/qXh4QeDQlnZwrVm0LS3uqiJctWDDwMlqHVFs617zoMC8dBM=
+X-Received: by 2002:a81:78c6:0:b0:31e:848b:6e2 with SMTP id
+ t189-20020a8178c6000000b0031e848b06e2mr11086109ywc.301.1658770876326; Mon, 25
+ Jul 2022 10:41:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220723195932.1302575-1-longman@redhat.com>
+In-Reply-To: <20220723195932.1302575-1-longman@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 25 Jul 2022 19:41:05 +0200
+Message-ID: <CAJZ5v0hL7P2miQjivtirzUhuTzqkM091GYCr+OjQARyi7TXSYQ@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: Fix false positive RCU splats due to
+ incorrect hardirqs state
+To:     Waiman Long <longman@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A build with -D_FORTIFY_SOURCE=2 enabled will produce the following warnings:
+On Sat, Jul 23, 2022 at 10:00 PM Waiman Long <longman@redhat.com> wrote:
+>
+> Commit 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
+> uses raw_local_irq_enable/local_irq_disable() around call to
+> __intel_idle() in intel_idle_irq().
+>
+> With interrupt enabled, timer tick interrupt can happen and a
+> subsequently call to __do_softirq() may change the lockdep hardirqs state
+> of a debug kernel back to 'on'. This will result in a mismatch between
+> the cpu hardirqs state (off) and the lockdep hardirqs state (on) causing
+> a number of false positive "WARNING: suspicious RCU usage" splats.
+>
+> Fix that by using local_irq_disable() to disable interrupt in
+> intel_idle_irq().
+>
+> Fixes: 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-sysfs.c:63:30: warning: '%s' directive output may be truncated writing up to 255 bytes into a region of size between 0 and 255 [-Wformat-truncation=]
-  snprintf(filepath, 256, "%s/%s", path, filename);
-                              ^~
-Bump up the buffer to PATH_MAX which is the limit and account for all of
-the possible NUL and separators that could lead to exceeding the
-allocated buffer sizes.
+Applied as 5.19-rc material.
 
-Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal subsystem")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- tools/thermal/tmon/sysfs.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+Peter, please let me know if you have concerns.
 
-diff --git a/tools/thermal/tmon/sysfs.c b/tools/thermal/tmon/sysfs.c
-index b00b1bfd9d8e..cb1108bc9249 100644
---- a/tools/thermal/tmon/sysfs.c
-+++ b/tools/thermal/tmon/sysfs.c
-@@ -13,6 +13,7 @@
- #include <stdint.h>
- #include <dirent.h>
- #include <libintl.h>
-+#include <limits.h>
- #include <ctype.h>
- #include <time.h>
- #include <syslog.h>
-@@ -33,9 +34,9 @@ int sysfs_set_ulong(char *path, char *filename, unsigned long val)
- {
- 	FILE *fd;
- 	int ret = -1;
--	char filepath[256];
-+	char filepath[PATH_MAX + 2]; /* NUL and '/' */
- 
--	snprintf(filepath, 256, "%s/%s", path, filename);
-+	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
- 
- 	fd = fopen(filepath, "w");
- 	if (!fd) {
-@@ -57,9 +58,9 @@ static int sysfs_get_ulong(char *path, char *filename, unsigned long *p_ulong)
- {
- 	FILE *fd;
- 	int ret = -1;
--	char filepath[256];
-+	char filepath[PATH_MAX + 2]; /* NUL and '/' */
- 
--	snprintf(filepath, 256, "%s/%s", path, filename);
-+	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
- 
- 	fd = fopen(filepath, "r");
- 	if (!fd) {
-@@ -76,9 +77,9 @@ static int sysfs_get_string(char *path, char *filename, char *str)
- {
- 	FILE *fd;
- 	int ret = -1;
--	char filepath[256];
-+	char filepath[PATH_MAX + 2]; /* NUL and '/' */
- 
--	snprintf(filepath, 256, "%s/%s", path, filename);
-+	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
- 
- 	fd = fopen(filepath, "r");
- 	if (!fd) {
-@@ -199,8 +200,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
- {
- 	unsigned long trip_instance = 0;
- 	char cdev_name_linked[256];
--	char cdev_name[256];
--	char cdev_trip_name[256];
-+	char cdev_name[PATH_MAX];
-+	char cdev_trip_name[PATH_MAX];
- 	int cdev_id;
- 
- 	if (nl->d_type == DT_LNK) {
-@@ -213,7 +214,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
- 			return -EINVAL;
- 		}
- 		/* find the link to real cooling device record binding */
--		snprintf(cdev_name, 256, "%s/%s", tz_name, nl->d_name);
-+		snprintf(cdev_name, sizeof(cdev_name) - 2, "%s/%s",
-+			 tz_name, nl->d_name);
- 		memset(cdev_name_linked, 0, sizeof(cdev_name_linked));
- 		if (readlink(cdev_name, cdev_name_linked,
- 				sizeof(cdev_name_linked) - 1) != -1) {
-@@ -226,8 +228,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
- 			/* find the trip point in which the cdev is binded to
- 			 * in this tzone
- 			 */
--			snprintf(cdev_trip_name, 256, "%s%s", nl->d_name,
--				"_trip_point");
-+			snprintf(cdev_trip_name, sizeof(cdev_trip_name) - 1,
-+				"%s%s", nl->d_name, "_trip_point");
- 			sysfs_get_ulong(tz_name, cdev_trip_name,
- 					&trip_instance);
- 			/* validate trip point range, e.g. trip could return -1
--- 
-2.25.1
-
+> ---
+>  drivers/idle/intel_idle.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index f5c6802aa6c3..907700d1e78e 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -162,7 +162,13 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
+>
+>         raw_local_irq_enable();
+>         ret = __intel_idle(dev, drv, index);
+> -       raw_local_irq_disable();
+> +
+> +       /*
+> +        * The lockdep hardirqs state may be changed to 'on' with timer
+> +        * tick interrupt followed by __do_softirq(). Use local_irq_disable()
+> +        * to keep the hardirqs state correct.
+> +        */
+> +       local_irq_disable();
+>
+>         return ret;
+>  }
+> --
+> 2.31.1
+>
