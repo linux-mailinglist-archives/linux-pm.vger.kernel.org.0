@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0298A580684
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 23:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E5658068A
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Jul 2022 23:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237093AbiGYV1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 17:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S236661AbiGYV1Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 17:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237297AbiGYV1C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 17:27:02 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE66248CE
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:27:00 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id d13so10054384wrn.10
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:27:00 -0700 (PDT)
+        with ESMTP id S237280AbiGYV1E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 17:27:04 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B6A240B6
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:27:02 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so7095508wmm.4
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 14:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NVvhouf/ZsSYzyYoQ6bj2MFHWvALAEEXijoyeWSBKFg=;
-        b=4A+rmH5FZdlInKT/IX846VUtAcg0whbHzdGUMh3sSe86/B1YPdQRtpISDXGnDjKA5A
-         iEDwo0gN2W4HpW0UywK46TukdfyayePcb0aOuLa7dTqW2cFn/M5ZPAglWQMYjZcOcI2a
-         0WY6tPthSUe455uxDY0nXn0k934l/ir3s/PoEFq8oVnsfsBmzKbzFZsrsTCoMTKVBZdP
-         ikGa5fkkOueujzOcly3zondACVTnIUtnipqKXG7HYH6OtYamjFgZxRjlqv6haVL3RicO
-         9VVXIW9lbt/ltgGuL+UiMAiNfhETPIyA3b2wPL4V70YN7DHCRyHPIZKjbR9WDKGRxav8
-         jWTg==
+        bh=0/7L9Lc2wRZZo52YCs91vi96h8X92jsylQFQZGCnX0s=;
+        b=moWO8jivNU1cjTx+jhycpwp4j1NSrFXiBxnZLzWxkWOhd71+VNeuW0LevHrqNx+Y96
+         Xj6/35UpT0H8o2zYirADYTOclDWf3z9Dk5imPZNxkcVgB+NgGvhLIk7/cawOeh/rUTkr
+         aDWM5oFzGzIQT7In16e0/Wst5qm/cmsrDeIWVqkXCBBd6hP/iXmwby5nnQxGcyt8rlIF
+         YJIPGZg9AgWB3LHF6DKHFvNxPB1EwyzWRDnQ90gavwFHwqVVuqiYbpmulEYgmMD4Xryg
+         XWvLDvcYCcW7JodGSsr5kFKGcqqde4xKh9nayjG3ro6hmdV0QwF1oRGIDmk3uLGDRjEl
+         b0hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NVvhouf/ZsSYzyYoQ6bj2MFHWvALAEEXijoyeWSBKFg=;
-        b=jYvxXhV5Nn6TM9AIOJn5mSu9X4uaLiQQNvLK23uqDjoh0DGOaKu3K6J6fEFLhjNUEr
-         hstPY+SdMqgciFEE7p9dkiwc0i+kGPNaGwv+ipqC5gzzKmmn9JjjGYl41hrpXIX+mJKU
-         HnBnJWlfLR0xm45DSpnjt59DV0UJVCHVHoH6J6v1LR517Api1dfYBGc5g40LMeJbWrSU
-         ivlgGtlsVDaR24HXHucbCv5WQiJuTQnhvVf+kh5mhPOK/pgW+EMyYi66yNVoIBCWDmIt
-         cTZ2ExL2+0yeckNDY57pgrjHhwf34Wn8oyt4pe279WLKE4lu2u5LqHu98P6z13dHweg7
-         o+5A==
-X-Gm-Message-State: AJIora/TOSRnP2f05762KNAU/7lBLb1LGbGGwr6edqSGblL2MFe4vBbm
-        eUEUG9pIZ4m8hqN0z25w5VDN1A==
-X-Google-Smtp-Source: AGRyM1vUW151zyjWsaoIvJE7BR05pGeZN5me8jAFH/+l052fUdKUSaAu9hi8tNyIfy5CuOwaH6kQNw==
-X-Received: by 2002:a05:6000:719:b0:21e:4530:c558 with SMTP id bs25-20020a056000071900b0021e4530c558mr8323291wrb.243.1658784419294;
-        Mon, 25 Jul 2022 14:26:59 -0700 (PDT)
+        bh=0/7L9Lc2wRZZo52YCs91vi96h8X92jsylQFQZGCnX0s=;
+        b=O1M8h7pLA4QvvPThAbluPk7QfZ3Mdvk/K+4dimvzZkOhU1j2aOl5qu16PMMBDeu27K
+         XEoS6CPMwjSAqeikmDuFgyjjcGOpQvXeevPlo9a0i53N/qWIgxOB1MHNXUJbiEzWT8th
+         Vvzl/lSBVIoJjBtgv1jKIMB+cYWsIqrZgjyWAGUTBWCM/Hz7UIf4pITYnvc+yDb8lZxs
+         RyF71YH1/NszezTooFWAsWNOHBLSwCZSXXM0Oshc9qqZcsLRnZnslqkaqI3DsTwtDbLw
+         LCIFMW9kpy/hMJMsuMn+zAJO5Uo4AcDwgS1TU9y+g+QFKNFmrS+k0NyFeihu4IL0rOG2
+         rWJg==
+X-Gm-Message-State: AJIora9Lpd0T5onhAW9fdh2oNO4/dqxTPqXCuubSlyl4/be3gajyz7hf
+        u+6tXwe9GJ48b1wkTbUSixj9WA==
+X-Google-Smtp-Source: AGRyM1vyKjPCEv+fbOJKMq+h7EeTbR0qwq3V9QbvaCMzbQZMAZEvkVpoRiQ0jzTYzF1x+kvB6/Inuw==
+X-Received: by 2002:a1c:2584:0:b0:3a1:9de1:f2cd with SMTP id l126-20020a1c2584000000b003a19de1f2cdmr9329750wml.182.1658784421392;
+        Mon, 25 Jul 2022 14:27:01 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
-        by smtp.gmail.com with ESMTPSA id r17-20020a5d52d1000000b0021d68a504cbsm12668772wrv.94.2022.07.25.14.26.57
+        by smtp.gmail.com with ESMTPSA id r17-20020a5d52d1000000b0021d68a504cbsm12668772wrv.94.2022.07.25.14.26.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 14:26:58 -0700 (PDT)
+        Mon, 25 Jul 2022 14:27:01 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
@@ -61,20 +61,18 @@ Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
         glaroque@baylibre.com, miquel.raynal@bootlin.com,
         shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
         matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/UNIPHIER
-        ARCHITECTURE)
-Subject: [PATCH v2 04/32] thermal/drivers/uniphier: Switch to new of API
-Date:   Mon, 25 Jul 2022 23:26:09 +0200
-Message-Id: <20220725212637.2818207-5-daniel.lezcano@linexp.org>
+        Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH v2 05/32] thermal/drivers/generic-adc: Switch to new of API
+Date:   Mon, 25 Jul 2022 23:26:10 +0200
+Message-Id: <20220725212637.2818207-6-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
 References: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,45 +88,45 @@ API to register the thermal zone with these generic ops.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 ---
- drivers/thermal/uniphier_thermal.c | 10 +++++-----
+ drivers/thermal/thermal-generic-adc.c | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
-index 4cae5561a2a3..4111d99ef50e 100644
---- a/drivers/thermal/uniphier_thermal.c
-+++ b/drivers/thermal/uniphier_thermal.c
-@@ -187,9 +187,9 @@ static void uniphier_tm_disable_sensor(struct uniphier_tm_dev *tdev)
- 	usleep_range(1000, 2000);	/* The spec note says at least 1ms */
+diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
+index 73665c3ccfe0..323e273e3298 100644
+--- a/drivers/thermal/thermal-generic-adc.c
++++ b/drivers/thermal/thermal-generic-adc.c
+@@ -52,9 +52,9 @@ static int gadc_thermal_adc_to_temp(struct gadc_thermal_info *gti, int val)
+ 	return temp;
  }
  
--static int uniphier_tm_get_temp(void *data, int *out_temp)
-+static int uniphier_tm_get_temp(struct thermal_zone_device *tz, int *out_temp)
+-static int gadc_thermal_get_temp(void *data, int *temp)
++static int gadc_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
  {
--	struct uniphier_tm_dev *tdev = data;
-+	struct uniphier_tm_dev *tdev = tz->devdata;
- 	struct regmap *map = tdev->regmap;
+-	struct gadc_thermal_info *gti = data;
++	struct gadc_thermal_info *gti = tz->devdata;
+ 	int val;
  	int ret;
- 	u32 temp;
-@@ -204,7 +204,7 @@ static int uniphier_tm_get_temp(void *data, int *out_temp)
+ 
+@@ -68,7 +68,7 @@ static int gadc_thermal_get_temp(void *data, int *temp)
  	return 0;
  }
  
--static const struct thermal_zone_of_device_ops uniphier_of_thermal_ops = {
-+static const struct thermal_zone_device_ops uniphier_of_thermal_ops = {
- 	.get_temp = uniphier_tm_get_temp,
+-static const struct thermal_zone_of_device_ops gadc_thermal_ops = {
++static const struct thermal_zone_device_ops gadc_thermal_ops = {
+ 	.get_temp = gadc_thermal_get_temp,
  };
  
-@@ -289,8 +289,8 @@ static int uniphier_tm_probe(struct platform_device *pdev)
+@@ -143,8 +143,8 @@ static int gadc_thermal_probe(struct platform_device *pdev)
+ 	gti->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, gti);
  
- 	platform_set_drvdata(pdev, tdev);
- 
--	tdev->tz_dev = devm_thermal_zone_of_sensor_register(dev, 0, tdev,
--						&uniphier_of_thermal_ops);
-+	tdev->tz_dev = devm_thermal_of_zone_register(dev, 0, tdev,
-+						     &uniphier_of_thermal_ops);
- 	if (IS_ERR(tdev->tz_dev)) {
- 		dev_err(dev, "failed to register sensor device\n");
- 		return PTR_ERR(tdev->tz_dev);
+-	gti->tz_dev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, gti,
+-							   &gadc_thermal_ops);
++	gti->tz_dev = devm_thermal_of_zone_register(&pdev->dev, 0, gti,
++						    &gadc_thermal_ops);
+ 	if (IS_ERR(gti->tz_dev)) {
+ 		ret = PTR_ERR(gti->tz_dev);
+ 		if (ret != -EPROBE_DEFER)
 -- 
 2.25.1
 
