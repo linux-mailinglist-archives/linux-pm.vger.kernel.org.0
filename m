@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D8B581271
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 13:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AD8581275
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 13:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbiGZL6A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 07:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S233022AbiGZL6F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 07:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238380AbiGZL57 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 07:57:59 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF60732EFA
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 04:57:57 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id o12so16229565ljc.3
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 04:57:57 -0700 (PDT)
+        with ESMTP id S238577AbiGZL6B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 07:58:01 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1954B33342
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 04:58:00 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id b16so9777283lfb.7
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 04:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZwkQZasg6IBuIX69FQ87eiIi43RzDJyxPSLaxovlxC4=;
-        b=kYqEifC17FN7TtUjiBjuAmb1wrChjCst87iBC8TDZ7+xc8vNgwBl2B/DHmo4mtsUTk
-         ukHgvpU7hg4sndI3GIByDjcaQPJeBlvQr8pYw+n9B7CX8aDi+7QwW8qL+4zmVIHZe9rD
-         zDqLjIx9UR84zUhofG2J+SbCH9xpzcmW6j2abK87ChShLIwY+IkusBLVayEyUfEVUuZH
-         as5eQOemkZMLR1sbfhY1Sd4wMqv4fw+pvLTxsnhqbpBea6C5A8Qb0jVVqeqLgaqQa/56
-         RbYJvEoLI5xxRb9DURsh2h4t39Cy/0nkA3xIDdOUEltZFfLFnouXJb0kFRvTngXQ9Wvf
-         BgGw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pYLUai/g9PzuNxtQk+5u3lNYDu3DEs371sQhIxnEx1U=;
+        b=O5XnnAMMkLU5W9I+tb5iv/V7zHyqMVQ2/oyx7HN2nXIWsA+IPy0usF+WqhJT+McHqW
+         7wwRUIj6hmKY8KzKaYLJQwx6DDhI/87xRjMmR1HBDQ+fPOVpKXR0jl1t5IjjppA/CWxF
+         ALiEc0pLYC6sEFTn10XkTbRDHaBEXFXL9nXWIwyP1LOE0BhzF3Xr7KznoIA8LWIaW9v8
+         1q57WAz9E7eOTZInOwKwgJeTPJQYTBxm250WEgM3YrPZqOR04Nj/ljxmqKkFDb9cBbjQ
+         MHCvL5s4Zug2V7cinWP6TQl7L7cPhmtc9j9ME66HrT+GfkcT39ZRk0fjnTaBF/z1VWKh
+         WeqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZwkQZasg6IBuIX69FQ87eiIi43RzDJyxPSLaxovlxC4=;
-        b=RoXJlcknPZ7gzU0JuV4VpIrf3v0iaX9gIrus/GgmY4Jk4vOPR2P/RdtPOiwiCKvo5G
-         /BXWWcoo6greoybkvq84KiN0vrmWg8j6eGiZI3Edttr/fDVTaCiSguxfBj9YYBM1f0gh
-         GkLSTEXuHvkpPWawvo/+Rz3Rlxj5T6gPRAVfk3A9EX+TxiHP0sWS/nswfG5z0jvuUMsX
-         xERxQ0trc4VwGBAhQYWbQ3KXZyDzZlcDzlRe7e5HgZWxjGHXX4D9JYe1Zs8wtvbbcpbD
-         pTacvS9s0HZjXV9ZDBVr5ibPnkyEc98/NORw8ivnM7VEpS66RwRbQ32aeaPcOSuR+22J
-         z4QA==
-X-Gm-Message-State: AJIora9DV+87jaHQNZX1NFGmYm7cj16CKgl897Scp7bZg86wbVEoJJvw
-        ZHb6d4h/X7xVDcwW8gZ8lzq5Ww==
-X-Google-Smtp-Source: AGRyM1sbTSItTpSSwTcmlDwnnQpx/0JkNaISSUBsOMOvGMIufatVh9gvLfu9MyNfud5Jhd7RQsdUlg==
-X-Received: by 2002:a05:651c:1208:b0:25e:141e:63a7 with SMTP id i8-20020a05651c120800b0025e141e63a7mr1085274lja.513.1658836675690;
-        Tue, 26 Jul 2022 04:57:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pYLUai/g9PzuNxtQk+5u3lNYDu3DEs371sQhIxnEx1U=;
+        b=pkwROwQD0N1PunzWznWHel5QeYLwUKqT2Zi8vUUhtqoYXlBAVtDiYj4T2fQjWgVmSD
+         9H0rutp5uUYBz29xFpLwcfkIwvDl5ATJ3GcmTtXnBL3SXUiQZux4JAikYu2gXrPvESqk
+         5aK6sKGneeWXOtUehKkTX9Vb+R2Qat3NYXOp/B7rSoIoQH+/Z2xnNRXc5IYKCEJcWKRD
+         MCJV1M4QwtaVBya0sQFMRa2SwySI1qg9Mjx0dFBzAmFtSBmH64S4rM6ytxBjEfK3IjEZ
+         J0SDImRWy0UUU4FnYXe1j8w0FP3BDdauduOlPyNJOX3PZnDaqBj+9rQ9NO+PKg9hGOrG
+         /i3g==
+X-Gm-Message-State: AJIora+Ey6k5PNy2kRX7Hrih23ofnjRkcXlgzDVhP/5vcwBqn2knY05x
+        lhr/vGMox8SuJLOVO4tBaas1gA==
+X-Google-Smtp-Source: AGRyM1tLfSE4Egbpb2Jc+QspZmgwcEtAhCJrpE9RcM7ZQ/Hv4z8qtRIbJ7R3a7sa5pIKYoCWF64K8A==
+X-Received: by 2002:ac2:5f9c:0:b0:48a:8595:c84f with SMTP id r28-20020ac25f9c000000b0048a8595c84fmr4424871lfe.657.1658836678359;
+        Tue, 26 Jul 2022 04:57:58 -0700 (PDT)
 Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id g24-20020a19e058000000b0048a7d05739asm222219lfj.4.2022.07.26.04.57.53
+        by smtp.gmail.com with ESMTPSA id g24-20020a19e058000000b0048a7d05739asm222219lfj.4.2022.07.26.04.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 04:57:55 -0700 (PDT)
+        Tue, 26 Jul 2022 04:57:57 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -89,10 +89,12 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/3] dt-bindings: power: drop quotes when not needed
-Date:   Tue, 26 Jul 2022 13:57:46 +0200
-Message-Id: <20220726115748.101015-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/3] dt-bindings: power: reset: drop quotes when not needed
+Date:   Tue, 26 Jul 2022 13:57:47 +0200
+Message-Id: <20220726115748.101015-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220726115748.101015-1-krzysztof.kozlowski@linaro.org>
+References: <20220726115748.101015-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -105,106 +107,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Id and schema fields do not need quotes.
+string literals do not need quotes.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml      | 4 ++--
- .../devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml     | 4 ++--
- .../devicetree/bindings/power/apple,pmgr-pwrstate.yaml        | 2 +-
- .../devicetree/bindings/power/brcm,bcm63xx-power.yaml         | 4 ++--
- Documentation/devicetree/bindings/power/renesas,apmu.yaml     | 4 ++--
- .../devicetree/bindings/power/renesas,rcar-sysc.yaml          | 4 ++--
- 6 files changed, 11 insertions(+), 11 deletions(-)
+ .../devicetree/bindings/power/reset/regulator-poweroff.yaml     | 2 +-
+ .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml
-index 4e52ef33a986..5390e988a934 100644
---- a/Documentation/devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml
-+++ b/Documentation/devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml
-@@ -2,8 +2,8 @@
- # Copyright 2019 BayLibre, SAS
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/power/amlogic,meson-ee-pwrc.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/power/amlogic,meson-ee-pwrc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
+index 03bd1fa5a623..e9417557cd30 100644
+--- a/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
++++ b/Documentation/devicetree/bindings/power/reset/regulator-poweroff.yaml
+@@ -16,7 +16,7 @@ description: |
  
- title: Amlogic Meson Everything-Else Power Domains
+ properties:
+   compatible:
+-    const: "regulator-poweroff"
++    const: regulator-poweroff
  
-diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-index 86e5f6513bb3..eab21bb2050a 100644
---- a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-+++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-@@ -3,8 +3,8 @@
- # Author: Jianxin Pan <jianxin.pan@amlogic.com>
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+   cpu-supply:
+     description:
+diff --git a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
+index 68d7c14a7163..46de35861738 100644
+--- a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
++++ b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
+@@ -15,7 +15,7 @@ description: |
  
- title: Amlogic Meson Secure Power Domains
+ properties:
+   compatible:
+-    const: "xlnx,zynqmp-power"
++    const: xlnx,zynqmp-power
  
-diff --git a/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml b/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
-index 19a194980142..94d369eb85de 100644
---- a/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
-+++ b/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Hector Martin <marcan@marcan.st>
- 
- allOf:
--  - $ref: "power-domain.yaml#"
-+  - $ref: power-domain.yaml#
- 
- description: |
-   Apple SoCs include PMGR blocks responsible for power management,
-diff --git a/Documentation/devicetree/bindings/power/brcm,bcm63xx-power.yaml b/Documentation/devicetree/bindings/power/brcm,bcm63xx-power.yaml
-index 63b15ac6dde4..d867bd6976d8 100644
---- a/Documentation/devicetree/bindings/power/brcm,bcm63xx-power.yaml
-+++ b/Documentation/devicetree/bindings/power/brcm,bcm63xx-power.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/power/brcm,bcm63xx-power.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/power/brcm,bcm63xx-power.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: BCM63xx power domain driver
- 
-diff --git a/Documentation/devicetree/bindings/power/renesas,apmu.yaml b/Documentation/devicetree/bindings/power/renesas,apmu.yaml
-index d77fc88050c8..f2cc89e7f4e4 100644
---- a/Documentation/devicetree/bindings/power/renesas,apmu.yaml
-+++ b/Documentation/devicetree/bindings/power/renesas,apmu.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/power/renesas,apmu.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/power/renesas,apmu.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Renesas Advanced Power Management Unit
- 
-diff --git a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
-index 8d56bedd3390..0720b54881c2 100644
---- a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
-+++ b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/power/renesas,rcar-sysc.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/power/renesas,rcar-sysc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Renesas R-Car and RZ/G System Controller
- 
+   interrupts:
+     maxItems: 1
 -- 
 2.34.1
 
