@@ -2,110 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A1B581479
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 15:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DB758148F
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 15:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbiGZNt1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 09:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S230243AbiGZNzX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 09:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238875AbiGZNtX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 09:49:23 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152DA1FCFD
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 06:49:21 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id p21so8916903ljh.12
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 06:49:20 -0700 (PDT)
+        with ESMTP id S229897AbiGZNzV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 09:55:21 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5CC63F0
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 06:55:18 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h8so20252062wrw.1
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 06:55:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y5BRR0iNLx6aBIjbVl9ArC7hjqevnrWy8iJkMFg13Gw=;
-        b=dT2fn0qmN08x8rHVL25zAPZPXxb9sSxyHNjZVrrW2S0kNRdHOsJe3cOdw+SNGK+6pb
-         GuLEbjj3CsXGw9nRB38q61/3XyYl1ssLvLP0iuIIruAR9Xjo8ir7ULdYlxFFMJHQXnwP
-         4ghhgnbIWtNl3Ba41DwCv8guPqyb1YwPRU/FuN830CkRRByk4dt/ReYyePn36G30bYxR
-         PpSQ+eMpVbvtbSOaPPM3PZkYIeJFI3b9AI/jkmLA9qeJMmk4zllanXgUM2Z/Y7lj/Psi
-         vG6uCGIhjiydmCr6okRuZz7dIaEzpt/g0I59gQVWTD2ESoYOt3oAUOIiRFofMAYNXAgF
-         Ty0A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uRAXgknnujaKg4Y8xAc9gwmU3XgmouGtPlayIr+CeFQ=;
+        b=KrVhtqwt4ghxBcQ7BHk+gIXSc0ZctgVQNeRus03e1qw1Zb4a9TF+doBcOiaOIIwUFF
+         FWRcPWIAVVnV6sMOcMnxH1HwxhsDNx5/YRtWaxR+Mf4JVtFMaPhAOsRl6XmhaJveJQlW
+         Mt655y8Bz1uN9vZHplDqRNHvFnabzBLWwSd4f3oVQoPSekjsolFtNP75kuRmDVpgO3P+
+         Av9HfTgLCx/lifQnvkRfvhpqMPTy9XVoTRdPJKLkU2XcglCPo8SiGgKY8ZFdHCWHD71R
+         pOG5j/iRUnlLmc3y8Ut1uTwIIVlskDbob1uj+sQsgX3FlK97jNzyu9+Cb5aqH9/XCccb
+         JxOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Y5BRR0iNLx6aBIjbVl9ArC7hjqevnrWy8iJkMFg13Gw=;
-        b=5W7tL+pxilfkUlsRAYONiOjfMZbakQtaEvJWNjyRm5e0rKTmSw6pxY/ZgmjilzBwo6
-         J/fgfZ+ODOh7xSnHAMQoVlJ+fDCvBugfjT/k48qLv22GJKJ1hQyXrvNGpRfbWmhPxy+H
-         jaEvmlxxESmlDv2U3X9NR3jkSvugXO+wV3Y8ZJNJiqp5xLEx77hPHLsIeVxrhi2PKZrt
-         LQwG6SW7aBzCIfXIIw8NdKtVbejbXwA6yHiJ2HlEQOZZCBwl2X6UX+Faz1xw5WnFzLy/
-         my3KQFimbzOOTqwuGAsQefGlXoNlsh22jzF1BoaPo+L/nolGzsFYkTo75S9oNFt+SJT+
-         CxMQ==
-X-Gm-Message-State: AJIora+/zW8aJJ95mihskBoLv5gYgj6vrUX9bkbK4V5VcdKIjtR9d/fQ
-        lkEwsuieDrJcDypFt0aUjnFpYg==
-X-Google-Smtp-Source: AGRyM1uQNkFPqhr+UY20E19CB6pxfKs587FemzdiLwf9fjReDOp5EzYTe0h56cIIqJGEJrhs0ZzNuA==
-X-Received: by 2002:a2e:7108:0:b0:25d:eacb:964d with SMTP id m8-20020a2e7108000000b0025deacb964dmr6560570ljc.232.1658843359139;
-        Tue, 26 Jul 2022 06:49:19 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id 197-20020a2e05ce000000b0025d70efeaaasm3313237ljf.75.2022.07.26.06.49.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 06:49:18 -0700 (PDT)
-Message-ID: <b47185a6-07aa-d159-2bce-aa84be9d0abe@linaro.org>
-Date:   Tue, 26 Jul 2022 15:49:17 +0200
+        bh=uRAXgknnujaKg4Y8xAc9gwmU3XgmouGtPlayIr+CeFQ=;
+        b=hyGpbU4wXf5NY3b7jSkhYPulA6MIi//fh0pcElgoEncuGLJAZdHvO6b9URSgnaIi4t
+         mpgFyqSPmt9gaLpcyCh2ucUxlBt+jQbhhpYG7ROPLwLh1z7JiTJrqYbWGhjLxmKsf7ay
+         1+1k2tCZ11riDbNa5eG2Uq27vs2viPecIFuWQnNxvqGJRFq3HRoMGHOBSp1wFd26MeFh
+         lZTNMllH3KSgnR7acVpOAdzZUeZhFrE+MBUF3V6GprISlhBAD5NOm+NQWOtJaP8uNwS4
+         N59dS6BD6YPcFDE4pyMxlP/K3MkmW9jpWqXCsgdPio2ci8TN4BJCyKMpr9neM5bz8P2o
+         xTSA==
+X-Gm-Message-State: AJIora/uYGvv04+zODhAb6Eh8v3F95t8CmpXl/crbETqVLWmyoi64BtO
+        /x5B75eV6xnxbboZIYfWhKLvbw==
+X-Google-Smtp-Source: AGRyM1s4PQktP1/lpdXvhNgX9YiuT1FJm8lx9eDXYPnVNEEQe4+s8xmvMXcX7o+RyaDnO0TXbFY7Kw==
+X-Received: by 2002:a5d:6dab:0:b0:21d:9fc8:3029 with SMTP id u11-20020a5d6dab000000b0021d9fc83029mr11140889wrs.172.1658843716767;
+        Tue, 26 Jul 2022 06:55:16 -0700 (PDT)
+Received: from Balsam-ThinkPad-T480.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id d13-20020adf9c8d000000b0021e4c3b2967sm15244670wre.65.2022.07.26.06.55.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 06:55:16 -0700 (PDT)
+From:   Balsam CHIHI <bchihi@baylibre.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Subject: [PATCH v8 0/6] Add LVTS architecture thermal
+Date:   Tue, 26 Jul 2022 15:55:00 +0200
+Message-Id: <20220726135506.485108-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
-Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
- <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
- <25673493-4171-62b0-f696-1316d115f388@kali.org>
- <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
- <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
- <d89a540f-672d-83de-d19d-00f10e4370d1@kali.org>
- <fec6bd98-5efd-fe34-6d75-1765219acd82@linaro.org>
- <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
- <3325c626-f1af-2e95-fc53-68cf3d427a88@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3325c626-f1af-2e95-fc53-68cf3d427a88@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/07/2022 14:01, Sibi Sankar wrote:
->>>> I think you may be right; I just applied this patchset to -next
->>>> (20220722) and i do not see the error message there.  On my 5.19-rc7
->>>> tree, i am also testing a patchset that enables qcom devices to access
->>>> efivars, so possibly we are ending up in secure world there?
->>>
->>> Actually mapping of IO space should not touch secure world, so this was
->>> a long shot assuming you test it on the next.
->>>
->>
->> The memory region specified in device tree overlaps with the llcc system
->> cache controller node. Steev probably had the QCOM_LLCC config enabled 
->> when he tested it out on his branch.
-> 
->  From what I see we can probably get away with restricting the llcc_base
-> reg region to just llcc0_common region and leave the lcc-bwmon as is.
+This series moves thermal files related to MediaTek to the mediatek folder.
+And introduce the new architecture LVTS (low voltage thermal sensor) driver to report
+the highest temperature in the SoC and record the highest temperature sensor,
+each sensor as a hot zone.
+The LVTS body is divided into two parts, the LVTS controller and the LVTS device.
+The LVTS controller can connect up to 4 LVTS devices, and each LVTS device
+can connect up to 7 TSMCUs.
 
-Och, that IO mapping for llcc is quite big. I'll try that.
+The architecture will be the first to be used on mt8192 and mt8195.
 
+Changelog:
+Changes in v8:
+        - Fix Coding style issues
+        - Rebase to kernel-5.18.rc8
+        - Rebase on top of these series :
+          - [RESEND v8 00/19] Cleanup MediaTek clk reset drivers and support SoCs :
+                https://lore.kernel.org/all/20220523093346.28493-1-rex-bc.chen@mediatek.com/
+          - [PATCH v6 00/12] thermal OF rework :
+                https://lore.kernel.org/all/20220722200007.1839356-1-daniel.lezcano@linexp.org/
+        - Add multi-instance support and SRC Modularization :
+          - Rewrite DTS and DT bindings
+            - Add DT bindings for MT8195
+            - One LVTS node for each HW Domain (AP and MCU)
+          - One SW Instance for each HW Domain, for each SoC
+          - Add an SRC file for each SoC (MT8192 and MT8195)
+          - Add a Kconfig sub-menu entry for each SoC
+        - Shrink LVTS instance iospace length from 0x1000 to 0x400
+        - Replace platform_get_resource by platform_get_mem_or_io to get Base Address
+        - Replace platform_get_resource by platform_get_irq to get Interrupt Number
+        - Add "lvts_" prefix to functions and structs
 
-Best regards,
-Krzysztof
+Changes in v7:
+        - Fix coding style issues
+        - Rewrite dt bindings
+          - was not accurate
+          - Use mt8195 for example (instead of mt8192)
+          - Rename mt6873 to mt8192
+          - Remove clock name
+        - Rebased on top of to series:
+          - https://patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+          - https://patchwork.kernel.org/project/linux-pm/list/?series=639386
+
+Changes in v6:
+        - Remove temperature aggregation (it will be added in another series)
+        - Update the way to read the temperature (read one sensor instead of all)
+        - Add support of mt8195
+
+Changes in v5:
+        - Use 'git mv' for the relocated file.
+
+Changes in v4:
+        - Rebase to kernel-v5.13-rc1
+        - Resend
+
+Changes in v3:
+        - change the expression in the lvts_temp_to_raw to dev_s64.
+
+Changes in v2:
+        - Rebase to kernel-5.11-rc1.
+        - sort headers
+        - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+        - disconstruct the api of lvts_read_tc_msr_raw.
+        - add the initial value max_temp = 0 and compare e.q.
+          in the lvts_read_all_tc_temperature.
+        - add the return with an invalid number in the lvts_init.
+
+This series depends on [1] and [2].
+
+[1]https://lore.kernel.org/all/20220523093346.28493-1-rex-bc.chen@mediatek.com/
+[2]https://lore.kernel.org/all/20220722200007.1839356-1-daniel.lezcano@linexp.org/
+
+Alexandre Bailon (2):
+  dt-bindings: thermal: Add binding document for LVTS thermal
+    controllers
+  arm64: dts: mt8195: Add efuse node to mt8195
+
+Michael Kao (3):
+  thermal: mediatek: Relocate driver to mediatek folder
+  thermal: mediatek: Add LVTS drivers for SoC theraml zones for mt8192
+  thermal: mediatek: Add thermal zone settings for mt8195
+
+Tinghan Shen (1):
+  arm64: dts: mt8195: Add thermal zone
+
+ .../thermal/mediatek,mt8192-lvts.yaml         |  73 ++
+ .../thermal/mediatek,mt8195-lvts.yaml         |  75 ++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 131 ++-
+ drivers/thermal/Kconfig                       |  14 +-
+ drivers/thermal/Makefile                      |   2 +-
+ drivers/thermal/mediatek/Kconfig              |  62 ++
+ drivers/thermal/mediatek/Makefile             |   4 +
+ drivers/thermal/mediatek/lvts_mt8192.c        | 241 +++++
+ drivers/thermal/mediatek/lvts_mt8195.c        | 253 +++++
+ .../{mtk_thermal.c => mediatek/soc_temp.c}    |   2 +-
+ drivers/thermal/mediatek/soc_temp_lvts.c      | 928 ++++++++++++++++++
+ drivers/thermal/mediatek/soc_temp_lvts.h      | 366 +++++++
+ 12 files changed, 2138 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8195-lvts.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ create mode 100644 drivers/thermal/mediatek/lvts_mt8192.c
+ create mode 100644 drivers/thermal/mediatek/lvts_mt8195.c
+ rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (99%)
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
+
+-- 
+2.34.1
+
