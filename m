@@ -2,40 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F23580E34
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 09:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B69F580EDE
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 10:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238285AbiGZHsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 03:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S237458AbiGZI0t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 04:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbiGZHsD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 03:48:03 -0400
+        with ESMTP id S232010AbiGZI0s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 04:26:48 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DC91DFDA;
-        Tue, 26 Jul 2022 00:48:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18E091A82E;
+        Tue, 26 Jul 2022 01:26:47 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CF721FB;
-        Tue, 26 Jul 2022 00:48:02 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 759441FB;
+        Tue, 26 Jul 2022 01:26:47 -0700 (PDT)
 Received: from [10.57.13.197] (unknown [10.57.13.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48D1F3F73B;
-        Tue, 26 Jul 2022 00:48:00 -0700 (PDT)
-Message-ID: <500c8773-12e0-1e3a-fb11-4d7a5da11b71@arm.com>
-Date:   Tue, 26 Jul 2022 08:47:57 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0FA33F73B;
+        Tue, 26 Jul 2022 01:26:45 -0700 (PDT)
+Message-ID: <dade430a-0856-0936-96bd-5010480c48c9@arm.com>
+Date:   Tue, 26 Jul 2022 09:26:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v6 00/12] thermal OF rework
+Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, rafael@kernel.org
-References: <20220722200007.1839356-1-daniel.lezcano@linexp.org>
- <1aa3ae56-84ae-8a96-7a52-3181c47dcb07@linaro.org>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <1aa3ae56-84ae-8a96-7a52-3181c47dcb07@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <20220711124229.16516-1-lukasz.luba@arm.com>
+ <1198724e-d94f-0b7c-9c4a-90595f8426d2@arm.com>
+ <CAJZ5v0gh78z3tw6simaZ5S6dmGvDc-OE6t02N8vQYk-2eoFQgA@mail.gmail.com>
+ <deddd9cc-f517-cff9-e304-e1f09c6784b7@arm.com>
+ <CAJZ5v0jYzJo2BU-qKkaJog6pYx7SkpgmWGd6vTTkc2T=gx8abw@mail.gmail.com>
+ <837b387a-b29d-2122-efb0-881b24dd2725@arm.com>
+In-Reply-To: <837b387a-b29d-2122-efb0-881b24dd2725@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -47,55 +52,68 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi Rafael,
 
-On 7/25/22 17:34, Daniel Lezcano wrote:
-> 
+On 7/25/22 09:07, Lukasz Luba wrote:
 > Hi Rafael,
 > 
-> On 22/07/2022 21:59, Daniel Lezcano wrote:
->> The thermal framework initialization with the device tree appears to
->> be complicated and hard to make it to evolve.
+> On 7/15/22 18:29, Rafael J. Wysocki wrote:
+>> On Fri, Jul 15, 2022 at 1:47 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>
+>>>
+>>>
+>>> On 7/15/22 12:44, Rafael J. Wysocki wrote:
+>>>> On Fri, Jul 15, 2022 at 10:47 AM Lukasz Luba <lukasz.luba@arm.com> 
+>>>> wrote:
+>>>>>
+>>>>> Hi Rafael,
+>>>>>
+>>>>> gentle ping.
+>>>>>
+>>>>> On 7/11/22 13:42, Lukasz Luba wrote:
+>>>>>> There is no need to keep the max CPU capacity in the per_cpu 
+>>>>>> instance.
+>>>>>> Furthermore, there is no need to check and update that variable
+>>>>>> (sg_cpu->max) everytime in the frequency change request, which is 
+>>>>>> part
+>>>>>> of hot path. Instead use struct sugov_policy to store that 
+>>>>>> information.
+>>>>>> Initialize the max CPU capacity during the setup and start callback.
+>>>>>> We can do that since all CPUs in the same frequency domain have 
+>>>>>> the same
+>>>>>> max capacity (capacity setup and thermal pressure are based on that).
+>>>>>>
+>>>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>>>> ---
+>>>>>>     kernel/sched/cpufreq_schedutil.c | 30 
+>>>>>> +++++++++++++++---------------
+>>>>>>     1 file changed, 15 insertions(+), 15 deletions(-)
+>>>>>
+>>>>> The patch got Ack from Viresh.
+>>>>> Could you take it?
+>>>>
+>>>> Yes, it's there in my queue.  Same for the EM changes.
+>>>
+>>> Thank you Rafael!
 >>
->> It contains duplication of almost the same thermal generic structures
->> and has an assymetric initialization making hard any kind of serious
->> changes for more complex features. One of them is the multiple sensors
->> support per thermal zone.
+>> Well, the patch doesn't apply on top of 5.19-rc6, because
+>> sugov_get_util() is somewhat different.
 >>
->> In order to set the scene for the aforementioned feature with generic
->> code, we need to cleanup and rework the device tree initialization.
->>
->> However this rework is not obvious because of the multiple components
->> entering in the composition of a thermal zone and being initialized at
->> different moments. For instance, a cooling device can be initialized
->> before a sensor, so the thermal zones must exist before the cooling
->> device as well as the sensor. This asynchronous initialization forces
->> the thermal zone to be created with fake ops because they are
->> mandotory and build a list of cooling devices which is used to lookup
->> afterwards when the cooling device driver is registering itself.
->>
->> As there could be a large number of changes, this first series provide
->> some steps forward for a simpler device tree initialization.
->>
->> More series for cleanup and code duplication removal will follow.
->>
->> Changelog:
->>
->>   - v6:
->>      - Folded patches 8, 9, 10
->>      - Removed thermal_zone_get_trips() and thermal_zone_get_num_trips()
->>      - Moved tz->ntrips => tz->num_trips changes into patch 11 to fix the
->>        git bisecting
->>
+>> Please rebase it and resend.
 > 
-> I believe all the comments were addressed, is it fine if I merge this 
-> series ?
+> My apologies for the delay, I was on holidays.
 > 
+> I'll do that today and resend it.
 > 
 
-My apologies for being quiet, I was on holiday last week.
-Please don't wait for me, I'm still catching up with internal stuff.
-Based on your changelog I can see you've addressed my comments.
+I have found the reason why it doesn't apply
+on your tree. I have used next-20220711
+to base this work on. It contains Peter's
+branch sched/core, where there is this Dietmar's patch:
 
-Regards,
-Lukasz
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=sched/core&id=bb4479994945e9170534389a7762eb56149320ac
+
+That causes the issue. I thing it might collide when I re-base my patch
+on top of 5.19-rc6 and you apply it into pm tree...
+
+What do you think about this?
