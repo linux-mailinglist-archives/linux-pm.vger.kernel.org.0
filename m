@@ -2,75 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CA658129C
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 14:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB7558129F
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 14:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiGZMBm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 08:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
+        id S238939AbiGZMCX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 08:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbiGZMBm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 08:01:42 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CCBBE0D;
-        Tue, 26 Jul 2022 05:01:41 -0700 (PDT)
+        with ESMTP id S238566AbiGZMCW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 08:02:22 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A52BE0D
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 05:02:20 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id w15so14269758lft.11
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 05:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658836901; x=1690372901;
-  h=subject:from:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Y19Fz65PlnLCYSYXGeKtni8ycM0Z52y7gynxwVIafhU=;
-  b=tm9ArRv8SPTzFssb5Cmd9Q5GIxfz3ewtshcsx0z2lcyFaLrlcDSfq9Er
-   QdXx15+7S/bWxGcfuFRuvV4GaqMsTfevFwZL5DY8vRYLITms7uPjKpXjS
-   aIsF/fImV6otHmTB8IxKtQFA0Y+DVuTWO27FL7wMV4ZBcfeNDUHLwVZb9
-   4=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Jul 2022 05:01:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:01:40 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Jul 2022 05:01:40 -0700
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Jul
- 2022 05:01:36 -0700
-Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2OjeeEKqmdO0aXjrcmTB3oh5E1K12ioI2MK+Jlc0qnk=;
+        b=fcIAEvn+30kYNR7+C0fXkirctZWsFt20+FXogYSpLRYligq2mhXMSPDUI8Nc+Z/NVr
+         mKfsIotLqtTMrO194t4MwC1mPcUjNH+505xXRGh5Rml93A/x/9gVh6urDKZXTapx/sVj
+         pvrM4zilN0EEN1RHP2ZnXn2kjKri+aZWBJFUvWWriyRWu+i6toqrlo3E/C098/PWXaFg
+         VBBqnl7mDqxEUwGmtJss7o4hqpqPtKOzuojLAJFpUghDPgoeNV/zydmqOlkIZ4ZEtMp0
+         D0eyia4Jn6LSuRMaGoTesazpGVnPjhDFT9F0dviyv7HM/mqWDB5h+GbRC/Qj8ZDC8++O
+         ZnpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2OjeeEKqmdO0aXjrcmTB3oh5E1K12ioI2MK+Jlc0qnk=;
+        b=aSLBRz5IX2s/Qx7wU2Gafx5pGYSkwTmK6za1sD5HL9BCIUKy8bZiDfrJtpaMlzu1SL
+         aGjt6s+kkHRh1w+ceVzVJMW8yOH0SKfi7HXKycAt4K7VW+s8MLiB6OW1Q2D5zbDDR17p
+         pxj2OxqwqrX7N+jNMqnitkY2LbcFN9XhzDWz/O0U5SkNlrgWoVGmuzXGihh1htb9N8Gd
+         xVt17sNueOZslui6hGuWDo7T1Q7smbc7j84fGXjugqyjs3oLuPGLEQM+ohxSA5j4Gd4j
+         dTf56CLoBV3nqQ93Memccc5jXXHmQ7eMCX2qL7riKsNxfuWOGJk6XHiQs2Ox8N1xWoxj
+         uSqQ==
+X-Gm-Message-State: AJIora+smv1kPhBbNczCN++nPUhjEFBkksmPmRZU0QPDBu9rWlpfsrx6
+        ifg4AN34uNBa/PPriaydu/eS7A==
+X-Google-Smtp-Source: AGRyM1utfUTMqTxzhGdOwXaRAPG2WLJDIEoQDdDUh/HbNdYULwInxjOvmmUs8K8dm6dTpVUGBMH8eA==
+X-Received: by 2002:a05:6512:1085:b0:48a:9d35:4b8 with SMTP id j5-20020a056512108500b0048a9d3504b8mr1937104lfg.3.1658836938640;
+        Tue, 26 Jul 2022 05:02:18 -0700 (PDT)
+Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id p15-20020a2e804f000000b0025ddf9a5b9csm3221865ljg.72.2022.07.26.05.02.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 05:02:18 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
- <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
- <25673493-4171-62b0-f696-1316d115f388@kali.org>
- <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
- <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
- <d89a540f-672d-83de-d19d-00f10e4370d1@kali.org>
- <fec6bd98-5efd-fe34-6d75-1765219acd82@linaro.org>
- <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
-Message-ID: <3325c626-f1af-2e95-fc53-68cf3d427a88@quicinc.com>
-Date:   Tue, 26 Jul 2022 17:31:33 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Vinod Koul <vkoul@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 0/2] power/reset/watchdog: dt-bindings: minor clean and qcom,pm8916-wdt to dtschema
+Date:   Tue, 26 Jul 2022 14:02:13 +0200
+Message-Id: <20220726120215.101868-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,41 +75,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/26/22 5:01 PM, Sibi Sankar wrote:
-> On 7/23/22 2:06 PM, Krzysztof Kozlowski wrote:
->> On 23/07/2022 04:37, Steev Klimaszewski wrote:
->>>>
->>>> Currently it's 5.19.0-rc7 (torvalds tree at 4ba1329c) with a few extra
->>>> patches on top, the bwmon set included.  It's possible that secure
->>>> world uses it, but I do not know enough about that to say one way or
->>>> the other.
->>
->> To test patches you should apply them on maintainer's tree or
->> linux-next. Applying on other trees of course might be useful for
->> testing some backports, but it is independent process and different 
->> issue.
->>
->>>>
->>>> -- steev
->>>>
->>> I think you may be right; I just applied this patchset to -next
->>> (20220722) and i do not see the error message there.  On my 5.19-rc7
->>> tree, i am also testing a patchset that enables qcom devices to access
->>> efivars, so possibly we are ending up in secure world there?
->>
->> Actually mapping of IO space should not touch secure world, so this was
->> a long shot assuming you test it on the next.
->>
-> 
-> The memory region specified in device tree overlaps with the llcc system
-> cache controller node. Steev probably had the QCOM_LLCC config enabled 
-> when he tested it out on his branch.
+Hi,
 
- From what I see we can probably get away with restricting the llcc_base
-reg region to just llcc0_common region and leave the lcc-bwmon as is.
+Dependency
+==========
+Patch #2 watchdog depends by context on patch #1. Optionally I could split
+these into two separate patchsets, but then we would have conflict when merging
+to linux-next/Linus. Let me know if that is preferred.
 
-> 
->>
->> Best regards,
->> Krzysztof
->>
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (2):
+  dt-bindings: power: reset: qcom,pon: use absolute path to other schema
+  dt-bindings: watchdog: qcom,pm8916-wdt: convert to dtschema
+
+ .../bindings/power/reset/qcom,pon.yaml        |  8 ++-
+ .../bindings/watchdog/qcom,pm8916-wdt.txt     | 28 ----------
+ .../bindings/watchdog/qcom,pm8916-wdt.yaml    | 51 +++++++++++++++++++
+ 3 files changed, 57 insertions(+), 30 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
+
+-- 
+2.34.1
+
