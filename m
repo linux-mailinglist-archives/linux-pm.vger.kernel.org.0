@@ -2,198 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B445580A14
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 05:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4569D580A43
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 06:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237357AbiGZDnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 23:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S235920AbiGZEPs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 00:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiGZDnP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 23:43:15 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F8D2A70C
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 20:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1658806994; x=1690342994;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vt84amRQOiVRnZk+EYa9ZDlXy2/jQrtxfSttKXecpxM=;
-  b=aLBwt5Dr95/CgInZ7CnRnp2e8hQJ/U76YUpbMAvhjbaEeBJmpAn4KV94
-   L3p9j69RYx6EkoiAIw2RdY12ASOq83Sqh+To30cn11TpH/KXGlGM++yqn
-   KYXxm6bxizHR2K7VUt05pz6jFliwe/2C5SJu8t5IfPcKGukcFPyHUS0QM
-   ax0vJgC98KaZqsSmQ9gpWZc/rLYt0rVkbHpeVf72MYayUMsI8pWLWmpsF
-   /XS4B++yaUDbPhYqf2QJENuEiJo8M9t0HyMyLPH4EtcWarIAVjfovr9rl
-   wKviKHeRvgN5CJI+cPbUjBGayG6DhiI1cKnWz/PdCNZNhyhrarfk8mn7x
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,193,1654531200"; 
-   d="scan'208";a="205452419"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Jul 2022 11:43:12 +0800
-IronPort-SDR: VxCyMvbZRCUZDDgRmMi00TnfWAnpG70M+3K+8UUeDZhuYodMgTgwV8DnTcrb2R/NHEgUU5Ddzp
- lYopc4FF8kPYpAwbfnJqAwB9Xy/WhAdGqHjPK8Ii4l4SxEJ6Y87Sh9HiQ9L0G3SJ+DJ/YWkjcp
- Ne4C6J71n+HJeY5rxpn4WkkZ2HkZIDDBvgROvjyJbHDI7Jt7Fqnreq3mN8mXsjk+tTeVA7HpO9
- 89DCwOlY0WN1R/LUBqQJnFtB8YsqIFgwuHLz/PsH2QetnPj9CnCewZFxvx0FG/EvBgwmYV+7+X
- j6YH+10zGY+oIq+ortbXypWx
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jul 2022 19:59:28 -0700
-IronPort-SDR: jVq+EplKKfqYZB4t/0y8a/EMMK5/Pq7A1G94As5ZwlBh2fwx+DYCfkbipLDTZMyIwBct5+7T+m
- Av1tyPwThUOSWK4xvr/EUQtomP3b92i6ytoCkN5iknr2yqAVkpOq6JKXlwtzny40ix9BPXUcig
- gyQKdNEILwvQFZaplYusHiG+dgBx4Sw72gzbf2IcMae9fc1tpz2QrLAcj3Q71lY44CEb9MoYFX
- Sgf3Gq03faH9iPz6Pgx7r4KJ5YnfTswOEkeSRpItiCsNbtLuLqH0AkkqXzWqDBHPAbvdmwRVSL
- 6WM=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jul 2022 20:43:13 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LsN6S432Rz1Rwnl
-        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 20:43:12 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1658806990; x=1661398991; bh=vt84amRQOiVRnZk+EYa9ZDlXy2/jQrtxfSt
-        tKXecpxM=; b=NmUQGOfaZyqdbFPdIFJvfhAjQevr30CV+vNmhQE11dOmTR0lT8d
-        s7Sq0miyzoXWAH98SzbpLQu9bVq6Dr52Wguqm6Bwt52WzE3jKCMkiv0voMHlVCEV
-        hRztjEidts5lBpAlL9wwe/NflP8bxFNnghkn+Xy5ITJIAxKEQQvtkIFSnfaBqIt4
-        ydZpz+PJYDKI+iFQkVogU5LF+OJzsoXsi+LYFdbFJ1yPzDAMOe+AVpNlG0lzRbq7
-        sPAOvkP3Tx0lW1uosb7pN34AuiSkGTZ/+a3nH5kJvJdZ3SUxmGrxno8VX0aol2RY
-        AAsqOVq9pGaKQWSBT0ki2JaKL8ma3FR/dOA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 3JhtXDiA13Hu for <linux-pm@vger.kernel.org>;
-        Mon, 25 Jul 2022 20:43:10 -0700 (PDT)
-Received: from [10.225.163.10] (unknown [10.225.163.10])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LsN6J3N7Fz1RtVk;
-        Mon, 25 Jul 2022 20:43:04 -0700 (PDT)
-Message-ID: <8e506701-e934-e9de-1a2f-ee252e514741@opensource.wdc.com>
-Date:   Tue, 26 Jul 2022 12:43:03 +0900
+        with ESMTP id S231440AbiGZEPr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 00:15:47 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6BA240AA;
+        Mon, 25 Jul 2022 21:15:46 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id j195so4093224ybj.11;
+        Mon, 25 Jul 2022 21:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lL85hlJEWNpWq8aoVq7T9RPrHigl/wy3kQyoeNe4Sas=;
+        b=hCdS8QSsYIw6gGaV0XS9IAV/+XD+Kk0QE5hzusxmOf5d2dTDTQQcL3NhqMYKbFY0Tn
+         ALB21R/6DazMYeCAAzfSZS7P0Z41gJsw+nZjWX6PlQXwXANm3LVAqrB5PFsMuqAHqXem
+         Mqmm3Ih1NTwtWzQhnAzSzRXXrf5yfCoFcjkmFFPLCmRVp2siIg3AfNjuCMTK2YESptid
+         eeP9tz5wTm7qe3sotMpBO4iTSI2DKFf7D3YatBVRT/PbkAZVFycO+siEvHp7i27pNctb
+         TonIMjdDnr0jjVWHRnLmYyT6Iqx8oAClUtlkGASQ6CkTyN1ePQ9WOQPU8smSEzTDkemD
+         7GYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lL85hlJEWNpWq8aoVq7T9RPrHigl/wy3kQyoeNe4Sas=;
+        b=PC6hw7zeLjOXjofpJO1WG7vc5dzxEG2re2M9lU+dBoq7396PI+/H0o18wCV6FXP3HL
+         DVWLfwjhxo6IEwiWKCpIpEPlKmux4/qzcM4DZhZCNbMd7X6p1kvG3YPC3yJskwL6q4mR
+         bnZe0hw9n0J+Xi3G9eMJsaUYwL6S1ZKD9cX+Q6y8lNrxlQKZnLMfAoWykBI5j3AX9D2S
+         9z2iIrahKCgnt+rZdzI/GVljdaBVN7YBa+n7iN2NH4LCEJgPaqB+wIKMkiopEFMVCIym
+         DJeu1Nz5F5UxTziRTH1aPfl7zngy8kqLsJxYAKxVhaM/Amqw9AgFMiycnhTrO/p03qGt
+         lKJA==
+X-Gm-Message-State: AJIora+Ml0B1VxZDIMEoOtToMqvbHpdtILIeE9WZF99630HmB0dl3Up+
+        GiwbnPIJXues3K50dfQsbBjTROsPpFGg5HH8f1w=
+X-Google-Smtp-Source: AGRyM1uSqvDW6wRuMm0lak5Iwbp5WAlFUJEhBzOij+tqweUKRMo5toAZUB++pRBDQrYJNbxll8cTRP6sKMvIiCj1/Dk=
+X-Received: by 2002:a05:6902:10c2:b0:671:73dd:e67e with SMTP id
+ w2-20020a05690210c200b0067173dde67emr484158ybu.16.1658808945685; Mon, 25 Jul
+ 2022 21:15:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 25/32] ata/drivers/ahci_imx: Switch to new of thermal
- API
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
-        heiko@sntech.de, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
-        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
-        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
-        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
-        miquel.raynal@bootlin.com, shawnguo@kernel.org,
-        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
-        j-keerthy@ti.com, Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
- <20220725212637.2818207-26-daniel.lezcano@linexp.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220725212637.2818207-26-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-13-peterwu.pub@gmail.com>
+ <CAHp75VfgiK87VwWu2bTJ_mR0=g0sa0LPJ+H16OGcUdARmzFRSA@mail.gmail.com>
+In-Reply-To: <CAHp75VfgiK87VwWu2bTJ_mR0=g0sa0LPJ+H16OGcUdARmzFRSA@mail.gmail.com>
+From:   szuni chen <szunichen@gmail.com>
+Date:   Tue, 26 Jul 2022 12:15:34 +0800
+Message-ID: <CA+hk2fYpDRw+DRRU3m=EDOP6UEQNpJLyNBHe8Zi0qOfUObTb4Q@mail.gmail.com>
+Subject: Re: [PATCH v6 12/13] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/26/22 06:26, Daniel Lezcano wrote:
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach. The ops are no longer device
-> tree specific and are the generic ones provided by the core code.
-> 
-> Convert the ops to the thermal_zone_device_ops format and use the new
-> API to register the thermal zone with these generic ops.
-> 
-> sata_ahci_read_temperature() is used by sata_ahci_show_temp() also.
-> 
-> So in order to change the function prototype for the get_temp ops which
-> does not take a void* but a thermal_zone_device* structure, this
-> function wraps the call.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+Hi Andy,
 
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+>
+> > +#define MT6370_ITORCH_MIN_UA           25000
+> > +#define MT6370_ITORCH_STEP_UA          12500
+> > +#define MT6370_ITORCH_MAX_UA           400000
+> > +#define MT6370_ITORCH_DOUBLE_MAX_UA    800000
+> > +#define MT6370_ISTRB_MIN_UA            50000
+> > +#define MT6370_ISTRB_STEP_UA           12500
+> > +#define MT6370_ISTRB_MAX_UA            1500000
+> > +#define MT6370_ISTRB_DOUBLE_MAX_UA     3000000
+>
+> Perhaps _uA would be better and consistent across your series
+> regarding current units.
+>
 
-> ---
->  drivers/ata/ahci_imx.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/ata/ahci_imx.c b/drivers/ata/ahci_imx.c
-> index 79aa9f285312..b734e069034d 100644
-> --- a/drivers/ata/ahci_imx.c
-> +++ b/drivers/ata/ahci_imx.c
-> @@ -327,7 +327,7 @@ static int read_adc_sum(void *dev, u16 rtune_ctl_reg, void __iomem * mmio)
->  }
->  
->  /* SATA AHCI temperature monitor */
-> -static int sata_ahci_read_temperature(void *dev, int *temp)
-> +static int __sata_ahci_read_temperature(void *dev, int *temp)
->  {
->  	u16 mpll_test_reg, rtune_ctl_reg, dac_ctl_reg, read_sum;
->  	u32 str1, str2, str3, str4;
-> @@ -416,6 +416,11 @@ static int sata_ahci_read_temperature(void *dev, int *temp)
->  	return 0;
->  }
->  
-> +static int sata_ahci_read_temperature(struct thermal_zone_device *tz, int *temp)
-> +{
-> +	return __sata_ahci_read_temperature(tz->devdata, temp);
-> +}
-> +
->  static ssize_t sata_ahci_show_temp(struct device *dev,
->  				   struct device_attribute *da,
->  				   char *buf)
-> @@ -423,14 +428,14 @@ static ssize_t sata_ahci_show_temp(struct device *dev,
->  	unsigned int temp = 0;
->  	int err;
->  
-> -	err = sata_ahci_read_temperature(dev, &temp);
-> +	err = __sata_ahci_read_temperature(dev, &temp);
->  	if (err < 0)
->  		return err;
->  
->  	return sprintf(buf, "%u\n", temp);
->  }
->  
-> -static const struct thermal_zone_of_device_ops fsl_sata_ahci_of_thermal_ops = {
-> +static const struct thermal_zone_device_ops fsl_sata_ahci_of_thermal_ops = {
->  	.get_temp = sata_ahci_read_temperature,
->  };
->  
-> @@ -1131,8 +1136,8 @@ static int imx_ahci_probe(struct platform_device *pdev)
->  			ret = PTR_ERR(hwmon_dev);
->  			goto disable_clk;
->  		}
-> -		devm_thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
-> -					     &fsl_sata_ahci_of_thermal_ops);
-> +		devm_thermal_of_zone_register(hwmon_dev, 0, hwmon_dev,
-> +					      &fsl_sata_ahci_of_thermal_ops);
->  		dev_info(dev, "%s: sensor 'sata_ahci'\n", dev_name(hwmon_dev));
->  	}
->  
+Yes, _uA will be more consistent, but in general, using upper case in
+the define macro is a convention, doesn't it?
+
+>
+> > +       /*
+> > +        * For the flash to turn on/off, need to wait for HW ramping up/down time
+>
+> we need
+>
+> > +        * 5ms/500us to prevent the unexpected problem.
+> > +        */
+> > +       if (!prev && curr)
+> > +               usleep_range(5000, 6000);
+> > +       else if (prev && !curr)
+> > +               udelay(500);
+>
+> This still remains unanswered, why in the first place we allow
+> switching, and a busy loop in the other place?
+
+If I refine the description to
+"For the flash to turn on/off, need to wait for 5ms/500us analog settling time.
+If any flash led is already used, then the analog is settled done, we
+don't need to wait again."
+is it answer the question?
 
 
--- 
-Damien Le Moal
-Western Digital Research
+Best regards,
+Alice
