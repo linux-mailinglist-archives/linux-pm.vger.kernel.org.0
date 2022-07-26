@@ -2,142 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4054581671
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 17:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21F158169F
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 17:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237503AbiGZPb4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 11:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S238795AbiGZPlv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 11:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237721AbiGZPbz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 11:31:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C1524BED;
-        Tue, 26 Jul 2022 08:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658849514; x=1690385514;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hl+u7USFyWlFOxUxd5I+dkiqpw0PVDQT5ymfIrpcXZU=;
-  b=EmBCX1xSoqw2Ie12WlE8BRiUhxsy/rxlqlWcFFBktPkLqLP7k86pZXpq
-   eAf17JNDWmMcpFIseoFpWaVbRLj4RxRG139rFjUAWnt8rYoo//JxpmxR/
-   xzL5fwGjI0+fjnE8CINEypLVI5A98T6k2WLsENM8hoBKNnjkhl36WFDiQ
-   xd3P4oBpGJKTtjxPdi4ycnMQbopaeVsOhzBiNnPbhgys8FypSkQQVn4YU
-   cruxmVBg9WBmw4uJMqriRiqKMgd3LONgwZJy8orso1EKh35GHLAipBz7X
-   IZuEvl6HzCQjSf7+nccSXr8C7BRAj9OogkEkAAinTWP+UksvgFFRllAR+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="267749208"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="267749208"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 08:31:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="927377453"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Jul 2022 08:31:27 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGMWs-00073o-2g;
-        Tue, 26 Jul 2022 15:31:26 +0000
-Date:   Tue, 26 Jul 2022 23:30:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- e399ae3422730fa46abf97b3563c23274ecb8ceb
-Message-ID: <62e008aa.hGXu5TSEWwXQkLxD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S238661AbiGZPlu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 11:41:50 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DF92C118;
+        Tue, 26 Jul 2022 08:41:50 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id f73so25934788yba.10;
+        Tue, 26 Jul 2022 08:41:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=XZBi7IzCqvfKTanZDhCaN3J6iz5Ywu+mqR8S9am4fhs=;
+        b=QDDQn9lnU62NcpS9soWU772pkL/9HkB1xjc/a5W+bfCduAK+Pa6gcb8xPeulpWJyXJ
+         6/uOyy8QuglLUQwmHmv2MhQue7NY/xz52ILoBSqMLyoG8eObuszPJ5Dv4ekNMfF3OeWN
+         PKVUlku7hNaqs2z6oqQdR0WICfNAR62NHvJA3QLyxJFpnFNvb2hld//6v0fs65mIfmk2
+         Kyu3wv6SmyuC+Vl1hLz7mRKq6Fh4ndYxn/GOz9azS8vQ7jdh9u+WAN02TAz6WtUQaoLa
+         FnFLH8sc8Dxeh6HB54CPK12I1osOWgjWTWR6hSk1iLpEdR7gd85XFkL6etjveuAFmjEN
+         bCSQ==
+X-Gm-Message-State: AJIora/gMiMfvdZe96ZNAsHDKySi2fFeiMe1VUjVS7zGST/t/Uv2IgEp
+        gz99M7Sd0NsSYXSnyDWRoUlPdyrT+dEsAiBppXo=
+X-Google-Smtp-Source: AGRyM1tagkoanXWG4bh0W25Ylp/aPCF89fBrmoKdcJqs7qiNOxQ5gGAdGZLvN0DeMzruyK55onWK4fqRCht4OkOWItU=
+X-Received: by 2002:a05:6902:154f:b0:66e:e2d3:ce1 with SMTP id
+ r15-20020a056902154f00b0066ee2d30ce1mr12936010ybu.365.1658850109317; Tue, 26
+ Jul 2022 08:41:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220620144231.GA23345@axis.com> <5caa944f-c841-6f74-8e43-a278b2b93b06@suse.com>
+ <20220708110325.GA5307@axis.com> <4ca77763-53d0-965a-889e-be2eafadfd2f@intel.com>
+ <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com>
+In-Reply-To: <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Jul 2022 17:41:38 +0200
+Message-ID: <CAJZ5v0j0mgOcfKXRzyx12EX8CYLzowXrM8DGCH9XvQGnRNv0iw@mail.gmail.com>
+Subject: Re: PM runtime_error handling missing in many drivers?
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: e399ae3422730fa46abf97b3563c23274ecb8ceb  Merge branch 'pm-cpuidle' into bleeding-edge
+On Tue, Jul 26, 2022 at 11:05 AM Oliver Neukum <oneukum@suse.com> wrote:
+>
+>
+>
+> On 08.07.22 22:10, Rafael J. Wysocki wrote:
+> > On 7/8/2022 1:03 PM, Vincent Whitchurch wrote:
+>
+> >> Perhaps Rafael can shed some light on this.
+> >
+> > The driver always knows more than the framework about the device's
+> > actual state.  The framework only knows that something failed, but it
+> > doesn't know what it was and what way it failed.
+>
+> Hi,
+>
+> thinking long and deeply about this I do not think that this seemingly
+> obvious assertion is actually correct.
 
-elapsed time: 1191m
+I guess that depends on what is regarded as "the framework".  I mean
+the PM-runtime code, excluding the bus type or equivalent.
 
-configs tested: 61
-configs skipped: 2
+> > The idea was that drivers would clear these errors.
+>
+> I am afraid that is a deeply hidden layering violation. Yes, a driver's
+> resume() method may have failed. In that case, if that is the same
+> driver, it will obviously already know about the failure.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+So presumably it will do something to recover and avoid returning the
+error in the first place.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-sh                        sh7763rdp_defconfig
-mips                     loongson1b_defconfig
-powerpc                     ep8248e_defconfig
-ia64                             allmodconfig
-csky                              allnoconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-m68k                             allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-s390                 randconfig-r044-20220724
-arc                  randconfig-r043-20220724
-riscv                randconfig-r042-20220724
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
+From the PM-runtime core code perspective, if an error is returned by
+a suspend callback and it is not -EBUSY or -EAGAIN, the subsequent
+suspend is also likely to fail.
 
-clang tested configs:
-mips                         tb0287_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220724
-hexagon              randconfig-r045-20220724
+If a resume callback returns an error, any subsequent suspend or
+resume operations are likely to fail.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Storing the error effectively prevents subsequent operations from
+being carried out in both cases and that's why it is done.
+
+> PM operations, however, are operating on a tree. A driver requesting
+> a resume may get an error code. But it has no idea where this error
+> comes from. The generic code knows at least that.
+
+Well, what do you mean by "the generic code"?
+
+> Let's look at at a USB storage device. The request to resume comes
+> from sd.c. sd.c is certainly not equipped to handle a PCI error
+> condition that has prevented a USB host controller from resuming.
+
+Sure, but this doesn't mean that suspending or resuming the device is
+a good idea until the error condition gets resolved.
+
+> I am afraid this part of the API has issues. And they keep growing
+> the more we divorce the device driver from the bus driver, which
+> actually does the PM operation.
+
+Well, in general suspending or resuming a device is a collaborative
+effort and if one of the pieces falls over, making it work again
+involves fixing up the failing piece and notifying the others that it
+is ready again.  However, that part isn't covered and I'm not sure if
+it can be covered in a sufficiently generic way.
