@@ -2,94 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE285813F4
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 15:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9DA581429
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 15:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238627AbiGZNNO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 09:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S238686AbiGZN3Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 09:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbiGZNNN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 09:13:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0269C27CFD
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 06:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658841192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8lGwWcKgXjbZMsb7f3KkrDpC0QKsfV0t/BrUUpRw1V4=;
-        b=Rkj8Pu8Xn/8xA4NL3oR7xhO1jN060EbyM81tg36qXbs/BCUpc6yQuDbNV0mL8GK2HR5LAo
-        IwoDgVcfCxnOgaybRE4MMP1JuhQS94ssqD3Em4mtCLZOftUvSjvhDztz/biyfUDcrZAsmY
-        P3Umc76O0d9Cm21c/dvMwlq/SJIokSw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-402-ZNs6M0RYMWmMFdM8eCT6vg-1; Tue, 26 Jul 2022 09:13:10 -0400
-X-MC-Unique: ZNs6M0RYMWmMFdM8eCT6vg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48F57802D1C;
-        Tue, 26 Jul 2022 13:13:09 +0000 (UTC)
-Received: from localhost (unknown [10.39.192.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EECF81415118;
-        Tue, 26 Jul 2022 13:13:08 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-Cc:     Yishai Hadas <yishaih@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 1/5] vfio: Add the device features for the low power
- entry and exit
-In-Reply-To: <bd7bca18-ae07-c04a-23d3-bf71245da0cc@nvidia.com>
-Organization: Red Hat GmbH
-References: <20220719121523.21396-1-abhsahu@nvidia.com>
- <20220719121523.21396-2-abhsahu@nvidia.com>
- <20220721163445.49d15daf.alex.williamson@redhat.com>
- <aaef2e78-1ed2-fe8b-d167-8ea2dcbe45b6@nvidia.com>
- <20220725160928.43a17560.alex.williamson@redhat.com>
- <bd7bca18-ae07-c04a-23d3-bf71245da0cc@nvidia.com>
-User-Agent: Notmuch/0.36 (https://notmuchmail.org)
-Date:   Tue, 26 Jul 2022 15:13:07 +0200
-Message-ID: <87fsiom2zg.fsf@redhat.com>
+        with ESMTP id S238724AbiGZN3W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 09:29:22 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E527E2AE1F
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 06:29:20 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p11so17813848lfu.5
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 06:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kzYEowobG1GCcVsGATTfBQVx4ZYoqtGaYqMt9Le464E=;
+        b=lHoxWQovthKA2GrOxGoHuCbLjZpwWr3Wlh7056dot4DKAFfIVgkG0X9/r6cqb6+TDZ
+         OZPgf3/NLfKQ46hCkQI5oLLcIlzfQnWXPLnp8qei5lfUKUkHHv0wruzLTH3mim3BdFnM
+         1xeKuBtdw2mmbMsOWQUku7r1wAsGnlGA5nckVX+WpWLD+hK487Sn8T4gv2i33F3a65uT
+         24ALNXmSTxaVq71Lw4aQLmo0yKJw2DwMNFFklMhsmGexYn3qNzpQyosSSkGmYyPSsdP6
+         no+INldFjim//84rveKiIerJUAFYM6dFjuSXJrLJE5voGvjXv0ei+RCSVB3/WRewDOu/
+         +7iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kzYEowobG1GCcVsGATTfBQVx4ZYoqtGaYqMt9Le464E=;
+        b=bqZDndyITGloF06Mfm0Sn+Kihm54C7DxLy55M6goEx9ugwrfEr+PDzfZVyKytXmw46
+         XY45+/zAmVguhvFWxhWKVyDB3Z6dq7R5lVRUihME+PJCrSo6nyq/cn6bacCoyOQPId6H
+         DZx7UfN5xpFkLImhxvZGloLY1xropcm8K9nzetx9C5YMmEpuMjBo3VXlXE9gt0S4aorG
+         zcSsnh8gleyFqZNtuwKXLye/CYcVlqtMPIm6rWnmuySWHMyfI5lcv3gT1QUleFdGexT3
+         f4uQ5HOfTPZRoIqn7qY4on2TgJ1JEeeunyR54/Z0Wo6+YzEJJRVnPyNzXQKBGFvcNnZY
+         H60Q==
+X-Gm-Message-State: AJIora+dfz5ozuYoGdrnMA7sxAd49joqRPxD9zwOxbtDsPtmG7OV3elo
+        WknOLQegMQWq8DqPycx1Sf8Xlg==
+X-Google-Smtp-Source: AGRyM1uzPgOgi6yIT6lZAK0SxMjw4dz41VaKCAnAeaO5QC0g8ea4Em13uGgJdkaREsyjbsOtBTUaHQ==
+X-Received: by 2002:ac2:4e07:0:b0:48a:18f3:e5fe with SMTP id e7-20020ac24e07000000b0048a18f3e5femr6931153lfr.357.1658842159247;
+        Tue, 26 Jul 2022 06:29:19 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id i6-20020a056512318600b0048a78d5c4b5sm1698072lfe.165.2022.07.26.06.29.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 06:29:18 -0700 (PDT)
+Message-ID: <2e928ad6-f11a-145a-d3d3-8ba3ce068a37@linaro.org>
+Date:   Tue, 26 Jul 2022 15:29:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 03/10] soc: qcom: icc-bwmon: drop unused BWMON_ZONE_COUNT
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+ <20220720192807.130098-4-krzysztof.kozlowski@linaro.org>
+ <689ae7a0-bb23-8264-a2ff-40b1b5bbf0af@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <689ae7a0-bb23-8264-a2ff-40b1b5bbf0af@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 26 2022, Abhishek Sahu <abhsahu@nvidia.com> wrote:
+On 26/07/2022 13:25, Sibi Sankar wrote:
+> Hey Krzysztof,
+> 
+> Thanks for working on the llcc bwmon patch series!
+> 
+> 
+> On 7/21/22 12:58 AM, Krzysztof Kozlowski wrote:
+>> BWMON_ZONE_COUNT define is not used.
+>>
+>> Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   drivers/soc/qcom/icc-bwmon.c | 1 -
+>>   1 file changed, 1 deletion(-)
+>>
+>> diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
+>> index 3415f42523cd..b76a59d9002c 100644
+>> --- a/drivers/soc/qcom/icc-bwmon.c
+>> +++ b/drivers/soc/qcom/icc-bwmon.c
+>> @@ -105,7 +105,6 @@
+>>   
+>>   /* BWMONv4 count registers use count unit of 64 kB */
+>>   #define BWMON_COUNT_UNIT_KB			64
+>> -#define BWMON_ZONE_COUNT			0x2d8
+> 
+> Apart from ^^ a few more defines like BWMON_GLOBAL_IRQ_STATUS,
 
->  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP 4
->  
->  /*
->   * Upon VFIO_DEVICE_FEATURE_SET, disallow use of device low power states as
->   * previously enabled via VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY or
->   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP device features.
->   * This device feature IOCTL may itself generate a wakeup eventfd notification
->   * in the latter case if the device has previously entered a low power state.
+I will remove it in v2.
 
-Nit: s/has/had/
+> THRESHOLD_COUNT_ZONE2_SHIFT were unused as well.
 
->   */
->  #define VFIO_DEVICE_FEATURE_LOW_POWER_EXIT 5
+This one was used in the code and later replaced by reg_field shifts.
 
-I haven't followed this closely, and I'm not that familiar with power
-management, but at least I can't spot anything obviously problematic.
+> 
+> Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
 
+Thanks!
+
+Best regards,
+Krzysztof
