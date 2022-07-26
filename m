@@ -2,84 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F6B58163A
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 17:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0DC581664
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 17:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237598AbiGZPQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 11:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S236041AbiGZP3n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 11:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiGZPP5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 11:15:57 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A712525598
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 08:15:54 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10e45b51f77so766839fac.7
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 08:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qi27YQV2llDIQ9MD4a8mHofES1qIg++Nu2kwK03YD9s=;
-        b=CQAIm7dsoQ67sdv3ZNlQe6NjLz8yY6xJUmn7p6/mRDOJU4AfuiFJiSoeJElIgg+tAG
-         mFMrcjFV63EHW9qUCC6hD/DIPS7bFjLG5uHUNoS1kGMSxsOgyukFtbcOG5hcNandjbup
-         xs4PRGPwsd9nAJw0a02gw1hvB8oQ71GiWPhIS7Sa/gVtWAKHNFvVykm9NRZ++5yJMnUE
-         ty3Y/OtxIaKGQq/omAtGXpNGE6FGbRmEK6T9/LLkQJTuu0yCUC6k3ufqEv16KlMVrlB9
-         grZTXFo08BOg6O46yegyIGx8YZplppu+dB0fP8UW3g+MU2okGzhAnk1YL/4NrYCrdKoY
-         wzKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qi27YQV2llDIQ9MD4a8mHofES1qIg++Nu2kwK03YD9s=;
-        b=vfnSKzldb394MWobubDBEcxTnkoQ+TDPGFTBN5ZXkGHrOdCFHB3d6DTAGL1YPpp8FR
-         p4nD4T0CqSj71vkBbXBw2ry24bhrNsN2wTzEBM/qaUVyAmNN6z1eyHeC6j3b/T3y/ptG
-         qN//1Xudj0HwFrCO2DSrIddp2LBGo8Xy6vdFz92ydIf6xgDMxWwxHwx95svqQfOeJBa7
-         xy2rFsbIHlAskv6QgLjVGURL1AxOEnDIy1m2KSL8+fN0h0CVja0tZZGpdULBvL9c/Rme
-         i5jFDS0E7HMrFWRkGXZmguYxxlgryb9TXH1PvzuAODzrdimymetaE8hLUd/DFh8jqrq3
-         2nZg==
-X-Gm-Message-State: AJIora/9ctZcRNAG4CjMTwzLPTOhqjxzO2XLdgPuX/sFab5CKcwWgdGc
-        jTpaQEvP/oCfSCH5WR41Kgor+CPcc9qOf8uOPgs=
-X-Google-Smtp-Source: AGRyM1uhgZZGXaCq2SBFY+o1bwUROWuIuAPgjZwj+YCssxLFM98pvrFIosfruR3nTAuuiAaROu1fpw==
-X-Received: by 2002:a05:6870:b021:b0:10d:438:15e2 with SMTP id y33-20020a056870b02100b0010d043815e2mr8713667oae.162.1658848553012;
-        Tue, 26 Jul 2022 08:15:53 -0700 (PDT)
-Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id w4-20020a4aa444000000b0041ba884d42csm6015111ool.42.2022.07.26.08.15.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 08:15:52 -0700 (PDT)
-Message-ID: <68600ea4-9f65-f365-382a-444c60b4a25d@kali.org>
-Date:   Tue, 26 Jul 2022 10:15:49 -0500
+        with ESMTP id S229500AbiGZP3m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 11:29:42 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277AFDFCF
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 08:29:42 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="349683824"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="349683824"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 08:29:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="658735552"
+Received: from powerlab.fi.intel.com ([10.237.71.25])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Jul 2022 08:29:36 -0700
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>,
+        Rui Zhang <rui.zhang@intel.com>, Yu Chen <yu.c.chen@intel.com>
+Subject: [PATCH 1/4] turbostat: separate SPR from ICX
+Date:   Tue, 26 Jul 2022 18:29:32 +0300
+Message-Id: <20220726152935.3183492-1-dedekind1@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
-Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
- <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
- <25673493-4171-62b0-f696-1316d115f388@kali.org>
- <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
- <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
- <d89a540f-672d-83de-d19d-00f10e4370d1@kali.org>
- <fec6bd98-5efd-fe34-6d75-1765219acd82@linaro.org>
- <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
+        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,40 +46,137 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-On 7/26/22 6:31 AM, Sibi Sankar wrote:
-> On 7/23/22 2:06 PM, Krzysztof Kozlowski wrote:
->> On 23/07/2022 04:37, Steev Klimaszewski wrote:
->>>>
->>>> Currently it's 5.19.0-rc7 (torvalds tree at 4ba1329c) with a few extra
->>>> patches on top, the bwmon set included.  It's possible that secure
->>>> world uses it, but I do not know enough about that to say one way or
->>>> the other.
->>
->> To test patches you should apply them on maintainer's tree or
->> linux-next. Applying on other trees of course might be useful for
->> testing some backports, but it is independent process and different 
->> issue.
->>
->>>>
->>>> -- steev
->>>>
->>> I think you may be right; I just applied this patchset to -next
->>> (20220722) and i do not see the error message there.  On my 5.19-rc7
->>> tree, i am also testing a patchset that enables qcom devices to access
->>> efivars, so possibly we are ending up in secure world there?
->>
->> Actually mapping of IO space should not touch secure world, so this was
->> a long shot assuming you test it on the next.
->>
->
-> The memory region specified in device tree overlaps with the llcc system
-> cache controller node. Steev probably had the QCOM_LLCC config enabled 
-> when he tested it out on his branch.
->
->>
->> Best regards,
->> Krzysztof
->>
-Good catch!  You are correct, my -next config did not have QCOM_LLCC 
-set, and I am using QCOM_LLCC=m on the 5.19.0 release candidate.
+Before this patch, SPR platform was considered identical to ICX platform. This
+patch separates SPR support from ICX.
+
+This patch is a preparation for adding SPR-specific package C-state limits
+support.
+
+Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Reviewed-by: Chen Yu <yu.c.chen@intel.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 31 ++++++++++++++++++++++-----
+ 1 file changed, 26 insertions(+), 5 deletions(-)
+
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index ede31a4287a0..f9acb2af5bd8 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -2494,6 +2494,7 @@ int has_turbo_ratio_group_limits(int family, int model)
+ 	case INTEL_FAM6_ATOM_GOLDMONT:
+ 	case INTEL_FAM6_SKYLAKE_X:
+ 	case INTEL_FAM6_ICELAKE_X:
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:
+ 	case INTEL_FAM6_ATOM_GOLDMONT_D:
+ 	case INTEL_FAM6_ATOM_TREMONT_D:
+ 		return 1;
+@@ -3746,6 +3747,7 @@ int probe_nhm_msrs(unsigned int family, unsigned int model)
+ 		has_misc_feature_control = 1;
+ 		break;
+ 	case INTEL_FAM6_ICELAKE_X:	/* ICX */
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:	/* SPR */
+ 		pkg_cstate_limits = icx_pkg_cstate_limits;
+ 		has_misc_feature_control = 1;
+ 		break;
+@@ -3871,6 +3873,22 @@ int is_icx(unsigned int family, unsigned int model)
+ 	return 0;
+ }
+ 
++int is_spr(unsigned int family, unsigned int model)
++{
++
++	if (!genuine_intel)
++		return 0;
++
++	if (family != 6)
++		return 0;
++
++	switch (model) {
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:
++		return 1;
++	}
++	return 0;
++}
++
+ int is_ehl(unsigned int family, unsigned int model)
+ {
+ 	if (!genuine_intel)
+@@ -3988,6 +4006,7 @@ int has_glm_turbo_ratio_limit(unsigned int family, unsigned int model)
+ 	case INTEL_FAM6_ATOM_GOLDMONT:
+ 	case INTEL_FAM6_SKYLAKE_X:
+ 	case INTEL_FAM6_ICELAKE_X:
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:
+ 		return 1;
+ 	default:
+ 		return 0;
+@@ -4015,7 +4034,7 @@ int has_config_tdp(unsigned int family, unsigned int model)
+ 	case INTEL_FAM6_CANNONLAKE_L:	/* CNL */
+ 	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
+ 	case INTEL_FAM6_ICELAKE_X:	/* ICX */
+-
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:	/* SPR */
+ 	case INTEL_FAM6_XEON_PHI_KNL:	/* Knights Landing */
+ 		return 1;
+ 	default:
+@@ -4486,6 +4505,7 @@ static double rapl_dram_energy_units_probe(int model, double rapl_energy_units)
+ 	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
+ 	case INTEL_FAM6_XEON_PHI_KNL:	/* KNL */
+ 	case INTEL_FAM6_ICELAKE_X:	/* ICX */
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:	/* SPR */
+ 		return (rapl_dram_energy_units = 15.3 / 1000000);
+ 	default:
+ 		return (rapl_energy_units);
+@@ -4575,6 +4595,7 @@ void rapl_probe_intel(unsigned int family, unsigned int model)
+ 	case INTEL_FAM6_BROADWELL_X:	/* BDX */
+ 	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
+ 	case INTEL_FAM6_ICELAKE_X:	/* ICX */
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:	/* SPR */
+ 	case INTEL_FAM6_XEON_PHI_KNL:	/* KNL */
+ 		do_rapl =
+ 		    RAPL_PKG | RAPL_DRAM | RAPL_DRAM_POWER_INFO | RAPL_DRAM_PERF_STATUS | RAPL_PKG_PERF_STATUS |
+@@ -4740,13 +4761,13 @@ void perf_limit_reasons_probe(unsigned int family, unsigned int model)
+ 
+ void automatic_cstate_conversion_probe(unsigned int family, unsigned int model)
+ {
+-	if (is_skx(family, model) || is_bdx(family, model) || is_icx(family, model))
++	if (is_skx(family, model) || is_bdx(family, model) || is_icx(family, model) || is_spr(family, model))
+ 		has_automatic_cstate_conversion = 1;
+ }
+ 
+ void prewake_cstate_probe(unsigned int family, unsigned int model)
+ {
+-	if (is_icx(family, model))
++	if (is_icx(family, model) || is_spr(family, model))
+ 		dis_cstate_prewake = 1;
+ }
+ 
+@@ -4975,6 +4996,7 @@ int has_snb_msrs(unsigned int family, unsigned int model)
+ 	case INTEL_FAM6_CANNONLAKE_L:	/* CNL */
+ 	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
+ 	case INTEL_FAM6_ICELAKE_X:	/* ICX */
++	case INTEL_FAM6_SAPPHIRERAPIDS_X:	/* SPR */
+ 	case INTEL_FAM6_ATOM_GOLDMONT:	/* BXT */
+ 	case INTEL_FAM6_ATOM_GOLDMONT_PLUS:
+ 	case INTEL_FAM6_ATOM_GOLDMONT_D:	/* DNV */
+@@ -5367,7 +5389,6 @@ unsigned int intel_model_duplicates(unsigned int model)
+ 		return INTEL_FAM6_ATOM_TREMONT;
+ 
+ 	case INTEL_FAM6_ICELAKE_D:
+-	case INTEL_FAM6_SAPPHIRERAPIDS_X:
+ 		return INTEL_FAM6_ICELAKE_X;
+ 	}
+ 	return model;
+@@ -5654,7 +5675,7 @@ void process_cpuid()
+ 		BIC_NOT_PRESENT(BIC_Pkgpc7);
+ 		use_c1_residency_msr = 1;
+ 	}
+-	if (is_skx(family, model) || is_icx(family, model)) {
++	if (is_skx(family, model) || is_icx(family, model) || is_spr(family, model)) {
+ 		BIC_NOT_PRESENT(BIC_CPU_c3);
+ 		BIC_NOT_PRESENT(BIC_Pkgpc3);
+ 		BIC_NOT_PRESENT(BIC_CPU_c7);
+-- 
+2.35.1
+
