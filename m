@@ -2,130 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20611581231
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 13:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2371C58124A
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 13:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238882AbiGZLiV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 07:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S238722AbiGZLqj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 07:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238753AbiGZLiU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 07:38:20 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1A11B7B4
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 04:38:19 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id b10so13203109pjq.5
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 04:38:19 -0700 (PDT)
+        with ESMTP id S232740AbiGZLqi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 07:46:38 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F413C24BDC;
+        Tue, 26 Jul 2022 04:46:36 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id u12so10232318qtk.0;
+        Tue, 26 Jul 2022 04:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XTF9StjWQgJHRYSsdEBaY0u7FK5LEOTiY3Wa3FW8upA=;
-        b=TLFyf1icSzxwEqZFgiNFj+NH0oc2LeCm2i+1GPfLwQsbPaxEkWlm/4EBrhhInLtQPw
-         u3/ozFrowbHBdp71NaSNqTRIhbErIS9QFOjocwO1iezZUoqN4B8LZIP8zqKInMdvd3FI
-         NryLkQXfpEML/kSzYS9hcCJ2km1CAA/VhMZtq3110kXsIVBz+dUgzYxmgK/BQAgOChl5
-         xesqwjfqeT7kzDbsXzCMqGZOR1P8x3W4Sa2tyE5dWH30cu4T0tGGS7LIwi5BIatEQQko
-         w3JSlcPvo4RywWZM/+O9hpzpH8jcxvOB/3zqnYb4LZlgquujR1/ruaCvq/FOi3LhIbRL
-         silw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wL1b72wWwttocLxQ4i2N7IFKv69W21HPhWs4hRLf0o0=;
+        b=AZ8qDLn4Znu85xCahXNOnmojv9wcePPk3Lf2KSJODsdYIL/u4rdAI0Lnw8MiXeeTQl
+         0fNcl+cJw4vrGMs/9mjAcX99bHsbOpeBwt1ay2R33YRq1VsVjC++YG2fmlp7hix1YwsO
+         IKZ3zoTB97u6iKZxmk+c33+dSbGXuJXJDQz+RRlu+LRdNCgrsyBWNRh2nYIBbuWUos51
+         BrJUcA7G/8NE1M8r1t7zyLNEvXtcGsNdIwqfkXwOFPRNUwWDTrUivYLlX/lxHIIPKvWG
+         uXmZtHYk57ezocXOjrXXXwhnGpuE94ql5T95iceJZSiu4iSTtJVip83p/q4s/P1JT7m/
+         PgVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XTF9StjWQgJHRYSsdEBaY0u7FK5LEOTiY3Wa3FW8upA=;
-        b=623c4xJ6RA+q41dMoj3uMGasW9lxGyYLvKrHQolhMCSr0Egw0VzMMStX1yDBnQNRR1
-         16nQYMQN+cZ9UpWVIR+c/5H0+wnaIjN9W0F/GvWk8t2IwYzy5P2yrN+rGxluXsM4r+Bh
-         DFdBU1GJd4Z1PsF+OqlfQfm6+ShX6q5mqYdA4z3mJZ42NojvT69kE+qV+ixsKVebNJhG
-         +1+dAMlyku9nvAfUw7N3XswclVDgKoF73HywsuA6CfmNuJE+xc/0kX5fcYIsk1GbPPEb
-         bwzJzP6O1G1mWSO3DBuarhnfDSV/Ds1YNcvJvbdaEwInHL5PAi8rCFKpKxsSKYTpMu4Q
-         ovgA==
-X-Gm-Message-State: AJIora/q4Hzw+E09aO2r/tZzZcr/AaXhZZFbHEGGLEskjV1u3WqgWRHV
-        xZ2yYvwOmB1cLks4KlnGumL04pxrJw1nFq+W
-X-Google-Smtp-Source: AGRyM1ulwVBWC7IEP9x51nKsFgud3Ul3Aq9AtQOtio5lc+hdM4Z3shGl0x9Vb55oMjyM/xBcu6aW8Q==
-X-Received: by 2002:a17:90b:4b8a:b0:1ef:9e43:3791 with SMTP id lr10-20020a17090b4b8a00b001ef9e433791mr19021753pjb.38.1658835499196;
-        Tue, 26 Jul 2022 04:38:19 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3a:5a45:a9cd:d7dd:fd01:73c0? ([2401:4900:1f3a:5a45:a9cd:d7dd:fd01:73c0])
-        by smtp.gmail.com with ESMTPSA id o6-20020a170902d4c600b0016c1b178628sm11489113plg.269.2022.07.26.04.38.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 04:38:18 -0700 (PDT)
-Message-ID: <f1e7ac3b-e3e3-4843-2a07-f9f05b49c2b9@linaro.org>
-Date:   Tue, 26 Jul 2022 17:08:13 +0530
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wL1b72wWwttocLxQ4i2N7IFKv69W21HPhWs4hRLf0o0=;
+        b=wvpnYcrqPqDabB8SW5KSFMUYX0aK44p9eQIe9nlxcfis3Mdmi5cDaHQVkXupczyKOc
+         GUXeWGFIfKOtsPn9HMGR1vVzNcd9Suh6fMHxm/2EpODI081YjQiCr07vZ7rdvwqoVXdU
+         l+UhkoLymdbCOTE92gQAoUnKY/3Ln6dxdUQJz6DdDZP5m3GZOw3v0AGO8xx2pU3uQgNS
+         El/qLbHDgfQSvvnVtETCjHvad0rx/1z2YdYdtcGMRyiShArQSuojf8xKIabwCgw/vYAu
+         0wSJR2ApvrkKBhrnrxD66zFVuRj2v8HJ0yrhBvON8eutSbfvNcN8Vj2m+Td1uIrxj28K
+         jQBQ==
+X-Gm-Message-State: AJIora+A+mosHoqzSrnva77+s7B6I/5oJ7n4l9HJJlWqtX8if5/BxLJY
+        m4MK65D3+ln3/uSARZx+S+8g1u8tH5TnJ8erMvE=
+X-Google-Smtp-Source: AGRyM1sOWaWg8F0hJmRbLUJyv570Fqyt5WL0lP9RdfcVPQQLkd4tLFbTSnSOHuBdwqMxVIGbB1G4Kxurui/itRlhhGY=
+X-Received: by 2002:ac8:5a8b:0:b0:31f:27b8:2260 with SMTP id
+ c11-20020ac85a8b000000b0031f27b82260mr13732022qtc.198.1658835995667; Tue, 26
+ Jul 2022 04:46:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/5] thermal: qcom: tsens: Add driver support for
- re-initialization quirk
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, linux-pm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220724122424.2509021-4-bhupesh.sharma@linaro.org>
- <202207260755.tUajnfB4-lkp@intel.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <202207260755.tUajnfB4-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
+ <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com>
+In-Reply-To: <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Tue, 26 Jul 2022 19:45:59 +0800
+Message-ID: <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com>
+Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
+ sink type LED Indicator support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Mon, Jul 25, 2022 at 4:41 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+...
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> ^^^^ (Note this and read below)
 
-On 7/26/22 4:40 AM, kernel test robot wrote:
-> Hi Bhupesh,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on rafael-pm/thermal]
-> [also build test ERROR on linus/master v5.19-rc8 next-20220725]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220724-202546
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-> config: ia64-randconfig-r005-20220724 (https://download.01.org/0day-ci/archive/20220726/202207260755.tUajnfB4-lkp@intel.com/config)
-> compiler: ia64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/2356630fadc0a622264bf292b6930f8c728b0709
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220724-202546
->          git checkout 2356630fadc0a622264bf292b6930f8c728b0709
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     ia64-linux-ld: drivers/thermal/qcom/tsens.o: in function `tsens_probe':
->>> tsens.c:(.text+0x6d2): undefined reference to `qcom_scm_is_available'
->     ia64-linux-ld: drivers/thermal/qcom/tsens.o: in function `tsens_health_check_and_reinit.constprop.0':
->>> tsens.c:(.text+0x10c2): undefined reference to `qcom_scm_tsens_reinit'
+...
 
-It seems you have missed picking up [PATCH 1/5] firmware: qcom: scm: Add 
-support for tsens reinit workaround before running the checks on this 
-patch which is a part of this series itself (see [1]).
+> In conjunction with above what SoB of Alice means?
+>
+> You really need to take your time and (re-)read
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html.
 
-If I pick the PATCHes in the right order [PATCH 1/5], [PATCH 2/5] 
-followed by [PATCH 3/5], I don't see the compilation error being 
-reported (even with W=1 build options).
+Hi Andy,
 
-[1]. 
-https://lore.kernel.org/linux-arm-msm/20220724122424.2509021-2-bhupesh.sharma@linaro.org/
+Thanks for your reply.
+We are very sorry for this mistake. We will revise it in the next patch.
 
-Thanks,
-Bhupesh
+>
+> ...
+>
+> > + * Author: Alice Chen <alice_chen@richtek.com>
+> > + * Author: ChiYuan Huang <cy_huang@richtek.com>
+>
+> Would
+>  * Authors:
+>  *    Name_of_Author 1
+>  *    Name_of_Author 2
+>
+> work for you?
+
+It looks good, thanks! We will apply this in the next patch.
+
+ ...
+
+> > +struct mt6370_led {
+> > +       union {
+> > +               struct led_classdev isink;
+> > +               struct led_classdev_mc mc;
+> > +       };
+>
+> Where is the field that makes union work?
+
+Just for saving memory space.
+Because these led_classdevs do not be used at the same time.
+Or do you think it would be better to rewrite it as follows?
+-------------------------------------------------------------------------------------
+struct mt6370_led {
+       struct led_classdev isink;
+       struct led_classdev_mc mc;
+       struct mt6370_priv *priv;
+       u32 default_state;
+       u32 index;
+};
+-------------------------------------------------------------------------------------
+
+...
+
+> > +static int mt6370_gen_breath_pattern(struct mt6370_priv *priv,
+> > +                                    struct led_pattern *pattern, u32 len,
+> > +                                    u8 *pattern_val, u32 val_len)
+> > +{
+> > +       enum mt6370_led_ranges sel_range;
+> > +       struct led_pattern *curr;
+> > +       unsigned int sel;
+> > +       u8 val[P_MAX_PATTERNS / 2] = {};
+> > +       int i;
+> > +
+> > +       if (len < P_MAX_PATTERNS && val_len < P_MAX_PATTERNS / 2)
+> > +               return -EINVAL;
+> > +
+> > +       /*
+> > +        * Pattern list
+> > +        * tr1: byte 0, b'[7: 4]
+> > +        * tr2: byte 0, b'[3: 0]
+> > +        * tf1: byte 1, b'[7: 4]
+> > +        * tf2: byte 1, b'[3: 0]
+> > +        * ton: byte 2, b'[7: 4]
+> > +        * toff: byte 2, b'[3: 0]
+> > +        */
+> > +       for (i = 0; i < P_MAX_PATTERNS; i++) {
+> > +               curr = pattern + i;
+> > +
+> > +               sel_range = i == P_LED_TOFF ? R_LED_TOFF : R_LED_TRFON;
+> > +
+> > +               linear_range_get_selector_within(priv->ranges + sel_range,
+> > +                                                curr->delta_t, &sel);
+> > +
+> > +               val[i / 2] |= sel << (4 * ((i + 1) % 2));
+> > +       }
+> > +
+> > +       memcpy(pattern_val, val, 3);
+>
+> Isn't it something like put_unaligned_be24()/put_unaligned_le24()?
+
+OK, we will try to apply this method in the next patch.
+Thank you so much for reviewing our patches so many times and
+providing so many great suggestions!
+
+-- 
+Best Regards,
+ChiaEn Wu
