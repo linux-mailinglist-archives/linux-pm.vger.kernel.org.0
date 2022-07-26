@@ -2,125 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D20A581156
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 12:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420475811CD
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 13:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238694AbiGZKlj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 06:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S238790AbiGZLTo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 07:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbiGZKli (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 06:41:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0464B17062;
-        Tue, 26 Jul 2022 03:41:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6381D1FB;
-        Tue, 26 Jul 2022 03:41:38 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F3C93F70D;
-        Tue, 26 Jul 2022 03:41:37 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 11:41:34 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [-next] Lockdep warnings
-Message-ID: <20220726104134.3b3awfphvafljdgp@bogus>
+        with ESMTP id S229759AbiGZLTn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 07:19:43 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DD730F49;
+        Tue, 26 Jul 2022 04:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658834383; x=1690370383;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=ABO1vc8TQN3jq3u/kMUZdKq6N7zMTog4CpKlzMZ7bA0=;
+  b=rKJ6uomUAqkKvMtrY3/8B2ormqf7rGiLFJWHd6YV8RNr8zzEvTZAYy2l
+   cS18l0nezxLou8EA2bx1sCSJAlm5NDByM+7hYoSFbpWc0XVEdI3/7f1uH
+   8CnoFS/WNiraf3jHWAouv8u2MRXa9bBgV2+wZ7y8q1mFBtkKVy8751kuO
+   g=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Jul 2022 04:19:42 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 04:19:42 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Jul 2022 04:19:42 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Jul
+ 2022 04:19:37 -0700
+Subject: Re: [PATCH 01/10] dt-bindings: interconnect: qcom,msm8998-bwmon: add
+ support for SDM845 LLCC BWMON
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+ <20220720192807.130098-2-krzysztof.kozlowski@linaro.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <902c7c6c-e2f7-d441-cb6f-a803238c8df9@quicinc.com>
+Date:   Tue, 26 Jul 2022 16:49:33 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220720192807.130098-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I was seeing the below lockdep warnings on my arm64 Juno development
-platform almost 2 weeks back with -next. I wanted to check for similar
-reports before post and forgot.
 
---->8
+On 7/21/22 12:57 AM, Krzysztof Kozlowski wrote:
+> Add compatible for SDM845 Bandwidth Monitor instance measuring traffic
+> between LLCC and memory.  It comes with different register layout:
+> called v5.
+> 
+> Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-DEBUG_LOCKS_WARN_ON(lockdep_hardirqs_enabled())
- hardirqs last  enabled at (46157): cpuidle_enter_state+0x174/0x2b4
- WARNING: CPU: 5 PID: 0 at kernel/locking/lockdep.c:5506 check_flags+0x90/0x1e8
- hardirqs last disabled at (46158): el1_interrupt+0x2c/0xc8
- Modules linked in:
- softirqs last  enabled at (46154): __do_softirq+0x2c0/0x388
- softirqs last disabled at (46139): __irq_exit_rcu+0x118/0x18c
- CPU: 5 PID: 0 Comm: swapper/5 Not tainted 5.19.0-rc6-next-20220714 #9
- pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : check_flags+0x90/0x1e8
- lr : check_flags+0x90/0x1e8
- Call trace:
-  check_flags+0x90/0x1e8
-  lock_is_held_type+0x80/0x164
-  rcu_read_lock_sched_held+0x40/0x7c
-  trace_rcu_dyntick+0x5c/0x140
-  ct_kernel_enter+0x78/0xd4
-  ct_idle_exit+0x1c/0x44
-  cpu_idle_poll+0x74/0xb8
-  do_idle+0x90/0x2c4
-  cpu_startup_entry+0x30/0x34
-  secondary_start_kernel+0x130/0x144
-  __secondary_switched+0xb0/0xb4
- irq event stamp: 64229
- hardirqs last  enabled at (64229): cpu_idle_poll+0x40/0xb8
- hardirqs last disabled at (64228): do_idle+0xbc/0x2c4
- softirqs last  enabled at (64190): __do_softirq+0x2c0/0x388
- softirqs last disabled at (64185): __irq_exit_rcu+0x118/0x18c
- ---[ end trace 0000000000000000 ]---
- possible reason: unannotated irqs-off.
- irq event stamp: 64229
- hardirqs last  enabled at (64229): cpu_idle_poll+0x40/0xb8
- hardirqs last disabled at (64228): do_idle+0xbc/0x2c4
- softirqs last  enabled at (64190): __do_softirq+0x2c0/0x388
- softirqs last disabled at (64185): __irq_exit_rcu+0x118/0x18c
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
 
-----
-
-However I don't see the above warning with the latest -next. When I tried
-yesterday's -next now, I see a different warning. Not sure if they are
-related. I haven't tried to bisect.
-
---->8
-=============================
-[ BUG: Invalid wait context ]
-5.19.0-rc8-next-20220725 #38 Not tainted
------------------------------
-swapper/0/0 is trying to lock:
-(&drvdata->spinlock){....}-{3:3}, at: cti_cpu_pm_notify+0x54/0x114
-other info that might help us debug this:
-context-{5:5}
-1 lock held by swapper/0/0:
- #0: (cpu_pm_notifier.lock){....}-{2:2}, at: cpu_pm_enter+0x2c/0x80
-stack backtrace:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc8-next-20220725-00004-g599e6691ed8c #38
-Call trace:
- dump_backtrace+0xe8/0x108
- show_stack+0x18/0x4c
- dump_stack_lvl+0x90/0xc8
- dump_stack+0x18/0x54
- __lock_acquire+0xa70/0x32d0
- lock_acquire+0x160/0x308
- _raw_spin_lock+0x60/0xa0
- cti_cpu_pm_notify+0x54/0x114
- raw_notifier_call_chain_robust+0x50/0xd4
- cpu_pm_enter+0x48/0x80
- psci_enter_idle_state+0x34/0x74
- cpuidle_enter_state+0x120/0x2a8
- cpuidle_enter+0x38/0x50
- do_idle+0x1e8/0x2b8
- cpu_startup_entry+0x24/0x28
- kernel_init+0x0/0x1a0
- start_kernel+0x0/0x470
- start_kernel+0x34c/0x470
- __primary_switched+0xbc/0xc4
-
-----
-
---
-Regards,
-Sudeep
+> ---
+>   .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml     | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> index c2e697f6e6cf..32e2892d736b 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> @@ -27,6 +27,7 @@ properties:
+>                 - qcom,sdm845-bwmon
+>             - const: qcom,msm8998-bwmon
+>         - const: qcom,msm8998-bwmon       # BWMON v4
+> +      - const: qcom,sdm845-llcc-bwmon   # BWMON v5
+>   
+>     interconnects:
+>       maxItems: 1
+> 
