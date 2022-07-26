@@ -2,194 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D4C580966
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 04:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B445580A14
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 05:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbiGZCUm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 22:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
+        id S237357AbiGZDnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 23:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiGZCUk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 22:20:40 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8181719C33;
-        Mon, 25 Jul 2022 19:20:39 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id b25so10060091qka.11;
-        Mon, 25 Jul 2022 19:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W0xMOzx9xkEwYcg4IC9rpOdFz/8JFTGOz3GpQHY8CyA=;
-        b=bQNzSCTQTDj5oJAikkEBCR3Q/tLaWKw4sj3Vy9sXwlvn8sYyxYtkIYLMGJHXeTnchw
-         taB+Q9JNgrphDka9FLEaK8Qsw28p9ed1+CizwomW4uNr80I+wP1Lqo9LTTYwNWb3V89V
-         GIklfwwZ1L8oQOXN4gS6QzAtgFIiB62NAp+81WQ1VPf3ZNTslXRqVWiUfEk+RoW/cY8f
-         fDSw5bn9W+8qRxPD/H7Me+Tk8/fC32oiFqKIMjraRmMb5Kapx2uuyolL4AP030DYsD1r
-         9zbtprQkDJeDZWr8JDzg2hRZyzyKu9MOyRP/v2uOlFD2v7biNRKTj8XzA8Co9eYGKCHI
-         FE9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W0xMOzx9xkEwYcg4IC9rpOdFz/8JFTGOz3GpQHY8CyA=;
-        b=zZxFPvF85NxcUR5aY7nHc5ayUtGnK4+ZeTpK+EdMBydg6k+I+4M9d7LcWpfAQ2/487
-         PrcVkbn2nPm/8g5c0Uj2TI0+AbQloeemzW2GUkaIxorTR6JuEdQiognX4jraRo4tgjYu
-         i1In1BndCnBIj4KsEq0PyKdRYAEmtP5O33a7Gh+h5JNJCey2LR3qYe3rMu3BRd58+iYw
-         CfGjS+fO4MQRnYYp3ypkBr6EyjOoKz9QQPPhUgw+oyIkAtlGi0SOY+Wjk3S/kF0CM382
-         QcIYFYC/vGVkwOiDsEGwAZbQxfSuvLu5hhTtLs6KW0xPVC4DfW7jraDydyQ0SahjKcMM
-         WZCw==
-X-Gm-Message-State: AJIora/9gFK7EfbGxqMtTcbxC9m0ah4uE01h6ijhTm5ddeVRK36taA8U
-        YKvnErN8jl7TngFrh7OQGLfKQRYd8vaSLbyBf9w=
-X-Google-Smtp-Source: AGRyM1tZpCYcrI4GEenV5sl4ffLbB3S1w73dtE0jE5MocjhBVejW7P4d8PE22YJ6HvnYEZBNm5FpvyKW1Z34FzM/KzI=
-X-Received: by 2002:a37:80c2:0:b0:6b5:e9e4:c4c1 with SMTP id
- b185-20020a3780c2000000b006b5e9e4c4c1mr11082627qkd.129.1658802038657; Mon, 25
- Jul 2022 19:20:38 -0700 (PDT)
+        with ESMTP id S231458AbiGZDnP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 23:43:15 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F8D2A70C
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 20:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1658806994; x=1690342994;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vt84amRQOiVRnZk+EYa9ZDlXy2/jQrtxfSttKXecpxM=;
+  b=aLBwt5Dr95/CgInZ7CnRnp2e8hQJ/U76YUpbMAvhjbaEeBJmpAn4KV94
+   L3p9j69RYx6EkoiAIw2RdY12ASOq83Sqh+To30cn11TpH/KXGlGM++yqn
+   KYXxm6bxizHR2K7VUt05pz6jFliwe/2C5SJu8t5IfPcKGukcFPyHUS0QM
+   ax0vJgC98KaZqsSmQ9gpWZc/rLYt0rVkbHpeVf72MYayUMsI8pWLWmpsF
+   /XS4B++yaUDbPhYqf2QJENuEiJo8M9t0HyMyLPH4EtcWarIAVjfovr9rl
+   wKviKHeRvgN5CJI+cPbUjBGayG6DhiI1cKnWz/PdCNZNhyhrarfk8mn7x
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,193,1654531200"; 
+   d="scan'208";a="205452419"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 26 Jul 2022 11:43:12 +0800
+IronPort-SDR: VxCyMvbZRCUZDDgRmMi00TnfWAnpG70M+3K+8UUeDZhuYodMgTgwV8DnTcrb2R/NHEgUU5Ddzp
+ lYopc4FF8kPYpAwbfnJqAwB9Xy/WhAdGqHjPK8Ii4l4SxEJ6Y87Sh9HiQ9L0G3SJ+DJ/YWkjcp
+ Ne4C6J71n+HJeY5rxpn4WkkZ2HkZIDDBvgROvjyJbHDI7Jt7Fqnreq3mN8mXsjk+tTeVA7HpO9
+ 89DCwOlY0WN1R/LUBqQJnFtB8YsqIFgwuHLz/PsH2QetnPj9CnCewZFxvx0FG/EvBgwmYV+7+X
+ j6YH+10zGY+oIq+ortbXypWx
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jul 2022 19:59:28 -0700
+IronPort-SDR: jVq+EplKKfqYZB4t/0y8a/EMMK5/Pq7A1G94As5ZwlBh2fwx+DYCfkbipLDTZMyIwBct5+7T+m
+ Av1tyPwThUOSWK4xvr/EUQtomP3b92i6ytoCkN5iknr2yqAVkpOq6JKXlwtzny40ix9BPXUcig
+ gyQKdNEILwvQFZaplYusHiG+dgBx4Sw72gzbf2IcMae9fc1tpz2QrLAcj3Q71lY44CEb9MoYFX
+ Sgf3Gq03faH9iPz6Pgx7r4KJ5YnfTswOEkeSRpItiCsNbtLuLqH0AkkqXzWqDBHPAbvdmwRVSL
+ 6WM=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jul 2022 20:43:13 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LsN6S432Rz1Rwnl
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 20:43:12 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1658806990; x=1661398991; bh=vt84amRQOiVRnZk+EYa9ZDlXy2/jQrtxfSt
+        tKXecpxM=; b=NmUQGOfaZyqdbFPdIFJvfhAjQevr30CV+vNmhQE11dOmTR0lT8d
+        s7Sq0miyzoXWAH98SzbpLQu9bVq6Dr52Wguqm6Bwt52WzE3jKCMkiv0voMHlVCEV
+        hRztjEidts5lBpAlL9wwe/NflP8bxFNnghkn+Xy5ITJIAxKEQQvtkIFSnfaBqIt4
+        ydZpz+PJYDKI+iFQkVogU5LF+OJzsoXsi+LYFdbFJ1yPzDAMOe+AVpNlG0lzRbq7
+        sPAOvkP3Tx0lW1uosb7pN34AuiSkGTZ/+a3nH5kJvJdZ3SUxmGrxno8VX0aol2RY
+        AAsqOVq9pGaKQWSBT0ki2JaKL8ma3FR/dOA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3JhtXDiA13Hu for <linux-pm@vger.kernel.org>;
+        Mon, 25 Jul 2022 20:43:10 -0700 (PDT)
+Received: from [10.225.163.10] (unknown [10.225.163.10])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LsN6J3N7Fz1RtVk;
+        Mon, 25 Jul 2022 20:43:04 -0700 (PDT)
+Message-ID: <8e506701-e934-e9de-1a2f-ee252e514741@opensource.wdc.com>
+Date:   Tue, 26 Jul 2022 12:43:03 +0900
 MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-14-peterwu.pub@gmail.com>
- <20220725103128.xtaw2c4y5fobowg7@maple.lan>
-In-Reply-To: <20220725103128.xtaw2c4y5fobowg7@maple.lan>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Tue, 26 Jul 2022 10:20:02 +0800
-Message-ID: <CABtFH5LUKTZenTktq3v1JZ9xe-yJFsMvCZuwDhmxdT87k0O-zA@mail.gmail.com>
-Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370 support
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 25/32] ata/drivers/ahci_imx: Switch to new of thermal
+ API
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        heiko@sntech.de, hayashi.kunihiko@socionext.com,
+        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
+        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
+        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
+        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
+        miquel.raynal@bootlin.com, shawnguo@kernel.org,
+        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
+        j-keerthy@ti.com, Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
+ <20220725212637.2818207-26-daniel.lezcano@linexp.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220725212637.2818207-26-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 6:31 PM Daniel Thompson
-<daniel.thompson@linaro.org> wrote:
->
-> On Fri, Jul 22, 2022 at 06:24:07PM +0800, ChiaEn Wu wrote:
-> > diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-> > index a003e02..846dbe7 100644
-> > --- a/drivers/video/backlight/Kconfig
-> > +++ b/drivers/video/backlight/Kconfig
-> > @@ -268,6 +268,18 @@ config BACKLIGHT_MAX8925
-> >         If you have a LCD backlight connected to the WLED output of MAX8925
-> >         WLED output, say Y here to enable this driver.
-> >
-> > +config BACKLIGHT_MT6370
-> > +     tristate "MediaTek MT6370 Backlight Driver"
-> > +     depends on MFD_MT6370
-> > +     help
-> > +       This enables support for Mediatek MT6370 Backlight driver.
-> > +       It's commonly used to drive the display WLED. There are 4 channels
-> > +       inside, and each channel supports up to 30mA of current capability
-> > +       with 2048 current steps in exponential or linear mapping curves.
->
-> Does the MT6372 support more steps than this? In other words does it use
-> a fourteen bit scale or does it use an 11-bit scale at a different
-> register location?
+On 7/26/22 06:26, Daniel Lezcano wrote:
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
+> 
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
+> 
+> sata_ahci_read_temperature() is used by sata_ahci_show_temp() also.
+> 
+> So in order to change the function prototype for the get_temp ops which
+> does not take a void* but a thermal_zone_device* structure, this
+> function wraps the call.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 
-Hi Daniel,
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-Thanks for your reply.
-Yes, MT6372 can support 16384 steps and uses a 14-bit scale register
-location. But the maximum current of each
-channel of MT6372 is the same as MT6370 and MT6371, both 30mA.
-The main reason why MT6372 is designed this way is that one of the
-customers asked for a more delicate
-adjustment of the backlight brightness. But other customers actually
-do not have such requirements.
-Therefore, we designed it this way for maximum compatibility in software.
+> ---
+>  drivers/ata/ahci_imx.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/ata/ahci_imx.c b/drivers/ata/ahci_imx.c
+> index 79aa9f285312..b734e069034d 100644
+> --- a/drivers/ata/ahci_imx.c
+> +++ b/drivers/ata/ahci_imx.c
+> @@ -327,7 +327,7 @@ static int read_adc_sum(void *dev, u16 rtune_ctl_reg, void __iomem * mmio)
+>  }
+>  
+>  /* SATA AHCI temperature monitor */
+> -static int sata_ahci_read_temperature(void *dev, int *temp)
+> +static int __sata_ahci_read_temperature(void *dev, int *temp)
+>  {
+>  	u16 mpll_test_reg, rtune_ctl_reg, dac_ctl_reg, read_sum;
+>  	u32 str1, str2, str3, str4;
+> @@ -416,6 +416,11 @@ static int sata_ahci_read_temperature(void *dev, int *temp)
+>  	return 0;
+>  }
+>  
+> +static int sata_ahci_read_temperature(struct thermal_zone_device *tz, int *temp)
+> +{
+> +	return __sata_ahci_read_temperature(tz->devdata, temp);
+> +}
+> +
+>  static ssize_t sata_ahci_show_temp(struct device *dev,
+>  				   struct device_attribute *da,
+>  				   char *buf)
+> @@ -423,14 +428,14 @@ static ssize_t sata_ahci_show_temp(struct device *dev,
+>  	unsigned int temp = 0;
+>  	int err;
+>  
+> -	err = sata_ahci_read_temperature(dev, &temp);
+> +	err = __sata_ahci_read_temperature(dev, &temp);
+>  	if (err < 0)
+>  		return err;
+>  
+>  	return sprintf(buf, "%u\n", temp);
+>  }
+>  
+> -static const struct thermal_zone_of_device_ops fsl_sata_ahci_of_thermal_ops = {
+> +static const struct thermal_zone_device_ops fsl_sata_ahci_of_thermal_ops = {
+>  	.get_temp = sata_ahci_read_temperature,
+>  };
+>  
+> @@ -1131,8 +1136,8 @@ static int imx_ahci_probe(struct platform_device *pdev)
+>  			ret = PTR_ERR(hwmon_dev);
+>  			goto disable_clk;
+>  		}
+> -		devm_thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
+> -					     &fsl_sata_ahci_of_thermal_ops);
+> +		devm_thermal_of_zone_register(hwmon_dev, 0, hwmon_dev,
+> +					      &fsl_sata_ahci_of_thermal_ops);
+>  		dev_info(dev, "%s: sensor 'sata_ahci'\n", dev_name(hwmon_dev));
+>  	}
+>  
 
->
->
-> > +
-> > +       This driver can also be built as a module. If so, the module
-> > +       will be called "mt6370-backlight".
-> > +
-> > [...]
-> > diff --git a/drivers/video/backlight/mt6370-backlight.c b/drivers/video/backlight/mt6370-backlight.c
-> > new file mode 100644
-> > index 0000000..ba00a8f
-> > --- /dev/null
-> > +++ b/drivers/video/backlight/mt6370-backlight.c
-> > [...]
-> > +static int mt6370_bl_update_status(struct backlight_device *bl_dev)
-> > +{
-> > +     struct mt6370_priv *priv = bl_get_data(bl_dev);
-> > +     int brightness = backlight_get_brightness(bl_dev);
-> > +     unsigned int enable_val;
-> > +     u8 brightness_val[2];
-> > +     int ret;
-> > +
-> > +     if (brightness) {
-> > +             brightness_val[0] = (brightness - 1) & MT6370_BL_DIM2_MASK;
-> > +             brightness_val[1] = (brightness - 1) >> fls(MT6370_BL_DIM2_MASK);
-> > +
-> > +             /*
-> > +              * To make MT6372 using 14 bits to control the brightness
-> > +              * backward compatible with 11 bits brightness control
-> > +              * (like MT6370 and MT6371 do), we left shift the value
-> > +              * and pad with 1 to remaining bits. Hence, the MT6372's
-> > +              * backlight brightness will be almost the same as MT6370's
-> > +              * and MT6371's.
-> > +              */
-> > +             if (priv->vid_type == MT6370_VID_6372) {
-> > +                     brightness_val[0] <<= MT6370_BL_DIM2_6372_SHIFT;
-> > +                     brightness_val[0] |= MT6370_BL_DUMMY_6372_MASK;
-> > +             }
->
-> This somewhat depends on the answer to the first question above, but
-> what is the point of this shifting? If the range is 14-bit then the
-> driver should set max_brightness to 16384 and present the full range of
-> the MT6372 to the user.
-
-So should we make all 16384 steps of MT6372 available to users?
-Does that mean the DTS needs to be modified as well?
-Or, for the reasons, I have just explained (just one customer has this
-requirement), then we do not make any changes for compatibility
-reasons?
-Thanks.
-
->
-> Especially when using linear mappings (which are a totally pointless
-> scale to use for a backlight) the extra steps are useful for backlight
-> animation.
->
->
-> Daniel.
 
 -- 
-Best Regards,
-ChiaEn Wu
+Damien Le Moal
+Western Digital Research
