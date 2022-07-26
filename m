@@ -2,86 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD332580F10
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 10:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1552580F6D
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 10:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238114AbiGZIdS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 04:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S229902AbiGZIzz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 04:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238039AbiGZIdQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 04:33:16 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB5D2DA9A;
-        Tue, 26 Jul 2022 01:33:15 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id D1509DFD7B;
-        Tue, 26 Jul 2022 01:33:15 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id D02DUHP9NRY1; Tue, 26 Jul 2022 01:33:15 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658824395; bh=85peDTtgZNpuR8CVV06JKnQ8YE3l4H7dqTVa9ek/70Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HrmlhUiMonVdYsnG7cM3pJjmGaTVJKMWpHvXVq284dVRtG6f7miqVxj7W6Di6qafn
-         GoM3aaRiICss6PwgT47zP/TufgMDOK9eH7JkuBtnXdxnAziUTaofB9K809ano2+Gw9
-         aH9YzgPajfytUXtngcX/703EJKRUpAoU75RIU6QyEScqfb4WASq0oPCoQpdS1L3zdm
-         ryixrHkmwqdnMjht7RD1Ib4mWjY5Y69Y10/XqWO6WYaq3s6izKQl5l1rr9sYHsc0k1
-         xjhetCBmHhfLuePtYn7uyi7gGcdtet1CnuVQ+Ucm3JV7YaAZa7+mKaO1T9Y9FJHxp3
-         U6cCE1GHNDH4w==
-To:     rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
-        robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        pavel@ucw.cz
-Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v6 2/2] soc: imx: gpcv2: fix suspend/resume by setting GENPD_FLAG_IRQ_ON
-Date:   Tue, 26 Jul 2022 10:32:57 +0200
-Message-Id: <20220726083257.1730630-3-martin.kepplinger@puri.sm>
-In-Reply-To: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
+        with ESMTP id S230339AbiGZIzy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 04:55:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4822ED58;
+        Tue, 26 Jul 2022 01:55:53 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 360556601B15;
+        Tue, 26 Jul 2022 09:55:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658825751;
+        bh=7IwJqaz+R5Cs5Q6KElpkBqwQlDJ+5hJluvz7CFG5eNU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jNQ02sBc0MrrXzNT1gras1gHBPXz14i+8cCbYPXC24xWIOvSV/MAMSrRkk19OiVqr
+         FliZzLpJ5TI/xIxmKmidC3TDY+q0rIBNsWmtl/ka52N0ZNivIzjbL9CMWDwrqAMn77
+         oIqr5KKhn7UFwYiopl614ipkm7p41C8Wqjet82I9LThlG/YLLLnAFzmvpBan8xpRzk
+         0GsPkADgUXW0y/Xjrzzj9jieQqdAXT8+uPP5n9WXS4QseQ61aGvYXtzy/ml1t2Xn3y
+         e1xfb0pgf5wxeG8LBkYgy8UuL2wWV+iQwV43lcskWfXGdnREgVjRYF2IZJ/NiQO8A/
+         yKhTc+/T4QIxA==
+Message-ID: <5c8713ea-ad31-9d53-006b-05a3984672b2@collabora.com>
+Date:   Tue, 26 Jul 2022 10:55:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 20/32] thermal/drivers/mtk: Switch to new of API
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Amit Kucheria <amitk@kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
+ <20220725212637.2818207-21-daniel.lezcano@linexp.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220725212637.2818207-21-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For boards that use power-domains' power-supplies that need interrupts
-to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
-This will tell genpd to adjust accordingly. Currently it "only" sets the
-correct suspend/resume callbacks.
+Il 25/07/22 23:26, Daniel Lezcano ha scritto:
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
+> 
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 
-This fixes suspend/resume on imx8mq-librem5 boards (tested) and
-imx8mq-evk (by looking at dts) and possibly more.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- drivers/soc/imx/gpcv2.c | 3 +++
- 1 file changed, 3 insertions(+)
+> ---
+>   drivers/thermal/mtk_thermal.c | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index ede94eadddda..8440692e3890 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -679,9 +679,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   	return max;
+>   }
+>   
+> -static int mtk_read_temp(void *data, int *temperature)
+> +static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
+>   {
+> -	struct mtk_thermal *mt = data;
+> +	struct mtk_thermal *mt = tz->devdata;
+>   	int i;
+>   	int tempmax = INT_MIN;
+>   
+> @@ -700,7 +700,7 @@ static int mtk_read_temp(void *data, int *temperature)
+>   	return 0;
+>   }
+>   
+> -static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+> +static const struct thermal_zone_device_ops mtk_thermal_ops = {
+>   	.get_temp = mtk_read_temp,
+>   };
+>   
+> @@ -1082,8 +1082,8 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   
+>   	platform_set_drvdata(pdev, mt);
+>   
+> -	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+> -						     &mtk_thermal_ops);
+> +	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+> +					      &mtk_thermal_ops);
+>   	if (IS_ERR(tzdev)) {
+>   		ret = PTR_ERR(tzdev);
+>   		goto err_disable_clk_peri_therm;
+> 
 
-diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-index 6383a4edc360..199a621d8186 100644
---- a/drivers/soc/imx/gpcv2.c
-+++ b/drivers/soc/imx/gpcv2.c
-@@ -1337,6 +1337,9 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
- 		regmap_update_bits(domain->regmap, domain->regs->map,
- 				   domain->bits.map, domain->bits.map);
- 
-+	if (of_property_read_bool(domain->dev->of_node, "power-supply"))
-+		domain->genpd.flags |= GENPD_FLAG_IRQ_ON;
-+
- 	ret = pm_genpd_init(&domain->genpd, NULL, true);
- 	if (ret) {
- 		dev_err(domain->dev, "Failed to init power domain\n");
--- 
-2.30.2
 
