@@ -2,179 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45AD5816ED
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 18:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85F258176E
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 18:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiGZQDq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 Jul 2022 12:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        id S233723AbiGZQ2v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 12:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiGZQDp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 12:03:45 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B72F15716
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 09:03:43 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2048.outbound.protection.outlook.com [104.47.22.48]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-17-v-DuqpjXPFiBtxSJDWkrog-3; Tue, 26 Jul 2022 18:03:40 +0200
-X-MC-Unique: v-DuqpjXPFiBtxSJDWkrog-3
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- GVAP278MB0246.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:37::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5458.19; Tue, 26 Jul 2022 16:03:37 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::3510:6f55:f14a:380f]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::3510:6f55:f14a:380f%6]) with mapi id 15.20.5458.025; Tue, 26 Jul 2022
- 16:03:37 +0000
-Date:   Tue, 26 Jul 2022 18:03:37 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Max Krummenacher <max.oss.09@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain
- provider which controls
-Message-ID: <20220726160337.GA41736@francesco-nb.int.toradex.com>
-References: <20220609150851.23084-1-max.oss.09@gmail.com>
- <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
- <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
- <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
-In-Reply-To: <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
-X-ClientProxiedBy: ZR0P278CA0051.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:1d::20) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        with ESMTP id S229804AbiGZQ2u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 12:28:50 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1732625C5D;
+        Tue, 26 Jul 2022 09:28:49 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h9so20939136wrm.0;
+        Tue, 26 Jul 2022 09:28:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cIPI5KmDuzcke0XGgrnA7zF01gNNf3RwyHxJZzCv/6M=;
+        b=k8hilhnoU7dbumJaKM2qpgafxXdLLktBG83dcxCI1JKx7n39zUKZxlP+hYZm/5j5C2
+         7YXLb7fuySnGgbnGkpxhvXpl1sRoF7hshwnMXivVt8w4pR79xXoN0Zf/Z7O6i0ZPoqXy
+         h1w3xxojKg6npjOj4gSATpRpP4fc1AKm8exDwY9RtlBiYU/Nfv3DnCgIerclgCrtIiHW
+         4pqdofanwkiLeTMik0j7QL4VI2a6h9rzGwhyNseX/zAvfEyvDIB7CGdodUglNtq//vdd
+         dTGcKL2oeKGfhCJtZP5P5kO4nWtRmbI4NitvhT49eeOqA5wxxNWKTwDOcY0s9DVscfWs
+         8yxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cIPI5KmDuzcke0XGgrnA7zF01gNNf3RwyHxJZzCv/6M=;
+        b=gjPu6bxt45Skbkuql3IN84aEdSgZ7aud8LTW2YaXV1QNoacEQwfP9IDsZz0b5otXUf
+         VF/ahIoPFQvCQ1jE471Edw/cHJBaxTQ55t42lMF2cc5YA0xvRyebxTZRVEV94JpDwuP9
+         i4B2SpnHA3/TeuI+gQafUKPZ6Xne8ymamChswQPyWt3wfzwC1hKljNCoxEtcJ/VV4XE7
+         F77adRYQ4QMRtGHAsd9lky3NnyIcsVmhb7HJgSJNG1zbvm9WqoGPcT0HLY0d2xInhc1s
+         oIQCea+obEtqiRP/4C8ur06f1GgXGwuLWSzOHnjWUyJa2CmUj+JnkYp8IN9qN92gUEYi
+         Fqxg==
+X-Gm-Message-State: AJIora/iZt2/S7VO//2Ki9T6vIKV95sxuxBg5vh32cm9XXsdpZ4Ntp69
+        2MywWMEiNJRRO0cMZgiLjpu23z2Ppf3IZfo7y7Q=
+X-Google-Smtp-Source: AGRyM1vY2aubeKfH02KOuWoMorYDcmWdRSnkyGf3LHvGNaqt/b0DKZ5DoJ31VTcRGRydCQOFcoPshiRi+xhhDc0J+ac=
+X-Received: by 2002:a5d:4889:0:b0:21d:eab7:f798 with SMTP id
+ g9-20020a5d4889000000b0021deab7f798mr11482162wrq.96.1658852927394; Tue, 26
+ Jul 2022 09:28:47 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7a00a230-24d3-4880-7595-08da6f20668b
-X-MS-TrafficTypeDiagnostic: GVAP278MB0246:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: OwqtWOdrQOybZ14QQjP8WJWRqzsbOkxxiNrYWuuPZ3YbxEhNcWVc2Nuzhs/C0y205YUcPLREun2YkancoXSF2ZOgy/xvmOSEPPmdzCiMR3Tlwugoqz2x2NjBkaOByAO/chN9q+Gw9yekJSjaH/vCb2y5yBnZlsKxFxUILRkglJfzicd1Y0ESIl36X25BsifQX1zy9PPbJoNYvu5QAGo/1eK38BKJ6CtjxMTbT3ImAfy2MYNzlo9MBNYfClx92TWhMVbLh/7Q6/mvaSZbGUWL2FEc9ozGzmR5V8eZVucc2vtcGZWtPCtNAdO276+3qU9q2ougZnOtB7JqE4mvy0e5crqplFvMfrLSKT4cmzvbTpm4fKPkUtSjGDuKbqD2d56/LkpQNl+5jCYD2C2EvtWXXzb3qj1q/IsTdxJKXKhhyJfFplTH1yvs25I5XChNqfRvvGGTcQDGBQFHwmTTjxwH2tN/iWp1s0CWtJTUUoZ+BHWX7yet3WWNBoUkB1bJvp3jekhTEf2LjmWlzHqmfwwuuHGvwte+z3yK5XGVhHmJza1HO6zY7Vph2jCMt9PDjWhvejpdUCX2QPE09/fHwvIKzyoX0YkYq01G4UckiIqvKpd2xiX0asSCn7DLwKI/1VENZH1jIzu0hlpgdmSSAtiwYwFqWKY/2erTuFq78h4tXltkg7A7jnwO9ytcXCbHaQuwEG/7rnavHtQf5qJ3UiuZirRLk8Pc0DPvsozsrjs6AbwzF9ExtYPkMuJNtFFW/xL4L/yBkE+blxZEjsTW9VBXxdnnARQPh4AFcmR5ssooJ9EFFJIEsGsoZe6OMJd0Pz58
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(366004)(346002)(376002)(136003)(396003)(52116002)(6506007)(1076003)(6486002)(478600001)(2906002)(44832011)(41300700001)(5660300002)(33656002)(86362001)(7416002)(8936002)(316002)(54906003)(38350700002)(38100700002)(6916009)(66946007)(83380400001)(186003)(6512007)(26005)(4326008)(8676002)(66556008)(66476007);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?io2KSHXvK4sE6MW4ZTPVba+iYfW94eZUsG3ixr+43+NTI82ARdx1KUe5DTef?=
- =?us-ascii?Q?Zx83BLHmDLqdDWWkNypOoMrsq+7JCtZHFel1kWKcdrgK5opTCl8tnj38tMbl?=
- =?us-ascii?Q?kq4zsV59seP5zfKy26kgVvMCUUR9VpZ9LB3IqEoXidesmPb41P9Al7yrlyRu?=
- =?us-ascii?Q?GGVr+8e9fjhMrOCY3KpNcZ7EdR4kjtMK2S1P2IdzhLbXZ5JKaXBJUbOaFYdL?=
- =?us-ascii?Q?uxPW/C0Ln3ihAQyomshj2y/wlIHvPxrZl2c6scSwah73yoVQRdAO6OIA0yTG?=
- =?us-ascii?Q?W4EncAvmLoLFtxJqaUTnQ2TDFgrDpHXhZxbla0iDAuoPbySvI+3WhqB1ED2P?=
- =?us-ascii?Q?IsKBzaBCq5m1NxdjmZUfLyE0fIDsVhplBTk4oEbU3XQwvnxAw/gk7aK8uEdw?=
- =?us-ascii?Q?sODt/GluoHmsCeeLgFn8cnrOpWxgx3+DxYImB1sEKeUoovrhUHEQ8L4Wa7WG?=
- =?us-ascii?Q?XkPgt24ckpd8rlQb95NRT5PvhYVh7oq1rN1egZIcZ2p3LexyZRvhMY3Wx4id?=
- =?us-ascii?Q?WpUJ9c5G8VN/Q7bbrVKHAMu2KJEOIMrkowvKOzRai1julgXYbgon2qIOHk4/?=
- =?us-ascii?Q?fxggyb9s+HnwvmREEM3cY/jJdVGfi9DbJw0m8zSxlIck6O4ID2/CIg5GL358?=
- =?us-ascii?Q?r9ZHtwQ8bVZ3mWXnd5sBwqUbQdlNGdo/WtWuT3zZXHvQXTzsB0U4y1A9TZJ5?=
- =?us-ascii?Q?5gID8Oh5stC6WZtkPuD2qVgKKzyM5Ghiyepux3LzxyMK2IVxswj4aP23jfp4?=
- =?us-ascii?Q?CtVb+Cl+hL7RyZ+NiBAyq8hpJt4h0EN1+++vfZXUlB6yom9VzcrMXtw/ip6N?=
- =?us-ascii?Q?aK2VX2xDKoCNqS9LVbBk2Y51mTq4DGQVyQ8IGut77AAxR+UT2f3WjruSOi0N?=
- =?us-ascii?Q?VP/TxSKhe7qximdRgz7lCb0tOQeC9oM5A9zfZN2wFkxwGvqfN85RI43T7JsN?=
- =?us-ascii?Q?lrinwv1yy1avQtXRqRnJZBT1EbaXBYU0eZFEPelIF3BQ22oZoUPLMTglaEyA?=
- =?us-ascii?Q?X0wzLYNlgyYihju7aOqb+ZJ0WbLhiE6xV7UUWZwulmxOI/pqEtDKvh03Cbs4?=
- =?us-ascii?Q?tLEHZ/8ETFv2VWaJZneNC0uvZ6Ju70b/SJbu2mI6C8GUXlD8tu4aLPHs055L?=
- =?us-ascii?Q?Rls3FFRomIUJpkxtLnrPLjN1anUbnVFx9ysiDzd4rS/2M2GrNk5G9+sEAIu1?=
- =?us-ascii?Q?PkDTW6eU9Yu/1sIrHHOM9DdeU2JBn09O7+sEgfxQDOOVK2mlZdTVMinnkpoX?=
- =?us-ascii?Q?0zoa0P8q28jhE5355SW9IZhbg+Z1c0IZb/6O3TSJOgG7isK4zca88f1WJg+F?=
- =?us-ascii?Q?n0jiOkvafh3bL2669Xxla2YfHc/Io0IDpXewh4z1Y2wdrnujV3NdCR8jv1N5?=
- =?us-ascii?Q?G8QQgW3iYRZCH3Y9C3/rZEm0CZ+UqXq1ueXA8t5diYebUssClANHh/ZEWEyW?=
- =?us-ascii?Q?5FTYMjV7QwWuqMGAnuJbxp1ij55492Nk3CFBM6mERMeaed29C/jnUKTO5rlm?=
- =?us-ascii?Q?ebhq1GHq/IM/txJWMHkKDOqI1pxyIioycJhYpJQSf1zr2mvE3CLhOnSq3LnE?=
- =?us-ascii?Q?gCZIWdx1xXaWr4XEQnEjDpab0zyr3COAAuTX6SldAEhJykbz5jadjNupc+HU?=
- =?us-ascii?Q?yiejicLG60rJEuk/VJzgSQ4=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a00a230-24d3-4880-7595-08da6f20668b
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2022 16:03:37.7179
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4kzfuW1FBMESeUvddNC0/o9wezGO5bDj9HB8U3wEABqjrB/3PsdNr5WKwBmAJmBUUBk+s8TgW2iPWHNuq1MbL2xtdbcu+JuJEu9OrIXd6rE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0246
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725212637.2818207-1-daniel.lezcano@linexp.org> <20220725212637.2818207-9-daniel.lezcano@linexp.org>
+In-Reply-To: <20220725212637.2818207-9-daniel.lezcano@linexp.org>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Tue, 26 Jul 2022 09:28:20 -0700
+Message-ID: <CA+E=qVdrNkx9nXMEFFYQgDcX+gdKJaCh3zoTkBZBY3HhBFDAdQ@mail.gmail.com>
+Subject: Re: [PATCH v2 08/32] thermal/drivers/sun8i: Switch to new of API
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
+        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
+        heiko@sntech.de, hayashi.kunihiko@socionext.com,
+        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
+        digetx@gmail.com, jonathanh@nvidia.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Amit Kucheria <amitk@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Ulf and everybody,
+On Mon, Jul 25, 2022 at 2:27 PM Daniel Lezcano
+<daniel.lezcano@linexp.org> wrote:
+>
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
+>
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
+>
 
-On Wed, Jul 13, 2022 at 01:43:28PM +0200, Ulf Hansson wrote:
-> On Thu, 23 Jun 2022 at 18:14, Max Krummenacher <max.oss.09@gmail.com> wrote:
-> > So our plan is to explicitly handle a (shared) regulator in every
-> > driver involved, adding that regulator capability for drivers not
-> > already having one.
-> 
-> Please don't! I have recently rejected a similar approach for Tegra
-> platforms, which now have been converted into using the power domain
-> approach.
+Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
 
-Just to quickly re-iterate how our hardware design looks like, we do
-have a single gpio that control the power of a whole board area that is
-supposed to be powered-off in suspend mode, this area could contains
-devices that have a proper Linux driver and some passive driver-less
-components (e.g. level shifter) - the exact mix varies.
-
-Our proposal in this series was to model this as a power domain that
-could be controlled with a regulator. Krzysztof, Robin and others
-clearly argued against this idea.
-
-The other approach would be to have a single regulator shared with the
-multiple devices we have there (still not clear how that would work in
-case we have only driver-less passive components). This is just a
-device-tree matter, maybe we would need to add support for a supply to
-some device drivers.
-
-Honestly my conclusion from this discussion is that the only viable
-option is this second one, do I miss something?
-
-> If it's a powerail that is shared between controllers (devices), used
-> to keep their registers values for example, that should be modelled as
-> a power domain. Moreover for power domains, we can support
-> voltage/frequency (performance) scaling, which isn't really applicable
-> to a plain regulator.
-> 
-> However, if the actual powerrail fits well to be modelled as
-> regulator, please go ahead. Although, in this case, the regulator must
-> only be controlled behind a genpd provider's on/off callback, so you
-> still need the power domain approach, rather than using the regulator
-> in each driver and for each device.
-
-Francesco
-
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> ---
+>  drivers/thermal/sun8i_thermal.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> index d9cd23cbb671..2a4fa4068950 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -108,9 +108,9 @@ static int sun50i_h5_calc_temp(struct ths_device *tmdev,
+>                 return -1590 * reg / 10 + 276000;
+>  }
+>
+> -static int sun8i_ths_get_temp(void *data, int *temp)
+> +static int sun8i_ths_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -       struct tsensor *s = data;
+> +       struct tsensor *s = tz->devdata;
+>         struct ths_device *tmdev = s->tmdev;
+>         int val = 0;
+>
+> @@ -135,7 +135,7 @@ static int sun8i_ths_get_temp(void *data, int *temp)
+>         return 0;
+>  }
+>
+> -static const struct thermal_zone_of_device_ops ths_ops = {
+> +static const struct thermal_zone_device_ops ths_ops = {
+>         .get_temp = sun8i_ths_get_temp,
+>  };
+>
+> @@ -468,10 +468,10 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+>                 tmdev->sensor[i].tmdev = tmdev;
+>                 tmdev->sensor[i].id = i;
+>                 tmdev->sensor[i].tzd =
+> -                       devm_thermal_zone_of_sensor_register(tmdev->dev,
+> -                                                            i,
+> -                                                            &tmdev->sensor[i],
+> -                                                            &ths_ops);
+> +                       devm_thermal_of_zone_register(tmdev->dev,
+> +                                                     i,
+> +                                                     &tmdev->sensor[i],
+> +                                                     &ths_ops);
+>                 if (IS_ERR(tmdev->sensor[i].tzd))
+>                         return PTR_ERR(tmdev->sensor[i].tzd);
+>
+> --
+> 2.25.1
+>
