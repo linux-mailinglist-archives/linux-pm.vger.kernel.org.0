@@ -2,93 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101B7581307
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 14:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427C7581319
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 14:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238587AbiGZMS0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 08:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S232851AbiGZMXk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 08:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbiGZMSZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 08:18:25 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D142E13F9E;
-        Tue, 26 Jul 2022 05:18:22 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id i13so8372689edj.11;
-        Tue, 26 Jul 2022 05:18:22 -0700 (PDT)
+        with ESMTP id S232771AbiGZMXj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 08:23:39 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21ED514D02
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 05:23:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uFNBuksRAUHG8SQKGfIMoqHF0ZeQIQql/Pes//0/1FE=;
-        b=p25ViQRAGjIzoqbyw32XacT85JsM0ATOnc/aJ7f4OQUM+aio/Y993fmTKcDeocHCd9
-         Ip6z+1IDcK1emNmby8GCnHh8nTAZJOit+jilIBMN3MN8BHArbq5Y7jX0AdPoo5PJRGP+
-         qBAvo4C0uBT25Q/8kqgwUa9AThgrYs6OVHHMaOpyea8oHPpg79QNvmgM1Uz/oDBPwnAl
-         AufVZdMZG9DZBf3rhJ84O3aYj5LM94YzLZW6y/dSBdJHdO6Du6+eIPe3NFTEc8T9fHX5
-         OTqmGMZhfJaXrcwzJtTP8MEOT5b0nUwAv/+Z19lTei3pSAbzl6AU10dk5npcBMsgvF/p
-         dQxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uFNBuksRAUHG8SQKGfIMoqHF0ZeQIQql/Pes//0/1FE=;
-        b=cNPpWFqrhdUYHBqsgEaKSBbbCWj+L+Ph7rG5Vg/7tJqlHs9dmJPxGmZAUZLAI3R4Ik
-         LQNHuKIA+fNSCbYisXlsazusZ18iTXASS+Xw0fUFivYKXPm3I5ESHF3u6pVcO+Dqs5DX
-         EzKjBjWvyXHgqqHff8Kqt5vRgEv0s93RtydqdX4/F7wWDygs95G/ytCu2dTC8J8sREI0
-         iWWz1brG+cEbncvzjLJ1Ep5lEVqRdHDDLlgqgiJdRBgxqSO9cB9XmoLOCPCc6NOFIjsJ
-         eRBoOct2RcXQE9Rlb6hZQQt6x03vQpSpYdZWNXIw8wc49M3/zyIGiYbhFsGwcmWK84Ku
-         GnEQ==
-X-Gm-Message-State: AJIora9udDXmKi0XUWumhr7oTYzH83T+bzAVHWjLznKPMo+0lGED8+7i
-        KnuVjbACRyRoSw2A6Eg3XQwXUwwa4f0Au59k6rY=
-X-Google-Smtp-Source: AGRyM1uzT38suKCsbCmFfyzBHLwwuulTdOWUnr3cD4+NYEDfZRxNjDpqwVCvJTRb6rCtiz3um/F+ZSKguXrhc6flE20=
-X-Received: by 2002:a05:6402:50c9:b0:43c:163a:4d5f with SMTP id
- h9-20020a05640250c900b0043c163a4d5fmr7812854edb.386.1658837901255; Tue, 26
- Jul 2022 05:18:21 -0700 (PDT)
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1658838217; x=1690374217;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dI9JKgnIOeviq6/jYPE3rPuPUaDKP54yKfeQUXs+/MM=;
+  b=beHw3p07vlOl60GASHat4L17/4HOX/2ucd9tppnDXBOlNNpEH2hraISD
+   DhWm2DTGTo0PD+kAUf81lHhgPpL5y+5QzGy2asVD7D5f1XnmFDMw/coXw
+   5DHOs8/twFaDYEi1TrhzB2IkyyHsPONEpdQsBQgYUtfNStSSo6sW2vDRs
+   31aINSwZu0OgI+kAnmfNhkQo7973Q64sKA2a9k4pg7j8tvf/sXYn+K8DX
+   xRWGQza76piO+fJU+HDpJkw5cqn3MkNxwVrDhQHarf9FOWsVncj5WkoAo
+   e0mP7fNMu/TO1A0uUn6QN9y3LtBnFeN/u7Pqn1aBmS+aThB4oiNbzBNlb
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,193,1654552800"; 
+   d="scan'208";a="25268033"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 26 Jul 2022 14:23:35 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 26 Jul 2022 14:23:35 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 26 Jul 2022 14:23:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1658838215; x=1690374215;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dI9JKgnIOeviq6/jYPE3rPuPUaDKP54yKfeQUXs+/MM=;
+  b=AQf0rGgwNZM1S2Ha9hXQypcjFh+PAXFWrFRBTrVkLA3qAaBf0vAmxmUb
+   gG7++AgAq0HjkvwTShikY3SLvM24G9SViIozxDBWci2X1gFfB1MhcYnN/
+   yHXbhWP1rorSDHuj5T0C8fKuyqYuU2Ap0jt8KLgQrPyZVh4Om0D2qcp+m
+   NnFmSDIsogSSr6ShvmFkoyaYF4wppU920PjCTgUFhZJ86FH1/txcCrD/8
+   blmPC878XGjTxyDzNK8iwHTyn+zYL49DNPeXPbDWtXEyOAvWv91G3hZbY
+   deOXE5M3/FLcffv731/ez1qTkJBViAiu4b3b2juC7hzVX9T/76Oqw2NoP
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,193,1654552800"; 
+   d="scan'208";a="25268032"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 26 Jul 2022 14:23:35 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 07B7F280056;
+        Tue, 26 Jul 2022 14:23:35 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 1/1] thermal: imx8mm: Add hwmon support
+Date:   Tue, 26 Jul 2022 14:23:31 +0200
+Message-Id: <20220726122331.323093-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
- <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com> <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com>
-In-Reply-To: <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 26 Jul 2022 14:17:44 +0200
-Message-ID: <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
-Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
- sink type LED Indicator support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,39 +83,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 1:46 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> On Mon, Jul 25, 2022 at 4:41 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
+Expose thermal sensors as HWMON devices.
 
-...
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+Changes in v2:
+* Split from thermal_helpers patch
+* No change otherwise
 
-> > > +struct mt6370_led {
-> > > +       union {
-> > > +               struct led_classdev isink;
-> > > +               struct led_classdev_mc mc;
-> > > +       };
-> >
-> > Where is the field that makes union work?
->
-> Just for saving memory space.
-> Because these led_classdevs do not be used at the same time.
-> Or do you think it would be better to rewrite it as follows?
-> -------------------------------------------------------------------------------------
-> struct mt6370_led {
->        struct led_classdev isink;
->        struct led_classdev_mc mc;
->        struct mt6370_priv *priv;
->        u32 default_state;
->        u32 index;
-> };
-> -------------------------------------------------------------------------------------
+The helper patch need some additional work, but this can go as it is.
 
-You obviously didn't get what I'm talking about...
-Each union to work properly should have an associated variable that
-holds the information of which field of the union is in use. Do you
-have such a variable? If not, how does your code know which one to
-use? If yes, add a proper comment there.
+ drivers/thermal/imx8mm_thermal.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+index af666bd9e8d4..ca8e2c393030 100644
+--- a/drivers/thermal/imx8mm_thermal.c
++++ b/drivers/thermal/imx8mm_thermal.c
+@@ -16,6 +16,7 @@
+ #include <linux/thermal.h>
+ 
+ #include "thermal_core.h"
++#include "thermal_hwmon.h"
+ 
+ #define TER			0x0	/* TMU enable */
+ #define TPS			0x4
+@@ -176,6 +177,9 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
+ 			goto disable_clk;
+ 		}
+ 		tmu->sensors[i].hw_id = i;
++
++		if (devm_thermal_add_hwmon_sysfs(tmu->sensors[i].tzd))
++			dev_warn(&pdev->dev, "failed to add hwmon sysfs attributes\n");
+ 	}
+ 
+ 	platform_set_drvdata(pdev, tmu);
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+
