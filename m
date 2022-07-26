@@ -2,109 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D31580800
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 01:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1C45808B0
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 02:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiGYXLS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Jul 2022 19:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S236828AbiGZAON (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Jul 2022 20:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiGYXLR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 19:11:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B0BBF68;
-        Mon, 25 Jul 2022 16:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658790676; x=1690326676;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sOZHgtI0Aszjfo0V/PNPgA+M8VlOJa/SdqFbd4pmrWs=;
-  b=X0p7t2nhD3NYn/p3oLSh7vzt5DXUzS94VBXfvp1ZLbY91QCWu+3bNO6H
-   snGkD9+CEweolomAGIR76hYJ05pAHWksP3Ah/oTRW/YAE3/OCMjccilDg
-   PuhMV++mszSR+9NJ6z0LfT6pjis0OuzwEQIzx1SowYZOsMhJq1oG7/nPW
-   twuntO8J0sbtOP7hU5hOsX+GarrpaCRbNspZlT5Urnh8e+ChwedcZ37vR
-   4X8cM1n17c1WLgw5bOo8ZuANo1KDJKxoPPV/aVrRkhaZmZ1qfWQJINndT
-   kGGIhWKrHnQOuwPopxrNvgMgduoZgukQlaI05SWOSAquK/RxBYUt97Xus
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="313570583"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="313570583"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 16:11:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="927092344"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Jul 2022 16:11:13 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oG7EH-0005eH-0v;
-        Mon, 25 Jul 2022 23:11:13 +0000
-Date:   Tue, 26 Jul 2022 07:10:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
-        robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Subject: Re: [PATCH v2 3/5] thermal: qcom: tsens: Add driver support for
- re-initialization quirk
-Message-ID: <202207260755.tUajnfB4-lkp@intel.com>
-References: <20220724122424.2509021-4-bhupesh.sharma@linaro.org>
+        with ESMTP id S232178AbiGZAOL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Jul 2022 20:14:11 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4B727FFD
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 17:14:11 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id q22so6605471pgt.9
+        for <linux-pm@vger.kernel.org>; Mon, 25 Jul 2022 17:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=VPN8fxP/FdsRrDDoRfWW9vaTaIfQXmkyR3QR5hydx3s=;
+        b=SQh6bRB6Kb+13Z6gkFWtFxy9zk1FsTWFZaZj2BJkOfApGZb7A99WLFXRrE/FRzN2x4
+         W2eXCbs5rHHWv2z1EMMyNC1txcSr/eEKTOZLvLAC5t/V3QBDK3WJk2gHsf/yKLCqz4Jk
+         MWLgSipu2wyOb6naTWmER3aSxn6IQZR2xKZ403KrydNeJSBbBfajEMfZQbtu3HUMwt9Z
+         YxOniKe07jwNSZJc/V2x2W6PG3TAPW55ST1gsRrr+YdmTDRX+ppNxZUg5WfWdLpaHo7t
+         IKT5pQYqahnJz9M2539RutB4v7sLRgYOkWDu6OVjN+PrtCJFLN+aDuX/ZvfEFqMcBtCH
+         I41w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=VPN8fxP/FdsRrDDoRfWW9vaTaIfQXmkyR3QR5hydx3s=;
+        b=e+kdBkxd7+1pzGGgVdY9g0kib1UzURKqCTe6nbjt9stTGW4gKBW2LXv4DIM3QiQyb0
+         cvhAlWHlKn2rWti54H0nToeu9dKNtvfaOgbH08I7jjWk4f2GVRkLGBi7wOmTNKzAZ5V2
+         zER/xawqvV/0sxomCrbe+7f9HMxXjq4tKupgzorLSeibqLS4ho+RAloSOiK2JWtLrx1i
+         WTaTERrD8I4ky5rSa3HnN/82UlnUwf0E2GMaYmy7R0MnBAFPju70bpL/7OLQnx2cUSfd
+         qX7PpBPGC6t4cvOPdiBY6E8cCvUs00TnbAvuUx+Cf7oh2hIZZX7SuMpWV3IJ9IGKHD3H
+         ud1g==
+X-Gm-Message-State: AJIora8k19ozFasSheFuuF7d0e2cPKw4oR3S9LGbFB9p3Ij41/gfSnN+
+        wBwklVFEdJ0kzWc9lWjOL2CJ3OKPsuOVPa5t
+X-Google-Smtp-Source: AGRyM1tjCG3pd5TFAC9x+Hsz5OFeRMhP4urGTuDyzwzAkyDaM94Lcnht9QyQxTXmrDIAhusJ8GzflQ==
+X-Received: by 2002:a63:68c7:0:b0:405:1da9:ab69 with SMTP id d190-20020a6368c7000000b004051da9ab69mr13165253pgc.233.1658794450660;
+        Mon, 25 Jul 2022 17:14:10 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b0016c09e23b18sm9818372pli.154.2022.07.25.17.14.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 17:14:10 -0700 (PDT)
+Message-ID: <62df31d2.1c69fb81.4c619.f84f@mx.google.com>
+Date:   Mon, 25 Jul 2022 17:14:10 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220724122424.2509021-4-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc8-79-gb3f10ca8bf191
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.19-rc8-79-gb3f10ca8bf191)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Bhupesh,
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc8-79-gb3=
+f10ca8bf191)
 
-Thank you for the patch! Yet something to improve:
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+19-rc8-79-gb3f10ca8bf191/
 
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on linus/master v5.19-rc8 next-20220725]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tree: pm
+Branch: testing
+Git Describe: v5.19-rc8-79-gb3f10ca8bf191
+Git Commit: b3f10ca8bf191b812bf40c0911a22ce8ce67d13a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220724-202546
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-config: ia64-randconfig-r005-20220724 (https://download.01.org/0day-ci/archive/20220726/202207260755.tUajnfB4-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2356630fadc0a622264bf292b6930f8c728b0709
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220724-202546
-        git checkout 2356630fadc0a622264bf292b6930f8c728b0709
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash
+Warnings Detected:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+arc:
 
-All errors (new ones prefixed by >>):
+arm64:
 
-   ia64-linux-ld: drivers/thermal/qcom/tsens.o: in function `tsens_probe':
->> tsens.c:(.text+0x6d2): undefined reference to `qcom_scm_is_available'
-   ia64-linux-ld: drivers/thermal/qcom/tsens.o: in function `tsens_health_check_and_reinit.constprop.0':
->> tsens.c:(.text+0x10c2): undefined reference to `qcom_scm_tsens_reinit'
+arm:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
