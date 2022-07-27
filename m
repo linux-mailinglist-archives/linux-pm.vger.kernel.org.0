@@ -2,109 +2,241 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61ACF583314
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 21:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596F55833ED
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 22:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236109AbiG0TJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 15:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
+        id S231322AbiG0UJL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 16:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236888AbiG0TJS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 15:09:18 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252ED67C86
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 11:50:27 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id u6-20020a25b7c6000000b00670862c5b16so13994307ybj.12
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 11:50:27 -0700 (PDT)
+        with ESMTP id S232859AbiG0UJH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 16:09:07 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F85F5B07D
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 13:09:05 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id a13so20799984ljr.11
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 13:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=BEk69dNG70BOHgb0SXLFWzzFpDyu+7tq1YolDhZdyzE=;
-        b=B7uDYX/Cr97zFSRCvB7/fn1gKg5skiOo3orS627VXpMcYo8QEZ7oIrvYBjLdXKLvyw
-         oxhx2F1iCRsyE1gIZ2hQTPsAZ46+3sYZ0ox/pMmaN1heCLPhTeZtrSP1HwOFBi+LY5w+
-         O36Puictr1H9b2lkfo4jRR0Mo/xQr3nN7QsINYg+iKLGVrHaFtsRNdO2iKXWdHOJB+yI
-         aOHHjRJdiN1hTtvuovOpKu1BWxPbokvLEXrXizIHGlzJb61Z0JET3FdTJLeRJ+YjUkgx
-         ZtsTrJIP/RTGLKgls6kpdVgkFafVspj0h5Ad++NOeAflXkUYcUYlzfpi2vBLdxNvt1Jf
-         7KOQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xJtun5NcNR5wLyutYX62IIiLTVDFy1hcC9gXT6STMk8=;
+        b=XZtW6FVvaqmfalpx0q3HcwspGk2aOxr4ZIX759Vec0uZcWMN3UvIJP4v7oOSyem4KV
+         dGssTb1ubfo3rpB+ZdbMkUMkemuYuXSFgC4ZVolkm+eBdzjsCzfdIue4h4zns1j6OqCZ
+         vOYomoKyEhZ0IaRbpKm7JEshAe9RNzYfi8fPwXSeeDMKTZEKpj2X8WChDoR0G3SxsRP0
+         MmZQpAW1zn0p4lctA+YdJUvtLaJ86pI+8W613zPeSRJF2ybzSCik0qQguFSSvguU39GQ
+         B3CVa5LNF1dVHJ+FvUEE22LBsG528g7pIVSNpe0B6CxLQShQbAiiQRwrUEDO8dI8iNM2
+         BT+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=BEk69dNG70BOHgb0SXLFWzzFpDyu+7tq1YolDhZdyzE=;
-        b=tT5t3XumiK8xhjum8FAbgNeBWUD2hG9qSKqjOy/9lKQeB4SEWH/euyBnrZKofztgZP
-         1fEGripyQbjvm9/PSnmlBYI7WBbisXzsfmL5i6lTuv04rijo62ANX5JJbCGhFgz/Cr0p
-         WHEtbq3Y96pO0ldIGFzraTbAAALbevdk70PkHNH11c6AN6iUY8Kdc9Oj23Ppk8c80+2D
-         msqlFRje9uRpro+sCF3EwGozMhvzN93nfUiBBLb35TE8dwfxwC8sgM0RfmIbPOiJaMHL
-         m5oyXNILojbEO1gH4thIf02gECT/NbUdL6DoSXoaPgchuNDp5+URRY/HK/pSWaYWgdpp
-         DcGQ==
-X-Gm-Message-State: AJIora/JpC3611P482jWqZc4EMDz8BtFREmW80cEtBtNm4O+i8qfejNS
-        5O6T1bQM1BpDNH9i2TM+5XLx9ve43K+sSIE=
-X-Google-Smtp-Source: AGRyM1vBbGCvhJnuNcqNxmyfgvBqU63X92ObJ+fmmE6nsBM1EgRJPhCmvWH4pzIt7pOBmOkC8sjtqMGkHE01FH0=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:40ee:bae0:a4fd:c75b])
- (user=saravanak job=sendgmr) by 2002:a5b:502:0:b0:66e:206d:15f6 with SMTP id
- o2-20020a5b0502000000b0066e206d15f6mr18796823ybp.160.1658947826888; Wed, 27
- Jul 2022 11:50:26 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 11:50:11 -0700
-In-Reply-To: <20220727185012.3255200-1-saravanak@google.com>
-Message-Id: <20220727185012.3255200-4-saravanak@google.com>
-Mime-Version: 1.0
-References: <20220727185012.3255200-1-saravanak@google.com>
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v1 3/3] Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
-From:   Saravana Kannan <saravanak@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Saravana Kannan <saravanak@google.com>, naresh.kamboju@linaro.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xJtun5NcNR5wLyutYX62IIiLTVDFy1hcC9gXT6STMk8=;
+        b=UDPDuZmMTrpk2MFdLcbjYNhp5hk/Hp04xOhm9DG7wjDl1bgPBTfuHJbyQWdRISV3sT
+         om1twU40ji1vi/P6wKTqoIq4b6UFE1F37t9mscKw1x5TcIO+OeT02BiZ39toeiTMMrPb
+         uR3G2jC5mXTkcT2qOj8g/ru2DkJbWU/0t4wnB+kKu7mlrufLpJdS39bI4XOPwYRHuMLK
+         yJiYDffy/PthBRYlHbIlvr4UwqWFwj8Bgvv6zHy8NiMkI6fHOx2ETqhWXyuD7LyQ4C7q
+         tab0eZ+gpoJ+nr73MLwVxQHokpZXYE1YClcqAozdgA10KWlWmdEj2P323HUowLCrvP8X
+         78Sg==
+X-Gm-Message-State: AJIora8xirktHyswfhExD/rIuLtqMDE3gq0ZJ4RBjlVkpXE6ntOpOz2e
+        6WWjrVPvdiXNh0e4Zf8i5Gs1hg==
+X-Google-Smtp-Source: AGRyM1sfdGc2AXkd9v7L61hwgPs8XRui3lZKm4ip1NQ849VBvnGRnqYMpuE3luDBme8hNv+XItguaA==
+X-Received: by 2002:a2e:8789:0:b0:25d:edad:f50b with SMTP id n9-20020a2e8789000000b0025dedadf50bmr8740460lji.86.1658952543402;
+        Wed, 27 Jul 2022 13:09:03 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id b9-20020ac24109000000b004870f517c89sm3961649lfi.33.2022.07.27.13.09.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 13:09:02 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] firmware/psci: Add debugfs support to ease debugging
+Date:   Wed, 27 Jul 2022 23:09:01 +0300
+Message-Id: <20220727200901.1142557-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
+To ease debugging of PSCI supported features, add debugfs file called
+'psci' describing PSCI and SMC CC versions, enabled features and
+options.
 
-There are a few more issues to fix that have been reported in the thread
-for the original series [1]. We'll need to fix those before this will
-work. So, revert it for now.
-
-[1] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
-
-Signed-off-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/base/power/domain.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/firmware/psci/psci.c | 112 ++++++++++++++++++++++++++++++++++-
+ include/uapi/linux/psci.h    |   9 +++
+ 2 files changed, 120 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 3e86772d5fac..739e52cd4aba 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 		mutex_unlock(&gpd_list_lock);
- 		dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
- 			__func__, PTR_ERR(pd));
--		return -ENODEV;
-+		return driver_deferred_probe_check_state(base_dev);
- 	}
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index b907768eea01..6595cc964635 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -9,6 +9,7 @@
+ #include <linux/acpi.h>
+ #include <linux/arm-smccc.h>
+ #include <linux/cpuidle.h>
++#include <linux/debugfs.h>
+ #include <linux/errno.h>
+ #include <linux/linkage.h>
+ #include <linux/of.h>
+@@ -324,12 +325,121 @@ static void psci_sys_poweroff(void)
+ 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
+ }
  
- 	dev_dbg(dev, "adding to PM domain %s\n", pd->name);
+-static int __init psci_features(u32 psci_func_id)
++static int psci_features(u32 psci_func_id)
+ {
+ 	return invoke_psci_fn(PSCI_1_0_FN_PSCI_FEATURES,
+ 			      psci_func_id, 0, 0);
+ }
+ 
++#ifdef CONFIG_DEBUG_FS
++
++#define PSCI_ID(ver, _name) \
++	{ .fn = PSCI_##ver##_FN_##_name, .name = #_name, }
++#define PSCI_ID_NATIVE(ver, _name) \
++	{ .fn = PSCI_FN_NATIVE(ver, _name), .name = #_name, }
++
++/* A table of all optional functions */
++static const struct {
++	u32 fn;
++	const char *name;
++} psci_fn_ids[] = {
++	PSCI_ID_NATIVE(0_2, MIGRATE),
++	PSCI_ID(0_2, MIGRATE_INFO_TYPE),
++	PSCI_ID_NATIVE(0_2, MIGRATE_INFO_UP_CPU),
++	PSCI_ID(1_0, CPU_FREEZE),
++	PSCI_ID_NATIVE(1_0, CPU_DEFAULT_SUSPEND),
++	PSCI_ID_NATIVE(1_0, NODE_HW_STATE),
++	PSCI_ID_NATIVE(1_0, SYSTEM_SUSPEND),
++	PSCI_ID(1_0, SET_SUSPEND_MODE),
++	PSCI_ID_NATIVE(1_0, STAT_RESIDENCY),
++	PSCI_ID_NATIVE(1_0, STAT_COUNT),
++	PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
++};
++
++static int psci_debugfs_read(struct seq_file *s, void *data)
++{
++	int feature, type, i;
++	u32 ver;
++
++	ver = psci_ops.get_version();
++	seq_printf(s, "PSCIv%d.%d\n",
++		   PSCI_VERSION_MAJOR(ver),
++		   PSCI_VERSION_MINOR(ver));
++
++	/* PSCI_FEATURES is available only starting from 1.0 */
++	if (PSCI_VERSION_MAJOR(ver) < 1)
++		return 0;
++
++	feature = psci_features(ARM_SMCCC_VERSION_FUNC_ID);
++	if (feature != PSCI_RET_NOT_SUPPORTED) {
++		ver = invoke_psci_fn(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0);
++		seq_printf(s, "SMC Calling Convention v%d.%d\n",
++			   PSCI_VERSION_MAJOR(ver),
++			   PSCI_VERSION_MINOR(ver));
++	} else {
++		seq_printf(s, "SMC Calling Convention v1.0 is assumed\n");
++	}
++
++	feature = psci_features(PSCI_FN_NATIVE(0_2, CPU_SUSPEND));
++	if (feature < 0) {
++		seq_printf(s, "PSCI_FEATURES(CPU_SUSPEND) error (%d)\n", feature);
++	} else {
++		seq_printf(s, "OSI is %ssupported\n",
++			   (feature & BIT(0)) ? "" : "not ");
++		seq_printf(s, "%s StateID format is used\n",
++			   (feature & BIT(1)) ? "Extended" : "Original");
++	}
++
++	type = psci_ops.migrate_info_type();
++	if (type == PSCI_0_2_TOS_UP_MIGRATE ||
++	    type == PSCI_0_2_TOS_UP_NO_MIGRATE) {
++		unsigned long cpuid;
++
++		seq_printf(s, "Trusted OS %smigrate capable\n",
++			   type == PSCI_0_2_TOS_UP_NO_MIGRATE ? "not " : "");
++		cpuid = psci_migrate_info_up_cpu();
++		seq_printf(s, "Trusted OS resident on physical CPU 0x%lx (#%d)\n", cpuid, resident_cpu);
++	} else if (type == PSCI_0_2_TOS_MP) {
++		seq_printf(s, "Trusted OS migration not required\n");
++	} else {
++		if (type != PSCI_RET_NOT_SUPPORTED)
++			seq_printf(s, "MIGRATE_INFO_TYPE returned unknown type (%d)\n", type);
++	}
++
++	for (i = 0; i < ARRAY_SIZE(psci_fn_ids); i++) {
++		feature = psci_features(psci_fn_ids[i].fn);
++		if (feature == PSCI_RET_NOT_SUPPORTED)
++			continue;
++		if (feature < 0)
++			seq_printf(s, "PSCI_FEATURES(%s) error (%d)\n", psci_fn_ids[i].name, feature);
++		else
++			seq_printf(s, "%s is supported\n", psci_fn_ids[i].name);
++	}
++
++	return 0;
++}
++
++static int psci_debugfs_open(struct inode *inode, struct file *f)
++{
++	return single_open(f, psci_debugfs_read, NULL);
++}
++
++static const struct file_operations psci_debugfs_ops = {
++	.owner = THIS_MODULE,
++	.open = psci_debugfs_open,
++	.release = single_release,
++	.read = seq_read,
++	.llseek = seq_lseek
++};
++
++static int __init psci_debugfs_init(void)
++{
++	return PTR_ERR_OR_ZERO(debugfs_create_file("psci", S_IRUGO, NULL, NULL,
++						   &psci_debugfs_ops));
++}
++late_initcall(psci_debugfs_init)
++#endif
++
+ #ifdef CONFIG_CPU_IDLE
+ static int psci_suspend_finisher(unsigned long state)
+ {
+diff --git a/include/uapi/linux/psci.h b/include/uapi/linux/psci.h
+index 2bf93c0d6354..f6f0bad5858b 100644
+--- a/include/uapi/linux/psci.h
++++ b/include/uapi/linux/psci.h
+@@ -48,11 +48,20 @@
+ #define PSCI_0_2_FN64_MIGRATE_INFO_UP_CPU	PSCI_0_2_FN64(7)
+ 
+ #define PSCI_1_0_FN_PSCI_FEATURES		PSCI_0_2_FN(10)
++#define PSCI_1_0_FN_CPU_FREEZE			PSCI_0_2_FN(11)
++#define PSCI_1_0_FN_CPU_DEFAULT_SUSPEND		PSCI_0_2_FN(12)
++#define PSCI_1_0_FN_NODE_HW_STATE		PSCI_0_2_FN(13)
+ #define PSCI_1_0_FN_SYSTEM_SUSPEND		PSCI_0_2_FN(14)
+ #define PSCI_1_0_FN_SET_SUSPEND_MODE		PSCI_0_2_FN(15)
++#define PSCI_1_0_FN_STAT_RESIDENCY		PSCI_0_2_FN(16)
++#define PSCI_1_0_FN_STAT_COUNT			PSCI_0_2_FN(17)
+ #define PSCI_1_1_FN_SYSTEM_RESET2		PSCI_0_2_FN(18)
+ 
++#define PSCI_1_0_FN64_CPU_DEFAULT_SUSPEND	PSCI_0_2_FN64(12)
++#define PSCI_1_0_FN64_NODE_HW_STATE		PSCI_0_2_FN64(13)
+ #define PSCI_1_0_FN64_SYSTEM_SUSPEND		PSCI_0_2_FN64(14)
++#define PSCI_1_0_FN64_STAT_RESIDENCY		PSCI_0_2_FN64(16)
++#define PSCI_1_0_FN64_STAT_COUNT		PSCI_0_2_FN64(17)
+ #define PSCI_1_1_FN64_SYSTEM_RESET2		PSCI_0_2_FN64(18)
+ 
+ /* PSCI v0.2 power state encoding for CPU_SUSPEND function */
 -- 
-2.37.1.359.gd136c6c3e2-goog
+2.35.1
 
