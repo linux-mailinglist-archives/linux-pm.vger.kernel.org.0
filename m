@@ -2,63 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A814E58343E
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 22:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDCA58344B
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 22:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiG0UvP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 16:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S233582AbiG0Uxi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 16:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiG0UvO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 16:51:14 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E345072E
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 13:51:13 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id q3so74835qvp.5
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 13:51:13 -0700 (PDT)
+        with ESMTP id S233571AbiG0Uxi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 16:53:38 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839545072E
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 13:53:36 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id g24so13516153qtu.2
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 13:53:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3MimbQxk9gBAT10hM+BMRcfkfN4McVaow40wDd+ExhE=;
-        b=dk6fnxggUuYs3KCxaVouaJW51zBKcqV4CFXo1ZslOYtxvU3XxR8wedILt5Cj1SjZqW
-         gJZdlzB+HKvkWoJuywbNbLPLixfxxoJz14TZMzf2lMpXeGuj9Z3e2jGkEAA9O8E9KkfJ
-         wcZIAcFlRcxWH/W/TfLU8XMgnx7G0x3/gZ0gzp5utuKX3UZvOvqSLZK1g+apCHivkPoQ
-         5Pl8tfOeH0edfjXGetU7VbGOMab46CVTFZIxDM5Aasjd+1EeLtzxUSGpCZFvVpwaxdVh
-         cMFo8twmDnG86/c6oYpaFHn1ouXTdi/vcNtMS8HTmlYyOj7MmguqVsZt7EUHsjGDiaAP
-         B2zg==
+        bh=MDlOZm9bpqNk5galu2q+8ZemFKuebwxQyPEPvW8aCD0=;
+        b=FkNdkteraq4UsU7Xx3XCXsGyv2pDVoq9DFsQ8/8wefc8zs2Viwt75ozFhcHeLz4N4+
+         uQ0Ad4szRe0lELXplADVF4nkyXR/fphkwGpnuP2UINxvJikVRTN1m1bfUbS1JEDB0UpF
+         +bH20I/g6z6Rlb++C2rribWdJcaIK8KAgIhdgNGzlvX+wYvWz9UU5WuWHTioFLJFonF9
+         +bdjNYV8ElrCfZpIy3pvVxgb/RmxhGWbJagFXPCQdA14z5kmiKx8Z+6YpfYe+t26zBPW
+         0nUKsLzsTsDmHRoxkdjyqVnzb0RrW2rIr7ODoWdfedSh+OP/n2Arjev/20L2EsGhEsyj
+         T6lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3MimbQxk9gBAT10hM+BMRcfkfN4McVaow40wDd+ExhE=;
-        b=I6IvmWI0zX+nzZMA3UhWUTf2gyYuPJ6EQvsiAkJOaa2gJHIiXQa4FxtVgyED6biUOL
-         6U2fi4LZ2lAJkr9KnYTpK63TtUonnY/sn+vpbTtyxxLt+uy2t8OR4eWOWD+mzl9xxrZr
-         Gyu/WNaDMoRaYsBTQtLiwbKaD02TKEEFPAB93nDn4PYzVU6T78iGtvecuQROgfTNMX8F
-         ee5ffK6+LD7/ChfglRzzUhm6WNpcRalG15KkwCvJVsChZQCXsNvpF9bexrZj3elX5chv
-         aqYUzFgOIrUD+1ezr108+m2dnO1jJ/GlbRpkmr+YBMJF4plYuy1f5FW1HBe/bePTMKIk
-         jZ0w==
-X-Gm-Message-State: AJIora8VawXSf61n+Tw4QWHB8Ik63+amgtaUoWBoFkrum4/IzQzX5oZQ
-        wQjMkI8TT/XjRlq2fqV8PvVmx9d5RrUf7Wfpw63MA9xs8dD0rQ==
-X-Google-Smtp-Source: AGRyM1tuvxdRkL8TNAQWYCPS3S3HpR3TBUr0lC6PLUO0qAmXfaEV3lBIFV1MY0mudqjTzswos9YEBmjX7MR6zblPtq8=
-X-Received: by 2002:ad4:5761:0:b0:473:7861:69d1 with SMTP id
- r1-20020ad45761000000b00473786169d1mr21147659qvx.73.1658955072842; Wed, 27
- Jul 2022 13:51:12 -0700 (PDT)
+        bh=MDlOZm9bpqNk5galu2q+8ZemFKuebwxQyPEPvW8aCD0=;
+        b=fsz/WaxbXu42XcTt55yW0vFAaBYMPnKNaQebu42A6g3+2axPr+iFzj6u/IJT4o4Fj1
+         mBJBx/CHOOBCcFrKvfmz7tKfhAJAXgq3fyKIRSuKaWXMKk2JqAeJqTyeIyb+GO+HRTqW
+         cjYB0VpQCLCO0B73bUtnvKglAd4SEC2NpICwUTX7h/kneRAJ2s0rH+8AcOp6w4HPHt/P
+         5GI+bU3RI3Ks0gOYCXi7nkriu9o62NR6Ho3ft0fHoqiieJgmGCo4UGExFxJwZE8fWB6f
+         FWPCJBEzgFlrxLP0yVWbpb0q6y9KEYhrOqfR7V4GopHsuIJ99Ae6Qxyigi2Zm7QvsH2E
+         09nw==
+X-Gm-Message-State: AJIora+EoRtleqsjLFY0mqX1RtUWSevKsVmDdy8H4roMc/FpSHjz7kNN
+        kK170B3utTJu4w9oQwZGmdbAFZ/lOazh3orENSb1rTDmCpQ=
+X-Google-Smtp-Source: AGRyM1vKHr6vM2kxjdbr9EAKCjldD/o3QQvFj0TOP9IaO4NSxRZ6rC7ys2UwUgIfeDd+H5riy+fuvLbOrNGQAyeg03w=
+X-Received: by 2002:ac8:580c:0:b0:31f:1e9b:16d2 with SMTP id
+ g12-20020ac8580c000000b0031f1e9b16d2mr19469521qtg.682.1658955215621; Wed, 27
+ Jul 2022 13:53:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAA8EJpr2S-81+q-vjmk5i+T-JwaadkRpjCr_oGi7fMf7o3iH3A@mail.gmail.com>
- <20220727111410.bglx2u26456ray2u@bogus> <CAA8EJprNPJfGjkq2=hexbZn-=t2wKG6ZjSm5Mcbo4JuPQ-sc-A@mail.gmail.com>
- <CAA8EJpqP9XMcLP+Pmj5OnXD2_SJ9ULBZ_Q492+x56oQnPzqiUA@mail.gmail.com>
-In-Reply-To: <CAA8EJpqP9XMcLP+Pmj5OnXD2_SJ9ULBZ_Q492+x56oQnPzqiUA@mail.gmail.com>
+References: <20220727200901.1142557-1-dmitry.baryshkov@linaro.org> <bec61bd7-f547-5254-50a5-6f16c221051e@linaro.org>
+In-Reply-To: <bec61bd7-f547-5254-50a5-6f16c221051e@linaro.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 27 Jul 2022 23:51:01 +0300
-Message-ID: <CAA8EJppWSQTrZgN7yBLhLepuxEiFsBnkhcXOgXrz2qjGj3GcLw@mail.gmail.com>
-Subject: Re: PSCI domains without OSI support
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vinod.koul@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Wed, 27 Jul 2022 23:53:24 +0300
+Message-ID: <CAA8EJpoa-E1=t1JAWNPzueY95Y_DEsJZqzW3PajcjSrNDVoAVg@mail.gmail.com>
+Subject: Re: [PATCH] firmware/psci: Add debugfs support to ease debugging
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,67 +66,197 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 27 Jul 2022 at 16:39, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Wed, 27 Jul 2022 at 23:15, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
 >
-> On Wed, 27 Jul 2022 at 16:24, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
+> Hi Dmitry,
+>
+> On 7/28/22 1:39 AM, Dmitry Baryshkov wrote:
+> > To ease debugging of PSCI supported features, add debugfs file called
+> > 'psci' describing PSCI and SMC CC versions, enabled features and
+> > options.
 > >
-> > On Wed, 27 Jul 2022 at 14:14, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Wed, Jul 27, 2022 at 12:09:27PM +0300, Dmitry Baryshkov wrote:
->
-> > > > - Allow DTS forcing the PSCI power domains even if OSI enablement fails?
-> > >
-> > > Meaning DTS flag for this ? If OSI enable fails, why would you want to
-> > > still proceed. It is non-compliant and must be fixed if the firmware
-> > > supports OSI and expects OSPM to use the same.
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >   drivers/firmware/psci/psci.c | 112 ++++++++++++++++++++++++++++++++++-
+> >   include/uapi/linux/psci.h    |   9 +++
+> >   2 files changed, 120 insertions(+), 1 deletion(-)
 > >
-> > I'm not sure at this moment. PSCI firmware reports that OSI mode is
-> > supported, but then when psci_pd_try_set_osi_mode() tries to switch
-> > into OSI mode, it gets NOT_SUPPORTED.
-> > Just for the sake of completeness, I added a print to the psci.c to
-> > dump the result of the psci_set_osi_mode(false). It also returns
-> > NOT_SUPPORTED!
+> > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> > index b907768eea01..6595cc964635 100644
+> > --- a/drivers/firmware/psci/psci.c
+> > +++ b/drivers/firmware/psci/psci.c
+> > @@ -9,6 +9,7 @@
+> >   #include <linux/acpi.h>
+> >   #include <linux/arm-smccc.h>
+> >   #include <linux/cpuidle.h>
+> > +#include <linux/debugfs.h>
+> >   #include <linux/errno.h>
+> >   #include <linux/linkage.h>
+> >   #include <linux/of.h>
+> > @@ -324,12 +325,121 @@ static void psci_sys_poweroff(void)
+> >       invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
+> >   }
 > >
-> > My logical assumption would be that the firmware reports support for
-> > OS_INITIATED, but then just fails to properly support
-> > SET_SUSPEND_MODE.
+> > -static int __init psci_features(u32 psci_func_id)
+> > +static int psci_features(u32 psci_func_id)
 >
-> Okay. From the msm-3.14 commit log:
->
-> Add support to terminate all low power modes in PSCI. The lpm-levels will
-> work with version 1.0 of PSCI specification using the OS initiated scheme.
-> The lpm-levels driver would determine the last man standing and vote into
-> TZ accordingly.
->
-> Which means that the vendor kernel expected to work in the OSI mode
-> without calling SET_SUSPEND (such call doesn't exist in 3.14)
+> This change doesn't seem related to the patch $SUBJECT.
+> Also is it really needed? If yes, probably this should be a separate patch.
 
-After adding the debugfs file, it's clear that this is the case.
-
-Compare msm8996:
-PSCIv1.0
-SMC Calling Convention v1.0 is assumed
-OSI is supported
-Extended StateID format is used
-
-vs sdm845:
-PSCIv1.1
-SMC Calling Convention v1.2
-OSI is supported
-Extended StateID format is used
-CPU_FREEZE is supported
-SET_SUSPEND_MODE is supported
-
-Judging by people reporting 'failure to enable OSI mode' on several
-other Qualcomm SoCs (msm8976, msm8953), this bug is present on several
-older Qualcomm platforms.
+It is related and I don't think it should be moved to a separate
+patch. Removing the __init annotation from psci_features() is
+necessary to allow using psci_features() from psci_debufs_read(),
+which is definitely not an __init code. Otherwise reading from
+debugfs/psci would cause null pointer exceptions.
 
 >
-> So, this looks like the "force-psci-domains" or "ignore-osi-error"
-> flag would be logical.
-> The question about testing still holds.
+> Thanks,
+> Bhupesh
+>
+> >   {
+> >       return invoke_psci_fn(PSCI_1_0_FN_PSCI_FEATURES,
+> >                             psci_func_id, 0, 0);
+> >   }
+> >
+> > +#ifdef CONFIG_DEBUG_FS
+> > +
+> > +#define PSCI_ID(ver, _name) \
+> > +     { .fn = PSCI_##ver##_FN_##_name, .name = #_name, }
+> > +#define PSCI_ID_NATIVE(ver, _name) \
+> > +     { .fn = PSCI_FN_NATIVE(ver, _name), .name = #_name, }
+> > +
+> > +/* A table of all optional functions */
+> > +static const struct {
+> > +     u32 fn;
+> > +     const char *name;
+> > +} psci_fn_ids[] = {
+> > +     PSCI_ID_NATIVE(0_2, MIGRATE),
+> > +     PSCI_ID(0_2, MIGRATE_INFO_TYPE),
+> > +     PSCI_ID_NATIVE(0_2, MIGRATE_INFO_UP_CPU),
+> > +     PSCI_ID(1_0, CPU_FREEZE),
+> > +     PSCI_ID_NATIVE(1_0, CPU_DEFAULT_SUSPEND),
+> > +     PSCI_ID_NATIVE(1_0, NODE_HW_STATE),
+> > +     PSCI_ID_NATIVE(1_0, SYSTEM_SUSPEND),
+> > +     PSCI_ID(1_0, SET_SUSPEND_MODE),
+> > +     PSCI_ID_NATIVE(1_0, STAT_RESIDENCY),
+> > +     PSCI_ID_NATIVE(1_0, STAT_COUNT),
+> > +     PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
+> > +};
+> > +
+> > +static int psci_debugfs_read(struct seq_file *s, void *data)
+> > +{
+> > +     int feature, type, i;
+> > +     u32 ver;
+> > +
+> > +     ver = psci_ops.get_version();
+> > +     seq_printf(s, "PSCIv%d.%d\n",
+> > +                PSCI_VERSION_MAJOR(ver),
+> > +                PSCI_VERSION_MINOR(ver));
+> > +
+> > +     /* PSCI_FEATURES is available only starting from 1.0 */
+> > +     if (PSCI_VERSION_MAJOR(ver) < 1)
+> > +             return 0;
+> > +
+> > +     feature = psci_features(ARM_SMCCC_VERSION_FUNC_ID);
+> > +     if (feature != PSCI_RET_NOT_SUPPORTED) {
+> > +             ver = invoke_psci_fn(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0);
+> > +             seq_printf(s, "SMC Calling Convention v%d.%d\n",
+> > +                        PSCI_VERSION_MAJOR(ver),
+> > +                        PSCI_VERSION_MINOR(ver));
+> > +     } else {
+> > +             seq_printf(s, "SMC Calling Convention v1.0 is assumed\n");
+> > +     }
+> > +
+> > +     feature = psci_features(PSCI_FN_NATIVE(0_2, CPU_SUSPEND));
+> > +     if (feature < 0) {
+> > +             seq_printf(s, "PSCI_FEATURES(CPU_SUSPEND) error (%d)\n", feature);
+> > +     } else {
+> > +             seq_printf(s, "OSI is %ssupported\n",
+> > +                        (feature & BIT(0)) ? "" : "not ");
+> > +             seq_printf(s, "%s StateID format is used\n",
+> > +                        (feature & BIT(1)) ? "Extended" : "Original");
+> > +     }
+> > +
+> > +     type = psci_ops.migrate_info_type();
+> > +     if (type == PSCI_0_2_TOS_UP_MIGRATE ||
+> > +         type == PSCI_0_2_TOS_UP_NO_MIGRATE) {
+> > +             unsigned long cpuid;
+> > +
+> > +             seq_printf(s, "Trusted OS %smigrate capable\n",
+> > +                        type == PSCI_0_2_TOS_UP_NO_MIGRATE ? "not " : "");
+> > +             cpuid = psci_migrate_info_up_cpu();
+> > +             seq_printf(s, "Trusted OS resident on physical CPU 0x%lx (#%d)\n", cpuid, resident_cpu);
+> > +     } else if (type == PSCI_0_2_TOS_MP) {
+> > +             seq_printf(s, "Trusted OS migration not required\n");
+> > +     } else {
+> > +             if (type != PSCI_RET_NOT_SUPPORTED)
+> > +                     seq_printf(s, "MIGRATE_INFO_TYPE returned unknown type (%d)\n", type);
+> > +     }
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(psci_fn_ids); i++) {
+> > +             feature = psci_features(psci_fn_ids[i].fn);
+> > +             if (feature == PSCI_RET_NOT_SUPPORTED)
+> > +                     continue;
+> > +             if (feature < 0)
+> > +                     seq_printf(s, "PSCI_FEATURES(%s) error (%d)\n", psci_fn_ids[i].name, feature);
+> > +             else
+> > +                     seq_printf(s, "%s is supported\n", psci_fn_ids[i].name);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int psci_debugfs_open(struct inode *inode, struct file *f)
+> > +{
+> > +     return single_open(f, psci_debugfs_read, NULL);
+> > +}
+> > +
+> > +static const struct file_operations psci_debugfs_ops = {
+> > +     .owner = THIS_MODULE,
+> > +     .open = psci_debugfs_open,
+> > +     .release = single_release,
+> > +     .read = seq_read,
+> > +     .llseek = seq_lseek
+> > +};
+> > +
+> > +static int __init psci_debugfs_init(void)
+> > +{
+> > +     return PTR_ERR_OR_ZERO(debugfs_create_file("psci", S_IRUGO, NULL, NULL,
+> > +                                                &psci_debugfs_ops));
+> > +}
+> > +late_initcall(psci_debugfs_init)
+> > +#endif
+> > +
+> >   #ifdef CONFIG_CPU_IDLE
+> >   static int psci_suspend_finisher(unsigned long state)
+> >   {
+> > diff --git a/include/uapi/linux/psci.h b/include/uapi/linux/psci.h
+> > index 2bf93c0d6354..f6f0bad5858b 100644
+> > --- a/include/uapi/linux/psci.h
+> > +++ b/include/uapi/linux/psci.h
+> > @@ -48,11 +48,20 @@
+> >   #define PSCI_0_2_FN64_MIGRATE_INFO_UP_CPU   PSCI_0_2_FN64(7)
+> >
+> >   #define PSCI_1_0_FN_PSCI_FEATURES           PSCI_0_2_FN(10)
+> > +#define PSCI_1_0_FN_CPU_FREEZE                       PSCI_0_2_FN(11)
+> > +#define PSCI_1_0_FN_CPU_DEFAULT_SUSPEND              PSCI_0_2_FN(12)
+> > +#define PSCI_1_0_FN_NODE_HW_STATE            PSCI_0_2_FN(13)
+> >   #define PSCI_1_0_FN_SYSTEM_SUSPEND          PSCI_0_2_FN(14)
+> >   #define PSCI_1_0_FN_SET_SUSPEND_MODE                PSCI_0_2_FN(15)
+> > +#define PSCI_1_0_FN_STAT_RESIDENCY           PSCI_0_2_FN(16)
+> > +#define PSCI_1_0_FN_STAT_COUNT                       PSCI_0_2_FN(17)
+> >   #define PSCI_1_1_FN_SYSTEM_RESET2           PSCI_0_2_FN(18)
+> >
+> > +#define PSCI_1_0_FN64_CPU_DEFAULT_SUSPEND    PSCI_0_2_FN64(12)
+> > +#define PSCI_1_0_FN64_NODE_HW_STATE          PSCI_0_2_FN64(13)
+> >   #define PSCI_1_0_FN64_SYSTEM_SUSPEND                PSCI_0_2_FN64(14)
+> > +#define PSCI_1_0_FN64_STAT_RESIDENCY         PSCI_0_2_FN64(16)
+> > +#define PSCI_1_0_FN64_STAT_COUNT             PSCI_0_2_FN64(17)
+> >   #define PSCI_1_1_FN64_SYSTEM_RESET2         PSCI_0_2_FN64(18)
+> >
+> >   /* PSCI v0.2 power state encoding for CPU_SUSPEND function */
+
+
 
 -- 
 With best wishes
