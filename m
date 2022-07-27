@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BC758348C
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 23:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F126D583496
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 23:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbiG0VFO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 17:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S236439AbiG0VFu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 17:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbiG0VEY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 17:04:24 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E83606A3
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 14:04:07 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id b26so26104556wrc.2
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 14:04:07 -0700 (PDT)
+        with ESMTP id S235909AbiG0VFG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 17:05:06 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E0861128
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 14:04:11 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id k11so25627368wrx.5
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 14:04:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fQwrODMneSzL3hNZushZmArM7t54Sdd+4j1p+OO3JS8=;
-        b=ffvsBioqqTK3v5XHBc8wI1FNEys0b05prCWWYQB0YJfH9vPoQpT9lM3vMc/YC8uktE
-         Pc6Qzclhv74Iw7MB3B1YV2A6dh6SiTlrsBy8PcgGbcH/83f2GOV2vertbN1WNQTr9Vs8
-         CukW8ksaHHH9JkkO+VMC9v91wH54fFHkhjWwGKpTugpoz34qqsmYNINA3tz0yGCKv1s5
-         U4t0JQ1tKsvAJ5DbhgPacyAdzGft7eST0CIltom+ojNJZaD5vijOITQ7YqjEDcPqE/g1
-         19ip07LGGtVB0UeTk24pdVbtb+623Q/kghSkVcrxJeiFawwAkVY6R3cha1liIyR2Pswj
-         0b8g==
+        bh=Y+8gnJ68hJod6uvQUR4L1wvFSKnRgzdO4yxaDxG616M=;
+        b=x+88BBJb57JukKqCcxtbzhuJ1izDyDxxyEMwGBi9sRsQElVLfC/KEGAmf8s4wJXVFx
+         4+64HP3I1uRrT2vODAKBvbrB00FVGlVbMQU5HhvwIw9KW2F7FLLLDwgabrdAXGj+Akf6
+         8Mk3FHtwywA3nqhYXq3y9VaQaDY3VnjBdVjGEh/8kbQA7oRhPentpoLGnsMtDSV4P4Fn
+         T/puU7Lyo+pchOSrsXUAGlooCHHrODdVcPEwSdLdfPlqsZ/5sWG2ANbCdedDuweJP0/o
+         Sds9i9n0Owi80qRvI3/8FvR6sddk/85654or77qvOSty+uWQN0GEKStWAIhv2g8JLmsw
+         k1Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fQwrODMneSzL3hNZushZmArM7t54Sdd+4j1p+OO3JS8=;
-        b=28Btti5GHVaG8WqEy1nqDSoUa4IT410HqUddLaSNPIihP7S1C1OxtYwUuOa2zESKRa
-         z6iuU35a/5+zU6Xr0Z32GDT3GpzRn28O/lYf/9vHpRXdT3aI8aB3nhWb849Q5+hxV12H
-         b5jK+/MXMnFh6kFrcO8fp/o+4g4lw6FCexwMHYYsnRofHJ6nlBKFD0dBSt5pMZGQ3GEZ
-         1w0feJGPN332He4ZKATAsXeefO1J3tDU9xThVnaFb1sfi8QEeErwSIbryCOSUuyJUMqE
-         51oB1jCd0vp/snZorrAqqKLqrqpPZ9zekKoP4XMF5tKWZPC/T5x4/cMth98z+8pdj2eW
-         yJtw==
-X-Gm-Message-State: AJIora9HGIDTO5wl7JHOaQFYay7AaykwbMXdDsM11bjIwY/+TGSwYhmC
-        Jc8wpuTFUGy4KJgPw5xESsub+g==
-X-Google-Smtp-Source: AGRyM1vmg4NqC67WxLFEzrZYmRP8JolVODWDtBaJFUKKAuwQ9/Dl5us4zOVnKhcNZ/8q2xZppD91xg==
-X-Received: by 2002:a05:6000:1548:b0:21d:acfc:29f5 with SMTP id 8-20020a056000154800b0021dacfc29f5mr14745388wry.520.1658955846994;
-        Wed, 27 Jul 2022 14:04:06 -0700 (PDT)
+        bh=Y+8gnJ68hJod6uvQUR4L1wvFSKnRgzdO4yxaDxG616M=;
+        b=Q4s1kgggMIYTN8BcGNq/kCLPa7ilUBy11KD7OqV6UUbuWgXeldrLoBDjJAPqOx1Ooa
+         +P6sLehhVJujUQRE8bOaJwz/vPXGV6Y6vX1OxH9R5gPOvjb1cnoT9wIWlRLEjWKTaURM
+         nSMAtJcNyD44OUXufpxQDn8CrIRCd/OGJgN+RwYnsHmwi3Q+jsLizFSF5AVKzIWtN1tX
+         k16V1+amwv+B7XYuJIw4/OIcEieq9/OEG+qEmREmnchiEr55zOVPKIFacMtFsKsgAACd
+         m6SSkeCk++mHq+4j8JCrqy1muOagq/0DBidLCC2J+SU4NIxEShjXCrF30DvYflzcLIOu
+         iBrw==
+X-Gm-Message-State: AJIora+AnlALmBhq6k6Z1Ly+VB2dRN6FBL1haQWRCS8fW2ErV0CaROSF
+        bpy2PQxjLrNxSWbHnjBl7YLFag==
+X-Google-Smtp-Source: AGRyM1slQQd537zbhaxi6R16/WJLy9sr0CulGmuYdFM7k5O2+9TcSk2qXRezXHRFGXF3/fBRBSrJWg==
+X-Received: by 2002:a5d:6f0d:0:b0:21e:3c6f:f67c with SMTP id ay13-20020a5d6f0d000000b0021e3c6ff67cmr14497675wrb.606.1658955849378;
+        Wed, 27 Jul 2022 14:04:09 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05600c350600b003a38606385esm37908wmq.3.2022.07.27.14.04.04
+        by smtp.gmail.com with ESMTPSA id h6-20020a05600c350600b003a38606385esm37908wmq.3.2022.07.27.14.04.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 14:04:06 -0700 (PDT)
+        Wed, 27 Jul 2022 14:04:09 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
@@ -61,20 +61,25 @@ Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
         glaroque@baylibre.com, miquel.raynal@bootlin.com,
         shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
         matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-omap@vger.kernel.org (open list:TI BANDGAP AND THERMAL DRIVER)
-Subject: [PATCH v3 24/32] thermal/drivers/ti-soc: Switch to new of API
-Date:   Wed, 27 Jul 2022 23:02:45 +0200
-Message-Id: <20220727210253.3794069-25-daniel.lezcano@linexp.org>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
+        Parallel ATA drivers)),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE)
+Subject: [PATCH v3 25/32] ata/drivers/ahci_imx: Switch to new of thermal API
+Date:   Wed, 27 Jul 2022 23:02:46 +0200
+Message-Id: <20220727210253.3794069-26-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
 References: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,69 +93,71 @@ tree specific and are the generic ones provided by the core code.
 Convert the ops to the thermal_zone_device_ops format and use the new
 API to register the thermal zone with these generic ops.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
----
- .../thermal/ti-soc-thermal/ti-thermal-common.c   | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+sata_ahci_read_temperature() is used by sata_ahci_show_temp() also.
 
-diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-index 703039d8b937..8a9055bd376e 100644
---- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-+++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-@@ -65,10 +65,10 @@ static inline int ti_thermal_hotspot_temperature(int t, int s, int c)
- 
- /* thermal zone ops */
- /* Get temperature callback function for thermal zone */
--static inline int __ti_thermal_get_temp(void *devdata, int *temp)
-+static inline int __ti_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
- 	struct thermal_zone_device *pcb_tz = NULL;
--	struct ti_thermal_data *data = devdata;
-+	struct ti_thermal_data *data = tz->devdata;
- 	struct ti_bandgap *bgp;
- 	const struct ti_temp_sensor *s;
- 	int ret, tmp, slope, constant;
-@@ -85,8 +85,8 @@ static inline int __ti_thermal_get_temp(void *devdata, int *temp)
- 		return ret;
- 
- 	/* Default constants */
--	slope = thermal_zone_get_slope(data->ti_thermal);
--	constant = thermal_zone_get_offset(data->ti_thermal);
-+	slope = thermal_zone_get_slope(tz);
-+	constant = thermal_zone_get_offset(tz);
- 
- 	pcb_tz = data->pcb_tz;
- 	/* In case pcb zone is available, use the extrapolation rule with it */
-@@ -107,9 +107,9 @@ static inline int __ti_thermal_get_temp(void *devdata, int *temp)
- 	return ret;
+So in order to change the function prototype for the get_temp ops which
+does not take a void* but a thermal_zone_device* structure, this
+function wraps the call.
+
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+---
+ drivers/ata/ahci_imx.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/ata/ahci_imx.c b/drivers/ata/ahci_imx.c
+index 79aa9f285312..b734e069034d 100644
+--- a/drivers/ata/ahci_imx.c
++++ b/drivers/ata/ahci_imx.c
+@@ -327,7 +327,7 @@ static int read_adc_sum(void *dev, u16 rtune_ctl_reg, void __iomem * mmio)
  }
  
--static int __ti_thermal_get_trend(void *p, int trip, enum thermal_trend *trend)
-+static int __ti_thermal_get_trend(struct thermal_zone_device *tz, int trip, enum thermal_trend *trend)
+ /* SATA AHCI temperature monitor */
+-static int sata_ahci_read_temperature(void *dev, int *temp)
++static int __sata_ahci_read_temperature(void *dev, int *temp)
  {
--	struct ti_thermal_data *data = p;
-+	struct ti_thermal_data *data = tz->devdata;
- 	struct ti_bandgap *bgp;
- 	int id, tr, ret = 0;
- 
-@@ -130,7 +130,7 @@ static int __ti_thermal_get_trend(void *p, int trip, enum thermal_trend *trend)
+ 	u16 mpll_test_reg, rtune_ctl_reg, dac_ctl_reg, read_sum;
+ 	u32 str1, str2, str3, str4;
+@@ -416,6 +416,11 @@ static int sata_ahci_read_temperature(void *dev, int *temp)
  	return 0;
  }
  
--static const struct thermal_zone_of_device_ops ti_of_thermal_ops = {
-+static const struct thermal_zone_device_ops ti_of_thermal_ops = {
- 	.get_temp = __ti_thermal_get_temp,
- 	.get_trend = __ti_thermal_get_trend,
- };
-@@ -170,7 +170,7 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
- 		return -EINVAL;
++static int sata_ahci_read_temperature(struct thermal_zone_device *tz, int *temp)
++{
++	return __sata_ahci_read_temperature(tz->devdata, temp);
++}
++
+ static ssize_t sata_ahci_show_temp(struct device *dev,
+ 				   struct device_attribute *da,
+ 				   char *buf)
+@@ -423,14 +428,14 @@ static ssize_t sata_ahci_show_temp(struct device *dev,
+ 	unsigned int temp = 0;
+ 	int err;
  
- 	/* in case this is specified by DT */
--	data->ti_thermal = devm_thermal_zone_of_sensor_register(bgp->dev, id,
-+	data->ti_thermal = devm_thermal_of_zone_register(bgp->dev, id,
- 					data, &ti_of_thermal_ops);
- 	if (IS_ERR(data->ti_thermal)) {
- 		dev_err(bgp->dev, "thermal zone device is NULL\n");
+-	err = sata_ahci_read_temperature(dev, &temp);
++	err = __sata_ahci_read_temperature(dev, &temp);
+ 	if (err < 0)
+ 		return err;
+ 
+ 	return sprintf(buf, "%u\n", temp);
+ }
+ 
+-static const struct thermal_zone_of_device_ops fsl_sata_ahci_of_thermal_ops = {
++static const struct thermal_zone_device_ops fsl_sata_ahci_of_thermal_ops = {
+ 	.get_temp = sata_ahci_read_temperature,
+ };
+ 
+@@ -1131,8 +1136,8 @@ static int imx_ahci_probe(struct platform_device *pdev)
+ 			ret = PTR_ERR(hwmon_dev);
+ 			goto disable_clk;
+ 		}
+-		devm_thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
+-					     &fsl_sata_ahci_of_thermal_ops);
++		devm_thermal_of_zone_register(hwmon_dev, 0, hwmon_dev,
++					      &fsl_sata_ahci_of_thermal_ops);
+ 		dev_info(dev, "%s: sensor 'sata_ahci'\n", dev_name(hwmon_dev));
+ 	}
+ 
 -- 
 2.25.1
 
