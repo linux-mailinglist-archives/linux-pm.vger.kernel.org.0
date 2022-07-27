@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477CE5821E6
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 10:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CD9582202
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 10:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiG0IR1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 04:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
+        id S230302AbiG0IYv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 04:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiG0IRY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 04:17:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6FF4504C;
-        Wed, 27 Jul 2022 01:17:23 -0700 (PDT)
+        with ESMTP id S230298AbiG0IYu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 04:24:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FE445062;
+        Wed, 27 Jul 2022 01:24:48 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CFF896601B1A;
-        Wed, 27 Jul 2022 09:17:20 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 22B476601B12;
+        Wed, 27 Jul 2022 09:24:46 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658909841;
-        bh=fXIJ2hAtpli+W6S1Y8IGI1hYRxklmzSVaDFjnGNKiYE=;
+        s=mail; t=1658910287;
+        bh=8b3gB2PEEzP1TsEwR0L1dzW3+hdJVSaWwUA09H63Z24=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HVzr2P0a9UH6kJl2DYJR97d2HxdM8dsRiIvlj5Djxi0fRrCGxPd17mDSXLprr4cHl
-         rBXJ9ladoQn/B6hhQmy7p2JTKdishZmHQjtEvE6mTrrDqVtpoc30TgtBn9BizdDiep
-         LE4ZpOU6H56tOR7kLsvuY1HAZ1+PZFG+E9EBkHYuC8CzUj3fmJRg5m6lohXqQY02mt
-         HTNgagQi/NQtGs7W5GXhimenTLjfhE2uIi5ZDfbySn+L4iS0t8qAGHI1heOisUrEv0
-         YziUA4Ler8HgqLm4DKLxDRsmj5eb4ZAOE22WjiG2hR0907g4zsI/a3oqbzlIGFG4sf
-         EC+/wUhAP65Ow==
-Message-ID: <cad2ac1c-992b-960c-09c7-ba12baa58c93@collabora.com>
-Date:   Wed, 27 Jul 2022 10:17:18 +0200
+        b=WEgQcI3Ilp323F8vWcBDY+Uaz6wE6HfeMlV4T85u/Ccbfmd4BL3mRvSN3T4654JwN
+         MLoMJfi+Alskj6prf8IMPW0W3HptSXUdR24MaiY4VqfkQTXRisC1JOqSO3sAv4fjpZ
+         ETEWiBciryZWXLN0d7vEMdIpu3kcW9KxMTaQls6NKr7rL6lOQgageWQa68USWhV2Xg
+         e1IfbSHBK890D+e1mCQ43wyD8+hcDO5HdkONAVouFnZxR5s26zjjxCHGLmsgR8lt/W
+         VBfaA0Sdze9GvlCVgum9zv33uAozJCoPkA+c40jJkWt4+FKKuCOn+3e043Jdgir2Yk
+         p4U11EHNPu0UQ==
+Message-ID: <3cb97e73-d60a-086d-83c2-1711c70057a2@collabora.com>
+Date:   Wed, 27 Jul 2022 10:24:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
@@ -73,6 +73,74 @@ Il 26/07/22 15:55, Balsam CHIHI ha scritto:
 > Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
 > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> ---
+>   drivers/thermal/Kconfig                       | 14 ++++-------
+>   drivers/thermal/Makefile                      |  2 +-
+>   drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
+>   drivers/thermal/mediatek/Makefile             |  1 +
+>   .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
+>   5 files changed, 29 insertions(+), 11 deletions(-)
+>   create mode 100644 drivers/thermal/mediatek/Kconfig
+>   create mode 100644 drivers/thermal/mediatek/Makefile
+>   rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+> 
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 0e5cc948373c..ecba8d6e313b 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -412,16 +412,10 @@ config DA9062_THERMAL
+>   	  zone.
+>   	  Compatible with the DA9062 and DA9061 PMICs.
+>   
+> -config MTK_THERMAL
+> -	tristate "Temperature sensor driver for mediatek SoCs"
+> -	depends on ARCH_MEDIATEK || COMPILE_TEST
+> -	depends on HAS_IOMEM
+> -	depends on NVMEM || NVMEM=n
+> -	depends on RESET_CONTROLLER
+> -	default y
+> -	help
+> -	  Enable this option if you want to have support for thermal management
+> -	  controller present in Mediatek SoCs
+> +menu "Mediatek thermal drivers"
+> +depends on ARCH_MEDIATEK || COMPILE_TEST
+> +source "drivers/thermal/mediatek/Kconfig"
+> +endmenu
+>   
+>   config AMLOGIC_THERMAL
+>   	tristate "Amlogic Thermal Support"
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index def8e1a0399c..3c00e864ad55 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -55,7 +55,7 @@ obj-y				+= st/
+>   obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+>   obj-y				+= tegra/
+>   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
+>   obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+>   obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> new file mode 100644
+> index 000000000000..9c41e9079fc3
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Kconfig
+> @@ -0,0 +1,23 @@
+> +config MTK_THERMAL
+> +	tristate "MediaTek thermal drivers"
+> +	depends on THERMAL_OF
+> +	help
+> +		This is the option for MediaTek thermal software
+> +		solutions. Please enable corresponding options to
+> +		get temperature information from thermal sensors or
+> +		turn on throttle mechaisms for thermal mitigation.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Sorry, I just noticed that the indentation must be fixed.
 
+	help
+	  This is the option .....
+
+Thanks,
+Angelo
