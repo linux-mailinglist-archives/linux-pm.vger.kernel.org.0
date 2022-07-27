@@ -2,147 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31605823C1
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 12:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0631582538
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 13:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiG0KEk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 06:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        id S230136AbiG0LOS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 07:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiG0KEi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 06:04:38 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8503D1707A;
-        Wed, 27 Jul 2022 03:04:37 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id s9so1513421edd.8;
-        Wed, 27 Jul 2022 03:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B+itH6nCjnZkG3yJTUkgH3T3RkzlJIEijujwFkNTeHs=;
-        b=cG/IRfZwWO83wiK8SoAZgFegp/oSsSTdk6uMQXsyEzBbyDQ15vq0yzVYGG9pEdfz0Z
-         ZOOouCQXEYxdPO6EleD7jGQocetQsqrcx2C7y57nBleaH3XWNh/p9EZXeeMxomYeea0n
-         ccGpQbPM3KyJhbgX8FqfpXge+UD+lyXVuyBlv7AUvzyTYioFKkLUVdtqpGd8x6O73yOd
-         o3BHcOkkAf6zj76YWhjS7ePObKwBxNP5KslRU9Zg6sRbYapoWTeSb3rLO4m4qR/dd5mY
-         Xo/AD9faus7q33rPJGp/5b3BvXu4+tVOAzawSfBgIW64yo4mi098uiZmqwCRYHPukGG4
-         n1TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B+itH6nCjnZkG3yJTUkgH3T3RkzlJIEijujwFkNTeHs=;
-        b=WZvdnm+5h1mw7E7184OppTLgdI+dpROLmMCyx5DBGjK/s80lN7hvcVQI+oj4ijVu/Q
-         U4dDqaslZPcIQSTZTNBqHNyt7PlVm51pJDfIFXczr6RwYbT0QHOvS04HopHySpRF5UCq
-         9c8dP2KT5jWGqgSq9Q9C04l4sp7OzPGptXAsbRD04zI/TV//5afpOaB1k+CRyfw/pUre
-         bC1L8TGz5SzKC7rm7Fga6ocYtemAPWsqUcgc62QBKsh0cJVAuTnYlWsXWvnbysMBOi/L
-         6fwPu65OLjoeDnX9yCYsccd5hQMQ4zmMiR/jV9lHcNxucQblpkj6aAxQh0RHmBtdb7Dr
-         VzbA==
-X-Gm-Message-State: AJIora8gA4iaqKaVRMNGG8fVnCyEJHFxIQO4B38XkaQtAB3q4kbM+SkH
-        l5KStbo1QYRQPa3HInvHJTaz5Z1pCP6Cg2eppd0=
-X-Google-Smtp-Source: AGRyM1uwEejs5nDWqG+s979XFdwYwQmE2ZsEpW0n4nQQ7TCJsCqlYSNktlo34cJclnigei8K3rZk9qCXUcGHByv5Ilw=
-X-Received: by 2002:a05:6402:501d:b0:437:e000:a898 with SMTP id
- p29-20020a056402501d00b00437e000a898mr22474219eda.265.1658916275876; Wed, 27
- Jul 2022 03:04:35 -0700 (PDT)
+        with ESMTP id S229475AbiG0LOS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 07:14:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E254481C2;
+        Wed, 27 Jul 2022 04:14:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3394823A;
+        Wed, 27 Jul 2022 04:14:17 -0700 (PDT)
+Received: from bogus (unknown [10.57.11.51])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDC0C3F70D;
+        Wed, 27 Jul 2022 04:14:14 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 12:14:10 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vinod Koul <vinod.koul@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: PSCI domains without OSI support
+Message-ID: <20220727111410.bglx2u26456ray2u@bogus>
+References: <CAA8EJpr2S-81+q-vjmk5i+T-JwaadkRpjCr_oGi7fMf7o3iH3A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
- <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com>
- <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com>
- <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com> <CABtFH5+bQx5ym5jOzCPJWbZ23WtGYYwS7cMRt2g3ipEEqTb3JA@mail.gmail.com>
-In-Reply-To: <CABtFH5+bQx5ym5jOzCPJWbZ23WtGYYwS7cMRt2g3ipEEqTb3JA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 27 Jul 2022 12:03:59 +0200
-Message-ID: <CAHp75Vf7jeG_DmD3sZnerFDEVpMxDiL9DkMBddAk-kJH7Hfttg@mail.gmail.com>
-Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
- sink type LED Indicator support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAA8EJpr2S-81+q-vjmk5i+T-JwaadkRpjCr_oGi7fMf7o3iH3A@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 9:37 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> On Tue, Jul 26, 2022 at 8:18 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
+On Wed, Jul 27, 2022 at 12:09:27PM +0300, Dmitry Baryshkov wrote:
+> Hi,
+> 
+> Lately I have been working on improving the msm8996 platform support.
+> Vendor kernel seems to support domain-like idle (see [1], [2]).
+> However when I tried changing upstream msm8996.dtsi to use PSCI
+> domains, I faced the firmware reporting NOT_SUPPORTED to an attempt to
+> enable OSI (thus rendering PSCI domains useless, as they are now
+> marked with ALWAYS_ON).
 >
-> ...
+
+That's not good to hear 🙁.
+
+> I noticed that vendor kernel makes a call to cpu_suspend() with
+> power_state following the original format (described in PSCI spec
+> 5.4.2.1). What would be the best way to support this?
+
+And why is this not possible with the existing code ? Not sure if I
+understood it right, I am assuming you are mentioning that it is not
+possible.
+
+> - Allow DTS forcing the PSCI power domains even if OSI enablement fails?
+
+Meaning DTS flag for this ? If OSI enable fails, why would you want to
+still proceed. It is non-compliant and must be fixed if the firmware
+supports OSI and expects OSPM to use the same.
+
+> - Add a separate cpuidle driver?
+
+I would avoid that.
+
+> - Just forget about it and use plain PSCI as we currently do?
 >
-> > > Just for saving memory space.
-> > > Because these led_classdevs do not be used at the same time.
-> > > Or do you think it would be better to rewrite it as follows?
-> > > -------------------------------------------------------------------------------------
-> > > struct mt6370_led {
-> > >        struct led_classdev isink;
-> > >        struct led_classdev_mc mc;
-> > >        struct mt6370_priv *priv;
-> > >        u32 default_state;
-> > >        u32 index;
-> > > };
-> > > -------------------------------------------------------------------------------------
-> >
-> > You obviously didn't get what I'm talking about...
-> > Each union to work properly should have an associated variable that
-> > holds the information of which field of the union is in use. Do you
-> > have such a variable? If not, how does your code know which one to
-> > use? If yes, add a proper comment there.
-> >
+
+Worst case yes. My main worry is how many of the old SDM SoC has such a
+behaviour and how much they wary from each other. The OSI mode was pushed
+after lengthy discussions to support all these platforms and now we have
+platforms needing separate idle driver ?
+
+> Additional topic: for one of idle states the vendor kernel uses a
+> proprietary call into the hypervisor ([3]).
+
+Again I would say it is not spec compliant.
+
+> Up to now we have ignored this, as 8996 seems to be the only platform using
+> it. I suppose that adding it to cpuidle-psci.c would be frowned upon.
+
+Indeed.
+
+> Is this assumption correct? Would it add another point for adding a separate
+> cpuidle driver?
 >
-> Ummm... from my understanding,
-> if the colors of these four LEDs are set to 'LED_COLOR_ID_RGB' or
-> 'LED_COLOR_ID_MULTI' in DT,
-> their 'led->index' will be set to 'MT6370_VIRTUAL_MULTICOLOR' in
-> 'mt6370_leds_probe()'.
-> If so, these led devices will be set as 'struct led_classdev_mc' and
-> use related ops functions in 'mt6370_init_led_properties()'.
-> Instead, they whose 'led->index' is not 'MT6370_VIRTUAL_MULTICOLOR'
-> will be set as 'struct led_classdev'.
-> So, maybe the member 'index' of the 'struct mt6370_led' is what you
-> describe the information of which field of the union is in use?
 
-From this description it sounds like it is.
-
-> I will add the proper comment here to describe this thing. I'm so
-> sorry for misunderstanding your mean last time.
-
-Yes, please add a compressed version of what you said above to the code.
+I am getting a sense that this would be cleaner approach but I would like
+to understand how much of these non-compliance is carried to the other
+relatively newer SoCs. I understand this is atleast 5-6+ years old. I don't
+want this to set example to deviate from standard driver by adding new
+drivers though they all are supposedly using PSCI(and are not fully compliant)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
+Sudeep
