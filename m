@@ -2,66 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF05058211A
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 09:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE00E58213F
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 09:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiG0Hbk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 03:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        id S230381AbiG0Hhk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 03:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiG0Hbj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 03:31:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC6541989;
-        Wed, 27 Jul 2022 00:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658907098; x=1690443098;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=z69HSat8Qj8N9Swm2OyvSJng4HnatU7uq+BtNwOD/fg=;
-  b=laJvjcb396m+0dkvuv0KA1DVnU/0EY264MxMHg3KLLlOkqcQn1ZfoYNn
-   avecNee2pyDFgr0wRPwCPPtbXekCyEESRaJi+6D20bEzweuxLqUGztHtU
-   9/8vBt5UbZkTBHuU7JCCYvGvcGDkfCpbRnO9a39HjImC8YoTI/aslefek
-   Yc5JyJNX2fcPWas+KwhGkmpvRXLPYqSY8fen1gzTnK1+Hn5tro5n12Fee
-   57gq/PB54ZMsYxf8hdhmJGtjH2ACzPH97OZtmNTJcQBJZ0iCB7Ib5sAa0
-   n8NfAsJym3oTydHvqAtUj9hstpzHC2vSupPHi2GlSTUWu1de82CkHXfrH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="267935419"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="267935419"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 00:31:37 -0700
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="659079055"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.171.125]) ([10.249.171.125])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 00:31:34 -0700
-Subject: Re: [kbuild-all] Re: [PATCH v2 3/5] thermal: qcom: tsens: Add driver
- support for re-initialization quirk
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        kernel test robot <lkp@intel.com>, linux-pm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220724122424.2509021-4-bhupesh.sharma@linaro.org>
- <202207260755.tUajnfB4-lkp@intel.com>
- <f1e7ac3b-e3e3-4843-2a07-f9f05b49c2b9@linaro.org>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <55ee862c-ab22-04e3-c24e-7c9d099bb4da@intel.com>
-Date:   Wed, 27 Jul 2022 15:31:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        with ESMTP id S229680AbiG0Hhh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 03:37:37 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27D63B950;
+        Wed, 27 Jul 2022 00:37:36 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id y9so12106192qtv.5;
+        Wed, 27 Jul 2022 00:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7wBtopi5nrrnF3/tK6d3mUXKRzW2T+DIHWRi/Z/g55U=;
+        b=JrXv07SnypKXIiO9c1hDaO1ve2XFoCQh3YJA9N0xzJ8VKdcy+NOWbVByEfE93yA1bT
+         Tl79vU21bY1Riyh5vdmQjiXNRM6Y+lisVzjlFGA12N5TkfsJVvBTZVM+DXhLMCRLgtAT
+         CWazI0B5gaYgTPfT/LBhBjVu7eM5hrdl/RUhg4FDmsUWR19oAbFy6HoE9edFHPyenD8T
+         Qf2WPKI/e5SPnIeUMPrpopEK3VVMRKkcz81I6LE01vsC+va5BFGobzRlWIltgg+x4gCQ
+         EHVJv70L2zauSaiZEF5yiD6RME26xNIBHXc93G+wfeZxZyIdgW4ZKl6QFkorqrFDfTKD
+         6LhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7wBtopi5nrrnF3/tK6d3mUXKRzW2T+DIHWRi/Z/g55U=;
+        b=6Jat2MyN2X/bCcy4KChsFEgToktjw+TM2nIp1GsWV6ZzmD6Rvuyrj1WVCZLEay7Yy8
+         q74Yij3pzdIaz/b3Dx1814Y7F7SZ4G/HV33u1NUwo1HFCib9KKUGzmTEDTFzeUjfU0Bs
+         QX31Xn8Ix8XeXydaf8AcdSF3TvwfwPs2BaLCmimOEG8poqkdfChiJgGU3sbSMzaEOAPp
+         tjrZy4no79UXKPkp/eBai9E81Hw5Bzcf2HNvuOYOYl0cPXcPSChnTM9IDK5Jn7McZXoP
+         xHO/bCA9YNSGqGzehOVJ5hVsFJnBC1xruUQWUOhNGDVuRflhxLBmPlRaFHVf97VUhQHe
+         GsuA==
+X-Gm-Message-State: AJIora+ycXd0R3vO91GJKaKDVU9HJPaB0TnRR6u89peGwkCT5WgXMS1m
+        XRVpcxeT3Rf2n10XEOj8napxn7O9AWFngkOo0UeP0b2UjH0=
+X-Google-Smtp-Source: AGRyM1sXpKQZrYG0IbOgoxNKanSErlzr5LcY9lrHn4FGhRFmisG96yuJDLZQZGtegCOB6F8ydUZqqM5XWqwFIZtxfFQ=
+X-Received: by 2002:a05:622a:6098:b0:2f0:f0d2:b5f0 with SMTP id
+ hf24-20020a05622a609800b002f0f0d2b5f0mr17361865qtb.583.1658907456035; Wed, 27
+ Jul 2022 00:37:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <f1e7ac3b-e3e3-4843-2a07-f9f05b49c2b9@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
+ <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com>
+ <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com> <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
+In-Reply-To: <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Wed, 27 Jul 2022 15:36:59 +0800
+Message-ID: <CABtFH5+bQx5ym5jOzCPJWbZ23WtGYYwS7cMRt2g3ipEEqTb3JA@mail.gmail.com>
+Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
+ sink type LED Indicator support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,93 +97,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jul 26, 2022 at 8:18 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 
+...
 
-On 7/26/2022 7:38 PM, Bhupesh Sharma wrote:
-> Hi,
-> 
-> On 7/26/22 4:40 AM, kernel test robot wrote:
->> Hi Bhupesh,
->>
->> Thank you for the patch! Yet something to improve:
->>
->> [auto build test ERROR on rafael-pm/thermal]
->> [also build test ERROR on linus/master v5.19-rc8 next-20220725]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    
->> https://github.com/intel-lab-lkp/linux/commits/Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220724-202546 
->>
->> base:   
->> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git 
->> thermal
->> config: ia64-randconfig-r005-20220724 
->> (https://download.01.org/0day-ci/archive/20220726/202207260755.tUajnfB4-lkp@intel.com/config) 
->>
->> compiler: ia64-linux-gcc (GCC) 12.1.0
->> reproduce (this is a W=1 build):
->>          wget 
->> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->> -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # 
->> https://github.com/intel-lab-lkp/linux/commit/2356630fadc0a622264bf292b6930f8c728b0709 
->>
->>          git remote add linux-review 
->> https://github.com/intel-lab-lkp/linux
->>          git fetch --no-tags linux-review 
->> Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220724-202546 
->>
->>          git checkout 2356630fadc0a622264bf292b6930f8c728b0709
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 
->> make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash
->>
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>     ia64-linux-ld: drivers/thermal/qcom/tsens.o: in function 
->> `tsens_probe':
->>>> tsens.c:(.text+0x6d2): undefined reference to `qcom_scm_is_available'
->>     ia64-linux-ld: drivers/thermal/qcom/tsens.o: in function 
->> `tsens_health_check_and_reinit.constprop.0':
->>>> tsens.c:(.text+0x10c2): undefined reference to `qcom_scm_tsens_reinit'
-> 
-> It seems you have missed picking up [PATCH 1/5] firmware: qcom: scm: Add 
-> support for tsens reinit workaround before running the checks on this 
-> patch which is a part of this series itself (see [1]).
+> > Just for saving memory space.
+> > Because these led_classdevs do not be used at the same time.
+> > Or do you think it would be better to rewrite it as follows?
+> > -------------------------------------------------------------------------------------
+> > struct mt6370_led {
+> >        struct led_classdev isink;
+> >        struct led_classdev_mc mc;
+> >        struct mt6370_priv *priv;
+> >        u32 default_state;
+> >        u32 index;
+> > };
+> > -------------------------------------------------------------------------------------
+>
+> You obviously didn't get what I'm talking about...
+> Each union to work properly should have an associated variable that
+> holds the information of which field of the union is in use. Do you
+> have such a variable? If not, how does your code know which one to
+> use? If yes, add a proper comment there.
+>
 
-Hi Bhupesh,
+Ummm... from my understanding,
+if the colors of these four LEDs are set to 'LED_COLOR_ID_RGB' or
+'LED_COLOR_ID_MULTI' in DT,
+their 'led->index' will be set to 'MT6370_VIRTUAL_MULTICOLOR' in
+'mt6370_leds_probe()'.
+If so, these led devices will be set as 'struct led_classdev_mc' and
+use related ops functions in 'mt6370_init_led_properties()'.
+Instead, they whose 'led->index' is not 'MT6370_VIRTUAL_MULTICOLOR'
+will be set as 'struct led_classdev'.
+So, maybe the member 'index' of the 'struct mt6370_led' is what you
+describe the information of which field of the union is in use?
+I will add the proper comment here to describe this thing. I'm so
+sorry for misunderstanding your mean last time.
+Thanks again for your review.
 
-Thanks for the feedback, the bot applied the full patch set to test,
-please see
-
- 
-https://github.com/intel-lab-lkp/linux/commits/Bhupesh-Sharma/Add-support-for-tsens-controller-reinit-via-trustzone/20220724-202546 
-
-
-Maybe the bot chose a wrong base branch to apply which caused the
-unexpected issue.
-
+-- 
 Best Regards,
-Rong Chen
-
-> 
-> If I pick the PATCHes in the right order [PATCH 1/5], [PATCH 2/5] 
-> followed by [PATCH 3/5], I don't see the compilation error being 
-> reported (even with W=1 build options).
-> 
-> [1]. 
-> https://lore.kernel.org/linux-arm-msm/20220724122424.2509021-2-bhupesh.sharma@linaro.org/ 
-> 
-> 
-> Thanks,
-> Bhupesh
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+ChiaEn Wu
