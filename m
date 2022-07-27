@@ -2,197 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28AD581D64
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 04:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5E9581E53
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 05:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbiG0CEB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 22:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
+        id S232385AbiG0Dkr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 23:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiG0CEB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 22:04:01 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62B53C144
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 19:03:59 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id g12so14863285pfb.3
-        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 19:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yd/l1Y2v+nNxV0KyGFNfQlfxUt2Z9k1HtIC4DEOBQIU=;
-        b=yf93Bqh4B7NAb5zzYjgyRtPl5sG47SRE+ksECQ5hxpl8IOazvvey1c0bfIuyUoPpjz
-         Lt9XU76+4iqUu0sDqEZUbnccnCEdaOYUUqCpsDBHaagc+yJL0WTlSaJnwDoEfb8rW/D+
-         IZExgYmmpTc8iwpYcu9lujNolDDLwlfqfdoMcfBxxbSy5cjMsF5RA92Db8qyhXxik/6I
-         uUuNIgWXiQ6p0sVKMEeB3GaSs+D9JoNK/iULHq6yCIPfdCrk4geRD+W8gw88AVSeBGmX
-         kENgXRKBaUiqZrgOiyuA8TClKTCKB/B/9xqrqB7hK3FfZI6P7nGn/P9bJuzM6gPVXAgZ
-         h1nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yd/l1Y2v+nNxV0KyGFNfQlfxUt2Z9k1HtIC4DEOBQIU=;
-        b=72TWQsAZWMZNPmHSrnDsEktJ+c0O6mTyy8VXGn3+tqDBxtlYKCijU2mlHGEpm25MQ8
-         UjUDNWamU/CzwX5wQc7wLGDOqskqWy/TP7t6YOQsq87oUECN6nS09iT76fih/wsR7DWe
-         7fI8gmU+SXNmGH+41n19+NDt5Ssxw8YwPASwN8nR9q9UmftfjQydsyldxOvErMaL6mFD
-         bKVVKvQj51+/9U1oRs7Ua+qnSnP7CDXB6krvouS6Ji8Agg1/d0E9YvHkbjAmIQjVZw2t
-         GHqlQSSZbJSpDwcJhFwZXlETzdeyZ792ERhvq6JB7C5uoMROMTyOq1mDIbFm3Mr83axR
-         ElBA==
-X-Gm-Message-State: AJIora+y00Tn1MSiUEX3CQNexWn/aP3uy1Im5S4tSNOjWtqGw0C7D1W9
-        nIU+51lW6HfK6EggkvUY5N/pfQ==
-X-Google-Smtp-Source: AGRyM1tDkPTK1dhSVBWeIzbIo15BGWiupCCg42sIRLr/tTeciL8rBbq/r2ksgg2jhug6UlZ7PcO3QQ==
-X-Received: by 2002:aa7:84c1:0:b0:52a:e11a:f5e9 with SMTP id x1-20020aa784c1000000b0052ae11af5e9mr19626590pfn.55.1658887439049;
-        Tue, 26 Jul 2022 19:03:59 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id o63-20020a625a42000000b0052ba70ea97esm12330831pfb.30.2022.07.26.19.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 19:03:58 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 10:03:54 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Coresight ML <coresight@lists.linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [-next] Lockdep warnings
-Message-ID: <20220727020354.GE36862@leoy-ThinkPad-X240s>
-References: <20220726104134.3b3awfphvafljdgp@bogus>
- <Yt/gyEMOtGafQX4z@FVFF77S0Q05N>
- <Yt/i/o3Sb+niH2e+@FVFF77S0Q05N>
+        with ESMTP id S229808AbiG0Dkq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 23:40:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454AC248DC;
+        Tue, 26 Jul 2022 20:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658893245; x=1690429245;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H3clCfHQ5Hd46X71EZ2SgoDShniIrDMAoWzjfHTbGNE=;
+  b=d0YEff+yWj2j10h5Mh390YSSa4fxs/Pr9cVC+qEwyxvEEFnfJEDgA9cQ
+   yCZ316Z+ZeLm6Wr3+UXL5EHAiGU0afImE+cW6+S5OoS1sJ3bDoKh8cEUo
+   ohORre6j7BB192trYtG1+evNGWB/AgWaVVVArTYWgVwEACO+SlXIm0OsG
+   s2DNoYcXPtYGi3MR76Ss6zyCeHe8uRFwqpLBRcTypRArvQvW5zfStXSIr
+   FMTKeC4dtRNxgc3yPDyIX2xU2i33/AcZGY+ZObvuyJnpvpvsKagLQ1oYY
+   42rH1s5/wiMyo1Zp9ADC1ovHCjYIjEp3Bq25VFRN+jA5Xxv22IqEFfczF
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="268520211"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="268520211"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 20:40:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="550686759"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 26 Jul 2022 20:40:41 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGXub-0008GY-0e;
+        Wed, 27 Jul 2022 03:40:41 +0000
+Date:   Wed, 27 Jul 2022 11:39:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>, linux-pm@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, rafael@kernel.org,
+        lenb@kernel.org, viresh.kumar@linaro.org, robert.moore@intel.com,
+        devel@acpica.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jeremy Linton <jeremy.linton@arm.com>
+Subject: Re: [PATCH] ACPI: CPPC: Disable FIE if registers in PCC regions
+Message-ID: <202207271136.DESdyKRY-lkp@intel.com>
+References: <20220726145948.2194684-1-jeremy.linton@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yt/i/o3Sb+niH2e+@FVFF77S0Q05N>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220726145948.2194684-1-jeremy.linton@arm.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 01:50:06PM +0100, Mark Rutland wrote:
-> On Tue, Jul 26, 2022 at 01:40:40PM +0100, Mark Rutland wrote:
-> > [Adding Peter; I suspect this is due to the cpuidle rework]
-> 
-> Looking again I see the cpuidle rework isn't in next, so evidently not...
-> 
-> Sorry for the noise!
+Hi Jeremy,
 
-I'd like to loop in Mike.L and CoreSight ML for CTI PM callbacks.
-Please see below a comment for CTI spinlock usage.
+Thank you for the patch! Perhaps something to improve:
 
-> > I'll go give next a spin in a VM, but I suspect I might need real HW to see
-> > this due to the way PSCI idle states work.
-> > 
-> > Mark.
-> > 
-> > On Tue, Jul 26, 2022 at 11:41:34AM +0100, Sudeep Holla wrote:
-> > > I was seeing the below lockdep warnings on my arm64 Juno development
-> > > platform almost 2 weeks back with -next. I wanted to check for similar
-> > > reports before post and forgot.
-> > > 
-> > > --->8
-> > > 
-> > > DEBUG_LOCKS_WARN_ON(lockdep_hardirqs_enabled())
-> > >  hardirqs last  enabled at (46157): cpuidle_enter_state+0x174/0x2b4
-> > >  WARNING: CPU: 5 PID: 0 at kernel/locking/lockdep.c:5506 check_flags+0x90/0x1e8
-> > >  hardirqs last disabled at (46158): el1_interrupt+0x2c/0xc8
-> > >  Modules linked in:
-> > >  softirqs last  enabled at (46154): __do_softirq+0x2c0/0x388
-> > >  softirqs last disabled at (46139): __irq_exit_rcu+0x118/0x18c
-> > >  CPU: 5 PID: 0 Comm: swapper/5 Not tainted 5.19.0-rc6-next-20220714 #9
-> > >  pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > >  pc : check_flags+0x90/0x1e8
-> > >  lr : check_flags+0x90/0x1e8
-> > >  Call trace:
-> > >   check_flags+0x90/0x1e8
-> > >   lock_is_held_type+0x80/0x164
-> > >   rcu_read_lock_sched_held+0x40/0x7c
-> > >   trace_rcu_dyntick+0x5c/0x140
-> > >   ct_kernel_enter+0x78/0xd4
-> > >   ct_idle_exit+0x1c/0x44
-> > >   cpu_idle_poll+0x74/0xb8
-> > >   do_idle+0x90/0x2c4
-> > >   cpu_startup_entry+0x30/0x34
-> > >   secondary_start_kernel+0x130/0x144
-> > >   __secondary_switched+0xb0/0xb4
-> > >  irq event stamp: 64229
-> > >  hardirqs last  enabled at (64229): cpu_idle_poll+0x40/0xb8
-> > >  hardirqs last disabled at (64228): do_idle+0xbc/0x2c4
-> > >  softirqs last  enabled at (64190): __do_softirq+0x2c0/0x388
-> > >  softirqs last disabled at (64185): __irq_exit_rcu+0x118/0x18c
-> > >  ---[ end trace 0000000000000000 ]---
-> > >  possible reason: unannotated irqs-off.
-> > >  irq event stamp: 64229
-> > >  hardirqs last  enabled at (64229): cpu_idle_poll+0x40/0xb8
-> > >  hardirqs last disabled at (64228): do_idle+0xbc/0x2c4
-> > >  softirqs last  enabled at (64190): __do_softirq+0x2c0/0x388
-> > >  softirqs last disabled at (64185): __irq_exit_rcu+0x118/0x18c
-> > > 
-> > > ----
-> > > 
-> > > However I don't see the above warning with the latest -next. When I tried
-> > > yesterday's -next now, I see a different warning. Not sure if they are
-> > > related. I haven't tried to bisect.
-> > > 
-> > > --->8
-> > > =============================
-> > > [ BUG: Invalid wait context ]
-> > > 5.19.0-rc8-next-20220725 #38 Not tainted
-> > > -----------------------------
-> > > swapper/0/0 is trying to lock:
-> > > (&drvdata->spinlock){....}-{3:3}, at: cti_cpu_pm_notify+0x54/0x114
-> > > other info that might help us debug this:
-> > > context-{5:5}
-> > > 1 lock held by swapper/0/0:
-> > >  #0: (cpu_pm_notifier.lock){....}-{2:2}, at: cpu_pm_enter+0x2c/0x80
-> > > stack backtrace:
-> > > CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc8-next-20220725-00004-g599e6691ed8c #38
-> > > Call trace:
-> > >  dump_backtrace+0xe8/0x108
-> > >  show_stack+0x18/0x4c
-> > >  dump_stack_lvl+0x90/0xc8
-> > >  dump_stack+0x18/0x54
-> > >  __lock_acquire+0xa70/0x32d0
-> > >  lock_acquire+0x160/0x308
-> > >  _raw_spin_lock+0x60/0xa0
-> > >  cti_cpu_pm_notify+0x54/0x114
-> > >  raw_notifier_call_chain_robust+0x50/0xd4
-> > >  cpu_pm_enter+0x48/0x80
-> > >  psci_enter_idle_state+0x34/0x74
-> > >  cpuidle_enter_state+0x120/0x2a8
-> > >  cpuidle_enter+0x38/0x50
-> > >  do_idle+0x1e8/0x2b8
-> > >  cpu_startup_entry+0x24/0x28
-> > >  kernel_init+0x0/0x1a0
-> > >  start_kernel+0x0/0x470
-> > >  start_kernel+0x34c/0x470
-> > >  __primary_switched+0xbc/0xc4
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v5.19-rc8 next-20220726]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If we look into for this callback, we can see the lock sequence is:
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Linton/ACPI-CPPC-Disable-FIE-if-registers-in-PCC-regions/20220726-230217
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220727/202207271136.DESdyKRY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a4dd80cfc857eef429f60e999bdc9479179d495e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jeremy-Linton/ACPI-CPPC-Disable-FIE-if-registers-in-PCC-regions/20220726-230217
+        git checkout a4dd80cfc857eef429f60e999bdc9479179d495e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
 
-  cti_cpu_pm_notify()
-    `> cpu_pm_notify_robust():
-         `> raw_spin_lock_irqsave(cpu_pm_notifier.lock, flag) -> a raw spinlock
-         `> cti_cpu_pm_notify()
-              `> spin_lock(&drvdata->spinlock) -> a normal spinlock
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-A raw spinlock is not a sleepable lock, and normal spinlock can be a
-sleepable lock (e.g. it can be a mutex after enabled PREEMPT_RT).
+All warnings (new ones prefixed by >>):
 
-One solution is we can change to a raw spinlock in CTI driver, so this
-can dismiss the lockdep warning.
+   In file included from drivers/cpufreq/intel_pstate.c:45:
+>> include/acpi/cppc_acpi.h:177:12: warning: no previous prototype for function 'cppc_perf_ctrs_in_pcc' [-Wmissing-prototypes]
+   extern int cppc_perf_ctrs_in_pcc(void)
+              ^
+   include/acpi/cppc_acpi.h:177:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   extern int cppc_perf_ctrs_in_pcc(void)
+          ^
+   1 warning generated.
 
-Actually, I am a bit suspect if it's really necessary to use spinlock in
-CTI PM callbacks, the reason is in CPU's idle flow, it will run into
-idle thread context and disable the local IRQ, which means it likely has
-no race condition with thread context and interrupt handler, so we can
-remove the locking in PM callbacks.
 
-Mike, could you check for this?  Thanks!
+vim +/cppc_perf_ctrs_in_pcc +177 include/acpi/cppc_acpi.h
 
-Leo
+   135	
+   136	#ifdef CONFIG_ACPI_CPPC_LIB
+   137	extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
+   138	extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
+   139	extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+   140	extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+   141	extern int cppc_set_enable(int cpu, bool enable);
+   142	extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+   143	extern int cppc_perf_ctrs_in_pcc(void);
+   144	extern bool acpi_cpc_valid(void);
+   145	extern bool cppc_allow_fast_switch(void);
+   146	extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+   147	extern unsigned int cppc_get_transition_latency(int cpu);
+   148	extern bool cpc_ffh_supported(void);
+   149	extern bool cpc_supported_by_cpu(void);
+   150	extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+   151	extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
+   152	#else /* !CONFIG_ACPI_CPPC_LIB */
+   153	static inline int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
+   154	{
+   155		return -ENOTSUPP;
+   156	}
+   157	static inline int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+   158	{
+   159		return -ENOTSUPP;
+   160	}
+   161	static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+   162	{
+   163		return -ENOTSUPP;
+   164	}
+   165	static inline int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+   166	{
+   167		return -ENOTSUPP;
+   168	}
+   169	static inline int cppc_set_enable(int cpu, bool enable)
+   170	{
+   171		return -ENOTSUPP;
+   172	}
+   173	static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+   174	{
+   175		return -ENOTSUPP;
+   176	}
+ > 177	extern int cppc_perf_ctrs_in_pcc(void)
+   178	{
+   179		return false;
+   180	}
+   181	static inline bool acpi_cpc_valid(void)
+   182	{
+   183		return false;
+   184	}
+   185	static inline bool cppc_allow_fast_switch(void)
+   186	{
+   187		return false;
+   188	}
+   189	static inline unsigned int cppc_get_transition_latency(int cpu)
+   190	{
+   191		return CPUFREQ_ETERNAL;
+   192	}
+   193	static inline bool cpc_ffh_supported(void)
+   194	{
+   195		return false;
+   196	}
+   197	static inline int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val)
+   198	{
+   199		return -ENOTSUPP;
+   200	}
+   201	static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
+   202	{
+   203		return -ENOTSUPP;
+   204	}
+   205	#endif /* !CONFIG_ACPI_CPPC_LIB */
+   206	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
