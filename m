@@ -2,99 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51657581B97
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Jul 2022 23:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C23581CDD
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 02:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiGZVL2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Jul 2022 17:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S232932AbiG0A4C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Jul 2022 20:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiGZVL2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 17:11:28 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345672A723;
-        Tue, 26 Jul 2022 14:11:27 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id j195so7940049ybj.11;
-        Tue, 26 Jul 2022 14:11:27 -0700 (PDT)
+        with ESMTP id S232373AbiG0A4C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Jul 2022 20:56:02 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6678E11A01
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 17:56:01 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id bf13so14566446pgb.11
+        for <linux-pm@vger.kernel.org>; Tue, 26 Jul 2022 17:56:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3t16s+OcKDcEZXENZbwqgCIwk/X+UcCVddI7l2RgCtI=;
-        b=NLlIwrwDW5ocpVXLAcOp1+TDqUcPCxfwIlZYoT416DevuJKD+dUfl9bBi679g2rqK2
-         CIUnAduiKXZV+uuX9vvtefQgXdxUXYyXsEuPfPNgM1dBPFpPcOIBJkPmyIsfPKqSlPvZ
-         cs/NXt5vjastEJs668It7JG7h3U2M1XnFaZoUdfMr98yqbX8+51XzA9qScCCtr/0CPcf
-         UKlseVrk75xrMR4lK0kFjvrou6WhmwoB1FSX4TmmBRPU0s2fcpACCZRIARCrZi4V0YhC
-         R+/cA4lOo/YX9n2B3Mt9qqQ08B8mD20uA8ooW7zBv+hqRY2P5MRhNrqbHt2mKx2geVrI
-         ym4Q==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ey7prdBXERmdD80QzyvhYsSLXCwrwCQGq6xbNu6iQ9c=;
+        b=H/GHDYBe/MO1vUSiMZOJvLglocGL8Eb9KCYI0ynC4+7AQ4BnB1vHlVHpzezmwnFXWX
+         wVCXpeXCNp+PgZkMLv8FOXRu3wWibrIJ0rsGfEG7MMRvMzwCaRMU7DPwy6zDrg2BPTzQ
+         AyFxwsgSYF6ODiBCzsyFT8Oy4FtZwZRrX57d0N5rR44XPcO8hRENIuSzJ+FJGCE1y/bH
+         vBzCyfXwkK/WRWft57W+DK916f1IXwBUlQxVsNc7y34ymCGst5x+UV9thKRb6ZmOiaEv
+         GKbTEdVsOJxWovNjnlNxys/0BJHhmC08E81xEXgDHgjKcqPK0NU1oHnG8iqgndZ/BcU+
+         6etg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3t16s+OcKDcEZXENZbwqgCIwk/X+UcCVddI7l2RgCtI=;
-        b=QqkqoyZJNoso85P4Gg1rhUTPeliPe2/gNCD/mjXNtL7XeM0pcfD8h/c1bW5TDz5RAC
-         Zv7gCmFOPdYTae2z2KvZLS8fs3rofN88GR6XPHiYOfR/P8vdMqzSjFa9eMBFSsqWE8yk
-         rH3ZrDH5vJt0jhLkfuBiHfJ5QNr5iqaEbeTP/b02ikmzl6tvsjZmfuzErh4NZIVr1TAO
-         h3s6uCwZh4dI3UTBR41y4GzQAlRSdG2K4IBKIN5ObrPevTfDvKBWcXuF/yquh7oaFrOF
-         m45dmjFpuryoHICJkiDSCvez/mTh8zQYgYtPePfyfOvdQiolHmI8Cf2Y88zp3eGDA3JM
-         Dagg==
-X-Gm-Message-State: AJIora8QBJuvouUmuGjvXCTKoBIoyLIx+g3j178GP8FyCuOCiUPg10OB
-        gZHx+/rB9rgxiDtnacK3g+wfaFzo2BbPpa7J7T0=
-X-Google-Smtp-Source: AGRyM1vRom4tJven8LPA373fu9mUzwWFI/x5WXxjSDmq4hHFo5RlkMbpmY16sruCIKeXcaYVkHJkHeLZd0gOeU0DUKc=
-X-Received: by 2002:a25:e682:0:b0:671:79d9:66c7 with SMTP id
- d124-20020a25e682000000b0067179d966c7mr2977858ybh.5.1658869886200; Tue, 26
- Jul 2022 14:11:26 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ey7prdBXERmdD80QzyvhYsSLXCwrwCQGq6xbNu6iQ9c=;
+        b=3esqfB3whHus/4KBwVtwuZGTPGaVOWO0aEph555l4KTR5v8IBZXl7SetN/nwai56iw
+         3PysXzdkRrMqyoovvoqVCZsHEF9UFuX1sCrgVMADWfy20CI84BP7N5Muh7qOFgUHIexz
+         3PH7G+SA00Rx2htGiCJm8IzhFCkn8RT1oCiEGb6QtXLpap0e949diJmM06kU2NflEdqd
+         3PA182xedL4aT4A458yeVgCnUFZiI8wCZuL9gyfX8zDoGKJMtTGAtZnxaBWIBIkufXAq
+         Ufxqgl3CaUxjtz8A7CNMLrMpE7Hilsl/UTw/T1nwmqeYeDKmyFO/CQEjS9Wa2RiHZaJu
+         gjbA==
+X-Gm-Message-State: AJIora+WTbHOohsibXjJXJfe83KwtjM63xw4qTlo7ErGnXrXNAg6rDTT
+        /V82nG5ADMVqejxpiG8UQccUdNYuxpT2U6tj
+X-Google-Smtp-Source: AGRyM1uOEQrfwkqb3yXoLnCZIJeKO2UgeIDOKb8SYM2HTH4DrbWMpHkKDED6hI+KtYx5fZ/Ggus7Ag==
+X-Received: by 2002:a63:1a4c:0:b0:416:1821:733d with SMTP id a12-20020a631a4c000000b004161821733dmr16484215pgm.444.1658883360884;
+        Tue, 26 Jul 2022 17:56:00 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090a410400b001f2e20edd14sm210531pjf.45.2022.07.26.17.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 17:56:00 -0700 (PDT)
+Message-ID: <62e08d20.170a0220.22664.0846@mx.google.com>
+Date:   Tue, 26 Jul 2022 17:56:00 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220726115748.101015-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220726115748.101015-1-krzysztof.kozlowski@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 26 Jul 2022 23:11:15 +0200
-Message-ID: <CAFBinCCOcuHeuXvEe9obBu2qby0bwQLPmaSbginmFh3_gSz4GA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: power: drop quotes when not needed
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sebastian Reichel <sre@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        David Lechner <david@lechnology.com>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        =?UTF-8?Q?Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Michael Klein <michael@fossekall.de>,
-        Dan Murphy <dmurphy@ti.com>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        "Andrew F. Davis" <afd@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        David Heidelberg <david@ixit.cz>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc8-85-g8cfc5f8d77b2
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.19-rc8-85-g8cfc5f8d77b2)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,18 +70,89 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 1:57 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Id and schema fields do not need quotes.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml      | 4 ++--
->  .../devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml     | 4 ++--
-For the Amlogic ones:
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc8-85-g8c=
+fc5f8d77b2)
+
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+19-rc8-85-g8cfc5f8d77b2/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.19-rc8-85-g8cfc5f8d77b2
+Git Commit: 8cfc5f8d77b21e9bd808b1ac3efc795f8afc635e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
 
 
-Thank you!
-Martin
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
