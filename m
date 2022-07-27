@@ -2,161 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1511A5822AB
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 11:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B13A5822DC
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 11:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbiG0JEQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 05:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
+        id S229806AbiG0JNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 05:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbiG0JEO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 05:04:14 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E340474CD
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 02:04:13 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id y127so2165866yby.8
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 02:04:13 -0700 (PDT)
+        with ESMTP id S230521AbiG0JMu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 05:12:50 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE96C48CA0
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 02:09:39 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id r21so12176892qtn.11
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 02:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p2f3kh3jqi9yjSQzKeEhCTNVhq9kV2tSI6rer8mhvNI=;
-        b=WjFzxSO2wJzIbJH4XkUpRb5mtLv5lM7tMqrUu61P+vX0mCZ/dxyDFrjHgg+qBFmghP
-         nfGkL9gbS4Vwnuud/OmpQCyB0dChfNXSYl32JihYvnsBaCCarUtHOOga4p4XSzpQttS6
-         tzpx1dwoudB1NWkAiJvbO21luJ/qSTi1mF8Ku8IMdXHKV/5OiSzbGwXEVW0QvM71M8EC
-         SeUocZhlVq/HD29CtUs1jWRlWUZg0UGiSRK1SMN0nL1eB+v5zdZz/2mSy009D7aOwqFW
-         KSeQ/Q7fVmh7VjJga5qADbHbVztwLQMIU30KVKqPo5h4nsiKuHvwDyAZGhzrWlgFzhK3
-         N3AA==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=t0hf4UQntBvjEEgtCvAucH7uGKb1uBzrDXI50Jj9ZxE=;
+        b=A/l93MPO1KNPoZGVDh1VU6A6ApZqMu7OLydaCYN7ZJctYpEjXnCB9osGgGauErcew0
+         nxnaFLLzX1LIHCbHUYzPKuDi4YpKsgcsHUpaww+G9xLnCh469E3tkDBQ/HB0UF6RMMEi
+         1ch9o7BjGIj+RxrbI8xq4BC6jUkLxZUysnfHLxp3UbgElfTSoY4bilRe34f21CHX/BwL
+         QRyupQuEMEGJuCWXYjcty/OH0UfI3hKZ5o3yuw6cGMfOyfYxZC1B/jijKfjJd7Ot81Uz
+         uBz6L5JO+CPaZhVhLDBGfnfo9be145yFWeOoz5/JKgapmHKsWwLgb0uq5F6MWNSBzU/O
+         nY8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p2f3kh3jqi9yjSQzKeEhCTNVhq9kV2tSI6rer8mhvNI=;
-        b=3FgeV+IrlmjRWFzcMEYj4czkWaYqx1Ey1w4nbSqxIL9aAQ6TahEDq1mbmmuawmWbR8
-         I36qIUIGp9FW0GwaVYXamkJNHX0SEuqra+tkbK0RX6AATyX7v9yIrxQLnyigkIq9KfSf
-         BV77jfMirtv3KGJsIAB9ZYsQT+5Z0JLfr6IWHueh5Ce9QDw/25HmO2sP1dTCJqu33RCV
-         MnvWsH/Gu4GW9FjZJq1yt8LFzdtpBkZkHUyWJpbHerIQl3n5cyxAqSVyv8tofwU5IPaF
-         Awr+xRn7ewWh7Qgowim/y4AF8xTOUvy3hrce0KKhFfvBEBeF9oLLSffgCeCGlwFCwMNo
-         RQHQ==
-X-Gm-Message-State: AJIora+MxgJVyx8ra+NJpoUKuCP1KveZ7xXfpQ6ZUne/bp+KVbq2qXFs
-        gRAFrCWgLYjAo/Jt7o9DHcVy/t4h7OyfXtJE1fk+8g==
-X-Google-Smtp-Source: AGRyM1tFqXVl1Wq7EQt3qviY8BvioiYzPA9jdIWLjIYucLUw/m0e/HDPSy2RNp34GiUJ0LE93SKzgQ/kW9FUP7L1iYE=
-X-Received: by 2002:a25:ba02:0:b0:670:8171:3176 with SMTP id
- t2-20020a25ba02000000b0067081713176mr15910761ybg.61.1658912652855; Wed, 27
- Jul 2022 02:04:12 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=t0hf4UQntBvjEEgtCvAucH7uGKb1uBzrDXI50Jj9ZxE=;
+        b=Q/7EGK9S/g0AvrVK20+zuUQyyzCfCL0Jv6WsJClXdRuNVOSaDtrWSjAgov79kYUnP2
+         dBOKwmD3TRWU9T8I9aEhdbFv8e3SdGcb9omhqZ23E77ZA+PF5xph3bb+X/402AYluc+p
+         KmdkO3jxyotTcxXer1BrDhncuU7it+35M+7wJuVykdF2iMFvJWlGaWC+4xfkV8huw8Fl
+         EtCdt0UuMuammYIwLG7FM74tll/TcRpb4l4+hNd0vJ9O/aYUaZgWdxBtfL7fiqBuijEd
+         /MCEvsMlLJ3uSdecvU6CXKHAmPOZcDRV3tITOGp+FfX6tsWB/Wgl5yvLteAionSseED6
+         tYPg==
+X-Gm-Message-State: AJIora+Pc5ZXfwjTR8Is/vodcUJccH4Cb4Co3RaDaCzL0FBk2rtlA267
+        XitxzzXAxe3XiJF69fY6Le4Q+z/TSITyaj4BzTIE1LT3JQ1zkw==
+X-Google-Smtp-Source: AGRyM1v2Hu8xIE4ak2/29qw0dXfDCsbwXTinqCIWgXkDLw/iJ212tDw4uXeu+cTi1kcFSjmv49UYSFY8i4sJ2Uc5qxY=
+X-Received: by 2002:a05:622a:451:b0:31f:4257:4eb2 with SMTP id
+ o17-20020a05622a045100b0031f42574eb2mr4993421qtx.370.1658912978790; Wed, 27
+ Jul 2022 02:09:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220726135506.485108-1-bchihi@baylibre.com> <20220726135506.485108-2-bchihi@baylibre.com>
- <3cb97e73-d60a-086d-83c2-1711c70057a2@collabora.com>
-In-Reply-To: <3cb97e73-d60a-086d-83c2-1711c70057a2@collabora.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 27 Jul 2022 11:03:36 +0200
-Message-ID: <CAGuA+orsPVDjKcD=nMoHNKkQd3LNP8FP+TDSCWvabmR9f19TWw@mail.gmail.com>
-Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek folder
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 27 Jul 2022 12:09:27 +0300
+Message-ID: <CAA8EJpr2S-81+q-vjmk5i+T-JwaadkRpjCr_oGi7fMf7o3iH3A@mail.gmail.com>
+Subject: PSCI domains without OSI support
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vinod.koul@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 10:24 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 26/07/22 15:55, Balsam CHIHI ha scritto:
-> > Add Mediatek proprietary folder to upstream more thermal zone and cooler
-> > drivers. Relocate the original thermal controller driver to it and rename
-> > as soc_temp.c to show its purpose more clearly.
-> >
-> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> > Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> > ---
-> >   drivers/thermal/Kconfig                       | 14 ++++-------
-> >   drivers/thermal/Makefile                      |  2 +-
-> >   drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
-> >   drivers/thermal/mediatek/Makefile             |  1 +
-> >   .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
-> >   5 files changed, 29 insertions(+), 11 deletions(-)
-> >   create mode 100644 drivers/thermal/mediatek/Kconfig
-> >   create mode 100644 drivers/thermal/mediatek/Makefile
-> >   rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
-> >
-> > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> > index 0e5cc948373c..ecba8d6e313b 100644
-> > --- a/drivers/thermal/Kconfig
-> > +++ b/drivers/thermal/Kconfig
-> > @@ -412,16 +412,10 @@ config DA9062_THERMAL
-> >         zone.
-> >         Compatible with the DA9062 and DA9061 PMICs.
-> >
-> > -config MTK_THERMAL
-> > -     tristate "Temperature sensor driver for mediatek SoCs"
-> > -     depends on ARCH_MEDIATEK || COMPILE_TEST
-> > -     depends on HAS_IOMEM
-> > -     depends on NVMEM || NVMEM=n
-> > -     depends on RESET_CONTROLLER
-> > -     default y
-> > -     help
-> > -       Enable this option if you want to have support for thermal management
-> > -       controller present in Mediatek SoCs
-> > +menu "Mediatek thermal drivers"
-> > +depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +source "drivers/thermal/mediatek/Kconfig"
-> > +endmenu
-> >
-> >   config AMLOGIC_THERMAL
-> >       tristate "Amlogic Thermal Support"
-> > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> > index def8e1a0399c..3c00e864ad55 100644
-> > --- a/drivers/thermal/Makefile
-> > +++ b/drivers/thermal/Makefile
-> > @@ -55,7 +55,7 @@ obj-y                               += st/
-> >   obj-$(CONFIG_QCOM_TSENS)    += qcom/
-> >   obj-y                               += tegra/
-> >   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-> > -obj-$(CONFIG_MTK_THERMAL)    += mtk_thermal.o
-> > +obj-$(CONFIG_MTK_THERMAL)    += mediatek/
-> >   obj-$(CONFIG_GENERIC_ADC_THERMAL)   += thermal-generic-adc.o
-> >   obj-$(CONFIG_UNIPHIER_THERMAL)      += uniphier_thermal.o
-> >   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> > diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
-> > new file mode 100644
-> > index 000000000000..9c41e9079fc3
-> > --- /dev/null
-> > +++ b/drivers/thermal/mediatek/Kconfig
-> > @@ -0,0 +1,23 @@
-> > +config MTK_THERMAL
-> > +     tristate "MediaTek thermal drivers"
-> > +     depends on THERMAL_OF
-> > +     help
-> > +             This is the option for MediaTek thermal software
-> > +             solutions. Please enable corresponding options to
-> > +             get temperature information from thermal sensors or
-> > +             turn on throttle mechaisms for thermal mitigation.
->
-> Sorry, I just noticed that the indentation must be fixed.
->
->         help
->           This is the option .....
->
-> Thanks,
-> Angelo
-OK, It will be fixed ASAP.
+Hi,
 
-Thanks,
-Balsam.
+Lately I have been working on improving the msm8996 platform support.
+Vendor kernel seems to support domain-like idle (see [1], [2]).
+However when I tried changing upstream msm8996.dtsi to use PSCI
+domains, I faced the firmware reporting NOT_SUPPORTED to an attempt to
+enable OSI (thus rendering PSCI domains useless, as they are now
+marked with ALWAYS_ON).
+
+I noticed that vendor kernel makes a call to cpu_suspend() with
+power_state following the original format (described in PSCI spec
+5.4.2.1). What would be the best way to support this?
+- Allow DTS forcing the PSCI power domains even if OSI enablement fails?
+- Add a separate cpuidle driver?
+- Just forget about it and use plain PSCI as we currently do?
+
+Additional topic: for one of idle states the vendor kernel uses a
+proprietary call into the hypervisor ([3]). Up to now we have ignored
+this, as 8996 seems to be the only platform using it. I suppose that
+adding it to cpuidle-psci.c would be frowned upon. Is this assumption
+correct? Would it add another point for adding a separate cpuidle
+driver?
+
+[1] https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.UM.6.6.c31-02700-89xx.0/arch/arm/boot/dts/qcom/msm8996-pm.dtsi#L32
+
+[2] https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.UM.6.6.c31-02700-89xx.0/drivers/cpuidle/lpm-levels.c#L927
+
+[3] https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.UM.6.6.c31-02700-89xx.0/drivers/cpuidle/lpm-levels.c#L944
+
+-- 
+With best wishes
+Dmitry
