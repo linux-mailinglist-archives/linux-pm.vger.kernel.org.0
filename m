@@ -2,138 +2,298 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4127582155
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 09:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E375821B7
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 10:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiG0HmD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 03:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S229535AbiG0IFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 04:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiG0HmC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 03:42:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7781220193;
-        Wed, 27 Jul 2022 00:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658907721; x=1690443721;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=d4iM8TIPJXWTotJ3yhXeNZkv/L1xvQZLzpOWaWEW7hM=;
-  b=flpb5eHau/ePCFg5/C2OWT36flvPooUzeb7oGFGBGw+wpUvXqwK6ok4u
-   BEfJnZmziJNq/yUqw7+S4l3FpooYzXQcp/XNLj+6RZ2seDYr3jR4mXW36
-   Php80lb5I3gFlFV8lOdT0Ic53tZJ0MpaLjBfVeF/vHF+r5PtxKx9Vo/aY
-   mv8ZyNdXG4+koRRQocncqRQTKhmrBrQKE6tS46U9rVIOnYeAPnIn0qrB5
-   CcARw8rlZukLoBa8HRy0/iWN4fpPAYE3gu9ht4/euzYkcG043NZOlYCN/
-   ejkHHRAKyt2ABp7n35K4gN5IdymkOZ5lXgOIgeDpI+RIXQUjx+wGaW5O/
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="349874127"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="349874127"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 00:42:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="689777665"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jul 2022 00:41:59 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGbg6-0008U4-0z;
-        Wed, 27 Jul 2022 07:41:58 +0000
-Date:   Wed, 27 Jul 2022 15:41:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- f11001f2dd7ec311162f0faaa6c2839f313cda41
-Message-ID: <62e0ec2a.kV9Im9JHkpRPiLTo%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229506AbiG0IFU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 04:05:20 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DED32667
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 01:05:17 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 599553F124
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 08:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1658909114;
+        bh=2EHnKuERdz3YH5WWDKnExQUdg0Om9iiL0qfm7ITCKY4=;
+        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=vfre44TwNd3hlo04Pa/E4kJzoDOzAyQnLVFbiX8H3yBIb7YJ4KDkQXMn6Iq6ZOHbE
+         Jw54xtMIDX8LSpN4EcuKgeqTcTsaIugYLFArcfJNI/aUmJ22//ZWao0mS6ZZxFDtV4
+         /870SQyJWA0DD1FUQ+KHqG8kg7nW1sF0TyQZIvIVuN+n0Nub0ZJ0a0hhqnGuQ+5fq7
+         JGTCF0FJEERIxR/AX1pkgYNyUHtmXHDgJo9OWOv9ZklmIdugo8+6YyYvR+kk0+MEIZ
+         N5E7Jb4kCXAZv781Hlyc40WXNxfD/igYeumFV8ElxM2BIojpGExtqqczd85c5zIAL7
+         zwc6EaMGHh1QQ==
+Received: by mail-ed1-f69.google.com with SMTP id y2-20020a056402440200b0043bd6c898deso7881683eda.20
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 01:05:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:organization:references:in-reply-to:message-id:subject
+         :cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=2EHnKuERdz3YH5WWDKnExQUdg0Om9iiL0qfm7ITCKY4=;
+        b=QjoFC6np83MHDgZoXBI2ghSxuSVBeouu+45I+zdwNG1To7y9R4i/pzVUGacvwiBcXv
+         N+X+IxCwcWxOI3NyGetQPiHCOJ5x94olLlJ9PByOHvn3FmldcVaxdBcl7c6T2F1rYWcy
+         owRfYdB3MeKzh55gmO3EgGOF/JYwGkJq4nxD3PlYtpu86nYMLTWcb/QN+WoHOhwa7TJh
+         xWqtWXsSHzmGpEGaKCutwmHhHxBnZGtUj10xeOSuaxycgKcDXPHvqg8jym+ipyhYUFu7
+         5WC3X9WXwlpK16IdfVklJqbyxAgDSeX0IYymyJO2VPKh5tBGZT3eJFqOSmfOHMeTk/dR
+         ncwA==
+X-Gm-Message-State: AJIora+U9HzLv83IeAEi4+rH9PceJgwuD6G0LK6xnj98t2NsbP9QLFJ1
+        kbQxj1U/aBawX/IAtHtuBmodtGylEJKRgQhW92ZtS6E6QKmVMD2QYxGWb4LUc4h3YjkbOUNvJGT
+        IdayyjGAswYF073uYOn/fzkYmtXhFZqC1Fm5O
+X-Received: by 2002:a17:906:9be4:b0:72b:cf9:99d8 with SMTP id de36-20020a1709069be400b0072b0cf999d8mr16665567ejc.747.1658909113991;
+        Wed, 27 Jul 2022 01:05:13 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uT5/cEpFvJBgf7GeDy4LxPJIYxT29suI1ax4YpuqsYKhij4wMPXgSBBQxVrDJ/TFkSg9N7CA==
+X-Received: by 2002:a17:906:9be4:b0:72b:cf9:99d8 with SMTP id de36-20020a1709069be400b0072b0cf999d8mr16665532ejc.747.1658909113594;
+        Wed, 27 Jul 2022 01:05:13 -0700 (PDT)
+Received: from smeagol ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id kx20-20020a170907775400b0072aa014e852sm7235198ejc.87.2022.07.27.01.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 01:05:12 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 10:05:10 +0200
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>, stefan.wahren@i2se.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Robin Murphy <robin.murphy@arm.con>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: Re: bcm2711_thermal: Kernel panic - not syncing: Asynchronous
+ SError Interrupt
+Message-ID: <20220727100510.4723ec84@smeagol>
+In-Reply-To: <6612b35f-86bb-bb1e-bae8-188366495dbe@gmail.com>
+References: <20210210114829.2915de78@gollum>
+        <6d9ca41b4ad2225db102da654d38bc61f6c1c111.camel@suse.de>
+        <35e17dc9-c88d-582f-607d-1d90b20868fa@arm.com>
+        <c6774af169854dc1d4efa272b439e80cea8cd8ff.camel@suse.de>
+        <6612b35f-86bb-bb1e-bae8-188366495dbe@gmail.com>
+Organization: Canonical Ltd
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/eZoo3NCjbX5UO/=hScJI=Qk";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: f11001f2dd7ec311162f0faaa6c2839f313cda41  Merge branch 'powercap' into bleeding-edge
+--Sig_/eZoo3NCjbX5UO/=hScJI=Qk
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-elapsed time: 724m
+On Wed, 10 Feb 2021 14:59:45 -0800
+Florian Fainelli <f.fainelli@gmail.com> wrote:
 
-configs tested: 57
-configs skipped: 2
+> On 2/10/2021 8:55 AM, Nicolas Saenz Julienne wrote:
+> > Hi Robin,
+> >=20
+> > On Wed, 2021-02-10 at 16:25 +0000, Robin Murphy wrote: =20
+> >> On 2021-02-10 13:15, Nicolas Saenz Julienne wrote: =20
+> >>> [ Add Robin, Catalin and Florian in case they want to chime in ]
+> >>>
+> >>> Hi Juerg, thanks for the report!
+> >>>
+> >>> On Wed, 2021-02-10 at 11:48 +0100, Juerg Haefliger wrote: =20
+> >>>> Trying to dump the BCM2711 registers kills the kernel:
+> >>>>
+> >>>> # cat /sys/kernel/debug/regmap/dummy-avs-monitor\@fd5d2000/range
+> >>>> 0-efc
+> >>>> # cat /sys/kernel/debug/regmap/dummy-avs-monitor\@fd5d2000/registers
+> >>>>
+> >>>> [   62.857661] SError Interrupt on CPU1, code 0xbf000002 -- SError =
+=20
+> >>>
+> >>> So ESR's IDS (bit 24) is set, which means it's an 'Implementation Def=
+ined
+> >>> SError,' hence IIUC the rest of the error code is meaningless to anyo=
+ne outside
+> >>> of Broadcom/RPi. =20
+> >>
+> >> It's imp-def from the architecture's PoV, but the implementation in th=
+is=20
+> >> case is Cortex-A72, where 0x000002 means an attributable, containable=
+=20
+> >> Slave Error:
+> >>
+> >> https://developer.arm.com/documentation/100095/0003/system-control/aar=
+ch64-register-descriptions/exception-syndrome-register--el1-and-el3?lang=3D=
+en
+> >>
+> >> In other words, the thing at the other end of an interconnect=20
+> >> transaction said "no" :)
+> >>
+> >> (The fact that Cortex-A72 gets too far ahead of itself to take it as a=
+=20
+> >> synchronous external abort is a mild annoyance, but hey...) =20
+> >=20
+> > Thanks for both your clarifications! Reading arm documentation is a ski=
+ll on
+> > its own. =20
+>=20
+> Yes it is.
+>=20
+> >  =20
+> >>> The regmap is created through the following syscon device:
+> >>>
+> >>> 	avs_monitor: avs-monitor@7d5d2000 {
+> >>> 		compatible =3D "brcm,bcm2711-avs-monitor",
+> >>> 			     "syscon", "simple-mfd";
+> >>> 		reg =3D <0x7d5d2000 0xf00>;
+> >>>
+> >>> 		thermal: thermal {
+> >>> 			compatible =3D "brcm,bcm2711-thermal";
+> >>> 			#thermal-sensor-cells =3D <0>;
+> >>> 		};
+> >>> 	};
+> >>>
+> >>> I've done some tests with devmem, and the whole <0x7d5d2000 0xf00> ra=
+nge is
+> >>> full of addresses that trigger this same error. Also note that as per=
+ Florian's
+> >>> comments[1]: "AVS_RO_REGISTERS_0: 0x7d5d2200 - 0x7d5d22e3." But from =
+what I can
+> >>> tell, at least 0x7d5d22b0 seems to be faulty too.
+> >>>
+> >>> Any ideas/comments? My guess is that those addresses are marked someh=
+ow as
+> >>> secure, and only for VC4 to access (VC4 is RPi4's co-processor). Ulti=
+mately,
+> >>> the solution is to narrow the register range exposed by avs-monitor t=
+o whatever
+> >>> bcm2711-thermal needs (which is ATM a single 32bit register). =20
+> >>
+> >> When a peripheral decodes a region of address space, nobody says it ha=
+s=20
+> >> to accept accesses to *every* address in that space; registers may be=
+=20
+> >> sparsely populated, and although some devices might be "nice" and make=
+=20
+> >> unused areas behave as RAZ/WI, others may throw slave errors if you po=
+ke=20
+> >> at the wrong places. As you note, in a TrustZone-aware device some=20
+> >> registers may only exist in one or other of the Secure/Non-Secure=20
+> >> address spaces.
+> >>
+> >> Even when there is a defined register at a given address, it still=20
+> >> doesn't necessarily accept all possible types of access; it wouldn't b=
+e=20
+> >> particularly friendly, but a device *could* have, say, some registers=
+=20
+> >> that support 32-bit accesses and others that only support 16-bit=20
+> >> accesses, and thus throw slave errors if you do the wrong thing in the=
+=20
+> >> wrong place.
+> >>
+> >> It really all depends on the device itself. =20
+> >=20
+> > All in all, assuming there is no special device quirk to apply, the fee=
+ling I'm
+> > getting is to just let the error be. As you hint, firmware has no blame=
+ here,
+> > and debugfs is a 'best effort, zero guarantees' interface after all. =20
+>=20
+> We should probably fill a regmap_access_table to deny reading registers
+> for which there is no address decoding and possibly another one to deny
+> writing to the read-only registers.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-i386                                defconfig
-i386                             allyesconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220724
-riscv                randconfig-r042-20220724
-s390                 randconfig-r044-20220724
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
+Below is a patch that adds a read access table but it seems wrong to include
+'internal.h' and add the table in the thermal driver. Shouldn't this happen
+in a higher layer, somehow between syscon and the thermal node?
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220724
-hexagon              randconfig-r045-20220724
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
+...Juerg
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+diff --git a/drivers/thermal/broadcom/bcm2711_thermal.c b/drivers/thermal/b=
+roadcom/bcm2711_thermal.c
+index 6e2ff710b2ec..a831c33f6d9a 100644
+--- a/drivers/thermal/broadcom/bcm2711_thermal.c
++++ b/drivers/thermal/broadcom/bcm2711_thermal.c
+@@ -21,6 +21,7 @@
+ #include <linux/thermal.h>
+=20
+ #include "../thermal_hwmon.h"
++#include "../../base/regmap/internal.h"
+=20
+ #define AVS_RO_TEMP_STATUS             0x200
+ #define AVS_RO_TEMP_STATUS_VALID_MSK   (BIT(16) | BIT(10))
+@@ -67,6 +68,32 @@ static const struct of_device_id bcm2711_thermal_id_tabl=
+e[] =3D {
+ };
+ MODULE_DEVICE_TABLE(of, bcm2711_thermal_id_table);
+=20
++/* Readable register ranges.
++ * Ranges determined experimentally by reading every register. Non-readable
++ * register reads cause SError exceptions. */
++static const struct regmap_range bcm2711_thermal_rd_ranges[] =3D {
++       regmap_reg_range(0x000, 0x010),
++       regmap_reg_range(0x034, 0x044),
++       regmap_reg_range(0x068, 0x098),
++       regmap_reg_range(0x0ac, 0x0c8),
++       regmap_reg_range(0x100, 0x100),
++       regmap_reg_range(0x108, 0x108),
++       regmap_reg_range(0x110, 0x124),
++       regmap_reg_range(0x200, 0x2ac),
++       regmap_reg_range(0x2e0, 0x2e0),
++       regmap_reg_range(0x800, 0x810),
++       regmap_reg_range(0xd00, 0xd8c),
++       regmap_reg_range(0xdd0, 0xdd4),
++       regmap_reg_range(0xdf8, 0xe8c),
++       regmap_reg_range(0xed0, 0xed4),
++       regmap_reg_range(0xef8, 0xefc),
++};
++
++static const struct regmap_access_table bcm2711_thermal_rd_table =3D {
++       .yes_ranges     =3D bcm2711_thermal_rd_ranges,
++       .n_yes_ranges   =3D ARRAY_SIZE(bcm2711_thermal_rd_ranges),
++};
++
+ static int bcm2711_thermal_probe(struct platform_device *pdev)
+ {
+        struct thermal_zone_device *thermal;
+@@ -90,6 +117,7 @@ static int bcm2711_thermal_probe(struct platform_device =
+*pdev)
+                return ret;
+        }
+        priv->regmap =3D regmap;
++       priv->regmap->rd_table =3D &bcm2711_thermal_rd_table;
+=20
+        thermal =3D devm_thermal_zone_of_sensor_register(dev, 0, priv,
+                                                       &bcm2711_thermal_of_=
+ops);
+
+
+--Sig_/eZoo3NCjbX5UO/=hScJI=Qk
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmLg8bYACgkQD9OLCQum
+QrfV1g/+IHJo7txKoZL+J3czDpgvPEqgT5a7JWATbFaR9NWzo6ASHMjvvPepTsB8
+CMA/BxmYSmPQmdL4PfnzdrcEnedNSkpmeSdxRPdCn0rr4AxErAI/Y6/nOnCD2tzr
+zgeFikcz/3moru4/H9tJNUojtzwk+Jelm2CNrZsU9myktF6S8bKlsPR6PNoRNVtB
+YMmassJpaEGL1HjqvrScpaUU7jhftpHkLPuITBV064SiMekVd7eMW+BnObl8nnmH
++D1LB5BfIFj48hR3sVWuKvWOO1xG3eIuvG33ijBiBGLiAjEQ1r9ZG9XvoODOJXUP
+TN/SGnwKQNNFOKl0/1rgvPjJsQh34xdf6/N3nJD6Hf1jGf9JUb0BqGM4pYD9cWu0
+7Nfww3UimzY/o9mgHOiGsVAKqJMk+uH89LPguL8pNeQq8kED6snrWPfic8bnRUMM
+ykU73T4Jv9tyGAZ87kJ25BZRFWOqyCy8oZyRHoiLBrmSU0/Xxp8sUZhp/AxoCWwN
+nQk+HyNmIusJLQweewNhL9upUTaQj/iq+YqofnTMgQDO4XZquc5rJxwjRADIza7H
+606fz4Y7aeNHzd/zcQJ4IsR6NtT1LaJoTGdNmoG/RfMamcWfTO1wmOZI75cz+XDb
+/ZIVldO794a6UiIVQpCR6gUAPN/FxSHl5VczO9SNyNEAhRO6IiA=
+=a0Oy
+-----END PGP SIGNATURE-----
+
+--Sig_/eZoo3NCjbX5UO/=hScJI=Qk--
