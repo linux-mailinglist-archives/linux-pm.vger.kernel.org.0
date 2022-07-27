@@ -2,115 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74375827DB
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 15:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1646582870
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Jul 2022 16:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbiG0NjQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 09:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S233395AbiG0OU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 10:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiG0NjP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 09:39:15 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A12433A10
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 06:39:15 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id g1so13243962qki.7
-        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 06:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2QFiCXkJxx739jgPLzShntoxWexyJZMXNXrZLpOZHHc=;
-        b=JbCdVgRqKL+Uk7m/7kRGLDKv/rzSbFpfAYZE0yl6HsvBpTbY7idW4B/tXNd5wir9vk
-         hvv5RLBXTs2+kuIughwvTsZHiyJdZdz0/a7NQDOtBLtUzWH9X0ClHbdrZ+BkJ6T7qLUo
-         SEmvK0tQ9eb0fdQmr8Vdw1WXSVcqdp1/yt6myjLyUmsukc3IzCymaoOFbuahrh65dHEu
-         oyTNaywVZJnPuFOmy+l3PwNX4a8B+N19ieCto9w3/SEJZsFYkJYknn5vQUZGnGpRTu52
-         K+oCpqgqFhOlVVE7/QerPMpTbXOGqPIqS9YCZmhzfnf9YkchtB6o1Q+LfVqKBbOxyYE0
-         kUXA==
+        with ESMTP id S229957AbiG0OU0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 10:20:26 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C85AE70;
+        Wed, 27 Jul 2022 07:20:24 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id c131so30416832ybf.9;
+        Wed, 27 Jul 2022 07:20:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2QFiCXkJxx739jgPLzShntoxWexyJZMXNXrZLpOZHHc=;
-        b=IZxc7LEq16C1vgMofJedLZ34D8eqxEen82tiFJ4iufKma4Ns01MJF6HYLi1tSe+8PE
-         ji1XAn/Oe85K8b8lnwhhzUXOGdXarglPhrRG5sy8xnbgxe8d6i724gJe73cWpXO6JJbs
-         lqJ9sOjI6zKQfQQHcxb7oBOAK9qZrgH+x90FfQg243XKwxtMvxGa2x5p0Y+dINgGfk/L
-         ghzyYIBlHzF4JgFmA3Dyp5np7Whn40l3jRCa+pw1gJXDt/EJ/okTSRFygFZ12InHtKSD
-         Y4kQ4UZliozx7evZ1O9fIrOEPjiM5mmafnZgesbD0M/zKSef0PwEn35mR3X6l1okZXWY
-         SlvA==
-X-Gm-Message-State: AJIora/5qWm5O9IOaq10MWBdJ1s4kqXENDEbj9RBH3osAVhGcSLFileJ
-        FQLtp+Y5C16f/9JJV8QieUyu+fzmmZMovYAvj7aMEA==
-X-Google-Smtp-Source: AGRyM1voBUoxknVFyqPILlZPKXj50s2zoX+oML6D0mDkVJLzKx23q6u7KvAi+HN/MG4nC9aEI3JVuqX9m0hZQMJ+gdE=
-X-Received: by 2002:ae9:f311:0:b0:6b6:30a9:1bb1 with SMTP id
- p17-20020ae9f311000000b006b630a91bb1mr16291367qkg.30.1658929154214; Wed, 27
- Jul 2022 06:39:14 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ZZQrQFuZsMC74d9YHFngh8zcNejUotEWaL+cgwpy5r0=;
+        b=LQkjDTUri6/kMt9NiJi5nMaMMjW2AtwqcAjBjMD1x7eTCmHWAzMPw7mg737aS6qaCn
+         Hn3ZVGK+u/luEU/3kEsysyW03Xxw8uxXMl3cWjmUt4SsgIcJcVJuxqI/IthjcSFve+BO
+         db+4js5+48kIpSlEqv67RW9bc1mxQJOo23TjlSqGIW7x5r9LwxZa3Yov848VdKjCly+q
+         GTY0kn6GFvX5287kd0dcl1aVfWsoYH7zl1oUnIFDkjW00BUDl0EKwZagg+kxwIVPB6in
+         gdMoCyf4dgQ4+rOFZyfaVDx/Vg9j3VGU9BunlOecWjZAsBRT86HPQ0sBTicZL/O134YZ
+         J9Bw==
+X-Gm-Message-State: AJIora9jdi0FN3axmBxkbbvKPu1BLRNsLf5HV19RuTUjOAkDegAhInZr
+        i8WF8hI5FA4DEuWl8IWhMexyKgtes09bJ/FXVA0=
+X-Google-Smtp-Source: AGRyM1uGIbmyr0q0QRHW5y2W97GwmCI+dp+iGYjJTRfR+7+eLpW5l6PCtu03bh+mBT295lnvedtmIkIaHWNi783kI9w=
+X-Received: by 2002:a05:6902:1541:b0:670:ac02:58c3 with SMTP id
+ r1-20020a056902154100b00670ac0258c3mr17346883ybu.622.1658931623636; Wed, 27
+ Jul 2022 07:20:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAA8EJpr2S-81+q-vjmk5i+T-JwaadkRpjCr_oGi7fMf7o3iH3A@mail.gmail.com>
- <20220727111410.bglx2u26456ray2u@bogus> <CAA8EJprNPJfGjkq2=hexbZn-=t2wKG6ZjSm5Mcbo4JuPQ-sc-A@mail.gmail.com>
-In-Reply-To: <CAA8EJprNPJfGjkq2=hexbZn-=t2wKG6ZjSm5Mcbo4JuPQ-sc-A@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 27 Jul 2022 16:39:03 +0300
-Message-ID: <CAA8EJpqP9XMcLP+Pmj5OnXD2_SJ9ULBZ_Q492+x56oQnPzqiUA@mail.gmail.com>
-Subject: Re: PSCI domains without OSI support
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vinod.koul@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20220722084314.17816-1-di.shen@unisoc.com> <CAJZ5v0iKWH2QkztewmJXiqGwnzBxCo5MWni9Q3VODwV+huvuQA@mail.gmail.com>
+ <12043680.O9o76ZdvQC@kreacher> <CAHYJL4r85vyJ9GukmhVki8EHt2VTAr0549-DA4ND0WGQHWpGqA@mail.gmail.com>
+ <CAHYJL4r9Mqv96dg+KaNa0Vh6_EuXSkMy7uLwDFYGMfZP9UTRfg@mail.gmail.com>
+In-Reply-To: <CAHYJL4r9Mqv96dg+KaNa0Vh6_EuXSkMy7uLwDFYGMfZP9UTRfg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 27 Jul 2022 16:20:12 +0200
+Message-ID: <CAJZ5v0j9B7=3r=2tvtuhQyPV1egZJzQ=Yf8OKXTa+QJO0vO_xg@mail.gmail.com>
+Subject: Re: [PATCH V2 1/1] thermal/sysfs: Clear cooling_device_stats_attr_group
+ before initialized
+To:     Di Shen <cindygm567@gmail.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Di Shen <di.shen@unisoc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        jeson.gao@unisoc.com, xuewen.yan@unisoc.com, ke.wang@unisoc.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 27 Jul 2022 at 16:24, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Wed, Jul 27, 2022 at 10:17 AM Di Shen <cindygm567@gmail.com> wrote:
 >
-> On Wed, 27 Jul 2022 at 14:14, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> Hi Rafael,
+> I have tested this patch on our platform, and it works. Later, I will
+> send the patch v3.
+
+Well, no need.  I'll use the one that you've just tested.
+
+Thanks!
+
+
+> On Tue, Jul 26, 2022 at 3:39 PM Di Shen <cindygm567@gmail.com> wrote:
 > >
-> > On Wed, Jul 27, 2022 at 12:09:27PM +0300, Dmitry Baryshkov wrote:
-
-> > > - Allow DTS forcing the PSCI power domains even if OSI enablement fails?
+> > On Sat, Jul 23, 2022 at 2:42 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > >
+> > > On Friday, July 22, 2022 7:18:42 PM CEST Rafael J. Wysocki wrote:
+> > > > On Fri, Jul 22, 2022 at 10:44 AM Di Shen <di.shen@unisoc.com> wrote:
+> > > > >
+> > > > > There's a space allocated for cooling_device_stats_attr_group
+> > > > > within cooling_device_attr_groups. This space is shared by all
+> > > > > cooling devices.
+> > > >
+> > > > That's correct.
+> > > >
+> > > > > If the stats structure of one cooling device successfully
+> > > > > creates stats sysfs. After that, another cooling device fails
+> > > > > to get max_states in cooling_device_stats_setup(). It can
+> > > > > return directly without initializing the stats structure, but
+> > > > > the cooling_device_stats_attr_group is still the attribute
+> > > > > group of the last cooling device.
+> > > >
+> > > > I cannot parse the above, sorry.
+> > > >
+> > > > For example, how can a "stats structure of one cooling device" create
+> > > > anything?   As a data structure, it is a passive entity, so it doesn't
+> > > > carry out any actions.
+> > > >
+> > > > I think (but I am not sure) that you are referring to the error code
+> > > > path in which the ->get_max_state() callback fails for a cooling
+> > > > device after cooling_device_stats_setup() has completed successfully
+> > > > for another one.
+> > > >
+> > > > > At this time, read or write stats sysfs nodes can cause kernel
+> > > > > crash. Like the following, kernel crashed when
+> > > > > 'cat time_in_state_ms'.
+> > > > >
+> > > > > [<5baac8d4>] panic+0x1b4/0x3c8
+> > > > > [<9d287b0f>] arm_notify_die+0x0/0x78
+> > > > > [<094fc22c>] __do_kernel_fault+0x94/0xa4
+> > > > > [<3b4b69a4>] do_page_fault+0xd4/0x364
+> > > > > [<23793e7a>] do_translation_fault+0x38/0xc0
+> > > > > [<6e5cc52a>] do_DataAbort+0x4c/0xd0
+> > > > > [<a28c16b8>] __dabt_svc+0x5c/0xa0
+> > > > > [<747516ae>] _raw_spin_lock+0x20/0x60
+> > > > > [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
+> > > > > [<cb78325e>] dev_attr_show+0x38/0x64
+> > > > > [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
+> > > > > [<c0a843ab>] seq_read+0x244/0x620
+> > > > > [<b316b374>] vfs_read+0xd8/0x218
+> > > > > [<3aebf5fa>] sys_read+0x80/0xe4
+> > > > > [<7cf100f5>] ret_fast_syscall+0x0/0x28
+> > > > > [<08cbe22f>] 0xbe8c1198
+> > > > >
+> > > > > stats sysfs:
+> > > > > phone:/sys/class/thermal/cooling_device2/stats # ls
+> > > > > reset  time_in_state_ms  total_trans  trans_table
+> > > > >
+> > > > > The same as cat total_trans, trans_table, and echo reset.
+> > >
+> > > So does the (untested) patch below work too?
+> > >
 > >
-> > Meaning DTS flag for this ? If OSI enable fails, why would you want to
-> > still proceed. It is non-compliant and must be fixed if the firmware
-> > supports OSI and expects OSPM to use the same.
->
-> I'm not sure at this moment. PSCI firmware reports that OSI mode is
-> supported, but then when psci_pd_try_set_osi_mode() tries to switch
-> into OSI mode, it gets NOT_SUPPORTED.
-> Just for the sake of completeness, I added a print to the psci.c to
-> dump the result of the psci_set_osi_mode(false). It also returns
-> NOT_SUPPORTED!
->
-> My logical assumption would be that the firmware reports support for
-> OS_INITIATED, but then just fails to properly support
-> SET_SUSPEND_MODE.
-
-Okay. From the msm-3.14 commit log:
-
-Add support to terminate all low power modes in PSCI. The lpm-levels will
-work with version 1.0 of PSCI specification using the OS initiated scheme.
-The lpm-levels driver would determine the last man standing and vote into
-TZ accordingly.
-
-Which means that the vendor kernel expected to work in the OSI mode
-without calling SET_SUSPEND (such call doesn't exist in 3.14)
-
-So, this looks like the "force-psci-domains" or "ignore-osi-error"
-flag would be logical.
-The question about testing still holds.
-
-> I should probably try ignoring the error psci-domain.c and continue
-> with binding power domains. What would be the best way to check that
-> the domains setup works as expected?
-
--- 
-With best wishes
-Dmitry
+> > Yes, I agree with you. I will test it on our platform and give
+> > a reply later. Thanks.
+> >
+> > > ---
+> > >  drivers/thermal/thermal_sysfs.c |   10 +++++++---
+> > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > >
+> > > Index: linux-pm/drivers/thermal/thermal_sysfs.c
+> > > ===================================================================
+> > > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
+> > > +++ linux-pm/drivers/thermal/thermal_sysfs.c
+> > > @@ -813,12 +813,13 @@ static const struct attribute_group cool
+> > >
+> > >  static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+> > >  {
+> > > +       const struct attribute_group *stats_attr_group = NULL;
+> > >         struct cooling_dev_stats *stats;
+> > >         unsigned long states;
+> > >         int var;
+> > >
+> > >         if (cdev->ops->get_max_state(cdev, &states))
+> > > -               return;
+> > > +               goto out;
+> > >
+> > >         states++; /* Total number of states is highest state + 1 */
+> > >
+> > > @@ -828,7 +829,7 @@ static void cooling_device_stats_setup(s
+> > >
+> > >         stats = kzalloc(var, GFP_KERNEL);
+> > >         if (!stats)
+> > > -               return;
+> > > +               goto out;
+> > >
+> > >         stats->time_in_state = (ktime_t *)(stats + 1);
+> > >         stats->trans_table = (unsigned int *)(stats->time_in_state + states);
+> > > @@ -838,9 +839,12 @@ static void cooling_device_stats_setup(s
+> > >
+> > >         spin_lock_init(&stats->lock);
+> > >
+> > > +       stats_attr_group = &cooling_device_stats_attr_group;
+> > > +
+> > > +out:
+> > >         /* Fill the empty slot left in cooling_device_attr_groups */
+> > >         var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
+> > > -       cooling_device_attr_groups[var] = &cooling_device_stats_attr_group;
+> > > +       cooling_device_attr_groups[var] = stats_attr_group;
+> > >  }
+> > >
+> > >  static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
+> > >
+> > >
+> > >
+> > --
+> > Best regards,
