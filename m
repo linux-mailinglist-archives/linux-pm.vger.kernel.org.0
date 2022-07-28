@@ -2,205 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4D7584803
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Jul 2022 00:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5EB584890
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Jul 2022 01:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiG1WLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 18:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S233352AbiG1XMK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 19:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiG1WLh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 18:11:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 264DA78DF7;
-        Thu, 28 Jul 2022 15:11:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77A42113E;
-        Thu, 28 Jul 2022 15:11:36 -0700 (PDT)
-Received: from mammon-tx2.austin.arm.com (mammon-tx2.austin.arm.com [10.118.28.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B64233F70D;
-        Thu, 28 Jul 2022 15:11:35 -0700 (PDT)
-From:   Jeremy Linton <jeremy.linton@arm.com>
-To:     linux-pm@vger.kernel.org
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeremy Linton <jeremy.linton@arm.com>
-Subject: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC regions
-Date:   Thu, 28 Jul 2022 17:10:43 -0500
-Message-Id: <20220728221043.4161903-2-jeremy.linton@arm.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220728221043.4161903-1-jeremy.linton@arm.com>
-References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+        with ESMTP id S233490AbiG1XMJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 19:12:09 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E0606A0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 16:12:08 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso6733574pjo.1
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 16:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=S0lwp6g8km9IQP8dALEfoeTQk7vHN06GSgK6/EqOBjQ=;
+        b=jMVwvTaXfI7rlspB1y/EBSx+2EmIyLz3j3BtDMZFOPCYIGYTWb6bH4A9QoIPpqCy9H
+         F1EOMTm+Av1/D3mlDey6InTTJHt5vTSWj/Sy8yL7rOtvpKFUeQ/U3PZTdqO2alzrvL3a
+         94GPoH/lWaZkYDkQVFfIal7xBZujDHjt9Opg4epsVbPrfHbg6IdaO/HzDvkiH1oxTg2R
+         Ny85eLR7X8Bhg2ikFhZj1plYyvVpWKjzMkhthT/Cu4By/Jgh/x2gxXB5Q5/Y3VDFXGHW
+         T+rdIgcxqiOISmpPN0mTO4e/ilV7/a4wBYyVbsLF3VAjg7yfGrwVbQDxJtpmnV2rK8Ut
+         gSig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=S0lwp6g8km9IQP8dALEfoeTQk7vHN06GSgK6/EqOBjQ=;
+        b=7Gxcc75uSiLlv3QMz7hIRw5XlHaSPcp86WpkKPtxqHvB90jk/2aH2U9LbCPW6J8wJS
+         FF1a/wA3Iy0cfphFRTcRSOqpeINJMwKE9TdPbXIDVyUVCSUd9KceAvdF1a9xpLIEA+s0
+         YNME9ktovkcRm7gSD0XFbArOyb1hXLH+MhwujWVTXOcvoz5MKLJWx1nh8CDHgKZAC5q3
+         4hp7TeG6ijRd88pFdBQ8Zdn3Kwye6uKxg8w7xUYR6lEy3GS9YS+/y7zctrWqlcsHaJ3Q
+         WpkSaKpT9xJfBVFXbrhYf8b8yO3/mkIwwsXU5p9eUPbJVHVebNxwLw45lWiSZG950jlF
+         IPaw==
+X-Gm-Message-State: ACgBeo3V6u1vcHIabnJQq+dWkR6WsAYoiDnEnjVE6u6AtNMRCL57eD63
+        gBqdAExD6UdIdm5LxGcCFZ+sq3TKHimO8XAu
+X-Google-Smtp-Source: AA6agR7nhNuQL4h51dTnuorrYLWuFL5iftp7LcQwOkbmBWPgaJ690c0X0nw5zFMJ6EJk0pzl7LhTuA==
+X-Received: by 2002:a17:902:a382:b0:16d:9b15:83d5 with SMTP id x2-20020a170902a38200b0016d9b1583d5mr1050349pla.101.1659049927534;
+        Thu, 28 Jul 2022 16:12:07 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090ae60600b001eff36b1f2asm1659213pjy.0.2022.07.28.16.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 16:12:07 -0700 (PDT)
+Message-ID: <62e317c7.170a0220.33271.260c@mx.google.com>
+Date:   Thu, 28 Jul 2022 16:12:07 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc8-92-ge240a33f1bc48
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.19-rc8-92-ge240a33f1bc48)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PCC regions utilize a mailbox to set/retrieve register values used by
-the CPPC code. This is fine as long as the operations are
-infrequent. With the FIE code enabled though the overhead can range
-from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-based machines.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc8-92-ge2=
+40a33f1bc48)
 
-So, before enabling FIE assure none of the registers used by
-cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
-enable a module parameter which can also disable it at boot or module
-reload.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+19-rc8-92-ge240a33f1bc48/
 
-Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+Tree: pm
+Branch: testing
+Git Describe: v5.19-rc8-92-ge240a33f1bc48
+Git Commit: e240a33f1bc480e5ff7a39d07ab3ba0c8ed34df8
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
- drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
- drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
- include/acpi/cppc_acpi.h       |  5 +++++
- 3 files changed, 61 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index 3c6d4ef87be0..38b881db14c7 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -1246,6 +1246,47 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
- }
- EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
- 
-+/**
-+ * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
-+ *
-+ * CPPC has flexibility about how counters describing CPU perf are delivered.
-+ * One of the choices is PCC regions, which can have a high access latency. This
-+ * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
-+ *
-+ * Return: true if any of the counters are in PCC regions, false otherwise
-+ */
-+bool cppc_perf_ctrs_in_pcc(void)
-+{
-+	int cpu;
-+
-+	for_each_present_cpu(cpu) {
-+		struct cpc_register_resource *ref_perf_reg;
-+		struct cpc_desc *cpc_desc;
-+
-+		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-+
-+		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-+		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-+		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-+			return true;
-+
-+
-+		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-+
-+		/*
-+		 * If reference perf register is not supported then we should
-+		 * use the nominal perf value
-+		 */
-+		if (!CPC_SUPPORTED(ref_perf_reg))
-+			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-+
-+		if (CPC_IN_PCC(ref_perf_reg))
-+			return true;
-+	}
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-+
- /**
-  * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
-  * @cpunum: CPU from which to read counters.
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 24eaf0ec344d..ed607e27d6bb 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -63,7 +63,11 @@ static struct cppc_workaround_oem_info wa_info[] = {
- 
- static struct cpufreq_driver cppc_cpufreq_driver;
- 
-+static bool fie_disabled;
-+
- #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-+module_param(fie_disabled, bool, 0444);
-+MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
- 
- /* Frequency invariance support */
- struct cppc_freq_invariance {
-@@ -158,7 +162,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
- 	struct cppc_freq_invariance *cppc_fi;
- 	int cpu, ret;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	for_each_cpu(cpu, policy->cpus) {
-@@ -199,7 +203,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
- 	struct cppc_freq_invariance *cppc_fi;
- 	int cpu;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	/* policy->cpus will be empty here, use related_cpus instead */
-@@ -229,7 +233,12 @@ static void __init cppc_freq_invariance_init(void)
- 	};
- 	int ret;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (cppc_perf_ctrs_in_pcc()) {
-+		pr_debug("FIE not enabled on systems with registers in PCC\n");
-+		fie_disabled = true;
-+	}
-+
-+	if (fie_disabled)
- 		return;
- 
- 	kworker_fie = kthread_create_worker(0, "cppc_fie");
-@@ -247,7 +256,7 @@ static void __init cppc_freq_invariance_init(void)
- 
- static void cppc_freq_invariance_exit(void)
- {
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	kthread_destroy_worker(kworker_fie);
-@@ -940,6 +949,8 @@ static void cppc_check_hisi_workaround(void)
- 		}
- 	}
- 
-+	fie_disabled = true;
-+
- 	acpi_put_table(tbl);
- }
- 
-diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-index d389bab54241..fe6dc3e5a454 100644
---- a/include/acpi/cppc_acpi.h
-+++ b/include/acpi/cppc_acpi.h
-@@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
- extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
- extern int cppc_set_enable(int cpu, bool enable);
- extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-+extern bool cppc_perf_ctrs_in_pcc(void);
- extern bool acpi_cpc_valid(void);
- extern bool cppc_allow_fast_switch(void);
- extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-@@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
- {
- 	return -ENOTSUPP;
- }
-+static inline bool cppc_perf_ctrs_in_pcc(void)
-+{
-+	return false;
-+}
- static inline bool acpi_cpc_valid(void)
- {
- 	return false;
--- 
-2.35.3
-
+For more info write to <info@kernelci.org>
