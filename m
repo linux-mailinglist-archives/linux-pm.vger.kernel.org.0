@@ -2,72 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0A558368D
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 03:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BA15836AC
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 04:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbiG1Byp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Jul 2022 21:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S236318AbiG1CHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Jul 2022 22:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiG1Byo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 21:54:44 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6954F663;
-        Wed, 27 Jul 2022 18:54:42 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id e20so249511vkm.3;
-        Wed, 27 Jul 2022 18:54:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=OnjdniXbQp+HuZbyZX0sPLXHIblB/RAJDkONKRBrLrY=;
-        b=S+RVC01zHZZ1rm0K35cbsio28SU5krD18nblE4sldghkGMXMjQE6+Lm0Q5/k7u+pyB
-         BTyYRNIgA48TUZjLWYn5ikDzn+YCepnoe3mR9K9inA2r0EYy/9jpWxeyXtNGzsg2BObH
-         mAqcf/jf6YCZBeE5JTKEQBcmLM954F/dsnhGJO3/xoqoeg9kLO09/YKWvOHpEEGC9QLw
-         QTHzuFCXMKoa/anYzi3+XT+vxSQUiYWNe1koz7XuZRyyOTfTR1btFblVT/MCTLTn2r6f
-         6jpDaOoPnqUVtM/b1dTLlp8b+C9P9Pg8s8ufkL3WFynuLCuaDte4lj9AL66Hq7TbtQD3
-         81vQ==
+        with ESMTP id S232919AbiG1CHb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Jul 2022 22:07:31 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E465924B
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 19:07:30 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 85AA63F119
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 02:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1658974048;
+        bh=QUeZnOPqdNL4lvXqREiShbeO7BuLmw+2Wa9bS3C20Po=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=r7gf7GwkMPy/+xd44vOiLRkRMQPpGLxowqCxYzm2a6RpslBQLu/cXcx1LABAYg7VP
+         9Ny4wO3YKqFTTYXhqnv5JZxP5R+KrwC4S6tl2K0JYEUdh/MbFAxDDI7OIxXiTbYogV
+         amsfEoYOnvUNxvS/UEHT4TWOJLRb3ThCqoK2w5gE6fVDQKezhVs9SPh43w8Qcr+0+G
+         OyQ2CYmbUK+EErtbWMkOJkfryrwPH8+AlLAgWjYYeHw9xfVUNyoTkrhXo7OTmHd/2e
+         SxRwQirvmIrma9MaqIO4Jr9mE6xTP/mzrW0yChDJCn1S2X42IYL29eeg2hjPP18Qe5
+         EzQg8P437idSA==
+Received: by mail-ej1-f69.google.com with SMTP id hq20-20020a1709073f1400b0072b9824f0a2so102927ejc.23
+        for <linux-pm@vger.kernel.org>; Wed, 27 Jul 2022 19:07:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=OnjdniXbQp+HuZbyZX0sPLXHIblB/RAJDkONKRBrLrY=;
-        b=dc53IJXBpHmYDUFkd//5tJ//u2pSRJP+wvmMpxuY/ugumwSf1ftl5XNvsVDZGLR0L2
-         Q/YMzwXek11MbM1Sx6WSAbxtMays6woE3k4PTkBcAJHpi0DISvP2dt0bfsi0U9uxoAXB
-         FHC6ZWlUQZfwuLzTqHDngfiRzqr6jnoL47WUDoHKviytKCPrEAcN6uM/eYVAEAkmInjM
-         6p81x4okou09UR+OQkKSvR3bBi17iVkxvV6PaO0EGGYKbpjey+c7LX7HMOSpWpdEvcPJ
-         oBc07EXOsv67Qt8aQM9fGwBpayqg190jcNiCBBVHH3BCLvfuhugA7LBBQqFTljLDIlT4
-         QfDg==
-X-Gm-Message-State: AJIora9qvAyqVHXlTJCSqWi1v9QY4gFaqXbbgVG/yhUyfwN1nvNawMzE
-        cGr56nimsZ2AUHJELKQo24N7LZegCg1hACkBjJI=
-X-Google-Smtp-Source: AGRyM1uVZiRv75QwHcr+M//vqsxcbZXIus3XYgqL2kL/vJjYg4KpUPLi7Qao3+OB8dqTxwLZZfUPBXriY7HbhfOoJcY=
-X-Received: by 2002:a1f:ac15:0:b0:375:65d6:269c with SMTP id
- v21-20020a1fac15000000b0037565d6269cmr7966970vke.13.1658973281106; Wed, 27
- Jul 2022 18:54:41 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QUeZnOPqdNL4lvXqREiShbeO7BuLmw+2Wa9bS3C20Po=;
+        b=6d7MvxKNB4a65Vt+VLhF9gotlOLD7g0Zd69ylzBTNh8B8K0S6dByIsW69ZtX/nnrp8
+         7B1Qm8qol1Jp+F5dAs1gEVnrFcCjcBDca4kH8r309JRNMqJ4E31kab41UwqOa8IaoCgt
+         yMvAlAD6mvwvUmfqVCFZ9s41Uyxun68Xm/Wxw3yZZhYMZFTHy/x5DWxg48uIro47Yu0W
+         TzMmNyE3gxMbFreo0ZM0TpXcvgHBsJUD9OaLkH3mVob2mTb4EqThW+xQAPaSaqtV2WqU
+         F9ZGq/7YoJGS3apAXWp1DikXTOj2+TW70DXtL6QN16QVo3Rnq3fl3dy3nsbPof1NLU+q
+         lWPQ==
+X-Gm-Message-State: AJIora9qtbLs2UT+P1c+bpMgg04xutlpogtABCpXb3QzoOyDX8db5zXw
+        X0i01ubKKdIMkG+4dr+EGZt7Wa4dZmq4aMfrz1n0mygnQ4svKJFmB9PKleogNnsZGhb/MDpAvDE
+        4+K+/8tQkVjevfwLfNg6BGIVbqe3Xei1Q2jZFCuJCpdn0LrzLV/na
+X-Received: by 2002:a05:6402:90a:b0:439:c144:24cd with SMTP id g10-20020a056402090a00b00439c14424cdmr25378472edz.209.1658974047989;
+        Wed, 27 Jul 2022 19:07:27 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1urft1cdryKbyaflp+Ot0/rCIr+tsT9IAXM7GyhPEI+FSLjVVjgy9a+LoWFyg24/KqgAuBNxgoWOfX/dVyjPWQ=
+X-Received: by 2002:a05:6402:90a:b0:439:c144:24cd with SMTP id
+ g10-20020a056402090a00b00439c14424cdmr25378456edz.209.1658974047669; Wed, 27
+ Jul 2022 19:07:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722084314.17816-1-di.shen@unisoc.com> <CAJZ5v0iKWH2QkztewmJXiqGwnzBxCo5MWni9Q3VODwV+huvuQA@mail.gmail.com>
- <12043680.O9o76ZdvQC@kreacher> <CAHYJL4r85vyJ9GukmhVki8EHt2VTAr0549-DA4ND0WGQHWpGqA@mail.gmail.com>
- <CAHYJL4r9Mqv96dg+KaNa0Vh6_EuXSkMy7uLwDFYGMfZP9UTRfg@mail.gmail.com> <CAJZ5v0j9B7=3r=2tvtuhQyPV1egZJzQ=Yf8OKXTa+QJO0vO_xg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j9B7=3r=2tvtuhQyPV1egZJzQ=Yf8OKXTa+QJO0vO_xg@mail.gmail.com>
-From:   Di Shen <cindygm567@gmail.com>
-Date:   Thu, 28 Jul 2022 09:54:30 +0800
-Message-ID: <CAHYJL4obZYjPg-qQ4dMQKVzUe0Sf6ecvhVSLTtJpJeyFRsY_-A@mail.gmail.com>
-Subject: Re: [PATCH V2 1/1] thermal/sysfs: Clear cooling_device_stats_attr_group
- before initialized
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Di Shen <di.shen@unisoc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jeson.gao@unisoc.com, xuewen.yan@unisoc.com, ke.wang@unisoc.com
+References: <CAFv23QmH4ooXJzX9A0CBObrETZgb9sT4dfh03NZA--fKfZnHDA@mail.gmail.com>
+ <87fsixz8cb.wl-maz@kernel.org> <CAFv23Q=O29J4K_bdTi_SuThsEZN_SFNNz+bBPQSA+RGCANm6=w@mail.gmail.com>
+ <CAAd53p7GGjqpo97VP=uXnJQstKzxCf9Si+ZCD98UsbdJ7oS=SA@mail.gmail.com>
+ <CAJZ5v0jYJxk1B1XORLQkGf=R9HDPbUzAjb3_2GUM0XtfmyXfZA@mail.gmail.com> <CAAd53p77SiW+uuZM9FAXiPooC-CN7BxVwj1LPJjEfbZZb_q14g@mail.gmail.com>
+In-Reply-To: <CAAd53p77SiW+uuZM9FAXiPooC-CN7BxVwj1LPJjEfbZZb_q14g@mail.gmail.com>
+From:   AceLan Kao <acelan.kao@canonical.com>
+Date:   Thu, 28 Jul 2022 10:07:16 +0800
+Message-ID: <CAFv23QkMZiXs8N_+gt0d7aFf=iNt3ynVBG2RrUjW_mqNvCwHAw@mail.gmail.com>
+Subject: Re: There are not enough CPU0 APIC IRQs while doing IRQ migration
+ during S3
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,133 +82,257 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ok, thanks.
-
-On Wed, Jul 27, 2022 at 10:20 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+Kai-Heng Feng <kai.heng.feng@canonical.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
+=8821=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8811:02=E5=AF=AB=E9=81=93=
+=EF=BC=9A
 >
-> On Wed, Jul 27, 2022 at 10:17 AM Di Shen <cindygm567@gmail.com> wrote:
+> On Wed, Jul 20, 2022 at 6:11 PM Rafael J. Wysocki <rafael@kernel.org> wro=
+te:
 > >
-> > Hi Rafael,
-> > I have tested this patch on our platform, and it works. Later, I will
-> > send the patch v3.
->
-> Well, no need.  I'll use the one that you've just tested.
->
-> Thanks!
->
->
-> > On Tue, Jul 26, 2022 at 3:39 PM Di Shen <cindygm567@gmail.com> wrote:
+> > On Wed, Jul 20, 2022 at 5:16 AM Kai-Heng Feng
+> > <kai.heng.feng@canonical.com> wrote:
 > > >
-> > > On Sat, Jul 23, 2022 at 2:42 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > > >
-> > > > On Friday, July 22, 2022 7:18:42 PM CEST Rafael J. Wysocki wrote:
-> > > > > On Fri, Jul 22, 2022 at 10:44 AM Di Shen <di.shen@unisoc.com> wrote:
-> > > > > >
-> > > > > > There's a space allocated for cooling_device_stats_attr_group
-> > > > > > within cooling_device_attr_groups. This space is shared by all
-> > > > > > cooling devices.
-> > > > >
-> > > > > That's correct.
-> > > > >
-> > > > > > If the stats structure of one cooling device successfully
-> > > > > > creates stats sysfs. After that, another cooling device fails
-> > > > > > to get max_states in cooling_device_stats_setup(). It can
-> > > > > > return directly without initializing the stats structure, but
-> > > > > > the cooling_device_stats_attr_group is still the attribute
-> > > > > > group of the last cooling device.
-> > > > >
-> > > > > I cannot parse the above, sorry.
-> > > > >
-> > > > > For example, how can a "stats structure of one cooling device" create
-> > > > > anything?   As a data structure, it is a passive entity, so it doesn't
-> > > > > carry out any actions.
-> > > > >
-> > > > > I think (but I am not sure) that you are referring to the error code
-> > > > > path in which the ->get_max_state() callback fails for a cooling
-> > > > > device after cooling_device_stats_setup() has completed successfully
-> > > > > for another one.
-> > > > >
-> > > > > > At this time, read or write stats sysfs nodes can cause kernel
-> > > > > > crash. Like the following, kernel crashed when
-> > > > > > 'cat time_in_state_ms'.
-> > > > > >
-> > > > > > [<5baac8d4>] panic+0x1b4/0x3c8
-> > > > > > [<9d287b0f>] arm_notify_die+0x0/0x78
-> > > > > > [<094fc22c>] __do_kernel_fault+0x94/0xa4
-> > > > > > [<3b4b69a4>] do_page_fault+0xd4/0x364
-> > > > > > [<23793e7a>] do_translation_fault+0x38/0xc0
-> > > > > > [<6e5cc52a>] do_DataAbort+0x4c/0xd0
-> > > > > > [<a28c16b8>] __dabt_svc+0x5c/0xa0
-> > > > > > [<747516ae>] _raw_spin_lock+0x20/0x60
-> > > > > > [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
-> > > > > > [<cb78325e>] dev_attr_show+0x38/0x64
-> > > > > > [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
-> > > > > > [<c0a843ab>] seq_read+0x244/0x620
-> > > > > > [<b316b374>] vfs_read+0xd8/0x218
-> > > > > > [<3aebf5fa>] sys_read+0x80/0xe4
-> > > > > > [<7cf100f5>] ret_fast_syscall+0x0/0x28
-> > > > > > [<08cbe22f>] 0xbe8c1198
-> > > > > >
-> > > > > > stats sysfs:
-> > > > > > phone:/sys/class/thermal/cooling_device2/stats # ls
-> > > > > > reset  time_in_state_ms  total_trans  trans_table
-> > > > > >
-> > > > > > The same as cat total_trans, trans_table, and echo reset.
-> > > >
-> > > > So does the (untested) patch below work too?
-> > > >
+> > > [+Cc Rafael, linux-pm]
 > > >
-> > > Yes, I agree with you. I will test it on our platform and give
-> > > a reply later. Thanks.
+> > > On Wed, Jul 20, 2022 at 10:53 AM AceLan Kao <acelan.kao@canonical.com=
+> wrote:
+> > > >
+> > > > Marc Zyngier <maz@kernel.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=8819=
+=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=886:48=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> > > > >
+> > > > > [- Jason]
+> > > > >
+> > > > > On Tue, 19 Jul 2022 06:55:21 +0100,
+> > > > > AceLan Kao <acelan.kao@canonical.com> wrote:
+> > > > > >
+> > > > > > HI all,
+> > > > > >
+> > > > > > I encountered an issue while doing S3, it shows below message a=
+nd then
+> > > > > > failed to enter S3
+> > > > > > [  106.731140] CPU 31 has 116 vectors, 85 available. Cannot dis=
+able CPU
+> > > > > > [  106.731551] ACPI: \_PR_.C01F: Found 2 idle states
+> > > > > > [  106.732610] Error taking CPU31 down: -28
+> > > > > > [  106.732612] Non-boot CPUs are not disabled
+> > > > > >
+> > > > > > CPU: AMD Ryzen Threadripper PRO 3955WX 16-Cores
+> > > > > > Kernel: v5.19-rc7
+> > > > > > There are 5 PCI to 4 type-c ports USB cards on the machine, and=
+ It
+> > > > > > wouldn't lead to the issue if only 4 cards are plugged. So, it =
+looks
+> > > > > > like it can't handle 5 cards, and failed on the IRQ migration.
+> > > > > >
+> > > > > > The workaround provided by kaiheng is to release the irq while
+> > > > > > suspending and request irq while resuming.
+> > > > > > I'm wondering do we have a better solution for this kind of iss=
+ue?
+> > > > > > Thanks.
+> > > > > >
+> > > > > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > > > > > index edc6881c8a1b..91c79b21cb57 100644
+> > > > > > --- a/drivers/usb/host/xhci.c
+> > > > > > +++ b/drivers/usb/host/xhci.c
+> > > > > > @@ -17,6 +17,7 @@
+> > > > > > #include <linux/slab.h>
+> > > > > > #include <linux/dmi.h>
+> > > > > > #include <linux/dma-mapping.h>
+> > > > > > +#include <linux/suspend.h>
+> > > > > >
+> > > > > > #include "xhci.h"
+> > > > > > #include "xhci-trace.h"
+> > > > > > @@ -1079,6 +1080,9 @@ int xhci_suspend(struct xhci_hcd *xhci, b=
+ool do_wakeup)
+> > > > > >                                __func__);
+> > > > > >        }
+> > > > > >
+> > > > > > +       if (pm_suspend_via_firmware())
+> > > > > > +               xhci_cleanup_msix(xhci);
+> > > > >
+> > > > > I'm a bit clueless when it comes to the combination of x86 and xh=
+ci,
+> > > > > but doesn't this prevent resuming on a xhci interrupt?
+> > > > The PCI cards provide 4 type-c USB ports, and in the beginning we
+> > > > found that removing one PCI card fixed the issue, so we were trying=
+ to
+> > > > fix the issue in xhci driver.
+> > > > The USB ports on the PCI cards can't resume the system from S3 even
+> > > > without the workaround,
+> > > > but the USB ports on the rear panel of the motherboard still work w=
+ith
+> > > > the workaround.
 > > >
-> > > > ---
-> > > >  drivers/thermal/thermal_sysfs.c |   10 +++++++---
-> > > >  1 file changed, 7 insertions(+), 3 deletions(-)
-> > > >
-> > > > Index: linux-pm/drivers/thermal/thermal_sysfs.c
-> > > > ===================================================================
-> > > > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-> > > > +++ linux-pm/drivers/thermal/thermal_sysfs.c
-> > > > @@ -813,12 +813,13 @@ static const struct attribute_group cool
-> > > >
-> > > >  static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
-> > > >  {
-> > > > +       const struct attribute_group *stats_attr_group = NULL;
-> > > >         struct cooling_dev_stats *stats;
-> > > >         unsigned long states;
-> > > >         int var;
-> > > >
-> > > >         if (cdev->ops->get_max_state(cdev, &states))
-> > > > -               return;
-> > > > +               goto out;
-> > > >
-> > > >         states++; /* Total number of states is highest state + 1 */
-> > > >
-> > > > @@ -828,7 +829,7 @@ static void cooling_device_stats_setup(s
-> > > >
-> > > >         stats = kzalloc(var, GFP_KERNEL);
-> > > >         if (!stats)
-> > > > -               return;
-> > > > +               goto out;
-> > > >
-> > > >         stats->time_in_state = (ktime_t *)(stats + 1);
-> > > >         stats->trans_table = (unsigned int *)(stats->time_in_state + states);
-> > > > @@ -838,9 +839,12 @@ static void cooling_device_stats_setup(s
-> > > >
-> > > >         spin_lock_init(&stats->lock);
-> > > >
-> > > > +       stats_attr_group = &cooling_device_stats_attr_group;
-> > > > +
-> > > > +out:
-> > > >         /* Fill the empty slot left in cooling_device_attr_groups */
-> > > >         var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
-> > > > -       cooling_device_attr_groups[var] = &cooling_device_stats_attr_group;
-> > > > +       cooling_device_attr_groups[var] = stats_attr_group;
-> > > >  }
-> > > >
-> > > >  static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
-> > > >
-> > > >
-> > > >
-> > > --
-> > > Best regards,
+> > > The isn't xHCI specific. The issue here is that CPU0 APIC doesn't hav=
+e
+> > > enough IRQ vector for ACPI S3 suspend.
+> > > Ideally we don't want to tear down IRQs during suspend, but for this
+> > > case minimizing IRQ numbers means successful S3.
+> > >
+> > > So maybe we can have a suspend flow like this:
+> > > - At the beginning of suspend, check if there's enough free IRQ for
+> > > CPU0 migration.
+> > > - If there isn't enough free slots, hint drivers to tear down non-wak=
+e
+> > > IRQs. Maybe use a global variable if we don't want to add a new
+> > > parameter to current PM ops.
+> > > - If it's still not enough, abort suspend.
+> > >
+> > > For suspend that doesn't unplug CPU like suspend-to-idle, no
+> > > modification is needed.
+> > > I wonder if that makes sense?
+> >
+> > Quite probably, IRQs need not be migrated during system suspend, so it
+> > should be possible to avoid doing that entirely on "hot remove" if it
+> > is part of the suspend flow.
+>
+> So is it required to disable all CPUs except CPU0 for ACPI S3?
+> ACPI spec rev 6.3, "7.4.2.4 System \_S3 State" says "The processors
+> are not executing instructions. The processor-complex context is not
+> maintained." it doesn't say the CPUs have to be disabled.
+> So as long as CPUs are quiesced, is pm_sleep_disable_secondary_cpus()
+> still needed for S3?
+>
+I'm still doing some tests for this issue and tried to not migrate
+IRQs or do not offline CPUs while suspending,
+but I can't find a good path to do it well, and the system may fail to
+enter suspended or fail to be waken up.
+
+I also checked the available vectors when the CPU is going offline,
+and found the available vector reduces by around 200 when one CPU is
+offline.
+So that makes the available vectors are not sufficient at the end,
+I'm wondering if the calculation for the deducted vectors is reasonable?
+Or could we allocate more vectors in the beginning?
+
+u@u-M12SWA-TF:~$ sudo cat /sys/kernel/debug/irq/domains/VECTOR
+name:   VECTOR
+size:   0
+mapped: 371
+flags:  0x00000003
+Online bitmaps:       32
+Global available:   6150
+Global reserved:      57
+Total allocated:     282
+System: 39: 0-19,29,32,50,128,236,240-242,244,246-255
+| CPU | avl | man | mac | act | vectors
+    0   192     1     1    9  33-40,48
+    1   191     1     1   10  33-42
+    2   192     1     1    9  33-41
+    3   192     1     1    9  33-36,38-42
+    4   192     1     1    9  33-36,38-42
+    5   192     1     1    9  33-40,43
+    6   193     1     1    8  33-36,38-39,41-42
+    7   191     1     1   10  33-42
+    8   192     1     1    9  33-38,40-42
+    9   192     1     1    9  33-41
+   10   192     1     1    9  33-41
+   11   192     1     1    9  33-41
+   12   192     1     1    9  33-41
+   13   194     1     1    7  33-36,38,40-41
+   14   193     1     1    8  33-36,38-41
+   15   193     1     1    8  33-38,40-41
+   16   192     1     1    9  33-41
+   17   194     1     1    7  33-39
+   18   192     1     1    9  33-41
+   19   191     1     1   10  33-42
+   20   193     1     1    8  33-38,40,42
+   21   192     1     1    9  33-38,40-42
+   22   192     1     1    9  33-40,42
+   23   192     1     1    9  33-41
+   24   191     1     1   10  33-37,39-43
+   25   192     1     1    9  33-41
+   26   192     1     1    9  33-40,43
+   27   193     1     1    8  33-40
+   28   193     1     1    8  33-39,42
+   29   192     1     1    9  33-41
+   30   192     1     1    9  33-41
+   31   192     1     1    9  33-41
+u@u-M12SWA-TF:~$ sudo chcpu -d 1
+CPU 1 disabled
+u@u-M12SWA-TF:~$ sudo cat /sys/kernel/debug/irq/domains/VECTOR
+name:   VECTOR
+size:   0
+mapped: 371
+flags:  0x00000003
+Online bitmaps:       31
+Global available:   5950
+Global reserved:      57
+Total allocated:     281
+System: 39: 0-19,29,32,50,128,236,240-242,244,246-255
+| CPU | avl | man | mac | act | vectors
+    0   192     1     1    9  33-40,48
+    2   192     1     1    9  33-41
+    3   192     1     1    9  33-36,38-42
+    4   192     1     1    9  33-36,38-42
+    5   192     1     1    9  33-40,43
+    6   193     1     1    8  33-36,38-39,41-42
+    7   191     1     1   10  33-42
+    8   192     1     1    9  33-38,40-42
+    9   192     1     1    9  33-41
+   10   192     1     1    9  33-41
+   11   192     1     1    9  33-41
+   12   192     1     1    9  33-41
+   13   193     1     1    8  33-38,40-41
+   14   193     1     1    8  33-36,38-41
+   15   193     1     1    8  33-38,40-41
+   16   192     1     1    9  33-41
+   17   186     1     1   15  33-47
+   18   192     1     1    9  33-41
+   19   191     1     1   10  33-42
+   20   193     1     1    8  33-38,40,42
+   21   192     1     1    9  33-38,40-42
+   22   192     1     1    9  33-40,42
+   23   192     1     1    9  33-41
+   24   191     1     1   10  33-37,39-43
+   25   192     1     1    9  33-41
+   26   192     1     1    9  33-40,43
+   27   193     1     1    8  33-40
+   28   193     1     1    8  33-39,42
+   29   192     1     1    9  33-41
+   30   192     1     1    9  33-41
+   31   192     1     1    9  33-41
+u@u-M12SWA-TF:~$ sudo chcpu -d 2
+CPU 2 disabled
+u@u-M12SWA-TF:~$ sudo cat /sys/kernel/debug/irq/domains/VECTOR
+name:   VECTOR
+size:   0
+mapped: 371
+flags:  0x00000003
+Online bitmaps:       30
+Global available:   5750
+Global reserved:      57
+Total allocated:     280
+System: 39: 0-19,29,32,50,128,236,240-242,244,246-255
+| CPU | avl | man | mac | act | vectors
+    0   192     1     1    9  33-40,48
+    3   192     1     1    9  33-36,38-42
+    4   192     1     1    9  33-36,38-42
+    5   192     1     1    9  33-40,43
+    6   193     1     1    8  33-36,38-39,41-42
+    7   191     1     1   10  33-42
+    8   192     1     1    9  33-38,40-42
+    9   192     1     1    9  33-41
+   10   192     1     1    9  33-41
+   11   192     1     1    9  33-41
+   12   192     1     1    9  33-41
+   13   193     1     1    8  33-38,40-41
+   14   193     1     1    8  33-36,38-41
+   15   193     1     1    8  33-38,40-41
+   16   192     1     1    9  33-41
+   17   186     1     1   15  33-47
+   18   184     1     1   17  33-49
+   19   191     1     1   10  33-42
+   20   193     1     1    8  33-38,40,42
+   21   192     1     1    9  33-38,40-42
+   22   192     1     1    9  33-40,42
+   23   192     1     1    9  33-41
+   24   191     1     1   10  33-37,39-43
+   25   192     1     1    9  33-41
+   26   192     1     1    9  33-40,43
+   27   193     1     1    8  33-40
+   28   193     1     1    8  33-39,42
+   29   192     1     1    9  33-41
+   30   192     1     1    9  33-41
+   31   192     1     1    9  33-41
