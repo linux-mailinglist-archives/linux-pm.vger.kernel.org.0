@@ -2,174 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897DB583D6D
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 13:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC728583D8E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 13:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236231AbiG1LbU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 07:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
+        id S235976AbiG1Lh5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 07:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbiG1LbR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 07:31:17 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D9629C9B
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 04:31:15 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so911411wmo.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 04:31:14 -0700 (PDT)
+        with ESMTP id S230399AbiG1Lh4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 07:37:56 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DC851A25
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 04:37:54 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id d17so2387195lfa.12
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 04:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=SMC59iUGEUeIWikaYVLjy2odSUsf6J1BxrN5JwfwEpY=;
-        b=I2LvfwRSLT0FBLkzKL97tXa0j3AxOgqK4JwBDMsSM+Z8HGBr1Hsl+SUU8HPYMLz66e
-         8uwZd7/fPyOTDqCE8CpYD1EB4BMYrqBICeOrQcRtAgtcyK1eE/L39avZt/VLlWPC4Uor
-         LoRGhJiBQNR/hDNsANtNPDEqnDWOhfwEJTmwgA0Cv1jj23KAfdmGOY1sasEYVFjLX/YX
-         ZlPZ2zhQiq7NYJ6LHAqKNcChUNlEupakqOtGb+CZPupdBgaFq1mBMgBamPwT1GZ2CiGh
-         Xxn5YMmbVopGqmz+InpOVGDvq/m/bhIDEUtdkMhmWHk2Kp5mn0bff3ZHplSxHO3nCLJd
-         f6Wg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DDXwy09v5kzKGSrtSfqtSiy1i98PELQE2ktj6kzOluw=;
+        b=hGzHTvEkVez1BnQLLcWNc9PRGnf8eblmhwFNLAhTAxKItS4UsxHX/1I4FceQRbPq9o
+         145lgb3pMgV7OmbFcqcNEmHCIYBp8g7Z+e52Fjg8tPprY3GNGFq61WT9Tf4neCxjNu/+
+         GV95yZmunE9dzg6h0jPXmzGjKhEu3IUSBHU9tChhlb4jBgRyczMqX0HZUD41lwM2IkCZ
+         7FHreixOLlTuQ/HfQQpo3vqhzk0IS3rrI61xdloYiceq6FvETefUFeKPRwh9g6AhPqqH
+         KKoXxVrLtK0Pnk6VGQ1daC9u6dGOxTEXQ6cKD+LMSNEbGpplvB3gsPlOTK3vmbFWC7NR
+         ciKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=SMC59iUGEUeIWikaYVLjy2odSUsf6J1BxrN5JwfwEpY=;
-        b=EJdQBOIF8j0zeK9g6ffkavYdgOs8Itg2LdJ9eGGKXEDWvnimDJjtn2sxeFaLF/D7qG
-         Rk0xhzgV/EAVQBJi1OOI4GS+oF+anBHD/8ohXuquDSFmicap4cNiLsylYbrIe1+RmNAS
-         2YgsZyzp6Nd4Ufz12LMFNXJu8fuH072DK/OnZS+Jl+h1Ld8xwLwO3mhzCdBgmbCiP9gO
-         +hN1kgW/F1QeIDI9O5MCzxzlPOF4DJ2otW3sm+xJPX/YmGkONkAimEEa3toMyyRQmA+/
-         TGMnvLoZxwATVgroq5Pdwt3+2N+YXwSZdidLoNCHZABl8mNqjmteyT0nqR7punFnqLF3
-         7WYA==
-X-Gm-Message-State: AJIora+v0fauUMCX2T78a7Ps/y3uOhjCoDCSMnrOP6MtTL6Qu4/Vu128
-        ai09IMEr3e67hvRZsrswupveqQ==
-X-Google-Smtp-Source: AGRyM1vjIPgxwYbMk8BsnZlSouB9NDyINH+vUJA52rfBsJa1/epNS6uEmdrCNjJkZQ9qNZQU8kklUA==
-X-Received: by 2002:a05:600c:3556:b0:3a3:2a9c:f26 with SMTP id i22-20020a05600c355600b003a32a9c0f26mr6221269wmq.58.1659007873312;
-        Thu, 28 Jul 2022 04:31:13 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id z22-20020a1cf416000000b003a35516ccc3sm937306wma.26.2022.07.28.04.31.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DDXwy09v5kzKGSrtSfqtSiy1i98PELQE2ktj6kzOluw=;
+        b=QLgqzWR0JphUVyIFHbtt7KdE3GzXkuqiQC+ljGj1NY1pRHj5b+XvDiIE/yP/oVrW5u
+         gi4DcoX6iM8aW1jFSzupV4VY+9CRE7qq+khYTsWvLSSpCscTd4QZ07Jt2al/ToC82woB
+         /0BbCwaK0cRP4EWsztPFcuXhPu/TFVe9hg47/pdZxPgKzazktbpROvl16hme8rWSBmXj
+         6o/5sVAUNiQsioR3QTmNcp5zOazsU3KiSNPXrjROhByweuk4rkuhOQYbEleZS+im7KRE
+         Wz1HBKzB7hecZzkSA+8VqOh21VFYr9NOlCISzYE3MuvRA2CFztxOuy0RYnBemQReAnhn
+         OQvg==
+X-Gm-Message-State: AJIora/n9Na+MIl8QnccnyVmPKIa1dC2J80yiz4Mk4iSsVB9xBGDJ64H
+        DN9h1XDUAw3gtOP2CS7g9j7OQw==
+X-Google-Smtp-Source: AGRyM1sPCDaukKfCDTYez0xGEZrgkJ/tVyoOHk1t8WUGeH1+uZGLbFvBi9h88tQHwauRo0IhCtkoWw==
+X-Received: by 2002:a05:6512:2821:b0:48a:6a01:3d29 with SMTP id cf33-20020a056512282100b0048a6a013d29mr10219021lfb.649.1659008273103;
+        Thu, 28 Jul 2022 04:37:53 -0700 (PDT)
+Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id l12-20020a2ea80c000000b0025e0396786dsm98192ljq.93.2022.07.28.04.37.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 04:31:12 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 12:31:09 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Thu, 28 Jul 2022 04:37:52 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370
- support
-Message-ID: <20220728113109.7gf3b36mqjxlhcq3@maple.lan>
-References: <20220722102407.2205-1-peterwu.pub@gmail.com>
- <20220722102407.2205-14-peterwu.pub@gmail.com>
- <20220725103128.xtaw2c4y5fobowg7@maple.lan>
- <CABtFH5LUKTZenTktq3v1JZ9xe-yJFsMvCZuwDhmxdT87k0O-zA@mail.gmail.com>
- <20220726093058.2fz2p2vg7xpfsnfe@maple.lan>
- <CABtFH5+in-+=6r3wOvQ8-78DT9CXaMursJukhx+kdwMvvP3djw@mail.gmail.com>
- <20220726115954.kpkmidrk3zo3dpbq@maple.lan>
- <CABtFH5K3LLw9ZqY0Qrrx_8xs+3ioJpzP0=_HptmoDY6tvu2JVg@mail.gmail.com>
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH v2 00/11] soc/arm64: qcom: Add LLCC BWMON on SDM845
+Date:   Thu, 28 Jul 2022 13:37:37 +0200
+Message-Id: <20220728113748.170548-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABtFH5K3LLw9ZqY0Qrrx_8xs+3ioJpzP0=_HptmoDY6tvu2JVg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 02:24:46PM +0800, ChiaEn Wu wrote:
-> On Tue, Jul 26, 2022 at 7:59 PM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> > > > > So should we make all 16384 steps of MT6372 available to users?
-> > > >
-> > > > Yes.
-> > > >
-> > > >
-> > > > > Does that mean the DTS needs to be modified as well?
-> > > >
-> > > > Yes... the property to set initial brightness needs a 14-bit range.
-> > > >
-> > > > It would also be a good idea to discuss with the DT maintainers whether
-> > > > you should introduce a second compatible string (ending 6372) in order
-> > > > to allow the DT validation checks to detect accidental use of MT6372
-> > > > ranges on MT6370 hardware.
+Hi,
 
-[snip]
+Changes since v1
+================
+1. Patch #2: Drop also BWMON_GLOBAL_IRQ_STATUS (Sibi).
+2. Minor rebasings because of above drop.
+3. Patch #4: typo in subject (Sibi).
+4. New patch: arm64: dts: qcom: sdm845: narrow LLCC address space (Sibi).
+5. Add Rb tags.
 
-> > > > I'd be curious what the compatiblity reasons are. In other words what
-> > > > software breaks?
-> > >
-> > > The reason is as above. We just hope the users who use this series SubPMIC can
-> > > directly apply this driver to drive the backlight device without
-> > > knowing the underlying hardware.
-> > > Not software breaks.
-> >
-> > As above, ignoring the max_brightness property is a bug in the
-> > userspace. I'm still unclear why sending faked ranges to userspace
-> > it a better solution than fixing the userspace.
->
-> Ok, I got it!
-> If I add a second compatible string (like 'mediatek,mt6372-backlight')
-> in the DT section,
-> and append 'if-then-else' to determine the correct maximum value of
-> 'default-brightness' and 'max-brightness',
-> Also, I will append 'bled exponential mode' to make user control using
-> linear or exponential mode.
+Description
+===========
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
 
-I'd be very pleased to see support for exponential mode added: it's a
-much better way to control LEDs and backlights.
+Qualcomm SoCs might several BWMON instances.  Extend existing support for CPU
+BWMON (called v4) to LLCC BWMON (called v5).
 
+Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc: Sibi Sankar <quic_sibis@quicinc.com>
 
-> These changes I will explain to DT's maintainer again.
+Best regards,
+Krzysztof
 
-Excellent. I know DT maintainers are copied into this thread but they
-will probably not be following this patch's thread so it is better to
-discuss in the mail thread for the DT bindings!
+Krzysztof Kozlowski (11):
+  dt-bindings: interconnect: qcom,msm8998-bwmon: add support for SDM845
+    LLCC BWMON
+  soc: qcom: icc-bwmon: re-use IRQ enable/clear define
+  soc: qcom: icc-bwmon: drop unused registers
+  soc: qcom: icc-bwmon: store reference to variant data in container
+  soc: qcom: icc-bwmon: clear all registers on init
+  soc: qcom: icc-bwmon: store count unit per variant
+  soc: qcom: icc-bwmon: use regmap and prepare for BWMON v5
+  soc: qcom: icc-bwmon: add per-variant quirks
+  soc: qcom: icc-bwmon: add support for SDM845 LLCC BWMON
+  arm64: dts: qcom: sdm845: narrow LLCC address space
+  arm64: dts: qcom: sdm845: add LLCC BWMON
 
+ .../interconnect/qcom,msm8998-bwmon.yaml      |   1 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  39 +-
+ drivers/soc/qcom/icc-bwmon.c                  | 460 ++++++++++++++----
+ 3 files changed, 401 insertions(+), 99 deletions(-)
 
-> Back to the driver section,
-> do I still need to use the register to confirm again whether this
-> SubPMIC used now is MT6372 and record this information? (using
-> 'mt6370_check_vendor_info()')
-> I am afraid that the user who uses the MT6370 hardware, but the DT
-> compatible string is set to 'mediatek,mt6372-backlight'.
-> This may cause errors when update/get brightness values.
-> So I hope the driver here can check again to make sure the
-> 'default-brightness', 'max-brightness', can be updated/got correctly.
-> I don't know if this will make you feel redundant if I do this??
+-- 
+2.34.1
 
-Yes, it's good idea to check the hardware model during probe. I'd
-suggest just reporting this as an error ("Buggy DT, wrong compatible
-string") rather than trying to re-intepret the parameters.
-
-
-Daniel.
