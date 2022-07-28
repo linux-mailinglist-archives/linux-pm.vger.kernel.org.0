@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76E0584356
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16B7584357
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiG1Pl5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 11:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
+        id S232004AbiG1Pl6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 11:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbiG1Pl5 (ORCPT
+        with ESMTP id S231928AbiG1Pl5 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085C468DD8
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:56 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:41:53 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B19E675B7
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:57 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:41:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659022914;
+        s=2020; t=1659022915;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fqn2BrhshjUeCi875dEucc4Cn69MISEXOC+QHeSMyiU=;
-        b=FNBqLPuR08TUQefb+XPVZMORqL0TJFexF2jNVyNir6ds8iu8wya3Btq6xlziT1GScl1W5q
-        d8qLAj/IHnVLast7P1Q93pT1f8jTUykuOcZFonmq8phxUdiLzr49w2hgSJbfGpxVVdl6fX
-        F0LU3YeZJO/00TRfzQEUgmML6fHJQPHtqGDZrrP+nrAeb4sux3QH1NTgOT/V9KiaWco5Gp
-        xQQoW5x0CyVDVoqDKqdKQEGAtcw1G2vqkzXcgiJXg9huHxq9ZqT5wA/AKS6aiFCb/iBDq3
-        mlAS40GLB4u20RGLN1Hpfcomu8DVIDrOlh7PV/SFKh32XWBGjEgWnxwqichZlw==
+        bh=pCuh1/7iooYsRMKgxvE8bCmp1t9D1HqRBxEA8GkF+5Y=;
+        b=ba1g+eP29bBmU1nnL8CTcsCXV96ApsVZS2Bvl+d2qQF8AZqw+nYgaJNJCOaT+eKeb0rmlU
+        VQN0OQcB+pRPX46qid4VWjNFdyt/jVfXVXGms6NpG5dLpG+Xlo47vY9Omw32YOv9HYCDaS
+        aT50HB8bDunZvUPl+Bj+gaZwB3RrqzohmbplJ0akWAHXh4Y7DwYy5SgI5u6WDFt9jT8CC6
+        XoSF4Z7nqj76Rmg77I0LZcGnAkjAPe5PBXKtKG228fsgCVWSSojC1IbJ0+NXvIg58zNGJX
+        NfLQChPp5qISVklKPBJQ5pApGFP0C14m46duJDxskOLpqCEuPw9k0Vnxqtgwmw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659022914;
+        s=2020e; t=1659022915;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fqn2BrhshjUeCi875dEucc4Cn69MISEXOC+QHeSMyiU=;
-        b=j594XFxA/N4NXJjiasRAFH9Bekg9lEFISg5XMMusoaYQWL90Fho1bHgYMxKqPI60aX/08U
-        65rDdTQIe9t6DPAg==
+        bh=pCuh1/7iooYsRMKgxvE8bCmp1t9D1HqRBxEA8GkF+5Y=;
+        b=ACx9ZaYYNQNrLJ5VUzNHcV0V4jvSLRAK9JzHPUDxo6SBzYDqLSRutiJzJTfYBLjkUe+lSK
+        EQHDQRXbaXhtUPDw==
 From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/u8500: Remove the get_trend function
+Subject: [thermal: thermal/next] thermal/drivers/tegra: Remove get_trend function
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>, rui.zhang@intel.com,
-        amitk@kernel.org
-In-Reply-To: <20220616202537.303655-3-daniel.lezcano@linaro.org>
-References: <20220616202537.303655-3-daniel.lezcano@linaro.org>
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20220616202537.303655-2-daniel.lezcano@linaro.org>
+References: <20220616202537.303655-2-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Message-ID: <165902291348.15455.7980934224505888475.tip-bot2@tip-bot2>
+Message-ID: <165902291444.15455.4376455696379488120.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,112 +65,74 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     66a0b101efca70097a14aece9c76bc24cd0da119
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//66a0b101efca70097a14aece9c76bc24cd0da119
+Commit-ID:     afbeb99e2e33df7cb0833f94128320989c58d6d2
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//afbeb99e2e33df7cb0833f94128320989c58d6d2
 Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Thu, 16 Jun 2022 22:25:37 +02:00
+AuthorDate:    Thu, 16 Jun 2022 22:25:36 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 28 Jul 2022 17:29:46 +02:00
 
-thermal/drivers/u8500: Remove the get_trend function
+thermal/drivers/tegra: Remove get_trend function
 
-The get_trend function relies on the interrupt to set the raising or
-dropping trend. However the interpolated temperature is already giving
-the temperature information to the thermal framework which is able to
-deduce the trend.
+The get_trend function does already what the generic framework does.
 
-Remove the trend code.
+Remove it.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20220616202537.303655-3-daniel.lezcano@linaro.org
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Link: https://lore.kernel.org/r/20220616202537.303655-2-daniel.lezcano@linaro.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/db8500_thermal.c | 26 ++++----------------------
- 1 file changed, 4 insertions(+), 22 deletions(-)
+ drivers/thermal/tegra/soctherm.c | 32 +-------------------------------
+ 1 file changed, 32 deletions(-)
 
-diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
-index 21d4d6e..ed40cfd 100644
---- a/drivers/thermal/db8500_thermal.c
-+++ b/drivers/thermal/db8500_thermal.c
-@@ -53,7 +53,6 @@ static const unsigned long db8500_thermal_points[] = {
- 
- struct db8500_thermal_zone {
- 	struct thermal_zone_device *tz;
--	enum thermal_trend trend;
- 	unsigned long interpolated_temp;
- 	unsigned int cur_index;
- };
-@@ -73,24 +72,12 @@ static int db8500_thermal_get_temp(void *data, int *temp)
+diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
+index 210325f..825eab5 100644
+--- a/drivers/thermal/tegra/soctherm.c
++++ b/drivers/thermal/tegra/soctherm.c
+@@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void *data, int trip, int temp)
  	return 0;
  }
  
--/* Callback to get temperature changing trend */
--static int db8500_thermal_get_trend(void *data, int trip, enum thermal_trend *trend)
+-static int tegra_thermctl_get_trend(void *data, int trip,
+-				    enum thermal_trend *trend)
 -{
--	struct db8500_thermal_zone *th = data;
+-	struct tegra_thermctl_zone *zone = data;
+-	struct thermal_zone_device *tz = zone->tz;
+-	int trip_temp, temp, last_temp, ret;
 -
--	*trend = th->trend;
+-	if (!tz)
+-		return -EINVAL;
+-
+-	ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
+-	if (ret)
+-		return ret;
+-
+-	temp = READ_ONCE(tz->temperature);
+-	last_temp = READ_ONCE(tz->last_temperature);
+-
+-	if (temp > trip_temp) {
+-		if (temp >= last_temp)
+-			*trend = THERMAL_TREND_RAISING;
+-		else
+-			*trend = THERMAL_TREND_STABLE;
+-	} else if (temp < trip_temp) {
+-		*trend = THERMAL_TREND_DROPPING;
+-	} else {
+-		*trend = THERMAL_TREND_STABLE;
+-	}
 -
 -	return 0;
 -}
 -
- static struct thermal_zone_of_device_ops thdev_ops = {
- 	.get_temp = db8500_thermal_get_temp,
--	.get_trend = db8500_thermal_get_trend,
+ static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
+ {
+ 	u32 r;
+@@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data, int lo, int hi)
+ static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
+ 	.get_temp = tegra_thermctl_get_temp,
+ 	.set_trip_temp = tegra_thermctl_set_trip_temp,
+-	.get_trend = tegra_thermctl_get_trend,
+ 	.set_trips = tegra_thermctl_set_trips,
  };
  
- static void db8500_thermal_update_config(struct db8500_thermal_zone *th,
- 					 unsigned int idx,
--					 enum thermal_trend trend,
- 					 unsigned long next_low,
- 					 unsigned long next_high)
- {
-@@ -98,7 +85,6 @@ static void db8500_thermal_update_config(struct db8500_thermal_zone *th,
- 
- 	th->cur_index = idx;
- 	th->interpolated_temp = (next_low + next_high)/2;
--	th->trend = trend;
- 
- 	/*
- 	 * The PRCMU accept absolute temperatures in celsius so divide
-@@ -127,8 +113,7 @@ static irqreturn_t prcmu_low_irq_handler(int irq, void *irq_data)
- 	}
- 	idx -= 1;
- 
--	db8500_thermal_update_config(th, idx, THERMAL_TREND_DROPPING,
--				     next_low, next_high);
-+	db8500_thermal_update_config(th, idx, next_low, next_high);
- 	dev_dbg(&th->tz->device,
- 		"PRCMU set max %ld, min %ld\n", next_high, next_low);
- 
-@@ -149,8 +134,7 @@ static irqreturn_t prcmu_high_irq_handler(int irq, void *irq_data)
- 		next_low = db8500_thermal_points[idx];
- 		idx += 1;
- 
--		db8500_thermal_update_config(th, idx, THERMAL_TREND_RAISING,
--					     next_low, next_high);
-+		db8500_thermal_update_config(th, idx, next_low, next_high);
- 
- 		dev_dbg(&th->tz->device,
- 			"PRCMU set max %ld, min %ld\n", next_high, next_low);
-@@ -210,8 +194,7 @@ static int db8500_thermal_probe(struct platform_device *pdev)
- 	dev_info(dev, "thermal zone sensor registered\n");
- 
- 	/* Start measuring at the lowest point */
--	db8500_thermal_update_config(th, 0, THERMAL_TREND_STABLE,
--				     PRCMU_DEFAULT_LOW_TEMP,
-+	db8500_thermal_update_config(th, 0, PRCMU_DEFAULT_LOW_TEMP,
- 				     db8500_thermal_points[0]);
- 
- 	platform_set_drvdata(pdev, th);
-@@ -232,8 +215,7 @@ static int db8500_thermal_resume(struct platform_device *pdev)
- 	struct db8500_thermal_zone *th = platform_get_drvdata(pdev);
- 
- 	/* Resume and start measuring at the lowest point */
--	db8500_thermal_update_config(th, 0, THERMAL_TREND_STABLE,
--				     PRCMU_DEFAULT_LOW_TEMP,
-+	db8500_thermal_update_config(th, 0, PRCMU_DEFAULT_LOW_TEMP,
- 				     db8500_thermal_points[0]);
- 
- 	return 0;
