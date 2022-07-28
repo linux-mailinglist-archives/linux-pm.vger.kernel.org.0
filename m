@@ -2,233 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1E5583ABD
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 10:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87600583AD1
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 10:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234611AbiG1Ixt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 04:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S235172AbiG1I6T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 04:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234953AbiG1Ixs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 04:53:48 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E27A6558F
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 01:53:47 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id i8so1292357wro.11
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 01:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=9AF0C8l8seSrzx2WmUBIWSdZqGWfFBtfpdLun9U6Kz8=;
-        b=mP/mmTrHM6/k6VQpQzfSYKo6wM/3/z+WB1b8AnfbQRmYSGYo2t1YFLoEixZuoBhuPa
-         UvwY/bfbiI1uveHGmETaK6nuicHscsF/pNv7VhlbF+eeKKvhO2fJwzdDDcLkTsaAWf97
-         /JUhjOFMU/gtHAeg84LBUq0TGc3iMe7bxaxkY6gVCzMumA1b6dkhX+4a5BdRjWSDQj8z
-         LTmPqw6LTmwqIYYlHgTuQdE0ynLn2ouVfuDmtpzyXT+qDxveLv1U8r7ZXkOn6EC3Rloz
-         fVgoWX3H2vNK2SGhXDa5k0WcYY9uXbdoAopMfF9+T77xzkIk5fZc99Fpi9boaQ1IL9fE
-         5ofw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=9AF0C8l8seSrzx2WmUBIWSdZqGWfFBtfpdLun9U6Kz8=;
-        b=FVoxz80VI5YEIUGwvg3iTmEX2MKUQ6FiqWR+0vblABUu4TcSiFJaCb/sUYsSDsISwD
-         3GPxjZQw6wJI+uHRn/UDveg8wgszEtXfYavdhJC/HtjVfMHZOTmsFMePaG44UwhHQkK3
-         PIUN7oIa26G/6B9hv19QotvvGajLr075DvSTds6QzlXMpnib+WqSfwBss9p9jCOpoyb/
-         5zVkhXf2oIttgdXAgpzluJT1yefK0xLtblDnQtIkht0/DJTRTHBRvMWpuVf062kTfC5y
-         ytubol2Ow3C/QtUmFzmL95xpxaKgZ31v2EIJ+9WbW7sZUnBmFOpVB9LNbw+4dIjQ+t9K
-         iPfA==
-X-Gm-Message-State: AJIora9EsjqwnFN/gNGQv8nrffscQRuz9ojlyJ/oRUvaVelGdqtMfJl+
-        /ICESJ8UmyaOEOhKGS78HOwGFg==
-X-Google-Smtp-Source: AGRyM1tjAGtsAciOHE5CsBzVumOndSP4m4ERcdH7oyhmbdFq+OGEyGoruEpjxxeh3gBxCpR4A3Ahdw==
-X-Received: by 2002:a05:6000:1789:b0:21e:87cd:beba with SMTP id e9-20020a056000178900b0021e87cdbebamr13229704wrg.252.1658998425382;
-        Thu, 28 Jul 2022 01:53:45 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0? ([2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0])
-        by smtp.googlemail.com with ESMTPSA id n18-20020a5d67d2000000b0020fff0ea0a3sm293465wrw.116.2022.07.28.01.53.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 01:53:45 -0700 (PDT)
-Message-ID: <24250d03-b25f-e521-5abd-f36109885c36@linaro.org>
-Date:   Thu, 28 Jul 2022 10:53:43 +0200
+        with ESMTP id S235331AbiG1I6O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 04:58:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EB5665654
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 01:58:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D584106F;
+        Thu, 28 Jul 2022 01:58:13 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 254E03F73B;
+        Thu, 28 Jul 2022 01:58:12 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 09:58:09 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PSCI: Print a warning if PSCI doesn't accept PC mode
+Message-ID: <20220728085809.sct3swhs7xuls27t@bogus>
+References: <20220727182034.983727-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek
- folder
-Content-Language: en-US
-To:     Balsam CHIHI <bchihi@baylibre.com>, rafael@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-References: <20220726135506.485108-1-bchihi@baylibre.com>
- <20220726135506.485108-2-bchihi@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220726135506.485108-2-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220727182034.983727-1-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Jul 27, 2022 at 09:20:34PM +0300, Dmitry Baryshkov wrote:
+> The function psci_pd_try_set_osi_mode() will print an error if enabling
+> OSI mode fails. To ease debugging PSCI issues print corresponding
+> message if switching to PC mode fails too.
+>
 
-Hi Balsam,
+Are you seeing that even setting to PC mode failing on msm8996. The platform
+must boot in PC mode, so even if it fails we ignore so not sure if the logging
+is of much help here IMO.
 
-On 26/07/2022 15:55, Balsam CHIHI wrote:
-> Add Mediatek proprietary folder to upstream more thermal zone and cooler
-> drivers. Relocate the original thermal controller driver to it and rename
-> as soc_temp.c to show its purpose more clearly.
-
-I realize the Kconfig, Makefiles format are not consistent across the 
-boards. Before I fix this, you can comply to the format:
-
-drivers/thermal/Kconfig:
-
-menu "Mediatek thermal drivers"
-depends on ARCH_MEDIATEK || COMPILE_TEST
-source "drivers/thermal/mediatek/Kconfig"
-endmenu
-
-drivers/thermal/Makefile:
-
--obj-$(CONFIG_MTK_THERMAL)      += mtk_thermal.o
-+obj-y                          += mediatek
-
-drivers/thermal/mediatek/Kconfig:
-
-config MTK_SOC_THERMAL
-	tristate "Temperature sensor driver for MediaTek SoCs"
-	depends on HAS_IOMEM
-	depends on NVMEM
-	depends on RESET_CONTROLLER
-	help
-		Enable this option if you want to get SoC temperature
-		information for MediaTek platforms. This driver
-		configures thermal controllers to collect temperature
-		via AUXADC interface.
-
-drivers/thermal/mediatek/Makefile:
-
-obj-$(MTK_SOC_THERMAL)	+= soc_temp.o
-
-However, rename 'soc_temp' to something more SoC explicit, eg. 
-mtxxx_thermal.c
-
-Thanks
-
-   -- Daniel
-
-
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->   drivers/thermal/Kconfig                       | 14 ++++-------
->   drivers/thermal/Makefile                      |  2 +-
->   drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
->   drivers/thermal/mediatek/Makefile             |  1 +
->   .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
->   5 files changed, 29 insertions(+), 11 deletions(-)
->   create mode 100644 drivers/thermal/mediatek/Kconfig
->   create mode 100644 drivers/thermal/mediatek/Makefile
->   rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+>  drivers/firmware/psci/psci.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 0e5cc948373c..ecba8d6e313b 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -412,16 +412,10 @@ config DA9062_THERMAL
->   	  zone.
->   	  Compatible with the DA9062 and DA9061 PMICs.
->   
-> -config MTK_THERMAL
-> -	tristate "Temperature sensor driver for mediatek SoCs"
-> -	depends on ARCH_MEDIATEK || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	depends on NVMEM || NVMEM=n
-> -	depends on RESET_CONTROLLER
-> -	default y
-> -	help
-> -	  Enable this option if you want to have support for thermal management
-> -	  controller present in Mediatek SoCs
-> +menu "Mediatek thermal drivers"
-> +depends on ARCH_MEDIATEK || COMPILE_TEST
-> +source "drivers/thermal/mediatek/Kconfig"
-> +endmenu
->   
->   config AMLOGIC_THERMAL
->   	tristate "Amlogic Thermal Support"
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index def8e1a0399c..3c00e864ad55 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -55,7 +55,7 @@ obj-y				+= st/
->   obj-$(CONFIG_QCOM_TSENS)	+= qcom/
->   obj-y				+= tegra/
->   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
->   obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
->   obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
-> new file mode 100644
-> index 000000000000..9c41e9079fc3
-> --- /dev/null
-> +++ b/drivers/thermal/mediatek/Kconfig
-> @@ -0,0 +1,23 @@
-> +config MTK_THERMAL
-> +	tristate "MediaTek thermal drivers"
-> +	depends on THERMAL_OF
-> +	help
-> +		This is the option for MediaTek thermal software
-> +		solutions. Please enable corresponding options to
-> +		get temperature information from thermal sensors or
-> +		turn on throttle mechaisms for thermal mitigation.
-> +
-> +if MTK_THERMAL
-> +
-> +config MTK_SOC_THERMAL
-> +	tristate "Temperature sensor driver for MediaTek SoCs"
-> +	depends on HAS_IOMEM
-> +	depends on NVMEM
-> +	depends on RESET_CONTROLLER
-> +	help
-> +		Enable this option if you want to get SoC temperature
-> +		information for MediaTek platforms. This driver
-> +		configures thermal controllers to collect temperature
-> +		via AUXADC interface.
-> +
-> +endif
-> diff --git a/drivers/thermal/mediatek/Makefile b/drivers/thermal/mediatek/Makefile
-> new file mode 100644
-> index 000000000000..4b4cb04a358f
-> --- /dev/null
-> +++ b/drivers/thermal/mediatek/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_MTK_SOC_THERMAL)		+= soc_temp.o
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mediatek/soc_temp.c
-> similarity index 100%
-> rename from drivers/thermal/mtk_thermal.c
-> rename to drivers/thermal/mediatek/soc_temp.c
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index cfb448eabdaa..b907768eea01 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -597,7 +597,9 @@ static int __init psci_1_0_init(struct device_node *np)
+>  		pr_info("OSI mode supported.\n");
+>  
+>  		/* Default to PC mode. */
+> -		psci_set_osi_mode(false);
+> +		err = psci_set_osi_mode(false);
+> +		if (err)
+> +			pr_info("setting PC mode failed with %d\n", err);
 
+Since we don't care about error value here, does it make sense to add the
+log in psci_set_osi_mode() that covers both PC and OSI case whenever it is
+called ?
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regards,
+Sudeep
