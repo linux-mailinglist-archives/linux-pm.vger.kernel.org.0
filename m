@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDA158434D
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA76758434E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiG1Plt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 11:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
+        id S231897AbiG1Plu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 11:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiG1Pls (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:48 -0400
+        with ESMTP id S230140AbiG1Plt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:49 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F86368DF0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:47 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:41:44 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637DF675B7
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:48 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:41:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659022906;
+        s=2020; t=1659022907;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D9Z0nBO4feTdDES5we4nSo79baCg7t2QErLjV3s8Y5A=;
-        b=akpTeIpJuNHSKWeU5P3pRsNLPBhN6DnEhp3GHc74qJbut+GxpMzWeq2ADFoH/0o10HGSpP
-        vDoTNijh3hyAyv1iIZVZpiTRu+IE153+nfopvddqBVdFjmOcbC7L4uF1dz8Hfjx79DSax8
-        Ysax24Wxa1j2tFB4zot/3YYLOFMlI6v6iXFlmkd40RzLcdG/7gWN8EqqB2825te6EdFKOr
-        LvJ6USRuuHEwTk2HvDBuzA2SA+J2AUdavReMkJPaUY5KVrC7aifzxugUk8ewNe9X596vPm
-        c79lZsWrs5AmOxomcooeYsPzIs3ujilkEJvdpVQeLHZen12+0t0+8T1J6Vmr3g==
+        bh=luoPkByJ58tkZ49XoDClSSRGoc6PTNHqpjqOrkJWTU8=;
+        b=rl1sMcbX1YMrveEHqKTvT3naThAAytC5qILCA/mglnHYbTm7hHhU4UfAX1uqxRtvRwO5iu
+        e75DcqgjBA6Z5Qwd/gFKw302DawMB9xx6Sdny3U8G6EnYze9WlEhs7QfhSmFSWcm954Icc
+        qyWIUOouyCzkULEOg/G9h6w08JOlpJzEHi0QF8AWwJA7MW4v7PaRYscWLiaFQw1gyuIF/F
+        xEojVtZpDvLaXS2Io3V92aM2sDEMKWtH3F6POdRtM4B6EeUa0qLQGAn/W8JuUEHn8k+NJp
+        gQo0W8Az77zJ4oyKktC0bh6FXmUkkisf9ohYgpyalJUYnCbgGzQbXbg5Loht+A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659022906;
+        s=2020e; t=1659022907;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D9Z0nBO4feTdDES5we4nSo79baCg7t2QErLjV3s8Y5A=;
-        b=1tZ7gY7vZyXtQiawwaTnDqgOePWouxHOwgb/0QrYRDBO4YtjDsm6Y6JtWtCh9g9HwdDbBs
-        kVDAPadqx+vra7Cw==
-From:   "thermal-bot for Dmitry Baryshkov" <tip-bot2@linutronix.de>
+        bh=luoPkByJ58tkZ49XoDClSSRGoc6PTNHqpjqOrkJWTU8=;
+        b=LXQFRg6dukO4HXLlOl/untLjvywcTEYzj0aaaS7Rr4VyrzVfqicb9TNVImuaibwbJCJhcA
+        Vl4Gxh04jJMyc6Cg==
+From:   "thermal-bot for Yang Li" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/qcom/temp-alarm: Register
- thermal zones as hwmon sensors
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+Subject: [thermal: thermal/next] thermal/drivers/u8500: Remove unnecessary
+ print function dev_err()
+Cc:     Yang Li <yang.lee@linux.alibaba.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220719054940.755907-1-dmitry.baryshkov@linaro.org>
-References: <20220719054940.755907-1-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220719003556.74460-1-yang.lee@linux.alibaba.com>
+References: <20220719003556.74460-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Message-ID: <165902290488.15455.7645927052363659067.tip-bot2@tip-bot2>
+Message-ID: <165902290593.15455.4628253169016805715.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,46 +66,54 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     fb55b0129787ec98eace23ddccd429188d318574
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//fb55b0129787ec98eace23ddccd429188d318574
-Author:        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-AuthorDate:    Tue, 19 Jul 2022 08:49:39 +03:00
+Commit-ID:     8cf18eea46e24a337c5a095edeed42ca03e97811
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//8cf18eea46e24a337c5a095edeed42ca03e97811
+Author:        Yang Li <yang.lee@linux.alibaba.com>
+AuthorDate:    Tue, 19 Jul 2022 08:35:56 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 28 Jul 2022 17:29:50 +02:00
 
-thermal/drivers/qcom/temp-alarm: Register thermal zones as hwmon sensors
+thermal/drivers/u8500: Remove unnecessary print function dev_err()
 
-Register thermal zones as hwmon sensors to let userspace read
-temperatures using standard hwmon interface.
+The print function dev_err() is redundant because platform_get_irq()
+already prints an error.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Link: https://lore.kernel.org/r/20220719054940.755907-1-dmitry.baryshkov@linaro.org
+Eliminate the follow coccicheck warnings:
+./drivers/thermal/db8500_thermal.c:162:2-9: line 162 is redundant because platform_get_irq() already prints an error
+./drivers/thermal/db8500_thermal.c:176:2-9: line 176 is redundant because platform_get_irq() already prints an error
+
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Link: https://lore.kernel.org/r/20220719003556.74460-1-yang.lee@linux.alibaba.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/thermal/db8500_thermal.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-index 7419e19..770f82c 100644
---- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-+++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-@@ -16,6 +16,7 @@
- #include <linux/thermal.h>
+diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
+index ed40cfd..121cf85 100644
+--- a/drivers/thermal/db8500_thermal.c
++++ b/drivers/thermal/db8500_thermal.c
+@@ -158,10 +158,8 @@ static int db8500_thermal_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
- #include "../thermal_core.h"
-+#include "../thermal_hwmon.h"
+ 	low_irq = platform_get_irq_byname(pdev, "IRQ_HOTMON_LOW");
+-	if (low_irq < 0) {
+-		dev_err(dev, "Get IRQ_HOTMON_LOW failed\n");
++	if (low_irq < 0)
+ 		return low_irq;
+-	}
  
- #define QPNP_TM_REG_DIG_MAJOR		0x01
- #define QPNP_TM_REG_TYPE		0x04
-@@ -458,6 +459,10 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 		return ret;
+ 	ret = devm_request_threaded_irq(dev, low_irq, NULL,
+ 		prcmu_low_irq_handler, IRQF_NO_SUSPEND | IRQF_ONESHOT,
+@@ -172,10 +170,8 @@ static int db8500_thermal_probe(struct platform_device *pdev)
  	}
  
-+	if (devm_thermal_add_hwmon_sysfs(chip->tz_dev))
-+		dev_warn(&pdev->dev,
-+			 "Failed to add hwmon sysfs attributes\n");
-+
- 	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL, qpnp_tm_isr,
- 					IRQF_ONESHOT, node->name, chip);
- 	if (ret < 0)
+ 	high_irq = platform_get_irq_byname(pdev, "IRQ_HOTMON_HIGH");
+-	if (high_irq < 0) {
+-		dev_err(dev, "Get IRQ_HOTMON_HIGH failed\n");
++	if (high_irq < 0)
+ 		return high_irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(dev, high_irq, NULL,
+ 		prcmu_high_irq_handler, IRQF_NO_SUSPEND | IRQF_ONESHOT,
