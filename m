@@ -2,137 +2,237 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9AA584362
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF395844E2
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 19:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiG1PmI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 11:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S232064AbiG1RVB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 13:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiG1PmH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:42:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F916675B7
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:42:06 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:42:03 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659022925;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xks27Dnp58BMs2V8Nyxlu0vIIWDNUlTkVog3vDhZhBU=;
-        b=mY4Wh17pt1Y3pe/KWGtKz6m64LdCcnkJRDJQnU18Eg05uBjaXHwLjmp3rjlxhIR9FtkfQl
-        xyHBuT6i9/uL+20yPdvw037mEDjBUPrDJSraF0J0YtThFMU0wrvycFfWkV2JZxmDUn9bTh
-        weX/5Q+mWeZgsg7CoUugx85nwKu2GR9zuFYMr1RpkEh8cBKV8CsNYCKJg9k8LeY/rjEK7S
-        /UHCKHlxP+PgRsR1ilZMQz/DL83tMn9uXRhwMyLM28gC7Tbu3kAYFGWHBwiChhVeYJ34MX
-        VdbuN9OLfK1Dhcgn1YEwv5NhJFaNuiO174XxLgaThS4m/E8ug2GLv2pvbGd6+g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659022925;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xks27Dnp58BMs2V8Nyxlu0vIIWDNUlTkVog3vDhZhBU=;
-        b=IxogYHEnsXIHuu4UJzy5/ZSH7x2FZuTQ7usAYr/8i6NrVhyTektWyo9ptWD7FAHMaCjSJJ
-        LTsUAnVz0yF6/4Cg==
-From:   "thermal-bot for Lukasz Luba" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-pm@vger.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] drivers/thermal/cpufreq_cooling: Use private
- callback ops for each cooling device
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220613124327.30766-2-lukasz.luba@arm.com>
-References: <20220613124327.30766-2-lukasz.luba@arm.com>
+        with ESMTP id S229461AbiG1RU5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 13:20:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086A55B79D;
+        Thu, 28 Jul 2022 10:20:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9229461D0F;
+        Thu, 28 Jul 2022 17:20:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75B3C433D7;
+        Thu, 28 Jul 2022 17:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659028854;
+        bh=3juGR+P+/PoNu1lEhZFgztJ6A9LmEO7Lb+rh9Y4NDdw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Ajcg/8L4izAZKa2mPe4A6mwD2xhNPSF6zD8jqYYYRNqfhpnanJCwPLkeDTtzMAAXY
+         M7oUXZ6CZuH31IjVxAqM2gRnsWZITNKb55wlZ5JnD/DUCRDg3UdeAIrzeX0lNHjHAR
+         wzgi3C8wJdIpBMqt7sc3STjd7C0uykM6U86/xrKMdBkv3A6gpbtO4hXjJ5l+TjHaLy
+         e4DKSoCgdb1tzebEFm0O9AJWb9AqCOKWaWW3sVozalRIPGLkf5E1tw9aRE4zu/+akq
+         X3FcajNE+AfhyfG4rrsgNdfZt/xVPEzBnwFe9tFjDbwwql6CH8YXjM30w46DcxQYCb
+         8dZ4kaIUmww0Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9739D5C0B3E; Thu, 28 Jul 2022 10:20:53 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 10:20:53 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Michel Lespinasse <michel@lespinasse.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org, rh0@fb.com
+Subject: Re: [PATCH 04/36] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
+Message-ID: <20220728172053.GA3607379@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220608142723.103523089@infradead.org>
+ <20220608144516.172460444@infradead.org>
+ <20220725194306.GA14746@lespinasse.org>
 MIME-Version: 1.0
-Message-ID: <165902292398.15455.9515377508059027850.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725194306.GA14746@lespinasse.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the thermal/next branch of thermal:
+On Mon, Jul 25, 2022 at 12:43:06PM -0700, Michel Lespinasse wrote:
+> On Wed, Jun 08, 2022 at 04:27:27PM +0200, Peter Zijlstra wrote:
+> > Commit c227233ad64c ("intel_idle: enable interrupts before C1 on
+> > Xeons") wrecked intel_idle in two ways:
+> > 
+> >  - must not have tracing in idle functions
+> >  - must return with IRQs disabled
+> > 
+> > Additionally, it added a branch for no good reason.
+> > 
+> > Fixes: c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> After this change was introduced, I am seeing "WARNING: suspicious RCU
+> usage" when booting a kernel with debug options compiled in. Please
+> see the attached dmesg output. The issue starts with commit 32d4fd5751ea
+> and is still present in v5.19-rc8.
+> 
+> I'm not sure, is this too late to fix or revert in v5.19 final ?
 
-Commit-ID:     3cbf6a8ab70b21de75bc389d384911392cf7f616
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//3cbf6a8ab70b21de75bc389d384911392cf7f616
-Author:        Lukasz Luba <lukasz.luba@arm.com>
-AuthorDate:    Mon, 13 Jun 2022 13:43:24 +01:00
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 28 Jul 2022 17:29:41 +02:00
+I finally got a chance to take a quick look at this.
 
-drivers/thermal/cpufreq_cooling: Use private callback ops for each cooling device
+The rcu_eqs_exit() function is making a lockdep complaint about
+being invoked with interrupts enabled.  This function is called from
+rcu_idle_exit(), which is an expected code path from cpuidle_enter_state()
+via its call to rcu_idle_exit().  Except that rcu_idle_exit() disables
+interrupts before invoking rcu_eqs_exit().
 
-It is very unlikely that one CPU cluster would have the EM and some other
-won't have it (because EM registration failed or DT lacks needed entry).
-Although, we should avoid modifying global variable with callbacks anyway.
-Redesign this and add safety for such situation.
+The only other call to rcu_idle_exit() does not disable interrupts,
+but it is via rcu_user_exit(), which would be a very odd choice for
+cpuidle_enter_state().
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://lore.kernel.org/r/20220613124327.30766-2-lukasz.luba@arm.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/cpufreq_cooling.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+It seems unlikely, but it might be that it is the use of local_irq_save()
+instead of raw_local_irq_save() within rcu_idle_exit() that is causing
+the trouble.  If this is the case, then the commit shown below would
+help.  Note that this commit removes the warning from lockdep, so it
+is necessary to build the kernel with CONFIG_RCU_EQS_DEBUG=y to enable
+equivalent debugging.
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index b8151d9..ad8b86f 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -59,6 +59,7 @@ struct time_in_idle {
-  * @cdev: thermal_cooling_device pointer to keep track of the
-  *	registered cooling device.
-  * @policy: cpufreq policy.
-+ * @cooling_ops: cpufreq callbacks to thermal cooling device ops
-  * @idle_time: idle time stats
-  * @qos_req: PM QoS contraint to apply
-  *
-@@ -71,6 +72,7 @@ struct cpufreq_cooling_device {
- 	unsigned int max_level;
- 	struct em_perf_domain *em;
- 	struct cpufreq_policy *policy;
-+	struct thermal_cooling_device_ops cooling_ops;
- #ifndef CONFIG_SMP
- 	struct time_in_idle *idle_time;
- #endif
-@@ -485,14 +487,6 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
- 	return ret;
+Could you please try your test with the -rce commit shown below applied?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit ed4ae5eff4b38797607cbdd80da394149110fb37
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Tue May 17 21:00:04 2022 -0700
+
+    rcu: Apply noinstr to rcu_idle_enter() and rcu_idle_exit()
+    
+    This commit applies the "noinstr" tag to the rcu_idle_enter() and
+    rcu_idle_exit() functions, which are invoked from portions of the idle
+    loop that cannot be instrumented.  These tags require reworking the
+    rcu_eqs_enter() and rcu_eqs_exit() functions that these two functions
+    invoke in order to cause them to use normal assertions rather than
+    lockdep.  In addition, within rcu_idle_exit(), the raw versions of
+    local_irq_save() and local_irq_restore() are used, again to avoid issues
+    with lockdep in uninstrumented code.
+    
+    This patch is based in part on an earlier patch by Jiri Olsa, discussions
+    with Peter Zijlstra and Frederic Weisbecker, earlier changes by Thomas
+    Gleixner, and off-list discussions with Yonghong Song.
+    
+    Link: https://lore.kernel.org/lkml/20220515203653.4039075-1-jolsa@kernel.org/
+    Reported-by: Jiri Olsa <jolsa@kernel.org>
+    Reported-by: Alexei Starovoitov <ast@kernel.org>
+    Reported-by: Andrii Nakryiko <andrii@kernel.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Reviewed-by: Yonghong Song <yhs@fb.com>
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index c25ba442044a6..9a5edab5558c9 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -631,8 +631,8 @@ static noinstr void rcu_eqs_enter(bool user)
+ 		return;
+ 	}
+ 
+-	lockdep_assert_irqs_disabled();
+ 	instrumentation_begin();
++	lockdep_assert_irqs_disabled();
+ 	trace_rcu_dyntick(TPS("Start"), rdp->dynticks_nesting, 0, atomic_read(&rdp->dynticks));
+ 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !user && !is_idle_task(current));
+ 	rcu_preempt_deferred_qs(current);
+@@ -659,9 +659,9 @@ static noinstr void rcu_eqs_enter(bool user)
+  * If you add or remove a call to rcu_idle_enter(), be sure to test with
+  * CONFIG_RCU_EQS_DEBUG=y.
+  */
+-void rcu_idle_enter(void)
++void noinstr rcu_idle_enter(void)
+ {
+-	lockdep_assert_irqs_disabled();
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !raw_irqs_disabled());
+ 	rcu_eqs_enter(false);
  }
+ EXPORT_SYMBOL_GPL(rcu_idle_enter);
+@@ -861,7 +861,7 @@ static void noinstr rcu_eqs_exit(bool user)
+ 	struct rcu_data *rdp;
+ 	long oldval;
  
--/* Bind cpufreq callbacks to thermal cooling device ops */
--
--static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
--	.get_max_state		= cpufreq_get_max_state,
--	.get_cur_state		= cpufreq_get_cur_state,
--	.set_cur_state		= cpufreq_set_cur_state,
--};
--
- /**
-  * __cpufreq_cooling_register - helper function to create cpufreq cooling device
-  * @np: a valid struct device_node to the cooling device device tree node
-@@ -554,7 +548,10 @@ __cpufreq_cooling_register(struct device_node *np,
- 	/* max_level is an index, not a counter */
- 	cpufreq_cdev->max_level = i - 1;
+-	lockdep_assert_irqs_disabled();
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !raw_irqs_disabled());
+ 	rdp = this_cpu_ptr(&rcu_data);
+ 	oldval = rdp->dynticks_nesting;
+ 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && oldval < 0);
+@@ -896,13 +896,13 @@ static void noinstr rcu_eqs_exit(bool user)
+  * If you add or remove a call to rcu_idle_exit(), be sure to test with
+  * CONFIG_RCU_EQS_DEBUG=y.
+  */
+-void rcu_idle_exit(void)
++void noinstr rcu_idle_exit(void)
+ {
+ 	unsigned long flags;
  
--	cooling_ops = &cpufreq_cooling_ops;
-+	cooling_ops = &cpufreq_cdev->cooling_ops;
-+	cooling_ops->get_max_state = cpufreq_get_max_state;
-+	cooling_ops->get_cur_state = cpufreq_get_cur_state;
-+	cooling_ops->set_cur_state = cpufreq_set_cur_state;
+-	local_irq_save(flags);
++	raw_local_irq_save(flags);
+ 	rcu_eqs_exit(false);
+-	local_irq_restore(flags);
++	raw_local_irq_restore(flags);
+ }
+ EXPORT_SYMBOL_GPL(rcu_idle_exit);
  
- #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
- 	if (em_is_sane(cpufreq_cdev, em)) {
