@@ -2,140 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F057A583A77
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 10:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1E5583ABD
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 10:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbiG1IkS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 04:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S234611AbiG1Ixt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 04:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234381AbiG1IkS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 04:40:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 555AC240B3;
-        Thu, 28 Jul 2022 01:40:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF20F106F;
-        Thu, 28 Jul 2022 01:40:16 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D4863F73B;
-        Thu, 28 Jul 2022 01:40:15 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 09:40:12 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vinod Koul <vinod.koul@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: PSCI domains without OSI support
-Message-ID: <20220728084012.jjbmycplye3zuaok@bogus>
-References: <CAA8EJpr2S-81+q-vjmk5i+T-JwaadkRpjCr_oGi7fMf7o3iH3A@mail.gmail.com>
- <20220727111410.bglx2u26456ray2u@bogus>
- <CAA8EJprNPJfGjkq2=hexbZn-=t2wKG6ZjSm5Mcbo4JuPQ-sc-A@mail.gmail.com>
+        with ESMTP id S234953AbiG1Ixs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 04:53:48 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E27A6558F
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 01:53:47 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id i8so1292357wro.11
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 01:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=9AF0C8l8seSrzx2WmUBIWSdZqGWfFBtfpdLun9U6Kz8=;
+        b=mP/mmTrHM6/k6VQpQzfSYKo6wM/3/z+WB1b8AnfbQRmYSGYo2t1YFLoEixZuoBhuPa
+         UvwY/bfbiI1uveHGmETaK6nuicHscsF/pNv7VhlbF+eeKKvhO2fJwzdDDcLkTsaAWf97
+         /JUhjOFMU/gtHAeg84LBUq0TGc3iMe7bxaxkY6gVCzMumA1b6dkhX+4a5BdRjWSDQj8z
+         LTmPqw6LTmwqIYYlHgTuQdE0ynLn2ouVfuDmtpzyXT+qDxveLv1U8r7ZXkOn6EC3Rloz
+         fVgoWX3H2vNK2SGhXDa5k0WcYY9uXbdoAopMfF9+T77xzkIk5fZc99Fpi9boaQ1IL9fE
+         5ofw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=9AF0C8l8seSrzx2WmUBIWSdZqGWfFBtfpdLun9U6Kz8=;
+        b=FVoxz80VI5YEIUGwvg3iTmEX2MKUQ6FiqWR+0vblABUu4TcSiFJaCb/sUYsSDsISwD
+         3GPxjZQw6wJI+uHRn/UDveg8wgszEtXfYavdhJC/HtjVfMHZOTmsFMePaG44UwhHQkK3
+         PIUN7oIa26G/6B9hv19QotvvGajLr075DvSTds6QzlXMpnib+WqSfwBss9p9jCOpoyb/
+         5zVkhXf2oIttgdXAgpzluJT1yefK0xLtblDnQtIkht0/DJTRTHBRvMWpuVf062kTfC5y
+         ytubol2Ow3C/QtUmFzmL95xpxaKgZ31v2EIJ+9WbW7sZUnBmFOpVB9LNbw+4dIjQ+t9K
+         iPfA==
+X-Gm-Message-State: AJIora9EsjqwnFN/gNGQv8nrffscQRuz9ojlyJ/oRUvaVelGdqtMfJl+
+        /ICESJ8UmyaOEOhKGS78HOwGFg==
+X-Google-Smtp-Source: AGRyM1tjAGtsAciOHE5CsBzVumOndSP4m4ERcdH7oyhmbdFq+OGEyGoruEpjxxeh3gBxCpR4A3Ahdw==
+X-Received: by 2002:a05:6000:1789:b0:21e:87cd:beba with SMTP id e9-20020a056000178900b0021e87cdbebamr13229704wrg.252.1658998425382;
+        Thu, 28 Jul 2022 01:53:45 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0? ([2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0])
+        by smtp.googlemail.com with ESMTPSA id n18-20020a5d67d2000000b0020fff0ea0a3sm293465wrw.116.2022.07.28.01.53.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 01:53:45 -0700 (PDT)
+Message-ID: <24250d03-b25f-e521-5abd-f36109885c36@linaro.org>
+Date:   Thu, 28 Jul 2022 10:53:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek
+ folder
+Content-Language: en-US
+To:     Balsam CHIHI <bchihi@baylibre.com>, rafael@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+References: <20220726135506.485108-1-bchihi@baylibre.com>
+ <20220726135506.485108-2-bchihi@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220726135506.485108-2-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAA8EJprNPJfGjkq2=hexbZn-=t2wKG6ZjSm5Mcbo4JuPQ-sc-A@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 04:24:22PM +0300, Dmitry Baryshkov wrote:
-> On Wed, 27 Jul 2022 at 14:14, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Wed, Jul 27, 2022 at 12:09:27PM +0300, Dmitry Baryshkov wrote:
-> > > Hi,
-> > >
-> > > Lately I have been working on improving the msm8996 platform support.
-> > > Vendor kernel seems to support domain-like idle (see [1], [2]).
-> > > However when I tried changing upstream msm8996.dtsi to use PSCI
-> > > domains, I faced the firmware reporting NOT_SUPPORTED to an attempt to
-> > > enable OSI (thus rendering PSCI domains useless, as they are now
-> > > marked with ALWAYS_ON).
-> > >
-> >
-> > That's not good to hear 🙁.
-> >
-> > > I noticed that vendor kernel makes a call to cpu_suspend() with
-> > > power_state following the original format (described in PSCI spec
-> > > 5.4.2.1). What would be the best way to support this?
-> >
-> > And why is this not possible with the existing code ? Not sure if I
-> > understood it right, I am assuming you are mentioning that it is not
-> > possible.
->
-> It's not possible with the cpuidle-psci-domains.c. The driver marks
-> all genpds as ALWAYS_ON, thus making sure that they are never
-> suspended.
->
 
-That doesn't sound correct. I am sure Ulf has tried this on one of SDM
-platform for sure when it was merged.
+Hi Balsam,
 
-> > > - Allow DTS forcing the PSCI power domains even if OSI enablement fails?
-> >
-> > Meaning DTS flag for this ? If OSI enable fails, why would you want to
-> > still proceed. It is non-compliant and must be fixed if the firmware
-> > supports OSI and expects OSPM to use the same.
->
-> I'm not sure at this moment. PSCI firmware reports that OSI mode is
-> supported, but then when psci_pd_try_set_osi_mode() tries to switch
-> into OSI mode, it gets NOT_SUPPORTED.
+On 26/07/2022 15:55, Balsam CHIHI wrote:
+> Add Mediatek proprietary folder to upstream more thermal zone and cooler
+> drivers. Relocate the original thermal controller driver to it and rename
+> as soc_temp.c to show its purpose more clearly.
 
-Yikes, fix the damn broken firmware. That is utter non-sense. I don't
-understand why would the firmware authors enable some feature before it
-is ready.
+I realize the Kconfig, Makefiles format are not consistent across the 
+boards. Before I fix this, you can comply to the format:
 
-> Just for the sake of completeness, I added a print to the psci.c to
-> dump the result of the psci_set_osi_mode(false). It also returns
-> NOT_SUPPORTED!
->
+drivers/thermal/Kconfig:
 
-Well it is simply broken then. Not tested firmware, so please don't
-attempt to use OSI if it is so fundamentally broken. I find it hard to
-accept the argument that well it works just that the query API is failing.
-But what is the guarantee that it is tested well enough. We will end up
-adding more quirks after adding one to enable it.
+menu "Mediatek thermal drivers"
+depends on ARCH_MEDIATEK || COMPILE_TEST
+source "drivers/thermal/mediatek/Kconfig"
+endmenu
 
-> My logical assumption would be that the firmware reports support for
-> OS_INITIATED, but then just fails to properly support
-> SET_SUSPEND_MODE.
+drivers/thermal/Makefile:
 
-I knew this argument was coming as I wrote above, sorry I don't buy that.
-It is probably one of the early platforms supporting PSCI and not well tested
-for conformance. So I am inclined to just say we can't support it.
+-obj-$(CONFIG_MTK_THERMAL)      += mtk_thermal.o
++obj-y                          += mediatek
 
-> I should probably try ignoring the error psci-domain.c and continue
-> with binding power domains. What would be the best way to check that
-> the domains setup works as expected?
->
-> >
-> > > - Add a separate cpuidle driver?
-> >
-> > I would avoid that.
-> >
-> > > - Just forget about it and use plain PSCI as we currently do?
-> > >
-> >
-> > Worst case yes. My main worry is how many of the old SDM SoC has such a
-> > behaviour and how much they wary from each other. The OSI mode was pushed
-> > after lengthy discussions to support all these platforms and now we have
-> > platforms needing separate idle driver ?
->
-> I'm not sure. 32-bit SoCs use non-PSCI idle driver. MSM8916, sdm845
-> and later SoCs are using proper domains support.
+drivers/thermal/mediatek/Kconfig:
 
-Yes that is 32-bit, we just support PSCI on 64-bit. No more arguments
-there, we had enough in the early days for almost more than a year. We
-are not going back to that again.
+config MTK_SOC_THERMAL
+	tristate "Temperature sensor driver for MediaTek SoCs"
+	depends on HAS_IOMEM
+	depends on NVMEM
+	depends on RESET_CONTROLLER
+	help
+		Enable this option if you want to get SoC temperature
+		information for MediaTek platforms. This driver
+		configures thermal controllers to collect temperature
+		via AUXADC interface.
 
---
-Regards,
-Sudeep
+drivers/thermal/mediatek/Makefile:
+
+obj-$(MTK_SOC_THERMAL)	+= soc_temp.o
+
+However, rename 'soc_temp' to something more SoC explicit, eg. 
+mtxxx_thermal.c
+
+Thanks
+
+   -- Daniel
+
+
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+
+> ---
+>   drivers/thermal/Kconfig                       | 14 ++++-------
+>   drivers/thermal/Makefile                      |  2 +-
+>   drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
+>   drivers/thermal/mediatek/Makefile             |  1 +
+>   .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
+>   5 files changed, 29 insertions(+), 11 deletions(-)
+>   create mode 100644 drivers/thermal/mediatek/Kconfig
+>   create mode 100644 drivers/thermal/mediatek/Makefile
+>   rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+> 
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 0e5cc948373c..ecba8d6e313b 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -412,16 +412,10 @@ config DA9062_THERMAL
+>   	  zone.
+>   	  Compatible with the DA9062 and DA9061 PMICs.
+>   
+> -config MTK_THERMAL
+> -	tristate "Temperature sensor driver for mediatek SoCs"
+> -	depends on ARCH_MEDIATEK || COMPILE_TEST
+> -	depends on HAS_IOMEM
+> -	depends on NVMEM || NVMEM=n
+> -	depends on RESET_CONTROLLER
+> -	default y
+> -	help
+> -	  Enable this option if you want to have support for thermal management
+> -	  controller present in Mediatek SoCs
+> +menu "Mediatek thermal drivers"
+> +depends on ARCH_MEDIATEK || COMPILE_TEST
+> +source "drivers/thermal/mediatek/Kconfig"
+> +endmenu
+>   
+>   config AMLOGIC_THERMAL
+>   	tristate "Amlogic Thermal Support"
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index def8e1a0399c..3c00e864ad55 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -55,7 +55,7 @@ obj-y				+= st/
+>   obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+>   obj-y				+= tegra/
+>   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
+>   obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+>   obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> new file mode 100644
+> index 000000000000..9c41e9079fc3
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Kconfig
+> @@ -0,0 +1,23 @@
+> +config MTK_THERMAL
+> +	tristate "MediaTek thermal drivers"
+> +	depends on THERMAL_OF
+> +	help
+> +		This is the option for MediaTek thermal software
+> +		solutions. Please enable corresponding options to
+> +		get temperature information from thermal sensors or
+> +		turn on throttle mechaisms for thermal mitigation.
+> +
+> +if MTK_THERMAL
+> +
+> +config MTK_SOC_THERMAL
+> +	tristate "Temperature sensor driver for MediaTek SoCs"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_CONTROLLER
+> +	help
+> +		Enable this option if you want to get SoC temperature
+> +		information for MediaTek platforms. This driver
+> +		configures thermal controllers to collect temperature
+> +		via AUXADC interface.
+> +
+> +endif
+> diff --git a/drivers/thermal/mediatek/Makefile b/drivers/thermal/mediatek/Makefile
+> new file mode 100644
+> index 000000000000..4b4cb04a358f
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Makefile
+> @@ -0,0 +1 @@
+> +obj-$(CONFIG_MTK_SOC_THERMAL)		+= soc_temp.o
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mediatek/soc_temp.c
+> similarity index 100%
+> rename from drivers/thermal/mtk_thermal.c
+> rename to drivers/thermal/mediatek/soc_temp.c
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
