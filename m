@@ -2,52 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA843583F91
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 15:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B565C584025
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 15:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238969AbiG1NGH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 09:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S229532AbiG1NiP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 09:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238871AbiG1NGG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 09:06:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F91052DEB;
-        Thu, 28 Jul 2022 06:06:02 -0700 (PDT)
+        with ESMTP id S230029AbiG1NiM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 09:38:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6514D178;
+        Thu, 28 Jul 2022 06:38:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B765261CF2;
-        Thu, 28 Jul 2022 13:06:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 736C0C433C1;
-        Thu, 28 Jul 2022 13:05:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 518A061D45;
+        Thu, 28 Jul 2022 13:38:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D982C433D6;
+        Thu, 28 Jul 2022 13:38:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659013561;
-        bh=RHdNXg2FMd7Dpr3izSu13H5wifouRTsZ4ttGOeY++k0=;
+        s=k20201202; t=1659015489;
+        bh=mmsn/t+5QNmM/FD9heL+FjFHsGTIQcd9xFxfGr8LHzg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fx+EzAVPExp6RzDbyz4pMnd0FalmyWqhpD/NPZ+7WiNGG8GcjBn8nyp/OYK7xHJiG
-         w4DgUBdA+9Geg64LnRtQw8uJ7EjTth1aNc/2pJmEu2Yyo0gyRk5e4kzCrfX+2/kZ1R
-         1D8pgpoAO9N7bH5NvxyjlI7mShuPZNPi6Yn3QYwkZPjp4GReaWEN+pxrlzJJUeZDHz
-         vh2YEyrIPtpZyAsfULG4JszmaDUfH6xtxrehpWABji1NvXHBxNsxAjr/R5DpQaQ6TI
-         +8P4lmajPZqfYXHBVJFR3EVe+gBeihmJ8wm6flDEg9wdwxQeTciuwFtKgn4v91IK1m
-         ZMFnroSCI4Jig==
-Date:   Thu, 28 Jul 2022 14:05:56 +0100
+        b=LeIWgEYZiNwFxd3GVsR/NJ2ps0rFuovH3OyVXj6idgqySzM5Ia6bBFqXWnQM/K82j
+         8D+xcAI3NxP4Ov82OJUtvK4jc5YjeDIo6e9n1jELfEBUv33J0xStbJTuEu42rz/te9
+         IxdGUKMq4Y8wz3VeyOLqyhkpe2+OJ6dKVoOIwqBVDJ0A3ENP7bBNLNuXS72+1TWTYK
+         y+RspS2qIj8PFh2e0K4tqb4R9jYPzUlZQcTWjSxaR9I+anWs7svppFS7aIOKr4/5mb
+         J1+0c9F7fYrJ8jLM+iWSUdQm9cBDhGW2E1Swcgd+KQtwWxc28hkoP88qfri9H4vLAq
+         D6d9pozm7mYfw==
+Date:   Thu, 28 Jul 2022 14:38:04 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Subject: Re: [PATCH] firmware/psci: Add debugfs support to ease debugging
-Message-ID: <YuKJtKHzoR4DUsOr@sirena.org.uk>
+Message-ID: <YuKRPB/Ilb0al3ro@sirena.org.uk>
 References: <20220727200901.1142557-1-dmitry.baryshkov@linaro.org>
- <20220728090806.nnighsbx2lcgugon@bogus>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9ApfM92VlMV+pgBD"
+        protocol="application/pgp-signature"; boundary="YBGfuNYEyJDOClJJ"
 Content-Disposition: inline
-In-Reply-To: <20220728090806.nnighsbx2lcgugon@bogus>
+In-Reply-To: <20220727200901.1142557-1-dmitry.baryshkov@linaro.org>
 X-Cookie: People respond to people who respond.
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,39 +57,57 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---9ApfM92VlMV+pgBD
+--YBGfuNYEyJDOClJJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jul 28, 2022 at 10:08:06AM +0100, Sudeep Holla wrote:
-> On Wed, Jul 27, 2022 at 11:09:01PM +0300, Dmitry Baryshkov wrote:
+On Wed, Jul 27, 2022 at 11:09:01PM +0300, Dmitry Baryshkov wrote:
 
-> > To ease debugging of PSCI supported features, add debugfs file called
-> > 'psci' describing PSCI and SMC CC versions
+> +} psci_fn_ids[] = {
+> +	PSCI_ID_NATIVE(0_2, MIGRATE),
+> +	PSCI_ID(0_2, MIGRATE_INFO_TYPE),
+> +	PSCI_ID_NATIVE(0_2, MIGRATE_INFO_UP_CPU),
+> +	PSCI_ID(1_0, CPU_FREEZE),
+> +	PSCI_ID_NATIVE(1_0, CPU_DEFAULT_SUSPEND),
+> +	PSCI_ID_NATIVE(1_0, NODE_HW_STATE),
+> +	PSCI_ID_NATIVE(1_0, SYSTEM_SUSPEND),
+> +	PSCI_ID(1_0, SET_SUSPEND_MODE),
+> +	PSCI_ID_NATIVE(1_0, STAT_RESIDENCY),
+> +	PSCI_ID_NATIVE(1_0, STAT_COUNT),
+> +	PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
+> +};
 
-> These 2 are for sure in the boot log. Having them is debugfs accessible
-> via file system add not much value as we would hit issues quite early in
-> the boot for most of the things related to PSCI.
+There's other functions like the MEM_PROTECT ones which we don't
+currently use but it might be interesting to enumerate...
 
-It can be useful to have something that can be queried at any point when
-collecting diagnostics, even if there's been a lot of logging or log
-rotation since boot.  It makes it easier to give people instructions or
-a tool which will reliably collect useful information when filing a bug
-report.
+>  #define PSCI_1_0_FN_PSCI_FEATURES		PSCI_0_2_FN(10)
+> +#define PSCI_1_0_FN_CPU_FREEZE			PSCI_0_2_FN(11)
+> +#define PSCI_1_0_FN_CPU_DEFAULT_SUSPEND		PSCI_0_2_FN(12)
 
---9ApfM92VlMV+pgBD
+...we're already adding functions here.
+
+> +#define PSCI_1_0_FN_NODE_HW_STATE		PSCI_0_2_FN(13)
+
+> +#define PSCI_1_0_FN_STAT_RESIDENCY		PSCI_0_2_FN(16)
+> +#define PSCI_1_0_FN_STAT_COUNT			PSCI_0_2_FN(17)
+
+Some of these state query things might be interesting to actually call
+and output results from at some point, doesn't seem like something that
+should be a blocker though.
+
+--YBGfuNYEyJDOClJJ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLiibMACgkQJNaLcl1U
-h9Djrgf/birZX09UpgOEo3CESr2Dek7AN1A7Upjzq6E7iRTeEfJsTpmAU96iU2yZ
-ZDL4mCHFDdgos0VDgKY5CPqMZXA5ClqFmTGDmDv4oiQJ7oLd16/bCQQ1Mt7IEExi
-ebjhHC7mG2BK7LSRK8D1v6tf6yaQpWA4Y128YVdu2RlaescUmgxn2iWyi7rcQary
-uYH6fQbc853JsHYjiS4GpCPQUhqHbwegWq7tLC/aHXcZA80cjVhS/C+MCaCZRI9s
-awkAwdApxEBGpSw1OEpXpg5IGnLt5ijR3NLl+uUKHkRlfiLMwi5J0CMb6ecMJnu4
-+z4AttpiEFUj0KbnqMIHUFsslKiVqQ==
-=awB8
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLikTwACgkQJNaLcl1U
+h9BAnwf/RzOG3aFKcvv9K/vZw2k6o3L2Of7BgJ00FEx9o/5mPNrSxvgslC9yvxev
+QQVtI98A4XOjk6gFpmk9OiwlFztF1McyaaDQxmngmaOct2cPYu4NM3p8//4gJJfr
+RQs9kHZSQ5Q5CbA0vycWH9+7DHPX9WUxbbMuFiDfqpd2WaJx7G+U1Uz8e1DqHyq1
+wxwztBOFidoL+rQNqK2TY4RBzIIR2EFAHfKiu6Y4hFlm91qrHPe+YEbkW8Yoa+Xl
++G0L4btuYdJL7g/Dt6gUD7ApUdA17LhvifMcq+HJsaH004DuVOquZK+K9rHEmiAE
+JqWJs6IX9t++1fUdsxFvgIEs2fczJQ==
+=+kLn
 -----END PGP SIGNATURE-----
 
---9ApfM92VlMV+pgBD--
+--YBGfuNYEyJDOClJJ--
