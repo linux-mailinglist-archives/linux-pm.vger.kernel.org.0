@@ -2,61 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C27158435C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB6C58435D
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbiG1PmF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S231130AbiG1PmF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 28 Jul 2022 11:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbiG1PmE (ORCPT
+        with ESMTP id S232060AbiG1PmE (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:42:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA09968DD8
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:42:01 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:41:59 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA73C69F2C
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:42:02 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:42:00 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659022920;
+        s=2020; t=1659022921;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zQ11RQURvQ+Agip/Q8/1jNVfJFietfyYULJKV+Ffa/4=;
-        b=0Z8D7TzN4i4gnsUiQ8NswiLtfroyXEczIDcW6KeGvHPWafM9vBRY5gLZT9DuGQrrwavH1z
-        4GOTSm9qliqd5C7hU+cXMVOXS/hPGdBBIZStOy5I7Xig0AY+RQc2HhQoi3nF78sBRQ4Qv9
-        x10SjWS1ef2qjiPDV5DLa6RLp0WydsUD4qaS/SWLnKy3ck//rt1vBkQ8fjre87w2wayDbv
-        gLBeNHAFBHFQdwC3irkgFWFby/e3iYMYCz06wokD2hgOoVI9xUQ1MYQ6qbBGWoBM7B+RiS
-        Tjut8xy+KloWQUKt2I+E9sOvwOOOU3u2iIX0kGSt9nxx82IA3sOiqPiYRV2sCw==
+        bh=o2pg7/Ef4iXgAIxmM/uUgaDhM60j6caLZmwwoXBpMQs=;
+        b=lUyz4ML6jj5/ndQh/qO0aIA18YAtc9woXeFJhKjQD0MRrvLhWjikUavYjCEkrvw/P50szp
+        W4u96tc8qK+4QsQfiX/0eWroCmmMRQCwqkBaa2dzn/g7Eug9Ev+Lrpc+HN1VSn8PZx0vZI
+        lyRdr1mSKMyW4OBQajD/naRq7rPoUqxauNGDzkODPWbCiOR/wZEPRQeQ/pHVjIWEo2uRzN
+        9nNo0vHu0+ADJRAqipmQ7ayi8E+SBEHBWGX7c7VZJNTDfrfXDxVphIgnzHtyqfOCxMWyHe
+        pwRZ2BkAI6TZyBKkHTT9qlsL4m5NF6F3YI1EZG2yQIxIXBqZ/QG0x00z4CBPQQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659022920;
+        s=2020e; t=1659022921;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zQ11RQURvQ+Agip/Q8/1jNVfJFietfyYULJKV+Ffa/4=;
-        b=e+l/hUkHRAwmCVygCMyu7tNiMCvBLx6QsyiOidM8lRxWuYeeFhDolhPA7XOqvgolYwbmaf
-        fz/8NTT5G2GCv6Ag==
-From:   "thermal-bot for Wolfram Sang" <tip-bot2@linutronix.de>
+        bh=o2pg7/Ef4iXgAIxmM/uUgaDhM60j6caLZmwwoXBpMQs=;
+        b=6tBPJoIyu8w0ZTnVSnR49DEmgFa/5d/uV/fcn/IxF49VbeFy7MXl09KCoDg2j53DeU5dlw
+        Eu6ffxJ8/cxiRlBw==
+From:   "thermal-bot for Lukas Bulwahn" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] drivers/thermal/rcar_gen3_thermal: Improve
- logging during probe
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        niklas.soderlund+renesas@ragnatech.se,
+Subject: [thermal: thermal/next] MAINTAINERS: add include/dt-bindings/thermal
+ to THERMAL
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220610200500.6727-1-wsa+renesas@sang-engineering.com>
-References: <20220610200500.6727-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220613124309.28790-1-lukas.bulwahn@gmail.com>
+References: <20220613124309.28790-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Message-ID: <165902291926.15455.9349901822229270872.tip-bot2@tip-bot2>
+Message-ID: <165902292023.15455.2835710756933197447.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,59 +66,38 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     404dd7dfb13028d315514f63ed3cf9da46307a39
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
-git//404dd7dfb13028d315514f63ed3cf9da46307a39
-Author:        Wolfram Sang <wsa+renesas@sang-engineering.com>
-AuthorDate:    Fri, 10 Jun 2022 22:04:59 +02:00
+Commit-ID:     037a6ea0debbe3da3f5cef311d835fb7f1a5e2c7
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//037a6ea0debbe3da3f5cef311d835fb7f1a5e2c7
+Author:        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+AuthorDate:    Mon, 13 Jun 2022 14:43:09 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 28 Jul 2022 17:29:44 +02:00
+CommitterDate: Thu, 28 Jul 2022 17:29:43 +02:00
 
-drivers/thermal/rcar_gen3_thermal: Improve logging during probe
+MAINTAINERS: add include/dt-bindings/thermal to THERMAL
 
-When setting up a new board, a plain "Can't register thermal zone"
-didn't help me much because the thermal zones in DT were all fine. I
-just had a sensor entry too much in the parent TSC node. Reword the
-failure/success messages to contain the sensor number to make it easier
-to understand which sensor is affected. Example output now:
+Maintainers of the directory Documentation/devicetree/bindings/thermal
+are also the maintainers of the corresponding directory
+include/dt-bindings/thermal.
 
-rcar_gen3_thermal e6198000.thermal: Sensor 0: Loaded 1 trip points
-rcar_gen3_thermal e6198000.thermal: Sensor 1: Loaded 1 trip points
-rcar_gen3_thermal e6198000.thermal: Sensor 2: Loaded 1 trip points
-rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
+Add the file entry for include/dt-bindings/thermal to the appropriate
+section in MAINTAINERS.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
-Link: https://lore.kernel.org/r/20220610200500.6727-1-wsa+renesas@sang-engine=
-ering.com
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Link: https://lore.kernel.org/r/20220613124309.28790-1-lukas.bulwahn@gmail.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/rcar_gen3_thermal.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_=
-thermal.c
-index 43eb25b..e2020c6 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -507,7 +507,7 @@ static int rcar_gen3_thermal_probe(struct platform_device=
- *pdev)
- 		zone =3D devm_thermal_zone_of_sensor_register(dev, i, tsc,
- 							    &rcar_gen3_tz_of_ops);
- 		if (IS_ERR(zone)) {
--			dev_err(dev, "Can't register thermal zone\n");
-+			dev_err(dev, "Sensor %u: Can't register thermal zone\n", i);
- 			ret =3D PTR_ERR(zone);
- 			goto error_unregister;
- 		}
-@@ -529,7 +529,7 @@ static int rcar_gen3_thermal_probe(struct platform_device=
- *pdev)
- 		if (ret < 0)
- 			goto error_unregister;
-=20
--		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
-+		dev_info(dev, "Sensor %u: Loaded %d trip points\n", i, ret);
- 	}
-=20
- 	if (!priv->num_tscs) {
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3ad3328..b0fbf28 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19586,6 +19586,7 @@ F:	Documentation/ABI/testing/sysfs-class-thermal
+ F:	Documentation/devicetree/bindings/thermal/
+ F:	Documentation/driver-api/thermal/
+ F:	drivers/thermal/
++F:	include/dt-bindings/thermal/
+ F:	include/linux/cpu_cooling.h
+ F:	include/linux/thermal.h
+ F:	include/uapi/linux/thermal.h
