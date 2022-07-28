@@ -2,32 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBFE584350
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C58D584351
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbiG1Plw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 11:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S230140AbiG1Plx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 11:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiG1Plv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888CF69F2E
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:50 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:41:47 -0000
+        with ESMTP id S231895AbiG1Plw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2FE675B7
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:51 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:41:48 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659022908;
+        s=2020; t=1659022909;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=whO/bydgWwNS6IRQrcq+YXw4GnlKQ9np5ljGKOZJWQ4=;
-        b=NcqnwCLAH6Gkae+l4KpSJSxUZveJGMaJlCvtwrhUB/wpF2yQal4Gd+YC30eTvxxLO+oArD
-        sOwMu3bn7PqXcD9SjyD1sVVaCa8W+Af3QZtKKheZ1AAOrdg1sbGXg857SK/bwPLwErCBBu
-        62o6qKyOMs/Qz+8di0+zWUj8vcsAlBZk/pHPGKgO4FzadnunAfEuMxX9hb9J/LZGWBRvfv
-        E9wE6N5tejHwYZMyFNojil1whUkdEjTLZ1EbkZ7i/mzXmLN5a8Z6LGAsSAoU4hGq5zn7g3
-        gAt0A/jr0+uhOyQluu+UHsEg7J/kDBxhPmSVKdd/DxmUkpOCt9PXAm/GR4fvng==
+        bh=TTpZHwAxh3kB1hJsasc4lTwdQ/DPtpmF7LA9z8bpdjQ=;
+        b=BQx7cI7Ez+Glv7MpH+cKcxu2lst/y0PokytqnCssRcZV4ZKSbXQAv9FRzi3qjKKB3mQP1c
+        /p+ReOjYWnuCr/3R2bJJTO1dFVMXliBLg30JI3/44hByvpr62mxU3EUf1/rNiwhFnDxDug
+        qKmjLXuKBWl4Tk3Fy45ELKCSJEVjUBHEfq+KbGN8AWgFqCaYEZ6JMtDApUryvNVeHAiVWi
+        NLtpw7JrkhgwGw/VeP83Xgvix7HIIGNxG9XNXonYnW8CXnROUGLQSW5X35L9F+9vg/c695
+        xJl02rkzRZ22U1iebot/1VpD5OeJ2Aizf0L4C+L86gwgOSJ3P6sULtJRwadjqA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1659022909;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -35,23 +35,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=whO/bydgWwNS6IRQrcq+YXw4GnlKQ9np5ljGKOZJWQ4=;
-        b=6IT4Gdg6KiQs2LQA9zdxW7lJXb5zZ9SW0PwBeKZ+xDcQcKqEPZMex/CPnpQMYy/m5DGsXz
-        IIoQRlRxkXXZnTCg==
-From:   "thermal-bot for Julia Lawall" <tip-bot2@linutronix.de>
+        bh=TTpZHwAxh3kB1hJsasc4lTwdQ/DPtpmF7LA9z8bpdjQ=;
+        b=Rg9eLNMFomYtOx4HB2IRqN7w980M2qn0xaH6d1aJGGNx1ohp2cealQojFn7Pf4RmCXestY
+        n7IwnaHcad4AF6DQ==
+From:   "thermal-bot for Jin Xiaoyun" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/sun8i: Fix typo in comment
-Cc:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+Subject: [thermal: thermal/next] thermal/drivers/k3_j72xx_bandgap: Make
+ k3_j72xx_bandgap_j721e_data and k3_j72xx_bandgap_j7200_data static
+Cc:     Hulk Robot <hulkci@huawei.com>,
+        Jin Xiaoyun <jinxiaoyun2@huawei.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220521111145.81697-36-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-36-Julia.Lawall@inria.fr>
+In-Reply-To: <20220613063111.654893-1-jinxiaoyun2@huawei.com>
+References: <20220613063111.654893-1-jinxiaoyun2@huawei.com>
 MIME-Version: 1.0
-Message-ID: <165902290780.15455.801425426946519060.tip-bot2@tip-bot2>
+Message-ID: <165902290872.15455.10401267632566847325.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,37 +67,43 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     11188b439974b8ef8fe8c4c6df6ab8b6486c8c45
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//11188b439974b8ef8fe8c4c6df6ab8b6486c8c45
-Author:        Julia Lawall <Julia.Lawall@inria.fr>
-AuthorDate:    Sat, 21 May 2022 13:10:46 +02:00
+Commit-ID:     4aaec53b84418e83fcee6907fcff177df1f12f44
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//4aaec53b84418e83fcee6907fcff177df1f12f44
+Author:        Jin Xiaoyun <jinxiaoyun2@huawei.com>
+AuthorDate:    Mon, 13 Jun 2022 14:31:11 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 28 Jul 2022 17:29:49 +02:00
+CommitterDate: Thu, 28 Jul 2022 17:29:48 +02:00
 
-thermal/drivers/sun8i: Fix typo in comment
+thermal/drivers/k3_j72xx_bandgap: Make k3_j72xx_bandgap_j721e_data and k3_j72xx_bandgap_j7200_data static
 
-Spelling mistake (triple letters) in comment.
-Detected with the help of Coccinelle.
+Fix sparse warnings:
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-Acked-by: Vasily Khoruzhick <anarsoul@gmail.com>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220521111145.81697-36-Julia.Lawall@inria.fr
+drivers/thermal/k3_j72xx_bandgap.c:532:36: sparse: sparse: symbol 'k3_j72xx_bandgap_j721e_data' was not declared. Should it be static?
+drivers/thermal/k3_j72xx_bandgap.c:536:36: sparse: sparse: symbol 'k3_j72xx_bandgap_j7200_data' was not declared. Should it be static?
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Jin Xiaoyun <jinxiaoyun2@huawei.com>
+Link: https://lore.kernel.org/r/20220613063111.654893-1-jinxiaoyun2@huawei.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/sun8i_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/k3_j72xx_bandgap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index d9cd23c..212c87e 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -237,7 +237,7 @@ static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
- 	 * The calibration data on the H6 is the ambient temperature and
- 	 * sensor values that are filled during the factory test stage.
- 	 *
--	 * The unit of stored FT temperature is 0.1 degreee celusis.
-+	 * The unit of stored FT temperature is 0.1 degree celsius.
- 	 *
- 	 * We need to calculate a delta between measured and caluclated
- 	 * register values and this will become a calibration offset.
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index 27d4cae..115a44e 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -530,11 +530,11 @@ static int k3_j72xx_bandgap_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
++static const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
+ 	.has_errata_i2128 = 1,
+ };
+ 
+-const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j7200_data = {
++static const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j7200_data = {
+ 	.has_errata_i2128 = 0,
+ };
+ 
