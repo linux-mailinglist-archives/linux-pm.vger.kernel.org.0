@@ -2,55 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5D358435E
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8019584360
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbiG1PmG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 11:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S232060AbiG1PmH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 11:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiG1PmF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:42:05 -0400
+        with ESMTP id S231965AbiG1PmG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:42:06 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD32A675B7
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:42:03 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:42:01 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC97D69F26
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:42:04 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:42:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659022922;
+        s=2020; t=1659022923;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VFdzxsZWRAESjEDM923t6kSGMLwG2xo1Fkn7zUaRY5o=;
-        b=hypiUcHcBrYrhw7Yo0SCbFyIHXmrdsW8xSXQ2ji0sL6/ZKv0Y9VyoF045BeDzQIublvJ0N
-        iXXYGMS8v/prPMppZbvq+kb2awZL/AE6UnmBdytd+FKKOsjM41cYqxTzqR7CuiWjg4vZaT
-        0a9Ebb8uxrC9xfzLVaQ7CEWuMcdWCb7qJeihv250teztgtSRDNpJg5WEaWAaRWXw52p0Ch
-        bDj7i2aKVijhxRofH3A96rbdsi3U7Nc4U/aM3jrCCSOO5aoKhgaxzx42sR4y1VYlU+nG/9
-        Z1mM0UwESHZ+avMfT6RVLNrCmGuLTAhiPlqjQYf5vUvpktuHtkiy0pQlf3gQLA==
+        bh=iPrsEICSuUSQ1FqJcfxN2BtxSd2U4YCPEleD51MuSA4=;
+        b=V2uE/W9V1O96vGOQi3JhpFYwmpdCTEYSEtzqSWFGeWuKVzs9qkNecMbmYxjWuKM0dNtXUL
+        HuTeUBGzWJVi8GLXkgJaQbzBY8sYbUSTKylrkjpIkw8MPZGIi1pW8Arbb90cET1cidJjnX
+        jsV//Mgm0tWe5N5UnS+OlEQFSGIMSpUV04XevzJPXyFsafTabjOD23wU3s/mcSojCPEbEI
+        eLSqidbDCzi5bxJu0ASJP0BNlOlHBCMajuzhXboAaB6fNAXPNytCJq2tkJMAQGTw6W91Ee
+        pk8wL1OPGs0L2vyUGVdP/tUeoET+aWQBi9/mZHfZqyenweHD0wc+iNr4HsX/Ow==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659022922;
+        s=2020e; t=1659022923;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VFdzxsZWRAESjEDM923t6kSGMLwG2xo1Fkn7zUaRY5o=;
-        b=oKlRZGoOr206h8av+CJqt2EyHtu2Nx7aVJKRtqoPgHVAaPYtn5JpBxWmOTMqeojhJnY6Ry
-        SX3yJeYK2YaDN8CQ==
+        bh=iPrsEICSuUSQ1FqJcfxN2BtxSd2U4YCPEleD51MuSA4=;
+        b=JeX0iWkTfws1RCINgMHAr2gII6ouHUxRdca2hrH5V6Ng/k7nDQzywNXN3w6owDub+JP2kg
+        RXHGzXQhdC1+5IBA==
 From:   "thermal-bot for Lukasz Luba" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] drivers/thermal/devfreq_cooling: Extend the
- devfreq_cooling_device with ops
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+Subject: [thermal: thermal/next] drivers/thermal/cpufreq_cooling: Update
+ outdated comments
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220613124327.30766-5-lukasz.luba@arm.com>
-References: <20220613124327.30766-5-lukasz.luba@arm.com>
+In-Reply-To: <20220613124327.30766-4-lukasz.luba@arm.com>
+References: <20220613124327.30766-4-lukasz.luba@arm.com>
 MIME-Version: 1.0
-Message-ID: <165902292122.15455.14722779744580534059.tip-bot2@tip-bot2>
+Message-ID: <165902292216.15455.11562519755936909394.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,113 +67,138 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     829f416643f9738b0fda9e3f1bf8712113f61a23
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//829f416643f9738b0fda9e3f1bf8712113f61a23
+Commit-ID:     9784d2fbb858ec0dd8d0032293aa06fa736d6ea2
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//9784d2fbb858ec0dd8d0032293aa06fa736d6ea2
 Author:        Lukasz Luba <lukasz.luba@arm.com>
-AuthorDate:    Mon, 13 Jun 2022 13:43:27 +01:00
+AuthorDate:    Mon, 13 Jun 2022 13:43:26 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 28 Jul 2022 17:29:43 +02:00
+CommitterDate: Thu, 28 Jul 2022 17:29:42 +02:00
 
-drivers/thermal/devfreq_cooling: Extend the devfreq_cooling_device with ops
+drivers/thermal/cpufreq_cooling: Update outdated comments
 
-Remove unneeded global variable devfreq_cooling_ops which is used only
-as a copy pattern. Instead, extend the struct devfreq_cooling_device with
-the needed ops structure. This also simplifies the allocation/free code
-during the setup/cleanup.
+The code has moved and left some comments stale. Update them where
+there is a need.
 
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-Link: https://lore.kernel.org/r/20220613124327.30766-5-lukasz.luba@arm.com
+Link: https://lore.kernel.org/r/20220613124327.30766-4-lukasz.luba@arm.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/devfreq_cooling.c | 27 +++++++++------------------
- 1 file changed, 9 insertions(+), 18 deletions(-)
+ drivers/thermal/cpufreq_cooling.c | 44 ++++++++++++------------------
+ 1 file changed, 18 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-index 8c76f96..67b618b 100644
---- a/drivers/thermal/devfreq_cooling.c
-+++ b/drivers/thermal/devfreq_cooling.c
-@@ -28,6 +28,7 @@
-  * struct devfreq_cooling_device - Devfreq cooling device
-  *		devfreq_cooling_device registered.
-  * @cdev:	Pointer to associated thermal cooling device.
-+ * @cooling_ops: devfreq callbacks to thermal cooling device ops
-  * @devfreq:	Pointer to associated devfreq device.
-  * @cooling_state:	Current cooling state.
-  * @freq_table:	Pointer to a table with the frequencies sorted in descending
-@@ -48,6 +49,7 @@
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index 492a67e..50f8b90 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -206,7 +206,7 @@ static u32 get_dynamic_power(struct cpufreq_cooling_device *cpufreq_cdev,
+  * complex code may be needed if experiments show that it's not
+  * accurate enough.
+  *
+- * Return: 0 on success, -E* if getting the static power failed.
++ * Return: 0 on success, this function doesn't fail.
   */
- struct devfreq_cooling_device {
- 	struct thermal_cooling_device *cdev;
-+	struct thermal_cooling_device_ops cooling_ops;
- 	struct devfreq *devfreq;
- 	unsigned long cooling_state;
- 	u32 *freq_table;
-@@ -290,12 +292,6 @@ static int devfreq_cooling_power2state(struct thermal_cooling_device *cdev,
- 	return 0;
- }
- 
--static struct thermal_cooling_device_ops devfreq_cooling_ops = {
--	.get_max_state = devfreq_cooling_get_max_state,
--	.get_cur_state = devfreq_cooling_get_cur_state,
--	.set_cur_state = devfreq_cooling_set_cur_state,
--};
--
- /**
-  * devfreq_cooling_gen_tables() - Generate frequency table.
-  * @dfc:	Pointer to devfreq cooling device.
-@@ -363,18 +359,18 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
- 	char *name;
- 	int err, num_opps;
- 
--	ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
--	if (!ops)
--		return ERR_PTR(-ENOMEM);
- 
- 	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
--	if (!dfc) {
--		err = -ENOMEM;
--		goto free_ops;
--	}
-+	if (!dfc)
-+		return ERR_PTR(-ENOMEM);
- 
- 	dfc->devfreq = df;
- 
-+	ops = &dfc->cooling_ops;
-+	ops->get_max_state = devfreq_cooling_get_max_state;
-+	ops->get_cur_state = devfreq_cooling_get_cur_state;
-+	ops->set_cur_state = devfreq_cooling_set_cur_state;
-+
- 	em = em_pd_get(dev);
- 	if (em && !em_is_artificial(em)) {
- 		dfc->em_pd = em;
-@@ -437,8 +433,6 @@ free_table:
- 	kfree(dfc->freq_table);
- free_dfc:
- 	kfree(dfc);
--free_ops:
--	kfree(ops);
- 
- 	return ERR_PTR(err);
- }
-@@ -520,13 +514,11 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
- void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
+ 				       u32 *power)
+@@ -249,9 +249,8 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
+  * milliwatts assuming 100% load.  Store the calculated power in
+  * @power.
+  *
+- * Return: 0 on success, -EINVAL if the cooling device state could not
+- * be converted into a frequency or other -E* if there was an error
+- * when calculating the static power.
++ * Return: 0 on success, -EINVAL if the cooling device state is bigger
++ * than maximum allowed.
+  */
+ static int cpufreq_state2power(struct thermal_cooling_device *cdev,
+ 			       unsigned long state, u32 *power)
+@@ -281,15 +280,11 @@ static int cpufreq_state2power(struct thermal_cooling_device *cdev,
+  * Calculate a cooling device state for the cpus described by @cdev
+  * that would allow them to consume at most @power mW and store it in
+  * @state.  Note that this calculation depends on external factors
+- * such as the cpu load or the current static power.  Calling this
+- * function with the same power as input can yield different cooling
+- * device states depending on those external factors.
+- *
+- * Return: 0 on success, -ENODEV if no cpus are online or -EINVAL if
+- * the calculated frequency could not be converted to a valid state.
+- * The latter should not happen unless the frequencies available to
+- * cpufreq have changed since the initialization of the cpu cooling
+- * device.
++ * such as the CPUs load.  Calling this function with the same power
++ * as input can yield different cooling device states depending on those
++ * external factors.
++ *
++ * Return: 0 on success, this function doesn't fail.
+  */
+ static int cpufreq_power2state(struct thermal_cooling_device *cdev,
+ 			       u32 power, unsigned long *state)
+@@ -401,7 +396,7 @@ static unsigned int get_state_freq(struct cpufreq_cooling_device *cpufreq_cdev,
+  * Callback for the thermal cooling device to return the cpufreq
+  * max cooling state.
+  *
+- * Return: 0 on success, an error code otherwise.
++ * Return: 0 on success, this function doesn't fail.
+  */
+ static int cpufreq_get_max_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long *state)
+@@ -420,7 +415,7 @@ static int cpufreq_get_max_state(struct thermal_cooling_device *cdev,
+  * Callback for the thermal cooling device to return the cpufreq
+  * current cooling state.
+  *
+- * Return: 0 on success, an error code otherwise.
++ * Return: 0 on success, this function doesn't fail.
+  */
+ static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long *state)
+@@ -479,7 +474,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+  * @em: Energy Model of the cpufreq policy
+  *
+  * This interface function registers the cpufreq cooling device with the name
+- * "thermal-cpufreq-%x". This api can support multiple instances of cpufreq
++ * "cpufreq-%s". This API can support multiple instances of cpufreq
+  * cooling devices. It also gives the opportunity to link the cooling device
+  * with a device tree node, in order to bind it via the thermal DT code.
+  *
+@@ -590,8 +585,8 @@ free_cdev:
+  * @policy: cpufreq policy
+  *
+  * This interface function registers the cpufreq cooling device with the name
+- * "thermal-cpufreq-%x". This api can support multiple instances of cpufreq
+- * cooling devices.
++ * "cpufreq-%s". This API can support multiple instances of cpufreq cooling
++ * devices.
+  *
+  * Return: a valid struct thermal_cooling_device pointer on success,
+  * on failure, it returns a corresponding ERR_PTR().
+@@ -608,17 +603,14 @@ EXPORT_SYMBOL_GPL(cpufreq_cooling_register);
+  * @policy: cpufreq policy
+  *
+  * This interface function registers the cpufreq cooling device with the name
+- * "thermal-cpufreq-%x". This api can support multiple instances of cpufreq
+- * cooling devices. Using this API, the cpufreq cooling device will be
+- * linked to the device tree node provided.
++ * "cpufreq-%s". This API can support multiple instances of cpufreq cooling
++ * devices. Using this API, the cpufreq cooling device will be linked to the
++ * device tree node provided.
+  *
+  * Using this function, the cooling device will implement the power
+- * extensions by using a simple cpu power model.  The cpus must have
++ * extensions by using the Energy Model (if present).  The cpus must have
+  * registered their OPPs using the OPP library.
+  *
+- * It also takes into account, if property present in policy CPU node, the
+- * static power consumed by the cpu.
+- *
+  * Return: a valid struct thermal_cooling_device pointer on success,
+  * and NULL on failure.
+  */
+@@ -654,7 +646,7 @@ EXPORT_SYMBOL_GPL(of_cpufreq_cooling_register);
+  * cpufreq_cooling_unregister - function to remove cpufreq cooling device.
+  * @cdev: thermal cooling device pointer.
+  *
+- * This interface function unregisters the "thermal-cpufreq-%x" cooling device.
++ * This interface function unregisters the "cpufreq-%x" cooling device.
+  */
+ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
  {
- 	struct devfreq_cooling_device *dfc;
--	const struct thermal_cooling_device_ops *ops;
- 	struct device *dev;
- 
- 	if (IS_ERR_OR_NULL(cdev))
- 		return;
- 
--	ops = cdev->ops;
- 	dfc = cdev->devdata;
- 	dev = dfc->devfreq->dev.parent;
- 
-@@ -537,6 +529,5 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 
- 	kfree(dfc->freq_table);
- 	kfree(dfc);
--	kfree(ops);
- }
- EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
