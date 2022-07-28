@@ -2,162 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F71583B57
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 11:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD742583C76
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 12:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235563AbiG1Jht (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 05:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S236264AbiG1Ksy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 06:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235554AbiG1Jhs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 05:37:48 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F3061D8A
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 02:37:46 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id b16so2015283lfb.7
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 02:37:46 -0700 (PDT)
+        with ESMTP id S236406AbiG1Kso (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 06:48:44 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F114010D0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 03:48:40 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id p21so1506258ljh.12
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 03:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8JmHUzVejHKie8HTRAolerKNkqFMF0TC8kqIrcN4GZo=;
-        b=lB4vLEJrwzE71UKK834Pf5O06Jg6ogSa3Dvcuxgp+4S9Dv2VCMquOICJcCHjYPJBxU
-         +9N8GJXdyV1ldMUygXvuKCCVNfE7A5I8DLufpcbN1Oh63jFmkt+b5oqcqY7yCy9b5UoH
-         GvWUuKdeRBFbZUN+4GyppsL5WyINRw+S3yU4ikzpHQ9QpK0EzS+1J9zjxm92nAbGUNzv
-         uc5dmvrIus5SHp6D/8zRmJrYFgrYJ58GMytqNIoZr0yYejJSoVOaO98qek8O1XiffeGn
-         TyFtqDmFBR8oeEzkzabFg359QGWVyBi98dWr86IEtlyznGquiSScimQHoD7dh2WuUoPn
-         5h4g==
+        bh=EYLN2VgFPShJvkoh7oJtGxXStSJxN1cfz1bpPXRcJLM=;
+        b=a+Dj/mYhB8H1Bp+5HLk5zHgeUYIKBPfd7Yo+ipogyQ3BXiEoDKeRLhR1S/YwL2OmaS
+         E1A06DTnla0zeAljOyHhRQMruZlceg6qHB9sQGGoJrvAPWsJot3Zvi8gJBXzakTKzYhP
+         7sZ1Nz+zP+fVgCfS2JlVWNUeXkWgJNZyHBbKuT6BOmWOr/7L9y8N9AurxpWGAb1nf338
+         mmPyfVLmA70r8mCWrfeNwPur8tNSKVSth3eixf4nGGuSrIrHJA812nUGMCPns59eXjR9
+         iTtB0qopT7eOf4W2US7gjDOS+JfO3InU/ZOaYdYSKEobdJMyBu/tVYAjV3JIvyvIrtic
+         f/gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8JmHUzVejHKie8HTRAolerKNkqFMF0TC8kqIrcN4GZo=;
-        b=ADxK6WcbQRhMsdoYbybRu7GNIk1lgHKp/SVdk8fMhgvNIqyZmR0yqvool3soqZeTjv
-         x4TpE0jkmMghyE5Yj8XRElV3jLUAFKgdRW8JU+njGQCA++EHXdL+pIEU9LKupSTRsAoJ
-         JntYjGf+YWS3hby5UOLRjzvZT9dztG3YEKRE5NJbcmhrvfu4Idu24VEE04llPbNJBFXc
-         kI7/R5EgcL6EWohIrnUUySX7z8y9eiGzIKQWU7gC7FhFQP1Z+I84aEReJaP4UNUvV9vL
-         qNrzQLruod32rrBq8/32VVKS/4HGjK47HocaduNrjx9v/OYmxPIzgf8+5ILzA0rfOZHo
-         og/Q==
-X-Gm-Message-State: AJIora/zANEGUPa3oWAQU7AAxw0XOb6cS9zmTR9AeHkQQTsLO8wHGF09
-        ERAMuH0lnyJ3Fk8tiN2AFgiDESr0k+7sW42UqniBRHovf3o9YA==
-X-Google-Smtp-Source: AGRyM1tFoTcCL8AhPA0bTHZG2PZ20h0N/CQpdR8GaxfVYWkeyLmZlM9lQ/QSu/W9u2xGpTHGHte/WaxMGINcPl4jCNo=
-X-Received: by 2002:a05:6512:2a8e:b0:48a:6b7d:617d with SMTP id
- dt14-20020a0565122a8e00b0048a6b7d617dmr10219035lfb.167.1659001064322; Thu, 28
- Jul 2022 02:37:44 -0700 (PDT)
+        bh=EYLN2VgFPShJvkoh7oJtGxXStSJxN1cfz1bpPXRcJLM=;
+        b=VRM6lscOqmv8pssm/RbHx5R5KjXU2J0tdKUUYQJX1XgWWqUvYuHLIPqBYRZeJmS06G
+         UNstH8ipKzs9NI2gzriD8ITTf0VhS1kiSz5OTKj10PHwTET75U50dm90j5pCaYjocoyM
+         7Vs/TgSIHqQJSglhFr12MDT4oJxTw3RgJmxfflUXXXilrarQPyAfk2+KuGY1HbsZCV6r
+         wo0b/Vlx7zSFuDSc6VexylaylOUC+YF6a8k35HV+IyXgADrOb9kXyCidm9/g/1bBw/pS
+         yxGcq6WMwiSVATlOaQfRoJw5FyqlVu9dsoZGnEERKQ/PC8pcJK65QzX0e5Z/3NcAS6jC
+         R+zQ==
+X-Gm-Message-State: AJIora9KhiPG3C07ey/rwx+Iu4LmyMoqJHdS1dYRc8CuaUSVEnKVAMmk
+        jEKfOMEyx6yVAi+S/Q8wyMdOJ+c+3O1AXm4RfkKCng==
+X-Google-Smtp-Source: AGRyM1v0PalcgYlIcJ0DZQcgyrxJwJ31CaZnUffSCZOp+2Ho1FbpEAoopHkS2fCpuqbTQnTWL1WcoxUwQCKwOJPqYTo=
+X-Received: by 2002:a05:651c:1147:b0:25d:eb36:755d with SMTP id
+ h7-20020a05651c114700b0025deb36755dmr8521602ljo.16.1659005319133; Thu, 28 Jul
+ 2022 03:48:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
- <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
- <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com> <20220726160337.GA41736@francesco-nb.int.toradex.com>
-In-Reply-To: <20220726160337.GA41736@francesco-nb.int.toradex.com>
+References: <20220727185012.3255200-1-saravanak@google.com> <20220727185012.3255200-4-saravanak@google.com>
+In-Reply-To: <20220727185012.3255200-4-saravanak@google.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 28 Jul 2022 11:37:07 +0200
-Message-ID: <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Max Krummenacher <max.oss.09@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Thu, 28 Jul 2022 12:48:02 +0200
+Message-ID: <CAPDyKFrBuNfs5-mQbtGMjokxAFrbJ5rmQw3tgks16p0mO0uuNg@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, naresh.kamboju@linaro.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 26 Jul 2022 at 18:03, Francesco Dolcini
-<francesco.dolcini@toradex.com> wrote:
+On Wed, 27 Jul 2022 at 20:50, Saravana Kannan <saravanak@google.com> wrote:
 >
-> Hello Ulf and everybody,
+> This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
 >
-> On Wed, Jul 13, 2022 at 01:43:28PM +0200, Ulf Hansson wrote:
-> > On Thu, 23 Jun 2022 at 18:14, Max Krummenacher <max.oss.09@gmail.com> wrote:
-> > > So our plan is to explicitly handle a (shared) regulator in every
-> > > driver involved, adding that regulator capability for drivers not
-> > > already having one.
-> >
-> > Please don't! I have recently rejected a similar approach for Tegra
-> > platforms, which now have been converted into using the power domain
-> > approach.
+> There are a few more issues to fix that have been reported in the thread
+> for the original series [1]. We'll need to fix those before this will
+> work. So, revert it for now.
 >
-> Just to quickly re-iterate how our hardware design looks like, we do
-> have a single gpio that control the power of a whole board area that is
-> supposed to be powered-off in suspend mode, this area could contains
-> devices that have a proper Linux driver and some passive driver-less
-> components (e.g. level shifter) - the exact mix varies.
+> [1] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
 >
-> Our proposal in this series was to model this as a power domain that
-> could be controlled with a regulator. Krzysztof, Robin and others
-> clearly argued against this idea.
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 
-Well, historically we haven't modelled these kinds of power-rails
-other than through power-domains. And this is exactly what genpd and
-PM domains in Linux are there to help us with.
-
-Moreover, on another SoC/platform, maybe the power-rails are deployed
-differently and maybe those have the ability to scale performance too.
-Then it doesn't really fit well with the regulator model anymore.
-
-If we want to continue to keep drivers portable, I don't see any
-better option than continuing to model these power-rails as
-power-domains.
-
->
-> The other approach would be to have a single regulator shared with the
-> multiple devices we have there (still not clear how that would work in
-> case we have only driver-less passive components). This is just a
-> device-tree matter, maybe we would need to add support for a supply to
-> some device drivers.
->
-> Honestly my conclusion from this discussion is that the only viable
-> option is this second one, do I miss something?
-
-No thanks!
-
-Well, unless you can convince me there are benefits to this approach
-over the power-domain approach.
-
->
-> > If it's a powerail that is shared between controllers (devices), used
-> > to keep their registers values for example, that should be modelled as
-> > a power domain. Moreover for power domains, we can support
-> > voltage/frequency (performance) scaling, which isn't really applicable
-> > to a plain regulator.
-> >
-> > However, if the actual powerrail fits well to be modelled as
-> > regulator, please go ahead. Although, in this case, the regulator must
-> > only be controlled behind a genpd provider's on/off callback, so you
-> > still need the power domain approach, rather than using the regulator
-> > in each driver and for each device.
->
-> Francesco
->
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
+
+> ---
+>  drivers/base/power/domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 3e86772d5fac..739e52cd4aba 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                 mutex_unlock(&gpd_list_lock);
+>                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+>                         __func__, PTR_ERR(pd));
+> -               return -ENODEV;
+> +               return driver_deferred_probe_check_state(base_dev);
+>         }
+>
+>         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
+> --
+> 2.37.1.359.gd136c6c3e2-goog
+>
