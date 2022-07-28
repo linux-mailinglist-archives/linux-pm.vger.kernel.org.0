@@ -2,59 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7733583B4C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 11:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F71583B57
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 11:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235163AbiG1JfP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 05:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S235563AbiG1Jht (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 05:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235547AbiG1JfO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 05:35:14 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD626BF57
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 02:35:12 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id e16so1047023qka.5
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 02:35:12 -0700 (PDT)
+        with ESMTP id S235554AbiG1Jhs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 05:37:48 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F3061D8A
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 02:37:46 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id b16so2015283lfb.7
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 02:37:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mEujygdF9HiNBZrDC/mPTjbQJRIpLwuClvEFyJRFbX0=;
-        b=B+NFenYCmKOGwyipO0AWS0JL4S/XXDSFPzTrfLfbNU56v2IjkGscmW4HMoMie1dS3T
-         o5aUOWWg4SFppm50Z8/dgligjSYUeFHpX55MSbmV93vAy6w0MQviM4UakHBE9hK0/hB1
-         ODI/intBFqskp9CbVCiB7caqxn0ApAN1RC8wpZHQt81XB/aYPe0ZEbwqEuRXTK6ulCKg
-         CkkHZujT+b86slvjFeMY5SrJiKs2hZ7SOIl2SJGri8OXWmvab8IAwxkgSEpPpMbkMC5c
-         KdxnL2delyLucdDSk3rFbhH4a0onbnScYTKRSGJUa0HXyHvniC7lYIdgkagzg1UN/gtA
-         tv/w==
+        bh=8JmHUzVejHKie8HTRAolerKNkqFMF0TC8kqIrcN4GZo=;
+        b=lB4vLEJrwzE71UKK834Pf5O06Jg6ogSa3Dvcuxgp+4S9Dv2VCMquOICJcCHjYPJBxU
+         +9N8GJXdyV1ldMUygXvuKCCVNfE7A5I8DLufpcbN1Oh63jFmkt+b5oqcqY7yCy9b5UoH
+         GvWUuKdeRBFbZUN+4GyppsL5WyINRw+S3yU4ikzpHQ9QpK0EzS+1J9zjxm92nAbGUNzv
+         uc5dmvrIus5SHp6D/8zRmJrYFgrYJ58GMytqNIoZr0yYejJSoVOaO98qek8O1XiffeGn
+         TyFtqDmFBR8oeEzkzabFg359QGWVyBi98dWr86IEtlyznGquiSScimQHoD7dh2WuUoPn
+         5h4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mEujygdF9HiNBZrDC/mPTjbQJRIpLwuClvEFyJRFbX0=;
-        b=Ewc/XkGoRPV8WMBSuryoj4q++KB8rt6c13rhxT2TwR4f5KNlyQDbdGbn1anyMEw19R
-         LYFzKW+srWYEeQwm1YGFfwo6BYuicSq4NeRMcqz5hMJosHrMbe18bx7V+wkWarEZ+u9I
-         LLmGH5l7Mnc4eCpOiL809xuV8hkHjIIkv1CKCByQBQHfr8L9pA3fxAYjpfStQgk/Qptk
-         mcX8NHnClnGG/F5UPpmFxg8mhPJ8Jt3ozjoI2A/O6d+hsnKD5OUitaoVH2cTrs0IhsSY
-         SB3+ehJ1mgaLU0vKkMGRH2aDxfh/pKfzeqV8Fcl9EKHH4rT6ephMxq5c3xUuvk3YVjVF
-         MegA==
-X-Gm-Message-State: AJIora92jqMHB1yX4+B4vYX3tfpxgZRQrINkjNr+K4h2EQbHw4uK8B+e
-        7nxCqBfIK6PP2jmHIxbR+EvlDXdJElgyvfKTXUwbEQ==
-X-Google-Smtp-Source: AGRyM1tOVppTMhS5GfKC9W+WkJoKDSn+YflerKIstoCUYJPQLbdjfAeAVY1r2pn+UfCGjCgS4kyL32kqPB0OE754vzM=
-X-Received: by 2002:ae9:f311:0:b0:6b6:30a9:1bb1 with SMTP id
- p17-20020ae9f311000000b006b630a91bb1mr19223162qkg.30.1659000911771; Thu, 28
- Jul 2022 02:35:11 -0700 (PDT)
+        bh=8JmHUzVejHKie8HTRAolerKNkqFMF0TC8kqIrcN4GZo=;
+        b=ADxK6WcbQRhMsdoYbybRu7GNIk1lgHKp/SVdk8fMhgvNIqyZmR0yqvool3soqZeTjv
+         x4TpE0jkmMghyE5Yj8XRElV3jLUAFKgdRW8JU+njGQCA++EHXdL+pIEU9LKupSTRsAoJ
+         JntYjGf+YWS3hby5UOLRjzvZT9dztG3YEKRE5NJbcmhrvfu4Idu24VEE04llPbNJBFXc
+         kI7/R5EgcL6EWohIrnUUySX7z8y9eiGzIKQWU7gC7FhFQP1Z+I84aEReJaP4UNUvV9vL
+         qNrzQLruod32rrBq8/32VVKS/4HGjK47HocaduNrjx9v/OYmxPIzgf8+5ILzA0rfOZHo
+         og/Q==
+X-Gm-Message-State: AJIora/zANEGUPa3oWAQU7AAxw0XOb6cS9zmTR9AeHkQQTsLO8wHGF09
+        ERAMuH0lnyJ3Fk8tiN2AFgiDESr0k+7sW42UqniBRHovf3o9YA==
+X-Google-Smtp-Source: AGRyM1tFoTcCL8AhPA0bTHZG2PZ20h0N/CQpdR8GaxfVYWkeyLmZlM9lQ/QSu/W9u2xGpTHGHte/WaxMGINcPl4jCNo=
+X-Received: by 2002:a05:6512:2a8e:b0:48a:6b7d:617d with SMTP id
+ dt14-20020a0565122a8e00b0048a6b7d617dmr10219035lfb.167.1659001064322; Thu, 28
+ Jul 2022 02:37:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220727182034.983727-1-dmitry.baryshkov@linaro.org> <20220728085809.sct3swhs7xuls27t@bogus>
-In-Reply-To: <20220728085809.sct3swhs7xuls27t@bogus>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 28 Jul 2022 12:35:00 +0300
-Message-ID: <CAA8EJpqd2K1YB2U9fixi4qxpC4n645O+8GwLj5DsXCqcFJoiMA@mail.gmail.com>
-Subject: Re: [PATCH] PSCI: Print a warning if PSCI doesn't accept PC mode
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+ <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
+ <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com> <20220726160337.GA41736@francesco-nb.int.toradex.com>
+In-Reply-To: <20220726160337.GA41736@francesco-nb.int.toradex.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 28 Jul 2022 11:37:07 +0200
+Message-ID: <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     Max Krummenacher <max.oss.09@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -65,47 +91,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 11:58, Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Tue, 26 Jul 2022 at 18:03, Francesco Dolcini
+<francesco.dolcini@toradex.com> wrote:
 >
-> On Wed, Jul 27, 2022 at 09:20:34PM +0300, Dmitry Baryshkov wrote:
-> > The function psci_pd_try_set_osi_mode() will print an error if enabling
-> > OSI mode fails. To ease debugging PSCI issues print corresponding
-> > message if switching to PC mode fails too.
+> Hello Ulf and everybody,
+>
+> On Wed, Jul 13, 2022 at 01:43:28PM +0200, Ulf Hansson wrote:
+> > On Thu, 23 Jun 2022 at 18:14, Max Krummenacher <max.oss.09@gmail.com> wrote:
+> > > So our plan is to explicitly handle a (shared) regulator in every
+> > > driver involved, adding that regulator capability for drivers not
+> > > already having one.
 > >
+> > Please don't! I have recently rejected a similar approach for Tegra
+> > platforms, which now have been converted into using the power domain
+> > approach.
 >
-> Are you seeing that even setting to PC mode failing on msm8996. The platform
-> must boot in PC mode, so even if it fails we ignore so not sure if the logging
-> is of much help here IMO.
+> Just to quickly re-iterate how our hardware design looks like, we do
+> have a single gpio that control the power of a whole board area that is
+> supposed to be powered-off in suspend mode, this area could contains
+> devices that have a proper Linux driver and some passive driver-less
+> components (e.g. level shifter) - the exact mix varies.
+>
+> Our proposal in this series was to model this as a power domain that
+> could be controlled with a regulator. Krzysztof, Robin and others
+> clearly argued against this idea.
 
-It helped me to understand that it is not only setting OSI, who fails
-with the 'not_supported' status, but setting PC mode also fails. Which
-later led me to checking which functions are provided at all, etc.
+Well, historically we haven't modelled these kinds of power-rails
+other than through power-domains. And this is exactly what genpd and
+PM domains in Linux are there to help us with.
+
+Moreover, on another SoC/platform, maybe the power-rails are deployed
+differently and maybe those have the ability to scale performance too.
+Then it doesn't really fit well with the regulator model anymore.
+
+If we want to continue to keep drivers portable, I don't see any
+better option than continuing to model these power-rails as
+power-domains.
 
 >
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >  drivers/firmware/psci/psci.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> The other approach would be to have a single regulator shared with the
+> multiple devices we have there (still not clear how that would work in
+> case we have only driver-less passive components). This is just a
+> device-tree matter, maybe we would need to add support for a supply to
+> some device drivers.
+>
+> Honestly my conclusion from this discussion is that the only viable
+> option is this second one, do I miss something?
+
+No thanks!
+
+Well, unless you can convince me there are benefits to this approach
+over the power-domain approach.
+
+>
+> > If it's a powerail that is shared between controllers (devices), used
+> > to keep their registers values for example, that should be modelled as
+> > a power domain. Moreover for power domains, we can support
+> > voltage/frequency (performance) scaling, which isn't really applicable
+> > to a plain regulator.
 > >
-> > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> > index cfb448eabdaa..b907768eea01 100644
-> > --- a/drivers/firmware/psci/psci.c
-> > +++ b/drivers/firmware/psci/psci.c
-> > @@ -597,7 +597,9 @@ static int __init psci_1_0_init(struct device_node *np)
-> >               pr_info("OSI mode supported.\n");
-> >
-> >               /* Default to PC mode. */
-> > -             psci_set_osi_mode(false);
-> > +             err = psci_set_osi_mode(false);
-> > +             if (err)
-> > +                     pr_info("setting PC mode failed with %d\n", err);
+> > However, if the actual powerrail fits well to be modelled as
+> > regulator, please go ahead. Although, in this case, the regulator must
+> > only be controlled behind a genpd provider's on/off callback, so you
+> > still need the power domain approach, rather than using the regulator
+> > in each driver and for each device.
 >
-> Since we don't care about error value here, does it make sense to add the
-> log in psci_set_osi_mode() that covers both PC and OSI case whenever it is
-> called ?
+> Francesco
+>
 
-Yes, this sounds like a logical idea. I'll do this in v2.
-
--- 
-With best wishes
-Dmitry
+Kind regards
+Uffe
