@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA76584355
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76E0584356
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbiG1Pl4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 11:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S231991AbiG1Pl5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 11:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbiG1Plz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FD468DD8
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:55 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:41:52 -0000
+        with ESMTP id S231945AbiG1Pl5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085C468DD8
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:56 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:41:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659022913;
+        s=2020; t=1659022914;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+2P2ZzaK8VenEkNwhwAEal1XsUQYPyic5x8XE72i2Fk=;
-        b=Fg74jfH/2fOJv3zvmZRB+ZmKZO6XCVavuU/Jd9YognPuzQPdJw/KcLT/zFrLBnTrcTrWje
-        AD0Z948eDBbMjhV30zIFD2Jgqm5KhoEZbipE9k91LKTtnKRfpWc8HCcoN+dLBuoRTihwJe
-        zvgDwXw2WNaGz+NdCYNEfvbPT9/PHvIJNuE+mWMAasQkMO56imMOeiB4acfmbM4/0rTHGN
-        FV5J15uRAQr00N+IhvgJBaL7cUwtKcqMXib6TVD5KmsxeFr8QkXP8RqY5hkDOxoKMmzGZg
-        q/iN6mIhqTccKOFoJx0ppYg8BQQ4fB5zfAQ3pdSZkM+s7uyxzsMPfPrOsasf5w==
+        bh=fqn2BrhshjUeCi875dEucc4Cn69MISEXOC+QHeSMyiU=;
+        b=FNBqLPuR08TUQefb+XPVZMORqL0TJFexF2jNVyNir6ds8iu8wya3Btq6xlziT1GScl1W5q
+        d8qLAj/IHnVLast7P1Q93pT1f8jTUykuOcZFonmq8phxUdiLzr49w2hgSJbfGpxVVdl6fX
+        F0LU3YeZJO/00TRfzQEUgmML6fHJQPHtqGDZrrP+nrAeb4sux3QH1NTgOT/V9KiaWco5Gp
+        xQQoW5x0CyVDVoqDKqdKQEGAtcw1G2vqkzXcgiJXg9huHxq9ZqT5wA/AKS6aiFCb/iBDq3
+        mlAS40GLB4u20RGLN1Hpfcomu8DVIDrOlh7PV/SFKh32XWBGjEgWnxwqichZlw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659022913;
+        s=2020e; t=1659022914;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+2P2ZzaK8VenEkNwhwAEal1XsUQYPyic5x8XE72i2Fk=;
-        b=xfUWytf9/6rxZPDvnwZVJlpJY/R0/cmVDKl2oXkw4sr0rtIZhZAIdd6K69SmAgyOdcBVth
-        xcYHk8IVlZEpVJDw==
+        bh=fqn2BrhshjUeCi875dEucc4Cn69MISEXOC+QHeSMyiU=;
+        b=j594XFxA/N4NXJjiasRAFH9Bekg9lEFISg5XMMusoaYQWL90Fho1bHgYMxKqPI60aX/08U
+        65rDdTQIe9t6DPAg==
 From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/core: Use clamp() helper in the
- stepwise governor
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
+Subject: [thermal: thermal/next] thermal/drivers/u8500: Remove the get_trend function
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>, rui.zhang@intel.com,
         amitk@kernel.org
-In-Reply-To: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
-References: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20220616202537.303655-3-daniel.lezcano@linaro.org>
+References: <20220616202537.303655-3-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Message-ID: <165902291255.15455.9761232716849801405.tip-bot2@tip-bot2>
+Message-ID: <165902291348.15455.7980934224505888475.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,72 +65,112 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     25bff3ed9a8aaee45c3b554cca58673f1bea1bdc
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//25bff3ed9a8aaee45c3b554cca58673f1bea1bdc
+Commit-ID:     66a0b101efca70097a14aece9c76bc24cd0da119
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//66a0b101efca70097a14aece9c76bc24cd0da119
 Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Wed, 29 Jun 2022 17:10:11 +02:00
+AuthorDate:    Thu, 16 Jun 2022 22:25:37 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 28 Jul 2022 17:29:47 +02:00
+CommitterDate: Thu, 28 Jul 2022 17:29:46 +02:00
 
-thermal/core: Use clamp() helper in the stepwise governor
+thermal/drivers/u8500: Remove the get_trend function
 
-The code is actually clampling the next cooling device state using the
-lowest and highest states of the thermal instance.
+The get_trend function relies on the interrupt to set the raising or
+dropping trend. However the interpolated temperature is already giving
+the temperature information to the thermal framework which is able to
+deduce the trend.
 
-That code can be replaced by the clamp() macro which does exactly the
-same. It results in a simpler routine to read.
+Remove the trend code.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20220629151012.3115773-1-daniel.lezcano@linaro.org
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220616202537.303655-3-daniel.lezcano@linaro.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/gov_step_wise.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ drivers/thermal/db8500_thermal.c | 26 ++++----------------------
+ 1 file changed, 4 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
-index 12acb12..6efbfaf 100644
---- a/drivers/thermal/gov_step_wise.c
-+++ b/drivers/thermal/gov_step_wise.c
-@@ -11,6 +11,7 @@
-  */
+diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
+index 21d4d6e..ed40cfd 100644
+--- a/drivers/thermal/db8500_thermal.c
++++ b/drivers/thermal/db8500_thermal.c
+@@ -53,7 +53,6 @@ static const unsigned long db8500_thermal_points[] = {
  
- #include <linux/thermal.h>
-+#include <linux/minmax.h>
- #include <trace/events/thermal.h>
+ struct db8500_thermal_zone {
+ 	struct thermal_zone_device *tz;
+-	enum thermal_trend trend;
+ 	unsigned long interpolated_temp;
+ 	unsigned int cur_index;
+ };
+@@ -73,24 +72,12 @@ static int db8500_thermal_get_temp(void *data, int *temp)
+ 	return 0;
+ }
  
- #include "thermal_core.h"
-@@ -52,10 +53,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+-/* Callback to get temperature changing trend */
+-static int db8500_thermal_get_trend(void *data, int trip, enum thermal_trend *trend)
+-{
+-	struct db8500_thermal_zone *th = data;
+-
+-	*trend = th->trend;
+-
+-	return 0;
+-}
+-
+ static struct thermal_zone_of_device_ops thdev_ops = {
+ 	.get_temp = db8500_thermal_get_temp,
+-	.get_trend = db8500_thermal_get_trend,
+ };
  
- 	if (!instance->initialized) {
- 		if (throttle) {
--			next_target = (cur_state + 1) >= instance->upper ?
--					instance->upper :
--					((cur_state + 1) < instance->lower ?
--					instance->lower : (cur_state + 1));
-+			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
- 		} else {
- 			next_target = THERMAL_NO_TARGET;
- 		}
-@@ -66,10 +64,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 	switch (trend) {
- 	case THERMAL_TREND_RAISING:
- 		if (throttle) {
--			next_target = cur_state < instance->upper ?
--				    (cur_state + 1) : instance->upper;
--			if (next_target < instance->lower)
--				next_target = instance->lower;
-+			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
- 		}
- 		break;
- 	case THERMAL_TREND_RAISE_FULL:
-@@ -82,9 +77,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 				next_target = THERMAL_NO_TARGET;
- 		} else {
- 			if (!throttle) {
--				next_target = cur_state - 1;
--				if (next_target > instance->upper)
--					next_target = instance->upper;
-+				next_target = clamp((cur_state - 1), instance->lower, instance->upper);
- 			}
- 		}
- 		break;
+ static void db8500_thermal_update_config(struct db8500_thermal_zone *th,
+ 					 unsigned int idx,
+-					 enum thermal_trend trend,
+ 					 unsigned long next_low,
+ 					 unsigned long next_high)
+ {
+@@ -98,7 +85,6 @@ static void db8500_thermal_update_config(struct db8500_thermal_zone *th,
+ 
+ 	th->cur_index = idx;
+ 	th->interpolated_temp = (next_low + next_high)/2;
+-	th->trend = trend;
+ 
+ 	/*
+ 	 * The PRCMU accept absolute temperatures in celsius so divide
+@@ -127,8 +113,7 @@ static irqreturn_t prcmu_low_irq_handler(int irq, void *irq_data)
+ 	}
+ 	idx -= 1;
+ 
+-	db8500_thermal_update_config(th, idx, THERMAL_TREND_DROPPING,
+-				     next_low, next_high);
++	db8500_thermal_update_config(th, idx, next_low, next_high);
+ 	dev_dbg(&th->tz->device,
+ 		"PRCMU set max %ld, min %ld\n", next_high, next_low);
+ 
+@@ -149,8 +134,7 @@ static irqreturn_t prcmu_high_irq_handler(int irq, void *irq_data)
+ 		next_low = db8500_thermal_points[idx];
+ 		idx += 1;
+ 
+-		db8500_thermal_update_config(th, idx, THERMAL_TREND_RAISING,
+-					     next_low, next_high);
++		db8500_thermal_update_config(th, idx, next_low, next_high);
+ 
+ 		dev_dbg(&th->tz->device,
+ 			"PRCMU set max %ld, min %ld\n", next_high, next_low);
+@@ -210,8 +194,7 @@ static int db8500_thermal_probe(struct platform_device *pdev)
+ 	dev_info(dev, "thermal zone sensor registered\n");
+ 
+ 	/* Start measuring at the lowest point */
+-	db8500_thermal_update_config(th, 0, THERMAL_TREND_STABLE,
+-				     PRCMU_DEFAULT_LOW_TEMP,
++	db8500_thermal_update_config(th, 0, PRCMU_DEFAULT_LOW_TEMP,
+ 				     db8500_thermal_points[0]);
+ 
+ 	platform_set_drvdata(pdev, th);
+@@ -232,8 +215,7 @@ static int db8500_thermal_resume(struct platform_device *pdev)
+ 	struct db8500_thermal_zone *th = platform_get_drvdata(pdev);
+ 
+ 	/* Resume and start measuring at the lowest point */
+-	db8500_thermal_update_config(th, 0, THERMAL_TREND_STABLE,
+-				     PRCMU_DEFAULT_LOW_TEMP,
++	db8500_thermal_update_config(th, 0, PRCMU_DEFAULT_LOW_TEMP,
+ 				     db8500_thermal_points[0]);
+ 
+ 	return 0;
