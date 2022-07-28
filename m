@@ -2,57 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87214584353
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8958584354
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Jul 2022 17:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiG1Ply (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Jul 2022 11:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
+        id S231982AbiG1Plz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Jul 2022 11:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbiG1Plx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:53 -0400
+        with ESMTP id S231928AbiG1Plz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Jul 2022 11:41:55 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B47D68DD8
-        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:53 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:41:50 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3406268DF0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Jul 2022 08:41:54 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:41:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659022911;
+        s=2020; t=1659022912;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FRQV/ao8/fyUkgL5lk7a9rmHdtd9yKJ8vS9dSOahuDM=;
-        b=NQeSemQfxnziXDqj/K9MFoUcXi/I98gMh+tsrORvFWtfeXsTWbceCIcLo3Gs4yJG+BxKmf
-        AoTCJsU/+jDdEa40LZ/lJK8cDmpr1aZ83+9hTqjBWSZZoEuJHECewjWXDlvM0q0s7FFBjI
-        ymqi0L7Wp8bT8KT6DrrfIJ+lSvkQTvrdtOjVkeXNb/ytDWN/pHKFkZG5xRMh/EnoBvY4JC
-        Gu5E08c21f/cP2gFTXaR9Mb8BnH/QzoHvqiBNw5S3qtwdVKrP1oAjZvPAkpGKLflKg712z
-        UhCDlXYbJ/IONwbKwSIir3bNwW7ZIPaqzzY+I7fDSxIAkEngiZHrHEJp+glMLQ==
+        bh=r7PiDqb/4OlGA2bYKr9VabPonFXXnCntWjnHf4DmzC0=;
+        b=WodvzzNFQvhfA0D2G2xknxUOK3I3vB9nUeHY8XS2H3Gnrijs6nK6LPOmgFP2HEdMaKF9Ts
+        oS78pSIG7QQ9K1cfYH2qyi/+qRIFR6TDeA22pOaW6OE1VeZZh+akCwm7/MiVnwT958iKSs
+        vw7ZnPTLDJ7jbrgXS6cp7fdPmZmi071mL/s3L94hx8JLsd5kBfMLDsCkYgXg3ybxazeYDv
+        chojLjwxzI5zgTZSG60d+LAmGfoKFd3JhYtaHG3Gw6HyKpz75ZHgkO3fKwdFdZBQP1uyNY
+        LArjmbYUNOH3Wf0VNstLXmhkVB1yTFcbA74uOx7V3Efqx6OXBZRlpEs5oiz5bA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659022911;
+        s=2020e; t=1659022912;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FRQV/ao8/fyUkgL5lk7a9rmHdtd9yKJ8vS9dSOahuDM=;
-        b=g/KX8Wai6NpCinyzw60B+JUGUrj6C8wb/HavUp6il2ykc0sQOPFm10hcAtrGAI+fKTImcc
-        Ma3eEhe8ELE3GgCQ==
-From:   "thermal-bot for Bryan Brattlof" <tip-bot2@linutronix.de>
+        bh=r7PiDqb/4OlGA2bYKr9VabPonFXXnCntWjnHf4DmzC0=;
+        b=bcj1SNDTBlpDGemGhmJtaahSGUSNswphwx7YTBPeMbx/nKXTCYumcUbFSEaAjfVfQ6ApN8
+        lOfMMwoTsqg+dRDQ==
+From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/k3_j72xx_bandgap: Fix
- ref_table memory leak during probe
-Cc:     kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Bryan Brattlof <bb@ti.com>, Keerthy <j-keerthy@ti.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220525213617.30002-1-bb@ti.com>
-References: <20220525213617.30002-1-bb@ti.com>
+Subject: [thermal: thermal/next] thermal/core: Remove DROP_FULL and RAISE_FULL
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
+        amitk@kernel.org
+In-Reply-To: <20220629151012.3115773-2-daniel.lezcano@linaro.org>
+References: <20220629151012.3115773-2-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Message-ID: <165902291063.15455.8263730895299210540.tip-bot2@tip-bot2>
+Message-ID: <165902291163.15455.6354391914611113397.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,60 +64,66 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     99a049aace3257cf7644c3bbf67cb1a655248cc2
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//99a049aace3257cf7644c3bbf67cb1a655248cc2
-Author:        Bryan Brattlof <bb@ti.com>
-AuthorDate:    Wed, 25 May 2022 16:36:17 -05:00
+Commit-ID:     4102c4042a33c682021683ec26c2dca3fd9d7cc2
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//4102c4042a33c682021683ec26c2dca3fd9d7cc2
+Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
+AuthorDate:    Wed, 29 Jun 2022 17:10:12 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 28 Jul 2022 17:29:47 +02:00
 
-thermal/drivers/k3_j72xx_bandgap: Fix ref_table memory leak during probe
+thermal/core: Remove DROP_FULL and RAISE_FULL
 
-If an error occurs in the k3_j72xx_bandgap_probe() function the memory
-allocated to the 'ref_table' will not be released.
+The trends DROP_FULL and RAISE_FULL are not used and were never used
+in the past AFAICT. Remove these conditions as they seems to not be
+handled anywhere.
 
-Add a err_free_ref_table step to the error path to free 'ref_table'
-
-Fixes: 72b3fc61c752 ("thermal: k3_j72xx_bandgap: Add the bandgap driver support")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Bryan Brattlof <bb@ti.com>
-Reviewed-by: Keerthy <j-keerthy@ti.com>
-Link: https://lore.kernel.org/r/20220525213617.30002-1-bb@ti.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20220629151012.3115773-2-daniel.lezcano@linaro.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/k3_j72xx_bandgap.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/thermal/gov_step_wise.c | 11 -----------
+ include/linux/thermal.h         |  2 --
+ 2 files changed, 13 deletions(-)
 
-diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-index 64e3231..3a35aa3 100644
---- a/drivers/thermal/k3_j72xx_bandgap.c
-+++ b/drivers/thermal/k3_j72xx_bandgap.c
-@@ -433,7 +433,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
- 				     GFP_KERNEL);
- 	if (!derived_table) {
- 		ret = -ENOMEM;
--		goto err_alloc;
-+		goto err_free_ref_table;
- 	}
- 
- 	/* Workaround not needed if bit30/bit31 is set even for J721e */
-@@ -483,7 +483,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
- 		if (IS_ERR(ti_thermal)) {
- 			dev_err(bgp->dev, "thermal zone device is NULL\n");
- 			ret = PTR_ERR(ti_thermal);
--			goto err_alloc;
-+			goto err_free_ref_table;
+diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+index 6efbfaf..9729b46 100644
+--- a/drivers/thermal/gov_step_wise.c
++++ b/drivers/thermal/gov_step_wise.c
+@@ -67,10 +67,6 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+ 			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
  		}
+ 		break;
+-	case THERMAL_TREND_RAISE_FULL:
+-		if (throttle)
+-			next_target = instance->upper;
+-		break;
+ 	case THERMAL_TREND_DROPPING:
+ 		if (cur_state <= instance->lower) {
+ 			if (!throttle)
+@@ -81,13 +77,6 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+ 			}
+ 		}
+ 		break;
+-	case THERMAL_TREND_DROP_FULL:
+-		if (cur_state == instance->lower) {
+-			if (!throttle)
+-				next_target = THERMAL_NO_TARGET;
+-		} else
+-			next_target = instance->lower;
+-		break;
+ 	default:
+ 		break;
  	}
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 365733b..231bac2 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -40,8 +40,6 @@ enum thermal_trend {
+ 	THERMAL_TREND_STABLE, /* temperature is stable */
+ 	THERMAL_TREND_RAISING, /* temperature is raising */
+ 	THERMAL_TREND_DROPPING, /* temperature is dropping */
+-	THERMAL_TREND_RAISE_FULL, /* apply highest cooling action */
+-	THERMAL_TREND_DROP_FULL, /* apply lowest cooling action */
+ };
  
-@@ -514,6 +514,9 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+err_free_ref_table:
-+	kfree(ref_table);
-+
- err_alloc:
- 	pm_runtime_put_sync(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
+ /* Thermal notification reason */
