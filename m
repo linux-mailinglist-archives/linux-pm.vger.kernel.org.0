@@ -2,273 +2,274 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566D7585366
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Jul 2022 18:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ABC5853EC
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Jul 2022 18:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbiG2Q2e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Jul 2022 12:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S238334AbiG2Qrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Jul 2022 12:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiG2Q2d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jul 2022 12:28:33 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2DDDF60;
-        Fri, 29 Jul 2022 09:28:32 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id q6-20020a05683033c600b0061d2f64df5dso2138514ott.13;
-        Fri, 29 Jul 2022 09:28:32 -0700 (PDT)
+        with ESMTP id S238210AbiG2Qrf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jul 2022 12:47:35 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459CC8AB2D
+        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 09:47:14 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id b26so6700890wrc.2
+        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 09:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=FrtWAe2AWSu0ytBk+RY2IWenDv3uSIfc4SXJrDvpAqY=;
-        b=QPmQKM62GdP8hGc0v1OaRUaMoS8Pe1YFqXzhyUddyLSPCUkgo9DY4QSi3B9mKnTlPQ
-         6f4V8NLpMF6ef+Y3k8Bc0evv4yBrqdax4wxCyqGUTK2Y6cwYluo6Xfd/qNuBSfMs3u3C
-         thD7FSyMzlKMuYTwaCiNSD7Noyw+DuFZ/OQ35Xmr1E9hoxGiA2IBnJ+f+VAT9dt7oDQ/
-         vDks41oNJRKwDj72q0DoUoH4S9HVex6TRV4mTrJ5D2yFZIZ0TRXETwEE9zNTyU5X/qzp
-         KMCVy2crItzeXUXZxE1POCIq+UrQF2xJT6AyVENuAQI3oqD3eNR+RnMyDxThxP1t41H/
-         KfNg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:subject:cc:to:from:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc;
+        bh=uj0NTCk0OK/D6vlalqFLNfUUb0fhxD9ZnTJOgSVfHLE=;
+        b=JzIIH/aDJh/HArX8KTQKPL4vTCQ6E6SyN3ZvH11SG066upkgvwoK9cVlSr5FI9aSFV
+         fdmDJLlhH3qUSRt9Kt5RZ7478uQpZtyd/3+HeI5Yqu0QsRq7PzYARp+cFBqV7VYPaVTI
+         M1GnxnkcKJh4LWhPv3819TTcwv2zoWTxf/7yGv4evffh00rlPJnO88jmYvRYAc/J0uRZ
+         8Ih3y+nxp7DsswMn3wzo+Z9K8N4WL5LbUvNLdOeBvuNXQVxm0RksRPRfy0jVqzO471NE
+         Hnbko8eRoe7TjcgrBAWGGP/1eQcwaFiWSfbY06rtvjHVu6l9ng8x2csxRDGw7+yYSB9z
+         GcVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=FrtWAe2AWSu0ytBk+RY2IWenDv3uSIfc4SXJrDvpAqY=;
-        b=k9rEMkjkfrK4NOa/ve6mKIlCAzfzu5EscDgnzsyDSgFwToc26mKXItjqDAoh8j33TM
-         vYbtHQ93o0OpueDWASdtnP+H6hxQ4rUl4hVYbDR2hWougUjKZlVV8Ntw9pknuImvoAdt
-         J0FsnDluXnytMnSxxeFHSOLtIeG9u1Q6nIg3BScWIGUONY6WDJnYzhPV4nHec5cEPwaR
-         lzJdr2VaTpFsTMZh1kYsUc/Bw1iCwgor6spyWvLwZTmXV5D5M8y9waxBALXa8MebhwKK
-         4c89Rw2kjwdTIK18NxHeIPI3fL+tlXbpdI+V4GvHlfqXILNlhFyQ6S9NQCo2hYpSJ9Y7
-         /iqA==
-X-Gm-Message-State: AJIora8y3Ep2ZGUOn6a6AJo4Lm3M5sriJDB9WQx0+SNdebjkTt0N1uoE
-        nP0WzN+yTjMAiUaZ7N1/PBzzn7d/O/U=
-X-Google-Smtp-Source: AGRyM1sDiXIt2MwtbSK2xFqF1JMI9Nc7fPF548IZgZE1d7ZCWQ3tWKHPotsPIt8NdbUAfrA19RUdlQ==
-X-Received: by 2002:a9d:58cc:0:b0:61c:efc0:5c75 with SMTP id s12-20020a9d58cc000000b0061cefc05c75mr1771997oth.167.1659112111423;
-        Fri, 29 Jul 2022 09:28:31 -0700 (PDT)
-Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id v5-20020a4aaec5000000b0043540f7701esm1332748oon.31.2022.07.29.09.28.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 09:28:30 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 11:28:28 -0500
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-pm@vger.kernel.org, kbuild-all@lists.01.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        zhangqing@rock-chips.com, zyw@rock-chips.com,
-        jon.lin@rock-chips.com, sre@kernel.org, heiko@sntech.de,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lee.jones@linaro.org, Chris Morgan <macromorgan@hotmail.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>
-Subject: Re: [RESEND 3/4 v7] power: supply: Add charger driver for Rockchip
- RK817
-Message-ID: <20220729162828.GB102@wintermute.localdomain>
-References: <20220721161718.29800-4-macroalpha82@gmail.com>
- <202207242227.mttUkfTB-lkp@intel.com>
+        h=content-transfer-encoding:subject:cc:to:from:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc;
+        bh=uj0NTCk0OK/D6vlalqFLNfUUb0fhxD9ZnTJOgSVfHLE=;
+        b=Eowc4RO9OJdwNji2yeLjLuclypM3pFy3i6xu4Alk9ezCtz1esXOs64SuS94723xqpv
+         pFCaVKCeL46s6/Et3+oW63bDxLgzG3sbacK9VqUXfUvxIMiwVjxkGjX146JJMeTdiXyv
+         lkrcXe7IvGyWbby6FgGmUVPqmL9YZRrlCmArnV7M+TK3Q789tooa+v76t9FqiYoFa+1k
+         FQOf0Cj5Qqcb4/di3cawLucmKnb98HJJS+2Ftn+aay6cSj/f4sTo+1NYm2qWUo7P5xib
+         +U6/uUtWl1JETUE8FlroXXIMKFdl9zo3lelEKplmW8mq3YIC58Ic176Rp8c4sAF+sW5n
+         4G9w==
+X-Gm-Message-State: ACgBeo1Ts9R8fcK3TzIAUqfHYMuaNbmYn/o6X6mavtUFG1UqHjw0neVg
+        wYm0JPjpITSro7H0mbMyFM0RWw==
+X-Google-Smtp-Source: AA6agR6qmxaN2FTVOQj1qZRYQEAsun4ZNQP7ryxKFYGUZ8GgVZvTIvwFiSwT1ChxiVsgCntcXXp0Yg==
+X-Received: by 2002:a05:6000:887:b0:21e:24a0:f302 with SMTP id ca7-20020a056000088700b0021e24a0f302mr2878536wrb.466.1659113231809;
+        Fri, 29 Jul 2022 09:47:11 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:a2b5:2611:bcc1:9aac? ([2a05:6e02:1041:c10:a2b5:2611:bcc1:9aac])
+        by smtp.googlemail.com with ESMTPSA id u17-20020a05600c19d100b0039db31f6372sm10102894wmq.2.2022.07.29.09.47.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Jul 2022 09:47:11 -0700 (PDT)
+Message-ID: <930e7e1b-f0d2-c3ea-cd1a-c212332e0057@linaro.org>
+Date:   Fri, 29 Jul 2022 18:47:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202207242227.mttUkfTB-lkp@intel.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bryan Brattlof <bb@ti.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        jinxiaoyun2@huawei.com, Julia Lawall <julia.lawall@lip6.fr>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [GIT PULL] thermal for v5.20-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 10:58:00PM +0800, kernel test robot wrote:
-> Hi Chris,
-> 
-> Thank you for the patch! Perhaps something to improve:
 
-I'm afraid I'm not sure the best way to fix this. The only thing I can
-think of is for now the driver should only be for systems with a
-Rockchip RK817 PMIC (to my knowledge only ARM based systems from
-Rockchip), but it looks like the arch was set as parisc. Even still,
-as long as some of the functions ahead of it don't error out each
-of those variables should be used. Is there a way to confirm these
-warnings?
+Hi Rafael,
 
-Thank you.
+please consider pulling the following changes:
 
-> 
-> [auto build test WARNING on lee-mfd/for-mfd-next]
-> [also build test WARNING on sre-power-supply/for-next rockchip/for-next linus/master v5.19-rc7 next-20220722]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Morgan/power-supply-Add-Support-for-RK817-Charger/20220722-002431
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-> config: parisc-allmodconfig (https://download.01.org/0day-ci/archive/20220724/202207242227.mttUkfTB-lkp@intel.com/config)
-> compiler: hppa-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/008e6f0d590e275cbb56d4506b5638156506dd40
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Chris-Morgan/power-supply-Add-Support-for-RK817-Charger/20220722-002431
->         git checkout 008e6f0d590e275cbb56d4506b5638156506dd40
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/power/supply/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/power/supply/rk817_charger.c: In function 'rk817_read_or_set_full_charge_on_boot':
-> >> drivers/power/supply/rk817_charger.c:701:33: warning: variable 'soc_tmp3' set but not used [-Wunused-but-set-variable]
->      701 |         int soc_tmp1, soc_tmp2, soc_tmp3;
->          |                                 ^~~~~~~~
-> >> drivers/power/supply/rk817_charger.c:701:23: warning: variable 'soc_tmp2' set but not used [-Wunused-but-set-variable]
->      701 |         int soc_tmp1, soc_tmp2, soc_tmp3;
->          |                       ^~~~~~~~
-> >> drivers/power/supply/rk817_charger.c:701:13: warning: variable 'soc_tmp1' set but not used [-Wunused-but-set-variable]
->      701 |         int soc_tmp1, soc_tmp2, soc_tmp3;
->          |             ^~~~~~~~
-> 
-> 
-> vim +/soc_tmp3 +701 drivers/power/supply/rk817_charger.c
-> 
->    692	
->    693	static int
->    694	rk817_read_or_set_full_charge_on_boot(struct rk817_charger *charger,
->    695					struct power_supply_battery_info *bat_info)
->    696	{
->    697		struct rk808 *rk808 = charger->rk808;
->    698		u8 bulk_reg[4];
->    699		u32 boot_voltage, boot_charge_mah, tmp;
->    700		int ret, reg, off_time;
->  > 701		int soc_tmp1, soc_tmp2, soc_tmp3;
->    702		bool first_boot;
->    703	
->    704		/* Check if the battery is uninitalized. If it is, the columb counter
->    705		 * needs to be set up.
->    706		 */
->    707		ret = regmap_read(rk808->regmap, RK817_GAS_GAUGE_GG_STS, &reg);
->    708		if (ret < 0)
->    709			return ret;
->    710		first_boot = reg & RK817_BAT_CON;
->    711		/* If the battery is uninitialized, use the poweron voltage and an ocv
->    712		 * lookup to guess our charge. The number won't be very accurate until
->    713		 * we hit either our minimum voltage (0%) or full charge (100%).
->    714		 */
->    715		if (first_boot) {
->    716			regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_PWRON_VOL_H,
->    717					 bulk_reg, 2);
->    718			tmp = get_unaligned_be16(bulk_reg);
->    719			boot_voltage = (charger->voltage_k * tmp) +
->    720					1000 * charger->voltage_b;
->    721			/* Since only implementation has no working thermistor, assume
->    722			 * 20C for OCV lookup. If lookup fails, report error with OCV
->    723			 * table.
->    724			 */
->    725			charger->soc = power_supply_batinfo_ocv2cap(bat_info,
->    726								    boot_voltage,
->    727								    20) * 1000;
->    728			if (charger->soc < 0)
->    729				charger->soc = 0;
->    730	
->    731			/* Guess that full charge capacity is the design capacity */
->    732			charger->fcc_mah = charger->bat_charge_full_design_uah / 1000;
->    733			/* Set battery as "set up". BSP driver uses this value even
->    734			 * though datasheet claims it's a read-only value.
->    735			 */
->    736			regmap_write_bits(rk808->regmap, RK817_GAS_GAUGE_GG_STS,
->    737					  RK817_BAT_CON, 0);
->    738			/* Save nvram values */
->    739			ret = rk817_record_battery_nvram_values(charger);
->    740			if (ret < 0)
->    741				return ret;
->    742		} else {
->    743			ret = rk817_read_battery_nvram_values(charger);
->    744			if (ret < 0)
->    745				return ret;
->    746	
->    747			regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
->    748					 bulk_reg, 4);
->    749			tmp = get_unaligned_be32(bulk_reg);
->    750			if (tmp < 0)
->    751				tmp = 0;
->    752			boot_charge_mah = ADC_TO_CHARGE_UAH(tmp,
->    753							    charger->res_div) / 1000;
->    754			/* Check if the columb counter has been off for more than 300
->    755			 * minutes as it tends to drift downward. If so, re-init soc
->    756			 * with the boot voltage instead. Note the unit values for the
->    757			 * OFF_CNT register appear to be in decaminutes and stops
->    758			 * counting at 2550 (0xFF) minutes. BSP kernel used OCV, but
->    759			 * for me occasionally that would show invalid values. Boot
->    760			 * voltage is only accurate for me on first poweron (not
->    761			 * reboots), but we shouldn't ever encounter an OFF_CNT more
->    762			 * than 0 on a reboot anyway.
->    763			 */
->    764			regmap_read(rk808->regmap, RK817_GAS_GAUGE_OFF_CNT, &off_time);
->    765			if (off_time >= 30) {
->    766				regmap_bulk_read(rk808->regmap,
->    767						 RK817_GAS_GAUGE_PWRON_VOL_H,
->    768						 bulk_reg, 2);
->    769				tmp = get_unaligned_be16(bulk_reg);
->    770				boot_voltage = (charger->voltage_k * tmp) +
->    771						1000 * charger->voltage_b;
->    772				charger->soc =
->    773					power_supply_batinfo_ocv2cap(bat_info,
->    774								     boot_voltage,
->    775								     20) * 1000;
->    776			} else {
->    777				charger->soc = (boot_charge_mah * 1000 * 100 /
->    778						charger->fcc_mah);
->    779			}
->    780		}
->    781	
->    782		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_PWRON_VOL_H,
->    783				 bulk_reg, 2);
->    784		tmp = get_unaligned_be16(bulk_reg);
->    785		boot_voltage = (charger->voltage_k * tmp) + 1000 * charger->voltage_b;
->    786		soc_tmp1 = power_supply_batinfo_ocv2cap(bat_info,
->    787							boot_voltage, 20) * 1000;
->    788		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
->    789				 bulk_reg, 4);
->    790		tmp = get_unaligned_be32(bulk_reg);
->    791		if (tmp < 0)
->    792			tmp = 0;
->    793		boot_charge_mah = ADC_TO_CHARGE_UAH(tmp, charger->res_div) / 1000;
->    794		soc_tmp2 = (boot_charge_mah * 1000 * 100 / charger->fcc_mah);
->    795		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_OCV_VOL_H,
->    796				 bulk_reg, 2);
->    797		tmp = get_unaligned_be16(bulk_reg);
->    798		boot_voltage = (charger->voltage_k * tmp) + 1000 * charger->voltage_b;
->    799		soc_tmp3 = power_supply_batinfo_ocv2cap(bat_info,
->    800							boot_voltage, 20) * 1000;
->    801	
->    802		/* Now we have our full charge capacity and soc, init the columb
->    803		 * counter.
->    804		 */
->    805		boot_charge_mah = charger->soc * charger->fcc_mah / 100 / 1000;
->    806		if (boot_charge_mah > charger->fcc_mah)
->    807			boot_charge_mah = charger->fcc_mah;
->    808		tmp = CHARGE_TO_ADC(boot_charge_mah, charger->res_div);
->    809		put_unaligned_be32(tmp, bulk_reg);
->    810		ret = regmap_bulk_write(rk808->regmap, RK817_GAS_GAUGE_Q_INIT_H3,
->    811				  bulk_reg, 4);
->    812		if (ret < 0)
->    813			return ret;
->    814	
->    815		/* Set QMAX value to max design capacity. */
->    816		tmp = CHARGE_TO_ADC((charger->bat_charge_full_design_uah / 1000),
->    817				    charger->res_div);
->    818		put_unaligned_be32(tmp, bulk_reg);
->    819		ret = regmap_bulk_write(rk808->regmap, RK817_GAS_GAUGE_Q_MAX_H3,
->    820					bulk_reg, 4);
->    821		if (ret < 0)
->    822			return ret;
->    823	
->    824		return 0;
->    825	}
->    826	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+Thanks!
+
+
+The following changes since commit 62f46fc7b8c639bc97cc9c69e063c40970b6e14c:
+
+   thermal: intel_tcc_cooling: Add TCC cooling support for RaptorLake 
+(2022-06-30 19:48:44 +0200)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v5.20-rc1
+
+for you to fetch changes up to d0c75fa2c17f082b32a5f26ff40bf378b12952de:
+
+   thermal/of: Initialize trip points separately (2022-07-28 17:29:57 +0200)
+
+----------------------------------------------------------------
+- Make per cpufreq / devfreq cooling device ops instead of using a
+   global variable, fix comments and rework the trace information
+   (Lukasz Luba)
+
+- Add the include/dt-bindings/thermal.h under the area covered by the
+   thermal maintainer in the MAINTAINERS file (Lukas Bulwahn)
+
+- Improve the error output by giving the sensor identification when a
+   thermal zone failed to initialize, the DT bindings by changing the
+   positive logic and adding the r8a779f0 support on the rcar3 (Wolfram
+   Sang)
+
+- Convert the QCom tsens DT binding to the dtsformat format (Krzysztof
+   Kozlowski)
+
+- Remove the pointless get_trend() function in the QCom, Ux500 and
+   tegra thermal drivers, along with the unused DROP_FULL and
+   RAISE_FULL trends definitions. Simplify the code by using clamp()
+   macros (Daniel Lezcano)
+
+- Fix ref_table memory leak at probe time on the k3_j72xx bandgap
+   (Bryan Brattlof)
+
+- Fix array underflow in prep_lookup_table (Dan Carpenter)
+
+- Add static annotation to the k3_j72xx_bandgap_j7* data structure
+   (Jin Xiaoyun)
+
+- Fix typos in comments detected on sun8i by Coccinelle (Julia Lawall)
+
+- Fix typos in comments on rzg2l (Biju Das)
+
+- Remove as unnecessary call to dev_err() as the error is already
+   printed by the failing function on u8500 (Yang Li)
+
+- Register the thermal zones as hwmon sensors for the Qcom thermal
+   sensors (Dmitry Baryshkov)
+
+- Fix 'tmon' tool compilation issue by adding phtread.h include
+   (Markus Mayer)
+
+- Fix typo in the comments for the 'tmon' tool (Slark Xiao)
+
+- Consolidate the thermal core code by beginning to move the thermal
+   trip structure from the thermal OF code as a generic structure to be
+   used by the different sensors when registering a thermal zone
+   (Daniel Lezcano)
+
+----------------------------------------------------------------
+Biju Das (1):
+       thermal/drivers/rzg2l: Fix comments
+
+Bryan Brattlof (1):
+       thermal/drivers/k3_j72xx_bandgap: Fix ref_table memory leak 
+during probe
+
+Dan Carpenter (1):
+       thermal/drivers/k3_j72xx_bandgap: Fix array underflow in 
+prep_lookup_table()
+
+Daniel Lezcano (16):
+       thermal/drivers/qcom: Remove get_trend function
+       thermal/drivers/tegra: Remove get_trend function
+       thermal/drivers/u8500: Remove the get_trend function
+       thermal/core: Use clamp() helper in the stepwise governor
+       thermal/core: Remove DROP_FULL and RAISE_FULL
+       thermal/core: Avoid calling ->get_trip_temp() unnecessarily
+       thermal/core: Remove duplicate information when an error occurs
+       thermal/of: Replace device node match with device node search
+       thermal/of: Remove the device node pointer for thermal_trip
+       thermal/of: Move thermal_trip structure to thermal.h
+       thermal/core: Remove unneeded EXPORT_SYMBOLS
+       thermal/core: Move thermal_set_delay_jiffies to static
+       thermal/core: Rename 'trips' to 'num_trips'
+       thermal/core: Add thermal_trip in thermal_zone
+       thermal/of: Use thermal trips stored in the thermal zone
+       thermal/of: Initialize trip points separately
+
+Dmitry Baryshkov (2):
+       thermal/drivers/qcom/temp-alarm: Register thermal zones as hwmon 
+sensors
+       thermal/drivers/qcom/spmi-adc-tm5: Register thermal zones as 
+hwmon sensors
+
+Jason Wang (1):
+       thermal/ti-soc-thermal: Fix comment typo
+
+Jin Xiaoyun (1):
+       thermal/drivers/k3_j72xx_bandgap: Make 
+k3_j72xx_bandgap_j721e_data and k3_j72xx_bandgap_j7200_data static
+
+Julia Lawall (1):
+       thermal/drivers/sun8i: Fix typo in comment
+
+Krzysztof Kozlowski (1):
+       dt-bindings: thermal: qcom,spmi-temp-alarm: convert to dtschema
+
+Lukas Bulwahn (1):
+       MAINTAINERS: add include/dt-bindings/thermal to THERMAL
+
+Lukasz Luba (4):
+       drivers/thermal/cpufreq_cooling: Use private callback ops for 
+each cooling device
+       drivers/thermal/cpufreq_cooling : Refactor 
+thermal_power_cpu_get_power tracing
+       drivers/thermal/cpufreq_cooling: Update outdated comments
+       drivers/thermal/devfreq_cooling: Extend the 
+devfreq_cooling_device with ops
+
+Markus Mayer (1):
+       thermal/tools/tmon: Include pthread and time headers in tmon.h
+
+Slark Xiao (1):
+       thermal/tools/tmon: Fix typo 'the the' in comment
+
+Wolfram Sang (3):
+       drivers/thermal/rcar_gen3_thermal: Improve logging during probe
+       dt-bindings: thermal: rcar-gen3-thermal: use positive logic
+       dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0 support
+
+Yang Li (1):
+       thermal/drivers/u8500: Remove unnecessary print function dev_err()
+
+  .../bindings/thermal/qcom,spmi-temp-alarm.yaml     |  85 +++++++++
+  .../bindings/thermal/qcom-spmi-temp-alarm.txt      |  51 ------
+  .../bindings/thermal/rcar-gen3-thermal.yaml        |  36 ++--
+  MAINTAINERS                                        |   1 +
+  drivers/thermal/cpufreq_cooling.c                  |  77 +++-----
+  drivers/thermal/db8500_thermal.c                   |  34 +---
+  drivers/thermal/devfreq_cooling.c                  |  27 +--
+  drivers/thermal/gov_fair_share.c                   |   6 +-
+  drivers/thermal/gov_power_allocator.c              |   4 +-
+  drivers/thermal/gov_step_wise.c                    |  26 +--
+  drivers/thermal/k3_j72xx_bandgap.c                 |  13 +-
+  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   5 +
+  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   5 +
+  drivers/thermal/qcom/tsens.c                       |  12 --
+  drivers/thermal/qcom/tsens.h                       |   2 -
+  drivers/thermal/rcar_gen3_thermal.c                |   4 +-
+  drivers/thermal/rzg2l_thermal.c                    |  18 +-
+  drivers/thermal/sun8i_thermal.c                    |   2 +-
+  drivers/thermal/tegra/soctherm.c                   |  32 ----
+  drivers/thermal/tegra/tegra30-tsensor.c            |   2 +-
+  drivers/thermal/thermal_core.c                     |  61 ++++---
+  drivers/thermal/thermal_core.h                     |  15 --
+  drivers/thermal/thermal_helpers.c                  |  13 +-
+  drivers/thermal/thermal_netlink.c                  |   2 +-
+  drivers/thermal/thermal_of.c                       | 201 
+++++++++++++---------
+  drivers/thermal/thermal_sysfs.c                    |  22 +--
+  drivers/thermal/ti-soc-thermal/ti-bandgap.c        |   2 +-
+  include/linux/thermal.h                            |  26 ++-
+  include/trace/events/thermal.h                     |  28 +--
+  tools/thermal/tmon/pid.c                           |   2 +-
+  tools/thermal/tmon/tmon.h                          |   3 +
+  31 files changed, 387 insertions(+), 430 deletions(-)
+  create mode 100644 
+Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+  delete mode 100644 
+Documentation/devicetree/bindings/thermal/qcom-spmi-temp-alarm.txt
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
