@@ -2,134 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1B4585172
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Jul 2022 16:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBD05851D9
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Jul 2022 16:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbiG2OU3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Jul 2022 10:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S236725AbiG2O4A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Jul 2022 10:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236444AbiG2OU1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jul 2022 10:20:27 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4984513F00
-        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 07:20:26 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id l9-20020a056830268900b006054381dd35so3368830otu.4
-        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 07:20:26 -0700 (PDT)
+        with ESMTP id S235283AbiG2O4A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jul 2022 10:56:00 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CCD15FFF
+        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 07:55:58 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id o21so3754751qkm.10
+        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 07:55:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=n48rwJ6znQ/JiCvqsQDOhikE94C4sngYxJzSk0+idkE=;
-        b=kEtZGN6Z/CorW5Lq9wq9t9IfRLJyy5KD5gGGTiO1ceZcd1+AdGD/ipjIzeeBB477aM
-         NjaME6VCtJHKdIAtJSf3AyiDtYVfHU2DMx2BK+WgYUfzmxs+P9l5aIpPj8EnP/GCW3Aj
-         63YYjuqGUmZqgyEURS2I7WmMqi6xNyoj1JDqGyqUbbpCzs2wKSkVV+WTKbYNCprRzxDE
-         kaXM6QtugzjaCnUIHwCHVfYbzEMnI4Ny5Tr15HtS6EDQTweVOT7qfNgUGZwOliuIDXfV
-         Szj2FryXQ589F5FlbwRvCpKK+4KZBNbXRUWfVMy+WsWihby1p3QZA93hXObM1VLVwTbf
-         2ZGA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LU2jKHS2Nm/7auV+iXP7l5+JlImO2zH8Ua3fe+uAhns=;
+        b=OZNDxgLZk8wvXTdP85PMsUJiFJIIaXj4v3T3Ey2Nov8fiANefz2/gBDsigiFOapewA
+         fMI6JTAspaRMOntcwIsXngHPqho4GhdgPVPGySVXZWPoXd0tppemhOuBAL6EUiLwb8Ag
+         6MBpafWXpbKCQBGt0HQIBSQaUXOV2bJJ4U8QYvty6YaxmUP+V69cwI76abBIGId6rcG8
+         2J3nW+bleIJQvESYr6Qk5E73UinO/6hd2LC2T/ENHI4dXFHYNcLJv3vXe5J01rRRQRto
+         PmRJf1K9hWUMiG0NZ1c1k8z5Qfq4lXYyKzCfADSTjLrJJ/6ZEMd1Du9tH6Zqg5WqZ+E1
+         AvSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n48rwJ6znQ/JiCvqsQDOhikE94C4sngYxJzSk0+idkE=;
-        b=09LdpmVktdM5flqVmuHbokuzUuWKaHRQCv6lvJrrkZU3+jfPGfgrHpAqY6+kxpd7FA
-         LIJYlfjpd9G+E1c4STxP0L9ZcVacZQ3SWuZp6wJLMy6+iGkjFzQbzvglM4HzjtT7EHM5
-         9HyERenOdfZdsZx7c45V7p5ocvZ+QQBkvfSr1cLSIKoDHiqzFZfTDlzBBUQoFFhIYEDz
-         rV7hNsKV0FDNTCIO/iMYJPdzehmROHdm8X7xM8u24+UB+WIPum8GrFruAOVMtgaALc1q
-         uDM42GXulj9xNGx0M7W6zO9TLG8oQHfqcBtGCBU3xKAqLjntWsPIU7AjJfMm82JL56Z8
-         Ii/A==
-X-Gm-Message-State: AJIora9stFKM6WAqqsfDUMVKmmsvy2gyVE7bMr8wLtTRYTePZav1M/uo
-        IGP8in+PAHueSDNe+rBK1uxX1w==
-X-Google-Smtp-Source: AGRyM1uRHTKEEcbNwdfwMOxF4/qNgi9j0Z4DK9KAiGrml3gkmfEBOEQ2f+23Zdw83v8JeDV2xhvALA==
-X-Received: by 2002:a05:6830:660c:b0:61c:1c4f:3f56 with SMTP id cp12-20020a056830660c00b0061c1c4f3f56mr1498744otb.207.1659104425591;
-        Fri, 29 Jul 2022 07:20:25 -0700 (PDT)
-Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id o32-20020a05687096a000b0010ea56a12a4sm113791oaq.10.2022.07.29.07.20.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 07:20:24 -0700 (PDT)
-Message-ID: <42875ff3-04a2-c465-4063-1ce3b0b35dba@kali.org>
-Date:   Fri, 29 Jul 2022 09:20:22 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LU2jKHS2Nm/7auV+iXP7l5+JlImO2zH8Ua3fe+uAhns=;
+        b=wWu/QUDJDka/sjZGkeXBMy/HqNIfpRYmUYEOC7Ph0iT/PSmLlif8aq+0Eu4lLLfg+9
+         0nJSEgR1aqqY1mfDQ8lAY28Nk1KFknpKyp7pQ6V6CkaKfViVlTgfnd7Gb2Mtm033j4R1
+         /XHzj6Uu7wPnhmArgSZ/cU/e0NDx94AwiMo7mE70vl+plqzwBlWRnTjUKHBnfaLLXuZL
+         OmWABFHTJFmMJDl+8x1JTBFlc+OZOkyppfPvEYtjsn5iSISiZDXs1qiazm9wwVNokStO
+         MQd8TAxTnYa6KGwlYX5iXDIXRfskHhUW61n3Ksp5KbEnuaxHCOFWO4iysyZFNDsw7Atm
+         INow==
+X-Gm-Message-State: AJIora/oMFvZ5q2uepHdMAN+A5w/8unrHlVdY0i310jbsqvQQCDmbBsO
+        GwBHhQa5XYwp9SG2pRbU+8hnS96V7urUsQmn4v++mg==
+X-Google-Smtp-Source: AGRyM1uwfw5+ktHeTJCgth0/QP6b+8gJhL4OadszNPMbvavG0KWq6WmdZnKKeu+eI7Idy2MZJbV2Kx0JdGducq73Kac=
+X-Received: by 2002:ae9:e906:0:b0:6b5:f0ec:ed92 with SMTP id
+ x6-20020ae9e906000000b006b5f0eced92mr2964676qkf.59.1659106557689; Fri, 29 Jul
+ 2022 07:55:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 00/11] soc/arm64: qcom: Add LLCC BWMON on SDM845
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-References: <20220728113748.170548-1-krzysztof.kozlowski@linaro.org>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <20220728113748.170548-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220727200901.1142557-1-dmitry.baryshkov@linaro.org> <YuKRPB/Ilb0al3ro@sirena.org.uk>
+In-Reply-To: <YuKRPB/Ilb0al3ro@sirena.org.uk>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 29 Jul 2022 17:55:46 +0300
+Message-ID: <CAA8EJpqKXoLNKEyfSrUoABFwPqqZT5reiAJ5muGz-+FUwxzUcg@mail.gmail.com>
+Subject: Re: [PATCH] firmware/psci: Add debugfs support to ease debugging
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Thu, 28 Jul 2022 at 16:38, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Jul 27, 2022 at 11:09:01PM +0300, Dmitry Baryshkov wrote:
+>
+> > +} psci_fn_ids[] = {
+> > +     PSCI_ID_NATIVE(0_2, MIGRATE),
+> > +     PSCI_ID(0_2, MIGRATE_INFO_TYPE),
+> > +     PSCI_ID_NATIVE(0_2, MIGRATE_INFO_UP_CPU),
+> > +     PSCI_ID(1_0, CPU_FREEZE),
+> > +     PSCI_ID_NATIVE(1_0, CPU_DEFAULT_SUSPEND),
+> > +     PSCI_ID_NATIVE(1_0, NODE_HW_STATE),
+> > +     PSCI_ID_NATIVE(1_0, SYSTEM_SUSPEND),
+> > +     PSCI_ID(1_0, SET_SUSPEND_MODE),
+> > +     PSCI_ID_NATIVE(1_0, STAT_RESIDENCY),
+> > +     PSCI_ID_NATIVE(1_0, STAT_COUNT),
+> > +     PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
+> > +};
+>
+> There's other functions like the MEM_PROTECT ones which we don't
+> currently use but it might be interesting to enumerate...
 
-On 7/28/22 6:37 AM, Krzysztof Kozlowski wrote:
-> Hi,
->
-> Changes since v1
-> ================
-> 1. Patch #2: Drop also BWMON_GLOBAL_IRQ_STATUS (Sibi).
-> 2. Minor rebasings because of above drop.
-> 3. Patch #4: typo in subject (Sibi).
-> 4. New patch: arm64: dts: qcom: sdm845: narrow LLCC address space (Sibi).
-> 5. Add Rb tags.
->
-> Description
-> ===========
-> BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
-> interconnect links in a SoC.  It might be used to gather current bus usage and
-> vote for interconnect bandwidth, thus adjusting the bus speed based on actual
-> usage.
->
-> Qualcomm SoCs might several BWMON instances.  Extend existing support for CPU
-> BWMON (called v4) to LLCC BWMON (called v5).
->
-> Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
-> Cc: Sibi Sankar <quic_sibis@quicinc.com>
->
-> Best regards,
-> Krzysztof
->
-> Krzysztof Kozlowski (11):
->    dt-bindings: interconnect: qcom,msm8998-bwmon: add support for SDM845
->      LLCC BWMON
->    soc: qcom: icc-bwmon: re-use IRQ enable/clear define
->    soc: qcom: icc-bwmon: drop unused registers
->    soc: qcom: icc-bwmon: store reference to variant data in container
->    soc: qcom: icc-bwmon: clear all registers on init
->    soc: qcom: icc-bwmon: store count unit per variant
->    soc: qcom: icc-bwmon: use regmap and prepare for BWMON v5
->    soc: qcom: icc-bwmon: add per-variant quirks
->    soc: qcom: icc-bwmon: add support for SDM845 LLCC BWMON
->    arm64: dts: qcom: sdm845: narrow LLCC address space
->    arm64: dts: qcom: sdm845: add LLCC BWMON
->
->   .../interconnect/qcom,msm8998-bwmon.yaml      |   1 +
->   arch/arm64/boot/dts/qcom/sdm845.dtsi          |  39 +-
->   drivers/soc/qcom/icc-bwmon.c                  | 460 ++++++++++++++----
->   3 files changed, 401 insertions(+), 99 deletions(-)
->
-Tested on the Lenovo Yoga C630 with QCOM_LLCC=m and no longer see the 
-previous error message.
+Argh, missed the next page in PSCI spec. Will fix in v2.
 
-Tested-by: Steev Klimaszewski <steev@kali.org>
+>
+> >  #define PSCI_1_0_FN_PSCI_FEATURES            PSCI_0_2_FN(10)
+> > +#define PSCI_1_0_FN_CPU_FREEZE                       PSCI_0_2_FN(11)
+> > +#define PSCI_1_0_FN_CPU_DEFAULT_SUSPEND              PSCI_0_2_FN(12)
+>
+> ...we're already adding functions here.
+>
+> > +#define PSCI_1_0_FN_NODE_HW_STATE            PSCI_0_2_FN(13)
+>
+> > +#define PSCI_1_0_FN_STAT_RESIDENCY           PSCI_0_2_FN(16)
+> > +#define PSCI_1_0_FN_STAT_COUNT                       PSCI_0_2_FN(17)
+>
+> Some of these state query things might be interesting to actually call
+> and output results from at some point, doesn't seem like something that
+> should be a blocker though.
 
+I thought about it, but deferred for now.
+
+-- 
+With best wishes
+Dmitry
