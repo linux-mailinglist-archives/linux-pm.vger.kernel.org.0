@@ -2,78 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5169584E56
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Jul 2022 11:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8AB584EB4
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Jul 2022 12:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235562AbiG2Jqx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Jul 2022 05:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S236168AbiG2KZ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Jul 2022 06:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbiG2Jqw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jul 2022 05:46:52 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21923286D5
-        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 02:46:50 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id id17so2275917wmb.1
-        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 02:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MDmF5QS33jQXUS1JhSWwpGQuwX9A2sSaoTcMcLMYLUo=;
-        b=AHIf9t8R8HvFvTEls/vPZQoIRWKv8OccNB22EVwKmTiKYnlXFrRQzYaFdU9SYXmkfX
-         E6skP32PX2JpY5vBjW9aoCLTJjQ5pYz9SntC+kReOGoN2ODgPbB6AG5LqnmqzWaLs+iw
-         pCizmcCsfaExO2MFKoztpJFcUoOrdlruG7oabJTebXXhyFFMlIOncHSIAgUPvbs3iAZN
-         KRQPofoLo1kSgP+j2jsXWEoZ0leVgaj4Vlr+nkGY6NUnUUYoe0sxpEQgs0RbzNGEE4U6
-         2BvM3QakSbPVdm5XpHlxby4hagYHeJeuggzFoucGNHHkzvZ6xmRckx4IUOgMjw3FLUOM
-         zuLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MDmF5QS33jQXUS1JhSWwpGQuwX9A2sSaoTcMcLMYLUo=;
-        b=Y8SrpRKaa2q086iK+EIcTUfGqtXP37OAvyZL4NzpbJSHp3wlIKlcAJETPE2Oe3tXcm
-         iZL6v98KmYprnecgjbAyhlFfe4U+H1yBhqrk6sgtl8vM5RzsNZ3Yd/S8sZilPEAKH6Ir
-         S9gd2cXWnt31aJIo4z9iEEfsqVrl04tEmtjkERPC5O+sRMTihs5raccj4LgL+hHcVphF
-         VyTJNBHZY5vX4c0La/T6XAPAbawcI8fB6VfhaDW3sE5ZAua82jgLeI8AOLrdLaixsb0K
-         zrDCM1m9JFJoAWdey9rT65Omy6Zk0DUzELxUApkQYPuSFuDPPcKFqY2ChRtp1jGajxVq
-         Q05Q==
-X-Gm-Message-State: AJIora83ZKjEBHuudYdBbGGUvawHV7Se5fQCF16bsop7rW4psj7NI45/
-        tKUZo3eX5XhK5W3GZNONAEjdAQ==
-X-Google-Smtp-Source: AGRyM1sAyx7FlJtXRaY7CaO8hKhU5nQs933sHl5efssIYF82QqVT5gKLfrs0AvI8HnrNbkM5TRF3/w==
-X-Received: by 2002:a1c:f710:0:b0:394:1960:e8a1 with SMTP id v16-20020a1cf710000000b003941960e8a1mr1917315wmh.154.1659088008519;
-        Fri, 29 Jul 2022 02:46:48 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id x17-20020a5d60d1000000b0021e7e050404sm3537644wrt.117.2022.07.29.02.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 02:46:47 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 12:46:46 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC] PM: domains: Reverse the order of performance and enabling
- ops
-Message-ID: <20220729094646.xqlhfjzxo3gk4n27@linaro.org>
-References: <20220720110246.762939-1-abel.vesa@linaro.org>
- <CAPDyKFoh8UV=QC6RhOkc=FSvoeqF_UiWp97h0Qp8dniB=sS+8A@mail.gmail.com>
- <YuA0luCtQ1J+ExBi@linaro.org>
- <CAPDyKFo4tryzYQK=q6aPGxocmoq=duC2B1RMh1QoV_maVCApjA@mail.gmail.com>
+        with ESMTP id S235867AbiG2KZh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jul 2022 06:25:37 -0400
+Received: from server.lespinasse.org (server.lespinasse.org [63.205.204.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9645592;
+        Fri, 29 Jul 2022 03:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-79-ed;
+ t=1659090298; h=date : from : to : cc : subject : message-id :
+ references : mime-version : content-type : in-reply-to : from;
+ bh=a/XS8F6DJ0UncG2aNUIYHtQzj6v+HgUrBJ1uNti4iPo=;
+ b=z07fAc3s82E8eDjOmWqCiQ8bXbav83TEx3/Re97NlSxxiCQo28PSqhP5HNIn+14JJNint
+ RyzSM6g4CHMlWDtCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
+ i=@lespinasse.org; q=dns/txt; s=srv-79-rsa; t=1659090298; h=date :
+ from : to : cc : subject : message-id : references : mime-version :
+ content-type : in-reply-to : from;
+ bh=a/XS8F6DJ0UncG2aNUIYHtQzj6v+HgUrBJ1uNti4iPo=;
+ b=I1XE4PG3J6WdBxHBHPO8gz729jU9NwxFGePQBg2SGh03K5MaVR21Or0F1Ed2fJkedXwqn
+ 73ZEg9HBg/VtqO2lKkpr4whjhup8i+ouV+MRlyl12YqkOIbBlxYxGShIJKbmEieaOBGjn22
+ ZXDWImDNaRHLW7cNGx8eSPR5smKlm5X/Vadfwpk61igIRp4T13wJ8QuAfpZsGCdgjSHCAt3
+ xICHC0gdRmgeZ4VsHAxcqkS8UkYtj/62Fy/MANXsihH037ZiFlqRtJ1IH4+gKYbMZ+SX1Jj
+ 7eSPi+obGVy9GT10OfxqZ1++H06soXF8UFwZNT5FhqZM4eGuNqJqYx1H9gbg==
+Received: by server.lespinasse.org (Postfix, from userid 1000)
+        id 43C591608FB; Fri, 29 Jul 2022 03:24:58 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 03:24:58 -0700
+From:   Michel Lespinasse <michel@lespinasse.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Michel Lespinasse <michel@lespinasse.org>,
+        Peter Zijlstra <peterz@infradead.org>, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org, rh0@fb.com
+Subject: Re: [PATCH 04/36] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
+Message-ID: <20220729102458.GA1695@lespinasse.org>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144516.172460444@infradead.org>
+ <20220725194306.GA14746@lespinasse.org>
+ <20220728172053.GA3607379@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFo4tryzYQK=q6aPGxocmoq=duC2B1RMh1QoV_maVCApjA@mail.gmail.com>
+In-Reply-To: <20220728172053.GA3607379@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,291 +116,88 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-07-28 13:37:38, Ulf Hansson wrote:
-> + Dmitry, Thierry
->
-> On Tue, 26 Jul 2022 at 20:38, Abel Vesa <abel.vesa@linaro.org> wrote:
-> >
-> > On 22-07-21 18:48:10, Ulf Hansson wrote:
-> > > On Wed, 20 Jul 2022 at 13:03, Abel Vesa <abel.vesa@linaro.org> wrote:
-> > > >
-> > > > Rather than enabling and then setting the performance state, which usually
-> > > > translates into two different levels (voltages) in order to get to the
-> > > > one required by the consumer, we could give a chance to the providers to
-> > > > cache the performance state needed by the consumer and then, when powering
-> > > > on the power domain, the provider could use the cached level instead.
-> > >
-> > > I don't think it's really clear what you want to do here. Let's see
-> > > what the discussion below brings us to, but for the next version
-> > > please elaborate a bit more in the commit message.
-> >
-> > Sorry about that. Will give more details in the next version.
-> >
-> > >
-> > > Although, if I understand correctly (also from our offlist
-> > > discussions), you want to make it possible to move from two calls,
-> > > into one call into the FW from the genpd provider. So it's basically
-> > > an optimization, which to me, certainly sounds worth doing.
-> > >
-> > > Furthermore, to get the complete picture, in the Qcom case, we set a
-> > > "default" low performance level from the genpd's ->power_on()
-> > > callback, which is needed to enable basic functionality for some
-> > > consumers.
-> > >
-> > > The second call that I refer to is made when genpd calls the
-> > > ->set_performance() callback (from genpd_runtime_suspend()), which is
-> > > done by genpd to potentially set a new value for an aggregated
-> > > performance state of the PM domain. In case when there actually is a
-> > > new performance state set in this path, we end up calling the FW twice
-> > > for the Qcom case, where this first one is unnecessary.
-> > >
-> > > Did I get that right?
-> >
-> > Actually, for every ->power_on, there is a ->set_performance right after.
-> >
-> > For example, on genpd_runtime_suspend, this is done:
-> >
-> >         genpd_lock(genpd);
-> >         ret = genpd_power_on(genpd, 0);
-> >         if (!ret)
-> >                 genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-> >         genpd_unlock(genpd);
-> >
-> > And same thing on __genpd_dev_pm_attach.
->
-> I guess you refer to genpd_runtime_resume(), but never mind, I get it.
+On Thu, Jul 28, 2022 at 10:20:53AM -0700, Paul E. McKenney wrote:
+> On Mon, Jul 25, 2022 at 12:43:06PM -0700, Michel Lespinasse wrote:
+> > On Wed, Jun 08, 2022 at 04:27:27PM +0200, Peter Zijlstra wrote:
+> > > Commit c227233ad64c ("intel_idle: enable interrupts before C1 on
+> > > Xeons") wrecked intel_idle in two ways:
+> > > 
+> > >  - must not have tracing in idle functions
+> > >  - must return with IRQs disabled
+> > > 
+> > > Additionally, it added a branch for no good reason.
+> > > 
+> > > Fixes: c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
+> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > 
+> > After this change was introduced, I am seeing "WARNING: suspicious RCU
+> > usage" when booting a kernel with debug options compiled in. Please
+> > see the attached dmesg output. The issue starts with commit 32d4fd5751ea
+> > and is still present in v5.19-rc8.
+> > 
+> > I'm not sure, is this too late to fix or revert in v5.19 final ?
+> 
+> I finally got a chance to take a quick look at this.
+> 
+> The rcu_eqs_exit() function is making a lockdep complaint about
+> being invoked with interrupts enabled.  This function is called from
+> rcu_idle_exit(), which is an expected code path from cpuidle_enter_state()
+> via its call to rcu_idle_exit().  Except that rcu_idle_exit() disables
+> interrupts before invoking rcu_eqs_exit().
+> 
+> The only other call to rcu_idle_exit() does not disable interrupts,
+> but it is via rcu_user_exit(), which would be a very odd choice for
+> cpuidle_enter_state().
+> 
+> It seems unlikely, but it might be that it is the use of local_irq_save()
+> instead of raw_local_irq_save() within rcu_idle_exit() that is causing
+> the trouble.  If this is the case, then the commit shown below would
+> help.  Note that this commit removes the warning from lockdep, so it
+> is necessary to build the kernel with CONFIG_RCU_EQS_DEBUG=y to enable
+> equivalent debugging.
+> 
+> Could you please try your test with the -rce commit shown below applied?
 
-Yes, I meant _resume.
+Thanks for looking into it.
 
->
-> Note that, I only wanted to highlight  that genpd doesn't necessarily
-> invoke the ->set_performance() callback at genpd_runtime_resume(). It
-> depends on whether there is a new performance level to be set for the
-> device (which also needs to aggregate to a new level for the genpd in
-> question).
+After checking out Peter's commit 32d4fd5751ea,
+cherry picking your commit ed4ae5eff4b3,
+and setting CONFIG_RCU_EQS_DEBUG=y in addition of my usual debug config,
+I am now seeing this a few seconds into the boot:
 
-Yes, I get that. But if there is no new performance level to be set, the
-order doesn't matter. Right?
-
->
-> >
-> > Now, TBH, I can't think of any scenario where a consumer would want its PD powered,
-> > (which implies a non-zero voltage level) and then changed to a higher performance
-> > level (higher voltage).
-> >
-> > In most scenarios, though, the consumer needs the PD powered on to a specific voltage
-> > level.
->
-> Yes, this sounds reasonable to me too.
->
-> However, in some cases there are certain orders of how things need to
-> be "powered on", there may be clocks etc that need to be managed
-> carefully to not break HW or cause glitches, for example.
-
-Totally agree. Maybe this would be another reason for the
-->set_performance to be called before the ->power_on. Think about it
-as the equivalent of clk_prepare in the CCF. Makes sense to have an
-initial preparation before actually enabling the PD. And this
-preparation should include the performance level as information passed
-to the provider.
-
->
-> I have looped in Dmitry and Thierry to see if they think the change
-> should be fine for Tegra platforms too.
->
-
-Good. But the tegra usecase uses only the ->set_performance and does not
-use ->power_on and ->power_off for that specific PD. So I don't think
-their usecase will be affected by the order reverse.
-
-> >
-> > Based on the two statements above, we need ->set_performance to actually act as
-> > a way to tell the provider to which voltage level to power on the power domain
-> > when the ->power_on will be called.
-> >
-> > So my suggestion with this patch is to reverse the order, do ->set_performance first
-> > and then ->power_on, this way the provider receives the voltage level required by
-> > a consumer before the request to power on the PD. Then a provider might use that
-> > info when powering on/off that PD.
->
-> Yes, that should work fine. At least for the power on scenario. Let's
-> discuss more about the power off scenario below.
->
-> >
-> > >
-> > > > Also the drop_performance and power_off have to be reversed so that
-> > > > when the last active consumer suspends, the level doesn't actually drop
-> > > > until the pd is disabled.
-> > >
-> > > I don't quite get what this part helps with, is it really needed to
-> > > improve the behaviour?
-> >
-> > Again, why would a consumer need its PD voltage dropped before being powered off?
->
-> Similar to powering on a device/PM domain, we need to be careful about
-> the order of how we turn things off. Other than that, you are probably
-> right.
-
-Again, there are multiple qcom providers that use these and all of them
-need the order reversed. Other than the that, there is the tegra single
-PD case which would not be impacted, as I explained above.
-
->
-> However, I don't quite understand how reversing the order of calling
-> the ->power_off() callback and the ->set_performance_state() would
-> help the provider to implement this. See more below.
->
-
-Please correct me where I'm wrong, but here is the most popular scenario as
-I see it.
-
-Device A needs the PD enabled at the lowest performance level, so
-->set_performance passes on that information to the provider and then,
-on ->power_on, the provider uses that performance level to power on that
-PD. This can be done by a single call to FW on power_on.
-
-Now lets assume there is another device (B) that needs same PD at the
-highest performance level, so genpd calls into the provider performance
-call, which checks if the PD is on and if so, it writes the new value to
-FW.
-
-On power off, lets assume device B runtime suspends first, so the
-->set_performance will 'release' that higher performance level, so the
-provider will do another call to FW (since the PD is enabled) with the
-lowest performance level, which is still needed by device B. In this case,
-the ->power_off will not even be called.
-
-When the last active consumer suspends (in our case here, device A), ->power_off
-will be called first disabling the PD, then the ->set_performance will
-'release' that lowest perf level the device A requested but will not
-call to FW since the PD is already disabled. This would make
-sure there are not two calls with two different levels to the FW.
-
-Now, most of this depends on the provider's way of doing things.
-But in order to allow the provider to do what is described above, it
-needs to know about the perf level before it is asked to power on a PD.
-Same applies to powering off.
-
-> >
-> > I think it makes more sense for the ->set_performance in this case to act as a
-> > way to tell the provider that a specific device has yeilded its voltage level
-> > request. That way the provider can drop the voltage to the minimum requested by
-> > the active consumers of that PD.
->
-> The genpd provider can know if the PM domain is powered on or off,
-> when the ->set_performance_state() callback is invoked. If it's
-> powered off, it may then decide to "cache" the request for the
-> performance level request, until it gets powered on.
-
-But the ->set_performance is called only after ->power_on, so the PD
-will always be on when ->set_performance checks. And this is what my
-patch is trying to change actually.
-
->
-> Although, I don't see how a genpd provider should be able to cache a
-> performance state request, when the PM domain is already powered on
-> (which is what you propose, if I understand correctly), that simply
-> doesn't work for the other scenarios.
-
-I explained this above. The provider will need to check if the PD is on
-and only write to FW if it is. Otherwise it will cache the value for
-when the power_on is called.
-
->
-> >
-> > >
-> > > >
-> > > > For the power domains that do not provide the set_performance, things
-> > > > remain unchanged, as does for the power domains that only provide the
-> > > > set_performance but do not provide the power_on/off.
-> > >
-> > > Right, good points!
-> > >
-> > > I get back to review the code soon, just wanted to make sure I have
-> > > the complete picture first.
-> > >
-> > > Kind regards
-> > > Uffe
-> > >
-> > > >
-> > > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > > > ---
-> > > >  drivers/base/power/domain.c | 30 +++++++++++++++---------------
-> > > >  1 file changed, 15 insertions(+), 15 deletions(-)
-> > > >
-> > > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > > > index 5a2e0232862e..38647c304b73 100644
-> > > > --- a/drivers/base/power/domain.c
-> > > > +++ b/drivers/base/power/domain.c
-> > > > @@ -939,8 +939,8 @@ static int genpd_runtime_suspend(struct device *dev)
-> > > >                 return 0;
-> > > >
-> > > >         genpd_lock(genpd);
-> > > > -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> > > >         genpd_power_off(genpd, true, 0);
-> > > > +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> > > >         genpd_unlock(genpd);
-> > > >
-> > > >         return 0;
-> > > > @@ -978,9 +978,8 @@ static int genpd_runtime_resume(struct device *dev)
-> > > >                 goto out;
-> > > >
-> > > >         genpd_lock(genpd);
-> > > > +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-> > > >         ret = genpd_power_on(genpd, 0);
-> > > > -       if (!ret)
-> > > > -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-> > > >         genpd_unlock(genpd);
-> > > >
-> > > >         if (ret)
-> > > > @@ -1018,8 +1017,8 @@ static int genpd_runtime_resume(struct device *dev)
-> > > >  err_poweroff:
-> > > >         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
-> > > >                 genpd_lock(genpd);
-> > > > -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> > > >                 genpd_power_off(genpd, true, 0);
-> > > > +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> > > >                 genpd_unlock(genpd);
-> > > >         }
-> > > >
-> > > > @@ -2747,17 +2746,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> > > >         dev->pm_domain->detach = genpd_dev_pm_detach;
-> > > >         dev->pm_domain->sync = genpd_dev_pm_sync;
-> > > >
-> > > > -       if (power_on) {
-> > > > -               genpd_lock(pd);
-> > > > -               ret = genpd_power_on(pd, 0);
-> > > > -               genpd_unlock(pd);
-> > > > -       }
-> > > > -
-> > > > -       if (ret) {
-> > > > -               genpd_remove_device(pd, dev);
-> > > > -               return -EPROBE_DEFER;
-> > > > -       }
-> > > > -
-> > > >         /* Set the default performance state */
-> > > >         pstate = of_get_required_opp_performance_state(dev->of_node, index);
-> > > >         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-> > > > @@ -2769,6 +2757,18 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> > > >                         goto err;
-> > > >                 dev_gpd_data(dev)->default_pstate = pstate;
-> > > >         }
-> > > > +
-> > > > +       if (power_on) {
-> > > > +               genpd_lock(pd);
-> > > > +               ret = genpd_power_on(pd, 0);
-> > > > +               genpd_unlock(pd);
-> > > > +       }
-> > > > +
-> > > > +       if (ret) {
-> > > > +               genpd_remove_device(pd, dev);
-> > > > +               return -EPROBE_DEFER;
-> > > > +       }
-> > > > +
-> > > >         return 1;
-> > > >
-> > > >  err:
-> > > > --
-> > > > 2.34.3
-> > > >
-> > >
+[    3.010650] ------------[ cut here ]------------
+[    3.010651] WARNING: CPU: 0 PID: 0 at kernel/sched/clock.c:397 sched_clock_tick+0x27/0x60
+[    3.010657] Modules linked in:
+[    3.010660] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc1-test-00005-g1be22fea0611 #1
+[    3.010662] Hardware name: LENOVO 30BFS44D00/1036, BIOS S03KT51A 01/17/2022
+[    3.010663] RIP: 0010:sched_clock_tick+0x27/0x60
+[    3.010665] Code: 1f 40 00 53 eb 02 5b c3 66 90 8b 05 2f c3 40 01 85 c0 74 18 65 8b 05 60 88 8f 4e 85 c0 75 0d 65 8b 05 a9 85 8f 4e 85 c0 74 02 <0f> 0b e8 e2 6c 89 00 48 c7 c3 40 d5 02 00
+ 89 c0 48 03 1c c5 c0 98
+[    3.010667] RSP: 0000:ffffffffb2803e28 EFLAGS: 00010002
+[    3.010670] RAX: 0000000000000001 RBX: ffffc8ce7fa07060 RCX: 0000000000000001
+[    3.010671] RDX: 0000000000000000 RSI: ffffffffb268dd21 RDI: ffffffffb269ab13
+[    3.010673] RBP: 0000000000000001 R08: ffffffffffc300d5 R09: 000000000002be80
+[    3.010674] R10: 000003625b53183a R11: ffffa012b802b7a4 R12: ffffffffb2aa9e80
+[    3.010675] R13: ffffffffb2aa9e00 R14: 0000000000000001 R15: 0000000000000000
+[    3.010677] FS:  0000000000000000(0000) GS:ffffa012b8000000(0000) knlGS:0000000000000000
+[    3.010678] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    3.010680] CR2: ffffa012f81ff000 CR3: 0000000c99612001 CR4: 00000000003706f0
+[    3.010681] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    3.010682] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    3.010683] Call Trace:
+[    3.010685]  <TASK>
+[    3.010688]  cpuidle_enter_state+0xb7/0x4b0
+[    3.010694]  cpuidle_enter+0x29/0x40
+[    3.010697]  do_idle+0x1d4/0x210
+[    3.010702]  cpu_startup_entry+0x19/0x20
+[    3.010704]  rest_init+0x117/0x1a0
+[    3.010708]  arch_call_rest_init+0xa/0x10
+[    3.010711]  start_kernel+0x6d8/0x6ff
+[    3.010716]  secondary_startup_64_no_verify+0xce/0xdb
+[    3.010728]  </TASK>
+[    3.010729] irq event stamp: 44179
+[    3.010730] hardirqs last  enabled at (44179): [<ffffffffb2000ccb>] asm_sysvec_apic_timer_interrupt+0x1b/0x20
+[    3.010734] hardirqs last disabled at (44177): [<ffffffffb22003f0>] __do_softirq+0x3f0/0x498
+[    3.010736] softirqs last  enabled at (44178): [<ffffffffb2200332>] __do_softirq+0x332/0x498
+[    3.010738] softirqs last disabled at (44171): [<ffffffffb16c760b>] irq_exit_rcu+0xab/0xf0
+[    3.010741] ---[ end trace 0000000000000000 ]---
