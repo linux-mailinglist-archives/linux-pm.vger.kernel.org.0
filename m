@@ -2,157 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A5258578A
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Jul 2022 02:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22B9585829
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Jul 2022 05:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbiG3AXo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Jul 2022 20:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
+        id S239772AbiG3DJU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Jul 2022 23:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiG3AXo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jul 2022 20:23:44 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C8F275C2
-        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 17:23:40 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id p1so5884970plr.11
-        for <linux-pm@vger.kernel.org>; Fri, 29 Jul 2022 17:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=keGYl8dO4pT8+19W8D5f5HMmyaoYEfBCBPlRHXFxc0U=;
-        b=gka2t1/Nbil1MdOg09+dBZoLCz0nvj9Cey558debRVLsAmDVTxidHlgK0tqgbFJrGi
-         EN5xzduBuw4JRYIY/oUas7bfCWBRODEeVeiCfkaPgoGA7rPnh0z1OjHMgu1toiY730FE
-         DZCh107ok2FC4hyxexzbkh5oiNuHOjtTBlCs7cVz5EOTHp7oLMKFLgBpcbtkYLgyEZyj
-         w1YVkQk5bnrmHBrkrLy+UIigTtUElB1VJ27OOMBVfn9wGU9gA1y8lie5GGwDDBgCr/BH
-         gH1NH0bjIw3599dyyTO+c0ge6s/qGt31jFKD4incwOOWK7ddtDEV36h2v7w8HYN8LDaZ
-         HNdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=keGYl8dO4pT8+19W8D5f5HMmyaoYEfBCBPlRHXFxc0U=;
-        b=IO4x1Cb9ngJnx3PHr18sy7Hw2LOFcJhRRpnzl5qc5+8z+oQRFrOU1MRrDIKtGvAiMB
-         0pj5J4QOZkAoM7WWc/TyTKj0lmA/vvv/n7hSSdP1w6GkmGl6hZtJj0uqLP3FzMr5fDV0
-         1iZ076Fvg22rPkObiUjyX+hfkrQQzMOHSi+zra7MJis0D82/V9882hpdi6ghl7UdbtPc
-         C8u8+KJ1ImhtNY7nWasjTwiLl/IM5DOEgXrSBGtk+vgt+NExWORPzGkhXRKW3hsD9l02
-         qfIN2a3qL7PrwBT7+goyXi1WqSmzMkWKYQ47J5rNJfc+zYGLUu9xNMBgcLa1ds9x4ciM
-         72ug==
-X-Gm-Message-State: ACgBeo378TQHxxKL9vEblWGEyvGY34o/zopUMXo2LWhOL9CbiCgqCtTQ
-        W3JwkzZg3Ng4cwsSR8XRFHmtYg==
-X-Google-Smtp-Source: AA6agR6clYbmUXqZao5GyBU2O6Iyl2+rkkTJzZ5uDJEYzP9gXlXvwLa3lwNbW188flIOMLC77k38bQ==
-X-Received: by 2002:a17:902:bc49:b0:16d:ac99:f96f with SMTP id t9-20020a170902bc4900b0016dac99f96fmr6245951plz.130.1659140619530;
-        Fri, 29 Jul 2022 17:23:39 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n13-20020a63ee4d000000b0041a390f276esm3102620pgk.40.2022.07.29.17.23.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 17:23:39 -0700 (PDT)
-Message-ID: <62e47a0b.630a0220.787bc.491c@mx.google.com>
-Date:   Fri, 29 Jul 2022 17:23:39 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        with ESMTP id S230251AbiG3DJT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Jul 2022 23:09:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E74E50064;
+        Fri, 29 Jul 2022 20:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659150558; x=1690686558;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=k15e640Ac5kBV2qmOLkobhBC26rzlrHl47y6EDbeQTU=;
+  b=bpg02TieQr4xZRmsKBtyUrZ+8Gc1UlnJf6rPTRY9z9Z+GIqrebaTDx6M
+   zlwffe6ZIyKiGgMvKBvg9YXTqep9M1vlKXIy7K8Sp4VzOnOpZ+CNZL5SX
+   ZpQXVM4Izsjp8kaw6TccwXeV9xSwZtnlHhC2f5DgrTIcE+6BZdtJWrBDf
+   zXMbLFdSFvhs//rUI6vLe8TrLb4E9HHB6jPVfemsWypryRu8O7wzFGj4G
+   s08NaherMZWBbctLLRsPCuVGJwsxvVV9cDyK/3Nuc4fMu+JWhAinzV0DD
+   ePqaG02+ov9N5eu+aMc/SYfV5gEJBPiSE1JchvEkS/PCN7dwLt9AFDv6D
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="288898755"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="288898755"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 20:09:18 -0700
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="928953118"
+Received: from abdulra4-mobl.gar.corp.intel.com ([10.214.159.26])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 20:09:15 -0700
+Message-ID: <9c1937c1d7ab7687412c15c26532aea258aec078.camel@intel.com>
+Subject: Re: [PATCH] thermal: intel: Add TCC cooling support for Alder
+ Lake-N and Raptor Lake-P
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Date:   Sat, 30 Jul 2022 11:09:59 +0800
+In-Reply-To: <20220728175456.2796-1-sumeet.r.pawnikar@intel.com>
+References: <20220728175456.2796-1-sumeet.r.pawnikar@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: pm-5.19-rc9-140-g4031614b39959
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (pm-5.19-rc9-140-g4031614b39959)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.1-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (pm-5.19-rc9-140-=
-g4031614b39959)
+On Thu, 2022-07-28 at 23:24 +0530, Sumeet Pawnikar wrote:
+> Add Alder Lake-N and Raptor Lake-P to the list of processor models
+> supported by the Intel TCC cooling driver.
+>=20
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
-5.19-rc9-140-g4031614b39959/
+Acked-by: Zhang Rui <rui.zhang@intel.com>
 
-Tree: pm
-Branch: testing
-Git Describe: pm-5.19-rc9-140-g4031614b39959
-Git Commit: 4031614b3995978278db2c905fd13d5c64e060a3
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+> ---
+> =C2=A0drivers/thermal/intel/intel_tcc_cooling.c | 2 ++
+> =C2=A01 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/thermal/intel/intel_tcc_cooling.c
+> b/drivers/thermal/intel/intel_tcc_cooling.c
+> index a9596e7562ea..95adac427b6f 100644
+> --- a/drivers/thermal/intel/intel_tcc_cooling.c
+> +++ b/drivers/thermal/intel/intel_tcc_cooling.c
+> @@ -81,7 +81,9 @@ static const struct x86_cpu_id tcc_ids[]
+> __initconst =3D {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODE=
+L(COMETLAKE, NULL),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODE=
+L(ALDERLAKE, NULL),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODE=
+L(ALDERLAKE_L, NULL),
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODEL(ALD=
+ERLAKE_N, NULL),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODE=
+L(RAPTORLAKE, NULL),
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODEL(RAP=
+TORLAKE_P, NULL),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{}
+> =C2=A0};
+> =C2=A0
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
