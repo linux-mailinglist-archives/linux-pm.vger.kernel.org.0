@@ -2,102 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B825859FF
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Jul 2022 12:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239A7585B7B
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Jul 2022 20:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiG3KVy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Jul 2022 06:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        id S235170AbiG3SGi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Jul 2022 14:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiG3KVx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Jul 2022 06:21:53 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09DD17587
-        for <linux-pm@vger.kernel.org>; Sat, 30 Jul 2022 03:21:51 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id 7so11932666ybw.0
-        for <linux-pm@vger.kernel.org>; Sat, 30 Jul 2022 03:21:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
-        b=e/2GYziRMA8j610MCPuZGuSL/9FDnd3SHdoUReTPCuRdU4yqJJSi7rnss0Hg4s84g5
-         QVk2xr46dAUr6+ywloAnQW5C5yzHP+l1yn+J5f8esOCPLwx8nVvL2LXRMUjhaIYTUG16
-         G7aP78FyDc6ygvcjLglx6vYeSofalMTa92Z7KczguJO6u8uOxIji2LwDLsZzZIgpyeeT
-         W1pemiuuaCVN5LtD3J8NGD5eTI4TkLpCpQH/tki8694gXFeLnRo3s4j0kMn+v7B5vqtd
-         wJSihL/ikwiXDqs3zN+Epih+ocHbPbhxoJOIiXLn/fIisgTJfKNl0SjoUv/1bT27Dwi0
-         COFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
-        b=4fbRxP/EzTA9Clpox58obfp0eofS6L5QQwh317g4Akm7+dBmJLAPwRjO9VyZ6ISLMH
-         oHUaVpiiPgoMY2DNRIChMYMnZJ3fnXHEjHhI+N8OVv5EC8vaKxEpqjP2Xs9iU78i4ecZ
-         jA4mniehMSJ1TPNZZUY4GWeQRCQnF3kgEP3GsPUD6sHUurqSaKC3rk5kcvT75VsrRTnK
-         xeJ0uarJA5jyWJVwJo2TpYi9Lw1yEHTzRlQw4LvQ7XER7mkRA1P+9Br6OkhUgh2OQC9q
-         O6J+jP9V7eHs1S1hIc8LtqnabuL6ZkaJv2i/y3T9ql/qkTSj4og+nivynt6TihewHNvL
-         NMcQ==
-X-Gm-Message-State: ACgBeo0mVwJPYNm8HeZYfdqzTup3LQwhFqXqNokE/XAlPqtwIhHsmfVi
-        6knx7eIe2saWPiDQo1aX7ewfTiF1TYIcLBi2nyM=
-X-Google-Smtp-Source: AA6agR6fn7bKXIlxVkqFDbyLyHp9pNO6f5wah0pEkTHvNsYK7WB9b21FoScbgMJI2SeuIwbyBfWFK4yXDWmpM69CWxA=
-X-Received: by 2002:a25:a0c5:0:b0:676:d67c:1dc3 with SMTP id
- i5-20020a25a0c5000000b00676d67c1dc3mr1460451ybm.450.1659176510752; Sat, 30
- Jul 2022 03:21:50 -0700 (PDT)
+        with ESMTP id S229742AbiG3SGg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Jul 2022 14:06:36 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C225715729
+        for <linux-pm@vger.kernel.org>; Sat, 30 Jul 2022 11:06:34 -0700 (PDT)
+Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 23A4884070;
+        Sat, 30 Jul 2022 20:06:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1659204393;
+        bh=VVm3jt8ej/l/H6HJPP9/rYDDUrIgyFBWzyD2gMovHTg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=a1J26kEb3lBJ6evXHoYv6YvIT6qIpg0IEHnOr4DCSxXYYmu27gOUUkBg2gDM16DVp
+         T8YCzNEQHGgu9rvKAoD56lKWJ39BdLaxJCac6itZWsg+7w3DyI7VLVOEF5JMb8MLvj
+         tq32IMGwYERSHvcDftAHERKsGYWladkoV5/hgSd4o6EltchDRJJSKPQRYkMZYAts+3
+         e7dkcAqHtnNkl4G7t5n4Sa+ORprpIZR8hqkHwxiIQDGGzLERBqrTYB9jxoVDt+ENlf
+         oBFD8a8Vi0qZoHRLwzBKG+fluW7OnytH4Mw5S6l88Fsti0p2Vpuvq9hywL4UJv/mfz
+         nd/uuP7lTePyw==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-pm@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH] power: supply: bq25890: Add support for setting IINLIM
+Date:   Sat, 30 Jul 2022 20:06:30 +0200
+Message-Id: <20220730180630.152098-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a05:7010:378e:b0:2e8:83a:d0a2 with HTTP; Sat, 30 Jul 2022
- 03:21:50 -0700 (PDT)
-Reply-To: biksusan825@gmail.com
-From:   Susan Bikram <susanbikram34@gmail.com>
-Date:   Sat, 30 Jul 2022 03:21:50 -0700
-Message-ID: <CAGsFf53FfwmFQZzrZUM2v7_K1v3=-ObQX7xx2EieHXT1YqgAkA@mail.gmail.com>
-Subject: Waiting to hear from you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [susanbikram34[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [biksusan825[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [susanbikram34[at]gmail.com]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b42 listed in]
-        [list.dnswl.org]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear ,
+Let user set input current limit via sysfs. This is useful in case there
+are multiple chargers connected to the device, each of which with its own
+arbitrary maximum current which it can provide, some of which may provide
+more than the default 500mA. In that case, userspace can listen for plug
+events generated by each charger and adjust the current limit accordingly,
+e.g. to permit battery to charge faster.
 
-Please can I have your attention and possibly help me for humanity's
-sake please. I am writing this message with a heavy heart filled with
-sorrows and sadness.
-Please if you can respond, i have an issue that i will be most
-grateful if you could help me deal with it please.
+Note that the IINLIM is reset every time the bq25890 is disconnected from
+a charger, so the userspace must adjust the limit repeatly on every plug
+event.
 
-Susan
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: linux-pm@vger.kernel.org
+---
+ drivers/power/supply/bq25890_charger.c | 30 ++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index 131ec7d882fe9..e412bcf90b40c 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -613,6 +613,34 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+ 	return 0;
+ }
+ 
++static int bq25890_power_supply_set_property(struct power_supply *psy,
++					     enum power_supply_property psp,
++					     const union power_supply_propval *val)
++{
++	struct bq25890_device *bq = power_supply_get_drvdata(psy);
++	u32 lval;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++		lval = clamp(val->intval, 100000, 3250000);
++		lval = DIV_ROUND_UP(lval - 100000, 50000);
++		return bq25890_field_write(bq, F_IINLIM, lval);
++	default:
++		return -EINVAL;
++	}
++}
++
++static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
++						      enum power_supply_property psp)
++{
++	switch (psp) {
++	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ static int bq25890_get_chip_state(struct bq25890_device *bq,
+ 				  struct bq25890_state *state)
+ {
+@@ -837,6 +865,8 @@ static const struct power_supply_desc bq25890_power_supply_desc = {
+ 	.properties = bq25890_power_supply_props,
+ 	.num_properties = ARRAY_SIZE(bq25890_power_supply_props),
+ 	.get_property = bq25890_power_supply_get_property,
++	.set_property = bq25890_power_supply_set_property,
++	.property_is_writeable = bq25890_power_supply_property_is_writeable,
+ };
+ 
+ static int bq25890_power_supply_init(struct bq25890_device *bq)
+-- 
+2.35.1
+
