@@ -2,79 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9A7585E66
-	for <lists+linux-pm@lfdr.de>; Sun, 31 Jul 2022 12:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C0E585EC2
+	for <lists+linux-pm@lfdr.de>; Sun, 31 Jul 2022 14:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiGaKCj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 Jul 2022 06:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
+        id S232934AbiGaMD2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 31 Jul 2022 08:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiGaKCi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jul 2022 06:02:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FA03DF6A
-        for <linux-pm@vger.kernel.org>; Sun, 31 Jul 2022 03:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659261756;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=vayguMlD77QjDBXfS0xZu3bAQP0f8I6/l5OuMHXvdMM=;
-        b=JHvABvDxL/AX/DCygsfOADAc+SYXI3Gus7WBewB0neDF92M1D2YyP4hBiGzHDAsBWqJ+va
-        DbdvJ/tbY90j7KJr42c120sdzqljZh/4z9XLEs5Him7cryeVbAxW5bsg1g5HbmjYyDXR1j
-        Piju08JifXwMOTaBnhSovv9PFMjgZag=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-Rzwj82_WOYuCD3DKLXneqw-1; Sun, 31 Jul 2022 06:02:34 -0400
-X-MC-Unique: Rzwj82_WOYuCD3DKLXneqw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229640AbiGaMD1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jul 2022 08:03:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF1211814;
+        Sun, 31 Jul 2022 05:03:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7A7DB8037B3;
-        Sun, 31 Jul 2022 10:02:34 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.65])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 923332026D64;
-        Sun, 31 Jul 2022 10:02:33 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Marek Vasut <marex@denx.de>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: bq25890: Disable PUMPX_EN on errors
-Date:   Sun, 31 Jul 2022 12:02:28 +0200
-Message-Id: <20220731100228.32920-1-hdegoede@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7F9EB80D1D;
+        Sun, 31 Jul 2022 12:03:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E52CC433D6;
+        Sun, 31 Jul 2022 12:03:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659269003;
+        bh=dgiL09k3fn1iAi1x9FpXJw4FrC+NXMosnHbICt8S4Zs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JHQK9Pl3O8Vnrcfj3/YDIY+pWrMUG0hvj6nyIrkJ7tCFKK21Ncfec/QzojLSvDARe
+         lr7o0yzRQLgJPTbozA0g4qVRpxpOVddLE8Cbk9bzVU5MVbHHq3GPtsHTbYZl+9Bp0x
+         RDTc1fS9WNoDB3Z8Pa/hIeAwaidUaAqlEksqllwiqwL//DTKNHkAhEk9KcBqzekef6
+         MD/ktPdll/uLze02Gb3/vqdV89Tavmope2E223OB+k63KAOZoOjKqc8X7sTGh7Gob3
+         M3mQ4WKjwtOvXcsR/5y3dwsDMSuzK0agZtMtpBgA+MZ+XvgS1rGY9M64kPie3Rr9f7
+         Grz3f+dzYSQIA==
+Date:   Sun, 31 Jul 2022 13:13:28 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
+        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
+        heiko@sntech.de, hayashi.kunihiko@socionext.com,
+        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
+        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
+        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
+        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
+        miquel.raynal@bootlin.com, shawnguo@kernel.org,
+        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
+        j-keerthy@ti.com, Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-iio@vger.kernel.org (open list:IIO SUBSYSTEM AND DRIVERS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Allwinner
+        sunXi SoC support),
+        linux-sunxi@lists.linux.dev (open list:ARM/Allwinner sunXi SoC support)
+Subject: Re: [PATCH v3 27/32] iio/drivers/sun4i_gpadc: Switch to new of
+ thermal API
+Message-ID: <20220731131328.7301de32@jic23-huawei>
+In-Reply-To: <20220727210253.3794069-28-daniel.lezcano@linexp.org>
+References: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
+        <20220727210253.3794069-28-daniel.lezcano@linexp.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When bq25890_pump_express_work encounters an errors disable
-the PUMPX_EN flag, just like the work does on a successful exit.
+On Wed, 27 Jul 2022 23:02:48 +0200
+Daniel Lezcano <daniel.lezcano@linexp.org> wrote:
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/power/supply/bq25890_charger.c | 1 +
- 1 file changed, 1 insertion(+)
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
+> 
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+Whilst making no pretence at having checked what the new calls do, I'm fine with this
+patch affecting the driver in IIO and going through appropriate thermal tree.
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index 852a6fec4339..056260b2cb76 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -946,6 +946,7 @@ static void bq25890_pump_express_work(struct work_struct *data)
- 
- 	return;
- error_print:
-+	bq25890_field_write(bq, F_PUMPX_EN, 0);
- 	dev_err(bq->dev, "Failed to request hi-voltage charging\n");
- }
- 
--- 
-2.37.1
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>  drivers/iio/adc/sun4i-gpadc-iio.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/sun4i-gpadc-iio.c b/drivers/iio/adc/sun4i-gpadc-iio.c
+> index 2d393a4dfff6..13d1e937357c 100644
+> --- a/drivers/iio/adc/sun4i-gpadc-iio.c
+> +++ b/drivers/iio/adc/sun4i-gpadc-iio.c
+> @@ -412,9 +412,9 @@ static int sun4i_gpadc_runtime_resume(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -static int sun4i_gpadc_get_temp(void *data, int *temp)
+> +static int sun4i_gpadc_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -	struct sun4i_gpadc_iio *info = data;
+> +	struct sun4i_gpadc_iio *info = tz->devdata;
+>  	int val, scale, offset;
+>  
+>  	if (sun4i_gpadc_temp_read(info->indio_dev, &val))
+> @@ -428,7 +428,7 @@ static int sun4i_gpadc_get_temp(void *data, int *temp)
+>  	return 0;
+>  }
+>  
+> -static const struct thermal_zone_of_device_ops sun4i_ts_tz_ops = {
+> +static const struct thermal_zone_device_ops sun4i_ts_tz_ops = {
+>  	.get_temp = &sun4i_gpadc_get_temp,
+>  };
+>  
+> @@ -637,9 +637,9 @@ static int sun4i_gpadc_probe(struct platform_device *pdev)
+>  	pm_runtime_enable(&pdev->dev);
+>  
+>  	if (IS_ENABLED(CONFIG_THERMAL_OF)) {
+> -		info->tzd = thermal_zone_of_sensor_register(info->sensor_device,
+> -							    0, info,
+> -							    &sun4i_ts_tz_ops);
+> +		info->tzd = thermal_of_zone_register(info->sensor_device,
+> +						     0, info,
+> +						     &sun4i_ts_tz_ops);
+>  		/*
+>  		 * Do not fail driver probing when failing to register in
+>  		 * thermal because no thermal DT node is found.
 
