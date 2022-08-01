@@ -2,97 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEBE5862B7
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 04:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBA65862DC
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 04:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239215AbiHACig (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 Jul 2022 22:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S229569AbiHAC5r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 31 Jul 2022 22:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239206AbiHACia (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jul 2022 22:38:30 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4690223;
-        Sun, 31 Jul 2022 19:38:29 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id y141so9364409pfb.7;
-        Sun, 31 Jul 2022 19:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=zNIL0d60+lP47ZBgcTkvjxzvvxJ/d6RHaA53rs7bZXo=;
-        b=ZhaTHb6h5NaWbmcaBac8WRQF0u5GyIfHdsfOk+yF8bJrM/ADNiTFnCC2LwJinyqYls
-         dvbugYZFWVccDX++veX8Lnba3wJKr6cuksTOC9axM7NT/eWt4TP9/flKndLmGBQzC7Ms
-         SKymiOdQB7P1iZNhgBhW6Rv5UiMoFTtbf//W+tym7iGOocDbB+wfHTjdG4aV8p6aQSm3
-         9zo1ULrWwFOrMmpRY38v4IK8WzFPz124EdG4i3PBsAGUrWCvEsU/rRfWW2F+KodKjk6G
-         9zlNENCg2KxmtJ2Owi6fr4PXER91ywN5JKpnpmeaB+xW6gd2AQbd+OwcKCVTVYaPW2eO
-         SEmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=zNIL0d60+lP47ZBgcTkvjxzvvxJ/d6RHaA53rs7bZXo=;
-        b=Obft3PuKcxhUkNSZ+fNwy9zd5QO1I+zEGWmdGE3C0D/TPAwxQx7mL0nQPwdFnbkfMD
-         9W1h0YAdDdKjUsYoa1rpbTkrgGNw+LYvL1ZV1fnaH3VxDoCLRNs68+OsRkn6MnhTzmS3
-         CI7xM8PK5l0HJkuuTIKPsNGvib6KqdDzAQLjjxeWI4BusjGAvfZ5nMqU63n2UE5n5gwF
-         Ytgn7HhaMK+Km24yHAycVIrnSCGCKZ00loCsKipAwnhzJdsSU2JlgH3pTbWpHqCgF5Lw
-         5RwLHD2hEJGbjrPIkM6ys0RZTmL/t/FDaxQPRlvpeUABY/Uyew2VfitpgBppUKattMO3
-         4bTQ==
-X-Gm-Message-State: AJIora+Nfl2SfI3izZfUDXDgZvC1i+3ogcVh2M8RX4MOPf+bvIkCt4GH
-        iUAkNOYd8+Lr7DLznzcICqAX/RcC9g4=
-X-Google-Smtp-Source: AGRyM1suHZXC+Q4CTRBSQf5r/19buWarOMOoo2orLz0T2aIijGM7NZXwh0Kd94sC+7OU8QQmjXH06Q==
-X-Received: by 2002:aa7:8811:0:b0:52a:b0a4:a324 with SMTP id c17-20020aa78811000000b0052ab0a4a324mr14339903pfo.63.1659321509151;
-        Sun, 31 Jul 2022 19:38:29 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id pg14-20020a17090b1e0e00b001f200eabc65sm7523795pjb.41.2022.07.31.19.38.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 19:38:28 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] thermal/drivers/k3_j72xx_bandgap:using the pm_runtime_resume_and_get  to simplify the code
-Date:   Mon,  1 Aug 2022 02:38:24 +0000
-Message-Id: <20220801023824.1595268-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S238241AbiHAC5q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jul 2022 22:57:46 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A16DEFC
+        for <linux-pm@vger.kernel.org>; Sun, 31 Jul 2022 19:57:41 -0700 (PDT)
+Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 2954E8407F;
+        Mon,  1 Aug 2022 04:57:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1659322658;
+        bh=lBkpKVy/TRGRLwMMmH+MnR8dS+/6RFcbhJl6fcWc7Iw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V1F0ik0bCZMwh9Ufdn9OHoRBSPbUQiSWo6Q56SeC9CofHLCiKQYz03FSgQxjOnaXL
+         fPiB4TRknjxLO48fX1Hdn9eAlOhdhC/jwMDhKyHhporwOtl+sbweUBbsdqe/QA+VvW
+         7+0Y8DNZ8ZMxhbjX1cp8AFA54IZmra78q5qRv+MpdP6mOExz7vG7F1BWwywlGDWouR
+         U1PM8iiUVMbKwrL+bIeoXfWqZadfv7Rk+3H4bNd9htcx9df5HwY/q1+tR+r8gN+9BE
+         ipf3uGDo8SIgVObccauVwhORBk+s2uS7CrzM1xLinftEmikffgI8/ePWdcyTdLGqH7
+         Kn69tz2vUTxRQ==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-pm@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH v2] power: supply: bq25890: Add support for setting IINLIM
+Date:   Mon,  1 Aug 2022 04:57:27 +0200
+Message-Id: <20220801025727.778218-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Let user set input current limit via sysfs. This is useful in case there
+are multiple chargers connected to the device, each of which with its own
+arbitrary maximum current which it can provide, some of which may provide
+more than the default 500mA. In that case, userspace can listen for plug
+events generated by each charger and adjust the current limit accordingly,
+e.g. to permit battery to charge faster.
 
-Using pm_runtime_resume_and_get() to instade of  pm_runtime_get_sync
-and pm_runtime_put_noidle.
+Note that the IINLIM is reset every time the bq25890 is disconnected from
+a charger, so the userspace must adjust the limit repeatly on every plug
+event.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- drivers/thermal/k3_j72xx_bandgap.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: linux-pm@vger.kernel.org
+---
+V2: Use bq25890_find_idx(val->intval, F_IINLIM) instead of ad-hoc division
+---
+ drivers/power/supply/bq25890_charger.c | 29 ++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-index 115a44eb4fbf..5aabb89cf46d 100644
---- a/drivers/thermal/k3_j72xx_bandgap.c
-+++ b/drivers/thermal/k3_j72xx_bandgap.c
-@@ -403,9 +403,8 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
- 		workaround_needed = driver_data->has_errata_i2128;
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index 131ec7d882fe9..892609f9dd250 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -613,6 +613,33 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+ 	return 0;
+ }
  
- 	pm_runtime_enable(dev);
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
- 		pm_runtime_disable(dev);
- 		return ret;
- 	}
++static int bq25890_power_supply_set_property(struct power_supply *psy,
++					     enum power_supply_property psp,
++					     const union power_supply_propval *val)
++{
++	struct bq25890_device *bq = power_supply_get_drvdata(psy);
++	u8 lval;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++		lval = bq25890_find_idx(val->intval, F_IINLIM);
++		return bq25890_field_write(bq, F_IINLIM, lval);
++	default:
++		return -EINVAL;
++	}
++}
++
++static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
++						      enum power_supply_property psp)
++{
++	switch (psp) {
++	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ static int bq25890_get_chip_state(struct bq25890_device *bq,
+ 				  struct bq25890_state *state)
+ {
+@@ -837,6 +864,8 @@ static const struct power_supply_desc bq25890_power_supply_desc = {
+ 	.properties = bq25890_power_supply_props,
+ 	.num_properties = ARRAY_SIZE(bq25890_power_supply_props),
+ 	.get_property = bq25890_power_supply_get_property,
++	.set_property = bq25890_power_supply_set_property,
++	.property_is_writeable = bq25890_power_supply_property_is_writeable,
+ };
+ 
+ static int bq25890_power_supply_init(struct bq25890_device *bq)
 -- 
-2.25.1
+2.35.1
+
