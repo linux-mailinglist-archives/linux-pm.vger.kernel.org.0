@@ -2,95 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EEF586AE0
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 14:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F24C586B1E
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 14:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiHAMfG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Aug 2022 08:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S234862AbiHAMpz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Aug 2022 08:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbiHAMer (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 08:34:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3D79A98F;
-        Mon,  1 Aug 2022 05:14:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED3360FD2;
-        Mon,  1 Aug 2022 12:14:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22CFC433D6;
-        Mon,  1 Aug 2022 12:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659356070;
-        bh=w0W5ZUfjn4T03h03W8oCnoYtL38becK3wr+5hEpAC0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nZRtm4AdrxPt2REmi18BgtIuUY3TOtl0nZNBkkg3g2kp3S1HeJIi7VFwKqqbkOanq
-         upyR4pD6+E7mrZFUTXmceXOsPxbjRlTvVhM2Xdkcj6X4QNI0BghoBlGtv7M8RmJeHu
-         Y1XQBCaVPrTlL1bGnU9N0BlD41giqTJq7+2K3tLteDuduL6+s4/QtjI6ubn3sviXhC
-         W8FSlB47jNZPD4VmwCn0gQicnbeARsju/7Gb2JuVv6JUru8T9LGrpbQq+Z9XZ5Okvt
-         jCU3aqs9NITWjkP2AsEPikOajB/q0xBeFk/IVrRibwN1rldyuKx0XMa1jJkIc9Yl8C
-         mb5cDNm/5gjRw==
-Date:   Mon, 1 Aug 2022 13:14:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] firmware/psci: Add debugfs support to ease debugging
-Message-ID: <YufDoc7VWG4e8r0o@sirena.org.uk>
-References: <20220727200901.1142557-1-dmitry.baryshkov@linaro.org>
- <20220728090806.nnighsbx2lcgugon@bogus>
- <CAA8EJpr2=y-wT_HV4H5BTm7RPsc=--6C054WHJDpQzehU=Z+VA@mail.gmail.com>
- <7d9607ed-f8eb-f3a2-22e4-4d2a240919c9@gmail.com>
- <20220801095910.ngexid57qgmvhes7@bogus>
+        with ESMTP id S234983AbiHAMph (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 08:45:37 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE8146DA5
+        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 05:32:54 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id j15so5861109wrr.2
+        for <linux-pm@vger.kernel.org>; Mon, 01 Aug 2022 05:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version;
+        bh=nQEpMirCobOsOWattp713R2f+EJsY/28eyyRhLTxB+E=;
+        b=1MBkA4LqiF8fI0dfhCjDcznALsi41csR8RWo8B2vXIaEqFfOsFRqiHCRFevYzqX8lq
+         tdSDgz5bwsQG79hc3kd4cKyzpweWaDLj5euZHMZ8Q9zdEYqsShIHDKDFttv68frF9K51
+         8F5YFa7BDVVbtQov0QIiY5bRRnf8WJxlf6auhTUNV9Po0xjI+/zxML6w8lS1N1rA5T3e
+         2v+pH+AERHtt+02YqoXwVpiKGavKriiDMsM2ynRux63XWQdHX37BU//YBoiIm55BZ0X7
+         RJq13GSYT2uWpGCrcFYjI2eWBsvW5nfLl9VW3XHlujK3xt5LVd9Ii05ttsfsiRg4YDAN
+         gAtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version;
+        bh=nQEpMirCobOsOWattp713R2f+EJsY/28eyyRhLTxB+E=;
+        b=w2UzjIN+5vS0/a/X+8QzOtmyLn0TXXls2sIrtVBogXN+yjQy+O5TCdJ+yFKA/x+Eb3
+         qLslm3rA+t4dDOl5w9ulV+cTVQAqcmxqK0vx7tHBSv4717J3AOBzoyd7+fsPLL1IetpG
+         urNeasH2/DTlS5T7/LJiz+pcAnlMhrMR4UmbZjFb7fNXM75o6G1zE6BIRPROC8blgA2M
+         OgmgtD2X6v9JLhK/2uOC+JceqOvC7VdqFA7+oN6dmhZmMu0mNQ0R03gAdiC6F3E2WEWJ
+         tQqdNIf4aWppHci5dpD7QP+zboXn2yoYqhavNd95wQk7qcRUtGIiRmZ6c8AOKdMSZ+VB
+         16Bw==
+X-Gm-Message-State: ACgBeo2EjwGF6OfAzXLQMJ3B2+ux4zhgva1D1z2xftfPR/8u/At52drt
+        xSaNoXBbBe8OUxiTtgnJvF1XgA==
+X-Google-Smtp-Source: AA6agR7944sGCx6WI3LpU8LVDq4T/AE2Sxg90GKPb2BHCCrbdYHuOAn49HeQwObUPDO+UkB9PjVvcA==
+X-Received: by 2002:adf:db4c:0:b0:21e:ef46:af22 with SMTP id f12-20020adfdb4c000000b0021eef46af22mr9755067wrj.424.1659357172791;
+        Mon, 01 Aug 2022 05:32:52 -0700 (PDT)
+Received: from localhost ([109.180.234.208])
+        by smtp.gmail.com with ESMTPSA id e13-20020a5d65cd000000b0020fcaba73bcsm11806263wrw.104.2022.08.01.05.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 05:32:52 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        linux-pm@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        viresh.kumar@linaro.org, robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC regions
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+        <20220728221043.4161903-2-jeremy.linton@arm.com>
+        <871qu4krb4.fsf@stealth>
+        <a0bdc45a-c5c6-65ba-1ab8-e52dd26652d7@arm.com>
+Date:   Mon, 01 Aug 2022 13:32:51 +0100
+In-Reply-To: <a0bdc45a-c5c6-65ba-1ab8-e52dd26652d7@arm.com> (Jeremy Linton's
+        message of "Fri, 29 Jul 2022 10:20:46 -0500")
+Message-ID: <87tu6wjg98.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ekcJJ+0/0YVPoSLP"
-Content-Disposition: inline
-In-Reply-To: <20220801095910.ngexid57qgmvhes7@bogus>
-X-Cookie: Dieters live life in the fasting lane.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Jeremy Linton <jeremy.linton@arm.com> writes:
 
---ekcJJ+0/0YVPoSLP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Hi,
+>
+> On 7/29/22 07:59, Punit Agrawal wrote:
+>> Hi Jeremy,
+>> One comment / query below.
+>> Jeremy Linton <jeremy.linton@arm.com> writes:
+>> 
+>>> PCC regions utilize a mailbox to set/retrieve register values used by
+>>> the CPPC code. This is fine as long as the operations are
+>>> infrequent. With the FIE code enabled though the overhead can range
+>>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>>> based machines.
+>>>
+>>> So, before enabling FIE assure none of the registers used by
+>>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>>> enable a module parameter which can also disable it at boot or module
+>>> reload.
+>>>
+>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>> ---
+>>>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>>>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>>>   include/acpi/cppc_acpi.h       |  5 +++++
+>>>   3 files changed, 61 insertions(+), 4 deletions(-)
+>>>
+>> [...]
+>> 
+>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>>> index 24eaf0ec344d..ed607e27d6bb 100644
+>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> [...]
+>> 
+>>> @@ -229,7 +233,12 @@ static void __init cppc_freq_invariance_init(void)
+>>>   	};
+>>>   	int ret;
+>>>   -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+>>> +	if (cppc_perf_ctrs_in_pcc()) {
+>>> +		pr_debug("FIE not enabled on systems with registers in PCC\n");
+>> The message should probably be promoted to a pr_info() and exposed
+>> as
+>> part of the kernel logs. It is a change in the default behaviour we've
+>> had until now. The message will provide some hint about why it was
+>> disabled.
+>> Thoughts?
+>
+> I personally flip flopped between making it pr_info or pr_debug and
+> settled on debug because no one else was complaining about the
+> cppc_fie consumption. Which to me, meant that the users of platforms
+> utilizing PCC regions weren't sensitive to the problem, or weren't yet
+> running a distro/kernel with it enabled, or any number of other
+> reasons why the problem wasn't getting more attention. Mostly I
+> concluded the FIE code hadn't shown up in "enterprise" distros yet..
 
-On Mon, Aug 01, 2022 at 10:59:10AM +0100, Sudeep Holla wrote:
+I too was thinking that likely enterprise users haven't started digging
+into the performance impact of enabling frequency invariance.
 
-> So if we need this beyond PSCI FID range, better you have it as generic
-> SMCCC debug FS. Thoughts ?
+> But, yah, if no one is going to complain about the extra messages
+> pr_info() is a better plan.
 
-That thought did cross my mind when reviewing Dmitry's patch but given
-that as far as I'm aware SMCCC isn't particularly enumerable it seemed
-like it might be more of a small library of helpers than something you
-could write a general structure for.  I might be missing something
-though.
+Thanks! I'll look out for the updated patch.
 
---ekcJJ+0/0YVPoSLP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLnw6AACgkQJNaLcl1U
-h9Cpvwf8C1LP3InR0pGaYnO72+leN/x5NE9szVPZkG6SQV/WHBXcoykpbRTPzu2Q
-EvKcL8yteIs2D0Yu9qWGee1uNqBi8RuEKvrot+b+lqfW8CRlLTHJDmnxuNUwHaUv
-vk7vmnS7O++IkPn50AhtBYulJuGEhMEs6Ex9Vzp532UJBqou5Yf6lMPhQzGp2+wm
-gNYpJvpOHkO4SPzhyOmOwJXmwici0cFYEpIpEQ+tKh1+HbhANCvBo2UoqAuSWoVB
-R5MWkIvc3XS0FseIHBUEqfaNglaEGASlp+BnC/T41rR7kazfuQafRoV1OoBUBsSq
-sSDJQoAZO8JOiYBLbzmVhl58hXQaNw==
-=VxKG
------END PGP SIGNATURE-----
-
---ekcJJ+0/0YVPoSLP--
+FIE was designed to improve load balancing (and arguably fairness
+too). Hopefully, the message will aid users in looking more closely and
+complain to system vendor / upstream if it matters to their workloads.
