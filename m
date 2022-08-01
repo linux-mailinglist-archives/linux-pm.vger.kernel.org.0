@@ -2,102 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2DC5863CB
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 07:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE4F586566
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 08:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbiHAFnN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Aug 2022 01:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S232596AbiHAGsv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Aug 2022 02:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbiHAFnN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 01:43:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8425F13DEB;
-        Sun, 31 Jul 2022 22:43:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D16D860C93;
-        Mon,  1 Aug 2022 05:43:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91FDC433C1;
-        Mon,  1 Aug 2022 05:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659332589;
-        bh=GsGF8A4Me4IQT0F9GvKCQUBEMKLVc7qayH0CzaMRxE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uv/bntGh5sgvS9Mm030zD5YjMm0KSOsVTmJ2zCMMkP0eDlk3DDFibIkO5TgLEOWS+
-         HOry+Jf1cRNvOngT2lMtgyHdm7k//Wez9OQQFk1AdAYoz475TMAZ3A4mA7uHYeafxI
-         RQD5OpTuZ9YybIWaOektt0IJnta/E+ZnhB/1ESWgWblwkWvfLA1vOsRtjrwlcp7aJg
-         I8Rtr5vGKxfiPhGpyMW6LUohqyVK5weFKF7QYNOeOt7vxcQ1fBv58pC8v3FoZHq1M5
-         80mtBsjQe9oLTvoT5gw2ZRsLyc03R/8DoMhvAyo5HJ9v798VaaYJyN/2bnVv9YxskM
-         rGzp29fXLaP5Q==
-Date:   Mon, 1 Aug 2022 11:12:55 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
-Message-ID: <20220801054255.GA12039@thinkpad>
-References: <cover.1657695140.git.viresh.kumar@linaro.org>
- <20220715160933.GD12197@workstation>
- <20220718015742.uwskqo55qd67jx2w@vireshk-i7>
- <20220801023756.76jswkbwivuntqof@vireshk-i7>
+        with ESMTP id S234727AbiHAGsW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 02:48:22 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F96A13F49;
+        Sun, 31 Jul 2022 23:48:13 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id o1so7734990qkg.9;
+        Sun, 31 Jul 2022 23:48:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0pCQwRUtQqbmZSwhlAYKv7D+OaWBuV6jzuOG3pLiqnE=;
+        b=ln2eP881w+pJWsnC+kYg6rYGAd3maj9S7mJ+gV/lLUoTHa07yJ7pdTT1iddtkvut7G
+         wCE3Vn0TT0sSu2CGZvq/wm0E+8dX8DAzc0wcrTU8f68Bf945HKsgWEqdxw/iLewJID2+
+         U3xISuK9fbiy0BRYeJ5aJIV0S+Q+NI5ty1LBv5VOtK4++uo7wdiHC9lGtmGhCbrpNouT
+         poWweP7l/AaVWeIy/2bVG85dC0G/EueHZA6lUebLElpHSoCxf4b25lXpFCUPSvI2lhdW
+         7jc02DOr4iyObq+BZvCMVIS2hbqCqgw3xx0epY1nfMPIBNYZpFTwGEBUDoh2MKMua6y2
+         T4rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0pCQwRUtQqbmZSwhlAYKv7D+OaWBuV6jzuOG3pLiqnE=;
+        b=Y97cQMDQsqGK7AYWLfOKdA8pvvi9aEfceRVlMf3wL/m6lPqs47koW/+OhY9eyN1wkg
+         pK0cDrMXcIjTVa0EyQHvpuPLThUewNvCcuBk8viNdK4geO0JfT8x4FlZzB9ijjvsafqL
+         KGZz8LoxAzCVh4uFSLaGXCpBwaP9mVp1/VDGlXRyxduwr86NbL2cfvnGeSwXnQ1OZiNa
+         HxWPTomC4xKawKmjBpHtdNs1+5OKJir14AtnUFQTOiA7Q+mM7Kfb/oymAm4JETnVZ/9Q
+         RMw9vjpUaqQZ/AmqmQMHBTVIpccUTDMeLAFEpq1PPbX1LDJTcD1ghg4EnpiBZVuPmAsA
+         hzXw==
+X-Gm-Message-State: AJIora8FopjwlP1rSx/ZiX8GU9Ml6sQ5dwYKhNl+ABKNwpljS/SabVTB
+        3yFUopDMAgRVTFtAi/wOQsmnzKvv9Rzze5tpm3k=
+X-Google-Smtp-Source: AGRyM1vi8vD3grhYbZ/WLviZ2IFccZbjNO75ItldTtC+nPOI6OOaG7LKKV2FJNQbFGfWSid26gTwustg4ausWvfIn5M=
+X-Received: by 2002:a05:620a:1706:b0:6b8:705a:c61e with SMTP id
+ az6-20020a05620a170600b006b8705ac61emr8915998qkb.129.1659336492750; Sun, 31
+ Jul 2022 23:48:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220801023756.76jswkbwivuntqof@vireshk-i7>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-6-peterwu.pub@gmail.com>
+In-Reply-To: <20220722102407.2205-6-peterwu.pub@gmail.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Mon, 1 Aug 2022 14:47:36 +0800
+Message-ID: <CABtFH5L83d5Di6O9TC-L3UX2ma5J3PE47ihfJFfPD5YGJ43NxQ@mail.gmail.com>
+Subject: Re: [PATCH v6 05/13] dt-bindings: backlight: Add MediaTek MT6370 backlight
+To:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 08:07:56AM +0530, Viresh Kumar wrote:
-> On 18-07-22, 07:27, Viresh Kumar wrote:
-> > The OPP tables, which are part of the CPU nodes, mentions clock rates.
-> > Are these values for the cxo/gpll clocks or the clock that reaches the
-> > CPUs? I believe the latter. The DT is not really complete if the CPU
-> > node mentions the frequency, but not the source clock. It works for
-> > you because you don't want to do clk_set_rate() in this case, but then
-> > it leaves other frameworks, like OPP, confused and rightly so.
-> > 
-> > Normally, there is always a difference in what the OPP table contains
-> > as frequency value and what the hardware programs, mostly it is small
-> > though. It shouldn't prevent us from having the hierarchy clearly
-> > defined in the DT.
-> > 
-> > Based on your description, I think it would be better to make
-> > cpufreq-hw a clock provider and CPUs the consumer of it. It would then
-> > allow the OPP core to not carry the hack to make it all work.
-> 
-> Bjorn / Mani,
-> 
-> Can we please get this sorted out ? I don't want to carry an unnecessary hack in
-> the OPP core for this.
-> 
+On Fri, Jul 22, 2022 at 6:24 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
 
-I'm waiting for inputs from Bjorn.
+[snip]
 
-@Bjorn: What do you think of the proposal to add qcom-cpufreq-hw as the clk
-provider for CPUs?
+> +  compatible:
+> +    const: mediatek,mt6370-backlight
+> +
+> +  default-brightness:
+> +    minimum: 0
+> +    maximum: 2048
+> +
+> +  max-brightness:
+> +    minimum: 0
+> +    maximum: 2048
+> +
 
-Thanks,
-Mani
+Hi Rob, Krzysztof,
 
-> -- 
-> viresh
+First, I'm so sorry for our SoB writing wrong, I'll fix it in the next patch.
+Because of this mail thread
+(https://lore.kernel.org/all/20220728113109.7gf3b36mqjxlhcq3@maple.lan/),
+I would like to discuss with you that I may change the following in
+this DT document, I am not sure whether you agree or not.
+
+1. Add some descriptions about MT6372, which supports 16384 steps (14
+bits) and is different from MT6370/MT6371 (2048 steps, 11 bits)
+2. Modify the format of 'compatible' as follows to distinguish between
+MT6370/MT6371 or MT6372
+------------------------------------------
+properties:
+  compatible:
+    enum:
+      - mediatek,mt6370-backlight
+      - mediatek,mt6372-backlight
+------------------------------------------
+
+3. Remove the 'maximum' value of 'default-brightness' and
+'max-brightness', and add "if-else" to determine the "maximum" value
+as follows
+------------------------------------------
+  default-brightness:
+    minimum: 0
+
+  max-brightness:
+    minimum: 0
+
+...
+
+if:
+  properties:
+    compatible:
+      contains:
+        const: mediatek,mt6372-backlight
+
+then:
+  properties:
+    default-brightness:
+      maximum: 16384
+
+    max-brightness:
+      maximum: 16384
+
+else:
+  properties:
+    default-brightness:
+      maximum: 2048
+
+    max-brightness:
+      maximum: 2048
+------------------------------------------
+
+4. Add a new boolean property to allow the user to determine whether
+to enable the exponential mode of backlight brightness or not. Like
+this,
+------------------------------------------
+  mediatek,bled-exponential-mode-enable:
+    description: |
+      Enable the exponential mode of backlight brightness. If this property
+      is not enabled, the default is to use linear mode.
+    type: boolean
+------------------------------------------
+
+I hope these changes I have added will meet your expectations.
+And I'm not sure if I should remove 'Reviewed-By' first until it
+passes your review.
+Thanks.
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Best Regards,
+ChiaEn Wu
