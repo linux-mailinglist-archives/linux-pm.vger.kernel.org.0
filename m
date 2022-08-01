@@ -2,115 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7290A586857
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 13:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EEF586AE0
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 14:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbiHALng (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Aug 2022 07:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S231401AbiHAMfG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Aug 2022 08:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbiHALnQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 07:43:16 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A019E33374
-        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 04:43:04 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id d7so6398839pgc.13
-        for <linux-pm@vger.kernel.org>; Mon, 01 Aug 2022 04:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jCZfqgpMIYNePan17xLuQgg/2P+1/yoh0ZDJdZ/18tI=;
-        b=IDlZWskTF70cLwVWU511IykP7AjcAZQRAs8VbYY0NylYCYM0GJ2goPqkXxs1+3oyAL
-         xruycQ6vh21/kXgFQ6YyXhYqPqZ1o1sM/twBunN/05CtkUSL5NTNSUCHOQL3+WBfWj1S
-         4AcaDOZME9ihzikOxhHpu0dIqXM/TVkSLeCIYgjNTgNpA/o/fx8RZj6i7fG4XxG7J857
-         a+TOwHrJ0DMEUMKTcXDe6HvsFadmvS+FKR7TchULQyxH8Pc9IWAUDAD5cFxGV9PfKnH7
-         6kWiotPrDaGVwgmgJ1jE5AIkwo8+ZF8NPfTbwRjIc/oXl6AWhp/dOZfbjp2DwFyzAKT7
-         8P9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jCZfqgpMIYNePan17xLuQgg/2P+1/yoh0ZDJdZ/18tI=;
-        b=B6cbgbj7XkWiDNI2TYiYtf7lFTp4wWGsF+mJhwtR/uCeDK0mWzaElKWYIM+IAyGl/S
-         g/FmTpTvN7rvwh74OGRituRWIcWJE/VwDRsY7amOSoEh7hdASJQ0r4JQ+9YfkfWQwAH2
-         bgBmPXlb/T1enL/sxpOFMnSt+O/71iJyLUsc7kJJJAuXKxEQzl7TRRquPOx0bWFRjzu/
-         35UCLRKHcrXFtH/xlIEKaCwsM5in+OBYWH/2bGVRQsT56LoD+ajjgpIDHUUGzvH5H037
-         srsrYAohegGHVIS4fFMGaZ67k3cZnqV7aKXHjEuMh7rOj2I53dXlnwojL/WwvkwiKmJJ
-         lFMw==
-X-Gm-Message-State: AJIora/KZxAeaCQhxtLQNy1Yy65eQXOa2yendK/z/PkzanLEbivbJoyx
-        7nzweYDvDj5U7EB3+OMdDMonSw==
-X-Google-Smtp-Source: AGRyM1sy7zJbZBiuLqJ7c7UTW7/Bu4BYqPzTf/WcI22nbTu9nQpq2LYP0aw6jf2JYIEIq3ZhrUjwiA==
-X-Received: by 2002:a05:6a00:17aa:b0:52a:e94b:67e5 with SMTP id s42-20020a056a0017aa00b0052ae94b67e5mr16104010pfg.76.1659354184093;
-        Mon, 01 Aug 2022 04:43:04 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id n16-20020a170902e55000b0016d5cf36ff8sm9496422plf.274.2022.08.01.04.43.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 04:43:03 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 17:13:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
- dev_pm_opp_set_config+0x344/0x620
-Message-ID: <20220801114301.k6ya3gfyy3pcrzwx@vireshk-i7>
-References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
- <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
- <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
- <20220801023636.p5ytjqasedpohmdy@vireshk-i7>
- <d074daf4-c8e1-927d-9edd-2575f2335aa1@linaro.org>
+        with ESMTP id S232919AbiHAMer (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 08:34:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3D79A98F;
+        Mon,  1 Aug 2022 05:14:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED3360FD2;
+        Mon,  1 Aug 2022 12:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22CFC433D6;
+        Mon,  1 Aug 2022 12:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659356070;
+        bh=w0W5ZUfjn4T03h03W8oCnoYtL38becK3wr+5hEpAC0o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nZRtm4AdrxPt2REmi18BgtIuUY3TOtl0nZNBkkg3g2kp3S1HeJIi7VFwKqqbkOanq
+         upyR4pD6+E7mrZFUTXmceXOsPxbjRlTvVhM2Xdkcj6X4QNI0BghoBlGtv7M8RmJeHu
+         Y1XQBCaVPrTlL1bGnU9N0BlD41giqTJq7+2K3tLteDuduL6+s4/QtjI6ubn3sviXhC
+         W8FSlB47jNZPD4VmwCn0gQicnbeARsju/7Gb2JuVv6JUru8T9LGrpbQq+Z9XZ5Okvt
+         jCU3aqs9NITWjkP2AsEPikOajB/q0xBeFk/IVrRibwN1rldyuKx0XMa1jJkIc9Yl8C
+         mb5cDNm/5gjRw==
+Date:   Mon, 1 Aug 2022 13:14:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] firmware/psci: Add debugfs support to ease debugging
+Message-ID: <YufDoc7VWG4e8r0o@sirena.org.uk>
+References: <20220727200901.1142557-1-dmitry.baryshkov@linaro.org>
+ <20220728090806.nnighsbx2lcgugon@bogus>
+ <CAA8EJpr2=y-wT_HV4H5BTm7RPsc=--6C054WHJDpQzehU=Z+VA@mail.gmail.com>
+ <7d9607ed-f8eb-f3a2-22e4-4d2a240919c9@gmail.com>
+ <20220801095910.ngexid57qgmvhes7@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ekcJJ+0/0YVPoSLP"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d074daf4-c8e1-927d-9edd-2575f2335aa1@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220801095910.ngexid57qgmvhes7@bogus>
+X-Cookie: Dieters live life in the fasting lane.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-08-22, 14:36, Stanimir Varbanov wrote:
-> Viresh,
-> 
-> On 8/1/22 05:36, Viresh Kumar wrote:
-> > On 25-07-22, 14:55, Stanimir Varbanov wrote:
-> >> Hi Viresh,
-> >>
-> >> I can take a look and provide a patch to fix that.
-> > 
-> > Any update on this ? I am going to send pull request for 5.20 very soon and it
-> > would have been much better if this was fixed before I send that.
-> > 
-> 
-> I'm trying on next-20220728, but applying [1] gives below errors:
-> 
-> /linux-next/drivers/media/platform/qcom/venus/pm_helpers.c: In function
-> ‘core_get_v1’:
-> /linux-next/drivers/media/platform/qcom/venus/pm_helpers.c:299:4: error:
-> ‘struct dev_pm_opp_config’ has no member named ‘clk_count’
->   299 |   .clk_count = 1,
->       |    ^~~~~~~~~
-> 
-> 
-> Do you have v3 for Venus driver ?
 
-You don't need to apply anything over linux-next, it has everything you need.
-The patch you mention is dropped and we carry separate calls to configure OPP
-resources for now.
+--ekcJJ+0/0YVPoSLP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-viresh
+On Mon, Aug 01, 2022 at 10:59:10AM +0100, Sudeep Holla wrote:
+
+> So if we need this beyond PSCI FID range, better you have it as generic
+> SMCCC debug FS. Thoughts ?
+
+That thought did cross my mind when reviewing Dmitry's patch but given
+that as far as I'm aware SMCCC isn't particularly enumerable it seemed
+like it might be more of a small library of helpers than something you
+could write a general structure for.  I might be missing something
+though.
+
+--ekcJJ+0/0YVPoSLP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLnw6AACgkQJNaLcl1U
+h9Cpvwf8C1LP3InR0pGaYnO72+leN/x5NE9szVPZkG6SQV/WHBXcoykpbRTPzu2Q
+EvKcL8yteIs2D0Yu9qWGee1uNqBi8RuEKvrot+b+lqfW8CRlLTHJDmnxuNUwHaUv
+vk7vmnS7O++IkPn50AhtBYulJuGEhMEs6Ex9Vzp532UJBqou5Yf6lMPhQzGp2+wm
+gNYpJvpOHkO4SPzhyOmOwJXmwici0cFYEpIpEQ+tKh1+HbhANCvBo2UoqAuSWoVB
+R5MWkIvc3XS0FseIHBUEqfaNglaEGASlp+BnC/T41rR7kazfuQafRoV1OoBUBsSq
+sSDJQoAZO8JOiYBLbzmVhl58hXQaNw==
+=VxKG
+-----END PGP SIGNATURE-----
+
+--ekcJJ+0/0YVPoSLP--
