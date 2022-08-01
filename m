@@ -2,114 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E78587002
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 20:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0EC587076
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 20:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiHASBL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Aug 2022 14:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S231634AbiHASnC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Aug 2022 14:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbiHASBJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 14:01:09 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5D22409E
-        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 11:01:07 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id bx38so3304584ljb.10
-        for <linux-pm@vger.kernel.org>; Mon, 01 Aug 2022 11:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uZR/I+yAkBmW0w7mHOk3YtgLxlXC2BKh5JL5UtMmwBs=;
-        b=q+w6TE6z8roa1FS6pRp+tOhYcqoLK1RRU14NW5VdOJfv8hFjDkUklpCbJ0Zl4zmPBn
-         RCi6pAbq34Qsp896AIPfQsEXgp4FmQ9P1asmBO/5jNtq7wXUDfX9UCfCUp3jhB94dxOx
-         bAfL/QhWup7fU2XaCntjtXmyRRdyLfc1J5QqEsljVEOHviQjSxVn6v6KmX9MNtiMfOBW
-         dnz6oXrJCAYm4G2Mnz5cwr+o4qtZcKhtz7JY4LiK5ZTLRkgstfhGCAjZP+43gi7bNxDZ
-         hXwUACWS4Bigbxoz64aX9jfwSxHSRwx7i+EkjPU2ySYW/48LpOqbvlmdZYAvjHNZ2/d8
-         m36w==
+        with ESMTP id S233181AbiHASnB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 14:43:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54CBB764E
+        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 11:43:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659379379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9VSxu6kH6OVSyxacr8C8nn8K1lJQbLqb/x2+RqZOLy0=;
+        b=hBS/jpCOoozNh3YUO+vJiogzCjfwO767S74pf626Q6qczwzMp/pQTVDzaOwA/VE5OLT4Rl
+        5Ve837uMOSrywEOUAFLaqh1Ts6UbWz/DRDszX/sC0fSYGpqhIabclFLtQfvFPBoLGGMxdS
+        IeNMse/17zdnw9+IfT6bQVwC+rmKGtQ=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-197-TWB05Yy4O5i0XRjwYM4g7g-1; Mon, 01 Aug 2022 14:42:56 -0400
+X-MC-Unique: TWB05Yy4O5i0XRjwYM4g7g-1
+Received: by mail-io1-f72.google.com with SMTP id n19-20020a056602341300b0066850b49e09so4155280ioz.12
+        for <linux-pm@vger.kernel.org>; Mon, 01 Aug 2022 11:42:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uZR/I+yAkBmW0w7mHOk3YtgLxlXC2BKh5JL5UtMmwBs=;
-        b=C63ZscMWLa0JVkxj9as4HFktCUsaq/nWOLTpb9HhjPQfJGda0Jxrz6BY1R7qbfIl31
-         rsiMmEJ2awiloxqn6ewv29Ql6RLGfALMRJ58VaIgsYRkkqptvqJJnodkoJFrZaNpfchx
-         ISHSiODnLm90Bo6hNca9fkP7+RmKgDNClhKQaBYMfSjQQf4DRiza79VEUJMAU7QDREt8
-         +4UZTTLQThXBu2qU3hwYU7GsVimS1iNt6HMVwU0tGPdS4pmZ0E6XVt//hTzFdOrOnAoH
-         Mh+KffbShC/ua/CsHGXo9BLaoU2Cmx/HT62MhHt/IzL85F2EltXpjcv92KKZ9zJXDKL7
-         btPw==
-X-Gm-Message-State: AJIora9BO+fUQXGsBBrBR+z8qth3LyqDdc2N/sBA79rjkNfoQGGQJ/Fm
-        /+m5tlRWOogFWx6eGwMdwQJJtQ==
-X-Google-Smtp-Source: AGRyM1s+ieLndbXdmOHTogelfkNm1sPX5Vt3Z6RRXxCaWFy4HZux37fvLIAz14ZPc21Ux3ijqkBQBA==
-X-Received: by 2002:a2e:934f:0:b0:250:a7bc:2b8f with SMTP id m15-20020a2e934f000000b00250a7bc2b8fmr5464878ljh.512.1659376866299;
-        Mon, 01 Aug 2022 11:01:06 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id c15-20020a056512324f00b0048ae7b7b077sm1151293lfr.200.2022.08.01.11.01.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 11:01:05 -0700 (PDT)
-Message-ID: <57faa0a7-301c-c60c-6831-00a351ed3ea5@linaro.org>
-Date:   Mon, 1 Aug 2022 20:01:03 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=9VSxu6kH6OVSyxacr8C8nn8K1lJQbLqb/x2+RqZOLy0=;
+        b=qDSu5Y/tCT5BEKneQkH/ij3FFW6pxrha9yhIcIUZfr/w1dUvck8rb+5EDevTiN/wk5
+         haVv9Bu0oXIvHifyby5GV8QrgS+6IOp8vkVfwwWN+H+j2gATj42eHy3dMRUYZnQUX0IF
+         HMeWkOaUh/vXMu9uqmxq0DBO+KZWK5yFpM/YwxfFSG9cYEDxRcD2c0xNjNlkjPBjM67b
+         vl4u8LwCjK8bgJPmozYIXDerhvPiiof2IxRCT6lc8uVev5JpucbNobkY1cwCDETpnM2U
+         1OagZhCSqThgJgjlxI9VPmtuGtJ1J8ozwK/iW/27A0e04gwbXWcKPVwAdlRNejXMF0d2
+         XEwQ==
+X-Gm-Message-State: AJIora+v2oyQ4e3nk/HIP0lr30KX66TFHLRxw+oTMVYlSa6b8aSfw5Xs
+        HKX4WA1a0iHJLB3Qoaqoose3mtEwnvIh3izBRqko4GW/i8RJXSBbtsNovPydV4Jq787ZX9bKVNF
+        hppl44IDAzxeV4c5RdUo=
+X-Received: by 2002:a05:6e02:12c7:b0:2dc:8862:15ed with SMTP id i7-20020a056e0212c700b002dc886215edmr6218131ilm.253.1659379375619;
+        Mon, 01 Aug 2022 11:42:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vPhYcUSteoNNgux6SlllUg3TqHUG5Z8FH+OPi18qAeH1VyuLr2yZZAoZeI2cQIAMhW3mQv6g==
+X-Received: by 2002:a05:6e02:12c7:b0:2dc:8862:15ed with SMTP id i7-20020a056e0212c700b002dc886215edmr6218115ilm.253.1659379375287;
+        Mon, 01 Aug 2022 11:42:55 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id cs12-20020a056638470c00b003427bb38ccasm771291jab.54.2022.08.01.11.42.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 11:42:54 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 12:42:53 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v5 1/5] vfio: Add the device features for the low power
+ entry and exit
+Message-ID: <20220801124253.11c24d91.alex.williamson@redhat.com>
+In-Reply-To: <f903e2b9-f85b-a4c8-4706-f463919723a3@nvidia.com>
+References: <20220719121523.21396-1-abhsahu@nvidia.com>
+        <20220719121523.21396-2-abhsahu@nvidia.com>
+        <20220721163445.49d15daf.alex.williamson@redhat.com>
+        <aaef2e78-1ed2-fe8b-d167-8ea2dcbe45b6@nvidia.com>
+        <20220725160928.43a17560.alex.williamson@redhat.com>
+        <bd7bca18-ae07-c04a-23d3-bf71245da0cc@nvidia.com>
+        <20220726172356.GH4438@nvidia.com>
+        <f903e2b9-f85b-a4c8-4706-f463919723a3@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RESEND 3/4 v7] power: supply: Add charger driver for Rockchip
- RK817
-Content-Language: en-US
-To:     Chris Morgan <macroalpha82@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     linux-pm@vger.kernel.org, kbuild-all@lists.01.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        zhangqing@rock-chips.com, zyw@rock-chips.com,
-        jon.lin@rock-chips.com, sre@kernel.org, heiko@sntech.de,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lee.jones@linaro.org, Chris Morgan <macromorgan@hotmail.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>
-References: <20220721161718.29800-4-macroalpha82@gmail.com>
- <202207242227.mttUkfTB-lkp@intel.com>
- <20220729162828.GB102@wintermute.localdomain>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220729162828.GB102@wintermute.localdomain>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/07/2022 18:28, Chris Morgan wrote:
-> On Sun, Jul 24, 2022 at 10:58:00PM +0800, kernel test robot wrote:
->> Hi Chris,
->>
->> Thank you for the patch! Perhaps something to improve:
+On Wed, 27 Jul 2022 11:37:02 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
+
+> On 7/26/2022 10:53 PM, Jason Gunthorpe wrote:
+> > On Tue, Jul 26, 2022 at 06:17:18PM +0530, Abhishek Sahu wrote:  
+> >>  Thanks Alex for your thorough review of uAPI.
+> >>  I have incorporated all the suggestions.
+> >>  Following is the updated uAPI.
+> >>  
+> >>  /*
+> >>   * Upon VFIO_DEVICE_FEATURE_SET, allow the device to be moved into a low power
+> >>   * state with the platform-based power management.  Device use of lower power
+> >>   * states depends on factors managed by the runtime power management core,
+> >>   * including system level support and coordinating support among dependent
+> >>   * devices.  Enabling device low power entry does not guarantee lower power
+> >>   * usage by the device, nor is a mechanism provided through this feature to
+> >>   * know the current power state of the device.  If any device access happens
+> >>   * (either from the host or through the vfio uAPI) when the device is in the
+> >>   * low power state, then the host will move the device out of the low power
+> >>   * state as necessary prior to the access.  Once the access is completed, the
+> >>   * device may re-enter the low power state.  For single shot low power support
+> >>   * with wake-up notification, see
+> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP below.  Access to mmap'd
+> >>   * device regions is disabled on LOW_POWER_ENTRY and may only be resumed after
+> >>   * calling LOW_POWER_EXIT.
+> >>   */
+> >>  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY 3
+> >>  
+> >>  /*
+> >>   * This device feature has the same behavior as
+> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY with the exception that the user
+> >>   * provides an eventfd for wake-up notification.  
+> > 
+> > It feels like this should be one entry point instead of two.
+> > 
+> > A flag "automatic re-sleep" and an optional eventfd (-1 means not
+> > provided) seems to capture both of these behaviors in a bit clearer
+> > and extendable way.
+
+I think the mutual exclusion between re-entrant mode and one-shot is
+quite a bit more subtle in the version below, so I don't particularly
+find this cleaner.  Potentially we could have variant drivers support
+one w/o the other in the previously proposed model as well.  It's
+interesting to see this suggestion since since we seem to have a theme
+of making features single purpose elsewhere.  Thanks,
+
+Alex 
+
 > 
-> I'm afraid I'm not sure the best way to fix this. The only thing I can
-> think of is for now the driver should only be for systems with a
-> Rockchip RK817 PMIC (to my knowledge only ARM based systems from
-> Rockchip),
+>  We discussed about that in the earlier version of the patch series.
+>  Since we have different exit related handling, so to avoid confusion
+>  we proceeded with 2 separate variants for the low power entry. Also,
+>  we don't need any parameter for the first case.
+> 
+>  But, I can do the changes to make a single entry point, if we conclude
+>  for that. 
+> 
+>  From my side, I have explored how the uAPI looks like if
+>  we go with this approach.
+> 
+>  /*
+>   * Upon VFIO_DEVICE_FEATURE_SET, allow the device to be moved into a low power
+>   * state with the platform-based power management.  Device use of lower power
+>   * states depends on factors managed by the runtime power management core,
+>   * including system level support and coordinating support among dependent
+>   * devices.  Enabling device low power entry does not guarantee lower power
+>   * usage by the device, nor is a mechanism provided through this feature to
+>   * know the current power state of the device.  If any device access happens
+>   * (either from the host or through the vfio uAPI) when the device is in the
+>   * low power state, then the host will move the device out of the low power
+>   * state as necessary prior to the access.  Once the access is completed, the
+>   * device re-entry to a low power state will be controlled through
+>   * VFIO_DEVICE_LOW_POWER_REENTERY_DISABLE flag.
+>   *
+>   * If LOW_POWER_REENTERY_DISABLE flag is not set, the device may re-enter the
+>   * low power state.  Access to mmap'd device regions is disabled on
+>   * LOW_POWER_ENTRY and may only be resumed after calling LOW_POWER_EXIT.
+>   *
+>   * If LOW_POWER_REENTERY_DISABLE flag is set, then user needs to provide an
+>   * eventfd for wake-up notification.  When the device moves out of the low
+>   * power state for the wake-up, the host will not allow the device to re-enter
+>   * a low power state without a subsequent user call to LOW_POWER_ENTRY.
+>   * Access to mmap'd device regions is disabled on LOW_POWER_ENTRY and may only
+>   * be resumed after the low power exit.  The low power exit can happen either
+>   * through LOW_POWER_EXIT or through any other access (where the wake-up
+>   * notification has been generated).  The access to mmap'd device regions will
+>   * not trigger low power exit.
+>   *
+>   * The notification through the provided eventfd will be generated only when
+>   * the device has entered and is resumed from a low power state after
+>   * calling this device feature IOCTL.  A device that has not entered low power
+>   * state, as managed through the runtime power management core, will not
+>   * generate a notification through the provided eventfd on access.  Calling the
+>   * LOW_POWER_EXIT feature is optional in the case where notification has been
+>   * signaled on the provided eventfd that a resume from low power has occurred.
+>   *
+>   * The wakeup_eventfd needs to be valid only if LOW_POWER_REENTERY_DISABLE
+>   * flag is set, otherwise, it will be ignored.
+>   */
+>  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY 3
+>  
+>  struct vfio_device_low_power_entry_with_wakeup {
+>  	__u32 flags;
+>  #define VFIO_DEVICE_LOW_POWER_REENTERY_DISABLE	(1 << 0)
+>  	__s32 wakeup_eventfd;
+>  };
+>  
+>  /*
+>   * Upon VFIO_DEVICE_FEATURE_SET, disallow use of device low power states as
+>   * previously enabled via VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY device feature.
+>   * This device feature IOCTL may itself generate a wakeup eventfd notification
+>   * if the device had previously entered a low power state with
+>   * VFIO_DEVICE_LOW_POWER_REENTERY_DISABLE flag set.
+>   */
+>  #define VFIO_DEVICE_FEATURE_LOW_POWER_EXIT 4
+> 
+>  Thanks,
+>  Abhishek
+> 
 
-Why? We want to compile test everything everywhere,
-
->  but it looks like the arch was set as parisc. 
-
-The arch itself does not matter unless the actual warning is specific to it.
-
-> Even still,
-> as long as some of the functions ahead of it don't error out each
-> of those variables should be used. Is there a way to confirm these
-> warnings?
-
-Just compile and see by yourself. The error should be visible on
-multiple archs. If not, then use parisc. Ubuntu provides most of cross
-compilers so it's extra easy to use. The ones not provided by Ubuntu are
-also here:
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
-
-
-Best regards,
-Krzysztof
