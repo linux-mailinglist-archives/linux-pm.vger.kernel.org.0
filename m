@@ -2,54 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C7D5862E1
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 05:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2DC5863CB
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 07:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238998AbiHADAL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 Jul 2022 23:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S239521AbiHAFnN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Aug 2022 01:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238241AbiHADAL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jul 2022 23:00:11 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56880DF0C
-        for <linux-pm@vger.kernel.org>; Sun, 31 Jul 2022 20:00:08 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        with ESMTP id S231483AbiHAFnN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 01:43:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8425F13DEB;
+        Sun, 31 Jul 2022 22:43:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 4E43680361;
-        Mon,  1 Aug 2022 05:00:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1659322806;
-        bh=WohGlKboRFj91P+Xw4Po6h0hN5uP08SJLlYYTAW+7rI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FxiLpS5Lm85QXb05eP0eSopN7hkl08+edh/mWUjxvs3aW5yAf++u06BrrgriKUPZO
-         mEiJWorwYQL1nu+N/bRDyN/ZxWrFLEH7qGS1xMytrUFyfPB+5/aihcOWFNofXMi9yB
-         9X2ZxnObas8GCoHncMAQd7HhvYI9ejbn0tmzS8b4yxIORIJSGWEaOviZQX2fKEh6C4
-         feOkxO4gdD5vy4o1LmanoLOlhGgvDjlCU0xn/hQHLIdCSN6iDvdoCXCsWyl+JrmOIt
-         3Z35Cqw3cxHrj7F4xwoAJ/0oOZ1viKgdgMlKkJELdJ4uuOmP/ZiQo4xYXkEAePZC3v
-         bIRp7D8lBgeUg==
-Message-ID: <b18944f4-4e87-dfd1-37af-568a8959c57c@denx.de>
-Date:   Mon, 1 Aug 2022 05:00:05 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D16D860C93;
+        Mon,  1 Aug 2022 05:43:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91FDC433C1;
+        Mon,  1 Aug 2022 05:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659332589;
+        bh=GsGF8A4Me4IQT0F9GvKCQUBEMKLVc7qayH0CzaMRxE8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uv/bntGh5sgvS9Mm030zD5YjMm0KSOsVTmJ2zCMMkP0eDlk3DDFibIkO5TgLEOWS+
+         HOry+Jf1cRNvOngT2lMtgyHdm7k//Wez9OQQFk1AdAYoz475TMAZ3A4mA7uHYeafxI
+         RQD5OpTuZ9YybIWaOektt0IJnta/E+ZnhB/1ESWgWblwkWvfLA1vOsRtjrwlcp7aJg
+         I8Rtr5vGKxfiPhGpyMW6LUohqyVK5weFKF7QYNOeOt7vxcQ1fBv58pC8v3FoZHq1M5
+         80mtBsjQe9oLTvoT5gw2ZRsLyc03R/8DoMhvAyo5HJ9v798VaaYJyN/2bnVv9YxskM
+         rGzp29fXLaP5Q==
+Date:   Mon, 1 Aug 2022 11:12:55 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
+Message-ID: <20220801054255.GA12039@thinkpad>
+References: <cover.1657695140.git.viresh.kumar@linaro.org>
+ <20220715160933.GD12197@workstation>
+ <20220718015742.uwskqo55qd67jx2w@vireshk-i7>
+ <20220801023756.76jswkbwivuntqof@vireshk-i7>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] power: supply: bq25890: Add support for setting IINLIM
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20220730180630.152098-1-marex@denx.de>
- <a28026fb-a69b-3ca5-9851-95e6983b9404@redhat.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <a28026fb-a69b-3ca5-9851-95e6983b9404@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220801023756.76jswkbwivuntqof@vireshk-i7>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,45 +64,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/31/22 11:52, Hans de Goede wrote:
+On Mon, Aug 01, 2022 at 08:07:56AM +0530, Viresh Kumar wrote:
+> On 18-07-22, 07:27, Viresh Kumar wrote:
+> > The OPP tables, which are part of the CPU nodes, mentions clock rates.
+> > Are these values for the cxo/gpll clocks or the clock that reaches the
+> > CPUs? I believe the latter. The DT is not really complete if the CPU
+> > node mentions the frequency, but not the source clock. It works for
+> > you because you don't want to do clk_set_rate() in this case, but then
+> > it leaves other frameworks, like OPP, confused and rightly so.
+> > 
+> > Normally, there is always a difference in what the OPP table contains
+> > as frequency value and what the hardware programs, mostly it is small
+> > though. It shouldn't prevent us from having the hierarchy clearly
+> > defined in the DT.
+> > 
+> > Based on your description, I think it would be better to make
+> > cpufreq-hw a clock provider and CPUs the consumer of it. It would then
+> > allow the OPP core to not carry the hack to make it all work.
+> 
+> Bjorn / Mani,
+> 
+> Can we please get this sorted out ? I don't want to carry an unnecessary hack in
+> the OPP core for this.
+> 
 
-[...]
+I'm waiting for inputs from Bjorn.
 
->> +static int bq25890_power_supply_set_property(struct power_supply *psy,
->> +					     enum power_supply_property psp,
->> +					     const union power_supply_propval *val)
->> +{
->> +	struct bq25890_device *bq = power_supply_get_drvdata(psy);
->> +	u32 lval;
->> +
->> +	switch (psp) {
->> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
->> +		lval = clamp(val->intval, 100000, 3250000);
->> +		lval = DIV_ROUND_UP(lval - 100000, 50000);
-> 
-> I'm not sure DIV_ROUND_UP is the right thing to do here. This means
-> that when the user e.g. asks for 1040 mA the iinlim will get set to
-> 1050mA so more then which is being requested.
-> 
-> IMHO it would be better to use rounding down, aka standard divide
-> behavior here.
-> 
-> But even better would be to replace both lval = ... statements
-> with a single:
-> 
-> 	lval = bq25890_find_idx(val->intval, TBL_IINLIM);
-> 
-> which takes care of all this for you and is also what is used
-> by bq25890_charger_external_power_changed() to set iinlim based
-> on charger-type-detection done by other chips on the board
-> (e.g. PMICs / usb-phys Type-C controllers).
+@Bjorn: What do you think of the proposal to add qcom-cpufreq-hw as the clk
+provider for CPUs?
 
-Nice, fixed in v2, thanks.
+Thanks,
+Mani
 
-There is one thing which I don't quite understand about this driver 
-though -- shouldn't we implement .external_power_changed() callback and 
-then somehow listen for which charger gets plugged in (like, USB 
-standard one, or 1.5A one or 3A one, or even some adapter), and based on 
-that tweak the IINLIM too ? Or is this more of a userspace kind of 
-policy, so it should be up to userspace to write this sysfs entry as 
-needed ?
+> -- 
+> viresh
+
+-- 
+மணிவண்ணன் சதாசிவம்
