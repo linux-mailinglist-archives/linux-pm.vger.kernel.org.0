@@ -2,214 +2,288 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0EC587076
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 20:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940AA5871B3
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 21:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiHASnC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Aug 2022 14:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
+        id S235092AbiHATtA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 1 Aug 2022 15:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbiHASnB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 14:43:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54CBB764E
-        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 11:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659379379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9VSxu6kH6OVSyxacr8C8nn8K1lJQbLqb/x2+RqZOLy0=;
-        b=hBS/jpCOoozNh3YUO+vJiogzCjfwO767S74pf626Q6qczwzMp/pQTVDzaOwA/VE5OLT4Rl
-        5Ve837uMOSrywEOUAFLaqh1Ts6UbWz/DRDszX/sC0fSYGpqhIabclFLtQfvFPBoLGGMxdS
-        IeNMse/17zdnw9+IfT6bQVwC+rmKGtQ=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-TWB05Yy4O5i0XRjwYM4g7g-1; Mon, 01 Aug 2022 14:42:56 -0400
-X-MC-Unique: TWB05Yy4O5i0XRjwYM4g7g-1
-Received: by mail-io1-f72.google.com with SMTP id n19-20020a056602341300b0066850b49e09so4155280ioz.12
-        for <linux-pm@vger.kernel.org>; Mon, 01 Aug 2022 11:42:56 -0700 (PDT)
+        with ESMTP id S235052AbiHATs7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 15:48:59 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685A832068;
+        Mon,  1 Aug 2022 12:48:57 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id y127so20624758yby.8;
+        Mon, 01 Aug 2022 12:48:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=9VSxu6kH6OVSyxacr8C8nn8K1lJQbLqb/x2+RqZOLy0=;
-        b=qDSu5Y/tCT5BEKneQkH/ij3FFW6pxrha9yhIcIUZfr/w1dUvck8rb+5EDevTiN/wk5
-         haVv9Bu0oXIvHifyby5GV8QrgS+6IOp8vkVfwwWN+H+j2gATj42eHy3dMRUYZnQUX0IF
-         HMeWkOaUh/vXMu9uqmxq0DBO+KZWK5yFpM/YwxfFSG9cYEDxRcD2c0xNjNlkjPBjM67b
-         vl4u8LwCjK8bgJPmozYIXDerhvPiiof2IxRCT6lc8uVev5JpucbNobkY1cwCDETpnM2U
-         1OagZhCSqThgJgjlxI9VPmtuGtJ1J8ozwK/iW/27A0e04gwbXWcKPVwAdlRNejXMF0d2
-         XEwQ==
-X-Gm-Message-State: AJIora+v2oyQ4e3nk/HIP0lr30KX66TFHLRxw+oTMVYlSa6b8aSfw5Xs
-        HKX4WA1a0iHJLB3Qoaqoose3mtEwnvIh3izBRqko4GW/i8RJXSBbtsNovPydV4Jq787ZX9bKVNF
-        hppl44IDAzxeV4c5RdUo=
-X-Received: by 2002:a05:6e02:12c7:b0:2dc:8862:15ed with SMTP id i7-20020a056e0212c700b002dc886215edmr6218131ilm.253.1659379375619;
-        Mon, 01 Aug 2022 11:42:55 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vPhYcUSteoNNgux6SlllUg3TqHUG5Z8FH+OPi18qAeH1VyuLr2yZZAoZeI2cQIAMhW3mQv6g==
-X-Received: by 2002:a05:6e02:12c7:b0:2dc:8862:15ed with SMTP id i7-20020a056e0212c700b002dc886215edmr6218115ilm.253.1659379375287;
-        Mon, 01 Aug 2022 11:42:55 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id cs12-20020a056638470c00b003427bb38ccasm771291jab.54.2022.08.01.11.42.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 11:42:54 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 12:42:53 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 1/5] vfio: Add the device features for the low power
- entry and exit
-Message-ID: <20220801124253.11c24d91.alex.williamson@redhat.com>
-In-Reply-To: <f903e2b9-f85b-a4c8-4706-f463919723a3@nvidia.com>
-References: <20220719121523.21396-1-abhsahu@nvidia.com>
-        <20220719121523.21396-2-abhsahu@nvidia.com>
-        <20220721163445.49d15daf.alex.williamson@redhat.com>
-        <aaef2e78-1ed2-fe8b-d167-8ea2dcbe45b6@nvidia.com>
-        <20220725160928.43a17560.alex.williamson@redhat.com>
-        <bd7bca18-ae07-c04a-23d3-bf71245da0cc@nvidia.com>
-        <20220726172356.GH4438@nvidia.com>
-        <f903e2b9-f85b-a4c8-4706-f463919723a3@nvidia.com>
-Organization: Red Hat
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=egmRs92oP4TdMekylU+TV/79gXiOhc1WUfIIgb3vhM8=;
+        b=1OZxXZcXxROqosYLLFEMQlqHUn2oD33TwbqqJUkF14PWL2bVrQQhSnRZzkcHZhI6mo
+         z0srG8LK2NIF+FDLYoVcmjPd51fPpYgDUg5R+Zd91wx4cPLrrCKsKTt6FYbqlTo1nHsn
+         4u0WTTnMTGhdAPamB5RiNk/c100OSMzWyvQMwQFUKVcxwKjLXkFtWpa06BQmBQrvYobi
+         xTsNdc5xPEtZ8gtpYkoMC/gfYzDda1kQYnDX9mH6GqTzLRzjpI+F0FJzGUfJ8miKythK
+         PuZdvhnBOpumhr7A2Q9+WYhwRjEzggFDQ+miP5dTDwS6+odK6qp2cKM3gvRl08f49Ueh
+         IyfQ==
+X-Gm-Message-State: ACgBeo14SNxAoTFbhBQLcia1s8SNgqolbYa4LUHGL2/CCX1Kjm5MnX3q
+        I//vHWlu7Mp1Hm9pfV6Sy1TMcp/uQcL9IcPNJOPGaC/T+r+E2w==
+X-Google-Smtp-Source: AA6agR7Iv9myO84oeSF50C24Y8EbYJ8yccva8g+RlxgyexF9qLopjNZyad7AelFL0Xyj7oWNvje5BfNtCqN8a01cPyo=
+X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
+ z15-20020a25664f000000b0066cd0f436ccmr12319448ybm.482.1659383336315; Mon, 01
+ Aug 2022 12:48:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 1 Aug 2022 21:48:40 +0200
+Message-ID: <CAJZ5v0jsKLQLf-UXyTNSjhYYSMo3XjjF6fNSW_Dbzbrzi3+NSg@mail.gmail.com>
+Subject: [GIT PULL] ACPI updates for v5.20-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 27 Jul 2022 11:37:02 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+Hi Linus,
 
-> On 7/26/2022 10:53 PM, Jason Gunthorpe wrote:
-> > On Tue, Jul 26, 2022 at 06:17:18PM +0530, Abhishek Sahu wrote:  
-> >>  Thanks Alex for your thorough review of uAPI.
-> >>  I have incorporated all the suggestions.
-> >>  Following is the updated uAPI.
-> >>  
-> >>  /*
-> >>   * Upon VFIO_DEVICE_FEATURE_SET, allow the device to be moved into a low power
-> >>   * state with the platform-based power management.  Device use of lower power
-> >>   * states depends on factors managed by the runtime power management core,
-> >>   * including system level support and coordinating support among dependent
-> >>   * devices.  Enabling device low power entry does not guarantee lower power
-> >>   * usage by the device, nor is a mechanism provided through this feature to
-> >>   * know the current power state of the device.  If any device access happens
-> >>   * (either from the host or through the vfio uAPI) when the device is in the
-> >>   * low power state, then the host will move the device out of the low power
-> >>   * state as necessary prior to the access.  Once the access is completed, the
-> >>   * device may re-enter the low power state.  For single shot low power support
-> >>   * with wake-up notification, see
-> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP below.  Access to mmap'd
-> >>   * device regions is disabled on LOW_POWER_ENTRY and may only be resumed after
-> >>   * calling LOW_POWER_EXIT.
-> >>   */
-> >>  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY 3
-> >>  
-> >>  /*
-> >>   * This device feature has the same behavior as
-> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY with the exception that the user
-> >>   * provides an eventfd for wake-up notification.  
-> > 
-> > It feels like this should be one entry point instead of two.
-> > 
-> > A flag "automatic re-sleep" and an optional eventfd (-1 means not
-> > provided) seems to capture both of these behaviors in a bit clearer
-> > and extendable way.
+Please pull from the tag
 
-I think the mutual exclusion between re-entrant mode and one-shot is
-quite a bit more subtle in the version below, so I don't particularly
-find this cleaner.  Potentially we could have variant drivers support
-one w/o the other in the previously proposed model as well.  It's
-interesting to see this suggestion since since we seem to have a theme
-of making features single purpose elsewhere.  Thanks,
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.20-rc1
 
-Alex 
+with top-most commit 6352f3478a95cc413ecfee4fdb3300009fd3679a
 
-> 
->  We discussed about that in the earlier version of the patch series.
->  Since we have different exit related handling, so to avoid confusion
->  we proceeded with 2 separate variants for the low power entry. Also,
->  we don't need any parameter for the first case.
-> 
->  But, I can do the changes to make a single entry point, if we conclude
->  for that. 
-> 
->  From my side, I have explored how the uAPI looks like if
->  we go with this approach.
-> 
->  /*
->   * Upon VFIO_DEVICE_FEATURE_SET, allow the device to be moved into a low power
->   * state with the platform-based power management.  Device use of lower power
->   * states depends on factors managed by the runtime power management core,
->   * including system level support and coordinating support among dependent
->   * devices.  Enabling device low power entry does not guarantee lower power
->   * usage by the device, nor is a mechanism provided through this feature to
->   * know the current power state of the device.  If any device access happens
->   * (either from the host or through the vfio uAPI) when the device is in the
->   * low power state, then the host will move the device out of the low power
->   * state as necessary prior to the access.  Once the access is completed, the
->   * device re-entry to a low power state will be controlled through
->   * VFIO_DEVICE_LOW_POWER_REENTERY_DISABLE flag.
->   *
->   * If LOW_POWER_REENTERY_DISABLE flag is not set, the device may re-enter the
->   * low power state.  Access to mmap'd device regions is disabled on
->   * LOW_POWER_ENTRY and may only be resumed after calling LOW_POWER_EXIT.
->   *
->   * If LOW_POWER_REENTERY_DISABLE flag is set, then user needs to provide an
->   * eventfd for wake-up notification.  When the device moves out of the low
->   * power state for the wake-up, the host will not allow the device to re-enter
->   * a low power state without a subsequent user call to LOW_POWER_ENTRY.
->   * Access to mmap'd device regions is disabled on LOW_POWER_ENTRY and may only
->   * be resumed after the low power exit.  The low power exit can happen either
->   * through LOW_POWER_EXIT or through any other access (where the wake-up
->   * notification has been generated).  The access to mmap'd device regions will
->   * not trigger low power exit.
->   *
->   * The notification through the provided eventfd will be generated only when
->   * the device has entered and is resumed from a low power state after
->   * calling this device feature IOCTL.  A device that has not entered low power
->   * state, as managed through the runtime power management core, will not
->   * generate a notification through the provided eventfd on access.  Calling the
->   * LOW_POWER_EXIT feature is optional in the case where notification has been
->   * signaled on the provided eventfd that a resume from low power has occurred.
->   *
->   * The wakeup_eventfd needs to be valid only if LOW_POWER_REENTERY_DISABLE
->   * flag is set, otherwise, it will be ignored.
->   */
->  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY 3
->  
->  struct vfio_device_low_power_entry_with_wakeup {
->  	__u32 flags;
->  #define VFIO_DEVICE_LOW_POWER_REENTERY_DISABLE	(1 << 0)
->  	__s32 wakeup_eventfd;
->  };
->  
->  /*
->   * Upon VFIO_DEVICE_FEATURE_SET, disallow use of device low power states as
->   * previously enabled via VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY device feature.
->   * This device feature IOCTL may itself generate a wakeup eventfd notification
->   * if the device had previously entered a low power state with
->   * VFIO_DEVICE_LOW_POWER_REENTERY_DISABLE flag set.
->   */
->  #define VFIO_DEVICE_FEATURE_LOW_POWER_EXIT 4
-> 
->  Thanks,
->  Abhishek
-> 
+ Merge branches 'acpi-video', 'acpi-pci' and 'acpi-docs'
 
+on top of commit e0dccc3b76fb35bb257b4118367a883073d7390e
+
+ Linux 5.19-rc8
+
+to receive ACPI updates for 5.20-rc1.
+
+These rework the handling of ACPI device objects to use the driver
+core facilities for managing child ones instead of some questionable
+home-grown ways without the requisite locking and reference counting,
+clean up the EC driver, improve suspend-to-idle handling on x86, add
+some systems to the ACPI backlight quirk list, fix some assorted
+issues, clean up code and improve documentation.
+
+Specifics:
+
+ - Use facilities provided by the driver core and some additional
+   helpers to handle the children of a given ACPI device object in
+   multiple places instead of using the children and node list heads in
+   struct acpi_device which is error prone (Rafael Wysocki).
+
+ - Fix ACPI-related device reference counting issue in the hisi_lpc bus
+   driver (Yang Yingliang).
+
+ - Drop the children and node list heads that are not needed any more
+   from struct acpi_device (Rafael Wysocki).
+
+ - Drop driver member from struct acpi_device (Uwe Kleine-König).
+
+ - Drop redundant check from acpi_device_remove() (Uwe Kleine-König).
+
+ - Prepare the CPPC library for handling backwards-compatible future
+   _CPC return package formats gracefully (Rafael Wysocki).
+
+ - Clean up the ACPI EC driver after previous changes in it (Hans
+   de Goede).
+
+ - Drop leftover acpi_processor_get_limit_info() declaration (Riwen
+   Lu).
+
+ - Split out thermal initialization from ACPI PSS (Riwen Lu).
+
+ - Annotate more functions in the ACPI CPU idle driver to live in the
+   cpuidle section (Guilherme G. Piccoli).
+
+ - Fix _EINJ vs "special purpose" EFI memory regions (Dan Williams).
+
+ - Implement a better fix to avoid spamming the console with old error
+   logs (Tony Luck).
+
+ - Fix typo in a comment in the APEI code (Xiang wangx).
+
+ - Save NVS memory during transitions into S3 on Lenovo G40-45 (Manyi
+   Li).
+
+ - Add support for upcoming AMD uPEP device ID AMDI008 to the ACPI
+   suspend-to-idle driver for x86 platforms (Shyam Sundar S K).
+
+ - Clean up checks related to the ACPI_FADT_LOW_POWER_S0 platform flag
+   in the LPIT table driver and the suspend-to-idle driver for x86
+   platforms (Rafael Wysocki).
+
+ - Print information messages regarding declared LPS0 idle support in
+   the platform firmware (Rafael Wysocki).
+
+ - Fix missing check in register_device_clock() in the ACPI driver for
+   Intel SoCs (huhai).
+
+ - Fix ACS setup in the VIOT table parser (Eric Auger).
+
+ - Skip IRQ override on AMD Zen platforms where it's harmful (Chuanhong
+   Guo).
+
+ - Use native backlight on Dell Inspiron N4010 (Hans de Goede).
+
+ - Use native backlight on some TongFang devices (Werner Sembach).
+
+ - Drop X86 dependency from the ACPI backlight driver Kconfig (Riwen
+   Lu).
+
+ - Shorten the quirk list in the ACPI backlight driver by identifying
+   Clevo by board_name only (Werner Sembach).
+
+ - Remove useless NULL pointer checks from 2 ACPI PCI link management
+   functions (Andrey Strachuk).
+
+ - Fix obsolete example in the ACPI EINJ documentation (Qifu Zhang).
+
+ - Update links and references to _DSD-related documents (Sudeep
+   Holla).
+
+Thanks!
+
+
+---------------
+
+Andrey Strachuk (1):
+      ACPI/PCI: Remove useless NULL pointer checks
+
+Chuanhong Guo (1):
+      ACPI: resource: skip IRQ override on AMD Zen platforms
+
+Dan Williams (1):
+      ACPI: APEI: Fix _EINJ vs EFI_MEMORY_SP
+
+Eric Auger (1):
+      ACPI: VIOT: Fix ACS setup
+
+Guilherme G. Piccoli (1):
+      ACPI: processor/idle: Annotate more functions to live in cpuidle section
+
+Hans de Goede (5):
+      ACPI: EC: Remove duplicate ThinkPad X1 Carbon 6th entry from DMI quirks
+      ACPI: EC: Drop the EC_FLAGS_IGNORE_DSDT_GPE quirk
+      ACPI: EC: Re-use boot_ec when possible even when
+EC_FLAGS_TRUST_DSDT_GPE is set
+      ACPI: EC: Drop unused ident initializers from dmi_system_id tables
+      ACPI: video: Use native backlight on Dell Inspiron N4010
+
+Manyi Li (1):
+      ACPI: PM: save NVS memory for Lenovo G40-45
+
+Qifu Zhang (1):
+      Documentation: ACPI: EINJ: Fix obsolete example
+
+Rafael J. Wysocki (21):
+      ACPI: glue: Use acpi_dev_for_each_child()
+      ACPI: glue: Introduce acpi_dev_has_children()
+      ACPI: glue: Introduce acpi_find_child_by_adr()
+      thunderbolt: ACPI: Replace tb_acpi_find_port() with
+acpi_find_child_by_adr()
+      USB: ACPI: Replace usb_acpi_find_port() with acpi_find_child_by_adr()
+      ACPI: container: Use acpi_dev_for_each_child()
+      ACPI: property: Use acpi_dev_for_each_child() for child lookup
+      ACPI: bus: Export acpi_dev_for_each_child() to modules
+      ACPI: video: Use acpi_dev_for_each_child()
+      ACPI: bus: Introduce acpi_dev_for_each_child_reverse()
+      ACPI: scan: Walk ACPI device's children using driver core
+      platform/x86/thinkpad_acpi: Use acpi_dev_for_each_child()
+      soundwire: Use acpi_dev_for_each_child()
+      ACPI / MMC: PM: Unify fixing up device power
+      mfd: core: Use acpi_dev_for_each_child()
+      hisi_lpc: Use acpi_dev_for_each_child()
+      ACPI: bus: Drop unused list heads from struct acpi_device
+      Revert "ACPI / PM: LPIT: Register sysfs attributes based on FADT"
+      ACPI: PM: s2idle: Use LPS0 idle if ACPI_FADT_LOW_POWER_S0 is unset
+      ACPI: PM: x86: Print messages regarding LPS0 idle support
+      ACPI: CPPC: Do not prevent CPPC from working in the future
+
+Riwen Lu (3):
+      ACPI: video: Drop X86 dependency from Kconfig
+      ACPI: processor: Split out thermal initialization from ACPI PSS
+      ACPI: processor: Drop leftover acpi_processor_get_limit_info() declaration
+
+Shyam Sundar S K (1):
+      ACPI: PM: s2idle: Add support for upcoming AMD uPEP HID AMDI008
+
+Sudeep Holla (1):
+      Documentation: ACPI: Update links and references to DSD related docs
+
+Tony Luck (1):
+      ACPI: APEI: Better fix to avoid spamming the console with old error logs
+
+Uwe Kleine-König (2):
+      ACPI: bus: Drop redundant check in acpi_device_remove()
+      ACPI: bus: Drop driver member of struct acpi_device
+
+Werner Sembach (2):
+      ACPI: video: Force backlight native for some TongFang devices
+      ACPI: video: Shortening quirk list by identifying Clevo by board_name only
+
+Xiang wangx (1):
+      ACPI: APEI: Fix double word in a comment
+
+Yang Yingliang (1):
+      bus: hisi_lpc: fix missing platform_device_put() in hisi_lpc_acpi_probe()
+
+huhai (1):
+      ACPI: LPSS: Fix missing check in register_device_clock()
+
+---------------
+
+ .../firmware-guide/acpi/DSD-properties-rules.rst   |  11 +-
+ Documentation/firmware-guide/acpi/apei/einj.rst    |   2 +-
+ drivers/acpi/Kconfig                               |   4 +-
+ drivers/acpi/Makefile                              |   5 +-
+ drivers/acpi/acpi_lpit.c                           |   6 -
+ drivers/acpi/acpi_lpss.c                           |   3 +
+ drivers/acpi/acpi_video.c                          |  41 ++---
+ drivers/acpi/apei/apei-base.c                      |   2 +-
+ drivers/acpi/apei/bert.c                           |  31 +++-
+ drivers/acpi/apei/einj.c                           |   2 +
+ drivers/acpi/bus.c                                 |  47 +++--
+ drivers/acpi/container.c                           |  17 +-
+ drivers/acpi/cppc_acpi.c                           |  54 +++---
+ drivers/acpi/device_pm.c                           |  22 +++
+ drivers/acpi/device_sysfs.c                        |   2 +-
+ drivers/acpi/ec.c                                  | 140 +++++---------
+ drivers/acpi/glue.c                                | 133 ++++++++++----
+ drivers/acpi/pci_link.c                            |   8 +-
+ drivers/acpi/processor_driver.c                    |  72 +-------
+ drivers/acpi/processor_idle.c                      |   6 +-
+ drivers/acpi/processor_thermal.c                   |  54 ++++++
+ drivers/acpi/property.c                            |  45 ++---
+ drivers/acpi/resource.c                            |  10 +
+ drivers/acpi/scan.c                                |  70 +++----
+ drivers/acpi/sleep.c                               |  11 ++
+ drivers/acpi/video_detect.c                        |  63 +++++--
+ drivers/acpi/viot.c                                |  26 ++-
+ drivers/acpi/x86/s2idle.c                          |  17 +-
+ drivers/bus/hisi_lpc.c                             | 204 ++++++++++-----------
+ drivers/mfd/mfd-core.c                             |  31 +++-
+ drivers/mmc/host/sdhci-acpi.c                      |   7 +-
+ drivers/mmc/host/sdhci-pci-core.c                  |  11 +-
+ drivers/platform/x86/thinkpad_acpi.c               |  53 +++---
+ drivers/soundwire/slave.c                          | 117 +++++++-----
+ drivers/thunderbolt/acpi.c                         |  29 +--
+ drivers/usb/core/usb-acpi.c                        |  18 +-
+ include/acpi/acpi_bus.h                            |   9 +-
+ include/acpi/cppc_acpi.h                           |   2 +-
+ include/acpi/processor.h                           |   9 +-
+ include/linux/acpi_viot.h                          |   2 +
+ 40 files changed, 748 insertions(+), 648 deletions(-)
