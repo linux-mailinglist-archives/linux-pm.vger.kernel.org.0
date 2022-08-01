@@ -2,74 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73260586FF2
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 19:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E78587002
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 20:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbiHAR6K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Aug 2022 13:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
+        id S231941AbiHASBL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Aug 2022 14:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbiHAR5u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 13:57:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20896101D7
-        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 10:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2C49B8160E
-        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 17:56:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B62C433D6;
-        Mon,  1 Aug 2022 17:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659376608;
-        bh=44LCcrouMZHC9BHhjLjbD3JPK6PchsuKX2t0WL9Nn7c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rf/hBlDjHtaBzjplk3obAnyi8F6Vl6sAAcN+p0uSSVh4YGa3zHNjWSU2t9Ccv3haC
-         07miiQ24FgBl62s55mdoMwTsiU6XKT22Bc0cMkbpBRTzLYtrsCgM7nNnHyzOlg/nEp
-         eg8IFwvpLhcwH5/ySUqYtAtW7uSyMQVJvf67+Z7P0mLYMggUj9lv1IuVm6q6EocwVM
-         +vM6IA16f4reSaww3vZDLi3MLXttQibpBEyds6rhRdTlp5OkjT24RCGs2UAY5KKjHE
-         p5pl8fb2bdGpBkq6oUHJU4P4hNZZ+3Uc1J8J3rhJIId6DaFRKB9Q2V6PG58E88ru6w
-         mIUca4euGUXnw==
-Received: by pali.im (Postfix)
-        id 2400F75F; Mon,  1 Aug 2022 19:56:45 +0200 (CEST)
-Date:   Mon, 1 Aug 2022 19:56:45 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Elad Nachman <enachman@marvell.com>
-Cc:     Wojciech Bartczak <wbartczak@marvell.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
-        Philip Soares <philips@netisense.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, nnet <nnet@fastmail.fm>,
-        =?utf-8?Q?G=C3=A9rald?= Kerma <gandalf@gk2.net>
-Subject: Re: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for
- 1.2 GHz variant
-Message-ID: <20220801175645.bnknpfg26acbat7c@pali>
-References: <20210630135942.29730-1-kabel@kernel.org>
- <20210630225601.6372-1-kabel@kernel.org>
- <20210702163035.nmb5pniwpqtmaz4b@pali>
- <20210708143451.4htvdop4zvjufrq6@pali>
- <20210715193321.z3vswz6x4rzvw2fd@pali>
- <20210808193026.xuyaufi5wqnrcakd@pali>
- <20220801123616.uol4wrs6trttumsg@pali>
- <BN9PR18MB4251768A59D38A44C264E1FEDB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
- <20220801141254.ojljy2lewgrkga3f@pali>
- <BN9PR18MB42514ADBD547CADD93BD7646DB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
+        with ESMTP id S232991AbiHASBJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 14:01:09 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5D22409E
+        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 11:01:07 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id bx38so3304584ljb.10
+        for <linux-pm@vger.kernel.org>; Mon, 01 Aug 2022 11:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uZR/I+yAkBmW0w7mHOk3YtgLxlXC2BKh5JL5UtMmwBs=;
+        b=q+w6TE6z8roa1FS6pRp+tOhYcqoLK1RRU14NW5VdOJfv8hFjDkUklpCbJ0Zl4zmPBn
+         RCi6pAbq34Qsp896AIPfQsEXgp4FmQ9P1asmBO/5jNtq7wXUDfX9UCfCUp3jhB94dxOx
+         bAfL/QhWup7fU2XaCntjtXmyRRdyLfc1J5QqEsljVEOHviQjSxVn6v6KmX9MNtiMfOBW
+         dnz6oXrJCAYm4G2Mnz5cwr+o4qtZcKhtz7JY4LiK5ZTLRkgstfhGCAjZP+43gi7bNxDZ
+         hXwUACWS4Bigbxoz64aX9jfwSxHSRwx7i+EkjPU2ySYW/48LpOqbvlmdZYAvjHNZ2/d8
+         m36w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uZR/I+yAkBmW0w7mHOk3YtgLxlXC2BKh5JL5UtMmwBs=;
+        b=C63ZscMWLa0JVkxj9as4HFktCUsaq/nWOLTpb9HhjPQfJGda0Jxrz6BY1R7qbfIl31
+         rsiMmEJ2awiloxqn6ewv29Ql6RLGfALMRJ58VaIgsYRkkqptvqJJnodkoJFrZaNpfchx
+         ISHSiODnLm90Bo6hNca9fkP7+RmKgDNClhKQaBYMfSjQQf4DRiza79VEUJMAU7QDREt8
+         +4UZTTLQThXBu2qU3hwYU7GsVimS1iNt6HMVwU0tGPdS4pmZ0E6XVt//hTzFdOrOnAoH
+         Mh+KffbShC/ua/CsHGXo9BLaoU2Cmx/HT62MhHt/IzL85F2EltXpjcv92KKZ9zJXDKL7
+         btPw==
+X-Gm-Message-State: AJIora9BO+fUQXGsBBrBR+z8qth3LyqDdc2N/sBA79rjkNfoQGGQJ/Fm
+        /+m5tlRWOogFWx6eGwMdwQJJtQ==
+X-Google-Smtp-Source: AGRyM1s+ieLndbXdmOHTogelfkNm1sPX5Vt3Z6RRXxCaWFy4HZux37fvLIAz14ZPc21Ux3ijqkBQBA==
+X-Received: by 2002:a2e:934f:0:b0:250:a7bc:2b8f with SMTP id m15-20020a2e934f000000b00250a7bc2b8fmr5464878ljh.512.1659376866299;
+        Mon, 01 Aug 2022 11:01:06 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id c15-20020a056512324f00b0048ae7b7b077sm1151293lfr.200.2022.08.01.11.01.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 11:01:05 -0700 (PDT)
+Message-ID: <57faa0a7-301c-c60c-6831-00a351ed3ea5@linaro.org>
+Date:   Mon, 1 Aug 2022 20:01:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BN9PR18MB42514ADBD547CADD93BD7646DB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RESEND 3/4 v7] power: supply: Add charger driver for Rockchip
+ RK817
+Content-Language: en-US
+To:     Chris Morgan <macroalpha82@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     linux-pm@vger.kernel.org, kbuild-all@lists.01.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        zhangqing@rock-chips.com, zyw@rock-chips.com,
+        jon.lin@rock-chips.com, sre@kernel.org, heiko@sntech.de,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lee.jones@linaro.org, Chris Morgan <macromorgan@hotmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+References: <20220721161718.29800-4-macroalpha82@gmail.com>
+ <202207242227.mttUkfTB-lkp@intel.com>
+ <20220729162828.GB102@wintermute.localdomain>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220729162828.GB102@wintermute.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,163 +82,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Elad!
+On 29/07/2022 18:28, Chris Morgan wrote:
+> On Sun, Jul 24, 2022 at 10:58:00PM +0800, kernel test robot wrote:
+>> Hi Chris,
+>>
+>> Thank you for the patch! Perhaps something to improve:
+> 
+> I'm afraid I'm not sure the best way to fix this. The only thing I can
+> think of is for now the driver should only be for systems with a
+> Rockchip RK817 PMIC (to my knowledge only ARM based systems from
+> Rockchip),
 
-Robert (in CC) tested this proposed change. But increasing delay to
-100ms does not help. CPU still crashes early during boot.
+Why? We want to compile test everything everywhere,
 
-On Monday 01 August 2022 14:15:27 Elad Nachman wrote:
-> Hi,
-> 
-> As first step, please try to increase the delay to 100ms, see if it helps.
-> 
-> Elad.
-> 
-> -----Original Message-----
-> From: Pali Rohár <pali@kernel.org> 
-> Sent: Monday, August 1, 2022 5:13 PM
-> To: Elad Nachman <enachman@marvell.com>
-> Cc: Wojciech Bartczak <wbartczak@marvell.com>; Marek Behún <kabel@kernel.org>; Viresh Kumar <viresh.kumar@linaro.org>; Gregory CLEMENT <gregory.clement@bootlin.com>; Robert Marko <robert.marko@sartura.hr>; Tomasz Maciej Nowak <tmn505@gmail.com>; Anders Trier Olesen <anders.trier.olesen@gmail.com>; Philip Soares <philips@netisense.com>; linux-pm@vger.kernel.org; Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>; linux-arm-kernel@lists.infradead.org; nnet <nnet@fastmail.fm>
-> Subject: Re: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant
-> 
-> Hello Elad and thank you for response!
-> 
-> This errata is already implemented in the kernel for a longer time by Gregory's commit:
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__git.kernel.org_pub_scm_linux_kernel_git_stable_linux.git_commit_-3Fid-3D61c40f35f5cd6f67ccbd7319a1722eb78c815989&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=-E-AwB9STVx8xgapaCNSpDJIPPnkrzrWkZX0uFz2bfNGFnckZelT_XaovUUPrNIg&s=4EUcdDWB_gqnEV8nREQi9E_iym5bjoM6l5zLrbh_GVs&e= 
-> 
-> There is also 20ms delay after L2/L3 to L1 state switch.
-> 
-> Any idea what could be wrong here? Or is something more than above commit needed to correctly implement that errata?
-> 
-> On Monday 01 August 2022 14:01:07 Elad Nachman wrote:
-> > Hi Pali,
-> > 
-> > There is an errata for that.
-> > 
-> > "
-> > Switching from L2/L3 state (200/300 MHz) to L0 state (1200 MHz) 
-> > requires sudden changes of VDD supply, and it requires time to 
-> > stabilize the VDD supply. The solution is to use gradual switching from L2/L3 to L1 and then L1 to L0 state.
-> > "
-> > 
-> > I would also add additional delay for the VDD supply stabilization.
-> > 
-> > FYI,
-> > 
-> > Elad.
-> > 
-> > -----Original Message-----
-> > From: Pali Rohár <pali@kernel.org>
-> > Sent: Monday, August 1, 2022 3:36 PM
-> > To: Elad Nachman <enachman@marvell.com>; Wojciech Bartczak 
-> > <wbartczak@marvell.com>
-> > Cc: Marek Behún <kabel@kernel.org>; Viresh Kumar 
-> > <viresh.kumar@linaro.org>; Gregory CLEMENT 
-> > <gregory.clement@bootlin.com>; Robert Marko <robert.marko@sartura.hr>; 
-> > Tomasz Maciej Nowak <tmn505@gmail.com>; Anders Trier Olesen 
-> > <anders.trier.olesen@gmail.com>; Philip Soares 
-> > <philips@netisense.com>; linux-pm@vger.kernel.org; Sebastian 
-> > Hesselbarth <sebastian.hesselbarth@gmail.com>; 
-> > linux-arm-kernel@lists.infradead.org; nnet <nnet@fastmail.fm>
-> > Subject: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 
-> > 1.2 GHz variant
-> > 
-> > External Email
-> > 
-> > ----------------------------------------------------------------------
-> > + Elad and Wojciech from Marvell
-> > 
-> > Could you please look at this issue and/or forward it to relevant Marvell team?
-> > 
-> > Maintainer Viresh already wrote that we cannot hang forever for Marvell and patch which disables support for 1.2 GHz was merged:
-> > https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_l
-> > inux-2Dpm_20210809040224.j2rvopmmqda3utc5-40vireshk-2Di7_&d=DwIDaQ&c=n
-> > KjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=
-> > 5nMMKyKOOM3XdMe_PerZRx8L7-D7MkWhCl7GxpXTPiotVf1TR4j8v3bpjQmRKCLC&s=cXi
-> > CZByknfz1rOIgJl4fJHl1KLLRq2shHul2-VPpYP0&e=
-> > 
-> > On Sunday 08 August 2021 21:30:26 Pali Rohár wrote:
-> > > Gentle reminder. This is really serious issue. Could you please look at it?
-> > > 
-> > > Adding more MarvellEmbeddedProcessors people to the loop: Evan, 
-> > > Benjamin an Igal
-> > > 
-> > > On Thursday 15 July 2021 21:33:21 Pali Rohár wrote:
-> > > > Ping! Gentle reminder for Marvell people.
-> > > > 
-> > > > On Thursday 08 July 2021 16:34:51 Pali Rohár wrote:
-> > > > > Konstantin, Nadav, Ken, Victor, Jason: This issue is pretty 
-> > > > > serious, CPU on 1.2GHz A3720 is crashing. Could you please look at it?
-> > > > > 
-> > > > > On Friday 02 July 2021 18:30:35 Pali Rohár wrote:
-> > > > > > +Jason from GlobalScale as this issue affects GlobalScale Espressobin Ultra and V7 1.2 GHz boards.
-> > > > > > 
-> > > > > > On Thursday 01 July 2021 00:56:01 Marek Behún wrote:
-> > > > > > > The 1.2 GHz variant of the Armada 3720 SOC is unstable with
-> > > > > > > DVFS: when the SOC boots, the WTMI firmware sets clocks and 
-> > > > > > > AVS values that work correctly with 1.2 GHz CPU frequency, 
-> > > > > > > but random crashes occur once cpufreq driver starts scaling.
-> > > > > > > 
-> > > > > > > We do not know currently what is the reason:
-> > > > > > > - it may be that the voltage value for L0 for 1.2 GHz variant provided
-> > > > > > >   by the vendor in the OTP is simply incorrect when scaling 
-> > > > > > > is used,
-> > > > > > > - it may be that some delay is needed somewhere,
-> > > > > > > - it may be something else.
-> > > > > > > 
-> > > > > > > The most sane solution now seems to be to simply forbid the 
-> > > > > > > cpufreq driver on 1.2 GHz variant.
-> > > > > > > 
-> > > > > > > Signed-off-by: Marek Behún <kabel@kernel.org>
-> > > > > > > Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for Armada
-> > > > > > > 37xx")
-> > > > > > > ---
-> > > > > > > If someone from Marvell could look into this, it would be 
-> > > > > > > great since basically 1.2 GHz variant cannot scale, which is 
-> > > > > > > a feature that was claimed to be supported by the SOC.
-> > > > > > > 
-> > > > > > > Ken Ma / Victor Gu, you have worked on commit 
-> > > > > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__github.
-> > > > > > > co
-> > > > > > > m_MarvellEmbeddedProcessors_linux-2Dmarvell_commit_d6719fdc2
-> > > > > > > b3 
-> > > > > > > cac58064f41b531f86993c919aa9a&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7x
-> > > > > > > tf 
-> > > > > > > Q&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=5nMMKyKOOM
-> > > > > > > 3X 
-> > > > > > > dMe_PerZRx8L7-D7MkWhCl7GxpXTPiotVf1TR4j8v3bpjQmRKCLC&s=b9cDK
-> > > > > > > em t70OiTJF6KXj0ySzbxpsB_nuteXJE87via80&e=
-> > > > > > > in linux-marvell.
-> > > > > > > Your patch takes away the 1202 mV constant for 1.2 GHz base 
-> > > > > > > CPU frequency and instead adds code that computes the 
-> > > > > > > voltages from the voltage found in L0 AVS register (which is filled in by WTMI firmware).
-> > > > > > > 
-> > > > > > > Do you know why the code does not work correctly for some 
-> > > > > > > 1.2 GHz boards? Do we need to force the L0 voltage to 1202 
-> > > > > > > mV if it is lower, or something?
-> > > > > > > ---
-> > > > > > >  drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
-> > > > > > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > > > > > 
-> > > > > > > diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c
-> > > > > > > b/drivers/cpufreq/armada-37xx-cpufreq.c
-> > > > > > > index 3fc98a3ffd91..c10fc33b29b1 100644
-> > > > > > > --- a/drivers/cpufreq/armada-37xx-cpufreq.c
-> > > > > > > +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
-> > > > > > > @@ -104,7 +104,11 @@ struct armada_37xx_dvfs {  };
-> > > > > > >  
-> > > > > > >  static struct armada_37xx_dvfs armada_37xx_dvfs[] = {
-> > > > > > > -	{.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} },
-> > > > > > > +	/*
-> > > > > > > +	 * The cpufreq scaling for 1.2 GHz variant of the SOC is currently
-> > > > > > > +	 * unstable because we do not know how to configure it properly.
-> > > > > > > +	 */
-> > > > > > > +	/* {.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 
-> > > > > > > +6} }, */
-> > > > > > >  	{.cpu_freq_max = 1000*1000*1000, .divider = {1, 2, 4, 5} },
-> > > > > > >  	{.cpu_freq_max = 800*1000*1000,  .divider = {1, 2, 3, 4} },
-> > > > > > >  	{.cpu_freq_max = 600*1000*1000,  .divider = {2, 4, 5, 6} 
-> > > > > > > },
-> > > > > > > --
-> > > > > > > 2.31.1
-> > > > > > > 
+>  but it looks like the arch was set as parisc. 
+
+The arch itself does not matter unless the actual warning is specific to it.
+
+> Even still,
+> as long as some of the functions ahead of it don't error out each
+> of those variables should be used. Is there a way to confirm these
+> warnings?
+
+Just compile and see by yourself. The error should be visible on
+multiple archs. If not, then use parisc. Ubuntu provides most of cross
+compilers so it's extra easy to use. The ones not provided by Ubuntu are
+also here:
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
+
+
+Best regards,
+Krzysztof
