@@ -2,130 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7230D586B25
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 14:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D53586B2D
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 14:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbiHAMqU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Aug 2022 08:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S231167AbiHAMrD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Aug 2022 08:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234775AbiHAMpx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 08:45:53 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBB4491F8
-        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 05:34:08 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id y127so18654646yby.8
-        for <linux-pm@vger.kernel.org>; Mon, 01 Aug 2022 05:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LcoRKUZxcX+fwnP/w+Ek0L1ccliKcMJGGIMkqg+/gBk=;
-        b=8Qq67pSUym7bRxaJ1wXQxajEMJS6HpKos8PyqVw/AIYaTRUkyuiHDv0eycBw7WteMz
-         vA2ffmtRj5NpE9imFKTBnZZHdh7Veak9BjcfMJEO1TvQsTZncZ8wpJSSeWS/Fzl2r4oo
-         crxtVikU87MU4cvow8KAMXuSE8Fw4ECrP5KwDbAKdS8agCFU52209EKhx1fzCsQSWcmG
-         Bf2T4r9FGmsl0SSufopazQYH6qUx7esh3yBY7jYpKJtzHa+9ugcTbzjnNcl7YUrB99/v
-         9oEa7EI5KFpJbbLUS6osrgC2g3+vL4a3PJZdTepn337fCpKGSdA1qUQAomSfAXFQxHJJ
-         e1NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LcoRKUZxcX+fwnP/w+Ek0L1ccliKcMJGGIMkqg+/gBk=;
-        b=vU3RjVrCXwQPo4NZK6oJXAwttSsG9+V4uDPOJ0kdY2mxYGd/RYfX0Jt/7W6oaMsTt8
-         wMLMhtPhi0yce/XypKxrZCND1XwPl+tMpgm2RiccKBtfcNcxuBWK4mSq8k5EPUSZHsi9
-         gnYhqOuXR2JDcciRXT0PdCiJ8b7WjaYTN7wsL4Lcsou7PID7BKsgl4iexyDv56ZtV7Jh
-         nKSF03oSbUqvGJRjO7iQmv1LfvK6uXUcbv9/Gvm9Dh1X9+Cfh5BNXgkY0pZTUDAXRjaF
-         HqiHYDHqQALhQSe0JSNOSFF7WBs7Agw2Nuuz1Zc/sM7FOnbzGI7+AQRnyc3yE0NAJS0N
-         nz9Q==
-X-Gm-Message-State: ACgBeo2/3LkdBF/hUOiPXODsrSfq/ObgnAIaIwmuP/VKNuo2kS9RYI5N
-        jx3t60FEgVHbyckjKiZH+QmRCz3DNgKi0kjYa8wd7Q==
-X-Google-Smtp-Source: AA6agR6gUV377VODoTtcZyENpHL6zTEL/yl0+xktWswsikj2XjC6xG8FsEO1Dd8D5SwcKI+6sZgTq8Xo9pCEdETIOIU=
-X-Received: by 2002:a25:4941:0:b0:670:24c7:dc96 with SMTP id
- w62-20020a254941000000b0067024c7dc96mr10354775yba.22.1659357247554; Mon, 01
- Aug 2022 05:34:07 -0700 (PDT)
+        with ESMTP id S234979AbiHAMqo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Aug 2022 08:46:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF356B76
+        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 05:36:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8053961127
+        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 12:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F018C433D6;
+        Mon,  1 Aug 2022 12:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659357379;
+        bh=kZCEGskqalhxUksNqAHxXa4wKsmMgGTM0zR1HJDxJeg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nWwM21I5r6RewDjzByYaeHA/ymoaZz9e35S0xPyE4Dr846KRS93uvqNg1qZ2Ij2gv
+         tsnB+g6oNIJnBkRMze8ubmlEDASesMb7oBKnw/gsE6BlwYuXfSqptCNmkccjNWBRe/
+         XiAfUoFBcnq6wgfpRmpGj5xW+9d9bkQiHTyqOyFws4SL7MtJlOZrioQv+gdnnFSzh0
+         54mvLsZZ8BcWHt+uk2TWzxCZGpzhxFGZia2mmbOrF0ovzF/UpdAdumgXsUXSIJlC5h
+         z/wMpS9ST/H41tBXYfhLS/6GSnyLqoznhzdyU5jU+0X8wVdSgLnHXJF3gddtCWmrJC
+         30jgHAWweAPHA==
+Received: by pali.im (Postfix)
+        id D8C9F75F; Mon,  1 Aug 2022 14:36:16 +0200 (CEST)
+Date:   Mon, 1 Aug 2022 14:36:16 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Elad Nachman <enachman@marvell.com>,
+        Wojciech Bartczak <wbartczak@marvell.com>
+Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Tomasz Maciej Nowak <tmn505@gmail.com>,
+        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
+        Philip Soares <philips@netisense.com>,
+        linux-pm@vger.kernel.org,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, nnet <nnet@fastmail.fm>
+Subject: Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz
+ variant
+Message-ID: <20220801123616.uol4wrs6trttumsg@pali>
+References: <20210630135942.29730-1-kabel@kernel.org>
+ <20210630225601.6372-1-kabel@kernel.org>
+ <20210702163035.nmb5pniwpqtmaz4b@pali>
+ <20210708143451.4htvdop4zvjufrq6@pali>
+ <20210715193321.z3vswz6x4rzvw2fd@pali>
+ <20210808193026.xuyaufi5wqnrcakd@pali>
 MIME-Version: 1.0
-References: <20220726135506.485108-1-bchihi@baylibre.com> <20220726135506.485108-6-bchihi@baylibre.com>
- <20220729201421.fxybo57g46ftghgd@notapiano>
-In-Reply-To: <20220729201421.fxybo57g46ftghgd@notapiano>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Mon, 1 Aug 2022 14:33:31 +0200
-Message-ID: <CAGuA+ooqk-tf5FVfEbA0WdjTOo2fPJi-+AaHDC9jXgw=3vKq0g@mail.gmail.com>
-Subject: Re: [PATCH v8 5/6] arm64: dts: mt8195: Add efuse node to mt8195
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210808193026.xuyaufi5wqnrcakd@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 10:14 PM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> On Tue, Jul 26, 2022 at 03:55:05PM +0200, Balsam CHIHI wrote:
-> > This adds the efuse node. This will be required by the thermal driver
-> > to get the calibration data.
-> >
-> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> > ---
-> >  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot=
-/dts/mediatek/mt8195.dtsi
-> > index 0ff34edcf8c8..4fbf24b5d202 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > @@ -1236,6 +1236,22 @@ nor_flash: spi@1132c000 {
-> >                       status =3D "disabled";
-> >               };
-> >
-> > +             efuse: efuse@11c10000 {
-> > +                     compatible =3D "mediatek,efuse";
-> > +                     reg =3D <0 0x11c10000 0 0x1000>;
-> > +                     #address-cells =3D <1>;
-> > +                     #size-cells =3D <1>;
-> > +                     lvts_efuse_data1: lvts1-calib@1bc {
-> > +                             reg =3D <0x1bc 0x14>;
-> > +                     };
-> > +                     lvts_efuse_data2: lvts2-calib@1d0 {
-> > +                             reg =3D <0x1d0 0x38>;
-> > +                     };
-> > +                     svs_calibration: calib@580 {
-> > +                             reg =3D <0x580 0x64>;
-> > +                     };
-> > +             };
-> > +
->
-> This commit doesn't apply, there's already an efuse node on mt8195.dtsi. =
-Please
-> rebase.
->
-> Thanks,
-> N=C3=ADcolas
++ Elad and Wojciech from Marvell
 
-Hello N=C3=ADcolas,
+Could you please look at this issue and/or forward it to relevant Marvell team?
 
-Thank you so much for the review.
-I rebased on top of the latest kernel version "linux-5.19.0" but I
-can't find efuse node on mt8195.dtsi.
-But, this node is indeed present on mt8192.dtsi.
+Maintainer Viresh already wrote that we cannot hang forever for Marvell
+and patch which disables support for 1.2 GHz was merged:
+https://lore.kernel.org/linux-pm/20210809040224.j2rvopmmqda3utc5@vireshk-i7/
 
-Best regards,
-Balsam
+On Sunday 08 August 2021 21:30:26 Pali Rohár wrote:
+> Gentle reminder. This is really serious issue. Could you please look at it?
+> 
+> Adding more MarvellEmbeddedProcessors people to the loop: Evan, Benjamin an Igal
+> 
+> On Thursday 15 July 2021 21:33:21 Pali Rohár wrote:
+> > Ping! Gentle reminder for Marvell people.
+> > 
+> > On Thursday 08 July 2021 16:34:51 Pali Rohár wrote:
+> > > Konstantin, Nadav, Ken, Victor, Jason: This issue is pretty serious,
+> > > CPU on 1.2GHz A3720 is crashing. Could you please look at it?
+> > > 
+> > > On Friday 02 July 2021 18:30:35 Pali Rohár wrote:
+> > > > +Jason from GlobalScale as this issue affects GlobalScale Espressobin Ultra and V7 1.2 GHz boards.
+> > > > 
+> > > > On Thursday 01 July 2021 00:56:01 Marek Behún wrote:
+> > > > > The 1.2 GHz variant of the Armada 3720 SOC is unstable with DVFS: when
+> > > > > the SOC boots, the WTMI firmware sets clocks and AVS values that work
+> > > > > correctly with 1.2 GHz CPU frequency, but random crashes occur once
+> > > > > cpufreq driver starts scaling.
+> > > > > 
+> > > > > We do not know currently what is the reason:
+> > > > > - it may be that the voltage value for L0 for 1.2 GHz variant provided
+> > > > >   by the vendor in the OTP is simply incorrect when scaling is used,
+> > > > > - it may be that some delay is needed somewhere,
+> > > > > - it may be something else.
+> > > > > 
+> > > > > The most sane solution now seems to be to simply forbid the cpufreq
+> > > > > driver on 1.2 GHz variant.
+> > > > > 
+> > > > > Signed-off-by: Marek Behún <kabel@kernel.org>
+> > > > > Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for Armada 37xx")
+> > > > > ---
+> > > > > If someone from Marvell could look into this, it would be great since
+> > > > > basically 1.2 GHz variant cannot scale, which is a feature that was
+> > > > > claimed to be supported by the SOC.
+> > > > > 
+> > > > > Ken Ma / Victor Gu, you have worked on commit
+> > > > > https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/d6719fdc2b3cac58064f41b531f86993c919aa9a
+> > > > > in linux-marvell.
+> > > > > Your patch takes away the 1202 mV constant for 1.2 GHz base CPU
+> > > > > frequency and instead adds code that computes the voltages from the
+> > > > > voltage found in L0 AVS register (which is filled in by WTMI firmware).
+> > > > > 
+> > > > > Do you know why the code does not work correctly for some 1.2 GHz
+> > > > > boards? Do we need to force the L0 voltage to 1202 mV if it is lower,
+> > > > > or something?
+> > > > > ---
+> > > > >  drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
+> > > > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > index 3fc98a3ffd91..c10fc33b29b1 100644
+> > > > > --- a/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > @@ -104,7 +104,11 @@ struct armada_37xx_dvfs {
+> > > > >  };
+> > > > >  
+> > > > >  static struct armada_37xx_dvfs armada_37xx_dvfs[] = {
+> > > > > -	{.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} },
+> > > > > +	/*
+> > > > > +	 * The cpufreq scaling for 1.2 GHz variant of the SOC is currently
+> > > > > +	 * unstable because we do not know how to configure it properly.
+> > > > > +	 */
+> > > > > +	/* {.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4, 6} }, */
+> > > > >  	{.cpu_freq_max = 1000*1000*1000, .divider = {1, 2, 4, 5} },
+> > > > >  	{.cpu_freq_max = 800*1000*1000,  .divider = {1, 2, 3, 4} },
+> > > > >  	{.cpu_freq_max = 600*1000*1000,  .divider = {2, 4, 5, 6} },
+> > > > > -- 
+> > > > > 2.31.1
+> > > > > 
