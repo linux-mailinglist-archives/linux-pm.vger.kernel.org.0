@@ -2,115 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943F7586066
-	for <lists+linux-pm@lfdr.de>; Sun, 31 Jul 2022 20:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F7A5862AD
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Aug 2022 04:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236727AbiGaSpK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 Jul 2022 14:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S239151AbiHACgt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 31 Jul 2022 22:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232790AbiGaSpJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jul 2022 14:45:09 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D53DF4D
-        for <linux-pm@vger.kernel.org>; Sun, 31 Jul 2022 11:45:04 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id z12so1494222wrs.9
-        for <linux-pm@vger.kernel.org>; Sun, 31 Jul 2022 11:45:04 -0700 (PDT)
+        with ESMTP id S239159AbiHACgs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Jul 2022 22:36:48 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3964D632A
+        for <linux-pm@vger.kernel.org>; Sun, 31 Jul 2022 19:36:47 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id h28so3019591pfq.11
+        for <linux-pm@vger.kernel.org>; Sun, 31 Jul 2022 19:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=tvOif7D7GjSlYLteSKiLH6y+AMJJ8XB36nHdth7eJaI=;
-        b=ySCIVB22C5KydntWmrTt/vJ+FXw3SCt7Qq0EHU4Wsdg2oo0gWbj6Yxwz8cwyy/4I5K
-         HENmHYrPnicHJz+eux7lA0koBsdcES1krsyeu6Rz+rpBZiPHb+TTCTlfP/FVQyqR6qlH
-         5OJ6yYriM4M95Hd8HA0AuUQsxGPJ+0hVqFFGfywDb5BY/8pSvl7qolw0J915JkE4QIwO
-         fnABpzC687Y+xnV6RlQ4Cg59hcz7RyikQg5/y0fj2bZcBDZUCbQ1gXSTOdOIdEaGoROf
-         XhtdFr+Y2uKEu0TfDrNYUt4MEK4yGM5Ls4OYoOkxR0Qq8Z3BQwFArZaBCSHXWUawg5Tt
-         IADg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/btFMtkRWmBmwZL2J5Giju8R89Pj69dl4iEYhrOPPD0=;
+        b=l14ypADMZwmwBX3PPuNnhfhC0pkWgO3nxHo/kcyqcDQQy6USdhzex+seukGsSkiqSF
+         CD7pjPOYfJb33Kd7/A6vDuOlVFJR69nqhta9PCeUDn5y37fM+EkdqrOWOxK0nM364cNI
+         2hS6W+ancz2HhSWKGABkGucgEiskAd7ylplsxyesLdgbKYAGyM0I/K+ZEXPCQJj/GkFL
+         8Y9XaXvYU44xz7LbcwFhfHWp3z3bb1GMR4qPIK58+MeCotpAY7lzMuOK025gYsWI0JgR
+         W00nJkIsFipx8cXltA+pedB7ltCKnQ+3K6ezUJJcMD8vPYZcKGA2QkZCWNkwtVcXUu7k
+         0vXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=tvOif7D7GjSlYLteSKiLH6y+AMJJ8XB36nHdth7eJaI=;
-        b=6u3FzM86YSIPNQYwPnRcuziFdGceVLGC0tTIabC39f1ywsRAzBXqTtc1koi5a5A1yb
-         w1DCWdSIDriOGLYUbSeXToMXRc7uE3iB6pckQ8pIBRhpLmOlvvjA2NzuTQV6zKDXQ8P7
-         X60diVCGxF3yVvxHpjDQUHUMn6S5PIxc297Sv7/L8UrR0Ursx1kEL+QgnqHaH4f0slvs
-         FntufeP7O8541BSCGCK6Vz3KMBcJeTcb8DsNbTE5Hjw15OvkxMzsS1mx8uymivr3Xi0t
-         p+92OSG8WXb7BTtbLuPCSprMkKCRfoQCdAWm0+MAJXJWeEzP0d4qdCOzy6MUn+0trrD2
-         Jijw==
-X-Gm-Message-State: ACgBeo1b9VYgH3axMjP3QqvvyERqsc9cgV9Ceo9E0gSwrOPF2YXfJEUp
-        6pG//TqUZ10g3h4yV/nH0+ZJew==
-X-Google-Smtp-Source: AA6agR63ZHLK7NohlWD4N34eOOAHK775S7u5BEkmukp5cqJ2trsqg6paOiu8M/xH8+DhuG6l8q2scg==
-X-Received: by 2002:a5d:6d0c:0:b0:21f:ba0:ff7f with SMTP id e12-20020a5d6d0c000000b0021f0ba0ff7fmr8841442wrq.76.1659293103468;
-        Sun, 31 Jul 2022 11:45:03 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:b04a:b59f:f2d8:e65c? ([2a05:6e02:1041:c10:b04a:b59f:f2d8:e65c])
-        by smtp.gmail.com with ESMTPSA id h1-20020a05600c2ca100b003a3253b706esm17534135wmc.34.2022.07.31.11.45.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jul 2022 11:45:03 -0700 (PDT)
-Message-ID: <eee44dc0-9717-9ed0-42b0-713ad9fbe688@linexp.org>
-Date:   Sun, 31 Jul 2022 20:45:00 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/btFMtkRWmBmwZL2J5Giju8R89Pj69dl4iEYhrOPPD0=;
+        b=QTRGYqG7EK/NKdtC7MXY4XUwqG4YnpOak5WMB5zAvnXgSWkZ8tEjvJLTApU9YPptUi
+         v8uRHJSCL27UIClZQ2w7VflVNpr8PdBViDB5s5hxEvYwLtJd7+IERYnMR6hBOxSxruUZ
+         6FHMmZhOkxnSmFGDVNLAUelW4EU1xFcq6qEcyPn1YD4i9Tj44ErTE+YSyEYhl+s7MTrE
+         54bn9oCzm10WCNd0linJdSolmArREL2RK5OQiVKC5RSw/O7z7FE3B0Gfk2vGHNFhEYow
+         j3TajGfzlM7mJkENuEd+iWizK7VIiQdDogV0pLK0x+OhGjIHgToLYS77XGaUWP3piFPC
+         RxaA==
+X-Gm-Message-State: AJIora//xJG2cv9s47iZek7JAOccg7GTsOLGD5B5r3JwXYaruYfAG8o6
+        POXKexhhV1mDjHH1Fwxei9fGwCdu9jM1Cg==
+X-Google-Smtp-Source: AGRyM1uWuPpbJThAzj8401hKyu6FavGanE+K+gT78KliFc+nSDEucI4aDKw5IqZW2VO01+cLRobseA==
+X-Received: by 2002:a05:6a00:24c6:b0:52b:ee89:eca9 with SMTP id d6-20020a056a0024c600b0052bee89eca9mr14043056pfv.78.1659321406689;
+        Sun, 31 Jul 2022 19:36:46 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id j11-20020a170902da8b00b0016d1f6d1b99sm8237530plx.49.2022.07.31.19.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 19:36:46 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 08:06:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
+ dev_pm_opp_set_config+0x344/0x620
+Message-ID: <20220801023636.p5ytjqasedpohmdy@vireshk-i7>
+References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
+ <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
+ <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 27/32] iio/drivers/sun4i_gpadc: Switch to new of
- thermal API
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
-        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
-        heiko@sntech.de, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
-        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
-        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
-        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
-        miquel.raynal@bootlin.com, shawnguo@kernel.org,
-        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
-        j-keerthy@ti.com, Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "moderated list:ARM/Allwinner sunXi SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>
-References: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
- <20220727210253.3794069-28-daniel.lezcano@linexp.org>
- <20220731131328.7301de32@jic23-huawei>
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-In-Reply-To: <20220731131328.7301de32@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/07/2022 14:13, Jonathan Cameron wrote:
-> On Wed, 27 Jul 2022 23:02:48 +0200
-> Daniel Lezcano <daniel.lezcano@linexp.org> wrote:
->
->> The thermal OF code has a new API allowing to migrate the OF
->> initialization to a simpler approach. The ops are no longer device
->> tree specific and are the generic ones provided by the core code.
->>
->> Convert the ops to the thermal_zone_device_ops format and use the new
->> API to register the thermal zone with these generic ops.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> Whilst making no pretence at having checked what the new calls do, I'm fine with this
-> patch affecting the driver in IIO and going through appropriate thermal tree.
->
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+On 25-07-22, 14:55, Stanimir Varbanov wrote:
+> Hi Viresh,
+> 
+> I can take a look and provide a patch to fix that.
 
-Thanks for reviewing the patch
+Any update on this ? I am going to send pull request for 5.20 very soon and it
+would have been much better if this was fixed before I send that.
 
+-- 
+viresh
