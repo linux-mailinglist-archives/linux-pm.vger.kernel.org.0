@@ -2,183 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E310587669
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Aug 2022 06:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3905877AF
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Aug 2022 09:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbiHBEiS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Aug 2022 00:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S234725AbiHBHRX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Aug 2022 03:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiHBEiR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Aug 2022 00:38:17 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37923E0B2
-        for <linux-pm@vger.kernel.org>; Mon,  1 Aug 2022 21:38:16 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id h28so6135278pfq.11
-        for <linux-pm@vger.kernel.org>; Mon, 01 Aug 2022 21:38:16 -0700 (PDT)
+        with ESMTP id S235784AbiHBHRV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Aug 2022 03:17:21 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2449B5E
+        for <linux-pm@vger.kernel.org>; Tue,  2 Aug 2022 00:17:20 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id y9so9719259qtv.5
+        for <linux-pm@vger.kernel.org>; Tue, 02 Aug 2022 00:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=+sVDX8J2fsFaU4/JOLF7uHVZ3sDfDMe4Q5bGv+SxkRA=;
-        b=CPGo4ofXPVNgguOet/7LhVmln6eOc/j3c3Dry4DVW+YWJZSEMF+gp8wkcpPKg/TmPJ
-         q6XzpcPvivWO3MZgGAhHUZPlsSLkJO4ieBzxtg9F3g3SB/0AEDKilXbpusW+RH3v+KTg
-         QRIIzr/fxdbmWnINxXnhhPznbFy1sJ8DOonLrIXeg8vLCUIXb5j9NQ6pjBgLyXm7cCkl
-         JauSXYNAvQGPC28SHpbBOgncGYT+Fhv9psNxZaY5xcFy8IOTCE9D4A25cmOu9CEvmvAc
-         2gAuVXQVGjeplDtFmghJYC03QSbiScCOpv3qNRfr7G3iFFug82DsXf2zdIOyythvTLMI
-         wFhg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=bL6fGScq+yhoKFMlnh6d0gxqoohgKkceu0Z+UVQzyQI=;
+        b=RcIOpJJ0Ov5o4fHdrPK1zfrXJX6gdPFzu7fjwuuUjXM6UHBZyGruAo4zx7iEo477RD
+         Fp4PVSRuVwiRll7m1oVNQrgPxvrYz3awbWW7JV8FAoP6ENu1uux5Q5wq/CSFU9COSbdY
+         yd6A0uqiEvPxRvSttO9SFeT73/nDoFT0jIVbJXgwqetOUrapXbl8kWmYRLLjXaCVKKvT
+         PXNdJ7RGAsU6C5mOPZ076oZabnIasPRsJts5TmEhMIHgfutaqLl1x3vF0LHCdEXA72EA
+         5WcDgdW0Rj7KiTODrCDuU6Zh+yUKhdkUUXTNHeNT6SDa9Er0lLYq63Ruiq+b6AGe1jGS
+         93Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=+sVDX8J2fsFaU4/JOLF7uHVZ3sDfDMe4Q5bGv+SxkRA=;
-        b=pzm/7gmasvzi0MZH1g3bsmYcK6WqCrK9mzL7KpIRCeWTJCL8dJCdbgZZx8eQLwXcvF
-         OdYz6Xz1yE/faceLtnSSexX8CtMzwSr8n1XL1XoG5wheYowXaQCObbVEojfIXLhwIYp1
-         KrmJp/LEGLS8FaEmubXl6s/Bf/LuiFwyLaWWLKJ1Im6Lcsd22e/xjet+HskJOy5eBoAW
-         qkuH4EzP8UftAkZ7VHmVBqY/sSqF+tYC03Gts8DgdEbpd4FpcsDBXbx66JtTCMWP9mmc
-         o6gdbOWWDFDySvx8lIzYgpzMVeF/ZsDjUXN/+cpvAf+EkoQp6oTfGzcJC3t2EAuef1cP
-         S+CQ==
-X-Gm-Message-State: AJIora9Fqvl75EQlcs15EHaJbdFI0D4c3/fvChRLjxhd/CGgvj1MuqY4
-        2g9ZQV4rPfJMVljudiOC8io75w==
-X-Google-Smtp-Source: AGRyM1uYw8OYUDrO4CbOkdXZtNzLsXryFdYIeYdAVGA9ABzzV7H/QR4I39EqeNibRJfksQspemqvKw==
-X-Received: by 2002:a65:5cc4:0:b0:41a:ae9f:5642 with SMTP id b4-20020a655cc4000000b0041aae9f5642mr15639247pgt.542.1659415095627;
-        Mon, 01 Aug 2022 21:38:15 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id y10-20020a655a0a000000b0041c66a66d41sm398386pgs.45.2022.08.01.21.38.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 21:38:15 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 10:08:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP updates for 5.20-rc1
-Message-ID: <20220802043813.qxl7etwseag2ncb3@vireshk-i7>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=bL6fGScq+yhoKFMlnh6d0gxqoohgKkceu0Z+UVQzyQI=;
+        b=DhH+MzeIQqwc9nx5ou4UGDxnekQptSDe1M1KP68Tg1D75e3RGj5hogAUZzR4S08Ggy
+         YVxnB+ls5grrZvjjna0XIBagbnZ5FmGTx9w/iGOFPwF0hSapjtjzO6w/6h5xBEm1yMO1
+         E598iylb4TR1WU8RDRv8Npplyx6NntMCvpiVFPoioc4ojbkROsxjGZrudeIMXWFh7um2
+         ahn98mgZ6oIXJ4JhKBiI7K9323vWDC00jghMb0+G1CnlZNqOVG4LaurOJnn8vu61fYOm
+         hcpMhF1Em9bkogJOj+6Unix6LERhG8Ky1F2TZ2O4ToqlG4MiXM75GkdyFnzzWcKzn99s
+         LlsQ==
+X-Gm-Message-State: AJIora8FMzWKiSf2ezA9PvGIeFqoDHFaGA5A1pE1aL9VBsWO448wJM4D
+        9wf6TurvcxcB19f4hCKtqo0GOZCSB7fZDTg/DqjlgA==
+X-Google-Smtp-Source: AGRyM1ujC1egqaRzzJh0wgVInw8CjeH7Adwmb22QYBOfvTBE0sjoUrTqJEXPccOS4SayDbm/OEgA5ksInidWTbnis8w=
+X-Received: by 2002:ac8:5942:0:b0:31f:39f6:aba7 with SMTP id
+ 2-20020ac85942000000b0031f39f6aba7mr16851230qtz.295.1659424639554; Tue, 02
+ Aug 2022 00:17:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220801212244.1124867-1-daniel.lezcano@linexp.org> <20220801212244.1124867-12-daniel.lezcano@linexp.org>
+In-Reply-To: <20220801212244.1124867-12-daniel.lezcano@linexp.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 2 Aug 2022 10:17:08 +0300
+Message-ID: <CAA8EJpqS9_VUfX23j2BdUUxT=5=ig1k5ycKhiHy0xW+2zO05=Q@mail.gmail.com>
+Subject: Re: [PATCH v4 11/32] thermal/drivers/qcom: Switch to new of API
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
+        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
+        heiko@sntech.de, hayashi.kunihiko@socionext.com,
+        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
+        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
+        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
+        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
+        miquel.raynal@bootlin.com, shawnguo@kernel.org,
+        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
+        j-keerthy@ti.com, Andy Gross <agross@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Tue, 2 Aug 2022 at 00:24, Daniel Lezcano <daniel.lezcano@linexp.org> wrote:
+>
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
+>
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-5.20-rc1
-
-for you to fetch changes up to 1d95af02f23031c2e1cca7607c514b86ce85bc6e:
-
-  venus: pm_helpers: Fix warning in OPP during probe (2022-08-02 09:44:22 +0530)
-
-----------------------------------------------------------------
-OPP updates for 5.20-rc1
-
-- Make dev_pm_opp_set_regulators() accept NULL terminated list (Viresh
-  Kumar).
-
-- Add dev_pm_opp_set_config() and friends and migrate other
-  users/helpers to using them (Viresh Kumar).
-
-- Add support for multiple clocks for a device (Viresh Kumar and
-  Krzysztof Kozlowski).
-
-- Configure resources before adding OPP table for Venus (Stanimir
-  Varbanov).
-
-- Keep reference count up for opp->np and opp_table->np while they are
-  still in use (Liang He).
-
-- Minor cleanups (Viresh Kumar and Yang Li).
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      dt-bindings: opp: accept array of frequencies
-
-Liang He (2):
-      OPP: Don't drop opp_table->np reference while it is still in use
-      OPP: Don't drop opp->np reference while it is still in use
-
-Stanimir Varbanov (1):
-      venus: pm_helpers: Fix warning in OPP during probe
-
-Tang Bin (1):
-      opp: Fix error check in dev_pm_opp_attach_genpd()
-
-Viresh Kumar (37):
-      OPP: Fix typo in comment
-      OPP: Track if clock name is configured by platform
-      OPP: Make dev_pm_opp_set_regulators() accept NULL terminated list
-      OPP: Add dev_pm_opp_set_config() and friends
-      cpufreq: qcom-nvmem: Migrate to dev_pm_opp_set_config()
-      cpufreq: sti: Migrate to dev_pm_opp_set_config()
-      cpufreq: ti: Migrate to dev_pm_opp_set_config()
-      drm/lima: Migrate to dev_pm_opp_set_config()
-      soc/tegra: Add comment over devm_pm_opp_set_clkname()
-      soc/tegra: Migrate to dev_pm_opp_set_config()
-      OPP: Migrate set-regulators API to use set-config helpers
-      OPP: Migrate set-supported-hw API to use set-config helpers
-      OPP: Migrate set-clk-name API to use set-config helpers
-      OPP: Migrate set-opp-helper API to use set-config helpers
-      OPP: Migrate attach-genpd API to use set-config helpers
-      OPP: Migrate set-prop-name helper API to use set-config helpers
-      OPP: Add support for config_regulators() helper
-      OPP: Make _generic_set_opp_regulator() a config_regulators() interface
-      OPP: Add dev_pm_opp_get_supplies()
-      OPP: ti: Migrate to dev_pm_opp_set_config_regulators()
-      OPP: Remove custom OPP helper support
-      OPP: Remove dev_pm_opp_find_freq_ceil_by_volt()
-      OPP: Add generic key finding helpers and use them for freq APIs
-      OPP: Use generic key finding helpers for level key
-      OPP: Use generic key finding helpers for bandwidth key
-      OPP: Use consistent names for OPP table instances
-      OPP: Remove rate_not_available parameter to _opp_add()
-      OPP: Reuse _opp_compare_key() in _opp_add_static_v2()
-      OPP: Make dev_pm_opp_set_opp() independent of frequency
-      OPP: Allow multiple clocks for a device
-      OPP: Compare bandwidths for all paths in _opp_compare_key()
-      OPP: Add key specific assert() method to key finding helpers
-      OPP: Assert clk_count == 1 for single clk helpers
-      OPP: Provide a simple implementation to configure multiple clocks
-      OPP: Allow config_clks helper for single clk case
-      PM / devfreq: tegra30: Register config_clks helper
-      OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
-
-Yang Li (1):
-      opp: Fix some kernel-doc comments
-
- Documentation/devicetree/bindings/opp/opp-v2-base.yaml |   10 +
- drivers/cpufreq/cpufreq-dt.c                           |   19 +-
- drivers/cpufreq/imx-cpufreq-dt.c                       |   12 +-
- drivers/cpufreq/qcom-cpufreq-nvmem.c                   |  109 +++--------
- drivers/cpufreq/sti-cpufreq.c                          |   27 +--
- drivers/cpufreq/sun50i-cpufreq-nvmem.c                 |   31 ++-
- drivers/cpufreq/tegra20-cpufreq.c                      |   12 +-
- drivers/cpufreq/ti-cpufreq.c                           |   42 ++--
- drivers/devfreq/exynos-bus.c                           |   21 +-
- drivers/devfreq/tegra30-devfreq.c                      |   22 ++-
- drivers/gpu/drm/lima/lima_devfreq.c                    |   12 +-
- drivers/gpu/drm/panfrost/panfrost_devfreq.c            |    3 +-
- drivers/gpu/drm/panfrost/panfrost_drv.c                |   15 +-
- drivers/media/platform/qcom/venus/pm_helpers.c         |   10 +-
- drivers/memory/tegra/tegra124-emc.c                    |   11 +-
- drivers/opp/core.c                                     | 1577 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------------------------------------------
- drivers/opp/cpu.c                                      |   12 +-
- drivers/opp/debugfs.c                                  |   27 ++-
- drivers/opp/of.c                                       |  150 +++++++-------
- drivers/opp/opp.h                                      |   56 ++++--
- drivers/opp/ti-opp-supply.c                            |   77 ++++----
- drivers/soc/tegra/common.c                             |   49 +++--
- drivers/soc/tegra/pmc.c                                |    4 +-
- include/linux/pm_opp.h                                 |  322 ++++++++++++++++++------------
- 24 files changed, 1356 insertions(+), 1274 deletions(-)
+> ---
+>  drivers/thermal/qcom/qcom-spmi-adc-tm5.c    | 19 +++++++++----------
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 12 ++++++------
+>  drivers/thermal/qcom/tsens.c                | 16 ++++++++--------
+>  3 files changed, 23 insertions(+), 24 deletions(-)
 
 -- 
-viresh
+With best wishes
+Dmitry
