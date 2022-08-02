@@ -2,240 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF62A587C94
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Aug 2022 14:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F80587D26
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Aug 2022 15:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbiHBMnc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Aug 2022 08:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        id S233142AbiHBNdX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Aug 2022 09:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiHBMna (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Aug 2022 08:43:30 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A819E37FB9;
-        Tue,  2 Aug 2022 05:43:29 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so15183687pjf.5;
-        Tue, 02 Aug 2022 05:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=U9m3FQ39/4mYFptI4g6gXxTyAr9soFCJ8+yoeDOFuYE=;
-        b=i2Q8AEq1KNHeon8oovOfgQZVLe3KS3nqoU7VPppGG0qPugDAUwSenRTDP59HL+JmAc
-         POppR8p9f8SEZP/itNPUPvW1gb/7AyizvM7ycr9ukE6NXZRw3rMQJhd4097jNG8+gqFt
-         VKbG6SlXdmjPVoTA8fTjPk33Bu7/gFAkhZuQ/bKzeiit7n1l5ctyO73Mwex4wjbZ5zOv
-         d/McmwavwIO049aXxV7GBfF+3n0mzGNuKLulvO3JnoMoAeo359wjQhVlJMIv+ca3BdxM
-         hf2/Jk8oqWOzrWRyHunRbSC48OQx3yCFOw0dJROA92vx4u4W8JQMBay5swmGhXRu3geT
-         kaNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=U9m3FQ39/4mYFptI4g6gXxTyAr9soFCJ8+yoeDOFuYE=;
-        b=tK3sr2/gkovMAtaCj7BX55DZbakriam2nBbdCqbDlrMeN5hUYscooAEPO+XOhMa4Jd
-         fSY5+EZhSIpBh5IAXJGsU1o85NNJ30qEDFKg9zFVTMXsCu/pgnjtqpWGW3M+vp6I8zpf
-         xn0Z8se+pVTM9RO4/QpAJguGGXQu1smNHjyg3T4PFxdm5ZqJ4cRAUyufHxgfm2db3UGZ
-         s8if+S+WsD6b8+L60O+wR2jQKE9OW4ccOL8WfcysHYUJOFjvbwvLddQbCl+QFY2Vu3CV
-         TarXB5+fnR06Cw0Ob+RuD0YCzTNB6kNt8aVf77sXwe48siSxg0XoWjTQK+81ssqO9EHz
-         c22Q==
-X-Gm-Message-State: ACgBeo3/kZNt2sl0xwCdLVt31PzI7mHhK3dh4xyztxsPqV5XD2+aIroX
-        YiBr4mOSePK0qh7Cg1MVAtk3c8sX6SMQGq32jQM=
-X-Google-Smtp-Source: AA6agR43XCpLPTV1z8GO6mF5EYSfHI1FBFdyJ9uqiH9/FXtU0W+zqQqUBcZB+xxQvTIjrrBh2aUEIqE7in1fYQiNu9Q=
-X-Received: by 2002:a17:902:d4c2:b0:16d:c317:ee9d with SMTP id
- o2-20020a170902d4c200b0016dc317ee9dmr19985383plg.25.1659444209092; Tue, 02
- Aug 2022 05:43:29 -0700 (PDT)
+        with ESMTP id S232569AbiHBNdW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Aug 2022 09:33:22 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B8A17A8C;
+        Tue,  2 Aug 2022 06:33:21 -0700 (PDT)
+X-UUID: bd5af5aef97c4ce797f25be4b413af80-20220802
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:8bf43c17-354f-4ee3-a470-c1b6138fc2f2,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:133c0f25-a982-4824-82d2-9da3b6056c2a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: bd5af5aef97c4ce797f25be4b413af80-20220802
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <peter.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 267675943; Tue, 02 Aug 2022 21:33:15 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 2 Aug 2022 21:33:14 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 2 Aug 2022 21:33:14 +0800
+Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release
+ supplier
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220613120755.14306-1-peter.wang@mediatek.com>
+ <b55d5691-0b2d-56bb-26ff-dcac56770611@mediatek.com>
+ <CAJZ5v0gTpv2gt_Gm9rUd+8Jmp4=ij2=J20o7qO0sC-hm=w3=_A@mail.gmail.com>
+ <12028598.O9o76ZdvQC@kreacher>
+ <90b5f619-2dd6-817b-fe2d-f895be0b5b98@mediatek.com>
+ <CAJZ5v0h8xNCV+1YwRA5wob6Vnvz8JFikv3pYMR_mUrXxzfc=tQ@mail.gmail.com>
+ <f6ebfd39-a27a-8b1c-6a61-f9a63236961d@mediatek.com>
+ <CAJZ5v0gChpusk6JuTG+Zhd_qGR1N+s97Avn4ybdp7Ggpv_uRaQ@mail.gmail.com>
+ <7c3ec17e-296f-ab15-6055-fd59a7d8f036@mediatek.com>
+ <5c9a3908-a2c6-76d7-db6d-d762503d640a@mediatek.com>
+ <CAJZ5v0gSY7sJ2zsUsBeNFpT8XnL5yHd0inxh1+pXa9s1b9M50A@mail.gmail.com>
+From:   Peter Wang <peter.wang@mediatek.com>
+Message-ID: <80a67ef6-ea29-5b96-9596-6fbbb34c4961@mediatek.com>
+Date:   Tue, 2 Aug 2022 21:33:14 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220525115554.430971-1-alistair@alistair23.me>
- <20220525115554.430971-5-alistair@alistair23.me> <ea5e1659-5842-6685-52eb-f77ac4247a2d@sholland.org>
-In-Reply-To: <ea5e1659-5842-6685-52eb-f77ac4247a2d@sholland.org>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Tue, 2 Aug 2022 22:43:02 +1000
-Message-ID: <CAKmqyKPLanGCWkofWh7rEiAhpTFF865BGQNg1q-8avpObJ+J3A@mail.gmail.com>
-Subject: Re: [PATCH v21 4/4] ARM: dts: imx7d-remarkable2: Enable lcdif
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-hwmon@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0gSY7sJ2zsUsBeNFpT8XnL5yHd0inxh1+pXa9s1b9M50A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, May 29, 2022 at 4:20 AM Samuel Holland <samuel@sholland.org> wrote:
->
-> Hi Alistair,
->
-> On 5/25/22 6:55 AM, Alistair Francis wrote:
-> > Connect the dispaly on the reMarkable2.
-> >
-> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> > ---
-> >  arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
-> >  1 file changed, 74 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > index 99ac0d242936..03a4029e1e57 100644
-> > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > @@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
-> >               startup-delay-us = <100000>; /* 100 ms */
-> >       };
-> >
-> > +     reg_sdoe: regulator-sdoe {
-> > +             compatible = "regulator-fixed";
-> > +             regulator-name = "SDOE";
-> > +             pinctrl-names = "default", "sleep";
-> > +             pinctrl-0 = <&pinctrl_sdoe_reg>;
-> > +             pinctrl-1 = <&pinctrl_sdoe_reg>;
-> > +             gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-> > +             enable-active-high;
-> > +     };
-> > +
-> >       wifi_pwrseq: wifi_pwrseq {
-> >               compatible = "mmc-pwrseq-simple";
-> >               pinctrl-names = "default";
-> > @@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
-> >               clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
-> >               clock-names = "ext_clock";
-> >       };
-> > +
-> > +     panel {
-> > +             compatible = "eink,vb3300-kca";
-> > +
-> > +             port {
-> > +                     panel_in: endpoint {
-> > +                             remote-endpoint = <&display_out>;
-> > +                     };
-> > +             };
-> > +     };
->
-> From the discussion at [1], this is not safe to merge. It exposes an
-> electrophoretic display to fbcon/userspace as if it was an LCD, which it very
-> much is not. Trying to write RGB pixel data to the panel could damage it.
 
-Hey Samuel,
-
-From what I can tell it's difficult to damage the display, but I see your point.
-
+On 8/2/22 7:01 PM, Rafael J. Wysocki wrote:
+> On Tue, Aug 2, 2022 at 5:19 AM Peter Wang <peter.wang@mediatek.com> wrote:
+>>
+>>> Hi Rafael,
+>>>
+>>> Yes, it is very clear!
+>>> I miss this important key point that usage_count is always >
+>>> rpm_active 1.
+>>> I think this patch could work.
+>>>
+>>> Thanks.
+>>> Peter
+>>>
+>>>
+>>>
+>>>
+>> Hi Rafael,
+>>
+>> After test with commit ("887371066039011144b4a94af97d9328df6869a2 PM:
+>> runtime: Fix supplier device management during consumer probe") past weeks,
+>> The supplier still suspend when consumer is active "after"
+>> pm_runtime_put_suppliers.
+>> Do you have any idea about that?
+> Well, this means that the consumer probe doesn't bump up the
+> supplier's PM-runtime usage counter as appropriate.
 >
-> So at the very least before hooking this up, the LCD controller has to know that
-> the EPD needs special handling and that it cannot accept RGB.
+> You need to tell me more about what happens during the consumer probe.
+> Which driver is this?
 
-Looking at [1] it seems like no decision was made about how to handle
-a case like this where the EPC driving is all done in software. We
-currently drive it from userspace via proprietary software. It seems
-unlikely we will be able to support this in the kernel, so it would be
-nice to somehow expose it to userspace.
+Hi Rafael,
 
->
-> That doesn't necessarily mean there is a problem with the content of this patch
-> -- the special handling may all be taken care of based on the compatible string
+I have the same idea with you. But I still don't know how it could happen.
 
-Ah ok. So it sounds like adding a check to the LCD controller based on
-compatible string to reject RGB values would be a good start here.
-That would at least block bogus values from making it to the screen
+It is upstream ufs driver in scsi system. Here is call flow
+do_scan_async (process 1)
+     do_scsi_scan_host
+         scsi_scan_host_selected
+             scsi_scan_channel
+                 __scsi_scan_target
+                     scsi_probe_and_add_lun
+                         scsi_alloc_sdev
+                             slave_alloc     -> setup link
+                         scsi_add_lun
+                             slave_configure    -> enable rpm
+                             scsi_sysfs_add_sdev
+                                 scsi_autopm_get_device    <- get runtime pm
+                                 device_add                <- invoke 
+sd_probe in process 2
+                                 scsi_autopm_put_device    <- put 
+runtime pm, point 1
 
-Alistair
+driver_probe_device (process 2)
+     __driver_probe_device
+         pm_runtime_get_suppliers
+             really_probe
+                 sd_probe
+                     scsi_autopm_get_device                <- get 
+runtime pm, point 2
+                     pm_runtime_set_autosuspend_delay    <- set rpm 
+delay to 2s
+                     scsi_autopm_put_device                <- put 
+runtime pm
+         pm_runtime_put_suppliers                        <- 
+(link->rpm_active = 1)
 
-> -- but I think it's a really bad idea to merge this with how "eink,vb3300-kca"
-> is currently represented in panel-simple.
->
-> Regards,
-> Samuel
->
-> [1]: https://lore.kernel.org/lkml/Yo5kz%2F9cSd6ewC5f@phenom.ffwll.local/
->
-> >  };
-> >
-> >  &clks {
-> > @@ -132,6 +152,20 @@ reg_epdpmic: vcom {
-> >       };
-> >  };
-> >
-> > +&lcdif {
-> > +     pinctrl-names = "default";
-> > +     pinctrl-0 = <&pinctrl_lcdif>;
-> > +     lcd-supply = <&reg_epdpmic>;
-> > +     lcd2-supply = <&reg_sdoe>;
-> > +     status = "okay";
-> > +
-> > +     port {
-> > +             display_out: endpoint {
-> > +                     remote-endpoint = <&panel_in>;
-> > +             };
-> > +     };
-> > +};
-> > +
-> >  &snvs_pwrkey {
-> >       status = "okay";
-> >  };
-> > @@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL              0x4000007f
-> >               >;
-> >       };
-> >
-> > +     pinctrl_lcdif: lcdifgrp {
-> > +             fsl,pins = <
-> > +                     MX7D_PAD_LCD_DATA00__LCD_DATA0          0x79
-> > +                     MX7D_PAD_LCD_DATA01__LCD_DATA1          0x79
-> > +                     MX7D_PAD_LCD_DATA02__LCD_DATA2          0x79
-> > +                     MX7D_PAD_LCD_DATA03__LCD_DATA3          0x79
-> > +                     MX7D_PAD_LCD_DATA04__LCD_DATA4          0x79
-> > +                     MX7D_PAD_LCD_DATA05__LCD_DATA5          0x79
-> > +                     MX7D_PAD_LCD_DATA06__LCD_DATA6          0x79
-> > +                     MX7D_PAD_LCD_DATA07__LCD_DATA7          0x79
-> > +                     MX7D_PAD_LCD_DATA08__LCD_DATA8          0x79
-> > +                     MX7D_PAD_LCD_DATA09__LCD_DATA9          0x79
-> > +                     MX7D_PAD_LCD_DATA10__LCD_DATA10         0x79
-> > +                     MX7D_PAD_LCD_DATA11__LCD_DATA11         0x79
-> > +                     MX7D_PAD_LCD_DATA12__LCD_DATA12         0x79
-> > +                     MX7D_PAD_LCD_DATA13__LCD_DATA13         0x79
-> > +                     MX7D_PAD_LCD_DATA14__LCD_DATA14         0x79
-> > +                     MX7D_PAD_LCD_DATA15__LCD_DATA15         0x79
-> > +
-> > +                     MX7D_PAD_LCD_DATA17__LCD_DATA17         0x79
-> > +                     MX7D_PAD_LCD_DATA18__LCD_DATA18         0x79
-> > +                     MX7D_PAD_LCD_DATA19__LCD_DATA19         0x79
-> > +                     MX7D_PAD_LCD_DATA20__LCD_DATA20         0x79
-> > +                     MX7D_PAD_LCD_DATA21__LCD_DATA21         0x79
-> > +
-> > +                     MX7D_PAD_LCD_DATA23__LCD_DATA23         0x79
-> > +                     MX7D_PAD_LCD_CLK__LCD_CLK               0x79
-> > +                     MX7D_PAD_LCD_ENABLE__LCD_ENABLE         0x79
-> > +                     MX7D_PAD_LCD_VSYNC__LCD_VSYNC           0x79
-> > +                     MX7D_PAD_LCD_HSYNC__LCD_HSYNC           0x79
-> > +                     MX7D_PAD_LCD_RESET__LCD_RESET           0x79
-> > +             >;
-> > +     };
-> > +
-> > +     pinctrl_sdoe_reg: sdoereggrp {
-> > +             fsl,pins = <
-> > +                     MX7D_PAD_LCD_DATA22__GPIO3_IO27         0x74
-> > +             >;
-> > +     };
-> > +
-> >       pinctrl_uart1: uart1grp {
-> >               fsl,pins = <
-> >                       MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX    0x79
-> >
->
+After process 1 call scsi_autopm_put_device(point 1) let consumer enter 
+suspend,
+process 2 call scsi_autopm_get_device(point 2) may have chance resume 
+consumer but not
+bump up the supplier's PM-runtime usage counter as appropriate.
+
+Thanks.
+Peter
+
+
+
+
+
