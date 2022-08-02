@@ -2,155 +2,349 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A041F588058
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Aug 2022 18:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B852C58806D
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Aug 2022 18:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238178AbiHBQfZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Aug 2022 12:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S237469AbiHBQm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Aug 2022 12:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiHBQfH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Aug 2022 12:35:07 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141914B0F7;
-        Tue,  2 Aug 2022 09:35:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QTzu9kE1yTG9rWpxg6HXx15jtnSMC57GsdCaBux6IJJIYBz4bWAr0Cb7xukvjV/pT8Z9iYMmfElAfDnp2j1qMiT5U3X9GUoVR+tgAyY3M8A8obAqO3+3zRBF1tMLqMaim+z/IMeWUw13n7Rc9AdqepoJWe6q/zkIMVeuSxAFBDKvED4mg9yghFzSFpjotvuOUS8zap6hfmFw0LtgLwMYXYAxazkredZgng4+a4SCm0q2Ozs/fTdm60KvYMBUtxS5DFrOIpcCK9jkInrjzxKMWfey/9EmbW3tlnofogAq7V1hUQHAIc6Yfhw4nC7xqEUVDA636IhmHWXEln7TSZmRDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NrMAzaQWGC1E/LeUoeymVAaQsVoLc2YAwavjL+Rw6EY=;
- b=O/IpTU6CmJIFkO58QVV5UsBEipxUmbhbqZneDefTJH5pDaHNANwcryJp0LKMlirzEvYXAtzEaKdbldY03QxvSuEr8uESZ9suas7GVdQSIWsdVsz+LAgP7MLSlhcmEg29sHUDXmeh160JdZ5Q/yYwSGPxRDISg0BXMqLM1PI+FgVeBWfrhne190emk8WymgQk9aG3wmNPYGBdixikUZB13+j0QKLzcrTXX7ZG1mPeNhRCG5zrp7AGMViUK7LFExFFLL0/vgAyDcJD6PBCWG4hfnLXypkcIC3yFe1FgIw9Nzw1hvnn/llX7sNmmTus/KkobXCHpDPxhuOu7KH8VlgINA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NrMAzaQWGC1E/LeUoeymVAaQsVoLc2YAwavjL+Rw6EY=;
- b=HXF1YQwwuBY/eYjC+irHQbQKFh+b/ZlHtgK5aXoDTgsDRQJAnwcNFcAmhC9u8jI0pErVo8NGuF8cTw+OEn2nLiqPGuNdekyQZtulwKUxbwtbfnXHgdihEGaLAR//Tb3ZZEavYwQPhY4fRE4jlnvJ9AdnirqMRZ2uZZ6n9hI+cx7r7O/9cbjGbubKGLYGwNl8dD1h1CUG6S78llXOoQLe8qL76pqfboxA38svHnEL6IF+rOFLX49sf2Jf9T0fWxlQAxZE7efHvAYCFxHAm8uPpAMmOiSCPKUzQIhpmuO5+RPearWrJxYHwLuS/FAr1QVLUEjN3WvnGZd6qmt9EEq2Rw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM4PR12MB6496.namprd12.prod.outlook.com (2603:10b6:8:bd::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Tue, 2 Aug
- 2022 16:35:05 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::4cce:310f:93:5d58]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::4cce:310f:93:5d58%8]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
- 16:35:05 +0000
-Date:   Tue, 2 Aug 2022 13:35:04 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 1/5] vfio: Add the device features for the low power
- entry and exit
-Message-ID: <YulSOK+YKjV2634b@nvidia.com>
-References: <20220719121523.21396-2-abhsahu@nvidia.com>
- <20220721163445.49d15daf.alex.williamson@redhat.com>
- <aaef2e78-1ed2-fe8b-d167-8ea2dcbe45b6@nvidia.com>
- <20220725160928.43a17560.alex.williamson@redhat.com>
- <bd7bca18-ae07-c04a-23d3-bf71245da0cc@nvidia.com>
- <20220726172356.GH4438@nvidia.com>
- <f903e2b9-f85b-a4c8-4706-f463919723a3@nvidia.com>
- <20220801124253.11c24d91.alex.williamson@redhat.com>
- <YukvBBClrbCbIitm@nvidia.com>
- <20220802094128.38fba103.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802094128.38fba103.alex.williamson@redhat.com>
-X-ClientProxiedBy: BL1P223CA0022.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:208:2c4::27) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        with ESMTP id S238247AbiHBQm0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Aug 2022 12:42:26 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7D7BE1D
+        for <linux-pm@vger.kernel.org>; Tue,  2 Aug 2022 09:42:24 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id c185so17124553oia.7
+        for <linux-pm@vger.kernel.org>; Tue, 02 Aug 2022 09:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XES7wOqlXUr/qAejOlLvtCN7ks5gH2R5PvCE/JidLOk=;
+        b=4190d3+JrkiXhDd+sEF76kgxj6+rjjafOclUfGhVQ6bOozxT9Wn4y66Vb/qVrbpLpT
+         QY6K/IWx8s9qTFEFYQWnUGQbI4OTIczlUW71FgSpQvhkpyU2VUTMGiBS0SCvdlPAySSP
+         J7ot53zo0npr67bdtHTGR2gtbYbwgL6hfeskiS2wp9nuD8UWMx81wjhdcgT/VYFVFoZL
+         EaMOjo2KntIH1TtxFFdwR9GyoyLOESzTyS7rK5HnWUBJQXT2hpQPzM1E4M0XakUwldhB
+         I+lb3e5yNobtOQ+Tqutwd5QkzB70jrT7rSrZDpEMQfy18BiWraO+oRwvvwj0vJQZnHj0
+         hOfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XES7wOqlXUr/qAejOlLvtCN7ks5gH2R5PvCE/JidLOk=;
+        b=NzfqMlM9j7I8cWFMq12LPtJ+SYzw9ckeBIkdwmWzAeeZSW9wbsK2rjg4SqPrGguQ3M
+         LY5TGYcKfebN0ThQSaRmZR1X6cXXMRjoo3dNCDXVWOe1bhZWDGAeeXH3dePs/AYQgABJ
+         pNEk0J20jIXT0lu9ftHXvTAsG7tYim3agITCRyx0pkEI1VjGRxBiOZT8Cx+UQmnol3Vb
+         Ud8u2jsrNsx50Rdk4z34lOPyBHdvjQ3iUQmj4jiyxpS86Qn6CdO/OLdg0eZS66ADfK8T
+         gjFtfip+sN+KcByFD869ioZGplEyMA3pdIatv3Y+FSNFoIUhso+jm88J9F2mWDfIMUa2
+         a4hw==
+X-Gm-Message-State: ACgBeo1NEr7A9gZGz1U/GtsRXPfXngJ0qUVRwVZYhOKpW1eWLOaE54Nl
+        v+mZz5dyNGuDC37wleq56lgKuIQ+a2Wr+OZapg+xrw==
+X-Google-Smtp-Source: AA6agR4pbZzxkfXf2vgKt5XgxIFfJ96rDqgrFxG9oPGYy6ZZkYcmom/pVDu6PVLSc9rn8xz3Lwm1V5HA4C/B+oET/Yc=
+X-Received: by 2002:a05:6808:1b20:b0:33a:b9ab:30d8 with SMTP id
+ bx32-20020a0568081b2000b0033ab9ab30d8mr163535oib.8.1659458543668; Tue, 02 Aug
+ 2022 09:42:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ca652ef4-c87d-4267-bf60-08da74a4f46b
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6496:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 812IN+sQp/gd/y2/5escjHYaGsOQvtTr7eX1bPtlcKMrk9416txDmLh6wPMQIzQ6HFZemecZP2ms8FKHJhkfr2OZFxGhkeJqKm+q2w/d5vae7zYhlR4GC8DyOW4y0QzyPidTqyY89Wdk7XL5UPJkfN4r9vlVFUVmbhuVQH5euRgMIiR8HqIkv1+LP4vwM5RboMynhuRN7jBmBt7tWJ6CnQ1YgUxFHKQ9vgfJFXNgsO3DeSEl8wlj90wnyoD487B584Gd9zv4AHsfJ4i5hI1TqJQ0HX2IGdtIcUhPtNaxRHdXAkhmjRgIvDaVWPgxPt/6mfdk+2ve+k21GfUgA6Kh1gwMvYud7CwNF/9Bj4amHzhjLIHSzy+yWwB1cj1nesobbQVemc1Ioe0IUjtCFzPvfGy2V5ruTIzVN/qNMvzPjXivyC5XpwQOCYYZ2xaAJZMSl2F3+KzprVoXWsg+rSb4UiM7LcQ8BFbp+EeNM8ZhJN3PD4EyNUUbaS7Y8IMVKo6y1xr7kz7NupVlVXAEjMUUUSzOWuADLyih8bt/kCizM9xpxwHjWTcnkForMJc43EkquS6Rw/xZk68ti0Z/Af71vDjfBdXnB8mJbPlOHHy7FUHLrrBNwj8ILQ1Q8kCLNcFBPljWdiTGKgLHXQRKC5Tsq0pMwUrcxSVCKlBG7gtOMBaDsW3Fvk4x153/7xwRYn+OrfXA4hwIQ3pv2MPQJGWgv5Zsz8docHbSgkLCvalRCS1jLEWelnPpYuk9m5L+LYAd13wXH4j2HBhCZas84tlDFDcznkT15R5VJz0lgc/kYy4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(86362001)(83380400001)(26005)(6506007)(2906002)(41300700001)(186003)(38100700002)(6512007)(66946007)(6916009)(316002)(6486002)(4326008)(8676002)(66476007)(66556008)(54906003)(478600001)(2616005)(8936002)(36756003)(5660300002)(7416002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BIQcxWrUGrVl+N0b/ceNNGtFk8quMX2x9zVH1yE+wksZhKMSgmdxaPW/o6Ib?=
- =?us-ascii?Q?WnbMSV611dp85/CDlcTSJfJ9w3BFK1XACJB9aUlG1s6zlvBIdaOXeKeVdFi1?=
- =?us-ascii?Q?7la+4OyIvGPIyVrSzsLElmf5bcGS9Oimu/+DSUYJahSkJQDywSzIX9skLelC?=
- =?us-ascii?Q?NYsi1yOQjNrVgePCxbzti0lezjLGOlkZXlw3jIIsn+Mm17tqPrHA4XiyCbU+?=
- =?us-ascii?Q?Kv6wI1Kbn4RPf8OdS/C0TJ57xce5U3vI/0WxOHx9T6ohLzZ+tqS3ka01/E5Y?=
- =?us-ascii?Q?+XwqL9cCcSrtQLgg3lDrbs+tLwumPuiPgIcep8uX/Wq1YtF4Q6rDedxC6nDe?=
- =?us-ascii?Q?3WgmoTnJN29Di0tePabEzp3CcD6g72KIzrIDUAobtIlz+MmAEBf7g4Zzrwqt?=
- =?us-ascii?Q?CeGdzRveK5CZ9cpvyzC2eLq+9wBi4PliDJJVqcsdhG/lCXw97lSeKuORF6Ch?=
- =?us-ascii?Q?QqpkkhFSmnJaojuGbaMuCmrr7zopBZz26ZNlD4cqdlhFUA76e51A/aOPqcgm?=
- =?us-ascii?Q?uOadec970mBmWbfk4sURDt79UoixrNSEci37Z1Zh0PWRsNz5K1OFaM3OovzZ?=
- =?us-ascii?Q?OThhvtNhqFxsROqOWbY7PzjKnVU7nsTSTEMeY7bSVlG8t7nZq+zXMQdlgQ7L?=
- =?us-ascii?Q?dPMrhZCA+fz3IjvFsU6qBhZW+yRfg/VmALgLjqGR5HrIy3MyTkkOLXdA2P2u?=
- =?us-ascii?Q?1zeaizgynZh7mn2tryI7PUFtHwt3HMJZsaReNDg+7kwZucp5Bsdrx8KHtf+k?=
- =?us-ascii?Q?x6bXdjZqjYcQYVSHsfn2QvzJ34SOqmXY1dBKCmyShTHjsK/WrYRDJbMhpiQE?=
- =?us-ascii?Q?Jb3pvze6yBzQtIQ4J8UIdgzovbi9efsB9NZrpCWgcadTrGIfZWAJ258dggEq?=
- =?us-ascii?Q?nI6klSl4rbVsPTpmsvG6goqJFn9HLmTLH8EDu0tG2wIduEroTsMp93Kx/WjK?=
- =?us-ascii?Q?S7eECcZeqzyjsJXg0zvDEHnXEJbs6A652rp+J4chd9+KTvU19tkOAWVWWdkz?=
- =?us-ascii?Q?0dmGLX/9fQEmCpVuuLiwuuCq8zNsRnEM32ZQwLO3oh3AD9YQDZX49XQytHZ+?=
- =?us-ascii?Q?CfXiYXoiCMuDOE3v1t34b6uG+VNrH/Zkj8oxfn1PSkshKoXaZN5/SFNHrziV?=
- =?us-ascii?Q?HhuxLq7ML2MSTkvJqiLJbgL98Xv//M0rptAJ+Gssq3UqsizvijPIgAE+k+uE?=
- =?us-ascii?Q?KjFRPNBndaL8O+B1KM/W9RY+YJwqdcn0YdfmRjkEb9wlejygO6fLIkwX6bB+?=
- =?us-ascii?Q?LzoaEKDUcwbDNoRq7IIPPahy23+phDDy0qbkbPLwWyKg2ME6imb8gE1gMFUd?=
- =?us-ascii?Q?vD8oEnvUNDqlCqihR0wdY7vkNz8x4LeXEUuqK9K4ROpAoh0uu0e4dhn4jBDH?=
- =?us-ascii?Q?2m3AqVvya77tCQ77t7y9irdEN8alUo8tHrqOTzKVfCQW+0Y81DFwLbWDRQ2r?=
- =?us-ascii?Q?AabZeyTYK+0vnJ43CH1rP43GbQaxEEbkgd2Jajne+VhKUB0KqjP52fUdkYsK?=
- =?us-ascii?Q?cVk5CGCh0yaRzIcjCgIcmLegeb2miNir4xRLVAEe7029YFphvPoZV7ZV6UyE?=
- =?us-ascii?Q?fCc338D+2c8Ot7EqjKEEMiKcHSqVrV7LjJl4n9ri?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca652ef4-c87d-4267-bf60-08da74a4f46b
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 16:35:05.1600
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qXvK0Vg8lFwlyPcp3SOkfSEAyOfLghG3JN1rmv+c4KQX7eEnOK9G9b2Ag35Zi1p1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6496
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20210630135942.29730-1-kabel@kernel.org> <20210630225601.6372-1-kabel@kernel.org>
+ <20210702163035.nmb5pniwpqtmaz4b@pali> <20210708143451.4htvdop4zvjufrq6@pali>
+ <20210715193321.z3vswz6x4rzvw2fd@pali> <20210808193026.xuyaufi5wqnrcakd@pali>
+ <20220801123616.uol4wrs6trttumsg@pali> <BN9PR18MB4251768A59D38A44C264E1FEDB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
+ <20220801141254.ojljy2lewgrkga3f@pali> <BN9PR18MB42514ADBD547CADD93BD7646DB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
+ <20220801175645.bnknpfg26acbat7c@pali> <BN9PR18MB42518C761E574D862D30CDA7DB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
+In-Reply-To: <BN9PR18MB42518C761E574D862D30CDA7DB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Tue, 2 Aug 2022 18:42:12 +0200
+Message-ID: <CA+HBbNEHRhU4HOK-NGGLxak0UUfwjZvtkuLtzCk=fvSaS=MMEA@mail.gmail.com>
+Subject: Re: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 1.2
+ GHz variant
+To:     Elad Nachman <enachman@marvell.com>
+Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Wojciech Bartczak <wbartczak@marvell.com>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Tomasz Maciej Nowak <tmn505@gmail.com>,
+        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
+        Philip Soares <philips@netisense.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, nnet <nnet@fastmail.fm>,
+        =?UTF-8?Q?G=C3=A9rald_Kerma?= <gandalf@gk2.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 09:41:28AM -0600, Alex Williamson wrote:
+On Mon, Aug 1, 2022 at 8:50 PM Elad Nachman <enachman@marvell.com> wrote:
+>
+> Hi Pali,
+>
+> Could you please provide the crash dump / call trace?
+>
+> Also, if you can please annotate with printk the exact voltage/frequency =
+changes taken by the driver, up to the point of the crash?
+>
+> This will help understand the sequence of events leading to the crash.
+>
+> Thanks,
+>
+> Elad.
 
-> The subtlety is that there's a flag and a field and the flag can only
-> be set if the field is set, the flag can only be clear if the field is
-> clear, so we return -EINVAL for the other cases?  Why do we have both a
-> flag and a field?  This isn't like we're adding a feature later and the
-> flag needs to indicate that the field is present and valid.  It's just
-> not a very clean interface, imo.  Thanks,
 
-That isn't how I read Abhishek's proposal.. The eventfd should always
-work and should always behave as described "The notification through
-the provided eventfd will be generated only when the device has
-entered and is resumed from a low power state"
+Hi Elad,
+Here are 2 bootlogs, but I dont think they are of any use as the
+traces are rather random
+and they are always different, like a real voltage issue:
+https://gist.github.com/robimarko/113216f566ccf159dfd33933889da042
+https://gist.github.com/robimarko/990d757870d44a3c5acdfeb957547705
 
-If userspace provides it without LOW_POWER_REENTERY_DISABLE then it
-still generates the events.
+Here is a bootleg with the frequency changes, OPP points that are set
+by the CPUFreq driver are also here:
+https://gist.github.com/robimarko/1a81b0c6e93735b75ff4461d405c8033
 
-The linkage to LOW_POWER_REENTERY_DISABLE is only that userspace
-probably needs to use both elements together to generate the
-auto-reentry behavior. Kernel should not enforce it.
+I am still digging to print the voltage changes as _set_opp_voltage is
+not being used.
 
-Two fields, orthogonal behaviors.
+Regards,
+Robert
+>
+>
+> ________________________________
+> =D7=9E=D7=90=D7=AA: Pali Roh=C3=A1r <pali@kernel.org>
+> =E2=80=8F=E2=80=8F=D7=A0=D7=A9=D7=9C=D7=97: =D7=99=D7=95=D7=9D =D7=A9=D7=
+=A0=D7=99 01 =D7=90=D7=95=D7=92=D7=95=D7=A1=D7=98 2022 20:56
+> =E2=80=8F=E2=80=8F=D7=90=D7=9C: Elad Nachman <enachman@marvell.com>
+> =D7=A2=D7=95=D7=AA=D7=A7: Wojciech Bartczak <wbartczak@marvell.com>; Mare=
+k Beh=C3=BAn <kabel@kernel.org>; Viresh Kumar <viresh.kumar@linaro.org>; Gr=
+egory CLEMENT <gregory.clement@bootlin.com>; Robert Marko <robert.marko@sar=
+tura.hr>; Tomasz Maciej Nowak <tmn505@gmail.com>; Anders Trier Olesen <ande=
+rs.trier.olesen@gmail.com>; Philip Soares <philips@netisense.com>; linux-pm=
+@vger.kernel.org <linux-pm@vger.kernel.org>; Sebastian Hesselbarth <sebasti=
+an.hesselbarth@gmail.com>; linux-arm-kernel@lists.infradead.org <linux-arm-=
+kernel@lists.infradead.org>; nnet <nnet@fastmail.fm>; G=C3=A9rald Kerma <ga=
+ndalf@gk2.net>
+> =E2=80=8F=E2=80=8F=D7=A0=D7=95=D7=A9=D7=90: Re: [EXT] Re: [PATCH v2] cpuf=
+req: armada-37xx: forbid cpufreq for 1.2 GHz variant
+>
+> Hello Elad!
+>
+> Robert (in CC) tested this proposed change. But increasing delay to
+> 100ms does not help. CPU still crashes early during boot.
+>
+> On Monday 01 August 2022 14:15:27 Elad Nachman wrote:
+> > Hi,
+> >
+> > As first step, please try to increase the delay to 100ms, see if it hel=
+ps.
+> >
+> > Elad.
+> >
+> > -----Original Message-----
+> > From: Pali Roh=C3=A1r <pali@kernel.org>
+> > Sent: Monday, August 1, 2022 5:13 PM
+> > To: Elad Nachman <enachman@marvell.com>
+> > Cc: Wojciech Bartczak <wbartczak@marvell.com>; Marek Beh=C3=BAn <kabel@=
+kernel.org>; Viresh Kumar <viresh.kumar@linaro.org>; Gregory CLEMENT <grego=
+ry.clement@bootlin.com>; Robert Marko <robert.marko@sartura.hr>; Tomasz Mac=
+iej Nowak <tmn505@gmail.com>; Anders Trier Olesen <anders.trier.olesen@gmai=
+l.com>; Philip Soares <philips@netisense.com>; linux-pm@vger.kernel.org; Se=
+bastian Hesselbarth <sebastian.hesselbarth@gmail.com>; linux-arm-kernel@lis=
+ts.infradead.org; nnet <nnet@fastmail.fm>
+> > Subject: Re: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq =
+for 1.2 GHz variant
+> >
+> > Hello Elad and thank you for response!
+> >
+> > This errata is already implemented in the kernel for a longer time by G=
+regory's commit:
+> > https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__git.kernel.org_p=
+ub_scm_linux_kernel_git_stable_linux.git_commit_-3Fid-3D61c40f35f5cd6f67ccb=
+d7319a1722eb78c815989&d=3DDwIDaQ&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=3DeTeNTLEK5-T=
+xXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=3D-E-AwB9STVx8xgapaCNSpDJIPPnkrzrWkZX0uF=
+z2bfNGFnckZelT_XaovUUPrNIg&s=3D4EUcdDWB_gqnEV8nREQi9E_iym5bjoM6l5zLrbh_GVs&=
+e=3D
+> >
+> > There is also 20ms delay after L2/L3 to L1 state switch.
+> >
+> > Any idea what could be wrong here? Or is something more than above comm=
+it needed to correctly implement that errata?
+> >
+> > On Monday 01 August 2022 14:01:07 Elad Nachman wrote:
+> > > Hi Pali,
+> > >
+> > > There is an errata for that.
+> > >
+> > > "
+> > > Switching from L2/L3 state (200/300 MHz) to L0 state (1200 MHz)
+> > > requires sudden changes of VDD supply, and it requires time to
+> > > stabilize the VDD supply. The solution is to use gradual switching fr=
+om L2/L3 to L1 and then L1 to L0 state.
+> > > "
+> > >
+> > > I would also add additional delay for the VDD supply stabilization.
+> > >
+> > > FYI,
+> > >
+> > > Elad.
+> > >
+> > > -----Original Message-----
+> > > From: Pali Roh=C3=A1r <pali@kernel.org>
+> > > Sent: Monday, August 1, 2022 3:36 PM
+> > > To: Elad Nachman <enachman@marvell.com>; Wojciech Bartczak
+> > > <wbartczak@marvell.com>
+> > > Cc: Marek Beh=C3=BAn <kabel@kernel.org>; Viresh Kumar
+> > > <viresh.kumar@linaro.org>; Gregory CLEMENT
+> > > <gregory.clement@bootlin.com>; Robert Marko <robert.marko@sartura.hr>=
+;
+> > > Tomasz Maciej Nowak <tmn505@gmail.com>; Anders Trier Olesen
+> > > <anders.trier.olesen@gmail.com>; Philip Soares
+> > > <philips@netisense.com>; linux-pm@vger.kernel.org; Sebastian
+> > > Hesselbarth <sebastian.hesselbarth@gmail.com>;
+> > > linux-arm-kernel@lists.infradead.org; nnet <nnet@fastmail.fm>
+> > > Subject: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq fo=
+r
+> > > 1.2 GHz variant
+> > >
+> > > External Email
+> > >
+> > > ---------------------------------------------------------------------=
+-
+> > > + Elad and Wojciech from Marvell
+> > >
+> > > Could you please look at this issue and/or forward it to relevant Mar=
+vell team?
+> > >
+> > > Maintainer Viresh already wrote that we cannot hang forever for Marve=
+ll and patch which disables support for 1.2 GHz was merged:
+> > > https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lore.kernel.or=
+g_l
+> > > inux-2Dpm_20210809040224.j2rvopmmqda3utc5-40vireshk-2Di7_&d=3DDwIDaQ&=
+c=3Dn
+> > > KjWec2b6R0mOyPaz7xtfQ&r=3DeTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ=
+&m=3D
+> > > 5nMMKyKOOM3XdMe_PerZRx8L7-D7MkWhCl7GxpXTPiotVf1TR4j8v3bpjQmRKCLC&s=3D=
+cXi
+> > > CZByknfz1rOIgJl4fJHl1KLLRq2shHul2-VPpYP0&e=3D
+> > >
+> > > On Sunday 08 August 2021 21:30:26 Pali Roh=C3=A1r wrote:
+> > > > Gentle reminder. This is really serious issue. Could you please loo=
+k at it?
+> > > >
+> > > > Adding more MarvellEmbeddedProcessors people to the loop: Evan,
+> > > > Benjamin an Igal
+> > > >
+> > > > On Thursday 15 July 2021 21:33:21 Pali Roh=C3=A1r wrote:
+> > > > > Ping! Gentle reminder for Marvell people.
+> > > > >
+> > > > > On Thursday 08 July 2021 16:34:51 Pali Roh=C3=A1r wrote:
+> > > > > > Konstantin, Nadav, Ken, Victor, Jason: This issue is pretty
+> > > > > > serious, CPU on 1.2GHz A3720 is crashing. Could you please look=
+ at it?
+> > > > > >
+> > > > > > On Friday 02 July 2021 18:30:35 Pali Roh=C3=A1r wrote:
+> > > > > > > +Jason from GlobalScale as this issue affects GlobalScale Esp=
+ressobin Ultra and V7 1.2 GHz boards.
+> > > > > > >
+> > > > > > > On Thursday 01 July 2021 00:56:01 Marek Beh=C3=BAn wrote:
+> > > > > > > > The 1.2 GHz variant of the Armada 3720 SOC is unstable with
+> > > > > > > > DVFS: when the SOC boots, the WTMI firmware sets clocks and
+> > > > > > > > AVS values that work correctly with 1.2 GHz CPU frequency,
+> > > > > > > > but random crashes occur once cpufreq driver starts scaling=
+.
+> > > > > > > >
+> > > > > > > > We do not know currently what is the reason:
+> > > > > > > > - it may be that the voltage value for L0 for 1.2 GHz varia=
+nt provided
+> > > > > > > >   by the vendor in the OTP is simply incorrect when scaling
+> > > > > > > > is used,
+> > > > > > > > - it may be that some delay is needed somewhere,
+> > > > > > > > - it may be something else.
+> > > > > > > >
+> > > > > > > > The most sane solution now seems to be to simply forbid the
+> > > > > > > > cpufreq driver on 1.2 GHz variant.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
+> > > > > > > > Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for Armada
+> > > > > > > > 37xx")
+> > > > > > > > ---
+> > > > > > > > If someone from Marvell could look into this, it would be
+> > > > > > > > great since basically 1.2 GHz variant cannot scale, which i=
+s
+> > > > > > > > a feature that was claimed to be supported by the SOC.
+> > > > > > > >
+> > > > > > > > Ken Ma / Victor Gu, you have worked on commit
+> > > > > > > > https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__gith=
+ub.
+> > > > > > > > co
+> > > > > > > > m_MarvellEmbeddedProcessors_linux-2Dmarvell_commit_d6719fdc=
+2
+> > > > > > > > b3
+> > > > > > > > cac58064f41b531f86993c919aa9a&d=3DDwIDaQ&c=3DnKjWec2b6R0mOy=
+Paz7x
+> > > > > > > > tf
+> > > > > > > > Q&r=3DeTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=3D5nMMK=
+yKOOM
+> > > > > > > > 3X
+> > > > > > > > dMe_PerZRx8L7-D7MkWhCl7GxpXTPiotVf1TR4j8v3bpjQmRKCLC&s=3Db9=
+cDK
+> > > > > > > > em t70OiTJF6KXj0ySzbxpsB_nuteXJE87via80&e=3D
+> > > > > > > > in linux-marvell.
+> > > > > > > > Your patch takes away the 1202 mV constant for 1.2 GHz base
+> > > > > > > > CPU frequency and instead adds code that computes the
+> > > > > > > > voltages from the voltage found in L0 AVS register (which i=
+s filled in by WTMI firmware).
+> > > > > > > >
+> > > > > > > > Do you know why the code does not work correctly for some
+> > > > > > > > 1.2 GHz boards? Do we need to force the L0 voltage to 1202
+> > > > > > > > mV if it is lower, or something?
+> > > > > > > > ---
+> > > > > > > >  drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
+> > > > > > > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > > > > b/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > > > > index 3fc98a3ffd91..c10fc33b29b1 100644
+> > > > > > > > --- a/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > > > > +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > > > > @@ -104,7 +104,11 @@ struct armada_37xx_dvfs {  };
+> > > > > > > >
+> > > > > > > >  static struct armada_37xx_dvfs armada_37xx_dvfs[] =3D {
+> > > > > > > > - {.cpu_freq_max =3D 1200*1000*1000, .divider =3D {1, 2, 4,=
+ 6} },
+> > > > > > > > + /*
+> > > > > > > > +  * The cpufreq scaling for 1.2 GHz variant of the SOC is =
+currently
+> > > > > > > > +  * unstable because we do not know how to configure it pr=
+operly.
+> > > > > > > > +  */
+> > > > > > > > + /* {.cpu_freq_max =3D 1200*1000*1000, .divider =3D {1, 2,=
+ 4,
+> > > > > > > > +6} }, */
+> > > > > > > >    {.cpu_freq_max =3D 1000*1000*1000, .divider =3D {1, 2, 4=
+, 5} },
+> > > > > > > >    {.cpu_freq_max =3D 800*1000*1000,  .divider =3D {1, 2, 3=
+, 4} },
+> > > > > > > >    {.cpu_freq_max =3D 600*1000*1000,  .divider =3D {2, 4, 5=
+, 6}
+> > > > > > > > },
+> > > > > > > > --
+> > > > > > > > 2.31.1
+> > > > > > > >
 
-Jason
+
+
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
