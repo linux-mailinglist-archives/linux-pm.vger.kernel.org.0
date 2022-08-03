@@ -2,63 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE925893D6
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Aug 2022 22:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAB95893D2
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Aug 2022 22:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236899AbiHCU4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Aug 2022 16:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
+        id S237566AbiHCUyz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Aug 2022 16:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236574AbiHCU4Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Aug 2022 16:56:16 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDCD17AA1
-        for <linux-pm@vger.kernel.org>; Wed,  3 Aug 2022 13:56:15 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d16so2179741qtw.8
-        for <linux-pm@vger.kernel.org>; Wed, 03 Aug 2022 13:56:15 -0700 (PDT)
+        with ESMTP id S236574AbiHCUyy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Aug 2022 16:54:54 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FE1E7D
+        for <linux-pm@vger.kernel.org>; Wed,  3 Aug 2022 13:54:53 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-10ea9ef5838so16697854fac.3
+        for <linux-pm@vger.kernel.org>; Wed, 03 Aug 2022 13:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ybP/ElRLkO+EJL+/j9uG30N2lLShN588ns/EY1gUwXs=;
-        b=Ciy86lX6LuQK0c5yd6gR52m67WVfapJjjyJqpBfkLvfZMQ/fOScolJAYm98o1FWitT
-         b3bG/cJFhkjGnNpxEEwnGbCqGT/Uu9JHWs/h5krFWqmVLMiBzgt4xOX2Y03TVeB4e4Zu
-         p8bCkmMuI4XQ6sMTiw+nKNv4elcQtAk7R76f4=
+        bh=qCvjB0XOGwom3VuKpUHiorVjWdQfyMRzQDadmEnUHfo=;
+        b=iH2cHiyXqK9lCPc7UF2E5siG7sE1VBvgiD6bj0XQ2XOZEaHWJVTEvWFzAA+rrjMZ7J
+         83IqAOQGL8q5iEALOWpLAFFRpwoS2W0T5hAzgenMRyTvAkanoMjyTA1vMnKZDjkRagYa
+         mZErqeI7eut841LPwAGXKQTDKHa/GLL+Sd9GY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ybP/ElRLkO+EJL+/j9uG30N2lLShN588ns/EY1gUwXs=;
-        b=voEuKL8+Ztb3FHEWqLhHUz4CRoXtVz2cA2+0y+OKVNF7gP6MwZVfMxKoQIgXpb2j/o
-         PsCWT0HVsUPUUKcw7SPiGfMQy9h7+a4lKYQEPxDMGvlhBgWPf9bmu/wA8WPc/kNlnuAI
-         AvBRPilcw/AJ1zM9qurb/PVbgN/0uJ+8LGoUaFoB1JIoD210Em6vqimNX1PNxO+5XzPU
-         m46ZygZXk9zd9DdMTwY9sPVadNFuCJoO07o/rdVhVosRcqHmt0heQ7APr5Wr1GACIfWR
-         Nh7Hfr4G3ktQYtGE+gwyi2UMmoOor7phagUETTcoKVWIWOfWzl4oO98gD+IADkQjWmBX
-         vRyg==
-X-Gm-Message-State: AJIora9ZTSUstPdJ/Kms1/awAKo4NfWKyKNzynevODQaRUUffjgO9zys
-        4ktNtfmVa/Lx7ceJ1+yCSJnRF9YQIxlKjw==
-X-Google-Smtp-Source: AGRyM1tUOE8j+zPGoqgtmejsPnX6fBpZlovZyDyXrtLmTvsiRs1iOCnXpwRlyBCspW+MS+CFiBr01g==
-X-Received: by 2002:ac8:7fcb:0:b0:31e:f635:c9a0 with SMTP id b11-20020ac87fcb000000b0031ef635c9a0mr24269144qtk.157.1659560174538;
-        Wed, 03 Aug 2022 13:56:14 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id bi39-20020a05620a31a700b006b555509398sm12474839qkb.136.2022.08.03.13.56.14
+        bh=qCvjB0XOGwom3VuKpUHiorVjWdQfyMRzQDadmEnUHfo=;
+        b=guZnag00iTWbvBfJQFzTbDgMO9W50eiHdXTOLRoKYMnSfWc3vGaCftYKANCxbCWR8J
+         lNaDaCgMdDL+7DbntHsUAZFHpzzAI1qOb43lEBa5beHQPQZi0G6OodvNFV66r+1bPgnC
+         KBR3WSEEcsdTufsu6PrjfgtccUL6yeLB+Tddr0HX0WyS8UsAMOhVF+jKogGtiosqsT+h
+         Wd/o5HIlGZJoFdSVgCJTSFQPvLvPyOE6V0FwKiqHD7+35qo51KsjP1Zf5HpHPm6nG/CS
+         J+yJnM2Qj4LAXi+Vl9+DCSnrok4fOq1HaljZXvLJw/pf5p8kYete2X2neYIHgStztWJ3
+         AUMQ==
+X-Gm-Message-State: ACgBeo0PM0qqyoj5AeKtVwkPWxu0hT5CsdgZ0/WWRdPXugS5+o4+lLjj
+        5DPXf5sRO5mO/jluMtFtcrv37gvaFI3xMQ==
+X-Google-Smtp-Source: AA6agR4yWswS1PIt5Cw8PK37pkYRHI3Oh0NGYnhjkrB4XR/N+xtg/6qyrKydU4AzwA2uIQ2dT2eXeQ==
+X-Received: by 2002:a05:6870:c0c5:b0:10d:5f5c:9ab1 with SMTP id e5-20020a056870c0c500b0010d5f5c9ab1mr2834735oad.156.1659560092752;
+        Wed, 03 Aug 2022 13:54:52 -0700 (PDT)
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com. [209.85.161.54])
+        by smtp.gmail.com with ESMTPSA id kw12-20020a056870ac0c00b0010be134ac60sm4637417oab.19.2022.08.03.13.54.52
         for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 13:56:14 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 204so29023285yba.1
-        for <linux-pm@vger.kernel.org>; Wed, 03 Aug 2022 13:56:14 -0700 (PDT)
+        Wed, 03 Aug 2022 13:54:52 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id j8-20020a4ac548000000b00435a8dd31a2so3197313ooq.5
+        for <linux-pm@vger.kernel.org>; Wed, 03 Aug 2022 13:54:52 -0700 (PDT)
 X-Received: by 2002:a05:6830:290a:b0:618:b519:53f5 with SMTP id
- z10-20020a056830290a00b00618b51953f5mr9795274otu.237.1659559724240; Wed, 03
- Aug 2022 13:48:44 -0700 (PDT)
+ z10-20020a056830290a00b00618b51953f5mr9795854otu.237.1659559753343; Wed, 03
+ Aug 2022 13:49:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220504161439.8.I87952411cf83f2199ff7a4cc8c828d357b8c8ce3@changeid>
- <YumpwkIz+S+zDfol@sol.localdomain>
-In-Reply-To: <YumpwkIz+S+zDfol@sol.localdomain>
+References: <20220504232102.469959-1-evgreen@chromium.org> <20220504161439.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
+ <Yumskea9UJ9n0uPz@sol.localdomain>
+In-Reply-To: <Yumskea9UJ9n0uPz@sol.localdomain>
 From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 3 Aug 2022 13:48:08 -0700
-X-Gmail-Original-Message-ID: <CAE=gft4_M=9TsbHFEVQO-3BRrQsDia0Mwt0C9OpA6fMcnaDsrw@mail.gmail.com>
-Message-ID: <CAE=gft4_M=9TsbHFEVQO-3BRrQsDia0Mwt0C9OpA6fMcnaDsrw@mail.gmail.com>
-Subject: Re: [PATCH 08/10] PM: hibernate: Mix user key in encrypted hibernate
+Date:   Wed, 3 Aug 2022 13:48:37 -0700
+X-Gmail-Original-Message-ID: <CAE=gft4jTQY1N5X=Yyg6g6-e0EBPHKhnQxcX02NZU0mZxaTvwA@mail.gmail.com>
+Message-ID: <CAE=gft4jTQY1N5X=Yyg6g6-e0EBPHKhnQxcX02NZU0mZxaTvwA@mail.gmail.com>
+Subject: Re: [PATCH 04/10] security: keys: trusted: Allow storage of PCR
+ values in creation data
 To:     Eric Biggers <ebiggers@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Matthew Garrett <mgarrett@aurora.tech>,
@@ -69,8 +70,13 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Gwendal Grignou <gwendal@chromium.org>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -82,83 +88,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 3:48 PM Eric Biggers <ebiggers@kernel.org> wrote:
+On Tue, Aug 2, 2022 at 4:00 PM Eric Biggers <ebiggers@kernel.org> wrote:
 >
-> On Wed, May 04, 2022 at 04:21:00PM -0700, Evan Green wrote:
-> > +/*
-> > + * Allow user mode to fold in key material for the data portion of the hibernate
-> > + * image.
-> > + */
-> > +struct uswsusp_user_key {
-> > +     /* Kernel returns the metadata size. */
-> > +     __kernel_loff_t meta_size;
-> > +     __u32 key_len;
-> > +     __u8 key[16];
-> > +     __u32 pad;
-> > +};
+> On Wed, May 04, 2022 at 04:20:56PM -0700, Evan Green wrote:
+> > diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+> > index aa108bea6739b3..2975827c01bec0 100644
+> > --- a/security/keys/trusted-keys/trusted_tpm1.c
+> > +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> > @@ -713,6 +713,7 @@ enum {
+> >       Opt_hash,
+> >       Opt_policydigest,
+> >       Opt_policyhandle,
+> > +     Opt_creationpcrs,
+> >  };
+> >
+> >  static const match_table_t key_tokens = {
+> > @@ -725,6 +726,7 @@ static const match_table_t key_tokens = {
+> >       {Opt_hash, "hash=%s"},
+> >       {Opt_policydigest, "policydigest=%s"},
+> >       {Opt_policyhandle, "policyhandle=%s"},
+> > +     {Opt_creationpcrs, "creationpcrs=%s"},
+> >       {Opt_err, NULL}
+> >  };
+> >
+> > @@ -858,6 +860,13 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+> >                               return -EINVAL;
+> >                       opt->policyhandle = handle;
+> >                       break;
+> > +             case Opt_creationpcrs:
+> > +                     if (!tpm2)
+> > +                             return -EINVAL;
+> > +                     res = kstrtoint(args[0].from, 16, &opt->creation_pcrs);
+> > +                     if (res < 0)
+> > +                             return -EINVAL;
+> > +                     break;
 >
-> Shouldn't the key field be 32 bytes?
->
+> I thought that TPM1 is deprecated.  Are you sure you need more TPM1 features?
 
-Short answer: yes, it should, will fix. Long answer: I had used a
-hardcoded AEAD algorithm of "gcm(aes)", and was envisioning it being
-AES128. But making it accommodate 32 bytes now before this gets set in
-stone is a better idea.
+It seems that trusted_tpm1.c is not just TPM1 functions, but also
+common functions that call TPM2 primitives. A few of these functions
+(like this getoptions()) seem to even error out if !tpm_is_tpm2(chip).
 
-> > +/* Derive a key from the kernel and user keys for data encryption. */
-> > +static int snapshot_use_user_key(struct snapshot_data *data)
-> > +{
-> > +     struct shash_desc *desc;
-> > +     u8 digest[SHA256_DIGEST_SIZE];
-> > +     struct trusted_key_payload *payload;
-> > +     struct crypto_shash *tfm;
-> > +     int ret;
-> > +
-> > +     tfm = crypto_alloc_shash("sha256", 0, 0);
-> > +     if (IS_ERR(tfm)) {
-> > +             ret = -EINVAL;
-> > +             goto err_rel;
-> > +     }
-> > +
-> > +     desc = kmalloc(sizeof(struct shash_desc) +
-> > +                    crypto_shash_descsize(tfm), GFP_KERNEL);
-> > +     if (!desc) {
-> > +             ret = -ENOMEM;
-> > +             goto err_rel;
-> > +     }
-> > +
-> > +     desc->tfm = tfm;
-> > +     ret = crypto_shash_init(desc);
-> > +     if (ret != 0)
-> > +             goto err_free;
-> > +
-> > +     /*
-> > +      * Hash the kernel key and the user key together. This folds in the user
-> > +      * key, but not in a way that gives the user mode predictable control
-> > +      * over the key bits. Hash in all 32 bytes of the key even though only 16
-> > +      * are in active use as extra salt.
-> > +      */
-> > +     payload = data->key->payload.data[0];
-> > +     crypto_shash_update(desc, payload->key, MIN_KEY_SIZE);
-> > +     crypto_shash_update(desc, data->user_key, sizeof(data->user_key));
-> > +     crypto_shash_final(desc, digest);
-> > +     ret = crypto_aead_setkey(data->aead_tfm,
-> > +                              digest,
-> > +                              SNAPSHOT_ENCRYPTION_KEY_SIZE);
-> > +
-> > +err_free:
-> > +     kfree(desc);
-> > +
-> > +err_rel:
-> > +     crypto_free_shash(tfm);
-> > +     return ret;
-> > +}
->
-> Just select CRYPTO_LIB_SHA256, and you can use sha256_init/update/final which
-> would be much simpler.  Similarly with sha256_data() that is added by the next
-> patch; you could just call sha256().
-
-Good idea, will do. Thanks!
-
->
-> - Eric
+-Evan
