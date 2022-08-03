@@ -2,108 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07342589110
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Aug 2022 19:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B5C589118
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Aug 2022 19:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbiHCROV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Aug 2022 13:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
+        id S233102AbiHCRQ5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 3 Aug 2022 13:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236677AbiHCROU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Aug 2022 13:14:20 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1038952FEA
-        for <linux-pm@vger.kernel.org>; Wed,  3 Aug 2022 10:14:19 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id l22so22354918wrz.7
-        for <linux-pm@vger.kernel.org>; Wed, 03 Aug 2022 10:14:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=GUtktyRkXIhS+Fz7PPmZmEHdzJqtBsKjE1UhF4HSDMo=;
-        b=hgURM5ANxcvq1WQMcHsEFrKc4g+wG97zSAqfnwBblL3ajda7Es9x+8sBzkuDU52XUm
-         EUqhtzZNWYFzJzAgxjM15fqdeIybTL0lvpKoWK9e2lTFNC/KfjYJY04zznzuuKdt66iD
-         ZRy1T+eqNlsZVTZQFUtLmK8GZAXV7qH5itA3HPzClVL+tGOhvWX7KzJj9rGlVYS/NqTR
-         WYfjkgjREasgWqrvTY/hVSMONzXDc6qUnlFFoe/IwD1HZgifZgXMhtBaPkz7VpG2jUav
-         eK4L+Ki4uqVT6GCPgitAAHVtDaUFtpFKMPGTows4TQTFLvXZE/XCVX67duIp15OuLV1Y
-         NEjA==
+        with ESMTP id S229519AbiHCRQ5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Aug 2022 13:16:57 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A214BD2B;
+        Wed,  3 Aug 2022 10:16:55 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id g5so5001224ybg.11;
+        Wed, 03 Aug 2022 10:16:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=GUtktyRkXIhS+Fz7PPmZmEHdzJqtBsKjE1UhF4HSDMo=;
-        b=Sd7xMF3PhzH0+8u7f9vdo4L82ZDsB+NbLlI4Swo5x4G8CQOSsdw1eUGok7GaDDVvpw
-         tKAeQHhmiygMXTTiaGJFy4xxgfyB+Wg2KdZBARMj8Cpyx1P4LfCNIz2D96BD+MLL5EvF
-         Ey5kT7prtuv3knvdLbdKeNZ4WbGfaDB18yGHyOsM5b+mDg30/oYBPKyEdNWHqrVtxTHH
-         eYKjkVhxSN7VAE1tqP6S0wJmax+ew6meWXHrkBkAT95dJvq1bhEeCBhU5C4cWwq3OLxT
-         s94jlxQWGOTnHHGpa09HUjgPVbOuvIAgPOPxW1IFDmglbe7lRiS8/Yf8HSVTA3I7fUe/
-         tjxA==
-X-Gm-Message-State: ACgBeo2ssMO9S3wHxzGffMW+o114XHHIuqUvKUYilxHoUaWiCz+A0bbp
-        4eepGa0LcMFwuZyJuqp0BoR4ig==
-X-Google-Smtp-Source: AA6agR5wBU/h1VzY7Of86k5Vjs0Yjyf4+h43iAnWFK5iP7bOZIUoXZkeuCrQwsHl+8vX59zAdlFSXg==
-X-Received: by 2002:a5d:6b10:0:b0:21e:4bbd:e893 with SMTP id v16-20020a5d6b10000000b0021e4bbde893mr16903170wrw.613.1659546857496;
-        Wed, 03 Aug 2022 10:14:17 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6e48:fbdd:280d:6dac? ([2a05:6e02:1041:c10:6e48:fbdd:280d:6dac])
-        by smtp.googlemail.com with ESMTPSA id r4-20020a05600c158400b0039c96b97359sm2780146wmf.37.2022.08.03.10.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 10:14:17 -0700 (PDT)
-Message-ID: <9110a859-9885-1dab-0412-e8f62cfff458@linaro.org>
-Date:   Wed, 3 Aug 2022 19:14:16 +0200
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=tVkrucCiudsyx1mFT3vVq9clQOmXAUbsmn7GW6+D/E8=;
+        b=bEJv1k7kPO0WQDT9fXfWlvmgVZBwS3DkEkfsX7vfku5WNEnv/iT6D+Mz7iC+rOHnTs
+         hFzmH6QRrpxFix48MHBa+fXs8ogPQ+EMdUL/ppWQg4nsgLtd7vxhj23ht3gii0DlHUPf
+         bmDtmtLlHL4rq+RZRlawe0jqVwmzBfaS3xX39+0iAPDnWzXCASN1RhfWrXx+ku39+g/6
+         kYYwxCUaOUK5ZfuRriozlIMGUmV9JCYalZ9CojETyO262x/0nCD+TxV7Df6EBBRFPWu6
+         5UHHf6z7WRo1EHSsyzCAF6uttrv876AFRf3oi+s2lPCjIDVB41VQJo72npy+3M8QPUjs
+         pZrg==
+X-Gm-Message-State: ACgBeo0w34PaZ8deHrRheR8r8WW1PGLM9jQhyHMSpWg/vNUX/VyxXoH9
+        UP9FMYsHodih1gCeRZ3y266tc0wwEL43BVY7Fpw=
+X-Google-Smtp-Source: AA6agR5y94g6lfVwhfJAawaPYNXyfBaF56BbGZ3vYo034kvqYtQMhuAUgng63ePd6TM3yBwDiFfY7X1HdtZ8qnjkVM4=
+X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
+ z15-20020a25664f000000b0066cd0f436ccmr20498350ybm.482.1659547014946; Wed, 03
+ Aug 2022 10:16:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] tools/thermal: Fix possible path truncations
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-References: <20220725173755.2993805-1-f.fainelli@gmail.com>
- <CAJZ5v0hL46vdr=f8YiAPnRmmehZs51n+tkgoY7PMTVyJD0cpEA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hL46vdr=f8YiAPnRmmehZs51n+tkgoY7PMTVyJD0cpEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220731141352.7caa1a69@endymion.delvare> <CAJZ5v0idi1+Rzgqgr0H3_d_SB6B41hoZ0TJ2h8j8iK9FQPNGbw@mail.gmail.com>
+ <31d5794f-de7d-373b-641e-e2fa62987138@linaro.org>
+In-Reply-To: <31d5794f-de7d-373b-641e-e2fa62987138@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 3 Aug 2022 19:16:44 +0200
+Message-ID: <CAJZ5v0jwadU_Sip-7GJiGG68Vo1KqOSfFB5Hpxqa+_P38AK1oQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Drop obsolete dependency on COMPILE_TEST
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jean Delvare <jdelvare@suse.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Talel Shenhar <talel@amazon.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/08/2022 19:07, Rafael J. Wysocki wrote:
-> On Mon, Jul 25, 2022 at 7:38 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> A build with -D_FORTIFY_SOURCE=2 enabled will produce the following warnings:
->>
->> sysfs.c:63:30: warning: '%s' directive output may be truncated writing up to 255 bytes into a region of size between 0 and 255 [-Wformat-truncation=]
->>    snprintf(filepath, 256, "%s/%s", path, filename);
->>                                ^~
->> Bump up the buffer to PATH_MAX which is the limit and account for all of
->> the possible NUL and separators that could lead to exceeding the
->> allocated buffer sizes.
->>
->> Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal subsystem")
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> Daniel, are you going to pick up this one or should I?
-> 
-> There is also a tmon patch from Florian that seems to be pending.
-> Should I take care of it?
+On Wed, Aug 3, 2022 at 7:08 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 03/08/2022 19:05, Rafael J. Wysocki wrote:
+> > On Sun, Jul 31, 2022 at 2:13 PM Jean Delvare <jdelvare@suse.de> wrote:
+> >>
+> >> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+> >> is possible to test-build any driver which depends on OF on any
+> >> architecture by explicitly selecting OF. Therefore depending on
+> >> COMPILE_TEST as an alternative is no longer needed.
+> >>
+> >> It is actually better to always build such drivers with OF enabled,
+> >> so that the test builds are closer to how each driver will actually be
+> >> built on its intended target. Building them without OF may not test
+> >> much as the compiler will optimize out potentially large parts of the
+> >> code. In the worst case, this could even pop false positive warnings.
+> >> Dropping COMPILE_TEST here improves the quality of our testing and
+> >> avoids wasting time on non-existent issues.
+> >>
+> >> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> >> Cc: Talel Shenhar <talel@amazon.com>
+> >> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> >> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >
+> > Daniel, I can pick up this one if that's OK.  Any concerns?
+>
+> No concerns, I'm fine with it
 
-Mmh, let me check. I thought I picked them :/
+OK, applied, thanks!
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> >> ---
+> >>   drivers/thermal/Kconfig |    4 ++--
+> >>   1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> --- linux-5.18.orig/drivers/thermal/Kconfig     2022-05-22 21:52:31.000000000 +0200
+> >> +++ linux-5.18/drivers/thermal/Kconfig  2022-07-31 13:51:55.009394318 +0200
+> >> @@ -221,7 +221,7 @@ config THERMAL_EMULATION
+> >>
+> >>   config THERMAL_MMIO
+> >>          tristate "Generic Thermal MMIO driver"
+> >> -       depends on OF || COMPILE_TEST
+> >> +       depends on OF
+> >>          depends on HAS_IOMEM
+> >>          help
+> >>            This option enables the generic thermal MMIO driver that will use
+> >> @@ -496,7 +496,7 @@ config SPRD_THERMAL
+> >>
+> >>   config KHADAS_MCU_FAN_THERMAL
+> >>          tristate "Khadas MCU controller FAN cooling support"
+> >> -       depends on OF || COMPILE_TEST
+> >> +       depends on OF
+> >>          depends on MFD_KHADAS_MCU
+> >>          select MFD_CORE
+> >>          select REGMAP
+> >>
+> >> --
+> >> Jean Delvare
+> >> SUSE L3 Support
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
