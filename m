@@ -2,83 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61657588AC4
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Aug 2022 12:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7068588B80
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Aug 2022 13:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233946AbiHCKvp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Aug 2022 06:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S237478AbiHCLqa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Aug 2022 07:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiHCKvo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Aug 2022 06:51:44 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423DA1A052
-        for <linux-pm@vger.kernel.org>; Wed,  3 Aug 2022 03:51:42 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id v5so8515876wmj.0
-        for <linux-pm@vger.kernel.org>; Wed, 03 Aug 2022 03:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=UKgtTNEBRcEuJKNYzz9fav0XLRpqgY1r5hhJ/ETR5F4=;
-        b=l1j1LNiLEHPl29Pqd5P8h+R7lQ9danPifmXUoG1hTfeY7KvWVeWx4Abd/xixiNrTZ9
-         JBlyQVkJyX80pZtlMqZ6Zbq0haNbmZHQinkkW4C8DIpLFF0kl4WJPthEg6PNo2p6eTCp
-         attrMx7gN07hxshRXfb9PDygzeU0NjnkZhcnRjJ6DAgsr6WsA9grBWaP5hMz0rPsDIlh
-         OhW7WsQJxFhhOVrOT3KtkmQqcemojHqyp6C37wCh3drpgH1D4H6IuVjlNJF8eQYJ6AY8
-         SeNbscjbVDScrpQ1WsxQGbjQLluEMJUv13H4KPRayh0XvtQIJxmLIKNRGUukTiwDLMFr
-         Oncw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=UKgtTNEBRcEuJKNYzz9fav0XLRpqgY1r5hhJ/ETR5F4=;
-        b=ZgfJJH9vDU206sQ3Wa7ClSwi/wBITwlIvNaZ38o5UPvSrdiQJj//8G8IlTOgovEn01
-         jJYIRAaf6v4qWevVAVlz+nS6lMFC0wFHKkJ33pNE45NCRsGPEjCULoQi6cOmejwLXDpE
-         FCZcTqwfKfhzuRI/+lCHz76gJ22zaAgR7uiPH9LsBog5nGyzUBHMMiZR3ClyiTqTAyag
-         Y/St5virll5EUOcfv/EknAAaBzgpDF3pX1/Q7qK9nrL1lhi/ljxImJ5XiWhiB9x7YOXQ
-         +Nw9fJiqf7Oyt0jfMZUx5W14cIlBTnm4XOP1XYGwws1zM/MrKuJ5z/tvkCLw+VdZ+AEu
-         VLpg==
-X-Gm-Message-State: ACgBeo1NHuRd8Sorogr53voFIyPwVe05za6igS9OFYWmzjbpI6AW6L1+
-        7WxiPkPe14d9TlWAWzq1yNK/1w==
-X-Google-Smtp-Source: AA6agR4ooQgNyvGSBedKzPOVSNxL7PaXRTSiaL3eh/8HzCV27FgkpUxBQmODfbbFRFzAFLhywsacXA==
-X-Received: by 2002:a05:600c:3845:b0:3a3:227d:c1c6 with SMTP id s5-20020a05600c384500b003a3227dc1c6mr2467572wmr.9.1659523900775;
-        Wed, 03 Aug 2022 03:51:40 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6e48:fbdd:280d:6dac? ([2a05:6e02:1041:c10:6e48:fbdd:280d:6dac])
-        by smtp.googlemail.com with ESMTPSA id g11-20020a05600c4ecb00b003a02cbf862esm2331719wmq.13.2022.08.03.03.51.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 03:51:40 -0700 (PDT)
-Message-ID: <57687bbc-580a-ef07-bc50-6bc9f5c14ec9@linaro.org>
-Date:   Wed, 3 Aug 2022 12:51:38 +0200
+        with ESMTP id S230301AbiHCLq3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Aug 2022 07:46:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7F76350;
+        Wed,  3 Aug 2022 04:46:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0364611ED;
+        Wed,  3 Aug 2022 11:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985DBC433C1;
+        Wed,  3 Aug 2022 11:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659527188;
+        bh=nZKYmWlSa9XmyEdXHQ+cFtuL6uqFDd9bmmvA2/joacM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lKkKLODzWGt19SS6paH+uYnJ5WxQXsAszaZ7AR1vzbKUKoSB/WM4jsgXsFP2VXGW6
+         dMVEVVscVmkm3p1CJ+hugPdfDmRK99vq/r1MhATi+uhk5NZr1tS4jMKtaZoWLrMaJT
+         gjCkX0NNSbX/3uxpqPgxe2Kj6/Jg3lpcnGFEl5uE=
+Date:   Wed, 3 Aug 2022 13:46:25 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, yj.chiang@mediatek.com,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 5.4] thermal: Fix NULL pointer dereferences in
+ of_thermal_ functions
+Message-ID: <YupgEZ7jrxfpnE9s@kroah.com>
+References: <20220802034238.27127-1-mark-pk.tsai@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek
- folder
-Content-Language: en-US
-To:     Balsam CHIHI <bchihi@baylibre.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-References: <20220726135506.485108-1-bchihi@baylibre.com>
- <20220726135506.485108-2-bchihi@baylibre.com>
- <24250d03-b25f-e521-5abd-f36109885c36@linaro.org>
- <CAGuA+opxZ7DDrWHcnTRhMcm7YveCAypdy9MDSytt58asgekayw@mail.gmail.com>
- <CAGuA+ooOUXaBM+uPvEEohFLtO8sRd4T=DMcc6Fvo9P92gsq4yg@mail.gmail.com>
- <9b224465-e9e5-43d3-50eb-3614decbd8b2@linaro.org>
- <CAGuA+op-mO5ZMz_EvSOYUNiZ_4OOwLFQqFqMrCQBVMcG3mbcPQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAGuA+op-mO5ZMz_EvSOYUNiZ_4OOwLFQqFqMrCQBVMcG3mbcPQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802034238.27127-1-mark-pk.tsai@mediatek.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,37 +61,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Balsam,
-
-On 03/08/2022 10:41, Balsam CHIHI wrote:
-> On Fri, Jul 29, 2022 at 5:35 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> Hi Balsam,
->>
->> On 29/07/2022 17:21, Balsam CHIHI wrote:
->>
->> [ ... ]
->>
->> You may want to wait next week before sending a new version, I'm still
->> reviewing your series (note you can send it anyway if you prefer)
->>
+On Tue, Aug 02, 2022 at 11:42:16AM +0800, Mark-PK Tsai wrote:
+> From: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
 > 
-> Hi Daniel,
+> commit 96cfe05051fd8543cdedd6807ec59a0e6c409195 upstream.
 > 
-> Thank you for the review.
-> I have finished implementing the changes requested by the maintainers
-> and would like to resubmit the series.
-> Do I still have to wait for your feedback to send it again?
+> of_parse_thermal_zones() parses the thermal-zones node and registers a
+> thermal_zone device for each subnode. However, if a thermal zone is
+> consuming a thermal sensor and that thermal sensor device hasn't probed
+> yet, an attempt to set trip_point_*_temp for that thermal zone device
+> can cause a NULL pointer dereference. Fix it.
+> 
+>  console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
+>  ...
+>  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+>  ...
+>  Call trace:
+>   of_thermal_set_trip_temp+0x40/0xc4
+>   trip_point_temp_store+0xc0/0x1dc
+>   dev_attr_store+0x38/0x88
+>   sysfs_kf_write+0x64/0xc0
+>   kernfs_fop_write_iter+0x108/0x1d0
+>   vfs_write+0x2f4/0x368
+>   ksys_write+0x7c/0xec
+>   __arm64_sys_write+0x20/0x30
+>   el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
+>   do_el0_svc+0x28/0xa0
+>   el0_svc+0x14/0x24
+>   el0_sync_handler+0x88/0xec
+>   el0_sync+0x1c0/0x200
+> 
+> While at it, fix the possible NULL pointer dereference in other
+> functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
+> of_thermal_get_trend().
+> 
+> Suggested-by: David Collins <quic_collinsd@quicinc.com>
+> Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> ---
+>  drivers/thermal/of-thermal.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
 
-At your convenience, I'll review the new version if you send it
+Now queued up, thanks.
 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+greg k-h
