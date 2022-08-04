@@ -2,131 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAB95893D2
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Aug 2022 22:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAED589589
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 02:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbiHCUyz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Aug 2022 16:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S238888AbiHDA7h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Aug 2022 20:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236574AbiHCUyy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Aug 2022 16:54:54 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FE1E7D
-        for <linux-pm@vger.kernel.org>; Wed,  3 Aug 2022 13:54:53 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-10ea9ef5838so16697854fac.3
-        for <linux-pm@vger.kernel.org>; Wed, 03 Aug 2022 13:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qCvjB0XOGwom3VuKpUHiorVjWdQfyMRzQDadmEnUHfo=;
-        b=iH2cHiyXqK9lCPc7UF2E5siG7sE1VBvgiD6bj0XQ2XOZEaHWJVTEvWFzAA+rrjMZ7J
-         83IqAOQGL8q5iEALOWpLAFFRpwoS2W0T5hAzgenMRyTvAkanoMjyTA1vMnKZDjkRagYa
-         mZErqeI7eut841LPwAGXKQTDKHa/GLL+Sd9GY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qCvjB0XOGwom3VuKpUHiorVjWdQfyMRzQDadmEnUHfo=;
-        b=guZnag00iTWbvBfJQFzTbDgMO9W50eiHdXTOLRoKYMnSfWc3vGaCftYKANCxbCWR8J
-         lNaDaCgMdDL+7DbntHsUAZFHpzzAI1qOb43lEBa5beHQPQZi0G6OodvNFV66r+1bPgnC
-         KBR3WSEEcsdTufsu6PrjfgtccUL6yeLB+Tddr0HX0WyS8UsAMOhVF+jKogGtiosqsT+h
-         Wd/o5HIlGZJoFdSVgCJTSFQPvLvPyOE6V0FwKiqHD7+35qo51KsjP1Zf5HpHPm6nG/CS
-         J+yJnM2Qj4LAXi+Vl9+DCSnrok4fOq1HaljZXvLJw/pf5p8kYete2X2neYIHgStztWJ3
-         AUMQ==
-X-Gm-Message-State: ACgBeo0PM0qqyoj5AeKtVwkPWxu0hT5CsdgZ0/WWRdPXugS5+o4+lLjj
-        5DPXf5sRO5mO/jluMtFtcrv37gvaFI3xMQ==
-X-Google-Smtp-Source: AA6agR4yWswS1PIt5Cw8PK37pkYRHI3Oh0NGYnhjkrB4XR/N+xtg/6qyrKydU4AzwA2uIQ2dT2eXeQ==
-X-Received: by 2002:a05:6870:c0c5:b0:10d:5f5c:9ab1 with SMTP id e5-20020a056870c0c500b0010d5f5c9ab1mr2834735oad.156.1659560092752;
-        Wed, 03 Aug 2022 13:54:52 -0700 (PDT)
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com. [209.85.161.54])
-        by smtp.gmail.com with ESMTPSA id kw12-20020a056870ac0c00b0010be134ac60sm4637417oab.19.2022.08.03.13.54.52
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 13:54:52 -0700 (PDT)
-Received: by mail-oo1-f54.google.com with SMTP id j8-20020a4ac548000000b00435a8dd31a2so3197313ooq.5
-        for <linux-pm@vger.kernel.org>; Wed, 03 Aug 2022 13:54:52 -0700 (PDT)
-X-Received: by 2002:a05:6830:290a:b0:618:b519:53f5 with SMTP id
- z10-20020a056830290a00b00618b51953f5mr9795854otu.237.1659559753343; Wed, 03
- Aug 2022 13:49:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220504161439.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
- <Yumskea9UJ9n0uPz@sol.localdomain>
-In-Reply-To: <Yumskea9UJ9n0uPz@sol.localdomain>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 3 Aug 2022 13:48:37 -0700
-X-Gmail-Original-Message-ID: <CAE=gft4jTQY1N5X=Yyg6g6-e0EBPHKhnQxcX02NZU0mZxaTvwA@mail.gmail.com>
-Message-ID: <CAE=gft4jTQY1N5X=Yyg6g6-e0EBPHKhnQxcX02NZU0mZxaTvwA@mail.gmail.com>
-Subject: Re: [PATCH 04/10] security: keys: trusted: Allow storage of PCR
- values in creation data
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
+        with ESMTP id S238861AbiHDA7g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Aug 2022 20:59:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440655F9AF;
+        Wed,  3 Aug 2022 17:59:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B839861751;
+        Thu,  4 Aug 2022 00:59:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98755C433C1;
+        Thu,  4 Aug 2022 00:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659574773;
+        bh=c0/kYEt5J2FdFJ1FwCq/4THeVhzcRRwZ4/5qZhcI7OE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F4wcugpqGGlPXXs70am0ZjVTUrZiqaKLeXs3OasZWwFdN1LltdJ4eybaDZ6H0ns5y
+         v6uB4vaqKembrVC3p0SxJHJlHmqCBe/dU50f7AyBp/tWsTyk1HD4O6CQFuOE86dcid
+         G0Nh7kIvy/CPexZ3/IOJF+CQE9+d5L7VFpu9zaqeuuLR8Y/8SKN7+3Fo9SVGrqnfgC
+         tWWzGeEToXMW6Vex1z+NbfJubFno50C/TkJscFAhkDFvjh9xBPcOm8a1TjtrsB3vxT
+         czEg5uT1k7lwXWapU3btmj1gxrU2X4GutaCBtKlp3z9oqXiIdMQfSijMSZ/jNcKmNg
+         yzkbTbJIgOcIA==
+Date:   Thu, 4 Aug 2022 03:59:30 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Matthew Garrett <mgarrett@aurora.tech>
+Cc:     Evan Green <evgreen@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        LKML <linux-kernel@vger.kernel.org>,
         Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Gwendal Grignou <gwendal@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
         David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 00/10] Encrypted Hibernation
+Message-ID: <YusZ8gD/LjiAXadR@kernel.org>
+References: <20220504232102.469959-1-evgreen@chromium.org>
+ <20220506160807.GA1060@bug>
+ <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
+ <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
+ <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
+ <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
+ <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
+ <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 4:00 PM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Wed, May 04, 2022 at 04:20:56PM -0700, Evan Green wrote:
-> > diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-> > index aa108bea6739b3..2975827c01bec0 100644
-> > --- a/security/keys/trusted-keys/trusted_tpm1.c
-> > +++ b/security/keys/trusted-keys/trusted_tpm1.c
-> > @@ -713,6 +713,7 @@ enum {
-> >       Opt_hash,
-> >       Opt_policydigest,
-> >       Opt_policyhandle,
-> > +     Opt_creationpcrs,
-> >  };
+On Tue, Aug 02, 2022 at 11:36:43AM -0700, Matthew Garrett wrote:
+> On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
+> 
+> > One more bump here, as we'd really love to get encrypted hibernation
+> > to a form upstream would accept if at all possible. We were
+> > considering landing this in our Chrome OS tree for now, then coming
+> > back in a couple months with a "we've been baking this ourselves and
+> > it's going so great, oooh yeah". I'm not sure if upstream would find
+> > that compelling or not. But in any case, some guidance towards making
+> > this more upstream friendly would be well appreciated.
 > >
-> >  static const match_table_t key_tokens = {
-> > @@ -725,6 +726,7 @@ static const match_table_t key_tokens = {
-> >       {Opt_hash, "hash=%s"},
-> >       {Opt_policydigest, "policydigest=%s"},
-> >       {Opt_policyhandle, "policyhandle=%s"},
-> > +     {Opt_creationpcrs, "creationpcrs=%s"},
-> >       {Opt_err, NULL}
-> >  };
-> >
-> > @@ -858,6 +860,13 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
-> >                               return -EINVAL;
-> >                       opt->policyhandle = handle;
-> >                       break;
-> > +             case Opt_creationpcrs:
-> > +                     if (!tpm2)
-> > +                             return -EINVAL;
-> > +                     res = kstrtoint(args[0].from, 16, &opt->creation_pcrs);
-> > +                     if (res < 0)
-> > +                             return -EINVAL;
-> > +                     break;
->
-> I thought that TPM1 is deprecated.  Are you sure you need more TPM1 features?
+> > One thing I realized in attempting to pick this myself is that the
+> > trusted key blob format has moved to ASN.1. So I should really move
+> > the creation ticket to the new ASN.1 format (if I can figure out the
+> > right OID for that piece), which would allow me to drop a lot of the
+> > ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
+> > I'll work on that and resend.
+> 
+> I've been revamping my TPM-backed verified hibernation implementation
+> based on this work, so I'd definitely be enthusiastic about it being
+> mergeable.
 
-It seems that trusted_tpm1.c is not just TPM1 functions, but also
-common functions that call TPM2 primitives. A few of these functions
-(like this getoptions()) seem to even error out if !tpm_is_tpm2(chip).
+BTW, is it tested with QEMU + swtpm?
 
--Evan
+BR, Jarkko
