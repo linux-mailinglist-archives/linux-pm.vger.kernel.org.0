@@ -2,248 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DEE589DDD
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 16:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBCD589E8B
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 17:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239918AbiHDOtu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Aug 2022 10:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S239674AbiHDPVm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Aug 2022 11:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiHDOtt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 10:49:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 969E018C;
-        Thu,  4 Aug 2022 07:49:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15AEB11FB;
-        Thu,  4 Aug 2022 07:49:48 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.29.144])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5998F3F73B;
-        Thu,  4 Aug 2022 07:49:46 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 15:49:43 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2] firmware/psci: Add debugfs support to ease debugging
-Message-ID: <YuvchxwbbI3H+kxY@FVFF77S0Q05N.cambridge.arm.com>
-References: <20220804131507.3738094-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S235462AbiHDPVl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 11:21:41 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8B7248CF
+        for <linux-pm@vger.kernel.org>; Thu,  4 Aug 2022 08:21:39 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id y11so31245441lfs.6
+        for <linux-pm@vger.kernel.org>; Thu, 04 Aug 2022 08:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sLHXisZDzhQTu+IhZD1MGX5kdmZBF2E9OyEhDTPZJwU=;
+        b=MkFB+W3R4k/NmdzMtGvO5gm8bWIU/D3gqfEfki8sreQu/60nOhWupmHELrsdxsDNxS
+         WT7olF55X3+NnUwsGIK+/5xVeDIXpI3AZYGhlk8YbSW/qAp2+u8cYiH/JwAzsMfslxTQ
+         174s3nNsRf4FC6xCh/tS76iCgWBdiMvpYcRKkTLgY8ODyVSxWZA9kr64eG92gFiwPui2
+         hicquy9dQ4m1PDAd9L+Mp0rK9f5BbUOYYfEaiM4sX5fd8EgxoG1zIPQMhdT2u3pqsdFI
+         OTFWtje7TEcvipt37N3gDIsUQIEOPpT/CX8SEjySZASBM1mU4wCSdFM81FvEkI4yISn+
+         LVIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sLHXisZDzhQTu+IhZD1MGX5kdmZBF2E9OyEhDTPZJwU=;
+        b=1UlRRSAVMwgIKDI2Y1pPMG+wjny+Ev+ajMf3AgqVMP8PVCQqU7BCnT77I73SAJAWOU
+         W30TFworn9fej3Q/+JOhWxyteSkJQaso21FFRdHMHguz2XTKgDItN4/fIqtUEh9JF73a
+         3w9FhDV2R/pnyiOiHBJ4c72fSkPyBuWsY3jLtS8Dx/XAlZXw10BZgkv4tevIGYsd7yB5
+         eaKy9F0GpCnpKWsoDGtVw/Nc/6k5CZYP9FuF71e2xGs/OEN5sKfH25ZSJ/YTwAqLb833
+         AlgctyDE8DANGeLksx7v8sOlrSiV6dxOjv1peG4EY94gKdX2JE5eYsA/kAMH6WJbDtNx
+         7Aiw==
+X-Gm-Message-State: ACgBeo1hs1R1rmidJzBwznTzJhSQVVJGSlTg1q2bcHHFQUwypsYOJ2TH
+        IckqtPczi5iwP7VENxb7OB5XBA==
+X-Google-Smtp-Source: AA6agR7eeNfFMJaNN8k/ryXzsufMj3U/fkqVDVZELOmyQq1N/mh7D7XfeQg7tK35//Sy3EhyeaaZLw==
+X-Received: by 2002:a05:6512:2623:b0:48a:ac70:311 with SMTP id bt35-20020a056512262300b0048aac700311mr912828lfb.278.1659626498050;
+        Thu, 04 Aug 2022 08:21:38 -0700 (PDT)
+Received: from [192.168.1.6] ([77.222.167.48])
+        by smtp.gmail.com with ESMTPSA id v25-20020a2e4819000000b0025df04af0f0sm154942lja.51.2022.08.04.08.21.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 08:21:37 -0700 (PDT)
+Message-ID: <191fc051-f10c-3eb1-2810-ebfce2279bbd@linaro.org>
+Date:   Thu, 4 Aug 2022 17:21:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804131507.3738094-1-dmitry.baryshkov@linaro.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v8.1, 2/7] dt-bindings: thermal: Add binding document for
+ LVTS thermal controllers
+Content-Language: en-US
+To:     bchihi@baylibre.com, rafael@kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+References: <20220804130912.676043-1-bchihi@baylibre.com>
+ <20220804130912.676043-3-bchihi@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220804130912.676043-3-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 04:15:07PM +0300, Dmitry Baryshkov wrote:
-> To ease debugging of PSCI supported features, add debugfs file called
-> 'psci' describing PSCI and SMC CC versions, enabled features and
-> options.
+On 04/08/2022 15:09, bchihi@baylibre.com wrote:
+> From: Alexandre Bailon <abailon@baylibre.com>
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> This patch adds dt-binding documents for mt8192 and mt8195 thermal controllers.
+
+Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
+> 
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+
+Please rebase your patches on recent Linux kernel (or next).
+
 > ---
-> Changes since v1:
-> - Extended the table to include MEM_PROTECT functions (noted by Mark
->   Brown)
-> - Switched to seq_puts where possible
-> - Changed S_IRUGO to 0444
-> ---
->  drivers/firmware/psci/psci.c | 116 ++++++++++++++++++++++++++++++++++-
->  include/uapi/linux/psci.h    |  14 +++++
->  2 files changed, 129 insertions(+), 1 deletion(-)
-
-TBH I am really not keen on exposing this to userspace. AFAICT this is his is
-incredibly niche, and is going to be very painful to maintain.
-
-Without a strong rationale, I do not thing we should do this.
-
-Who is going to use this, and when?
-
-I'd be much happier logging stuff as it's probed into dmesg; I'm happy to add
-more information there (and/or a command line parameter to be more verbose).
-
-Thanks,
-Mark.
-
+>  .../thermal/mediatek,lvts-thermal.yaml        | 77 +++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
 > 
-> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> index 1628f1edef4a..42cae0ba10e2 100644
-> --- a/drivers/firmware/psci/psci.c
-> +++ b/drivers/firmware/psci/psci.c
-> @@ -9,6 +9,7 @@
->  #include <linux/acpi.h>
->  #include <linux/arm-smccc.h>
->  #include <linux/cpuidle.h>
-> +#include <linux/debugfs.h>
->  #include <linux/errno.h>
->  #include <linux/linkage.h>
->  #include <linux/of.h>
-> @@ -326,12 +327,125 @@ static void psci_sys_poweroff(void)
->  	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
->  }
->  
-> -static int __init psci_features(u32 psci_func_id)
-> +static int psci_features(u32 psci_func_id)
->  {
->  	return invoke_psci_fn(PSCI_1_0_FN_PSCI_FEATURES,
->  			      psci_func_id, 0, 0);
->  }
->  
-> +#ifdef CONFIG_DEBUG_FS
+> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> new file mode 100644
+> index 000000000000..53c44a73f3a4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> @@ -0,0 +1,77 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#define PSCI_ID(ver, _name) \
-> +	{ .fn = PSCI_##ver##_FN_##_name, .name = #_name, }
-> +#define PSCI_ID_NATIVE(ver, _name) \
-> +	{ .fn = PSCI_FN_NATIVE(ver, _name), .name = #_name, }
+> +title: MediaTek SoC LVTS thermal controller
 > +
-> +/* A table of all optional functions */
-> +static const struct {
-> +	u32 fn;
-> +	const char *name;
-> +} psci_fn_ids[] = {
-> +	PSCI_ID_NATIVE(0_2, MIGRATE),
-> +	PSCI_ID(0_2, MIGRATE_INFO_TYPE),
-> +	PSCI_ID_NATIVE(0_2, MIGRATE_INFO_UP_CPU),
-> +	PSCI_ID(1_0, CPU_FREEZE),
-> +	PSCI_ID_NATIVE(1_0, CPU_DEFAULT_SUSPEND),
-> +	PSCI_ID_NATIVE(1_0, NODE_HW_STATE),
-> +	PSCI_ID_NATIVE(1_0, SYSTEM_SUSPEND),
-> +	PSCI_ID(1_0, SET_SUSPEND_MODE),
-> +	PSCI_ID_NATIVE(1_0, STAT_RESIDENCY),
-> +	PSCI_ID_NATIVE(1_0, STAT_COUNT),
-> +	PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
-> +	PSCI_ID(1_1, MEM_PROTECT),
-> +	PSCI_ID_NATIVE(1_1, MEM_PROTECT_CHECK_RANGE),
-> +};
+> +maintainers:
+> +  - Yu-Chia Chang <ethan.chang@mediatek.com>
+> +  - Ben Tseng <ben.tseng@mediatek.com>
 > +
-> +static int psci_debugfs_read(struct seq_file *s, void *data)
-> +{
-> +	int feature, type, i;
-> +	u32 ver;
+
+Any reason why not referencing thermal-sensor.yaml?
+
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8192-lvts-ap
+> +      - mediatek,mt8192-lvts-mcu
+> +      - mediatek,mt8195-lvts-ap
+> +      - mediatek,mt8195-lvts-mcu
 > +
-> +	ver = psci_ops.get_version();
-> +	seq_printf(s, "PSCIv%d.%d\n",
-> +		   PSCI_VERSION_MAJOR(ver),
-> +		   PSCI_VERSION_MINOR(ver));
+> +  "#thermal-sensor-cells":
+> +    const: 1
 > +
-> +	/* PSCI_FEATURES is available only starting from 1.0 */
-> +	if (PSCI_VERSION_MAJOR(ver) < 1)
-> +		return 0;
+> +  reg:
+> +    maxItems: 2
+
+You need to describe the items (like nvmem-cells).
+
 > +
-> +	feature = psci_features(ARM_SMCCC_VERSION_FUNC_ID);
-> +	if (feature != PSCI_RET_NOT_SUPPORTED) {
-> +		ver = invoke_psci_fn(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0);
-> +		seq_printf(s, "SMC Calling Convention v%d.%d\n",
-> +			   PSCI_VERSION_MAJOR(ver),
-> +			   PSCI_VERSION_MINOR(ver));
-> +	} else {
-> +		seq_puts(s, "SMC Calling Convention v1.0 is assumed\n");
-> +	}
+> +  interrupts:
+> +    maxItems: 1
 > +
-> +	feature = psci_features(PSCI_FN_NATIVE(0_2, CPU_SUSPEND));
-> +	if (feature < 0) {
-> +		seq_printf(s, "PSCI_FEATURES(CPU_SUSPEND) error (%d)\n", feature);
-> +	} else {
-> +		seq_printf(s, "OSI is %ssupported\n",
-> +			   (feature & BIT(0)) ? "" : "not ");
-> +		seq_printf(s, "%s StateID format is used\n",
-> +			   (feature & BIT(1)) ? "Extended" : "Original");
-> +	}
+> +  clocks:
+> +    maxItems: 1
 > +
-> +	type = psci_ops.migrate_info_type();
-> +	if (type == PSCI_0_2_TOS_UP_MIGRATE ||
-> +	    type == PSCI_0_2_TOS_UP_NO_MIGRATE) {
-> +		unsigned long cpuid;
+> +  resets:
+> +    items:
+> +      - description: SW reset HW AP/MCU domain to clean temporary data on HW initialization/resume.
 > +
-> +		seq_printf(s, "Trusted OS %smigrate capable\n",
-> +			   type == PSCI_0_2_TOS_UP_NO_MIGRATE ? "not " : "");
-> +		cpuid = psci_migrate_info_up_cpu();
-> +		seq_printf(s, "Trusted OS resident on physical CPU 0x%lx (#%d)\n",
-> +			   cpuid, resident_cpu);
-> +	} else if (type == PSCI_0_2_TOS_MP) {
-> +		seq_puts(s, "Trusted OS migration not required\n");
-> +	} else {
-> +		if (type != PSCI_RET_NOT_SUPPORTED)
-> +			seq_printf(s, "MIGRATE_INFO_TYPE returned unknown type (%d)\n", type);
-> +	}
+> +  nvmem-cells:
+> +    items:
+> +      - description: LVTS calibration data 1 for thermal sensors
+> +      - description: LVTS calibration data 2 for thermal sensors
 > +
-> +	for (i = 0; i < ARRAY_SIZE(psci_fn_ids); i++) {
-> +		feature = psci_features(psci_fn_ids[i].fn);
-> +		if (feature == PSCI_RET_NOT_SUPPORTED)
-> +			continue;
-> +		if (feature < 0)
-> +			seq_printf(s, "PSCI_FEATURES(%s) error (%d)\n",
-> +				   psci_fn_ids[i].name, feature);
-> +		else
-> +			seq_printf(s, "%s is supported\n", psci_fn_ids[i].name);
-> +	}
+> +  nvmem-cell-names:
+> +    items:
+> +      - const: lvts_calib_data1
+> +      - const: lvts_calib_data2
 > +
-> +	return 0;
-> +}
+> +required:
+> +  - compatible
+> +  - '#thermal-sensor-cells'
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +  - nvmem-cells
+> +  - nvmem-cell-names
 > +
-> +static int psci_debugfs_open(struct inode *inode, struct file *f)
-> +{
-> +	return single_open(f, psci_debugfs_read, NULL);
-> +}
+> +additionalProperties: false
 > +
-> +static const struct file_operations psci_debugfs_ops = {
-> +	.owner = THIS_MODULE,
-> +	.open = psci_debugfs_open,
-> +	.release = single_release,
-> +	.read = seq_read,
-> +	.llseek = seq_lseek
-> +};
+> +examples:
+> +  - |
+> +    #include <dt-bindings/thermal/thermal.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/reset/mt8195-resets.h>
 > +
-> +static int __init psci_debugfs_init(void)
-> +{
-> +	return PTR_ERR_OR_ZERO(debugfs_create_file("psci", 0444, NULL, NULL,
-> +						   &psci_debugfs_ops));
-> +}
-> +late_initcall(psci_debugfs_init)
-> +#endif
-> +
->  #ifdef CONFIG_CPU_IDLE
->  static int psci_suspend_finisher(unsigned long state)
->  {
-> diff --git a/include/uapi/linux/psci.h b/include/uapi/linux/psci.h
-> index 2bf93c0d6354..3511095c2702 100644
-> --- a/include/uapi/linux/psci.h
-> +++ b/include/uapi/linux/psci.h
-> @@ -48,12 +48,26 @@
->  #define PSCI_0_2_FN64_MIGRATE_INFO_UP_CPU	PSCI_0_2_FN64(7)
->  
->  #define PSCI_1_0_FN_PSCI_FEATURES		PSCI_0_2_FN(10)
-> +#define PSCI_1_0_FN_CPU_FREEZE			PSCI_0_2_FN(11)
-> +#define PSCI_1_0_FN_CPU_DEFAULT_SUSPEND		PSCI_0_2_FN(12)
-> +#define PSCI_1_0_FN_NODE_HW_STATE		PSCI_0_2_FN(13)
->  #define PSCI_1_0_FN_SYSTEM_SUSPEND		PSCI_0_2_FN(14)
->  #define PSCI_1_0_FN_SET_SUSPEND_MODE		PSCI_0_2_FN(15)
-> +#define PSCI_1_0_FN_STAT_RESIDENCY		PSCI_0_2_FN(16)
-> +#define PSCI_1_0_FN_STAT_COUNT			PSCI_0_2_FN(17)
-> +
->  #define PSCI_1_1_FN_SYSTEM_RESET2		PSCI_0_2_FN(18)
-> +#define PSCI_1_1_FN_MEM_PROTECT			PSCI_0_2_FN(19)
-> +#define PSCI_1_1_FN_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN(19)
->  
-> +#define PSCI_1_0_FN64_CPU_DEFAULT_SUSPEND	PSCI_0_2_FN64(12)
-> +#define PSCI_1_0_FN64_NODE_HW_STATE		PSCI_0_2_FN64(13)
->  #define PSCI_1_0_FN64_SYSTEM_SUSPEND		PSCI_0_2_FN64(14)
-> +#define PSCI_1_0_FN64_STAT_RESIDENCY		PSCI_0_2_FN64(16)
-> +#define PSCI_1_0_FN64_STAT_COUNT		PSCI_0_2_FN64(17)
-> +
->  #define PSCI_1_1_FN64_SYSTEM_RESET2		PSCI_0_2_FN64(18)
-> +#define PSCI_1_1_FN64_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN64(19)
->  
->  /* PSCI v0.2 power state encoding for CPU_SUSPEND function */
->  #define PSCI_0_2_POWER_STATE_ID_MASK		0xffff
-> -- 
-> 2.35.1
-> 
+> +      lvtsmcu: thermal-sensor@11278000 {
+
+Mixed-up indentation.
+
+Best regards,
+Krzysztof
