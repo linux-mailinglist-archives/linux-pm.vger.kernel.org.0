@@ -2,127 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D039C58A3D9
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 01:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425D158A3EB
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 01:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236637AbiHDXUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Aug 2022 19:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S232163AbiHDXbB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Aug 2022 19:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiHDXUX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 19:20:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C88848E85;
-        Thu,  4 Aug 2022 16:20:22 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8887A6601B8B;
-        Fri,  5 Aug 2022 00:20:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659655220;
-        bh=T0qa+MBJicKTTAZecGrlpW67BsO3JhfQBcWJNXRa4zk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hH1TgnyvKoh2vVAqSo9D86sEPyQp9coth65EX7I5eUQx1zM2/dicl2FTfdJNQkBvz
-         KspkfArJl68MM4tj//R3mx7eW/CtBz4mI4gHGSGG5+uG5cRKXeglv9/eh05xzedmgr
-         JaWDG3SAxSgKH+1d0PsF2WmRgKqPce6H535Wx2LfoWCQjSMwwLcPvkCOO2FvoBvT2/
-         bipN9umw3NmBsHaIQVOugavHQ+tnhuE05FMe5rX60Y8VSfX7HE37VyasHD9nGbhh+A
-         Fil0Mc38682UP0nno7MpyiPESI3P3ShO669oOE7bSswoeY3tTVh4+Yv1ZKS4gGsi+I
-         2NnqbtkScB3ng==
-Date:   Thu, 4 Aug 2022 19:20:15 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     bchihi@baylibre.com
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Subject: Re: [PATCH v8.1, 3/7] arm64: dts: mt8192: Add thermal zone
-Message-ID: <20220804232015.wz23cjuh73zceoa5@notapiano>
-References: <20220804130912.676043-1-bchihi@baylibre.com>
- <20220804130912.676043-4-bchihi@baylibre.com>
+        with ESMTP id S230432AbiHDXbA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 19:31:00 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2F56E8B3;
+        Thu,  4 Aug 2022 16:30:59 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 274NUNmE128600;
+        Thu, 4 Aug 2022 18:30:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1659655823;
+        bh=HUDX6vDFz8YIrTjZ3w2uA6MHjjFNKz+nOiOMOApIlwo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=QXdaSe0dmFO3V/910XSiFZ2GSl7OasFfKaR5JOdJrTlwCSpiSO3pD9EScDXWLF2qO
+         XGG3X8jPPLBwY79j5SvhYI5kdRZ59+sIBaJsDtoz7lJL/BfJClTPQEI61n28bfFcP4
+         7iV5Z7v5Jy0ha2J10ITgGoeYlj26V75KdhgI019I=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 274NUMbK014332
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 4 Aug 2022 18:30:22 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 4
+ Aug 2022 18:30:22 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 4 Aug 2022 18:30:22 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 274NUMad019136;
+        Thu, 4 Aug 2022 18:30:22 -0500
+Date:   Thu, 4 Aug 2022 18:30:22 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+CC:     <daniel.lezcano@linaro.org>, <rafael@kernel.org>,
+        <rui.zhang@intel.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <khilman@baylibre.com>,
+        <abailon@baylibre.com>, <lukasz.luba@arm.com>,
+        <broonie@kernel.org>, <damien.lemoal@opensource.wdc.com>,
+        <heiko@sntech.de>, <hayashi.kunihiko@socionext.com>,
+        <mhiramat@kernel.org>, <talel@amazon.com>,
+        <thierry.reding@gmail.com>, <digetx@gmail.com>,
+        <jonathanh@nvidia.com>, <anarsoul@gmail.com>,
+        <tiny.windzz@gmail.com>, <baolin.wang7@gmail.com>,
+        <f.fainelli@gmail.com>, <bjorn.andersson@linaro.org>,
+        <mcoquelin.stm32@gmail.com>, <glaroque@baylibre.com>,
+        <miquel.raynal@bootlin.com>, <shawnguo@kernel.org>,
+        <niklas.soderlund@ragnatech.se>, <matthias.bgg@gmail.com>,
+        <j-keerthy@ti.com>, Amit Kucheria <amitk@kernel.org>
+Subject: Re: [PATCH v5 21/33] thermal/drivers/banggap: Switch to new of API
+Message-ID: <20220804233022.xmbaapjco47dldj6@bryanbrattlof.com>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220804224349.1926752-22-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220804130912.676043-4-bchihi@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220804224349.1926752-22-daniel.lezcano@linexp.org>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 03:09:08PM +0200, bchihi@baylibre.com wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
+On August  5, 2022 thus sayeth Daniel Lezcano:
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
 > 
-> This adds the thermal zone for the mt8192.
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
 > 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+
+Reviewed-by: Bryan Brattlof <bb@ti.com>
+
 > ---
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 113 ++++++++++++++++++++++-
->  1 file changed, 112 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index cbae5a5ee4a0..3320b5c14ee3 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-[..]
-> +		vdec-thermal {
+>  drivers/thermal/k3_bandgap.c       | 12 ++++++------
+>  drivers/thermal/k3_j72xx_bandgap.c | 12 +++++-------
+>  2 files changed, 11 insertions(+), 13 deletions(-)
+>
 
-		infra-thermal
+Thanks for updating the drivers!
 
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 4>;
-> +		};
-> +		img-thermal {
-
-		cam-thermal
-
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 5>;
-> +		};
-> +		infra-thermal {
-
-		md1-thermal
-
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 6>;
-> +		};
-> +		cam1-thermal {
-
-		md2-thermal
-
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 7>;
-> +		};
-> +		cam2-thermal {
-
-		md3-thermal
-
-Thanks,
-Nícolas
-
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 8>;
-> +		};
-> +	};
->  };
-> -- 
-> 2.34.1
-> 
-> 
+~Bryan
