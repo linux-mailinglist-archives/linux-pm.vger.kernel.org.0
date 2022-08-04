@@ -2,98 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D5D58A29A
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 22:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD0058A2F0
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 23:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbiHDU6p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Aug 2022 16:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        id S237103AbiHDV4Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Aug 2022 17:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiHDU6o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 16:58:44 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0422A253;
-        Thu,  4 Aug 2022 13:58:43 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id t22so779070lfg.1;
-        Thu, 04 Aug 2022 13:58:43 -0700 (PDT)
+        with ESMTP id S234184AbiHDV4P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 17:56:15 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C549E15827
+        for <linux-pm@vger.kernel.org>; Thu,  4 Aug 2022 14:56:13 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10edfa2d57dso1104185fac.0
+        for <linux-pm@vger.kernel.org>; Thu, 04 Aug 2022 14:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=HHRxra4X537rFoFLJVgbKCdXy3OgEpyBQ3xZYMyvpjQ=;
-        b=RmYddp5MQJnZzXnr8V2AYL6D/FVJBs0IagfHmjm/yzhO1l9jSKd4IFV2QMdxuCeSLy
-         Wct5aoV58PnZVzkpPjTA9+I/s3kzdtD8V/izMHLlSJeI1DiCI6pZCoyd0GIeQ9cbGFIO
-         UyuizjsIA9ysCGBiJTdxuuAughj61pBJFqEmFnAzR7OKmuQ/k5mUNXSx8muv1MHEc6a+
-         zUWRuz67D3GXvFo1aYvPMu0WoyVd/WP9OKd4lx8HSLKE6wPraRYX/jqg3dCxH9lHyvFJ
-         6O/1r+vG7EhyfjJgjOvqmw1JCz/9QfYp6oT7JOCs9fU0bR0jgL/GT0eTZwcvKDbaMAmX
-         EF9A==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=A3KaqbTDvr6yI86EPzA1l0NOPWv07KWx997g85QsDx4=;
+        b=V06sSFt2ksPjM8k6wnSbaG2QkPaVwvcAPAKnSzq34sTv9ksxh2OqhTuqg8SpivF9Y0
+         BeAYJPw9WS7SWCrlAS2ZuZhlUV0Va814LRQgaD8u4FmAed6qJn5lA7YVe7jiuQtzViV2
+         U2pdwnl+QBpBXtgGdP1BnbBo3Ok4S5SQTNkLc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=HHRxra4X537rFoFLJVgbKCdXy3OgEpyBQ3xZYMyvpjQ=;
-        b=3Rvts7jxHQUE4lpbGJ3UiRLmpHJHa2dpA9t2F9ydhDhJCwWn3xcv3mRMJbl1VGVrHY
-         +dASQmocYdzarWjhBjxFnkQMD7+13Go79F2+hTaEP8Gg0Ezat829yjdOpW5hyQib+kmI
-         +g3eAAAHyCNdofUEhORjsR3JEZjBb1WYIGyrwoevzjt9RHSo5zqrjLtThmY8seQUMfDF
-         zJVWMqyhOSpDA0CaSFpDlpNghCER2Q8fSBeoxjCcKApwDbFPvmEW99vaW4JyyxWcHCBo
-         Lu0cfITSXUz1PW6dufNnV9o35HQi6YxSNucKZPNGBOkrpL02WtLUAoJRq1pN4ROtjW2q
-         WIAg==
-X-Gm-Message-State: ACgBeo2PgabxHeq6GtWPPrfFLp4H2xPyYsignxpgt6Ei3a+dzEJzhxZ1
-        +fjeK1oDppllELnGwiU11zY=
-X-Google-Smtp-Source: AA6agR5EKgutuExmcrsuCmY+FSTABsMDT5T5D217XKizNZ3lCL5+bACCWYACNuHci4qxuT3uksCwRw==
-X-Received: by 2002:a05:6512:2806:b0:48a:f74d:da0e with SMTP id cf6-20020a056512280600b0048af74dda0emr1415679lfb.477.1659646721622;
-        Thu, 04 Aug 2022 13:58:41 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru. [109.252.119.232])
-        by smtp.googlemail.com with ESMTPSA id s9-20020ac24649000000b0048a9e899693sm238517lfo.16.2022.08.04.13.58.40
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=A3KaqbTDvr6yI86EPzA1l0NOPWv07KWx997g85QsDx4=;
+        b=4QEiH3gRbvK3PmykkW09DjX1fN58qknn0OPEBSPzxd12eiY5F58B4p1mqBsE6SVzXv
+         dT9w0h2H/sbZlfnDLyYzXBJ5hPLCyuL9TYTCnrBvwpZ5tkirETcLQrbUU/dvg/Oo8Zi0
+         LpXn/gme2aIKGTXDF2MUKWbLwaZ8mt1ok++Tbk9Pjl0h3aVHxUr2IK3SY4aK/kZWKd5e
+         Bcs+y9Za7ea1TmJnvCOzShErCt62U2rDhXwT7P+P/XNj9TtcSniYDh0JBTMJccNwaIf8
+         PY8UH8U25QWfs3fk+6HazChZSPh4vnOdjaDoxp6ipZCIBZcA1n+8Zf74xWH7dkFBUkbZ
+         Ckfg==
+X-Gm-Message-State: ACgBeo2YpUpSSIA/SW/SpWCneAmqaTgQMSkzxE2FstogKP2CxNqyvgZx
+        CZV/nZOAHkKpU4eCefHxyCfp7i8QTV7Z3A==
+X-Google-Smtp-Source: AA6agR7NWe/wGTX9lNTs50epxcc2LL6a8cfpAqXiKQTKPJpx7foWNot8qBjhsU0oZmc+dIJNYkj/pA==
+X-Received: by 2002:a05:6870:9613:b0:10d:cc11:62ec with SMTP id d19-20020a056870961300b0010dcc1162ecmr5316319oaq.9.1659650172920;
+        Thu, 04 Aug 2022 14:56:12 -0700 (PDT)
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com. [209.85.160.42])
+        by smtp.gmail.com with ESMTPSA id 185-20020a4a0dc2000000b004359da266b4sm367552oob.14.2022.08.04.14.56.11
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 13:58:40 -0700 (PDT)
-Message-ID: <1355f1f6-d6c9-6d5f-9b5f-333084c6561b@gmail.com>
-Date:   Thu, 4 Aug 2022 23:58:34 +0300
+        Thu, 04 Aug 2022 14:56:12 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-10ea7d8fbf7so1030578fac.7
+        for <linux-pm@vger.kernel.org>; Thu, 04 Aug 2022 14:56:11 -0700 (PDT)
+X-Received: by 2002:a05:6870:b4a1:b0:10e:50b8:50aa with SMTP id
+ y33-20020a056870b4a100b0010e50b850aamr1952047oap.174.1659650171298; Thu, 04
+ Aug 2022 14:56:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC] PM: domains: Reverse the order of performance and enabling
- ops
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
+References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
+ <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
+ <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
+ <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
+ <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
+ <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
+ <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com> <YusZ8gD/LjiAXadR@kernel.org>
+In-Reply-To: <YusZ8gD/LjiAXadR@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Thu, 4 Aug 2022 14:55:35 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
+Message-ID: <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Encrypted Hibernation
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Matthew Garrett <mgarrett@aurora.tech>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20220720110246.762939-1-abel.vesa@linaro.org>
- <CAPDyKFoh8UV=QC6RhOkc=FSvoeqF_UiWp97h0Qp8dniB=sS+8A@mail.gmail.com>
- <YuA0luCtQ1J+ExBi@linaro.org>
- <CAPDyKFo4tryzYQK=q6aPGxocmoq=duC2B1RMh1QoV_maVCApjA@mail.gmail.com>
- <20220729094646.xqlhfjzxo3gk4n27@linaro.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220729094646.xqlhfjzxo3gk4n27@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Gwendal Grignou <gwendal@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-29.07.2022 12:46, Abel Vesa пишет:
->> I have looped in Dmitry and Thierry to see if they think the change
->> should be fine for Tegra platforms too.
->>
-> Good. But the tegra usecase uses only the ->set_performance and does not
-> use ->power_on and ->power_off for that specific PD. So I don't think
-> their usecase will be affected by the order reverse.
-> 
+On Wed, Aug 3, 2022 at 5:59 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Tue, Aug 02, 2022 at 11:36:43AM -0700, Matthew Garrett wrote:
+> > On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
+> >
+> > > One more bump here, as we'd really love to get encrypted hibernation
+> > > to a form upstream would accept if at all possible. We were
+> > > considering landing this in our Chrome OS tree for now, then coming
+> > > back in a couple months with a "we've been baking this ourselves and
+> > > it's going so great, oooh yeah". I'm not sure if upstream would find
+> > > that compelling or not. But in any case, some guidance towards making
+> > > this more upstream friendly would be well appreciated.
+> > >
+> > > One thing I realized in attempting to pick this myself is that the
+> > > trusted key blob format has moved to ASN.1. So I should really move
+> > > the creation ticket to the new ASN.1 format (if I can figure out the
+> > > right OID for that piece), which would allow me to drop a lot of the
+> > > ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
+> > > I'll work on that and resend.
+> >
+> > I've been revamping my TPM-backed verified hibernation implementation
+> > based on this work, so I'd definitely be enthusiastic about it being
+> > mergeable.
+>
+> BTW, is it tested with QEMU + swtpm?
 
-For Tegra it indeed shouldn't change anything.
+For myself, so far I've been testing on a recent Intel Chromebook. The
+H1 (aka cr50) security chip on modern chromebooks implements a subset
+[1] of TPM2.0, and is exposed through the standard TPM APIs in the
+kernel. I can make sure to test on Qemu as well, is there anything in
+particular I should look out for?
+
+-Evan
+
+[1] https://chromium-review.googlesource.com/c/chromiumos/third_party/tpm2/+/3373466
+
+>
+> BR, Jarkko
