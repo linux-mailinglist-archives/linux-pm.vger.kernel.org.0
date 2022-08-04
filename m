@@ -2,368 +2,257 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9005F589C4C
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 15:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63515589C66
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 15:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239828AbiHDNKj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Aug 2022 09:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        id S239793AbiHDNPf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Aug 2022 09:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239822AbiHDNKU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 09:10:20 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58131D31D
-        for <linux-pm@vger.kernel.org>; Thu,  4 Aug 2022 06:10:09 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id l19so3532551wms.1
-        for <linux-pm@vger.kernel.org>; Thu, 04 Aug 2022 06:10:09 -0700 (PDT)
+        with ESMTP id S229625AbiHDNPc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 09:15:32 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CB223B
+        for <linux-pm@vger.kernel.org>; Thu,  4 Aug 2022 06:15:10 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id y23so11761540ljh.12
+        for <linux-pm@vger.kernel.org>; Thu, 04 Aug 2022 06:15:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cla0lM4BldOpdb6hEqlLWVngdnoWs3axmUG8txIxp54=;
-        b=IJrM87wbpGCvXj70KwixdInKdcktY/525oInwlXZaqH3/HWmLnQHPLGgV+IzGKCQLD
-         qaD0iwZSqgD09TxvOOWc3+rvefb0CTTt6K0PGyuhVFHolhiaIFpR00ot+3GsmOjrlElz
-         V2o1Pi8oxEDLoiCoDc5z31p+P2foC+McHOht/KSu3FHsuV/idbm47AWTqHW0Tf/zJi7m
-         t+yBUQfVe7YlI/5q6UsvrzgV9shJKZ/GA0R+dfw3mnhCDlNDHA2wnb1x7tP5w6N+IRDQ
-         Yc0gXiSxBA24lnN4Pt9ygruZrDJMZ0gxwD0zvBg9PvZ96yZxfA7nDCEWh8EownBGPOIk
-         Lq9g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=YLKjqf0VvdQs4ZVB34r7qRpi2pa/ZZY9gx5hzXjZQeI=;
+        b=hCWiXPnxornHE/1vIe/gF4E7vKv8l00mxjcv41svwsOkteFpVJsiIKE5lcZhpZkq/d
+         lx013rfy4nGxTjGf6qa8MHuNGWQrHNTS02EfSW8GnaN/pnGj1mcj7G3qX4xzNOXDVCO+
+         AFhJDrPDNh4xDc1N2AHbZ22cF2d2EFwsl3Ok3zdILbOZmU4u8XjRMA/Ca/fOJP8+iUAM
+         g3JZdd+YGfdj1xResOTYURkISMUW99V19m/fcSq5196fsQ0ft8BDY2hsQnUBZdLOCWus
+         iIeV4aQk9Pls6757U98bNCYmo8oOQJ89gPrhkBcJs/UTV7aRLfKayR2wri8mVrPdiF4+
+         voGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cla0lM4BldOpdb6hEqlLWVngdnoWs3axmUG8txIxp54=;
-        b=XhGK0hPYLxXkGbQyl0bvFAHH/VEuAox2fgbRE3m6mne+UO89ay9JmHCTxokdiVNr8Y
-         Chty7DVXGCowzYIYdtoAZ8be5dznoSAiD8bIsbt2Jj5/hfnjgam7L75BDDQEy3r6y2qv
-         LGLvnBozRbOW58NL/OBW5ScdQozC8JeLYGaq9SPEKL9xB6NcNL4DjjySPP2952LZvZAx
-         ahCyPSHt6+KtkywbVZ7gh0C7Spk839zY/kVCDWX4qOLUxhEj2cjay47Euey0xMPCcxAK
-         rT9WVefaYD7yC8WnmwXNrMnGycShvgaslJnEPGKifp6IHgWcB8ouMBO9X55EH3BSQ8l4
-         EMog==
-X-Gm-Message-State: ACgBeo00ecJ/C2415sM2hCJborHaqQmf6S74OSVzvvELchxer/uMZxaP
-        EJeigjn/1xZ0GscKacvSJ+zI6g==
-X-Google-Smtp-Source: AA6agR4FHom/Hb5zs4LT+11P8Qnc2UjkasWQfOka/HpKPxrvCMFaQXG6iQpiiTxD44HRyTYVlSeb9Q==
-X-Received: by 2002:a05:600c:3556:b0:3a3:2a9c:f26 with SMTP id i22-20020a05600c355600b003a32a9c0f26mr6193299wmq.58.1659618609259;
-        Thu, 04 Aug 2022 06:10:09 -0700 (PDT)
-Received: from Balsam-ThinkPad-T480.. (235.163.185.81.rev.sfr.net. [81.185.163.235])
-        by smtp.gmail.com with ESMTPSA id o15-20020adfcf0f000000b0021d6a520ce9sm1156817wrj.47.2022.08.04.06.10.07
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=YLKjqf0VvdQs4ZVB34r7qRpi2pa/ZZY9gx5hzXjZQeI=;
+        b=myUsebDojvv19wLunXIMPVmke7+iWn6j+1AV5opv3EfM/iaRk1uTw4g+x7lB75zEga
+         XuZ25Aj/ySw2dT2IQxjJM7HymKHO71/Fn9qI6Kl9sGsuLqfQRCJiB/apIjEsooo3mj4C
+         +JB0VnUqmkbzAwYaeBSrfe3SXEXwCH2L26OFDbjUnKUIgH3NsGgz+LYfhsgNHbh0Qrcj
+         O2wyZRA2y7sns4hRuX8hfOx/Xh/aF+9xi4nvqiES051xd0VsQj0PEwJrz/7VVkmZIw/u
+         iRLQuPETtYldwJ240OYuTdrHLZQ07xDyGulAn7S5uw9uLFKndDNgKEk76BFG56iR4lne
+         4rRQ==
+X-Gm-Message-State: ACgBeo00UgHgZvp8J789747LVp8Ie/RiTIMQQgMX/YxEnTCl8WGxwL5G
+        wJ1Llj9L2KK06M/gcoBaUYBGCQ==
+X-Google-Smtp-Source: AA6agR4TLbdWdH1RYUJBGjNB+8FVQjh0ywk80UgDvIHshYDZL/cJCffT+h3ScJwUg9i59OtRDJEa5w==
+X-Received: by 2002:a05:651c:903:b0:25d:e732:6409 with SMTP id e3-20020a05651c090300b0025de7326409mr590228ljq.314.1659618908361;
+        Thu, 04 Aug 2022 06:15:08 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b0048b183d9752sm119489lfr.211.2022.08.04.06.15.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 06:10:08 -0700 (PDT)
-From:   bchihi@baylibre.com
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Subject: [PATCH v8.1, 7/7] thermal: mediatek: Add thermal zone settings for mt8195
-Date:   Thu,  4 Aug 2022 15:09:12 +0200
-Message-Id: <20220804130912.676043-8-bchihi@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220804130912.676043-1-bchihi@baylibre.com>
-References: <20220804130912.676043-1-bchihi@baylibre.com>
+        Thu, 04 Aug 2022 06:15:07 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2] firmware/psci: Add debugfs support to ease debugging
+Date:   Thu,  4 Aug 2022 16:15:07 +0300
+Message-Id: <20220804131507.3738094-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Michael Kao <michael.kao@mediatek.com>
+To ease debugging of PSCI supported features, add debugfs file called
+'psci' describing PSCI and SMC CC versions, enabled features and
+options.
 
-Add thermal zone settings for mt8195
-
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/thermal/mediatek/lvts_thermal.h |   1 +
- drivers/thermal/mediatek/lvts_v4.c      | 223 ++++++++++++++++++++++++
- 2 files changed, 224 insertions(+)
+Changes since v1:
+- Extended the table to include MEM_PROTECT functions (noted by Mark
+  Brown)
+- Switched to seq_puts where possible
+- Changed S_IRUGO to 0444
+---
+ drivers/firmware/psci/psci.c | 116 ++++++++++++++++++++++++++++++++++-
+ include/uapi/linux/psci.h    |  14 +++++
+ 2 files changed, 129 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.h b/drivers/thermal/mediatek/lvts_thermal.h
-index 9095f9cd232b..4db2c135661e 100644
---- a/drivers/thermal/mediatek/lvts_thermal.h
-+++ b/drivers/thermal/mediatek/lvts_thermal.h
-@@ -16,6 +16,7 @@
- #define FEATURE_DEVICE_AUTO_RCK	BIT(0)
- #define NUM_EFUSE_ADDR			22
- #define NUM_EFUSE_BLOCK_MT8192	1
-+#define NUM_EFUSE_BLOCK_MT8195	2
- #define DEFAULT_GOLDEN_TEMP		50
- #define DEFAULT_CUONT_R			35000
- #define DEFAULT_CUONT_RC		2750
-diff --git a/drivers/thermal/mediatek/lvts_v4.c b/drivers/thermal/mediatek/lvts_v4.c
-index 6477d386c9e1..e216b66625db 100644
---- a/drivers/thermal/mediatek/lvts_v4.c
-+++ b/drivers/thermal/mediatek/lvts_v4.c
-@@ -32,6 +32,31 @@ enum mt8192_lvts_ap_sensor_enum {
- 	MT8192_NUM_TS_AP
- };
- 
-+enum mt8195_lvts_mcu_sensor_enum {
-+	MT8195_TS1_0,		// cpu_big1
-+	MT8195_TS1_1,		// cpu_big2
-+	MT8195_TS2_0,		// cpu_big3
-+	MT8195_TS2_1,		// cpu_big4
-+	MT8195_TS3_0,		// cpu_little1
-+	MT8195_TS3_1,		// cpu_little2
-+	MT8195_TS3_2,		// cpu_little3
-+	MT8195_TS3_3,		// cpu_little4
-+	MT8195_NUM_TS_MCU
-+};
-+
-+enum mt8195_lvts_ap_sensor_enum {
-+	MT8195_TS4_0,		// vpu1
-+	MT8195_TS4_1,		// vpu2
-+	MT8195_TS5_0,		// gpu1
-+	MT8195_TS5_1,		// gpu2
-+	MT8195_TS6_0,		// vdec
-+	MT8195_TS6_1,		// img
-+	MT8195_TS6_2,		// infra
-+	MT8195_TS7_0,		// cam1
-+	MT8195_TS7_1,		// cam2
-+	MT8195_NUM_TS_AP
-+};
-+
- static void mt8192_mcu_efuse_to_cal_data(struct lvts_data *lvts_data)
- {
- 	const unsigned int mt8192_ts[] = { MT8192_TS2_0, MT8192_TS3_0 };
-@@ -74,6 +99,60 @@ static void mt8192_ap_efuse_to_cal_data(struct lvts_data *lvts_data)
- 	}
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index 1628f1edef4a..42cae0ba10e2 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -9,6 +9,7 @@
+ #include <linux/acpi.h>
+ #include <linux/arm-smccc.h>
+ #include <linux/cpuidle.h>
++#include <linux/debugfs.h>
+ #include <linux/errno.h>
+ #include <linux/linkage.h>
+ #include <linux/of.h>
+@@ -326,12 +327,125 @@ static void psci_sys_poweroff(void)
+ 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
  }
  
-+static void mt8195_mcu_efuse_to_cal_data(struct lvts_data *lvts_data)
+-static int __init psci_features(u32 psci_func_id)
++static int psci_features(u32 psci_func_id)
+ {
+ 	return invoke_psci_fn(PSCI_1_0_FN_PSCI_FEATURES,
+ 			      psci_func_id, 0, 0);
+ }
+ 
++#ifdef CONFIG_DEBUG_FS
++
++#define PSCI_ID(ver, _name) \
++	{ .fn = PSCI_##ver##_FN_##_name, .name = #_name, }
++#define PSCI_ID_NATIVE(ver, _name) \
++	{ .fn = PSCI_FN_NATIVE(ver, _name), .name = #_name, }
++
++/* A table of all optional functions */
++static const struct {
++	u32 fn;
++	const char *name;
++} psci_fn_ids[] = {
++	PSCI_ID_NATIVE(0_2, MIGRATE),
++	PSCI_ID(0_2, MIGRATE_INFO_TYPE),
++	PSCI_ID_NATIVE(0_2, MIGRATE_INFO_UP_CPU),
++	PSCI_ID(1_0, CPU_FREEZE),
++	PSCI_ID_NATIVE(1_0, CPU_DEFAULT_SUSPEND),
++	PSCI_ID_NATIVE(1_0, NODE_HW_STATE),
++	PSCI_ID_NATIVE(1_0, SYSTEM_SUSPEND),
++	PSCI_ID(1_0, SET_SUSPEND_MODE),
++	PSCI_ID_NATIVE(1_0, STAT_RESIDENCY),
++	PSCI_ID_NATIVE(1_0, STAT_COUNT),
++	PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
++	PSCI_ID(1_1, MEM_PROTECT),
++	PSCI_ID_NATIVE(1_1, MEM_PROTECT_CHECK_RANGE),
++};
++
++static int psci_debugfs_read(struct seq_file *s, void *data)
 +{
-+	struct lvts_sensor_cal_data *cal_data = &lvts_data->cal_data;
++	int feature, type, i;
++	u32 ver;
 +
-+	cal_data->golden_temp = GET_CAL_DATA_BITMASK(0, lvts_data, 31, 24);
++	ver = psci_ops.get_version();
++	seq_printf(s, "PSCIv%d.%d\n",
++		   PSCI_VERSION_MAJOR(ver),
++		   PSCI_VERSION_MINOR(ver));
 +
-+	cal_data->count_r[MT8195_TS1_0] = GET_CAL_DATA_BITMASK(1, lvts_data, 23, 0);
-+	cal_data->count_r[MT8195_TS1_1] = (GET_CAL_DATA_BITMASK(2, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(1, lvts_data, 31, 24);
-+	cal_data->count_r[MT8195_TS2_0] = GET_CAL_DATA_BITMASK(3, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS2_1] = GET_CAL_DATA_BITMASK(4, lvts_data, 23, 0);
-+	cal_data->count_r[MT8195_TS3_0] = (GET_CAL_DATA_BITMASK(6, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(5, lvts_data, 31, 16);
-+	cal_data->count_r[MT8195_TS3_1] = GET_CAL_DATA_BITMASK(6, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS3_2] = GET_CAL_DATA_BITMASK(7, lvts_data, 23, 0);
-+	cal_data->count_r[MT8195_TS3_3] = (GET_CAL_DATA_BITMASK(8, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(7, lvts_data, 31, 24);
++	/* PSCI_FEATURES is available only starting from 1.0 */
++	if (PSCI_VERSION_MAJOR(ver) < 1)
++		return 0;
 +
-+	cal_data->count_rc[MT8195_TS1_0] = (GET_CAL_DATA_BITMASK(3, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(2, lvts_data, 31, 16);
-+	cal_data->count_rc[MT8195_TS2_0] = (GET_CAL_DATA_BITMASK(5, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(4, lvts_data, 31, 24);
-+	cal_data->count_rc[MT8195_TS3_0] = (GET_CAL_DATA_BITMASK(9, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(8, lvts_data, 31, 16);
++	feature = psci_features(ARM_SMCCC_VERSION_FUNC_ID);
++	if (feature != PSCI_RET_NOT_SUPPORTED) {
++		ver = invoke_psci_fn(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0);
++		seq_printf(s, "SMC Calling Convention v%d.%d\n",
++			   PSCI_VERSION_MAJOR(ver),
++			   PSCI_VERSION_MINOR(ver));
++	} else {
++		seq_puts(s, "SMC Calling Convention v1.0 is assumed\n");
++	}
++
++	feature = psci_features(PSCI_FN_NATIVE(0_2, CPU_SUSPEND));
++	if (feature < 0) {
++		seq_printf(s, "PSCI_FEATURES(CPU_SUSPEND) error (%d)\n", feature);
++	} else {
++		seq_printf(s, "OSI is %ssupported\n",
++			   (feature & BIT(0)) ? "" : "not ");
++		seq_printf(s, "%s StateID format is used\n",
++			   (feature & BIT(1)) ? "Extended" : "Original");
++	}
++
++	type = psci_ops.migrate_info_type();
++	if (type == PSCI_0_2_TOS_UP_MIGRATE ||
++	    type == PSCI_0_2_TOS_UP_NO_MIGRATE) {
++		unsigned long cpuid;
++
++		seq_printf(s, "Trusted OS %smigrate capable\n",
++			   type == PSCI_0_2_TOS_UP_NO_MIGRATE ? "not " : "");
++		cpuid = psci_migrate_info_up_cpu();
++		seq_printf(s, "Trusted OS resident on physical CPU 0x%lx (#%d)\n",
++			   cpuid, resident_cpu);
++	} else if (type == PSCI_0_2_TOS_MP) {
++		seq_puts(s, "Trusted OS migration not required\n");
++	} else {
++		if (type != PSCI_RET_NOT_SUPPORTED)
++			seq_printf(s, "MIGRATE_INFO_TYPE returned unknown type (%d)\n", type);
++	}
++
++	for (i = 0; i < ARRAY_SIZE(psci_fn_ids); i++) {
++		feature = psci_features(psci_fn_ids[i].fn);
++		if (feature == PSCI_RET_NOT_SUPPORTED)
++			continue;
++		if (feature < 0)
++			seq_printf(s, "PSCI_FEATURES(%s) error (%d)\n",
++				   psci_fn_ids[i].name, feature);
++		else
++			seq_printf(s, "%s is supported\n", psci_fn_ids[i].name);
++	}
++
++	return 0;
 +}
 +
-+static void mt8195_ap_efuse_to_cal_data(struct lvts_data *lvts_data)
++static int psci_debugfs_open(struct inode *inode, struct file *f)
 +{
-+	struct lvts_sensor_cal_data *cal_data = &lvts_data->cal_data;
-+
-+	cal_data->golden_temp = GET_CAL_DATA_BITMASK(0, lvts_data, 31, 24);
-+
-+	cal_data->count_r[MT8195_TS4_0] = GET_CAL_DATA_BITMASK(9, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS4_1] = GET_CAL_DATA_BITMASK(10, lvts_data, 23, 0);
-+	cal_data->count_r[MT8195_TS5_0] = (GET_CAL_DATA_BITMASK(12, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(11, lvts_data, 31, 16);
-+	cal_data->count_r[MT8195_TS5_1] = GET_CAL_DATA_BITMASK(12, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS6_0] = (GET_CAL_DATA_BITMASK(14, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(13, lvts_data, 31, 24);
-+	cal_data->count_r[MT8195_TS6_1] = (GET_CAL_DATA_BITMASK(15, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(14, lvts_data, 31, 16);
-+	cal_data->count_r[MT8195_TS6_2] = GET_CAL_DATA_BITMASK(15, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS7_0] = (GET_CAL_DATA_BITMASK(17, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(16, lvts_data, 31, 24);
-+	cal_data->count_r[MT8195_TS7_1] = (GET_CAL_DATA_BITMASK(18, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(17, lvts_data, 31, 16);
-+
-+	cal_data->count_rc[MT8195_TS4_0] = (GET_CAL_DATA_BITMASK(11, lvts_data, 15, 0) << 8) +
-+						GET_CAL_DATA_BITMASK(10, lvts_data, 31, 24);
-+	cal_data->count_rc[MT8195_TS5_0] = GET_CAL_DATA_BITMASK(13, lvts_data, 23, 0);
-+	cal_data->count_rc[MT8195_TS6_0] = GET_CAL_DATA_BITMASK(16, lvts_data, 23, 0);
-+	cal_data->count_rc[MT8195_TS7_0] = GET_CAL_DATA_BITMASK(18, lvts_data, 31, 8);
++	return single_open(f, psci_debugfs_read, NULL);
 +}
 +
- static struct lvts_speed_settings tc_speed_mt8192 = {
- 	.period_unit = PERIOD_UNIT,
- 	.group_interval_delay = GROUP_INTERVAL_DELAY,
-@@ -81,6 +160,13 @@ static struct lvts_speed_settings tc_speed_mt8192 = {
- 	.sensor_interval_delay = SENSOR_INTERVAL_DELAY,
- };
++static const struct file_operations psci_debugfs_ops = {
++	.owner = THIS_MODULE,
++	.open = psci_debugfs_open,
++	.release = single_release,
++	.read = seq_read,
++	.llseek = seq_lseek
++};
++
++static int __init psci_debugfs_init(void)
++{
++	return PTR_ERR_OR_ZERO(debugfs_create_file("psci", 0444, NULL, NULL,
++						   &psci_debugfs_ops));
++}
++late_initcall(psci_debugfs_init)
++#endif
++
+ #ifdef CONFIG_CPU_IDLE
+ static int psci_suspend_finisher(unsigned long state)
+ {
+diff --git a/include/uapi/linux/psci.h b/include/uapi/linux/psci.h
+index 2bf93c0d6354..3511095c2702 100644
+--- a/include/uapi/linux/psci.h
++++ b/include/uapi/linux/psci.h
+@@ -48,12 +48,26 @@
+ #define PSCI_0_2_FN64_MIGRATE_INFO_UP_CPU	PSCI_0_2_FN64(7)
  
-+static struct lvts_speed_settings tc_speed_mt8195 = {
-+	.period_unit = PERIOD_UNIT,
-+	.group_interval_delay = GROUP_INTERVAL_DELAY,
-+	.filter_interval_delay = FILTER_INTERVAL_DELAY,
-+	.sensor_interval_delay = SENSOR_INTERVAL_DELAY,
-+};
+ #define PSCI_1_0_FN_PSCI_FEATURES		PSCI_0_2_FN(10)
++#define PSCI_1_0_FN_CPU_FREEZE			PSCI_0_2_FN(11)
++#define PSCI_1_0_FN_CPU_DEFAULT_SUSPEND		PSCI_0_2_FN(12)
++#define PSCI_1_0_FN_NODE_HW_STATE		PSCI_0_2_FN(13)
+ #define PSCI_1_0_FN_SYSTEM_SUSPEND		PSCI_0_2_FN(14)
+ #define PSCI_1_0_FN_SET_SUSPEND_MODE		PSCI_0_2_FN(15)
++#define PSCI_1_0_FN_STAT_RESIDENCY		PSCI_0_2_FN(16)
++#define PSCI_1_0_FN_STAT_COUNT			PSCI_0_2_FN(17)
 +
- static const struct lvts_tc_settings mt8192_tc_mcu_settings[] = {
- 	[0] = {
- 		.dev_id = 0x81,
-@@ -164,6 +250,89 @@ static const struct lvts_tc_settings mt8192_tc_ap_settings[] = {
- 	}
- };
+ #define PSCI_1_1_FN_SYSTEM_RESET2		PSCI_0_2_FN(18)
++#define PSCI_1_1_FN_MEM_PROTECT			PSCI_0_2_FN(19)
++#define PSCI_1_1_FN_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN(19)
  
-+static const struct lvts_tc_settings mt8195_tc_mcu_settings[] = {
-+	[0] = {
-+		.dev_id = 0x81,
-+		.addr_offset = 0x0,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS1_0, MT8195_TS1_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT1,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(3),
-+	},
-+	[1] = {
-+		.dev_id = 0x82,
-+		.addr_offset = 0x100,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS2_0, MT8195_TS2_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT0,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(4),
-+	},
-+	[2] = {
-+		.dev_id = 0x83,
-+		.addr_offset = 0x200,
-+		.num_sensor = 4,
-+		.sensor_map = { MT8195_TS3_0, MT8195_TS3_1, MT8195_TS3_2, MT8195_TS3_3 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT0,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(5),
-+	}
-+};
++#define PSCI_1_0_FN64_CPU_DEFAULT_SUSPEND	PSCI_0_2_FN64(12)
++#define PSCI_1_0_FN64_NODE_HW_STATE		PSCI_0_2_FN64(13)
+ #define PSCI_1_0_FN64_SYSTEM_SUSPEND		PSCI_0_2_FN64(14)
++#define PSCI_1_0_FN64_STAT_RESIDENCY		PSCI_0_2_FN64(16)
++#define PSCI_1_0_FN64_STAT_COUNT		PSCI_0_2_FN64(17)
 +
-+static const struct lvts_tc_settings mt8195_tc_ap_settings[] = {
-+	[0] = {
-+		.dev_id = 0x84,
-+		.addr_offset = 0x0,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS4_0, MT8195_TS4_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT0,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(3),
-+	},
-+	[1] = {
-+		.dev_id = 0x85,
-+		.addr_offset = 0x100,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS5_0, MT8195_TS5_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT1,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(4),
-+	},
-+	[2] = {
-+		.dev_id = 0x86,
-+		.addr_offset = 0x200,
-+		.num_sensor = 3,
-+		.sensor_map = { MT8195_TS6_0, MT8195_TS6_1, MT8195_TS6_2 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT1,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(5),
-+	},
-+	[3] = {
-+		.dev_id = 0x87,
-+		.addr_offset = 0x300,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS7_0, MT8195_TS7_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT0,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(6),
-+	}
-+};
-+
- static const struct lvts_data mt8192_lvts_mcu_data = {
- 	.num_tc = (ARRAY_SIZE(mt8192_tc_mcu_settings)),
- 	.tc = mt8192_tc_mcu_settings,
-@@ -216,9 +385,63 @@ static const struct lvts_data mt8192_lvts_ap_data = {
- 	},
- };
+ #define PSCI_1_1_FN64_SYSTEM_RESET2		PSCI_0_2_FN64(18)
++#define PSCI_1_1_FN64_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN64(19)
  
-+static const struct lvts_data mt8195_lvts_mcu_data = {
-+	.num_tc = (ARRAY_SIZE(mt8195_tc_mcu_settings)),
-+	.tc = mt8195_tc_mcu_settings,
-+	.num_sensor = MT8195_NUM_TS_MCU,
-+	.ops = {
-+		.efuse_to_cal_data = mt8195_mcu_efuse_to_cal_data,
-+		.device_enable_and_init = lvts_device_enable_and_init,
-+		.device_enable_auto_rck = lvts_device_enable_auto_rck_v4,
-+		.device_read_count_rc_n = lvts_device_read_count_rc_n_v4,
-+		.set_cal_data = lvts_set_calibration_data_v4,
-+		.init_controller = lvts_init_controller_v4,
-+	},
-+	.feature_bitmap = FEATURE_DEVICE_AUTO_RCK,
-+	.num_efuse_addr = NUM_EFUSE_ADDR,
-+	.num_efuse_block = NUM_EFUSE_BLOCK_MT8195,
-+	.cal_data = {
-+		.default_golden_temp = DEFAULT_GOLDEN_TEMP,
-+		.default_count_r = DEFAULT_CUONT_R,
-+		.default_count_rc = DEFAULT_CUONT_RC,
-+	},
-+	.coeff = {
-+		.a = COEFF_A,
-+		.b = COEFF_B,
-+	},
-+};
-+
-+static const struct lvts_data mt8195_lvts_ap_data = {
-+	.num_tc = (ARRAY_SIZE(mt8195_tc_ap_settings)),
-+	.tc = mt8195_tc_ap_settings,
-+	.num_sensor = MT8195_NUM_TS_AP,
-+	.ops = {
-+		.efuse_to_cal_data = mt8195_ap_efuse_to_cal_data,
-+		.device_enable_and_init = lvts_device_enable_and_init,
-+		.device_enable_auto_rck = lvts_device_enable_auto_rck_v4,
-+		.device_read_count_rc_n = lvts_device_read_count_rc_n_v4,
-+		.set_cal_data = lvts_set_calibration_data_v4,
-+		.init_controller = lvts_init_controller_v4,
-+	},
-+	.feature_bitmap = FEATURE_DEVICE_AUTO_RCK,
-+	.num_efuse_addr = NUM_EFUSE_ADDR,
-+	.num_efuse_block = NUM_EFUSE_BLOCK_MT8195,
-+	.cal_data = {
-+		.default_golden_temp = DEFAULT_GOLDEN_TEMP,
-+		.default_count_r = DEFAULT_CUONT_R,
-+		.default_count_rc = DEFAULT_CUONT_RC,
-+	},
-+	.coeff = {
-+		.a = COEFF_A,
-+		.b = COEFF_B,
-+	},
-+};
-+
- static const struct of_device_id lvts_of_match[] = {
- 	{ .compatible = "mediatek,mt8192-lvts-mcu", .data = &mt8192_lvts_mcu_data, },
- 	{ .compatible = "mediatek,mt8192-lvts-ap", .data = &mt8192_lvts_ap_data, },
-+	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data, },
-+	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data, },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, lvts_of_match);
+ /* PSCI v0.2 power state encoding for CPU_SUSPEND function */
+ #define PSCI_0_2_POWER_STATE_ID_MASK		0xffff
 -- 
-2.34.1
+2.35.1
 
