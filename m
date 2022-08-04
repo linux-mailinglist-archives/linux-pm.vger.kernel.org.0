@@ -2,119 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CF9589C2E
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 15:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C607C589C37
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Aug 2022 15:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234188AbiHDNH4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Aug 2022 09:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S239684AbiHDNKB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Aug 2022 09:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiHDNHz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 09:07:55 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D0F15738
-        for <linux-pm@vger.kernel.org>; Thu,  4 Aug 2022 06:07:53 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a13so22042772ljr.11
-        for <linux-pm@vger.kernel.org>; Thu, 04 Aug 2022 06:07:53 -0700 (PDT)
+        with ESMTP id S239572AbiHDNKA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 09:10:00 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E4A18366
+        for <linux-pm@vger.kernel.org>; Thu,  4 Aug 2022 06:09:57 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id p8-20020a05600c05c800b003a50311d75cso1983834wmd.4
+        for <linux-pm@vger.kernel.org>; Thu, 04 Aug 2022 06:09:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=2mPVyeBFtaU3RdKAsQho6cTa5+HorQ2Exu3btIiOUzk=;
-        b=HmvDXaTStmNuX98PFb429ubH/UBs4kLSFIFuBj8o7ihM5eWHZj1Wzke9jRa5+sSWSO
-         ohjRd2oFwKCQGNrORfIoLK9v1wxT+5tIUex3QZokknCXn3hAJ9tYakOCAi7DFPRi87ZW
-         wrUlHjNyySKG9BIyzCzFkx6HDpjo9vn28k8MHNkRlL6jqrh6IFckUw8CpMoUtJWorL88
-         qxX5DqKldk0EZkhaUhVZYgRG9oUEvn9420nNSDTkS0tsDHAfzinAvXH+UCeeMI4aw8kk
-         GB5t1Q1Sb7Wu9QQQYeoFyUYivOkdad8UyZVb6PEy65Oswwhr5xxG5Q/R4Bmg9pHAyxD+
-         6RZQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/550FRoRwhwiWa23UJcURfUhwjAKd0WneHpFmZPlwqw=;
+        b=nHKiKcjX72Na/r5yh2xsHteZvjaIFfk3+PwiCpogq5p/Or0Oc//pj3zPrKYmUlEr5V
+         zLzQZ6rmU6Vfkv7uL/DnL7HAtHYnNAakGKkSMbjXhzbQs4HqtZv6UZOy2M016wbIWgOy
+         +wApUHQaQwm0NLF//egJ1amCnId7COEMhnaOMeqGrgXo926zvAgU95BqKK5Gb+xQjBT3
+         78zRJKXfTDc1hvcTOVzh3sfxdDQIiDw8zG0v8RDVUyZXLquxH67A7briquUYzekmDgs/
+         igPuK2C7sPS8vFK0ZEK4GTesaEfgxsLQ4Hxy4+Bi1uFlZI8LKWcSu89Zami5qbnQIanR
+         A5Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=2mPVyeBFtaU3RdKAsQho6cTa5+HorQ2Exu3btIiOUzk=;
-        b=lInqnDGhFA1/xdpc2OhC1hSHZSg/UQxH+F/2ZFS9MenJvLkFndL//8XM3/fH3hA4t6
-         3L9kkl3ac6VkwhAXNQmmhe+7EUNn3nZ+ggmQaR0IX2xGIpHkvEx4v7RmySNDtz7MWa3z
-         GZPJMGqjwhf1zTED22dBaNWo5XTad9uRevxM/HYHA+Z5dHdd+P0IUSssNGZtw8sMdi/I
-         g8m+YC994STQa1VDW1+QPu8YLKo4SI/BJNAKWekCvmMO0fbeSMtWmQ2Cl48sSM6Gi7bk
-         GijtXBR58+9XZqCRoUTWfH0V/WLYcaV06oausrP+W9O2V/hdEPdo8CNOVXOkGywTm6QK
-         Dj9g==
-X-Gm-Message-State: ACgBeo3PhKOqTsqVzyv7t+vjc15Piq/r6urLKbSxp9Hqw6YCrEy9MJsf
-        Z7jmsCSIPHJEARrrWWBAu2Uvlw==
-X-Google-Smtp-Source: AA6agR4P3wAFSoGlT84eB+C6qr4BOR//C22QuoriJle9qYybcIXddWfc6ZqOhEJZc5bOFU9JechAYQ==
-X-Received: by 2002:a2e:82c5:0:b0:25d:83d8:41b with SMTP id n5-20020a2e82c5000000b0025d83d8041bmr548955ljh.140.1659618472301;
-        Thu, 04 Aug 2022 06:07:52 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id o20-20020a2e9b54000000b0025e2c5a12b6sm115743ljj.129.2022.08.04.06.07.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/550FRoRwhwiWa23UJcURfUhwjAKd0WneHpFmZPlwqw=;
+        b=P+AYQoIJ/guxNrLsG7KtOAMFmI3FI2B0gCpDghGPa50UVGBULZKl60EMutUu7A0rzf
+         3VhE+bZ0wQuEHm18dCCXYwLShPitqBZPhtSIcmciBDw+Ek3RuVtBpq3MhdciEpmES8C2
+         YAwC/RTsGTPUwhwSvWrGTE2Ecl7IxIIsRMPWQ0G7iEguvZWccl2wjxDGQjkyqvId7pJ1
+         2FG49PP7rrlTYx04HkA9UFuSx+oKNZmBCEvK1oHvywG4208uOqRY7orUDmQ/K5BBOGfG
+         OZRbvP2A/ABp855bUuW4vs9EGPktVLlcxzDCYsh0whWP6y/tzo2KkhnRUN69Y6NYyjHh
+         Y2ZA==
+X-Gm-Message-State: ACgBeo2kkDux16EfdEhP40c9hLc0FrXs1xVbOf8NR3BpmmPjsMpdMh5R
+        9s3L1m18yte0OOQ5ZsxXI7+j5w==
+X-Google-Smtp-Source: AA6agR5EDjcdFhE33k318QdP42SioQ8FJinf54Xtn+XGNTbDKaLLK6czAFeIqHHSqOI7XN4hCvAOog==
+X-Received: by 2002:a05:600c:4fd4:b0:3a3:2c30:5749 with SMTP id o20-20020a05600c4fd400b003a32c305749mr1405025wmq.62.1659618596268;
+        Thu, 04 Aug 2022 06:09:56 -0700 (PDT)
+Received: from Balsam-ThinkPad-T480.. (235.163.185.81.rev.sfr.net. [81.185.163.235])
+        by smtp.gmail.com with ESMTPSA id o15-20020adfcf0f000000b0021d6a520ce9sm1156817wrj.47.2022.08.04.06.09.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 06:07:51 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2] firmware/psci: Print a warning if PSCI doesn't accept PC mode
-Date:   Thu,  4 Aug 2022 16:07:50 +0300
-Message-Id: <20220804130750.3706897-1-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 04 Aug 2022 06:09:55 -0700 (PDT)
+From:   bchihi@baylibre.com
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Subject: [PATCH v8.1, 0/7] Add LVTS architecture thermal
+Date:   Thu,  4 Aug 2022 15:09:05 +0200
+Message-Id: <20220804130912.676043-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function psci_pd_try_set_osi_mode() will print an error if enabling
-OSI mode fails. To ease debugging PSCI issues print corresponding
-message if switching to PC mode fails too.
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
-This is a replacement for [1], now moving the warning from
-psci_set_osi_mode() callers to the function iself.
+This series moves thermal files related to MediaTek to the mediatek folder.
+And introduce the new architecture LVTS (low voltage thermal sensor) driver to report
+the highest temperature in the SoC and record the highest temperature sensor,
+each sensor as a hot zone.
+The LVTS body is divided into two parts, the LVTS controller and the LVTS device.
+The LVTS controller can connect up to 4 LVTS devices, and each LVTS device
+can connect up to 7 TSMCUs.
 
-https://lore.kernel.org/all/20220727182034.983727-1-dmitry.baryshkov@linaro.org/
+The architecture will be the first to be used on mt8192 and mt8195.
 
----
- drivers/cpuidle/cpuidle-psci-domain.c | 4 +---
- drivers/firmware/psci/psci.c          | 2 ++
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changelog:
+Changes in v8.1 :
+        - Fix Coding style issues
+        - Rebase on top of next-20220803
+        - Add multi-instance support :
+          - Rewrite DT-binding and DTS :
+            - Add DT-binding and DTS for LVTS_v4 (MT8192 and MT8195)
+            - One LVTS node for each HW Domain (AP and MCU)
+          - One SW Instance for each HW Domain
+          - Add a Kconfig sub-menu entry for LVTS and LVTS_v4 SoCs
+        - Replace platform_get_resource by platform_get_mem_or_io to get Base Address
+        - Replace platform_get_resource by platform_get_irq to get Interrupt Number
+        - Add "lvts_" prefix to functions and structs
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index 3db4fca1172b..821984947ed9 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -124,10 +124,8 @@ static bool psci_pd_try_set_osi_mode(void)
- 		return false;
- 
- 	ret = psci_set_osi_mode(true);
--	if (ret) {
--		pr_warn("failed to enable OSI mode: %d\n", ret);
-+	if (ret)
- 		return false;
--	}
- 
- 	return true;
- }
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index cfb448eabdaa..1628f1edef4a 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -163,6 +163,8 @@ int psci_set_osi_mode(bool enable)
- 			PSCI_1_0_SUSPEND_MODE_PC;
- 
- 	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
-+	if (err < 0)
-+		pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
- 	return psci_to_linux_errno(err);
- }
- 
+Changes in v7 :
+        - Fix coding style issues
+        - Rewrite dt bindings
+          - was not accurate
+          - Use mt8195 for example (instead of mt8192)
+          - Rename mt6873 to mt8192
+          - Remove clock name
+        - Rebased on top of to series:
+          - https://patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+          - https://patchwork.kernel.org/project/linux-pm/list/?series=639386
+
+Changes in v6 :
+        - Remove temperature aggregation (it will be added in another series)
+        - Update the way to read the temperature (read one sensor instead of all)
+        - Add support of mt8195
+
+Changes in v5 :
+        - Use 'git mv' for the relocated file.
+
+Changes in v4 :
+        - Rebase to kernel-v5.13-rc1
+        - Resend
+
+Changes in v3 :
+        - change the expression in the lvts_temp_to_raw to dev_s64.
+
+Changes in v2 :
+        - Rebase to kernel-5.11-rc1.
+        - sort headers
+        - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+        - disconstruct the api of lvts_read_tc_msr_raw.
+        - add the initial value max_temp = 0 and compare e.q.
+          in the lvts_read_all_tc_temperature.
+        - add the return with an invalid number in the lvts_init.
+
+Alexandre Bailon (2):
+  dt-bindings: thermal: Add binding document for LVTS thermal
+    controllers
+  arm64: dts: mt8195: Add efuse node to mt8195
+
+Balsam CHIHI (1):
+  arm64: dts: mt8192: Add thermal zone
+
+Michael Kao (3):
+  thermal: mediatek: Relocate driver to mediatek folder
+  thermal: mediatek: Add LVTS driver for mt8192 thermal zones
+  thermal: mediatek: Add thermal zone settings for mt8195
+
+Tinghan Shen (1):
+  arm64: dts: mt8195: Add thermal zone
+
+ .../thermal/mediatek,lvts-thermal.yaml        |  77 ++
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 113 ++-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 125 ++-
+ drivers/thermal/Kconfig                       |  14 +-
+ drivers/thermal/Makefile                      |   2 +-
+ drivers/thermal/mediatek/Kconfig              |  47 +
+ drivers/thermal/mediatek/Makefile             |   3 +
+ drivers/thermal/mediatek/lvts_thermal.c       | 855 ++++++++++++++++++
+ drivers/thermal/mediatek/lvts_thermal.h       | 377 ++++++++
+ drivers/thermal/mediatek/lvts_v4.c            | 464 ++++++++++
+ .../mtxxxx_thermal.c}                         |   2 +-
+ 11 files changed, 2065 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ create mode 100644 drivers/thermal/mediatek/lvts_thermal.c
+ create mode 100644 drivers/thermal/mediatek/lvts_thermal.h
+ create mode 100644 drivers/thermal/mediatek/lvts_v4.c
+ rename drivers/thermal/{mtk_thermal.c => mediatek/mtxxxx_thermal.c} (99%)
+
 -- 
-2.35.1
+2.34.1
 
