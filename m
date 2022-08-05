@@ -2,121 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EBE58A409
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 02:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2702058A46B
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 03:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbiHEAAQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Aug 2022 20:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S235474AbiHEBUF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Aug 2022 21:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiHEAAP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 20:00:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE091C9;
-        Thu,  4 Aug 2022 17:00:10 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 168826601BFA;
-        Fri,  5 Aug 2022 01:00:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659657609;
-        bh=9IWOqoMZl87xKFNXdbsY2lD256+X8oemFwBtvRVYKMU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gCk84Flp/HQMm/r7Wu1xhl6K9nnsuhbKmhYnpEZFhls8m64otTleTFvTId5i3fg0J
-         n53uFS0ILVjAVjNE2AxXtF33RNeHDJiwFw4BAi0DpKfRN07o376iDyoMJ7rej8FxAV
-         cBzMNgOnjhk93Nck/64Wd61K41LZ3JthNdLcKMCuIUTOW+DOeC2xlKcunNvgiIZPhK
-         gzxuhTTlhwwTViXamwzMhNBd16XD0/CyWTVDqK17RRukKIqJlWBKuifhDFwjiQHALy
-         jig/uIpwDnMp8StHAvUDBtKHKHK4R1iX3d7oMGIg0EKNQIJpkBiIPGKGOz06se3Khr
-         Gi8NSKUhgv3EA==
-Date:   Thu, 4 Aug 2022 20:00:03 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     bchihi@baylibre.com
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Subject: Re: [PATCH v8.1, 4/7] thermal: mediatek: Add LVTS driver for mt8192
- thermal zones
-Message-ID: <20220805000003.gljuut3udzed7avz@notapiano>
-References: <20220804130912.676043-1-bchihi@baylibre.com>
- <20220804130912.676043-5-bchihi@baylibre.com>
+        with ESMTP id S230160AbiHEBUE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Aug 2022 21:20:04 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D0871BCE;
+        Thu,  4 Aug 2022 18:20:03 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2751JdLK127630;
+        Thu, 4 Aug 2022 20:19:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1659662379;
+        bh=xVg4Rc1wyAEPnHP+dLUX1rSBue1ZBaUejyLmG1hs/xM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=RKJBGrROxMIOhbL1NYPde9O27IUb2mWnVnJJcwri26pQkiPeCWorOh97k8QjQDlhg
+         8sF6awfejheK8JnWrUQYMUetjeU9a+jHFmIrYjJYwire4c9YEQTSaCAzha7e3pCqiR
+         qiRYAkoYZSwc/RocVGz70IfkFeDHizS0e20+gSRk=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2751JdVi006868
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 4 Aug 2022 20:19:39 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 4
+ Aug 2022 20:19:38 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 4 Aug 2022 20:19:38 -0500
+Received: from [10.250.232.200] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2751JTAX008557;
+        Thu, 4 Aug 2022 20:19:30 -0500
+Message-ID: <d55ed858-ccb2-1983-e93a-3090e1960eb0@ti.com>
+Date:   Fri, 5 Aug 2022 06:49:28 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220804130912.676043-5-bchihi@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 24/33] thermal/drivers/ti-soc: Switch to new of API
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        <daniel.lezcano@linaro.org>, <rafael@kernel.org>
+CC:     <rui.zhang@intel.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <khilman@baylibre.com>,
+        <abailon@baylibre.com>, <lukasz.luba@arm.com>,
+        <broonie@kernel.org>, <damien.lemoal@opensource.wdc.com>,
+        <heiko@sntech.de>, <hayashi.kunihiko@socionext.com>,
+        <mhiramat@kernel.org>, <talel@amazon.com>,
+        <thierry.reding@gmail.com>, <digetx@gmail.com>,
+        <jonathanh@nvidia.com>, <anarsoul@gmail.com>,
+        <tiny.windzz@gmail.com>, <baolin.wang7@gmail.com>,
+        <f.fainelli@gmail.com>, <bjorn.andersson@linaro.org>,
+        <mcoquelin.stm32@gmail.com>, <glaroque@baylibre.com>,
+        <miquel.raynal@bootlin.com>, <shawnguo@kernel.org>,
+        <niklas.soderlund@ragnatech.se>, <matthias.bgg@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220804224349.1926752-25-daniel.lezcano@linexp.org>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <20220804224349.1926752-25-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Balsam,
 
-another thing.
 
-On Thu, Aug 04, 2022 at 03:09:09PM +0200, bchihi@baylibre.com wrote:
-[..]
-> --- /dev/null
-> +++ b/drivers/thermal/mediatek/lvts_thermal.h
-[..]
-> +#define ONE_SAMPLE							(lvts_data->counting_window_us + 2 * BUS_ACCESS_US)
+On 8/5/2022 4:13 AM, Daniel Lezcano wrote:
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
+> 
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
 
-This macro is still using a hardcoded variable.
+Acked-by: Keerthy <j-keerthy@ti.com>
 
-> +#define NUM_OF_SAMPLE(tc_id)				((lvts_data->tc[tc_id].hw_filter < LVTS_FILTER_2) ? \
-> +	1 : ((lvts_data->tc[tc_id].hw_filter > LVTS_FILTER_16_OF_18) ? \
-> +	1 : ((lvts_data->tc[tc_id].hw_filter == LVTS_FILTER_16_OF_18) ? \
-> +	18 : ((lvts_data->tc[tc_id].hw_filter == LVTS_FILTER_8_OF_10) ? \
-> +	10 : (lvts_data->tc[tc_id].hw_filter * 2)))))
-
-Ditto.
-
-> +
-> +#define PERIOD_UNIT_US(tc_id)		((lvts_data->tc[tc_id].tc_speed->period_unit * 256 * \
-> +	CLOCK_26MHZ_CYCLE_NS) / 1000)
-> +#define FILTER_INT_US(tc_id)		(lvts_data->tc[tc_id].tc_speed->filter_interval_delay * \
-> +	PERIOD_UNIT_US(tc_id))
-> +#define SENSOR_INT_US(tc_id)		(lvts_data->tc[tc_id].tc_speed->sensor_interval_delay * \
-> +	PERIOD_UNIT_US(tc_id))
-> +#define GROUP_INT_US(tc_id)			(lvts_data->tc[tc_id].tc_speed->group_interval_delay * \
-> +	PERIOD_UNIT_US(tc_id))
-
-All of these too.
-
-> +#define SENSOR_LATENCY_US(tc_id)	((NUM_OF_SAMPLE(tc_id) - 1) * FILTER_INT_US(tc_id) + \
-[..]
-> +#define DEVICE_READ				(CK26M_ACTIVE(lvts_data) | DEVICE_ACCESS)
-
-And this.
-
-> +#define DEVICE_WRITE			(CK26M_ACTIVE(lvts_data) | DEVICE_ACCESS | WRITE_ACCESS)
-
-And this.
-
-> +#define RESET_ALL_DEVICES		(DEVICE_WRITE | RG_TSFM_RST << 8 | 0xFF)
-> +#define READ_DEVICE_REG(reg_id)	(DEVICE_READ | (reg_id) << 8 | 0x00)
-> +#define READ_BACK_DEVICE_ID		(CK26M_ACTIVE(lvts_data) | DEVICE_ACCESS | BROADCAST_ID_UPDATE | \
-
-And finally this one.
-
-I might've have missed some, so please double-check and remove any lingering
-hardcoded variable in macros.
-
-Thanks,
-Nícolas
-
-> +	RG_DID_LVTS << 8)
-[..]
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> ---
+>   .../thermal/ti-soc-thermal/ti-thermal-common.c   | 16 ++++++++--------
+>   1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> index 703039d8b937..8a9055bd376e 100644
+> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> @@ -65,10 +65,10 @@ static inline int ti_thermal_hotspot_temperature(int t, int s, int c)
+>   
+>   /* thermal zone ops */
+>   /* Get temperature callback function for thermal zone */
+> -static inline int __ti_thermal_get_temp(void *devdata, int *temp)
+> +static inline int __ti_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+>   {
+>   	struct thermal_zone_device *pcb_tz = NULL;
+> -	struct ti_thermal_data *data = devdata;
+> +	struct ti_thermal_data *data = tz->devdata;
+>   	struct ti_bandgap *bgp;
+>   	const struct ti_temp_sensor *s;
+>   	int ret, tmp, slope, constant;
+> @@ -85,8 +85,8 @@ static inline int __ti_thermal_get_temp(void *devdata, int *temp)
+>   		return ret;
+>   
+>   	/* Default constants */
+> -	slope = thermal_zone_get_slope(data->ti_thermal);
+> -	constant = thermal_zone_get_offset(data->ti_thermal);
+> +	slope = thermal_zone_get_slope(tz);
+> +	constant = thermal_zone_get_offset(tz);
+>   
+>   	pcb_tz = data->pcb_tz;
+>   	/* In case pcb zone is available, use the extrapolation rule with it */
+> @@ -107,9 +107,9 @@ static inline int __ti_thermal_get_temp(void *devdata, int *temp)
+>   	return ret;
+>   }
+>   
+> -static int __ti_thermal_get_trend(void *p, int trip, enum thermal_trend *trend)
+> +static int __ti_thermal_get_trend(struct thermal_zone_device *tz, int trip, enum thermal_trend *trend)
+>   {
+> -	struct ti_thermal_data *data = p;
+> +	struct ti_thermal_data *data = tz->devdata;
+>   	struct ti_bandgap *bgp;
+>   	int id, tr, ret = 0;
+>   
+> @@ -130,7 +130,7 @@ static int __ti_thermal_get_trend(void *p, int trip, enum thermal_trend *trend)
+>   	return 0;
+>   }
+>   
+> -static const struct thermal_zone_of_device_ops ti_of_thermal_ops = {
+> +static const struct thermal_zone_device_ops ti_of_thermal_ops = {
+>   	.get_temp = __ti_thermal_get_temp,
+>   	.get_trend = __ti_thermal_get_trend,
+>   };
+> @@ -170,7 +170,7 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>   		return -EINVAL;
+>   
+>   	/* in case this is specified by DT */
+> -	data->ti_thermal = devm_thermal_zone_of_sensor_register(bgp->dev, id,
+> +	data->ti_thermal = devm_thermal_of_zone_register(bgp->dev, id,
+>   					data, &ti_of_thermal_ops);
+>   	if (IS_ERR(data->ti_thermal)) {
+>   		dev_err(bgp->dev, "thermal zone device is NULL\n");
