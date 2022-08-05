@@ -2,66 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F25A58ACE0
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 17:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9529B58AD14
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 17:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241177AbiHEO75 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Aug 2022 10:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S231585AbiHEPis (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Aug 2022 11:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241196AbiHEO7S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 10:59:18 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69476612A
-        for <linux-pm@vger.kernel.org>; Fri,  5 Aug 2022 07:58:23 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v3so3616333wrp.0
-        for <linux-pm@vger.kernel.org>; Fri, 05 Aug 2022 07:58:23 -0700 (PDT)
+        with ESMTP id S238385AbiHEPir (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 11:38:47 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A13D237F4
+        for <linux-pm@vger.kernel.org>; Fri,  5 Aug 2022 08:38:46 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id v3so3739710wrp.0
+        for <linux-pm@vger.kernel.org>; Fri, 05 Aug 2022 08:38:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=z+3sr4RoahqIagdepcyckHH4zFG4cR5LxNdbwLmB54k=;
-        b=MFpiKKPkYPJj0FgsnYVOIAOjy9IT9JvfWkemJu8CDvaPaBJM4I6d3Q36vTsTtFI6ja
-         R/PUffq+p6imiM+cfp2/hw1+5n6rnT7qxGtrLfXjxN+culnyV2403T/PLGI00E24yz/n
-         BhSMj7fPlP3T20IyZm3z2/erPy6ZMQa6adcaQGrHm1DYcSdydUJsVCJDcIxT9iUrNu/E
-         gOKx+DSq08g7/B5YGzIP5DbJj7c6r4jiZoDHc3NO62syr3XVO2nGuNGpl1Fycj2yYWFG
-         IqMrQTy8Qkzr/Orcu4SnT/nyqkbwNAq3MQtMq0RYQyeP4dxUvdGYOvoduAE7Y0I1f2Zj
-         0CmA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=aBvzMW7h3alEgW99ErQv4+ny+IZdZS0VnELxUm//1vE=;
+        b=bJploTn1ZE5XHYS0BVPysP7rl5RlcHPt9cxUX1IVE6+RhYPxMWgrfU5DpKNg/cqYTz
+         84njdSjxidKNs4jPiLtI8tJ2SLTx/N43CjhvJCshuTVqF2R3rsO2q8yUzklN33kq/0jP
+         sXPng9EMCrg7FIRTD0yjlie9OSPyIhN1jNpTIfC8dllrvJIBoWiADfVbhGV+dWlg4FQT
+         rMiU4hnxyenVGwzGqoZdfYUtnhBfXeE4Sc8ohFCncwcBnzEHkXvbhgeWQS2vZClG43eL
+         nIPAe+aLeX5Fkvf9CeIxFdKyNx325MDaT4g2h6J7X8Scxfe/+PlkwJ46fc9EXAV2oC2l
+         N3tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=z+3sr4RoahqIagdepcyckHH4zFG4cR5LxNdbwLmB54k=;
-        b=ubZDNvzwrTkbNg/BWF5iMBlTx9AtmySEy5DX8lMapwovUIL5dHRnC6vLtPcFy624FN
-         zR/Rah0HFPXNwbSh/PwoZs52PuqOUltp+8d3dZ4k6UXCEcCz/6ZINuN6EkruRxUkirlI
-         RQXTdfti8wXhnPzPAJ0EnuRGypthZ0BQy7qPnRl5lAZFC958al+9+BvdGpFVDOfGAXD1
-         QwJBtVUshSI8c5eUQvLO+fnOCR3JSASEAaZjtE3AbkaqHAny1nEkrUzPPs488W1xqh17
-         GSLEumCEh3uFaZcGkOvjsGcbkTxWZoL9z1UuoZtVAaNaLtTaHvXWMTWq8uhkYWazl3xr
-         16Bg==
-X-Gm-Message-State: ACgBeo0qRByArM5+5MgGiSbyXREz/s43HP9RSwyGTEoXr+q2Kw8LzOzD
-        rmyGYmbvP5RChJEU5R+wsqxX9Q==
-X-Google-Smtp-Source: AA6agR5DmVTQ2ntzu1hlzAW+nFfelk11ldlqaHtiqEP2t8I5nxMLB1Uf6lJMSqbEwFig7z8aQu2/OQ==
-X-Received: by 2002:a5d:64c1:0:b0:220:8590:3809 with SMTP id f1-20020a5d64c1000000b0022085903809mr4629247wri.97.1659711503027;
-        Fri, 05 Aug 2022 07:58:23 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=aBvzMW7h3alEgW99ErQv4+ny+IZdZS0VnELxUm//1vE=;
+        b=yQAiG6uVbnb0s4eStERLIuDZ5YX9ukvkwVD02KWSov8MwnZ1zQkoikuqaC2RBpr850
+         tGQxcnvcCQs1GrcyPmA9UpYDMDZdvatH3JHMnorfo8mUF9PPIoDpz2BIfN2KnZ+Ed/Zc
+         BosKRb1FvMuTxcg385HaeEhIRGcQLLm0qGHePRmIyERFkuIbpj340Df6I6w6Q2ij9XKv
+         sKjr7sT9EnIVy2gsZVPEQyFOju0z4BTcX5+249PdYw7sUa8SSA8l+Xl8tw9endcDFisU
+         8sWiWss/RKfBYn6nn0eDs1ddoRQfM/B4bv6ZbwQsfBDgYptoOYP7t1oTS9XTiNoT/8iY
+         SIeQ==
+X-Gm-Message-State: ACgBeo3FVQIH2pR3NvobV0e5e/TSU+qDcghzzm3HKx/4rM/Lvv9FsbZC
+        ae0FsDDsp8GXSTyI9s4SAzweGw==
+X-Google-Smtp-Source: AA6agR4x5cXN7HuFjwyEH0hOFnaSWF2uTDVVYX3KO+S0TO9GQiiR8aa2fLy45UwY+57NlElSOh7xUQ==
+X-Received: by 2002:adf:e282:0:b0:21e:5546:5a26 with SMTP id v2-20020adfe282000000b0021e55465a26mr4901672wri.77.1659713924862;
+        Fri, 05 Aug 2022 08:38:44 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:aef0:8606:da6b:79ef])
-        by smtp.gmail.com with ESMTPSA id y1-20020adfd081000000b0022159d92004sm3102448wrh.82.2022.08.05.07.58.22
+        by smtp.gmail.com with ESMTPSA id h14-20020a5d430e000000b002217540b222sm1721025wrq.58.2022.08.05.08.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 07:58:22 -0700 (PDT)
+        Fri, 05 Aug 2022 08:38:44 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v1 26/26] thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-Date:   Fri,  5 Aug 2022 16:57:29 +0200
-Message-Id: <20220805145729.2491611-27-daniel.lezcano@linaro.org>
+Subject: [PATCH 1/5] thermal/core: Rearm the monitoring only one time
+Date:   Fri,  5 Aug 2022 17:38:30 +0200
+Message-Id: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
-References: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,203 +67,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
+The current code calls monitor_thermal_zone() inside the
+handle_thermal_trip() function. But this one is called in a loop for
+each trip point which means the monitoring is rearmed several times
+for nothing (assuming there could be several passive and active trip
+points).
 
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
+Move the monitor_thermal_zone() function out of the
+handle_thermal_trip() function and after the thermal trip loop, so the
+timer will be disabled or rearmed one time.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 120 ++++++++++---------
- 1 file changed, 66 insertions(+), 54 deletions(-)
+ drivers/thermal/thermal_core.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index 4d8edc61a78b..c28a98c82f97 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -53,6 +53,7 @@ struct zone_device {
- 	u32				msr_pkg_therm_high;
- 	struct delayed_work		work;
- 	struct thermal_zone_device	*tzone;
-+	struct thermal_trip		*trips;
- 	struct cpumask			cpumask;
- };
- 
-@@ -138,40 +139,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
- 	return -EINVAL;
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index b4c68410c158..4e1a83987b99 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -383,11 +383,6 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+ 		handle_critical_trips(tz, trip, trip_temp, type);
+ 	else
+ 		handle_non_critical_trips(tz, trip);
+-	/*
+-	 * Alright, we handled this trip successfully.
+-	 * So, start monitoring again.
+-	 */
+-	monitor_thermal_zone(tz);
  }
  
--static int sys_get_trip_temp(struct thermal_zone_device *tzd,
--			     int trip, int *temp)
--{
--	struct zone_device *zonedev = tzd->devdata;
--	unsigned long thres_reg_value;
--	u32 mask, shift, eax, edx;
--	int ret;
--
--	if (trip >= MAX_NUMBER_OF_TRIPS)
--		return -EINVAL;
--
--	if (trip) {
--		mask = THERM_MASK_THRESHOLD1;
--		shift = THERM_SHIFT_THRESHOLD1;
--	} else {
--		mask = THERM_MASK_THRESHOLD0;
--		shift = THERM_SHIFT_THRESHOLD0;
--	}
--
--	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
--			   &eax, &edx);
--	if (ret < 0)
--		return ret;
--
--	thres_reg_value = (eax & mask) >> shift;
--	if (thres_reg_value)
--		*temp = zonedev->tj_max - thres_reg_value * 1000;
--	else
--		*temp = THERMAL_TEMP_INVALID;
--	pr_debug("sys_get_trip_temp %d\n", *temp);
--
--	return 0;
--}
--
- static int
- sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- {
-@@ -212,18 +179,9 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- 			l, h);
+ static void update_temperature(struct thermal_zone_device *tz)
+@@ -503,6 +498,8 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
+ 
+ 	for (count = 0; count < tz->num_trips; count++)
+ 		handle_thermal_trip(tz, count);
++
++	monitor_thermal_zone(tz);
  }
- 
--static int sys_get_trip_type(struct thermal_zone_device *thermal, int trip,
--			     enum thermal_trip_type *type)
--{
--	*type = THERMAL_TRIP_PASSIVE;
--	return 0;
--}
--
- /* Thermal zone callback registry */
- static struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
--	.get_trip_temp = sys_get_trip_temp,
--	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
- };
- 
-@@ -328,6 +286,48 @@ static int pkg_thermal_notify(u64 msr_val)
- 	return 0;
- }
- 
-+static struct thermal_trip *pkg_temp_thermal_trips_init(int cpu, int tj_max, int num_trips)
-+{
-+	struct thermal_trip *trips;
-+	unsigned long thres_reg_value;
-+	u32 mask, shift, eax, edx;
-+	int ret, i;
-+
-+	trips = kzalloc(sizeof(*trips) * num_trips, GFP_KERNEL);
-+	if (!trips)
-+		return ERR_PTR(-ENOMEM);
-+	
-+	for (i = 0; i < num_trips; i++) {
-+
-+		if (i) {
-+			mask = THERM_MASK_THRESHOLD1;
-+			shift = THERM_SHIFT_THRESHOLD1;
-+		} else {
-+			mask = THERM_MASK_THRESHOLD0;
-+			shift = THERM_SHIFT_THRESHOLD0;
-+		}
-+
-+		ret = rdmsr_on_cpu(cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
-+				   &eax, &edx);
-+		if (ret < 0) {
-+			kfree(trips);
-+			return ERR_PTR(ret);
-+		}
-+
-+		thres_reg_value = (eax & mask) >> shift;
-+
-+		trips[i].temperature = thres_reg_value ?
-+			tj_max - thres_reg_value * 1000 : THERMAL_TEMP_INVALID;
-+
-+		trips[i].type = THERMAL_TRIP_PASSIVE;
-+		
-+		pr_debug("%s: cpu=%d, trip=%d, temp=%d\n",
-+			 __func__, cpu, i, trips[i].temperature);
-+	}
-+
-+	return trips;
-+}
-+
- static int pkg_temp_thermal_device_add(unsigned int cpu)
- {
- 	int id = topology_logical_die_id(cpu);
-@@ -353,24 +353,27 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	if (!zonedev)
- 		return -ENOMEM;
- 
-+	zonedev->trips = pkg_temp_thermal_trips_init(cpu, tj_max, thres_count);
-+	if (IS_ERR(zonedev->trips)) {
-+		err = PTR_ERR(zonedev->trips);
-+		goto out_kfree_zonedev;
-+	}
-+	
- 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
- 	zonedev->cpu = cpu;
- 	zonedev->tj_max = tj_max;
--	zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
--			thres_count,
-+	zonedev->tzone = thermal_zone_device_register_with_trips("x86_pkg_temp",
-+			zonedev->trips, thres_count,
- 			(thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
- 			zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
- 	if (IS_ERR(zonedev->tzone)) {
- 		err = PTR_ERR(zonedev->tzone);
--		kfree(zonedev);
--		return err;
-+		goto out_kfree_trips;
- 	}
- 	err = thermal_zone_device_enable(zonedev->tzone);
--	if (err) {
--		thermal_zone_device_unregister(zonedev->tzone);
--		kfree(zonedev);
--		return err;
--	}
-+	if (err)
-+		goto out_unregister_tz;
-+
- 	/* Store MSR value for package thermal interrupt, to restore at exit */
- 	rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev->msr_pkg_therm_low,
- 	      zonedev->msr_pkg_therm_high);
-@@ -379,7 +382,14 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	raw_spin_lock_irq(&pkg_temp_lock);
- 	zones[id] = zonedev;
- 	raw_spin_unlock_irq(&pkg_temp_lock);
--	return 0;
-+
-+out_unregister_tz:	
-+	thermal_zone_device_unregister(zonedev->tzone);
-+out_kfree_trips:
-+	kfree(zonedev->trips);
-+out_kfree_zonedev:
-+	kfree(zonedev);
-+	return err;
- }
- 
- static int pkg_thermal_cpu_offline(unsigned int cpu)
-@@ -463,8 +473,10 @@ static int pkg_thermal_cpu_offline(unsigned int cpu)
- 	raw_spin_unlock_irq(&pkg_temp_lock);
- 
- 	/* Final cleanup if this is the last cpu */
--	if (lastcpu)
-+	if (lastcpu) {
-+		kfree(zonedev->trips);
- 		kfree(zonedev);
-+	}
- 	return 0;
- }
+ EXPORT_SYMBOL_GPL(thermal_zone_device_update);
  
 -- 
 2.25.1
