@@ -2,192 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F087E58A9EF
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 13:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F3758AA15
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 13:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237962AbiHELH5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Aug 2022 07:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S240425AbiHELZi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Aug 2022 07:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiHELH4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 07:07:56 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7278606A1;
-        Fri,  5 Aug 2022 04:07:55 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id h22so1772775qta.3;
-        Fri, 05 Aug 2022 04:07:55 -0700 (PDT)
+        with ESMTP id S240606AbiHELZg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 07:25:36 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39A064C3
+        for <linux-pm@vger.kernel.org>; Fri,  5 Aug 2022 04:25:33 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 199so3319791ybl.9
+        for <linux-pm@vger.kernel.org>; Fri, 05 Aug 2022 04:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=xevi7s0+mr+ptfy7uVrWQvtAVkuN9tBhA8DON7VF3hc=;
-        b=a9+SkJgUlA0b0/BHR/ZnCRMvTgWWiTfbn+7hCLvZBsaMMCRDTPxUJBAC7vZNjxq/vo
-         k8OLi0uQ406lmhmpDT6bTA8Ln7hcqHBvrfJ6793g1OGhONtOUz8WZFu//S4D+ajPvm+/
-         HiavKm1cieEdFkxt1ha+nayBdzC2mzMdgbZG3PWagP1NkKBygX5opsEMSZg7lLxmqjo8
-         LBS37LwpObC3ROrIeGlDwWsw0zgdY3DWHlzFAJgr2ZjpMu5E7HGDXRWesXtLS8v9Z+Us
-         O4BT37Ii/msU+LJssnGZn5Y8/ZMnoo5h2TyNnno4biJLWE9r//68n4cVGwG19hhQqWRQ
-         N3Dg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=muUdW2iF3NLjwFcKkUArmJmVBNuXYz5InLqAh5elhfQ=;
+        b=ZUBBPCVRKEuFSuCPGHKTywKyH/kz5FoYQ4SPG9r/m/PmuP84AIk/zJgLwK68dCnegK
+         XdD1C1BEYg+sKcGp1H3uUxsLXoN4gYzjgiVA2a5AFY9xpSyPn/BQpsirChHco6A4y9NN
+         ql0Lbq3xix6hQeO6JH5QiBHNfJvSgucXv92qF8mnPyG8Vv5sRLGY25X2/U6VkiJBzK9p
+         HRbyqwg4XSHh7d4ZXc4TmKaQr3kNcDmesLlTGC32vhNEtl8Xy1iiCE1WHsf6J4L3Bv7h
+         XOzbsRryXD/Bhbb44WrOq+ans5GHNgSrPtAjJoNe8xDrew7DllBJKzFoJomSWAVYWYzf
+         1Q0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xevi7s0+mr+ptfy7uVrWQvtAVkuN9tBhA8DON7VF3hc=;
-        b=sm5JrA6bYdtj87Ckqd8aZ8RxoIv3GyG38CZ8N7UmJFNpjIxZb3FmKdl8gfzW4nn6k3
-         7KcSZsLfpo1+dYFn639RMKnLI8QdjTDqAaRgsAfY/f4HBpBIF4MPMNRzzlo2276KReGz
-         AN/CO/oeQ+/v4mSeO1eB9t7O2Mk7K1hsy609OzmMw48+q2L6LjzmZe5cPbymL/w6Mc4+
-         uqJ/0Gjr8QOCn5t83Pi0pEsdIlyK7pekwFNUUQPchH0UvEUIVfHDE+DLYE2hAaPZTdej
-         WzR97EgX9aCPpQ6IwprcjHUViM/laq8Mpt7KhXp3+ATbTRnqObe2PhfFrBSyMLDoS8Ar
-         /XFw==
-X-Gm-Message-State: ACgBeo3JmxB5VDOC+Ob7cqtgv1SMy0kEQ3LHNtUg3UipsyiY3U6uID0i
-        kGhvFFg7x7va8tgDO+dNqSfAD8aoOxTwMJe/wt4=
-X-Google-Smtp-Source: AA6agR616g5NuJiBX7N2EN5Udk4icnJWQWfoN9qnVhTU27eNGicOdpHWiuxBhRNAeZcqXVc1r4KkqHm9jBQr5PV+ypI=
-X-Received: by 2002:ac8:5784:0:b0:31f:24e:93f5 with SMTP id
- v4-20020ac85784000000b0031f024e93f5mr5286928qta.429.1659697674792; Fri, 05
- Aug 2022 04:07:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=muUdW2iF3NLjwFcKkUArmJmVBNuXYz5InLqAh5elhfQ=;
+        b=cWDiFtGXGdZzPq3f9RewDadIdj6czXDEAuDVCN+ickxZ1uQvgLi23F4yt0/vRhFxB/
+         Cr7Y2wfjToBZMJOzfVMs73xs/Hm1tC/QIdyaU5JW2V4kUBaKNnyuwPdrMA/fIgVydK8D
+         GmvjR1fhxdcUrJQOBQUBjQT6sJDLIwvTn2oqHFIyeHwLdaUsJvb7M5RfdeUnX8w2aOtj
+         8s/fphHA/kRtMxddlwuSx9lP/me3wLMbqep67BNtUWNFtOk5Luq/U7MDoQuhd1zQEhZu
+         XNuxY4oduym5v+aEmXMgSWBVuT5Ly4s9TlpYuu++MX6yMA7iMMIR1hQUvECcDzsfCBZo
+         AGAQ==
+X-Gm-Message-State: ACgBeo2+JfLtuTHzidkpvT8PYOa/V7q6ZhHCbDyCB5NxlNrGQm8TGZ48
+        0jW9Xwl2Z1Pm1/6ZZA4BwaraTVVfy/+chs5Aa5o=
+X-Google-Smtp-Source: AA6agR48+738mSZjy5LJrMtQ2AFxj8AYLjAyQoyHT8mCE7f1tV3P/VQ7Fs7G6sJY/M82Rd74OvkNynlB7eYjzgFo7eI=
+X-Received: by 2002:a25:73d4:0:b0:67a:6ef2:f581 with SMTP id
+ o203-20020a2573d4000000b0067a6ef2f581mr4581693ybc.100.1659698733114; Fri, 05
+ Aug 2022 04:25:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220805070610.3516-1-peterwu.pub@gmail.com> <20220805070610.3516-12-peterwu.pub@gmail.com>
-In-Reply-To: <20220805070610.3516-12-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 5 Aug 2022 13:07:18 +0200
-Message-ID: <CAHp75VeL=GVMSQaxePwc47FsQczs10m0ZFc-Y3Z2rGx45vLnuQ@mail.gmail.com>
-Subject: Re: [PATCH v7 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
- sink type LED Indicator support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+Received: by 2002:a05:7010:5087:b0:2e8:760f:3500 with HTTP; Fri, 5 Aug 2022
+ 04:25:32 -0700 (PDT)
+Reply-To: rolandnyemih200@gmail.com
+From:   Rowland Nyemih <fralaimetals100@gmail.com>
+Date:   Fri, 5 Aug 2022 12:25:32 +0100
+Message-ID: <CA+5KX237D5i7Pv=idXVYwJwwPkQRyq=+5PDjBV-bEO4vYhu4TQ@mail.gmail.com>
+Subject: Rowland
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b2b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [fralaimetals100[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [fralaimetals100[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rolandnyemih200[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 9:07 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> From: ChiYuan Huang <cy_huang@richtek.com>
->
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual
-> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
->
-> Add a support for the MediaTek MT6370 Current Sink Type LED Indicator
-
-Add support
-
-(This is also for all other commit messages)
-
-> driver. It can control four channels current-sink RGB LEDs with 3 modes,
-
-3 modes:
-
-> constant current, PWM, and breath mode.
-
-...
-
-> +static int mt6370_gen_breath_pattern(struct mt6370_priv *priv,
-> +                                    struct led_pattern *pattern, u32 len,
-> +                                    u8 *pattern_val, u32 val_len)
-> +{
-> +       enum mt6370_led_ranges sel_range;
-> +       struct led_pattern *curr;
-> +       unsigned int sel;
-> +       u32 val = 0;
-> +       int i;
-> +
-> +       if (len < P_MAX_PATTERNS && val_len < P_MAX_PATTERNS / 2)
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * Pattern list
-> +        * tr1:  byte 0, b'[7: 4]
-> +        * tr2:  byte 0, b'[3: 0]
-> +        * tf1:  byte 1, b'[7: 4]
-> +        * tf2:  byte 1, b'[3: 0]
-> +        * ton:  byte 2, b'[7: 4]
-> +        * toff: byte 2, b'[3: 0]
-> +        */
-> +       for (i = 0; i < P_MAX_PATTERNS; i++) {
-> +               curr = pattern + i;
-> +
-> +               sel_range = i == P_LED_TOFF ? R_LED_TOFF : R_LED_TRFON;
-> +
-> +               linear_range_get_selector_within(priv->ranges + sel_range,
-> +                                                curr->delta_t, &sel);
-> +
-> +               val <<= i % 2 == 0 ? 8 : 0;
-> +               val |= sel << (i % 2 == 0 ? 4 : 0);
-
-It's too cryptic, why not simply:
-
-  if (i % 2) {
-    val |= sel;
-  } else {
-    val <<= 8;
-    val |= sel << 4;
-  }
-
-?
-
-> +       }
-> +
-> +       put_unaligned_be24(val, pattern_val);
-> +
-> +       return 0;
-> +}
-
-...
-
-> +       const char * const states[] = { "off", "keep", "on" };
-
-> +       ret = fwnode_property_read_string(init_data->fwnode, "default-state",
-> +                                         &stat_str);
-> +       if (!ret) {
-> +               ret = match_string(states, ARRAY_SIZE(states), stat_str);
-> +               if (ret < 0)
-> +                       ret = STATE_OFF;
-> +
-> +               led->default_state = ret;
-> +       }
-
-Replace this by using led_init_default_state_get().
-
--- 
-With Best Regards,
-Andy Shevchenko
+HI,
+Good day.
+Kindly confirm to me if this is your correct email Address and get
+back to me for our interest.
+Sincerely,
+Rowland Nyemih
