@@ -2,190 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EC258ADCB
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 18:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A2B58AE29
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 18:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238497AbiHEQAa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Aug 2022 12:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S236318AbiHEQ3a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Aug 2022 12:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241072AbiHEQA3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 12:00:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BBD82ADC;
-        Fri,  5 Aug 2022 09:00:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EAE46106F;
-        Fri,  5 Aug 2022 09:00:24 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41B383F73B;
-        Fri,  5 Aug 2022 09:00:23 -0700 (PDT)
-Date:   Fri, 5 Aug 2022 17:00:20 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vinod Koul <vinod.koul@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: PSCI domains without OSI support
-Message-ID: <20220805160020.fc5s3hv3u5h4gcmv@bogus>
-References: <CAA8EJpr2S-81+q-vjmk5i+T-JwaadkRpjCr_oGi7fMf7o3iH3A@mail.gmail.com>
- <20220727111410.bglx2u26456ray2u@bogus>
- <CAA8EJprNPJfGjkq2=hexbZn-=t2wKG6ZjSm5Mcbo4JuPQ-sc-A@mail.gmail.com>
- <20220728084012.jjbmycplye3zuaok@bogus>
- <CAPDyKFqT23A_4EdBe=2-+6821BzjPvGzsMositM2=Of692iv3A@mail.gmail.com>
+        with ESMTP id S241349AbiHEQ3X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 12:29:23 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D651EAC1;
+        Fri,  5 Aug 2022 09:29:22 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id j63so4509738ybb.13;
+        Fri, 05 Aug 2022 09:29:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JpK4cKjWfUdf5fiTOgPLG1JC3Xe7mGK2psxBpm/kgz0=;
+        b=5WmvgU3LEnUUlhoZvFAANJwRfEBY0n0UwBf2M7r7VbcsC//hRMH0CahIzWYYQpe7Y4
+         UvNAXCjug+d09y5p4dngiLK0+QAV/TaV57+LQc9bsTpOaJx5Qza+zsri7ODpKGVujXIO
+         bIZsNR1ZIPoCwpp5V48xoUvDzXQn9jnFemS6ofNEGcrd7/LbnS0QsNgnD44cVSJezucc
+         lTzFnagbCXpKyEM56vM+XKlhO71vJNrK7NShs2hmW27BxLOk1nEpU6M+nCpnMWdCpHtQ
+         gTtnsi5qH7K4CixJWsT0BFOlrWrOOer17BtX/EJkOrSCt7iRvFQu98fPhLUhWG52KfS+
+         vTJw==
+X-Gm-Message-State: ACgBeo0oDEqwOK+M4vgyeEK8YJn+eVK4JB0rrOPID19i5sZAZMd40V9D
+        diGI6JW3faDuUWg+91xcJMmtVIZdb6GVnno98e4=
+X-Google-Smtp-Source: AA6agR7Zsuuvu2R22w+jsFCs5Obdld9ZRUWowUJ7/XDtMD+zovP2x7IJKUXlcChmvQ7oXdoo4RS6v+yWnnoBfovePVI=
+X-Received: by 2002:a25:cc51:0:b0:676:ccba:875 with SMTP id
+ l78-20020a25cc51000000b00676ccba0875mr6093715ybf.137.1659716960892; Fri, 05
+ Aug 2022 09:29:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPDyKFqT23A_4EdBe=2-+6821BzjPvGzsMositM2=Of692iv3A@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 5 Aug 2022 18:29:09 +0200
+Message-ID: <CAJZ5v0jVp+AW06MqgOmQV=AmGtb7VdY_FYSxC6wT2BZw9uzxnQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] thermal/core: Rearm the monitoring only one time
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 04:12:42PM +0200, Ulf Hansson wrote:
-> On Thu, 28 Jul 2022 at 10:40, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Wed, Jul 27, 2022 at 04:24:22PM +0300, Dmitry Baryshkov wrote:
-> > > On Wed, 27 Jul 2022 at 14:14, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > >
-> > > > On Wed, Jul 27, 2022 at 12:09:27PM +0300, Dmitry Baryshkov wrote:
-> > > > > Hi,
-> > > > >
-> > > > > Lately I have been working on improving the msm8996 platform support.
-> > > > > Vendor kernel seems to support domain-like idle (see [1], [2]).
-> > > > > However when I tried changing upstream msm8996.dtsi to use PSCI
-> > > > > domains, I faced the firmware reporting NOT_SUPPORTED to an attempt to
-> > > > > enable OSI (thus rendering PSCI domains useless, as they are now
-> > > > > marked with ALWAYS_ON).
-> > > > >
-> > > >
-> > > > That's not good to hear 🙁.
-> > > >
-> > > > > I noticed that vendor kernel makes a call to cpu_suspend() with
-> > > > > power_state following the original format (described in PSCI spec
-> > > > > 5.4.2.1). What would be the best way to support this?
-> > > >
-> > > > And why is this not possible with the existing code ? Not sure if I
-> > > > understood it right, I am assuming you are mentioning that it is not
-> > > > possible.
-> > >
-> > > It's not possible with the cpuidle-psci-domains.c. The driver marks
-> > > all genpds as ALWAYS_ON, thus making sure that they are never
-> > > suspended.
-> > >
-> >
-> > That doesn't sound correct. I am sure Ulf has tried this on one of SDM
-> > platform for sure when it was merged.
+On Fri, Aug 5, 2022 at 5:38 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 >
-> It looks like there may be some misunderstanding here.
+> The current code calls monitor_thermal_zone() inside the
+> handle_thermal_trip() function. But this one is called in a loop for
+> each trip point which means the monitoring is rearmed several times
+> for nothing (assuming there could be several passive and active trip
+> points).
 >
-> I think the point Dmitry is trying to make, is that the we set the
-> GENPD_FLAG_ALWAYS_ON for the created genpds, when the OSI mode could
-> not be turned on, when probing the cpuidle-psci-domain driver. In this
-> way, all of cluster idle-states become disabled.
+> Move the monitor_thermal_zone() function out of the
+> handle_thermal_trip() function and after the thermal trip loop, so the
+> timer will be disabled or rearmed one time.
 >
-> More details about why we have this behaviour can be found from the
-> commit below.
->
-> 70c179b49870 ("cpuidle: psci: Allow PM domain to be initialized even
-> if no OSI mode")
->
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Ah OK, understood now.
+Does this series depend on any other?
 
-> >
-> > > > > - Allow DTS forcing the PSCI power domains even if OSI enablement fails?
-> > > >
-> > > > Meaning DTS flag for this ? If OSI enable fails, why would you want to
-> > > > still proceed. It is non-compliant and must be fixed if the firmware
-> > > > supports OSI and expects OSPM to use the same.
-> > >
-> > > I'm not sure at this moment. PSCI firmware reports that OSI mode is
-> > > supported, but then when psci_pd_try_set_osi_mode() tries to switch
-> > > into OSI mode, it gets NOT_SUPPORTED.
-> >
-> > Yikes, fix the damn broken firmware. That is utter non-sense. I don't
-> > understand why would the firmware authors enable some feature before it
-> > is ready.
+You've been sending quite a lot of material lately and it is not
+always easy to tell what the dependencies between the different patch
+series are.
+
+> ---
+>  drivers/thermal/thermal_core.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 >
-> I certainly agree that the FW is broken and should really have been
-> fixed, but that seems unlikely to happen when moving forward.
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index b4c68410c158..4e1a83987b99 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -383,11 +383,6 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+>                 handle_critical_trips(tz, trip, trip_temp, type);
+>         else
+>                 handle_non_critical_trips(tz, trip);
+> -       /*
+> -        * Alright, we handled this trip successfully.
+> -        * So, start monitoring again.
+> -        */
+> -       monitor_thermal_zone(tz);
+>  }
 >
-> On the other hand, it's quite common that we try to add workarounds at
-> the Linux side to fix FW issues. Of course, it depends on what kind of
-> hacks it means for us to carry.
+>  static void update_temperature(struct thermal_zone_device *tz)
+> @@ -503,6 +498,8 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
 >
-> In this particular case, I am of the opinion that it looks like the
-> "hack" may be worth it. Unless I have underestimated the problem, it
-> seems like a new DT property/flag and a simple if-clause in
-> psci_pd_try_set_osi_mode() should do the trick for us.
+>         for (count = 0; count < tz->num_trips; count++)
+>                 handle_thermal_trip(tz, count);
+> +
+> +       monitor_thermal_zone(tz);
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_zone_device_update);
 >
-
-I don't like the idea of new property/flag for this for simple reason.
-Once you have that it is impossible to control if downstream new platforms
-are using it and they will expect it to be maintained once they ship the
-product.
-
-> I wouldn't mind maintaining such small parts, when going forward - and
-> of course I think we should also reject any newer platforms from using
-> it.
+> --
+> 2.25.1
 >
-
-The only way that we can achieve this IMO is to have quirks based on
-platform compatible which needs to be updated and can be rejected for
-newer platforms. New flags means new feature which is expected to be
-supported for long and hard to control newer platforms not using them.
-
-> >
-> > > Just for the sake of completeness, I added a print to the psci.c to
-> > > dump the result of the psci_set_osi_mode(false). It also returns
-> > > NOT_SUPPORTED!
-> > >
-> >
-> > Well it is simply broken then. Not tested firmware, so please don't
-> > attempt to use OSI if it is so fundamentally broken. I find it hard to
-> > accept the argument that well it works just that the query API is failing.
-> > But what is the guarantee that it is tested well enough. We will end up
-> > adding more quirks after adding one to enable it.
-> >
-> > > My logical assumption would be that the firmware reports support for
-> > > OS_INITIATED, but then just fails to properly support
-> > > SET_SUSPEND_MODE.
-> >
-> > I knew this argument was coming as I wrote above, sorry I don't buy that.
-> > It is probably one of the early platforms supporting PSCI and not well tested
-> > for conformance. So I am inclined to just say we can't support it.
-> >
->
-> As Dmitry also wrote in his other reply, the FW has certainly been
-> well tested with the cluster idle states (acting like OSI mode has
-> been enabled).
->
-
-OK, fair enough if you are aware that is the case here.
-
-> To me, it seems like a pity, if we just decided to leave all those
-> devices out there in the field, lacking support for deeper idle
-> states. Don't you think?
->
-
-Sure, but I don't like new flags for handling this for reasons stated
-above. Unless DT maintainers expect to take "new flag/property" for
-some reasons that I am not aware of, I prefer the check on existing
-platform compatible to deal with this problem so that this problem
-doesn't trickle down to newer platforms as well. Thoughts ?
-
-And please add that we can't add any compatibles that are added later
-than certain date to that list when we are adding this support.
-
---
-Regards,
-Sudeep
