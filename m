@@ -2,67 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C011458ACD1
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 16:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E2358ACD4
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 16:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241208AbiHEO73 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Aug 2022 10:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S241216AbiHEO7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Aug 2022 10:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241117AbiHEO6a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 10:58:30 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A9E6BD5C
-        for <linux-pm@vger.kernel.org>; Fri,  5 Aug 2022 07:58:13 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id h13so3545274wrf.6
-        for <linux-pm@vger.kernel.org>; Fri, 05 Aug 2022 07:58:13 -0700 (PDT)
+        with ESMTP id S241138AbiHEO6l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 10:58:41 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFAC6C13A
+        for <linux-pm@vger.kernel.org>; Fri,  5 Aug 2022 07:58:14 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v3so3615864wrp.0
+        for <linux-pm@vger.kernel.org>; Fri, 05 Aug 2022 07:58:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=aqMaHXWxSF1AlY1fJjS12uTHlTBPz1oDnaX+N99K3gQ=;
-        b=mqQrqmu+YhBQKIHfpM02TKn8UWOFfqRsUFuFQbbJhvSQ1LoPwTt3dwHLaiqSpzdN9E
-         PDpn+KG6MZAitd5QWudINdRdVFMHC7KHDPtJAaAyFwGBpaCu+pnqgRQ+c+hxkSPqaNnI
-         xuknQtd0BI0OZPGvyBNOG7x4KlSHpLzhNqqXbupqSM0iyzaxoAFl9fdcgGB8CbqG6amo
-         YCVbnf5NLwOjibh0MIqn1QgFTo48NZYHi9Ny5K8znbP8gQfuFsPlJHCiZjFkbVS1o/4K
-         kCB+tJwwyjdYmFGKsTxwBcH7jWy1vH2kc0HqgTLKmYSJ9g4F0GwMNwAX0CjWGJdtniBs
-         ZFxQ==
+        bh=PImRJTT8zs0oIpM2evdWHVSde+hTXl/M4vFOcqlQbmQ=;
+        b=AqT1WgxHm8fBw9YYLR9Hlqe2zAKgmgWFxmR1J7NYMR9Zy74/c/k3G0UZA+uPSjNGL5
+         aCkpzu/wLBRGitr5nPAb/RWb48VrD6U5bW4ZVadhD+4QzZQcGXNwP8CpcKGjazelJ0yd
+         emzJ2gb28bcTDWLW03p9/7dvuDE6mf/hk54KcCVjy2ctiWpTIUqMQBs1cOOqRdXAjsol
+         pZ0SLR4eEh5WHFT/B9ftuPbf3lwjWzp/zqKnx6g9SpWBxSFu8eZldRlmAJW+vWP7C6c0
+         3yCndj1x98qCQ/XvT307fQEkAidVz5Rn1e+kl1vkzFkWn9S9+6ZPU71MhFBoUfJWgm4w
+         2d+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=aqMaHXWxSF1AlY1fJjS12uTHlTBPz1oDnaX+N99K3gQ=;
-        b=MufINIM8a2QETw+rZr0bfpjF8tbDODjaSIfiiPK4Gc0QDZV08bolD9sKCyKHt/CGVk
-         guM3UVGsXYF1gXWG+Nbp2CWGPZgZVI6Au6jTZY3fjhSlypaTNKgXgCY8Gjqrvc5EFZUS
-         cBCaKrNHJ7ZAGrhjMw/QsF+fH8mNCIPwW3jULFdOdBKjcqI44pP7nRCHgECZtHjuCHLc
-         GyOy6ZEop2uCgXQo+9ogAKlOyhgK34vEH6O5wmGO6nxKRfdz82tctl421v4oXSDP4YRf
-         k8Bsfd3yxQgFFMtBlgWCZqk1n/QvFLnlAD3kJ7UvMG9b5Ihgyro39y/44dE7eRkvA1UZ
-         sv2g==
-X-Gm-Message-State: ACgBeo2VpbJ8XOyeGp906dmv3pIUIHK6GUHo9WekH2eg6+4+BXOLS6cE
-        enXSP2bXVm1t+d6UELOYuI8Fgg==
-X-Google-Smtp-Source: AA6agR4JSLzRCO8BJrj8mF8xZLtYg+aL9xK+By9lyb4B7Jxec+U/RjWtTI1b7bJsL6XswKljIgLBLQ==
-X-Received: by 2002:a5d:590f:0:b0:21f:c78:4693 with SMTP id v15-20020a5d590f000000b0021f0c784693mr4489792wrd.544.1659711492875;
-        Fri, 05 Aug 2022 07:58:12 -0700 (PDT)
+        bh=PImRJTT8zs0oIpM2evdWHVSde+hTXl/M4vFOcqlQbmQ=;
+        b=Xobvy0mWzZLmwLyFKzS/Fw1bxovzrd30VyMUEH/6VqOeSin/KgoXGKZcDPqi6K9cAu
+         daYMZR259SSavXDCOHTrCS+/2Wn/BXlDSvOEHuRtdp4y53vuv1Uc7WGJBDP1KKqklQn2
+         bkCVppft5O+p/itn1MIZ3S/haoKxcWrzDIKgljRRzCAigM08A3nZfgeVlixTMxykPF3C
+         Dd94bkEoowVdhtptTdpmLnbbKt9+eY5nWzXFeonYmC/qaL1Bwq6gNhL9fyNUdSHypVb+
+         nB4veBMVEIep20OtmdLxgl0ZzFgL5Mn3HSMt/0tEcrciX+UEG5u7Rx1uMYfToH3d5yqe
+         Wwlw==
+X-Gm-Message-State: ACgBeo1LqM813XDSQJPhuHaFHDv/Jx3SJcDGG+vMBMYN1RwNVvxSCvyQ
+        VBpIrpneQ06bn7n5d58NkP3o9brru0iLIQ==
+X-Google-Smtp-Source: AA6agR6UlwCu/D0lPBaupJTGeqKV3LwNn9dvU2lghGb4PjgBAeFOg6ik6VX4Gpue4J/T6g+M4iufXg==
+X-Received: by 2002:a05:6000:511:b0:21e:503e:d964 with SMTP id a17-20020a056000051100b0021e503ed964mr4627748wrf.306.1659711494257;
+        Fri, 05 Aug 2022 07:58:14 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:aef0:8606:da6b:79ef])
-        by smtp.gmail.com with ESMTPSA id y1-20020adfd081000000b0022159d92004sm3102448wrh.82.2022.08.05.07.58.11
+        by smtp.gmail.com with ESMTPSA id y1-20020adfd081000000b0022159d92004sm3102448wrh.82.2022.08.05.07.58.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 07:58:12 -0700 (PDT)
+        Fri, 05 Aug 2022 07:58:13 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE)
-Subject: [PATCH v1 20/26] thermal/drivers/broadcom: Use generic thermal_zone_get_trip() function
-Date:   Fri,  5 Aug 2022 16:57:23 +0200
-Message-Id: <20220805145729.2491611-21-daniel.lezcano@linaro.org>
+        linux-kernel@vger.kernel.org,
+        Support Opensource <support.opensource@diasemi.com>,
+        Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH v1 21/26] thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
+Date:   Fri,  5 Aug 2022 16:57:24 +0200
+Message-Id: <20220805145729.2491611-22-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
 References: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
@@ -87,49 +80,86 @@ thermal zone.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/broadcom/bcm2835_thermal.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/thermal/da9062-thermal.c | 52 +++++---------------------------
+ 1 file changed, 8 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/thermal/broadcom/bcm2835_thermal.c b/drivers/thermal/broadcom/bcm2835_thermal.c
-index 2c67841a1115..5485e59d03a9 100644
---- a/drivers/thermal/broadcom/bcm2835_thermal.c
-+++ b/drivers/thermal/broadcom/bcm2835_thermal.c
-@@ -18,6 +18,7 @@
- #include <linux/platform_device.h>
- #include <linux/thermal.h>
+diff --git a/drivers/thermal/da9062-thermal.c b/drivers/thermal/da9062-thermal.c
+index 180edec34e07..1e163e90d6b6 100644
+--- a/drivers/thermal/da9062-thermal.c
++++ b/drivers/thermal/da9062-thermal.c
+@@ -120,44 +120,6 @@ static irqreturn_t da9062_thermal_irq_handler(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
  
-+#include "../thermal_core.h"
- #include "../thermal_hwmon.h"
+-static int da9062_thermal_get_trip_type(struct thermal_zone_device *z,
+-					int trip,
+-					enum thermal_trip_type *type)
+-{
+-	struct da9062_thermal *thermal = z->devdata;
+-
+-	switch (trip) {
+-	case 0:
+-		*type = THERMAL_TRIP_HOT;
+-		break;
+-	default:
+-		dev_err(thermal->dev,
+-			"Driver does not support more than 1 trip-wire\n");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static int da9062_thermal_get_trip_temp(struct thermal_zone_device *z,
+-					int trip,
+-					int *temp)
+-{
+-	struct da9062_thermal *thermal = z->devdata;
+-
+-	switch (trip) {
+-	case 0:
+-		*temp = DA9062_MILLI_CELSIUS(125);
+-		break;
+-	default:
+-		dev_err(thermal->dev,
+-			"Driver does not support more than 1 trip-wire\n");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+ static int da9062_thermal_get_temp(struct thermal_zone_device *z,
+ 				   int *temp)
+ {
+@@ -172,8 +134,10 @@ static int da9062_thermal_get_temp(struct thermal_zone_device *z,
  
- #define BCM2835_TS_TSENSCTL			0x00
-@@ -224,7 +225,8 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
- 	 */
- 	val = readl(data->regs + BCM2835_TS_TSENSCTL);
- 	if (!(val & BCM2835_TS_TSENSCTL_RSTB)) {
--		int trip_temp, offset, slope;
-+		struct thermal_trip trip;
-+		int offset, slope;
+ static struct thermal_zone_device_ops da9062_thermal_ops = {
+ 	.get_temp	= da9062_thermal_get_temp,
+-	.get_trip_type	= da9062_thermal_get_trip_type,
+-	.get_trip_temp	= da9062_thermal_get_trip_temp,
++};
++
++static struct thermal_trip trips[] = {
++	{ .temperature = DA9062_MILLI_CELSIUS(125), .type = THERMAL_TRIP_HOT },
+ };
  
- 		slope = thermal_zone_get_slope(tz);
- 		offset = thermal_zone_get_offset(tz);
-@@ -232,7 +234,7 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
- 		 * For now we deal only with critical, otherwise
- 		 * would need to iterate
- 		 */
--		err = tz->ops->get_trip_temp(tz, 0, &trip_temp);
-+		err = thermal_zone_get_trip(tz, 0, &trip);
- 		if (err < 0) {
- 			dev_err(&pdev->dev,
- 				"Not able to read trip_temp: %d\n",
-@@ -249,7 +251,7 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
- 		val |= (0xFE << BCM2835_TS_TSENSCTL_RSTDELAY_SHIFT);
+ static const struct da9062_thermal_config da9062_config = {
+@@ -228,10 +192,10 @@ static int da9062_thermal_probe(struct platform_device *pdev)
+ 	INIT_DELAYED_WORK(&thermal->work, da9062_thermal_poll_on);
+ 	mutex_init(&thermal->lock);
  
- 		/*  trip_adc value from info */
--		val |= bcm2835_thermal_temp2adc(trip_temp,
-+		val |= bcm2835_thermal_temp2adc(trip.temperature,
- 						offset,
- 						slope)
- 			<< BCM2835_TS_TSENSCTL_THOLD_SHIFT;
+-	thermal->zone = thermal_zone_device_register(thermal->config->name,
+-					1, 0, thermal,
+-					&da9062_thermal_ops, NULL, pp_tmp,
+-					0);
++	thermal->zone = thermal_zone_device_register_with_trips(thermal->config->name,
++								trips, ARRAY_SIZE(trips), 0, thermal,
++								&da9062_thermal_ops, NULL, pp_tmp,
++								0);
+ 	if (IS_ERR(thermal->zone)) {
+ 		dev_err(&pdev->dev, "Cannot register thermal zone device\n");
+ 		ret = PTR_ERR(thermal->zone);
 -- 
 2.25.1
 
