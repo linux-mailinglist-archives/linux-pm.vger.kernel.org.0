@@ -2,149 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E669458ABCB
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 15:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E65658AC29
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Aug 2022 16:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237496AbiHENsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Aug 2022 09:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
+        id S230095AbiHEOKv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Aug 2022 10:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiHENsh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 09:48:37 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D322B4D151
-        for <linux-pm@vger.kernel.org>; Fri,  5 Aug 2022 06:48:35 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id t1so3503133lft.8
-        for <linux-pm@vger.kernel.org>; Fri, 05 Aug 2022 06:48:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7Qu42GkSZgSwJNVcCZcDAVdJgynuhwiHLKNU0w0qTtI=;
-        b=jTc9Thnexb9GxgUgrlkof29rYFwEScpVooPrSpeoAddqfUklQtPW2FvIf+uA8yhNB2
-         ksRm0oHYBDIGrC2ls2PGDj/jq+VtZz3xUag/gUBSZiaG/PR+hKiLQ6TOl05QbzJvssH7
-         ePm6GgMf7mIm+O2laFeDHqN6FL6YZgSyF0TfxQEEFVtE5Wx9ZM7tGAPDAi/6h3XZIQzb
-         6n8TEwgYK2khaJv77FcKOZXr66GhFIWlQPF5VoSlE5SlMDCbY9J4M7kmU+gyB1J451dr
-         E5j7GfVPRGa7WxX/PX9fBa43JfBEWmzXmc4J1qK8JtKRi8tubxh4OntZYYdQm72Wxkje
-         jyvA==
+        with ESMTP id S240906AbiHEOKn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 10:10:43 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E5B26554;
+        Fri,  5 Aug 2022 07:10:41 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-328a1cff250so25426477b3.6;
+        Fri, 05 Aug 2022 07:10:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7Qu42GkSZgSwJNVcCZcDAVdJgynuhwiHLKNU0w0qTtI=;
-        b=h6gRBIZ+vQpakaTknAmaNoJVYdcTm/GClD/FeZ0H50Jmv/i3ASiWv0kU6Amx1q0VLK
-         hgYpm2bIW81iEMbQcUChVHjL9W0vnqAI+WQVg3DjNPgB4xb7FrCZxGf57ZpJYcNstbQG
-         3sAU6oNA69u7Mh+2aUirr2wBlO708IBaEBo070bLFxvJNc6q4pY0yTzvTn49Fc9U8G42
-         x2YzW4Rd7dssiNYo2lgNGEUf96knmZRyHpH2Znrv4zzGHPe/Y4zeve1JqI1nbMXCAYAd
-         7OkD248ZR+2Hk5t1bkPvQH7Kx+fbsTMPMMIUBeLtX8fb1Xn2rW65NjVHHzLtrUjYPfEO
-         ORFg==
-X-Gm-Message-State: ACgBeo0tlh1mUnmMwfInCp5TrtdPoZ0ajI3E1nG4J4jc9v+qwJ9svHPE
-        jRYLxB12VpQLgCtAVBtFg4An5sFayvslPuq7auTqVg==
-X-Google-Smtp-Source: AA6agR6zlbnodh7A88lmlV3/ndU82/uMEk4Guofki8d9vqHREYM9WObWKDa13yhXY+LMQ0DPNGeGgkbtP80ffPZFn/M=
-X-Received: by 2002:a05:6512:3403:b0:481:60ae:7ebc with SMTP id
- i3-20020a056512340300b0048160ae7ebcmr2489455lfr.358.1659707314190; Fri, 05
- Aug 2022 06:48:34 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=CHx7bJPvvyTngqWiFPDdkK2Ii5TEJtPQmjfIfoaxYFY=;
+        b=NSTr78hm8kwgepBwe2aJ/ueD9Wm9YLRFP0LhX/rTNo7N+HqDN1dfMyBrGU7wvIaQk2
+         gFVR3F7LBqIhVsb4c2Y5EcBlYurdBX90n6NZR56ffbOVjw2KjTo7VxHiAZ1tBKlx8hEZ
+         dQKjlttvm7C6wOSrliiaSgNIwQI40iaAGr6vGtgmVinbLaEt/zzRXXVpjhBWVCMDOOjI
+         o0ugR/03fiq2N74rCwq1tG09+MNF922XNeJJKFDEAU7q8SQlAH6OJ3oWo/YtPoaBWwa7
+         8teNz+UNl/qnds2D+Z+9x1Po+5Kf1ySj+A/cCI6nhTzGtC5h3l0Pcf3bIQ3EqmkAJZ/9
+         lVtg==
+X-Gm-Message-State: ACgBeo2879Ks7vGRwfOICdQKMyx9C4ofvzumweeNpQlTofDJYjXU2yXQ
+        3tHLJxArWLuz3RityNWCLU+FqJEy9XCb+Buywsw=
+X-Google-Smtp-Source: AA6agR71VAjeCfoinelkmVMZFjmxfMNcwzNppNMp7moYuaidxLoi4rQ3wlVfEos3tVRX9iGw46tP/793Q3/dv/eWuL0=
+X-Received: by 2002:a81:ae0a:0:b0:324:59ab:feec with SMTP id
+ m10-20020a81ae0a000000b0032459abfeecmr6372940ywh.7.1659708640995; Fri, 05 Aug
+ 2022 07:10:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAA8EJpr2S-81+q-vjmk5i+T-JwaadkRpjCr_oGi7fMf7o3iH3A@mail.gmail.com>
- <20220727111410.bglx2u26456ray2u@bogus> <CAA8EJprNPJfGjkq2=hexbZn-=t2wKG6ZjSm5Mcbo4JuPQ-sc-A@mail.gmail.com>
- <CAA8EJpqP9XMcLP+Pmj5OnXD2_SJ9ULBZ_Q492+x56oQnPzqiUA@mail.gmail.com> <CAA8EJppWSQTrZgN7yBLhLepuxEiFsBnkhcXOgXrz2qjGj3GcLw@mail.gmail.com>
-In-Reply-To: <CAA8EJppWSQTrZgN7yBLhLepuxEiFsBnkhcXOgXrz2qjGj3GcLw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 5 Aug 2022 15:47:56 +0200
-Message-ID: <CAPDyKFo5ejVDn+9meM+5=bb8SF=a8DGABP4KYF9AHhc-DCuf1Q@mail.gmail.com>
-Subject: Re: PSCI domains without OSI support
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vinod.koul@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <2643836.mvXUDI8C0e@kreacher> <FA016A79-B2B1-42A4-A63F-3A44B3EC57CB@chromium.org>
+In-Reply-To: <FA016A79-B2B1-42A4-A63F-3A44B3EC57CB@chromium.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 5 Aug 2022 16:10:29 +0200
+Message-ID: <CAJZ5v0j0ebQMWeR2VWjdRufYEoQ_viysYjsvFSVFX11ef2R17Q@mail.gmail.com>
+Subject: Re: [PATCH] PM: core: Do not randomize struct dev_pm_ops layout
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 27 Jul 2022 at 22:51, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Fri, Aug 5, 2022 at 4:12 AM Kees Cook <keescook@chromium.org> wrote:
 >
-> On Wed, 27 Jul 2022 at 16:39, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On Wed, 27 Jul 2022 at 16:24, Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On Wed, 27 Jul 2022 at 14:14, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > >
-> > > > On Wed, Jul 27, 2022 at 12:09:27PM +0300, Dmitry Baryshkov wrote:
-> >
-> > > > > - Allow DTS forcing the PSCI power domains even if OSI enablement fails?
-> > > >
-> > > > Meaning DTS flag for this ? If OSI enable fails, why would you want to
-> > > > still proceed. It is non-compliant and must be fixed if the firmware
-> > > > supports OSI and expects OSPM to use the same.
-> > >
-> > > I'm not sure at this moment. PSCI firmware reports that OSI mode is
-> > > supported, but then when psci_pd_try_set_osi_mode() tries to switch
-> > > into OSI mode, it gets NOT_SUPPORTED.
-> > > Just for the sake of completeness, I added a print to the psci.c to
-> > > dump the result of the psci_set_osi_mode(false). It also returns
-> > > NOT_SUPPORTED!
-> > >
-> > > My logical assumption would be that the firmware reports support for
-> > > OS_INITIATED, but then just fails to properly support
-> > > SET_SUSPEND_MODE.
-> >
-> > Okay. From the msm-3.14 commit log:
-> >
-> > Add support to terminate all low power modes in PSCI. The lpm-levels will
-> > work with version 1.0 of PSCI specification using the OS initiated scheme.
-> > The lpm-levels driver would determine the last man standing and vote into
-> > TZ accordingly.
-> >
-> > Which means that the vendor kernel expected to work in the OSI mode
-> > without calling SET_SUSPEND (such call doesn't exist in 3.14)
 >
-> After adding the debugfs file, it's clear that this is the case.
 >
-> Compare msm8996:
-> PSCIv1.0
-> SMC Calling Convention v1.0 is assumed
-> OSI is supported
-> Extended StateID format is used
->
-> vs sdm845:
-> PSCIv1.1
-> SMC Calling Convention v1.2
-> OSI is supported
-> Extended StateID format is used
-> CPU_FREEZE is supported
-> SET_SUSPEND_MODE is supported
->
-> Judging by people reporting 'failure to enable OSI mode' on several
-> other Qualcomm SoCs (msm8976, msm8953), this bug is present on several
-> older Qualcomm platforms.
->
+> On August 4, 2022 10:15:08 AM PDT, "Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
+> >From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > So, this looks like the "force-psci-domains" or "ignore-osi-error"
-> > flag would be logical.
-> > The question about testing still holds.
+> >Because __rpm_get_callback() uses offsetof() to compute the address of
+> >the callback in question in struct dev_pm_ops, randomizing the layout
+> >of the latter leads to interesting, but unfortunately also undesirable
+> >results in some cases.
+>
+> How does this manifest? This is a compile-time randomization, so offsetof() will find the correct location.
 
-Alright, so this looks like a deviation from the spec. Nevertheless,
-it seems quite simple for us to fix by overriding the FW error, by
-adding a new DT flag, in the way you propose.
+Well, I would think so.
 
-In principle, I think the new DT flag should avoid us to call
-psci_set_osi_mode() in psci_pd_try_set_osi_mode(), but rather just
-return true when the flag is set.
+> Is struct dev_pm_ops created or consumed externally from the kernel at any point?
 
-In this way, the GENPD_FLAG_ALWAYS_ON will not be set for the genpds
-that are created, so things should work as the PSCI FW has OSI mode
-enabled.
+I'm not sure TBH.  I have seen a trace where pci_pm_resume_noirq() is
+evidently called via rpm_callback() which should never happen if the
+offset computation is correct.
 
-Kind regards
-Uffe
+The driver in question (which is out of the tree for now) is modular,
+so in theory it could be built separately from the rest of the kernel,
+but I think that this still should work, shouldn't it?
+
+> >
+> >Prevent that from happening by using the __no_randomize_layout
+> >annotation on struct dev_pm_ops.
+> >
+> >Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >---
+> > include/linux/pm.h |    2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> >Index: linux-pm/include/linux/pm.h
+> >===================================================================
+> >--- linux-pm.orig/include/linux/pm.h
+> >+++ linux-pm/include/linux/pm.h
+> >@@ -307,7 +307,7 @@ struct dev_pm_ops {
+> >       int (*runtime_suspend)(struct device *dev);
+> >       int (*runtime_resume)(struct device *dev);
+> >       int (*runtime_idle)(struct device *dev);
+> >-};
+> >+} __no_randomize_layout;
+> >
+> > #define SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> >       .suspend = pm_sleep_ptr(suspend_fn), \
+> >
+> >
+> >
+>
+> --
+> Kees Cook
