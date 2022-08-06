@@ -2,116 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AFE58B7A9
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Aug 2022 20:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB4E58B7FD
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Aug 2022 21:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbiHFSVz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Aug 2022 14:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S231855AbiHFTnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Aug 2022 15:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241657AbiHFSVk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Aug 2022 14:21:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74D1E25;
-        Sat,  6 Aug 2022 11:21:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42BC461221;
-        Sat,  6 Aug 2022 18:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271BAC433C1;
-        Sat,  6 Aug 2022 18:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659810064;
-        bh=orcjVHFk4lFBov1ujUSmqLHsLoO2iIvfGgGHJHlIh7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FWMhuXFJSleNWQKkiPFl4VU6fLgJgg6NLKSQrAlEY/EFTQ9ut+LINlEq4+P8A76ir
-         IvyBzut+gNS7PLgDqedD3Lom2EzymAV2djRK1XpPyawrVNmOacohakfCykPAhI8xbb
-         Y8SnjOMZWNinwDaIqEUVGkxQlmlIciOCeYQ/r4VeVn/N/FXRdtUd3W1fJGX7qUfjvG
-         eSMWVoal7Q1bqcQbqRZCy3pbAPd90fAtGG81LEqp8ofNdOI3Y9onRrpPZEvacpHvDJ
-         Hl38QHCxXBh3JLj/eY20OJYs7ADgNsiFMtAyfyJW2Ne2V3Pii9H1HZAHJJLRXJACXZ
-         dDFGHS6h1Yfdw==
-Date:   Sat, 6 Aug 2022 21:21:01 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Matthew Garrett <mgarrett@aurora.tech>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-Message-ID: <Yu6xDf9ejxHbLyJ6@kernel.org>
-References: <20220504232102.469959-1-evgreen@chromium.org>
- <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
- <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
- <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
- <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
- <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
- <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com>
- <YusZ8gD/LjiAXadR@kernel.org>
- <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
+        with ESMTP id S231738AbiHFTnY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Aug 2022 15:43:24 -0400
+X-Greylist: delayed 2278 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 06 Aug 2022 12:43:23 PDT
+Received: from toro.compassinternetsolutions.com (unknown [138.128.241.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB573892
+        for <linux-pm@vger.kernel.org>; Sat,  6 Aug 2022 12:43:23 -0700 (PDT)
+Received: from towingselectedto by toro.compassinternetsolutions.com with local (Exim 4.95)
+        (envelope-from <towingselectedto@toro.compassinternetsolutions.com>)
+        id 1oKP6x-001jzO-Vo
+        for linux-pm@vger.kernel.org;
+        Sat, 06 Aug 2022 15:05:24 -0400
+To:     linux-pm@vger.kernel.org
+Subject: =?us-ascii?Q?Subject:_THE_WORLD_FINANCIAL_CRISIS_CAN_MAKE_YO?=  =?us-ascii?Q?U_VERY_RICH!?=
+X-PHP-Script: www.selectedtowing.com/index.php for 156.146.63.156, 156.146.63.156
+Date:   Sat, 6 Aug 2022 19:05:23 +0000
+From:   Selected Towing <wordpress@selectedtowing.com>
+Reply-To: arnaldo@coinso.com
+Message-ID: <8tsukeWiNeWgo8aEWsnsiBMPMTM0oop7SWOOjfwTBgM@www.selectedtowing.com>
+X-Mailer: PHPMailer 6.5.0 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - toro.compassinternetsolutions.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [1064 996] / [47 12]
+X-AntiAbuse: Sender Address Domain - toro.compassinternetsolutions.com
+X-Get-Message-Sender-Via: toro.compassinternetsolutions.com: authenticated_id: towingselectedto/from_h
+X-Authenticated-Sender: toro.compassinternetsolutions.com: wordpress@selectedtowing.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,
+        HEADER_FROM_DIFFERENT_DOMAINS,PHP_SCRIPT,RCVD_IN_BL_SPAMCOP_NET,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 02:55:35PM -0700, Evan Green wrote:
-> On Wed, Aug 3, 2022 at 5:59 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Tue, Aug 02, 2022 at 11:36:43AM -0700, Matthew Garrett wrote:
-> > > On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
-> > >
-> > > > One more bump here, as we'd really love to get encrypted hibernation
-> > > > to a form upstream would accept if at all possible. We were
-> > > > considering landing this in our Chrome OS tree for now, then coming
-> > > > back in a couple months with a "we've been baking this ourselves and
-> > > > it's going so great, oooh yeah". I'm not sure if upstream would find
-> > > > that compelling or not. But in any case, some guidance towards making
-> > > > this more upstream friendly would be well appreciated.
-> > > >
-> > > > One thing I realized in attempting to pick this myself is that the
-> > > > trusted key blob format has moved to ASN.1. So I should really move
-> > > > the creation ticket to the new ASN.1 format (if I can figure out the
-> > > > right OID for that piece), which would allow me to drop a lot of the
-> > > > ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
-> > > > I'll work on that and resend.
-> > >
-> > > I've been revamping my TPM-backed verified hibernation implementation
-> > > based on this work, so I'd definitely be enthusiastic about it being
-> > > mergeable.
-> >
-> > BTW, is it tested with QEMU + swtpm?
-> 
-> For myself, so far I've been testing on a recent Intel Chromebook. The
-> H1 (aka cr50) security chip on modern chromebooks implements a subset
-> [1] of TPM2.0, and is exposed through the standard TPM APIs in the
-> kernel. I can make sure to test on Qemu as well, is there anything in
-> particular I should look out for?
+Message Body:
+THE FALL IN THE PRICE OF BITCOIN WILL MAKE YOU A MILLIONAIRE https://telegra.ph/Cryptocurrency-makes-people-millionaires-at-15-people-per-hour---Page-303114-08-02
 
-I was just thinking what I could use for testing
+--
+This e-mail was sent from a contact form on Selected Towing (http://www.selectedtowing.com)
 
-BR, Jarkko
