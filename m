@@ -2,65 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1CB58B334
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Aug 2022 03:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2978558B40F
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Aug 2022 08:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238141AbiHFB2m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Aug 2022 21:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
+        id S229828AbiHFG1J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Aug 2022 02:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiHFB2m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Aug 2022 21:28:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354F07D1C4;
-        Fri,  5 Aug 2022 18:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659749321; x=1691285321;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ye8NVzvzBvcHA9s6ReUJQafmZ0O34T0PcCGjPKSAx8w=;
-  b=esaU8RKe4gcVy5C2OvDN4xIZKN8l0bNEcoo52Oe3tAvnGyiV8LauybDQ
-   hF0PBQgviLsaCfvtw3PyDQ6OCkokDglzgN2Kr3sFMa1ElFTZG75UDPrhy
-   ZTExLHAY57ZRkNF+P0emM4trsD189amIUDb6eN5zEFLN5Tu96qr0SlqKu
-   SqQZ+GSooKKT7KFoNQa/5EE6JBayB5a+dQ0jIqa/kP1aVG5a5pivq+tyY
-   q4xsTU/fE2Dm40rg0zSBQeNo1oXC/wUDnvmvlU29vYr7Lb1meP5FlagCp
-   wnMdl5f9r7/+QwEODmyC/R9WYGakTi/9jqabS1c20RicypolAWsOAFUfo
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="290334363"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="290334363"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 18:28:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="693181583"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Aug 2022 18:28:38 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oK8cI-000Jtw-0C;
-        Sat, 06 Aug 2022 01:28:38 +0000
-Date:   Sat, 6 Aug 2022 09:27:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     kbuild-all@lists.01.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v1 05/26] thermal/drivers/tegra: Use generic
- thermal_zone_get_trip() function
-Message-ID: <202208060952.zqreQz9o-lkp@intel.com>
-References: <20220805145729.2491611-6-daniel.lezcano@linaro.org>
+        with ESMTP id S239233AbiHFG1H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Aug 2022 02:27:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E98613F0D
+        for <linux-pm@vger.kernel.org>; Fri,  5 Aug 2022 23:27:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45A6FB8013C
+        for <linux-pm@vger.kernel.org>; Sat,  6 Aug 2022 06:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F4BC43141
+        for <linux-pm@vger.kernel.org>; Sat,  6 Aug 2022 06:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659767218;
+        bh=tdSQkdYyeQu2cNOaRFHtoh04jOL8Bg/ji7wzXxG7lgs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FnB+ligvchV64camigOScyWCWVuMZcJxS9TMhKpURDvxJuD15TqWNAxHVXTLu2xkL
+         moKhYMmO55rw4LUyJzidVQJHannvd17EuYNPjPSwgawtkhHUQDMA4M2xEHU3onX6L6
+         YEQTqZBfABNsGDwzFZ4/7FrlCUs9f3rMQ0nd4ZtaLOaBjxmBr1k86hKwgBxrie9p2d
+         JOslacRJ5NusQN3YitDiqF9suoO4wLR9c+RE7C7DyoKKMs768wFP8FtTyseEX0WLbl
+         i5SNLKf+zOBQnlHor1l4oVyR5mT+SzEJwiWKWveLAQReJ05ShSzuVkHJ9JLBZu9Fe9
+         yuJVPSBJh4BCw==
+Received: by mail-lj1-f179.google.com with SMTP id z20so5052268ljq.3
+        for <linux-pm@vger.kernel.org>; Fri, 05 Aug 2022 23:26:58 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0veuhsznVkjixhRb+L4Swi6km974cnquJH/TfX7E12YMhH4vxo
+        uRYw1xQPewqTICPjs2D0YDmVLw32mHmqyxeiszov5Q==
+X-Google-Smtp-Source: AA6agR4/G709MljrnqhPnqLX5KFXMgV7jfTvvwjjUkNoDxppcTzDaXDqqOrXi08SScKBPIQQz4Do0P5Hxjbk54WbPI8=
+X-Received: by 2002:a2e:a916:0:b0:25e:2d78:f676 with SMTP id
+ j22-20020a2ea916000000b0025e2d78f676mr2806226ljq.260.1659767216809; Fri, 05
+ Aug 2022 23:26:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805145729.2491611-6-daniel.lezcano@linaro.org>
+References: <20220805145729.2491611-1-daniel.lezcano@linaro.org> <20220805145729.2491611-12-daniel.lezcano@linaro.org>
+In-Reply-To: <20220805145729.2491611-12-daniel.lezcano@linaro.org>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Sat, 6 Aug 2022 11:56:45 +0530
+X-Gmail-Original-Message-ID: <CAHLCerPoqGvuDy2LKsSEd681qwQd=doUN3m-6m6encuxEudu7g@mail.gmail.com>
+Message-ID: <CAHLCerPoqGvuDy2LKsSEd681qwQd=doUN3m-6m6encuxEudu7g@mail.gmail.com>
+Subject: Re: [PATCH v1 11/26] thermal/drivers/qcom: Use generic
+ thermal_zone_get_trip() function
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +68,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Fri, Aug 5, 2022 at 8:28 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
+>
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Amit Kucheria <amitk@kernel.org>
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on next-20220804]
-[cannot apply to rafael-pm/thermal tegra/for-next linus/master v5.19 v5.19-rc8 v5.19-rc7 v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/Rework-the-trip-points-creation/20220805-230055
-base:    899926f2ccb4453c51943f6738a71b2c5ad98b71
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220806/202208060952.zqreQz9o-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/17490c33351b77ce054a22f2e41306ca6c18cd99
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/Rework-the-trip-points-creation/20220805-230055
-        git checkout 17490c33351b77ce054a22f2e41306ca6c18cd99
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "thermal_zone_get_trip" [drivers/thermal/tegra/tegra-soctherm.ko] undefined!
->> ERROR: modpost: "thermal_zone_get_trip" [drivers/thermal/tegra/tegra30-tsensor.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 39 +++++++++------------
+>  1 file changed, 17 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> index be785ab37e53..127e8c90211c 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> @@ -263,17 +263,17 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+>         return qpnp_tm_write(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, reg);
+>  }
+>
+> -static int qpnp_tm_set_trip_temp(struct thermal_zone_device *tz, int trip, int temp)
+> +static int qpnp_tm_set_trip_temp(struct thermal_zone_device *tz, int trip_id, int temp)
+>  {
+>         struct qpnp_tm_chip *chip = tz->devdata;
+> -       const struct thermal_trip *trip_points;
+> +       struct thermal_trip trip;
+>         int ret;
+>
+> -       trip_points = of_thermal_get_trip_points(chip->tz_dev);
+> -       if (!trip_points)
+> -               return -EINVAL;
+> +       ret = thermal_zone_get_trip(chip->tz_dev, trip_id, &trip);
+> +       if (ret)
+> +               return ret;
+>
+> -       if (trip_points[trip].type != THERMAL_TRIP_CRITICAL)
+> +       if (trip.type != THERMAL_TRIP_CRITICAL)
+>                 return 0;
+>
+>         mutex_lock(&chip->lock);
+> @@ -299,22 +299,17 @@ static irqreturn_t qpnp_tm_isr(int irq, void *data)
+>
+>  static int qpnp_tm_get_critical_trip_temp(struct qpnp_tm_chip *chip)
+>  {
+> -       int ntrips;
+> -       const struct thermal_trip *trips;
+> -       int i;
+> -
+> -       ntrips = of_thermal_get_ntrips(chip->tz_dev);
+> -       if (ntrips <= 0)
+> -               return THERMAL_TEMP_INVALID;
+> -
+> -       trips = of_thermal_get_trip_points(chip->tz_dev);
+> -       if (!trips)
+> -               return THERMAL_TEMP_INVALID;
+> -
+> -       for (i = 0; i < ntrips; i++) {
+> -               if (of_thermal_is_trip_valid(chip->tz_dev, i) &&
+> -                   trips[i].type == THERMAL_TRIP_CRITICAL)
+> -                       return trips[i].temperature;
+> +       struct thermal_trip trip;
+> +       int i, ret;
+> +
+> +       for (i = 0; i < thermal_zone_get_num_trips(chip->tz_dev); i++) {
+> +
+> +               ret = thermal_zone_get_trip(chip->tz_dev, i, &trip);
+> +               if (ret)
+> +                       continue;
+> +
+> +               if (trip.type == THERMAL_TRIP_CRITICAL)
+> +                       return trip.temperature;
+>         }
+>
+>         return THERMAL_TEMP_INVALID;
+> --
+> 2.25.1
+>
