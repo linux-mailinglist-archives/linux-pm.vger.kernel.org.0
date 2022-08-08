@@ -2,74 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89DD58CDC0
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 20:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D00758CDD2
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 20:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237394AbiHHSih (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 14:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S244465AbiHHSmZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 14:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234943AbiHHSif (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 14:38:35 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C08EE1C;
-        Mon,  8 Aug 2022 11:38:33 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8B6D2240005;
-        Mon,  8 Aug 2022 18:38:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1659983912;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tm3EpuS9pDYqqZBTNmVKBmb1DmjbCqV31hX/CMoLAVc=;
-        b=jy7Fe9LhMQ2zm2vkg/wS/7L1gCDHmz1eNFZ/rmyNcYJvNvwRl20TsOPvUFwMipmApn4WsZ
-        r1DWaPz9dwknph+ZHshcfsmufOMXjZONR13Bom2rtW0iUIqmbeNhYS+2Sk7uUBmwnO1lFc
-        vg0CLzG+Xvnmy0Cx3eCm76wOVT7OH1aq+vhoRoP7MZlWDQVHvt49B8xxLOHXbFPPDevvzP
-        DsS7Bslm43JmY3u9pCQZBo0g8d3c8RrkxNoVniOdym2el+piHcJ+VXvDCDP7/OsNv/UHne
-        IXUvawEqAPjGGvBo2n3rnTauNfqc02pWudkrRTdEuw21/SmxnsauVqFoLHyDYw==
-Date:   Mon, 8 Aug 2022 20:38:31 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-acpi@vger.kernel.org, rjw@rjwysocki.net
-Cc:     a.zummo@towertech.it, mario.limonciello@amd.com,
-        linux-rtc@vger.kernel.org, rui.zhang@intel.com,
-        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0
-Message-ID: <165998389112.717573.2543861915100061902.b4-ty@bootlin.com>
-References: <12054246.O9o76ZdvQC@kreacher>
+        with ESMTP id S244410AbiHHSmI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 14:42:08 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59791929E
+        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 11:41:39 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id j5so5619057oih.6
+        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 11:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=+jov4sDK8fqguLcdGEtCS3PX7Z+/XUaiZu5mjGAoBwc=;
+        b=jQh0ZktlrsGJDfa5sjbq2FHvzf4mdvXfFgJm/+h4G+SV2anYSa8bfoSW0x4cZ+a3Aw
+         l0RRwnm4nakH4bXp8NL0oOLZJ9X2/pY+yndrdlsPeLyxZh/ViMnKFbDOXVx/nMOZ3cKv
+         ceY+U9j3d8UqgTT7Mwyo4gRiFfM9J+QRO6t5Cg1dbWKXaphwir4V2MbeP/89G33WRA+N
+         gelXSFx7JFODRcl3YrPC8cGsN7ItGYTyrXZ575oNF0+odf1LDKxLLKGQ4X6GPFW3SZHF
+         m/3Y2Lopfg0cwERPa5gJWPnQOWwBWBvQIG6zrBuR4751Tjv+mDN+PExBB8PTuQP+jw75
+         MChA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=+jov4sDK8fqguLcdGEtCS3PX7Z+/XUaiZu5mjGAoBwc=;
+        b=gdWHk9SW6CNesXPxgq0/DIP2vLurr0DH21cQGrx8tr8oE4xK7NylBNNf67lmLTgwr0
+         veNmIpkQgE7WxKlQCiKgYN5j2m1t7emVnD8EmU6JnADlDHVWFjsDAehFz9VDPeAY53Z/
+         ukfUitMYZkdIEAApw1SMR8xXIHGO8Z+NEn0KLrFl+cKwlYhomSgjBBedZmysnwGomhIR
+         8uENlH4N8YNB3iOqUd8LWpXgNDmEEUCsqE9fYwBjY+P7l1SO42+IW2dH1mT3O7bfpqC7
+         Zot5Fek46NI+zix1oH+oSAuLuSGSygIJihaZId6Dn8HEYKbjnl+rhlhGAt1QkD8F3+7l
+         YxoA==
+X-Gm-Message-State: ACgBeo2Vv01Gvyw5DHpeplmg+H5ba3m8U0jet/JSQ4xfulOFUlbY0U79
+        blrRrMS+NMpKaAjteaUwZnsmI1EMFJPmMw==
+X-Google-Smtp-Source: AA6agR5bJmLFgnGWaH7lWQ9cZrofG2bX3oeGvmJg+5K1A0TzfoRbCFeR6iE+6t9h5yKMa98pNuVKGQ==
+X-Received: by 2002:a05:6808:2114:b0:343:665:d54e with SMTP id r20-20020a056808211400b003430665d54emr1187227oiw.71.1659984099106;
+        Mon, 08 Aug 2022 11:41:39 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id y12-20020a4a650c000000b00440ed1f8c45sm2295292ooc.43.2022.08.08.11.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 11:41:38 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 11:44:18 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh@kernel.org, pavel@ucw.cz, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] dt-bindings: leds: Describe optional 'reg' property used
+ for Qualcomm LPG nodes
+Message-ID: <YvFZgr1RRq6tYaVC@ripper>
+References: <20220721195502.1525214-1-bhupesh.sharma@linaro.org>
+ <CAA8EJppGS38aP7gyd1c3kNgraAVJDoqUef2cDfZpu2aL_iwW0g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <12054246.O9o76ZdvQC@kreacher>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAA8EJppGS38aP7gyd1c3kNgraAVJDoqUef2cDfZpu2aL_iwW0g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 08 Aug 2022 20:23:59 +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu 21 Jul 13:19 PDT 2022, Dmitry Baryshkov wrote:
+
+> On Thu, 21 Jul 2022 at 22:55, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+> >
+> > As Bjorn noted in [1], it is useful to describe the optional
+> > 'reg' property for Qualcomm LPG nodes as it is used in
+> > some Qualcomm dts files.
 > 
-> The ACPI_FADT_LOW_POWER_S0 flag merely means that it is better to
-> use low-power S0 idle on the given platform than S3 (provided that
-> the latter is supported) and it doesn't preclude using either of
-> them (which of them will be used depends on the choices made by user
-> space).
+> I don't think this is correct. LPG block maps to several regions, so
+> using just one of them in reg doesn't look correct.
 > 
-> [...]
 
-Applied, thanks!
+I agree, but I also like the uniformity of having unit addresses for the
+devices on the spmi buses.
 
-[1/1] rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0
-      commit: 6492fed7d8c95f53b0b804ef541324d924d95d41
+> > This fixes the following 'make dtbs_check' error reported for
+> > pm8350c & sc8280xp pwm nodes:
+> >
+> > arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dtb:
+> >  pwm@e800: 'reg' does not match any of the regexes:
+> >  '^led@[0-9a-f]$', 'pinctrl-[0-9]+'
+> 
+> I'd prefer to follow the existing schema and to drop the region from
+> those files.
+> 
 
-Best regards,
+I'm fine either way, but we have more of these nodes, so I would like to
+hear from the DT maintainers on the direction to take. All nodes on the
+spmi bus has an (at least one) address, so it would be accurate to state
+this in the node.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+It does however not seem like devicetree@, nor Krzysztof is Cc'ed on
+this patch, so I've added them...
+
+Regards,
+Bjorn
+
+> >
+> > [1]. https://lore.kernel.org/linux-arm-msm/Ytg3tIaL5h5b9ewH@builder.lan/
+> >
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Cc: robh@kernel.org
+> > Cc: pavel@ucw.cz
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > index fe336fa16518..f394ab7a757b 100644
+> > --- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > @@ -27,6 +27,9 @@ properties:
+> >        - qcom,pmi8994-lpg
+> >        - qcom,pmi8998-lpg
+> >
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> >    "#pwm-cells":
+> >      const: 2
+> >
+> > --
+> > 2.35.3
+> >
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
