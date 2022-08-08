@@ -2,88 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DCF58CF8C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 23:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEC458CFB9
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 23:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234943AbiHHVRp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 17:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S244457AbiHHVdX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 17:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238401AbiHHVRo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 17:17:44 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69711AF37
-        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 14:17:42 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id s11-20020a1cf20b000000b003a52a0945e8so3235566wmc.1
-        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 14:17:42 -0700 (PDT)
+        with ESMTP id S244374AbiHHVdE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 17:33:04 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21631B792;
+        Mon,  8 Aug 2022 14:33:03 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id g12so9174818pfb.3;
+        Mon, 08 Aug 2022 14:33:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=xT3U7Fcq666IjZnpP4Hd9cAsdG9vkr6FYDlzUI0n/OE=;
-        b=ECongWXKH2gwPuWgmxYdr6guRMPl4jAF8wszWyuDEt5/3rpg1VhdodvEh3b0QBJjMu
-         jGuXiG3uAJrZY2JzewgWe+wqpjTOPR5nMCDJUoBHV71Wu31SoMOUZSGcUU+V/BgGTuoy
-         iVb6OREEZ4TfbdQdQqMHPScwgu2CXEsFtz4WSM90RaGHcMVscynjwcqz6Pyx/I7NK/TI
-         zT/kzTU86DoKMKXH5cCVDZiAL1O5h6QNpKCMMH9MPqLwM/TjTMEnWa0yh1zmJ4LaADHI
-         kzYBPFYPlmtlKKcbEVAmF6tKXgF52bwvvAz7j8ELzRCOEsd+XYWyWY7oGbauIVyZh6Hv
-         UCgw==
+         :sender:from:to:cc;
+        bh=rS3Mx8/uZ2d+BgMGOGtvmS/CNUo6wU0+RbWwTqMfR8I=;
+        b=WDCv75RRp771BTrXoqCYUYmsK98tI5FHeD3vK8AtBlp07+b9a5FwjIo8VsSqSuRRMi
+         1HTbstJmbcsWr5Lk6zNA7l42qj5Mlbkp6xG6WnO+Ug0khtE/pLRXy1M11hRIkWXOSoQa
+         Yy57MR/8S0NS9rowud+9Mg//M1aztU3rIf6HyOTIKtnjkbxl75Fj8rkpkKHhf1TZeNAF
+         RH8rOzOo0MNU2Fx5pKzs/MfgezRGLNGa6ZM4i12CkUx4StQwYhUbfKCbxHOJvYUXAFw+
+         y5IO7YlIENr/PhzT398g/oWyTato2mqiXn4eIyc4dQ15C1wD0zza6q495CmE/Nx+YRoP
+         7/5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=xT3U7Fcq666IjZnpP4Hd9cAsdG9vkr6FYDlzUI0n/OE=;
-        b=X5m7vQaqy8Qr0Ari7EA5J1+6kbu8nshNEYiQBdfryC2VavaiIKj/2MHI2c1xPlPz8j
-         RvKBpFe2oID9lOx/U+QHMwuV92a1h2eFkGGOb2XW6eYKPaJ0nGBe/zHdZB5uS2+qIUMv
-         BSkUluGIySpQYTc9YYCjd03eCeu/Jvi1n1aFebSQj8zfuLU8yz7LTQ9VZOsotOVge3d3
-         Z7FM1vFw/FZKcyztt71G1QUJwXLOzUdTQVCFoHviogBu4uZh8LJNlXp1uB3p6D5Jkg8d
-         hdR1k+FNyZI/Tx3DkeMHrEb4AxKvSI1oZs29LWdrPhq5BU6s4fYa8iSmtmkETVFWsHC/
-         hIYg==
-X-Gm-Message-State: ACgBeo2HKjKUFj9hvKmXRoSm5at15INTI39W7+QqQ08jF99VNUMXcBqC
-        Iu75XlpkfrrGhQYHCnHDEOyOBA==
-X-Google-Smtp-Source: AA6agR4jZ2+M0qSdbkYF7IST0XVTX3X/Zm/eeDM106HX5oBGSVSsAfRVMOsrJ4HYtT1spomRLZEnUg==
-X-Received: by 2002:a05:600c:1ca0:b0:3a5:3703:2a97 with SMTP id k32-20020a05600c1ca000b003a537032a97mr6409480wms.23.1659993461134;
-        Mon, 08 Aug 2022 14:17:41 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id o6-20020a05600c4fc600b003a32490c95dsm20358062wmq.35.2022.08.08.14.17.39
+         :sender:x-gm-message-state:from:to:cc;
+        bh=rS3Mx8/uZ2d+BgMGOGtvmS/CNUo6wU0+RbWwTqMfR8I=;
+        b=GI41Hfk3D7DjaAk7uC/nMuDIZHNjstjwYRq2arx5EtVGaNDKrZhyFlnDyRrOqK2LhI
+         WtpbE4yTt1jKv49uVBqaDI7IqGyMS/FmB6sdeRHVNQ9BI3eHGdeyAmEP7Cg+quJz6b+B
+         3KqQTioidHC0sS/BPlwW1lWKhMW1ITgDnohL++gnSu8oRVmfyLniXJOnbOZ0V4LvUBTW
+         qAGr4nw7WPraFsSWniRF19Yd8r1bJfQwPhwtb2igllnNNtN7SWHB+pxZPvOzSNY3A3Nr
+         PLd+aE2YoaIsv6o2ITp4PMJW9sCJsxnAtZWWsG8oth/4UyqZ1lA9QbWAvv7cWQ+zPqGi
+         6HoQ==
+X-Gm-Message-State: ACgBeo2Omn+5R7rySSrsE+gopOttpzk52TMjYJfTJxmMAVpnESi9NUQb
+        7QO+r/iCnINipUTShgrobOXMTlUJFJw=
+X-Google-Smtp-Source: AA6agR4Q/q2QTvXAEUC14Lyvast2H7Dvne8pF5BOLyeeUrNr9nHEnL523tiqO5tH/lfk6eqYhRXSgw==
+X-Received: by 2002:a63:6406:0:b0:41b:f291:2cbf with SMTP id y6-20020a636406000000b0041bf2912cbfmr17518116pgb.96.1659994383453;
+        Mon, 08 Aug 2022 14:33:03 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902eb8d00b0016eef474042sm9057529plg.262.2022.08.08.14.33.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 14:17:39 -0700 (PDT)
-Message-ID: <fb14ae2a-9702-1041-ae84-34d37835e839@linaro.org>
-Date:   Mon, 8 Aug 2022 23:17:38 +0200
+        Mon, 08 Aug 2022 14:33:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <593294eb-aecd-2a9c-dc01-1e91b0a00075@roeck-us.net>
+Date:   Mon, 8 Aug 2022 14:33:00 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Subject: Re: [PATCH 2/4] thermal/of: Return -ENODEV instead of -EINVAL if
  registration fails
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     rafael@kernel.org, dan.carpenter@oracle.com,
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     michael@walle.cc, dan.carpenter@oracle.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
 References: <20220808180915.446053-1-daniel.lezcano@linaro.org>
  <20220808180915.446053-2-daniel.lezcano@linaro.org>
  <f8008f05-4e4d-e21f-2e40-e234930ee86e@roeck-us.net>
- <d676c6533e11ac357a8aaca4ba216b6d@walle.cc>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <d676c6533e11ac357a8aaca4ba216b6d@walle.cc>
+ <bbd09ad6-db85-5981-a5c1-1dabca1f1b66@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <bbd09ad6-db85-5981-a5c1-1dabca1f1b66@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/08/2022 21:05, Michael Walle wrote:
-> Am 2022-08-08 20:35, schrieb Guenter Roeck:
+On 8/8/22 13:31, Daniel Lezcano wrote:
+> On 08/08/2022 20:35, Guenter Roeck wrote:
 >> On 8/8/22 11:09, Daniel Lezcano wrote:
 >>> The previous version of the OF code was returning -ENODEV if no
 >>> thermal zones description was found or if the lookup of the sensor in
@@ -103,56 +103,41 @@ On 08/08/2022 21:05, Michael Walle wrote:
 >>> index 368eb58e97cf..4210c18ef7b2 100644
 >>> --- a/drivers/thermal/thermal_of.c
 >>> +++ b/drivers/thermal/thermal_of.c
->>> @@ -329,7 +329,7 @@ static struct device_node 
->>> *of_thermal_zone_find(struct device_node *sensor, int
+>>> @@ -329,7 +329,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
 >>>       np = of_find_node_by_name(NULL, "thermal-zones");
 >>>       if (!np) {
 >>>           pr_err("Unable to find thermal zones description\n");
 >>
 >> I really don't like that error message: People will see it (and complain)
->> whenever a sensor registers and there is no thermal zone, even though 
->> that
+>> whenever a sensor registers and there is no thermal zone, even though that
 >> is perfectly normal (see description above).
+>>
 > 
-> I can second that, and there actually two error messages:
+> I agree, I'll change the message to:
 > 
-> [    6.156983] thermal_sys: Unable to find thermal zones description
-> [    6.163125] thermal_sys: Failed to find thermal zone for hwmon id=0
-
-Yeah, I can check:
-
-np = of_thermal_zone_find(sensor, id);
-
-And print the error if PTR_ERR(np) != ENODEV, otherwise silently return.
-
-
-> On the sl28 board with the qoriq_thermal driver:
-> [    1.917940] thermal_sys: Failed to find thermal zone for tmu id=2
-> [    1.929231] thermal_sys: Failed to find thermal zone for tmu id=3
-> [    1.940519] thermal_sys: Failed to find thermal zone for tmu id=4
-> [    1.951814] thermal_sys: Failed to find thermal zone for tmu id=5
-> [    1.963109] thermal_sys: Failed to find thermal zone for tmu id=6
-> [    1.974399] thermal_sys: Failed to find thermal zone for tmu id=7
-> [    1.985690] thermal_sys: Failed to find thermal zone for tmu id=8
-> [    1.996980] thermal_sys: Failed to find thermal zone for tmu id=9
-> [    2.008274] thermal_sys: Failed to find thermal zone for tmu id=10
-> [    2.019656] thermal_sys: Failed to find thermal zone for tmu id=11
-> [    2.031037] thermal_sys: Failed to find thermal zone for tmu id=12
-> [    2.048942] thermal_sys: Failed to find thermal zone for tmu id=13
-> [    2.060320] thermal_sys: Failed to find thermal zone for tmu id=14
-> [    2.071700] thermal_sys: Failed to find thermal zone for tmu id=15
+>      pr_info("No thermal zones description\n");
 > 
-> Btw. the driver seems to always register 16 sensors regardless how
-> many the actual hardware has (or rather: are described in the DT).
+> sounds good ?
+> 
 
-Yes, it may be nicer to rely on the compatible string to figure out the 
-sensors of the platform and call with full knowledge the registering 
-function. But anyway ...
+I think it should be silent or at best pr_debug.
 
+Guenter
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>>> -        return ERR_PTR(-EINVAL);
+>>> +        return ERR_PTR(-ENODEV);
+>>>       }
+>>>       /*
+>>> @@ -368,7 +368,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+>>>               }
+>>>           }
+>>>       }
+>>> -    tz = ERR_PTR(-EINVAL);
+>>> +    tz = ERR_PTR(-ENODEV);
+>>>   out:
+>>>       of_node_put(np);
+>>>       return tz;
+>>
+> 
+> 
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
