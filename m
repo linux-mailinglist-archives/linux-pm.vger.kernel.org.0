@@ -2,50 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB4E58C067
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 03:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469DF58C106
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 03:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243158AbiHHBwP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Aug 2022 21:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
+        id S243614AbiHHB5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Aug 2022 21:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243745AbiHHBvn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Aug 2022 21:51:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D20D128;
-        Sun,  7 Aug 2022 18:38:37 -0700 (PDT)
+        with ESMTP id S243670AbiHHBzq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Aug 2022 21:55:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F331C110;
+        Sun,  7 Aug 2022 18:39:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D66EA60E65;
-        Mon,  8 Aug 2022 01:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2243BC433D6;
-        Mon,  8 Aug 2022 01:38:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C408B80E0F;
+        Mon,  8 Aug 2022 01:39:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56BAC433D7;
+        Mon,  8 Aug 2022 01:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922716;
-        bh=bSH9y4Ku8CoRj6uH7czVHGtvbannl6YjNvwomyXlUIs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=B6mSes8nSlvOcXYF5bu5FVzh7LpauZIsBv8GzrPsi0c427idqFP9i0htLavWFQeIF
-         qBrzUXDMPZz09ePRVATjHYVEWswB4z8YRPfJTumD2QhUMA6nYbsZv3Wa0UwVOFWDhH
-         6qz+o6HmIZbUzh4vV74EJumjiQo9gbKSXqUv+d1EbGsXjGJKZdsgkGH+0zOcVwHVG3
-         4POFBu0iDJPF7KbXJ/TML821+SCZolGID+mp6DLRMRdE7T4sS4pZMPalbskbttBi/O
-         8xdK7+VPjkT8LKbDOsKPXSynFDR4riHo17wNF8u2wF5UVkHP0bd9I6LxZkoOLaC6Kx
-         UhqtB490o5gVw==
+        s=k20201202; t=1659922749;
+        bh=fsWJpVlbdSP6aK71pA9OxUeNSHt9OvDhrKF+Ylw6rhM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gKMMJXEbdsYpmOH5qlQL1yc8d+QrbZCZeLcVC6B/iFltM/zI7CRl5a4WrfP7a0330
+         p0/xnCUxE1t00V/XOogdb0YUgUXzsKgw/oXN1s9qvXSyNrTgWWDaZXd4F0vAj3vnHi
+         rnFqyrTFeMy13mVc6Jv6pEDLozEoQbk/xFvXspukGjGGGW1eHV1BbMI8imlb8zakwY
+         XyX+FD/BDtwIX3D8JyUmEIZ4XGsoVNOlbzWu67KJFeC+3I4yFUaFmUhXb5ik45kAnj
+         aBpnUIXHUOyxOOWEbeZW/Z/77vbfRqC3ORdnvJ+zHZ246N8t/LdLXXZ7x4YcoDDYEa
+         8877yM1xw+anA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wyes Karny <wyes.karny@amd.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
+Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        daniel.lezcano@linaro.org, corbet@lwn.net, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        peterz@infradead.org, chang.seok.bae@intel.com,
-        ebiederm@xmission.com, zhengqi.arch@bytedance.com,
-        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 01/23] x86: Handle idle=nomwait cmdline properly for x86_idle
-Date:   Sun,  7 Aug 2022 21:38:08 -0400
-Message-Id: <20220808013832.316381-1-sashal@kernel.org>
+        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 22/23] PM: hibernate: defer device probing when resuming from hibernation
+Date:   Sun,  7 Aug 2022 21:38:29 -0400
+Message-Id: <20220808013832.316381-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220808013832.316381-1-sashal@kernel.org>
+References: <20220808013832.316381-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,95 +58,104 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Wyes Karny <wyes.karny@amd.com>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit 8bcedb4ce04750e1ccc9a6b6433387f6a9166a56 ]
+[ Upstream commit 8386c414e27caba8501119948e9551e52b527f59 ]
 
-When kernel is booted with idle=nomwait do not use MWAIT as the
-default idle state.
+syzbot is reporting hung task at misc_open() [1], for there is a race
+window of AB-BA deadlock which involves probe_count variable. Currently
+wait_for_device_probe() from snapshot_open() from misc_open() can sleep
+forever with misc_mtx held if probe_count cannot become 0.
 
-If the user boots the kernel with idle=nomwait, it is a clear
-direction to not use mwait as the default idle state.
-However, the current code does not take this into consideration
-while selecting the default idle state on x86.
+When a device is probed by hub_event() work function, probe_count is
+incremented before the probe function starts, and probe_count is
+decremented after the probe function completed.
 
-Fix it by checking for the idle=nomwait boot option in
-prefer_mwait_c1_over_halt().
+There are three cases that can prevent probe_count from dropping to 0.
 
-Also update the documentation around idle=nomwait appropriately.
+  (a) A device being probed stopped responding (i.e. broken/malicious
+      hardware).
 
-[ dhansen: tweak commit message ]
+  (b) A process emulating a USB device using /dev/raw-gadget interface
+      stopped responding for some reason.
 
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Zhang Rui <rui.zhang@intel.com>
-Link: https://lkml.kernel.org/r/fdc2dc2d0a1bc21c2f53d989ea2d2ee3ccbc0dbe.1654538381.git-series.wyes.karny@amd.com
+  (c) New device probe requests keeps coming in before existing device
+      probe requests complete.
+
+The phenomenon syzbot is reporting is (b). A process which is holding
+system_transition_mutex and misc_mtx is waiting for probe_count to become
+0 inside wait_for_device_probe(), but the probe function which is called
+ from hub_event() work function is waiting for the processes which are
+blocked at mutex_lock(&misc_mtx) to respond via /dev/raw-gadget interface.
+
+This patch mitigates (b) by deferring wait_for_device_probe() from
+snapshot_open() to snapshot_write() and snapshot_ioctl(). Please note that
+the possibility of (b) remains as long as any thread which is emulating a
+USB device via /dev/raw-gadget interface can be blocked by uninterruptible
+blocking operations (e.g. mutex_lock()).
+
+Please also note that (a) and (c) are not addressed. Regarding (c), we
+should change the code to wait for only one device which contains the
+image for resuming from hibernation. I don't know how to address (a), for
+use of timeout for wait_for_device_probe() might result in loss of user
+data in the image. Maybe we should require the userland to wait for the
+image device before opening /dev/snapshot interface.
+
+Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
+Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/admin-guide/pm/cpuidle.rst | 15 +++++++++------
- arch/x86/kernel/process.c                |  9 ++++++---
- 2 files changed, 15 insertions(+), 9 deletions(-)
+ kernel/power/user.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
-index e70b365dbc60..80cf2ef2a506 100644
---- a/Documentation/admin-guide/pm/cpuidle.rst
-+++ b/Documentation/admin-guide/pm/cpuidle.rst
-@@ -676,8 +676,8 @@ the ``menu`` governor to be used on the systems that use the ``ladder`` governor
- by default this way, for example.
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index 77438954cc2b..672d4e28fa8a 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -26,6 +26,7 @@
  
- The other kernel command line parameters controlling CPU idle time management
--described below are only relevant for the *x86* architecture and some of
--them affect Intel processors only.
-+described below are only relevant for the *x86* architecture and references
-+to ``intel_idle`` affect Intel processors only.
+ #include "power.h"
  
- The *x86* architecture support code recognizes three kernel command line
- options related to CPU idle time management: ``idle=poll``, ``idle=halt``,
-@@ -699,10 +699,13 @@ idle, so it very well may hurt single-thread computations performance as well as
- energy-efficiency.  Thus using it for performance reasons may not be a good idea
- at all.]
++static bool need_wait;
  
--The ``idle=nomwait`` option disables the ``intel_idle`` driver and causes
--``acpi_idle`` to be used (as long as all of the information needed by it is
--there in the system's ACPI tables), but it is not allowed to use the
--``MWAIT`` instruction of the CPUs to ask the hardware to enter idle states.
-+The ``idle=nomwait`` option prevents the use of ``MWAIT`` instruction of
-+the CPU to enter idle states. When this option is used, the ``acpi_idle``
-+driver will use the ``HLT`` instruction instead of ``MWAIT``. On systems
-+running Intel processors, this option disables the ``intel_idle`` driver
-+and forces the use of the ``acpi_idle`` driver instead. Note that in either
-+case, ``acpi_idle`` driver will function only if all the information needed
-+by it is in the system's ACPI tables.
+ #define SNAPSHOT_MINOR	231
  
- In addition to the architecture-level kernel command line options affecting CPU
- idle time management, there are parameters affecting individual ``CPUIdle``
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 571e38c9ee1d..068715a52ac1 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -659,6 +659,10 @@ static void amd_e400_idle(void)
-  */
- static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86 *c)
- {
-+	/* User has disallowed the use of MWAIT. Fallback to HALT */
-+	if (boot_option_idle_override == IDLE_NOMWAIT)
-+		return 0;
-+
- 	if (c->x86_vendor != X86_VENDOR_INTEL)
- 		return 0;
- 
-@@ -769,9 +773,8 @@ static int __init idle_setup(char *str)
- 	} else if (!strcmp(str, "nomwait")) {
- 		/*
- 		 * If the boot option of "idle=nomwait" is added,
--		 * it means that mwait will be disabled for CPU C2/C3
--		 * states. In such case it won't touch the variable
--		 * of boot_option_idle_override.
-+		 * it means that mwait will be disabled for CPU C1/C2/C3
-+		 * states.
+@@ -79,7 +80,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
+ 		 * Resuming.  We may need to wait for the image device to
+ 		 * appear.
  		 */
- 		boot_option_idle_override = IDLE_NOMWAIT;
- 	} else
+-		wait_for_device_probe();
++		need_wait = true;
+ 
+ 		data->swap = -1;
+ 		data->mode = O_WRONLY;
+@@ -171,6 +172,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+ 	ssize_t res;
+ 	loff_t pg_offp = *offp & ~PAGE_MASK;
+ 
++	if (need_wait) {
++		wait_for_device_probe();
++		need_wait = false;
++	}
++
+ 	lock_system_sleep();
+ 
+ 	data = filp->private_data;
+@@ -206,6 +212,11 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+ 	loff_t size;
+ 	sector_t offset;
+ 
++	if (need_wait) {
++		wait_for_device_probe();
++		need_wait = false;
++	}
++
+ 	if (_IOC_TYPE(cmd) != SNAPSHOT_IOC_MAGIC)
+ 		return -ENOTTY;
+ 	if (_IOC_NR(cmd) > SNAPSHOT_IOC_MAXNR)
 -- 
 2.35.1
 
