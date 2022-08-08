@@ -2,240 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4EA58C6C3
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 12:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207B358C6FB
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 12:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242230AbiHHKsa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 06:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S234435AbiHHKzY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 06:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242720AbiHHKsB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 06:48:01 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E127140B8
-        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 03:47:58 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id f20so12032330lfc.10
-        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 03:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MC2v6NUHdyQnnZYkJCn4LjAypKIo0C8pXGhVxCJJimA=;
-        b=W9rPnh7bC1E2NKlPctj5CJl6XHy4ZUkYXokDx3/Y5yxoMPcuCFr+UQ2ZLBxyRfBHpx
-         2fAykpcZDEMCmok4jhq1A0Q7r822Vw7OIwnhxgOOyUAyl5usH7tCnO2N4vJ1cAAdmrKr
-         8t01asrDC5BVRDPZXYPeeR/SuAx+2SnbyK+jPWbNJDMA25+O7EP5otc5w2ClcuCblXGV
-         sR/adjLroM+SMGlbNTsPmF79C0Y7gBjkIvdrKPM3uMZP9qk0t1qECLfuDdgqrAbW8Xv0
-         dGfKVARp5SdlZvePRidCQGD8wavpowmm6cfXdPpItSs3NfoydSY5fhvk6+DfrMhH93sq
-         SQNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MC2v6NUHdyQnnZYkJCn4LjAypKIo0C8pXGhVxCJJimA=;
-        b=pI0C7yCopMDL/S9NjNu2PgtS533mgy1qMG0UqVIy7a8LkDKWPSlVTXkRJaukrz2LkA
-         6pUqVec7+qZo+rJi7sw8f7HYw7ROwsOLd+DQnOC87glHVJkuKIEfBqr3tGTFshIHDLyK
-         XuPgVNBWsOZvWZ7DW4sKoqEiuaOEQIMduAOxSCKkAoceiEsBJtaLMCzj8d5T5tNHPkRZ
-         +xpyHQf67ya4P6CZoBB2IP5MjSbyT1KfnljGK8Z2XyiKyWo/8LBN+z03QOv8a0HSAoN8
-         LdJgqqpAhdTCH8+kmUFX8m00ycfS4PmN3AhqfQ7bVjY5F4I3CsbN93zkOo3CBOrVirp0
-         Yjzg==
-X-Gm-Message-State: ACgBeo2HJnLWwd4IUZpMB8Mg2h/agZZqOwj+W1YMVTS2VjezpamhiJn3
-        IvxAWYf0p84G48Ui4qAa+wxePQ==
-X-Google-Smtp-Source: AA6agR4QI9l+GRE03Zrm7i5mh9rcgI/S73YecChrNB3PcmYXz2UlrE8dBO5icUSF5md8laPwJNDO4w==
-X-Received: by 2002:a05:6512:2989:b0:48a:f4b9:84bf with SMTP id du9-20020a056512298900b0048af4b984bfmr6611596lfb.39.1659955677840;
-        Mon, 08 Aug 2022 03:47:57 -0700 (PDT)
-Received: from localhost.localdomain ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id l18-20020a2ea312000000b0025e040510e7sm1314321lje.74.2022.08.08.03.47.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 03:47:54 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/5] dt-bindings: Drop Dan Murphy
-Date:   Mon,  8 Aug 2022 13:47:12 +0300
-Message-Id: <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
-References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S234608AbiHHKzX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 06:55:23 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CFDD79;
+        Mon,  8 Aug 2022 03:55:20 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 181E12223A;
+        Mon,  8 Aug 2022 12:55:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1659956118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RIdhLhurzw55B/JKOQ+E8pJZqvSO0LIXDXuMcUgdp84=;
+        b=LxGVcfoLul7nMlz9drdP2sRSsqy0SETWHy1xE0kxAg2mUOfZHT194syvE+7iDAMRz1uo07
+        9DzubeoJZd8oZ2zDXdlpZ0jJbypEM0MK7Ll0RFAvlW3pRnvJsXz7co/A3pyp56MGjmM9MV
+        bWP2dZlaa4A6J8BcCuNJLtAHfZcLbuA=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 08 Aug 2022 12:55:15 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     abailon@baylibre.com, anarsoul@gmail.com, baolin.wang7@gmail.com,
+        bjorn.andersson@linaro.org, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
+        f.fainelli@gmail.com, glaroque@baylibre.com,
+        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
+        jonathanh@nvidia.com, khilman@baylibre.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, matthias.bgg@gmail.com,
+        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
+        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
+        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v5 00/33] New thermal OF code
+In-Reply-To: <9b6aea8b-23fb-a882-4c47-5cd70cf266bf@linaro.org>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220808094216.928018-1-michael@walle.cc>
+ <9b6aea8b-23fb-a882-4c47-5cd70cf266bf@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <5daf2b7ebba3a3227ac37643a919add2@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Emails to Dan Murphy bounce ("550 Invalid recipient <dmurphy@ti.com>
-(#5.1.1)").
+Hi Daniel,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml     | 2 +-
- .../devicetree/bindings/leds/leds-class-multicolor.yaml         | 2 +-
- Documentation/devicetree/bindings/leds/leds-lp50xx.yaml         | 2 +-
- Documentation/devicetree/bindings/net/ti,dp83822.yaml           | 2 +-
- Documentation/devicetree/bindings/net/ti,dp83867.yaml           | 2 +-
- Documentation/devicetree/bindings/net/ti,dp83869.yaml           | 2 +-
- Documentation/devicetree/bindings/power/supply/bq2515x.yaml     | 1 -
- Documentation/devicetree/bindings/power/supply/bq25980.yaml     | 1 -
- Documentation/devicetree/bindings/sound/tas2562.yaml            | 2 +-
- Documentation/devicetree/bindings/sound/tlv320adcx140.yaml      | 2 +-
- 10 files changed, 8 insertions(+), 10 deletions(-)
+Am 2022-08-08 12:21, schrieb Daniel Lezcano:
+> On 08/08/2022 11:42, Michael Walle wrote:
+>>> The following changes are depending on:
+>>> 
+>>>   - 20220722200007.1839356-1-daniel.lezcano@linexp.org
+>>> 
+>>> which are present in the thermal/linux-next branch:
+>>> 
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
+>>> 
+>>> The series introduces a new thermal OF code. The patch description 
+>>> gives
+>>> a detailed explanation of the changes. Basically we write new OF 
+>>> parsing
+>>> functions, we migrate all the users of the old thermal OF API to the 
+>>> new
+>>> one and then we finish by removing the old OF code.
+>>> 
+>>> That is the second step to rework the thermal OF code. More patches 
+>>> will
+>>> come after that to remove the duplication of the trip definitions in 
+>>> the
+>>> different drivers which will result in more code duplication removed 
+>>> and
+>>> consolidation of the core thermal framework.
+>>> 
+>>> Thanks for those who tested the series on their platform and
+>>> investigated the regression with the disabled by default thermal 
+>>> zones.
+>> I haven't looked closely yet, but this series is breaking two of my
+>> boards.
+>> 
+>> There seems to be one mistake within the new thermal code:
+>> 
+>> [    2.030452] thermal_sys: Failed to find 'trips' node
+>> [    2.033664] usb 1-1: new high-speed USB device number 2 using 
+>> xhci-hcd
+>> [    2.035434] thermal_sys: Failed to find trip points for tmu id=2
+>> [    2.048010] qoriq_thermal 1f80000.tmu: Failed to register sensors
+>> [    2.054128] qoriq_thermal: probe of 1f80000.tmu failed with error 
+>> -22
+>> [    2.060607] devm_thermal_of_zone_release:707 res=ffff002002377180
+>> [    2.067044] Unable to handle kernel paging request at virtual 
+>> address 01adadadadadad88
+>> [    2.075003] Mem abort info:
+>> [    2.077805]   ESR = 0x0000000096000004
+>> [    2.081562]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [    2.086893]   SET = 0, FnV = 0
+>> [    2.089955]   EA = 0, S1PTW = 0
+>> [    2.093100]   FSC = 0x04: level 0 translation fault
+>> [    2.097993] Data abort info:
+>> [    2.100876]   ISV = 0, ISS = 0x00000004
+>> [    2.104724]   CM = 0, WnR = 0
+>> [    2.107698] [01adadadadadad88] address between user and kernel 
+>> address ranges
+>> [    2.114863] Internal error: Oops: 96000004 [#1] SMP
+>> [    2.119754] Modules linked in:
+>> [    2.122815] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 
+>> 5.19.0-next-20220808-00078-ga957a15f74fc-dirty #1694
+>> [    2.132504] Hardware name: Kontron KBox A-230-LS (DT)
+>> [    2.137568] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS 
+>> BTYPE=--)
+>> [    2.144554] pc : kfree+0x5c/0x3c0
+>> [    2.147885] lr : thermal_of_zone_unregister+0x34/0x54
+>> [    2.152954] sp : ffff80000a22bab0
+>> [    2.156274] x29: ffff80000a22bab0 x28: 0000000000000000 x27: 
+>> ffff800009960464
+>> [    2.163438] x26: ffff800009a16960 x25: 0000000000000006 x24: 
+>> ffff800009f09a40
+>> [    2.170601] x23: ffff800009ab9008 x22: ffff800008d0d684 x21: 
+>> 01adadadadadad80
+>> [    2.177763] x20: 6b6b6b6b6b6b6b6b x19: ffff002002335000 x18: 
+>> 00000000fffffffb
+>> [    2.184925] x17: ffff800008d0d67c x16: ffff800008d072b4 x15: 
+>> ffff800008d0c6c4
+>> [    2.192087] x14: ffff800008d0c34c x13: ffff8000088d5034 x12: 
+>> ffff8000088d46d4
+>> [    2.199248] x11: ffff8000088d4624 x10: 0000000000000000 x9 : 
+>> ffff800008d0d684
+>> [    2.206410] x8 : ffff002000b1a158 x7 : bbbbbbbbbbbbbbbb x6 : 
+>> ffff80000a0f53b8
+>> [    2.213572] x5 : ffff80000a22b940 x4 : 0000000000000000 x3 : 
+>> 0000000000000000
+>> [    2.220733] x2 : fffffc0000000000 x1 : ffff002000838040 x0 : 
+>> 01adb1adadadad80
+>> [    2.227895] Call trace:
+>> [    2.230342]  kfree+0x5c/0x3c0
+>> [    2.233318]  thermal_of_zone_unregister+0x34/0x54
+>> [    2.238036]  devm_thermal_of_zone_release+0x44/0x54
+>> [    2.242931]  release_nodes+0x64/0xd0
+>> [    2.246516]  devres_release_all+0xbc/0x350
+>> [    2.250623]  device_unbind_cleanup+0x20/0x70
+>> [    2.254905]  really_probe+0x1a0/0x2e4
+>> [    2.258577]  __driver_probe_device+0x80/0xec
+>> [    2.262859]  driver_probe_device+0x44/0x130
+>> [    2.267055]  __driver_attach+0x104/0x1b4
+>> [    2.270989]  bus_for_each_dev+0x7c/0xe0
+>> [    2.274834]  driver_attach+0x30/0x40
+>> [    2.278418]  bus_add_driver+0x160/0x210
+>> [    2.281900] hub 1-1:1.0: USB hub found
+>> [    2.282264]  driver_register+0x84/0x140
+>> [    2.286109] hub 1-1:1.0: 7 ports detected
+>> [    2.289859]  __platform_driver_register+0x34/0x40
+>> [    2.289867]  qoriq_tmu_init+0x28/0x34
+>> [    2.302258]  do_one_initcall+0x50/0x250
+>> [    2.306104]  kernel_init_freeable+0x278/0x31c
+>> [    2.310474]  kernel_init+0x30/0x140
+>> [    2.313972]  ret_from_fork+0x10/0x20
+>> [    2.317559] Code: b25657e2 d34cfc00 d37ae400 8b020015 (f94006a1)
+>> [    2.323672] ---[ end trace 0000000000000000 ]---
+>> [    2.328317] Kernel panic - not syncing: Attempted to kill init! 
+>> exitcode=0x0000000b
+>> [    2.335999] SMP: stopping secondary CPUs
+>> [    2.339932] Kernel Offset: disabled
+>> [    2.343425] CPU features: 0x2000,0800f021,00001086
+>> [    2.348229] Memory Limit: none
+>> [    2.351289] ---[ end Kernel panic - not syncing: Attempted to kill 
+>> init! exitcode=0x0000000b ]---
+>> 
+>> This was seen a sl28 board
+>> (arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts).
+>> The same board in the KernelCI also have some more information:
+>> https://lavalab.kontron.com/scheduler/job/151900#L1162
+>> 
+>> But I guess even if that is fixed, the driver will not probe due to 
+>> the
+>> missing trip points? Are they now mandatory? Does it mean we'd need to
+>> update our device trees? But that will then mean older devices trees
+>> don't work anymore.
+> 
+> Thanks for reporting, I'll investigate the issues you are reporting.
+> 
+> There is no need to update any device tree file. The code does not
+> change the bindings, it is a rewrite of the implementation supposed to
+> be without impact on the existing bindings, thus the existing device
+> tree descriptions.
+> 
+> Why are you saying there are missing trip points ? The dts shows trip
+> points for 'core-cluster' and 'ddr-controller' ?
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-index 9f5e96439c01..8f50f0f719df 100644
---- a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Texas Instruments' ads124s08 and ads124s06 ADC chip
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Jonathan Cameron <jic23@kernel.org>
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-index 12693483231f..1a9e5bd352c1 100644
---- a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Common properties for the multicolor LED class.
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Pavel Machek <pavel@ucw.cz>
- 
- description: |
-   Bindings for multi color LEDs show how to describe current outputs of
-diff --git a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-index e0b658f07973..7fdda32d0ff4 100644
---- a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: LED driver for LP50XX RGB LED from Texas Instruments.
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Pavel Machek <pavel@ucw.cz>
- 
- description: |
-   The LP50XX is multi-channel, I2C RGB LED Drivers that can group RGB LEDs into
-diff --git a/Documentation/devicetree/bindings/net/ti,dp83822.yaml b/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-index 75e8712e903a..ac329a9555bf 100644
---- a/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-@@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
- title: TI DP83822 ethernet PHY
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - David S. Miller <davem@davemloft.net>
- 
- description: |
-   The DP83822 is a low-power, single-port, 10/100 Mbps Ethernet PHY. It
-diff --git a/Documentation/devicetree/bindings/net/ti,dp83867.yaml b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-index 76ff08a477ba..b7a651443543 100644
---- a/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-@@ -11,7 +11,7 @@ allOf:
-   - $ref: "ethernet-controller.yaml#"
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - David S. Miller <davem@davemloft.net>
- 
- description: |
-   The DP83867 device is a robust, low power, fully featured Physical Layer
-diff --git a/Documentation/devicetree/bindings/net/ti,dp83869.yaml b/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-index 1b780dce61ab..4f6ad9d30d44 100644
---- a/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-@@ -11,7 +11,7 @@ allOf:
-   - $ref: "ethernet-phy.yaml#"
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - David S. Miller <davem@davemloft.net>
- 
- description: |
-   The DP83869HM device is a robust, fully-featured Gigabit (PHY) transceiver
-diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-index 27db38577822..4376e6dca48d 100644
---- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-@@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: TI bq2515x 500-mA Linear charger family
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-   - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
- 
- description: |
-diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-index 4883527ab5c7..509a0667b04e 100644
---- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-@@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: TI BQ25980 Flash Charger
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-   - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
- 
- description: |
-diff --git a/Documentation/devicetree/bindings/sound/tas2562.yaml b/Documentation/devicetree/bindings/sound/tas2562.yaml
-index 5f7dd5d6cbca..3655d3077dc9 100644
---- a/Documentation/devicetree/bindings/sound/tas2562.yaml
-+++ b/Documentation/devicetree/bindings/sound/tas2562.yaml
-@@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
- title: Texas Instruments TAS2562 Smart PA
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Mark Brown <broonie@kernel.org>
- 
- description: |
-   The TAS2562 is a mono, digital input Class-D audio amplifier optimized for
-diff --git a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-index bc2fb1a80ed7..4ab57c835ba3 100644
---- a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-+++ b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-@@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Texas Instruments TLV320ADCX140 Quad Channel Analog-to-Digital Converter
- 
- maintainers:
--  - Dan Murphy <dmurphy@ti.com>
-+  - Mark Brown <broonie@kernel.org>
- 
- description: |
-   The TLV320ADCX140 are multichannel (4-ch analog recording or 8-ch digital
--- 
-2.34.1
+You are right. I've just looked at the error message:
 
+[    2.030452] thermal_sys: Failed to find 'trips' node
+[    2.033664] usb 1-1: new high-speed USB device number 2 using 
+xhci-hcd
+[    2.035434] thermal_sys: Failed to find trip points for tmu id=2
+
+So maybe the code just don't find em.
+
+-michael
