@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4410258C6BB
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 12:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAEC58C6C9
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 12:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242198AbiHHKrt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 06:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S242713AbiHHKrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 06:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242653AbiHHKrs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 06:47:48 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E811C1261F
-        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 03:47:45 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id d14so12012207lfl.13
-        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 03:47:45 -0700 (PDT)
+        with ESMTP id S242677AbiHHKru (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 06:47:50 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391B813D0C
+        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 03:47:48 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id d14so12012302lfl.13
+        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 03:47:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S/fyxO5UUrefZ9S+J35611sMDpHuXmlRV0zDBtFzDOI=;
-        b=QZmV3X54GBsXEmxf8s+h7eZi2Rxvs/eX19h95wNMagcOZG2BWqNyf/8uWSfXcXSi0H
-         D2J52UwtV2GSgQFWuxXsNus9vThvcOJ+x4rWJngGAMleFBFuIYAI5rvU+Il7yr8ctY4T
-         ZKaoTqZViE3AKz+HCKv1fFJIimhWLQHvetuyDAKU27eMoeyiFFrnREgMssyyOd/w2GQ+
-         8ro3IxWKXCe5zjT5FVpqNvP8n6eT0XZXVZDl3kWSWyluVjCgUzT86z2/dNAwYityi6wq
-         tmOAUw4lGusovZmiIyvBkv7UxmoTpR8kxI7MUaHqUlqx+lROUxJxkV2OFiZmJoQ7EpYE
-         HtnA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WAcb2UIHnzQWc+7wJXO7+t1zm0MYd48VFY89RfjXd90=;
+        b=pZ5n4LsUBuRfPUkslmcaCk2lyPkUqZyTC3GWr4dCq4OQhzI2yFphVsu0x+mjWy8fZw
+         UIsmWZYgMFr9Yo+y/H67qdsq9admU3xUHWPwbiGxpLJTqpj7syYu3bHYvDKQBqxv1lQ/
+         zwGG8xpqoab03LUU6cXmLLzRjm5EJl/y/z4KAHXoVfA68w6a+AySxuiMRh0q9utI2nfY
+         h7sZyPEQwg+KnK+U7ITd4kryslnHn1NAXGj3Ib6yOHzncgujAx+CICo/SBYUeqRAfpEq
+         igdQhXtZc7CNdOE9/5MzuJe6z4xR4AvvhTeCIDUczl3v3IUhqL7T2aSQFXnAIlKPk2az
+         hSGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S/fyxO5UUrefZ9S+J35611sMDpHuXmlRV0zDBtFzDOI=;
-        b=VIvJph1Xy3avS0SDV4dX2D/XIMg+0JxYtGmyfvsPH2ukYwnBUNYMGo6KZCNQmbFUd0
-         yAnTu32Wch/OlKOdXVHHGe0NiGZk7aVsZIn+WXBXPa0ANeOgO/3MpWnaIvV4+L2NMBGv
-         OlRkYyVm3g/eO6wejjVoz6wm24WfG7+cgEE3haLZrLeVFQtaKy14RXjsSQOKAF0mmdre
-         24JnmJ+L79s/V5U4JZjhijrFH4Fz0h578ocpE+pI767k0G3OoeLthxNH89OMn86saHqn
-         N/D0LcBsUFVLKtDhsT/t7G0jRmgUfbhDsibl2sEiRGRm1aBv7eFrqw66nBkeRSAZQEpb
-         W/0w==
-X-Gm-Message-State: ACgBeo1E4Y00mveHDokTvFFrJ/dVBMO8/YgwtQwZFzvD+jMy0g3Jhrs8
-        3kexzpNLsVrb8dR4oEbJJTUWpA==
-X-Google-Smtp-Source: AA6agR5O0DrK81VJ8xxEeNLWmXoFfFeD2gJu+76VOqk+ccUPS09sI/bRAbVrJYxn5te/7qBFWz6vcA==
-X-Received: by 2002:ac2:4d29:0:b0:48a:eea7:4b92 with SMTP id h9-20020ac24d29000000b0048aeea74b92mr5781095lfk.400.1659955664258;
-        Mon, 08 Aug 2022 03:47:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WAcb2UIHnzQWc+7wJXO7+t1zm0MYd48VFY89RfjXd90=;
+        b=tDLfZNe7b/8/VkknUsW4v0VNFDjCpc/4kGnSMS4h1MJ1L6mY61iXtL2zowAy6tYAY7
+         jSK1UCaIffamRB0Qn4DCZ9pqblZjD8fTZ41hhF4D/LG6qNVWuz6hAGSAoHZdoLSz1qFW
+         YXb8gLbnmidUEbLta1RjOPMqdHrSI+T95AEs7O8trGP6+Pd902z+kwZVJIWxcNTHBQle
+         jsScsIr9Xf2nifyX/L10zRerLDHQi7nmh/VhErc/jBvhb344ELHA6hdh7EUkEBQv6Pum
+         nO3JZf+vP18YkuJHDpFWK3Ci+23W6sCua32FHq3Q/QCTDvU/BwjpmGqYwIpDGGaJEDWa
+         BajA==
+X-Gm-Message-State: ACgBeo1iD6XgUECCPIZAZcTlMzwsBW7mwVuHvbIFVd3jYDMXVhfUXk0u
+        9xn4yGQXwu8uRaWZaWQHKeBe0w==
+X-Google-Smtp-Source: AA6agR5EYE1Bofb0M8EdhYNvz7LnouDO56jHt/oH1KxMlhgzj77yT9NZM45q6dvtAj/sMKDOm7VOew==
+X-Received: by 2002:ac2:50d2:0:b0:48a:f4fe:3553 with SMTP id h18-20020ac250d2000000b0048af4fe3553mr5797397lfm.248.1659955666064;
+        Mon, 08 Aug 2022 03:47:46 -0700 (PDT)
 Received: from localhost.localdomain ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id l18-20020a2ea312000000b0025e040510e7sm1314321lje.74.2022.08.08.03.47.42
+        by smtp.gmail.com with ESMTPSA id l18-20020a2ea312000000b0025e040510e7sm1314321lje.74.2022.08.08.03.47.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 03:47:43 -0700 (PDT)
+        Mon, 08 Aug 2022 03:47:45 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Michael Hennerich <Michael.Hennerich@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
@@ -73,15 +73,17 @@ To:     Michael Hennerich <Michael.Hennerich@analog.com>,
         netdev@vger.kernel.org, linux-pm@vger.kernel.org,
         alsa-devel@alsa-project.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings: few stale maintainers cleanup
-Date:   Mon,  8 Aug 2022 13:47:07 +0300
-Message-Id: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/5] dt-bindings: iio: Drop Joachim Eastwood
+Date:   Mon,  8 Aug 2022 13:47:08 +0300
+Message-Id: <20220808104712.54315-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,50 +91,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Emails to Joachim Eastwood bounce ("552 5.2.2 The email account that you
+tried to reach is over quota and inactive.").
 
-A question:
-
-Several of the bindings here had only one
-maintainer and history does not always point to a new one (although I did not
-perform extensive digging). I added subsystem maintainer, because dtschema
-requires such entry. This is not the best choice as simply subsystem maintainer
-might not have the actual device (or its datasheets or any interest in it).
-
-However dtschema requires a maintainer. Maybe we could add some
-"orphaned" entry in such case?
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (5):
-  dt-bindings: iio: Drop Joachim Eastwood
-  dt-bindings: iio: Drop Bogdan Pricop
-  dt-bindings: Drop Beniamin Bia and Stefan Popa
-  dt-bindings: Drop Robert Jones
-  dt-bindings: Drop Dan Murphy
-
- Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml       | 1 -
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
  Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml   | 1 -
- Documentation/devicetree/bindings/iio/adc/adi,ad7091r5.yaml    | 2 +-
- Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml      | 3 +--
  Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml | 2 +-
- Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml   | 2 +-
- Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml    | 2 +-
- .../devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml        | 1 -
- Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml    | 2 +-
- .../devicetree/bindings/leds/leds-class-multicolor.yaml        | 2 +-
- Documentation/devicetree/bindings/leds/leds-lp50xx.yaml        | 2 +-
- Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml       | 1 -
- Documentation/devicetree/bindings/net/ti,dp83822.yaml          | 2 +-
- Documentation/devicetree/bindings/net/ti,dp83867.yaml          | 2 +-
- Documentation/devicetree/bindings/net/ti,dp83869.yaml          | 2 +-
- Documentation/devicetree/bindings/power/supply/bq2515x.yaml    | 1 -
- Documentation/devicetree/bindings/power/supply/bq25980.yaml    | 1 -
- Documentation/devicetree/bindings/sound/tas2562.yaml           | 2 +-
- Documentation/devicetree/bindings/sound/tlv320adcx140.yaml     | 2 +-
- 19 files changed, 13 insertions(+), 20 deletions(-)
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml b/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
+index 7c8f8bdc2333..9c7c66feeffc 100644
+--- a/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
++++ b/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
+@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Freescale MMA7455 and MMA7456 three axis accelerometers
+ 
+ maintainers:
+-  - Joachim Eastwood <manabian@gmail.com>
+   - Jonathan Cameron <jic23@kernel.org>
+ 
+ description:
+diff --git a/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml b/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
+index 6404fb73f8ed..43abb300fa3d 100644
+--- a/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: NXP LPC1850 ADC bindings
+ 
+ maintainers:
+-  - Joachim Eastwood <manabian@gmail.com>
++  - Jonathan Cameron <jic23@kernel.org>
+ 
+ description:
+   Supports the ADC found on the LPC1850 SoC.
 -- 
 2.34.1
 
