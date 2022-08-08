@@ -2,181 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83DE58CCDA
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 19:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9645A58CD58
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 20:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244034AbiHHRmH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 13:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
+        id S243612AbiHHSJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 14:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244260AbiHHRlq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 13:41:46 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A212A9;
-        Mon,  8 Aug 2022 10:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1659980491; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9mQW2IujmsdsUsW34qxOE4YfSHlUJeCynQdqfBBLGIY=;
-        b=FxGb5nxvZxYH337FCdmCvaubP/Jk6LIC3Yvt4apRCVZ6JnrxJuQrv1e7a6GxSvTko9RzAQ
-        kHpHt5jTR+pEkQqCuI7zTYi4MaUOpBwesMlnnAaaqRDaVbeVDKBeOTUy8d5KjkJk7BfHXQ
-        EmPJFZBT1i5AEgNjRHtv/K6F/CnJYYo=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>
-Subject: [PATCH v2 01/30] pm: Improve EXPORT_*_DEV_PM_OPS macros
-Date:   Mon,  8 Aug 2022 19:40:38 +0200
-Message-Id: <20220808174107.38676-2-paul@crapouillou.net>
-In-Reply-To: <20220808174107.38676-1-paul@crapouillou.net>
-References: <20220808174107.38676-1-paul@crapouillou.net>
+        with ESMTP id S237965AbiHHSJf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 14:09:35 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEFC62EA
+        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 11:09:33 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h13so11775069wrf.6
+        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 11:09:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=E7W+A8RBq7Usp9JU9F1Ru53gxwOjNDrCjAkC1uG7hB8=;
+        b=K1ljnjeze7jNd1Zry0QkH2fhPDlX4fViK9SEP0ye2TfZ0hIaFCk11ir0aKzI96yU6/
+         kehdi1SBDLMrlVbw97VVun0eqb8sSxT4mErssG/JBp9XCPJ3I80VxDHazp3MP9AFUGSa
+         eVUeMb9pY7FzZFyJFuZPtkQUH8Q7PzhSXyjqOOl6DKZxk7u8mtP+TcmxRMGYxWVJ0Zi3
+         H4WWA1qwaDtUxeN/WpD6qWRREb+f7aYYio3NZ42avgXpkN2tDLujhbCNpLNsPxglScLf
+         qoz5ntjRGBftLN+DUJr1Yw7bMl0gugyr4eydRAcRnTLU9PbiOUdePA1VwEOc0Kt5VWY3
+         DjCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=E7W+A8RBq7Usp9JU9F1Ru53gxwOjNDrCjAkC1uG7hB8=;
+        b=Obsi9bj/LWq+dAp5n8eBDDQZSV8/6g4puriJCc82ii6g7gHaq1vOo+Daw5+p2H25Sh
+         0o8RhWORU4dWZeFN8Q0Mv5Zb15m0uNMY5+RRzfPsVEpOUWqcJAwAKSUckeH9+kbNqjlc
+         UQTRhO/3E9TfecvEQqjofVvpzP+/wBQ7tGEyEm5lD34/2FCrtB1PnaJ/Kn2WeVX4E3uN
+         PPegT3289FTfcQEhE/6cu1zw77eGllagm06pEe23Mhgr3QsjI1rgNlbSM2/P/PJhrbYr
+         BwHXMvIp2wIWiGqjw78sZyHiZ2GKicQzFFMO/QiEbybOx9b6CTTrmCLgexJE+C3ttw8C
+         UEyg==
+X-Gm-Message-State: ACgBeo0DQw60RGobEbcNmnuQeoAYupomrHptjyFwzJuUnShVt71nWYzc
+        2/bxyXfKXYo32D/EoWaJhHDh8w==
+X-Google-Smtp-Source: AA6agR6j3bOlOUhmzuo2GiW8M3SkMk/yg8KqV2xEhqyOjkIwV0K6lDVjcG8CneciLlAnhVnX/RLjZw==
+X-Received: by 2002:a05:6000:178a:b0:221:1b91:c8fa with SMTP id e10-20020a056000178a00b002211b91c8famr10941704wrg.245.1659982172473;
+        Mon, 08 Aug 2022 11:09:32 -0700 (PDT)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id c5-20020a5d4f05000000b002205a5de337sm11937309wru.102.2022.08.08.11.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 11:09:31 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     michael@walle.cc, dan.carpenter@oracle.com, linux@roeck-us.net,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 1/4] thermal/of: Fix error code in of_thermal_zone_find()
+Date:   Mon,  8 Aug 2022 20:09:12 +0200
+Message-Id: <20220808180915.446053-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Update the _EXPORT_DEV_PM_OPS() internal macro. It was not used anywhere
-outside pm.h and pm_runtime.h, so it is safe to update it.
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-Before, this macro would take a few parameters to be used as sleep and
-runtime callbacks. This made it unsuitable to use with different
-callbacks, for instance the "noirq" ones.
+Currently, if we cannot find the correct thermal zone then this error
+path returns NULL and it would lead to an Oops in the caller.  Return
+ERR_PTR(-EINVAL) instead.
 
-It is now semantically different: instead of creating a conditionally
-exported dev_pm_ops structure, it only contains part of the definition.
-
-This macro should however never be used directly (hence the trailing
-underscore). Instead, the following four macros are provided:
-- EXPORT_DEV_PM_OPS(name)
-- EXPORT_GPL_DEV_PM_OPS(name)
-- EXPORT_NS_DEV_PM_OPS(name, ns)
-- EXPORT_NS_GPL_DEV_PM_OPS(name, ns)
-
-For instance, it is now possible to conditionally export noirq
-suspend/resume PM functions like this:
-
-EXPORT_GPL_DEV_PM_OPS(foo_pm_ops) = {
-    NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
-};
-
-The existing helper macros EXPORT_*_SIMPLE_DEV_PM_OPS() and
-EXPORT_*_RUNTIME_DEV_PM_OPS() have been updated to use these new macros.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Fixes: 3bd52ac87347 ("thermal/of: Rework the thermal device tree initialization")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/YvDzovkMCQecPDjz@kili
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
-Cc: Jonathan Cameron <jic23@kernel.org>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: linux-pm <linux-pm@vger.kernel.org>
+ drivers/thermal/thermal_of.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- include/linux/pm.h         | 37 +++++++++++++++++++++++--------------
- include/linux/pm_runtime.h | 20 ++++++++++++--------
- 2 files changed, 35 insertions(+), 22 deletions(-)
-
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index 871c9c49ec9d..93cd34f00822 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -375,19 +375,20 @@ const struct dev_pm_ops name = { \
- }
- 
- #ifdef CONFIG_PM
--#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
--			   runtime_resume_fn, idle_fn, sec, ns)		\
--	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
--			   runtime_resume_fn, idle_fn); \
--	__EXPORT_SYMBOL(name, sec, ns)
-+#define _EXPORT_DEV_PM_OPS(name, sec, ns)				\
-+	const struct dev_pm_ops name;					\
-+	__EXPORT_SYMBOL(name, sec, ns);					\
-+	const struct dev_pm_ops name
- #else
--#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
--			   runtime_resume_fn, idle_fn, sec, ns) \
--static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
--					 resume_fn, runtime_suspend_fn, \
--					 runtime_resume_fn, idle_fn)
-+#define _EXPORT_DEV_PM_OPS(name, sec, ns)				\
-+	static __maybe_unused const struct dev_pm_ops __static_##name
- #endif
- 
-+#define EXPORT_DEV_PM_OPS(name) _EXPORT_DEV_PM_OPS(name, "", "")
-+#define EXPORT_GPL_DEV_PM_OPS(name) _EXPORT_DEV_PM_OPS(name, "_gpl", "")
-+#define EXPORT_NS_DEV_PM_OPS(name, ns) _EXPORT_DEV_PM_OPS(name, "", #ns)
-+#define EXPORT_NS_GPL_DEV_PM_OPS(name, ns) _EXPORT_DEV_PM_OPS(name, "_gpl", #ns)
-+
- /*
-  * Use this if you want to use the same suspend and resume callbacks for suspend
-  * to RAM and hibernation.
-@@ -399,13 +400,21 @@ static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
- 	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
- 
- #define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
--	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "", "")
-+	EXPORT_DEV_PM_OPS(name) = { \
-+		SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-+	}
- #define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
--	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl", "")
-+	EXPORT_GPL_DEV_PM_OPS(name) = { \
-+		SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-+	}
- #define EXPORT_NS_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn, ns)	\
--	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "", #ns)
-+	EXPORT_NS_DEV_PM_OPS(name, ns) = { \
-+		SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-+	}
- #define EXPORT_NS_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn, ns)	\
--	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl", #ns)
-+	EXPORT_NS_GPL_DEV_PM_OPS(name, ns) = { \
-+		SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-+	}
- 
- /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
- #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index 9e4d056967c6..ba2077d9e366 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -40,17 +40,21 @@
- 			   resume_fn, idle_fn)
- 
- #define EXPORT_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
--	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
--			   suspend_fn, resume_fn, idle_fn, "", "")
-+	EXPORT_DEV_PM_OPS(name) = { \
-+		RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
-+	}
- #define EXPORT_GPL_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
--	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
--			   suspend_fn, resume_fn, idle_fn, "_gpl", "")
-+	EXPORT_GPL_DEV_PM_OPS(name) = { \
-+		RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
-+	}
- #define EXPORT_NS_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn, ns) \
--	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
--			   suspend_fn, resume_fn, idle_fn, "", #ns)
-+	EXPORT_NS_DEV_PM_OPS(name, ns) = { \
-+		RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
-+	}
- #define EXPORT_NS_GPL_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn, ns) \
--	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
--			   suspend_fn, resume_fn, idle_fn, "_gpl", #ns)
-+	EXPORT_NS_GPL_DEV_PM_OPS(name, ns) = { \
-+		RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
-+	}
- 
- #ifdef CONFIG_PM
- extern struct workqueue_struct *pm_wq;
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index c2bb5954b21e..368eb58e97cf 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -368,6 +368,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+ 			}
+ 		}
+ 	}
++	tz = ERR_PTR(-EINVAL);
+ out:
+ 	of_node_put(np);
+ 	return tz;
 -- 
-2.35.1
+2.34.1
 
