@@ -2,120 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA89358C741
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 13:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D86858C773
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 13:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242653AbiHHLIL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 07:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S242699AbiHHLWw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 07:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242214AbiHHLIJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 07:08:09 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAB9230
-        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 04:08:07 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id j3so2249570ljo.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 04:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=G5McPA5IZBMFjJ0FWkBGoduD3K8bZspnlviNAqde1yc=;
-        b=U/8GdIPAOfjfBSkPjG5qZxEpHYx+/y1PqJjkW7q9XPKi+rNH9/dxiBi1yihCy+h293
-         iNwxkcW7qy7LPeMGxSs5rHpkJQq5EwzuHdr+LCPHKjOeQ83rg8iKzV3zZarNThEsWH0w
-         CmC/o7Zp4FC1+BWdTxPiNp8JkSwzUoXh7tQIU56sUavV8iNgWPijx/uuF0xZaPPcxocb
-         /f7wX+tz8FQi5OrTmy4E+tsl100B6B6g7NsVYajrm5YYsymY0zrRboDLbi4cvxNVYAbc
-         0EoeM/cP8He8woq/BuYMI7uO1xTTlUTwupdPNkoU6aX4x7Uw/vfB35BO1qPupE6jKKH6
-         esHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G5McPA5IZBMFjJ0FWkBGoduD3K8bZspnlviNAqde1yc=;
-        b=ymIedlxFBw0mga7F0ckBuW0px1FhUvyRVgxM4X5W7LXtRJ08gQzBE8K6jjyC2538aq
-         iyC9uoLVvn7V3xuya0ddH1R5jqUteEbEgOHtakvhjUWoobSOq/XcFD3Vjh6w3KxP0XzB
-         4Ul/ARdouJnOAWNW/CysxcJupQdg7NYbayYiu6gbEi1r8uMzJD84y1ma6CcDnOJXE6w5
-         N+eNGkb5SpGEJUgWKDdcxCy3i52tv3J0UifcpB7EgSWhfwHjCs/Vto9nqu+p+H2ak25b
-         81LHDTry9YTqE0p2fbzaMAglx9hVS3dfxDvz0KI1qd7qp2p6laLiR1INDr6dIoX/VWFx
-         gSrg==
-X-Gm-Message-State: ACgBeo3QCNKT+5ts12m8eI+kLw9qHGdNSb9T3YHeFcEWxw/VwCvRoYsy
-        y22CV+KL3VyIJ4+UrjiANLoteg==
-X-Google-Smtp-Source: AA6agR5I5A6dxgwMS+V5R6U4to3TDtNl7lNnpi0SFDGcuvZCIrUri2LyMgMT9eOhaBiYlWL8+eDong==
-X-Received: by 2002:a2e:2ac1:0:b0:25e:4b39:e3cb with SMTP id q184-20020a2e2ac1000000b0025e4b39e3cbmr5854240ljq.458.1659956886352;
-        Mon, 08 Aug 2022 04:08:06 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id t16-20020a2e9d10000000b0025e6a598019sm1338801lji.131.2022.08.08.04.08.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 04:08:05 -0700 (PDT)
-Message-ID: <43b3c497-97fd-29aa-a07b-bcd6413802c4@linaro.org>
-Date:   Mon, 8 Aug 2022 14:08:03 +0300
+        with ESMTP id S242409AbiHHLWt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 07:22:49 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6949643D;
+        Mon,  8 Aug 2022 04:22:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1659957766; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WncN/J6jFWmOuUfW/r0Cy7asGiQzUA6y7QhuiAhEaDc=;
+        b=go3y9ib6p4wlvAhqD+14udIU6ndNcNfw6Ei+gujiIZe2mDnjtCjzwBYhz3DCkW60MOWXwv
+        tWWeWR1683vpLlcMa4Ygfaha8bDQUqFbOQ9gJWO/AZ/zRoSwVBQ4TdjYPdTBZNUqOaxY6r
+        OhPbbWEtkIMqLLq4pZLiF59MhHq0XUI=
+Date:   Mon, 08 Aug 2022 13:22:37 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/5] PM: core: Add EXPORT_NS_GPL_DEV_PM_OPS to avoid
+ drivers rolling own.
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Sean Nyekjaer <sean@geanix.com>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Message-Id: <PLNAGR.UBLC121G9UCD2@crapouillou.net>
+In-Reply-To: <20220807192038.1039771-2-jic23@kernel.org>
+References: <20220807192038.1039771-1-jic23@kernel.org>
+        <20220807192038.1039771-2-jic23@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 5/5] dt-bindings: Drop Dan Murphy
-Content-Language: en-US
-To:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
- <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/08/2022 13:47, Krzysztof Kozlowski wrote:
-> Emails to Dan Murphy bounce ("550 Invalid recipient <dmurphy@ti.com>
-> (#5.1.1)").
+Hi Jonathan,
+
+If you can wait a day or two - I would like to submit my own version of=20
+EXPORT_NS_GPL_DEV_PM_OPS, which should be more versatile than your=20
+version.
+
+Cheers,
+-Paul
 
 
-(...)
+Le dim., ao=FBt 7 2022 at 20:20:34 +0100, Jonathan Cameron=20
+<jic23@kernel.org> a =E9crit :
+> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>=20
+> A driver wishing to export a struct dev_pm_ops with both suspend and
+> runtime ops provided could use _EXPORT_DEV_PM_OPS() directly but
+> that macro is not intended for use in drivers and requires non
+> intuitive aspect such as passing "_gpl" as one parameter and the
+> namespace as a string.  As such just provide a macro to cover
+> the GPL and NS case in a fashion that is in line with similar macros.
+>=20
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Paul Cercueil <paul@crapouillou.net>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  include/linux/pm.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index 871c9c49ec9d..18856e0d23ac 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -407,6 +407,11 @@ static __maybe_unused=20
+> _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
+>  #define EXPORT_NS_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn,=20
+> ns)	\
+>  	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL,=20
+> "_gpl", #ns)
+>=20
+> +#define EXPORT_NS_GPL_DEV_PM_OPS(name, suspend_fn, resume_fn,=20
+> runtime_suspend_fn, \
+> +			   runtime_resume_fn, idle_fn, ns) \
+> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn,=20
+> \
+> +			   runtime_resume_fn, idle_fn, "_gpl", #ns)
+> +
+>  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+>  const struct dev_pm_ops __maybe_unused name =3D { \
+> --
+> 2.37.1
+>=20
 
->  description: |
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> index 4883527ab5c7..509a0667b04e 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TI BQ25980 Flash Charger
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
->    - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
 
-Ricardo's also bounces... Does it mean TI is not interested in
-maintaining mainline support for its drivers?
-
-Best regards,
-Krzysztof
