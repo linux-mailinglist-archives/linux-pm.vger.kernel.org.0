@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDC458C101
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 03:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC5158C0FE
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 03:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243595AbiHHB5N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Aug 2022 21:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S242017AbiHHB5M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Aug 2022 21:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243816AbiHHB4F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Aug 2022 21:56:05 -0400
+        with ESMTP id S243930AbiHHB4i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Aug 2022 21:56:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BF7F58B;
-        Sun,  7 Aug 2022 18:39:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB10C10546;
+        Sun,  7 Aug 2022 18:40:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C249160DF5;
-        Mon,  8 Aug 2022 01:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070D5C433B5;
-        Mon,  8 Aug 2022 01:39:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4356E60EF0;
+        Mon,  8 Aug 2022 01:40:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F88CC433D6;
+        Mon,  8 Aug 2022 01:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922779;
-        bh=XJV9M8+6gd6QGZ+hPFG/T7Pgl2ABNYmIgsz/9vaE7z4=;
+        s=k20201202; t=1659922800;
+        bh=nNnTUhqNU4YQbcijVe/pezvof71mJ2XPgaNef+hmOY0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ogk8ANc8tSRDEOPIDs35luBf9I8t4qcrdGzYAumRU37jqY4BqZyz1bylw7z7LNbLB
-         MPFXBkLCS+TCChswla6TSEb7o6phXET2y773wVbCMJTOrtm9JfGermywrAwtlUpQRq
-         5d0c2czEmDvlamvNM3sjomBrPD8SC5yDRDFnhoYbVhvVXYMOsJPa39SOxQtHHTYrFb
-         fjbRd4cjk6UD7dW7xGZghKFO90rdSXythjowC6sCS0lXw+FqS5lzcBodvkaOQGOuks
-         ieho+taJoG/Qsy0biJRDxeRQDED5F0vlx69RXto4+6fdqCLNoP/1RK7VBCGUSoiwQX
-         KkQc2Y+mv28nw==
+        b=Nhy6XpyDlVxXDXooBBjMOnwy+h+16T23oqiwkJ6jkq78cZSIP4D1bvtKfU5o7F7Ap
+         uTP45z5Nw4bQ3QfTCOrZPgIlktIwTDMkYJjfwjKqP/M1T9Cgr3jXUsQPJSddjDuzSy
+         QvkTQ0mk5J0DpyY9AaA6+YgLKPYdyJ86fAFH1EoahA9LN6f2XraTVzvKKIigWzUe/r
+         DNFYrr/K3RbdMXkiGyguCFgFolplpc/z3fNP4aLB6mRQ/gVMqsnPCfxSX7J8QjnqcR
+         I3tp/zqQxb4dpc5a+hj2scNwb7Zc/CNKZk+gq2cT2H4qOYtfj+ODijZujbSuBmlXde
+         5Qcmj6AJR7eZg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
@@ -38,12 +38,12 @@ Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
         pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 15/16] PM: hibernate: defer device probing when resuming from hibernation
-Date:   Sun,  7 Aug 2022 21:39:12 -0400
-Message-Id: <20220808013914.316709-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 11/12] PM: hibernate: defer device probing when resuming from hibernation
+Date:   Sun,  7 Aug 2022 21:39:41 -0400
+Message-Id: <20220808013943.316907-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013914.316709-1-sashal@kernel.org>
-References: <20220808013914.316709-1-sashal@kernel.org>
+In-Reply-To: <20220808013943.316907-1-sashal@kernel.org>
+References: <20220808013943.316907-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -112,7 +112,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 2d8b60a3c86b..6a11154b3d52 100644
+index 69017a569f30..add4653477fe 100644
 --- a/kernel/power/user.c
 +++ b/kernel/power/user.c
 @@ -29,6 +29,7 @@
