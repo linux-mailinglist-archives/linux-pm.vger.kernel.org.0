@@ -2,84 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF5358C97B
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 15:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F06658C9A3
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 15:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235611AbiHHNbV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 09:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S243446AbiHHNmg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236191AbiHHNbT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 09:31:19 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A1AF18
-        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 06:31:17 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v3so10981860wrp.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 06:31:17 -0700 (PDT)
+        with ESMTP id S243428AbiHHNme (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 09:42:34 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F94D94
+        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 06:42:32 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id r14so9875318ljp.2
+        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 06:42:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=GiRVWjLaeTq4bwRmFmvvoFT6ftmqIf6M/URaB1Ctnzg=;
-        b=szcVgf8m8WJvtE5gnipsM5vQKf7KCnLNPJ+u3VKMuEykYIiygVOa7aSIO8GXu6dxin
-         C9cN1pT2M7tkqSxLTQ7dEVCI+bTDkIQrvmBHhlH226szPJbK9TDVm0cj3w+hAEBYDeuS
-         kuN5fmrWuU9jX9u2cSYdFmZAH0Q9zg90ZB+Y2Q0O5czLc0IhrJBHqzUIDRrvqxeMobzp
-         MWC5M/IEaW4beCNYx7AAe2phe0YPGi3kmWCiDtoq4wZ+O9nQ0hSFGvM9w0a3Z6C1+eES
-         3NaGqGOTUmlTtOOk/S6l+yQq5g25tDsdg1dnKXql0r7ZtwkTqNQ3fL1uypK6EeT6xGAv
-         YU2A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5H5TR7yfLLVGjO2fI6qniVBtadkhJI8/3v58NZ4+aeg=;
+        b=bXnvRJ6nOxFzSC03Dcmjii23iewhz/xPMP7mmNk40sy/2AJKnuZzqL0EDpvUGeDqb/
+         binXxXc8RW/lSPUkXLVqhu5er/MNiwqZwp/vrJZCwTGtcO5czhs8JW3MsvyjizesezH9
+         aoolBtrW1JlePDeHYPBYGqFc5VPWSRcbcjVJ5CY8x9+AQhQJVugDLttPyBce9HhO8zu1
+         DDCQ3E8qIlxi4VBrThQzAHr52rfslCZGffC5BKzyWbXnsYTJyDbrGoOXMLY1kyvppXgZ
+         vsIseXn2CRl2KBcYYl4FPmr1VD0I+kKg22MgoJJdb4r8/5WkdDE3Z3V/Z8i3Mlw2MJWD
+         J+bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=GiRVWjLaeTq4bwRmFmvvoFT6ftmqIf6M/URaB1Ctnzg=;
-        b=kD/JjzzMGjn2o63Rv3S+YiJ7xRlGpDNQHHVsUOWVnGUp8qFzKdQzj83gTeTNWmW80H
-         A2yQwNIwGcG6UClx6gO3Y/mDANuUFPmbEQ4aSwKHkKazrDmscelyyTB6HtX9qgZIT0hE
-         9KRUegqthqkJ2+M5nPFnerY2syB0fg2lmRWkcZnChlImCvCN9dHQIC/QASMplI3UCK8z
-         6S4td9Ozkbc++CXOFndtqzrCY5xOSGJ/oxeRKy5MPUeYX7Y9CLcvrAdrOQARJKWsgZoa
-         Z4Dj1xE0Go7F5/cf4+bLRE/tes2ZJWJ4pEw1Lx5bFZJnoTHtfugpkCxnFG9AqnxmY/zo
-         R/8w==
-X-Gm-Message-State: ACgBeo2ajW+GlnzUMeqdpYxShTtXOdcJXvG1znRW6p03k8J7eJfw/eI6
-        6xk1qY93HK9jco8kZY8Em2YYfQ==
-X-Google-Smtp-Source: AA6agR4tDfsDfFt7qIu/1NfPJKT5E3XCnPORK+fkpaRYUHopQtyUadTGtAorGFjCYlZOJaI9Q1zrMA==
-X-Received: by 2002:adf:ee09:0:b0:21e:f4e4:aa68 with SMTP id y9-20020adfee09000000b0021ef4e4aa68mr11486799wrn.324.1659965476379;
-        Mon, 08 Aug 2022 06:31:16 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:5a02:3ab6:cc02:eb4e? ([2a05:6e02:1041:c10:5a02:3ab6:cc02:eb4e])
-        by smtp.googlemail.com with ESMTPSA id j1-20020a056000124100b0021d221daccfsm11516170wrx.78.2022.08.08.06.31.14
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5H5TR7yfLLVGjO2fI6qniVBtadkhJI8/3v58NZ4+aeg=;
+        b=sSKUIof2UvapvADT+UILmNBuPIEEAguVMZWzbfP6dvAQ4s7yKeJEALK3VcxMS/clsV
+         GL9CHRJi48OiZjRIITVQAVkli9nRdsvaW1zJG7tvOxvfW0qfKlyfoiw41JB1pvzGF96e
+         sHm57Umq0b0lhQhbZsOwuaVQmBxDIS2AtVhfLo1ksslXB1R1uU5o6vTk2mdL9XvfE9/b
+         98vkULJ3UjMNtrlwdNESsYWQj1EDC1ZDZqH+Pterh4RSiQRAjhjmdv0034/zozZwzRsg
+         g2H9BjINe8dZec8Jg508THjEw5WilSjG3VGX+RFtFNXdeNLZooX1Ti7Vm8PMAYkQP02G
+         MAkA==
+X-Gm-Message-State: ACgBeo2FwEDtdtMOKTD1naVwNjeOViDXIBcICG6u3tH9zzGItIHbDqu2
+        UvA2fp4zvpT8N1KFH7g8MnSAYA==
+X-Google-Smtp-Source: AA6agR5A2GynCEEZbEtFP8UiibR/fWKXFnx5kgKUiZ9UHHnA0JhCbjjzFv+icaTSaByKlBRw5mHQGg==
+X-Received: by 2002:a2e:b8d3:0:b0:25f:e94d:10ae with SMTP id s19-20020a2eb8d3000000b0025fe94d10aemr767505ljp.331.1659966151058;
+        Mon, 08 Aug 2022 06:42:31 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id t7-20020a05651c204700b0025e5a65afbbsm1369551ljo.120.2022.08.08.06.42.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 06:31:15 -0700 (PDT)
-Message-ID: <24be0922-74a5-456e-411b-b1c6e7924f99@linaro.org>
-Date:   Mon, 8 Aug 2022 15:31:13 +0200
+        Mon, 08 Aug 2022 06:42:30 -0700 (PDT)
+Message-ID: <e62e2f08-5b1e-6488-375f-d4c46d7ce785@linaro.org>
+Date:   Mon, 8 Aug 2022 16:42:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 00/33] New thermal OF code
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 8/8] power: supply: Add driver for Qualcomm SMBCHG
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
-        anarsoul@gmail.com, baolin.wang7@gmail.com,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
-        f.fainelli@gmail.com, glaroque@baylibre.com,
-        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
-        jonathanh@nvidia.com, khilman@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, matthias.bgg@gmail.com,
-        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
-        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
-        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220808094216.928018-1-michael@walle.cc>
- <cd4fef23-15b3-15ab-8125-91860bd83315@linaro.org>
- <8a979d0fcab90f4d5ffee95f322c5ace@walle.cc>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <8a979d0fcab90f4d5ffee95f322c5ace@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Alejandro Tafalla <atafalla@dnyon.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220808073459.396278-1-y.oudjana@protonmail.com>
+ <20220808073459.396278-9-y.oudjana@protonmail.com>
+ <02243d57-d7aa-7aa9-4f95-24c417ff8c69@linaro.org>
+ <S0KAGR.INJ75H9K5FWO1@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <S0KAGR.INJ75H9K5FWO1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -90,103 +85,163 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/08/2022 15:24, Michael Walle wrote:
-> Hi Daniel,
+On 08/08/2022 13:05, Yassine Oudjana wrote:
 > 
-> Am 2022-08-08 15:09, schrieb Daniel Lezcano:
->> Does this fix solves this first issue ?
+> On Mon, Aug 8 2022 at 11:55:02 +03:00:00, Krzysztof Kozlowski 
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 08/08/2022 10:34, Yassine Oudjana wrote:
+>>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>
+>>>  Add a driver for the switch-mode battery charger found on
+>>>  PMICs such as PMI8994. This block is referred to in the vendor
+>>>  kernel[1] as smbcharger or SMBCHG. It has USB and DC inputs,
+>>>  and can generate VBUS for USB OTG with a boost regulator.
+>>>  It supports Qualcomm Quick Charge 2.0, and can operate along
+>>>  with a parallel charger (SMB1357, or SMB1351 for added Quick
+>>>  Charge 3.0 support) for improved efficiency at higher currents.
+>>>
+>>>  At the moment, this driver supports charging off of the USB input
+>>>  at 5V with input current limit up to 3A. It also includes support
+>>>  for operating the OTG boost regulator as well as extcon
+>>>  functionality, reporting states of USB and USB_HOST with VBUS and
+>>>  charge port types.
+>>>
+>>>  Co-developed-by: Alejandro Tafalla <atafalla@dnyon.com>
+>>>  Signed-off-by: Alejandro Tafalla <atafalla@dnyon.com>
+>>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>
+>>>  [1] 
+>>> https://github.com/android-linux-stable/msm-3.18/blob/kernel.lnx.3.18.r34-rel/drivers/power/qpnp-smbcharger.c
+>>>  ---
+>>>   MAINTAINERS                        |    2 +
+>>>   drivers/power/supply/Kconfig       |   11 +
+>>>   drivers/power/supply/Makefile      |    1 +
+>>>   drivers/power/supply/qcom-smbchg.c | 1664 
+>>> ++++++++++++++++++++++++++++
+>>>   drivers/power/supply/qcom-smbchg.h |  428 +++++++
+>>>   5 files changed, 2106 insertions(+)
+>>>   create mode 100644 drivers/power/supply/qcom-smbchg.c
+>>>   create mode 100644 drivers/power/supply/qcom-smbchg.h
+>>>
+>>>  diff --git a/MAINTAINERS b/MAINTAINERS
+>>>  index f6cf3a27d132..9b8693050890 100644
+>>>  --- a/MAINTAINERS
+>>>  +++ b/MAINTAINERS
+>>>  @@ -16964,6 +16964,8 @@ L:	linux-pm@vger.kernel.org
+>>>   L:	linux-arm-msm@vger.kernel.org
+>>>   S:	Maintained
+>>>   F:	Documentation/devicetree/bindings/power/supply/qcom,smbchg.yaml
+>>>  +F:	drivers/power/supply/qcom-smbchg.c
+>>>  +F:	drivers/power/supply/qcom-smbchg.h
+>>>
+>>>   QUALCOMM TSENS THERMAL DRIVER
+>>>   M:	Amit Kucheria <amitk@kernel.org>
+>>>  diff --git a/drivers/power/supply/Kconfig 
+>>> b/drivers/power/supply/Kconfig
+>>>  index 1aa8323ad9f6..246bfc118d9f 100644
+>>>  --- a/drivers/power/supply/Kconfig
+>>>  +++ b/drivers/power/supply/Kconfig
+>>>  @@ -633,6 +633,17 @@ config CHARGER_QCOM_SMBB
+>>>   	  documentation for more detail.  The base name for this driver is
+>>>   	  'pm8941_charger'.
+>>>
+>>>  +config CHARGER_QCOM_SMBCHG
+>>>  +	tristate "Qualcomm Switch-Mode Battery Charger"
 >>
->> https://lore.kernel.org/all/YvDzovkMCQecPDjz@kili/
+>> As I mentioned in cover letter, this should be either squashed into
+>> Caleb's work, merged into some common part or kept separate but with
+>> clear explaining why it cannot be merged.
+>>
+>> Some incomplete review follows:
+>>
+>>>  +	depends on MFD_SPMI_PMIC || COMPILE_TEST
+>>>  +	depends on OF
+>>>  +	depends on EXTCON
+>>>  +	depends on REGULATOR
+>>>  +	select QCOM_PMIC_SEC_WRITE
+>>>  +	help
+>>>  +	  Say Y to include support for the Switch-Mode Battery Charger 
+>>> block
+>>>  +	  found in Qualcomm PMICs such as PMI8994.
+>>>  +
+>>>   config CHARGER_BQ2415X
+>>>   	tristate "TI BQ2415x battery charger driver"
+>>>   	depends on I2C
+>>>  diff --git a/drivers/power/supply/Makefile 
+>>> b/drivers/power/supply/Makefile
+>>>  index 7f02f36aea55..7c2c037cd8b1 100644
+>>>  --- a/drivers/power/supply/Makefile
+>>>  +++ b/drivers/power/supply/Makefile
+>>>  @@ -83,6 +83,7 @@ obj-$(CONFIG_CHARGER_MAX8998)	+= max8998_charger.o
+>>>   obj-$(CONFIG_CHARGER_MP2629)	+= mp2629_charger.o
+>>>   obj-$(CONFIG_CHARGER_MT6360)	+= mt6360_charger.o
+>>>   obj-$(CONFIG_CHARGER_QCOM_SMBB)	+= qcom_smbb.o
+>>>  +obj-$(CONFIG_CHARGER_QCOM_SMBCHG)	+= qcom-smbchg.o
+>>>   obj-$(CONFIG_CHARGER_BQ2415X)	+= bq2415x_charger.o
+>>>   obj-$(CONFIG_CHARGER_BQ24190)	+= bq24190_charger.o
+>>>   obj-$(CONFIG_CHARGER_BQ24257)	+= bq24257_charger.o
+>>>  diff --git a/drivers/power/supply/qcom-smbchg.c 
+>>> b/drivers/power/supply/qcom-smbchg.c
+>>>  new file mode 100644
+>>>  index 000000000000..23a9667953c9
+>>>  --- /dev/null
+>>>  +++ b/drivers/power/supply/qcom-smbchg.c
+>>>  @@ -0,0 +1,1664 @@
+>>>  +// SPDX-License-Identifier: GPL-2.0-only
+>>
+>> Several things look like based from original sources, so please retain
+>> original copyright.
 > 
-> Unfortunately not, it is still the same:
+> Do I replace the existing copyright here with the original one, just 
+> add it, or mention that this driver is based on downstream sources 
+> (maybe putting a link as well) then add it?
 
-Ok, thanks for testing
+Add original copyright and optionally mention that it is based on
+downstream source. Links are not needed.
 
+>>
+>>>  +
+>>>  +static int smbchg_probe(struct platform_device *pdev)
+>>>  +{
+>>>  +	struct smbchg_chip *chip;
+>>>  +	struct regulator_config config = {};
+>>>  +	struct power_supply_config supply_config = {};
+>>>  +	int i, irq, ret;
+>>>  +
+>>>  +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+>>>  +	if (!chip)
+>>>  +		return -ENOMEM;
+>>>  +
+>>>  +	chip->dev = &pdev->dev;
+>>>  +
+>>>  +	chip->regmap = dev_get_regmap(chip->dev->parent, NULL);
+>>>  +	if (!chip->regmap) {
+>>>  +		dev_err(chip->dev, "Failed to get regmap\n");
+>>>  +		return -ENODEV;
+>>>  +	}
+>>>  +
+>>>  +	ret = of_property_read_u32(chip->dev->of_node, "reg", 
+>>> &chip->base);
+>>
+>> First: device_xxx
 > 
-> [    1.915140] thermal_sys: Failed to find thermal zone for tmu id=2
-> [    1.921279] qoriq_thermal 1f80000.tmu: Failed to register sensors
-> [    1.927395] qoriq_thermal: probe of 1f80000.tmu failed with error -22
-> [    1.934189] Unable to handle kernel paging request at virtual address 
-> 01adadadadadad88
-> [    1.942146] Mem abort info:
-> [    1.944948]   ESR = 0x0000000096000004
-> [    1.948708]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    1.954042]   SET = 0, FnV = 0
-> [    1.957107]   EA = 0, S1PTW = 0
-> [    1.960253]   FSC = 0x04: level 0 translation fault
-> [    1.965147] Data abort info:
-> [    1.968030]   ISV = 0, ISS = 0x00000004
-> [    1.971878]   CM = 0, WnR = 0
-> [    1.974852] [01adadadadadad88] address between user and kernel 
-> address ranges
-> [    1.982016] Internal error: Oops: 96000004 [#1] SMP
-> [    1.986907] Modules linked in:
-> [    1.989969] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 
-> 5.19.0-next-20220808-00080-g1c46f44502e0 #1697
-> [    1.999135] Hardware name: Kontron KBox A-230-LS (DT)
-> [    2.004199] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS 
-> BTYPE=--)
-> [    2.011185] pc : kfree+0x5c/0x3c0
-> [    2.014516] lr : devm_thermal_of_zone_release+0x38/0x60
-> [    2.019761] sp : ffff80000a22bad0
-> [    2.023081] x29: ffff80000a22bad0 x28: 0000000000000000 x27: 
-> ffff800009960464
-> [    2.030245] x26: ffff800009a16960 x25: 0000000000000006 x24: 
-> ffff800009f09a40
-> [    2.037407] x23: ffff800009ab9008 x22: ffff800008d0eea8 x21: 
-> 01adadadadadad80
-> [    2.044569] x20: 6b6b6b6b6b6b6b6b x19: ffff00200232b800 x18: 
-> 00000000fffffffb
-> [    2.051731] x17: ffff800008d0eea0 x16: ffff800008d07d44 x15: 
-> ffff800008d0d154
-> [    2.056647] usb 1-1: new high-speed USB device number 2 using xhci-hcd
-> [    2.058893] x14: ffff800008d0cddc x13: ffff8000088d1c2c x12: 
-> ffff8000088d5034
-> [    2.072597] x11: ffff8000088d46d4 x10: 0000000000000000 x9 : 
-> ffff800008d0eea8
-> [    2.079759] x8 : ffff002000b1a158 x7 : bbbbbbbbbbbbbbbb x6 : 
-> ffff80000a0f53b8
-> [    2.086921] x5 : ffff80000a22b960 x4 : 0000000000000000 x3 : 
-> 0000000000000000
-> [    2.094082] x2 : fffffc0000000000 x1 : ffff002000838040 x0 : 
-> 01adb1adadadad80
-> [    2.101244] Call trace:
-> [    2.103692]  kfree+0x5c/0x3c0
-> [    2.106666]  devm_thermal_of_zone_release+0x38/0x60
-> [    2.111561]  release_nodes+0x64/0xd0
-> [    2.115146]  devres_release_all+0xbc/0x350
-> [    2.119253]  device_unbind_cleanup+0x20/0x70
-> [    2.123536]  really_probe+0x1a0/0x2e4
-> [    2.127208]  __driver_probe_device+0x80/0xec
-> [    2.131490]  driver_probe_device+0x44/0x130
-> [    2.135685]  __driver_attach+0x104/0x1b4
-> [    2.139619]  bus_for_each_dev+0x7c/0xe0
-> [    2.143465]  driver_attach+0x30/0x40
-> [    2.147048]  bus_add_driver+0x160/0x210
-> [    2.150894]  driver_register+0x84/0x140
-> [    2.154741]  __platform_driver_register+0x34/0x40
-> [    2.159461]  qoriq_tmu_init+0x28/0x34
-> [    2.163133]  do_one_initcall+0x50/0x250
-> [    2.166979]  kernel_init_freeable+0x278/0x31c
-> [    2.171349]  kernel_init+0x30/0x140
-> [    2.174847]  ret_from_fork+0x10/0x20
-> [    2.178433] Code: b25657e2 d34cfc00 d37ae400 8b020015 (f94006a1)
-> [    2.184546] ---[ end trace 0000000000000000 ]---
-> [    2.189188] Kernel panic - not syncing: Attempted to kill init! 
-> exitcode=0x0000000b
-> [    2.196869] SMP: stopping secondary CPUs
-> [    2.200803] Kernel Offset: disabled
-> [    2.204296] CPU features: 0x2000,0800f021,00001086
-> [    2.209100] Memory Limit: none
-> [    2.212158] ---[ end Kernel panic - not syncing: Attempted to kill 
-> init! exitcode=0x0000000b ]---
+> Okay.
 > 
-> -michael
+>> Second: what if address is bigger than u32? Shouldn't this be
+>> of_read_number or something similar in device_xxx API?
+> 
+> The address wouldn't exceed sizeof(u16). Actually now I think I 
+> should've used property_read_u16 instead. I couldn't find a device_* 
+> equivalent of of_read_number (or at least not a direct one), are you 
+> sure it exists?
+
+I think u16 would be confusing as reg size is minimum u32 (with
+address-cells==1). Instead of of_read_number(), maybe this should be
+of_get_address() (see pm8941-pwrkey.c), but there is no device_xxx()
+equivalent. Still I think it would be the most appropriate to parse
+actual address.
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
