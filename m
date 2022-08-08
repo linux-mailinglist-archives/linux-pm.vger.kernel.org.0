@@ -2,72 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE2D58C70D
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 13:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6461858C73D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 13:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235676AbiHHLA5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 07:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S242802AbiHHLHQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 07:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235061AbiHHLAr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 07:00:47 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510AA55B8
-        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 04:00:46 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id uj29so16000624ejc.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 04:00:46 -0700 (PDT)
+        with ESMTP id S242853AbiHHLG6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 07:06:58 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E7015FEC
+        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 04:06:45 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id i128-20020a1c3b86000000b003a536d58f73so2237134wma.4
+        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 04:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=sDgE00TSYImsrZ8eUvhvRLyRwa/CwuKhww/PvBiXyo0=;
-        b=ezCd+qosLR/Jc6oUu5JRl2ht1Aj2dHh9IzM7OpMvphFEVNo0ModfeMaXR8Tnw2Zsqn
-         nfq5CfL2u9nE0vpfXFUGVypqNLobO6oZzKO/V6UsBogadHCt4RbPi2s9HoHvDRofKjGo
-         VRej3lM0t12sXhFYnqCbfiAQg2rO+BaxDhUix7yw5f0c459aiU7qov/SDMRY8kRu6pJK
-         Jt30x8XZBYTp8vgHIK1BWiXJJ1gV7+cghF90t5kRvv8MK1PjT7EyaE3M3hlmdSWyEdWB
-         6nMPPDcaCGUCD2On+We+mc91hUd1VMnhW9GHVzyQNss+x12DmnUPv+hhE7V2K+BXP+gY
-         Np+A==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=c16ijpz5NNMDTs3mb30Og3o9Sww4mQ03ahV/QOHWVds=;
+        b=DrgQ+srR6mq7WUlxI3sRzp45XRaLwh8AdoFWX64QOec03vBhctBLrHtEQ6oAttrxbj
+         pufR5eQ5R38WVPEARYyDCUufiGi2xS1gHnOuJCRddGgQoUY6rnJ4yEmDO92o29ao9CUn
+         tc4Tkg9bAmzQ1a/EWuV9UC7+ksEx2NuUtct+bC5z9/b9gD563sxFOd7JzYm35xcsfZry
+         Ve2uIlcNuUtkUx3w/bPiDjZGAu+xz0FlOxbun2frOESGiInfQED2y0E699NSIxMdiHbD
+         vcAgCcJMd0i9kNJPyDNUAytAi+rss7kKL3/ldjhSiBinfkdAJ3sYPw3Z3bdarmIlIdCx
+         0MvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=sDgE00TSYImsrZ8eUvhvRLyRwa/CwuKhww/PvBiXyo0=;
-        b=qZjWXKciA6VgqCbnijjpg5uSqD3WFZTjmoQQWJHt87mJmECmE5fTnqQPIJUjLeQZGH
-         EGrAM4PHZRnzyrIcYVP+9bfvApP4aeqNskCrlzsuR9WaFDJeCb0PaqUR5yqch+IpX/UU
-         orRv+pOBJ3v33CD+OqvjrfsaOvhgdfXpdB6KkB/kfMcyUK+Ok/uh1yHY7XjEE+kzXkj5
-         HMQyN05btsbxqw1JxWhMXSmOKNSxlG7h7vyK327Fln4AOLP9nqi8GNoGcaGlwuC4XSxF
-         o9lMWa0hkFtkjw3jZDi3GQYjD4qbk9MmJ80pjeMAbNcMK6NkzLYWHPK5PkacErv0is9H
-         k8Cw==
-X-Gm-Message-State: ACgBeo0C/5ii3GoFFjO8EiReS8BCO5t6AzPZdbte0wdxF5ShfmG4h1q3
-        a/R9Kf6eHFeYAk8DIcXfQSe98w==
-X-Google-Smtp-Source: AA6agR72d6ukddY5qJeAVt8KsDUBKUZegBbwzlVc/8G27Nj3mmNrQQImfvzoag/bC6kBlOUTsYNX5w==
-X-Received: by 2002:a17:907:9712:b0:731:67db:1b48 with SMTP id jg18-20020a170907971200b0073167db1b48mr2120070ejc.754.1659956444802;
-        Mon, 08 Aug 2022 04:00:44 -0700 (PDT)
-Received: from arch-thunder (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
-        by smtp.gmail.com with ESMTPSA id d3-20020aa7ce03000000b0043e67f9028esm4415297edv.20.2022.08.08.04.00.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 04:00:44 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 12:00:42 +0100
-From:   Rui Miguel Silva <rui.silva@linaro.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH 3/5] iio: gyro: fxas210002c: Move exports to
- IIO_FXAS210002C namespace.
-Message-ID: <20220808110042.wc6x6z4pmphha5in@arch-thunder>
-References: <20220807192038.1039771-1-jic23@kernel.org>
- <20220807192038.1039771-4-jic23@kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=c16ijpz5NNMDTs3mb30Og3o9Sww4mQ03ahV/QOHWVds=;
+        b=rTk45oaULTs09Pi+O9sdehxogTDtKOU8nPJUz2u4Cc/3aP5dix4sXS8Ae0FYm2Bk5/
+         oHuWWXxdlA1aOL5k9J8i3FtqTjQK8VfMMq/wHgDU4WjZoHL4GjFvF/62Pt2mV7o2gniZ
+         L8X62cPJ3GulZ2iMHg4/RJV0faCcH4kkhFO/QpDjngA35p/YTEiPwkGK4/DjE/HwKVKE
+         YcUpuVoip9M4HK4LDNo8A8pReLns0DGBE9NfJ80M89smmH+gGTCY9FSj4Au4rW0Ly51u
+         qttyJTWtjkKShg4oNLGhHS+N9AvWXCT5gFS2zLNmZShweUFWXXhiGpeDw+R2o8VffCQS
+         9P2A==
+X-Gm-Message-State: ACgBeo2oCx0L2AFvopwdaeAVuzXSGZvihNJJ5CTRPIg7CBEMSRWOkhGQ
+        cyb1RoKgvywecx3yRWXX3AFhkQ==
+X-Google-Smtp-Source: AA6agR7cPa81AJUe5QUESVeNU8FMUZLrA4hGZ5NWQnUDWBHokliPfdeVTyWcpdZkSj1IZp53DvaIJw==
+X-Received: by 2002:a7b:cbd7:0:b0:3a5:500e:13bc with SMTP id n23-20020a7bcbd7000000b003a5500e13bcmr300646wmi.83.1659956804248;
+        Mon, 08 Aug 2022 04:06:44 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:54d7:57c:c89f:760b? ([2a05:6e02:1041:c10:54d7:57c:c89f:760b])
+        by smtp.googlemail.com with ESMTPSA id l8-20020a05600c4f0800b003a17ab4e7c8sm20019016wmq.39.2022.08.08.04.06.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 04:06:43 -0700 (PDT)
+Message-ID: <7c32806f-7ca1-a7f7-4565-84f59f2421be@linaro.org>
+Date:   Mon, 8 Aug 2022 13:06:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220807192038.1039771-4-jic23@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 00/33] New thermal OF code
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     abailon@baylibre.com, anarsoul@gmail.com, baolin.wang7@gmail.com,
+        bjorn.andersson@linaro.org, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
+        f.fainelli@gmail.com, glaroque@baylibre.com,
+        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
+        jonathanh@nvidia.com, khilman@baylibre.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, matthias.bgg@gmail.com,
+        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
+        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
+        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220808094216.928018-1-michael@walle.cc>
+ <9b6aea8b-23fb-a882-4c47-5cd70cf266bf@linaro.org>
+ <5daf2b7ebba3a3227ac37643a919add2@walle.cc>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <5daf2b7ebba3a3227ac37643a919add2@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,132 +88,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Jonathan,
-On Sun, Aug 07, 2022 at 08:20:36PM +0100, Jonathan Cameron wrote:
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> Includes using EXPORT_NS_GPL_DEV_PM_OPS() and the simplifications that
-> brings by allowing the compiler to remove unused struct dev_pm_ops
-> and callbacks without needing explicit __maybe_unused markings.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Rui Miguel Silva <rui.silva@linaro.org>
+On 08/08/2022 12:55, Michael Walle wrote:
+> Hi Daniel,
 
-This looks a sane and good improvement, thanks.
+[ ... ]
 
-Acked-by: Rui Miguel Silva <rui.silva@linaro.org>
+>>> There seems to be one mistake within the new thermal code:
 
-Cheers,
-     Rui
+[ ... ]
 
-> ---
->  drivers/iio/gyro/fxas21002c_core.c | 21 +++++++++------------
->  drivers/iio/gyro/fxas21002c_i2c.c  |  3 ++-
->  drivers/iio/gyro/fxas21002c_spi.c  |  3 ++-
->  3 files changed, 13 insertions(+), 14 deletions(-)
+>>> This was seen a sl28 board
+>>> (arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts).
+>>> The same board in the KernelCI also have some more information:
+>>> https://lavalab.kontron.com/scheduler/job/151900#L1162
+>>>
+>>> But I guess even if that is fixed, the driver will not probe due to the
+>>> missing trip points? Are they now mandatory? Does it mean we'd need to
+>>> update our device trees? But that will then mean older devices trees
+>>> don't work anymore.
+>>
+>> Thanks for reporting, I'll investigate the issues you are reporting.
+>>
+>> There is no need to update any device tree file. The code does not
+>> change the bindings, it is a rewrite of the implementation supposed to
+>> be without impact on the existing bindings, thus the existing device
+>> tree descriptions.
+>>
+>> Why are you saying there are missing trip points ? The dts shows trip
+>> points for 'core-cluster' and 'ddr-controller' ?
 > 
-> diff --git a/drivers/iio/gyro/fxas21002c_core.c b/drivers/iio/gyro/fxas21002c_core.c
-> index a36d71d9e3ea..9aee9096363f 100644
-> --- a/drivers/iio/gyro/fxas21002c_core.c
-> +++ b/drivers/iio/gyro/fxas21002c_core.c
-> @@ -998,7 +998,7 @@ int fxas21002c_core_probe(struct device *dev, struct regmap *regmap, int irq,
->  
->  	return ret;
->  }
-> -EXPORT_SYMBOL_GPL(fxas21002c_core_probe);
-> +EXPORT_SYMBOL_NS_GPL(fxas21002c_core_probe, IIO_FXAS21002C);
->  
->  void fxas21002c_core_remove(struct device *dev)
->  {
-> @@ -1009,9 +1009,9 @@ void fxas21002c_core_remove(struct device *dev)
->  	pm_runtime_disable(dev);
->  	pm_runtime_set_suspended(dev);
->  }
-> -EXPORT_SYMBOL_GPL(fxas21002c_core_remove);
-> +EXPORT_SYMBOL_NS_GPL(fxas21002c_core_remove, IIO_FXAS21002C);
->  
-> -static int __maybe_unused fxas21002c_suspend(struct device *dev)
-> +static int fxas21002c_suspend(struct device *dev)
->  {
->  	struct fxas21002c_data *data = iio_priv(dev_get_drvdata(dev));
->  
-> @@ -1021,7 +1021,7 @@ static int __maybe_unused fxas21002c_suspend(struct device *dev)
->  	return 0;
->  }
->  
-> -static int __maybe_unused fxas21002c_resume(struct device *dev)
-> +static int fxas21002c_resume(struct device *dev)
->  {
->  	struct fxas21002c_data *data = iio_priv(dev_get_drvdata(dev));
->  	int ret;
-> @@ -1033,26 +1033,23 @@ static int __maybe_unused fxas21002c_resume(struct device *dev)
->  	return fxas21002c_mode_set(data, data->prev_mode);
->  }
->  
-> -static int __maybe_unused fxas21002c_runtime_suspend(struct device *dev)
-> +static int fxas21002c_runtime_suspend(struct device *dev)
->  {
->  	struct fxas21002c_data *data = iio_priv(dev_get_drvdata(dev));
->  
->  	return fxas21002c_mode_set(data, FXAS21002C_MODE_READY);
->  }
->  
-> -static int __maybe_unused fxas21002c_runtime_resume(struct device *dev)
-> +static int fxas21002c_runtime_resume(struct device *dev)
->  {
->  	struct fxas21002c_data *data = iio_priv(dev_get_drvdata(dev));
->  
->  	return fxas21002c_mode_set(data, FXAS21002C_MODE_ACTIVE);
->  }
->  
-> -const struct dev_pm_ops fxas21002c_pm_ops = {
-> -	SET_SYSTEM_SLEEP_PM_OPS(fxas21002c_suspend, fxas21002c_resume)
-> -	SET_RUNTIME_PM_OPS(fxas21002c_runtime_suspend,
-> -			   fxas21002c_runtime_resume, NULL)
-> -};
-> -EXPORT_SYMBOL_GPL(fxas21002c_pm_ops);
-> +EXPORT_NS_GPL_DEV_PM_OPS(fxas21002c_pm_ops, fxas21002c_suspend,
-> +			 fxas21002c_resume, fxas21002c_runtime_suspend,
-> +			 fxas21002c_runtime_resume, NULL, IIO_FXAS21002C);
->  
->  MODULE_AUTHOR("Rui Miguel Silva <rui.silva@linaro.org>");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/iio/gyro/fxas21002c_i2c.c b/drivers/iio/gyro/fxas21002c_i2c.c
-> index a7807fd97483..241401a9dfea 100644
-> --- a/drivers/iio/gyro/fxas21002c_i2c.c
-> +++ b/drivers/iio/gyro/fxas21002c_i2c.c
-> @@ -55,7 +55,7 @@ MODULE_DEVICE_TABLE(of, fxas21002c_i2c_of_match);
->  static struct i2c_driver fxas21002c_i2c_driver = {
->  	.driver = {
->  		.name = "fxas21002c_i2c",
-> -		.pm = &fxas21002c_pm_ops,
-> +		.pm = pm_ptr(&fxas21002c_pm_ops),
->  		.of_match_table = fxas21002c_i2c_of_match,
->  	},
->  	.probe_new	= fxas21002c_i2c_probe,
-> @@ -67,3 +67,4 @@ module_i2c_driver(fxas21002c_i2c_driver);
->  MODULE_AUTHOR("Rui Miguel Silva <rui.silva@linaro.org>");
->  MODULE_LICENSE("GPL v2");
->  MODULE_DESCRIPTION("FXAS21002C I2C Gyro driver");
-> +MODULE_IMPORT_NS(IIO_FXAS21002C);
-> diff --git a/drivers/iio/gyro/fxas21002c_spi.c b/drivers/iio/gyro/fxas21002c_spi.c
-> index c3ac169facf9..4f633826547c 100644
-> --- a/drivers/iio/gyro/fxas21002c_spi.c
-> +++ b/drivers/iio/gyro/fxas21002c_spi.c
-> @@ -54,7 +54,7 @@ MODULE_DEVICE_TABLE(of, fxas21002c_spi_of_match);
->  static struct spi_driver fxas21002c_spi_driver = {
->  	.driver = {
->  		.name = "fxas21002c_spi",
-> -		.pm = &fxas21002c_pm_ops,
-> +		.pm = pm_ptr(&fxas21002c_pm_ops),
->  		.of_match_table = fxas21002c_spi_of_match,
->  	},
->  	.probe		= fxas21002c_spi_probe,
-> @@ -66,3 +66,4 @@ module_spi_driver(fxas21002c_spi_driver);
->  MODULE_AUTHOR("Rui Miguel Silva <rui.silva@linaro.org>");
->  MODULE_LICENSE("GPL v2");
->  MODULE_DESCRIPTION("FXAS21002C SPI Gyro driver");
-> +MODULE_IMPORT_NS(IIO_FXAS21002C);
-> -- 
-> 2.37.1
+> You are right. I've just looked at the error message:
 > 
+> [    2.030452] thermal_sys: Failed to find 'trips' node
+> [    2.033664] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+> [    2.035434] thermal_sys: Failed to find trip points for tmu id=2
+> 
+> So maybe the code just don't find em.
+
+For the board it seems there is no definition for tmu with id 2
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
