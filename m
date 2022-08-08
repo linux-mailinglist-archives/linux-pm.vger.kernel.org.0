@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC5158C0FE
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 03:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655DC58C14D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 03:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242017AbiHHB5M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Aug 2022 21:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S243856AbiHHB6k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Aug 2022 21:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243930AbiHHB4i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Aug 2022 21:56:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB10C10546;
-        Sun,  7 Aug 2022 18:40:01 -0700 (PDT)
+        with ESMTP id S244091AbiHHB4z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Aug 2022 21:56:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79364626F;
+        Sun,  7 Aug 2022 18:40:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4356E60EF0;
-        Mon,  8 Aug 2022 01:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F88CC433D6;
-        Mon,  8 Aug 2022 01:39:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25B05B80DDF;
+        Mon,  8 Aug 2022 01:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA633C433D6;
+        Mon,  8 Aug 2022 01:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922800;
-        bh=nNnTUhqNU4YQbcijVe/pezvof71mJ2XPgaNef+hmOY0=;
+        s=k20201202; t=1659922816;
+        bh=xnZLMMWFFHl1IT12UIBhDAc2y68nT2QeA5UidjFrj8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nhy6XpyDlVxXDXooBBjMOnwy+h+16T23oqiwkJ6jkq78cZSIP4D1bvtKfU5o7F7Ap
-         uTP45z5Nw4bQ3QfTCOrZPgIlktIwTDMkYJjfwjKqP/M1T9Cgr3jXUsQPJSddjDuzSy
-         QvkTQ0mk5J0DpyY9AaA6+YgLKPYdyJ86fAFH1EoahA9LN6f2XraTVzvKKIigWzUe/r
-         DNFYrr/K3RbdMXkiGyguCFgFolplpc/z3fNP4aLB6mRQ/gVMqsnPCfxSX7J8QjnqcR
-         I3tp/zqQxb4dpc5a+hj2scNwb7Zc/CNKZk+gq2cT2H4qOYtfj+ODijZujbSuBmlXde
-         5Qcmj6AJR7eZg==
+        b=u//+sQYh1zKaNZLnBTQHtwaaoOU/rcIKJgStAnKgbaxUeuGXir7OYt6chau9YDH9U
+         q0yv4Scnzhi+I5Zg3ypWCKfYcP3gCCpLyqxswzZFYr/9m6fM7kWF8FXXkFrKW+8GJn
+         bsHjn/Qim/facxaVTPwL9cLrSjFaU+9kzbGKSz9sHlAlqWqGPz2nVjwv0AXBOt+rRl
+         Qvu+1XTf10tdfQnieqDwsOLJCbLJb/Bcc1nIUYwdsakzitJxPc6ARnNBCX4zvE77gx
+         6wnigbL4NTJG+vYJD8F0a8S5uOMf89+XgjoDZHiJRN9wRZ/BY107Q0TQlYOhrNqPb1
+         zlvV+x3AYuE2g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
@@ -38,12 +38,12 @@ Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
         pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 11/12] PM: hibernate: defer device probing when resuming from hibernation
-Date:   Sun,  7 Aug 2022 21:39:41 -0400
-Message-Id: <20220808013943.316907-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 7/8] PM: hibernate: defer device probing when resuming from hibernation
+Date:   Sun,  7 Aug 2022 21:40:02 -0400
+Message-Id: <20220808014005.317064-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013943.316907-1-sashal@kernel.org>
-References: <20220808013943.316907-1-sashal@kernel.org>
+In-Reply-To: <20220808014005.317064-1-sashal@kernel.org>
+References: <20220808014005.317064-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -112,7 +112,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 69017a569f30..add4653477fe 100644
+index bc6dde1f1567..a84f9e549ad5 100644
 --- a/kernel/power/user.c
 +++ b/kernel/power/user.c
 @@ -29,6 +29,7 @@
