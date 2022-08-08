@@ -2,60 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CCE58C647
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 12:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3D758C652
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Aug 2022 12:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242444AbiHHKWG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Aug 2022 06:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S232218AbiHHK0Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Aug 2022 06:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242460AbiHHKWE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 06:22:04 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6909713CD1
-        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 03:22:02 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id i128-20020a1c3b86000000b003a536d58f73so2181500wma.4
-        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 03:22:02 -0700 (PDT)
+        with ESMTP id S232740AbiHHK0O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Aug 2022 06:26:14 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A72EAF;
+        Mon,  8 Aug 2022 03:26:13 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id p18so8130039plr.8;
+        Mon, 08 Aug 2022 03:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=J6ZVNADyKTbQixcRRwr5+iYgPIyFaFRfnAwe3AZXzG8=;
-        b=jN6WCrYWQ2jC9ZXlc1TGgoPmuqkLvvvix3wRLHNKam69FJylZAuMn1T+go58xyXU0k
-         UwwynBmOPjAgbO9uXmg2IySjvW3/VxbmfRWfgW6tcPX6o+HWoJwT89qj1RuOmgaKXfsv
-         hQ2UmeMGjjSM30xGMCbpJqJlm7MbvjjU38Dk1Nh1RMLgGQVRrF47+jVevhHUIDCT+G3N
-         GU3XaHSabyOsgQ4KQcN5AUvsW5U3I8tnhCv89JnRXuGqMu+a18tVtCED80Sg9LN4Rzr0
-         wZhmgy6S8euKWg/YMXL7p/9w0c8hmdFZp/kTivkLV33q/PNqo80XsxRqa/sE/rADGM9q
-         eFKA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=EXiXJN8MYkJGng5lNfVERdVuIaPMTXfVA4hJ6cFOEMk=;
+        b=aLhQ9RvqFygerD+CeJ4X5lxejhEF8/NQ8TOThb4q+E8/7SBY2lgeY/xmVjdZfE9xjN
+         GQswa/57mZeRfipXhzaVGV0A2981YTeAlgRAACinebEliuxxT0HtLM63rBwxcMos0mq6
+         KmikJ+KHutRLaar7qYkCe6ktRoTjB5Yoxiq3zu2xpwd5LqS8sg9rX18hQWsu89O+3KTy
+         PPaTC5q/GCw2VcOPzdzKVc2JxFq6FNnrBboTU/EeuGP7s7zc/ZQXt8dgDguA2AvKOPAv
+         lTnBswm/5kvDsPyF92L6wJBAKrwMqWCmbJ2Vi1iOIvQFQg+uKcGj1owxGWwemGBvjnnD
+         Cnkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=J6ZVNADyKTbQixcRRwr5+iYgPIyFaFRfnAwe3AZXzG8=;
-        b=Jh0QLoWYfaT9NrGlbkVOWwfymOPT0rFJhwFf4ghHF9+6GcWQG25xD+z4NGNZVnEBhY
-         MYQbIrycOe0DVXybs5G7P1CQTJQ8hsQ326nvbluGCYkFm9n2FdL+hsX3IvbC5svl/tvN
-         V6zNTP+r063Vx4SvqZ/D5Ah78kKX7THpkW31JjMhIAAGhyoXISnDmKfghPaZms5U/qmO
-         sKGEBZbnv9sIAbb91XXNjcwYfTS1qU5/73RdGUVrVbVNuYBGW4Te146eKbpOW6i+9j4Y
-         t27n5qB7lFeQVQyph1PXxLDajl2uYqpyXRtIyMs0cnN/6j3VvvNO8tpWnF8ikIBvLMTv
-         TpoA==
-X-Gm-Message-State: ACgBeo0uKD4c2bEWjowqAUhzPn/+n1565MBWooe+YcuLU/dNVDVmF8ol
-        uhUj9nmo1TOshYTj3NBxjXwPmA==
-X-Google-Smtp-Source: AA6agR7jdIkl0S4iYu4brpVO3NjNmmY52GYqlyF4M5MvrYI85rfNu1cRzMx2DqrvGB85+5wqJtwy4w==
-X-Received: by 2002:a1c:1985:0:b0:3a3:2cf8:ebe with SMTP id 127-20020a1c1985000000b003a32cf80ebemr17600187wmz.7.1659954120777;
-        Mon, 08 Aug 2022 03:22:00 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:54d7:57c:c89f:760b? ([2a05:6e02:1041:c10:54d7:57c:c89f:760b])
-        by smtp.googlemail.com with ESMTPSA id o19-20020a05600c4fd300b0039747cf8354sm14087596wmq.39.2022.08.08.03.21.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 03:22:00 -0700 (PDT)
-Message-ID: <9b6aea8b-23fb-a882-4c47-5cd70cf266bf@linaro.org>
-Date:   Mon, 8 Aug 2022 12:21:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=EXiXJN8MYkJGng5lNfVERdVuIaPMTXfVA4hJ6cFOEMk=;
+        b=3hXapC9Rb9M7+KZ3/+4JvVho9Vs7o8AAfIcOv4TtjGmWumqI/3N+eGn4ZKSkh/k4MO
+         /jCGiTFu5nusdfLM9kaZhER6r+4jCO74jGcwkFDevtXy82psJLtlHz60cmT7GdrbZkgZ
+         KFNJxBYm5HMoZYM9KULTEgBqtuUK+WBT57eHQZpa/l6WH+mYLsCeZJRXCp9oiZ0rOuYV
+         oCboiULJkZ0hJ1Z/DYySufueyos2nPTw37ut/31FQTwUrwq3uU3a1Q7Y8dvlCLoZQccO
+         T2EMGA9DIX8nOdUuY8BseMxy1Zqw46xpaqKcAFayESb9cH3EKQ5PJMfNQUGtG2jMbEEW
+         bUXw==
+X-Gm-Message-State: ACgBeo0xcFaGb/H/H56D7FjwjUpl6zIIF47yuBHEMAkMJlFOkWRC0/Xc
+        u3soxWjh4obJfo9XaVZw/No=
+X-Google-Smtp-Source: AA6agR7FFIYMoil1kGWAoZVgpkjadegt312i7+C2v89YNyWN2z7LMi9NxuFVOaw84REVhZifKjiIZw==
+X-Received: by 2002:a17:902:b607:b0:170:c7fc:388a with SMTP id b7-20020a170902b60700b00170c7fc388amr1922821pls.29.1659954372772;
+        Mon, 08 Aug 2022 03:26:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q19-20020a170902f35300b0016909be39e5sm8248889ple.177.2022.08.08.03.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 03:26:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 8 Aug 2022 03:26:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Michael Walle <michael@walle.cc>
-Cc:     abailon@baylibre.com, anarsoul@gmail.com, baolin.wang7@gmail.com,
+Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
+        anarsoul@gmail.com, baolin.wang7@gmail.com,
         bjorn.andersson@linaro.org, broonie@kernel.org,
         damien.lemoal@opensource.wdc.com, daniel.lezcano@linaro.org,
         digetx@gmail.com, f.fainelli@gmail.com, glaroque@baylibre.com,
@@ -66,56 +63,55 @@ Cc:     abailon@baylibre.com, anarsoul@gmail.com, baolin.wang7@gmail.com,
         mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
         miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
         rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
-        Guenter Roeck <linux@roeck-us.net>
+        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com
+Subject: Re: [PATCH v5 00/33] New thermal OF code
+Message-ID: <20220808102610.GA1969424@roeck-us.net>
 References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
  <20220808094216.928018-1-michael@walle.cc>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v5 00/33] New thermal OF code
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20220808094216.928018-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Michael,
-
-On 08/08/2022 11:42, Michael Walle wrote:
+On Mon, Aug 08, 2022 at 11:42:16AM +0200, Michael Walle wrote:
 > Hi,
->
->> The following changes are depending on:
->>
->>   - 20220722200007.1839356-1-daniel.lezcano@linexp.org
->>
->> which are present in the thermal/linux-next branch:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
->>
->> The series introduces a new thermal OF code. The patch description gives
->> a detailed explanation of the changes. Basically we write new OF parsing
->> functions, we migrate all the users of the old thermal OF API to the new
->> one and then we finish by removing the old OF code.
->>
->> That is the second step to rework the thermal OF code. More patches will
->> come after that to remove the duplication of the trip definitions in the
->> different drivers which will result in more code duplication removed and
->> consolidation of the core thermal framework.
->>
->> Thanks for those who tested the series on their platform and
->> investigated the regression with the disabled by default thermal zones.
+> 
+> > The following changes are depending on:
+> > 
+> >  - 20220722200007.1839356-1-daniel.lezcano@linexp.org
+> > 
+> > which are present in the thermal/linux-next branch:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
+> > 
+> > The series introduces a new thermal OF code. The patch description gives
+> > a detailed explanation of the changes. Basically we write new OF parsing
+> > functions, we migrate all the users of the old thermal OF API to the new
+> > one and then we finish by removing the old OF code.
+> > 
+> > That is the second step to rework the thermal OF code. More patches will
+> > come after that to remove the duplication of the trip definitions in the
+> > different drivers which will result in more code duplication removed and
+> > consolidation of the core thermal framework.
+> > 
+> > Thanks for those who tested the series on their platform and
+> > investigated the regression with the disabled by default thermal zones.
+> 
 > I haven't looked closely yet, but this series is breaking two of my
 > boards.
->
+> 
 > There seems to be one mistake within the new thermal code:
->
+> 
 > [    2.030452] thermal_sys: Failed to find 'trips' node
 > [    2.033664] usb 1-1: new high-speed USB device number 2 using xhci-hcd
 > [    2.035434] thermal_sys: Failed to find trip points for tmu id=2
@@ -174,7 +170,7 @@ On 08/08/2022 11:42, Michael Walle wrote:
 > [    2.306104]  kernel_init_freeable+0x278/0x31c
 > [    2.310474]  kernel_init+0x30/0x140
 > [    2.313972]  ret_from_fork+0x10/0x20
-> [    2.317559] Code: b25657e2 d34cfc00 d37ae400 8b020015 (f94006a1)
+> [    2.317559] Code: b25657e2 d34cfc00 d37ae400 8b020015 (f94006a1) 
 > [    2.323672] ---[ end trace 0000000000000000 ]---
 > [    2.328317] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
 > [    2.335999] SMP: stopping secondary CPUs
@@ -182,53 +178,43 @@ On 08/08/2022 11:42, Michael Walle wrote:
 > [    2.343425] CPU features: 0x2000,0800f021,00001086
 > [    2.348229] Memory Limit: none
 > [    2.351289] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
->
+> 
 > This was seen a sl28 board
 > (arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts).
 > The same board in the KernelCI also have some more information:
 > https://lavalab.kontron.com/scheduler/job/151900#L1162
->
+> 
 > But I guess even if that is fixed, the driver will not probe due to the
 > missing trip points? Are they now mandatory? Does it mean we'd need to
 > update our device trees? But that will then mean older devices trees
 > don't work anymore.
 
-Thanks for reporting, I'll investigate the issues you are reporting.
+It would also mean that all hwmon drivers registering a thermal zone sensor
+would fail to register unless such a thermal zone actually exists. This
+would make the whole concept of having the hwmon core register thermal
+zone sensors impossible. I have no idea how this is expected to work now,
+but there is an apparent flaw in the logic. That means I withdraw my
+Acked-by: for the hwmon patches in this series until it is guaranteed
+that hwmon registration does not fail as above if there is no thermal
+zone associated with a sensor.
 
-There is no need to update any device tree file. The code does not 
-change the bindings, it is a rewrite of the implementation supposed to 
-be without impact on the existing bindings, thus the existing device 
-tree descriptions.
-
-Why are you saying there are missing trip points ? The dts shows trip 
-points for 'core-cluster' and 'ddr-controller' ?
-
+> 
 > On my second board
 > (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts). I get the
 > following error:
->
+> 
 > [    6.292819] thermal_sys: Unable to find thermal zones description
 > [    6.298872] thermal_sys: Failed to find thermal zone for hwmon id=0
 > [    6.305375] lan966x-hwmon e2010180.hwmon: error -EINVAL: failed to register hwmon device
 > [    6.313508] lan966x-hwmon: probe of e2010180.hwmon failed with error -22
-
-Interesting ...
-
+> 
 > Again, is there seems to be something missing in the device tree. For this
 > board a device tree change should be easily doable, as it is still in
 > development.
+> 
 
+That would work for this board, but not for all other boards where a sensor
+tries to register with the thermal subsystem but there is no thermal zone
+defined for it.
 
-> Let me know if I can help testing changes.
-
-Yes, definitively, thanks for proposing
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Guenter
