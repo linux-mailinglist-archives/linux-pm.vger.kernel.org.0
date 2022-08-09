@@ -2,177 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345E258D5DE
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 10:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BE558D804
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 13:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241432AbiHII4r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Aug 2022 04:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
+        id S232994AbiHIL2l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Aug 2022 07:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241406AbiHII4l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 04:56:41 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD49E2250D
-        for <linux-pm@vger.kernel.org>; Tue,  9 Aug 2022 01:56:40 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id l4so13517374wrm.13
-        for <linux-pm@vger.kernel.org>; Tue, 09 Aug 2022 01:56:40 -0700 (PDT)
+        with ESMTP id S231308AbiHIL2k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 07:28:40 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E80219292;
+        Tue,  9 Aug 2022 04:28:40 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d16so11040956pll.11;
+        Tue, 09 Aug 2022 04:28:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=x3LAwxQixbirt9XaznuF2BMc0lzOuvCPnP/nz7piIPA=;
-        b=y1UiaG7mgsxxxkHnliUc3V8iryz12DjSbv11GtTXD23OEibQT/XAqSoQKUw1FwtP0a
-         4PB6f8dcAvqUXBldjTJ/HOZlpXYjgwkFgPqZyA6xgbqqtw3MuMTxIoxBy11TW+tezsMW
-         2K+EroHeyLUojbWRl4p6oJdLzXQM24WSHMYmp2ieA58bdAssSyQ9jaMO8FckuonPcoS5
-         8o5jCUwCZY4ghfg1159eLT3VYm9sLSpjvDYCMFkE21Hq+LCtQjG1mwmbN+bcpCR8b+YH
-         Q4ioh3CAQqruy2aXfBXa+KFs4DdUs73sq2XWs8V2CjPQx58tgMpu5OC393sK9GFVAT0p
-         j+Eg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=VIiZZVAptd5oSBmx9Azfpj0vKhX9kuKTVoBaO2I82Tw=;
+        b=LgAxdbOWyuUIuL3YTJih5ytfqHTawzMlOfNpy9MIPTRVVVtIuhnPwmz10U7GTmxwoa
+         A7CU08LoPnc3dFyKheKIND6+C3FMOcv+Zec+PVO48Ig5UDN0+TpprbqmgdjW0FusXqjo
+         6JuU5KeMz/j2QDwmNX4l9I2K2xIKpvZc8ktQjHEQ/d3FJ7ntXXTOO7Z5yM/kxgWetyJw
+         g81gwpIbPYEpD7xHwGkiJJWpMyNLXWPqDDvX9UvXhQixmyYZGzkWuBk+sCZHkmawJvpR
+         eWh3sLR4E3WoaRrr1WAZ7ok4nX7tz64WlKXF7nc0e5hI3s3Jh45H6hWsMFyUNho9Dxxw
+         kPaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=x3LAwxQixbirt9XaznuF2BMc0lzOuvCPnP/nz7piIPA=;
-        b=yZrx7w3wTXpbuqwuMNQopWSWHz4zKoMXmGe6l9VPg7H0u07DOXWOPjzvZrkHIQgxs4
-         zTRaFntW6oJCgBsWtY6aZtHScSgXHRDTQB1T7uwZHV4NT7GqAYFiE6YOg79AQteSscVY
-         u/XaFhGn5uEcTJQC3wuInRgfZtI2Bbat3MW6jpufs+a/+oFuqm5KPNWi8XPv1oB8SumB
-         DaEsI0mmJAm5wXahdUW2e7smbqur88+g5rnHvst1G1FTA3VHG+mfVj9z1z6RMG7aNRyM
-         49QHKzN85mskGUwQAbh51+rMpK6Z3VEGPhNKj7dJsM9VXn11GEgBq90QVJeHf2a4iOus
-         fP1Q==
-X-Gm-Message-State: ACgBeo1LeZk8UwXwrs9Lhqbw/tgDAivdJzuRHnGjCgyqxVC0XH9zo5cE
-        BbMJuTiPVM3i3D9dXBO4rjL57A==
-X-Google-Smtp-Source: AA6agR4QnB1mLDfIpQIOqHx/tKNQwqELMOrfwW0X/9YINERn8kfF19WXMyx+PJyM+67u+QoAeBdf9Q==
-X-Received: by 2002:a5d:5483:0:b0:220:6b87:8f79 with SMTP id h3-20020a5d5483000000b002206b878f79mr13962163wrv.17.1660035398746;
-        Tue, 09 Aug 2022 01:56:38 -0700 (PDT)
-Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id c5-20020adfe705000000b0021f1522c93bsm15746147wrm.45.2022.08.09.01.56.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 01:56:38 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     michael@walle.cc, dan.carpenter@oracle.com, linux@roeck-us.net,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 4/4] thermal/of: Fix free after use in thermal_of_unregister()
-Date:   Tue,  9 Aug 2022 10:56:29 +0200
-Message-Id: <20220809085629.509116-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220809085629.509116-1-daniel.lezcano@linaro.org>
-References: <20220809085629.509116-1-daniel.lezcano@linaro.org>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=VIiZZVAptd5oSBmx9Azfpj0vKhX9kuKTVoBaO2I82Tw=;
+        b=pgSdgLHOITuulg0Vppj+g8fIpunPPJEfA7XyjLXn4T6YsQavYHJ1Hj4cP3ezSir4ML
+         KmNpNst2oT+svEba4pBelzeoWK2sBOuxTchtYGrVVSImMgdWnqiEwiZYRteCBk9JjtNL
+         oWGXPe57OfztxrQKU9Lpz2VV+GkD+hO4tfFvcTprJBNTHxYe7UVS8M7a7hzk3ZsawlAE
+         g0NhbEH5I2Yd7dbneXdrqoKjrR7/9S/nbu0hkrKhwSflja6bhJdbm6Qt9Zl8T4FUmgp+
+         tnV3sc7ZxQznZXjUhtteMH2+DSBHEs3Eq2Elnw5L1ledAHCh186QxhmweuUsjucY9Miq
+         SVsg==
+X-Gm-Message-State: ACgBeo1KSDkICOaMUkSUou6WvaspPndgYXIEx9RafEhs2kMzpmh33THf
+        uu3ED6qijs/vyxr+zTNMiXqMRbNLPPybebcXBsA=
+X-Google-Smtp-Source: AA6agR45VCQGXf/7Di9MAsVfM1ob5MNVs/XZtyhXe84XqAGlWYokWouUAXa/mdqnKk+nv6X7bGSqAGb+8u6s77Mnnb4=
+X-Received: by 2002:a17:902:e5c8:b0:16f:1511:7575 with SMTP id
+ u8-20020a170902e5c800b0016f15117575mr23196630plf.83.1660044519576; Tue, 09
+ Aug 2022 04:28:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20220525115554.430971-1-alistair@alistair23.me>
+ <20220525115554.430971-2-alistair@alistair23.me> <Yo5vjlsc0J1S70zN@sirena.org.uk>
+ <Yo86jpMrKR0Dj/HB@google.com>
+In-Reply-To: <Yo86jpMrKR0Dj/HB@google.com>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Tue, 9 Aug 2022 21:28:13 +1000
+Message-ID: <CAKmqyKOrtHHGOB81UvHQX=bMke_1e5Y7GPcSrqFcMtEvL6EtJw@mail.gmail.com>
+Subject: Re: [PATCH v21 1/4] mfd: silergy,sy7636a: Add config option
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Alistair Francis <alistair@alistair23.me>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Amit Kucheria <amitk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-hwmon@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal zone is freed after being unregistered. The release method
-devm_thermal_zone_device_register() calls
-  -> thermal_of_zone_device_unregister()
+On Thu, May 26, 2022 at 6:30 PM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Wed, 25 May 2022, Mark Brown wrote:
+>
+> > On Wed, May 25, 2022 at 09:55:51PM +1000, Alistair Francis wrote:
+> > > Add a specific MFD_SY7636A config option.
+> > >
+> > > As part of this change we can use MFD_SY7636A as a dependency for all
+> > > SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C a=
+s
+> > > it no longer needs to be selectable.
+> >
+> > Acked-by: Mark Brown <broonie@kernel.org>
+>
+> Full disclosure; I've already made my cut for v5.19.
+>
+> This is due for v5.20.
 
-This one calls thermal_zone_device_unregister() which frees the
-thermal zone. However, thermal_of_zone_device_unregister() does access
-this freed pointer to free different resources allocated by the
-thermal_of framework which is invalid.
+I just wanted to double check that this is still going in for 5.20
 
-It results in a kernel panic:
+Alistair
 
-[    1.915140] thermal_sys: Failed to find thermal zone for tmu id=2
-[    1.921279] qoriq_thermal 1f80000.tmu: Failed to register sensors
-[    1.927395] qoriq_thermal: probe of 1f80000.tmu failed with error -22
-[    1.934189] Unable to handle kernel paging request at virtual address 01adadadadadad88
-[    1.942146] Mem abort info:
-[    1.944948]   ESR = 0x0000000096000004
-[    1.948708]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    1.954042]   SET = 0, FnV = 0
-[    1.957107]   EA = 0, S1PTW = 0
-[    1.960253]   FSC = 0x04: level 0 translation fault
-[    1.965147] Data abort info:
-[    1.968030]   ISV = 0, ISS = 0x00000004
-[    1.971878]   CM = 0, WnR = 0
-[    1.974852] [01adadadadadad88] address between user and kernel address ranges
-[    1.982016] Internal error: Oops: 96000004 [#1] SMP
-[    1.986907] Modules linked in:
-[    1.989969] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-next-20220808-00080-g1c46f44502e0 #1697
-[    1.999135] Hardware name: Kontron KBox A-230-LS (DT)
-[    2.004199] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    2.011185] pc : kfree+0x5c/0x3c0
-[    2.014516] lr : devm_thermal_of_zone_release+0x38/0x60
-[    2.019761] sp : ffff80000a22bad0
-[    2.023081] x29: ffff80000a22bad0 x28: 0000000000000000 x27: ffff800009960464
-[    2.030245] x26: ffff800009a16960 x25: 0000000000000006 x24: ffff800009f09a40
-[    2.037407] x23: ffff800009ab9008 x22: ffff800008d0eea8 x21: 01adadadadadad80
-[    2.044569] x20: 6b6b6b6b6b6b6b6b x19: ffff00200232b800 x18: 00000000fffffffb
-[    2.051731] x17: ffff800008d0eea0 x16: ffff800008d07d44 x15: ffff800008d0d154
-[    2.056647] usb 1-1: new high-speed USB device number 2 using xhci-hcd
-[    2.058893] x14: ffff800008d0cddc x13: ffff8000088d1c2c x12: ffff8000088d5034
-[    2.072597] x11: ffff8000088d46d4 x10: 0000000000000000 x9 : ffff800008d0eea8
-[    2.079759] x8 : ffff002000b1a158 x7 : bbbbbbbbbbbbbbbb x6 : ffff80000a0f53b8
-[    2.086921] x5 : ffff80000a22b960 x4 : 0000000000000000 x3 : 0000000000000000
-[    2.094082] x2 : fffffc0000000000 x1 : ffff002000838040 x0 : 01adb1adadadad80
-[    2.101244] Call trace:
-[    2.103692]  kfree+0x5c/0x3c0
-[    2.106666]  devm_thermal_of_zone_release+0x38/0x60
-[    2.111561]  release_nodes+0x64/0xd0
-[    2.115146]  devres_release_all+0xbc/0x350
-[    2.119253]  device_unbind_cleanup+0x20/0x70
-[    2.123536]  really_probe+0x1a0/0x2e4
-[    2.127208]  __driver_probe_device+0x80/0xec
-[    2.131490]  driver_probe_device+0x44/0x130
-[    2.135685]  __driver_attach+0x104/0x1b4
-[    2.139619]  bus_for_each_dev+0x7c/0xe0
-[    2.143465]  driver_attach+0x30/0x40
-[    2.147048]  bus_add_driver+0x160/0x210
-[    2.150894]  driver_register+0x84/0x140
-[    2.154741]  __platform_driver_register+0x34/0x40
-[    2.159461]  qoriq_tmu_init+0x28/0x34
-[    2.163133]  do_one_initcall+0x50/0x250
-[    2.166979]  kernel_init_freeable+0x278/0x31c
-[    2.171349]  kernel_init+0x30/0x140
-[    2.174847]  ret_from_fork+0x10/0x20
-[    2.178433] Code: b25657e2 d34cfc00 d37ae400 8b020015 (f94006a1)
-[    2.184546] ---[ end trace 0000000000000000 ]---
-
-Store the allocated resource pointers before the thermal zone is free
-and use them to release the resource after unregistering the thermal
-zone.
-
-Reported-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Tested-by: Michael Walle <michael@walle.cc>
----
- drivers/thermal/thermal_of.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 3effc729be4b..fd2fb84bf246 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -596,11 +596,15 @@ static int thermal_of_unbind(struct thermal_zone_device *tz,
-  */
- void thermal_of_zone_unregister(struct thermal_zone_device *tz)
- {
-+	struct thermal_trip *trips = tz->trips;
-+	struct thermal_zone_params *tzp = tz->tzp;
-+	struct thermal_zone_device_ops *ops = tz->ops;
-+
- 	thermal_zone_device_disable(tz);
- 	thermal_zone_device_unregister(tz);
--	kfree(tz->trips);
--	kfree(tz->tzp);
--	kfree(tz->ops);
-+	kfree(trips);
-+	kfree(tzp);
-+	kfree(ops);
- }
- EXPORT_SYMBOL_GPL(thermal_of_zone_unregister);
- 
--- 
-2.34.1
-
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Principal Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog
