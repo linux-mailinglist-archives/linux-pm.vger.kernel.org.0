@@ -2,168 +2,292 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFA258DA64
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 16:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7511C58DA87
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 16:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbiHIOdG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Aug 2022 10:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        id S243061AbiHIOuP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Aug 2022 10:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiHIOdF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 10:33:05 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AF718352;
-        Tue,  9 Aug 2022 07:33:02 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id r69so4981796pgr.2;
-        Tue, 09 Aug 2022 07:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=5Xq/0OiZzCvmhWkkiPnzduUq5EO9SWbMWZthaNtSYn8=;
-        b=gXGIhKPqVnqKPdmUIUbCJePl+qNWA1CeUWR8oFzFC7XlhGEITOv2m7QFnQwux6KiAK
-         zzSTn9rxQkH6I3dsxBAlPADmf1oWHLdQlkBdd06H6qsUaC/7ValxsFA2YCjg20WuSGqN
-         t+g9RE23IfAZhmBfrkyf3GDYNrq+gj358LH3k2fjtJvmdkGKoM/2Estpti/2ZUSIj8WI
-         VE2MeKn/JNfIeAhhhJzbh+DdoosxoGU8aIg5J1loTHBZlDIYAwsP0/1mywhBRL9swDLs
-         MhCIT5yze1OlH8ujUku6nRTFRSakrO002c6efoqLGvOA5kue1NRTIlZSEj2o3cOGoLi3
-         2W9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=5Xq/0OiZzCvmhWkkiPnzduUq5EO9SWbMWZthaNtSYn8=;
-        b=aoDJBnTYh7TdfvPgEc3Pgc/tpsS7PCoR03X5YPMvhRhyMgQzj27z+WD21/gs2II0hB
-         ghrlDFE9SLMhNAEx3WpoIUMK7Et06m5KrB31b7U7HjIcuq1jYV7PRNKo+VraOrkDJZnp
-         DRsJIWPv02RhMfCvRVgJJQyUIdnQOfkTqk6ErFTl56MWisKNURLkGWxyTOtquVXjhLH4
-         P9PjmYi0/7eptuTNGC8EhSLDwgiRPutnyTtaSq1fzRLteLqcRwwG6u8ZAo4xiIwzoaJ2
-         xjHQ1pn7JTtWCpLu5hqIWzHMzwhmpyN5eKjHjXtDwyRLZKaCdV9Yfs+mI6hfBrjfamdb
-         aqNg==
-X-Gm-Message-State: ACgBeo3aGpWqy6BUfFiR92GHONZu31IIBaSVBJkIPOrmBK72HyCPgmKo
-        ZTaRr0x/yKtXWe4XDrj4UQY=
-X-Google-Smtp-Source: AA6agR45uyvXyXdyzQg6Db96ox5UpgucK0vWnHculImEAe3Sn1Ud9/FKFju8bYmMyShZASG/4cmfdQ==
-X-Received: by 2002:a63:68c7:0:b0:405:1da9:ab69 with SMTP id d190-20020a6368c7000000b004051da9ab69mr19964222pgc.233.1660055581941;
-        Tue, 09 Aug 2022 07:33:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 65-20020a621744000000b0052d36feb7fcsm10525536pfx.198.2022.08.09.07.32.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 07:32:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6318d099-268b-1bbe-fed8-4f4b356e90cb@roeck-us.net>
-Date:   Tue, 9 Aug 2022 07:32:57 -0700
+        with ESMTP id S243158AbiHIOuN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 10:50:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21761A0;
+        Tue,  9 Aug 2022 07:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660056611; x=1691592611;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MeOY66iMfT0VrAnqeNnxzAkGciSEZ0bAm2GSHVjxkys=;
+  b=moRigWkGD0OvYRjUNcza8+vltn2dDl6Ctqs5lx1lFRDsoN9jvzc/5nbD
+   YUmsGYR98HHcnaHmnA5CPd57Yh5D23MXBs0oaP0/BVPueVRVD2gQ1LslJ
+   ekOVrlC9Qyge+fCg+xB5/N9RVL2UNIeCD5hRzBoabSE4qVbJuer2sNLyo
+   JP9/36RMo4A21xmBs4aExiKRgNduqAf7LcJzRIxQFDVOU0XmNVYN0uuU1
+   YmspuBdrZ+hyslxOWSP8eN6X2qAaWegt2qMMpggzo+/eQsqdRYo8EuDuE
+   /KlcvKIDNwgMZlTWF8Ns6XpnFn1quDTxJuBNieFXVfe1ngWVUqXmexKOb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="271234059"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="271234059"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 07:50:10 -0700
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="850488485"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 07:50:10 -0700
+Message-ID: <f7fd60bd53c54212dce08a49f73ab529b4277fce.camel@linux.intel.com>
+Subject: Re: [PATCH v1 25/26] thermal/intel/int340x: Replace parameter to
+ simplify
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>
+Date:   Tue, 09 Aug 2022 07:50:10 -0700
+In-Reply-To: <20220805145729.2491611-26-daniel.lezcano@linaro.org>
+References: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
+         <20220805145729.2491611-26-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 00/33] New thermal OF code
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Michael Walle <michael@walle.cc>
-Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
-        anarsoul@gmail.com, baolin.wang7@gmail.com,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
-        f.fainelli@gmail.com, glaroque@baylibre.com,
-        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
-        jonathanh@nvidia.com, khilman@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, matthias.bgg@gmail.com,
-        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
-        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
-        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220808094216.928018-1-michael@walle.cc>
- <20220808102610.GA1969424@roeck-us.net>
- <829788a5-3da4-8638-a587-9e80e2fd3fea@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <829788a5-3da4-8638-a587-9e80e2fd3fea@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/9/22 01:53, Daniel Lezcano wrote:
-> Hi Guenter,
+On Fri, 2022-08-05 at 16:57 +0200, Daniel Lezcano wrote:
+> In the process of replacing the get_trip_* ops by the generic trip
+> points, the current code has an 'override' property to add another
+> indirection to a different ops.
 > 
-> On 08/08/2022 12:26, Guenter Roeck wrote:
+> Rework this approach to prevent this indirection and make the code
+> ready for the generic trip points conversion.
 > 
-> [ ... ]
+> Actually the get_temp() is different regarding the platform, so it is
+> pointless to add a new set of ops but just create dynamically the ops
+> at init time.
 > 
->>> But I guess even if that is fixed, the driver will not probe due to the
->>> missing trip points? Are they now mandatory? Does it mean we'd need to
->>> update our device trees? But that will then mean older devices trees
->>> don't work anymore.
->>
->> It would also mean that all hwmon drivers registering a thermal zone sensor
->> would fail to register unless such a thermal zone actually exists. 
-> 
-> Probably missing something but if the thermal zone is not described, the hwmon driver won't initialize. And except if I'm wrong, that was already the case before these changes, no?
-> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-In the hwmon source (you point to it below):
+> ---
+>  .../int340x_thermal/int340x_thermal_zone.c    | 31 ++++++++-----------
+>  .../int340x_thermal/int340x_thermal_zone.h    |  4 +--
+>  .../processor_thermal_device.c                | 10 ++----
+>  3 files changed, 18 insertions(+), 27 deletions(-)
+> 
+> diff --git
+> a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> index 62c0aa5d0783..10731b9a140a 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> @@ -18,9 +18,6 @@ static int int340x_thermal_get_zone_temp(struct
+> thermal_zone_device *zone,
+>         unsigned long long tmp;
+>         acpi_status status;
+>  
+> -       if (d->override_ops && d->override_ops->get_temp)
+> -               return d->override_ops->get_temp(zone, temp);
+> -
+>         status = acpi_evaluate_integer(d->adev->handle, "_TMP", NULL,
+> &tmp);
+>         if (ACPI_FAILURE(status))
+>                 return -EIO;
+> @@ -46,9 +43,6 @@ static int int340x_thermal_get_trip_temp(struct
+> thermal_zone_device *zone,
+>         struct int34x_thermal_zone *d = zone->devdata;
+>         int i;
+>  
+> -       if (d->override_ops && d->override_ops->get_trip_temp)
+> -               return d->override_ops->get_trip_temp(zone, trip,
+> temp);
+> -
+>         if (trip < d->aux_trip_nr)
+>                 *temp = d->aux_trips[trip];
+>         else if (trip == d->crt_trip_id)
+> @@ -79,9 +73,6 @@ static int int340x_thermal_get_trip_type(struct
+> thermal_zone_device *zone,
+>         struct int34x_thermal_zone *d = zone->devdata;
+>         int i;
+>  
+> -       if (d->override_ops && d->override_ops->get_trip_type)
+> -               return d->override_ops->get_trip_type(zone, trip,
+> type);
+> -
+>         if (trip < d->aux_trip_nr)
+>                 *type = THERMAL_TRIP_PASSIVE;
+>         else if (trip == d->crt_trip_id)
+> @@ -112,9 +103,6 @@ static int int340x_thermal_set_trip_temp(struct
+> thermal_zone_device *zone,
+>         acpi_status status;
+>         char name[10];
+>  
+> -       if (d->override_ops && d->override_ops->set_trip_temp)
+> -               return d->override_ops->set_trip_temp(zone, trip,
+> temp);
+> -
+>         snprintf(name, sizeof(name), "PAT%d", trip);
+>         status = acpi_execute_simple_method(d->adev->handle, name,
+>                         millicelsius_to_deci_kelvin(temp));
+> @@ -134,9 +122,6 @@ static int int340x_thermal_get_trip_hyst(struct
+> thermal_zone_device *zone,
+>         acpi_status status;
+>         unsigned long long hyst;
+>  
+> -       if (d->override_ops && d->override_ops->get_trip_hyst)
+> -               return d->override_ops->get_trip_hyst(zone, trip,
+> temp);
+> -
+>         status = acpi_evaluate_integer(d->adev->handle, "GTSH", NULL,
+> &hyst);
+>         if (ACPI_FAILURE(status))
+>                 *temp = 0;
+> @@ -217,7 +202,7 @@ static struct thermal_zone_params
+> int340x_thermal_params = {
+>  };
+>  
+>  struct int34x_thermal_zone *int340x_thermal_zone_add(struct
+> acpi_device *adev,
+> -                               struct thermal_zone_device_ops
+> *override_ops)
+> +                                                    int (*get_temp)
+> (struct thermal_zone_device *, int *))
+>  {
+>         struct int34x_thermal_zone *int34x_thermal_zone;
+>         acpi_status status;
+> @@ -231,8 +216,15 @@ struct int34x_thermal_zone
+> *int340x_thermal_zone_add(struct acpi_device *adev,
+>                 return ERR_PTR(-ENOMEM);
+>  
+>         int34x_thermal_zone->adev = adev;
+> -       int34x_thermal_zone->override_ops = override_ops;
+>  
+> +       int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
+> +                                         
+> sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
+> +       if (!int34x_thermal_zone->ops)
+> +               goto err_ops_alloc;
+> +
+> +       if (get_temp)
+> +               int34x_thermal_zone->ops->get_temp = get_temp;
+> +       
+>         status = acpi_evaluate_integer(adev->handle, "PATC", NULL,
+> &trip_cnt);
+>         if (ACPI_FAILURE(status))
+>                 trip_cnt = 0;
+> @@ -262,7 +254,7 @@ struct int34x_thermal_zone
+> *int340x_thermal_zone_add(struct acpi_device *adev,
+>                                                 acpi_device_bid(adev),
+>                                                 trip_cnt,
+>                                                 trip_mask,
+> int34x_thermal_zone,
+> -
+>                                                &int340x_thermal_zone_ops
+> ,
+> +                                               int34x_thermal_zone-
+> >ops,
+>                                                 &int340x_thermal_params
+> ,
+>                                                 0, 0);
+>         if (IS_ERR(int34x_thermal_zone->zone)) {
+> @@ -281,6 +273,8 @@ struct int34x_thermal_zone
+> *int340x_thermal_zone_add(struct acpi_device *adev,
+>         acpi_lpat_free_conversion_table(int34x_thermal_zone-
+> >lpat_table);
+>         kfree(int34x_thermal_zone->aux_trips);
+>  err_trip_alloc:
+> +       kfree(int34x_thermal_zone->ops);
+> +err_ops_alloc:
+>         kfree(int34x_thermal_zone);
+>         return ERR_PTR(ret);
+>  }
+> @@ -292,6 +286,7 @@ void int340x_thermal_zone_remove(struct
+> int34x_thermal_zone
+>         thermal_zone_device_unregister(int34x_thermal_zone->zone);
+>         acpi_lpat_free_conversion_table(int34x_thermal_zone-
+> >lpat_table);
+>         kfree(int34x_thermal_zone->aux_trips);
+> +       kfree(int34x_thermal_zone->ops);
+>         kfree(int34x_thermal_zone);
+>  }
+>  EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
+> diff --git
+> a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> index 3b4971df1b33..e28ab1ba5e06 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> @@ -29,13 +29,13 @@ struct int34x_thermal_zone {
+>         int hot_temp;
+>         int hot_trip_id;
+>         struct thermal_zone_device *zone;
+> -       struct thermal_zone_device_ops *override_ops;
+> +       struct thermal_zone_device_ops *ops;
+>         void *priv_data;
+>         struct acpi_lpat_conversion_table *lpat_table;
+>  };
+>  
+>  struct int34x_thermal_zone *int340x_thermal_zone_add(struct
+> acpi_device *,
+> -                               struct thermal_zone_device_ops
+> *override_ops);
+> +                               int (*get_temp) (struct
+> thermal_zone_device *, int *));
+>  void int340x_thermal_zone_remove(struct int34x_thermal_zone *);
+>  int int340x_thermal_read_trips(struct int34x_thermal_zone
+> *int34x_zone);
+>  
+> diff --git
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> index a8d98f1bd6c6..317703027ce9 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -207,10 +207,6 @@ static int proc_thermal_get_zone_temp(struct
+> thermal_zone_device *zone,
+>         return ret;
+>  }
+>  
+> -static struct thermal_zone_device_ops proc_thermal_local_ops = {
+> -       .get_temp       = proc_thermal_get_zone_temp,
+> -};
+> -
+>  static int proc_thermal_read_ppcc(struct proc_thermal_device
+> *proc_priv)
+>  {
+>         int i;
+> @@ -285,7 +281,7 @@ int proc_thermal_add(struct device *dev, struct
+> proc_thermal_device *proc_priv)
+>         struct acpi_device *adev;
+>         acpi_status status;
+>         unsigned long long tmp;
+> -       struct thermal_zone_device_ops *ops = NULL;
+> +       int (*get_temp) (struct thermal_zone_device *, int *) = NULL;
+>         int ret;
+>  
+>         adev = ACPI_COMPANION(dev);
+> @@ -304,10 +300,10 @@ int proc_thermal_add(struct device *dev, struct
+> proc_thermal_device *proc_priv)
+>                 /* there is no _TMP method, add local method */
+>                 stored_tjmax = get_tjmax();
+>                 if (stored_tjmax > 0)
+> -                       ops = &proc_thermal_local_ops;
+> +                       get_temp = proc_thermal_get_zone_temp;
+>         }
+>  
+> -       proc_priv->int340x_zone = int340x_thermal_zone_add(adev, ops);
+> +       proc_priv->int340x_zone = int340x_thermal_zone_add(adev,
+> get_temp);
+>         if (IS_ERR(proc_priv->int340x_zone)) {
+>                 return PTR_ERR(proc_priv->int340x_zone);
+>         } else
 
-         if (IS_ERR(tzd)) {
-                 if (PTR_ERR(tzd) != -ENODEV)
-                         return PTR_ERR(tzd);
-                 dev_info(dev, "temp%d_input not attached to any thermal zone\n",
-                          index + 1);
-                 devm_kfree(dev, tdata);
-                 return 0;
-         }
-
-That contradicts "if the thermal zone is not described, the hwmon driver won't initialize".
-Now I must be missing something, since you mention that yourself below, and your new patch
-series fixes the problem, at least AFAICS. Confused.
-
-Guenter
-
->> This
->> would make the whole concept of having the hwmon core register thermal
->> zone sensors impossible.
-> 
-> No, only the way the thermal OF is implemented changed. No functional changes. So AFAICT, you can still create thermal zones with the hwmon.
-> 
->> I have no idea how this is expected to work now,
->> but there is an apparent flaw in the logic. That means I withdraw my
->> Acked-by: for the hwmon patches in this series until it is guaranteed
->> that hwmon registration does not fail as above if there is no thermal
->> zone associated with a sensor.
-> 
-> 
-> If the thermal zone creation fails with -ENODEV, then it is no considered as an error when creating the hwmon [1]
-> 
-> The function [devm]_thermal_zone_of_sensor_register() checks if there is a thermal zone description, if not it bails out with -ENODEV [2]
-> 
-> Otherwise it checks all the thermal zones if the device passed as parameter matches a sensor in the thermal zone [3][4]
-> 
-> If there is no match, then it returns -ENODEV which is the default error code [5]
-> 
-> My understanding is there is no thermal zone creation if there is no description in the device tree for such a device in the thermal zone.
-> 
-> The issue we had here was the confusing error message when -ENODEV (before was -EINVAL) is returning while before the code was silently continuing without creating the thermal zone.
-> 
-> We are talking here about what is in under CONFIG_THERMAL_OF in the hwmon code path. The rest is untouched.
-> 
-> Am I missing something?
-> 
-> 
-> 
-> [1] https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/hwmon/hwmon.c#230
-> 
-> [2] https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#499
-> 
-> [3] https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#510
-> 
-> [4] https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#428
-> 
-> [5] https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#497
 
