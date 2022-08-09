@@ -2,272 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0098B58E266
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 00:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A592558E301
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 00:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiHIWGN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Aug 2022 18:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S230110AbiHIWQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Aug 2022 18:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiHIWFm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 18:05:42 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4E713F8B
-        for <linux-pm@vger.kernel.org>; Tue,  9 Aug 2022 15:05:34 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id p12-20020a7bcc8c000000b003a5360f218fso119946wma.3
-        for <linux-pm@vger.kernel.org>; Tue, 09 Aug 2022 15:05:34 -0700 (PDT)
+        with ESMTP id S230129AbiHIWPW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 18:15:22 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCAC26AE4
+        for <linux-pm@vger.kernel.org>; Tue,  9 Aug 2022 15:15:16 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id y82so3923691iof.7
+        for <linux-pm@vger.kernel.org>; Tue, 09 Aug 2022 15:15:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=89E/CxlN8Tp3lczCV5jVp3NK0Ss9lUiOGh8dJwP7JXg=;
-        b=tQaWHRdToEGk9WyjVRDEXaOnmacVEHhEh9WTJBVy4a9+NSpbr3U00Bqsd3yAkmoj4V
-         irOjiq2E8FpsIhKj0MpKRSzda70bUfDcYjfnKWq6k4UIlpZ5jgBboSIPRdR5RVgQFen+
-         /iUjSrK6LSWDrbL/dYy562SG7MQYDt/k9+qUnOyOC6E3xvZ4DQZamws1IdA7FF8sOktK
-         TBjZlXQUnW4iefsiY8VMKEeHWk3pX5XttoYNvn6LO5w5u6sxWATq0vM7X78x0qPdt5+Z
-         9uiqfoN+R3LC6al9mZ+IbecJ5ooYK3Fa+9nciGy/4RjcrUIpLjccuzJtSX/5+EfiElAP
-         dHnA==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=GI1h58u9NHz7rI/vIwOU5DkUcoHPmL+b4tk5i/xxv5Y=;
+        b=QTP95oQi+RYhXbI8sz4RyTZp0RSE4jP48cyyUmWbTiK1ItvOHbADVtjkGHK/8zFbqv
+         EIzUG3d4HgG5eAQxnVHuBpH33ycuIiNpMEXk8S0LHARhhQGb6AufQVVn/40aQfLvP77W
+         778oK7qnpGZXO0Q2aGCYT4Mad4FGDHlh1br3s7D4D+9Vr7gPQrhXDR8bwR1fyz6kQ1n2
+         /mI7/+oIm6xqfpBjeRephfywWnzvzUcqvvdKwYuFsxmTm/GRVEQb9jKfBsLPvHEPeyBR
+         SLk52BQ10Zm7GZ4Mv5gugSKJZhGFXVOipaGDVsAOq6ABLyMrmGMv+5RYTjL3cqduwO+M
+         O1Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=89E/CxlN8Tp3lczCV5jVp3NK0Ss9lUiOGh8dJwP7JXg=;
-        b=BCzWWbOJK8U+kVJyZlsg0g+YmcEGGuH2/iLcZUdjWaGrCFbXrBylUAr5dulzO9KmZh
-         6oANjHnvSAXksHyRp5BSDdV+Ixj7sybYKuavrqddKafL8UOM4hWIEQT/Q0BAEyiYMeCL
-         OdqSHoy+JJFXrxuERzfsv7kua/pvDZgpswA37LW27G/fdONaThrWEqueSzSIHxvZzRzM
-         RwquAfiOrLvtZAOdF5eI0mYSfVZj6En+xuAc109FjB6z8959AqyFmjJxRbG5VNKsCiWO
-         CZVlZuNdEiJWiuPmctPLAe4vCDkgwFQDYdFJ0PUXOLkG3Yv3FL0fifYg3o1R843c1db2
-         AZ6A==
-X-Gm-Message-State: ACgBeo1qNTGkzw07C2nVbA3UAuZnUgBVJq/sTfDeu3zDQVBh943mf+21
-        Nq2Aami4bZnbSzGBxWSpaPldioLwOVtrGw==
-X-Google-Smtp-Source: AA6agR5H3wiH8mgnBiSDgOR3YUyQt9nGqs0bbssfxeVDisk8h603TP07ShOGbwrr1Fh33JtOTXe7Lg==
-X-Received: by 2002:a05:600c:3d93:b0:3a3:3a93:fb16 with SMTP id bi19-20020a05600c3d9300b003a33a93fb16mr290789wmb.190.1660082733455;
-        Tue, 09 Aug 2022 15:05:33 -0700 (PDT)
-Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05600c3b1500b003a317ee3036sm293583wms.2.2022.08.09.15.05.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 15:05:32 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v2 26/26] thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-Date:   Wed, 10 Aug 2022 00:04:36 +0200
-Message-Id: <20220809220436.711020-27-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220809220436.711020-1-daniel.lezcano@linaro.org>
-References: <20220809220436.711020-1-daniel.lezcano@linaro.org>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=GI1h58u9NHz7rI/vIwOU5DkUcoHPmL+b4tk5i/xxv5Y=;
+        b=OmIWn1lnNKQPZegk7DqpjlpmWC+1oiVrrQZlikQwT0hgjsg/DP6H68FTwAwKFARZP6
+         tHxGVpboqSCSuwWL354ICT61NGHD525Qkv0wmeubzbNRq05iGul4rkfhWCDziASobHfe
+         zxnqPtZMjAwRl7LwexS5jHdP+bkVnQwEZTQpJodj+N+NmH+h66UATg4HVwV2a6gyFrJ7
+         mHp4mwvdSQZYz4XaCro2eaZP1Aw5aa4oQ5srxARAhlVuisW6aadoedu0GmIV3KhZOm8B
+         IWjMN5PSpHOLANjDomp7kDBSuxsz4+OB1TdX/X1sZ+ofZAd2U3dyxIMH1fNiFa4l0KfB
+         AviQ==
+X-Gm-Message-State: ACgBeo2I8ZSXom/cZeXT+xRb41n/h1fiBYMRCg9w3lD5ZNumMRT5wpL8
+        jL0rG4a5pYSeAPqXW3zBGFEeKYTD9p1R1nFZabx97DArXcQjzg==
+X-Google-Smtp-Source: AA6agR7pJ6r7fhR2kV9XLe+oV3h+/ej1weqLnpTQS1YP5ule1vsDwGSNCnOW6LlEIY2xTapZFY+hu5KXPqSjTYpoaJM=
+X-Received: by 2002:a63:4642:0:b0:41b:d353:c5c7 with SMTP id
+ v2-20020a634642000000b0041bd353c5c7mr20359415pgk.568.1660083303718; Tue, 09
+ Aug 2022 15:15:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Received: by 2002:a05:6a10:e8a6:b0:2d4:fb1c:cc5e with HTTP; Tue, 9 Aug 2022
+ 15:15:03 -0700 (PDT)
+Reply-To: wijh555@gmail.com
+From:   "Dr. Ali Moses" <alimoses07@gmail.com>
+Date:   Tue, 9 Aug 2022 15:15:03 -0700
+Message-ID: <CADWzZe65tcOX2+bMZfMLLauGpHEQ9Cdv814nLU=uQvKzDFrEVg@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d32 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [alimoses07[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wijh555[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [alimoses07[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
-
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 120 ++++++++++---------
- 1 file changed, 66 insertions(+), 54 deletions(-)
-
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index 4d8edc61a78b..c28a98c82f97 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -53,6 +53,7 @@ struct zone_device {
- 	u32				msr_pkg_therm_high;
- 	struct delayed_work		work;
- 	struct thermal_zone_device	*tzone;
-+	struct thermal_trip		*trips;
- 	struct cpumask			cpumask;
- };
- 
-@@ -138,40 +139,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
- 	return -EINVAL;
- }
- 
--static int sys_get_trip_temp(struct thermal_zone_device *tzd,
--			     int trip, int *temp)
--{
--	struct zone_device *zonedev = tzd->devdata;
--	unsigned long thres_reg_value;
--	u32 mask, shift, eax, edx;
--	int ret;
--
--	if (trip >= MAX_NUMBER_OF_TRIPS)
--		return -EINVAL;
--
--	if (trip) {
--		mask = THERM_MASK_THRESHOLD1;
--		shift = THERM_SHIFT_THRESHOLD1;
--	} else {
--		mask = THERM_MASK_THRESHOLD0;
--		shift = THERM_SHIFT_THRESHOLD0;
--	}
--
--	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
--			   &eax, &edx);
--	if (ret < 0)
--		return ret;
--
--	thres_reg_value = (eax & mask) >> shift;
--	if (thres_reg_value)
--		*temp = zonedev->tj_max - thres_reg_value * 1000;
--	else
--		*temp = THERMAL_TEMP_INVALID;
--	pr_debug("sys_get_trip_temp %d\n", *temp);
--
--	return 0;
--}
--
- static int
- sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- {
-@@ -212,18 +179,9 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- 			l, h);
- }
- 
--static int sys_get_trip_type(struct thermal_zone_device *thermal, int trip,
--			     enum thermal_trip_type *type)
--{
--	*type = THERMAL_TRIP_PASSIVE;
--	return 0;
--}
--
- /* Thermal zone callback registry */
- static struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
--	.get_trip_temp = sys_get_trip_temp,
--	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
- };
- 
-@@ -328,6 +286,48 @@ static int pkg_thermal_notify(u64 msr_val)
- 	return 0;
- }
- 
-+static struct thermal_trip *pkg_temp_thermal_trips_init(int cpu, int tj_max, int num_trips)
-+{
-+	struct thermal_trip *trips;
-+	unsigned long thres_reg_value;
-+	u32 mask, shift, eax, edx;
-+	int ret, i;
-+
-+	trips = kzalloc(sizeof(*trips) * num_trips, GFP_KERNEL);
-+	if (!trips)
-+		return ERR_PTR(-ENOMEM);
-+	
-+	for (i = 0; i < num_trips; i++) {
-+
-+		if (i) {
-+			mask = THERM_MASK_THRESHOLD1;
-+			shift = THERM_SHIFT_THRESHOLD1;
-+		} else {
-+			mask = THERM_MASK_THRESHOLD0;
-+			shift = THERM_SHIFT_THRESHOLD0;
-+		}
-+
-+		ret = rdmsr_on_cpu(cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
-+				   &eax, &edx);
-+		if (ret < 0) {
-+			kfree(trips);
-+			return ERR_PTR(ret);
-+		}
-+
-+		thres_reg_value = (eax & mask) >> shift;
-+
-+		trips[i].temperature = thres_reg_value ?
-+			tj_max - thres_reg_value * 1000 : THERMAL_TEMP_INVALID;
-+
-+		trips[i].type = THERMAL_TRIP_PASSIVE;
-+		
-+		pr_debug("%s: cpu=%d, trip=%d, temp=%d\n",
-+			 __func__, cpu, i, trips[i].temperature);
-+	}
-+
-+	return trips;
-+}
-+
- static int pkg_temp_thermal_device_add(unsigned int cpu)
- {
- 	int id = topology_logical_die_id(cpu);
-@@ -353,24 +353,27 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	if (!zonedev)
- 		return -ENOMEM;
- 
-+	zonedev->trips = pkg_temp_thermal_trips_init(cpu, tj_max, thres_count);
-+	if (IS_ERR(zonedev->trips)) {
-+		err = PTR_ERR(zonedev->trips);
-+		goto out_kfree_zonedev;
-+	}
-+	
- 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
- 	zonedev->cpu = cpu;
- 	zonedev->tj_max = tj_max;
--	zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
--			thres_count,
-+	zonedev->tzone = thermal_zone_device_register_with_trips("x86_pkg_temp",
-+			zonedev->trips, thres_count,
- 			(thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
- 			zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
- 	if (IS_ERR(zonedev->tzone)) {
- 		err = PTR_ERR(zonedev->tzone);
--		kfree(zonedev);
--		return err;
-+		goto out_kfree_trips;
- 	}
- 	err = thermal_zone_device_enable(zonedev->tzone);
--	if (err) {
--		thermal_zone_device_unregister(zonedev->tzone);
--		kfree(zonedev);
--		return err;
--	}
-+	if (err)
-+		goto out_unregister_tz;
-+
- 	/* Store MSR value for package thermal interrupt, to restore at exit */
- 	rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev->msr_pkg_therm_low,
- 	      zonedev->msr_pkg_therm_high);
-@@ -379,7 +382,14 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	raw_spin_lock_irq(&pkg_temp_lock);
- 	zones[id] = zonedev;
- 	raw_spin_unlock_irq(&pkg_temp_lock);
--	return 0;
-+
-+out_unregister_tz:	
-+	thermal_zone_device_unregister(zonedev->tzone);
-+out_kfree_trips:
-+	kfree(zonedev->trips);
-+out_kfree_zonedev:
-+	kfree(zonedev);
-+	return err;
- }
- 
- static int pkg_thermal_cpu_offline(unsigned int cpu)
-@@ -463,8 +473,10 @@ static int pkg_thermal_cpu_offline(unsigned int cpu)
- 	raw_spin_unlock_irq(&pkg_temp_lock);
- 
- 	/* Final cleanup if this is the last cpu */
--	if (lastcpu)
-+	if (lastcpu) {
-+		kfree(zonedev->trips);
- 		kfree(zonedev);
-+	}
- 	return 0;
- }
- 
 -- 
-2.34.1
+Hello,
+We the Board Directors believe you are in good health, doing great and
+with the hope that this mail will meet you in good condition, We are
+privileged and delighted to reach you via email" And we are urgently
+waiting to hear from you. and again your number is not connecting.
 
+My regards,
+Dr. Ali Moses..
+
+Sincerely,
+Prof. Chin Guang
