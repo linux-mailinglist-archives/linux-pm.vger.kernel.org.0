@@ -2,112 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BE558D804
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 13:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D35458D932
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 15:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiHIL2l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Aug 2022 07:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
+        id S243707AbiHINOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Aug 2022 09:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiHIL2k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 07:28:40 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E80219292;
-        Tue,  9 Aug 2022 04:28:40 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d16so11040956pll.11;
-        Tue, 09 Aug 2022 04:28:40 -0700 (PDT)
+        with ESMTP id S243714AbiHINOW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 09:14:22 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AE41A05B
+        for <linux-pm@vger.kernel.org>; Tue,  9 Aug 2022 06:14:18 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso1665026wmb.2
+        for <linux-pm@vger.kernel.org>; Tue, 09 Aug 2022 06:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=VIiZZVAptd5oSBmx9Azfpj0vKhX9kuKTVoBaO2I82Tw=;
-        b=LgAxdbOWyuUIuL3YTJih5ytfqHTawzMlOfNpy9MIPTRVVVtIuhnPwmz10U7GTmxwoa
-         A7CU08LoPnc3dFyKheKIND6+C3FMOcv+Zec+PVO48Ig5UDN0+TpprbqmgdjW0FusXqjo
-         6JuU5KeMz/j2QDwmNX4l9I2K2xIKpvZc8ktQjHEQ/d3FJ7ntXXTOO7Z5yM/kxgWetyJw
-         g81gwpIbPYEpD7xHwGkiJJWpMyNLXWPqDDvX9UvXhQixmyYZGzkWuBk+sCZHkmawJvpR
-         eWh3sLR4E3WoaRrr1WAZ7ok4nX7tz64WlKXF7nc0e5hI3s3Jh45H6hWsMFyUNho9Dxxw
-         kPaw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=YbYq10AH7DFyPthSKrztZodwwushB5t/2Y6IpnigFO4=;
+        b=Z7YPedDXnLSgBPd9OMsLK57MpNaQ+Vcno0m+BuDTk72qpO7Aul44JeaGBXTzylLRf6
+         nLlLx0AAopKc9yoMFkj+Q54hadriFobDH/c4+X0sfC9AHuazANM0RuLRgl7aIbp7cuqZ
+         GuqgXlEc4WGquTmSK1cBzJuaCX2BX2TNLtrn0hY9FZo6tj0eSfsrMRlv0hloKxBdqAxe
+         HzL7oWPVQvc9jYePBqrd3jAmn1hhsql6nZA98xDcQZHIrlEoh2Q1hNjtZQezpUCmpo7M
+         blu04r+nOiSHk4MsGO4DyfiRnWD0AV/92wFDYDkXqtnn2T/ooJhtO/5AZzhil2k4tdEF
+         DqKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=VIiZZVAptd5oSBmx9Azfpj0vKhX9kuKTVoBaO2I82Tw=;
-        b=pgSdgLHOITuulg0Vppj+g8fIpunPPJEfA7XyjLXn4T6YsQavYHJ1Hj4cP3ezSir4ML
-         KmNpNst2oT+svEba4pBelzeoWK2sBOuxTchtYGrVVSImMgdWnqiEwiZYRteCBk9JjtNL
-         oWGXPe57OfztxrQKU9Lpz2VV+GkD+hO4tfFvcTprJBNTHxYe7UVS8M7a7hzk3ZsawlAE
-         g0NhbEH5I2Yd7dbneXdrqoKjrR7/9S/nbu0hkrKhwSflja6bhJdbm6Qt9Zl8T4FUmgp+
-         tnV3sc7ZxQznZXjUhtteMH2+DSBHEs3Eq2Elnw5L1ledAHCh186QxhmweuUsjucY9Miq
-         SVsg==
-X-Gm-Message-State: ACgBeo1KSDkICOaMUkSUou6WvaspPndgYXIEx9RafEhs2kMzpmh33THf
-        uu3ED6qijs/vyxr+zTNMiXqMRbNLPPybebcXBsA=
-X-Google-Smtp-Source: AA6agR45VCQGXf/7Di9MAsVfM1ob5MNVs/XZtyhXe84XqAGlWYokWouUAXa/mdqnKk+nv6X7bGSqAGb+8u6s77Mnnb4=
-X-Received: by 2002:a17:902:e5c8:b0:16f:1511:7575 with SMTP id
- u8-20020a170902e5c800b0016f15117575mr23196630plf.83.1660044519576; Tue, 09
- Aug 2022 04:28:39 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=YbYq10AH7DFyPthSKrztZodwwushB5t/2Y6IpnigFO4=;
+        b=soJdAYdyDhH+3NyOrXKP9fUeEMNxuvjk1w1IHuKPfWYcgasHSuK+/wibEmo6H7IPKO
+         be3UyKYrsX7sJRvtruMbDcJMfyIJuR8hHCQ92k9IROAYPq96IzPrc2q0dgBRL/Oig32F
+         0/uQzf+g2qM9Xk3LP4YmcW4y64UmxQRobndL6z2UjdE73N2bUhRb8510TQ6FDfdkBgVR
+         g6Rf8Ilqu3jZUcsc+fIh8yyX3Mnjuae7IiZWV1+8Myf7JlvTZbYgKZPF6Pt/gIYGmF2V
+         i6friQfjND9Y1gncJCcJEWBx6KVbajHXx5GW4bcC3CPtHc/Qir+UnwPNlJ9YKcLejTHR
+         QQaA==
+X-Gm-Message-State: ACgBeo0/VV6L2pjjFUnnrEKyJgEpe96WGMlaUsXMBuo6X2TZHNI8d0Am
+        tIp4IsVAHr3kqNqtWrDEMMpDTw==
+X-Google-Smtp-Source: AA6agR4/lo60i+WLJVLsgEtDWzhjrmVdxnP64JGuV05zhH+S6LHtffAoI85nP9uDE8F/o6OlDzl8sg==
+X-Received: by 2002:a7b:c848:0:b0:3a5:41f6:4d37 with SMTP id c8-20020a7bc848000000b003a541f64d37mr5721352wml.23.1660050857317;
+        Tue, 09 Aug 2022 06:14:17 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id n2-20020a05600c4f8200b003a1980d55c4sm22561795wmq.47.2022.08.09.06.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 06:14:16 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 14:14:14 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v7 06/13] dt-bindings: mfd: Add MediaTek MT6370
+Message-ID: <YvJdpq0MWNPQZw5c@google.com>
+References: <20220805070610.3516-1-peterwu.pub@gmail.com>
+ <20220805070610.3516-7-peterwu.pub@gmail.com>
 MIME-Version: 1.0
-References: <20220525115554.430971-1-alistair@alistair23.me>
- <20220525115554.430971-2-alistair@alistair23.me> <Yo5vjlsc0J1S70zN@sirena.org.uk>
- <Yo86jpMrKR0Dj/HB@google.com>
-In-Reply-To: <Yo86jpMrKR0Dj/HB@google.com>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Tue, 9 Aug 2022 21:28:13 +1000
-Message-ID: <CAKmqyKOrtHHGOB81UvHQX=bMke_1e5Y7GPcSrqFcMtEvL6EtJw@mail.gmail.com>
-Subject: Re: [PATCH v21 1/4] mfd: silergy,sy7636a: Add config option
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Alistair Francis <alistair@alistair23.me>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-hwmon@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805070610.3516-7-peterwu.pub@gmail.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 26, 2022 at 6:30 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Wed, 25 May 2022, Mark Brown wrote:
->
-> > On Wed, May 25, 2022 at 09:55:51PM +1000, Alistair Francis wrote:
-> > > Add a specific MFD_SY7636A config option.
-> > >
-> > > As part of this change we can use MFD_SY7636A as a dependency for all
-> > > SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C a=
-s
-> > > it no longer needs to be selectable.
-> >
-> > Acked-by: Mark Brown <broonie@kernel.org>
->
-> Full disclosure; I've already made my cut for v5.19.
->
-> This is due for v5.20.
+On Fri, 05 Aug 2022, ChiaEn Wu wrote:
 
-I just wanted to double check that this is still going in for 5.20
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add MediaTek MT6370 binding documentation.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
+>  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
+>  2 files changed, 298 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+>  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
 
-Alistair
+Applied, thanks.
 
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Principal Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+-- 
+DEPRECATED: Please use lee@kernel.org
