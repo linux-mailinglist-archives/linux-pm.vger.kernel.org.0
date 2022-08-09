@@ -2,120 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E0258D322
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 07:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8287858D3AF
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 08:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbiHIFZh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Aug 2022 01:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
+        id S237082AbiHIGX6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Aug 2022 02:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234191AbiHIFZg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 01:25:36 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C830B186CB
-        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 22:25:33 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id t1so15540999lft.8
-        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 22:25:33 -0700 (PDT)
+        with ESMTP id S229853AbiHIGX5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 02:23:57 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721771FCE9
+        for <linux-pm@vger.kernel.org>; Mon,  8 Aug 2022 23:23:56 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id l22so13190779wrz.7
+        for <linux-pm@vger.kernel.org>; Mon, 08 Aug 2022 23:23:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MN/PfmZxhZGkUDtNPw5NWgDuHq3bhLxgM7464BOCO7A=;
-        b=XZrgPN9JLTKg8atSdFLRTYNXR78mzwUKGoKE9+m3YvMPYebYYnJTS2thkWjAOgWbk5
-         Gp59g/B0MEDTGRnUhfBxEFnRud/VlvToqjXrovIy0Www+xC4rMQN3M3WlpGAbdXu09r6
-         ZpdXLzv7X/df/4F54dEYXnKNlQcjkeSqIKEs9oRRrN9KDCqhEqsNKlPW5qpnFWxw93a2
-         fD6udybTtwWNYP6Qi8hXEoBOF9+yyEZKAkAw1EcPulVs4hk6FaEf1LKr6fnW8Y4DVqPe
-         7HU6MNS2/1x5Zi85kq9xobr759btcJdBQJgsSBzQgBwkk/zspIwOMZRYwN818GbG+x2+
-         T5RQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=d7+2BSYxyvsSLuCik/VVlPelVR4UOsw6NIEHox7wPO0=;
+        b=Pm7E7LVPZOui+XqGS+iSnFHLsVC0m9fKA6j6vlG0FupasZ5jNnZMUjpFr7oaTTpDaD
+         zu2cSJioK1RFw+B5wiC1I46qmqsMEpR/yOmQgyrhbyUYNHOdQY4eynJkJVRNqdrwa4QJ
+         5HGrROeLsjUaYb8QHHo/w3b74/3GsiFfuz3oyuKjSiER0Cu/wIE4q/xK8ohfIVNS+OKy
+         kGktnnk5s0juxmle6+4LVDvi+sGU4tcwalqxW0Yzv08FY70D+2m5/g0M/5IH3eXiXRet
+         bBtH0NpEAmwNUZblhiTcJHNfDPLkQm5MwreoYzxwOgE7PTdQBH8qcXYPREOr+rXqx9t/
+         OAhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MN/PfmZxhZGkUDtNPw5NWgDuHq3bhLxgM7464BOCO7A=;
-        b=jb39icNLlTN+C60NbhLgqyybV/lZv151xcGNMO7ZSoX0gSXT42HM0rDPvU++souxwW
-         Ya4nAay1+qoVmIU1gGgOnKZIa0RYqKkdJyQjSViVQs1+C8EG8WsNIFkdoOaUmGJ8hLAW
-         8gBbnOPW2uk+WM6lcfvBjcvH0IFDMsJo1yTvquWJQPfzBxQF9VraAtrHs3xxseBk3pWj
-         OfoadqA+ajLss5HMkjpyMIscZXjIdFXzp3XoB7Xkx54zdk3VXf6wZ9oUePSF4eN6ZFSZ
-         dpbkuy/Wyzyhxt54xXDevD977XtT6w6qCd4/p3za9z73KKFcDDTOvaK7vMXVddR4E/7v
-         q1fg==
-X-Gm-Message-State: ACgBeo2jLeayVnOL5j5+XJyv1mAth0Oln1unkcE9TrI9hSxX6z6IO9K9
-        hgELTeStWJzkYhL9nwjl3LPQ1Q==
-X-Google-Smtp-Source: AA6agR6hw1vEdUjRQW20Lnu2pJAqZx/55rR0g6ua4dI5DTsbMqQXBvmrnt/fWy/9kP3zcmoMbyohMQ==
-X-Received: by 2002:a05:6512:3b85:b0:48b:36d0:6cde with SMTP id g5-20020a0565123b8500b0048b36d06cdemr7082766lfv.247.1660022732045;
-        Mon, 08 Aug 2022 22:25:32 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id j3-20020a056512344300b0048a921664e8sm1632860lfr.37.2022.08.08.22.25.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 22:25:31 -0700 (PDT)
-Message-ID: <c6b890b6-e72f-0377-f0ae-cd15d29c23a1@linaro.org>
-Date:   Tue, 9 Aug 2022 08:25:29 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=d7+2BSYxyvsSLuCik/VVlPelVR4UOsw6NIEHox7wPO0=;
+        b=7L3I6FHfO10ZCQOW2YMjCrf+TIjSpEhWofcTLpFWmki7P4B3INLrPfmlzj19FREGmi
+         Ds4sw/vRypvf0I3YscntPJIs2IDU5Bxcm02HsfZYhNaUdcTTiRElisINvmaTQVjGQFW0
+         c3miREYMisPmYDmokVcEaMi0xxh/PKA0tQL30uzVi8xdi5B2EI9Na6uPyxIehlJ9WHBz
+         dce7XRT63JzvF1wOtTZk9FufnhQzX0Mv2MLCUKv9kKh6wVoXWV+2QrYoWi9+HIxgGh0G
+         2dQpzS0dXrk0NK/jIjzCSQCOmhMXhK0lR1K+p03SaY9xjTCKX6Bzb2j4nIgR+yDC29Vn
+         O7rw==
+X-Gm-Message-State: ACgBeo1PXR/NBklZXLp7vYM43iegfwX97wACBq22uPO/8IgI4YU6LVyt
+        6jDkowv14KYXVYFrR5Rja20Xvw==
+X-Google-Smtp-Source: AA6agR5OcfCcf9sUliZFsaAZbqUkuQw4bg/isuHefok+vpOJ7L4ipnYw5h3ASa+mZJ5qkyVioR2gzg==
+X-Received: by 2002:a5d:4301:0:b0:21b:8af6:4a21 with SMTP id h1-20020a5d4301000000b0021b8af64a21mr13999974wrq.296.1660026234952;
+        Mon, 08 Aug 2022 23:23:54 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id bh19-20020a05600c3d1300b003a2f6367049sm15650781wmb.48.2022.08.08.23.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 23:23:54 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 07:23:52 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, zhangqing@rock-chips.com,
+        zyw@rock-chips.com, jon.lin@rock-chips.com, sre@kernel.org,
+        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, lee@kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+Subject: Re: [PATCH v8 2/4] mfd: Add Rockchip rk817 battery charger support
+Message-ID: <YvH9eGYefSiS4N9z@google.com>
+References: <20220808173809.11320-1-macroalpha82@gmail.com>
+ <20220808173809.11320-3-macroalpha82@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings: few
- stale maintainers cleanup
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
- <20220808115202.3175eb1f@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220808115202.3175eb1f@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808173809.11320-3-macroalpha82@gmail.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/08/2022 21:52, Jakub Kicinski wrote:
-> On Mon,  8 Aug 2022 13:47:07 +0300 Krzysztof Kozlowski wrote:
->> Several of the bindings here had only one
->> maintainer and history does not always point to a new one (although I did not
->> perform extensive digging). I added subsystem maintainer, because dtschema
->> requires such entry. This is not the best choice as simply subsystem maintainer
->> might not have the actual device (or its datasheets or any interest in it).
->>
->> However dtschema requires a maintainer. Maybe we could add some
->> "orphaned" entry in such case?
+On Mon, 08 Aug 2022, Chris Morgan wrote:
+
+> From: Chris Morgan <macromorgan@hotmail.com>
 > 
-> Integrating it with MAINTAINERS would be another option worth exploring
-> although slightly tangential.
+> Add rk817 charger support cell to rk808 mfd driver.
 > 
-> How do you want this merged? It's all over the place subsystem-wise.
+> Acked-for-mfd-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+> ---
+>  drivers/mfd/rk808.c       | 16 ++++++-
+>  include/linux/mfd/rk808.h | 91 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 106 insertions(+), 1 deletion(-)
 
-I was thinking this could go via Rob's tree as fixes for current cycle,
-so your Ack would be great. If there is preference, I can split it per
-subsystem, but for such trivial updates it's a bit of a churn.
+Applied, thanks.
 
-
-Best regards,
-Krzysztof
+-- 
+DEPRECATED: Please use lee@kernel.org
