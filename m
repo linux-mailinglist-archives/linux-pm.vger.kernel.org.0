@@ -2,62 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8806458D549
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 10:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9EE58D5BE
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 10:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbiHIIX4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Aug 2022 04:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
+        id S235629AbiHIIxi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Aug 2022 04:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiHIIXz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 04:23:55 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1615062EE
-        for <linux-pm@vger.kernel.org>; Tue,  9 Aug 2022 01:23:55 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id b6so5940475wmq.5
-        for <linux-pm@vger.kernel.org>; Tue, 09 Aug 2022 01:23:55 -0700 (PDT)
+        with ESMTP id S241232AbiHIIxa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 04:53:30 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A32D22508
+        for <linux-pm@vger.kernel.org>; Tue,  9 Aug 2022 01:53:27 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso1380913wmb.2
+        for <linux-pm@vger.kernel.org>; Tue, 09 Aug 2022 01:53:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=BJWOeYOWaGtuSWpgn3DJStQNfUCfS0wNXe43q2ava3Q=;
-        b=kJKNpygG1OIUcxR8O/QC0aXceRvoaiUrQDf/YJPW1+loD+a0IkdIlMs8b9Orla/OeG
-         /5I09F70ijl3gKR6mzqD/HIF2Ud+kDHfm4xyYXWtAgE40eOX87k+oXaErctxr96V15d9
-         kARohaRpAG9aPmFv2qlLrkZzReKnQJiZRdlgpcBaK+cajdIoa6dLnnUhosxkp03DuyIB
-         4y6ZQlSTiEwyYeLYIu6zyKuZ1s4lltpgS2Wst0R2a8xiXt7U68jgwjDABgTXOhyuz4Dr
-         2To729dHM+lGa5GVzUiaUS4Z/0cK2Ut+ROUcRFZEMF0AQAb1l6q5MQ0zuvSJIGnTkdgP
-         azpA==
+        bh=qG0cMVDpsw3lX4Bn87g1WU9OQnuZ1JiWfH6lXAs1oTo=;
+        b=It5aifXBux/SXZQo7kIXTKsrClPnKo4DMK+1FQ+dEW2NQ7mBlQLj8BzfOo0hIKXFkh
+         eyaoGE7t0882xNqlruvy03WAT/8RKsccfeoi4O7KGQBtrE/qGe9vT3wvLAM2iGCiBF0G
+         18b2/s4Yll+jtdywo11uUbu6CWSiDsauyZ35IUgZy2l6pcqvSEruV68RC43EsMCKR/IQ
+         OSJaYUDjqx5+rHJX7jdPt2BKPGCw2vLwiSOhXJ2Ux+lKc2wZfS3zLvcznnVaCJYWqtsd
+         pQ5CM4RzhDtX5A7IB68dcsgKDZV7Ze3bLVnrewRh4B/s8R3TFjkLUXJJyyIpMurvgpiU
+         oT6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=BJWOeYOWaGtuSWpgn3DJStQNfUCfS0wNXe43q2ava3Q=;
-        b=o8DO4Xt3G79+9uKveK7ozWYX5G8BOMd/EbrFdzf61xVKYk3ukG/kcJL31LKoYiwcZG
-         XXFbrA2HSoY59hIhLK7nit3L82KiUSfJ1K9MfRr2/qPj8hr1huRbPhoqGMdiMbEbrkuP
-         PbLQie8Nezn/o32bZQVQpZ7hZ9qfptQrtxnaE4jkhICeXbyvW6UQpK3dt1Pi6kg55mL7
-         w2mLVsvHw1hS58OuCMbbtHxvWndz1pwfl8CcvpXutqBa+4/9REe7xRvKoQGUkLZjhgLz
-         ghPK3ZIt1NOwrQZ2PYJF/Fqp0SEPh6LV/VWZRwll439OBdrJH143QtgztB6MxwvvffnE
-         /LUw==
-X-Gm-Message-State: ACgBeo2O2sbjNkSaLrUZ4CKN4v1anYhaeFBjq27R8MOnbX0DIQYspG/P
-        k78JlUe8zoproQIShlCYODVUyw==
-X-Google-Smtp-Source: AA6agR65Ka6kB6xgrHkvANuCCrRtr8CpPBbbo6EzKPhAu8eK4TDBf2PjFBheWdyREneQgnGGbFqlRA==
-X-Received: by 2002:a1c:ed05:0:b0:3a2:ebae:c5e7 with SMTP id l5-20020a1ced05000000b003a2ebaec5e7mr14589715wmh.78.1660033433553;
-        Tue, 09 Aug 2022 01:23:53 -0700 (PDT)
+        bh=qG0cMVDpsw3lX4Bn87g1WU9OQnuZ1JiWfH6lXAs1oTo=;
+        b=TZh9Cyv2HeVrL2kmduvIA72UpPJ9OCW0Dr/s6v3mj9gAVEfqJd+MaEYPbzmDeX3Uif
+         KbadCFiffjzKniclxa/tAHtN1ds3bQTimDIezEhpS+DkbrEWcd7cYFxXGvvxM6svIPCv
+         VH82YoHj4bXqQCfRaudrno8enfCqJaWsQCQthtmo1XWD6TiLYpJUbUUKBvFrjiFhwkpl
+         LwisE60NbgRenEFfzigYLePiE+wpllpWKZQ2An08Fl/gNYUmJsxePjDg5IMMYxoQpwQp
+         Oap+8hypT743j8CA13UGtPR0KtkVwc+c2g7KrYzp/nLqSWz9Zdx/FC3ORb0I9vPcUe2Z
+         mZWg==
+X-Gm-Message-State: ACgBeo1oe6TXizCRdYpHdIYyvPiIkCh8Sz3kE06slNB9oZevGl3BOny9
+        It6wzAesVfYAtx0DlCMuMeJBgOq6v6/oyw==
+X-Google-Smtp-Source: AA6agR4aU2oT1B0lZOEedWdpfgdQY9s7hYm2Mi9wy+kVRDKtJ7UuWhTFm37jQlnjey0/+bRmcUsfNg==
+X-Received: by 2002:a05:600c:2650:b0:3a5:4402:bc2a with SMTP id 16-20020a05600c265000b003a54402bc2amr4476133wmy.108.1660035205589;
+        Tue, 09 Aug 2022 01:53:25 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q3-20020a056000136300b0021b956da1dcsm12886669wrz.113.2022.08.09.01.23.51
+        by smtp.googlemail.com with ESMTPSA id w8-20020a5d6088000000b002185631adf0sm13011623wrt.23.2022.08.09.01.53.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 01:23:52 -0700 (PDT)
-Message-ID: <27c03303-9ee5-d9df-b7f2-016491fce9e5@linaro.org>
-Date:   Tue, 9 Aug 2022 10:23:50 +0200
+        Tue, 09 Aug 2022 01:53:25 -0700 (PDT)
+Message-ID: <829788a5-3da4-8638-a587-9e80e2fd3fea@linaro.org>
+Date:   Tue, 9 Aug 2022 10:53:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Subject: Re: [PATCH v5 00/33] New thermal OF code
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, daniel.lezcano@linexp.org
-Cc:     abailon@baylibre.com, anarsoul@gmail.com, baolin.wang7@gmail.com,
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Michael Walle <michael@walle.cc>
+Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
+        anarsoul@gmail.com, baolin.wang7@gmail.com,
         bjorn.andersson@linaro.org, broonie@kernel.org,
         damien.lemoal@opensource.wdc.com, digetx@gmail.com,
         f.fainelli@gmail.com, glaroque@baylibre.com,
@@ -68,12 +70,12 @@ Cc:     abailon@baylibre.com, anarsoul@gmail.com, baolin.wang7@gmail.com,
         mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
         miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
         rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
-        Guenter Roeck <linux@roeck-us.net>
+        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com
 References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
  <20220808094216.928018-1-michael@walle.cc>
+ <20220808102610.GA1969424@roeck-us.net>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220808094216.928018-1-michael@walle.cc>
+In-Reply-To: <20220808102610.GA1969424@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,35 +89,78 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/08/2022 11:42, Michael Walle wrote:
+Hi Guenter,
+
+On 08/08/2022 12:26, Guenter Roeck wrote:
 
 [ ... ]
 
-> On my second board
-> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts). I get the
-> following error:
+>> But I guess even if that is fixed, the driver will not probe due to the
+>> missing trip points? Are they now mandatory? Does it mean we'd need to
+>> update our device trees? But that will then mean older devices trees
+>> don't work anymore.
 > 
-> [    6.292819] thermal_sys: Unable to find thermal zones description
-> [    6.298872] thermal_sys: Failed to find thermal zone for hwmon id=0
-> [    6.305375] lan966x-hwmon e2010180.hwmon: error -EINVAL: failed to register hwmon device
-> [    6.313508] lan966x-hwmon: probe of e2010180.hwmon failed with error -22
-> 
-> Again, is there seems to be something missing in the device tree. For this
-> board a device tree change should be easily doable, as it is still in
-> development.
+> It would also mean that all hwmon drivers registering a thermal zone sensor
+> would fail to register unless such a thermal zone actually exists. 
 
-Logically with the fixes I've send these errors should have gone. Just a 
-pr_info should appear "... not attached to any thermal zone".
+Probably missing something but if the thermal zone is not described, the 
+hwmon driver won't initialize. And except if I'm wrong, that was already 
+the case before these changes, no?
 
-If I'm correct, without or with the changes (new thermal OF code + 
-fixes), the hwmon message is the same and the hwmon thermal zone is not 
-created. So no regression hopefully.
+> This
+> would make the whole concept of having the hwmon core register thermal
+> zone sensors impossible.
 
-Is it possible to check that?
+No, only the way the thermal OF is implemented changed. No functional 
+changes. So AFAICT, you can still create thermal zones with the hwmon.
 
-[ ... ]
+> I have no idea how this is expected to work now,
+> but there is an apparent flaw in the logic. That means I withdraw my
+> Acked-by: for the hwmon patches in this series until it is guaranteed
+> that hwmon registration does not fail as above if there is no thermal
+> zone associated with a sensor.
 
 
+If the thermal zone creation fails with -ENODEV, then it is no 
+considered as an error when creating the hwmon [1]
+
+The function [devm]_thermal_zone_of_sensor_register() checks if there is 
+a thermal zone description, if not it bails out with -ENODEV [2]
+
+Otherwise it checks all the thermal zones if the device passed as 
+parameter matches a sensor in the thermal zone [3][4]
+
+If there is no match, then it returns -ENODEV which is the default error 
+code [5]
+
+My understanding is there is no thermal zone creation if there is no 
+description in the device tree for such a device in the thermal zone.
+
+The issue we had here was the confusing error message when -ENODEV 
+(before was -EINVAL) is returning while before the code was silently 
+continuing without creating the thermal zone.
+
+We are talking here about what is in under CONFIG_THERMAL_OF in the 
+hwmon code path. The rest is untouched.
+
+Am I missing something?
+
+
+
+[1] 
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/hwmon/hwmon.c#230
+
+[2] 
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#499
+
+[3] 
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#510
+
+[4] 
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#428
+
+[5] 
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#497
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
