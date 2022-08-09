@@ -2,191 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D503658DB3B
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 17:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A8958DBE9
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Aug 2022 18:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240389AbiHIPhv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Aug 2022 11:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
+        id S245025AbiHIQ2F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Aug 2022 12:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244940AbiHIPh0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 11:37:26 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5835597
-        for <linux-pm@vger.kernel.org>; Tue,  9 Aug 2022 08:37:22 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id j15so14767719wrr.2
-        for <linux-pm@vger.kernel.org>; Tue, 09 Aug 2022 08:37:22 -0700 (PDT)
+        with ESMTP id S244993AbiHIQ2B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Aug 2022 12:28:01 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E891CFCD
+        for <linux-pm@vger.kernel.org>; Tue,  9 Aug 2022 09:27:58 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id e15so17788784lfs.0
+        for <linux-pm@vger.kernel.org>; Tue, 09 Aug 2022 09:27:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=A8f8AXcn46eg5Xdy6reWOlVNk4yWLMkAOY5qgsZS1Hw=;
-        b=PeZW1Ndo+Vc+0qgJ9v55bzTY0riGk25YGWF0pHiZTyBtsqOLlPi3xMplbKC1pnC//d
-         3o6a3NhhhaXMxFIV5JEYTVXk2H5zKbmXKI4J7B0bN/sD38OnaQqu0Y7m5T34KVyglWrZ
-         tkoIGhTRVNeY6Yjvi0KVjeIdAJhom1FZudfbtsEJ7RxGn6KXw2usTRyeRop2kVXkhdmm
-         IvTZkA4h5We6V0MiIiaFQ+gwJzE7UzzfyY9lA/3O3gO1gJaUQ33Dx7LdxtOXgi0wariK
-         ngPY1AF09FYppz8zXqYfnRjZtILEWRHuObNdBJXk9yh8ZazbDpbRSOX5nrXjfVl741n5
-         6YIg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AR+nnS9UZD6P2Hs8ZDImw5TD7p9NQC+KnqHa3zocRvk=;
+        b=scwhCRJP2cX92hQGoRkNYm1CP1o41FrEej53GLl6u8y5tLL91RoPRZ7d6703rgd6z4
+         y4xGg04FcmAIUHsFZQoz3WCYKNxzaLl/PR8KdfKG3pssC1Ay0wa0QlWGw/CoiJHSId30
+         hd2EyCkjzIer0sV5O8xkfFRvGUJS2udkZLP+LgpUOsffdh6Ohnu9uFOfrWIMHTe8lNIt
+         DcZEoqWOYX3F4kMr76HXbsT2Moht6G1fCn39Xyon/Lq04771JDKk12dmYO1wKfeq7bEo
+         IAX75aMK5gnpn0hTmsCJekxKFQfTF8tAtJGgWwg6FDMsH6NiNiY5SGBvidLvPPdbFP1v
+         gydA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=A8f8AXcn46eg5Xdy6reWOlVNk4yWLMkAOY5qgsZS1Hw=;
-        b=7QoBSK69lyhXjfcBIKPre8AHiINKMVcsNFkepq6HTmcKptIjfSBisMWcQJ+B/Zwsvy
-         BAE6K1YLq5n/sWruRqPrjvTWOfJ3rs0rkje+KNvb2jgIEC4LtPsGYUVD9hi0Cd7WnQ0J
-         NUbTB7MYDmOrg6hVcxt/jg8PxnTkalios8jwtAWNHj+L55mMjeI7uYH6D4Z212ak9m1c
-         71fh5OxIbjJ6s7ndkPH+HSTyyM83r9dfoVC7XTW0sHJ2IB6n7Qr1hsDZ/V2BoqZkPodn
-         GPB5lNzjpHTE7FwDWKezGYlQJE0oMGhRzX9CZ69n4hKmu8WJrNCB7jsVWWIdFUvtzh9p
-         l1iQ==
-X-Gm-Message-State: ACgBeo2LXVpBEhYMvxTUNKnYg1GhCpSQHHV2oHwGXBWeCLz4dviGKr5C
-        HEwDB82UrapfVWTrpO826EGt0g==
-X-Google-Smtp-Source: AA6agR5UZ842ZznQyZ71kFFKy889anCdQIM3c3LWzRaSKSzAuiF1OnSmf1qsEywAmE/gS2A4+nkrYA==
-X-Received: by 2002:a5d:59af:0:b0:220:6daf:5f64 with SMTP id p15-20020a5d59af000000b002206daf5f64mr14805476wrr.192.1660059441332;
-        Tue, 09 Aug 2022 08:37:21 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id y1-20020adfd081000000b0022159d92004sm12936540wrh.82.2022.08.09.08.37.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 08:37:20 -0700 (PDT)
-Message-ID: <53d33f48-1774-3a0e-a84e-a8027679ea5a@linaro.org>
-Date:   Tue, 9 Aug 2022 17:37:17 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AR+nnS9UZD6P2Hs8ZDImw5TD7p9NQC+KnqHa3zocRvk=;
+        b=WsRXHkShMBxI4A5e0HmmsgDoCRi7iHg1AXz6OYdU0dcEFPoVJmjaBGDONvZpU7EPRs
+         3KVUo9FJwfBQvaaIEp4DSxRxWpfWY55x45VROiKy8hhC2DHg4/FB+5k+pO2u0LsN49kL
+         2mUm9msiZxNUxFYau4QqGTsjX5kHtU1prnln2kxeGhzJRM6ovxX97GpITXw22+A9bJER
+         EiiXlbNL+b1bNppKzCr+VwUU6QjBXty5rOG5BD8WXUUrIPvtIKBRW6NxpunWw9z4mUaP
+         iH7x5J9+n++o5BlickkYZ5+1v81Lt29GNSWe/9mFUhfRJ5/RQz+/RoOjFdQJqiEydqgt
+         iTrA==
+X-Gm-Message-State: ACgBeo1CQqnUOF3saoz7vp0YQuJ8O7vWAH8sw/ut5I5M7fUTGcz9REdM
+        3qk/p0Kr7f15lwhR7C2b3C7rnA==
+X-Google-Smtp-Source: AA6agR5TRVjeZwahd7WkFhqyuhqfwiPBYep94z8LyDAT7HAxO3MZrTjHFZMuFjki+w1nYUDsee4f8A==
+X-Received: by 2002:a05:6512:2a8d:b0:48b:7f1:fe46 with SMTP id dt13-20020a0565122a8d00b0048b07f1fe46mr7624887lfb.261.1660062476861;
+        Tue, 09 Aug 2022 09:27:56 -0700 (PDT)
+Received: from localhost.localdomain ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id h7-20020ac24d27000000b0048a8c907fe9sm20999lfk.167.2022.08.09.09.27.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 09:27:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings: few stale maintainers cleanup
+Date:   Tue,  9 Aug 2022 19:27:47 +0300
+Message-Id: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 00/33] New thermal OF code
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Michael Walle <michael@walle.cc>
-Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
-        anarsoul@gmail.com, baolin.wang7@gmail.com,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
-        f.fainelli@gmail.com, glaroque@baylibre.com,
-        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
-        jonathanh@nvidia.com, khilman@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, matthias.bgg@gmail.com,
-        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
-        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
-        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220808094216.928018-1-michael@walle.cc>
- <20220808102610.GA1969424@roeck-us.net>
- <829788a5-3da4-8638-a587-9e80e2fd3fea@linaro.org>
- <6318d099-268b-1bbe-fed8-4f4b356e90cb@roeck-us.net>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <6318d099-268b-1bbe-fed8-4f4b356e90cb@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/08/2022 16:32, Guenter Roeck wrote:
-> On 8/9/22 01:53, Daniel Lezcano wrote:
->> Hi Guenter,
->>
->> On 08/08/2022 12:26, Guenter Roeck wrote:
->>
->> [ ... ]
->>
->>>> But I guess even if that is fixed, the driver will not probe due to the
->>>> missing trip points? Are they now mandatory? Does it mean we'd need to
->>>> update our device trees? But that will then mean older devices trees
->>>> don't work anymore.
->>>
->>> It would also mean that all hwmon drivers registering a thermal zone 
->>> sensor
->>> would fail to register unless such a thermal zone actually exists. 
->>
->> Probably missing something but if the thermal zone is not described, 
->> the hwmon driver won't initialize. And except if I'm wrong, that was 
->> already the case before these changes, no?
->>
-> 
-> In the hwmon source (you point to it below):
-> 
->          if (IS_ERR(tzd)) {
->                  if (PTR_ERR(tzd) != -ENODEV)
->                          return PTR_ERR(tzd);
->                  dev_info(dev, "temp%d_input not attached to any thermal 
-> zone\n",
->                           index + 1);
->                  devm_kfree(dev, tdata);
->                  return 0;
->          }
-> 
-> That contradicts "if the thermal zone is not described, the hwmon driver 
-> won't initialize".
-> Now I must be missing something, since you mention that yourself below, 
-> and your new patch
-> series fixes the problem, at least AFAICS. Confused.
+Hi,
 
-Sorry for not being clear. Let me try to explain it differently.
+Changes since v1
+================
+1. Patch #5: Drop also Ricardo Rivera-Matos and assign TI bindings to Andrew Davis
+2. Add acks.
 
-The function hwmon_thermal_add_sensor() is calling:
+A question
+==========
 
+Several of the bindings here had only one maintainer and history does not
+always point to a new one (although I did not perform extensive digging). I
+added subsystem maintainer, because dtschema requires an entry with valid email address.
 
-Without "[PATCH v5 00/33] New thermal OF code":
------------------------------------------------
+This is not the best choice as simply subsystem maintainer might not have the
+actual device (or its datasheets or any interest in it).
 
-   devm_thermal_zone_of_sensor_register(dev, index, ...);
+Maybe we could add some "orphaned" entry in such case?
 
-If there is no thermal zone description or the 'dev' does not belong to 
-any thermal zone then -ENODEV is returned -> OK and the hwmon thermal 
-zone is _not_ created
+Best regards,
+Krzysztof
 
+Krzysztof Kozlowski (5):
+  dt-bindings: iio: Drop Joachim Eastwood
+  dt-bindings: iio: Drop Bogdan Pricop
+  dt-bindings: Drop Beniamin Bia and Stefan Popa
+  dt-bindings: Drop Robert Jones
+  dt-bindings: Drop Dan Murphy and Ricardo Rivera-Matos
 
-
-With "[PATCH v5 00/33] New thermal OF code":
---------------------------------------------
-
-  devm_thermal_of_zone_register(dev, index, ...);
-
-If there is no thermal zone description or the 'dev' does not belong to 
-any thermal zone then *-EINVAL* is returned -> NOK, error message, and 
-hwmon thermal zone is _not_ created
-
-
-
-With "[PATCH v5 00/33] New thermal OF code" + fixes:
-----------------------------------------------------
-
-  devm_thermal_of_zone_register(dev, index, ...);
-
-If there is no thermal zone description or the 'dev' does not belong to 
-any thermal zone then *-ENODEV* is returned -> OK and the hwmon thermal 
-zone is _not_ created
-
-
-Quoting your initial message:
-
-"It would also mean that all hwmon drivers registering a thermal zone 
-sensor would fail to register unless such a thermal zone actually 
-exists. This would make the whole concept of having the hwmon core 
-register thermal zone sensors impossible [...]"
-
-The thermal zone must be described if the OF registering function 
-variant is used. Except I'm wrong that was already the case before the 
-changes.
-
-Otherwise, nothing prevents a hwmon to register itself with the core 
-code, that will create the thermal zone.
-
-
+ Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml       | 1 -
+ Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml   | 1 -
+ Documentation/devicetree/bindings/iio/adc/adi,ad7091r5.yaml    | 2 +-
+ Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml      | 3 +--
+ Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml | 2 +-
+ Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml   | 2 +-
+ Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml    | 2 +-
+ .../devicetree/bindings/iio/amplifiers/adi,hmc425a.yaml        | 1 -
+ Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml    | 2 +-
+ .../devicetree/bindings/leds/leds-class-multicolor.yaml        | 2 +-
+ Documentation/devicetree/bindings/leds/leds-lp50xx.yaml        | 2 +-
+ Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml       | 1 -
+ Documentation/devicetree/bindings/net/ti,dp83822.yaml          | 2 +-
+ Documentation/devicetree/bindings/net/ti,dp83867.yaml          | 2 +-
+ Documentation/devicetree/bindings/net/ti,dp83869.yaml          | 2 +-
+ Documentation/devicetree/bindings/power/supply/bq2515x.yaml    | 3 +--
+ Documentation/devicetree/bindings/power/supply/bq256xx.yaml    | 2 +-
+ Documentation/devicetree/bindings/power/supply/bq25980.yaml    | 3 +--
+ Documentation/devicetree/bindings/sound/tas2562.yaml           | 2 +-
+ Documentation/devicetree/bindings/sound/tlv320adcx140.yaml     | 2 +-
+ 20 files changed, 16 insertions(+), 23 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.34.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
