@@ -2,61 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7C958E8B4
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 10:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E537B58E8DA
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 10:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbiHJI04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Aug 2022 04:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
+        id S231310AbiHJIfS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Aug 2022 04:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiHJI0m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 04:26:42 -0400
+        with ESMTP id S231472AbiHJIew (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 04:34:52 -0400
 Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9624B61D60
-        for <linux-pm@vger.kernel.org>; Wed, 10 Aug 2022 01:26:34 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id n4so15119516wrp.10
-        for <linux-pm@vger.kernel.org>; Wed, 10 Aug 2022 01:26:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FF15A178
+        for <linux-pm@vger.kernel.org>; Wed, 10 Aug 2022 01:34:51 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id z16so16845856wrh.12
+        for <linux-pm@vger.kernel.org>; Wed, 10 Aug 2022 01:34:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=C4O+deHMw21i9ROh6aMeCmFYtLZ7zT5HJpdxL44+uwI=;
-        b=skHNKGe/EdlNIN/2JhTRvDNdaIJYAJYZium+/LxZVQO0MKzpOUYuSxH2xdjSGwF4DV
-         HUDoXC+raOXmQ/g1GVIjK2DfK8UF2H943OZhcV9iFmez0onZLNqDA0Sde4Wp0hNaVopL
-         phO5973aD84d2BDmNjRhrnxVP1fu1ggxab57oJpdb2s5jstkKpSJVIvyz4NT8OVfez5g
-         487I6AzTst2+OPjLwmslFsT87SiCwRj6yDbktUDlor/YGTnzAG9nvDjX4mbDesYOLbqQ
-         TY+6NylwgPvvbBFY8wYhm8xOcPeGCx0AAjjvG5pvcxMVuLBH80cS7VIt4ybHZ24ChwjN
-         NCGQ==
+        bh=bkzHlR+cUvVyHpzLk2ncuYHJ7GeFDJmOxDxvociFius=;
+        b=bb8Uer18YD5FkYXGsFH+l17HcWf0wvtMHUuQ40OQ0GDH/3iYV35IU7u3drCYFcDJ+X
+         eC+d0EzzWP3dBAef3pp4oOIIcSrl0b9C5KOFPkPNJss6OEmNIh9SLFfw/4cRDutguIvO
+         bUA52P58iNkqHhvPCo+d4EWUNugr196hO12CnwkizN6Szd/dFSmCBV4dd6Gcm25AXc0L
+         XMx/GoEDkc1knFnDeYBcj6DS3rh3hi8+uFrOCRtfYdYSOSiZIE1VjMTFJKIWQXUUSFF+
+         7E/XiO9K/KtE9Ieh741lmY7ZttRjK2tUOCdu4CYZNTvLUzGPZdQM0B7kwg0m/VZhMAzq
+         i4eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=C4O+deHMw21i9ROh6aMeCmFYtLZ7zT5HJpdxL44+uwI=;
-        b=Rr2fIzybwEUoMsiG/dhz5RdurTxkt8Ia5+GOm/xiyFpMcpLfxB7KkhN4qZ+MozqNGy
-         p1dx6+weFIa+ZMcXxglp1SfDBaB+6Yhle80kJTze+cVcs64qJwWX//S6myI66pqNOJU4
-         FvMj+oFDS6DUD+YF2aKj+75KfktIaK9RAVYekizc/f9yGegumpmFalQssJ0PuQ54YdOq
-         6AvopVgvhAy+859Y8p04m9ePRjVGYsBZ61hxn3OsYOdFCekZTvZ6wpCxNqGmoGBECBKs
-         WbmOLGP4vB0IdLATCeZAauZhGYq5wb4rFIyOLmpKXqYP3N+Duz8EA/u3dBGVQNWOh/uv
-         lwhg==
-X-Gm-Message-State: ACgBeo14i3AJV0TNJifJ8AUmrH4MC1PBaJbg2ASi93A8pCvt4GrOTpW9
-        og2QCR5bwPaLkfSAnHtE4aXPhw==
-X-Google-Smtp-Source: AA6agR4fgxq/68/WWQn+yFOTbhC53pUpIBXclTppON1LvC+cb77XJAaWf6/2h68rIy+rMscuIaf75g==
-X-Received: by 2002:a05:6000:1ac8:b0:220:8168:126b with SMTP id i8-20020a0560001ac800b002208168126bmr16394237wry.288.1660119992494;
-        Wed, 10 Aug 2022 01:26:32 -0700 (PDT)
+        bh=bkzHlR+cUvVyHpzLk2ncuYHJ7GeFDJmOxDxvociFius=;
+        b=YZSAfJfR7A7nQEY4rhYm3BbUK5mpiBXyrNlzYEVyXKhcJEaQ/z7bcH47OIL3ReVPOI
+         CRh2ZVBSJCB8bx49Ut7QtE31oxOaLabCNnokUznGg+HTUHYzeECozQ81bjjJdP/lSpOx
+         R5KRBYD6GO1Ny5WbXmf9jZHUe0wo4enY1TCQMaP79rMP/spybGcuOLbnd+18jJUQuJSh
+         EdkQQ7bVgptsEGaNXf7lcTVYZ4F3Yjww1HK3UZLuQYCB3vABj5gZg7/vQ9laMfEnx1QW
+         Bo9+A7tBf0siAxYhnaE+caCQ7W3zEno4OAoU1k2zhhvv9GSM2PSRB1fWBIZ+kU+QB48N
+         1paQ==
+X-Gm-Message-State: ACgBeo3h2kXqXDjz7EdO6lAMymxTu3YoEkEej0NN4tZ7TMtGEsj5ByYt
+        3FgGT0UM02LOyLr4wjisR/Z6JQ==
+X-Google-Smtp-Source: AA6agR6FOObBLF2ZRKKvwD+BJSywE7pEYvvMSqdtOWnXacW0tRqX3vqVzvAqQq0dwRnFGT2e0ee5MQ==
+X-Received: by 2002:a5d:5273:0:b0:220:5d3e:c50f with SMTP id l19-20020a5d5273000000b002205d3ec50fmr17189776wrc.291.1660120489914;
+        Wed, 10 Aug 2022 01:34:49 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e26-20020a05600c4b9a00b003a500b612fcsm1533910wmp.12.2022.08.10.01.26.30
+        by smtp.googlemail.com with ESMTPSA id o4-20020a05600c4fc400b003a0375c4f73sm1504248wmq.44.2022.08.10.01.34.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 01:26:31 -0700 (PDT)
-Message-ID: <1514c4c3-32c6-4127-0fd0-9a244445ff9c@linaro.org>
-Date:   Wed, 10 Aug 2022 10:26:29 +0200
+        Wed, 10 Aug 2022 01:34:49 -0700 (PDT)
+Message-ID: <c7b3c6b3-1384-079c-fe76-dc1eca4f3ab2@linaro.org>
+Date:   Wed, 10 Aug 2022 10:34:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Subject: Re: [PATCH v5 00/33] New thermal OF code
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Michael Walle <michael@walle.cc>
 Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
         anarsoul@gmail.com, baolin.wang7@gmail.com,
         bjorn.andersson@linaro.org, broonie@kernel.org,
@@ -69,14 +70,12 @@ Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
         mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
         miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
         rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
-        Guenter Roeck <linux@roeck-us.net>
+        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com
 References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
  <20220808094216.928018-1-michael@walle.cc>
- <27c03303-9ee5-d9df-b7f2-016491fce9e5@linaro.org>
- <5adfe0882926d8f16c158d453069b37b@walle.cc>
+ <20220808102610.GA1969424@roeck-us.net>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <5adfe0882926d8f16c158d453069b37b@walle.cc>
+In-Reply-To: <20220808102610.GA1969424@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,43 +89,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Michael,
 
-On 10/08/2022 10:01, Michael Walle wrote:
-> Hi Daniel, >
-> Am 2022-08-09 10:23, schrieb Daniel Lezcano:
->>> On my second board
->>> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts). I get 
->>> the
->>> following error:
->>>
->>> [    6.292819] thermal_sys: Unable to find thermal zones description
->>> [    6.298872] thermal_sys: Failed to find thermal zone for hwmon id=0
->>> [    6.305375] lan966x-hwmon e2010180.hwmon: error -EINVAL: failed to 
->>> register hwmon device
->>> [    6.313508] lan966x-hwmon: probe of e2010180.hwmon failed with 
->>> error -22
->>>
->>> Again, is there seems to be something missing in the device tree. For 
->>> this
->>> board a device tree change should be easily doable, as it is still in
->>> development.
->>
->> Logically with the fixes I've send these errors should have gone. Just
->> a pr_info should appear "... not attached to any thermal zone".
->>
->> If I'm correct, without or with the changes (new thermal OF code +
->> fixes), the hwmon message is the same and the hwmon thermal zone is
->> not created. So no regression hopefully.
->>
->> Is it possible to check that?
-> 
-> Yes, I'm no more seeing any error messages and the device
-> is probed successfully. Both on the kswitch board as well as on
-> the sl28 board.
+Hi Guenter,
 
-Great! thanks for testing
+On 08/08/2022 12:26, Guenter Roeck wrote:
+> On Mon, Aug 08, 2022 at 11:42:16AM +0200, Michael Walle wrote:
 
+[ ... ]
+
+> It would also mean that all hwmon drivers registering a thermal zone sensor
+> would fail to register unless such a thermal zone actually exists. This
+> would make the whole concept of having the hwmon core register thermal
+> zone sensors impossible. I have no idea how this is expected to work now,
+> but there is an apparent flaw in the logic. That means I withdraw my
+> Acked-by: for the hwmon patches in this series until it is guaranteed
+> that hwmon registration does not fail as above if there is no thermal
+> zone associated with a sensor.
+
+I tried to figure out where we are not in sync and I suspect there is a 
+misunderstanding from my side of your initial statement.
+
+I understood you meant the thermal zone can not be created with the 
+hwmon if there is no thermal zone description and that was the case before.
+
+But actually, I suspect I misunderstood and you meant if the thermal OF 
+registration fails, the hwmon creation fails for the hwmon subsystem, 
+and before the changes it was created anyway.
+
+Is that correct ?
+
+If yes, the change -EINVAL --> -ENODEV fixes the issue, shall I consider 
+in this case your Acked-by ?
+
+Thanks
    -- Daniel
 
 -- 
