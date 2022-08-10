@@ -2,89 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC7958EB99
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 13:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC1C58EBFA
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbiHJL6a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Aug 2022 07:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S230219AbiHJM3P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Aug 2022 08:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiHJL63 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 07:58:29 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD082FB0;
-        Wed, 10 Aug 2022 04:58:28 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id n8so22910179yba.2;
-        Wed, 10 Aug 2022 04:58:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9JfEXzMfTVhBDtMwX1BN6FvfajX+PQlhsv3StGgPVb8=;
-        b=jJB4IWtjqPXUxg9OSUQwxC311sMqioUSXU1pPhSzV9LoW+WPq767YdKr6tfu2tabm4
-         Cz9wCEy05J4/fXagJngDkuZ0p3tJS78cmRgfIngu18TLZ0eYTePR6yc2yAa/M5UUP5TH
-         FG+KQ9EXD7tIDil9rZKP9Nek0heKZiyXrv6JdoiCY4Nv5luBoyWP+iCfm0YcRd4lhnC1
-         DUHt6Xi52oq4yeYp43y6/V7ojQ74R3ccQqnNLTzBVKKrorcPLLWniyOqWo+X+WFW3g2O
-         3gd8Jg/7irXdRmLSI4V2S9JzYXsvJ1il4MkJkTBpD6+b1PP/GyNpGZ3mXBZFF5WGYEUl
-         H6iA==
-X-Gm-Message-State: ACgBeo0nzIFBFmVdbPHWOOJsXkf7iDMLakJ1/HD4iZdr5ekXi9f0zzuY
-        aTSyTf6W3rUbzX3B0njles4YKzqJSLVzBsNmnR0=
-X-Google-Smtp-Source: AA6agR51DXRic5c2iVTQUsTfKSb8eitFjRfO/qijCuvkAKyoV4mVlvBjWayvltMVuTJJPkSWi/YA7mjcqIMl5wS0OwM=
-X-Received: by 2002:a25:24ca:0:b0:67c:439f:1d59 with SMTP id
- k193-20020a2524ca000000b0067c439f1d59mr2477278ybk.81.1660132707603; Wed, 10
- Aug 2022 04:58:27 -0700 (PDT)
+        with ESMTP id S232241AbiHJM3N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:29:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A57987437F;
+        Wed, 10 Aug 2022 05:29:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08CDE1FB;
+        Wed, 10 Aug 2022 05:29:13 -0700 (PDT)
+Received: from [10.57.13.63] (unknown [10.57.13.63])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EFD23F5A1;
+        Wed, 10 Aug 2022 05:29:10 -0700 (PDT)
+Message-ID: <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
+Date:   Wed, 10 Aug 2022 13:29:08 +0100
 MIME-Version: 1.0
-References: <20220810100731.749317-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20220810100731.749317-1-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 10 Aug 2022 13:58:15 +0200
-Message-ID: <CAJZ5v0iv4oMsZyUg7-YY6cD2jsYyLdi7sDeE0GEm814kCEAvmQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal/core: Add missing EXPORT_SYMBOL_GPL
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Content-Language: en-US
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, vschneid@redhat.com,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220728221043.4161903-2-jeremy.linton@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 12:07 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The function thermal_zone_device_register_with_trips() is not exported
-> for modules.
->
-> Add the missing EXPORT_SYMBOL_GPL().
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Hi Jeremy,
 
-A Fixes tag missing?
++CC Valentin since he might be interested in this finding
++CC Ionela, Dietmar
 
+I have a few comments for this patch.
+
+
+On 7/28/22 23:10, Jeremy Linton wrote:
+> PCC regions utilize a mailbox to set/retrieve register values used by
+> the CPPC code. This is fine as long as the operations are
+> infrequent. With the FIE code enabled though the overhead can range
+> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+> based machines.
+> 
+> So, before enabling FIE assure none of the registers used by
+> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+> enable a module parameter which can also disable it at boot or module
+> reload.
+> 
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
 > ---
->  drivers/thermal/thermal_core.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index b4c68410c158..10c979dce512 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1329,6 +1329,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
->         kfree(tz);
->         return ERR_PTR(result);
->  }
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
->
->  struct thermal_zone_device *thermal_zone_device_register(const char *type, int ntrips, int mask,
->                                                          void *devdata, struct thermal_zone_device_ops *ops,
-> --
-> 2.34.1
->
+>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>   include/acpi/cppc_acpi.h       |  5 +++++
+>   3 files changed, 61 insertions(+), 4 deletions(-)
+
+
+1. You assume that all platforms would have this big overhead when
+    they have the PCC regions for this purpose.
+    Do we know which version of HW mailbox have been implemented
+    and used that have this 2-11% overhead in a platform?
+    Do also more recent MHU have such issues, so we could block
+    them by default (like in your code)?
+
+2. I would prefer to simply change the default Kconfig value to 'n' for
+    the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
+    check code which disables it.
+    We have probably introduce this overhead for older platforms with
+    this commit:
+
+commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
+Author: Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Tue Jun 23 15:49:40 2020 +0530
+
+     cpufreq: CPPC: Add support for frequency invariance
+
+
+
+If the test server with this config enabled performs well
+in the stress-tests, then on production server the config may be
+set to 'y' (or 'm' and loaded).
+
+I would vote to not add extra code, which then after a while might be
+decided to bw extended because actually some HW is actually capable (so
+we could check in runtime and enable it). IMO this create an additional
+complexity in our diverse configuration/tunnable space in our code.
+
+When we don't compile-in this, we should fallback to old-style
+FIE, which has been used on these old platforms.
+
+BTW (I have to leave it here) the first-class solution for those servers
+is to implement AMU counters, so the overhead to retrieve this info is
+really low.
+
+Regards,
+Lukasz
