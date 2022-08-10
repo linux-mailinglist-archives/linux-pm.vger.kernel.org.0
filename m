@@ -2,103 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E6458EC24
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9A958EC2F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbiHJMii (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Aug 2022 08:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S232050AbiHJMlZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Aug 2022 08:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiHJMib (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:38:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C7C83F1D;
-        Wed, 10 Aug 2022 05:38:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29393B81C44;
-        Wed, 10 Aug 2022 12:38:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47DA7C433D6;
-        Wed, 10 Aug 2022 12:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660135107;
-        bh=vPpn+dGLzKb7Sc6Czii2tdPohCYiVuar8IVF4AUuPeQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KqEAwT2EOk+jDmHldnh6OQGmRp3C1Bt+kOGg/vQZDwNgQ95yt0/UllzC1sypkM381
-         VoVi47u2MxCTA2tW8qWivLBlk+l00O/4JLVXJ3cvwGzmntQ0Oq7uBsfiIzvJ9iTazK
-         ghO5qoaVrVkpq2fKn5AOGDJslZn5bROZXmJXdM2iJgVRsDv+UEzm9q8JxCkuoXWRkU
-         IFqY0XuBXi+3K/umTuNQcWvaxnbZIFO6vWxcyNt4UroEWmihU0qT23Npd0wmj31cDU
-         58V28sw+rBdPnA5z4ccojXUEWkaIckAAAA523IY012rVUYgB9i+wLLer4nQdFIG8sn
-         mY8IBclIh+1Eg==
-Date:   Wed, 10 Aug 2022 13:38:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, Andrew Davis <afd@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 5/5] dt-bindings: Drop Dan Murphy and Ricardo
- Rivera-Matos
-Message-ID: <YvOmu3KvVl5xxtgY@sirena.org.uk>
-References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
- <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S230442AbiHJMlZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:41:25 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC07D75FD5;
+        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso1981143pjl.4;
+        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=paIljyHrUvej+/v+fGWG6Ry2j3rdU6vBvSRVU4+Ng94=;
+        b=CNXtsRPrb/GrYK/cLLTUVSxVh2X5WYkC3jRbKLtfBZ2x6Su/TzrAztaLxy2clwDaqC
+         bVlb/4nrQ+h8TKXpnnFmrj/ksn7HWP+fYvQmj8fuvmf7ucuJoFdnVf6Ab9Zk21Fn0Vzu
+         nhhyqdX/qyyWYK2qPvLz2JiuuHBgl7UH9MG65Ap6gyCAXVns2NKLSiU3FiYh5ycsazru
+         Zs4qG0S2L152zYMTtciGSD19q1KPYmb0bYYQVMNd5J0WL2cFAcVLB5y/11ugPghc/elg
+         Obt9bcqzGslBJ6gB8Z/QB5nS3rsZEdyI1Gmq9MmiCOCr0fFmW/KF79be491zY5Vw8o1l
+         NGgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=paIljyHrUvej+/v+fGWG6Ry2j3rdU6vBvSRVU4+Ng94=;
+        b=CnE5UugXJsOMi9IocR/DuA+BNND6XbmSGZpO9qd2utOpMlhCIe+Gv4EyJak88KWj9t
+         kLr3Zg5F4im7fGuB0lA1NqngBbfdfBalfq6raCjjPkp3Qll3VGDjMWTfd2Qp4vzC9Hb8
+         Zcm8aeIENtUiA7owrkT9oGegZcFOZtBTGxOJdJAFCupAWtheQM5pWRydaQRH5vERvZoK
+         vb2wfIez7jeN65JnNvH1pUOjF2OBNshW/YpKOYaR7OmMasELycBb+VeJctURYfG5hpw0
+         pg8+7oO1ITkmTU5xyNWy5H0tYLyH6dlSpPe/cxy5ek0HP3MuVqF44S8aznLXrb9Jbcy/
+         OksQ==
+X-Gm-Message-State: ACgBeo3qWP6Izwa0jwV0RylLwtXC0DaFDWmgLkG1dRYO2putOj1zYLJ+
+        L7b8b3KeTOyCVz9MLhgTw2s=
+X-Google-Smtp-Source: AA6agR7XAtjBC8yH4qNC8ojRXQc2+OqICsXEy04ur7rcG7rKpV2LpLk4MuLwWRTziU5gsZlCfR8tXA==
+X-Received: by 2002:a17:90b:100b:b0:1f7:68e8:dcb1 with SMTP id gm11-20020a17090b100b00b001f768e8dcb1mr3575262pjb.198.1660135282341;
+        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r11-20020a170902c60b00b0016dd6929af5sm12601477plr.206.2022.08.10.05.41.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 05:41:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <684fa47a-d8a8-3b4c-7749-438128e8efec@roeck-us.net>
+Date:   Wed, 10 Aug 2022 05:41:17 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IEszeuZxEA7/bbtR"
-Content-Disposition: inline
-In-Reply-To: <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
-X-Cookie: First pull up, then pull down.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 26/33] hwmon/drivers/pm_bus: Switch to new of thermal
+ API
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Jean Delvare <jdelvare@suse.com>,
+        "open list:PMBUS HARDWARE MONITORING DRIVERS" 
+        <linux-hwmon@vger.kernel.org>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220804224349.1926752-27-daniel.lezcano@linexp.org>
+ <20220808102949.GC1969424@roeck-us.net>
+ <61109578-8136-d544-0bdc-d65c0736c566@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <61109578-8136-d544-0bdc-d65c0736c566@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 8/10/22 03:23, Daniel Lezcano wrote:
+> On 08/08/2022 12:29, Guenter Roeck wrote:
+>> On Fri, Aug 05, 2022 at 12:43:42AM +0200, Daniel Lezcano wrote:
+>>> The thermal OF code has a new API allowing to migrate the OF
+>>> initialization to a simpler approach. The ops are no longer device
+>>> tree specific and are the generic ones provided by the core code.
+>>>
+>>> Convert the ops to the thermal_zone_device_ops format and use the new
+>>> API to register the thermal zone with these generic ops.
+>>>
+>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+>>
+>> Subject tag should be something like "hwmon: (pmbus) ...".
+>>
+>> Also, from other patches it appears that this would or might result
+>> in a registration failure if a thermal zone for the sensor does not
+>> exist. This will need to be resolved before the patch is can be applied.
+> 
+> With the subject fixed, shall I add your Acked-by ?
+> 
 
---IEszeuZxEA7/bbtR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yes. With subject fixed:
 
-On Tue, Aug 09, 2022 at 07:27:52PM +0300, Krzysztof Kozlowski wrote:
-> Emails to Dan Murphy and Ricardo Rivera-Matos bounce ("550 Invalid
-> recipient").  Andrew Davis agreed to take over the bindings.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---IEszeuZxEA7/bbtR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLzproACgkQJNaLcl1U
-h9Btywf/Ylfto3rP12Is+BQJ2PghIgdBExy5qdKGCvvgKFln7xaTTlF3RaoXLQ0d
-VAqhXaSdvHBsHgWzJ8c/B9p71/s7K5CXfcIrGeVm2OY9ZH2Cows3vqURj5tO5/FE
-sEhZRrwYC2bI4okDihJglpf7HSCZT6OjniTKbc7sk3HP3W77xpCu9VPLfBCDreh0
-WI0Uu3/vVOEsDt4IgAHXlqNqbRjQD2Rhwesx2PRPNpzrI7hCZ+qHORgTFlD7Qx3F
-Qa8wcybPT0S6C5o/et9+rajj4M4plbo6uNxd9B4rrTYzLMUDZsMwZOpTkCiMhz7F
-lgDRHQHDel322uDH+eBVQB/Aum7p+g==
-=2qBa
------END PGP SIGNATURE-----
-
---IEszeuZxEA7/bbtR--
+Thanks,
+Guenter
