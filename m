@@ -2,118 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC1C58EBFA
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E6458EC24
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiHJM3P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Aug 2022 08:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S231896AbiHJMii (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Aug 2022 08:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbiHJM3N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:29:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A57987437F;
-        Wed, 10 Aug 2022 05:29:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08CDE1FB;
-        Wed, 10 Aug 2022 05:29:13 -0700 (PDT)
-Received: from [10.57.13.63] (unknown [10.57.13.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EFD23F5A1;
-        Wed, 10 Aug 2022 05:29:10 -0700 (PDT)
-Message-ID: <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
-Date:   Wed, 10 Aug 2022 13:29:08 +0100
+        with ESMTP id S232080AbiHJMib (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:38:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C7C83F1D;
+        Wed, 10 Aug 2022 05:38:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29393B81C44;
+        Wed, 10 Aug 2022 12:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47DA7C433D6;
+        Wed, 10 Aug 2022 12:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660135107;
+        bh=vPpn+dGLzKb7Sc6Czii2tdPohCYiVuar8IVF4AUuPeQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KqEAwT2EOk+jDmHldnh6OQGmRp3C1Bt+kOGg/vQZDwNgQ95yt0/UllzC1sypkM381
+         VoVi47u2MxCTA2tW8qWivLBlk+l00O/4JLVXJ3cvwGzmntQ0Oq7uBsfiIzvJ9iTazK
+         ghO5qoaVrVkpq2fKn5AOGDJslZn5bROZXmJXdM2iJgVRsDv+UEzm9q8JxCkuoXWRkU
+         IFqY0XuBXi+3K/umTuNQcWvaxnbZIFO6vWxcyNt4UroEWmihU0qT23Npd0wmj31cDU
+         58V28sw+rBdPnA5z4ccojXUEWkaIckAAAA523IY012rVUYgB9i+wLLer4nQdFIG8sn
+         mY8IBclIh+1Eg==
+Date:   Wed, 10 Aug 2022 13:38:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, Andrew Davis <afd@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 5/5] dt-bindings: Drop Dan Murphy and Ricardo
+ Rivera-Matos
+Message-ID: <YvOmu3KvVl5xxtgY@sirena.org.uk>
+References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+ <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
- regions
-Content-Language: en-US
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, vschneid@redhat.com,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20220728221043.4161903-1-jeremy.linton@arm.com>
- <20220728221043.4161903-2-jeremy.linton@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220728221043.4161903-2-jeremy.linton@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IEszeuZxEA7/bbtR"
+Content-Disposition: inline
+In-Reply-To: <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
+X-Cookie: First pull up, then pull down.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jeremy,
 
-+CC Valentin since he might be interested in this finding
-+CC Ionela, Dietmar
+--IEszeuZxEA7/bbtR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have a few comments for this patch.
+On Tue, Aug 09, 2022 at 07:27:52PM +0300, Krzysztof Kozlowski wrote:
+> Emails to Dan Murphy and Ricardo Rivera-Matos bounce ("550 Invalid
+> recipient").  Andrew Davis agreed to take over the bindings.
 
+Acked-by: Mark Brown <broonie@kernel.org>
 
-On 7/28/22 23:10, Jeremy Linton wrote:
-> PCC regions utilize a mailbox to set/retrieve register values used by
-> the CPPC code. This is fine as long as the operations are
-> infrequent. With the FIE code enabled though the overhead can range
-> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-> based machines.
-> 
-> So, before enabling FIE assure none of the registers used by
-> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
-> enable a module parameter which can also disable it at boot or module
-> reload.
-> 
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> ---
->   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
->   include/acpi/cppc_acpi.h       |  5 +++++
->   3 files changed, 61 insertions(+), 4 deletions(-)
+--IEszeuZxEA7/bbtR
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-1. You assume that all platforms would have this big overhead when
-    they have the PCC regions for this purpose.
-    Do we know which version of HW mailbox have been implemented
-    and used that have this 2-11% overhead in a platform?
-    Do also more recent MHU have such issues, so we could block
-    them by default (like in your code)?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLzproACgkQJNaLcl1U
+h9Btywf/Ylfto3rP12Is+BQJ2PghIgdBExy5qdKGCvvgKFln7xaTTlF3RaoXLQ0d
+VAqhXaSdvHBsHgWzJ8c/B9p71/s7K5CXfcIrGeVm2OY9ZH2Cows3vqURj5tO5/FE
+sEhZRrwYC2bI4okDihJglpf7HSCZT6OjniTKbc7sk3HP3W77xpCu9VPLfBCDreh0
+WI0Uu3/vVOEsDt4IgAHXlqNqbRjQD2Rhwesx2PRPNpzrI7hCZ+qHORgTFlD7Qx3F
+Qa8wcybPT0S6C5o/et9+rajj4M4plbo6uNxd9B4rrTYzLMUDZsMwZOpTkCiMhz7F
+lgDRHQHDel322uDH+eBVQB/Aum7p+g==
+=2qBa
+-----END PGP SIGNATURE-----
 
-2. I would prefer to simply change the default Kconfig value to 'n' for
-    the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
-    check code which disables it.
-    We have probably introduce this overhead for older platforms with
-    this commit:
-
-commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
-Author: Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Tue Jun 23 15:49:40 2020 +0530
-
-     cpufreq: CPPC: Add support for frequency invariance
-
-
-
-If the test server with this config enabled performs well
-in the stress-tests, then on production server the config may be
-set to 'y' (or 'm' and loaded).
-
-I would vote to not add extra code, which then after a while might be
-decided to bw extended because actually some HW is actually capable (so
-we could check in runtime and enable it). IMO this create an additional
-complexity in our diverse configuration/tunnable space in our code.
-
-When we don't compile-in this, we should fallback to old-style
-FIE, which has been used on these old platforms.
-
-BTW (I have to leave it here) the first-class solution for those servers
-is to implement AMU counters, so the overhead to retrieve this info is
-really low.
-
-Regards,
-Lukasz
+--IEszeuZxEA7/bbtR--
