@@ -2,68 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E039958EC51
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42B558EC8F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbiHJMwg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Aug 2022 08:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
+        id S232405AbiHJM6b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Aug 2022 08:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbiHJMwd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:52:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B367FE66;
-        Wed, 10 Aug 2022 05:52:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232378AbiHJM6H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:58:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D6160525;
+        Wed, 10 Aug 2022 05:57:59 -0700 (PDT)
+Received: from mercury (dyndsl-095-033-155-153.ewe-ip-backbone.de [95.33.155.153])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8252861386;
-        Wed, 10 Aug 2022 12:52:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9738C433C1;
-        Wed, 10 Aug 2022 12:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660135951;
-        bh=EeZ6kGDwIthkNr0WdkLZfmH4fwpEIdTMd52+9j8dKtM=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 968926601C2A;
+        Wed, 10 Aug 2022 13:57:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660136277;
+        bh=AXUViYjkfsjlWnyiLgWqWN9MZttYpnjGIynZu5rUAaw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aKSO7imtRSUEtQHKowpG0xMVEWpNXtFKlhX8kwjtSm3OHAvoKIw9a3jb/YXBG3DhM
-         zadk7wKa859TkjrEwZapBVWJMVxWeL2buxjRDhNTKsPaFifA9kDJKkwbWQ+eyG9gl5
-         CZJEAi8DL74jcf0R/oR1FNAN3Z45VObIW23LdNWVNOr/arWPjlaXNYobkw4HREg5dH
-         ix71nyRaq47fwD+9eoiy4iopNg7U8mj6j8yWRa+Q+QP3MY40maYRdrF6CjoS/e0CFH
-         XIZXeHeAxq+KSt3BW8Q3cVHS6zyEGSXjCyIwOYzDX4/mgrY6rNoLHS6UKSF3AirTYl
-         6rmj86jxZ6ZlQ==
+        b=jDXgdsOidzYTu2oNC1erHn44vbS2vts5ReWdZHenahU9BENWCkA4038OA+Nwkkb+4
+         /kUOsqVguBjz/1jC3F/3t7A+gXlSVVaUyNWk07nXB7dJANymSbUxRqRYy/NimPHiiS
+         8TexTLunA86QqT9HLoeMK639uFUaEd+QyFrVsOa8lUvBsCK6Y53MhOqGIF8FJ/oDvL
+         0jPcOgPamgd6afMYuUC20rxuBlJHdk02soJI8TezMQTsf0BgCoubktSvLhHNq9SOpi
+         tgbaI3K6qgahfLujBtUwX+9h/7FcziktKvhn7YNwpMiqeyYQmJGwfD5r9CrDeT5NAS
+         42j7pvI156W/A==
 Received: by mercury (Postfix, from userid 1000)
-        id 027321060840; Wed, 10 Aug 2022 14:52:28 +0200 (CEST)
-Date:   Wed, 10 Aug 2022 14:52:28 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Lee Jones <lee@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Tinghan Shen <tinghan.shen@mediatek.com>, linux-pm@vger.kernel.org,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
+        id E7D8A1060840; Wed, 10 Aug 2022 14:57:55 +0200 (CEST)
+Date:   Wed, 10 Aug 2022 14:57:55 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v5 06/20] dt-bindings: power: mediatek: Add bindings for
- MediaTek SCPSYS
-Message-ID: <20220810125228.qmphht5g6xtrwoay@mercury.elektranox.org>
-References: <20220804021553.14867-1-tinghan.shen@mediatek.com>
- <20220804021553.14867-7-tinghan.shen@mediatek.com>
- <YvOXPOidrbySvFwZ@google.com>
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 5/5] dt-bindings: Drop Dan Murphy and Ricardo
+ Rivera-Matos
+Message-ID: <20220810125755.l6ou6imgbeuj37ir@mercury.elektranox.org>
+References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+ <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vmv57ibkudm7wwj2"
+        protocol="application/pgp-signature"; boundary="qodvu6jzbg5jdb43"
 Content-Disposition: inline
-In-Reply-To: <YvOXPOidrbySvFwZ@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,53 +76,101 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---vmv57ibkudm7wwj2
+--qodvu6jzbg5jdb43
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Lee,
+Hi,
 
-On Wed, Aug 10, 2022 at 12:32:12PM +0100, Lee Jones wrote:
-> On Thu, 04 Aug 2022, Tinghan Shen wrote:
+On Tue, Aug 09, 2022 at 07:27:52PM +0300, Krzysztof Kozlowski wrote:
+> Emails to Dan Murphy and Ricardo Rivera-Matos bounce ("550 Invalid
+> recipient").  Andrew Davis agreed to take over the bindings.
 >=20
-> > The System Control Processor System (SCPSYS) has several power
-> > management related tasks in the system. Add the bindings for it.
-> >=20
-> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../bindings/mfd/mediatek,mt8195-scpsys.yaml  | 67 +++++++++++++++++++
-> >  .../power/mediatek,power-controller.yaml      |  2 +-
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >=20
-> Sebastian,
+> ---
 >=20
-> Any issues with me applying this?
+> Changes since v1:
+> 1. Add Andrew Davis instead.
+> 2. Not adding accumulated ack due to change above.
+> ---
+=2E..
+>  Documentation/devicetree/bindings/power/supply/bq2515x.yaml    | 3 +--
+>  Documentation/devicetree/bindings/power/supply/bq256xx.yaml    | 2 +-
+>  Documentation/devicetree/bindings/power/supply/bq25980.yaml    | 3 +--
 
-No issues from my side, but I only handle things in power/reset and
-power/supply. The power domain related parts are usually handled by
-the SoC maintainer, i.e. Matthias Brugger in this case.
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
 -- Sebastian
 
---vmv57ibkudm7wwj2
+> [...]
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> index 27db38577822..1a1b240034ef 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI bq2515x 500-mA Linear charger family
+> =20
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+> =20
+>  description: |
+>    The BQ2515x family is a highly integrated battery charge management IC=
+ that
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> index 91abe5733c41..82f382a7ffb3 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI bq256xx Switch Mode Buck Charger
+> =20
+>  maintainers:
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+> =20
+>  description: |
+>    The bq256xx devices are a family of highly-integrated battery charge
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> index 4883527ab5c7..b687b8bcd705 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI BQ25980 Flash Charger
+> =20
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> +  - Andrew Davis <afd@ti.com>
+> =20
+>  description: |
+>    The BQ25980, BQ25975, and BQ25960 are a series of flash chargers inten=
+ded
+> [...]
+
+--qodvu6jzbg5jdb43
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmLzqgIACgkQ2O7X88g7
-+pplsQ//ZfSJ5/za7EWKT8zgB16un9iktfuKPLwTAwtR3u8YHSppWNyWtyBziJG6
-t6pM2qpCGNNocw0wdP3KimWTBp3pLALaRE042raxDxKOKxKAn7ZYhYcxFQhFVaaR
-KTG8mvfFCW+2EwbFXGId1v730W+nfETk/8IgRS5aqUnP0B/s9Yot4q8ehyzPP/4o
-8fEWm38pzxIPVDKJC6FajFFJBehozxSvd2ukodt/eQzZ1j+OeZ8NB3gKpPOCDgm2
-4qX/mFLDCsL7Ru3sdh2NJhblo/MzWn05nlXvIUJMYHKwMg1UaUDmnWBu18d3h2Bi
-3iRwTmuxKitm+P4B1tykugUR6npZkx5hItlji+a3qKgTwhWvBSYiJJg7mMUOyTjW
-ZdacoZdQwG1Pye8opVpYO14iz3qOWAFNJEgd4PWeQhuSg/w494wzy1SXzu9K7zct
-z+sZEOEO8EHpkvkMsonIcZyl/GTOpeyIeQ7/2nGRHP0Tt+XkVovcbV1j+9s3KU2N
-0PN9vRGRCwGr5FBcvwOVCr+i2bdZgZqPttMTiePAhYXpE2yZWYzYZ/KeBauxGGOa
-yhsq0dmX37VBO9WeMcJVnDA5x2hDyM9s40jFRSowkHOKKur+GKVM2uIZDTcHx+Eh
-2QshyHefaB3BpL3Qpc+tV0LXx17f4/iJeB7gf8IiEnxn8dW86Q8=
-=S5X0
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmLzq1MACgkQ2O7X88g7
++prR3RAAguNXBrOMU277Ao4ijuGi+QU6SzrNjySRdOiRVoG9Jn3Zo3D6969KokAP
+JfuYQLSClNfcDgaNVQPpXT5TG377q5ZerWaqfEFCXAy+cp0RIZWXdpDhb+2A5gCU
+gISuq5p61V0AQM6xyU+E9q+q9ZzQ8Qjjo2ckVFCqfcxe3pX4YUUXYu39ieKJqX7G
+juQsf03XgmKXT9PfPpBvMpPe7PqYlFzZqkuvfpNILNtksDBasHS2Tm998RXq3OTe
+hTlItrD65Mb4EEkhtuhj4Xkm6VbW6PXMAJiTCWraJsBZV+aZMdPWeoC5RsnhEDjM
+XcwnQGGy7VZYotwFMBYv1AtxiP6YNim1aYyReT/LA/+HBcIBGmD8Q0v3tgO9ruou
+Gx3DlkUgoo+q1cOLP0dzb+BWxSEx1VlNwONhIv/5bciur7BLTgVPt/1Vt2qLle0V
+1oEq90rdpUTv2poZn3cTd7+Qt99Eld3cVZ/JUFxrXywZkDuKMXB0Krnbg+sOeLfn
+dCWCe7fKeqgEIL71rna2j5BwCGFazcU3JeB2WdncDLqpFQaeb/0OPB8zw6RnC+oM
+PA+3qhtyhYYbcRMP7enDBV4skvpNTlJMD+tYQdzFWkcotVCvXho+7mI/Us+KZwBC
++CQWd+WnX+l91INLir3KpF7b3yR5BZeo5MYQND5yD7ZKylUXcRo=
+=yGj8
 -----END PGP SIGNATURE-----
 
---vmv57ibkudm7wwj2--
+--qodvu6jzbg5jdb43--
