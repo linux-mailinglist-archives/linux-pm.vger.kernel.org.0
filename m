@@ -2,93 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F9D58EB2A
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 13:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9957E58EB52
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 13:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiHJLW1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Aug 2022 07:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        id S230251AbiHJLcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Aug 2022 07:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiHJLW0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 07:22:26 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8D074DDD
-        for <linux-pm@vger.kernel.org>; Wed, 10 Aug 2022 04:22:24 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id c17so20789991lfb.3
-        for <linux-pm@vger.kernel.org>; Wed, 10 Aug 2022 04:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=KJVvJs/hdcnNTEwCF+Y2HOBUXT3s0+UCv0dsySn/kTc=;
-        b=Wc6xwPj14r6834HGH06kBOKr+qJOUEjLLLFWPKNrfoTPN8zWQS2+uRj1SPdiGIof0z
-         s64Fqt86/H8ud+6jATOixEykMP5zx4babwJaLYHxvxOjOz1pGnMiVFuAUwdrNsvWIPoI
-         tlerqScsK+OTQy52wmGf6Zp48yDF29XG4dCPb4zUOEt0/L+Z9lfN4x2x0K1+36JCe6/M
-         qlVFDwlPllTgTSxO8ft/gctYqGJ2xJeiktkCEliPjW2O+5WYwHsP4SUS6qqxv2fB2oiM
-         rqjFES6VXDuYcgTmSafmFIX8ovwakhhEAlic102vVpYtp6bFSbgpFLjf5IJ1kX5pB2uw
-         DiiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=KJVvJs/hdcnNTEwCF+Y2HOBUXT3s0+UCv0dsySn/kTc=;
-        b=yFoAubSDl1elI3iM7ztP1yK2FseGPAHNWOMRr0EEXCW6w9wVzY6odit0GlWoyeL9dd
-         HwJSD8Aumf9s0nqRAnHZ4DD95p8wbuL+HK4zVphTKueLRxkK2E42wBp9E37vynBOtFP1
-         MeLMGmEpAEsCi1UT4In/xm3VEqV2GcrYtLX1zvwMsvl5XjKVZiT7peW5MzFBRuXQD2pf
-         QC+TeVtFLnYvu9kzIU5JBIdtXX72Eadbh4/CB8C/aXbUmPocui+BYs2kRrbsBcUlPf91
-         y/1SPDiYc+cS3EKzZ4WOGGYexrVDiEacsEvn981QpuXUyyjpcFCaGYM4chauOsRFQDPR
-         X/qQ==
-X-Gm-Message-State: ACgBeo14spXEv0vfIn+3pHLnr6CssibOhjuyJP5XebVaLaem2nVSH5Rt
-        JNCIUB4rVWYU+qtfyOSYimiZTQ==
-X-Google-Smtp-Source: AA6agR5sBpeeQBdFjzS2wtiHcwYuXfYhIEICyKLtIACFba5DjV5ePna+qqSY3kuQDsfF0uLZsjdGdg==
-X-Received: by 2002:a05:6512:c13:b0:48b:3b30:637d with SMTP id z19-20020a0565120c1300b0048b3b30637dmr8195257lfu.447.1660130543208;
-        Wed, 10 Aug 2022 04:22:23 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id u18-20020ac258d2000000b0048af464559esm299979lfo.293.2022.08.10.04.22.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 04:22:22 -0700 (PDT)
-Message-ID: <f69bf678-0188-7178-7542-9773c15c1463@linaro.org>
-Date:   Wed, 10 Aug 2022 14:22:20 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 4/5] dt-bindings: Drop Robert Jones
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        with ESMTP id S232100AbiHJLcW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 07:32:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC6D75FFB;
+        Wed, 10 Aug 2022 04:32:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15B40611FA;
+        Wed, 10 Aug 2022 11:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB0FC433D7;
+        Wed, 10 Aug 2022 11:32:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660131139;
+        bh=NkcJyERgdIfhg4FFRFHacZj2nr13SGeMr4Bp2YOafuY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sJot657ZGnx73hIykDoU0y5vR+HN2FlwGhJKqUgKv2ZKYqs2KeD1zqtMCIUMdLZxc
+         ZbsVgtgjmI9eKPiZ6kSwrgseW0TZoatADvoT0eqb3fRf/HswgSrdwUN5988GLFtLpw
+         Q3dPupRicyECL1m5qhAhUwLBg+q13c8ra/HYV0MM6xBSrFs7uHWsuCp7r/2/+Kte10
+         a32UmFANFxr65ghbDPwhkPvnPmRYwdkglZVx5RG0PAEIA7FvC6paR0UARs5SMDyi3r
+         5oAz6rHnPWA433OE2i9+gAqvNsz1CbrOB4gGb5qBokcLEuCqAMX+b7hWhGHZkVZI4h
+         tHHWMD8DS2e0Q==
+Date:   Wed, 10 Aug 2022 12:32:12 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
- <20220809162752.10186-5-krzysztof.kozlowski@linaro.org>
- <YvOP9qr2CR9n1FCe@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YvOP9qr2CR9n1FCe@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>, iommu@lists.linux.dev,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v5 06/20] dt-bindings: power: mediatek: Add bindings for
+ MediaTek SCPSYS
+Message-ID: <YvOXPOidrbySvFwZ@google.com>
+References: <20220804021553.14867-1-tinghan.shen@mediatek.com>
+ <20220804021553.14867-7-tinghan.shen@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220804021553.14867-7-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,27 +67,24 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/08/2022 14:01, Lee Jones wrote:
-> On Tue, 09 Aug 2022, Krzysztof Kozlowski wrote:
-> 
->> Emails to Robert Jones bounce ("550 5.2.1 The email account that you
->> tried to reach is disabled").
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>
->> ---
->>
->> For maintainers entry see:
->> https://lore.kernel.org/all/20220808111113.71890-1-krzysztof.kozlowski@linaro.org/
->> ---
->>  Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml | 2 +-
->>  Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml    | 1 -
-> 
-> Any reason to submit these as one patch?
+On Thu, 04 Aug 2022, Tinghan Shen wrote:
 
-Less work for me, less work for maintainer applying and sending fixes. I
-think this could go via Rob's tree as fixes for current cycle.
+> The System Control Processor System (SCPSYS) has several power
+> management related tasks in the system. Add the bindings for it.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/mfd/mediatek,mt8195-scpsys.yaml  | 67 +++++++++++++++++++
+>  .../power/mediatek,power-controller.yaml      |  2 +-
 
-Best regards,
-Krzysztof
+Sebastian,
+
+Any issues with me applying this?
+
+>  2 files changed, 68 insertions(+), 1 deletion(-)
+>  create mode 100644
+>  Documentation/devicetree/bindings/mfd/mediatek,mt8195-scpsys.yaml
+
+-- 
+Lee Jones [李琼斯]
