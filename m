@@ -2,122 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9A958EC2F
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95DE58EC4A
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 14:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiHJMlZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Aug 2022 08:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S231368AbiHJMv1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Aug 2022 08:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiHJMlZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:41:25 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC07D75FD5;
-        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso1981143pjl.4;
-        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=paIljyHrUvej+/v+fGWG6Ry2j3rdU6vBvSRVU4+Ng94=;
-        b=CNXtsRPrb/GrYK/cLLTUVSxVh2X5WYkC3jRbKLtfBZ2x6Su/TzrAztaLxy2clwDaqC
-         bVlb/4nrQ+h8TKXpnnFmrj/ksn7HWP+fYvQmj8fuvmf7ucuJoFdnVf6Ab9Zk21Fn0Vzu
-         nhhyqdX/qyyWYK2qPvLz2JiuuHBgl7UH9MG65Ap6gyCAXVns2NKLSiU3FiYh5ycsazru
-         Zs4qG0S2L152zYMTtciGSD19q1KPYmb0bYYQVMNd5J0WL2cFAcVLB5y/11ugPghc/elg
-         Obt9bcqzGslBJ6gB8Z/QB5nS3rsZEdyI1Gmq9MmiCOCr0fFmW/KF79be491zY5Vw8o1l
-         NGgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=paIljyHrUvej+/v+fGWG6Ry2j3rdU6vBvSRVU4+Ng94=;
-        b=CnE5UugXJsOMi9IocR/DuA+BNND6XbmSGZpO9qd2utOpMlhCIe+Gv4EyJak88KWj9t
-         kLr3Zg5F4im7fGuB0lA1NqngBbfdfBalfq6raCjjPkp3Qll3VGDjMWTfd2Qp4vzC9Hb8
-         Zcm8aeIENtUiA7owrkT9oGegZcFOZtBTGxOJdJAFCupAWtheQM5pWRydaQRH5vERvZoK
-         vb2wfIez7jeN65JnNvH1pUOjF2OBNshW/YpKOYaR7OmMasELycBb+VeJctURYfG5hpw0
-         pg8+7oO1ITkmTU5xyNWy5H0tYLyH6dlSpPe/cxy5ek0HP3MuVqF44S8aznLXrb9Jbcy/
-         OksQ==
-X-Gm-Message-State: ACgBeo3qWP6Izwa0jwV0RylLwtXC0DaFDWmgLkG1dRYO2putOj1zYLJ+
-        L7b8b3KeTOyCVz9MLhgTw2s=
-X-Google-Smtp-Source: AA6agR7XAtjBC8yH4qNC8ojRXQc2+OqICsXEy04ur7rcG7rKpV2LpLk4MuLwWRTziU5gsZlCfR8tXA==
-X-Received: by 2002:a17:90b:100b:b0:1f7:68e8:dcb1 with SMTP id gm11-20020a17090b100b00b001f768e8dcb1mr3575262pjb.198.1660135282341;
-        Wed, 10 Aug 2022 05:41:22 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r11-20020a170902c60b00b0016dd6929af5sm12601477plr.206.2022.08.10.05.41.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 05:41:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <684fa47a-d8a8-3b4c-7749-438128e8efec@roeck-us.net>
-Date:   Wed, 10 Aug 2022 05:41:17 -0700
+        with ESMTP id S230378AbiHJMv1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 08:51:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD638647E1;
+        Wed, 10 Aug 2022 05:51:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 61B931FB;
+        Wed, 10 Aug 2022 05:51:26 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F2EC3F67D;
+        Wed, 10 Aug 2022 05:51:25 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 13:51:23 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Jeremy Linton <jeremy.linton@arm.com>, rafael@kernel.org,
+        lenb@kernel.org, viresh.kumar@linaro.org, robert.moore@intel.com,
+        devel@acpica.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vschneid@redhat.com, Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Message-ID: <YvOpy69JkluN4ITK@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+ <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 26/33] hwmon/drivers/pm_bus: Switch to new of thermal
- API
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
-        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
-        baolin.wang7@gmail.com, f.fainelli@gmail.com,
-        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
-        glaroque@baylibre.com, miquel.raynal@bootlin.com,
-        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
-        matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Jean Delvare <jdelvare@suse.com>,
-        "open list:PMBUS HARDWARE MONITORING DRIVERS" 
-        <linux-hwmon@vger.kernel.org>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220804224349.1926752-27-daniel.lezcano@linexp.org>
- <20220808102949.GC1969424@roeck-us.net>
- <61109578-8136-d544-0bdc-d65c0736c566@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <61109578-8136-d544-0bdc-d65c0736c566@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/10/22 03:23, Daniel Lezcano wrote:
-> On 08/08/2022 12:29, Guenter Roeck wrote:
->> On Fri, Aug 05, 2022 at 12:43:42AM +0200, Daniel Lezcano wrote:
->>> The thermal OF code has a new API allowing to migrate the OF
->>> initialization to a simpler approach. The ops are no longer device
->>> tree specific and are the generic ones provided by the core code.
->>>
->>> Convert the ops to the thermal_zone_device_ops format and use the new
->>> API to register the thermal zone with these generic ops.
->>>
->>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
->>
->> Subject tag should be something like "hwmon: (pmbus) ...".
->>
->> Also, from other patches it appears that this would or might result
->> in a registration failure if a thermal zone for the sensor does not
->> exist. This will need to be resolved before the patch is can be applied.
+Hi folks,
+
+On Wednesday 10 Aug 2022 at 13:29:08 (+0100), Lukasz Luba wrote:
+> Hi Jeremy,
 > 
-> With the subject fixed, shall I add your Acked-by ?
+> +CC Valentin since he might be interested in this finding
+> +CC Ionela, Dietmar
+> 
+> I have a few comments for this patch.
+> 
+> 
+> On 7/28/22 23:10, Jeremy Linton wrote:
+> > PCC regions utilize a mailbox to set/retrieve register values used by
+> > the CPPC code. This is fine as long as the operations are
+> > infrequent. With the FIE code enabled though the overhead can range
+> > from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+> > based machines.
+> > 
+> > So, before enabling FIE assure none of the registers used by
+> > cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+> > enable a module parameter which can also disable it at boot or module
+> > reload.
+> > 
+> > Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> > ---
+> >   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+> >   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+> >   include/acpi/cppc_acpi.h       |  5 +++++
+> >   3 files changed, 61 insertions(+), 4 deletions(-)
+> 
+> 
+> 1. You assume that all platforms would have this big overhead when
+>    they have the PCC regions for this purpose.
+>    Do we know which version of HW mailbox have been implemented
+>    and used that have this 2-11% overhead in a platform?
+>    Do also more recent MHU have such issues, so we could block
+>    them by default (like in your code)?
+> 
+> 2. I would prefer to simply change the default Kconfig value to 'n' for
+>    the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
+>    check code which disables it.
+>    We have probably introduce this overhead for older platforms with
+>    this commit:
+> 
+> commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
+> Author: Viresh Kumar <viresh.kumar@linaro.org>
+> Date:   Tue Jun 23 15:49:40 2020 +0530
+> 
+>     cpufreq: CPPC: Add support for frequency invariance
+> 
+> 
+> 
+> If the test server with this config enabled performs well
+> in the stress-tests, then on production server the config may be
+> set to 'y' (or 'm' and loaded).
+> 
+> I would vote to not add extra code, which then after a while might be
+> decided to bw extended because actually some HW is actually capable (so
+> we could check in runtime and enable it). IMO this create an additional
+> complexity in our diverse configuration/tunnable space in our code.
 > 
 
-Yes. With subject fixed:
+I agree that having CONFIG_ACPI_CPPC_CPUFREQ_FIE default to no is the
+simpler solution but it puts the decision in the hands of platform
+providers which might result in this functionality not being used most
+of the times, if at all. This being said, the use of CPPC counters is
+meant as a last resort for FIE, if the platform does not have AMUs. This
+is why I recommended this to default to no in the review of the original
+patches.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+But I don't see these runtime options as adding a lot of complexity
+and therefore agree with the idea of this patch, versus the config
+change above, with two design comments:
+ - Rather than having a check for fie_disabled in multiple init and exit
+   functions I think the code should be slightly redesigned to elegantly
+   bail out of most functions if cppc_freq_invariance_init() failed.
+ - Given the multiple options to disable this functionality (config,
+   PCC check), I don't see a need for a module parameter or runtime user
+   input, unless we make that overwrite all previous decisions, as in: if
+   CONFIG_ACPI_CPPC_CPUFREQ_FIE=y, even if cppc_perf_ctrs_in_pcc(), if
+   the fie_disabled module parameter is no, then counters should be used
+   for FIE.
 
 Thanks,
-Guenter
+Ionela.
+
+
+> When we don't compile-in this, we should fallback to old-style
+> FIE, which has been used on these old platforms.
+> 
+> BTW (I have to leave it here) the first-class solution for those servers
+> is to implement AMU counters, so the overhead to retrieve this info is
+> really low.
+> 
+> Regards,
+> Lukasz
