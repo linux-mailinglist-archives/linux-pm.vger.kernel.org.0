@@ -2,99 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DEEE58EF06
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 17:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1A658EF72
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Aug 2022 17:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiHJPLk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Aug 2022 11:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S230359AbiHJPcI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Aug 2022 11:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiHJPLj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 11:11:39 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840186555E;
-        Wed, 10 Aug 2022 08:11:38 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id v185so12351366ioe.11;
-        Wed, 10 Aug 2022 08:11:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=VdGy62arhSt+BL4EouUN4IOHP2gTgnK0/wSx3k0+9GQ=;
-        b=p37LXXtLjMmIAU65imJU+wvg6/LUkO86YE89axN8BOwgPRTamgDuZl6PptzZ75cZIw
-         RijsKK4+zwCMTAR9Jesc81TptEB3ScbH7OxFD8X1Ja7qxcPAa6w0X9GFcLZyIzG5AvXK
-         4MoAVHocMX5EAF5kHOjx55dbDEoxnumfL0Bjtujx6rKvTc55ewAZ37DzrKdyWp7uWB4v
-         Y+HyW7QYVipqmnCP4gFfBQLj3mbSPRz1e3Y+wOwGp0/P8rTb7L7q/njtSG69Z78OPzEX
-         LnAeiAyBPxscaIeUtbyW4s2EhGntNCvJi377S5W++5NRtyXKbSrHNqM9wA89JAnuMWQF
-         zdGw==
-X-Gm-Message-State: ACgBeo0qIJod+uWvEc4Y5W99mjYgq2xTf+5bC0pv/0Y0RXtCGwxZAty2
-        M/4pNjix1FfFZ4ieS0n2NmVipX2g0g==
-X-Google-Smtp-Source: AA6agR7WvN3Kq0NUIrMMMSYd3sVfG//5Whijw3XcGTtSkmrFdqmuuuPSGfS3vF6YdeztcytZilJZnQ==
-X-Received: by 2002:a05:6638:380c:b0:342:ceb9:7af2 with SMTP id i12-20020a056638380c00b00342ceb97af2mr9653346jav.227.1660144297690;
-        Wed, 10 Aug 2022 08:11:37 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id bs27-20020a056638451b00b0033f51f165e3sm7487923jab.140.2022.08.10.08.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 08:11:37 -0700 (PDT)
-Received: (nullmailer pid 4155387 invoked by uid 1000);
-        Wed, 10 Aug 2022 15:11:36 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-In-Reply-To: <20220810030500.2793882-2-bjorn.andersson@linaro.org>
-References: <20220810030500.2793882-1-bjorn.andersson@linaro.org> <20220810030500.2793882-2-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Lenovo Yoga C630 EC
-Date:   Wed, 10 Aug 2022 09:11:36 -0600
-Message-Id: <1660144296.239515.4155386.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229924AbiHJPcH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Aug 2022 11:32:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB455658C;
+        Wed, 10 Aug 2022 08:32:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E00A1424;
+        Wed, 10 Aug 2022 08:32:05 -0700 (PDT)
+Received: from [10.57.42.77] (unknown [10.57.42.77])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 73B813F67D;
+        Wed, 10 Aug 2022 08:32:02 -0700 (PDT)
+Message-ID: <2d0fc5d7-d484-f64c-fe50-18d18ad95fa2@arm.com>
+Date:   Wed, 10 Aug 2022 17:32:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, vschneid@redhat.com,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+ <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
+ <4da7cd19-4b98-9360-922f-d625c4ec55e0@arm.com>
+ <a7248e0c-f8cc-a7f1-f241-75faa7219961@arm.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <a7248e0c-f8cc-a7f1-f241-75faa7219961@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 09 Aug 2022 22:04:59 -0500, Bjorn Andersson wrote:
-> Add binding for the Embedded Controller found in the Qualcomm
-> Snapdragon-based Lenovo Yoga C630.
+
+
+On 8/10/22 16:37, Lukasz Luba wrote:
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  .../power/supply/lenovo,yoga-c630-ec.yaml     | 88 +++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
 > 
+> On 8/10/22 15:30, Jeremy Linton wrote:
+>> Hi,
+>>
+>> On 8/10/22 07:29, Lukasz Luba wrote:
+>>> Hi Jeremy,
+>>>
+>>> +CC Valentin since he might be interested in this finding
+>>> +CC Ionela, Dietmar
+>>>
+>>> I have a few comments for this patch.
+>>>
+>>>
+>>> On 7/28/22 23:10, Jeremy Linton wrote:
+>>>> PCC regions utilize a mailbox to set/retrieve register values used by
+>>>> the CPPC code. This is fine as long as the operations are
+>>>> infrequent. With the FIE code enabled though the overhead can range
+>>>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>>>> based machines.
+>>>>
+>>>> So, before enabling FIE assure none of the registers used by
+>>>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>>>> enable a module parameter which can also disable it at boot or module
+>>>> reload.
+>>>>
+>>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>>> ---
+>>>>    drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>>>>    drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>>>>    include/acpi/cppc_acpi.h       |  5 +++++
+>>>>    3 files changed, 61 insertions(+), 4 deletions(-)
+>>>
+>>>
+>>> 1. You assume that all platforms would have this big overhead when
+>>>      they have the PCC regions for this purpose.
+>>>      Do we know which version of HW mailbox have been implemented
+>>>      and used that have this 2-11% overhead in a platform?
+>>>      Do also more recent MHU have such issues, so we could block
+>>>      them by default (like in your code)?
+>>
+>> I posted that other email before being awake and conflated MHU with AMU
+>> (which could potentially expose the values directly). But the CPPC code
+>> isn't aware of whether a MHU or some other mailbox is in use. Either
+>> way, its hard to imagine a general mailbox with a doorbell/wait for
+>> completion handshake will ever be fast enough to consider running at the
+>> granularity this code is running at. If there were a case like that, the
+>> kernel would have to benchmark it at runtime to differentiate it from
+>> something that is talking over a slow link to a slowly responding mgmt
+>> processor.
+> 
+> Exactly, I'm afraid the same, that we would never get such fast
+> mailbox-based platform. Newer platforms would just use AMU, so
+> completely different code and no one would even bother to test if
+> their HW mailbox is fast-enough for this FIE purpose ;)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+To add some platform information, the following platforms are using
+CPPC through PCC channels (so mailboxes):
+- Cavium ThunderX2
+- Ampere eMAG
+- Ampere Altra
 
-yamllint warnings/errors:
+Fwiw, I can confirm the cppc_fie kthread can represent a significant load,
+with a utilization between 2% and 30%.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.example.dtb: embedded-controller@70: connector@1:ports: 'port@0' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.example.dtb: connector@1: ports: 'port@0' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/connector/usb-connector.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Regards,
+Pierre
