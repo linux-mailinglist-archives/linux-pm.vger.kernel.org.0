@@ -2,34 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D5E590579
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Aug 2022 19:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0738959092B
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 01:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235716AbiHKRN5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Aug 2022 13:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S235176AbiHKX2d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Aug 2022 19:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235915AbiHKRNg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Aug 2022 13:13:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58AF99E13F;
-        Thu, 11 Aug 2022 09:54:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4D44113E;
-        Thu, 11 Aug 2022 09:54:49 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.15.253])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C8AEE3F5A1;
-        Thu, 11 Aug 2022 09:54:47 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, viresh.kumar@linaro.org,
-        rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, lukasz.luba@arm.com
-Subject: [PATCH] cpufreq: check only freq_table in __resolve_freq()
-Date:   Thu, 11 Aug 2022 17:54:08 +0100
-Message-Id: <20220811165408.23027-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S234259AbiHKX2c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Aug 2022 19:28:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EE3A1D12;
+        Thu, 11 Aug 2022 16:28:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E73B615A7;
+        Thu, 11 Aug 2022 23:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3A2C433D6;
+        Thu, 11 Aug 2022 23:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660260511;
+        bh=K1pnTJgHJXUMiZr3606Z/nzCRJeYnqTRByEoRzKd/7o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HIRXHDytkWGeWocT5Y6EwMm+CJbDrEa9j6XN5O8Eu8tggS/sy0AK5M7lpp0JVOfij
+         GwbRDM16ekgHuzl4PZQ1EH23m7mMfd9mN69W1oPazdRXc+UJQox5HATkzxiEJSVxYI
+         88GgES/deOD/kahxMXRW7AsPEbUN2eK5TUzlaTUl5bulNsFfJh7TPxICCoxKbcO6o7
+         mKG3A0N2DqpMXWqbGBWvEJobFXCOJiK6Oij5pEwBQqo6yb6il5WS5IZJJYOOkLOFaP
+         RtkxSi4lDc8QQFsLFAIjgyoXswZqpDLP6/zE/WkyRPx3ZFACHiZpnOAPcsMe7ao55z
+         iEjSRKK7LSOFA==
+Received: by mercury (Postfix, from userid 1000)
+        id D59D6106085B; Fri, 12 Aug 2022 01:28:27 +0200 (CEST)
+Date:   Fri, 12 Aug 2022 01:28:27 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 6.0
+Message-ID: <20220811232827.e4ib5raltkbacmgc@mercury.elektranox.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pz5mswhhqer2puzz"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -37,32 +53,155 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The there is no need to check if the cpufreq driver implements callback
-cpufreq_driver::target_index. The logic in the __resolve_freq uses
-the frequency table available in the policy. It doesn't matter if the
-driver provides 'target_index' or 'target' callback. It just has to
-populate the 'policy->freq_table'.
 
-Thus, check only frequency table during the frequency resolving call.
+--pz5mswhhqer2puzz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/cpufreq/cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Linus,
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 7820c4e74289..69b3d61852ac 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -532,7 +532,7 @@ static unsigned int __resolve_freq(struct cpufreq_policy *policy,
- 
- 	target_freq = clamp_val(target_freq, policy->min, policy->max);
- 
--	if (!cpufreq_driver->target_index)
-+	if (!policy->freq_table)
- 		return target_freq;
- 
- 	idx = cpufreq_frequency_table_target(policy, target_freq, relation);
--- 
-2.17.1
+Sorry, a bit late this time. On the positive site all patches have
+been in linux-next for a month.
 
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.0
+
+for you to fetch changes up to c9d8468158adca6dffd2ff5b1befd35f75568b10:
+
+  power: supply: olpc_battery: Hold the reference returned by of_find_compatible_node (2022-07-17 01:05:54 +0200)
+
+----------------------------------------------------------------
+power supply and reset changes for the v6.0 series
+
+power-supply core:
+ - none
+
+drivers:
+ - pwr-mlxbf: new reset driver for Mellanox BlueField
+ - at91-reset: SAMA7G5 support
+ - ab8500: continue refurbishing
+ - misc. minor fixes
+
+----------------------------------------------------------------
+Asmaa Mnebhi (2):
+      power: reset: pwr-mlxbf: add BlueField SoC power control driver
+      power: reset: pwr-mlxbf: add missing include
+
+Claudiu Beznea (7):
+      dt-bindings: reset: convert Atmel/Microchip reset controller to YAML
+      dt-bindings: reset: atmel,at91sam9260-reset: add sama7g5 bindings
+      dt-bindings: reset: add sama7g5 definitions
+      power: reset: at91-reset: document structures and enums
+      power: reset: at91-reset: add at91_reset_data
+      power: reset: at91-reset: add reset_controller_dev support
+      power: reset: at91-reset: add support for SAMA7G5
+
+Jiang Jian (1):
+      power: supply: ab8500_fg: drop duplicated 'is' in comment
+
+Julia Lawall (1):
+      power: supply: lp8788: fix typo in comment
+
+Krzysztof Kozlowski (5):
+      dt-bindings: power: supply: bq24190: use regulator schema for child node
+      dt-bindings: power: supply: qcom,pm8941: use regulator schema for child node
+      dt-bindings: power: supply: qcom,pm8941: document usb-charge-current-limit
+      dt-bindings: power: supply: summit,smb347: use absolute path to schema
+      dt-bindings: power: reset: qcom,pshold: convert to dtschema
+
+Liang He (1):
+      power: supply: olpc_battery: Hold the reference returned by of_find_compatible_node
+
+Linus Walleij (4):
+      power: supply: ab8500: Respect charge_restart_voltage_uv
+      power: supply: ab8500: Exit maintenance if too low voltage
+      power: supply: ab8500: Add MAINTAINERS entry
+      power: supply: ab8500: Drop external charger leftovers
+
+Luca Ceresoli (1):
+      power: supply: max77976: update Luca Ceresoli's e-mail address
+
+Schspa Shi (1):
+      power: supply: Fix typo in power_supply_check_supplies
+
+Sebastian Reichel (1):
+      Merge tag 'at91-reset-sama7g5-signed' into psy-next
+
+Tetsuo Handa (1):
+      power: supply: ab8500: Remove flush_scheduled_work() call.
+
+Tom Rix (1):
+      power: reset: pwr-mlxbf: change rst_pwr_hid and low_pwr_hid from global to local variables
+
+Xiang wangx (1):
+      power: supply: bq24257: Fix syntax error in comments
+
+Xiaohui Zhang (1):
+      power: supply: cros_peripheral: Use struct_size() helper in kzalloc()
+
+Yang Li (1):
+      power: supply: Remove unnecessary print function dev_err()
+
+Zheng Bin (1):
+      power: supply: ab8500: add missing destroy_workqueue in ab8500_charger_bind
+
+ .../devicetree/bindings/arm/atmel-sysregs.txt      |  15 -
+ .../bindings/power/reset/msm-poweroff.txt          |  17 -
+ .../bindings/power/reset/qcom,pshold.yaml          |  35 ++
+ .../devicetree/bindings/power/supply/bq24190.yaml  |   2 +-
+ .../bindings/power/supply/qcom,pm8941-charger.yaml |   9 +-
+ .../power/supply/summit,smb347-charger.yaml        |   2 +-
+ .../bindings/reset/atmel,at91sam9260-reset.yaml    |  68 +++
+ MAINTAINERS                                        |   5 +
+ drivers/power/reset/Kconfig                        |   6 +
+ drivers/power/reset/Makefile                       |   1 +
+ drivers/power/reset/at91-reset.c                   | 184 +++++++-
+ drivers/power/reset/pwr-mlxbf.c                    |  97 ++++
+ drivers/power/supply/ab8500-chargalg.h             |   4 -
+ drivers/power/supply/ab8500_btemp.c                |   1 -
+ drivers/power/supply/ab8500_chargalg.c             |  70 ++-
+ drivers/power/supply/ab8500_charger.c              |  48 +-
+ drivers/power/supply/ab8500_fg.c                   |   3 +-
+ drivers/power/supply/bq24257_charger.c             |   2 +-
+ drivers/power/supply/cros_peripheral_charger.c     |   2 +-
+ drivers/power/supply/goldfish_battery.c            |   4 +-
+ drivers/power/supply/lp8788-charger.c              |   2 +-
+ drivers/power/supply/max77976_charger.c            |   4 +-
+ drivers/power/supply/olpc_battery.c                |   5 +-
+ drivers/power/supply/pm2301_charger.h              | 492 ---------------------
+ drivers/power/supply/power_supply_core.c           |   4 +-
+ include/dt-bindings/reset/sama7g5-reset.h          |  10 +
+ 26 files changed, 462 insertions(+), 630 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/msm-poweroff.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/qcom,pshold.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+ create mode 100644 drivers/power/reset/pwr-mlxbf.c
+ delete mode 100644 drivers/power/supply/pm2301_charger.h
+ create mode 100644 include/dt-bindings/reset/sama7g5-reset.h
+
+--pz5mswhhqer2puzz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmL1kJQACgkQ2O7X88g7
++poIZg//SqTkcIA8c0em5LVmjHI/o+4aXUrchTkkmCoEJZxv5/flXUh+tcu70B75
+dxxFTkdZ0mc+cjz3tB1i5wm0cy4mFQdQ4oGCDJrJh7dWbBxKCqVKlDmnYBnn3D1v
+0yib7CBKuEBhYRKCePWjpKgf3cw+K+kBJRf0BmMYlsTbPRPRgK4kNkfhZ+P/hmQF
+d/buaLIGdqzEd2EeYqcryJv0cv29O/USXflxnHJnsmA+jhzmPwJXqcs9gF/www5M
+BhuVK3jBHeTPA2KXRiuSOgk4ZKfI72qMHT3p+Nu5rgspIE9ZNrlXmoVybIDo9oBC
+MfFKjHIkxOk5TjvbOHgJpwodlpNMKswrLKQUjo8uD158wNCY1lCN15Xy8nwtQeM4
+EtYz/BDoKf+97sPkflam9ZGXEnbHe6ExYCVOfmgcBaoWJuJTgHL3OHjyopBYIs1h
+l1DYNM8J+CzhOheYFyDRFFuwK9og5His/jSw4zE9tLMVNPE7vD5ziV7tCaiYJlRA
+zo6yZsA81wxIXGrvQFHq8Koz79lN71RRFo8hNCAtMUfkrmzqjjjOmCh8WgUo7QUB
+IMj3QTAcmLxNEgGzkEm159njygK7O8rVXCtaiX62vGtdFaRqQNKnmCJf0DEgyuOR
+Ao6l6NMs2wtqgvAeI0OVjREPVRsCshzkEk8nW+hvcd7wyYhaMYU=
+=erri
+-----END PGP SIGNATURE-----
+
+--pz5mswhhqer2puzz--
