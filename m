@@ -2,71 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BE158FBDF
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Aug 2022 14:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DED58FD8D
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Aug 2022 15:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiHKMFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Aug 2022 08:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S231452AbiHKNmH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Aug 2022 09:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbiHKMFG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Aug 2022 08:05:06 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086B8956A5;
-        Thu, 11 Aug 2022 05:05:04 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1660219498tncr2goc
-Received: from localhost.localdomain ( [182.148.14.53])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 11 Aug 2022 20:04:57 +0800 (CST)
-X-QQ-SSF: 01000000002000G0V000B00A0000020
-X-QQ-FEAT: SGbEDZt3ZyZazrvh3yNR+bQlXu0qsiC+vMqnfAp9KATZkDdVTX2QhF3RKgWfR
-        I/nbnTFHwK7WZ1x+spHtaXyd7k7m+RwMNV2TeoOw0+25cnugyDRZfj3mSji48PeijRnMRV+
-        yiTPpjiYPooy0VzGAwypQKe3Mxmg3tia0mFM6FuJwvhTZQMoIXhseM0FdonTnQt2HH2YvtH
-        cFEnThKEAPSxcFnRThWjV0/NYW/Q/0/KqZKdh6Vu1EhftZDvUvkxFNLj4XUNHxbSsSqJonT
-        kqpPV1v7B4w3qEkDo3BfPF9qDnpCtIA7vwyqNtTEMLXwK46RvHj2gRifJTEgs6ZZx4CsFNW
-        vTxwA60H+KZEynFEsV6kvoa+3LTQ68eA2pg8/RFjdh6gH3h0/hRQwFcu8hApk5UkEnmSfv/
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] cpuidle/coupled: Fix comment typo
-Date:   Thu, 11 Aug 2022 20:04:50 +0800
-Message-Id: <20220811120450.13886-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229594AbiHKNmH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Aug 2022 09:42:07 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530F015A22;
+        Thu, 11 Aug 2022 06:42:06 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id 17so16926057plj.10;
+        Thu, 11 Aug 2022 06:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=p1TxuLj+R0HduMtTWToeGigGtVfbsJW4F/EMut9GGiE=;
+        b=QEm2doY3whZViiKl5O4Vw4CbKk4s64aQAFofySTGsdge5sZXoZQ74qjezABR7sfRir
+         2u1dxxMYd78ms9zj7Z7Ru9dCcCcN4Ss6+L1GqJ8rQk+EZwKEeE88TiE/nclF8xgRX9po
+         gc+qq54uDrMTdQhjgofBGyL/keejTSJh9vlVtQeut7CyjXfZHgf77jXgInIjpv8h5gCG
+         uTqBDKdKVxvYFXicbTngStewjSCQ5wAMIAOj5DqPGXidx3rYeF4A9+3MKC9Lfd9touGW
+         riCM0ptUKKbQS9ptbB6Qc2XPX3KC9CyLy9bEZFrv1n99ccAnwPY+nW4Q5LzHgc7csXL6
+         cq8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=p1TxuLj+R0HduMtTWToeGigGtVfbsJW4F/EMut9GGiE=;
+        b=7qNo2bOHNeI3EUKz+G/Ii/wH+xvLklztloFAZJHtYe0VOy4bDnP/Xj+PtCtrWYTp6X
+         8xsZxiovOy1c1K9vWXXdWBYhKRjHRAD+rnIGpZyjuOIkRfHhKpEIpv5Y8E8JEjZWIuJE
+         25c2LBIAVmtG+KL7AAeeUxt3F4mLCtTLR/IEI6zM23sjbxRhVt7YtogAWgP9I72Zhpc3
+         J3zoXluRS25QzJ0DPbmb5lFSZ8br23F9QRTe9D3aXl1ekPEwiTBZKq4+4yKcC0go2OR6
+         ppNOis2B3/8QhjOD7LxYmQ5x1d8NngikupQZBhYy/fKDWK9tkfjFUoR5i6hzj9LH+PZR
+         9uag==
+X-Gm-Message-State: ACgBeo0tKhj9GUVPD5bo9oQYHbcspRkELsp4TEgR54oWx96/Vz4ufmCG
+        qXzABiaRa3RkG/2tWlnmeQo=
+X-Google-Smtp-Source: AA6agR7AmQJEmAqJXah+6Iwv6S6YIzgVGXrvfYC0EK86MDFozFmLC/Do8uMgQY242hJI5cjmzj8JqA==
+X-Received: by 2002:a17:90b:3e8c:b0:1f7:3792:d336 with SMTP id rj12-20020a17090b3e8c00b001f73792d336mr9053879pjb.0.1660225325598;
+        Thu, 11 Aug 2022 06:42:05 -0700 (PDT)
+Received: from localhost.localdomain (1-171-1-124.dynamic-ip.hinet.net. [1.171.1.124])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170903228b00b0016edff78844sm14887753plh.277.2022.08.11.06.42.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Aug 2022 06:42:05 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sre@kernel.org
+Cc:     alina_yu@richtek.com, cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Add Richtek RT9471 3A battery charger support
+Date:   Thu, 11 Aug 2022 21:41:56 +0800
+Message-Id: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The double `are' is duplicated in the comment, remove one.
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/cpuidle/coupled.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch set is to add Richtek RT9471 charger support.
 
-diff --git a/drivers/cpuidle/coupled.c b/drivers/cpuidle/coupled.c
-index 74068742cef3..9acde71558d5 100644
---- a/drivers/cpuidle/coupled.c
-+++ b/drivers/cpuidle/coupled.c
-@@ -54,7 +54,7 @@
-  * variable is not locked.  It is only written from the cpu that
-  * it stores (or by the on/offlining cpu if that cpu is offline),
-  * and only read after all the cpus are ready for the coupled idle
-- * state are are no longer updating it.
-+ * state are no longer updating it.
-  *
-  * Three atomic counters are used.  alive_count tracks the number
-  * of cpus in the coupled set that are currently or soon will be
+The RT9471/D is a highly-integrated 3A switch mode battery charge management
+and system power path management device for single cell Li-Ion and Li-polymer
+battery. The low impedance power path optimizes switch-mode operation
+efficiency, reduces battery charging time and extends battery life during
+discharging phase.
+
+ChiYuan Huang (2):
+  dt-bindings: power: supply: Add Richtek RT9471 battery charger
+  power: supply: rt9471: Add Richtek RT9471 charger driver
+
+ .../bindings/power/supply/richtek,rt9471.yaml      |  78 ++
+ drivers/power/supply/Kconfig                       |  16 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/rt9471.c                      | 952 +++++++++++++++++++++
+ drivers/power/supply/rt9471.h                      |  76 ++
+ 5 files changed, 1123 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
+ create mode 100644 drivers/power/supply/rt9471.c
+ create mode 100644 drivers/power/supply/rt9471.h
+
 -- 
-2.36.1
+2.7.4
 
