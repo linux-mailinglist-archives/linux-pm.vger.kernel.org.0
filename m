@@ -2,100 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7D2591343
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 17:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3536C59135B
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 17:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238719AbiHLPrX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Aug 2022 11:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S238791AbiHLP6M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 11:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238563AbiHLPrW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 11:47:22 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7578589CF1
-        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 08:47:21 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id l22so1616083wrz.7
-        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 08:47:21 -0700 (PDT)
+        with ESMTP id S238950AbiHLP6K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 11:58:10 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC48ACA3D;
+        Fri, 12 Aug 2022 08:58:09 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id z20so1845796edb.9;
+        Fri, 12 Aug 2022 08:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=tpWip+BFdiEPdXC3B+X45lAS8MneZCGG5pkBJArRpus=;
-        b=xFGfqPcq9RVhU91fTWEd+DpL83es+Dnx0kntT1mCYTa32SsJz5/porK8jskHO6fH1J
-         rWVoLhz5B2+PDedAAbDsy+NugYq0qrqZrspnOUlvOqk6ps0LHP4UBi2Q6z1wVU19kV0A
-         oCKogJ2WpohEI3f7A3izCjNH9/gTqqrEyG343Zclp7SrKvFxH6J2ilN/hpv7fNGLXDwv
-         rCuI+h2tPFwynK/OQVVTVzxOXR3BnvFFmWcxDaTNXXO52GlhGPKqRN/0GBahwCK4bZXW
-         Psp+r/cgT5kS9cpi/gv+5Bj9GMTgglG1tVK/HFdkxdAWnd5whxorzhIMUfnbleCLnlFh
-         FHXQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=zLYCQ6rxWkBVwB6B4jZyHQK9L5sqow/EvVD4ZkuTfxs=;
+        b=iuLs4xuS/hmVPiqkl2JmtWw9mv7BeZOhkn/UJpzH4g8L1lmF6NDKzKy7yKR3MjXQ7f
+         4iKDlFze3/D+MejtpBnRHH3dHn/tFZMe3oOYTNtujiCNe+Euxg/f0O//+tuFIoyrWZ/3
+         qV4iVtaRWFzDibYKG8JV40Vjq5N65WuilykTWJEBPMKPLWyjlqUXs072cAaIMFgJnNir
+         TV3b+9nJ7LWnV/Gx0JtFHRN3OeE2d/Ug3TPa8m3jXL+348a5QSiav0VTWzwPt5OTtxpY
+         w6cZr5XVGBPl8aXJ6JXiBgQXrWMotJQ93++qphzgUUVOoXN9/blmjooh3njWpCIwRp6K
+         pc7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=tpWip+BFdiEPdXC3B+X45lAS8MneZCGG5pkBJArRpus=;
-        b=SRLvzg0L7aZBf4bbAAsxrmgXpO0tYZQz82RD9NHEZHzwJ3X/EEoqLM2h734i4pS8oU
-         EkpoEaq5OOVx43FJS1mZvfHXPGLJiQQROabGX1jrmBRE/pA4w7nElmNTnLQyzqCM+QFd
-         agGmVTrF+MXlvRdtsGAc9UZwgfdtMLIChNOfFFRax3MZYXZ5j0kDaNjckMzCO4Zj+RQK
-         Knmob3mywac54WGBwQcljn7ea+stR/Y9AZTjasrl9DcVSSJIKgT0dwY3W8qZT6pG1jcD
-         05Tq8vhVtMJ23/Kn7UA8iNDoUjyX7phZmrmY0sRHUXyMOhbZ2L5Y3jNUB8MJmlodLBw2
-         yFjQ==
-X-Gm-Message-State: ACgBeo22kGvazZ3lPj1y8WtFhbU7/A1iKjgEcMcG/dGfCyR0rvW1HxBd
-        pb9+ZJkpLgqTb8lKbyCLJbLvyQ==
-X-Google-Smtp-Source: AA6agR4WjhFzt4zhlKIdp0fiVZeF8Xua9VvxXyKi1X6mhoFMFcyL6Prj0NF3HtHYXyY5aIlVGfQ46w==
-X-Received: by 2002:a05:6000:114b:b0:220:5ff2:b9dc with SMTP id d11-20020a056000114b00b002205ff2b9dcmr2567505wrx.297.1660319240022;
-        Fri, 12 Aug 2022 08:47:20 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id q15-20020adff94f000000b002238ea5750csm2854309wrr.72.2022.08.12.08.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 08:47:19 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 18:47:18 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC] PM: domains: Reverse the order of performance and enabling
- ops
-Message-ID: <YvZ2Bl3fg/pdMVVw@linaro.org>
-References: <20220720110246.762939-1-abel.vesa@linaro.org>
- <CAPDyKFoh8UV=QC6RhOkc=FSvoeqF_UiWp97h0Qp8dniB=sS+8A@mail.gmail.com>
- <YuA0luCtQ1J+ExBi@linaro.org>
- <CAPDyKFo4tryzYQK=q6aPGxocmoq=duC2B1RMh1QoV_maVCApjA@mail.gmail.com>
- <20220729094646.xqlhfjzxo3gk4n27@linaro.org>
- <1355f1f6-d6c9-6d5f-9b5f-333084c6561b@gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=zLYCQ6rxWkBVwB6B4jZyHQK9L5sqow/EvVD4ZkuTfxs=;
+        b=PPcxxE1vgWQU4QDWx09iLchgOaakMsATkwSYVPKwho/zW8WtT9S90lCoLLMMoS7VlV
+         iPHyfuYvp2TddlWPbBJ3pb9I8X3PSFGnPAclN0mynJaDASqR/W7kPY7GNYFExT4SRyLY
+         j4gDaaArcSMX5lQpkNVal/DbIehiSksM3NlBsydDdXTVCeAHfqYWRYSAqOeLu2stU9ik
+         Ho+e2He9dzBJ1SK0pjgRhIuP3WCE1JhQjBXaG1FVxyYYBDfWWyIPqHodDzOF4r8tLmZt
+         YIUvAzFpv0UnTeNir9qqKTmkGBcSGK/t3Gzt5jPrJ0pQvsbtraunLlColkWfUZYwzldB
+         HTiQ==
+X-Gm-Message-State: ACgBeo0ib2AvgJpANqq0OpbVE8dS/pvvWTpWvJubt5ydnmOnyVsgVcHv
+        2o+z/VqBlx7merfu+9z41kd3A4H30B/k0e2YEzM=
+X-Google-Smtp-Source: AA6agR72cP3VP4buVO2VW8pPGacgkpWt3se1wdKOTVFZ30hx6uVQGZ7BNQrB1DV33X6Og9WovC7TPjmXfMACUd44DuI=
+X-Received: by 2002:a05:6402:d05:b0:425:b7ab:776e with SMTP id
+ eb5-20020a0564020d0500b00425b7ab776emr4377472edb.142.1660319887350; Fri, 12
+ Aug 2022 08:58:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1355f1f6-d6c9-6d5f-9b5f-333084c6561b@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+ <1660225318-4063-2-git-send-email-u0084500@gmail.com> <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
+ <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com> <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org>
+In-Reply-To: <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Fri, 12 Aug 2022 23:57:56 +0800
+Message-ID: <CADiBU38+9sR1r20=YWt-9s2+u7maHH+1VudCnV1-0+F4jYKdQQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
+ battery charger
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-08-04 23:58:34, Dmitry Osipenko wrote:
-> 29.07.2022 12:46, Abel Vesa пишет:
-> >> I have looped in Dmitry and Thierry to see if they think the change
-> >> should be fine for Tegra platforms too.
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B48=E6=9C=8812=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=882:54=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+>
+> On 12/08/2022 04:32, ChiYuan Huang wrote:
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=
+=B9=B48=E6=9C=8811=E6=97=A5 =E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A10:12=E5=
+=AF=AB=E9=81=93=EF=BC=9A
 > >>
-> > Good. But the tegra usecase uses only the ->set_performance and does not
-> > use ->power_on and ->power_off for that specific PD. So I don't think
-> > their usecase will be affected by the order reverse.
-> > 
-> 
-> For Tegra it indeed shouldn't change anything.
+> >> On 11/08/2022 16:41, cy_huang wrote:
+> >>> From: ChiYuan Huang <cy_huang@richtek.com>
+> >>>
+> >>> Add bindings for the Richtek RT9471 I2C controlled battery charger.
+> >>>
+> >>
+> >> Thank you for your patch. There is something to discuss/improve.
+> >>
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    const: richtek,rt9471
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  ceb-gpios:
+> >>> +    maxItems: 1
+> >>
+> >> This looks not standard, so please provide a description.
+> > It's the external 'charge enable' pin that's used to control battery ch=
+arging.
+> > The priority is higher than the register 'CHG_EN' control.
+> > In the word, 'b' means it's reverse logic, low to allow charging, high
+> > to force disable charging.
+>
+> Isn't this standard enable-gpios property?
+Not the same thing, this charger includes power patch control.
+This gpio is used to 'force disable' charge the battery.
+>
+> >
+> > description:
+> >   External charge enable pin that can force control not to charge the b=
+attery.
+> >   Low to allow charging, high to disable charging.
+> >
+> >>
+> >>> +
+> >>> +  wakeup-source: true
+> >>> +
+> >>> +  interrupts:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  interrupt-controller: true
+> >>> +
+> >>> +  "#interrupt-cells":
+> >>> +    const: 1
+> >>
+> >> Why a charger driver is a interrupt-controller?
+> > There're 32 nested IRQs from RT9471.
+> > The original thought is to make the user easy to bind the interrupt
+> > into their driver.
+>
+> Bindings are not related to the driver but to hardware...
+>
+Sorry, I mislead  your comment.
+Refer to bq2515x.yaml, I think it's better to change this property to
+'charge-enable-gpios'.
+It's the same usage like as TI charger.
+> >
+> > For charger driver, does it mean legacy IRQ handler is more preferred?
+>
+> Who is the consumer of these interrupts? Can you show the DTS with the
+> interrupt consumer?
+>
+> >>
+> >>> +
+> >>> +  usb-otg-vbus-regulator:
+> >>> +    type: object
+> >>> +    unevaluatedProperties: false
+> >>> +    $ref: /schemas/regulator/regulator.yaml#
+> >>> +
+> >>> +required:
+> >>> +  - compatible
+> >>> +  - reg
+> >>> +  - wakeup-source
+> >>> +  - interrupts
+> >>> +  - interrupt-controller
+> >>> +  - "#interrupt-cells"
+> >>> +
+> >>> +additionalProperties: false
+> >>> +
+> >>> +examples:
+> >>> +  - |
+> >>> +    #include <dt-bindings/interrupt-controller/irq.h>
+> >>> +    i2c {
+> >>> +      #address-cells =3D <1>;
+> >>> +      #size-cells =3D <0>;
+> >>> +
+> >>> +      charger@53 {
+> >>> +        compatible =3D "richtek,rt9471";
+> >>> +        reg =3D <0x53>;
+> >>> +        ceb-gpios =3D <&gpio26 1 0>;
+> >>
+> >> Isn't the last value a GPIO flag? If yes, use appropriate define.
+> > I already specify GPIOD_OUT_LOW in the gpiod_request flag.
+>
+> It is not related to the DTS. Anyway writing "low" for a meaning of high
+> is not correct usually...
+>
+> > Do I need to convert the gpio request code to GPIOD_OUT_HIGH,
+> > and specify here as GPIO_ACTIVE_LOW?
+>
+> You need to properly describe the hardware. The polarity of logical
+> signal is defined by DTS, not by driver. It does not make sense to do it
+> in driver. What if on some board the signal is inverted?
+>
+From our discussion, binding example just keep the active level that the pi=
+n is.
+So 'GPIO_ACTIVE_LOW', thanks.
 
-Thanks Dmitry for confirming.
+All of the above will be fixed in the next revision.
+
+> Best regards,
+> Krzysztof
