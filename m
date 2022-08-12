@@ -2,73 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B0F59147E
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 18:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20EC55914B9
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 19:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239614AbiHLQ7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Aug 2022 12:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S238732AbiHLRSF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 13:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239504AbiHLQ7i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 12:59:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1CAB0B36;
-        Fri, 12 Aug 2022 09:59:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BFF16162D;
-        Fri, 12 Aug 2022 16:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DCF3C43141;
-        Fri, 12 Aug 2022 16:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660323576;
-        bh=dYfDkEXm2FVNmiIZ740z+gR6XQETJgauB7fNRq96f08=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=UdZ9C8/456PCqFFhB8pgG7t4Z4RVA/lfO93OaJLqs9FLe6QKZ2ncBgVC5VmX7EFus
-         uqdznUQjwN0ZxyQmiHpK5MDXUndkL4U7A52NDxMgdBqG6wFfdSGPoCu3gKlWnP+UlD
-         bdmvMiFqW4q7ZHyXc66M8DNM+bkPcD51DcrZu/mUHrKd6icwZrqSjnBU9Fb9e8EUxd
-         PA4bPsihqds5tvSi6n/zx5h8dttnXNfUobwKk3EQBeGw2sQELJjOKXbFctrLejaXkr
-         uz9Kl6swh2eBmYEwY1vh/5MtvxtbVu1wZE0d5SRSVIe0vrrGlIewHqDxi1QtDhfezg
-         zPF8ijdCZv8Pw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 645A8C43142;
-        Fri, 12 Aug 2022 16:59:36 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for 6.0
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220811232827.e4ib5raltkbacmgc@mercury.elektranox.org>
-References: <20220811232827.e4ib5raltkbacmgc@mercury.elektranox.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220811232827.e4ib5raltkbacmgc@mercury.elektranox.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.0
-X-PR-Tracked-Commit-Id: c9d8468158adca6dffd2ff5b1befd35f75568b10
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f7cdaeeab8caf8e42fc176cdb272944e036ad998
-Message-Id: <166032357640.14629.17979609174109082646.pr-tracker-bot@kernel.org>
-Date:   Fri, 12 Aug 2022 16:59:36 +0000
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231250AbiHLRSD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 13:18:03 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B111DB1BB1;
+        Fri, 12 Aug 2022 10:18:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660324682; x=1691860682;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yAUb1g8BPPCo00CwCVUUCW/MEhmxy2A/zFgeWAZglu4=;
+  b=YNhocms2E/VMypvzbV9aaGfFEd7JinWt7YgzPuhbJctfbA0gM5kWWwc7
+   lDMHhkaxjlO/gsKLYjy0aNxJ1cNB6iMOvXXNHhajK3MzF6bKR1pW9eFwd
+   K1S4kmCM6ZUPMtL5EBspm89kcCWFBytdXMU4G41ywDJfC0If0+4LqS4NE
+   uGwh9EM0SHhyO4GwYPbYINGnofxcnVcu1zYiabezT7CzrZ6K9dnOyBDxd
+   sO+9TKuUHvif86468fkmiEpPo4B5AOAcBMFVlVCI1AytAcXHM5AtX3vYu
+   2JZ8QyHZswsYoyl6h+3AIVsZUFxkVNC0SCmmRsXB0SGLRsaFiPIGIY5uX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278593618"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="278593618"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 10:17:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="748258212"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 10:17:50 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMYI9-0000m3-1Z;
+        Fri, 12 Aug 2022 17:17:49 +0000
+Date:   Sat, 13 Aug 2022 01:17:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     kbuild-all@lists.01.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>
+Subject: Re: [PATCH v2 26/26] thermal/drivers/intel: Use generic
+ thermal_zone_get_trip() function
+Message-ID: <202208130155.HquqN8f2-lkp@intel.com>
+References: <20220809220436.711020-27-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809220436.711020-27-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 12 Aug 2022 01:28:27 +0200:
+Hi Daniel,
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.0
+I love your patch! Yet something to improve:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f7cdaeeab8caf8e42fc176cdb272944e036ad998
+[auto build test ERROR on next-20220809]
+[cannot apply to rafael-pm/thermal tegra/for-next linus/master v5.19 v5.19-rc8 v5.19-rc7 v5.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thank you!
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/Rework-the-trip-points-creation/20220810-060933
+base:    6c8f479764ebe2848589de3249743ea552ed2495
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220813/202208130155.HquqN8f2-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/b38db2fe0562e475bb6240a64e6f6156352d41d1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/Rework-the-trip-points-creation/20220810-060933
+        git checkout b38db2fe0562e475bb6240a64e6f6156352d41d1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "thermal_zone_device_register_with_trips" [drivers/thermal/intel/x86_pkg_temp_thermal.ko] undefined!
+ERROR: modpost: "thermal_zone_device_register_with_trips" [drivers/platform/x86/acerhdf.ko] undefined!
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://01.org/lkp
