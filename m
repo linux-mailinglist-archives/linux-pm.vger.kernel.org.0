@@ -2,77 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA0859145A
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 18:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B0F59147E
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 18:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238973AbiHLQzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Aug 2022 12:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S239614AbiHLQ7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 12:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiHLQy7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 12:54:59 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF5B07DA;
-        Fri, 12 Aug 2022 09:54:59 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id z13so755751ilq.9;
-        Fri, 12 Aug 2022 09:54:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=fRm+MK443iv+bWqysNNlWEdx5OQMpvKZbcU7Wh8UXuE=;
-        b=0h6S05Hx7CJjzexBNhziPCTLQdJkIC0j0zQpgqgTXb62uhMEULKJlePz/DmXmPFSQY
-         Jm/steKaS2nz64CdFoO3hlRupQEOkm7CFt+5+zy5V19ryUZPsD+cy7yjuv7zvmWYZ7I1
-         mwocLGY6PnOGn35rbLDSR++QNRebT1DbDMEmTg/xLNgH0IM1GDTEsImSDZvG+D+V2Vsc
-         0U8fNuSBR+hVi1Zo3wqL4mHylRu4Kt/GHwYvW7PC6RD05Z8UnYWnsbQBsbrb3Kmj0oVN
-         hzztvMPhXLSUxOg2h+209mOVerifzs+alrQ8cNX84c1k7+CmO8c8tej7H8hbogDYpZi9
-         nO4g==
-X-Gm-Message-State: ACgBeo3hPiuZD5ZX/Fh7bm2W3aQmIHl9zZBjFCOyAjfW7SmUkQOeLtTk
-        IvFDzTWSdVAbL1jUG10xZw==
-X-Google-Smtp-Source: AA6agR6tiAMmjfHF8/Q9cMoh1KscSKGBxd6+ZvSHYQseYcfmbrN92lYw48Pzhq+xNnC/wejeACiZbA==
-X-Received: by 2002:a05:6e02:148c:b0:2de:c3b:91d with SMTP id n12-20020a056e02148c00b002de0c3b091dmr2342165ilk.95.1660323298542;
-        Fri, 12 Aug 2022 09:54:58 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o4-20020a927304000000b002e4c8200225sm141783ilc.39.2022.08.12.09.54.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 09:54:58 -0700 (PDT)
-Received: (nullmailer pid 315561 invoked by uid 1000);
-        Fri, 12 Aug 2022 16:54:55 -0000
-Date:   Fri, 12 Aug 2022 10:54:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings:
- few stale maintainers cleanup
-Message-ID: <20220812165455.GA315443-robh@kernel.org>
-References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        with ESMTP id S239504AbiHLQ7i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 12:59:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1CAB0B36;
+        Fri, 12 Aug 2022 09:59:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BFF16162D;
+        Fri, 12 Aug 2022 16:59:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DCF3C43141;
+        Fri, 12 Aug 2022 16:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660323576;
+        bh=dYfDkEXm2FVNmiIZ740z+gR6XQETJgauB7fNRq96f08=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=UdZ9C8/456PCqFFhB8pgG7t4Z4RVA/lfO93OaJLqs9FLe6QKZ2ncBgVC5VmX7EFus
+         uqdznUQjwN0ZxyQmiHpK5MDXUndkL4U7A52NDxMgdBqG6wFfdSGPoCu3gKlWnP+UlD
+         bdmvMiFqW4q7ZHyXc66M8DNM+bkPcD51DcrZu/mUHrKd6icwZrqSjnBU9Fb9e8EUxd
+         PA4bPsihqds5tvSi6n/zx5h8dttnXNfUobwKk3EQBeGw2sQELJjOKXbFctrLejaXkr
+         uz9Kl6swh2eBmYEwY1vh/5MtvxtbVu1wZE0d5SRSVIe0vrrGlIewHqDxi1QtDhfezg
+         zPF8ijdCZv8Pw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 645A8C43142;
+        Fri, 12 Aug 2022 16:59:36 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 6.0
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220811232827.e4ib5raltkbacmgc@mercury.elektranox.org>
+References: <20220811232827.e4ib5raltkbacmgc@mercury.elektranox.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220811232827.e4ib5raltkbacmgc@mercury.elektranox.org>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.0
+X-PR-Tracked-Commit-Id: c9d8468158adca6dffd2ff5b1befd35f75568b10
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f7cdaeeab8caf8e42fc176cdb272944e036ad998
+Message-Id: <166032357640.14629.17979609174109082646.pr-tracker-bot@kernel.org>
+Date:   Fri, 12 Aug 2022 16:59:36 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,39 +60,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 07:27:47PM +0300, Krzysztof Kozlowski wrote:
-> Hi,
-> 
-> Changes since v1
-> ================
-> 1. Patch #5: Drop also Ricardo Rivera-Matos and assign TI bindings to Andrew Davis
-> 2. Add acks.
-> 
-> A question
-> ==========
-> 
-> Several of the bindings here had only one maintainer and history does not
-> always point to a new one (although I did not perform extensive digging). I
-> added subsystem maintainer, because dtschema requires an entry with valid email address.
-> 
-> This is not the best choice as simply subsystem maintainer might not have the
-> actual device (or its datasheets or any interest in it).
-> 
-> Maybe we could add some "orphaned" entry in such case?
+The pull request you sent on Fri, 12 Aug 2022 01:28:27 +0200:
 
-It would need to be obvious to not use for a new binding.
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.0
 
-> 
-> Best regards,
-> Krzysztof
-> 
-> Krzysztof Kozlowski (5):
->   dt-bindings: iio: Drop Joachim Eastwood
->   dt-bindings: iio: Drop Bogdan Pricop
->   dt-bindings: Drop Beniamin Bia and Stefan Popa
->   dt-bindings: Drop Robert Jones
->   dt-bindings: Drop Dan Murphy and Ricardo Rivera-Matos
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f7cdaeeab8caf8e42fc176cdb272944e036ad998
 
-Series applied for 6.0-rc1.
+Thank you!
 
-Rob
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
