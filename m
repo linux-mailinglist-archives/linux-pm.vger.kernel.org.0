@@ -2,129 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791EE591383
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 18:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA0859145A
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 18:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239030AbiHLQH3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Aug 2022 12:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S238973AbiHLQzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 12:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbiHLQH2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 12:07:28 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5492BB01;
-        Fri, 12 Aug 2022 09:07:27 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id fy5so2804899ejc.3;
-        Fri, 12 Aug 2022 09:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=e6zJEVJOtrs5jr41jffgUoYBgFxyThTIoik0RUHXuCw=;
-        b=b4fQeI7L6yFpe/zUPCjsDzLVQ1wyNnZOADEB9EruvZ/VpoZXIgnKnLe8Mk42lZjbBL
-         9hsFo8ET1u+f4g8H6BBJi++4a+ZUA5KiQt0EaN/ZS1WdZRcAgsEJ+AdxmbHX5cwIYbZq
-         lUX2/qvEg2Nx95P+HRiM43aaMJxPQ5fWhVg/dOkHvbSiU4cmj1LEvNy/ydhWw1iu+5Pt
-         6TfC6avTFtnPWBvxtJkk+f5bEEVvJvFzLH9Xc3KFUznflVd0/g0fF/Od5rrnc6SpucHf
-         q76pGXdWs4CromZLZH7MFB7G/N4gdNSR+vbYtHuGc+jXBxIb8pB9CktAskY4GqjlVLZm
-         3ecQ==
+        with ESMTP id S229464AbiHLQy7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 12:54:59 -0400
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF5B07DA;
+        Fri, 12 Aug 2022 09:54:59 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id z13so755751ilq.9;
+        Fri, 12 Aug 2022 09:54:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=e6zJEVJOtrs5jr41jffgUoYBgFxyThTIoik0RUHXuCw=;
-        b=Dihuaf7U4Bo3rQhG4mPHtovWjxpj5MEEr6RZnEgNgbdLH5b0xBymMAN5Hjd7ryb79e
-         H8BVbNHE9gPrUll3kE7MyrxJ2Y9IBH2+MWhkZCSPUjh7XtkiE12fHrwLVwPi/3koP5BU
-         Et/wUtNBA55AjBkrXREDvnqc/EUqp8xh9+jgLP/qh5TSTYl996hPN+mvnUP9gGMLYgc2
-         xMOCLQHbNWWLuTmcDE6TdQbdl54yBdy1CeWwpZCydOYR3uBha+R+uEnZ2ivIPq/zGqyr
-         3wnRRn0zddjw7lmZdwQLRkjaM2eVJRrleshW11mG6gtUV/1AhMctTBF92MJ2QYUnX5t3
-         eAIA==
-X-Gm-Message-State: ACgBeo1O4A90nXyc0A0uQKkm3kmmTbtKrKFbIYWIg//pIE3+Ulb9tI2o
-        MqqFA9igOANLN89LcVnKhOja1UgSVdWjyjJRSsk=
-X-Google-Smtp-Source: AA6agR4AcEvxsXoTW9XaaW1kokpsHtfsvfgZsZcSyJznwn9ZupVzTjGrJ6LGs6nECaBM1TmqWzPLesYjbEwBjSQLmAY=
-X-Received: by 2002:a17:907:8b97:b0:730:9480:972a with SMTP id
- tb23-20020a1709078b9700b007309480972amr3200458ejc.648.1660320445418; Fri, 12
- Aug 2022 09:07:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
- <1660225318-4063-2-git-send-email-u0084500@gmail.com> <1660317233.429908.168977.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1660317233.429908.168977.nullmailer@robh.at.kernel.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Sat, 13 Aug 2022 00:07:14 +0800
-Message-ID: <CADiBU39-4xdaMO5fOXOZyhC3w0TxdzZyfsFZXbcFw3=i+6UOMQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
- battery charger
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=fRm+MK443iv+bWqysNNlWEdx5OQMpvKZbcU7Wh8UXuE=;
+        b=0h6S05Hx7CJjzexBNhziPCTLQdJkIC0j0zQpgqgTXb62uhMEULKJlePz/DmXmPFSQY
+         Jm/steKaS2nz64CdFoO3hlRupQEOkm7CFt+5+zy5V19ryUZPsD+cy7yjuv7zvmWYZ7I1
+         mwocLGY6PnOGn35rbLDSR++QNRebT1DbDMEmTg/xLNgH0IM1GDTEsImSDZvG+D+V2Vsc
+         0U8fNuSBR+hVi1Zo3wqL4mHylRu4Kt/GHwYvW7PC6RD05Z8UnYWnsbQBsbrb3Kmj0oVN
+         hzztvMPhXLSUxOg2h+209mOVerifzs+alrQ8cNX84c1k7+CmO8c8tej7H8hbogDYpZi9
+         nO4g==
+X-Gm-Message-State: ACgBeo3hPiuZD5ZX/Fh7bm2W3aQmIHl9zZBjFCOyAjfW7SmUkQOeLtTk
+        IvFDzTWSdVAbL1jUG10xZw==
+X-Google-Smtp-Source: AA6agR6tiAMmjfHF8/Q9cMoh1KscSKGBxd6+ZvSHYQseYcfmbrN92lYw48Pzhq+xNnC/wejeACiZbA==
+X-Received: by 2002:a05:6e02:148c:b0:2de:c3b:91d with SMTP id n12-20020a056e02148c00b002de0c3b091dmr2342165ilk.95.1660323298542;
+        Fri, 12 Aug 2022 09:54:58 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id o4-20020a927304000000b002e4c8200225sm141783ilc.39.2022.08.12.09.54.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 09:54:58 -0700 (PDT)
+Received: (nullmailer pid 315561 invoked by uid 1000);
+        Fri, 12 Aug 2022 16:54:55 -0000
+Date:   Fri, 12 Aug 2022 10:54:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sebastian Reichel <sre@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, alinayu829@gmail.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        cy_huang <cy_huang@richtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings:
+ few stale maintainers cleanup
+Message-ID: <20220812165455.GA315443-robh@kernel.org>
+References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B48=E6=9C=8812=E6=97=A5 =
-=E9=80=B1=E4=BA=94 =E6=99=9A=E4=B8=8A11:13=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Thu, 11 Aug 2022 21:41:57 +0800, cy_huang wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add bindings for the Richtek RT9471 I2C controlled battery charger.
-> >
-> > Co-developed-by: Alina Yu <alina_yu@richtek.com>
-> > Signed-off-by: Alina Yu <alina_yu@richtek.com>
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> >  .../bindings/power/supply/richtek,rt9471.yaml      | 78 ++++++++++++++=
-++++++++
-> >  1 file changed, 78 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/power/supply/rich=
-tek,rt9471.yaml
-> >
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/powe=
-r/supply/richtek,rt9471.example.dtb: charger@53: usb-otg-vbus-regulator: Un=
-evaluated properties are not allowed ('regulator-compatible' was unexpected=
-)
->         From schema: /builds/robherring/linux-dt-review/Documentation/dev=
-icetree/bindings/power/supply/richtek,rt9471.yaml
->
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/patch/
->
-Thanks, after I add 'DT_CHECKER_FLAGS=3D-m', it also can be found for this =
-error.
+On Tue, Aug 09, 2022 at 07:27:47PM +0300, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> Changes since v1
+> ================
+> 1. Patch #5: Drop also Ricardo Rivera-Matos and assign TI bindings to Andrew Davis
+> 2. Add acks.
+> 
+> A question
+> ==========
+> 
+> Several of the bindings here had only one maintainer and history does not
+> always point to a new one (although I did not perform extensive digging). I
+> added subsystem maintainer, because dtschema requires an entry with valid email address.
+> 
+> This is not the best choice as simply subsystem maintainer might not have the
+> actual device (or its datasheets or any interest in it).
+> 
+> Maybe we could add some "orphaned" entry in such case?
 
-This is typo, not 'regulator-compatible', it's 'regulator-name'.
+It would need to be obvious to not use for a new binding.
 
-Will be fixed in next revision.
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit.
->
+> 
+> Best regards,
+> Krzysztof
+> 
+> Krzysztof Kozlowski (5):
+>   dt-bindings: iio: Drop Joachim Eastwood
+>   dt-bindings: iio: Drop Bogdan Pricop
+>   dt-bindings: Drop Beniamin Bia and Stefan Popa
+>   dt-bindings: Drop Robert Jones
+>   dt-bindings: Drop Dan Murphy and Ricardo Rivera-Matos
+
+Series applied for 6.0-rc1.
+
+Rob
