@@ -2,81 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED37590C21
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 08:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B4B590CE5
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 09:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbiHLGyT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Aug 2022 02:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S237643AbiHLHx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 03:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbiHLGyS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 02:54:18 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924C0A598E
-        for <linux-pm@vger.kernel.org>; Thu, 11 Aug 2022 23:54:17 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id e15so183942lfs.0
-        for <linux-pm@vger.kernel.org>; Thu, 11 Aug 2022 23:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=t3EERWAoHc/0sJzUnWIG/VXJqbeUHXe35Iq8kCfIwJ8=;
-        b=H0Rll6qOqs0V2BmA7/rXq8aEvL568CpvV8lKQ3Rn5KRJjcfJsvnHeU6JN6ie3e+jQb
-         KqVSjL28MvNTNAeD+f9a7p92RM33993ChXnC30O2V4iPLa4A0OpxfXLo6VnZD5mVX8j9
-         /mMs1KTE0M5xc5WVU0k7fH5YQbXIq4fBoNpYtztfLhZSob7Gk0NpSsvY9YNaagKTiGwM
-         I9EcusoqsELsaNje/phNRiMzW2n/gsxSKDzrAhAbT3hRUa8n5dP4+yPB2DKjvPF9yX6S
-         VR67nq/yClD4vERkuYuOmMD9YpDMf1R7iQqS3gt/3m2V+g6B3KzEgh87FPpqJAw6wbYc
-         Hzvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=t3EERWAoHc/0sJzUnWIG/VXJqbeUHXe35Iq8kCfIwJ8=;
-        b=Sx5S1q5rh76HLcXHnNhXxfsFJV2MQa0oQimzT6pa/BZdLMMJH0KYBkINtyx03iyY3K
-         GIqCwzHHDCZBKAJsrFPcATkH9cCl1U1uZ/KZRds/CS9GuV37EVCYsF8aG3gtkJhZtSK/
-         0mVMJ+QVu++u5FuEDzQPr+AAtlzTuHc8KPkjMzLv8vRwRqKJswPMx8Is1HLpnP4IGJPo
-         i2SFKtMwHeXMwZndwUHFJf0xcc9aJ3dNVdrew3VOrBrSaCGc1YuKCLJmBMGcZvR2CbrN
-         CybqLGLBLVemDEgSiDfvWleTv1GtHD4NcDTVvQ/3KALvRfwtO+Kt52AiiiyiJchsp/0y
-         1y0Q==
-X-Gm-Message-State: ACgBeo3j+vyY2GcBoi3N+F8eErX+w5wFTzr4/KKHUrEMSlDeGe4JKfSc
-        x2ReLyz6rDuE68AtBHdBw0NPrw==
-X-Google-Smtp-Source: AA6agR6TWxarEea/EB4pqn9N8km5hXjJnqltHNgS5yLpYpMOPAOSyNuQ9fhHFdZxk7o0iINjK3m8vw==
-X-Received: by 2002:a05:6512:ac3:b0:48a:fa85:7b20 with SMTP id n3-20020a0565120ac300b0048afa857b20mr801551lfu.340.1660287255892;
-        Thu, 11 Aug 2022 23:54:15 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id q30-20020ac2511e000000b0048dacaa8c36sm107895lfb.149.2022.08.11.23.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 23:54:15 -0700 (PDT)
-Message-ID: <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org>
-Date:   Fri, 12 Aug 2022 09:54:11 +0300
+        with ESMTP id S236480AbiHLHx2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 03:53:28 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B5FA721E;
+        Fri, 12 Aug 2022 00:53:23 -0700 (PDT)
+X-UUID: 32d70552f3984b9eb0471fe447add870-20220812
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4h8pJ2DKLxVCS5J3QoilhwJF0fUMj4gWuIsoPrZPKMA=;
+        b=OVDxWKk9vFU15CuVqRNpSrlngitUq0dgTq7sz2huy7vWqlE1IxWe1lte892zsC/X9DSF+axG99lqSyOBfaUDuV1eyIRUtDRNAy0Z3fbQPykD8gP57NZ0egm+mGpRbXyAe7Y2FK5EUMqt6PyR+GXMcj+BARtQGjW5ywov4Na06HE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:2ee0ce42-0f46-42e8-a41f-c7c0dc9483f0,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:6e47789c-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:-5,EDM:-3,IP:nil,URL:0,File:ni
+        l,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 32d70552f3984b9eb0471fe447add870-20220812
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1587919333; Fri, 12 Aug 2022 15:53:16 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 12 Aug 2022 15:53:15 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 12 Aug 2022 15:53:15 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <linus.walleij@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <sre@kernel.org>, <trix@redhat.com>
+Subject: Re: [PATCH] power: supply: ab8500: remove unused static local variable
+Date:   Fri, 12 Aug 2022 15:53:15 +0800
+Message-ID: <1660290795-612-1-git-send-email-miles.chen@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <CACRpkdafsWC4VM4c623Q2prkG4uaQPpY0fUkM0wbmWqM0J4TFQ@mail.gmail.com>
+References: <CACRpkdafsWC4VM4c623Q2prkG4uaQPpY0fUkM0wbmWqM0J4TFQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
- battery charger
-Content-Language: en-US
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
-        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
-References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
- <1660225318-4063-2-git-send-email-u0084500@gmail.com>
- <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
- <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,106 +60,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/08/2022 04:32, ChiYuan Huang wrote:
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年8月11日 週四 晚上10:12寫道：
+>> cpp_check reports
+>> [drivers/power/supply/ab8500_chargalg.c:493]: (style) Variable 'ab8500_chargalg_ex_ac_enable_toggle' is assigned a value that is never used.
 >>
->> On 11/08/2022 16:41, cy_huang wrote:
->>> From: ChiYuan Huang <cy_huang@richtek.com>
->>>
->>> Add bindings for the Richtek RT9471 I2C controlled battery charger.
->>>
+>> From inspection, this variable is never used. So remove it.
 >>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>> +properties:
->>> +  compatible:
->>> +    const: richtek,rt9471
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  ceb-gpios:
->>> +    maxItems: 1
->>
->> This looks not standard, so please provide a description.
-> It's the external 'charge enable' pin that's used to control battery charging.
-> The priority is higher than the register 'CHG_EN' control.
-> In the word, 'b' means it's reverse logic, low to allow charging, high
-> to force disable charging.
+>> Fixes: 6c50a08d9dd3 ("power: supply: ab8500: Drop external charger leftovers")
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>
+>Thanks Tom!
+>Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+>Yours,
+>Linus Walleij
 
-Isn't this standard enable-gpios property?
+Hi Sebastian,
 
-> 
-> description:
->   External charge enable pin that can force control not to charge the battery.
->   Low to allow charging, high to disable charging.
-> 
->>
->>> +
->>> +  wakeup-source: true
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  interrupt-controller: true
->>> +
->>> +  "#interrupt-cells":
->>> +    const: 1
->>
->> Why a charger driver is a interrupt-controller?
-> There're 32 nested IRQs from RT9471.
-> The original thought is to make the user easy to bind the interrupt
-> into their driver.
+It looks like that this patch is not in linux-next 20220812
+and I can still observe this build error with ARCH=arm, defconfig=allyesconfig.
 
-Bindings are not related to the driver but to hardware...
+Would you pick up this fix, please?
 
-> 
-> For charger driver, does it mean legacy IRQ handler is more preferred?
-
-Who is the consumer of these interrupts? Can you show the DTS with the
-interrupt consumer?
-
->>
->>> +
->>> +  usb-otg-vbus-regulator:
->>> +    type: object
->>> +    unevaluatedProperties: false
->>> +    $ref: /schemas/regulator/regulator.yaml#
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - wakeup-source
->>> +  - interrupts
->>> +  - interrupt-controller
->>> +  - "#interrupt-cells"
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/interrupt-controller/irq.h>
->>> +    i2c {
->>> +      #address-cells = <1>;
->>> +      #size-cells = <0>;
->>> +
->>> +      charger@53 {
->>> +        compatible = "richtek,rt9471";
->>> +        reg = <0x53>;
->>> +        ceb-gpios = <&gpio26 1 0>;
->>
->> Isn't the last value a GPIO flag? If yes, use appropriate define.
-> I already specify GPIOD_OUT_LOW in the gpiod_request flag.
-
-It is not related to the DTS. Anyway writing "low" for a meaning of high
-is not correct usually...
-
-> Do I need to convert the gpio request code to GPIOD_OUT_HIGH,
-> and specify here as GPIO_ACTIVE_LOW?
-
-You need to properly describe the hardware. The polarity of logical
-signal is defined by DTS, not by driver. It does not make sense to do it
-in driver. What if on some board the signal is inverted?
-
-Best regards,
-Krzysztof
+Thanks,
+Miles
