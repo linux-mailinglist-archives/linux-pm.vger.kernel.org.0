@@ -2,165 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963745909E2
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 03:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3BB590AE9
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 06:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235735AbiHLBcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Aug 2022 21:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S235671AbiHLEFv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 00:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiHLBcp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Aug 2022 21:32:45 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41092BF71;
-        Thu, 11 Aug 2022 18:32:44 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b96so25133233edf.0;
-        Thu, 11 Aug 2022 18:32:44 -0700 (PDT)
+        with ESMTP id S229552AbiHLEFt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 00:05:49 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01478E0C3
+        for <linux-pm@vger.kernel.org>; Thu, 11 Aug 2022 21:05:48 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a8so19409186pjg.5
+        for <linux-pm@vger.kernel.org>; Thu, 11 Aug 2022 21:05:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=Yu55T4L0tuXafN1uZTmyVTcIyoH+0dEPzfrt7zhu/EM=;
-        b=RVMfC9D4XbQ2ECXnO3ivEpeoUuYwiYciNFHdseF9wRNym7lHwKPpcTkPQx8vMWKkks
-         l7vffeMoBS0SNGmuOOmFzQ1qDZ+3SHBJmY5QSstebwkdVnXiOYKKxxbwHfKfBPSLPTZW
-         /bEu0qClUybC0C73NsUC7AECvW5yhfaj561w3HlSc9PVDsMDomKFBkkYzWGlWfKFu8u8
-         bpzE7CLl36brv/OC/reheeNFP5QovQL5/xXAz6TqSBhiqzSzDbqEU7kF3vFiX3ba7u3f
-         Sj9ScuIaWprPMS8QZJ6OlfRyvEnDwSDE9DN66yk33kgcy39ZhD3jTbd+tpBk8cjWoxdQ
-         IUJA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=DmoyVSWXIDjWkDxD/535JqvNJLgG0ANofKgHtTi6tF0=;
+        b=O8MvQcTfJgsSvxWkirUafK7Bh78DV5u3hBoBq3oc3JcYJo4pe4lUT4MNc97fBsEqUi
+         aFmG1Z3hgKBODhGhMXoIZO6XlC8B1SAugGqY1xXfe1H87/cnD8E5xC7Wo2zTqTcsxiaC
+         WUyhQgHRb+IelY0S2pzjWA5NFQFIc3HPfi5yg/OoUf9gGGPzSPM2lqOL0rjezrGLyWvG
+         0sUOaH6MBfUsomr4jQQVayG03E1rki774FmLMCHEm8yQO7WchkoBu4uKzdbZTbEMUSQ2
+         nynJ8MhfWO7vr68l/0I7GJ5RVbL1kWPveebTlrq9dswSjjSNuZ3Z6GGwn98GzHmII4nz
+         xdeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=Yu55T4L0tuXafN1uZTmyVTcIyoH+0dEPzfrt7zhu/EM=;
-        b=FCBzF6J0vW5ms4naoPDLT9eEdAb+6Y4xotqbzOSVXQmzLzqu0xKs6LXMZ51gnH4zoA
-         UwRVCLbgva3RV+wV3ZT+bRcjJpi8ZqNmRgVQWPJI05PUU41DQ79YIg+9f/hT+ZvvSA/T
-         6Tj5YQyKzSVlxMi3vWxcVlzOJ/t3pSVjIgjUBlFtmZANpjocHsqnrvX+ApvBAKUPjvdm
-         uDOCznbqfZhNrSLa53bCDwCw9n0BJM7VM6JSaZKGsLoNVLhVFhZvlmfLE4wATdZ5i/4w
-         N6IDBK9emew5XRlSqW0uHWazlbMCxLlP4kc0MSth93WQsJoOQQ1zOXbwsGuoeyZRsjdx
-         a5UQ==
-X-Gm-Message-State: ACgBeo16Zl41eGj+R16lAWYoNdu25zjDWSbC2xR0TLm81iF9sa+WzOkI
-        SxyoW/tcYwGhlZ4t+bldUTLhzHsASWDeiBbi2OI=
-X-Google-Smtp-Source: AA6agR7KtMGU/rsla2f7fwENtwgXLzDc8MR3ZiQqpxnnG/Ft8aj9l+1lBnO+G/fY21kqT5zoqP3r6bdeV6mAxZPfefs=
-X-Received: by 2002:a05:6402:438d:b0:43d:b383:660f with SMTP id
- o13-20020a056402438d00b0043db383660fmr1490810edc.283.1660267962604; Thu, 11
- Aug 2022 18:32:42 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=DmoyVSWXIDjWkDxD/535JqvNJLgG0ANofKgHtTi6tF0=;
+        b=AO6a8m5mu4TcmW4vKDCaGtgwCL4zjry5GaYWokxgZE6lwBHEQ2SyyFSqp80+FqtKn2
+         vTQ6Sw1DfjK25+tXdbiOhJ6/hrg9UqUFUELdJJnyvzhumOnBcWOIWsFQwnDpFqiISZDv
+         BHdyObDycNAKU1EYDBsEAu+tKR824DXYma3lue73IU7PjOhMQAfEvpyc8ndnC7FdmaBi
+         UiQfg6QCfiPdKfwcB0TQtpWkn/vMABVttyYy8eCDanisqSRQ5lUvdZ0F4AZO+ObAtZLZ
+         aJtUO+qdaNErPtg/Q3CNd6r9gwuaDbx500Z+GixQnvFl5Cmea9zimLuWgoHUgu+ddl4L
+         JR6Q==
+X-Gm-Message-State: ACgBeo3tf8h5ZdUjY6iq/0Hy0pxRGFXvWD7RJM1MDvtuqKcjjzwKBmCU
+        rz121Pwm8AosCZeAeD0V1vEJ9g==
+X-Google-Smtp-Source: AA6agR67PVkH2ZYPw4wvqs0B15TlDcQddT+dSsclrta1f5iFHLvGhbe9cJmamOHtST0r5/zQ1ThWow==
+X-Received: by 2002:a17:903:1c7:b0:16f:1228:f632 with SMTP id e7-20020a17090301c700b0016f1228f632mr2218461plh.65.1660277148355;
+        Thu, 11 Aug 2022 21:05:48 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id 14-20020a17090a190e00b001eff36b1f2asm576609pjg.0.2022.08.11.21.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 21:05:47 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 09:35:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: check only freq_table in __resolve_freq()
+Message-ID: <20220812040545.gcmyjjpqfup3bo5u@vireshk-i7>
+References: <20220811165408.23027-1-lukasz.luba@arm.com>
 MIME-Version: 1.0
-References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
- <1660225318-4063-2-git-send-email-u0084500@gmail.com> <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
-In-Reply-To: <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Fri, 12 Aug 2022 09:32:31 +0800
-Message-ID: <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
- battery charger
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
-        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220811165408.23027-1-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B48=E6=9C=8811=E6=97=A5 =E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A10:12=E5=AF=
-=AB=E9=81=93=EF=BC=9A
->
-> On 11/08/2022 16:41, cy_huang wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add bindings for the Richtek RT9471 I2C controlled battery charger.
-> >
->
-> Thank you for your patch. There is something to discuss/improve.
->
-> > +properties:
-> > +  compatible:
-> > +    const: richtek,rt9471
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  ceb-gpios:
-> > +    maxItems: 1
->
-> This looks not standard, so please provide a description.
-It's the external 'charge enable' pin that's used to control battery chargi=
-ng.
-The priority is higher than the register 'CHG_EN' control.
-In the word, 'b' means it's reverse logic, low to allow charging, high
-to force disable charging.
+On 11-08-22, 17:54, Lukasz Luba wrote:
+> The there is no need to check if the cpufreq driver implements callback
 
-description:
-  External charge enable pin that can force control not to charge the batte=
-ry.
-  Low to allow charging, high to disable charging.
+s/The there/There/
 
->
-> > +
-> > +  wakeup-source: true
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  interrupt-controller: true
-> > +
-> > +  "#interrupt-cells":
-> > +    const: 1
->
-> Why a charger driver is a interrupt-controller?
-There're 32 nested IRQs from RT9471.
-The original thought is to make the user easy to bind the interrupt
-into their driver.
+> cpufreq_driver::target_index. The logic in the __resolve_freq uses
+> the frequency table available in the policy. It doesn't matter if the
+> driver provides 'target_index' or 'target' callback. It just has to
+> populate the 'policy->freq_table'.
+> 
+> Thus, check only frequency table during the frequency resolving call.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 7820c4e74289..69b3d61852ac 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -532,7 +532,7 @@ static unsigned int __resolve_freq(struct cpufreq_policy *policy,
+>  
+>  	target_freq = clamp_val(target_freq, policy->min, policy->max);
+>  
+> -	if (!cpufreq_driver->target_index)
+> +	if (!policy->freq_table)
+>  		return target_freq;
+>  
+>  	idx = cpufreq_frequency_table_target(policy, target_freq, relation);
 
-For charger driver, does it mean legacy IRQ handler is more preferred?
->
-> > +
-> > +  usb-otg-vbus-regulator:
-> > +    type: object
-> > +    unevaluatedProperties: false
-> > +    $ref: /schemas/regulator/regulator.yaml#
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - wakeup-source
-> > +  - interrupts
-> > +  - interrupt-controller
-> > +  - "#interrupt-cells"
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    i2c {
-> > +      #address-cells =3D <1>;
-> > +      #size-cells =3D <0>;
-> > +
-> > +      charger@53 {
-> > +        compatible =3D "richtek,rt9471";
-> > +        reg =3D <0x53>;
-> > +        ceb-gpios =3D <&gpio26 1 0>;
->
-> Isn't the last value a GPIO flag? If yes, use appropriate define.
-I already specify GPIOD_OUT_LOW in the gpiod_request flag.
-Do I need to convert the gpio request code to GPIOD_OUT_HIGH,
-and specify here as GPIO_ACTIVE_LOW?
->
->
->
-> Best regards,
-> Krzysztof
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+-- 
+viresh
