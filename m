@@ -2,100 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20EC55914B9
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 19:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571C65915AF
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 20:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238732AbiHLRSF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Aug 2022 13:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        id S238935AbiHLSxY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 14:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiHLRSD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 13:18:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B111DB1BB1;
-        Fri, 12 Aug 2022 10:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660324682; x=1691860682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yAUb1g8BPPCo00CwCVUUCW/MEhmxy2A/zFgeWAZglu4=;
-  b=YNhocms2E/VMypvzbV9aaGfFEd7JinWt7YgzPuhbJctfbA0gM5kWWwc7
-   lDMHhkaxjlO/gsKLYjy0aNxJ1cNB6iMOvXXNHhajK3MzF6bKR1pW9eFwd
-   K1S4kmCM6ZUPMtL5EBspm89kcCWFBytdXMU4G41ywDJfC0If0+4LqS4NE
-   uGwh9EM0SHhyO4GwYPbYINGnofxcnVcu1zYiabezT7CzrZ6K9dnOyBDxd
-   sO+9TKuUHvif86468fkmiEpPo4B5AOAcBMFVlVCI1AytAcXHM5AtX3vYu
-   2JZ8QyHZswsYoyl6h+3AIVsZUFxkVNC0SCmmRsXB0SGLRsaFiPIGIY5uX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278593618"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="278593618"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 10:17:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="748258212"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 10:17:50 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMYI9-0000m3-1Z;
-        Fri, 12 Aug 2022 17:17:49 +0000
-Date:   Sat, 13 Aug 2022 01:17:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     kbuild-all@lists.01.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v2 26/26] thermal/drivers/intel: Use generic
- thermal_zone_get_trip() function
-Message-ID: <202208130155.HquqN8f2-lkp@intel.com>
-References: <20220809220436.711020-27-daniel.lezcano@linaro.org>
+        with ESMTP id S236937AbiHLSxX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 14:53:23 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2712CDCD
+        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 11:53:21 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id z6so2465542lfu.9
+        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 11:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=H2hFHauRZ+2L1/8Jn5Q0JcmOqrApxd8gqlCGFKCdAM4=;
+        b=PBfBUmCCqcFOkJncUdtapjWauTPUiKTDxV8oZ1lYEW8xc3KN7Gru9WcRttJJrZKU1v
+         puewIC/RAT4riMzrbYZNMmChbVUy0NVo4m3lT43eIzZTcMVjUMT0/X5alIayZosShy4a
+         A2DBnUKi2Oa3ha/9X7/FiezFCFP3q9i/vcYoE/Mi3Y4AdJPYaYItnAvzdaooEn9rDIZN
+         7pAj20HghfJsz2LY4CVKj1QhkKHqoUmLnisWbFU4dQIds7kZm8k1S6Yg29dGSpwT2wDf
+         ivyfgtn7IX0vPdhw51VB0i1Mn8hENHdS9HJxKH7sP6kJG94PPgGibl4u+FRAAJc+Wg71
+         YtFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=H2hFHauRZ+2L1/8Jn5Q0JcmOqrApxd8gqlCGFKCdAM4=;
+        b=BEvb0fuS+SwJ15/7kllhoZamdAToUaAsgJErW5XraQFao9B45bjBI6X4xsZBbj9Xys
+         Csspeei9K2fkgw6aol5EEf3fSQOaqYnVrr3nG7QCViQGS/V+d727ZJ8n0hpW1zCXWn9M
+         xb8rOsLow8mQtdoUbvJHKFMwwQwCCvA9KhxFYpHm5AzVT/svqsAKzqAqSXUuuxpymXJv
+         tw8wPAhrwX63l72VBpqhiFVCkhWfXbARp5IzCy2nxmj9P8uXLjjS7NjGiPmyrban46YZ
+         igY8t3ooPNaD8jkQcW+6AWyHouuvhN2PVA1KY7FL5mRN2n2wF+sGnt7+Q959cwSg40hd
+         O5fQ==
+X-Gm-Message-State: ACgBeo3NAszWstvsxcL+HIZ3mTPUvbfsBMfgGE1GU9N64Rfa292+D4Iy
+        yzcWTsndbp2KQM1xXMaowNx7DsBfGpqPnZTs
+X-Google-Smtp-Source: AA6agR6ZIpyoLa852PCDDPN1ueyFqhPzbfJsN8zaQTOoB7GiCdBw7o8HRvVEUWrz3UjuDNBYcfEFlw==
+X-Received: by 2002:ac2:4d18:0:b0:48b:4a2d:a378 with SMTP id r24-20020ac24d18000000b0048b4a2da378mr1611866lfi.304.1660330399661;
+        Fri, 12 Aug 2022 11:53:19 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id u9-20020ac251c9000000b0048b003c4bf7sm298508lfm.169.2022.08.12.11.53.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 11:53:19 -0700 (PDT)
+Message-ID: <f2a664be-71e9-7a26-2f0c-5f654d9cb3cb@linaro.org>
+Date:   Fri, 12 Aug 2022 21:53:15 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809220436.711020-27-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
+ battery charger
+Content-Language: en-US
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+ <1660225318-4063-2-git-send-email-u0084500@gmail.com>
+ <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
+ <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
+ <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org>
+ <CADiBU38+9sR1r20=YWt-9s2+u7maHH+1VudCnV1-0+F4jYKdQQ@mail.gmail.com>
+ <CADiBU3_Jt6n6tm=oVvjk5vsoEAneH7t-37S6skepA6v6bVVYUw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CADiBU3_Jt6n6tm=oVvjk5vsoEAneH7t-37S6skepA6v6bVVYUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On 12/08/2022 19:05, ChiYuan Huang wrote:
+>> It's the same usage like as TI charger.
+>>>>
+>>>> For charger driver, does it mean legacy IRQ handler is more preferred?
+>>>
+>>> Who is the consumer of these interrupts? Can you show the DTS with the
+>>> interrupt consumer?
+>>>
+> Sorry, I forget to reply this question.
+> Some battery driver may need to know the 'full', 'recharge' , 'ieoc' status.
+> The usage will  be like as below
+> 
+> battery {
+>   interrupts-extended = <&rt9471_chg 2 0>, <&rt9471_chg 3 0>, &(rt9471_chg 5 0>;
+>   interrupt-names = "chg-done", "chg-recharge", "chg-ieoc";
+> };
+> 
+> Some gauge HW needs this information to enhance the battery capacity accuracy.
 
-I love your patch! Yet something to improve:
+Other supply stack pieces do it via supplies (supplied to/from in
+include/linux/power_supply.h) and reporting power_supply_changed().
 
-[auto build test ERROR on next-20220809]
-[cannot apply to rafael-pm/thermal tegra/for-next linus/master v5.19 v5.19-rc8 v5.19-rc7 v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+With such explanation, your device is an interrupt source, but it is not
+an interrupt controller. If your device is interrupt controller, it
+means someone routes the interrupt line to your device. Physical line.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/Rework-the-trip-points-creation/20220810-060933
-base:    6c8f479764ebe2848589de3249743ea552ed2495
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220813/202208130155.HquqN8f2-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/b38db2fe0562e475bb6240a64e6f6156352d41d1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/Rework-the-trip-points-creation/20220810-060933
-        git checkout b38db2fe0562e475bb6240a64e6f6156352d41d1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "thermal_zone_device_register_with_trips" [drivers/thermal/intel/x86_pkg_temp_thermal.ko] undefined!
-ERROR: modpost: "thermal_zone_device_register_with_trips" [drivers/platform/x86/acerhdf.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof
