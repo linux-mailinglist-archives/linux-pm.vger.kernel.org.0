@@ -2,107 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA15D5911BE
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 15:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DC55912B9
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 17:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbiHLNy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Aug 2022 09:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
+        id S229760AbiHLPO3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 11:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbiHLNy4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 09:54:56 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6976AA8CF4
-        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 06:54:55 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z12so1286642wrs.9
-        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 06:54:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=jM7EPdzO3/8UIbNc27Sgu5Ssc7D/JbAU5jUdYrnh1RQ=;
-        b=j8Sp0Ny1AUyYQrQLBjWgLArXRjmzPu1lvmcKL+902eFWGt+x+95FkQ+LUAsRGB/lG9
-         Dsd23JA6G0mporl2ukXShKbHFJXlIMyXriCwpi96pWky/eRqATdJp79iylWXQJGFpu9S
-         xi+1UOTIuWDsawV/wl8Dto08G4ACp7h0YnyyjQPSXFK+U1fOlYPha14ooMsaX20r7lCm
-         bpMNJ0Cuqi8z9Q9OwkQszpmVmR4TjAun/1/WWNu7V1kR1ByiV66W7m6jqDWkR+dh6V/z
-         K9XUY1oS+Z8W3lx4hTsBrNot3HvxxwnQizqulHzAO+bfX7BrES7mig84NrV3S9AG12v1
-         0SRw==
+        with ESMTP id S238785AbiHLPN7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 11:13:59 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5D4A7A80;
+        Fri, 12 Aug 2022 08:13:57 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id r5so1029106iod.10;
+        Fri, 12 Aug 2022 08:13:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=jM7EPdzO3/8UIbNc27Sgu5Ssc7D/JbAU5jUdYrnh1RQ=;
-        b=XDtlQOQvZSxL8E7o1hiZEX0jArLSXT8D+sJQFmBSDC00wTqBB2h2ZUOlB5FOiI8s1h
-         JyYysfa35n+sdA7ZQYG/WxJS+uvJmUadCVu/v13A9ShIV+Vi7rWa9z3xfTvVpcw6ubZP
-         VI6ivl0lhvlfL/BHEZDf3McHJip1UDCEfCFxrWYq+t9HHPgvVpTKbVOr7sFbeIrJeHqV
-         yQtq3Z2DhEuU4Dql97PQ4WH4DQXvSOygHlcJieXnZr2F9pxkKuaDGNh+D4npL3KIy9h6
-         t0e8IK+FccY4eR4hD/P2Uj2LQulpGVqQvIsk/UkM7pP5wNOlMS8bJpR71FiYSGxxY/p+
-         EqaA==
-X-Gm-Message-State: ACgBeo1KH++TkjLIx6d3gqsVuExSkZObrFdYnu4+cbS8yhG+CkYH6Q/P
-        M+ShA4BiSznH9NMLyu49ZE+4yw==
-X-Google-Smtp-Source: AA6agR5Kf8LT3vuuSyA8RzNo0c2gUbzfKa5DRzkQ/uyCoMf8X9uhFvLsN0rMwuIy/15RvIrWqifSIQ==
-X-Received: by 2002:a05:6000:1acd:b0:220:62c2:bc29 with SMTP id i13-20020a0560001acd00b0022062c2bc29mr2199687wry.620.1660312493881;
-        Fri, 12 Aug 2022 06:54:53 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id bo22-20020a056000069600b0021d80f53324sm2164032wrb.7.2022.08.12.06.54.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 06:54:53 -0700 (PDT)
-Message-ID: <c0c5b306-9fd5-1048-ba08-044d292cbf7a@linaro.org>
-Date:   Fri, 12 Aug 2022 15:54:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] thermal/core: Fix lockdep_assert() warning
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     rafael@kernel.org, krzk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amitk@kernel.org, linux-samsung-soc@vger.kernel.org
-References: <f1fb1d84-85de-f3c5-0212-fcf0e9c0ccd2@samsung.com>
- <CGME20220812131216eucas1p266cfd4e51b59fc3cf8056474a6910094@eucas1p2.samsung.com>
- <20220812131202.1331238-1-daniel.lezcano@linaro.org>
- <ab708272-efe0-343e-2dfc-299187126a2a@samsung.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ab708272-efe0-343e-2dfc-299187126a2a@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        bh=+gnS23mSZkFSRCfkxdCiT8D1lZEPwBiVeiXPhatZCZ4=;
+        b=d52qyPc31Wa84oGVIzvGheJQeI+dksihim5QOh10Rip8fI+fRUqRtsT/Je4oLYMRpt
+         ruPZ3Wd/a+HVC3v4PKFGqgOPIZAuLrP/IhT9Hq3K117vmFgB2DtZrXrzye2ttdmsiJ/W
+         UIjfGMIvQwFo8mcaXKD7/61dKX/a8yOS0BwJOjxUZVhOrn0mmesOoxlxcepNH3sky0ho
+         wZ4ngmCyZKyplW0VlBB84s6SeRERg+Y2axE8HJW5WhXbVO6z8C4W1DHKjpxNZFhbagEr
+         8jwrR6jkXA5HXR5XzzEBzbEUynHjmxtTKdXj37jQYZD6U2I3ealOlvmiNu73xR3wblNF
+         MojQ==
+X-Gm-Message-State: ACgBeo3vYKirGIT2nLEEJRlmoA6sGlkowDT6jV+7zniA6tJe4EzvNeJY
+        XvLaphDKtfgBrrxdamvDDg==
+X-Google-Smtp-Source: AA6agR6d9iIReWiEm6VWqwmm0FzN4hPDYtj7eb+Orodkp8VoIY0qJFoUq8spBIFr2C6pFlessr3vyw==
+X-Received: by 2002:a05:6638:1386:b0:342:8d69:71c2 with SMTP id w6-20020a056638138600b003428d6971c2mr2041161jad.315.1660317236960;
+        Fri, 12 Aug 2022 08:13:56 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id q13-20020a0566022f0d00b00681b6e20a82sm1041171iow.46.2022.08.12.08.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 08:13:56 -0700 (PDT)
+Received: (nullmailer pid 168978 invoked by uid 1000);
+        Fri, 12 Aug 2022 15:13:53 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        alina_yu@richtek.com, sre@kernel.org, devicetree@vger.kernel.org,
+        alinayu829@gmail.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        cy_huang@richtek.com
+In-Reply-To: <1660225318-4063-2-git-send-email-u0084500@gmail.com>
+References: <1660225318-4063-1-git-send-email-u0084500@gmail.com> <1660225318-4063-2-git-send-email-u0084500@gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471 battery charger
+Date:   Fri, 12 Aug 2022 09:13:53 -0600
+Message-Id: <1660317233.429908.168977.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/08/2022 15:34, Marek Szyprowski wrote:
-> On 12.08.2022 15:12, Daniel Lezcano wrote:
->> The function thermal_zone_device_is_enabled() must be called with the
->> thermal zone lock held. In the resume path, it is called without.
->>
->> As the thermal_zone_device_is_enabled() is also checked in
->> thermal_zone_device_update(), do the check in resume() function is
->> pointless, except for saving an extra initialization which does not
->> hurt if it is done in all the cases.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Thu, 11 Aug 2022 21:41:57 +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> This fixes the warning I've reported. Feel free to add:
+> Add bindings for the Richtek RT9471 I2C controlled battery charger.
 > 
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Co-developed-by: Alina Yu <alina_yu@richtek.com>
+> Signed-off-by: Alina Yu <alina_yu@richtek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  .../bindings/power/supply/richtek,rt9471.yaml      | 78 ++++++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
 > 
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-Great, thanks for testing
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/richtek,rt9471.example.dtb: charger@53: usb-otg-vbus-regulator: Unevaluated properties are not allowed ('regulator-compatible' was unexpected)
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
