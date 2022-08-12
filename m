@@ -2,156 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12770591194
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 15:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA15D5911BE
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Aug 2022 15:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238937AbiHLNe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Aug 2022 09:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
+        id S238101AbiHLNy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Aug 2022 09:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbiHLNe1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 09:34:27 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D0D9C511
-        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 06:34:25 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220812133424euoutp023e2dea73fb6506d183f7262648b943e0~KnExM3hjp3254332543euoutp02I
-        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 13:34:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220812133424euoutp023e2dea73fb6506d183f7262648b943e0~KnExM3hjp3254332543euoutp02I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1660311264;
-        bh=MkZCuQgIsBVplYM2ulhejLrnFPkJHNJnFDJoU33mPJ8=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=Yx6Xucz9ZWkpLU+pFQPiG6b6rVip389ZRuFiVVBqkTzPEkP9Q79RTMHuPQr9OdXT+
-         JsEj9aASenpLsjZUrUPPUdADeo9y/zM5M3Y73439bti9A/9Wt+T147NDTdDHEZ7xU0
-         fEOf4QS5leHl7FVTZCQ/eicTSiyURcRg/vF2GNeI=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220812133423eucas1p1e17293f1b6aac297dfd77de5132f5ea6~KnEw95x9c0120701207eucas1p1m;
-        Fri, 12 Aug 2022 13:34:23 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 95.2C.09580.FD656F26; Fri, 12
-        Aug 2022 14:34:23 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220812133423eucas1p132aea983a5c2d0d4fe62a10ef2ffc9b3~KnEwjXX0f0517605176eucas1p1Z;
-        Fri, 12 Aug 2022 13:34:23 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220812133423eusmtrp217fb9ace3bb45a751196445fe7f4258f~KnEwikXNu0855308553eusmtrp2N;
-        Fri, 12 Aug 2022 13:34:23 +0000 (GMT)
-X-AuditID: cbfec7f5-9c3ff7000000256c-8e-62f656dfaf67
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id BF.15.09095.FD656F26; Fri, 12
-        Aug 2022 14:34:23 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220812133422eusmtip28344f0ba3a59afc6387c4871aa545fd2~KnEwBR17b2310523105eusmtip2I;
-        Fri, 12 Aug 2022 13:34:22 +0000 (GMT)
-Message-ID: <ab708272-efe0-343e-2dfc-299187126a2a@samsung.com>
-Date:   Fri, 12 Aug 2022 15:34:22 +0200
+        with ESMTP id S234501AbiHLNy4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Aug 2022 09:54:56 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6976AA8CF4
+        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 06:54:55 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id z12so1286642wrs.9
+        for <linux-pm@vger.kernel.org>; Fri, 12 Aug 2022 06:54:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=jM7EPdzO3/8UIbNc27Sgu5Ssc7D/JbAU5jUdYrnh1RQ=;
+        b=j8Sp0Ny1AUyYQrQLBjWgLArXRjmzPu1lvmcKL+902eFWGt+x+95FkQ+LUAsRGB/lG9
+         Dsd23JA6G0mporl2ukXShKbHFJXlIMyXriCwpi96pWky/eRqATdJp79iylWXQJGFpu9S
+         xi+1UOTIuWDsawV/wl8Dto08G4ACp7h0YnyyjQPSXFK+U1fOlYPha14ooMsaX20r7lCm
+         bpMNJ0Cuqi8z9Q9OwkQszpmVmR4TjAun/1/WWNu7V1kR1ByiV66W7m6jqDWkR+dh6V/z
+         K9XUY1oS+Z8W3lx4hTsBrNot3HvxxwnQizqulHzAO+bfX7BrES7mig84NrV3S9AG12v1
+         0SRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=jM7EPdzO3/8UIbNc27Sgu5Ssc7D/JbAU5jUdYrnh1RQ=;
+        b=XDtlQOQvZSxL8E7o1hiZEX0jArLSXT8D+sJQFmBSDC00wTqBB2h2ZUOlB5FOiI8s1h
+         JyYysfa35n+sdA7ZQYG/WxJS+uvJmUadCVu/v13A9ShIV+Vi7rWa9z3xfTvVpcw6ubZP
+         VI6ivl0lhvlfL/BHEZDf3McHJip1UDCEfCFxrWYq+t9HHPgvVpTKbVOr7sFbeIrJeHqV
+         yQtq3Z2DhEuU4Dql97PQ4WH4DQXvSOygHlcJieXnZr2F9pxkKuaDGNh+D4npL3KIy9h6
+         t0e8IK+FccY4eR4hD/P2Uj2LQulpGVqQvIsk/UkM7pP5wNOlMS8bJpR71FiYSGxxY/p+
+         EqaA==
+X-Gm-Message-State: ACgBeo1KH++TkjLIx6d3gqsVuExSkZObrFdYnu4+cbS8yhG+CkYH6Q/P
+        M+ShA4BiSznH9NMLyu49ZE+4yw==
+X-Google-Smtp-Source: AA6agR5Kf8LT3vuuSyA8RzNo0c2gUbzfKa5DRzkQ/uyCoMf8X9uhFvLsN0rMwuIy/15RvIrWqifSIQ==
+X-Received: by 2002:a05:6000:1acd:b0:220:62c2:bc29 with SMTP id i13-20020a0560001acd00b0022062c2bc29mr2199687wry.620.1660312493881;
+        Fri, 12 Aug 2022 06:54:53 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bo22-20020a056000069600b0021d80f53324sm2164032wrb.7.2022.08.12.06.54.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 06:54:53 -0700 (PDT)
+Message-ID: <c0c5b306-9fd5-1048-ba08-044d292cbf7a@linaro.org>
+Date:   Fri, 12 Aug 2022 15:54:52 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.12.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Subject: Re: [PATCH] thermal/core: Fix lockdep_assert() warning
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
 Cc:     rafael@kernel.org, krzk@kernel.org, rui.zhang@intel.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         amitk@kernel.org, linux-samsung-soc@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220812131202.1331238-1-daniel.lezcano@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFKsWRmVeSWpSXmKPExsWy7djPc7r3w74lGTx5Z2xxeH6FxbzPshbn
-        z29gt7i8aw6bxefeI4wWM87vY7KY+2Uqs8WTh31sDhwei/e8ZPLYtKqTzePOtT1sHp83yQWw
-        RHHZpKTmZJalFunbJXBl7D8zk71gNnfFuh8TmBsY53B2MXJySAiYSLzfsJupi5GLQ0hgBaPE
-        4+6pbBDOF0aJ6123oTKfGSWWrNvEDNOy5eM6qMRyRom5pz6xQDgfGSX+nH7PAlLFK2Ancfps
-        JyuIzSKgKtHa9IgJIi4ocXLmE7AaUYFkiWf/F7OD2MIC9hLbl+wGq2EWEJe49WQ+mC0ioCfR
-        +L4NKr6GUaLxjSmIzSZgKNH1tosNxOYUcJTY+OAkI0SNvMT2t3OYQQ6SELjBIfGodQU7xNku
-        Eou3XIWyhSVeHd8CZctI/N8JsowDyM6X+DvDGCJcIXHt9Rqoj60l7pz7xQZSwiygKbF+lz5E
-        2FHi6Kp7jBCdfBI33gpCXMAnMWnbdGaIMK9ER5sQRLWaxKzj6+B2HrxwiXkCo9IspDCZheT3
-        WUh+mYWwdwEjyypG8dTS4tz01GLjvNRyveLE3OLSvHS95PzcTYzA5HP63/GvOxhXvPqod4iR
-        iYPxEKMEB7OSCG/Zos9JQrwpiZVVqUX58UWlOanFhxilOViUxHmTMzckCgmkJ5akZqemFqQW
-        wWSZODilGpisFuYlm7XP7f/QbzWxIOAjn8eduHeZZU4LdKT+7HwUM3Ub+06Xeat1cr7NztC8
-        v/f3Q39HcZ1/D3Zybqn6dV7z98pHNRGXHZUCtr6UeGIqdDz0U6+k2n+F+MN7HYP91y5uvFDV
-        UlP/YDbHxlmTrZyPzk468EbUxVnng/7KuesUk6fsbxOyn9hacmvjsVPPvn/o0TMIlV+TxlM+
-        WeJAn9dh1rlu3Un/H26afdO8Z8upvbulZ3xzVH/btGRZjPv1lT2eKgaLpB/80/2bGqH28sf2
-        i8fCDjgsX27HWF1bEcf99EnI5f3/J2xOPLfexfb+eu5sY7H1mfMbpq6NCj3Sc23x9oAZtR6s
-        hZMm3uIt6tuqpMRSnJFoqMVcVJwIAF2eww6tAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAIsWRmVeSWpSXmKPExsVy+t/xe7r3w74lGRzuFrY4PL/CYt5nWYvz
-        5zewW1zeNYfN4nPvEUaLGef3MVnM/TKV2eLJwz42Bw6PxXteMnlsWtXJ5nHn2h42j8+b5AJY
-        ovRsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJzMstSi/TtEvQy9p+Z
-        yV4wm7ti3Y8JzA2Mczi7GDk5JARMJLZ8XMfUxcjFISSwlFHi0s4X7BAJGYmT0xpYIWxhiT/X
-        utggit4zSpy/PpkFJMErYCdx+mwnWBGLgKpEa9MjJoi4oMTJmU/AakQFkiUWHFoKZgsL2Ets
-        X7IbrIZZQFzi1pP5YLaIgJ5E4/s2sCuYBdYwSnybOJsdYttJRonDM6ezgVSxCRhKdL3tArM5
-        BRwlNj44yQgxyUyia2sXlC0vsf3tHOYJjEKzkBwyC8nCWUhaZiFpWcDIsopRJLW0ODc9t9hQ
-        rzgxt7g0L10vOT93EyMw6rYd+7l5B+O8Vx/1DjEycTAeYpTgYFYS4S1b9DlJiDclsbIqtSg/
-        vqg0J7X4EKMpMDQmMkuJJucD4z6vJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1
-        CKaPiYNTqoEpKmUpw/Jn75xa23znzmlIYp55uCvtiv+J/vcHua+enaq9h0uzMDWDZ76fOk/5
-        T/tl877e7djH13fy46d6vZVTFd6oKEqd3OrzxHgXbwdbwJwGB+U0Fvmc2EmFIf65VXbrVjx5
-        2S96pmJXG++sbckbDnieuuRZf/72wpqQGbZ1M99c1Ej5fmtm9uPISy+7Ztkbf06cuMVR6bu9
-        HJfgq41Sx5Y/E904698SixtMv29ufvYvhfuzaGStd6TRDruc25oy6k3WPYYba9azJbyfcb5K
-        4NHBau5p8zlqHk/YZxGlvHrziVc9WSxiR755uXlIbOKy4Zy1+IXv3e2/dv0qX+rhuM96yf6t
-        ssv1VJ6t35dXq8RSnJFoqMVcVJwIAGeOVq9DAwAA
-X-CMS-MailID: 20220812133423eucas1p132aea983a5c2d0d4fe62a10ef2ffc9b3
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220812131216eucas1p266cfd4e51b59fc3cf8056474a6910094
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220812131216eucas1p266cfd4e51b59fc3cf8056474a6910094
 References: <f1fb1d84-85de-f3c5-0212-fcf0e9c0ccd2@samsung.com>
-        <CGME20220812131216eucas1p266cfd4e51b59fc3cf8056474a6910094@eucas1p2.samsung.com>
-        <20220812131202.1331238-1-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <CGME20220812131216eucas1p266cfd4e51b59fc3cf8056474a6910094@eucas1p2.samsung.com>
+ <20220812131202.1331238-1-daniel.lezcano@linaro.org>
+ <ab708272-efe0-343e-2dfc-299187126a2a@samsung.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <ab708272-efe0-343e-2dfc-299187126a2a@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12.08.2022 15:12, Daniel Lezcano wrote:
-> The function thermal_zone_device_is_enabled() must be called with the
-> thermal zone lock held. In the resume path, it is called without.
->
-> As the thermal_zone_device_is_enabled() is also checked in
-> thermal_zone_device_update(), do the check in resume() function is
-> pointless, except for saving an extra initialization which does not
-> hurt if it is done in all the cases.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On 12/08/2022 15:34, Marek Szyprowski wrote:
+> On 12.08.2022 15:12, Daniel Lezcano wrote:
+>> The function thermal_zone_device_is_enabled() must be called with the
+>> thermal zone lock held. In the resume path, it is called without.
+>>
+>> As the thermal_zone_device_is_enabled() is also checked in
+>> thermal_zone_device_update(), do the check in resume() function is
+>> pointless, except for saving an extra initialization which does not
+>> hurt if it is done in all the cases.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+> This fixes the warning I've reported. Feel free to add:
+> 
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> 
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-This fixes the warning I've reported. Feel free to add:
+Great, thanks for testing
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
-> ---
->   drivers/thermal/thermal_core.c | 3 ---
->   1 file changed, 3 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 50814009339d..dc8ff6a84df1 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1438,9 +1438,6 @@ static int thermal_pm_notify(struct notifier_block *nb,
->   	case PM_POST_SUSPEND:
->   		atomic_set(&in_suspend, 0);
->   		list_for_each_entry(tz, &thermal_tz_list, node) {
-> -			if (!thermal_zone_device_is_enabled(tz))
-> -				continue;
-> -
->   			thermal_zone_device_init(tz);
->   			thermal_zone_device_update(tz,
->   						   THERMAL_EVENT_UNSPECIFIED);
-
-Best regards
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
