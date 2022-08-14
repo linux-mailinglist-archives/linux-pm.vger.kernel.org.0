@@ -2,176 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4470C592364
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Aug 2022 18:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92B959258C
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Aug 2022 18:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiHNQUw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 Aug 2022 12:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S231364AbiHNQrM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Aug 2022 12:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiHNQU3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Aug 2022 12:20:29 -0400
-Received: from sonic306-20.consmr.mail.gq1.yahoo.com (sonic306-20.consmr.mail.gq1.yahoo.com [98.137.68.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFB011162
-        for <linux-pm@vger.kernel.org>; Sun, 14 Aug 2022 09:03:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660493010; bh=v1wxdWmS7PzJ4GTDnvJwg409BHbOVzpx0sX5IXkXEQ8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ZRp8UM9Ksuoe0l5sKKVpzcYRynNIpZ0UGvW4IXPh39EnkJOFDFhGiaIHvny4s2bwMbPsodfytc6z5Z8EyJIUrFANJgz6lmt0sUD9kBTl1BSM04kKwORliniybQ+NSLD/iC1azL0GWGNkvfTUdSNUFz6Y1ZzeJ/eFyAovrLzjgj1yQOYsXbv4uRNn5FB5jqUIFK8wdRVCKNxi8vZu2UGuTMmXgkBDQGO8NqWyAbJjcvZ+8Y5gfIgKyEmTNS7/+RjqZGCGbOCD+ZIkdm6sfs/2OBcxo1SXsilOGfUWdGPNxpeQSPdQ0AwYPiWBizN8BA2Moc/goKII/5m8pwBBtSdIHw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660493010; bh=jAB2lbTuQpY5S6t3qSGZ47a6BzDgaFET83mKTD4m61w=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=QshC+MWNnXm/6Chg2HlJKChlzuDctlq96f8DED+2E26SzY++MGP10NKksHtDUGmxESsZc6gY4xTyEH1bhHpQAJeX+PRHYUx0Jpw2AbR52DVOSapS7eh0lBAAeLV3kyPKBauYPRnN2yKyO/eLb3bV88H45X8Z2YRT2hO3RztK+FombVtytQBhpqGe8VcSLeZ0Dxs/sb7yPM9EfKJQmksnxvy+/dhgGg11ksUwyFkomhXRMiLTMwbevmU12JtKX1DZXCY3oFDfxMZhC6LExi1qtVjGBh9z6kZSGFp66O/M1XDeCy2ctNMkvLro21yNAlNaqLmj3Le+adh6cbH3n4jApg==
-X-YMail-OSG: VwYA2mAVM1ngjslb92eTdmY6IPdA2.5XNKzC_Sc4CgFhVQoaQTYh1H.kM21MlVk
- UgE.aZNMTMGOW8oeA92sc.ApZ3mLbezib.YzW6Ubt9ydiviGnk3Czdjc0Za.ll9l3yqWoRD2otDT
- 6MKg9ztY94diBre83aWDqmDF8LA9AikcOU0H2_hiOfVfDup3yk0UDNWkWzhlYmTW4RV.WYt22OcL
- TicanIQEDjCgaLIdeSxo.iepKQGlTlWKy1mpMExRDyE02C7ZfWn5eAmatDMZ4tULPv_wGhWLTCV5
- y_cumtDEBbQLvZAJPMFa_OGuoklRaahCJh1P9Qi3N.KkNc.d7Qf9ALlnapI1.0kTy6e8d7IJkmTa
- wmpCjYzuxPDIu2WcVXSmbJWAcuLgq7Sdfggk91pkqfifWKFVTyWweRv7lkezJ8Yvan1ifZ8cJVn_
- tiefnzNG0Jf4jCad9Aq1HrhbTt34ChZpguF3ZvueONwE5esOrjkUBUgQ7esUzuh0874X0WAEccp9
- C7CZF7m9ZUpo6BR0TTN2f30M0B_.DrADLSHm3HvC6ilQxv3MG8nwQd2RZG91KrCe2CDWhqmFuDx5
- QmS1ZzR03pKX.janC3sTeALWTTI4IQQFCmVLozc05x.DOn64_jrWfWOUPjQQiGXXrBRp20rNdGQA
- cKI06xJbYEHvjcZ38KRFUv4crWM0Y8qOO_ZyhNnw9LPy1vCr2LXn4s8AMzUUcOp1PfCwAOdm1bsc
- 7dkOPN7NIY0AWX7XJ0ZMro69GsqOWl2vuXV47dqqt0Xgj8re21dvRmRuLlJxGkixDwBuVClvhih4
- 0qft2XMMKBJAsVAFOHMrMMY23NgNL.QZOVnj0Kqq.Gs_fKZaM1hkwX7uKWHIzz1_v1kB85u1Wchf
- tXVJNKqlHQjAVmxo4YUo8aXAhKR25j_xSerABFvIwRUY9cqaDVQli1CjE6LfFIAIue_0dDHJnHLn
- wdyEIN7wVPgHp_5Oor1FyHir__M_e6sTCa8pEZnOlzHchWQRBFf4BYYzHMb3Lnn8h41gEL._XMFD
- Fd9BcOZoTPFZx.b3PKN3N.KYrhTOhSCMC0MILGjMD_HNxRA.z11pyQ2I_KEae9O0umcc6FxTcSKX
- 6t6OYMNFQ.0V4jvActkMzhPV8WWLje6vNpBGrhwNQAB8Ag3a4NQ_56GJJQjyCytfQnJNaycpVke7
- Db7RUYT3hSG95G4CE6w0OPqzCPk9YV5r8oYgmZK7QOIkorhm1p65UgLW2K4HxCA7yrKRYsTkUr1Q
- 5idRjus0ObcX77QqYuUdeOdKcr9czVxS4eEglfExjE3KRZHtlxIi0o8.K_pUmHjujisIb7oqQu40
- KIXJGKrMHIfHbE.k4.xn7bKfbO_kSeT1Rb6vWBS.O7JsLpfrdeCc236d24VU8h.rv70j9ZohDt9K
- _cKb0qn5em1oKqLDhsphSru3tPawGDPAUX5ltYKlEZebAwZUlL_KOWuEtLy1g6fmOyCQlitcjYKa
- EtxF06Cf2zFMdFYh2dtUlhsSyrfc87HkpnK0AQ6pYkuAlg6VheW_I3l1ZzXddIODXWQ149DCdd8m
- Ez9DCH6jQlfZwgt80YX4Ahp1GQHOnlEWuorCcNCpWseIJR9DliwZR06iwxEDDrb87SXcFc7xE3ga
- .qVabavB9LZS7UMPKskKOOQ06ATtyM6I.ZRc8QLBfp11vXgFOrhm7dcM4WxMEUJIM7azMTwRtCT_
- wQs6McQp37OM7FuT27wn4DQYkF.d7nD2uZ4_Mhuev1Xds9FFpuvjVIBsyCyT1zvy_.1h_dwaHvbW
- 2b8TdRIEDo.Gh3dYXd6ri_rDmYD8.ASjal3DEjzKh9An6xNhn0SF8_YmHWT.LCr5I2Tj0x3jMrhb
- MX6DBoksOe7vItmzSCdkxQK2p0DcY4TD.DPbmMvoNK1RSREm6ktPXkI8RfbbJ0k3QHMn02VBLeqQ
- 3eTteMHC2NmtemU7YMl66VtMmMRexsK.e1ypqrqteNFF_PYZ49YEkjj0yU_Pqv9cnScUQmrpdYae
- KxcO8yr4Ftf84mEXB3ck6HLbjs9sYA6PxOxZMrYR1C1UvauQTSKIW._ilrGHcPViTs9HpKfRtPHa
- v1tYYSBi1CFxyj8D.mHTlk9BP.9AdYYeByFbiCFR3HlfZgcUQwfrznL0h2MzOrLe1VlQkbSSKZnx
- pYllZVODObUwMTX7v656f75DY6ysYOHD7NvAjzO30rVdMEO5cpfEX8J5cLE7Ww1gbQ85MzlAntar
- j0txjBPLhvuObaCUrvo2dWNTSbTXQRGZcWr1VdwZG429lB7q4ufH7
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Sun, 14 Aug 2022 16:03:30 +0000
-Received: by hermes--production-ne1-6649c47445-98ntq (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e7d4ad079837ab09a74572bb4eff2be9;
-          Sun, 14 Aug 2022 16:03:25 +0000 (UTC)
-Message-ID: <a4572696-8c4b-36ee-e067-8aa8a9786ad1@netscape.net>
-Date:   Sun, 14 Aug 2022 12:03:23 -0400
+        with ESMTP id S243688AbiHNQqT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Aug 2022 12:46:19 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2053.outbound.protection.outlook.com [40.107.223.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C178E0F5;
+        Sun, 14 Aug 2022 09:36:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HX+jA6zRKGQS3eiFDVSNfFxdlc4dkmGZJ/uXejKFGZThmebIzPSow0orGJSh/SO7k0TAG5RPVB+A40fCvh+06H+zgioOjD9e+7ipc0wEB4bSqzE9PPlCBMPbAbD5Tnr3EmLFgTtfXIH6XHtGHj7Tv6A0sHQSeUg6svWe+UT9UjMk0d9wuG7dCgxNhpIT9Vc4jp1z/L5A2dHA25AQE0blajLSkhRur4ik5L+cxRvy7ddwD7edvhpQptL6HayNq6hp+7GlX+2v2GusuaUh951vdUfXoCG5M9M6b35c3n5YiARt92AHbqbNbo+bxGFYtg4NzNdMsJLnsFfn01PgY6jccA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9nbY+vX6gnAKN0BkZW7Y2wTYqCdJGIJliiY6wjIh6Sk=;
+ b=DGiV8Wti9XmOMNQidfxiE11C7PB9+WJGFAfClBRn1HpgKkz6PzKB95cGENH/G7VssFq2OuVYOTAEGUanNBCaLZVXXaqeEN4LcT7Rb/f1ZLkGSRl6KMBi5puoW6lPeZCsoaPQOYOgBZ/a7RXdfIMamxUfrigbO7vlagn1l6aq2X4jfHDw3J8RAmb//xLzvyUsktdoltDJb+IqgXoe1pYn/VuY231LdSSSn7856iYZdimKzbVNkOpPmpHSyRNoD76kUgtX+7vhcrkIeOfMkc7j4jv0I2rK4TxVJE1H0OBPDy8HTqyzBF2PRDirpeXmTXX+lmP/2Cd0FWjMgE+CMLT+hQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9nbY+vX6gnAKN0BkZW7Y2wTYqCdJGIJliiY6wjIh6Sk=;
+ b=CBQYS/FS17WIopZkxywudN7mtFPr66vCT96tJ0Ii0qu1YLlpWcy7R19aLj/RaYGJAIbU2z8FIHPf9nQjGmIul7SsQE5cqU1zxYjopGRWBZpIQsmkfm+Gome5Pcss4unVOkb1C0v6MoLn4jxbsAv/LAD/SqJ8vtj7A+8XD69Fjdo=
+Received: from MW4PR03CA0356.namprd03.prod.outlook.com (2603:10b6:303:dc::31)
+ by DM6PR12MB3721.namprd12.prod.outlook.com (2603:10b6:5:1c2::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Sun, 14 Aug
+ 2022 16:36:33 +0000
+Received: from CO1NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::69) by MW4PR03CA0356.outlook.office365.com
+ (2603:10b6:303:dc::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11 via Frontend
+ Transport; Sun, 14 Aug 2022 16:36:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT034.mail.protection.outlook.com (10.13.174.248) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5525.11 via Frontend Transport; Sun, 14 Aug 2022 16:36:32 +0000
+Received: from aerithdevpyuan.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Sun, 14 Aug
+ 2022 11:36:05 -0500
+From:   Perry Yuan <Perry.Yuan@amd.com>
+To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
+        <viresh.kumar@linaro.org>
+CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
+        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
+        <Jinzhou.Su@amd.com>, <Shimmer.Huang@amd.com>,
+        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Perry Yuan <Perry.Yuan@amd.com>
+Subject: [PATCH v5 0/7] AMD Pstate Enhancement And Issue Fixs
+Date:   Mon, 15 Aug 2022 00:35:41 +0800
+Message-ID: <20220814163548.326686-1-Perry.Yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220715142549.25223-1-jgross@suse.com>
- <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
- <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
- <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
- <4688ee9b-1b18-3204-cc93-c6ab2ce9222c@netscape.net>
- <YvjFY1dn2Afg/mFj@kroah.com>
- <22bb6f38-c319-35a1-cf8a-07f78904ecfb@netscape.net>
- <YvjyNdH+X0dwjj+f@kroah.com>
-Content-Language: en-US
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-In-Reply-To: <YvjyNdH+X0dwjj+f@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 20620bdf-65d3-46ac-65db-08da7e1325e5
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3721:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7hSI39y16zZazki3cmSIwD29x5SDPlcljWdi0OrJqOZC+CmyyUDlNA7xDUV7cMWYf5IxJnD+JIpToasTuqM3YwQxhV83lVfMMTnYMEG1oO51lPF5A51VN8dMCwpci7foa5/k4TJ+ukuZYlGUYKqbILRYIBlAHdWM9kPRlEafiNiMnInm4qoCbGlTwMet9xAMF5vLeZOmVRNWQyR93KL10fh/4zPVDu8YGkLMRfz1vrvNEOf5aaXAGSw1ubm8agOrdBONFEWn/cLi1RvlR0SDsIefLLgFzoUwnhUqWgnNlhEKz9iv2Gkb9CUKvLKYA7khWH4uL1vSGaagGy8IREMADjM8roppGTP2IjRfNgrbK1qtluznUl5iwusWxJ1pqDGwh4rs/SncpAqJ7TwCKTv4h6X7z3QTQ5Bc+iHb5mGYCRyzrNDdO1ZP5DKy4lwed8t5mwtli3ef+DwPJKi4JIeJEnVtDQohopYdDOKJAKC0HJhEOUQRzb00d5svjkyZazLQaK8NG0JeZ8iacbvvzZvCPxbWbESz7DbUqfjxRDM2e0ZCTFEMEVU6r+ZR9uJQY8hVpul06cFbVRSnvtRcbt4aPRyR/aMB1S338YOR8EL6JNAq1DreqWFBqYJ95lWtaU5pkIy31EDOIG4THWAqaMguhMA1TLdb3XhZGLryXYXshQ8gtaKAUrZzJdezZxbI36FShF963HjUfDvxxbvDuejWeK8Icpk96Pl1NqIEaAzKikaNy2dtxTyGJW3xUdCp4w6RwVMOQ+Td0dOelXN0ADbvxMS96fkGAOZOK+sCq/pedTfvajbV7wQNZ+3b5FIAnlEGzy+rTWj9dUui+VVi0JjDLkieF6bpL8Qa0H/tc99vYfY=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(39860400002)(396003)(376002)(36840700001)(40470700004)(46966006)(40460700003)(426003)(336012)(478600001)(1076003)(5660300002)(47076005)(186003)(16526019)(36756003)(2616005)(83380400001)(110136005)(40480700001)(54906003)(8936002)(86362001)(36860700001)(41300700001)(356005)(8676002)(316002)(81166007)(82310400005)(4326008)(7696005)(70586007)(82740400003)(70206006)(2906002)(26005)(6666004)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2022 16:36:32.9740
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20620bdf-65d3-46ac-65db-08da7e1325e5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3721
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/14/2022 9:01 AM, Greg KH wrote:
-> On Sun, Aug 14, 2022 at 08:08:30AM -0400, Chuck Zmudzinski wrote:
-> > On 8/14/2022 5:50 AM, Greg KH wrote:
-> > > On Sun, Aug 14, 2022 at 05:19:12AM -0400, Chuck Zmudzinski wrote:
-> > > > Well, that did not take long. Juergen responded with a message,
-> > > > which is encrypted and not delivered to my mailbox because I do not
-> > > > have the PGP keys, presumably to make it difficult for me to continue
-> > > > the discussion and defend myself after I was accused of violating
-> > > > the netiquette rules yesterday by Boris:
-> > >
-> > > The message was signed, not encrypted.  Odd that your email client could
-> > > not read it, perhaps you need to use a different one?
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> > 
-> > It's not that my e-mail client could not read it, there is no evidence it
-> > was ever sent to me.
->
-> The To: line had your address in it, so it was sent to you, and again,
-> it was not encrypted as you claimed, but rather just signed to verify he
-> was the sender.  That's not making anything difficult for anyone, so I
-> think you owe him an apology here, especially as you are asking him to
-> do work for you.
->
-> best of luck!
->
-> greg k-h
+This patchsets adds support for precision boost hardware control
+for AMD processors.
 
-Dear Greg,
+Meanwhile the patchset fixs lowest perf query and desired perf scope issues.
+Update transition delay and latency default value to meet SMU firmware requirement.
+and do some code cleanups,
+It also exports cpufreq cpu release and acquire for coming amd-pstate epp mode driver
 
-Thanks for the advice. I appreciate it. Below follows my apology to Juergen and
-and Thorsten and some additional comments for anyone willing to hear what
-I am trying to say as I continue to try to participate in the discussion of this
-regression...
+The patch series are tested on the AMD mobile and EYPC server systems
 
-Dear Juergen and Thorsten,
+v4->v5:
+- drop the amd precision boost mode control patch
+- combine acpi_cpc_valid() changes into single patch
+- pick up Reviewed-by flags by Huang Ray
 
-I do apologize since I agree there is not enough evidence to conclude that
-Juergen purposely made it difficult for me to respond to and defend myself
-against the negative things he said about me in the e-mail I never received
-from him.
+v3->v4:
+- check cached bit for core performance boost from hardware configuration
+  register
+- pick up the Acked-by flags from Viresh and Sudeep
 
-I am not going to try to defend myself either, since it is not necessary and is
-probably an impossible task for me to succeed in defending myself here in
-this forum. The e-mail you tried and failed to send to me is currently
-publicly available on more than one public mailing lists and it speaks for
-itself. Each person who reads it and the other relevant messages in the
-thread will decide for himself or herself what that message means.
+v2->v3:
+- drop cpufreq cpu release and acquire export patch
+- remove the clamp_t in the amd_pstate_adjust_perf()
 
-So far I am inclined to think most people who will even take the time to
-read the thread will judge me to be in the wrong, and I also am inclined
-to think many who are Cc'd on this thread are already ignoring me
-because they consider me to be a total jerk. That's fine, but that's just
-their opinion, especially if they base their opinion only on a custom
-of hazing users who dare to say what they think on the Linux public
-mailing lists.
+v1->v2:
+- add two new patches to remove the acpi_disabled check
+- fix some typos in the commit info
+- move the clamp_t() into amd_pstate_update() function
+- rebased to 5.19-rc5
 
-But since you are the persons who create the Linux kernel, I will express
-my opinion that your decision to reject my efforts to help the kernel
-developers and maintainers work better together with each other and
-with users like me who are brave enough to say what they think on these
-public mailing lists is the wrong decision if your goal is really to make
-Linux and open source software development able to continue to produce
-high quality software that is actually useful to people.
+Perry Yuan (7):
+  cpufreq: amd-pstate: cleanup the unused and duplicated headers
+    declaration
+  cpufreq: amd-pstate: simplify cpudata pointer assignment
+  cpufreq: amd-pstate: fix white-space
+  cpufreq: amd_pstate: fix wrong lowest perf fetch
+  cpufreq: amd_pstate: map desired perf into pstate scope for powersave
+    governor
+  cpufreq: amd-pstate: update pstate frequency transition delay time
+  cpufreq: amd-pstate: add ACPI disabled check in acpi_cpc_valid()
 
-I say that because I am trying to scream to you as loud as I can: "Linux
-software is no longer useful to me." No one here seems willing to hear
-that message. I wonder if Linus even cares about that anymore. And that is
-sad, because Linux was a great project. Unfortunately, now, it is clear to
-me it is going to die a slow, painful death. The Linux kernel is a big and
-powerful enough project to survive for quite a while, and I probably won't
-live to see its death, but unless the people who define the Linux kernel
-community change, it will eventually die.
+ drivers/acpi/cppc_acpi.c       |  3 +++
+ drivers/base/arch_topology.c   |  2 +-
+ drivers/cpufreq/amd-pstate.c   | 32 ++++++++++----------------------
+ drivers/cpufreq/cppc_cpufreq.c |  2 +-
+ 4 files changed, 15 insertions(+), 24 deletions(-)
 
-Best regards and good luck to all of you,
+-- 
+2.34.1
 
-Chuck
