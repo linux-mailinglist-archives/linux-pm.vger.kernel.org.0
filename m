@@ -2,78 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F97591F55
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Aug 2022 11:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DE8591F6A
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Aug 2022 12:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiHNJue (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 Aug 2022 05:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S229977AbiHNKLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Aug 2022 06:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiHNJud (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Aug 2022 05:50:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E1611454;
-        Sun, 14 Aug 2022 02:50:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 794FBB8068C;
-        Sun, 14 Aug 2022 09:50:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF495C433D6;
-        Sun, 14 Aug 2022 09:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660470630;
-        bh=YMeRpElZNN0nRJL41e5QZR3ONX4RAqEuGqTmM2z0zbY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zjLoF89HCesvrKOZtY0em4B9+H9L9rwDc4dwStr8iHbzRI9/hJvKTQwtu6gpAzd8G
-         72+SwBvEtfkyAgFL3zp5qFmtzH3hTEvjzVpP1QwTNMjAEU91VXU9+WDqyB2fhYBVoR
-         8v/D4AD7qaiyv7NJHVL5jlXXCXYX3Ve+e/A/5Kvo=
-Date:   Sun, 14 Aug 2022 11:50:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chuck Zmudzinski <brchuckz@netscape.net>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>, jbeulich@suse.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        regressions@lists.linux.dev, Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
-Message-ID: <YvjFY1dn2Afg/mFj@kroah.com>
-References: <20220715142549.25223-1-jgross@suse.com>
- <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
- <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
- <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
- <4688ee9b-1b18-3204-cc93-c6ab2ce9222c@netscape.net>
+        with ESMTP id S229484AbiHNKLc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Aug 2022 06:11:32 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4332018E;
+        Sun, 14 Aug 2022 03:11:30 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kb8so9062576ejc.4;
+        Sun, 14 Aug 2022 03:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=bHUqv/0GJPBCxHv+0WA5YwKaB/OSuW/QMKq7Vb1Yd3Y=;
+        b=H9Q7SUQm+w/IZFinc+9IuGZRvyrc241jl2NXMTsWWzK4Yj/bMca3jtmqXimH+PoLbj
+         2tVsPtc0OBB1cWpTsK/ypRcAlVZ/oc5Fm3ZVDm0k5kgXDzpSN4W+WaHryNCwo66pJDLz
+         xUwI5u56/PgqhkW+91DeXvq9Zxbq1ayvGKJtLUXMSisVyhtIDqI6axlu4upiXKieu5Hq
+         JIcX3ZxxJuBcGLV7J8a5YSjhoLUQta4nKDZyf/30VbQq53CXMGRd3EMi1AAvOpnPeCBQ
+         6Kg49DtGHFitHX0fGzHErFmG16oJUsyiji2F2PO4jzO/Ab9e+C+UvcMpCMHfrz3fMvAQ
+         QA4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=bHUqv/0GJPBCxHv+0WA5YwKaB/OSuW/QMKq7Vb1Yd3Y=;
+        b=XmYAAX1YsGjpl8GVYfe95UPc7LZOJnDopwIAlS5dJsdo3+6agU2K6AmJbsrDXR3QQX
+         XMtkMfMyQd0qlWBUmwFg0VdiWy//C/6vDRayarduAlJIe6kOHn1PPn7h1XOij9AYV5OA
+         AQOBb4Ra7oeXHjIPjg+4uUykSGKV6vv7w7xH6MCpKaUDiNRNZMPzIssAYA+RLXI75UqZ
+         R0OAmeRx7sui9M96DhbaLenDxAIKyaQ/X+YAsG+9kPEgW1Q6nQj954tOW89QTdtNqDO5
+         tmhqVqH0CLgNrPZI4WlHWtr2aUj/amOF2BF92qTWr/OqoWB8wag9wdtls6yc2X+XWavF
+         TqQQ==
+X-Gm-Message-State: ACgBeo2q9IOzqHFiIFxxEKvR97cQ5tbIc2ckuZupcoYq61RV5CSug2Hh
+        1aK0T2HduAbHDDqWP+8Sh78=
+X-Google-Smtp-Source: AA6agR59O0rxTrcXuFbtEwWNQAihsOjIR0aJFZi3EF6pxH9m8ayr/toLSzZmLt9jpvao2bukmLllwA==
+X-Received: by 2002:a17:907:969f:b0:730:b649:ff90 with SMTP id hd31-20020a170907969f00b00730b649ff90mr7496486ejc.337.1660471889310;
+        Sun, 14 Aug 2022 03:11:29 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id v1-20020aa7d641000000b004417eeff836sm4538337edr.53.2022.08.14.03.11.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 03:11:28 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org,
+        Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>
+Subject: Re: [PATCH v5 28/33] iio/drivers/sun4i_gpadc: Switch to new of thermal API
+Date:   Sun, 14 Aug 2022 12:11:26 +0200
+Message-ID: <8976333.CDJkKcVGEf@jernej-laptop>
+In-Reply-To: <20220804224349.1926752-29-daniel.lezcano@linexp.org>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org> <20220804224349.1926752-29-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4688ee9b-1b18-3204-cc93-c6ab2ce9222c@netscape.net>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 05:19:12AM -0400, Chuck Zmudzinski wrote:
-> Well, that did not take long. Juergen responded with a message,
-> which is encrypted and not delivered to my mailbox because I do not
-> have the PGP keys, presumably to make it difficult for me to continue
-> the discussion and defend myself after I was accused of violating
-> the netiquette rules yesterday by Boris:
+Dne petek, 05. avgust 2022 ob 00:43:44 CEST je Daniel Lezcano napisal(a):
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
+> 
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-The message was signed, not encrypted.  Odd that your email client could
-not read it, perhaps you need to use a different one?
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-thanks,
+Best regards,
+Jernej
 
-greg k-h
+
