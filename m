@@ -2,125 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C2759308D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 16:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFCA59313E
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 17:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242847AbiHOOTH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Aug 2022 10:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S232418AbiHOPEo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Aug 2022 11:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiHOOTG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 10:19:06 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8A651F2C9;
-        Mon, 15 Aug 2022 07:19:05 -0700 (PDT)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 15 Aug 2022 23:19:05 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 3096920584CE;
-        Mon, 15 Aug 2022 23:19:05 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 15 Aug 2022 23:19:05 +0900
-Received: from [10.212.182.72] (unknown [10.212.182.72])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 3F146B62A4;
-        Mon, 15 Aug 2022 23:19:04 +0900 (JST)
-Subject: Re: [PATCH v2 09/26] thermal/drivers/uniphier: Use generic
- thermal_zone_get_trip() function
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "moderated list:ARM/UNIPHIER ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220809220436.711020-1-daniel.lezcano@linaro.org>
- <20220809220436.711020-10-daniel.lezcano@linaro.org>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <2dd3203b-8d49-9976-e79c-f23473eb30a4@socionext.com>
-Date:   Mon, 15 Aug 2022 23:19:03 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        with ESMTP id S232294AbiHOPEn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 11:04:43 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D663B205CE
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 08:04:41 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z16so9362688wrh.12
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 08:04:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc;
+        bh=11iOYJYT2e13K8s6XgKD9aJwBI/D1n9/1GA9l3T5EdU=;
+        b=0l0n8J8oLHQpw4KO8ZATjxzBbGtlxSKPh+Zx6UM+b2l1FA0FDzTM/QPWNO1fZBfrUR
+         VBA8H+qC06qDCkiYQ/bmbJ+W8jBscgSQIpgwYr5wQwH6C6ZYLJbz2IsQp/jk7onr+aRZ
+         yYwEywQrDeJ4Z1dxbojsOpUyLhuFjYsPNMEBtRO6dYB4TyMjzlsCOQjHxpBmTkhfrWAo
+         d/KgW8BaVQjCp/ZclzPwng3lKX0/JTrUO3TxG4MuBaqttdIFwHb4sqyqN4NJohD/tnrh
+         VxDH/uetuwZhNWinL+gZYHxHEmeSaTHz8tVsrVdtldSfLZUz8hpGB8V+01//OLrR1i0g
+         YntA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=11iOYJYT2e13K8s6XgKD9aJwBI/D1n9/1GA9l3T5EdU=;
+        b=BieeeGVa5L3CDtwhk8LaWytdSY60jGHAJC+0XUmWt5mUY8yIM4LQtvJHTppF386BBR
+         ujyqhuAhYRXBGvvNQMiEjDk2RQ9wI+W8a5r+BcXAoZDsVkkenIozrCqOOHzvO5d7MZes
+         mEPu5liW93H2VC1+wrwd1BIGD0cq3Pof+YOrRLlOkc1CIlwZLu9IsWNWg64TiG3lPnKL
+         ATSUonW0E3NMLr1DOWydtgpg7c+c5fSdqsbY7KzfDrejD7X3kQYlUZjppOwNTz65gMIM
+         G9/wLeIZ8cmROn3WxI+q3PkxJdJUCScQtT58GN/GtfS2wT/h9C2iol6WyneeWaB+Wl9D
+         g/dQ==
+X-Gm-Message-State: ACgBeo34sqVxcfM+16krQc9//O1C12jSQ7TLhb7JoYyKjvkc3YGEVkhK
+        9R72PrKIORC+8pcIrBiTiq5Gjg==
+X-Google-Smtp-Source: AA6agR4Cn9TM3OgrdvUAtLqY0NQqp052poL59AH0CMXJaR9rpGCZtSY4D321sbwI25TV4/TqJsBf4A==
+X-Received: by 2002:adf:fe4d:0:b0:223:9815:b1e5 with SMTP id m13-20020adffe4d000000b002239815b1e5mr8572076wrs.709.1660575880388;
+        Mon, 15 Aug 2022 08:04:40 -0700 (PDT)
+Received: from localhost ([109.180.234.208])
+        by smtp.gmail.com with ESMTPSA id v17-20020a5d43d1000000b0021eed2414c9sm7364535wrr.40.2022.08.15.08.04.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 08:04:39 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Perry Yuan <Perry.Yuan@amd.com>
+Cc:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
+        <viresh.kumar@linaro.org>, <Deepak.Sharma@amd.com>,
+        <Mario.Limonciello@amd.com>, <Nathan.Fontenot@amd.com>,
+        <Alexander.Deucher@amd.com>, <Jinzhou.Su@amd.com>,
+        <Shimmer.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 1/7] cpufreq: amd-pstate: cleanup the unused and
+ duplicated headers declaration
+References: <20220814163548.326686-1-Perry.Yuan@amd.com>
+        <20220814163548.326686-2-Perry.Yuan@amd.com>
+Date:   Mon, 15 Aug 2022 16:04:38 +0100
+In-Reply-To: <20220814163548.326686-2-Perry.Yuan@amd.com> (Perry Yuan's
+        message of "Mon, 15 Aug 2022 00:35:42 +0800")
+Message-ID: <87fshxim49.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20220809220436.711020-10-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022/08/10 7:04, Daniel Lezcano wrote:
-> The thermal framework gives the possibility to register the trip
-> points with the thermal zone. When that is done, no get_trip_* ops are
-> needed and they can be removed.
-> 
-> Convert ops content logic into generic trip points and register them with
-> the
-> thermal zone.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Hi Perry,
+
+Perry Yuan <Perry.Yuan@amd.com> writes:
+
+> Cleanup the headers declaration which are not used
+> actually and some duplicated declaration which is declarated in some
+> other headers already, it will help to simplify the header part.
+
+We usually don't get rid of indirectly included headers as long as
+definitions from header are used in the code. This avoids problems if
+for some reason the included header gets dropped - it'll leave the code
+in an uncompilable state.
+
+More below.
+
+>
+> Reviewed-by: Huang Rui <ray.huang@amd.com>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 > ---
->   drivers/thermal/uniphier_thermal.c | 26 +++++++++++---------------
->   1 file changed, 11 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/thermal/uniphier_thermal.c
-> b/drivers/thermal/uniphier_thermal.c
-> index 4111d99ef50e..1675174480aa 100644
-> --- a/drivers/thermal/uniphier_thermal.c
-> +++ b/drivers/thermal/uniphier_thermal.c
-> @@ -248,8 +248,7 @@ static int uniphier_tm_probe(struct platform_device
-> *pdev)
->   	struct regmap *regmap;
->   	struct device_node *parent;
->   	struct uniphier_tm_dev *tdev;
-> -	const struct thermal_trip *trips;
-> -	int i, ret, irq, ntrips, crit_temp = INT_MAX;
-> +	int i, ret, irq, crit_temp = INT_MAX;
->   
->   	tdev = devm_kzalloc(dev, sizeof(*tdev), GFP_KERNEL);
->   	if (!tdev)
-> @@ -296,20 +295,17 @@ static int uniphier_tm_probe(struct platform_device
-> *pdev)
->   		return PTR_ERR(tdev->tz_dev);
->   	}
->   
-> -	/* get trip points */
-> -	trips = of_thermal_get_trip_points(tdev->tz_dev);
-> -	ntrips = of_thermal_get_ntrips(tdev->tz_dev);
-> -	if (ntrips > ALERT_CH_NUM) {
-> -		dev_err(dev, "thermal zone has too many trips\n");
-> -		return -E2BIG;
-> -	}
-> -
->   	/* set alert temperatures */
-> -	for (i = 0; i < ntrips; i++) {
-> -		if (trips[i].type == THERMAL_TRIP_CRITICAL &&
-> -		    trips[i].temperature < crit_temp)
-> -			crit_temp = trips[i].temperature;
-> -		uniphier_tm_set_alert(tdev, i, trips[i].temperature);
-> +	for (i = 0; i < thermal_zone_get_num_trips(tdev->tz_dev); i++) {
-> +
-> +		struct thermal_trip trip;
-> +
-> +		thermal_zone_get_trip(tdev->tz_dev, i, &trip);
-> +		
+>  drivers/cpufreq/amd-pstate.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9ac75c1cde9c..19a078e232dd 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -31,19 +31,14 @@
+>  #include <linux/compiler.h>
+>  #include <linux/dmi.h>
+>  #include <linux/slab.h>
+> -#include <linux/acpi.h>
+>  #include <linux/io.h>
+>  #include <linux/delay.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/static_call.h>
+>  
+> -#include <acpi/processor.h>
+>  #include <acpi/cppc_acpi.h>
+>  
+>  #include <asm/msr.h>
+> -#include <asm/processor.h>
 
-I found this line has white spaces. Otherwise,
+On a quick scan, I noticed that "boot_cpu_data" and "boot_cpu_has()" in
+the module init function are defined in "asm/processor.h" that is being
+removed here. It may compile for now but makes the code more fragile as
+explained above.
 
-Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Please ensure that only the header files that have no definitions used
+in this file (amd-pstate.c) are dropped.
 
-> +		if (trip.type == THERMAL_TRIP_CRITICAL &&
-> +		    trip.temperature < crit_temp)
-> +			crit_temp = trip.temperature;
-> +		uniphier_tm_set_alert(tdev, i, trip.temperature);
->   		tdev->alert_en[i] = true;
->   	}
->   	if (crit_temp > CRITICAL_TEMP_LIMIT) {
-> 
-
----
-Best Regards
-Kunihiko Hayashi
+> -#include <asm/cpufeature.h>
+> -#include <asm/cpu_device_id.h>
+>  #include "amd-pstate-trace.h"
+>  
+>  #define AMD_PSTATE_TRANSITION_LATENCY	0x20000
