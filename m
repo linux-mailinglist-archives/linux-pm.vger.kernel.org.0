@@ -1,83 +1,55 @@
 Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B09A5933A7
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 18:57:37 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id E3725593493
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 20:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232979AbiHOQ5f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Aug 2022 12:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
+        id S229782AbiHOSLl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Aug 2022 14:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbiHOQ5W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 12:57:22 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D99226AF8
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 09:57:20 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id h1so4090835wmd.3
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 09:57:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc;
-        bh=Wz8FtmzVE71afdJyd32SYYvhTJFRBu1d+IAc4KxftWk=;
-        b=g17K+aqFZ0uoqC3D3blRXZMYWuXb6OabLSt3MnixauJf3aARPiWFBH79e8V2xbJmBU
-         lqXm4klL+6z210oRHBEKx4ObE+TUOzzasY1breZAnGUbLZ/gmd287rW1cu+UAMO6Xs2n
-         bUMV+Y0LDDqLy4gKh46yjPkYyyf03PBT0vQlbYW4zNPfZHdzVPdVFdFuHzTzybDUVYzI
-         S3l3/gokMu/2bZ9qkykjbpwrgKCuGfeQSSvI4cU7vqWrvDCpcWHd9QMXeLDLx91jNPNZ
-         OHJuqn812L9eCO4VNO6JFC0IBTvG5zzYGdufyMkHp3BjCWhPkCzHPgfPNWUobfPhgjZX
-         pZOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc;
-        bh=Wz8FtmzVE71afdJyd32SYYvhTJFRBu1d+IAc4KxftWk=;
-        b=CrPfbSCgn5flJsLB5iEBLYs4HupJzn+G22VnJZRhWQColxfHTpxp9w+VN3/a3NBs3J
-         oH/8uOUbYcrji1mP8KzUF04ZnBwfsOPhIFY5bdZ/W/y5OUPYC51C60b6HYjAzS7v7Ne+
-         LKVu7UiZbbpauY4NRxy3rkcjmy/8Jd4uCW5Tfl+coujjqQTRRcx18SB48WSolEuMFOI1
-         JpjCnoyMQdYu+MuP60hu1IMBMWh379E7TQixNyKc8Rx66sp/Cu14Q1s/+NGBTFu+7yem
-         AcDh3yMMCf7F46ce2byG6Xk6cRfMEOQQ5DW0z41eXiSpDc6Lg3lNJULsKu71lseDEf9/
-         LH2A==
-X-Gm-Message-State: ACgBeo3Dyu05TMQF/anp89JpXE4jTFyNL+sG0Nrbgy72YQlmOLb5YaMw
-        LcbbEDRplZ8gTDij55+ci09/Ew==
-X-Google-Smtp-Source: AA6agR7Ue6fhORNGVE/KVn3dSe3y7+kAUbN1R8ytqPit2armINrfIOPt/XGSqL69zrvimtRhOw/BoQ==
-X-Received: by 2002:a05:600c:1d12:b0:3a5:eb79:edc3 with SMTP id l18-20020a05600c1d1200b003a5eb79edc3mr4597797wms.136.1660582638858;
-        Mon, 15 Aug 2022 09:57:18 -0700 (PDT)
-Received: from localhost (217-149-171-129.nat.highway.telekom.at. [217.149.171.129])
-        by smtp.gmail.com with ESMTPSA id p185-20020a1c29c2000000b003a4f1385f0asm10599483wmp.24.2022.08.15.09.57.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 09:57:18 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 15 Aug 2022 18:57:16 +0200
-Message-Id: <CM6REZS9Z8AC.2KCR9N3EFLNQR@otso>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        with ESMTP id S233157AbiHOSBG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 14:01:06 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DEB24F15;
+        Mon, 15 Aug 2022 11:01:02 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oNeOJ-0003w4-L3; Mon, 15 Aug 2022 20:00:44 +0200
+Message-ID: <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
+Date:   Mon, 15 Aug 2022 20:00:42 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+To:     Chuck Zmudzinski <brchuckz@netscape.net>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Kevin Hilman" <khilman@kernel.org>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Pavel Machek" <pavel@ucw.cz>, "Len Brown" <len.brown@intel.com>,
-        "Andrew Lunn" <andrew@lunn.ch>,
-        "Heiner Kallweit" <hkallweit1@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, <naresh.kamboju@linaro.org>,
-        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state()
- for now
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Tony Lindgren" <tony@atomide.com>,
-        "Saravana Kannan" <saravanak@google.com>
-X-Mailer: aerc 0.11.0
-References: <20220727185012.3255200-1-saravanak@google.com>
- <Yvonn9C/AFcRUefV@atomide.com>
-In-Reply-To: <Yvonn9C/AFcRUefV@atomide.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
+ <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+ <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
+ <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
+ <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660586462;6091e165;
+X-HE-SMSGID: 1oNeOJ-0003w4-L3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,42 +58,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon Aug 15, 2022 at 1:01 PM CEST, Tony Lindgren wrote:
-> * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > More fixes/changes are needed before driver_deferred_probe_check_state(=
-)
-> > can be deleted. So, bring it back for now.
-> >=20
-> > Greg,
-> >=20
-> > Can we get this into 5.19? If not, it might not be worth picking up thi=
-s
-> > series. I could just do the other/more fixes in time for 5.20.
->
-> Yes please pick this as fixes for v6.0-rc series, it fixes booting for
-> me. I've replied with fixes tags for the two patches that were causing
-> regressions for me.
->
+Hi Chuck!
 
-Hi,
+On 15.08.22 18:56, Chuck Zmudzinski wrote:
+> 
+> I am forwarding this to you to help you cut through the noise.
 
-for me Patch 1+3 fix display probe on Qualcomm SM6350 (although display
-for this SoC isn't upstream yet, there are lots of other SoCs with very
-similar setup).
+Sorry for not replying earlier, I ignored this thread and all other
+non-urgent mail in the past two weeks: I was on vacation until a few
+days ago and when I came home I had to deal with some other stuff first.
 
-Probe for DPU silently fails, with CONFIG_DEBUG_DRIVER=3Dy we get this:
+> I do not apologize for trying to get
+> the fix for this regression rolling again.
 
-msm-mdss ae00000.mdss: __genpd_dev_pm_attach() failed to find PM domain: -2
+Yeah, it's important to ensure regressions don't simply fall though the
+cracks, but my advice in this case: let things rest for a few days now,
+the right people have the issue on their radar again; give them time to
+breath and work out a solution: it's not something that can be fixed
+easily within a few minutes by one person alone, as previous discussions
+have shown (also keep in mind that the merge window was open until
+yesterday, which keeps many maintainers quite busy).
 
-While I'm not familiar with the specifics of fw_devlink, the dtsi has
-power-domains =3D <&dispcc MDSS_GDSC> for this node but it doesn't pick
-that up for some reason.
+And FWIW: I've seen indicators that a solution to resolve this is
+hopefully pretty close now.
 
-We can also see that a bit later dispcc finally probes.
+>  After all, it has been over three months
+> since the regression was first reported.
 
-Regards
-Luca
+Yes, things take/took to long, as a few things were far from ideal how
+this regression was dealt with. But that happens sometimes, we're all
+just humans and make errors. I did a few as well and learned a thing or
+two from then. Due to that I'll do a few things slightly different in
+the future to hopefully get similar situations resolved a lot quicker in
+the future.
 
-> Regards,
->
-> Tony
+Ciao, Thorsten
