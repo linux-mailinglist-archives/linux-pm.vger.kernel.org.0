@@ -2,99 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECE25939E9
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 21:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731C8593D1B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 22:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245158AbiHOT3I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Aug 2022 15:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        id S1347126AbiHOUXc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Aug 2022 16:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345185AbiHOT1y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 15:27:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CFC2B276
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 11:43:44 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 18:43:35 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660589016;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t4Jyj19ZLXLkDHDVMCAVyy3UmAqdQVKjB0VpIUEg32w=;
-        b=N+CR7NB/djAHIB5DQEaVjvOLxkr5T+VPndcylpH1GnnoURjMAQ75980ZPs3zq7GJ/AIFyn
-        Xmy/T2Hw243+PIK8BX0kENhBbjT6TCOwyu9Gm4mdURfTo7LddLPclSf5/BFD3Eu5c537JT
-        +bHOaZBJWMvOV415e2X53whbWn4SR6QjnbF33WkD7uoH+ZELlX688M3bQRkNZZbn4MlK/B
-        iylXPg5rBhGL1QB/wp9dEWD4Hma44qUrc25dxwQmkL7E5fkWd9y+Tciy+vS5cK6LqGDFQA
-        rbVg6znx5qyzW86Nuunc0+VIy6M/Xk3Y1Z1Rqgry3PAT32TE0tdRBAUYco2bIw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660589016;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t4Jyj19ZLXLkDHDVMCAVyy3UmAqdQVKjB0VpIUEg32w=;
-        b=QOp+i0PQ4Eu/ozJbgZMcbu9234EUs5jaja+IIffwBF46oJyeW0m6PmiyhiIJ9vNZMvTw7Q
-        zLNBlxfZud0Rc+AQ==
-From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-pm@vger.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/fixes] thermal/core: Add missing EXPORT_SYMBOL_GPL
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
-        amitk@kernel.org
-In-Reply-To: <20220810100731.749317-1-daniel.lezcano@linaro.org>
-References: <20220810100731.749317-1-daniel.lezcano@linaro.org>
+        with ESMTP id S1347303AbiHOUWO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 16:22:14 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D0133A2F
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 12:02:17 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j1so10102646wrw.1
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 12:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=mu6VIMQHZgu7hW6pnoLsBEY5Z10dgE369agK010Rc84=;
+        b=YdFKfQNGHVM61QkiB3IPZDX0xemD9MegWIARaiXMcyMrJUIRQQ34gClP1mCfoYeOqr
+         IhjSyQkSZmScv6UvwboH2nUBjj0NW0MEeHwszC4o3K6B1PgApa3tD8cmPntGMzY5/zCJ
+         wWBwQ/gpYf2AhwA0ZbOPJ4c0uk1ziO0r/vkMCNIZslb+ChTJQBKjHYzgABsK00Hb5IcO
+         50nuuN9gqMSIIcFTledr7Gbw9+NDDdPiVmpMQs6ePBMXBxlK+lw3v3pnNTcsXXL1dTvq
+         +nhSQ8YrSzhxfi0qQ2lV9PMYbUx2Y6sequrRQmTd++xzIU23CmYNuDAySzrWnpxUjxmj
+         TGgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=mu6VIMQHZgu7hW6pnoLsBEY5Z10dgE369agK010Rc84=;
+        b=koZlKWSn70NvLdN6e19QrrdWr0Lzre94BCYirnmhXVg2a80hFA2yOhwbI/7T1jI1vW
+         vCMwcOw7yju/roUSjMX9W6pQWYt3ChDqyo2K+bQaG8TmEZPpLQrj1LQdpdXe9MISp3Te
+         eKdHkfPTSBzEzzvcOHpWSriMcWlGziyqh5m+bp9yKG1A2Dl+G8kbloqrLTq1WI058qfT
+         5FcB7FQZLbjhLlAE8ZPRGgP3fEfnUftA9sh5QEFij8NjTFcLRT72L9xl/2nBBJZOky25
+         qMSkeElmUMoQzbgMMYk5zX9cqtkC2zvXC0H5Hg3VYnkuuhkUpmi4Rajde8jh7aWgEhoW
+         MNdA==
+X-Gm-Message-State: ACgBeo0jenleGd2aR6bAteMeRhWm6UepDiyI1TxlC70MelLEoT+tZ2kj
+        V5jJfqpxXOgdtGssacht7IY1cg==
+X-Google-Smtp-Source: AA6agR4oN0w6cTpWbsmWpZL8bo4Si3qBVlLe6HqOhimCRoyeTxAPSdKHiWRpfMnic7xMqQTrI8coeg==
+X-Received: by 2002:a5d:5965:0:b0:224:f75e:2646 with SMTP id e37-20020a5d5965000000b00224f75e2646mr5769089wri.173.1660590136081;
+        Mon, 15 Aug 2022 12:02:16 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id z7-20020a05600c0a0700b003a5c2abc412sm11580846wmp.44.2022.08.15.12.02.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Aug 2022 12:02:15 -0700 (PDT)
+Message-ID: <2ab74b1a-7087-cbfc-3f05-92e0eef30ca9@linaro.org>
+Date:   Mon, 15 Aug 2022 21:02:05 +0200
 MIME-Version: 1.0
-Message-ID: <166058901552.401.11918907596464240553.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 00/32] New thermal OF code
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        damien.lemoal@opensource.wdc.com, Heiko Stuebner <heiko@sntech.de>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        mhiramat@kernel.org, Talel Shenhar <talel@amazon.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>, anarsoul@gmail.com,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        glaroque@baylibre.com, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Keerthy <j-keerthy@ti.com>
+References: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
+ <35457e1c-fe6b-2212-9624-70369f04ef0d@linaro.org>
+ <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the thermal/fixes branch of thermal:
 
-Commit-ID:     a921be53b46c393d8d594a62a44f418c97e5504b
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//a921be53b46c393d8d594a62a44f418c97e5504b
-Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Wed, 10 Aug 2022 12:07:31 +02:00
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 15 Aug 2022 20:38:19 +02:00
+Hi Rafael,
 
-thermal/core: Add missing EXPORT_SYMBOL_GPL
+On 28/07/2022 16:37, Rafael J. Wysocki wrote:
+> Hi Daniel,
+> 
+> On Wed, Jul 27, 2022 at 11:46 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>>
+>> Hi Rafael,
+>>
+>> we are close to release v5.19.
+>>
+>> I want to send a PR this week but it would be nice if this series could
+>> be part of it, so the trip point rework we discussed earlier (it is a
+>> long series) could be merged more easily for v5.21-rc1 as it will depend
+>> on these changes.
+>>
+>> This series was tested on different platforms, rk3399, broadcom and
+>> rcar. The external drivers as ata, touchscreen, regulator, hwmon were
+>> acked/reviewed and some other thermal drivers reviewed also. Some others
+>> remain without feedback because the maintainer is unresponsive or the
+>> driver is orphaned, falling under the thermal framework maintenance
+>> umbrella. All the drivers changes are the same.
+>>
+>> I do believe it does a nice cleanup and consolidation of the OF thermal
+>> code and realign it with the core thermal framework.
+>>
+>> Is it ok to merge the series?
+> 
+> I would prefer to put it into linux-next for a few days.
+> 
+> Why don't you send 2 pull requests, one with all of the other material
+> you have for 5.20 and another one with this series (it may be on top
+> of the first one)?
+> 
+> I will be able to defer pushing the second one till the second half of
+> the merge window.
 
-The function thermal_zone_device_register_with_trips() is not exported
-for modules.
+I setup a branch with the patches and the fixes.
 
-Add the missing EXPORT_SYMBOL_GPL().
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/v6.0-rc1-2
 
-Fixes: fae11de507f0e ("thermal/core: Add thermal_trip in thermal_zone")
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20220810100731.749317-1-daniel.lezcano@linaro.org
----
- drivers/thermal/thermal_core.c | 1 +
- 1 file changed, 1 insertion(+)
+Is there still time for a PR ?
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 6a5d0ae..50d50ce 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1329,6 +1329,7 @@ free_tz:
- 	kfree(tz);
- 	return ERR_PTR(result);
- }
-+EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
- 
- struct thermal_zone_device *thermal_zone_device_register(const char *type, int ntrips, int mask,
- 							 void *devdata, struct thermal_zone_device_ops *ops,
+
+
