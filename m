@@ -2,147 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731C8593D1B
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 22:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C017B594EB5
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 04:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347126AbiHOUXc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Aug 2022 16:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S233616AbiHPCgc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Aug 2022 22:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347303AbiHOUWO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 16:22:14 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D0133A2F
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 12:02:17 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id j1so10102646wrw.1
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 12:02:17 -0700 (PDT)
+        with ESMTP id S234157AbiHPCgO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 22:36:14 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F3713A501
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 15:54:19 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id a13so1001369ild.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 15:54:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=mu6VIMQHZgu7hW6pnoLsBEY5Z10dgE369agK010Rc84=;
-        b=YdFKfQNGHVM61QkiB3IPZDX0xemD9MegWIARaiXMcyMrJUIRQQ34gClP1mCfoYeOqr
-         IhjSyQkSZmScv6UvwboH2nUBjj0NW0MEeHwszC4o3K6B1PgApa3tD8cmPntGMzY5/zCJ
-         wWBwQ/gpYf2AhwA0ZbOPJ4c0uk1ziO0r/vkMCNIZslb+ChTJQBKjHYzgABsK00Hb5IcO
-         50nuuN9gqMSIIcFTledr7Gbw9+NDDdPiVmpMQs6ePBMXBxlK+lw3v3pnNTcsXXL1dTvq
-         +nhSQ8YrSzhxfi0qQ2lV9PMYbUx2Y6sequrRQmTd++xzIU23CmYNuDAySzrWnpxUjxmj
-         TGgA==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=hkKYpQpZVod/c+R4dm3Iger6VJ5VMkCGceQbJFeIRCM=;
+        b=AVYFSbBPXaQ55T7CZh6eJ8m+JoJg3uN+n2PSMuVdalLhI98HWk7vsoK0M+nRWYn58h
+         aBV4+fBu7w0uvPduhOuiUfSC6rYd51NoL9aX9rFvcAnAPzR/7ySJ2X6EGPigJH+gDab+
+         4GFBsr3PSIW1QXlN+z9G3P5rHxjxSUkXX7SbI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc;
-        bh=mu6VIMQHZgu7hW6pnoLsBEY5Z10dgE369agK010Rc84=;
-        b=koZlKWSn70NvLdN6e19QrrdWr0Lzre94BCYirnmhXVg2a80hFA2yOhwbI/7T1jI1vW
-         vCMwcOw7yju/roUSjMX9W6pQWYt3ChDqyo2K+bQaG8TmEZPpLQrj1LQdpdXe9MISp3Te
-         eKdHkfPTSBzEzzvcOHpWSriMcWlGziyqh5m+bp9yKG1A2Dl+G8kbloqrLTq1WI058qfT
-         5FcB7FQZLbjhLlAE8ZPRGgP3fEfnUftA9sh5QEFij8NjTFcLRT72L9xl/2nBBJZOky25
-         qMSkeElmUMoQzbgMMYk5zX9cqtkC2zvXC0H5Hg3VYnkuuhkUpmi4Rajde8jh7aWgEhoW
-         MNdA==
-X-Gm-Message-State: ACgBeo0jenleGd2aR6bAteMeRhWm6UepDiyI1TxlC70MelLEoT+tZ2kj
-        V5jJfqpxXOgdtGssacht7IY1cg==
-X-Google-Smtp-Source: AA6agR4oN0w6cTpWbsmWpZL8bo4Si3qBVlLe6HqOhimCRoyeTxAPSdKHiWRpfMnic7xMqQTrI8coeg==
-X-Received: by 2002:a5d:5965:0:b0:224:f75e:2646 with SMTP id e37-20020a5d5965000000b00224f75e2646mr5769089wri.173.1660590136081;
-        Mon, 15 Aug 2022 12:02:16 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id z7-20020a05600c0a0700b003a5c2abc412sm11580846wmp.44.2022.08.15.12.02.07
+        bh=hkKYpQpZVod/c+R4dm3Iger6VJ5VMkCGceQbJFeIRCM=;
+        b=GkIujf0p2JkcGUA6DAZNjuGOuBc3gwR8bbHWFzVhRW+5ZT7C+J6DuiwsR2G+pdwfEZ
+         R8PYms7ZVUXuy30WochSJ0TQaHVt/LCggHroi5FIWeRhDGkYhs697++pNL2c05T0iW6G
+         lTK58oMuPjDBziOHy4WIt2dWXZTzzncBksZmcSE1ACQfqFSdDsuQNQXSZyIct2YXGo1k
+         G15qfHRl6XTN+TMpuLA7tRrRz6HDC/FTPdsQrO4VG3BJQBHrWA4hM9YT3ln81+OvdKob
+         J/vQM9qvZgZ4oaQcYkX5HApiDSNkz4UPllF+E4xzdPxoEj3kaXSvSYooFuT2b05C9ROK
+         YAQw==
+X-Gm-Message-State: ACgBeo0acYTWbqVxHvThkonbMKk6x7nJ5kWfmyhSO+MV2eIo0ONyDF86
+        juKSKN8OSjaS8gRpLDwIyUR0FA==
+X-Google-Smtp-Source: AA6agR5ijmhL69tH7zLQ8VChNV3+aCH4BruXktH5EL+HQ94HvKvtKe/2ZTHCpyWCN4+AUO8MyifpWg==
+X-Received: by 2002:a92:c24d:0:b0:2e6:7ab0:6477 with SMTP id k13-20020a92c24d000000b002e67ab06477mr138632ilo.229.1660604058711;
+        Mon, 15 Aug 2022 15:54:18 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id y18-20020a92d812000000b002e6189eb930sm213479ilm.75.2022.08.15.15.54.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 12:02:15 -0700 (PDT)
-Message-ID: <2ab74b1a-7087-cbfc-3f05-92e0eef30ca9@linaro.org>
-Date:   Mon, 15 Aug 2022 21:02:05 +0200
+        Mon, 15 Aug 2022 15:54:18 -0700 (PDT)
+Subject: Re: [PATCH V8 0/4] Add unit test module for AMD P-State driver
+To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220526034725.1708916-1-li.meng@amd.com>
+ <fbd6bc2f-b6d7-497e-410c-4a82876075ff@linuxfoundation.org>
+ <5792136d-079e-6e1e-0bf5-aed1b3db6566@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f6668bdd-4d2a-ff36-7e62-323d6691a188@linuxfoundation.org>
+Date:   Mon, 15 Aug 2022 16:54:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 00/32] New thermal OF code
+In-Reply-To: <5792136d-079e-6e1e-0bf5-aed1b3db6566@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        damien.lemoal@opensource.wdc.com, Heiko Stuebner <heiko@sntech.de>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        mhiramat@kernel.org, Talel Shenhar <talel@amazon.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>, anarsoul@gmail.com,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        glaroque@baylibre.com, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Keerthy <j-keerthy@ti.com>
-References: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
- <35457e1c-fe6b-2212-9624-70369f04ef0d@linaro.org>
- <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Rafael,
-
-On 28/07/2022 16:37, Rafael J. Wysocki wrote:
-> Hi Daniel,
+On 6/9/22 2:28 PM, Shuah Khan wrote:
+> On 5/26/22 9:44 AM, Shuah Khan wrote:
+>> On 5/25/22 9:47 PM, Meng Li wrote:
+>>> Hi all:
+>>>
+>>> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
+>>> the functions of amd-pstate driver.
+>>> It could import as a module to launch some test tasks.
+>>> 1) It can help all users to verify their processor support (SBIOS/
+>>> Firmware or Hardware).
+>>> 2) Kernel can have a basic function test to avoid the kernel regression
+>>> during the update.
+>>> 3) We can introduce more functional or performance tests to align the
+>>> together, it will benefit power and performance scale optimization.
+>>>
+>>> We upstream out AMD P-state driver into Linux kernel and use this unit
+>>> test module to verify the required conditions and basic functions of
+>>> amd-pstate before integration test.
+>>>
+>>> We use test module in the kselftest frameworks to implement it.
+>>> We create amd-pstate-ut module and tie it into kselftest.
+>>>
+>>> For example: The test case aput_acpi_cpc is used to check whether the
+>>> _CPC object is exist in SBIOS.
+>>> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+>>> existed at the detected processor, so it is a necessary condition.
+>>>
+>>> At present, it only implements the basic framework and some simple test
+>>> cases.
+>>>
+>>> TODO : 1) we will add more test cases to improve the depth and coverage of
+>>> the test. E.X. use the script to trigger the tbench, gitsource, kernbench,
+>>> netperf, speedometer, and etc. testing and monitor the cpu frequency and
+>>> performance goals change, power consumption at runtime.
+>>>
+>>> Please check the documentation amd-pstate.rst for details of the test steps.
+>>>
+>>> See patch series in below git repo:
+>>> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+>>> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
+>>> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
+>>> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
+>>> V5: https://lore.kernel.org/lkml/20220505022913.329259-1-li.meng@amd.com/
+>>> V6: https://lore.kernel.org/lkml/20220519134737.359290-1-li.meng@amd.com/
+>>> V7: https://lore.kernel.org/lkml/20220522115423.1147282-1-li.meng@amd.com/
+>>>
+>>
+>>>
+>>> Changes from V7 -> V8:
+>>> - cpufreq: amd-pstate:
+>>> - - amend commit message.
+>>> - - amend module description.
+>>> - Documentation: amd-pstate:
+>>> - - amend commit message.
+>>> - - Remove the personal data.
+>>>
+>>
+>> Looks good to me. Thank you.
+>>
+>> Rafael, Viresh,
+>>
+>> How do you want to handle this patch series? We are in merge window
+>> and this would be for Linux 5.20 based on the changes and content.
+>>
+>> Would you like to take the entire patch series through your tree, you
+>> have my Ack(s) and Reviewed-by(s)
+>>
 > 
-> On Wed, Jul 27, 2022 at 11:46 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Rafael,
->>
->> we are close to release v5.19.
->>
->> I want to send a PR this week but it would be nice if this series could
->> be part of it, so the trip point rework we discussed earlier (it is a
->> long series) could be merged more easily for v5.21-rc1 as it will depend
->> on these changes.
->>
->> This series was tested on different platforms, rk3399, broadcom and
->> rcar. The external drivers as ata, touchscreen, regulator, hwmon were
->> acked/reviewed and some other thermal drivers reviewed also. Some others
->> remain without feedback because the maintainer is unresponsive or the
->> driver is orphaned, falling under the thermal framework maintenance
->> umbrella. All the drivers changes are the same.
->>
->> I do believe it does a nice cleanup and consolidation of the OF thermal
->> code and realign it with the core thermal framework.
->>
->> Is it ok to merge the series?
+> Picking this back up since rc1 is out. How do we want to handle this patch
+> series?
 > 
-> I would prefer to put it into linux-next for a few days.
-> 
-> Why don't you send 2 pull requests, one with all of the other material
-> you have for 5.20 and another one with this series (it may be on top
-> of the first one)?
-> 
-> I will be able to defer pushing the second one till the second half of
-> the merge window.
 
-I setup a branch with the patches and the fixes.
+Please send me rebased version. I will apply it for the net release.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/v6.0-rc1-2
-
-Is there still time for a PR ?
-
-
-
+thanks,
+-- Shuah
