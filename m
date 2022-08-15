@@ -2,79 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C017B594EB5
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 04:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F4A595253
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 08:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbiHPCgc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Aug 2022 22:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S229493AbiHPGFA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 02:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234157AbiHPCgO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 22:36:14 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F3713A501
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 15:54:19 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id a13so1001369ild.3
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 15:54:19 -0700 (PDT)
+        with ESMTP id S229659AbiHPGE1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 02:04:27 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350EB80519
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 16:37:00 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-324ec5a9e97so110738447b3.7
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 16:37:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=hkKYpQpZVod/c+R4dm3Iger6VJ5VMkCGceQbJFeIRCM=;
-        b=AVYFSbBPXaQ55T7CZh6eJ8m+JoJg3uN+n2PSMuVdalLhI98HWk7vsoK0M+nRWYn58h
-         aBV4+fBu7w0uvPduhOuiUfSC6rYd51NoL9aX9rFvcAnAPzR/7ySJ2X6EGPigJH+gDab+
-         4GFBsr3PSIW1QXlN+z9G3P5rHxjxSUkXX7SbI=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=fVxetOgUQ7E/da9h0YyyPZnmDSU85aoRWSOGJovfDo4=;
+        b=KTUwHeoXz1fmYUOVhvzKJVtvXyuG8JHUHX6QB6FOxUcDm+t/hWHwoYNXr85HrUdaEK
+         tILQMJn5QrnwvIaiiGvh/gmofiK9boSEgGXMH8Td1nph3IGh7K9bPlvKvjyubLDSc0aS
+         fgP5ZpT/qNqLdbxAcPOnXoC06oDNK7j8waNQN+CBuASLQjDxP44f8T2h1FoyDYuG2qG0
+         BpVB8cB/sRH0nhHBKOSHQriJwZq8WNgL2+bZYuBEh1Bbls5R4A/XDMEyrwthkWrfMF+H
+         T+itPy2imckkoWZbnfArIsJ7JKc+W9DP9rqWida20tZuDHZyrdibJlDrRnzcRORJzbga
+         q56w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=hkKYpQpZVod/c+R4dm3Iger6VJ5VMkCGceQbJFeIRCM=;
-        b=GkIujf0p2JkcGUA6DAZNjuGOuBc3gwR8bbHWFzVhRW+5ZT7C+J6DuiwsR2G+pdwfEZ
-         R8PYms7ZVUXuy30WochSJ0TQaHVt/LCggHroi5FIWeRhDGkYhs697++pNL2c05T0iW6G
-         lTK58oMuPjDBziOHy4WIt2dWXZTzzncBksZmcSE1ACQfqFSdDsuQNQXSZyIct2YXGo1k
-         G15qfHRl6XTN+TMpuLA7tRrRz6HDC/FTPdsQrO4VG3BJQBHrWA4hM9YT3ln81+OvdKob
-         J/vQM9qvZgZ4oaQcYkX5HApiDSNkz4UPllF+E4xzdPxoEj3kaXSvSYooFuT2b05C9ROK
-         YAQw==
-X-Gm-Message-State: ACgBeo0acYTWbqVxHvThkonbMKk6x7nJ5kWfmyhSO+MV2eIo0ONyDF86
-        juKSKN8OSjaS8gRpLDwIyUR0FA==
-X-Google-Smtp-Source: AA6agR5ijmhL69tH7zLQ8VChNV3+aCH4BruXktH5EL+HQ94HvKvtKe/2ZTHCpyWCN4+AUO8MyifpWg==
-X-Received: by 2002:a92:c24d:0:b0:2e6:7ab0:6477 with SMTP id k13-20020a92c24d000000b002e67ab06477mr138632ilo.229.1660604058711;
-        Mon, 15 Aug 2022 15:54:18 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y18-20020a92d812000000b002e6189eb930sm213479ilm.75.2022.08.15.15.54.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 15:54:18 -0700 (PDT)
-Subject: Re: [PATCH V8 0/4] Add unit test module for AMD P-State driver
-To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220526034725.1708916-1-li.meng@amd.com>
- <fbd6bc2f-b6d7-497e-410c-4a82876075ff@linuxfoundation.org>
- <5792136d-079e-6e1e-0bf5-aed1b3db6566@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f6668bdd-4d2a-ff36-7e62-323d6691a188@linuxfoundation.org>
-Date:   Mon, 15 Aug 2022 16:54:16 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=fVxetOgUQ7E/da9h0YyyPZnmDSU85aoRWSOGJovfDo4=;
+        b=w18lkiwi1bb7WNbszcCgDk7feua7KQFcYWETJlQlab9xK7lW0HKqxhsAh8T54o0jAR
+         D6uoIiAXa13PpZt+44pzAA0Zh6Xclayt0r75j6QGZCbBO7lK/3/JYCSPC0h8DRhlbaL0
+         FpzyDLBoNOezISC94a65lAFxV9+6qOCHTCcphFy+zK24BTwujDosT0l9hbV8nq07JKwI
+         YuZSpyEhg00S1m4RPpqewXwm0nAEs38MTk7jR05Su2DUHAp0Ao4XXdSrdIPZ88ETB1uf
+         s+zrnDmGTR5UGO7zOxCIhjwR2adp7E4OxNRUuSqb5qU9uoDaFUwXjgZ189fbOLb1i0dG
+         9n8g==
+X-Gm-Message-State: ACgBeo3oUBIzSm+2eZmu+acyMds6QBSOcb6/pTWDyg9VhBa07PxkqZI3
+        ZuGhskdjWPAxAe+ej8ugaYaRk4oJI8TTIQfMjVNsRA==
+X-Google-Smtp-Source: AA6agR5Np2WgcNsV8TjcwUEqg6oN6k4lKO8Wo6VF8E9ds7ny2Mlu9nLypvijdRBumVPbsaC27C1JZ/SudORTFk2byw8=
+X-Received: by 2002:a81:d8a:0:b0:333:38da:2a44 with SMTP id
+ 132-20020a810d8a000000b0033338da2a44mr1203503ywn.518.1660606619221; Mon, 15
+ Aug 2022 16:36:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <5792136d-079e-6e1e-0bf5-aed1b3db6566@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220727185012.3255200-1-saravanak@google.com>
+ <Yvonn9C/AFcRUefV@atomide.com> <CM6REZS9Z8AC.2KCR9N3EFLNQR@otso>
+In-Reply-To: <CM6REZS9Z8AC.2KCR9N3EFLNQR@otso>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 15 Aug 2022 16:36:23 -0700
+Message-ID: <CAGETcx_6oh=GVLP7-1gN_4DW7UHJ1MZQ6T1U2hupc_ZYDnXcNA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state() for now
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, naresh.kamboju@linaro.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,79 +80,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/9/22 2:28 PM, Shuah Khan wrote:
-> On 5/26/22 9:44 AM, Shuah Khan wrote:
->> On 5/25/22 9:47 PM, Meng Li wrote:
->>> Hi all:
->>>
->>> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
->>> the functions of amd-pstate driver.
->>> It could import as a module to launch some test tasks.
->>> 1) It can help all users to verify their processor support (SBIOS/
->>> Firmware or Hardware).
->>> 2) Kernel can have a basic function test to avoid the kernel regression
->>> during the update.
->>> 3) We can introduce more functional or performance tests to align the
->>> together, it will benefit power and performance scale optimization.
->>>
->>> We upstream out AMD P-state driver into Linux kernel and use this unit
->>> test module to verify the required conditions and basic functions of
->>> amd-pstate before integration test.
->>>
->>> We use test module in the kselftest frameworks to implement it.
->>> We create amd-pstate-ut module and tie it into kselftest.
->>>
->>> For example: The test case aput_acpi_cpc is used to check whether the
->>> _CPC object is exist in SBIOS.
->>> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
->>> existed at the detected processor, so it is a necessary condition.
->>>
->>> At present, it only implements the basic framework and some simple test
->>> cases.
->>>
->>> TODO : 1) we will add more test cases to improve the depth and coverage of
->>> the test. E.X. use the script to trigger the tbench, gitsource, kernbench,
->>> netperf, speedometer, and etc. testing and monitor the cpu frequency and
->>> performance goals change, power consumption at runtime.
->>>
->>> Please check the documentation amd-pstate.rst for details of the test steps.
->>>
->>> See patch series in below git repo:
->>> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
->>> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
->>> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
->>> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
->>> V5: https://lore.kernel.org/lkml/20220505022913.329259-1-li.meng@amd.com/
->>> V6: https://lore.kernel.org/lkml/20220519134737.359290-1-li.meng@amd.com/
->>> V7: https://lore.kernel.org/lkml/20220522115423.1147282-1-li.meng@amd.com/
->>>
->>
->>>
->>> Changes from V7 -> V8:
->>> - cpufreq: amd-pstate:
->>> - - amend commit message.
->>> - - amend module description.
->>> - Documentation: amd-pstate:
->>> - - amend commit message.
->>> - - Remove the personal data.
->>>
->>
->> Looks good to me. Thank you.
->>
->> Rafael, Viresh,
->>
->> How do you want to handle this patch series? We are in merge window
->> and this would be for Linux 5.20 based on the changes and content.
->>
->> Would you like to take the entire patch series through your tree, you
->> have my Ack(s) and Reviewed-by(s)
->>
-> 
-> Picking this back up since rc1 is out. How do we want to handle this patch
-> series?
-> 
+On Mon, Aug 15, 2022 at 9:57 AM Luca Weiss <luca.weiss@fairphone.com> wrote:
+>
+> On Mon Aug 15, 2022 at 1:01 PM CEST, Tony Lindgren wrote:
+> > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
+> > > More fixes/changes are needed before driver_deferred_probe_check_state()
+> > > can be deleted. So, bring it back for now.
+> > >
+> > > Greg,
+> > >
+> > > Can we get this into 5.19? If not, it might not be worth picking up this
+> > > series. I could just do the other/more fixes in time for 5.20.
+> >
+> > Yes please pick this as fixes for v6.0-rc series, it fixes booting for
+> > me. I've replied with fixes tags for the two patches that were causing
+> > regressions for me.
+> >
+>
+> Hi,
+>
+> for me Patch 1+3 fix display probe on Qualcomm SM6350 (although display
+> for this SoC isn't upstream yet, there are lots of other SoCs with very
+> similar setup).
+>
+> Probe for DPU silently fails, with CONFIG_DEBUG_DRIVER=y we get this:
+>
+> msm-mdss ae00000.mdss: __genpd_dev_pm_attach() failed to find PM domain: -2
+>
+> While I'm not familiar with the specifics of fw_devlink, the dtsi has
+> power-domains = <&dispcc MDSS_GDSC> for this node but it doesn't pick
+> that up for some reason.
+>
+> We can also see that a bit later dispcc finally probes.
 
-Please send me rebased version. I will apply it for the net release.
+Luca,
 
-thanks,
--- Shuah
+Can you test with this series instead and see if it fixes this issue?
+https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
+
+You might also need to add this delta on top of the series if the
+series itself isn't sufficient.
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 2f012e826986..866755d8ad95 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2068,7 +2068,11 @@ static int fw_devlink_create_devlink(struct device *con,
+                device_links_write_unlock();
+        }
+
+-       sup_dev = get_dev_from_fwnode(sup_handle);
++       if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
++               sup_dev = fwnode_get_next_parent_dev(sup_handle);
++       else
++               sup_dev = get_dev_from_fwnode(sup_handle);
++
+        if (sup_dev) {
+                /*
+                 * If it's one of those drivers that don't actually bind to
+
+-Saravana
