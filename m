@@ -2,104 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B3D592CB3
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 12:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2612592C5F
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Aug 2022 12:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242308AbiHOKJH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Aug 2022 06:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S242328AbiHOKNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Aug 2022 06:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242298AbiHOKJG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 06:09:06 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5873E165A0
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 03:09:04 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id v3so8551250wrp.0
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 03:09:04 -0700 (PDT)
+        with ESMTP id S233494AbiHOKM0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Aug 2022 06:12:26 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183DE175AC;
+        Mon, 15 Aug 2022 03:12:24 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id a9so9988247lfm.12;
+        Mon, 15 Aug 2022 03:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=CsB/NoAW56ne050I2nV0A7tDW+eX2gZVyLlTc8MEkXE=;
-        b=Q2bJb0gcve+toJBBcF3NJDnzAW0PYtNEMYzldvGWquVi3ZwNnMiF927RQ4XD401w1Q
-         aqApE+LzZaF804S8NHNrDNnz8VcYTD2U6CLYjQtPCA0hvMrO7+jrWUUN0416udv6b/3N
-         j0DcxZKkFiISmo3jjJ5bHRXLA5SH+pXC1EGwootfPQIhe0uOztl/i8zAmb8ixOT9pd3T
-         azeux2MTH1rpO1Q7ByHU5ZrZAkuuadpYbpO6FTBqH/DVLWI4sSbbZUDAwJTGXgIB3Fj9
-         aZXYEa2IyWIsKp+g0FPxJ3fQADvGYEJEXTALcSEbjJ1sUhjschl72EaI+m1QKh6kQEKp
-         mNFQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=MdskW5HP+CDyH23eInIpuoo8lXjbVqnmwkTOrQWFXYg=;
+        b=UEx3+L/gV5rSZ6L2pIExhA4Ehw9o+jAookhe3x/Dl20YZFyIOgTKcbXMT/Kbcy0w9T
+         PDDp+S5H5IRKkmc+DWuvU1KlfL/oTOA44P5OfeBI4698ZD/9uYM0so34cliZLrd+iUpd
+         LQWx/p4UsAHk5rO+2I2ee/Q2VD0VZ55wG+ACs37Qh2CSJrdqeJq6jXNha5jO5IHSUMZ+
+         wdyYxXgX71C+f/vC/2yVOsZR+2yUp65e6ibUygaza8v21jfbHoWyGTCRg3Vlgyo241/2
+         +axA/OyBaJibj73Wm4khKZHCXqNw85d50/xKs6fFrjsn4zymMz6DzJun5Xyr0aQOb8G0
+         8iwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=CsB/NoAW56ne050I2nV0A7tDW+eX2gZVyLlTc8MEkXE=;
-        b=Qv01bnZ+B15m2Oj2/eRLdbpMorvKXqgEKFsUDh9dYGVOVNwIPHh58Lld04nm6HEAR1
-         AVlFJuyAn4bxptKWgdarmb8o+/o2jSOmFyVnz/hmmS4z8uwmZQgJ84d6GXPWly8ihZ+L
-         TobMmDUIeWVJZfkYF4eog8DhoictuJpYxFbf0AOPf6C6pM4ii52sBawDgiHN+0RFUbEx
-         Nijbpwc4Kel+cYHh0W+W/+7exQ4dH3QUvM9yXsP1xwMJnB91+WQQDbFVZtCmL1LhCe7j
-         S7nlViu+O4X7XmCMNLFo6AQBdxO0A+fHTgSoJYCxBJ19CRfcZG3StJVfXZvIjSPOWhsW
-         Pilg==
-X-Gm-Message-State: ACgBeo2mL7ImViBk3iDoRvs1zuWmSJdAq+IQVxd/XLH0wGZwCr+mxuXH
-        uUs+7X5oP8h+WP6wZ+Y0zXeuXw==
-X-Google-Smtp-Source: AA6agR6d5kQNwJdr555MMH+HrNG3/sAUb0Op9EljHjT0wTZDPmBgOVTbFs55jQ216/Ed/j4i1HlcVw==
-X-Received: by 2002:adf:f851:0:b0:220:732b:2df2 with SMTP id d17-20020adff851000000b00220732b2df2mr8761477wrq.716.1660558142782;
-        Mon, 15 Aug 2022 03:09:02 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id l14-20020a5d560e000000b0021f0558e51asm6890533wrv.55.2022.08.15.03.08.59
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=MdskW5HP+CDyH23eInIpuoo8lXjbVqnmwkTOrQWFXYg=;
+        b=yo/x7Ut9eqWCwXpmjgVbFAR5VhmaWjcU+AyLNzFvxntpbjK6ciUyOx03eriw44R1Nw
+         gRs4bnzG906C8/qsPZMTU6xqUu8g35Oc508+qeJMJ/pLwVZLOOC1jXKa5mxLc8BX9Ek7
+         BWRQx8kP9DprFui7S3eT9EC+fP3Lb30R3ynJ50CW6g+p4tPWkJgiWmse7R/4lQt+MZs1
+         WdCe0f9MjSj0ywL3DMOka/phYHw6aPBhXXEOqItJcgqrjHdD67aDhvRqcF6mXoh44CwG
+         GL5gCjwG2/OM5NFsQdSipIhLxQC/pHRvYTb97SFn4lMlmTFlTTBtUzMsiU/6JrVFGqfy
+         beEg==
+X-Gm-Message-State: ACgBeo2KzBQOmQCgSh/A4vbXJzW9kf1oLT9LxrH2ibQ3lA9DouK9E2a7
+        sDnzuCzRa6v1dLyO4KXOIU59NbNxMeo=
+X-Google-Smtp-Source: AA6agR48ajQgkYbbBMkMx9FOY/cUH0YJqIDV8pf/uiQQV6pIiKrB6lPAhRoCRX+EWp5C+JPLBH6S5Q==
+X-Received: by 2002:a19:710f:0:b0:491:fce9:cfb1 with SMTP id m15-20020a19710f000000b00491fce9cfb1mr2367812lfc.264.1660558343143;
+        Mon, 15 Aug 2022 03:12:23 -0700 (PDT)
+Received: from localhost.localdomain (admv234.neoplus.adsl.tpnet.pl. [79.185.51.234])
+        by smtp.gmail.com with ESMTPSA id 18-20020ac25f52000000b0048b1ba4d2a4sm1047264lfz.265.2022.08.15.03.12.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 03:09:00 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 11:08:57 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     lee@kernel.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        linux@roeck-us.net, heikki.krogerus@linux.intel.com, deller@gmx.de,
-        broonie@kernel.org, mazziesaccount@gmail.com, lgirdwood@gmail.com,
-        andriy.shevchenko@linux.intel.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-Subject: Re: [RESEND PATCH v8 12/12] video: backlight: mt6370: Add MediaTek
- MT6370 support
-Message-ID: <20220815100857.hcna3ksejzcq5x3l@maple.lan>
-References: <20220815090125.27705-1-peterwu.pub@gmail.com>
- <20220815090125.27705-13-peterwu.pub@gmail.com>
+        Mon, 15 Aug 2022 03:12:22 -0700 (PDT)
+From:   Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Emma Anholt <emma@anholt.net>,
+        Rob Clark <robdclark@chromium.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-mmc@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 0/7] Compatibles for SM6115
+Date:   Mon, 15 Aug 2022 12:09:38 +0200
+Message-Id: <20220815100952.23795-1-a39.skl@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815090125.27705-13-peterwu.pub@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 05:01:25PM +0800, ChiaEn Wu wrote:
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
->
-> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
-> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
-> driver, display bias voltage supply, one general purpose LDO, and the
-> USB Type-C & PD controller complies with the latest USB Type-C and PD
-> standards.
->
-> Add support for the MediaTek MT6370 backlight driver.
-> It controls 4 channels of 8 series WLEDs in
-> 2048 (only for MT6370/MT6371) / 16384 (only for MT6372)
-> current steps (30 mA) in exponential or linear mapping curves.
->
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+This patch series add bunch of compatibles in preparation
+for sending device tree patches for Snapdragon 662 SoC
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Adam Skladowski (7):
+  dt-bindings: dmaengine: qcom: gpi: add compatible for SM6115
+  dmaengine: qcom: gpi: Add SM6115 support
+  dt-bindings: mmc: sdhci-msm: Document the SM6115 compatible
+  cpufreq: Add SM6115 to cpufreq-dt-platdev blocklist
+  dt-bindings: arm-smmu: Add compatible for Qualcomm SM6115
+  iommu/arm-smmu-qcom: Add SM6115 support
+  dt-bindings: firmware: document Qualcomm SM6115 SCM
 
+ Documentation/devicetree/bindings/dma/qcom,gpi.yaml     | 1 +
+ Documentation/devicetree/bindings/firmware/qcom,scm.txt | 1 +
+ Documentation/devicetree/bindings/iommu/arm,smmu.yaml   | 1 +
+ Documentation/devicetree/bindings/mmc/sdhci-msm.yaml    | 1 +
+ drivers/cpufreq/cpufreq-dt-platdev.c                    | 1 +
+ drivers/dma/qcom/gpi.c                                  | 1 +
+ drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c              | 2 ++
+ 7 files changed, 8 insertions(+)
 
-Daniel.
+-- 
+2.25.1
+
