@@ -2,155 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3369C595F63
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 17:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F48595FCD
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 18:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbiHPPjG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Aug 2022 11:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S231962AbiHPQFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 12:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236119AbiHPPiU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 11:38:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4276514034;
-        Tue, 16 Aug 2022 08:37:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE22C611EB;
-        Tue, 16 Aug 2022 15:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10ACCC433C1;
-        Tue, 16 Aug 2022 15:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660664272;
-        bh=V49dgqu/RAkWRS3001yah3EjBpkjCkpA7y5OPLHrM9Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HM6nA176MfOgvwM4aYzgxrXtkZNsyPzieWFtOM7wfa7Y6HbUs11ekwRDWDVFGGXGw
-         27V34YIPzdRIqrOl8k53roAb4tMeD5UDDV3RvxJs4/nEufjpEz3ytpRzUlb75UoX7f
-         SROELHAJ8Mbne9KSmP6mgvraDA/lHVPnonXJXTuB2h/9bkscGKgJ5nrdhIZtDpIjEo
-         kBNP11wnL1imt6wjN99dVad9lNWWj9FE1BCqH6GH4kVXnOR+yujHEy4YqWd9AVAx0H
-         WxHwbprxicMp3T+ovVm4DD6URYmFQxUHfQ68vJnbup2ojgM6/H6z1HwLET+nn0RO97
-         fcXe1fZzFaopQ==
-Received: by mail-ua1-f41.google.com with SMTP id s18so4160730uac.10;
-        Tue, 16 Aug 2022 08:37:51 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0ajzHlMuRIr+AeGlSE5R8WgtFK0ktXaZCMoN2zXAc19FX9wQp2
-        +PVs+UzAGu/wzazL6+zG2WxB/szrdxviIa7vtw==
-X-Google-Smtp-Source: AA6agR6P6tx9Y0Tb4qmdIdqjNQDONt+9JZtqem7UsItHKI1hbGP9NpYbZ5qL4HTr0AbwT9oos2Tvh2M0MtkHzHMsHgQ=
-X-Received: by 2002:ab0:2b06:0:b0:384:c4af:107c with SMTP id
- e6-20020ab02b06000000b00384c4af107cmr8599136uar.77.1660664270971; Tue, 16 Aug
- 2022 08:37:50 -0700 (PDT)
+        with ESMTP id S236277AbiHPQEd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 12:04:33 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8D4B0D
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 09:03:17 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id a4so1444958wrq.1
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 09:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc;
+        bh=G75P1MnBlTsTHdbk47o07Tr2GO1weW34E0V486dZ6zQ=;
+        b=tyvhRkLnT9eQhPU1fA+R37bcZOcR1lj7033nZZYaHV0lalSjYk16myN81RvmFzEdMC
+         ndbWIqX+3WeqaBeA4NYeiFOOZplsWmWVG0eBlinEroNkv6X42hD+OZDgFfIEM4+D8HHD
+         jSBOg9RNYMjSTCVrPWaO51iBtkm4g6kvHMAvaboPSNjUjSUQppwDWKdo0SOc5ZvywH3a
+         wdIkH7/7oG1wUDHRaCoQkUtwjPuA7EqYTuXWezQTRwsFT3XlB2A0Sl44lhrlkRDchgsU
+         km96AAvMAwoVwbguS/wwzFqyDDP7ykeHS0+J50yUk0jwdDc04LdcT9/4QOpcIJt9h7Ni
+         Le3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=G75P1MnBlTsTHdbk47o07Tr2GO1weW34E0V486dZ6zQ=;
+        b=f19aJw1p9zou5/Qd/IKpievltd08gP3i/GtVGsTaiqvER1R89oeqQkymtTmPbcJoT3
+         tUhKdMo/BDP63Ws8za4P9prAPUDZHrZdZemr4sbDE7XB/S4mA9eoogrqSYLfVZ/9/HVn
+         q0WqYxgDvoJe4yLjseYVFIhTx16IWDAyq4gt8bTj43sN5ZjohOf6ipWao0sjeVO7+blt
+         7kGdK/9m7VOgyvgUfUiYXwVhh33DXjRK432kwh/el3fJtcOrtTdz5YI7Y6V8u9ghcWqU
+         sQ5v+9BSQXGJe1mbciAqpvJ2mEAcaJxEv49Xu7z2R8VRGfI+wXCcCbEPxzLlVvfXzTc8
+         tWUw==
+X-Gm-Message-State: ACgBeo3hX768rFqxVIS0WslBI5JoQQswE1DXa0sKKaRmsqbzBEVSaDbe
+        1Co/VfM/2MKxwWh9XZvGK6vaJw==
+X-Google-Smtp-Source: AA6agR4sDP2eoSMqKaV2coqQ9MbRDM82FgU7mJBsnWOywpv4YY3XTlQ/jWnKNtxaFziuNPY74Dlivg==
+X-Received: by 2002:a05:6000:82:b0:225:21ff:a389 with SMTP id m2-20020a056000008200b0022521ffa389mr76896wrx.22.1660665795549;
+        Tue, 16 Aug 2022 09:03:15 -0700 (PDT)
+Received: from localhost ([109.180.234.208])
+        by smtp.gmail.com with ESMTPSA id z3-20020a1cf403000000b003a60bc8ae8fsm1897992wma.21.2022.08.16.09.03.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 09:03:15 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 6/7] cpufreq: amd-pstate: update pstate frequency
+ transition delay time
+References: <20220814163548.326686-1-Perry.Yuan@amd.com>
+        <20220814163548.326686-7-Perry.Yuan@amd.com> <87bkslim2c.fsf@stealth>
+        <DM4PR12MB5278E6B6EC656747AE67BFAF9C6B9@DM4PR12MB5278.namprd12.prod.outlook.com>
+Date:   Tue, 16 Aug 2022 17:03:13 +0100
+In-Reply-To: <DM4PR12MB5278E6B6EC656747AE67BFAF9C6B9@DM4PR12MB5278.namprd12.prod.outlook.com>
+        (Perry Yuan's message of "Tue, 16 Aug 2022 07:02:27 +0000")
+Message-ID: <874jycfa66.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220805070610.3516-1-peterwu.pub@gmail.com> <20220805070610.3516-7-peterwu.pub@gmail.com>
- <YvJdpq0MWNPQZw5c@google.com>
-In-Reply-To: <YvJdpq0MWNPQZw5c@google.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 16 Aug 2022 09:37:39 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJriSbJvejCi7n50T-NaOW+GF8yb6Fi4m-GvUkggf-9kw@mail.gmail.com>
-Message-ID: <CAL_JsqJriSbJvejCi7n50T-NaOW+GF8yb6Fi4m-GvUkggf-9kw@mail.gmail.com>
-Subject: Re: [PATCH v7 06/13] dt-bindings: mfd: Add MediaTek MT6370
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 7:14 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Fri, 05 Aug 2022, ChiaEn Wu wrote:
->
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add MediaTek MT6370 binding documentation.
-> >
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> > ---
-> >  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
-> >  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
-> >  2 files changed, 298 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> >  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
->
-> Applied, thanks.
+Hi Perry,
 
-Without the backlight schema applied, this is the result:
+"Yuan, Perry" <Perry.Yuan@amd.com> writes:
 
-./Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml: Unable
-to find schema file matching $id:
-http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: backlight: False schema does not allow {'compatible':
-['mediatek,mt6370-backlight'], 'mediatek,bled-channel-use': b'\x0f'}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: charger: False schema does not allow {'compatible':
-['mediatek,mt6370-charger'], 'interrupts': [[48], [68], [6]],
-'interrupt-names': ['attach_i', 'uvp_d_evt', 'mivr'], 'io-channels':
-[[1, 5]], 'usb-otg-vbus-regulator': {'regulator-name':
-['mt6370-usb-otg-vbus'], 'regulator-min-microvolt': [[4350000]],
-'regulator-max-microvolt': [[5800000]], 'regulator-min-microamp':
-[[500000]], 'regulator-max-microamp': [[3000000]], 'phandle': [[2]]}}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: tcpc: False schema does not allow {'compatible':
-['mediatek,mt6370-tcpc'], 'interrupts-extended': [[4294967295, 4, 8]],
-'connector': {'compatible': ['usb-c-connector'], 'label': ['USB-C'],
-'vbus-supply': [[2]], 'data-role': ['dual'], 'power-role': ['dual'],
-'try-power-role': ['sink'], 'source-pdos': [[570527844]], 'sink-pdos':
-[[570527944]], 'op-sink-microwatt': [[10000000]], 'ports':
-{'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg':
-[[0]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@1':
-{'reg': [[1]], 'endpoint': {'remote-endpoint': [[4294967295]]}},
-'port@2': {'reg': [[2]], 'endpoint': {'remote-endpoint':
-[[4294967295]]}}}}}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: indicator: False schema does not allow {'compatible':
-['mediatek,mt6370-indicator'], '#address-cells': [[1]], '#size-cells':
-[[0]], 'multi-led@0': {'reg': [[0]], 'function': ['indicator'],
-'color': [[9]], 'led-max-microamp': [[24000]], '#address-cells':
-[[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'color': [[1]]},
-'led@1': {'reg': [[1]], 'color': [[2]]}, 'led@2': {'reg': [[2]],
-'color': [[3]]}}, 'led@3': {'reg': [[3]], 'function': ['indicator'],
-'color': [[0]], 'led-max-microamp': [[6000]]}}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: flashlight: False schema does not allow {'compatible':
-['mediatek,mt6370-flashlight'], '#address-cells': [[1]],
-'#size-cells': [[0]], 'led@0': {'reg': [[0]], 'led-sources': [[0]],
-'function': ['flash'], 'color': [[0]], 'function-enumerator': [[1]],
-'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]],
-'flash-max-timeout-us': [[1248000]]}, 'led@1': {'reg': [[1]],
-'led-sources': [[1]], 'function': ['flash'], 'color': [[0]],
-'function-enumerator': [[2]], 'led-max-microamp': [[200000]],
-'flash-max-microamp': [[500000]], 'flash-max-timeout-us':
-[[1248000]]}}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-backlight: mediatek,bled-channel-use: b'\x0f' is not of type 'object',
-'array', 'boolean', 'null'
- From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
+> [AMD Official Use Only - General]
+>
+> Hi Punit
+>
+>> -----Original Message-----
+>> From: Punit Agrawal <punit.agrawal@bytedance.com>
+>> Sent: Monday, August 15, 2022 11:06 PM
+>> To: Yuan, Perry <Perry.Yuan@amd.com>
+>> Cc: rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>;
+>> viresh.kumar@linaro.org; Sharma, Deepak <Deepak.Sharma@amd.com>;
+>> Limonciello, Mario <Mario.Limonciello@amd.com>; Fontenot, Nathan
+>> <Nathan.Fontenot@amd.com>; Deucher, Alexander
+>> <Alexander.Deucher@amd.com>; Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>;
+>> Huang, Shimmer <Shimmer.Huang@amd.com>; Du, Xiaojian
+>> <Xiaojian.Du@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>; linux-
+>> pm@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH v5 6/7] cpufreq: amd-pstate: update pstate frequency
+>> transition delay time
+>> 
+>> [CAUTION: External Email]
+>> 
+>> Perry Yuan <Perry.Yuan@amd.com> writes:
+>> 
+>> > Change the default transition latency to be 20ms that is more
+>> > reasonable transition delay for AMD processors in non-EPP driver mode.
+>> >
+>> > Update transition delay time to 1ms, in the AMD CPU autonomous mode
+>> > and non-autonomous mode, CPPC firmware will decide frequency at 1ms
+>> > timescale based on the workload utilization.
+>> >
+>> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+>> > ---
+>> >  drivers/cpufreq/amd-pstate.c | 4 ++--
+>> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/drivers/cpufreq/amd-pstate.c
+>> > b/drivers/cpufreq/amd-pstate.c index e40177d14310..9cb051d61422 100644
+>> > --- a/drivers/cpufreq/amd-pstate.c
+>> > +++ b/drivers/cpufreq/amd-pstate.c
+>> > @@ -41,8 +41,8 @@
+>> >  #include <asm/msr.h>
+>> >  #include "amd-pstate-trace.h"
+>> >
+>> > -#define AMD_PSTATE_TRANSITION_LATENCY        0x20000
+>> > -#define AMD_PSTATE_TRANSITION_DELAY  500
+>> > +#define AMD_PSTATE_TRANSITION_LATENCY        20000
+>> > +#define AMD_PSTATE_TRANSITION_DELAY  1000
+>> 
+>> How were these values derived? If from documentation, it'll be good to add a
+>> link to the relevant documentation. And if they were derived from testing,
+>> please mention this in the commit log (along with some details of the tests used
+>> to determine the value).
+>
+> The values are calculated from the CPU PM firmware and hardware design.
+> There are some latency and delay values defined  in the PM firmware, I have no documents about the detail for now. 
+
+In that case, please mention that the values are calculated from
+firmware / hardware design in the commit log (and include a reference to
+the firmware sources if available).
+
+Thanks!
+
+[...]
+
