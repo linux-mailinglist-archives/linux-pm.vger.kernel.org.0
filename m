@@ -2,97 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91110595C4E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 14:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A36595CD6
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 15:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiHPMw0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Aug 2022 08:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
+        id S235498AbiHPNGy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 09:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiHPMwV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 08:52:21 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F08A66A65
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 05:52:20 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id j26so2953517wms.0
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 05:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=QIjj7h4Isq+cfghBOqfVoLTefEPxxEUame3Phutl2H8=;
-        b=keaWwdH65TdPofXhAKOaLQGVlrg/k0rwK/7d76EP+wuvXfZbkvU1NWK5NWmeFAib1k
-         zwyQCvrWhzffYB8AzvN5SawhuF/v7hCt7RA4+F5oXleHf6Q1/wbO4+Cw0bLbEastGMD1
-         5IVhPXRTfdH6QdKU4z+3NlpF4j37rD5KE6a57IiME3PVp9W5d12ISKCG6cLR9WEwJmLE
-         q94Avi7HegBixZqkUDuG/kNk+2JcmL/FO0iq/1w9YETOWFVRXgVmEOvfUN6WhZiMfSy8
-         eDtpqrhUpN8cKtgfHqXh/5AkSDOknww3Uwcrtzeuu1mu1oIkhBvgT4Hl3EKp55/hBy+5
-         R1BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=QIjj7h4Isq+cfghBOqfVoLTefEPxxEUame3Phutl2H8=;
-        b=3W0ghdF+ybCc9ObLGNNpp8zMSTddf3Z+pyBk6+7KKN/39t/szH7t7pyv/rDyoazTWt
-         9hpNpZtHZtkupxrLfP4WsY2SDvhkmdn1ga883lEelxABqxbhEQ5CkOP7KTdVIhcem/+5
-         EOvdT1MCcXXJjt/ZhCSkEdJUXVEohWB4JhL8xb6Ou20wSLXTdrZjUYGfoSFc6y999+Sh
-         bp4WbU8etFEQ8/DvJAN9WqGofxH2MzgdMyLiQxpnarS9KrgDnS3wuqxmsUxWQsIGtjH3
-         zpI1yby3tWb7cwE+oS4ZRc13HU3PdRS+LtPJB9ultjcuGnFrsXBCH2neJ3x9aTzAY926
-         RTPQ==
-X-Gm-Message-State: ACgBeo0CowzGygXvfnbbGOTZNyzHLjDg4QD5bst6NPERm/T1kUpgWg7i
-        NKxuXwS8tXYm7rnQD+VvwpTigQ==
-X-Google-Smtp-Source: AA6agR5w2lzHymM1CcgQLif6OsRje2M3vDi7dqWzHaue5rZKN7mnqR21Z4P1a3ivItOfmhCv/TiMtQ==
-X-Received: by 2002:a05:600c:3545:b0:3a6:df3:b395 with SMTP id i5-20020a05600c354500b003a60df3b395mr486580wmq.145.1660654338674;
-        Tue, 16 Aug 2022 05:52:18 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q13-20020a056000136d00b00224f5bfa890sm9186732wrz.97.2022.08.16.05.52.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 05:52:18 -0700 (PDT)
-Message-ID: <17669bc3-7f58-ea32-71f9-81b5a147f713@linaro.org>
-Date:   Tue, 16 Aug 2022 14:52:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 00/32] New thermal OF code
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        damien.lemoal@opensource.wdc.com, Heiko Stuebner <heiko@sntech.de>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        mhiramat@kernel.org, Talel Shenhar <talel@amazon.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>, anarsoul@gmail.com,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        glaroque@baylibre.com, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Keerthy <j-keerthy@ti.com>
-References: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
- <35457e1c-fe6b-2212-9624-70369f04ef0d@linaro.org>
- <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
- <2ab74b1a-7087-cbfc-3f05-92e0eef30ca9@linaro.org>
- <CAJZ5v0jKpT0R2btHCtoyqrnF6-pvVx2q8zmYcR2mT6qtsbkJVg@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jKpT0R2btHCtoyqrnF6-pvVx2q8zmYcR2mT6qtsbkJVg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        with ESMTP id S235399AbiHPNGu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 09:06:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72233DE96;
+        Tue, 16 Aug 2022 06:06:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 065D31042;
+        Tue, 16 Aug 2022 06:06:48 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.14.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2292C3F66F;
+        Tue, 16 Aug 2022 06:06:44 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org
+Cc:     lukasz.luba@arm.com, viresh.kumar@linaro.org,
+        dietmar.eggemann@arm.com, vincent.guittot@linaro.org
+Subject: [PATCH v2] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+Date:   Tue, 16 Aug 2022 14:06:29 +0100
+Message-Id: <20220816130629.3178-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,73 +38,146 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/08/2022 14:40, Rafael J. Wysocki wrote:
-> On Mon, Aug 15, 2022 at 9:02 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Rafael,
->>
->> On 28/07/2022 16:37, Rafael J. Wysocki wrote:
->>> Hi Daniel,
->>>
->>> On Wed, Jul 27, 2022 at 11:46 PM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>>
->>>> Hi Rafael,
->>>>
->>>> we are close to release v5.19.
->>>>
->>>> I want to send a PR this week but it would be nice if this series could
->>>> be part of it, so the trip point rework we discussed earlier (it is a
->>>> long series) could be merged more easily for v5.21-rc1 as it will depend
->>>> on these changes.
->>>>
->>>> This series was tested on different platforms, rk3399, broadcom and
->>>> rcar. The external drivers as ata, touchscreen, regulator, hwmon were
->>>> acked/reviewed and some other thermal drivers reviewed also. Some others
->>>> remain without feedback because the maintainer is unresponsive or the
->>>> driver is orphaned, falling under the thermal framework maintenance
->>>> umbrella. All the drivers changes are the same.
->>>>
->>>> I do believe it does a nice cleanup and consolidation of the OF thermal
->>>> code and realign it with the core thermal framework.
->>>>
->>>> Is it ok to merge the series?
->>>
->>> I would prefer to put it into linux-next for a few days.
->>>
->>> Why don't you send 2 pull requests, one with all of the other material
->>> you have for 5.20 and another one with this series (it may be on top
->>> of the first one)?
->>>
->>> I will be able to defer pushing the second one till the second half of
->>> the merge window.
->>
->> I setup a branch with the patches and the fixes.
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/v6.0-rc1-2
->>
->> Is there still time for a PR ?
-> 
-> Not for 6.0-rc.
+There is no need to keep the max CPU capacity in the per_cpu instance.
+Furthermore, there is no need to check and update that variable
+(sg_cpu->max) every time in the frequency change request, which is part
+of hot path. Instead use struct sugov_policy to store that information.
+Initialize the max CPU capacity during the setup and start callback.
+We can do that since all CPUs in the same frequency domain have the same
+max capacity (capacity setup and thermal pressure are based on that).
 
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+Changes v2:
+- collected ACK from Viresh
+- re-based on top of latest mainline where the previously conflicting
+  change is now merged
 
-Ok, I'll setup a signed tag for the 'fixes' branch.
+ kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-
-> I'm out of office this week, but I'll gladly merge an early PR for 6.1
-> next week.
-
-Ok, sounds good, thanks
-
-   -- Daniel
-
-
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 1207c78f85c1..9161d1136d01 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -25,6 +25,9 @@ struct sugov_policy {
+ 	unsigned int		next_freq;
+ 	unsigned int		cached_raw_freq;
+ 
++	/* max CPU capacity, which is equal for all CPUs in freq. domain */
++	unsigned long		max;
++
+ 	/* The next fields are only needed if fast switch cannot be used: */
+ 	struct			irq_work irq_work;
+ 	struct			kthread_work work;
+@@ -48,7 +51,6 @@ struct sugov_cpu {
+ 
+ 	unsigned long		util;
+ 	unsigned long		bw_dl;
+-	unsigned long		max;
+ 
+ 	/* The field below is for single-CPU policies only: */
+ #ifdef CONFIG_NO_HZ_COMMON
+@@ -158,7 +160,6 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+ {
+ 	struct rq *rq = cpu_rq(sg_cpu->cpu);
+ 
+-	sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+ 	sg_cpu->bw_dl = cpu_bw_dl(rq);
+ 	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+ 					  FREQUENCY_UTIL, NULL);
+@@ -253,6 +254,7 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+  */
+ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
+ {
++	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+ 	unsigned long boost;
+ 
+ 	/* No boost currently required */
+@@ -280,7 +282,8 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
+ 	 * sg_cpu->util is already in capacity scale; convert iowait_boost
+ 	 * into the same scale so we can compare.
+ 	 */
+-	boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
++	boost = sg_cpu->iowait_boost * sg_policy->max;
++	boost >>= SCHED_CAPACITY_SHIFT;
+ 	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
+ 	if (sg_cpu->util < boost)
+ 		sg_cpu->util = boost;
+@@ -337,7 +340,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+ 	if (!sugov_update_single_common(sg_cpu, time, flags))
+ 		return;
+ 
+-	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
++	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_policy->max);
+ 	/*
+ 	 * Do not reduce the frequency if the CPU has not been idle
+ 	 * recently, as the reduction is likely to be premature then.
+@@ -373,6 +376,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+ 				     unsigned int flags)
+ {
+ 	struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
++	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+ 	unsigned long prev_util = sg_cpu->util;
+ 
+ 	/*
+@@ -399,7 +403,8 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+ 		sg_cpu->util = prev_util;
+ 
+ 	cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
+-				   map_util_perf(sg_cpu->util), sg_cpu->max);
++				   map_util_perf(sg_cpu->util),
++				   sg_policy->max);
+ 
+ 	sg_cpu->sg_policy->last_freq_update_time = time;
+ }
+@@ -408,25 +413,19 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+ {
+ 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+ 	struct cpufreq_policy *policy = sg_policy->policy;
+-	unsigned long util = 0, max = 1;
++	unsigned long util = 0;
+ 	unsigned int j;
+ 
+ 	for_each_cpu(j, policy->cpus) {
+ 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+-		unsigned long j_util, j_max;
+ 
+ 		sugov_get_util(j_sg_cpu);
+ 		sugov_iowait_apply(j_sg_cpu, time);
+-		j_util = j_sg_cpu->util;
+-		j_max = j_sg_cpu->max;
+ 
+-		if (j_util * max > j_max * util) {
+-			util = j_util;
+-			max = j_max;
+-		}
++		util = max(j_sg_cpu->util, util);
+ 	}
+ 
+-	return get_next_freq(sg_policy, util, max);
++	return get_next_freq(sg_policy, util, sg_policy->max);
+ }
+ 
+ static void
+@@ -752,7 +751,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+ {
+ 	struct sugov_policy *sg_policy = policy->governor_data;
+ 	void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
+-	unsigned int cpu;
++	unsigned int cpu = cpumask_first(policy->cpus);
+ 
+ 	sg_policy->freq_update_delay_ns	= sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
+ 	sg_policy->last_freq_update_time	= 0;
+@@ -760,6 +759,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 	sg_policy->work_in_progress		= false;
+ 	sg_policy->limits_changed		= false;
+ 	sg_policy->cached_raw_freq		= 0;
++	sg_policy->max				= arch_scale_cpu_capacity(cpu);
+ 
+ 	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
