@@ -2,140 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F4A595253
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 08:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E47595459
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 10:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiHPGFA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Aug 2022 02:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S231893AbiHPIB5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 04:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiHPGE1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 02:04:27 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350EB80519
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 16:37:00 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-324ec5a9e97so110738447b3.7
-        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 16:37:00 -0700 (PDT)
+        with ESMTP id S231586AbiHPIBe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 04:01:34 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBC55B7A6
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 22:20:31 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id w11-20020a17090a380b00b001f73f75a1feso16391354pjb.2
+        for <linux-pm@vger.kernel.org>; Mon, 15 Aug 2022 22:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=fVxetOgUQ7E/da9h0YyyPZnmDSU85aoRWSOGJovfDo4=;
-        b=KTUwHeoXz1fmYUOVhvzKJVtvXyuG8JHUHX6QB6FOxUcDm+t/hWHwoYNXr85HrUdaEK
-         tILQMJn5QrnwvIaiiGvh/gmofiK9boSEgGXMH8Td1nph3IGh7K9bPlvKvjyubLDSc0aS
-         fgP5ZpT/qNqLdbxAcPOnXoC06oDNK7j8waNQN+CBuASLQjDxP44f8T2h1FoyDYuG2qG0
-         BpVB8cB/sRH0nhHBKOSHQriJwZq8WNgL2+bZYuBEh1Bbls5R4A/XDMEyrwthkWrfMF+H
-         T+itPy2imckkoWZbnfArIsJ7JKc+W9DP9rqWida20tZuDHZyrdibJlDrRnzcRORJzbga
-         q56w==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=38ZipuGlgcGilrPMDkFhdoUjJ/3FDArhDOlQ2DOW4s8=;
+        b=IsjBhnJPeIJdkqo1ehpYoRLT0VitBdKe08mRfC4rYgwgC0w7/SF6+1O9PNsWnkpHdw
+         XJbRo7KkdyO8PK/i6MdQoR3jI+mF6BDW4JUQ62jdrfXut9lEyZl7SLU/+TWeHIRa67ZL
+         54JGyugLq029uLg7lBucHI+Rx0mTJbsoMm6GxqlZsk6vqDv6t7b+Rw2N+D7A7DJGKRLN
+         gxax9e6i93WF2ugfQqLB3Qm37LWbJk6hyxampKI7aal7IowuviC6g6S6pvihdaKWj5ro
+         rWWptlrsnxzQGkoT5fE9W6UiLbUbLYFeK+OuxuRDKvTtDcBgKEqwrzgwL8YNeAbCWCay
+         sxgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fVxetOgUQ7E/da9h0YyyPZnmDSU85aoRWSOGJovfDo4=;
-        b=w18lkiwi1bb7WNbszcCgDk7feua7KQFcYWETJlQlab9xK7lW0HKqxhsAh8T54o0jAR
-         D6uoIiAXa13PpZt+44pzAA0Zh6Xclayt0r75j6QGZCbBO7lK/3/JYCSPC0h8DRhlbaL0
-         FpzyDLBoNOezISC94a65lAFxV9+6qOCHTCcphFy+zK24BTwujDosT0l9hbV8nq07JKwI
-         YuZSpyEhg00S1m4RPpqewXwm0nAEs38MTk7jR05Su2DUHAp0Ao4XXdSrdIPZ88ETB1uf
-         s+zrnDmGTR5UGO7zOxCIhjwR2adp7E4OxNRUuSqb5qU9uoDaFUwXjgZ189fbOLb1i0dG
-         9n8g==
-X-Gm-Message-State: ACgBeo3oUBIzSm+2eZmu+acyMds6QBSOcb6/pTWDyg9VhBa07PxkqZI3
-        ZuGhskdjWPAxAe+ej8ugaYaRk4oJI8TTIQfMjVNsRA==
-X-Google-Smtp-Source: AA6agR5Np2WgcNsV8TjcwUEqg6oN6k4lKO8Wo6VF8E9ds7ny2Mlu9nLypvijdRBumVPbsaC27C1JZ/SudORTFk2byw8=
-X-Received: by 2002:a81:d8a:0:b0:333:38da:2a44 with SMTP id
- 132-20020a810d8a000000b0033338da2a44mr1203503ywn.518.1660606619221; Mon, 15
- Aug 2022 16:36:59 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=38ZipuGlgcGilrPMDkFhdoUjJ/3FDArhDOlQ2DOW4s8=;
+        b=ajazR/SppHndIZOysz6AoImcv9a9klCUnM5Y3Lul20xdkN9Ne7ErZu/Qq/TsuVVBrc
+         +WfKMmPUxtRVz139fWCJ3+ynQRFtwX0OMgedilWLuiMounYcsghb3k66Sgmqywqrd8iB
+         W77+RbEF/OSSLQDUUol4vhNxK+W7ZGee58avW9p2HejcFNZft9d0dGEgX0DZlNVfB9bn
+         Uvhk43o5TXwAqKuIWAJtt9q05U1qFx1iesKTjmdeCKWd0h/vwiszkhqfb33tZm/IJgYs
+         GTUJT5SQ3Ss5U+tHwx67771pIr/gkqb0V2ublTFzkJN+ZEy1z+jdVp4sRHykU4RHcVO6
+         qJ8Q==
+X-Gm-Message-State: ACgBeo20FA+tDFFItZbkk/ypLYOJaxOrhgzaasLHff2hoQDCqOpKXaNn
+        szwp63jwjzHcPbaqz9xKguFhhA==
+X-Google-Smtp-Source: AA6agR7P9gzYxYLmzi7vzJqMMOI9qtuU7Ub85bOxZF3FskIRNGoRk0cwlIB+BPctooCIMJadzMLtNw==
+X-Received: by 2002:a17:90a:c24a:b0:1f3:3abd:6306 with SMTP id d10-20020a17090ac24a00b001f33abd6306mr22030875pjx.128.1660627230927;
+        Mon, 15 Aug 2022 22:20:30 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id w11-20020a1709029a8b00b00168dadc7354sm7933941plp.78.2022.08.15.22.20.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 22:20:30 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 10:50:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] OPP: Fix an un-initialized variable usage
+Message-ID: <20220816052026.ijcj63zhlaus27pi@vireshk-i7>
+References: <a21fb09a4f2fcdb08eeb43cf4fb525621b16d086.1660567465.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <20220727185012.3255200-1-saravanak@google.com>
- <Yvonn9C/AFcRUefV@atomide.com> <CM6REZS9Z8AC.2KCR9N3EFLNQR@otso>
-In-Reply-To: <CM6REZS9Z8AC.2KCR9N3EFLNQR@otso>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 15 Aug 2022 16:36:23 -0700
-Message-ID: <CAGETcx_6oh=GVLP7-1gN_4DW7UHJ1MZQ6T1U2hupc_ZYDnXcNA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state() for now
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, naresh.kamboju@linaro.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a21fb09a4f2fcdb08eeb43cf4fb525621b16d086.1660567465.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 9:57 AM Luca Weiss <luca.weiss@fairphone.com> wrote:
->
-> On Mon Aug 15, 2022 at 1:01 PM CEST, Tony Lindgren wrote:
-> > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > > More fixes/changes are needed before driver_deferred_probe_check_state()
-> > > can be deleted. So, bring it back for now.
-> > >
-> > > Greg,
-> > >
-> > > Can we get this into 5.19? If not, it might not be worth picking up this
-> > > series. I could just do the other/more fixes in time for 5.20.
-> >
-> > Yes please pick this as fixes for v6.0-rc series, it fixes booting for
-> > me. I've replied with fixes tags for the two patches that were causing
-> > regressions for me.
-> >
->
-> Hi,
->
-> for me Patch 1+3 fix display probe on Qualcomm SM6350 (although display
-> for this SoC isn't upstream yet, there are lots of other SoCs with very
-> similar setup).
->
-> Probe for DPU silently fails, with CONFIG_DEBUG_DRIVER=y we get this:
->
-> msm-mdss ae00000.mdss: __genpd_dev_pm_attach() failed to find PM domain: -2
->
-> While I'm not familiar with the specifics of fw_devlink, the dtsi has
-> power-domains = <&dispcc MDSS_GDSC> for this node but it doesn't pick
-> that up for some reason.
->
-> We can also see that a bit later dispcc finally probes.
+On 15-08-22, 14:44, Christophe JAILLET wrote:
+> smatch complains that 'ret' may be returned un-initialized.
+> 
+> Explicitly return 0 if we reach the end of the function (should
+> 'opp_table->clk_count' be 0).
+> 
+> Fixes: 8174a3a613af ("OPP: Provide a simple implementation to configure multiple clocks")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/opp/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 77d1ba3a4154..e87567dbe99f 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -873,7 +873,7 @@ int dev_pm_opp_config_clks_simple(struct device *dev,
+>  		}
+>  	}
+>  
+> -	return ret;
+> +	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_opp_config_clks_simple);
 
-Luca,
+Applied. Thanks.
 
-Can you test with this series instead and see if it fixes this issue?
-https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
-
-You might also need to add this delta on top of the series if the
-series itself isn't sufficient.
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 2f012e826986..866755d8ad95 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2068,7 +2068,11 @@ static int fw_devlink_create_devlink(struct device *con,
-                device_links_write_unlock();
-        }
-
--       sup_dev = get_dev_from_fwnode(sup_handle);
-+       if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
-+               sup_dev = fwnode_get_next_parent_dev(sup_handle);
-+       else
-+               sup_dev = get_dev_from_fwnode(sup_handle);
-+
-        if (sup_dev) {
-                /*
-                 * If it's one of those drivers that don't actually bind to
-
--Saravana
+-- 
+viresh
