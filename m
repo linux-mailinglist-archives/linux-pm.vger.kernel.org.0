@@ -2,113 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718A4595996
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 13:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F3159596D
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 13:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbiHPLM0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Aug 2022 07:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S235284AbiHPLHf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 07:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234524AbiHPLMH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 07:12:07 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B5110D3
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 02:01:11 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id a9so13921296lfm.12
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 02:01:11 -0700 (PDT)
+        with ESMTP id S235286AbiHPLHK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 07:07:10 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440A99C535
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 03:13:23 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id s9so10033392ljs.6
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 03:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=q+bgDPRgPRHSxrHtdS3PxKXnrSqyZcY4lba+sAly1/w=;
-        b=XBVexQTwUHJ5vuvI5fwHlQzDP8BSNOYEEWzB2HwtcIdr9VgldN+f6gjCzgLc5YRghT
-         bDTws6K01yYvmFxi+URd10lUW+EO+knrJSEUzk3wMm9S4Bxy/P9BjkJPyxwm5gVg/mLa
-         Er83nwuGoQWKtrGCfqjk0once47DoY/L5U0f7CIw0OhZYPalN9hVk5KZV2tsROVueKwb
-         hEhE+2ttmNq06MgugEwnbklerttW2i5JUUE29lvYheBllvPnrkYA1VfCjWsWIaC50yZZ
-         i7Kj0FeFYQMKNs3MrBQyi5LxndolnW6WiN082esUuUgZgqe0vV0iZ3Jigi8cbdAMnAqz
-         d9ug==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=I5SqP35XC1263ityEmHuahEtnvYD9OPIC1kK87SGfRw=;
+        b=GG76BEFFH8QopWBCiOBntKXwcAX7YWOUOgmNyASJ6GEoYLq58DYf15P+iP97FxOg4B
+         KjDaJEUrkA70ApHUjT+FWRX9DVIm1N4FveTnXJsj1bwwKg9k/nWwYY4N2FBwYTs1pST7
+         3snLlHdooPCoOILcUKxpsXT0nUuhOwVLBgLcwzaAMLwsqBwfwsUxFWrvl63bMa8wO6+b
+         P/tlXSY/kMnb3qOxP/UoznLJeEBju5oWeVLMNlmxpnkaOeJKxiiiBYqeVsYoKc84HnBY
+         7/U4xiutBBix58jCLqHm+QqRUeNvFfvsoqfQdQXr78xeD6wjWdbxc+OJkB4BuTKOZVqm
+         fxmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=q+bgDPRgPRHSxrHtdS3PxKXnrSqyZcY4lba+sAly1/w=;
-        b=500kDaEtl7Ahs0CMK/vgaOuCNxg49rnujXIjUZp90AHh+Ugk6omBC+xutFkhIYP+2L
-         ENax5uXbKrFnTYzeJ5JNvmpdNCajjPC8+L7/6Sjh8HTff6nUAsqW7fSZRDIgXihcSpqJ
-         R3s/u57AZ1798cCzkvyaqB9osUYOgCqizMdmvJ40NTp2mfrHv2w03WFhMx19ynkbzgU9
-         Gpk6eEYLhcnhZZ8A1XwmeUhvhVI5khz6kTCbvwe1ioG3caoJ/NlHkTdIdPGqe3oOtAbx
-         s/ooEuocN3/BnlFwExKHzq4uZY+lBC89lZIFzVahB2oO/6sBvUsxqY+V5fXVxjxALlgv
-         4DuA==
-X-Gm-Message-State: ACgBeo3Ij440eZ095bS3o0QhaVsKhbalU2nC5e0ECdN/b78EGMLwX9IV
-        EFh5n7Q+3ZYVw5+4uYwsccQSpw==
-X-Google-Smtp-Source: AA6agR4Rrs4sw4cWiTGLXoKhr6OEFnD9GHLxlEK0MF5jg4T84VBOnAh9FVPk2fjCu0Ybz5mk/e5WJg==
-X-Received: by 2002:a05:6512:3d8e:b0:48a:eff4:6b03 with SMTP id k14-20020a0565123d8e00b0048aeff46b03mr6570827lfv.49.1660640470377;
-        Tue, 16 Aug 2022 02:01:10 -0700 (PDT)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id p10-20020a05651211ea00b0048b04d494c6sm1323538lfs.51.2022.08.16.02.01.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 02:01:09 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 11:01:09 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2 15/26] thermal/drivers/rcar_gen3: Use the generic
- function to get the number of trips
-Message-ID: <Yvtc1adKkVSyRDIj@oden.dyn.berto.se>
-References: <20220809220436.711020-1-daniel.lezcano@linaro.org>
- <20220809220436.711020-16-daniel.lezcano@linaro.org>
+        bh=I5SqP35XC1263ityEmHuahEtnvYD9OPIC1kK87SGfRw=;
+        b=Iv6D2frjrTvQEP32HPVUWIv6jK8FtCG+pBxeyTLQXtbosS5gO4eAa3f8uHAtiY4gqe
+         uKmIqSO5QALP/KkjrTs0qHN1hTCX8FajZEbKK6sgbNxHF8Fk+CacrMnet3AW8SaCjOfD
+         owU/u/7bPEuWm2bvtAub7M5rWzUDyFrvFrAwxT2dDx4r1SlMJQTpoWW+NJnQXkWq5rQ1
+         1IWUi6NF8HRoPGnqewOEuDu+usbpGi3sIID0YtDhsucmhvyCv12aRJ/oiIpIk/0TRXaJ
+         hCByyWtaLhBO+xKCNKm1/JqNF724VoWN0MBo+Z87gpJKKn5HqaN9ssILJXZDnyje10PK
+         DypA==
+X-Gm-Message-State: ACgBeo0qrFTdlKQ0WrBSr1fO1rM0eMgv7lzRA3n56tuLqpistKLalaqj
+        TZUUh3YSSSFE2gYpSykM5vs1Rg==
+X-Google-Smtp-Source: AA6agR5wmREWNPb3k9paLeHs0ydehrKgaXqxM99gOCR/RBa1rBjr/Xk5erS1nX4K3zaQu/5OsWNJBw==
+X-Received: by 2002:a05:651c:244:b0:253:ecad:a4ee with SMTP id x4-20020a05651c024400b00253ecada4eemr5833229ljn.21.1660644802065;
+        Tue, 16 Aug 2022 03:13:22 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id d21-20020ac244d5000000b0048afccdd6e8sm1339250lfm.105.2022.08.16.03.13.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 03:13:21 -0700 (PDT)
+Message-ID: <488ccf2a-5058-d3c6-43ad-8ec2b541fb86@linaro.org>
+Date:   Tue, 16 Aug 2022 13:13:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220809220436.711020-16-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: supply: Add Richtek RT9471
+ battery charger
+Content-Language: en-US
+To:     cy_huang <u0084500@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org
+Cc:     alina_yu@richtek.com, cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1660548852-6222-1-git-send-email-u0084500@gmail.com>
+ <1660548852-6222-2-git-send-email-u0084500@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1660548852-6222-2-git-send-email-u0084500@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Daniel,
-
-Thanks for your work.
-
-On 2022-08-10 00:04:25 +0200, Daniel Lezcano wrote:
-> The thermal core framework allows to get the number of thermal trips,
-> use it instead of visiting the thermal core structure internals.
+On 15/08/2022 10:34, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
+> Add bindings for the Richtek RT9471 I2C controlled battery charger.
+> 
+> Co-developed-by: Alina Yu <alina_yu@richtek.com>
+> Signed-off-by: Alina Yu <alina_yu@richtek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > ---
->  drivers/thermal/rcar_gen3_thermal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Since v2
+> - Remove the properties for interrupt controller things in the binding documentation.
+> - Fix dtc error for typo, it's 'regulator-name', not 'regulator-compatible'.
+> - Add regulator min/max microamp to allow otg vbus current adjustable in example.
+> - Specify the active-level for charge-enable-gpios in binding example.
 > 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index 40ec63ad0a1b..6a6aaad2bcac 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -525,7 +525,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  		if (ret)
->  			goto error_unregister;
->  
-> -		ret = of_thermal_get_ntrips(tsc->zone);
-> +		ret = thermal_zone_get_num_trips(tsc->zone);
->  		if (ret < 0)
->  			goto error_unregister;
->  
-> -- 
-> 2.34.1
+> ---
+>  .../bindings/power/supply/richtek,rt9471.yaml      | 73 ++++++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
+> new file mode 100644
+> index 00000000..9286b82
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/richtek,rt9471.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Richtek RT9471 3A Single Cell Switching Battery charger
+> +
+> +maintainers:
+> +  - Alina Yu <alina_yu@richtek.com>
+> +  - ChiYuan Huang <cy_huang@richtek.com>
+> +
+> +description: |
+> +  RT9471 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
+> +  portable applications. It supports USB BC1.2 port detection, current and
+> +  voltage regulations in both charging and boost mode.
+> +
+> +  Datasheet is available at
+> +  https://www.richtek.com/assets/product_file/RT9471=RT9471D/DS9471D-02.pdf
+> +
+> +properties:
+> +  compatible:
+> +    const: richtek,rt9471
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  charge-enable-gpios:
+> +    description: GPIO used to turn on and off charging.
+> +    maxItems: 1
+> +
+> +  wakeup-source: true
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  usb-otg-vbus-regulator:
+> +    type: object
+> +    unevaluatedProperties: false
+> +    $ref: /schemas/regulator/regulator.yaml#
 
--- 
-Kind Regards,
-Niklas Söderlund
+ref goes before unevaluatedProperties (so one line up)
+
+with above:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
