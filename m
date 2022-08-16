@@ -2,81 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959FE5955F2
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 11:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4905A59564A
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 11:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbiHPJLJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Aug 2022 05:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S231515AbiHPJaS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 05:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbiHPJKa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 05:10:30 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7202CDABB8
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 00:27:18 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id x25so9807066ljm.5
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 00:27:18 -0700 (PDT)
+        with ESMTP id S233490AbiHPJ3g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 05:29:36 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2B8D573B
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 00:49:03 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id a9so13685608lfm.12
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 00:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=jgkKAq27nalp4xFLW3mk73yjlH+iPel54g7OBjDZ1oI=;
-        b=Mq7r6vRNCChXlYPF+zT+4Ept2VrTSrrP38C87uSqO8mXR/YVOX0bc2McxNSYlkkJTO
-         e+yH0rOVHqI0INUR/tSCYNXQU+p5/vwbT6u6aPRBaxQ6rMZpSy5k/VWsBL9Xp6vvIR8X
-         0PA3lUFcXPoMfb260xJiszNnXlRH9NvLF1m2hpHFs9gT4V8lV0SsJpmw9BR4vZ1gHH1j
-         c9kr3Vsajkbe22PtuANvdRgPeaUZ8sSt9fVW+ovyMLUS7440oFkcHs1atjIug+i2nGDx
-         WK6smRGXOaT1y5GxG6ZvcY5C348l7BHW39G0lV6+iqdC754xonpL8n7jbkfhynuZP2bv
-         sBig==
+        bh=OWzEWZaxyxOuDUG77wk5x1RGXvDnyDigjIAWDCcNa50=;
+        b=CP1SJ1WCfBQTbSs+JNdpd5uWIIWOz8Jb8vnE7FWAWuSq59Yw/w37A5RWLfljFndIHa
+         Jl47Lr1GQqwc3pA2UdAQ4ay+qnswguoef8YolXVncCvnkoXLNFB/5Ijivs1e/muPp/Ts
+         FCihLDDNgWHjyAmzkqZJQTNOGemyzQvEzBiv4KBeXlYMJT86Ea5DPH6LSTk4Puy2nINh
+         1ozyypJj1CJzGB+SYAnzAi4ZgC9H8dJ50YeLgqA3d33XqLJpLgPaNOlzAOI57xySfZFa
+         YN0HkZygzsBdpF2VLkj/XULURUhlJrtHaywC3ZAhXs+px9HZh+v2sYeN4b/qwZI6QtZE
+         Vxuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=jgkKAq27nalp4xFLW3mk73yjlH+iPel54g7OBjDZ1oI=;
-        b=JnYs8tixul8zOzTvBY3zHo0ZqCuktLGH1VL/3KkrgsGEllMUet5B67n9s2kE1pLfrf
-         GW4f7U04ca9ehbHuRPtM0MclNh8lSXArZcAcXQVUZGl42qx3BWCixpMXDpCsNbw7jk3d
-         bV7+A10zK+Ah1idHCURYaR1xYbVuaCfsL+8D5/xBQYX8ToNQeQtbpL91MEhSKtNkPdKX
-         Mi5s7InDZEHSedn7usuAEUJjMMNpUa4tokNPgX5eI2B875wl4W2flXuloA7j8JHv/aeJ
-         lVSmAnTd5J0RJ6sU7v0odf2jZOSsjVcOA6WhUxKhnCOXKxjzR7eP73U1m6sUTGQIC4pY
-         QXTw==
-X-Gm-Message-State: ACgBeo3zh4n2+KMlxZKCdeoAr/vi5wCneaHSdWABs+ZCESK2je9l66mp
-        gVQbpKC73VzgreG4WWWEiC/ulA==
-X-Google-Smtp-Source: AA6agR4jEHWzEqPmD1v9ED+1vw84vjsvdHwzpp1nZoCUPf9WX8jWoeSl8sl+A2IWC5wW16bz/hCrFg==
-X-Received: by 2002:a2e:a311:0:b0:25f:d95a:9c66 with SMTP id l17-20020a2ea311000000b0025fd95a9c66mr6273478lje.208.1660634836806;
-        Tue, 16 Aug 2022 00:27:16 -0700 (PDT)
+        bh=OWzEWZaxyxOuDUG77wk5x1RGXvDnyDigjIAWDCcNa50=;
+        b=0zU+m21NmK7zULZQmzjtN//EjSoe9w5WY4LhVXUKxIir4i1NJ4AiIsHpNzY677J6rK
+         ToceolqMY+kyPi4DQxWA6X75B9XKlovNZjKoNu8uA/wA48HNELmXwFikAYb9Pbk7jeEN
+         /FHJS32hcHF0G1bDZFDGJAmhd6jxXDUeckOEoVPlUOI8/MhWO/WJKFfCbBwaQm+yfRhH
+         dP87yEtnJyyQsfhjhsKXS5n8twAeHal9b6/Us5tXl6OlzzXeDP4zC67HHMhwAKWeYeoA
+         7YVGkEfEf3UUhegoN0mn3fRYwHYr27u7pBhBd4ilAZUf+kgMRYNipfkxEJCxXCIHyi4U
+         IcuQ==
+X-Gm-Message-State: ACgBeo0tOUte/6ldi/8/jRnzoapZOnR3H6JPu9I9guYy+I9JJMNA5sRB
+        KhATQ88IrLdNZXvor9ENcP3izw==
+X-Google-Smtp-Source: AA6agR5ql1UCM6jh0XKUGnlAiHiqXduAtZTrJfQZ4cfHKMl6uCLp6yMnP9THXPVGKy4dJsgFSps1eQ==
+X-Received: by 2002:a05:6512:15a7:b0:492:85af:e9f7 with SMTP id bp39-20020a05651215a700b0049285afe9f7mr3727101lfb.1.1660636142100;
+        Tue, 16 Aug 2022 00:49:02 -0700 (PDT)
 Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id q22-20020a056512211600b00491dda41e4bsm794337lfr.172.2022.08.16.00.27.15
+        by smtp.gmail.com with ESMTPSA id z13-20020a05651c11cd00b0025e4fcadc72sm1692159ljo.92.2022.08.16.00.49.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 00:27:16 -0700 (PDT)
-Message-ID: <343268e1-0c11-ae5f-c99a-62617e23f396@linaro.org>
-Date:   Tue, 16 Aug 2022 10:27:14 +0300
+        Tue, 16 Aug 2022 00:49:01 -0700 (PDT)
+Message-ID: <8c970e9d-3179-6fe9-3773-ce9d58d80be4@linaro.org>
+Date:   Tue, 16 Aug 2022 10:48:59 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
- battery charger
+Subject: Re: [PATCH 1/7] dt-bindings: dmaengine: qcom: gpi: add compatible for
+ SM6115
 Content-Language: en-US
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
-        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
-References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
- <1660225318-4063-2-git-send-email-u0084500@gmail.com>
- <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
- <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
- <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org>
- <CADiBU38+9sR1r20=YWt-9s2+u7maHH+1VudCnV1-0+F4jYKdQQ@mail.gmail.com>
- <CADiBU3_Jt6n6tm=oVvjk5vsoEAneH7t-37S6skepA6v6bVVYUw@mail.gmail.com>
- <f2a664be-71e9-7a26-2f0c-5f654d9cb3cb@linaro.org>
- <CADiBU3-bKGhW2Yy13svNUykqW+WN3VS6LftWMU0rMeCc+fMySg@mail.gmail.com>
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Emma Anholt <emma@anholt.net>,
+        Rob Clark <robdclark@chromium.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-mmc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sibi Sankar <sibis@codeaurora.org>
+References: <20220815100952.23795-1-a39.skl@gmail.com>
+ <20220815100952.23795-2-a39.skl@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CADiBU3-bKGhW2Yy13svNUykqW+WN3VS6LftWMU0rMeCc+fMySg@mail.gmail.com>
+In-Reply-To: <20220815100952.23795-2-a39.skl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,27 +98,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/08/2022 17:52, ChiYuan Huang wrote:
->>> Some gauge HW needs this information to enhance the battery capacity accuracy.
->>
->> Other supply stack pieces do it via supplies (supplied to/from in
->> include/linux/power_supply.h) and reporting power_supply_changed().
->>
->> With such explanation, your device is an interrupt source, but it is not
->> an interrupt controller. If your device is interrupt controller, it
->> means someone routes the interrupt line to your device. Physical line.
->>
-> Yap, sure. And so on, just use the SW power supply chain to do this
-> kind of event notification.
-> To remove it, it doesn't affect the internal interrupt request inside
-> the driver.
-> Just cannot be used for the outer driver to request the events directly.
+On 15/08/2022 13:09, Adam Skladowski wrote:
+> Document the compatible for GPI DMA controller on SM6115 SoC.
 > 
-> If so, I think 'interrupt-controller' and even '#interrupt-cells' need
-> to be removed.
-> OK?
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 
-Yes, both should be removed. Your device is not an interrupt controller...
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof
