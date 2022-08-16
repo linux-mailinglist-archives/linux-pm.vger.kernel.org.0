@@ -2,84 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B19595D5B
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 15:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B996C595E74
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 16:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbiHPNao (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Aug 2022 09:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
+        id S233073AbiHPOli (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 10:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235827AbiHPNad (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 09:30:33 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C71B8F0D
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 06:30:32 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso5383185wmb.2
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 06:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc;
-        bh=hc7qC7bI2uO2D4Qa+zC5gvmq4/4IvbZWBk2kTcS1e4g=;
-        b=p1uIS7iPRm5FqeZyBT0Rono6HWbv5ulB/bs5oZgYh6d9a1ptIjWxTqIf5fdui0UI7P
-         UiKMVSr+4RtXLv4oOr9y9VG9zkJ7wYmACViu7FoZAAHh0fx2AK3IeW287cwTA94pjy7W
-         58dOOYI3IkZoR37TVr4OI4CDMlz7EA6HMoFO3Ex0IHnawCAeW+LTa/T3QasiPuhhYTYG
-         mUk4SHi+5Q/GbXbDglXaTas5nW1FpgGGNDDHSmOKsKRkDWE1GvW1FLM0ls2tIh887+7e
-         gGI8c1mDEYenpo65eLgr7mEvWZmy3MQSEE91lN0cZg0rhMVt+ckyO47lwF8zoDEr71bJ
-         5C6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc;
-        bh=hc7qC7bI2uO2D4Qa+zC5gvmq4/4IvbZWBk2kTcS1e4g=;
-        b=5MYWuYAb1p5CFc7ijgJenDszkbLt9mIUwDPQSLpDS7/fDz83gYSh2QSsu7i424XADw
-         d4fyw/VSprnUKllr7i9tDQ/3n1oibZe9lY/E5hpSNqbw1DdXu8+Vpey8dJ9YsRrrEYeP
-         XJIY5iFPKrp/BStJA27Awd4xNbpZzZwS2KqC5ggWlJPf2yZ7Xhn4WPwQwIzN85S2uV3O
-         +GSrrniiPH7p3AP72lt4KHnb3uto3hTKasoP+p8dzIlI9CENzqLCJkcXO5J0BIhRx9af
-         y9CgO77OI7bT3lvuQ+3VRYtmSWLgiTUVSnE7WZZZaj48MSwU+PRNKVthnPVSmBN+R+K8
-         FoQQ==
-X-Gm-Message-State: ACgBeo3l8fLfvU9hk04nftu2PjDocyWlA8ncm+uKUETVpkx9itM3GJ0j
-        uQBV48bAG8wYzEniDX67lZJ6IA==
-X-Google-Smtp-Source: AA6agR5brmQT0VGVlB3KYey11S8HsfHLRIqrWymjHMuDRQM1mXOpHIasTetNNd2nw2J4QFqsRY8/MA==
-X-Received: by 2002:a1c:f217:0:b0:3a4:bfd4:21b4 with SMTP id s23-20020a1cf217000000b003a4bfd421b4mr12934932wmc.96.1660656630403;
-        Tue, 16 Aug 2022 06:30:30 -0700 (PDT)
-Received: from localhost (2a02-8388-6582-fe80-0000-0000-0000-0002.cable.dynamic.v6.surfer.at. [2a02:8388:6582:fe80::2])
-        by smtp.gmail.com with ESMTPSA id n6-20020a05600c3b8600b003a608d69a64sm1870148wms.21.2022.08.16.06.30.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 06:30:29 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 16 Aug 2022 15:30:26 +0200
-Message-Id: <CM7HN6H9EAN4.2008QGJVIO14X@otso>
-Subject: Re: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state()
- for now
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Saravana Kannan" <saravanak@google.com>
-Cc:     "Tony Lindgren" <tony@atomide.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        with ESMTP id S229536AbiHPOlh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 10:41:37 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36323B81FB;
+        Tue, 16 Aug 2022 07:41:33 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oNxkr-0006js-Lz; Tue, 16 Aug 2022 16:41:17 +0200
+Message-ID: <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
+Date:   Tue, 16 Aug 2022 16:41:16 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+To:     Chuck Zmudzinski <brchuckz@netscape.net>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Kevin Hilman" <khilman@kernel.org>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Pavel Machek" <pavel@ucw.cz>, "Len Brown" <len.brown@intel.com>,
-        "Andrew Lunn" <andrew@lunn.ch>,
-        "Heiner Kallweit" <hkallweit1@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, <naresh.kamboju@linaro.org>,
-        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <netdev@vger.kernel.org>
-X-Mailer: aerc 0.11.0
-References: <20220727185012.3255200-1-saravanak@google.com>
- <Yvonn9C/AFcRUefV@atomide.com> <CM6REZS9Z8AC.2KCR9N3EFLNQR@otso>
- <CAGETcx_6oh=GVLP7-1gN_4DW7UHJ1MZQ6T1U2hupc_ZYDnXcNA@mail.gmail.com>
-In-Reply-To: <CAGETcx_6oh=GVLP7-1gN_4DW7UHJ1MZQ6T1U2hupc_ZYDnXcNA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
+ <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+ <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
+ <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
+ <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
+ <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
+ <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1660660893;25543714;
+X-HE-SMSGID: 1oNxkr-0006js-Lz
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,112 +60,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
-
-On Tue Aug 16, 2022 at 1:36 AM CEST, Saravana Kannan wrote:
-> On Mon, Aug 15, 2022 at 9:57 AM Luca Weiss <luca.weiss@fairphone.com> wro=
-te:
-> >
-> > On Mon Aug 15, 2022 at 1:01 PM CEST, Tony Lindgren wrote:
-> > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > > > More fixes/changes are needed before driver_deferred_probe_check_st=
-ate()
-> > > > can be deleted. So, bring it back for now.
-> > > >
-> > > > Greg,
-> > > >
-> > > > Can we get this into 5.19? If not, it might not be worth picking up=
- this
-> > > > series. I could just do the other/more fixes in time for 5.20.
-> > >
-> > > Yes please pick this as fixes for v6.0-rc series, it fixes booting fo=
-r
-> > > me. I've replied with fixes tags for the two patches that were causin=
-g
-> > > regressions for me.
-> > >
-> >
-> > Hi,
-> >
-> > for me Patch 1+3 fix display probe on Qualcomm SM6350 (although display
-> > for this SoC isn't upstream yet, there are lots of other SoCs with very
-> > similar setup).
-> >
-> > Probe for DPU silently fails, with CONFIG_DEBUG_DRIVER=3Dy we get this:
-> >
-> > msm-mdss ae00000.mdss: __genpd_dev_pm_attach() failed to find PM domain=
-: -2
-> >
-> > While I'm not familiar with the specifics of fw_devlink, the dtsi has
-> > power-domains =3D <&dispcc MDSS_GDSC> for this node but it doesn't pick
-> > that up for some reason.
-> >
-> > We can also see that a bit later dispcc finally probes.
+On 15.08.22 20:17, Chuck Zmudzinski wrote:
+> On 8/15/2022 2:00 PM, Thorsten Leemhuis wrote:
 >
-> Luca,
->
-> Can you test with this series instead and see if it fixes this issue?
-> https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com=
-/
->
+>> the right people have the issue on their radar again; give them time to
+>> breath and work out a solution: it's not something that can be fixed
+>> easily within a few minutes by one person alone, as previous discussions
+>> have shown (also keep in mind that the merge window was open until
+>> yesterday, which keeps many maintainers quite busy).
+>>
+>> And FWIW: I've seen indicators that a solution to resolve this is
+>> hopefully pretty close now.
+> 
+> That's good to know. But I must ask, can you provide a link to a public
+> discussion that indicates a fix is close?
 
-Unfortunately it doesn't seem to work with the 9 patches, and the
-attached diff also doesn't seem to make a difference. I do see this in
-dmesg which I haven't seen in the past:
+I just searched for the commit id of the culprit yesterday like this:
+https://lore.kernel.org/all/?q=bdd8b6c982*
 
-[    0.056554] platform 1d87000.phy: Fixed dependency cycle(s) with /soc@0/=
-ufs@1d84000
-[    0.060070] platform ae00000.mdss: Fixed dependency cycle(s) with /soc@0=
-/clock-controller@af00000
-[    0.060150] platform ae00000.mdss: Failed to create device link with ae0=
-0000.mdss
-[    0.060188] platform ae00000.mdss: Failed to create device link with ae0=
-0000.mdss
-[    0.061135] platform c440000.spmi: Failed to create device link with c44=
-0000.spmi
-[    0.061157] platform c440000.spmi: Failed to create device link with c44=
-0000.spmi
-[    0.061180] platform c440000.spmi: Failed to create device link with c44=
-0000.spmi
-[    0.061198] platform c440000.spmi: Failed to create device link with c44=
-0000.spmi
-[    0.061215] platform c440000.spmi: Failed to create device link with c44=
-0000.spmi
-[    0.061231] platform c440000.spmi: Failed to create device link with c44=
-0000.spmi
-[    0.061252] platform c440000.spmi: Failed to create device link with c44=
-0000.spmi
+Which brought me to this message, which looks like Boris applied a
+slightly(?) modified version of Jan's patch to a branch that afaik is
+regularly pushed to Linus:
+https://lore.kernel.org/all/166055884287.401.612271624942869534.tip-bot2@tip-bot2/
 
-Also I'm going to be on holiday from today for about 2 weeks so I won't
-be able to test anything in that time.
+So unless problems show up in linux-next I expect this will land in
+master soon (and a bit later be backported to stable due to the CC
+stable tag).
 
-And in case it's interesting, here's the full dmesg to initramfs:
-https://pastebin.com/raw/Fc8W4MVi
+> Or do you know a fix is close
+> because of private discussions? That distinction is important to me
+> because open source software is much less useful to me if the solutions
+> to problems are not discussed openly (except, of course, for solutions
+> to security vulnerabilities that are not yet public).
 
-Regards
-Luca
+You IMHO are expecting a bit too much here IMHO. Solutions to problems
+in open source software get discussed on various, sometimes private
+channels all the time. Just take conferences for example, where people
+discuss them during talks, meetings, or in one-to-ones over coffee;
+sometimes they are the only way to solve complex problems. But as you
+can see from above link it's not like anybody is trying to sneak things
+into the kernel.
 
-> You might also need to add this delta on top of the series if the
-> series itself isn't sufficient.
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 2f012e826986..866755d8ad95 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2068,7 +2068,11 @@ static int fw_devlink_create_devlink(struct device=
- *con,
->                 device_links_write_unlock();
->         }
->
-> -       sup_dev =3D get_dev_from_fwnode(sup_handle);
-> +       if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
-> +               sup_dev =3D fwnode_get_next_parent_dev(sup_handle);
-> +       else
-> +               sup_dev =3D get_dev_from_fwnode(sup_handle);
-> +
->         if (sup_dev) {
->                 /*
->                  * If it's one of those drivers that don't actually bind =
-to
->
-> -Saravana
-
+Ciao, Thorsten
