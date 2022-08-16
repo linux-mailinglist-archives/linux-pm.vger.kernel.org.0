@@ -2,154 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F48595FCD
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 18:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75D0595FFB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 18:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbiHPQFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Aug 2022 12:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S231737AbiHPQQo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 12:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236277AbiHPQEd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 12:04:33 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8D4B0D
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 09:03:17 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id a4so1444958wrq.1
-        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 09:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc;
-        bh=G75P1MnBlTsTHdbk47o07Tr2GO1weW34E0V486dZ6zQ=;
-        b=tyvhRkLnT9eQhPU1fA+R37bcZOcR1lj7033nZZYaHV0lalSjYk16myN81RvmFzEdMC
-         ndbWIqX+3WeqaBeA4NYeiFOOZplsWmWVG0eBlinEroNkv6X42hD+OZDgFfIEM4+D8HHD
-         jSBOg9RNYMjSTCVrPWaO51iBtkm4g6kvHMAvaboPSNjUjSUQppwDWKdo0SOc5ZvywH3a
-         wdIkH7/7oG1wUDHRaCoQkUtwjPuA7EqYTuXWezQTRwsFT3XlB2A0Sl44lhrlkRDchgsU
-         km96AAvMAwoVwbguS/wwzFqyDDP7ykeHS0+J50yUk0jwdDc04LdcT9/4QOpcIJt9h7Ni
-         Le3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=G75P1MnBlTsTHdbk47o07Tr2GO1weW34E0V486dZ6zQ=;
-        b=f19aJw1p9zou5/Qd/IKpievltd08gP3i/GtVGsTaiqvER1R89oeqQkymtTmPbcJoT3
-         tUhKdMo/BDP63Ws8za4P9prAPUDZHrZdZemr4sbDE7XB/S4mA9eoogrqSYLfVZ/9/HVn
-         q0WqYxgDvoJe4yLjseYVFIhTx16IWDAyq4gt8bTj43sN5ZjohOf6ipWao0sjeVO7+blt
-         7kGdK/9m7VOgyvgUfUiYXwVhh33DXjRK432kwh/el3fJtcOrtTdz5YI7Y6V8u9ghcWqU
-         sQ5v+9BSQXGJe1mbciAqpvJ2mEAcaJxEv49Xu7z2R8VRGfI+wXCcCbEPxzLlVvfXzTc8
-         tWUw==
-X-Gm-Message-State: ACgBeo3hX768rFqxVIS0WslBI5JoQQswE1DXa0sKKaRmsqbzBEVSaDbe
-        1Co/VfM/2MKxwWh9XZvGK6vaJw==
-X-Google-Smtp-Source: AA6agR4sDP2eoSMqKaV2coqQ9MbRDM82FgU7mJBsnWOywpv4YY3XTlQ/jWnKNtxaFziuNPY74Dlivg==
-X-Received: by 2002:a05:6000:82:b0:225:21ff:a389 with SMTP id m2-20020a056000008200b0022521ffa389mr76896wrx.22.1660665795549;
-        Tue, 16 Aug 2022 09:03:15 -0700 (PDT)
-Received: from localhost ([109.180.234.208])
-        by smtp.gmail.com with ESMTPSA id z3-20020a1cf403000000b003a60bc8ae8fsm1897992wma.21.2022.08.16.09.03.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 09:03:15 -0700 (PDT)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 6/7] cpufreq: amd-pstate: update pstate frequency
- transition delay time
-References: <20220814163548.326686-1-Perry.Yuan@amd.com>
-        <20220814163548.326686-7-Perry.Yuan@amd.com> <87bkslim2c.fsf@stealth>
-        <DM4PR12MB5278E6B6EC656747AE67BFAF9C6B9@DM4PR12MB5278.namprd12.prod.outlook.com>
-Date:   Tue, 16 Aug 2022 17:03:13 +0100
-In-Reply-To: <DM4PR12MB5278E6B6EC656747AE67BFAF9C6B9@DM4PR12MB5278.namprd12.prod.outlook.com>
-        (Perry Yuan's message of "Tue, 16 Aug 2022 07:02:27 +0000")
-Message-ID: <874jycfa66.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S229835AbiHPQQn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 12:16:43 -0400
+Received: from sonic316-54.consmr.mail.gq1.yahoo.com (sonic316-54.consmr.mail.gq1.yahoo.com [98.137.69.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DCF7675F
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 09:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660666602; bh=SVFpb7xegGotvuUMr/bQJEt7nllzUEym3/0lYR9WT10=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=FFv7bUZvpnJs2n+O83iqdRkeMAdzw11+D8NUNQHgaUatSqUXZjVO8ctQxSWlkJFB/rWixYrq+Gw7d+5yPr1KbyXRNxikzlz5Iw/4Wc+mstP4hh56CIp32QJv9o0GxOpNgVUdlJM9AoJzSqmHEs3C0qTvyofqOszI4WNLX2/yQ5qnzZxATqK2uxwLZLcpgpu6hBGGz23skrKMKOMr1TVnAAwvYyhByXnpkeo9fCmsH5EvCpzei3psJUmC1L1WZUeDYtyiW9/QJSioN00qttFW4Nrby3wzYAw99NR1fSkNsvI0XdmMybRJNkAat2LGUTF7lSk9nma/P1DOmOrrXuKNxg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660666602; bh=Tfqvvv7EU3gvthsqcGgyOCwFs+Bx0FIjsQtDmfITapf=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=rbKEwah+2mT7efuKQB1NiCk44Lutpvr07U2rBlSvwf9q0K5vVkNwYnSdk4XrA3FSVDOUZ+Lp17t0IBH/qsFFEdjBTd52ydoDbbH5zP0CilHQJ+y36uPh1Zc7An0oS2V4M2diw70qvPj9ZOD0chYj9JpqCzQNTzX1DGWsS3hU++oUdLrAw4zyE2o+fG1Z90P8RYdzHA3cwlQ4OZbtbGzMEkH5QmB9XcSldlgWLzytYFLN1XieZFNDJ0CYN0MXrnK273dYK9jCKvMVu/jx+Vu7od+OkCKQO8FebyGbyPMyvMKNpROZhU1gKHKaysdN+/sRJr+00EviLfXisE+7M5EyYw==
+X-YMail-OSG: 6sjBv.0VM1kJ7aiBXQwq5Iiw4BmNpQWsnMbdt3_6LIEmzlmVk99MPJ22aR_fM7h
+ 1DpmRWIvVsAXWanKGK8QDMk59hyMeEi4Lksp1qqU9t4dmMpD30eHIXQSxKb98e6wcWJFZADEpHtU
+ IaXMw2lc9eklyG_WK0u46dzL9Kk1ImA09a2e8hwX4vXhc9motZTXzxxga9_YwxMnZKkz0ZW0_Tmi
+ 6KP5QjdzleKsC1e94nhaM8uRqqz2.K5oRvY.oIxlXCOJKUtAvSlH8AF3Q9D0bQqjY6MvPb0Idrx8
+ Ui2eRRzwV78KxhxEcPr3QWtQ2bqYo..WMPfSAgrX.iYZEV2GL1cKQzN82y8omwtmH2H7.zvpjeB.
+ brWjUt85UnRolA.kEV3yAzi_g6ZhUDP9fEvoXbKtzPtHsqfkxqYPaEyJiwhkUFcB9YJE9gl2owDB
+ u0U_bYbFBBfP1FohtbkYqF9u72XljCdHcMEUq43kOtJRlgkqYzhYpzBANMMr4Ab4hg9TIjrGJ9jz
+ 2gyTZ_zu2_xTUNX2MWHFkMPKMv7GwQL1oJOJ2w7YnF6kqKeI68r4_qICme8NC9AlgK2.5id5LM8U
+ Wef4v.4AKz2nLAk0Ccl7I1EYOstPiJ62A_7hyuv8PF.7udh7f32aHhLpYVCFDDUwryB1Yq90Aqjc
+ wI670AqlXgIcyHvMLbSM2RbWJXrbJyyj7KUpMtZ_Nr7gLb_d1sik.dPizAlYY_Ruqo_CPAkQMjMk
+ .X9oZLKSMzzKVd7Hm6yizyDnyknOR38Ux8N6gMZbq9vyI4uogrdNaC6rDE2o5YfUDixy4KgUD5bo
+ Uv4cIbV.F5w..ZiUSIQuo.9hAo9VD6JJtu4Rxfc7ELQuvf_8qAXBu9Zz4f8azXpfLINe99GLViPV
+ 5_M7yDEGoz4jBE0fHm3CqhW9dKUwUfoaBz1f.GeN54oVIvfG8DavFMipnj9GMA9nfvrzkN2gao3C
+ kQL7s8jGTkBir7RSq3xy53uB6_nj1leX69mm.uhma2hiCzuvjgiqLKxoRb54LMFfRqN82QELPwG8
+ dNYpMe4pNslTqdcfXxQehToqJHSa1wX8b8Dsa5sT6eQy_E_Iws.6vqo9xI_eJeOQ.2B8wkpzMcpO
+ azUGBK.6XQEasDcspuApHknttQZosL_ZqgD5Zdb8z7Q45TfDWKdPGwd30OE0PZYfuZ.n7Ht9sWAm
+ Eq6RZqoFq6y.aQZqzhfEoPYR0DZlKTrwk0MlP.EkdWhu.Ic1_Uf0pBHzYm280u4iLf8PeWLh8G.o
+ fGNzI3nnTCuqrGZoX5Lrxr.1IetTp601oE1D1.zzXzODemu9RVmHG9EA17RuRT5cVAJD_30EFkwA
+ 7FQC105U1C1Sfc5BXF1pNHKbM2GnVO8umc9dlQxRV0qPxVIDWLrrIidfPxSBDFm2ahOgw1ruaMig
+ HLTNEDlgwzzugGGSy9DqIMtYis9QwoBpJt92pZGvuYMcN9kUAyBx_9mXr58r8Hd0EIua.MSNdpJw
+ 2UqEc6L6fp_OJrmABECoFkXoTSL8WQUaDsRUG9TZvmpQalMlPfG4R.e1.04w2ho1a_Fi9N6Fpazn
+ FfTbfhqg1fzYOtqSn.TwOHbjpgNBFYIafyyg5UrLISlKnL3TXeTR2lekIDq88e58I6b2soJaXhyE
+ PsuBSgL1FazNG9kSmak30L0J968oc0frHJG4N3mV4DrpjiX5N0qL2.GjSqgggv0P_axUrZoFgAUa
+ MmBi6F9RxdyJSvxGURCaWfdQnDedW2GtAyUCSV49PKebnCEMFoeu9QmnM8.Hg1PVpY0QL1ddHkpI
+ z1hlWz4uKGwVcqPuZQYVI4ck3VJpSb4xgjdg7CRJP0OuhUgFIVNR931bBPPtWHtsry89XMwefnhH
+ n6ls9uGY0GUwOIJbWbtoQn3BVM6enAAx_pE0szhWi8x_K8tbl4R_CyiEIJaa7wCxIRWvSPOkEBT3
+ HrDeNaGTa1dBAUikijqKHvKYjnq9.guzp5PetKDFxJcMeVY0Air34tdqO71h85zJ3KFE.bGFyxVF
+ Hb1U34vIUdnty1.Z8WmvvxDCw3jEbHK8Vu1z38S1a_XbGdl_Mqdfbq5KDI9Z97x0yCzmc1q.X3Xx
+ LDQATlItZFs17eUtz7444h5zLBgDRczqxcCTSZuWR5W3tLSzkOljcbjbf1m.M5qXpJDndMGJmRZf
+ e8tsAD7kYM8WA8s6TkyejciH4jxLmHVNN4VDtWBkumWBkObBebldQAlENVpykzrjN64ntotu1GLw
+ UIQs6rhzaqZzWCuk-
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.gq1.yahoo.com with HTTP; Tue, 16 Aug 2022 16:16:42 +0000
+Received: by hermes--production-ne1-6649c47445-dfpjm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0539108f3a14b27640c2679d028594e8;
+          Tue, 16 Aug 2022 16:16:40 +0000 (UTC)
+Message-ID: <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
+Date:   Tue, 16 Aug 2022 12:16:36 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
+ <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+ <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
+ <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
+ <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
+ <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
+ <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
+ <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
+Content-Language: en-US
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Perry,
-
-"Yuan, Perry" <Perry.Yuan@amd.com> writes:
-
-> [AMD Official Use Only - General]
+On 8/16/2022 10:41 AM, Thorsten Leemhuis wrote:
+> On 15.08.22 20:17, Chuck Zmudzinski wrote:
+> > On 8/15/2022 2:00 PM, Thorsten Leemhuis wrote:
+> >
+> >> And FWIW: I've seen indicators that a solution to resolve this is
+> >> hopefully pretty close now.
+> > 
+> > That's good to know. But I must ask, can you provide a link to a public
+> > discussion that indicates a fix is close?
 >
-> Hi Punit
+> I just searched for the commit id of the culprit yesterday like this:
+> https://lore.kernel.org/all/?q=bdd8b6c982*
 >
->> -----Original Message-----
->> From: Punit Agrawal <punit.agrawal@bytedance.com>
->> Sent: Monday, August 15, 2022 11:06 PM
->> To: Yuan, Perry <Perry.Yuan@amd.com>
->> Cc: rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>;
->> viresh.kumar@linaro.org; Sharma, Deepak <Deepak.Sharma@amd.com>;
->> Limonciello, Mario <Mario.Limonciello@amd.com>; Fontenot, Nathan
->> <Nathan.Fontenot@amd.com>; Deucher, Alexander
->> <Alexander.Deucher@amd.com>; Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>;
->> Huang, Shimmer <Shimmer.Huang@amd.com>; Du, Xiaojian
->> <Xiaojian.Du@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>; linux-
->> pm@vger.kernel.org; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH v5 6/7] cpufreq: amd-pstate: update pstate frequency
->> transition delay time
->> 
->> [CAUTION: External Email]
->> 
->> Perry Yuan <Perry.Yuan@amd.com> writes:
->> 
->> > Change the default transition latency to be 20ms that is more
->> > reasonable transition delay for AMD processors in non-EPP driver mode.
->> >
->> > Update transition delay time to 1ms, in the AMD CPU autonomous mode
->> > and non-autonomous mode, CPPC firmware will decide frequency at 1ms
->> > timescale based on the workload utilization.
->> >
->> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->> > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
->> > ---
->> >  drivers/cpufreq/amd-pstate.c | 4 ++--
->> >  1 file changed, 2 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/drivers/cpufreq/amd-pstate.c
->> > b/drivers/cpufreq/amd-pstate.c index e40177d14310..9cb051d61422 100644
->> > --- a/drivers/cpufreq/amd-pstate.c
->> > +++ b/drivers/cpufreq/amd-pstate.c
->> > @@ -41,8 +41,8 @@
->> >  #include <asm/msr.h>
->> >  #include "amd-pstate-trace.h"
->> >
->> > -#define AMD_PSTATE_TRANSITION_LATENCY        0x20000
->> > -#define AMD_PSTATE_TRANSITION_DELAY  500
->> > +#define AMD_PSTATE_TRANSITION_LATENCY        20000
->> > +#define AMD_PSTATE_TRANSITION_DELAY  1000
->> 
->> How were these values derived? If from documentation, it'll be good to add a
->> link to the relevant documentation. And if they were derived from testing,
->> please mention this in the commit log (along with some details of the tests used
->> to determine the value).
+> Which brought me to this message, which looks like Boris applied a
+> slightly(?) modified version of Jan's patch to a branch that afaik is
+> regularly pushed to Linus:
+> https://lore.kernel.org/all/166055884287.401.612271624942869534.tip-bot2@tip-bot2/
 >
-> The values are calculated from the CPU PM firmware and hardware design.
-> There are some latency and delay values defined  in the PM firmware, I have no documents about the detail for now. 
+> So unless problems show up in linux-next I expect this will land in
+> master soon (and a bit later be backported to stable due to the CC
+> stable tag).
 
-In that case, please mention that the values are calculated from
-firmware / hardware design in the commit log (and include a reference to
-the firmware sources if available).
+OK, that's exactly the kind of thing I am looking for. It would be
+nice if regzbot could have found that patch in that tree and
+display it in the web interface as a notable patch. Currently,
+regzbot is only linking to a dead patch that does not even fix
+the regression as a notable patch associated with this regression.
 
-Thanks!
+If regzbot is not yet smart enough to find it, could you take the
+time to manually intervene with a regzbot command so that
+patch is displayed as a notable patch for this regression?
 
-[...]
+>
+> > Or do you know a fix is close
+> > because of private discussions? That distinction is important to me
+> > because open source software is much less useful to me if the solutions
+> > to problems are not discussed openly (except, of course, for solutions
+> > to security vulnerabilities that are not yet public).
+>
+> You IMHO are expecting a bit too much here IMHO. Solutions to problems
+> in open source software get discussed on various, sometimes private
+> channels all the time. Just take conferences for example, where people
+> discuss them during talks, meetings, or in one-to-ones over coffee;
+> sometimes they are the only way to solve complex problems. But as you
+> can see from above link it's not like anybody is trying to sneak things
+> into the kernel.
+>
+> Ciao, Thorsten
 
+Well, as a user of Linux, I would like to see more of those discussions in
+the open, especially if they relate directly to a fix of a regression tracked
+by regzbot. it would be helpful for me to decide questions such as, does
+it make sense for me to keep using the foo project to provide a feature,
+or should I switch to project baz that provides the same feature?
+
+In any case, watching what Linus actually chooses to commit into
+mainline gives me a pretty good clue about such questions.
+
+Best regards,
+
+Chuck
