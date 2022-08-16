@@ -2,35 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A36595CD6
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 15:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B19595D5B
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Aug 2022 15:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235498AbiHPNGy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Aug 2022 09:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S235744AbiHPNao (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Aug 2022 09:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235399AbiHPNGu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 09:06:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72233DE96;
-        Tue, 16 Aug 2022 06:06:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 065D31042;
-        Tue, 16 Aug 2022 06:06:48 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.14.225])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2292C3F66F;
-        Tue, 16 Aug 2022 06:06:44 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org
-Cc:     lukasz.luba@arm.com, viresh.kumar@linaro.org,
-        dietmar.eggemann@arm.com, vincent.guittot@linaro.org
-Subject: [PATCH v2] cpufreq: schedutil: Move max CPU capacity to sugov_policy
-Date:   Tue, 16 Aug 2022 14:06:29 +0100
-Message-Id: <20220816130629.3178-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S235827AbiHPNad (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Aug 2022 09:30:33 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C71B8F0D
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 06:30:32 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso5383185wmb.2
+        for <linux-pm@vger.kernel.org>; Tue, 16 Aug 2022 06:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc;
+        bh=hc7qC7bI2uO2D4Qa+zC5gvmq4/4IvbZWBk2kTcS1e4g=;
+        b=p1uIS7iPRm5FqeZyBT0Rono6HWbv5ulB/bs5oZgYh6d9a1ptIjWxTqIf5fdui0UI7P
+         UiKMVSr+4RtXLv4oOr9y9VG9zkJ7wYmACViu7FoZAAHh0fx2AK3IeW287cwTA94pjy7W
+         58dOOYI3IkZoR37TVr4OI4CDMlz7EA6HMoFO3Ex0IHnawCAeW+LTa/T3QasiPuhhYTYG
+         mUk4SHi+5Q/GbXbDglXaTas5nW1FpgGGNDDHSmOKsKRkDWE1GvW1FLM0ls2tIh887+7e
+         gGI8c1mDEYenpo65eLgr7mEvWZmy3MQSEE91lN0cZg0rhMVt+ckyO47lwF8zoDEr71bJ
+         5C6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc;
+        bh=hc7qC7bI2uO2D4Qa+zC5gvmq4/4IvbZWBk2kTcS1e4g=;
+        b=5MYWuYAb1p5CFc7ijgJenDszkbLt9mIUwDPQSLpDS7/fDz83gYSh2QSsu7i424XADw
+         d4fyw/VSprnUKllr7i9tDQ/3n1oibZe9lY/E5hpSNqbw1DdXu8+Vpey8dJ9YsRrrEYeP
+         XJIY5iFPKrp/BStJA27Awd4xNbpZzZwS2KqC5ggWlJPf2yZ7Xhn4WPwQwIzN85S2uV3O
+         +GSrrniiPH7p3AP72lt4KHnb3uto3hTKasoP+p8dzIlI9CENzqLCJkcXO5J0BIhRx9af
+         y9CgO77OI7bT3lvuQ+3VRYtmSWLgiTUVSnE7WZZZaj48MSwU+PRNKVthnPVSmBN+R+K8
+         FoQQ==
+X-Gm-Message-State: ACgBeo3l8fLfvU9hk04nftu2PjDocyWlA8ncm+uKUETVpkx9itM3GJ0j
+        uQBV48bAG8wYzEniDX67lZJ6IA==
+X-Google-Smtp-Source: AA6agR5brmQT0VGVlB3KYey11S8HsfHLRIqrWymjHMuDRQM1mXOpHIasTetNNd2nw2J4QFqsRY8/MA==
+X-Received: by 2002:a1c:f217:0:b0:3a4:bfd4:21b4 with SMTP id s23-20020a1cf217000000b003a4bfd421b4mr12934932wmc.96.1660656630403;
+        Tue, 16 Aug 2022 06:30:30 -0700 (PDT)
+Received: from localhost (2a02-8388-6582-fe80-0000-0000-0000-0002.cable.dynamic.v6.surfer.at. [2a02:8388:6582:fe80::2])
+        by smtp.gmail.com with ESMTPSA id n6-20020a05600c3b8600b003a608d69a64sm1870148wms.21.2022.08.16.06.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 06:30:29 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 16 Aug 2022 15:30:26 +0200
+Message-Id: <CM7HN6H9EAN4.2008QGJVIO14X@otso>
+Subject: Re: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state()
+ for now
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Saravana Kannan" <saravanak@google.com>
+Cc:     "Tony Lindgren" <tony@atomide.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Kevin Hilman" <khilman@kernel.org>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Pavel Machek" <pavel@ucw.cz>, "Len Brown" <len.brown@intel.com>,
+        "Andrew Lunn" <andrew@lunn.ch>,
+        "Heiner Kallweit" <hkallweit1@gmail.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, <naresh.kamboju@linaro.org>,
+        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <netdev@vger.kernel.org>
+X-Mailer: aerc 0.11.0
+References: <20220727185012.3255200-1-saravanak@google.com>
+ <Yvonn9C/AFcRUefV@atomide.com> <CM6REZS9Z8AC.2KCR9N3EFLNQR@otso>
+ <CAGETcx_6oh=GVLP7-1gN_4DW7UHJ1MZQ6T1U2hupc_ZYDnXcNA@mail.gmail.com>
+In-Reply-To: <CAGETcx_6oh=GVLP7-1gN_4DW7UHJ1MZQ6T1U2hupc_ZYDnXcNA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -38,146 +87,112 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no need to keep the max CPU capacity in the per_cpu instance.
-Furthermore, there is no need to check and update that variable
-(sg_cpu->max) every time in the frequency change request, which is part
-of hot path. Instead use struct sugov_policy to store that information.
-Initialize the max CPU capacity during the setup and start callback.
-We can do that since all CPUs in the same frequency domain have the same
-max capacity (capacity setup and thermal pressure are based on that).
+Hi Saravana,
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
-Changes v2:
-- collected ACK from Viresh
-- re-based on top of latest mainline where the previously conflicting
-  change is now merged
+On Tue Aug 16, 2022 at 1:36 AM CEST, Saravana Kannan wrote:
+> On Mon, Aug 15, 2022 at 9:57 AM Luca Weiss <luca.weiss@fairphone.com> wro=
+te:
+> >
+> > On Mon Aug 15, 2022 at 1:01 PM CEST, Tony Lindgren wrote:
+> > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
+> > > > More fixes/changes are needed before driver_deferred_probe_check_st=
+ate()
+> > > > can be deleted. So, bring it back for now.
+> > > >
+> > > > Greg,
+> > > >
+> > > > Can we get this into 5.19? If not, it might not be worth picking up=
+ this
+> > > > series. I could just do the other/more fixes in time for 5.20.
+> > >
+> > > Yes please pick this as fixes for v6.0-rc series, it fixes booting fo=
+r
+> > > me. I've replied with fixes tags for the two patches that were causin=
+g
+> > > regressions for me.
+> > >
+> >
+> > Hi,
+> >
+> > for me Patch 1+3 fix display probe on Qualcomm SM6350 (although display
+> > for this SoC isn't upstream yet, there are lots of other SoCs with very
+> > similar setup).
+> >
+> > Probe for DPU silently fails, with CONFIG_DEBUG_DRIVER=3Dy we get this:
+> >
+> > msm-mdss ae00000.mdss: __genpd_dev_pm_attach() failed to find PM domain=
+: -2
+> >
+> > While I'm not familiar with the specifics of fw_devlink, the dtsi has
+> > power-domains =3D <&dispcc MDSS_GDSC> for this node but it doesn't pick
+> > that up for some reason.
+> >
+> > We can also see that a bit later dispcc finally probes.
+>
+> Luca,
+>
+> Can you test with this series instead and see if it fixes this issue?
+> https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com=
+/
+>
 
- kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+Unfortunately it doesn't seem to work with the 9 patches, and the
+attached diff also doesn't seem to make a difference. I do see this in
+dmesg which I haven't seen in the past:
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 1207c78f85c1..9161d1136d01 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -25,6 +25,9 @@ struct sugov_policy {
- 	unsigned int		next_freq;
- 	unsigned int		cached_raw_freq;
- 
-+	/* max CPU capacity, which is equal for all CPUs in freq. domain */
-+	unsigned long		max;
-+
- 	/* The next fields are only needed if fast switch cannot be used: */
- 	struct			irq_work irq_work;
- 	struct			kthread_work work;
-@@ -48,7 +51,6 @@ struct sugov_cpu {
- 
- 	unsigned long		util;
- 	unsigned long		bw_dl;
--	unsigned long		max;
- 
- 	/* The field below is for single-CPU policies only: */
- #ifdef CONFIG_NO_HZ_COMMON
-@@ -158,7 +160,6 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
- {
- 	struct rq *rq = cpu_rq(sg_cpu->cpu);
- 
--	sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
- 	sg_cpu->bw_dl = cpu_bw_dl(rq);
- 	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
- 					  FREQUENCY_UTIL, NULL);
-@@ -253,6 +254,7 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
-  */
- static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
- {
-+	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	unsigned long boost;
- 
- 	/* No boost currently required */
-@@ -280,7 +282,8 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
- 	 * sg_cpu->util is already in capacity scale; convert iowait_boost
- 	 * into the same scale so we can compare.
- 	 */
--	boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
-+	boost = sg_cpu->iowait_boost * sg_policy->max;
-+	boost >>= SCHED_CAPACITY_SHIFT;
- 	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
- 	if (sg_cpu->util < boost)
- 		sg_cpu->util = boost;
-@@ -337,7 +340,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
- 	if (!sugov_update_single_common(sg_cpu, time, flags))
- 		return;
- 
--	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
-+	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_policy->max);
- 	/*
- 	 * Do not reduce the frequency if the CPU has not been idle
- 	 * recently, as the reduction is likely to be premature then.
-@@ -373,6 +376,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
- 				     unsigned int flags)
- {
- 	struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
-+	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	unsigned long prev_util = sg_cpu->util;
- 
- 	/*
-@@ -399,7 +403,8 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
- 		sg_cpu->util = prev_util;
- 
- 	cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
--				   map_util_perf(sg_cpu->util), sg_cpu->max);
-+				   map_util_perf(sg_cpu->util),
-+				   sg_policy->max);
- 
- 	sg_cpu->sg_policy->last_freq_update_time = time;
- }
-@@ -408,25 +413,19 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- {
- 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	struct cpufreq_policy *policy = sg_policy->policy;
--	unsigned long util = 0, max = 1;
-+	unsigned long util = 0;
- 	unsigned int j;
- 
- 	for_each_cpu(j, policy->cpus) {
- 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
--		unsigned long j_util, j_max;
- 
- 		sugov_get_util(j_sg_cpu);
- 		sugov_iowait_apply(j_sg_cpu, time);
--		j_util = j_sg_cpu->util;
--		j_max = j_sg_cpu->max;
- 
--		if (j_util * max > j_max * util) {
--			util = j_util;
--			max = j_max;
--		}
-+		util = max(j_sg_cpu->util, util);
- 	}
- 
--	return get_next_freq(sg_policy, util, max);
-+	return get_next_freq(sg_policy, util, sg_policy->max);
- }
- 
- static void
-@@ -752,7 +751,7 @@ static int sugov_start(struct cpufreq_policy *policy)
- {
- 	struct sugov_policy *sg_policy = policy->governor_data;
- 	void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
--	unsigned int cpu;
-+	unsigned int cpu = cpumask_first(policy->cpus);
- 
- 	sg_policy->freq_update_delay_ns	= sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
- 	sg_policy->last_freq_update_time	= 0;
-@@ -760,6 +759,7 @@ static int sugov_start(struct cpufreq_policy *policy)
- 	sg_policy->work_in_progress		= false;
- 	sg_policy->limits_changed		= false;
- 	sg_policy->cached_raw_freq		= 0;
-+	sg_policy->max				= arch_scale_cpu_capacity(cpu);
- 
- 	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
- 
--- 
-2.17.1
+[    0.056554] platform 1d87000.phy: Fixed dependency cycle(s) with /soc@0/=
+ufs@1d84000
+[    0.060070] platform ae00000.mdss: Fixed dependency cycle(s) with /soc@0=
+/clock-controller@af00000
+[    0.060150] platform ae00000.mdss: Failed to create device link with ae0=
+0000.mdss
+[    0.060188] platform ae00000.mdss: Failed to create device link with ae0=
+0000.mdss
+[    0.061135] platform c440000.spmi: Failed to create device link with c44=
+0000.spmi
+[    0.061157] platform c440000.spmi: Failed to create device link with c44=
+0000.spmi
+[    0.061180] platform c440000.spmi: Failed to create device link with c44=
+0000.spmi
+[    0.061198] platform c440000.spmi: Failed to create device link with c44=
+0000.spmi
+[    0.061215] platform c440000.spmi: Failed to create device link with c44=
+0000.spmi
+[    0.061231] platform c440000.spmi: Failed to create device link with c44=
+0000.spmi
+[    0.061252] platform c440000.spmi: Failed to create device link with c44=
+0000.spmi
+
+Also I'm going to be on holiday from today for about 2 weeks so I won't
+be able to test anything in that time.
+
+And in case it's interesting, here's the full dmesg to initramfs:
+https://pastebin.com/raw/Fc8W4MVi
+
+Regards
+Luca
+
+> You might also need to add this delta on top of the series if the
+> series itself isn't sufficient.
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 2f012e826986..866755d8ad95 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2068,7 +2068,11 @@ static int fw_devlink_create_devlink(struct device=
+ *con,
+>                 device_links_write_unlock();
+>         }
+>
+> -       sup_dev =3D get_dev_from_fwnode(sup_handle);
+> +       if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
+> +               sup_dev =3D fwnode_get_next_parent_dev(sup_handle);
+> +       else
+> +               sup_dev =3D get_dev_from_fwnode(sup_handle);
+> +
+>         if (sup_dev) {
+>                 /*
+>                  * If it's one of those drivers that don't actually bind =
+to
+>
+> -Saravana
 
