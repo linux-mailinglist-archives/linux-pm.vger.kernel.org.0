@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895B2596B03
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Aug 2022 10:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9DE596B16
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Aug 2022 10:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233851AbiHQIIy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Aug 2022 04:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        id S234003AbiHQIJA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Aug 2022 04:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbiHQIIx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Aug 2022 04:08:53 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6338551A15
-        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 01:08:52 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id z16so15263368wrh.12
-        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 01:08:52 -0700 (PDT)
+        with ESMTP id S233916AbiHQIIz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Aug 2022 04:08:55 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF95C52806
+        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 01:08:53 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id p12-20020a7bcc8c000000b003a5360f218fso590719wma.3
+        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 01:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=XFhFdGS4gab18LiNO0E9EIMJdc3E4TwobGsMEPo69aw=;
-        b=6SH+adSirsQoZZ7hs2noCxi688TUpUJhcU0j79bRwxs/rHH8544iWt2GNS+4gkg1Kt
-         c+MnCThDyXByjMNz0sV7zovfXokhtb0HR/SiCUCAGgZHY0OS2dOtmQz/bAHKDxmS8GJk
-         vP0AxBjik0XVs6MwvhVZfc/BIJ3GZgclGg5oneyMi5gs/wKyEWhyRkUi27jZtM43z5h9
-         0XHhLuJDzHRsazjbBd6fWRBVaxIiBV4K5FfofPp0Ny+k0SgGARP21sXNORwQXC94c9eB
-         NId4tZ6/v6t8A5eX7JGmiiZ8PasGUvXyQ3V0NUGQq6KPtV6WQg49X6tJ7PSlv+yxb6An
-         wBcA==
+        bh=vqBN/1lbDDUExS5IZ7DoqaWZVSkfYt/y1o6RlIQJrH0=;
+        b=uf6YkzyFQ14zCs70XWWzM9dZH85T8/q1k7HQueBM2LvFHPbhfDqQ3HCMcckugNviMF
+         F3NTw3U9cE6D3PKUY4SiDVjpZPa/l28lAxVKqhMxhJFRdj+TPItJoKMYa84Wb5Gs+61i
+         5quMuW8tDoJQE+FKH5KhTQif+vaYwz/xadhYpKJZbqwlXcscHpegS/HlXIfHsdK2uWiI
+         YMaAR9BDfwnVGAd9HgjVPCBBymXtyUMZVC5AvYv3307rNL5mDFZATXExEwpBcsWeb6hB
+         bRxJGncCU4QJ3pHX9TvxeDwLDuXSkwfKs9OTcDZ+Dhv8rcaYIAJa2oT4l5ToHsr2dz9Q
+         CWbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=XFhFdGS4gab18LiNO0E9EIMJdc3E4TwobGsMEPo69aw=;
-        b=Rr4qDdB1m+4AgEGyjwz8vmUOQDUBoHDdLUnKsN1q+EbSHKJs/UVFkaV0XGYGJPwbEO
-         L8d6+KO+fI2dz1UvLrvExIaemSfYKFIDnjIv/7HSPIS3wxp2O9ICyNHdBcSUgBLZz/xP
-         sZAr5LG1etvwYDDo8qunGXMWXbQL9uvgbhHG2HrJrolaEw9c2MUS7+ElNEIC7ax0UViA
-         Zc7LjdD2eIieEj/99FTF70gijkQyf1CRSvMYn6g5Q1uVRxvAukYjzlCP1beT3Em5NGBy
-         zQDneyr97m8sxkh+riN1QjpO0IpgCHnEmDESFG4QKWMANl0ZUetxuW5iPpsOLLgkhpMM
-         FkhQ==
-X-Gm-Message-State: ACgBeo3mR3/X8Cb6+M8iPT3vRxzX9Wwf+a//c4rK8/tX77boSiCQl9PG
-        6CW2bNnzH13wlNZmYH7JQkskMw==
-X-Google-Smtp-Source: AA6agR51Zl6xt+vxQT7gT7KACFEBbbFyESTGV94CTa/rv4g0vzVgLg37XjUImbsILtMPON9atLrVTQ==
-X-Received: by 2002:a5d:6f05:0:b0:223:8bfc:dd0f with SMTP id ay5-20020a5d6f05000000b002238bfcdd0fmr13349400wrb.547.1660723730931;
-        Wed, 17 Aug 2022 01:08:50 -0700 (PDT)
+        bh=vqBN/1lbDDUExS5IZ7DoqaWZVSkfYt/y1o6RlIQJrH0=;
+        b=vwA7+AYFUdQKa4wVSM/mMovT1gBWfrfvv2c+m1zW+0lFaiJaqM+3+ITQsqg5VULXWd
+         GgHT4GQXLHSx9Wj+/lGg/v+eemYZc3MNZyyRh2g/tlP68Dc4pGcCF5tRgrwfpvmZj7aS
+         9eJp4X5W1rdWqE5UlVDwP46+DH0719OiTNqV70Ym0diJr0nGpxbuHyoXCF+Ktmez0gz2
+         qg4ilf6vrCF1L4tva2l1uLCVrcgAbTsfzkhYWPKpV12/sIRzkQB7U/eqllFNv+ctTUaz
+         KRxtTTLGghI5aKqj7yWBlEVB4nLdbDdZ0W7d+4VgisSac15PaTMEGajXh9yAHHJYnjeg
+         sRkQ==
+X-Gm-Message-State: ACgBeo1/7uceQOZJE51nkvFque13A2b7PXXfyw+Tpmri5yONxJp31qFA
+        VTXbelxDXqm+y8Ug/9nm5MC6Ng==
+X-Google-Smtp-Source: AA6agR7xyAkug/0FUS2iV/tqnv/KSc31hp2N9qhVSWYwlEjmgU4SC/wDn1yaJLlWRb74RXcsko3bfA==
+X-Received: by 2002:a05:600c:1497:b0:3a5:f608:d765 with SMTP id c23-20020a05600c149700b003a5f608d765mr1264422wmh.19.1660723732364;
+        Wed, 17 Aug 2022 01:08:52 -0700 (PDT)
 Received: from Balsam-ThinkPad-T480.civfrance.com (58.188.158.77.rev.sfr.net. [77.158.188.58])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003a54d610e5fsm1391992wmq.26.2022.08.17.01.08.49
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003a54d610e5fsm1391992wmq.26.2022.08.17.01.08.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 01:08:50 -0700 (PDT)
+        Wed, 17 Aug 2022 01:08:51 -0700 (PDT)
 From:   bchihi@baylibre.com
 To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
         amitk@kernel.org
@@ -57,9 +57,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
         fan.chen@mediatek.com, louis.yu@mediatek.com,
         rex-bc.chen@mediatek.com, abailon@baylibre.com
-Subject: [PATCH v9,5/7] arm64: dts: mt8195: Add efuse node to mt8195
-Date:   Wed, 17 Aug 2022 10:07:55 +0200
-Message-Id: <20220817080757.352021-6-bchihi@baylibre.com>
+Subject: [PATCH v9,6/7] arm64: dts: mt8195: Add thermal zones and thermal nodes
+Date:   Wed, 17 Aug 2022 10:07:56 +0200
+Message-Id: <20220817080757.352021-7-bchihi@baylibre.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220817080757.352021-1-bchihi@baylibre.com>
 References: <20220817080757.352021-1-bchihi@baylibre.com>
@@ -75,41 +75,155 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Alexandre Bailon <abailon@baylibre.com>
+From: Tinghan Shen <tinghan.shen@mediatek.com>
 
-Add efuse node.
-This will be required by the thermal driver to get the calibration data.
+Add thermal zones and thermal nodes for the mt8195.
 
+Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+Co-developed-by: Ben Tseng <ben.tseng@mediatek.com>
+Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+Co-developed-by: Alexandre Bailon <abailon@baylibre.com>
 Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 Co-developed-by: Balsam CHIHI <bchihi@baylibre.com>
 Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 111 +++++++++++++++++++++++
+ 1 file changed, 111 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 066c14989708..95967a0196d8 100644
+index 95967a0196d8..aafbbe83e6ba 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -733,6 +733,18 @@ u2_intr_p3: usb2-intr-p3@189,2 {
- 				reg = <0x189 0x2>;
- 				bits = <7 5>;
- 			};
-+
-+			lvts_efuse_data1: lvts1-calib@1bc {
-+				reg = <0x1bc 0x14>;
-+			};
-+
-+			lvts_efuse_data2: lvts2-calib@1d0 {
-+				reg = <0x1d0 0x38>;
-+			};
-+
-+			svs_calibration: calib@580 {
-+				reg = <0x580 0x64>;
-+			};
+@@ -10,6 +10,7 @@
+ #include <dt-bindings/interrupt-controller/irq.h>
+ #include <dt-bindings/phy/phy.h>
+ #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
++#include <dt-bindings/reset/mt8195-resets.h>
+ 
+ / {
+ 	compatible = "mediatek,mt8195";
+@@ -452,6 +453,28 @@ spi0: spi@1100a000 {
+ 			status = "disabled";
  		};
  
- 		u3phy2: t-phy@11c40000 {
++		lvts_ap: thermal-sensor@1100b000 {
++			compatible = "mediatek,mt8195-lvts-ap";
++			#thermal-sensor-cells = <1>;
++			reg = <0 0x1100b000 0 0x1000>;
++			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
++			resets = <&infracfg_ao MT8195_INFRA_RST0_THERM_CTRL_SWRST>;
++			nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
++			nvmem-cell-names = "lvts_calib_data1", "lvts_calib_data2";
++		};
++
++		lvts_mcu: thermal-sensor@11278000 {
++			compatible = "mediatek,mt8195-lvts-mcu";
++			#thermal-sensor-cells = <1>;
++			reg = <0 0x11278000 0 0x1000>;
++			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
++			resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
++			nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
++			nvmem-cell-names = "lvts_calib_data1", "lvts_calib_data2";
++		};
++
+ 		spi1: spi@11010000 {
+ 			compatible = "mediatek,mt8195-spi",
+ 				     "mediatek,mt6765-spi";
+@@ -1106,4 +1129,92 @@ vencsys_core1: clock-controller@1b000000 {
+ 			#clock-cells = <1>;
+ 		};
+ 	};
++
++	thermal_zones: thermal-zones {
++		cpu0-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 0>;
++		};
++		cpu1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 1>;
++		};
++		cpu2-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 2>;
++		};
++		cpu3-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 3>;
++		};
++		cpu4-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 4>;
++		};
++		cpu5-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 5>;
++		};
++		cpu6-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 6>;
++		};
++		cpu7-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_mcu 7>;
++		};
++		vpu1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 0>;
++		};
++		vpu2-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 1>;
++		};
++		gpu1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 2>;
++		};
++		gpu2-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 3>;
++		};
++		vdec-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 4>;
++		};
++		img-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 5>;
++		};
++		infra-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 6>;
++		};
++		cam1-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 7>;
++		};
++		cam2-thermal {
++			polling-delay = <0>;
++			polling-delay-passive = <0>;
++			thermal-sensors = <&lvts_ap 8>;
++		};
++	};
+ };
 -- 
 2.34.1
 
