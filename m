@@ -2,277 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0010A597311
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Aug 2022 17:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87C45973BF
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Aug 2022 18:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240214AbiHQPbo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Aug 2022 11:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S240494AbiHQQHV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Aug 2022 12:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239257AbiHQPbn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Aug 2022 11:31:43 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7B29D670
-        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 08:31:41 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so1111080wms.5
-        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 08:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=x/8xM9ld9yrSaRR9pDeYKmRNvDsAFYo8/I49PiB0Ceo=;
-        b=ccOl9EvZk+s+6ZxGWVd80a/mQypWz20imbB4Q0Hv2rztkoFOKCvGXBegixRftkpheM
-         MqgQz/9PcTRh1mG+mfw56lmXtCXESaWgufZ+CMdvWb1GBujZzp8CKq+rQmObr93k6G39
-         cYYNFfphmlBvADyQ6J8/nPLjl/xDpNtPWMBtjjEAj4xGKqrywn9Q+RhU9q3/hbpo5+Cp
-         oFmRXqbyWcPHnYhhjkVeNzvZKUVMMPfBP+e8wcjZ/tMiVgvdT9Eyn3mjN2evlM7gr2WL
-         b39zwKebTo/1sI5apvAcudpfA1kPvP9BxxIPcWHuw5j9FcgE+EgheOS5B9RaX9+wXUbt
-         SxtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=x/8xM9ld9yrSaRR9pDeYKmRNvDsAFYo8/I49PiB0Ceo=;
-        b=lvxL4gGF6jzllI0dHmXvQEiQ27J6kGHSgM3iMQudXUSTMVuiYbSoFP1UduLTZ7ehCU
-         G6z1taHojoR0O2IOfYV604iLiCjBp9NJvwBsHoQNM7pmdXBxXXuZ8mjd/52OA0nN2dsc
-         a3qQ0x8cuP8Q6j5jBJizmhEf8R9XTQD44pCdypcNaOUcXzmDt0pJmmfKRocj+vDkHgSd
-         DFZ/tAGpvNMMvGUI3PPbXUTbk14Qz+AGJs6kU7A3rNguMP2/y9Q6wv+5vMovNYFOrZzA
-         bIf580PVkd9tJWvhPDdpAABcGvjiZnva3E2CcD+WgNpL9UpoOsvO57KAmY3NH86ldwm1
-         bYGg==
-X-Gm-Message-State: ACgBeo07pBYdYijfiP/TbbHZD6vj6qT4bCOJVpFlSu84FD6ECurEiuHi
-        wCmzVoD209xoTKLNxBQUcSMB8Q==
-X-Google-Smtp-Source: AA6agR4cNmGCf8XKin9xGyp8cT0b0iQPYD3hPoSzK7Lcas7XgCjIkGJwabbksuMGV19Oi3gnr2sccA==
-X-Received: by 2002:a7b:c848:0:b0:3a5:41f6:4d37 with SMTP id c8-20020a7bc848000000b003a541f64d37mr2634311wml.23.1660750299682;
-        Wed, 17 Aug 2022 08:31:39 -0700 (PDT)
-Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id t5-20020adfeb85000000b002216d6f8ad6sm13229633wrn.2.2022.08.17.08.31.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 08:31:38 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vadimp@mellanox.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vadimp@nvidia.com, petrm@nvidia.com,
-        edumazet@google.com, kuba@kernel.org, idosch@nvidia.com,
-        pabeni@redhat.com
-Subject: [PATCH v4] Revert "mlxsw: core: Add the hottest thermal zone detection"
-Date:   Wed, 17 Aug 2022 17:30:40 +0200
-Message-Id: <20220817153040.2464245-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S240531AbiHQQFL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Aug 2022 12:05:11 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2063.outbound.protection.outlook.com [40.107.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39419C2C9;
+        Wed, 17 Aug 2022 09:04:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=knjYKgu5mAvDYGmxcQRs6BkALwlUgRBepBpt+wqS8RkhVSGTvJXz6qzmJZy/4Dq5HUrYMid2PxoWvRbv19vHsS2AuPQIyJXy4lH4TvNkOR31NXHgXM6fLiK7Vf3jNDFTCPqYQ23Cztaa+zMQBPV2qTSICQivtmMRiVcb6nEHVv43XrcJ/eI3hi6DueIlfsa/ZLxdZZmDEaRsaGDLKbsMDGhIemt6R+NQO2amscYL0JR1+fhD8uabr4F5d19kr4GjBCRxiPRI5Ys1PJrd8UIIogdwrzQS5o2eQoJacNs6OvD55fCiQVTEDqkkorwB/m3dg48WBWiaOQSRgnYZ+y+09A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KXOD1sbfn2N18p1fW5WOHy5QWLp/1PgQL+ozKR9XdW4=;
+ b=law1mKSDkBHRMdJ6FJDEvuisAoweJ42KL3F2G2qT1LiczJ2+3ElfLpmOq9OdWmuByW/IAGgjids0PbbmskZY9uHUUc2VIKke5p8U0vMyIqQ5TxYKWeMT6wtjeTtYMRG1+cDeOfq1uI9srOU1gOxdF7BpJ9jQkMBxzyNB3F5h73xlQGyY5BmUsEJMXufKOZyOBcLqCjHeqxadsQZsxYfdpmvKh88QTlgF6ZKrwKUJxNcySlh64qQV+49gfV+Vw7QQwOOuz3vYVI8NP0lUKjpemQfZHu/eBtR60w3+8RC35OP0OX0VD740V+MkDVhJMMwYXtfApzKR6aaacuaGyFA1Aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KXOD1sbfn2N18p1fW5WOHy5QWLp/1PgQL+ozKR9XdW4=;
+ b=agA2/ynVJa0kghSlNmncLV9xKBydhvLQkdzyXIVl4nXyTrEID8+PKv/bHF92YR/TTD9r+Fjf0IJoNTUVRZRuMyTWVcIWFALtKAuX0By+ODAoTPugOLFkLaDHICMS0qVU/kSnEfER71qEXn/IdcfJcK9RK12TZyYIKA6yJmZ964srwN10KCmCNb9zmn4UJ8t53nTr1+7t28dHvjJUGsxFkOpN9ZpmBFnwdaFKp/DxDo84Lwivmqs1sLda0J2XWdXPDExyuQY8O+2MH9VO0nv/kHwEs/mx2jN3rkq2Pauz678n+HQ9jl/7hop87cTQJf2iSwqUxPqRpbAlxURuuPJHEQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13)
+ by BL0PR12MB2403.namprd12.prod.outlook.com (2603:10b6:207:40::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Wed, 17 Aug
+ 2022 16:04:43 +0000
+Received: from BL1PR12MB5304.namprd12.prod.outlook.com
+ ([fe80::784c:3561:5f6a:10ed]) by BL1PR12MB5304.namprd12.prod.outlook.com
+ ([fe80::784c:3561:5f6a:10ed%8]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
+ 16:04:43 +0000
+Message-ID: <5363303b-30bb-3c4a-bf42-426dd7f8138d@nvidia.com>
+Date:   Wed, 17 Aug 2022 21:34:30 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v6 5/5] vfio/pci: Implement
+ VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20220817051323.20091-1-abhsahu@nvidia.com>
+ <20220817051323.20091-6-abhsahu@nvidia.com> <Yvzy0VOfKkKod0OV@nvidia.com>
+X-Nvconfidentiality: public
+From:   Abhishek Sahu <abhsahu@nvidia.com>
+In-Reply-To: <Yvzy0VOfKkKod0OV@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MAXPR01CA0118.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:5d::36) To BL1PR12MB5304.namprd12.prod.outlook.com
+ (2603:10b6:208:314::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d24e28ab-85ff-4dd9-7703-08da806a322f
+X-MS-TrafficTypeDiagnostic: BL0PR12MB2403:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Vu5W3MMw4MesHF7Jo8wIKtoCivFjBwpp7WZeU7OAh/Y9Q5+0L2hk+cS1SM/n5v6r7I7Ea9tw4r+ZMlCERlXNf5R1CKXyDBUIgCChkbSDQvjKNEINWqjeylDlS5fbpJggHaNS9+Urr2ZdYJRdhdxEwUh+IsQzqUqPN4NRyr3WzZXBQJ6PJf1kTFqf/e95P9qnBy1ifgG+ojHattasIxoH8aqitE80R3zU/DmZa3l5DlWdRg+x5bj3iHHHqbv5LIjSOtCzhfqNTeWxk2OSCyB8zSlaC//gS9qN26wc6IUe1J1o7YVbA/DZHbw6fPQqfilj2Xt1hLZjXawhmtqrJuxFMYeH8n9DP+I9TUfnSshSEIQU0pXBQYlNHZjLaWoIFKRoM58UIvk4D6kgickYfmD7itJKOt9VT3RB94fv3wWKnW0Yjy2wVJctjFMFvPBP+F7hHU+b6T/9aFcIt/QgL2EgBdM5P3eG1sYDvWgYkPTkduKU84vVf8Xss3s4pFxonWH/5Kipd2LbLEwwME7G3ViWztn5le6RO5iRJeV3NBGXrTxdo9BCNtorOa0Du3VTnMS0Em8pYrHw3tSJhPmBEWCeaK/9TA6APw4CA3wqvI162qf3EFKbdZ6IymAYwnhYFY8SIRv6nSIUuWUvRff2mR4OKG/N2d2u621GoxmWWamZHNU/N2+Cqvyx9IrkqvaY5oaMrIZDvF7IikbuZpfCgz4oLnvOViy9a9sqLA78SW7RB4O1O+uMQ/8kziKwdYfQuhxHOoMeOspk0u026+ZeOX8IH/AobDn6r48qZZHDzAQxNgH0Az9ofMNb0EmG97Zy0tY7hob8cqWXqgAa8OrXH36lGw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5304.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(83380400001)(38100700002)(54906003)(37006003)(7416002)(8936002)(6862004)(66946007)(66556008)(66476007)(4326008)(8676002)(5660300002)(6636002)(316002)(2616005)(186003)(55236004)(53546011)(2906002)(478600001)(6486002)(26005)(6666004)(6512007)(6506007)(41300700001)(31696002)(31686004)(36756003)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WDcyRHhCUGx4YjZjcVlKdXBKLzRiMm02K09reWVpZkNIV1JjUGpzRnlLRzJI?=
+ =?utf-8?B?Q0p3ZFpFeWJsWmMwQUduV1ZWMWZYNkZ0bG50NEV6NnRYb3ZySDNVMCtkTzk5?=
+ =?utf-8?B?VFlCSHJKNFNyNC82V2s1aFlXbUtjTFBzMlJyU2pWNGYvWlR0U2FnZmlNbGNl?=
+ =?utf-8?B?di96dlkxNzFzSWhRUEtNREVxejJBSUFSS240N0FTa0JlclM2bDZMdjg3THc0?=
+ =?utf-8?B?MHlSd0ZTcTAvcU5oQ1ZLNUtNODhpbjZmbmhKby9aaDUva1M3OFZ6WFhUekFH?=
+ =?utf-8?B?bFNSUzZXNlVRVFgrZldxZ1dwVk5pS2FsUHMxTElhekpjaytOQm1Jc3pSZFJu?=
+ =?utf-8?B?UE5TQ2xGL0ErcWFPSzBJTXNuTjl1ZzgxK25pY3NzZXAyMzBhZitiQmFhYmdR?=
+ =?utf-8?B?R05xK3B4b0hJR3hCdGxQa3NqOXNJc0psU1lWenBoZFdwZlV0YkpYR2hxWlM2?=
+ =?utf-8?B?ZnFyeUV3bDFGMUhnYTBieVo3bm01ZU1YamtqaEs2SVBuSTF6ckY0M0xiTVpt?=
+ =?utf-8?B?bGx0VFhkUlBJUGpQbnBMOGxXT3lOTGZiUWtvMUFjTFJvQ3dDa0w4NFU1TDdV?=
+ =?utf-8?B?bkl6TXVkUWdGdFhZdWp2ZFRGZSs5VXY0L3dUM1p3ZjRHMnkvbkw1VFhuZVJT?=
+ =?utf-8?B?WUMvQ1lhb2JlNXU1cytZdjBlbGN6dVJ4Yk1Rc09ON0dZNkJ0WjJ2K3lGR0Y1?=
+ =?utf-8?B?dURYSStsTDcwSUk4K3N5czA3RExyK0Vid3h5bFdzVEdQbVdQWTRFajhCWjlU?=
+ =?utf-8?B?dHFmMks1RjM4OXVXUzRRb2pJOGlidVRsUTlIZUsrd2dyZEZMY1NJbkhYWEov?=
+ =?utf-8?B?Sm9mZ2J1eVd3eFdXYWpGQ0M4SkJKNnZ2M0g1dEh3RzFsU0lkN1J6ckJ5dWVk?=
+ =?utf-8?B?ZkNFQ0pRSVVCcXk1MmZ1TXF4dzVrM2dnQ2F0aCtIYVF5YVhtRU8vODZZcThm?=
+ =?utf-8?B?aDdOZFhhZVM1OVE5ZTRGU0ppZDlZMUs4dER1UnJjaEdIZ1J1d0UrTXRIRU0y?=
+ =?utf-8?B?WEhrRXZIcTRsVHR5TnBEZ3RrdFJuSnhLbEFVZ0htOGtJN2dBdTdGQ2ZTdzFx?=
+ =?utf-8?B?OGJueFZjMU9XVU1GUVU5ak85a1B3ckF3OWxPMTBHQ3dOa2VnRWNkQkkyazVY?=
+ =?utf-8?B?ek5ubVM1cEZkRittK1djOHlYaXkrdkxFSmdacFdtQ2dabHN5RGdwQ0g0SmtK?=
+ =?utf-8?B?ZEhjK0c0dVVJN2txOHNBS2VhaWRlQ1JJUEN5TmFxUG5UNzJJc3BhZnp3dHFx?=
+ =?utf-8?B?cERxcFQ1NDVWTXJWSStEK1o3UnpiNUNhM3Nnb09ySlRJc25RTUFZZC9vSlVS?=
+ =?utf-8?B?SE1WY0tYY2ZXMXJveGtXeCtSZ3BvZzhvSSt4dEZMVDM3cmRKdzNvVittOHFK?=
+ =?utf-8?B?RndmcjFiZGY0Y0JjL0g1S2JRMzhKcHFQVVNPbGR6VDAzdWRONmRsOWVwclpR?=
+ =?utf-8?B?NXlpY2ZwT0krZ0NabmF6ZXVMbnd6RDhRb1I3cXo1Wi9SR01ONS8zam9sZkNt?=
+ =?utf-8?B?ZXdLbjJTZzlFbTh2QTNHWUtISC9xTEFqbTk4V0JmSXl2Q3RDUjBQS0VDeDhS?=
+ =?utf-8?B?cHZUK3lwWXMvS2pENTRnWnZzMi93S0RKOGkxWDlESUlUZEhtRy8xT0l6aXBk?=
+ =?utf-8?B?M3h2N3BxaXcwbUttZXMxU0hFN2Y0SzBIbXYxWDVVVThNKy9CdlpudHZwYWY3?=
+ =?utf-8?B?aDcrSTVWTUlhNzJGRnFPcGRtRHJIMTZwRWkrWFREV0p5dUVwbUZ4bGI0d2Rk?=
+ =?utf-8?B?NnVlU3hpTEY5akhxWHpXN21pWnJVUXVBUGd0a0JPcVU3WHZyL2pheDlIekM5?=
+ =?utf-8?B?MTlhUUdJZTVaNDVZU0J2NXhBbW1RQnBNbGdkQUVPRDQybVVIRGYvNkk4NG9Z?=
+ =?utf-8?B?YWdoSXJXYmVUY1VzcGhMQ1czTjNhcDlQNkJoTGl1Yi91SGhkc0h0cTg2WEll?=
+ =?utf-8?B?ZHo5dHdrVTdka040V0J3T1NKc05WZnpRVjZnOE53TllXMGxXcWF6WHcycnZj?=
+ =?utf-8?B?Ykc5YzNqTk1QaCswK0sxZTRaWVJ1NURwQ0FodlhLT1FoSEIwRFdXSXhPeTFF?=
+ =?utf-8?B?SEtLSmZnb284dmlQbXo2NHkxdUNua1lMM2toVWhiNFdHeFZka05JOG1SNkNO?=
+ =?utf-8?Q?2dewS8d80/pk6nqlMa7xKv7GR?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d24e28ab-85ff-4dd9-7703-08da806a322f
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5304.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 16:04:42.6499
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cF9osWuhLQoWRFMeXoTw7lKxIyi+L76MpumEs2DIicZGegiVcddXVm3MvLWoolhvnpbfiup+v7sRbm89poLGag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2403
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This reverts commit 2dc2f760052da4925482ecdcdc5c94d4a599153c and
-commit 6f73862fabd93213de157d9cc6ef76084311c628.
+On 8/17/2022 7:23 PM, Jason Gunthorpe wrote:
+> On Wed, Aug 17, 2022 at 10:43:23AM +0530, Abhishek Sahu wrote:
+> 
+>> +static int
+>> +vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
+>> +				   void __user *arg, size_t argsz)
+> 
+> This should be
+>   struct vfio_device_low_power_entry_with_wakeup __user *arg
+> 
 
-As discussed in the thread:
+ Thanks Jason.
 
-https://lore.kernel.org/all/f3c62ebe-7d59-c537-a010-bff366c8aeba@linaro.org/
+ I can update this.
 
-the feature provided by commits 2dc2f760052da and 6f73862fabd93 is
-actually already handled by the thermal framework via the cooling
-device state aggregation, thus all this code is pointless.
+ But if we look the existing code, for example
+ (vfio_ioctl_device_feature_mig_device_state()), then there it still uses
+ 'void __user *arg' only. Is this a new guideline which we need to take
+ care ?
+ 
+>> @@ -1336,6 +1389,9 @@ int vfio_pci_core_ioctl_feature(struct vfio_device *device, u32 flags,
+>>  		return vfio_pci_core_feature_token(device, flags, arg, argsz);
+>>  	case VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY:
+>>  		return vfio_pci_core_pm_entry(device, flags, arg, argsz);
+>> +	case VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP:
+>> +		return vfio_pci_core_pm_entry_with_wakeup(device, flags,
+>> +							  arg, argsz);
+>>  	case VFIO_DEVICE_FEATURE_LOW_POWER_EXIT:
+>>  		return vfio_pci_core_pm_exit(device, flags, arg, argsz);
+> 
+> Best to keep these ioctls sorted
+> 
+> Jason
 
-The revert conflicts with the following changes:
- - 7f4957be0d5b8: thermal: Use mode helpers in drivers
- - 6a79507cfe94c: mlxsw: core: Extend thermal module with per QSFP module thermal zones
+ Do we need to keep the IOCTL name alphabetically sorted in the case list.
+ Currently, I have added in the order of IOCTL numbers.
 
-These conflicts were fixed and the resulting changes are in this patch.
-
-Both reverts are in the same change as requested by Ido Schimmel:
-
-https://lore.kernel.org/all/Yvz7+RUsmVco3Xpj@shredder/
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Tested-by: Vadim Pasternak <vadimp@nvidia.com>
----
-  -v4:
-   - Squash patch #1 and #2 as requested by Ido Schimmel
-   - Remove blank lines
-  -v3:
-   - Respin against v6.0-rc1
-  -v2
-   - Fix 'err' not used as reported by kbuild test:
-   https://lore.kernel.org/all/202208150708.fk6sfd8u-lkp@intel.com/
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- .../ethernet/mellanox/mlxsw/core_thermal.c    | 77 +------------------
- 1 file changed, 2 insertions(+), 75 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-index 3548fe1df7c8..987fe5c9d5a3 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-@@ -21,7 +21,6 @@
- #define MLXSW_THERMAL_ASIC_TEMP_HOT	105000	/* 105C */
- #define MLXSW_THERMAL_HYSTERESIS_TEMP	5000	/* 5C */
- #define MLXSW_THERMAL_MODULE_TEMP_SHIFT	(MLXSW_THERMAL_HYSTERESIS_TEMP * 2)
--#define MLXSW_THERMAL_TEMP_SCORE_MAX	GENMASK(31, 0)
- #define MLXSW_THERMAL_MAX_STATE	10
- #define MLXSW_THERMAL_MIN_STATE	2
- #define MLXSW_THERMAL_MAX_DUTY	255
-@@ -101,8 +100,6 @@ struct mlxsw_thermal {
- 	struct thermal_cooling_device *cdevs[MLXSW_MFCR_PWMS_MAX];
- 	u8 cooling_levels[MLXSW_THERMAL_MAX_STATE + 1];
- 	struct mlxsw_thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
--	unsigned int tz_highest_score;
--	struct thermal_zone_device *tz_highest_dev;
- 	struct mlxsw_thermal_area line_cards[];
- };
- 
-@@ -193,34 +190,6 @@ mlxsw_thermal_module_trips_update(struct device *dev, struct mlxsw_core *core,
- 	return 0;
- }
- 
--static void mlxsw_thermal_tz_score_update(struct mlxsw_thermal *thermal,
--					  struct thermal_zone_device *tzdev,
--					  struct mlxsw_thermal_trip *trips,
--					  int temp)
--{
--	struct mlxsw_thermal_trip *trip = trips;
--	unsigned int score, delta, i, shift = 1;
--
--	/* Calculate thermal zone score, if temperature is above the hot
--	 * threshold score is set to MLXSW_THERMAL_TEMP_SCORE_MAX.
--	 */
--	score = MLXSW_THERMAL_TEMP_SCORE_MAX;
--	for (i = MLXSW_THERMAL_TEMP_TRIP_NORM; i < MLXSW_THERMAL_NUM_TRIPS;
--	     i++, trip++) {
--		if (temp < trip->temp) {
--			delta = DIV_ROUND_CLOSEST(temp, trip->temp - temp);
--			score = delta * shift;
--			break;
--		}
--		shift *= 256;
--	}
--
--	if (score > thermal->tz_highest_score) {
--		thermal->tz_highest_score = score;
--		thermal->tz_highest_dev = tzdev;
--	}
--}
--
- static int mlxsw_thermal_bind(struct thermal_zone_device *tzdev,
- 			      struct thermal_cooling_device *cdev)
- {
-@@ -286,9 +255,6 @@ static int mlxsw_thermal_get_temp(struct thermal_zone_device *tzdev,
- 		return err;
- 	}
- 	mlxsw_reg_mtmp_unpack(mtmp_pl, &temp, NULL, NULL, NULL, NULL);
--	if (temp > 0)
--		mlxsw_thermal_tz_score_update(thermal, tzdev, thermal->trips,
--					      temp);
- 
- 	*p_temp = temp;
- 	return 0;
-@@ -349,21 +315,6 @@ static int mlxsw_thermal_set_trip_hyst(struct thermal_zone_device *tzdev,
- 	return 0;
- }
- 
--static int mlxsw_thermal_trend_get(struct thermal_zone_device *tzdev,
--				   int trip, enum thermal_trend *trend)
--{
--	struct mlxsw_thermal *thermal = tzdev->devdata;
--
--	if (trip < 0 || trip >= MLXSW_THERMAL_NUM_TRIPS)
--		return -EINVAL;
--
--	if (tzdev == thermal->tz_highest_dev)
--		return 1;
--
--	*trend = THERMAL_TREND_STABLE;
--	return 0;
--}
--
- static struct thermal_zone_params mlxsw_thermal_params = {
- 	.no_hwmon = true,
- };
-@@ -377,7 +328,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_ops = {
- 	.set_trip_temp	= mlxsw_thermal_set_trip_temp,
- 	.get_trip_hyst	= mlxsw_thermal_get_trip_hyst,
- 	.set_trip_hyst	= mlxsw_thermal_set_trip_hyst,
--	.get_trend	= mlxsw_thermal_trend_get,
- };
- 
- static int mlxsw_thermal_module_bind(struct thermal_zone_device *tzdev,
-@@ -463,7 +413,6 @@ static int mlxsw_thermal_module_temp_get(struct thermal_zone_device *tzdev,
- 	int temp, crit_temp, emerg_temp;
- 	struct device *dev;
- 	u16 sensor_index;
--	int err;
- 
- 	dev = thermal->bus_info->dev;
- 	sensor_index = MLXSW_REG_MTMP_MODULE_INDEX_MIN + tz->module;
-@@ -479,10 +428,8 @@ static int mlxsw_thermal_module_temp_get(struct thermal_zone_device *tzdev,
- 		return 0;
- 
- 	/* Update trip points. */
--	err = mlxsw_thermal_module_trips_update(dev, thermal->core, tz,
--						crit_temp, emerg_temp);
--	if (!err && temp > 0)
--		mlxsw_thermal_tz_score_update(thermal, tzdev, tz->trips, temp);
-+	mlxsw_thermal_module_trips_update(dev, thermal->core, tz,
-+					  crit_temp, emerg_temp);
- 
- 	return 0;
- }
-@@ -546,22 +493,6 @@ mlxsw_thermal_module_trip_hyst_set(struct thermal_zone_device *tzdev, int trip,
- 	return 0;
- }
- 
--static int mlxsw_thermal_module_trend_get(struct thermal_zone_device *tzdev,
--					  int trip, enum thermal_trend *trend)
--{
--	struct mlxsw_thermal_module *tz = tzdev->devdata;
--	struct mlxsw_thermal *thermal = tz->parent;
--
--	if (trip < 0 || trip >= MLXSW_THERMAL_NUM_TRIPS)
--		return -EINVAL;
--
--	if (tzdev == thermal->tz_highest_dev)
--		return 1;
--
--	*trend = THERMAL_TREND_STABLE;
--	return 0;
--}
--
- static struct thermal_zone_device_ops mlxsw_thermal_module_ops = {
- 	.bind		= mlxsw_thermal_module_bind,
- 	.unbind		= mlxsw_thermal_module_unbind,
-@@ -571,7 +502,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_module_ops = {
- 	.set_trip_temp	= mlxsw_thermal_module_trip_temp_set,
- 	.get_trip_hyst	= mlxsw_thermal_module_trip_hyst_get,
- 	.set_trip_hyst	= mlxsw_thermal_module_trip_hyst_set,
--	.get_trend	= mlxsw_thermal_module_trend_get,
- };
- 
- static int mlxsw_thermal_gearbox_temp_get(struct thermal_zone_device *tzdev,
-@@ -592,8 +522,6 @@ static int mlxsw_thermal_gearbox_temp_get(struct thermal_zone_device *tzdev,
- 		return err;
- 
- 	mlxsw_reg_mtmp_unpack(mtmp_pl, &temp, NULL, NULL, NULL, NULL);
--	if (temp > 0)
--		mlxsw_thermal_tz_score_update(thermal, tzdev, tz->trips, temp);
- 
- 	*p_temp = temp;
- 	return 0;
-@@ -608,7 +536,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_gearbox_ops = {
- 	.set_trip_temp	= mlxsw_thermal_module_trip_temp_set,
- 	.get_trip_hyst	= mlxsw_thermal_module_trip_hyst_get,
- 	.set_trip_hyst	= mlxsw_thermal_module_trip_hyst_set,
--	.get_trend	= mlxsw_thermal_module_trend_get,
- };
- 
- static int mlxsw_thermal_get_max_state(struct thermal_cooling_device *cdev,
--- 
-2.34.1
-
+ Regards,
+ Abhishek
