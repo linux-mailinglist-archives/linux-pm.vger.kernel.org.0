@@ -2,235 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C725E597A17
+	by mail.lfdr.de (Postfix) with ESMTP id 099C7597A15
 	for <lists+linux-pm@lfdr.de>; Thu, 18 Aug 2022 01:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234593AbiHQXPv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Aug 2022 19:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S234268AbiHQXPx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Aug 2022 19:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiHQXPv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Aug 2022 19:15:51 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB449A8336
-        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 16:15:49 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso1762278wma.2
-        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 16:15:49 -0700 (PDT)
+        with ESMTP id S242318AbiHQXPw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Aug 2022 19:15:52 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138B7ABD5B
+        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 16:15:51 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id m10-20020a05600c3b0a00b003a603fc3f81so120137wms.0
+        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 16:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=b/4P8tV61EgIGVpYT5PqDxyWk5mmw5Ug4AvquXZ8I1I=;
-        b=sLYvUSxTxvkN4moy3D6cbbY1+X0O5s8mJgOA/yM1CzC7QqqkGdIurca/exlpwbQBTn
-         mXE9c9OThjIjr3nVPCGM1+NRhayVdNKNzlE4IIP2zcaEVgUdm5Wd2eqOgnDKQkumVdQf
-         Yt30oPfgCkh1mkI3l4K7mFppHGeyiA4lnP47Dvg60nZhTB8IJh5+OrudCT41/YOJiNKb
-         EdZNtmyBa4l3tzNWRIUUYb6o4kWVUMN31UdeXpSrx03yC0nmB7ilv/Q63w57ausFMU/i
-         u04SqhLHSi8IPQbSPowcQ6Dc8MFb9FJR8SMFz+UdxomdGHNT25DSL2uPJWTb/oSDsOKu
-         9wNg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=FAp+0S/t7YU8InMU47zEYoFV6slTO7PsovSrf3VShbY=;
+        b=vmxd23h3CgHfjk4V5JZvUsKDnOZgufjfND0t2o1KBZQr6d+y886Y+C08IiNDrFuV0W
+         Km4dAalac3EbtT/Ww+DoRLF++YozVKJSvSuDfoBpcybyfbJYWLkxlr9QYhwPooUS8IqU
+         HwbcUnHQPvTKoaRE6mpEiMxsCYOm7F8gQoKkgduJMFDAx6BG/O+GHOKUPxCMyuzdME8l
+         oI6o1lqGDXvLozrxWjEyL06biH4NMHr+SbtvdBRYJH7vnLm8bv88ehTQU3loxw0Q/Nsi
+         K+097RW10XExwWNTs2OucjPVk1J9AJ1g2DFjhY/QDCm8vPvJd1lrJHRMyBCoN2+2rqum
+         b+GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=b/4P8tV61EgIGVpYT5PqDxyWk5mmw5Ug4AvquXZ8I1I=;
-        b=UlN9MYIS2zcE8BWE65GBpxnq217YN70QOVsW5wKyca0s2LmQ7YTBW23ZfvcXaEoAbO
-         kQVqhRTde37HwuqekYJZAfkEHav1RAc1OU14QWxCMTUOV2D3IGqqSZ8AmOhsYtTSouz9
-         v4Hev7CHp3UKmlryRP1WSakekdTmZsjgz4mjtYUKKGScfeKV5ytBdabKcsO8MIYHy50w
-         Bj3RlqwNCE1V6HWS0n2uAV43J7qBq6cjxIn/bJ4db7e4FL3Eb+s0boz9QX4Ea15W7Sht
-         fupaTQ+dFmJX/K7qfVvjqvB5W0nEJ4Rw4q1PtIQApqJW+fITZYAEcFCTxPq5PlFjjLEH
-         2o0A==
-X-Gm-Message-State: ACgBeo0kJ46xfo8db4KOBmEPhcphk+xD6S1qOexq43AH5wUxfxgRYvP3
-        oAF9xqA7dGFryyXiCpzRJnYqag==
-X-Google-Smtp-Source: AA6agR4j6elGVIcaE6QiO4xGHqbTutfNvtnn4E4WjePj71a9Oj/S7DZiz+8u8dBsci/Y2753leDSrQ==
-X-Received: by 2002:a05:600c:2311:b0:3a5:af18:75c1 with SMTP id 17-20020a05600c231100b003a5af1875c1mr3389851wmo.90.1660778148345;
-        Wed, 17 Aug 2022 16:15:48 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=FAp+0S/t7YU8InMU47zEYoFV6slTO7PsovSrf3VShbY=;
+        b=3MagNlU4TEz8LpnIXrOIWx4m6xam0fmtvUGjyM4X2htHFr5UDSRhRpYxGvnJ6CJ52y
+         yCe1qSHeqVt4OjuQ/OJKI0qLM0fD2Pn+jF1QVOi3bjg3N3yZ+85JjBBYK/wXbZ/VhfPh
+         s5dSBq1W8+7BmMqOvBDYUTEWSpy5LaTTY3KtFdXTx5JDL+HRFPMBqOfMheEfoUUGYCB3
+         /TyGghO5kD76etKWlbL/lsDTl50tix7G8FtF5BYIq7lVI/x/qZpJg0jYqcrG0XDw0saw
+         Leo7k4VMCe8Ygd3jBwRWogCu7IPoHXy1h51iy/k96ggTE5cDgPB/UrcrzVVEK2YdJ+OQ
+         YC8Q==
+X-Gm-Message-State: ACgBeo0P4cZDQG1/bWK4PXXEL+yYSHHLF0d8qr382dRnlVpV/CMdXGCs
+        3wD/Cuhk3iafYQbL72k5D0eUCg==
+X-Google-Smtp-Source: AA6agR51Q7GBXsRdO47Gle1+xrKCXRwcqVH25hN6raTnvfs7hipfhpD/aA5uTx9JDC+wKqEGl9nNcg==
+X-Received: by 2002:a1c:3b56:0:b0:3a5:b699:3d5a with SMTP id i83-20020a1c3b56000000b003a5b6993d5amr170670wma.45.1660778149529;
+        Wed, 17 Aug 2022 16:15:49 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05600c3ac700b003a5ad7f6de2sm137216wms.15.2022.08.17.16.15.46
+        by smtp.gmail.com with ESMTPSA id d7-20020a05600c3ac700b003a5ad7f6de2sm137216wms.15.2022.08.17.16.15.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 16:15:47 -0700 (PDT)
+        Wed, 17 Aug 2022 16:15:49 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org
 Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE)
-Subject: [PATCH 1/2] thermal/drivers/imx_sc: Rely on the platform data to get the resource id
-Date:   Thu, 18 Aug 2022 01:15:32 +0200
-Message-Id: <20220817231533.2639806-1-daniel.lezcano@linaro.org>
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 2/2] thermal/of: Remove the thermal_zone_of_get_sensor_id() function
+Date:   Thu, 18 Aug 2022 01:15:33 +0200
+Message-Id: <20220817231533.2639806-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220817231533.2639806-1-daniel.lezcano@linaro.org>
+References: <20220817231533.2639806-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the imx_sc driver is reimplementing part of the thermal zone
-parsing from the thermal OF tree code to get the sensor id associated
-with a thermal zone sensor.
-
-The driver platform specific code should know what sensor is present
-and not rely on the thermal zone description to do a discovery. Well
-that is arguable but all the other drivers have a per platform data
-telling what sensor id to use.
-
-The imx_sc thermal driver is the only one using a different
-approach. Not invalid but forcing to keep a specific function
-'thermal_zone_of_get_sensor_id()' to get the sensor id for a specific
-thermal zone as the self-explanatory function tells and having device
-tree code inside the driver.
-
-The thermal OF code had a rework and remains now self-encapsulated
-with a register/unregister functions and their 'devm' variants, except
-for the function mentioned above.
-
-After investigating, it appears the imx_sc sensor is defined in
-arch/arm64/boot/dts/freescale/imx8qxp.dtsi:
-
-which defines the cpu-thermal zone with the id: IMX_SC_R_SYSTEM
-
-This dtsi is included by:
-- imx8qxp-ai_ml.dts
-- imx8qxp-colibri.dtsi
-- imx8qxp-mek.dts
-
-The two first ones do not define more thermal zones
-The third one adds the pmic-thermal0 zone with id: IMX_SC_R_PMIC_0
-
-The thermal OF code returns -ENODEV if the thermal zone registration
-with a specific id fails because the description is not available in
-the DT for such a sensor id. In this case we continue with the other
-ids without bailing out with an error.
-
-So we can build for the 'fsl,imx-sc-thermal' a compatible data, an
-array of sensor ids containing IMX_SC_R_SYSTEM and IMX_SC_R_PMIC_0.
-
-The latter won't be found but that will not result in an error but a
-normal case where we continue the initialization with other ids.
-
-When a registration fails with -ENODEV this is not an error but a case
-where the description is not found in the device tree, that can the
-entire thermal zones description or a specific thermal zone with an
-unknown id.
-
-Change the code accordingly and remove the OF code from the driver.
+The function thermal_zone_of_get_sensor_id() is no longer used
+anywhere, remove it.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
-The changes apply on the linux-next branch:
+ drivers/thermal/thermal_of.c | 44 ------------------------------------
+ include/linux/thermal.h      | 10 --------
+ 2 files changed, 54 deletions(-)
 
- https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
-
-I don't have the platform, so I was not able to test the changes.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/imx_sc_thermal.c | 56 ++++++++++++--------------------
- 1 file changed, 20 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
-index 10bfa6507eb4..113c04b71df0 100644
---- a/drivers/thermal/imx_sc_thermal.c
-+++ b/drivers/thermal/imx_sc_thermal.c
-@@ -76,59 +76,41 @@ static const struct thermal_zone_device_ops imx_sc_thermal_ops = {
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index fd2fb84bf246..d4b6335ace15 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -130,50 +130,6 @@ static int of_thermal_get_crit_temp(struct thermal_zone_device *tz,
+ 	return -EINVAL;
+ }
  
- static int imx_sc_thermal_probe(struct platform_device *pdev)
- {
--	struct device_node *np, *child, *sensor_np;
- 	struct imx_sc_sensor *sensor;
--	int ret;
-+	const int *resource_id;
-+	int i, ret;
- 
- 	ret = imx_scu_get_handle(&thermal_ipc_handle);
- 	if (ret)
- 		return ret;
- 
--	np = of_find_node_by_name(NULL, "thermal-zones");
--	if (!np)
--		return -ENODEV;
-+	resource_id = of_device_get_match_data(&pdev->dev);
-+	if (!resource_id)
-+		return -EINVAL;
- 
--	sensor_np = of_node_get(pdev->dev.of_node);
-+	for (i = 0; resource_id[i] > 0; i++) {
- 
--	for_each_available_child_of_node(np, child) {
- 		sensor = devm_kzalloc(&pdev->dev, sizeof(*sensor), GFP_KERNEL);
--		if (!sensor) {
--			of_node_put(child);
--			ret = -ENOMEM;
--			goto put_node;
--		}
-+		if (!sensor)
-+			return -ENOMEM;
- 
--		ret = thermal_zone_of_get_sensor_id(child,
--						    sensor_np,
--						    &sensor->resource_id);
--		if (ret < 0) {
--			dev_err(&pdev->dev,
--				"failed to get valid sensor resource id: %d\n",
--				ret);
--			of_node_put(child);
--			break;
--		}
-+		sensor->resource_id = resource_id[i];
- 
--		sensor->tzd = devm_thermal_of_zone_register(&pdev->dev,
--							    sensor->resource_id,
--							    sensor,
--							    &imx_sc_thermal_ops);
-+		sensor->tzd = devm_thermal_of_zone_register(&pdev->dev, sensor->resource_id,
-+							    sensor, &imx_sc_thermal_ops);
- 		if (IS_ERR(sensor->tzd)) {
--			dev_err(&pdev->dev, "failed to register thermal zone\n");
--			ret = PTR_ERR(sensor->tzd);
--			of_node_put(child);
--			break;
-+			if (PTR_ERR(sensor->tzd) == -ENODEV) {
-+				devm_kfree(&pdev->dev, sensor);
-+				continue;
-+			}
-+			return PTR_ERR(sensor->tzd);
- 		}
- 
- 		if (devm_thermal_add_hwmon_sysfs(sensor->tzd))
- 			dev_warn(&pdev->dev, "failed to add hwmon sysfs attributes\n");
- 	}
- 
--put_node:
--	of_node_put(sensor_np);
--	of_node_put(np);
+-/**
+- * thermal_zone_of_get_sensor_id - get sensor ID from a DT thermal zone
+- * @tz_np: a valid thermal zone device node.
+- * @sensor_np: a sensor node of a valid sensor device.
+- * @id: the sensor ID returned if success.
+- *
+- * This function will get sensor ID from a given thermal zone node and
+- * the sensor node must match the temperature provider @sensor_np.
+- *
+- * Return: 0 on success, proper error code otherwise.
+- */
 -
--	return ret;
-+	return 0;
- }
+-int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
+-				  struct device_node *sensor_np,
+-				  u32 *id)
+-{
+-	struct of_phandle_args sensor_specs;
+-	int ret;
+-
+-	ret = of_parse_phandle_with_args(tz_np,
+-					 "thermal-sensors",
+-					 "#thermal-sensor-cells",
+-					 0,
+-					 &sensor_specs);
+-	if (ret)
+-		return ret;
+-
+-	if (sensor_specs.np != sensor_np) {
+-		of_node_put(sensor_specs.np);
+-		return -ENODEV;
+-	}
+-
+-	if (sensor_specs.args_count > 1)
+-		pr_warn("%pOFn: too many cells in sensor specifier %d\n",
+-		     sensor_specs.np, sensor_specs.args_count);
+-
+-	*id = sensor_specs.args_count ? sensor_specs.args[0] : 0;
+-
+-	of_node_put(sensor_specs.np);
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(thermal_zone_of_get_sensor_id);
+-
+ /***   functions parsing device tree nodes   ***/
  
- static int imx_sc_thermal_remove(struct platform_device *pdev)
-@@ -136,8 +118,10 @@ static int imx_sc_thermal_remove(struct platform_device *pdev)
- 	return 0;
- }
+ static int of_find_trip_id(struct device_node *np, struct device_node *trip)
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 86c24ddd5985..a5a18351a898 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -310,9 +310,6 @@ void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_dev
  
-+static int imx_sc_sensors[] = { IMX_SC_R_SYSTEM, IMX_SC_R_PMIC_0, -1 };
-+
- static const struct of_device_id imx_sc_thermal_table[] = {
--	{ .compatible = "fsl,imx-sc-thermal", },
-+	{ .compatible = "fsl,imx-sc-thermal", .data =  imx_sc_sensors },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, imx_sc_thermal_table);
+ void thermal_of_zone_unregister(struct thermal_zone_device *tz);
+ 
+-int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
+-				  struct device_node *sensor_np,
+-				  u32 *id);
+ #else
+ static inline
+ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
+@@ -336,13 +333,6 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
+ 						   struct thermal_zone_device *tz)
+ {
+ }
+-
+-static inline int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
+-						struct device_node *sensor_np,
+-						u32 *id)
+-{
+-	return -ENOENT;
+-}
+ #endif
+ 
+ #ifdef CONFIG_THERMAL
 -- 
 2.34.1
 
