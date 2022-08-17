@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23EE596F0F
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Aug 2022 15:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C56596EF5
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Aug 2022 15:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239401AbiHQNC4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Aug 2022 09:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
+        id S236486AbiHQNC6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Aug 2022 09:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236827AbiHQNCz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Aug 2022 09:02:55 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E28B50187
-        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 06:02:54 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id h1so6647366wmd.3
-        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 06:02:54 -0700 (PDT)
+        with ESMTP id S239515AbiHQNC5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Aug 2022 09:02:57 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C49050058
+        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 06:02:56 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so908951wms.5
+        for <linux-pm@vger.kernel.org>; Wed, 17 Aug 2022 06:02:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=cevyYAZt+dxQcHlPC3XN0GuOe1QkXMz82sZwwqq5w6E=;
-        b=wy4h554NSrItIUYkhyPJvyc8SB0Gne1UM0/mv6oEZWGmmn0JEst2Z3WFgZQySKmuG0
-         EdgcGv/fDTEWjcrXpeKZ35mufrqkGBlMc73/2JxtteMFUywO1WQPTMlxSDGsr824gBL5
-         BlhvBEj2odYhwi7n2/B+EAp5JsUXcbZ1ZhFjc+cujXbgJpfvs6ZfWP/SfWNMgpBYTQHA
-         Pd7EawC77rpES/6Y/5so932i1kGuBsCr/Rf8MiN/LjPM0ZcDsk9dF3TyRKdBQA0CveAn
-         D60TtOqknyagcux3nMVUOUP+36iXzAEyIxZj1tua0jg1yUV09IPz/UbLuDgVUHeEREpL
-         71/w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=4qpb20jFwXVK/uhCzEummrh/yZBd9xo3kQkre1/oSPg=;
+        b=y+4NstrXdvbqSHuB1IpRIQE3SkpmT3Y0THFE8REeuBdVZHtzQTqsyLmfU5gN4GGo8J
+         1oTh6Y3P6ApA8obKxhOYM8uGg8qUXF5Y++dWcuaU1f6kFnSo0MGiRUzuWHu6AsPS6rRO
+         rtI0+hmSKoiCkEJqtHfDAMUfNAxuUvOPU40hgoN/O42kECk0NifKUUB2IHd3IGf7VT6t
+         LCsxqmSUM9Ux4XUWhCmxeVYIueHNZ2Ywt2qs+LotSuK2OXpfEwlIP975p0iUiUVtoGlZ
+         y0mSJLF8Xaw/5UWwFrh/psbIRFZ1McqVlEHD8uHnSGmTU0G3Sa/23xUdD0hINDN6G+Kq
+         5W9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=cevyYAZt+dxQcHlPC3XN0GuOe1QkXMz82sZwwqq5w6E=;
-        b=ZWQpOebcqXDMC4fdfzGHTYr1pteKEqz6DAbnuNcuJcxlj3xmbJse5aEIeVVksuGvRJ
-         8meslEGrm1aTmjny0P+apBJUMaclMGiMnZEWRMmlfvohcuKdujRDPbvpD6PTR2q2LVfk
-         7IgOz5mQO4uSSOIZlxccsdH0CPzhcmPfiyJDma+bGoKXZVIckMunp8sycqug7vxlaaLM
-         mdkqYHdzCnZB0Cz2knJR3ymGxEM/GZ1j4BuHDl2Hrd+eodtS16cLSlVVs7Y2YXYMnn1I
-         oKeHx0gOOfijc/AOpoeOR/3V1d2hdpsHUpXSSaSG457Ku9czSQB67IIFQlHYrQwfuZbj
-         BWZA==
-X-Gm-Message-State: ACgBeo38D7R0QZlTRYnV9v/PfkJYvop3vycf8s+CMjp3yro5MzEWrhDd
-        lUrEuDaoyshxEPHVd2QIPWLohw==
-X-Google-Smtp-Source: AA6agR7I0BDNinl5wiSYEQ7K6IZtttPxoDtJ4jjXlBafsSHJ3G6MbtepMNnWL71mFhMdgw5iWqHF2A==
-X-Received: by 2002:a05:600c:384c:b0:3a3:744d:8dd2 with SMTP id s12-20020a05600c384c00b003a3744d8dd2mr2117743wmr.117.1660741372883;
-        Wed, 17 Aug 2022 06:02:52 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=4qpb20jFwXVK/uhCzEummrh/yZBd9xo3kQkre1/oSPg=;
+        b=kt+DXn8uOpVWrlFxlMo83HJQMHvZg+EPTNlv5Q8S0CjAXnKUKdrckeGvfkP7BeBKkH
+         6oIh3cdYMjXSK6Bkpc7II5pXoy2TFAPkjAmKGciKb7EJYcMSjDhhiNhI1zD2I+RX3ITv
+         rAHz5PpzwkWEjRGisEySYmiScK4Uf1gIt2ylI27r9KK2hbvOWl48U33zgg1XmGsRZ1Cg
+         MQLPORXmymihVmFXCr88BtnWsx7kiXWDc2X9fH86ibVtmDK7hh6qBu57JjFUCREN58j6
+         QluWW4dvMBItQ7r2jB+Wqn822SEBpYaK10dcMkd/G3SSHnjq2qBHi9N1XyF9s1Vzl+NI
+         nB1g==
+X-Gm-Message-State: ACgBeo1aw1REvx4LnnHgTtzmeiulU8s6HbyIRN8JF1R3USG5O+nDqWd0
+        ow2aRAZvcRrVMXsz1sQRfpI6qg==
+X-Google-Smtp-Source: AA6agR6duHdR757GJRSAbJ4+qqsmU0SzdsKnv6n6E9lIQNilTPTsXE3ZiE/oc+hLot2t8yOaodwbQA==
+X-Received: by 2002:a05:600c:1c0f:b0:3a5:4d6b:a883 with SMTP id j15-20020a05600c1c0f00b003a54d6ba883mr2125042wms.45.1660741374477;
+        Wed, 17 Aug 2022 06:02:54 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id y11-20020a5d620b000000b00222cf973e8csm12878862wru.69.2022.08.17.06.02.51
+        by smtp.gmail.com with ESMTPSA id y11-20020a5d620b000000b00222cf973e8csm12878862wru.69.2022.08.17.06.02.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 06:02:52 -0700 (PDT)
+        Wed, 17 Aug 2022 06:02:53 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org
 Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vadimp@mellanox.com,
@@ -54,10 +54,12 @@ Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vadimp@mellanox.com,
         linux-kernel@vger.kernel.org, vadimp@nvidia.com, petrm@nvidia.com,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
         Ido Schimmel <idosch@nvidia.com>
-Subject: [PATCH v3 1/2] Revert "mlxsw: core: Use different get_trend() callbacks for different thermal zones"
-Date:   Wed, 17 Aug 2022 15:02:26 +0200
-Message-Id: <20220817130227.2268127-1-daniel.lezcano@linaro.org>
+Subject: [PATCH v3 2/2] Revert "mlxsw: core: Add the hottest thermal zone detection"
+Date:   Wed, 17 Aug 2022 15:02:27 +0200
+Message-Id: <20220817130227.2268127-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220817130227.2268127-1-daniel.lezcano@linaro.org>
+References: <20220817130227.2268127-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,7 +72,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This reverts commit 2dc2f760052da4925482ecdcdc5c94d4a599153c.
+This reverts commit 6f73862fabd93213de157d9cc6ef76084311c628.
 
 As discussed in the thread:
 
@@ -80,34 +82,98 @@ the feature provided by commits 2dc2f760052da and 6f73862fabd93 is
 actually already handled by the thermal framework via the cooling
 device state aggregation, thus all this code is pointless.
 
-No conflict happened when reverting the patch.
+The revert conflicts with the following changes:
+ - 7f4957be0d5b8: thermal: Use mode helpers in drivers
+ - 6a79507cfe94c: mlxsw: core: Extend thermal module with per QSFP module thermal zones
+
+These conflicts were fixed and the resulting changes are in this patch.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Tested-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
- .../ethernet/mellanox/mlxsw/core_thermal.c    | 23 ++++---------------
- 1 file changed, 4 insertions(+), 19 deletions(-)
+  -v3:
+   - Respin against v6.0-rc1
+  -v2
+   - Fix 'err' not used as reported by kbuild test:
+   https://lore.kernel.org/all/202208150708.fk6sfd8u-lkp@intel.com/
+---
+ .../ethernet/mellanox/mlxsw/core_thermal.c    | 64 ++-----------------
+ 1 file changed, 4 insertions(+), 60 deletions(-)
 
 diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-index 3548fe1df7c8..0eb52665b994 100644
+index 0eb52665b994..2ec3b162dc6c 100644
 --- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
 +++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-@@ -352,7 +352,8 @@ static int mlxsw_thermal_set_trip_hyst(struct thermal_zone_device *tzdev,
- static int mlxsw_thermal_trend_get(struct thermal_zone_device *tzdev,
- 				   int trip, enum thermal_trend *trend)
- {
--	struct mlxsw_thermal *thermal = tzdev->devdata;
-+	struct mlxsw_thermal_module *tz = tzdev->devdata;
-+	struct mlxsw_thermal *thermal = tz->parent;
+@@ -21,7 +21,6 @@
+ #define MLXSW_THERMAL_ASIC_TEMP_HOT	105000	/* 105C */
+ #define MLXSW_THERMAL_HYSTERESIS_TEMP	5000	/* 5C */
+ #define MLXSW_THERMAL_MODULE_TEMP_SHIFT	(MLXSW_THERMAL_HYSTERESIS_TEMP * 2)
+-#define MLXSW_THERMAL_TEMP_SCORE_MAX	GENMASK(31, 0)
+ #define MLXSW_THERMAL_MAX_STATE	10
+ #define MLXSW_THERMAL_MIN_STATE	2
+ #define MLXSW_THERMAL_MAX_DUTY	255
+@@ -101,8 +100,6 @@ struct mlxsw_thermal {
+ 	struct thermal_cooling_device *cdevs[MLXSW_MFCR_PWMS_MAX];
+ 	u8 cooling_levels[MLXSW_THERMAL_MAX_STATE + 1];
+ 	struct mlxsw_thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
+-	unsigned int tz_highest_score;
+-	struct thermal_zone_device *tz_highest_dev;
+ 	struct mlxsw_thermal_area line_cards[];
+ };
  
- 	if (trip < 0 || trip >= MLXSW_THERMAL_NUM_TRIPS)
- 		return -EINVAL;
-@@ -546,22 +547,6 @@ mlxsw_thermal_module_trip_hyst_set(struct thermal_zone_device *tzdev, int trip,
+@@ -193,34 +190,6 @@ mlxsw_thermal_module_trips_update(struct device *dev, struct mlxsw_core *core,
  	return 0;
  }
  
--static int mlxsw_thermal_module_trend_get(struct thermal_zone_device *tzdev,
--					  int trip, enum thermal_trend *trend)
+-static void mlxsw_thermal_tz_score_update(struct mlxsw_thermal *thermal,
+-					  struct thermal_zone_device *tzdev,
+-					  struct mlxsw_thermal_trip *trips,
+-					  int temp)
+-{
+-	struct mlxsw_thermal_trip *trip = trips;
+-	unsigned int score, delta, i, shift = 1;
+-
+-	/* Calculate thermal zone score, if temperature is above the hot
+-	 * threshold score is set to MLXSW_THERMAL_TEMP_SCORE_MAX.
+-	 */
+-	score = MLXSW_THERMAL_TEMP_SCORE_MAX;
+-	for (i = MLXSW_THERMAL_TEMP_TRIP_NORM; i < MLXSW_THERMAL_NUM_TRIPS;
+-	     i++, trip++) {
+-		if (temp < trip->temp) {
+-			delta = DIV_ROUND_CLOSEST(temp, trip->temp - temp);
+-			score = delta * shift;
+-			break;
+-		}
+-		shift *= 256;
+-	}
+-
+-	if (score > thermal->tz_highest_score) {
+-		thermal->tz_highest_score = score;
+-		thermal->tz_highest_dev = tzdev;
+-	}
+-}
+-
+ static int mlxsw_thermal_bind(struct thermal_zone_device *tzdev,
+ 			      struct thermal_cooling_device *cdev)
+ {
+@@ -285,10 +254,8 @@ static int mlxsw_thermal_get_temp(struct thermal_zone_device *tzdev,
+ 		dev_err(dev, "Failed to query temp sensor\n");
+ 		return err;
+ 	}
++
+ 	mlxsw_reg_mtmp_unpack(mtmp_pl, &temp, NULL, NULL, NULL, NULL);
+-	if (temp > 0)
+-		mlxsw_thermal_tz_score_update(thermal, tzdev, thermal->trips,
+-					      temp);
+ 
+ 	*p_temp = temp;
+ 	return 0;
+@@ -349,22 +316,6 @@ static int mlxsw_thermal_set_trip_hyst(struct thermal_zone_device *tzdev,
+ 	return 0;
+ }
+ 
+-static int mlxsw_thermal_trend_get(struct thermal_zone_device *tzdev,
+-				   int trip, enum thermal_trend *trend)
 -{
 -	struct mlxsw_thermal_module *tz = tzdev->devdata;
 -	struct mlxsw_thermal *thermal = tz->parent;
@@ -122,27 +188,71 @@ index 3548fe1df7c8..0eb52665b994 100644
 -	return 0;
 -}
 -
- static struct thermal_zone_device_ops mlxsw_thermal_module_ops = {
- 	.bind		= mlxsw_thermal_module_bind,
- 	.unbind		= mlxsw_thermal_module_unbind,
-@@ -571,7 +556,7 @@ static struct thermal_zone_device_ops mlxsw_thermal_module_ops = {
+ static struct thermal_zone_params mlxsw_thermal_params = {
+ 	.no_hwmon = true,
+ };
+@@ -378,7 +329,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_ops = {
+ 	.set_trip_temp	= mlxsw_thermal_set_trip_temp,
+ 	.get_trip_hyst	= mlxsw_thermal_get_trip_hyst,
+ 	.set_trip_hyst	= mlxsw_thermal_set_trip_hyst,
+-	.get_trend	= mlxsw_thermal_trend_get,
+ };
+ 
+ static int mlxsw_thermal_module_bind(struct thermal_zone_device *tzdev,
+@@ -464,7 +414,6 @@ static int mlxsw_thermal_module_temp_get(struct thermal_zone_device *tzdev,
+ 	int temp, crit_temp, emerg_temp;
+ 	struct device *dev;
+ 	u16 sensor_index;
+-	int err;
+ 
+ 	dev = thermal->bus_info->dev;
+ 	sensor_index = MLXSW_REG_MTMP_MODULE_INDEX_MIN + tz->module;
+@@ -480,10 +429,8 @@ static int mlxsw_thermal_module_temp_get(struct thermal_zone_device *tzdev,
+ 		return 0;
+ 
+ 	/* Update trip points. */
+-	err = mlxsw_thermal_module_trips_update(dev, thermal->core, tz,
+-						crit_temp, emerg_temp);
+-	if (!err && temp > 0)
+-		mlxsw_thermal_tz_score_update(thermal, tzdev, tz->trips, temp);
++	mlxsw_thermal_module_trips_update(dev, thermal->core, tz,
++					  crit_temp, emerg_temp);
+ 
+ 	return 0;
+ }
+@@ -556,7 +503,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_module_ops = {
  	.set_trip_temp	= mlxsw_thermal_module_trip_temp_set,
  	.get_trip_hyst	= mlxsw_thermal_module_trip_hyst_get,
  	.set_trip_hyst	= mlxsw_thermal_module_trip_hyst_set,
--	.get_trend	= mlxsw_thermal_module_trend_get,
-+	.get_trend	= mlxsw_thermal_trend_get,
+-	.get_trend	= mlxsw_thermal_trend_get,
  };
  
  static int mlxsw_thermal_gearbox_temp_get(struct thermal_zone_device *tzdev,
-@@ -608,7 +593,7 @@ static struct thermal_zone_device_ops mlxsw_thermal_gearbox_ops = {
+@@ -577,8 +523,6 @@ static int mlxsw_thermal_gearbox_temp_get(struct thermal_zone_device *tzdev,
+ 		return err;
+ 
+ 	mlxsw_reg_mtmp_unpack(mtmp_pl, &temp, NULL, NULL, NULL, NULL);
+-	if (temp > 0)
+-		mlxsw_thermal_tz_score_update(thermal, tzdev, tz->trips, temp);
+ 
+ 	*p_temp = temp;
+ 	return 0;
+@@ -593,7 +537,6 @@ static struct thermal_zone_device_ops mlxsw_thermal_gearbox_ops = {
  	.set_trip_temp	= mlxsw_thermal_module_trip_temp_set,
  	.get_trip_hyst	= mlxsw_thermal_module_trip_hyst_get,
  	.set_trip_hyst	= mlxsw_thermal_module_trip_hyst_set,
--	.get_trend	= mlxsw_thermal_module_trend_get,
-+	.get_trend	= mlxsw_thermal_trend_get,
+-	.get_trend	= mlxsw_thermal_trend_get,
  };
  
  static int mlxsw_thermal_get_max_state(struct thermal_cooling_device *cdev,
+@@ -680,6 +623,7 @@ mlxsw_thermal_module_tz_init(struct mlxsw_thermal_module *module_tz)
+ 							MLXSW_THERMAL_TRIP_MASK,
+ 							module_tz,
+ 							&mlxsw_thermal_module_ops,
++
+ 							&mlxsw_thermal_params,
+ 							0,
+ 							module_tz->parent->polling_delay);
 -- 
 2.34.1
 
