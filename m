@@ -2,166 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE28598001
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Aug 2022 10:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4CE59815C
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Aug 2022 12:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240669AbiHRIXd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Aug 2022 04:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
+        id S241368AbiHRKQU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Aug 2022 06:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240356AbiHRIXc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Aug 2022 04:23:32 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627E65A8B3
-        for <linux-pm@vger.kernel.org>; Thu, 18 Aug 2022 01:23:31 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id m10-20020a05600c3b0a00b003a603fc3f81so551065wms.0
-        for <linux-pm@vger.kernel.org>; Thu, 18 Aug 2022 01:23:31 -0700 (PDT)
+        with ESMTP id S235212AbiHRKQS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Aug 2022 06:16:18 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D725EDF5;
+        Thu, 18 Aug 2022 03:16:17 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id x21so1284299edd.3;
+        Thu, 18 Aug 2022 03:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=FAp+0S/t7YU8InMU47zEYoFV6slTO7PsovSrf3VShbY=;
-        b=UQEOdCXast/aVv2yzUyT3f163CbbsbfK40Fhq89SICeLrnHvr8BQPZACV829x46meB
-         gsdIHoVasi+2HlCR6KEbwFc3TecNtZdVow7X9iiBT7CVqLv8wzxvH5Fl+mxpfQUdBd9o
-         CAL/u+nPhAJcQjYPc6ImtxKm9dJceW8e62YTqr5pXW71SbxpOdxfAe3KhzMlgwrtthht
-         6V+RyQdZSvfETC1BGn6d0CCdzsHueK2juQPpYacViJBBlV0Zpkybyx3jYgLdDBoph54X
-         X5qZUlVJ0Vpqtg5CTloy4ChxYE2v2qm/5bSLHP0+6s0PGcNSrGSg+cOCda5w82Vc5W76
-         RpyQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=wsN7iozfhyXZXHJvriSV4ZPgggxzR3PisBDWWDPZOQM=;
+        b=LXbFWrHXyFVAGMmqfKC0M++LKU5M1VSxesW12PjzaxHY+OnubhbBsITVQbUZBG1pxz
+         P8ArFm0kkzhpxgk+0PsEIFzR95i/ZMVp0kye8YGw5NEUXPL5c38RniOH6FHLGpJn/cC6
+         hupJqfhVoAyEitYYNf7BvsgWcGPyZ4Q6JAWY0tGCCEanUH1RKroPwDrlGfbuF8EtaJAX
+         sGO2GQFvfs/5KTlptZ6ZLyFnrv4eM2ZBXYfLDBzPnZrZx6Ic23ldsNGKmGJ/7F8kvFoE
+         58NmHZwIW/8rKRXENpdzAPf8gKCCEtJxMgjHesgxvhcIgnqU92sHKzUrqPSTakuE3JqY
+         +mbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=FAp+0S/t7YU8InMU47zEYoFV6slTO7PsovSrf3VShbY=;
-        b=3FBl8FLbmOQCRK0c6uCzjfzdBJzzrG7O0PEhsqG7xkun4R9GezLATdyCc1lNnSY73k
-         Yq1kbPw9Naqc53WxmTZP2S2oWZVM+sxUmV7tmwQl+53suAPzhlfETKoEuQzLvOg+7UgP
-         IsQDQVCs9xwjYra0wCrjrXxbGu2AssIO2xzYw8hpYDIg0q8OicdgXYPdvvhVVg7NDqd7
-         HqKFDigU8yoe4/f9Y84gAh709VzmeYWDcNih2sg+C+vrdy5cJol4eRZg7ibD0X9EYq0b
-         +v0Dp3DLs79Bt5Ay0IOTmPwRmCgZUHRSH3H//EBag/WexUZNRe+W6ehSYVk+/nTJYTIR
-         v/OQ==
-X-Gm-Message-State: ACgBeo30RVCfTWE4Wqbgo2o4IH0ju5nQBn46NzznmY+OR5wlEeJFrX76
-        nXYJmn29h+G8GzZ7iYWCendUUw==
-X-Google-Smtp-Source: AA6agR7zY1nXRjjOmclKfrXCmqTPJxgMWrGP9Pw8tJA2JaDaDUWT2uqYEwmhD2A7jnfXF6/dnWTSAw==
-X-Received: by 2002:a1c:7703:0:b0:3a5:aefa:68e3 with SMTP id t3-20020a1c7703000000b003a5aefa68e3mr1179966wmi.158.1660811009863;
-        Thu, 18 Aug 2022 01:23:29 -0700 (PDT)
-Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id p30-20020a1c545e000000b003a500b612fcsm4634005wmi.12.2022.08.18.01.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 01:23:29 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 2/2] thermal/of: Remove the thermal_zone_of_get_sensor_id() function
-Date:   Thu, 18 Aug 2022 10:23:16 +0200
-Message-Id: <20220818082316.2717095-2-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220818082316.2717095-1-daniel.lezcano@linaro.org>
-References: <20220818082316.2717095-1-daniel.lezcano@linaro.org>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=wsN7iozfhyXZXHJvriSV4ZPgggxzR3PisBDWWDPZOQM=;
+        b=xgAsVl7QOiPoXGuzg8Tuz5xYXRhU7OVMCErt4id1hlHiKH+Gs8ujldJyAQ48xt+4EK
+         d50TTRXu6W49fiqR2r26MF9diuv7PQSpPO5hRvW4iN5mgioLEXKfgDNZFi6Wfjbox0u9
+         okXsIqjcNfEzSlGBqP2k5eZdgvAEg+b6qOCy3GghRNScexfhPTAPek30hXhdMS/1Fp4X
+         beJatyhjYsJX2jsV0TvnxSvoC72SYeREBLeFyKJo8OhdlOzhRocei4vhmmV6KO4TkBpa
+         FSE8ldHD7OHx97NutAvi9KvMlpG2SkXBA7c2gn4OTueH358DDOD0ziKb4hR60Ui6B/ia
+         3Uyg==
+X-Gm-Message-State: ACgBeo3V9upHv4sZtWb/zLkLcgMJW8Aoa5ZvkHsJXkE227l6AbEqP6ph
+        1stObV7cnIT0OD92w4UDt9rkJqQ7omeCQhu6Q5TzdK7LEm4=
+X-Google-Smtp-Source: AA6agR58funaKXG5pSH22PfDkM0MZ7V1qoe2s5pa9w7uOzefy/5KJ4YZUMTwxaNfsEWYYmx8oA6X23E0SGPK8ZGT8Kg=
+X-Received: by 2002:a05:6402:d05:b0:425:b7ab:776e with SMTP id
+ eb5-20020a0564020d0500b00425b7ab776emr1805765edb.142.1660817775670; Thu, 18
+ Aug 2022 03:16:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1660785696-9010-1-git-send-email-u0084500@gmail.com>
+ <1660785696-9010-3-git-send-email-u0084500@gmail.com> <85193de5-244c-2cda-e442-656769b97b14@linaro.org>
+In-Reply-To: <85193de5-244c-2cda-e442-656769b97b14@linaro.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Thu, 18 Aug 2022 18:16:04 +0800
+Message-ID: <CADiBU3_RUTiG0T5vEKe0qHmHHQDXyMQL2BxFA+YgL_u-VGUNkA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] power: supply: rt9471: Add Richtek RT9471 charger driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function thermal_zone_of_get_sensor_id() is no longer used
-anywhere, remove it.
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B48=E6=9C=8818=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:09=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+>
+> On 18/08/2022 04:21, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add support for the RT9471 3A 1-Cell Li+ battery charger.
+> >
+> > The RT9471 is a highly-integrated 3A switch mode battery charger with
+> > low impedance power path to better optimize the charging efficiency.
+> >
+> > Co-developed-by: Alina Yu <alina_yu@richtek.com>
+> > Signed-off-by: Alina Yu <alina_yu@richtek.com>
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> > Since v2:
+> > - Fix checkpatch error about 'foo * bar' to 'foo *bar' in psy_device_to=
+_chip function.
+> > - Specify the member name directly for the use of linear range.
+> >
+> > ---
+>
+> (...)
+>
+> > +
+> > +static DEVICE_ATTR_RW(sysoff_enable);
+> > +static DEVICE_ATTR_RW(charge_term_enable);
+> > +static DEVICE_ATTR_RW(port_detect_enable);
+> > +
+> > +static struct attribute *rt9471_sysfs_entries[] =3D {
+> > +     &dev_attr_sysoff_enable.attr,
+> > +     &dev_attr_charge_term_enable.attr,
+> > +     &dev_attr_port_detect_enable.attr,
+> > +     NULL
+>
+> You need to document the sysfs ABI in Documentation.
+Can it be define in 'sysfs-class-power' or a dedicated file called
+'sysfs-class-power-rt9471'?
+Not sure which one is better.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_of.c | 44 ------------------------------------
- include/linux/thermal.h      | 10 --------
- 2 files changed, 54 deletions(-)
-
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index fd2fb84bf246..d4b6335ace15 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -130,50 +130,6 @@ static int of_thermal_get_crit_temp(struct thermal_zone_device *tz,
- 	return -EINVAL;
- }
- 
--/**
-- * thermal_zone_of_get_sensor_id - get sensor ID from a DT thermal zone
-- * @tz_np: a valid thermal zone device node.
-- * @sensor_np: a sensor node of a valid sensor device.
-- * @id: the sensor ID returned if success.
-- *
-- * This function will get sensor ID from a given thermal zone node and
-- * the sensor node must match the temperature provider @sensor_np.
-- *
-- * Return: 0 on success, proper error code otherwise.
-- */
--
--int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
--				  struct device_node *sensor_np,
--				  u32 *id)
--{
--	struct of_phandle_args sensor_specs;
--	int ret;
--
--	ret = of_parse_phandle_with_args(tz_np,
--					 "thermal-sensors",
--					 "#thermal-sensor-cells",
--					 0,
--					 &sensor_specs);
--	if (ret)
--		return ret;
--
--	if (sensor_specs.np != sensor_np) {
--		of_node_put(sensor_specs.np);
--		return -ENODEV;
--	}
--
--	if (sensor_specs.args_count > 1)
--		pr_warn("%pOFn: too many cells in sensor specifier %d\n",
--		     sensor_specs.np, sensor_specs.args_count);
--
--	*id = sensor_specs.args_count ? sensor_specs.args[0] : 0;
--
--	of_node_put(sensor_specs.np);
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_of_get_sensor_id);
--
- /***   functions parsing device tree nodes   ***/
- 
- static int of_find_trip_id(struct device_node *np, struct device_node *trip)
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 86c24ddd5985..a5a18351a898 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -310,9 +310,6 @@ void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_dev
- 
- void thermal_of_zone_unregister(struct thermal_zone_device *tz);
- 
--int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
--				  struct device_node *sensor_np,
--				  u32 *id);
- #else
- static inline
- struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-@@ -336,13 +333,6 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
- 						   struct thermal_zone_device *tz)
- {
- }
--
--static inline int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
--						struct device_node *sensor_np,
--						u32 *id)
--{
--	return -ENOENT;
--}
- #endif
- 
- #ifdef CONFIG_THERMAL
--- 
-2.34.1
-
+>
+> > +};
+> > +
+> > +static const struct attribute_group rt9471_attr_group =3D {
+> > +     .attrs  =3D rt9471_sysfs_entries,
+> > +};
+> > +
+> > +static const struct attribute_group *rt9471_attr_groups[] =3D {
+> > +     &rt9471_attr_group,
+> > +     NULL
+> > +};
+>
+> (...)
+>
+> > +
+> > +static const struct of_device_id rt9471_of_device_id[] =3D {
+> > +     { .compatible =3D "richtek,rt9471" },
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(of, rt9471_of_device_id);
+> > +
+> > +static struct i2c_driver rt9471_driver =3D {
+> > +     .driver =3D {
+> > +             .name =3D "rt9471",
+> > +             .owner =3D THIS_MODULE,
+>
+> You should not need this. Run coccinelle/coccicheck on your driver.
+Yes, I found it. 'module_i2c_driver' already include this owner setting.
+Just remove it. Thanks.
+>
+>
+> Best regards,
+> Krzysztof
