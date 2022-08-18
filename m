@@ -2,203 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2FF598ADF
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Aug 2022 20:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971F9598C0E
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Aug 2022 20:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiHRSJK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Aug 2022 14:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
+        id S1344650AbiHRSy1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Aug 2022 14:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239465AbiHRSJI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Aug 2022 14:09:08 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CC81A382
-        for <linux-pm@vger.kernel.org>; Thu, 18 Aug 2022 11:09:06 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3246910dac3so62203587b3.12
-        for <linux-pm@vger.kernel.org>; Thu, 18 Aug 2022 11:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=BQzknscGoJmCJVbW5eLwhZSTVcBlC0xIVj31IEsmJv4=;
-        b=WcFBaULAIRzpgXX9qo+Ak581nKtftWGZ49W6MuDAEzhOUN9DMZJqCiLoOkI2kzKXnz
-         lItJ3pQ5pZ79kliGoJLIQsqbxjrygRP9UfhcGz3jQG9Crf8rXVJpDe24tobhBefR0JP/
-         Sd/yVRzy382eALhko+nxyaHcFFBLv98HHcNUdFNKSs+QEYlpmD1JIoRBuG6rBhimy6B2
-         wBgy5bFrRz1OxXfCEqtjtNc4Wx+HLHMct6GlM5cxnbNN9U2sccLU834ApYULcuxtZJuD
-         J/vw/p64E/5iYKiobK52wRRkOqEKsOVm5lm9khtgxKuEhvGUTjBppeICAT9aHyxoU9SU
-         5X0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=BQzknscGoJmCJVbW5eLwhZSTVcBlC0xIVj31IEsmJv4=;
-        b=rigrw3C2aKOzybrJSL8HYnxPBvsloeSOxTFMlYw0FO64fP0AmtkRpzDyUHY8L5hxjH
-         q4XmfcMnf0Vohz/eCBuNZfy/TU8hntEcEpo71ypE21vUJMvO9O9LlCnE9xZmqdTTxs+k
-         tO8CQrqjNZXkiqcSDHMBDWAFe6/nSapCKfBM6DzsJ7KPFcVj6NvH8R+eZn5U70m+ds8y
-         XC/+spsoSg28q6OltydfF1Y3qygNRELUo5n7jFtirQrHe7GOlBGzM3PUugJ9OplHshzO
-         q+lGTUOlXhxVRMxTCRjktl5fNOM/3IRwT4N59bkyVQdi9dRVoFUcUPID5jzzsOkvxvX8
-         iDZw==
-X-Gm-Message-State: ACgBeo2kRKpgEg2L++SgoXJ4ePZ22sihCgy1ylvkzbxt4x5C4Vci3As+
-        0/eMqoESPy9/LhyHqNKB5NGNVzdVJjuppXSEJObETk434GY6Fg==
-X-Google-Smtp-Source: AA6agR74zQLuaUWhDf7z1LiK/foixV2Bcs8+zpwAuNR7AGqh0/HcLpsvnbWzMYU2SOdV7HfOEQNEAwnod6ilKwThtvg=
-X-Received: by 2002:a05:6902:2cb:b0:684:aebe:49ab with SMTP id
- w11-20020a05690202cb00b00684aebe49abmr4039537ybh.242.1660846145984; Thu, 18
- Aug 2022 11:09:05 -0700 (PDT)
+        with ESMTP id S243096AbiHRSyZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Aug 2022 14:54:25 -0400
+Received: from sonic303-25.consmr.mail.gq1.yahoo.com (sonic303-25.consmr.mail.gq1.yahoo.com [98.137.64.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F255280E
+        for <linux-pm@vger.kernel.org>; Thu, 18 Aug 2022 11:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660848863; bh=wMw+QkYaY2UjMD+FyXhwlnZboSQZ8j1LKo94f3KpI78=; h=Date:Subject:From:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=Z2UgCW7sJ+mDHDWZNMfzVy5y8aczHtKAbDVpLu8JgxCHNYNVg0122SyVwgnltjSeXwycOZdOloxluOTwgH+aJRc5YzG9FBFIGR0LvRiOz85dJeznVCMNdRijj6mWGz9xJ8BGtlno3Ah9lt0PCVoTT2RIRQhkPytiD+B7EaQZXsh0mi8Xtr5G3kwQvacNumkt5dEy3cM30ikr8+AI5J0KpVfO+KdTkqjYKg8G6RiiIDLgZ/Q46lML0ERMqBuV50PdlaQnBV8TVeb0EpDnW4RbuukNuizCoooDYuQyGYxNZ/sHr0nenXej40iY+3CRa70Iu0/9eMOfPZmCujAXSZFDrw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660848863; bh=l/IU3LIKb6aG1ZzgK5U0EAp+6bboLcPefTEZDZ/svCl=; h=X-Sonic-MF:Date:Subject:From:To:From:Subject; b=ogmRBCD2O5prO7BPljnvKiktjxzGL2GO2z4e45Qi6IMisjtRbHj5Upd9CHMxGV/9rHYyDdEN+Foa1ePPo+iaimnk0FFa37A3hwEZ0A72I/+V/a/I3V479K04uzQ7j2jqRDIjRod96yZf75rVL1c1pI+geK0PKCSfbsVQyoBjTpQ85lZkHVhmVpTMa+tBRjgYJ8XG2BYS4NX+kAqyeYGMyiA4Xaod3m5BemhLgf48Ts69/Qq/JJNlGBN7z+X6eX1/E/v28eoZUQxhbCeXSZmsfY/RUua+NPaPB483MHPedyCZOAnCV5p+uirqru9sniYk/tg5mPVceB8WcWeh2qIIwQ==
+X-YMail-OSG: ZMQ0oXMVM1l8ynKpii5JwAdDm95CUewQX5_YO6ICo62C4rChn6Qei7ddGBSjuno
+ VzIcQmxPo4NwAy5qrajFjTcI75uC1MhqKFDfXyXDoTm5g1MR2Pt_AnVgOjRVeuOt9R9Wz2Ph1mNm
+ aQHUwBqNgi9w.nDTbVyDv255DLt8tS8lFdcMDbghtlRB2vKCc1yT64okP1yhmNuPc8vBtKDveqTM
+ Dy68ST5Ycw12LSQW02JgQmpVNX29eIaXP89XZQQuROdMOrgu4PUj7Wp0cqiBYkJefuI0vqlxKibl
+ eBX8qcZ3wQl9T3uWlZMIrnpPJgdR3FMKnXkNtE5dAv0ZYhE5WlOnLFr1gChlfl6mh2XvQEBAsvMq
+ k6ilzb5VwpjPFVT_BPMaEr6OStSoWyYPYAq2mrqc6Pmr9EEntqomWqRuTE8JaXLLDHCPdcMz_A6c
+ JuSBEAVrGK2T3ygOnTUOF9Ik5idkddFpL3UA_UyJVXIbuw_fHzl01gprlK4rq_ix01yhrbGe7l.c
+ WkBqKknG2FjNwGsYnbuTpZIpfhZOrvhRJthnjpvbLY.ZohCoJ0IMJZWyWHUmG4gqPBHg.IZV_Jm2
+ 9Pw2LoBfl6GsLN3TSDF6Gp_eeluPrxZL1H.UgMedPRNffDwHwZdEh6aTOJQStL_o8_AMvzfATMKD
+ 4DjRDBxbYuktB0RKIAjd.afOj.FJ20reyFdGNCg4h0F4jTo4HLIe.szbSNxsFBOioZ26VHhP2vg5
+ yDz0BJW.1aBO13pXk9TFunqI3mMV5oQK2iTUEVOOsUd7FI7r2FSmHBjaRlOZDsAxb1l4QwvF2UDt
+ 9hr1D.kdnWoboRGL_Td9ZRHTYx7UKctHItBIfjpMTzDMxyxHXxrOe78NEb1y0ZHOcWdrileiBWnF
+ onGyaBgiFYB3xbufEfsglwCkbKXUjS.V.t.EZAqZGBE8lB76_joEAXi_CpEe5wnl8nnVaP_OWfzU
+ PsgaL8R2EhFiIkSZxhmnVHEzLQk6QJ_R1llwEa14734MZ8btovxy6ixrpMVUqUdodF1N697VdwmY
+ cnwpZoZeSwgXhcbiCV55QiIVShrFhbm_Pb0QAwQuPKfkjfcb8llbNy4Wdshta1bUY77FMvXcaTQH
+ 4vcmSog1r70xT2O.Yil3ak6ZujBeNp0cBl.mpf.mdiTBLA4v0r_CLoz2D4gusOYGy_6wypkgpXvx
+ Yw4N0yUpnVN84RGi_BWaGt3JyEAvSQL2ilRRNr2Hx4DRGJZ9AD0jfgZslJVPQWK7aviv7RPzq1Nb
+ wPgdR0l_uBZMFSNgUmQiIPtEbpZE0.QB__iuRM45Y9j9V5yAs1lV.TUNOEQPqbsE36FVgHMVKYdR
+ qj7vVd_kG6oYJFU6CWvI_m3Cvr8uTMEoK.uJSOVPMURl9RwqMBrI7pBn0cdLMiBHhAT2F82soDoc
+ Z_Azy9OynATz8jaH_8jbkSb_9ktiCSDA6xGPyUvUEYQ6h8HFgNJHqbHSmFN_nAB1rs6EmHcJ5llF
+ knfMjn_sfukNJkSYqw5WUcRi91d8gBB1IkYDqc.Xj7.OObUMuxsP5..znyTTCn3eG8stX4VAj4Zv
+ DmHSsJClbM4axBoS6zmxAYs43rKc.jenQKtPxAItd88S_rkfw5UKvxngTbPwviN80SppbWnvk6pw
+ 1YhVm.w_nerFQrjwN0frJnUzJzZKB4Ys798uCrcheOVdjIvFsI5zRiTMJYKjFZkgl.Svet3hAX1u
+ 166D.3tfKMSm0iOJ.yEzxUOQIU5qYtUCa20XP_W8uQCSlrmGH3Svqx8mWA1J3dHMg4b9gooa7Sa.
+ lUIQSqDTnfN55PiTTst6HhsXNUhXN.2hI46vDUqjxcO.gcyOVN7UJonrzCvxH3TKRUdAumTk5NTe
+ znCvUhTD2YimIUk5FCVIDadBwpwmDe5EVyYzC7lEBYV49QcKoJB5vOS7qwK6Tsr3czsLfCm_ObVr
+ YPxS_u4sBy5eXLN_7avB5t4Bpz6H2Q8Jd_tcJtT3qrrh0V7uXKoEWaU4SaFATpFFJjC2EaVi1fAE
+ eeAuRFVe243hNJwuiDwesYRso917ahfaUk73QZKhyadqMiXlpZb735ZPED5WG4tYPtb7iHmeune4
+ 4TLAjsAebqZ2ZIVLx12HQpXimOcrMIV_L_955ET9Lrli7hhqZ4s8lVVo0zmTo1Avj2QitQScWP45
+ EF_KZGSdanJzDDmrpvv.ORahOx7nSdyL7c67girVeeF7lhcKQb1zAOXWZVb5got5OUE7FQzdbZg8
+ TKdNsgL3LZrkPp_E-
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.gq1.yahoo.com with HTTP; Thu, 18 Aug 2022 18:54:23 +0000
+Received: by hermes--production-bf1-7586675c46-lmmdh (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d0129dba676f8848e6f0705cca693acd;
+          Thu, 18 Aug 2022 18:54:20 +0000 (UTC)
+Message-ID: <464f9f88-232d-4fa1-bc43-916ff7045f4e@netscape.net>
+Date:   Thu, 18 Aug 2022 14:54:17 -0400
 MIME-Version: 1.0
-References: <DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <DU0PR04MB9417E391B514287D040E0EC7886B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-In-Reply-To: <DU0PR04MB9417E391B514287D040E0EC7886B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 18 Aug 2022 11:08:29 -0700
-Message-ID: <CAGETcx8xXM18Se-ykf7=fFJ_4bvSgQm8LG6Bq=3wd0skSR46EA@mail.gmail.com>
-Subject: Re: Regression: PM: domains: Delete usage of driver_deferred_probe_check_state
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Alice Guo <alice.guo@nxp.com>, Bough Chen <haibo.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+Content-Language: en-US
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Juergen Gross <jgross@suse.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
+ <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+ <c88ea08c-a9d5-ef6a-333a-db9e00c6da6f@suse.com>
+ <bd66b5bc-4d07-d968-f46c-40cf624499a7@netscape.net>
+ <a29a66e0-2075-8084-84ad-8bd3e8a9fd4a@netscape.net>
+ <a7d10605-87e3-c4bd-4a76-f07a04f5751c@leemhuis.info>
+ <8d148826-62a5-95f9-8662-be14f56a6336@netscape.net>
+ <6b40ecc3-a2d3-3efd-4a19-2faf737f098b@leemhuis.info>
+ <be9d077c-ed4d-d5e3-a134-33afff027af4@netscape.net>
+ <6294958a-177a-5c67-47c6-3a95c23ac58e@leemhuis.info>
+ <5c40a423-f70a-abb8-360c-a601c5b157fe@netscape.net>
+In-Reply-To: <5c40a423-f70a-abb8-360c-a601c5b157fe@netscape.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 11:43 PM Peng Fan <peng.fan@nxp.com> wrote:
+On 8/16/22 1:28 PM, Chuck Zmudzinski wrote:
+> On 8/16/2022 12:53 PM, Thorsten Leemhuis wrote:
 >
-> > Subject: Regression: PM: domains: Delete usage of
-> > driver_deferred_probe_check_state
+> >
+> > regzbot will notice when the patch hit's Linux next,
 >
-> Just see your patchset :)
-> https://lore.kernel.org/all/20220727185012.3255200-1-saravanak@google.com/
->
-> Thanks,
-> Peng.
-> >
-> > Hi Saravana,
-> >
-> > The following two patches breaks NXP i.MX8ULP, but I think it may break
-> > others use SCMI.
-> >
-> > commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a
-> > Author: Saravana Kannan <mailto:saravanak@google.com>
-> > Date:   Wed Jun 1 00:06:57 2022 -0700
-> >
-> >     PM: domains: Delete usage of driver_deferred_probe_check_state()
-> >
-> >     Now that fw_devlink=on by default and fw_devlink supports
-> >     "power-domains" property, the execution will never get to the point
-> >     where driver_deferred_probe_check_state() is called before the supplier
-> >     has probed successfully or before deferred probe timeout has expired.
-> >
-> >     So, delete the call and replace it with -ENODEV.
-> >
-> >     Tested-by: Geert Uytterhoeven <mailto:geert+renesas@glider.be>
-> >     Reviewed-by: Ulf Hansson <mailto:ulf.hansson@linaro.org>
-> >     Signed-off-by: Saravana Kannan <mailto:saravanak@google.com>
-> >     Link: https://lore.kernel.org/r/20220601070707.3946847-2-
-> > saravanak@google.com
-> >     Signed-off-by: Greg Kroah-Hartman <mailto:gregkh@linuxfoundation.org>
-> >
-> > commit 9cbffc7a59561be950ecc675d19a3d2b45202b2b
-> > Author: Saravana Kannan <mailto:saravanak@google.com>
-> > Date:   Wed Jun 1 00:07:05 2022 -0700
-> >
-> >     driver core: Delete driver_deferred_probe_check_state()
-> >
-> >     The function is no longer used. So delete it.
-> >
-> >     Tested-by: Geert Uytterhoeven <mailto:geert+renesas@glider.be>
-> >     Signed-off-by: Saravana Kannan <mailto:saravanak@google.com>
-> >     Link: https://lore.kernel.org/r/20220601070707.3946847-10-
-> > saravanak@google.com
-> >     Signed-off-by: Greg Kroah-Hartman <mailto:gregkh@linuxfoundation.org>
-> >
-> > The i.MX8ULP mmc device node use
-> > "power-domains = <&scmi_devpd IMX8ULP_PD_USDHC0>;"
-> >
-> > The scmi firmware node as below:
-> >         firmware {
-> >                 scmi {
-> >                         compatible = "arm,scmi-smc";
-> >                         arm,smc-id = <0xc20000fe>;
-> >                         #address-cells = <1>;
-> >                         #size-cells = <0>;
-> >                         shmem = <&scmi_buf>;
-> >
-> >                         scmi_devpd: protocol@11 {
-> >                                 reg = <0x11>;
-> >                                 #power-domain-cells = <1>;
-> >                         };
-> >
-> >                         scmi_sensor: protocol@15 {
-> >                                 reg = <0x15>;
-> >                                 #thermal-sensor-cells = <1>;
-> >                         };
-> >                 };
-> >         };
-> >
-> > When sdhc driver probe, the scmi power domain provider has not been
-> > registered. So __genpd_dev_pm_attach directly return -ENODEV.
-> >
-> > device_links_check_suppliers should already check suppliers, but scmi
-> > protocol device not have compatible, so of_link_to_phandle
-> >       |-> of_get_compat_node
-> > use the parent node of scmi protocol as supplier if I understand correct.
-> >
-> > I am not sure whether we need to revert the above two patches, or do you
-> > have other suggestions?
+> IIUC, regzbot might not notice because the patch lacks a Link: tag
+> to the original regression report. The Link tag is to Jan's patch
+> that was posted sometime in April, I think, which also lacks the
+> Link tag to the original report of the regression which did not
+> happen until May 4. If regzbot is smart enough to notice that the
+> patch also has a Fixes: tag for the commit that was identified as
+> bad in the original regression report, then I expect regzbot will
+> find it.
 
-Hi Peng,
+Hey, I see the patch hit linux-next and regzbot noticed and
+now lists the patch as an incoming fix. Great job with regzbot!
 
-Thanks for the report. If you try this series with the following diff,
-I expect it to fix the issue for you. Can you please test it out and
-let me know? The v1 of the series removes the dependency on
-"compatible" strings. The first diff below is something I'm going to
-roll into v2 of the series and the 2nd diff below is fixing up the
-scmi bus to set the fwnode for devices it creates.
+By the way, I think regzbot is a great idea, and I think any resources
+devoted to develop it more would pay handsome returns for the
+quality of Linux. If no one but you is working on it, I actually might
+be willing to volunteer some time to help you develop it.
 
-Thanks,
-Saravana
+Best regards,
 
-https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
-
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 2f012e826986..866755d8ad95 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2068,7 +2068,11 @@ static int fw_devlink_create_devlink(struct device *con,
-                device_links_write_unlock();
-        }
-
--       sup_dev = get_dev_from_fwnode(sup_handle);
-+       if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
-+               sup_dev = fwnode_get_next_parent_dev(sup_handle);
-+       else
-+               sup_dev = get_dev_from_fwnode(sup_handle);
-+
-        if (sup_dev) {
-                /*
-                 * If it's one of those drivers that don't actually bind to
-
-
-diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
-index d4e23101448a..0802bdd0ebfc 100644
---- a/drivers/firmware/arm_scmi/bus.c
-+++ b/drivers/firmware/arm_scmi/bus.c
-@@ -192,6 +192,7 @@ scmi_device_create(struct device_node *np, struct
-device *parent, int protocol,
-        scmi_dev->protocol_id = protocol;
-        scmi_dev->dev.parent = parent;
-        scmi_dev->dev.of_node = np;
-+       scmi_dev->dev.fwnode= of_fwnode_handle(np);
-        scmi_dev->dev.bus = &scmi_bus_type;
-        scmi_dev->dev.release = scmi_device_release;
-        dev_set_name(&scmi_dev->dev, "scmi_dev.%d", id);
+Chuck
