@@ -2,152 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F157F59A710
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Aug 2022 22:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA9659A821
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Aug 2022 00:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350392AbiHSU1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Aug 2022 16:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S239717AbiHSWQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Aug 2022 18:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349984AbiHSU1E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Aug 2022 16:27:04 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13ED210C819;
-        Fri, 19 Aug 2022 13:27:03 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JJxaln029524;
-        Fri, 19 Aug 2022 20:26:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Se7PWaf/NhonQklUA1Pw/eCNIMlMR+Epgmia0lF7/Bc=;
- b=Gjmadpyp5c35hk/QTheLTmje7OTGlfGxVAkJtFVD6d10Kg6cBQqtJCKWAeuTQHrm4JoB
- /yCbFSuEtQ3xtNxIxjRyXRnuL+Z+n/iZ1WcZMzvVKHand7fwtmcXtXjEnZ3VH5VnkTrs
- 7FjfVtBCvqwP1L3yGtFuMR5dYKQ/i//0oiEgUVk6+jq+mry13UTkYl6Clz0fL0ytRavL
- 8uNuMz2O96Ml1/9B4h6g+6Ha9fyjyTjMeaNAczMGXXq6EW+0+0an05mXhQPLT0kcNbCr
- hcKLoQAKBzXMgr4Q2L5gLtnjxbS/T9X6ABUx3jn6FWSeknx10vsq/u3I5othU0oPCnai UQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j1wtcu7a3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 20:26:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27JKQvfN020785
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 20:26:57 GMT
-Received: from [10.110.45.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 19 Aug
- 2022 13:26:57 -0700
-Message-ID: <f9853511-e64c-9daf-b4e3-e334035771a8@quicinc.com>
-Date:   Fri, 19 Aug 2022 13:26:53 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] power: reset: qcom-pon: add support for
- qcom,pmk8350-pon compatible string
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220725191314.19456-1-quic_amelende@quicinc.com>
- <20220725191314.19456-3-quic_amelende@quicinc.com>
- <57f8d9c4-6f49-ad3d-fc82-7a0f66d1775a@linaro.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <57f8d9c4-6f49-ad3d-fc82-7a0f66d1775a@linaro.org>
+        with ESMTP id S239608AbiHSWQV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Aug 2022 18:16:21 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AE6C0B67
+        for <linux-pm@vger.kernel.org>; Fri, 19 Aug 2022 15:16:20 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-32a115757b6so98149907b3.13
+        for <linux-pm@vger.kernel.org>; Fri, 19 Aug 2022 15:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=t5NMSCOXrbG0Qu3FAuWbHVmFLW5D0kFYreRH8zEIjV8=;
+        b=gWwBFfQzdDln3NwaMOLGITORJZRdOHNWfwYN4lk8hEGSpzD3nf0hp2vwhR0ehr9i2w
+         R29Hm5/+BlRY+39ZdmD1y+vr3jEPlfnvwSvpVelQwQO1O7uxHZYyvePk913Fc2Fz55iX
+         QjzGWD5mo4bmDesrjxJb2EwyBMXHWwWyQyFGrGuWY2g2Dc8APPCBlo+u1d7Cd73v12ib
+         1Xy8VHJ3p5JBMqH9WrjSqdKP7zkHUsHt6QG1+x689dosBCL7ZjXPRMDXAxU6K3HdAbOj
+         4wQEDnRMFUt+HthMu1axqnRVGLRFtqAAl07/bp2Re7kFQ2Bm7Z0Zbz/5vPJvBClJV19J
+         Ff2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=t5NMSCOXrbG0Qu3FAuWbHVmFLW5D0kFYreRH8zEIjV8=;
+        b=JhIMx8PAqf7cgvmBGgoRzqcLv8KB15zpnM4qg0pFw7/xplVeic6BxNWsJ/dS6e0uzQ
+         IXtK+GrxA/LTAS2VkMuGwxyKi6rdL3DCFSe9DRcdXwWjTlseHcv8hds1Hd78N8KYqe5p
+         ebr8uLcIsZ8tuYRLwpZq0RBR16ez7uFnCjOflUh2a5I4FNxpADkEQRlEw96AAJle+mO/
+         TpDtqSqICvh9ThFVt05ag3U7nRURDPUPv3wo3dZRMTX41tqvQHpvDH0tJEsdd1t1Fai+
+         JKM5V6X7ecnhjqPQg5VQ8jjcuPqWWJxlfm90kRONGTXUhaYUyKnHO/QwxZBK2hsuVP9o
+         YFKw==
+X-Gm-Message-State: ACgBeo1tvcF41tqW9V9kgtNoDN3H90tAd5MZ7yCqus+eWLyVJrWAmQlX
+        RWHVZexD89KiitVpLXMrJyYthdx7Pt/3QH0=
+X-Google-Smtp-Source: AA6agR4EX1OBULn40ut/MjDpJQQkX96WwHfTFwXQk6CpU2kNVzlbku/C8FdhqvNBCu/ZTTWVaRDqauv3HvTZg1M=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f93e:7b61:ce3d:5b06])
+ (user=saravanak job=sendgmr) by 2002:a81:d353:0:b0:31e:2888:93a1 with SMTP id
+ d19-20020a81d353000000b0031e288893a1mr9560863ywl.498.1660947379483; Fri, 19
+ Aug 2022 15:16:19 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 15:16:10 -0700
+Message-Id: <20220819221616.2107893-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH v2 0/4] Bring back driver_deferred_probe_check_state() for now
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Peng Fan <peng.fan@nxp.com>, Luca Weiss <luca.weiss@fairphone.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8nomn0h_LjWmLOIKR9YLdc2CwMfp3JOT
-X-Proofpoint-GUID: 8nomn0h_LjWmLOIKR9YLdc2CwMfp3JOT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_12,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- impostorscore=0 mlxscore=0 clxscore=1015 malwarescore=0 bulkscore=0
- spamscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208190076
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+A bunch of issues have been reported in the original series[1] that removed
+driver_deferred_probe_check_state(). While most of the issues have been
+fixed in a new series that improved fw_devlink [2], there are still a few
+unresolved issues I need to address.
 
+So let's bring back driver_deferred_probe_check_state() until the other
+issues are resolved.
 
-On 7/26/2022 3:27 AM, Krzysztof Kozlowski wrote:
-> On 25/07/2022 21:13, Anjelique Melendez wrote:
->> Add support for the new "qcom,pmk8350-pon" comptaible string.
->>
->> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->> ---
->>  drivers/power/reset/qcom-pon.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
->> index 4a688741a88a..16bc01738be9 100644
->> --- a/drivers/power/reset/qcom-pon.c
->> +++ b/drivers/power/reset/qcom-pon.c
->> @@ -82,6 +82,7 @@ static const struct of_device_id pm8916_pon_id_table[] = {
->>  	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
->>  	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
->>  	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
->> +	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN2_REASON_SHIFT },
->>  	{ }
->>  };
->>  MODULE_DEVICE_TABLE(of, pm8916_pon_id_table);
-> 
-> This is now confusing. The new device has entirely different first and
-> second IO address spaces, but you do not code here any differences.
-> 
+Greg,
 
-Based on previous responses to this patch series, it was decided that a new
-"qcom,pmk8350-pon" compatible string is needed to differentiate between gen1/gen2
-vs gen3 children pon devices. Currently the child handles obtaining the register
-address(es) from its parent's regmap in drivers/input/misc/pm8941-pwrkey.c
-(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/misc/pm8941-pwrkey.c?h=v6.0-rc1#n287).
-The patch that handled that change can be found at
-https://lore.kernel.org/linux-arm-msm/20220422191239.6271-4-quic_amelende@quicinc.com/.
+Can we get this into 6.0-rcX please?
 
-This driver, as the parent, does not actually need any changes besides adding the
-new parent compatible string. Specifically this driver handles reboot mode support.
-Everything needed to handle reboot mode is in the first register and reboot mode
-is handled the same as a "qcom,pm8998-pon" parent. The split of the pon register
-in pmk8350 does not affect reboot mode. This is why before we added a new compatible
-string "qcom,pm8998-pon" still worked for gen3 children devices. Even though 2
-registers could be defined in the device tree, as a 2nd register is optional for gen3
-children devices,the fact that this driver uses of_property_read_u32() will ensure that
-the base address used for reboot mode comes from the first register.  
+-Saravana
 
-I do understand that this can be confusing but since "qcom,pmk8350-pon" still needs the
-shift reason = 1 we could do
+[1] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
+[2] - https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
 
-        #define GEN1_REASON_SHIFT		2
-        #define GEN2_REASON_SHIFT		1	
-   +    #define GEN3_REASON_SHIFT		1
- 
-  	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
-  	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
-  	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
-   +	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN3_REASON_SHIFT },
- 	{ }
+v1 -> v2:
+- Added a revert of the iommu change too.
 
+Saravana Kannan (4):
+  Revert "driver core: Delete driver_deferred_probe_check_state()"
+  Revert "net: mdio: Delete usage of
+    driver_deferred_probe_check_state()"
+  Revert "PM: domains: Delete usage of
+    driver_deferred_probe_check_state()"
+  Revert "iommu/of: Delete usage of driver_deferred_probe_check_state()"
 
-It would still have the exact same functionality but it may visually make more sense.
+ drivers/base/dd.c              | 30 ++++++++++++++++++++++++++++++
+ drivers/base/power/domain.c    |  2 +-
+ drivers/iommu/of_iommu.c       |  2 +-
+ drivers/net/mdio/fwnode_mdio.c |  4 +++-
+ include/linux/device/driver.h  |  1 +
+ 5 files changed, 36 insertions(+), 3 deletions(-)
 
-
-Thanks,
-Anjelique
+-- 
+2.37.1.595.g718a3a8f04-goog
 
