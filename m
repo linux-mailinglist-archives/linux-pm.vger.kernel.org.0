@@ -2,33 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6035159B432
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Aug 2022 16:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB21F59B437
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Aug 2022 16:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbiHUOCK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 21 Aug 2022 10:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
+        id S230355AbiHUOEg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 21 Aug 2022 10:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiHUOBv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Aug 2022 10:01:51 -0400
+        with ESMTP id S231240AbiHUOEG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Aug 2022 10:04:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8AA24968;
-        Sun, 21 Aug 2022 07:01:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A8E14039;
+        Sun, 21 Aug 2022 07:03:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E80260ED3;
-        Sun, 21 Aug 2022 14:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A1AC433C1;
-        Sun, 21 Aug 2022 14:01:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D794660ED2;
+        Sun, 21 Aug 2022 14:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E6AC433C1;
+        Sun, 21 Aug 2022 14:03:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661090466;
-        bh=0k2zh45ukdQfjSibWwXrqGwdFRWofhv4XHMJZjqOtp8=;
+        s=korg; t=1661090623;
+        bh=XEM3Q1n8/Fn0JosiPpTpiOI9w2KA6zt5GO0I5oP58Ss=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c/6VFKEhJiCIvysZjWrhxXgpSXUVwFwFrosz10dp4vugPPHye5D6Te45gL1BkGzJ8
-         MAPQiKLK0MjEZ9PtJMp+Hq5+OV3IP6KyumZxXVon8ALJS16rN2Iv2m0VFfueaD2fm8
-         iaMDQOe7h5qz0yue3hSt1Bfs6T1i5RP7qd5V0GtU=
-Date:   Sun, 21 Aug 2022 16:01:03 +0200
+        b=gaC+EaAWWpzwBa2UEema8pCnp7BCCh+uTMnoBSV6LRLs1OH167wOwXPMzTUMzxP1h
+         +rqsJJ/j07mSiGpcWajptpEbMlMaEGe09eNATKw/hMZkyOhOO2iiCGW1EGbsRRCJBg
+         Cv4o7EpCkT3HCd7EYkVr//C+nSZJxNYKxldX1glw=
+Date:   Sun, 21 Aug 2022 16:03:40 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Vimal Kumar <vimal.kumar32@gmail.com>
 Cc:     chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
@@ -37,7 +37,7 @@ Cc:     chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
         Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1] PM: runtime: Add support to disable wakeup sources
-Message-ID: <YwI6n+PkFZZV/FW6@kroah.com>
+Message-ID: <YwI7PM9wVF/H9hQL@kroah.com>
 References: <20220821134533.22901-1-vimal.kumar32@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -79,14 +79,55 @@ On Sun, Aug 21, 2022 at 07:15:32PM +0530, Vimal Kumar wrote:
 > Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
 > Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
 > Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
-
-That's a lot of gmail accounts, no "company" accounts?  :)
-
 > ---
 >  drivers/base/power/wakeup_stats.c | 63 ++++++++++++++++++++++++++++++-
+>  1 file changed, 62 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeup_stats.c
+> index 924fac493c4f..ad30e97f168b 100644
+> --- a/drivers/base/power/wakeup_stats.c
+> +++ b/drivers/base/power/wakeup_stats.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/kobject.h>
+>  #include <linux/slab.h>
+>  #include <linux/timekeeping.h>
+> +#include <linux/uaccess.h>
+>  
+>  #include "power.h"
+>  
+> @@ -208,9 +209,69 @@ void wakeup_source_sysfs_remove(struct wakeup_source *ws)
+>  	device_unregister(ws->dev);
+>  }
+>  
+> +static ssize_t disable_ws_store(struct class *class,
+> +				struct class_attribute *attr,
+> +				const char *buf, size_t len)
+> +{
+> +	struct device		*dev;
+> +	struct wakeup_source	*ws;
+> +	char                    *ws_name;
+> +	int                     status;
 
-You need a Documentation/ABI/ entry for any new sysfs file so we can
-properly review this and support it over time.
+Please don't pad these out to be in line like this, one space is all
+that is needed.
+
+> +
+> +	ws_name = kzalloc(sizeof(*(buf)), GFP_KERNEL);
+
+Are you sure this does what you think it does?  You are allocating 8
+bytes?
+
+> +	if (!ws_name)
+> +		return -ENOMEM;
+> +
+> +	if (copy_from_user(ws_name, buf, sizeof(*(buf))))
+
+Why are you doing this in a sysfs callback?
+
+Did you test this code?  How?  Can you provide a test script for it
+also?
+
+This does not look correct at all :(
 
 thanks,
 
