@@ -2,133 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB21F59B437
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Aug 2022 16:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2873659B49D
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Aug 2022 16:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbiHUOEg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 21 Aug 2022 10:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S229561AbiHUOt7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 21 Aug 2022 10:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbiHUOEG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Aug 2022 10:04:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A8E14039;
-        Sun, 21 Aug 2022 07:03:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D794660ED2;
-        Sun, 21 Aug 2022 14:03:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E6AC433C1;
-        Sun, 21 Aug 2022 14:03:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661090623;
-        bh=XEM3Q1n8/Fn0JosiPpTpiOI9w2KA6zt5GO0I5oP58Ss=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gaC+EaAWWpzwBa2UEema8pCnp7BCCh+uTMnoBSV6LRLs1OH167wOwXPMzTUMzxP1h
-         +rqsJJ/j07mSiGpcWajptpEbMlMaEGe09eNATKw/hMZkyOhOO2iiCGW1EGbsRRCJBg
-         Cv4o7EpCkT3HCd7EYkVr//C+nSZJxNYKxldX1glw=
-Date:   Sun, 21 Aug 2022 16:03:40 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vimal Kumar <vimal.kumar32@gmail.com>
-Cc:     chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
-        Vishal Badole <badolevishal1116@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] PM: runtime: Add support to disable wakeup sources
-Message-ID: <YwI7PM9wVF/H9hQL@kroah.com>
-References: <20220821134533.22901-1-vimal.kumar32@gmail.com>
+        with ESMTP id S229537AbiHUOt6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Aug 2022 10:49:58 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5966421E28;
+        Sun, 21 Aug 2022 07:49:55 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1661093391tec0jidz
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 21 Aug 2022 22:49:49 +0800 (CST)
+X-QQ-SSF: 0100000000200010B000B00A0000000
+X-QQ-FEAT: uOISxUm02zZbhxQ3H40WOQdC2cSFSB3X0EuGSVmAhr7EMcn66Xc38zLTQN4G4
+        BjONkVl/daDBRysNCtGN8YiZ8/POuzu5iACSqa9hWWglOivsU99ELeMQJ8n+MsmpK10UD0L
+        fyHChJCfkNwJFkhxwHKCG9jp8+ZXVwwBDuKtRrk3ZwQqzuiG50GviwtWN4pRNnXMJ9iAIQy
+        3PggKXiJzdOruTonil8Or4NZ7Kqgu6qEpMAPQLMns5dBWmql6ynyd2iqVv2DR0nwMcBuT24
+        2IzTgyHXp965Seo3xkwfEsR9GL3cSHCnff37s4R78J4oSgqBLhMMT3IaNnpUC4DA2+RchIe
+        LMFCCbr9trxEUXhQLTMFcCVJcHQU8tW0HqQi+op
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] power/supply: fix repeated words in comments
+Date:   Sun, 21 Aug 2022 22:49:42 +0800
+Message-Id: <20220821144942.48960-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220821134533.22901-1-vimal.kumar32@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_PBL,RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 07:15:32PM +0530, Vimal Kumar wrote:
-> User could find many wakeup sources available in the bsp, which
-> they won't be using. Currently users can only get the status and
-> list of enabled wakeup sources, but users can't disable it runtime.
-> It's very difficult to find the driver for each wakeup sources from
-> where it's getting enabled and make the changes for disabling it.
-> 
-> This will help users to disable any wakeup sources at runtime,
-> avoiding any code change and re-compilation. A new class attribute
-> "disable_ws" will be added in the wakeup calss. If user want to disable
-> any wakeup sources, user need to find the wakeup dev node associated
-> with the particular wakeup source and write the devnode name to the
-> class attribute "disable_ws".
-> 
-> Example:
-> Need to disable the wakeup source '1c08000.qcom,pcie'. The dev node
-> associated with this wakeup source is:
-> cat /sys/class/wakeup3/name ==> "1c08000.qcom,pcie", then for disabling
-> this wakeup source :
-> 	echo wakeup3 > /sys/class/wakeup/disable_ws
-> 
-> Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
-> Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-> Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
-> Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
-> Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
-> ---
->  drivers/base/power/wakeup_stats.c | 63 ++++++++++++++++++++++++++++++-
->  1 file changed, 62 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeup_stats.c
-> index 924fac493c4f..ad30e97f168b 100644
-> --- a/drivers/base/power/wakeup_stats.c
-> +++ b/drivers/base/power/wakeup_stats.c
-> @@ -15,6 +15,7 @@
->  #include <linux/kobject.h>
->  #include <linux/slab.h>
->  #include <linux/timekeeping.h>
-> +#include <linux/uaccess.h>
->  
->  #include "power.h"
->  
-> @@ -208,9 +209,69 @@ void wakeup_source_sysfs_remove(struct wakeup_source *ws)
->  	device_unregister(ws->dev);
->  }
->  
-> +static ssize_t disable_ws_store(struct class *class,
-> +				struct class_attribute *attr,
-> +				const char *buf, size_t len)
-> +{
-> +	struct device		*dev;
-> +	struct wakeup_source	*ws;
-> +	char                    *ws_name;
-> +	int                     status;
+ Delete the redundant word 'on'.
 
-Please don't pad these out to be in line like this, one space is all
-that is needed.
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/power/supply/cpcap-charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +
-> +	ws_name = kzalloc(sizeof(*(buf)), GFP_KERNEL);
+diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
+index 60e0ce105a29..be9764541d52 100644
+--- a/drivers/power/supply/cpcap-charger.c
++++ b/drivers/power/supply/cpcap-charger.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2017 Tony Lindgren <tony@atomide.com>
+  *
+  * Rewritten for Linux power framework with some parts based on
+- * on earlier driver found in the Motorola Linux kernel:
++ * earlier driver found in the Motorola Linux kernel:
+  *
+  * Copyright (C) 2009-2010 Motorola, Inc.
+  */
+-- 
+2.36.1
 
-Are you sure this does what you think it does?  You are allocating 8
-bytes?
-
-> +	if (!ws_name)
-> +		return -ENOMEM;
-> +
-> +	if (copy_from_user(ws_name, buf, sizeof(*(buf))))
-
-Why are you doing this in a sysfs callback?
-
-Did you test this code?  How?  Can you provide a test script for it
-also?
-
-This does not look correct at all :(
-
-thanks,
-
-greg k-h
