@@ -2,78 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D9159C5AA
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 20:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD9559C8F8
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 21:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236802AbiHVSEG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Aug 2022 14:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
+        id S236948AbiHVTe1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Aug 2022 15:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236423AbiHVSD6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 14:03:58 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594D02CC82;
-        Mon, 22 Aug 2022 11:03:58 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id p187so5835615oia.9;
-        Mon, 22 Aug 2022 11:03:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=esNtcNx3BW0ZYDyHJtcCsZAGZC+vRBsZkbC1+V6YdwA=;
-        b=TFjqIKk5GQjCmIwT98BjnxzTsJa2jL2miPnyMvgOZRiDk2Dw/tUwvn7MyDxY0DOoX8
-         E3LV34Db7jotsincJl31rTfsWJSdeTNBI8/0M32o3h3CacTnc8BsOfWTSWPguxJ6Y2kM
-         HiEDUuU/ma3Dqlgu2L2lLKlhwwmxOZxNeet1b5O8n5WFBt22UvcBm38IPXTLlRNvH+R3
-         KrQd2tB8SR6cDf4+cg1f6z2PW8ARmezgVfV+eEcAfjCEFGCnlG3eeLIk30Bnznc3GXyT
-         dKiWLd7gNn85Tjoy9VNvLT/7FaHaFSA10vfREt+yHGyts0TADSexb8acPa8m0lD+xhov
-         aSvw==
-X-Gm-Message-State: ACgBeo3t+nhBBRLbKDwbdterKT3eRJIDwfui3SxijovMCD7FR/2lymba
-        vEzHxeNAJvO5bF5AT7eA5Q==
-X-Google-Smtp-Source: AA6agR60bjoaWedKbnY/NS+tnW/H2Gz998DSgaZ40yNsNvcB/kC7hRFGHbUXBQym/1J5IOcu17Q8VQ==
-X-Received: by 2002:a05:6808:308e:b0:343:4b22:1a1e with SMTP id bl14-20020a056808308e00b003434b221a1emr9769893oib.102.1661191437571;
-        Mon, 22 Aug 2022 11:03:57 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j4-20020a9d7384000000b0063711d42df5sm1656299otk.30.2022.08.22.11.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 11:03:57 -0700 (PDT)
-Received: (nullmailer pid 74561 invoked by uid 1000);
-        Mon, 22 Aug 2022 18:03:55 -0000
-Date:   Mon, 22 Aug 2022 13:03:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>, linux-pm@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        linux-mediatek@lists.infradead.org, Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: interconnect: restrict opp-table to
- objects
-Message-ID: <20220822180355.GA74500-robh@kernel.org>
-References: <20220818061653.9524-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S237455AbiHVTeX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 15:34:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDDADAD;
+        Mon, 22 Aug 2022 12:34:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3C5EB818B8;
+        Mon, 22 Aug 2022 19:34:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB1AC433D7;
+        Mon, 22 Aug 2022 19:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661196859;
+        bh=zgjk7hxjYBSH2/TkdSD1wgIOQi7oZA1Ywc+Z1t41FHQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c9d3uADeMkfhYhKYIlIRBUA7KrnbYlwFNkcFrJWP8mZnzwTPIHyVSO615oV2JmTNV
+         zCl4wKaLm/IaWATF4c6MrY4Bj4xPNov30v0aUu5HXmzt/K2F3y2s40zlTgmtkRIoX3
+         LE0LGU42EbYi5WnEH2gVZqeJHVu5sQ+Et8M7Griz7TPqbPyniNj7Duu1rHaq1Nt3T7
+         stzCxMvRfJRaZE3R0jXhfkeQlrTtbWIwmtkvlZgFOmb0sr2rpZZFXdzMVlfVj1eSup
+         ahl2fJgnSJTQqgCo5RzZ+7QArMld+rmh2y9AsvwhCkTCb7eONfQLTx18K+gp2BPX0n
+         qr66o2gH2uLqA==
+Date:   Mon, 22 Aug 2022 19:59:50 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-iio@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        Sean Nyekjaer <sean@geanix.com>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH 0/5] PM: Introduce EXPORT_NS_GPL_DEV_PM_OPS() and use
+ cases in IIO.
+Message-ID: <20220822195950.1b1249c2@jic23-huawei>
+In-Reply-To: <CACRpkdb6qxO38kS1=cEja-KZSR5RcV-oWX36ikxggsLm8Y5ixw@mail.gmail.com>
+References: <20220807192038.1039771-1-jic23@kernel.org>
+        <CACRpkdb6qxO38kS1=cEja-KZSR5RcV-oWX36ikxggsLm8Y5ixw@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818061653.9524-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,21 +61,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 18 Aug 2022 09:16:53 +0300, Krzysztof Kozlowski wrote:
-> Simple 'opp-table:true' accepts a boolean property as opp-table, so
-> restrict it to object to properly enforce real OPP table nodes.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Correct typo in msg.
-> ---
->  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml        | 3 ++-
->  .../devicetree/bindings/interconnect/mediatek,cci.yaml         | 3 ++-
->  .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml   | 3 ++-
->  3 files changed, 6 insertions(+), 3 deletions(-)
-> 
+On Mon, 22 Aug 2022 11:04:18 +0200
+Linus Walleij <linus.walleij@linaro.org> wrote:
 
-Applied, thanks!
+> On Sun, Aug 7, 2022 at 9:10 PM Jonathan Cameron <jic23@kernel.org> wrote:
+> 
+> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> >
+> > Perhaps the most complex case we can have is a core driver module (usually
+> > with accompanying per bus modules) that exports, in a namespace,
+> > a struct dev_pm_ops. The driver has different handling for runtime and
+> > sleep suspend / resume so (almost) all callbacks are provided.
+> > The pm.h helper macro _EXPORT_DEV_PM_OPS() could be used here but the
+> > handling of the last two parameters is unusual and very different from
+> > the macros intended for driver usage. First parameter needs to be "_gpl"
+> > and second needs to be the namespace specified as a string.  Other NS
+> > macros take it without quotes.
+> >
+> > As such, this series proposes introducing a suitable macro and then provides
+> > a number of IIO driver conversions. Where relevant the exports from the
+> > driver are moved into the new namespace.
+> >
+> > If accepted we can either take the whole lot through the PM tree and hope
+> > there is nothing much else overlapping with this driver code in this cycle,
+> > or ideally we could use an immutable branch and pull this into both the
+> > IIO and PM trees.
+> >
+> > Jonathan Cameron (5):
+> >   PM: core: Add EXPORT_NS_GPL_DEV_PM_OPS to avoid drivers rolling own.
+> >   iio: accel: fxls8962af: Use new EXPORT_NS_GPL_DEV_PM_OPS()
+> >   iio: gyro: fxas210002c: Move exports to IIO_FXAS210002C namespace.
+> >   iio: imu: inv_icm42600: Move exports to IIO_ICM42600 namespace
+> >   iio: imu: inv_mpu: Move exports to IIO_MPU6050 namespace  
+> 
+> I like what you done here.
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Unfortunately change of plan because the EXPORT_NS_GPL_DEV_PM_OPS isn't
+general enough to cover some cases elsewhere.
+https://lore.kernel.org/all/20220808174107.38676-2-paul@crapouillou.net/
+
+I'll switch this series over to being based on that which will be
+a large enough change that I'll probably not pick up any tags given on
+this version.
+
+Thanks
+
+Jonathan
+
+
+> 
+> Yours,
+> Linus Walleij
+
