@@ -2,79 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C42E59BF43
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 14:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4E759BF88
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 14:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbiHVMI7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Aug 2022 08:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
+        id S234999AbiHVMdE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Aug 2022 08:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbiHVMI5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 08:08:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A75B175A9;
-        Mon, 22 Aug 2022 05:08:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47C0012FC;
-        Mon, 22 Aug 2022 05:08:58 -0700 (PDT)
-Received: from [10.57.14.241] (unknown [10.57.14.241])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11DA13F718;
-        Mon, 22 Aug 2022 05:08:52 -0700 (PDT)
-Message-ID: <638e0a6e-10d2-8552-a61f-c4c001a2cbe9@arm.com>
-Date:   Mon, 22 Aug 2022 13:08:51 +0100
+        with ESMTP id S230503AbiHVMdD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 08:33:03 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ABEBF4A;
+        Mon, 22 Aug 2022 05:33:01 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1661171567tc67godh
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 22 Aug 2022 20:32:45 +0800 (CST)
+X-QQ-SSF: 01000000002000C0D000B00A0000000
+X-QQ-FEAT: W+onFc5Tw4PahOvmZM6UxUA85VWZnx9QqbYzIamVuUUXjg8BOThf6BNm9i319
+        BZwr7n9YaL1n8XSgUYJZk4r86k4+2jNhEPaC+PyMi2V+ZuQBgfNm7VFQgZyDApLhJTz+XaH
+        IYm1UlOUL10FB8W0NV4Yw9S95TUBRQcAp7RrYl0+OoJqJTQAuHPUTSOYockMk2XaAccdx6E
+        mI52Nq5HnDPPLGMX2488Z1R/M1x4/m3Pd+xXYLCr+PMufhe9nzBO7en5h4g7khKmslzIdZE
+        Gf9c1SKUZ0iTcHPy7rSMGTCdf4516lRUYr/KC/WRI4hZSfsZc1o9W+SP5av6SOxANRU9Dfk
+        l5MlAn1afuu2CVzePTQbp/5sgcmuiVKdK9AeoXd7PG984NQDw81dofse5aOpszYm3cNh/gP
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, lukasz.luba@arm.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] drivers/thermal: fix repeated words in comments
+Date:   Mon, 22 Aug 2022 20:32:39 +0800
+Message-Id: <20220822123239.28400-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 2/2] cpufreq: CPPC: Change FIE default
-Content-Language: en-US
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, punit.agrawal@bytedance.com,
-        ionela.voinescu@arm.com, pierre.gondois@arm.com,
-        linux-kernel@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <20220819162547.141333-1-jeremy.linton@arm.com>
- <20220819162547.141333-3-jeremy.linton@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220819162547.141333-3-jeremy.linton@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_00,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
+        RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?43.154.54.12>]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+ Delete the redundant word 'device'.
+ Delete the redundant word 'which'.
 
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/thermal/cpufreq_cooling.c | 2 +-
+ drivers/thermal/thermal_of.c      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 8/19/22 17:25, Jeremy Linton wrote:
-> FIE is mostly implemented as PCC mailboxes on arm machines.  This was
-> enabled by default without any data suggesting that it does anything
-> but hurt system performance. Lets change the default to 'n' until
-> hardware appears which clearly benefits.
-> 
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> ---
->   drivers/cpufreq/Kconfig.arm | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> index 954749afb5fe..ad66d8f15db0 100644
-> --- a/drivers/cpufreq/Kconfig.arm
-> +++ b/drivers/cpufreq/Kconfig.arm
-> @@ -22,7 +22,7 @@ config ACPI_CPPC_CPUFREQ
->   config ACPI_CPPC_CPUFREQ_FIE
->   	bool "Frequency Invariance support for CPPC cpufreq driver"
->   	depends on ACPI_CPPC_CPUFREQ && GENERIC_ARCH_TOPOLOGY
-> -	default y
-> +	default n
->   	help
->   	  This extends frequency invariance support in the CPPC cpufreq driver,
->   	  by using CPPC delivered and reference performance counters.
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index b8151d95a806..13551b386e72 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -495,7 +495,7 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+ 
+ /**
+  * __cpufreq_cooling_register - helper function to create cpufreq cooling device
+- * @np: a valid struct device_node to the cooling device device tree node
++ * @np: a valid struct device_node to the cooling device tree node
+  * @policy: cpufreq policy
+  * Normally this should be same as cpufreq policy->related_cpus.
+  * @em: Energy Model of the cpufreq policy
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index b65d435cb92f..91bbed308305 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -651,7 +651,7 @@ EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_register);
+ /**
+  * devm_thermal_zone_of_sensor_unregister - Resource managed version of
+  *				thermal_zone_of_sensor_unregister().
+- * @dev: Device for which which resource was allocated.
++ * @dev: Device for which resource was allocated.
+  * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
+  *
+  * This function removes the sensor callbacks and private data from the
+-- 
+2.36.1
 
-LGTM
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
