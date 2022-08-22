@@ -1,204 +1,109 @@
 Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED42059BCCB
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 11:27:05 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id E42BF59BECA
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 13:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiHVJ0i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Aug 2022 05:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S234707AbiHVLsJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Aug 2022 07:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbiHVJ0g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 05:26:36 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E06A193F7
-        for <linux-pm@vger.kernel.org>; Mon, 22 Aug 2022 02:26:35 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id x23so9384816pll.7
-        for <linux-pm@vger.kernel.org>; Mon, 22 Aug 2022 02:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=afZwlyJFWi1oxAywjZJ8aFoRq/simALxdy+t/pD5S1g=;
-        b=p0GZd/XZJG+l9vJANZ5ADTT4svgFLH6gATUVTUqN50UgmM70MBgX6XZIyztbgxqI4C
-         BEb2TNVa1ptT708XMi5eaWgFEBiKkl1D1VHXH5vglSEI5O9lL8Six0R9jpTrWLDtaXcW
-         Dylm5HwV1lf+kRw/wkZrrZM3FErmbnRX0aRZfprFIJcKd4Q+jRswyne7Ao6yHu7cp31E
-         3RZWbl0CP7bwb/ZI/IYF/x9dPNJL6ia++6hfVt9brvATZXbv7+mTI98JXvN8mFIWXAr4
-         COv2KFL0mAeywSG32d6wtgN3cCc4EfC9xAJ1V3QwFCV46iJ2L/l5p5M9Q6+vsUlZUGmj
-         eUSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=afZwlyJFWi1oxAywjZJ8aFoRq/simALxdy+t/pD5S1g=;
-        b=Qf1fQoJZ5Ns5GrV4u8Wt0oZ7MyGm6hIx0EexMz4IcR1fn29kpEl8VkIjKTLCUW16g/
-         yz7OYk8c9QSEdNQ6CPWQPF3Bq53FTyfYktnBh8iJUCczQOQ9LjrurA4736x6DcSvWyQs
-         5xI3mMcJ7LLIvX4coCLZC2PNjQzYteT5JkY9StlF2mEUEsqt8xGiiXgDX1mRUsM+dDyD
-         0WQJPhpjzrT48bRWxwtxXtGqgvWtmyCq+Z4USJ+ZdSM4tqA6VtyXg+zGeysbhKErEAZG
-         ZgrVHUifuZ9fCxVlzRrwJMbMFPOPkwJ1S0CMiiOcG5irzO6cnbz8hWPUCAtd/n5XVOLx
-         9dKg==
-X-Gm-Message-State: ACgBeo2OWrblJFtwoybEcNoF9oh7twXOA5l5bP1r3NZ90P3OuV0iSsOA
-        tSvJm/RnhsfLOmk0WgtZadw3gToj4l9tuki55v17/A==
-X-Google-Smtp-Source: AA6agR4PTWfx6mJ4JfDP2s87MqHuEGPKmtNZbCfU8v7BsNem/96YT6tLIZvRLFXdnFduhqQo4YmT8Ok1AHREWZ1lgFk=
-X-Received: by 2002:a17:90b:3b4d:b0:1f4:d1b6:cb69 with SMTP id
- ot13-20020a17090b3b4d00b001f4d1b6cb69mr22224004pjb.229.1661160394706; Mon, 22
- Aug 2022 02:26:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220707125329.378277-1-jaz@semihalf.com> <20220707125329.378277-2-jaz@semihalf.com>
- <CAJZ5v0gdCN3P52ko44LQMqWJvDArHxZ7p4aSiQamML7aG_kRAA@mail.gmail.com> <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com>
-In-Reply-To: <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Mon, 22 Aug 2022 11:26:23 +0200
-Message-ID: <CAH76GKMw2rAnQOSFqReG1sEC=sdncWOJHNXn-Rp2Gx1oUZR3ZQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] suspend: extend S2Idle ops by new notify handler
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmytro Maluka <dmy@semihalf.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Dominik Behr <dbehr@google.com>, upstream@semihalf.com,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sachi King <nakato@nakato.io>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233161AbiHVLsI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 07:48:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D4933E2C;
+        Mon, 22 Aug 2022 04:48:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=hXhJWg1Kf/eJHKjFUc6fSpQt5aZQ2cmWgAltRhWjAwg=; b=cV0bemuEzkavOBvOciKQKHNr9i
+        xOdjIKceJXw5Z1uFOEvRag4nqokiZmhiGsy12Unuwpi+KPyjdRCiBajDVlwR4Tp8fx4ODQFpVEAPf
+        3DOKveN2MIeWnzMucgmKU+QjJJwTOtoTxr/vH7Sm26Omj0p7WTIPNBqWiCC0aOzolT8zNPvbdgg8R
+        wNVBGRRCCeo6c6MIjHuAnsrIQ6b04ba1kQoNexuGTgFHBldNtY9RrTJs5BjD9k8qEwaQxA3vzUOMi
+        NVrVn5rO6wwum8r/f2sZ/TLwyp4Dw637jL19TPFB7o8RJhNRddmLn9E/q0esZnbTLp0puFZlrjyx/
+        0h3qhLbw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oQ5uL-0054jo-2e; Mon, 22 Aug 2022 11:47:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BB129300771;
+        Mon, 22 Aug 2022 13:47:50 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 8550220187A67; Mon, 22 Aug 2022 13:47:50 +0200 (CEST)
+Message-ID: <20220822111816.760285417@infradead.org>
+User-Agent: quilt/0.66
+Date:   Mon, 22 Aug 2022 13:18:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v3 0/6] Freezer Rewrite
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Hi all,
 
-Could you please kindly comment on the above?
+With Eric picking up the ptrace patches adding JOBCTL_STOPPED / JOBCTL_TRACED
+and them having landed in Linus' tree, here a respin of the Freezer rewrite
+that relies on it.
 
-Thank you in advance,
-Grzegorz
+---
+ drivers/acpi/x86/s2idle.c         |   12 +
+ drivers/android/binder.c          |    4 
+ drivers/media/pci/pt3/pt3.c       |    4 
+ drivers/scsi/scsi_transport_spi.c |    7 -
+ fs/cifs/inode.c                   |    4 
+ fs/cifs/transport.c               |    5 
+ fs/coredump.c                     |    5 
+ fs/nfs/file.c                     |    3 
+ fs/nfs/inode.c                    |   12 -
+ fs/nfs/nfs3proc.c                 |    3 
+ fs/nfs/nfs4proc.c                 |   14 +-
+ fs/nfs/nfs4state.c                |    3 
+ fs/nfs/pnfs.c                     |    4 
+ fs/xfs/xfs_trans_ail.c            |    8 -
+ include/linux/completion.h        |    1 
+ include/linux/freezer.h           |  245 +-------------------------------------
+ include/linux/sched.h             |   41 +++---
+ include/linux/sunrpc/sched.h      |    7 -
+ include/linux/suspend.h           |    8 -
+ include/linux/umh.h               |    9 -
+ include/linux/wait.h              |   40 +++++-
+ init/do_mounts_initrd.c           |   10 -
+ kernel/cgroup/legacy_freezer.c    |   23 +--
+ kernel/exit.c                     |    4 
+ kernel/fork.c                     |    5 
+ kernel/freezer.c                  |  133 ++++++++++++++------
+ kernel/futex/waitwake.c           |    8 -
+ kernel/hung_task.c                |    4 
+ kernel/power/hibernate.c          |   35 +++--
+ kernel/power/main.c               |   18 +-
+ kernel/power/process.c            |   10 -
+ kernel/power/suspend.c            |   12 +
+ kernel/power/user.c               |   24 ++-
+ kernel/ptrace.c                   |    2 
+ kernel/sched/completion.c         |    9 +
+ kernel/sched/core.c               |    6 
+ kernel/signal.c                   |   14 +-
+ kernel/time/hrtimer.c             |    4 
+ kernel/umh.c                      |   18 +-
+ mm/khugepaged.c                   |    4 
+ net/sunrpc/sched.c                |   12 -
+ net/unix/af_unix.c                |    8 -
+ 42 files changed, 341 insertions(+), 461 deletions(-)
 
-=C5=9Br., 20 lip 2022 o 15:15 Grzegorz Jaszczyk <jaz@semihalf.com> napisa=
-=C5=82(a):
->
-> wt., 19 lip 2022 o 20:09 Rafael J. Wysocki <rafael@kernel.org> napisa=C5=
-=82(a):
-> >
-> > On Thu, Jul 7, 2022 at 2:56 PM Grzegorz Jaszczyk <jaz@semihalf.com> wro=
-te:
-> > >
-> > > Currently the LPS0 prepare_late callback is aimed to run as the very
-> > > last thing before entering the S2Idle state from LPS0 perspective,
-> > > nevertheless between this call and the system actually entering the
-> > > S2Idle state there are several places where the suspension process co=
-uld
-> > > be canceled.
-> >
-> > And why is this a problem?
-> >
-> > The cancellation will occur only if there is a wakeup signal that
-> > would otherwise cause one of the CPUs to exit the idle state.  Such a
-> > wakeup signal can appear after calling the new notifier as well, so
-> > why does it make a difference?
->
-> It could also occur due to suspend_test. Additionally with new
-> notifier we could get notification when the system wakes up from
-> s2idle_loop and immediately goes to sleep again (due to e.g.
-> acpi_s2idle_wake condition not being met) - in this case relying on
-> prepare_late callback is not possible since it is not called in this
-> path.
->
-> >
-> > > In order to notify VMM about guest entering suspend, extend the S2Idl=
-e
-> > > ops by new notify callback, which will be really invoked as a very la=
-st
-> > > thing before guest actually enters S2Idle state.
-> >
-> > It is not guaranteed that "suspend" (defined as all CPUs entering idle
-> > states) will be actually entered even after this "last step".
->
-> Since this whole patchset is aimed at notifying the host about a guest
-> entering s2idle state, reaching this step can be considered as a
-> suspend "entry point" for VM IMO. It is because we are talking about
-> the vCPU not the real CPU. Therefore it seems to me, that even if some
-> other vCPUs could still get some wakeup signal they will not be able
-> to kick (through s2idle_wake->swake_up_one(&s2idle_wait_head);) the
-> original vCPU which entered s2idle_loop, triggered the new notifier
-> and is halted due to handling vCPU exit (and was about to trigger
-> swait_event_exclusive). So it will prevent the VM's resume process
-> from being started.
->
-> >
-> > > Additionally extend the acpi_s2idle_dev_ops by notify() callback so
-> > > any driver can hook into it and allow to implement its own notificati=
-on.
-> > >
-> > > Taking advantage of e.g. existing acpi_s2idle_dev_ops's prepare/resto=
-re
-> > > hooks is not an option since it will not allow to prevent race
-> > > conditions:
-> > > - VM0 enters s2idle
-> > > - host notes about VM0 is in s2idle
-> > > - host continues with system suspension but in the meantime VM0 exits
-> > > s2idle and sends notification but it is already too late (VM could no=
-t
-> > > even send notification on time).
-> >
-> > Too late for what?
->
-> Too late to cancel the host suspend process, which thinks that the VM
-> is in s2idle state while it isn't.
->
-> >
-> > > Introducing notify() as a very last step before the system enters S2I=
-dle
-> > > together with an assumption that the VMM has control over guest
-> > > resumption allows preventing mentioned races.
-> >
-> > How does it do that?
->
-> At the moment when VM triggers this new notifier we trap on MMIO
-> access and the VMM handles vCPU exit (so the vCPU is "halted").
-> Therefore the VMM could control when it finishes such handling and
-> releases the vCPU again.
->
-> Maybe adding some more context will be helpful. This patchset was
-> aimed for two different scenarios actually:
-> 1) Host is about to enter the suspend state and needs first to suspend
-> VM with all pass-through devices. In this case the host waits for
-> s2idle notification from the guest and when it receives it, it
-> continues with its own suspend process.
-> 2) Guest could be a "privileged" one (in terms of VMM) and when the
-> guest enters s2idle state it notifies the host, which in turn triggers
-> the suspend process of the host.
->
-> >
-> > It looks like you want suspend-to-idle to behave like S3 and it won't.
->
-> In a way, yes, we compensate for the lack of something like PM1_CNT to
-> trap on for detecting that the guest is suspending.
-> We could instead force the guest to use S3 but IMO it is undesirable,
-> since it generally does make a difference which suspend mode is used
-> in the guest, s2idle or S3, e.g some drivers check which suspend type
-> is used and based on that behaves differently during suspend. One of
-> the example is:
-> https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdg=
-pu/amdgpu_drv.c#L2323
-> https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdg=
-pu/amdgpu_acpi.c#L1069
-> https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdg=
-pu/amdgpu_gfx.c#L583
->
-> Thank you,
-> Grzegorz
