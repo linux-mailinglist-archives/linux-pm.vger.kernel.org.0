@@ -1,69 +1,79 @@
 Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE2859BC3B
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 11:04:34 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id ED42059BCCB
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 11:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbiHVJEd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Aug 2022 05:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S233499AbiHVJ0i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Aug 2022 05:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbiHVJEc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 05:04:32 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51872E9E0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Aug 2022 02:04:30 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id t5so12955837edc.11
-        for <linux-pm@vger.kernel.org>; Mon, 22 Aug 2022 02:04:30 -0700 (PDT)
+        with ESMTP id S233749AbiHVJ0g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 05:26:36 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E06A193F7
+        for <linux-pm@vger.kernel.org>; Mon, 22 Aug 2022 02:26:35 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id x23so9384816pll.7
+        for <linux-pm@vger.kernel.org>; Mon, 22 Aug 2022 02:26:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=8t6DRoxgkPozFEWeJjBY16ppRcOF6Bnal2wZ0hlJ6iQ=;
-        b=lbUYYMD/RybmC+VdXZHCkHhqfOpZRvN9VMpZ8ln6xNR4ja/S4YYUbgsmx6pVAcq0Jf
-         SbPujLMYmBnlOJHUAdTd+ALc0IKwvkwBX4uZb53dHnvuINqD95E7VLVsGMWv/Jndr7Q5
-         VkoJESZxNwpGucjTKCez/cGwrKPQMtmyIwkjRW5eUeX1IKW6SXgMWeE/TZBtqMTJHI6q
-         wzpvweJ4Gv+kOKCuojyX+kKuzeefaQJBdtuXmG1B28qipr41zvPZu7lQg1LK+d+6tWA+
-         ylpmrPgpfd9rMDpA4GgTVjar8ZmYOsTeWmzE3zCHjAbro82ymXTGQSXPkNaG5HEjUanj
-         RV5A==
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=afZwlyJFWi1oxAywjZJ8aFoRq/simALxdy+t/pD5S1g=;
+        b=p0GZd/XZJG+l9vJANZ5ADTT4svgFLH6gATUVTUqN50UgmM70MBgX6XZIyztbgxqI4C
+         BEb2TNVa1ptT708XMi5eaWgFEBiKkl1D1VHXH5vglSEI5O9lL8Six0R9jpTrWLDtaXcW
+         Dylm5HwV1lf+kRw/wkZrrZM3FErmbnRX0aRZfprFIJcKd4Q+jRswyne7Ao6yHu7cp31E
+         3RZWbl0CP7bwb/ZI/IYF/x9dPNJL6ia++6hfVt9brvATZXbv7+mTI98JXvN8mFIWXAr4
+         COv2KFL0mAeywSG32d6wtgN3cCc4EfC9xAJ1V3QwFCV46iJ2L/l5p5M9Q6+vsUlZUGmj
+         eUSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8t6DRoxgkPozFEWeJjBY16ppRcOF6Bnal2wZ0hlJ6iQ=;
-        b=N716rJshAgXkPWivc/GNhlcgK4xT70+f/5gnNSJW+80dFkW/nAjT/PkGX4jaWGu9mt
-         YmDksQZQNV8RpiQc5RZ0/l0hXKhE+JzeehNMqBCzoS6FW3ugso2X9jnqxP2w81r0kKby
-         gzL31DAxvWA7TuG7IkmaUwtGJ7aJ2S8GkWFgMq4mEBm6d12uCeDg1iacptWNJSotfH5H
-         bcboAlAMQ1Anh3UUhcnvOQ8bMUu9rgGad+oQ+cU48nhvzNpVcExI6zs5U/05zZuHSDyn
-         5l11tw5PHvah63GWrv1LWOihaYdCiT4aeUHF96J6CjxqmFrMNnJU6d3NuHGa1lRGra3X
-         opyg==
-X-Gm-Message-State: ACgBeo1hREn+9AreUjEYxtf47PyeNGonz8XFI/LS8IQChTTxtESz6Y8y
-        rTIPrYeyGKRVfE9x2QuDJ5Xv0Zwh5r8Au39h2vQmy1CL8Mw=
-X-Google-Smtp-Source: AA6agR6SjlNjb9aBWck/aucsuQC/f/aOmME+qBmC7T/H8g9Hp1h1hVA34bfSVjsAkBDD0b0AD104HkPw0t7Cr4A3h34=
-X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id
- ew4-20020a056402538400b004316d84b451mr15046123edb.46.1661159069522; Mon, 22
- Aug 2022 02:04:29 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=afZwlyJFWi1oxAywjZJ8aFoRq/simALxdy+t/pD5S1g=;
+        b=Qf1fQoJZ5Ns5GrV4u8Wt0oZ7MyGm6hIx0EexMz4IcR1fn29kpEl8VkIjKTLCUW16g/
+         yz7OYk8c9QSEdNQ6CPWQPF3Bq53FTyfYktnBh8iJUCczQOQ9LjrurA4736x6DcSvWyQs
+         5xI3mMcJ7LLIvX4coCLZC2PNjQzYteT5JkY9StlF2mEUEsqt8xGiiXgDX1mRUsM+dDyD
+         0WQJPhpjzrT48bRWxwtxXtGqgvWtmyCq+Z4USJ+ZdSM4tqA6VtyXg+zGeysbhKErEAZG
+         ZgrVHUifuZ9fCxVlzRrwJMbMFPOPkwJ1S0CMiiOcG5irzO6cnbz8hWPUCAtd/n5XVOLx
+         9dKg==
+X-Gm-Message-State: ACgBeo2OWrblJFtwoybEcNoF9oh7twXOA5l5bP1r3NZ90P3OuV0iSsOA
+        tSvJm/RnhsfLOmk0WgtZadw3gToj4l9tuki55v17/A==
+X-Google-Smtp-Source: AA6agR4PTWfx6mJ4JfDP2s87MqHuEGPKmtNZbCfU8v7BsNem/96YT6tLIZvRLFXdnFduhqQo4YmT8Ok1AHREWZ1lgFk=
+X-Received: by 2002:a17:90b:3b4d:b0:1f4:d1b6:cb69 with SMTP id
+ ot13-20020a17090b3b4d00b001f4d1b6cb69mr22224004pjb.229.1661160394706; Mon, 22
+ Aug 2022 02:26:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220807192038.1039771-1-jic23@kernel.org>
-In-Reply-To: <20220807192038.1039771-1-jic23@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 Aug 2022 11:04:18 +0200
-Message-ID: <CACRpkdb6qxO38kS1=cEja-KZSR5RcV-oWX36ikxggsLm8Y5ixw@mail.gmail.com>
-Subject: Re: [PATCH 0/5] PM: Introduce EXPORT_NS_GPL_DEV_PM_OPS() and use
- cases in IIO.
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20220707125329.378277-1-jaz@semihalf.com> <20220707125329.378277-2-jaz@semihalf.com>
+ <CAJZ5v0gdCN3P52ko44LQMqWJvDArHxZ7p4aSiQamML7aG_kRAA@mail.gmail.com> <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com>
+In-Reply-To: <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com>
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+Date:   Mon, 22 Aug 2022 11:26:23 +0200
+Message-ID: <CAH76GKMw2rAnQOSFqReG1sEC=sdncWOJHNXn-Rp2Gx1oUZR3ZQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] suspend: extend S2Idle ops by new notify handler
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmytro Maluka <dmy@semihalf.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Dominik Behr <dbehr@google.com>, upstream@semihalf.com,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Sachi King <nakato@nakato.io>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,38 +81,124 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 7, 2022 at 9:10 PM Jonathan Cameron <jic23@kernel.org> wrote:
+Hi Rafael,
 
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->
-> Perhaps the most complex case we can have is a core driver module (usually
-> with accompanying per bus modules) that exports, in a namespace,
-> a struct dev_pm_ops. The driver has different handling for runtime and
-> sleep suspend / resume so (almost) all callbacks are provided.
-> The pm.h helper macro _EXPORT_DEV_PM_OPS() could be used here but the
-> handling of the last two parameters is unusual and very different from
-> the macros intended for driver usage. First parameter needs to be "_gpl"
-> and second needs to be the namespace specified as a string.  Other NS
-> macros take it without quotes.
->
-> As such, this series proposes introducing a suitable macro and then provides
-> a number of IIO driver conversions. Where relevant the exports from the
-> driver are moved into the new namespace.
->
-> If accepted we can either take the whole lot through the PM tree and hope
-> there is nothing much else overlapping with this driver code in this cycle,
-> or ideally we could use an immutable branch and pull this into both the
-> IIO and PM trees.
->
-> Jonathan Cameron (5):
->   PM: core: Add EXPORT_NS_GPL_DEV_PM_OPS to avoid drivers rolling own.
->   iio: accel: fxls8962af: Use new EXPORT_NS_GPL_DEV_PM_OPS()
->   iio: gyro: fxas210002c: Move exports to IIO_FXAS210002C namespace.
->   iio: imu: inv_icm42600: Move exports to IIO_ICM42600 namespace
->   iio: imu: inv_mpu: Move exports to IIO_MPU6050 namespace
+Could you please kindly comment on the above?
 
-I like what you done here.
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Thank you in advance,
+Grzegorz
 
-Yours,
-Linus Walleij
+=C5=9Br., 20 lip 2022 o 15:15 Grzegorz Jaszczyk <jaz@semihalf.com> napisa=
+=C5=82(a):
+>
+> wt., 19 lip 2022 o 20:09 Rafael J. Wysocki <rafael@kernel.org> napisa=C5=
+=82(a):
+> >
+> > On Thu, Jul 7, 2022 at 2:56 PM Grzegorz Jaszczyk <jaz@semihalf.com> wro=
+te:
+> > >
+> > > Currently the LPS0 prepare_late callback is aimed to run as the very
+> > > last thing before entering the S2Idle state from LPS0 perspective,
+> > > nevertheless between this call and the system actually entering the
+> > > S2Idle state there are several places where the suspension process co=
+uld
+> > > be canceled.
+> >
+> > And why is this a problem?
+> >
+> > The cancellation will occur only if there is a wakeup signal that
+> > would otherwise cause one of the CPUs to exit the idle state.  Such a
+> > wakeup signal can appear after calling the new notifier as well, so
+> > why does it make a difference?
+>
+> It could also occur due to suspend_test. Additionally with new
+> notifier we could get notification when the system wakes up from
+> s2idle_loop and immediately goes to sleep again (due to e.g.
+> acpi_s2idle_wake condition not being met) - in this case relying on
+> prepare_late callback is not possible since it is not called in this
+> path.
+>
+> >
+> > > In order to notify VMM about guest entering suspend, extend the S2Idl=
+e
+> > > ops by new notify callback, which will be really invoked as a very la=
+st
+> > > thing before guest actually enters S2Idle state.
+> >
+> > It is not guaranteed that "suspend" (defined as all CPUs entering idle
+> > states) will be actually entered even after this "last step".
+>
+> Since this whole patchset is aimed at notifying the host about a guest
+> entering s2idle state, reaching this step can be considered as a
+> suspend "entry point" for VM IMO. It is because we are talking about
+> the vCPU not the real CPU. Therefore it seems to me, that even if some
+> other vCPUs could still get some wakeup signal they will not be able
+> to kick (through s2idle_wake->swake_up_one(&s2idle_wait_head);) the
+> original vCPU which entered s2idle_loop, triggered the new notifier
+> and is halted due to handling vCPU exit (and was about to trigger
+> swait_event_exclusive). So it will prevent the VM's resume process
+> from being started.
+>
+> >
+> > > Additionally extend the acpi_s2idle_dev_ops by notify() callback so
+> > > any driver can hook into it and allow to implement its own notificati=
+on.
+> > >
+> > > Taking advantage of e.g. existing acpi_s2idle_dev_ops's prepare/resto=
+re
+> > > hooks is not an option since it will not allow to prevent race
+> > > conditions:
+> > > - VM0 enters s2idle
+> > > - host notes about VM0 is in s2idle
+> > > - host continues with system suspension but in the meantime VM0 exits
+> > > s2idle and sends notification but it is already too late (VM could no=
+t
+> > > even send notification on time).
+> >
+> > Too late for what?
+>
+> Too late to cancel the host suspend process, which thinks that the VM
+> is in s2idle state while it isn't.
+>
+> >
+> > > Introducing notify() as a very last step before the system enters S2I=
+dle
+> > > together with an assumption that the VMM has control over guest
+> > > resumption allows preventing mentioned races.
+> >
+> > How does it do that?
+>
+> At the moment when VM triggers this new notifier we trap on MMIO
+> access and the VMM handles vCPU exit (so the vCPU is "halted").
+> Therefore the VMM could control when it finishes such handling and
+> releases the vCPU again.
+>
+> Maybe adding some more context will be helpful. This patchset was
+> aimed for two different scenarios actually:
+> 1) Host is about to enter the suspend state and needs first to suspend
+> VM with all pass-through devices. In this case the host waits for
+> s2idle notification from the guest and when it receives it, it
+> continues with its own suspend process.
+> 2) Guest could be a "privileged" one (in terms of VMM) and when the
+> guest enters s2idle state it notifies the host, which in turn triggers
+> the suspend process of the host.
+>
+> >
+> > It looks like you want suspend-to-idle to behave like S3 and it won't.
+>
+> In a way, yes, we compensate for the lack of something like PM1_CNT to
+> trap on for detecting that the guest is suspending.
+> We could instead force the guest to use S3 but IMO it is undesirable,
+> since it generally does make a difference which suspend mode is used
+> in the guest, s2idle or S3, e.g some drivers check which suspend type
+> is used and based on that behaves differently during suspend. One of
+> the example is:
+> https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdg=
+pu/amdgpu_drv.c#L2323
+> https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdg=
+pu/amdgpu_acpi.c#L1069
+> https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdg=
+pu/amdgpu_gfx.c#L583
+>
+> Thank you,
+> Grzegorz
