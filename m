@@ -2,59 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2626259BF9D
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 14:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63F859BFAD
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 14:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234746AbiHVMkK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Aug 2022 08:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S235164AbiHVMrb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Aug 2022 08:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbiHVMkB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 08:40:01 -0400
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736E933343;
-        Mon, 22 Aug 2022 05:40:00 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id d18-20020a9d72d2000000b0063934f06268so833766otk.0;
-        Mon, 22 Aug 2022 05:40:00 -0700 (PDT)
+        with ESMTP id S235123AbiHVMra (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 08:47:30 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BC33AB03;
+        Mon, 22 Aug 2022 05:47:29 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id z22-20020a056830129600b0063711f456ceso7602909otp.7;
+        Mon, 22 Aug 2022 05:47:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=PhEPEud72j5kQVxW8NO2vqL1FVdaHjnTMbrh083xpV0=;
-        b=jrz9kdF7p21Lt8PU3ZNe+cpNELdxDnXQDshiwQTw+X7bKhKTLAk/YsEs+rKBKfY2VL
-         ZP3Z/5pWIqIkta1hEarQvAUb8ICgb78yjxpLubIaSx6VmCSMioYkb+/XQb+5rjaemb/2
-         TF6YjGjscHW4GT+wbukauvovDAy3Hg/GtQSrKj4Y6vN5ofHwdrdPPo2qL47eVYaQaO29
-         GiErwHy8QnSSUpQ57Jvaq/s3XqeXyyzebZlCp6nQZGquo6OsCz3Dt1k5+g/bphiqqeC+
-         zDO+rhTnbRGR7sz2jfsO8Ag+vfGqRw3xQ+1kfSE+s6wKNcEz072hC4v/3InnMg6xUUmQ
-         o4JA==
-X-Gm-Message-State: ACgBeo1SjvyOduC+B0S/jNAiRPfuMt0KXdacpFxrpByh6049YswSKxv9
-        yMUULxhF/ZOb4cHlqA1sMx+ovJ5mIg==
-X-Google-Smtp-Source: AA6agR5g64WBRUlwSWnDCd9sVKwnExbQiowIvsS13bvXxfGDvcK7A+9xBDQH0t3l/Jgnraq3we4Kzw==
-X-Received: by 2002:a05:6830:6188:b0:61c:568b:1001 with SMTP id cb8-20020a056830618800b0061c568b1001mr7614005otb.98.1661171999453;
-        Mon, 22 Aug 2022 05:39:59 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=7cbjI0WaZhQTvZlNz7q5LmNIlRjDT3q4dyHallkLrTo=;
+        b=CVhIP2M47w0eAhmUTcrlpYx2JKuSBdky0u8RWxwjXTgF7jPPfvZqtWxadk6wlfo3LQ
+         uiSl1hKd7tvRyMPsiNXc79cwLyYFtr5UADc3xacySrFPokO0qZLY4hi+Y0wTEODHl6Kw
+         CMLnSEiZjGRNmyVYkqurblMx7e7XJhUrAcP4lEbAraLfr65jcXlboaRT4PpnxauqWsMy
+         DxggInkjgCtEFeoKR6fxIdSitAnEUXpqCURE0o6eaVSinYAgZNLCm2NEqAN1llQmUAuM
+         A5T0jhSzNkT5+jmYMic8ndRqDRyXHDzME8qpcQ8EOdveo/lAdYxcMB/Qz5OPORNZCNJn
+         yUGQ==
+X-Gm-Message-State: ACgBeo0CBloaoQ8xySKTrdKo26ct4QylppTBG1kI/H9LD7XR8bBc5T68
+        ica1ixaSSDlCfybb8oOLOp6Jr5fEMg==
+X-Google-Smtp-Source: AA6agR6HuU3nFQ4lGlufxXNkmmzngtFFlaInk7mDi0EkehJepEpbode3NOBV0cAGi7IkodNWlHOamA==
+X-Received: by 2002:a05:6830:310d:b0:637:1b6c:6647 with SMTP id b13-20020a056830310d00b006371b6c6647mr7668149ots.170.1661172448975;
+        Mon, 22 Aug 2022 05:47:28 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a13-20020a4ad5cd000000b00435954f91ddsm2497869oot.28.2022.08.22.05.39.58
+        by smtp.gmail.com with ESMTPSA id k4-20020a056870570400b0010f07647598sm2978471oap.7.2022.08.22.05.47.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 05:39:58 -0700 (PDT)
-Received: (nullmailer pid 3640781 invoked by uid 1000);
-        Mon, 22 Aug 2022 12:39:57 -0000
-Date:   Mon, 22 Aug 2022 07:39:57 -0500
+        Mon, 22 Aug 2022 05:47:28 -0700 (PDT)
+Received: (nullmailer pid 3653297 invoked by uid 1000);
+        Mon, 22 Aug 2022 12:47:28 -0000
+Date:   Mon, 22 Aug 2022 07:47:28 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK binding
-Message-ID: <20220822123957.GA3628946-robh@kernel.org>
-References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
- <20220818031512.319310-2-bjorn.andersson@linaro.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Message-ID: <20220822124728.GA3641041-robh@kernel.org>
+References: <20220820102925.29476-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220818031512.319310-2-bjorn.andersson@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220820102925.29476-1-pali@kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -66,130 +67,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 08:15:09PM -0700, Bjorn Andersson wrote:
-> The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
-> platforms and implement USB Type-C handling and battery management.
-> This binding describes the component in the OS used to communicate with
-> the firmware and connect it's resources to those described in the
-> Devicetree, particularly the USB Type-C controllers relationship with
-> USB and DisplayPort components.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+On Sat, Aug 20, 2022 at 12:29:23PM +0200, Pali Rohár wrote:
+> This new optional priority property allows to specify custom priority level
+> of reset device. Default level was always 192.
+
+Why do we need/want this? What problem does it solve?
+
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 > ---
->  .../bindings/soc/qcom/qcom,pmic-glink.yaml    | 98 +++++++++++++++++++
->  1 file changed, 98 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+>  .../devicetree/bindings/power/reset/syscon-reboot.yaml        | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> new file mode 100644
-> index 000000000000..3261f9d27a47
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> @@ -0,0 +1,98 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/qcom/qcom,pmic-glink.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PMIC GLINK firmware interface for battery management, USB
-> +  Type-C and other things.
-> +
-> +maintainers:
-> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> +
-> +description:
-> +  The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
-> +  platforms and implement USB Type-C handling and battery management. This
-> +  binding describes the component in the OS used to communicate with the
-> +  firmware and connect it's resources to those described in the Devicetree,
-> +  particularly the USB Type-C controllers relationship with USB and DisplayPort
-> +  components.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,sc8180x-pmic-glink
-> +          - qcom,sc8280xp-pmic-glink
-> +          - qcom,sm8350-pmic-glink
-> +      - const: qcom,pmic-glink
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +patternProperties:
-> +  '^connector@\d$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |+
-> +    pmic-glink {
-> +        compatible = "qcom,sc8280xp-pmic-glink", "qcom,pmic-glink";
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        connector@0 {
-> +            compatible = "usb-c-connector";
-> +            reg = <0>;
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> index da2509724812..d905133aab27 100644
+> --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> @@ -42,6 +42,10 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: The reset value written to the reboot register (32 bit access).
+>  
+> +  priority:
 
-'reg' causes a warning:
+A bit too generic for the name.
 
-Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.example.dtb: pmic-glink: connector@0: Unevaluated properties are not allowed ('reg' was unexpected)
+> +    $ref: /schemas/types.yaml#/definitions/sint32
+> +    description: Priority level of this syscon reset device. Default 192.
 
-> +            power-role = "dual";
-> +            data-role = "dual";
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    endpoint {
-> +                        remote-endpoint = <&usb_role>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    endpoint@0 {
-> +                        reg = <0>;
-> +                        remote-endpoint = <&qmp_out>;
-> +                    };
-> +
-> +                    endpoint@1 {
-> +                        reg = <1>;
-> +                        remote-endpoint = <&displayport_hpd>;
-> +                    };
-> +                };
-> +
-> +                port@2 {
-> +                    reg = <2>;
-> +                    endpoint {
-> +                        remote-endpoint = <&sbu_mux>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> +
-> -- 
-> 2.35.1
-> 
-> 
+default: 192
+
+
+Though I'm not really sure about the whole concept of this in DT. Where 
+does 192 come from? Presumably if we have more than 1 reset device, then 
+'priority' is needed in multiple places. So you need a common schema 
+defining the property (as property types should be defined exactly 
+once) which this schema can reference.
+
+Rob
