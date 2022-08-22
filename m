@@ -2,1452 +2,634 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7116959BED5
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 13:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9225259BEAE
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Aug 2022 13:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234781AbiHVLsV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Aug 2022 07:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
+        id S232901AbiHVLja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Aug 2022 07:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234756AbiHVLsR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 07:48:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E755EB1;
-        Mon, 22 Aug 2022 04:48:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=5sp6b3UKc2du4arX3oS3P4qGZL5icn3P0gQgAHlB/Q0=; b=Hp6AlrcFcWK282VLFL1zEIPaqf
-        kkNAZzyZzIprrCLwm4+A9c/qlynPKDB2PBG/K0qU+7PPaA5Wh2lyZjDo8FW5ebc3sf26YnGYGH9uW
-        RgqoOTfT+grUFeD4G8+bJ77rNRiIVQFB1F/jdjMBv71Xkqs1a06V9F1cLTgGJRKz8rzytl+NDHG98
-        OTahn/Qh4OBjQQHT9cpq/jB1AGL4ixfBfh+A743fVhHATSfiBidgs0z+LQtYuV+8/nVYVVlqW5NF9
-        q5C74GecbD1phT/lda+qDsJDbnWtc6AeeK+OaNMBObUmA3+tJP/ZkU5tNl/6npNXxQlQKVRWw80Um
-        XfujrQSA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQ5uM-00EEf1-L0; Mon, 22 Aug 2022 11:47:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C2884300BBA;
-        Mon, 22 Aug 2022 13:47:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id A185520187A73; Mon, 22 Aug 2022 13:47:50 +0200 (CEST)
-Message-ID: <20220822114649.055452969@infradead.org>
-User-Agent: quilt/0.66
-Date:   Mon, 22 Aug 2022 13:18:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, tj@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-References: <20220822111816.760285417@infradead.org>
+        with ESMTP id S234605AbiHVLj3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Aug 2022 07:39:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA341B7BF
+        for <linux-pm@vger.kernel.org>; Mon, 22 Aug 2022 04:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661168365;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dn7qcf5LVqUeHOtrJWDm7qcKmL26xaaKCkuxvydggKA=;
+        b=PKpOWbqb/o9DJLUHR11xph00VeNCJ6sl67OV7tu6u0hWX7VSMtCaDcWTVOXxXcdoJ+RGSW
+        8XoVaH9nnvD+Ehyz9w449DzoDlBSvUfOOTjf4JcaAi5NxlS8p0hHRtMCgKJVnGk8fCXina
+        yD1gi/CDXyvGPglHpdUCuTILAFdnEXI=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-561-OZ6FDANkOO6ohEHLXS7m2Q-1; Mon, 22 Aug 2022 07:39:24 -0400
+X-MC-Unique: OZ6FDANkOO6ohEHLXS7m2Q-1
+Received: by mail-ed1-f72.google.com with SMTP id q18-20020a056402519200b0043dd2ff50feso6756478edd.9
+        for <linux-pm@vger.kernel.org>; Mon, 22 Aug 2022 04:39:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Dn7qcf5LVqUeHOtrJWDm7qcKmL26xaaKCkuxvydggKA=;
+        b=NWHs4nCe4wAkHan0JUeHK5VkNsypgmBf9ORunFF8vtfZtfY+4VUAGgP6mWhQPzFON5
+         rpz0riwgXjTGxD08O/ZK2PBKkAsfjxOyi5L9ecS62DG1gdR6gnL27JODgYSXBU6k++v3
+         zTMV0++giulUsr+KsGLLc5UJP9LKRDWQxVW1DR9upJULSaqL2bpptKOQysOV0zU6rG73
+         SlEYCu3bW8kQCdb6uTU5QQ47sJuMYHhC4CrvYfRaC6t7PDK0cYWkrD8tObzL6bNK8+g1
+         2RrIoRR/RQmD/BzuT+Wu3Tr0keA8H9h+DAH3jVaOmhjsLzA3jcR0a1B+QKmYFT/6/5Ai
+         +NMQ==
+X-Gm-Message-State: ACgBeo2Zv2axIjJfa0lN7QT0qMSAFVPRVNXk3nbu9eFmTdVaXqf96rKa
+        3kaRyvsEmT6eySBCzVTWiV2Xj8ujLn7Ff0Xfsensb39BYpoa5B+dMTXQJBahH5gqrxlVwqZsp9S
+        jst4NdJXnkDlyzMcS/60=
+X-Received: by 2002:a17:906:fc6:b0:72f:d080:416 with SMTP id c6-20020a1709060fc600b0072fd0800416mr12453621ejk.1.1661168362463;
+        Mon, 22 Aug 2022 04:39:22 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7EslOwiB8PFirhCnGpfUKcQPO9I3vNXx6R3lb7mRftIJYrbqJm5XJ7V+bp4oyG6JqO2ADh4g==
+X-Received: by 2002:a17:906:fc6:b0:72f:d080:416 with SMTP id c6-20020a1709060fc600b0072fd0800416mr12453594ejk.1.1661168361905;
+        Mon, 22 Aug 2022 04:39:21 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id h23-20020a50ed97000000b00445b5874249sm8030356edr.62.2022.08.22.04.39.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 04:39:21 -0700 (PDT)
+Message-ID: <2ddade8b-7260-8497-12f2-c8b13cf35e6a@redhat.com>
+Date:   Mon, 22 Aug 2022 13:39:20 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/2] [RFC] platform/x86: Fixes for Toshiba Z830
+Content-Language: en-US
+To:     Arvid Norlander <lkml@vorpal.se>,
+        platform-driver-x86@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Azael Avalos <coproscefalo@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20220821200821.1837460-1-lkml@vorpal.se>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220821200821.1837460-1-lkml@vorpal.se>
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rewrite the core freezer to behave better wrt thawing and be simpler
-in general.
+Hi Arvid,
 
-By replacing PF_FROZEN with TASK_FROZEN, a special block state, it is
-ensured frozen tasks stay frozen until thawed and don't randomly wake
-up early, as is currently possible.
+Nice to meet you.
 
-As such, it does away with PF_FROZEN and PF_FREEZER_SKIP, freeing up
-two PF_flags (yay!).
+On 8/21/22 22:08, Arvid Norlander wrote:
+> Hi,
+> 
+> NOTE: I had some trouble sending this with git send-email, I only managed
+> to send one copy successfully! Sorry if I managed to send it multiple
+> times.
+> 
+> I'm new to this kernel development thing, so applogies in advance for any
+> mistakes.
 
-Specifically; the current scheme works a little like:
+No worries, I think you are doing great so far.
 
-	freezer_do_not_count();
-	schedule();
-	freezer_count();
+Thank you for the detailed analysis and for all the work you are putting
+into this.
 
-And either the task is blocked, or it lands in try_to_freezer()
-through freezer_count(). Now, when it is blocked, the freezer
-considers it frozen and continues.
+> I have an old Toshiba Z830-10W laptop. Unfortunately it doesn't
+> work well under Linux. Fortunately I spent some time figuring out what was
+> wrong. I had documented my findings below. I have also included patches
+> (see the next few emails) for some of the issues.
+> 
+> I would like advice on how to proceed for some of the more advanced
+> problems though:
+> * Do we want to expose all these features that I figured out? For example,
+>   how to set the boot order on this old BIOS-only laptop from user space.
+>   Or various other settings accessible via the BIOS.
 
-However, on thawing, once pm_freezing is cleared, freezer_count()
-stops working, and any random/spurious wakeup will let a task run
-before its time.
+I'll try to write a short reply to each feature separately,
+I think we need to balance the worth of a feature to end users vs the amount
+of code to write + maintain here. E.g. adding support for non working
+hw buttons is generally considered worth the effort. Adding support for
+changing the boot-order not so much.
 
-That is, thawing tries to thaw things in explicit order; kernel
-threads and workqueues before doing bringing SMP back before userspace
-etc.. However due to the above mentioned races it is entirely possible
-for userspace tasks to thaw (by accident) before SMP is back.
+Note there is a generic interface for changing BIOS options from
+within Linux, so if you can change all (or almost all) BIOS options,
+you could consider implementing support for:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/ABI/testing/sysfs-class-firmware-attributes
 
-This can be a fatal problem in asymmetric ISA architectures (eg ARMv9)
-where the userspace task requires a special CPU to run.
+That has been implemented for Lenovo Think* and for some Dell
+models, but by the vendors themselves and the used WMI APIs are
+actually guaranteed to work on multiple models / generations hardware
+making it worth the effort. Also this is something which their
+customers want for managed rollout of these devices in big
+companies.
 
-As said; replace this with a special task state TASK_FROZEN and add
-the following state transitions:
+IMHO for these Toshiba laptops I still think it is a lot of work
+for something which won't see much use.
 
-	TASK_FREEZABLE	-> TASK_FROZEN
-	__TASK_STOPPED	-> TASK_FROZEN
-	__TASK_TRACED	-> TASK_FROZEN
+It would be good though to:
+1. Write some generic documentation from an end user pov for toshiba_acpi as:
+Documentation/admin-guide/laptops/toshiba_acpi.rst
+see:
+Documentation/admin-guide/laptops/thinkpad-acpi.rst
+as an example
 
-The new TASK_FREEZABLE can be set on any state part of TASK_NORMAL
-(IOW. TASK_INTERRUPTIBLE and TASK_UNINTERRUPTIBLE) -- any such state
-is already required to deal with spurious wakeups and the freezer
-causes one such when thawing the task (since the original state is
-lost).
+2. Extend the doc from 1. with toshiba_acpi firmware API documentation,
+including your findings on protocol bits which we won't directly
+implement/use so that this is at least written down in case it is
+needed later.
 
-The special __TASK_{STOPPED,TRACED} states *can* be restored since
-their canonical state is in ->jobctl.
+For 2. you can actually just copy and paste a lot of this email,
+I believe that having the info in this email in a
+Documentation/admin-guide/laptops/toshiba_acpi.rst file
+will make it a lot easier to find in the future then only having
+it in the mailinglist archives.
 
-With this, frozen tasks need an explicit TASK_FROZEN wakeup and are
-free of undue (early / spurious) wakeups.
+> * For the hardware buttons I describe below, is a solution specific to
+>   toshiba_acpi preferred, or should additional effort be spent on
+>   investigating a generic solution?
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- drivers/android/binder.c       |    4 
- drivers/media/pci/pt3/pt3.c    |    4 
- fs/cifs/inode.c                |    4 
- fs/cifs/transport.c            |    5 
- fs/coredump.c                  |    5 
- fs/nfs/file.c                  |    3 
- fs/nfs/inode.c                 |   12 --
- fs/nfs/nfs3proc.c              |    3 
- fs/nfs/nfs4proc.c              |   14 +-
- fs/nfs/nfs4state.c             |    3 
- fs/nfs/pnfs.c                  |    4 
- fs/xfs/xfs_trans_ail.c         |    8 -
- include/linux/freezer.h        |  245 +----------------------------------------
- include/linux/sched.h          |   41 +++---
- include/linux/sunrpc/sched.h   |    7 -
- include/linux/wait.h           |   12 +-
- kernel/cgroup/legacy_freezer.c |   23 +--
- kernel/exit.c                  |    4 
- kernel/fork.c                  |    5 
- kernel/freezer.c               |  133 ++++++++++++++++------
- kernel/futex/waitwake.c        |    8 -
- kernel/hung_task.c             |    4 
- kernel/power/main.c            |    6 -
- kernel/power/process.c         |   10 -
- kernel/ptrace.c                |    2 
- kernel/sched/core.c            |    2 
- kernel/signal.c                |   14 +-
- kernel/time/hrtimer.c          |    4 
- kernel/umh.c                   |   20 +--
- mm/khugepaged.c                |    4 
- net/sunrpc/sched.c             |   12 --
- net/unix/af_unix.c             |    8 -
- 32 files changed, 224 insertions(+), 409 deletions(-)
+Ok, this is interesting there actually is a specification from
+Microsoft for this:
+http://download.microsoft.com/download/9/c/5/9c5b2167-8017-4bae-9fde-d599bac8184a/dirapplaunch.docx
 
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -4247,10 +4247,9 @@ static int binder_wait_for_work(struct b
- 	struct binder_proc *proc = thread->proc;
- 	int ret = 0;
- 
--	freezer_do_not_count();
- 	binder_inner_proc_lock(proc);
- 	for (;;) {
--		prepare_to_wait(&thread->wait, &wait, TASK_INTERRUPTIBLE);
-+		prepare_to_wait(&thread->wait, &wait, TASK_INTERRUPTIBLE|TASK_FREEZABLE);
- 		if (binder_has_work_ilocked(thread, do_proc_work))
- 			break;
- 		if (do_proc_work)
-@@ -4267,7 +4266,6 @@ static int binder_wait_for_work(struct b
- 	}
- 	finish_wait(&thread->wait, &wait);
- 	binder_inner_proc_unlock(proc);
--	freezer_count();
- 
- 	return ret;
- }
---- a/drivers/media/pci/pt3/pt3.c
-+++ b/drivers/media/pci/pt3/pt3.c
-@@ -445,8 +445,8 @@ static int pt3_fetch_thread(void *data)
- 		pt3_proc_dma(adap);
- 
- 		delay = ktime_set(0, PT3_FETCH_DELAY * NSEC_PER_MSEC);
--		set_current_state(TASK_UNINTERRUPTIBLE);
--		freezable_schedule_hrtimeout_range(&delay,
-+		set_current_state(TASK_UNINTERRUPTIBLE|TASK_FREEZABLE);
-+		schedule_hrtimeout_range(&delay,
- 					PT3_FETCH_DELAY_DELTA * NSEC_PER_MSEC,
- 					HRTIMER_MODE_REL);
- 	}
---- a/fs/cifs/inode.c
-+++ b/fs/cifs/inode.c
-@@ -2327,7 +2327,7 @@ cifs_invalidate_mapping(struct inode *in
- static int
- cifs_wait_bit_killable(struct wait_bit_key *key, int mode)
- {
--	freezable_schedule_unsafe();
-+	schedule();
- 	if (signal_pending_state(mode, current))
- 		return -ERESTARTSYS;
- 	return 0;
-@@ -2345,7 +2345,7 @@ cifs_revalidate_mapping(struct inode *in
- 		return 0;
- 
- 	rc = wait_on_bit_lock_action(flags, CIFS_INO_LOCK, cifs_wait_bit_killable,
--				     TASK_KILLABLE);
-+				     TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
- 	if (rc)
- 		return rc;
- 
---- a/fs/cifs/transport.c
-+++ b/fs/cifs/transport.c
-@@ -757,8 +757,9 @@ wait_for_response(struct TCP_Server_Info
- {
- 	int error;
- 
--	error = wait_event_freezekillable_unsafe(server->response_q,
--				    midQ->mid_state != MID_REQUEST_SUBMITTED);
-+	error = wait_event_state(server->response_q,
-+				 midQ->mid_state != MID_REQUEST_SUBMITTED,
-+				 (TASK_KILLABLE|TASK_FREEZABLE_UNSAFE));
- 	if (error < 0)
- 		return -ERESTARTSYS;
- 
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -402,9 +402,8 @@ static int coredump_wait(int exit_code,
- 	if (core_waiters > 0) {
- 		struct core_thread *ptr;
- 
--		freezer_do_not_count();
--		wait_for_completion(&core_state->startup);
--		freezer_count();
-+		wait_for_completion_state(&core_state->startup,
-+					  TASK_UNINTERRUPTIBLE|TASK_FREEZABLE);
- 		/*
- 		 * Wait for all the threads to become inactive, so that
- 		 * all the thread context (extended register state, like
---- a/fs/nfs/file.c
-+++ b/fs/nfs/file.c
-@@ -570,7 +570,8 @@ static vm_fault_t nfs_vm_page_mkwrite(st
- 	}
- 
- 	wait_on_bit_action(&NFS_I(inode)->flags, NFS_INO_INVALIDATING,
--			nfs_wait_bit_killable, TASK_KILLABLE);
-+			   nfs_wait_bit_killable,
-+			   TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
- 
- 	lock_page(page);
- 	mapping = page_file_mapping(page);
---- a/fs/nfs/inode.c
-+++ b/fs/nfs/inode.c
-@@ -72,18 +72,13 @@ nfs_fattr_to_ino_t(struct nfs_fattr *fat
- 	return nfs_fileid_to_ino_t(fattr->fileid);
- }
- 
--static int nfs_wait_killable(int mode)
-+int nfs_wait_bit_killable(struct wait_bit_key *key, int mode)
- {
--	freezable_schedule_unsafe();
-+	schedule();
- 	if (signal_pending_state(mode, current))
- 		return -ERESTARTSYS;
- 	return 0;
- }
--
--int nfs_wait_bit_killable(struct wait_bit_key *key, int mode)
--{
--	return nfs_wait_killable(mode);
--}
- EXPORT_SYMBOL_GPL(nfs_wait_bit_killable);
- 
- /**
-@@ -1331,7 +1326,8 @@ int nfs_clear_invalid_mapping(struct add
- 	 */
- 	for (;;) {
- 		ret = wait_on_bit_action(bitlock, NFS_INO_INVALIDATING,
--					 nfs_wait_bit_killable, TASK_KILLABLE);
-+					 nfs_wait_bit_killable,
-+					 TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
- 		if (ret)
- 			goto out;
- 		spin_lock(&inode->i_lock);
---- a/fs/nfs/nfs3proc.c
-+++ b/fs/nfs/nfs3proc.c
-@@ -36,7 +36,8 @@ nfs3_rpc_wrapper(struct rpc_clnt *clnt,
- 		res = rpc_call_sync(clnt, msg, flags);
- 		if (res != -EJUKEBOX)
- 			break;
--		freezable_schedule_timeout_killable_unsafe(NFS_JUKEBOX_RETRY_TIME);
-+		__set_current_state(TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
-+		schedule_timeout(NFS_JUKEBOX_RETRY_TIME);
- 		res = -ERESTARTSYS;
- 	} while (!fatal_signal_pending(current));
- 	return res;
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -416,8 +416,8 @@ static int nfs4_delay_killable(long *tim
- {
- 	might_sleep();
- 
--	freezable_schedule_timeout_killable_unsafe(
--		nfs4_update_delay(timeout));
-+	__set_current_state(TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
-+	schedule_timeout(nfs4_update_delay(timeout));
- 	if (!__fatal_signal_pending(current))
- 		return 0;
- 	return -EINTR;
-@@ -427,7 +427,8 @@ static int nfs4_delay_interruptible(long
- {
- 	might_sleep();
- 
--	freezable_schedule_timeout_interruptible_unsafe(nfs4_update_delay(timeout));
-+	__set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE_UNSAFE);
-+	schedule_timeout(nfs4_update_delay(timeout));
- 	if (!signal_pending(current))
- 		return 0;
- 	return __fatal_signal_pending(current) ? -EINTR :-ERESTARTSYS;
-@@ -7406,7 +7407,8 @@ nfs4_retry_setlk_simple(struct nfs4_stat
- 		status = nfs4_proc_setlk(state, cmd, request);
- 		if ((status != -EAGAIN) || IS_SETLK(cmd))
- 			break;
--		freezable_schedule_timeout_interruptible(timeout);
-+		__set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
-+		schedule_timeout(timeout);
- 		timeout *= 2;
- 		timeout = min_t(unsigned long, NFS4_LOCK_MAXTIMEOUT, timeout);
- 		status = -ERESTARTSYS;
-@@ -7474,10 +7476,8 @@ nfs4_retry_setlk(struct nfs4_state *stat
- 			break;
- 
- 		status = -ERESTARTSYS;
--		freezer_do_not_count();
--		wait_woken(&waiter.wait, TASK_INTERRUPTIBLE,
-+		wait_woken(&waiter.wait, TASK_INTERRUPTIBLE|TASK_FREEZABLE,
- 			   NFS4_LOCK_MAXTIMEOUT);
--		freezer_count();
- 	} while (!signalled());
- 
- 	remove_wait_queue(q, &waiter.wait);
---- a/fs/nfs/nfs4state.c
-+++ b/fs/nfs/nfs4state.c
-@@ -1314,7 +1314,8 @@ int nfs4_wait_clnt_recover(struct nfs_cl
- 
- 	refcount_inc(&clp->cl_count);
- 	res = wait_on_bit_action(&clp->cl_state, NFS4CLNT_MANAGER_RUNNING,
--				 nfs_wait_bit_killable, TASK_KILLABLE);
-+				 nfs_wait_bit_killable,
-+				 TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
- 	if (res)
- 		goto out;
- 	if (clp->cl_cons_state < 0)
---- a/fs/nfs/pnfs.c
-+++ b/fs/nfs/pnfs.c
-@@ -1908,7 +1908,7 @@ static int pnfs_prepare_to_retry_layoutg
- 	pnfs_layoutcommit_inode(lo->plh_inode, false);
- 	return wait_on_bit_action(&lo->plh_flags, NFS_LAYOUT_RETURN,
- 				   nfs_wait_bit_killable,
--				   TASK_KILLABLE);
-+				   TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
- }
- 
- static void nfs_layoutget_begin(struct pnfs_layout_hdr *lo)
-@@ -3193,7 +3193,7 @@ pnfs_layoutcommit_inode(struct inode *in
- 		status = wait_on_bit_lock_action(&nfsi->flags,
- 				NFS_INO_LAYOUTCOMMITTING,
- 				nfs_wait_bit_killable,
--				TASK_KILLABLE);
-+				TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
- 		if (status)
- 			goto out;
- 	}
---- a/fs/xfs/xfs_trans_ail.c
-+++ b/fs/xfs/xfs_trans_ail.c
-@@ -602,9 +602,9 @@ xfsaild(
- 
- 	while (1) {
- 		if (tout && tout <= 20)
--			set_current_state(TASK_KILLABLE);
-+			set_current_state(TASK_KILLABLE|TASK_FREEZABLE);
- 		else
--			set_current_state(TASK_INTERRUPTIBLE);
-+			set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
- 
- 		/*
- 		 * Check kthread_should_stop() after we set the task state to
-@@ -653,14 +653,14 @@ xfsaild(
- 		    ailp->ail_target == ailp->ail_target_prev &&
- 		    list_empty(&ailp->ail_buf_list)) {
- 			spin_unlock(&ailp->ail_lock);
--			freezable_schedule();
-+			schedule();
- 			tout = 0;
- 			continue;
- 		}
- 		spin_unlock(&ailp->ail_lock);
- 
- 		if (tout)
--			freezable_schedule_timeout(msecs_to_jiffies(tout));
-+			schedule_timeout(msecs_to_jiffies(tout));
- 
- 		__set_current_state(TASK_RUNNING);
- 
---- a/include/linux/freezer.h
-+++ b/include/linux/freezer.h
-@@ -8,9 +8,11 @@
- #include <linux/sched.h>
- #include <linux/wait.h>
- #include <linux/atomic.h>
-+#include <linux/jump_label.h>
- 
- #ifdef CONFIG_FREEZER
--extern atomic_t system_freezing_cnt;	/* nr of freezing conds in effect */
-+DECLARE_STATIC_KEY_FALSE(freezer_active);
-+
- extern bool pm_freezing;		/* PM freezing in effect */
- extern bool pm_nosig_freezing;		/* PM nosig freezing in effect */
- 
-@@ -22,10 +24,7 @@ extern unsigned int freeze_timeout_msecs
- /*
-  * Check if a process has been frozen
-  */
--static inline bool frozen(struct task_struct *p)
--{
--	return p->flags & PF_FROZEN;
--}
-+extern bool frozen(struct task_struct *p);
- 
- extern bool freezing_slow_path(struct task_struct *p);
- 
-@@ -34,9 +33,10 @@ extern bool freezing_slow_path(struct ta
-  */
- static inline bool freezing(struct task_struct *p)
- {
--	if (likely(!atomic_read(&system_freezing_cnt)))
--		return false;
--	return freezing_slow_path(p);
-+	if (static_branch_unlikely(&freezer_active))
-+		return freezing_slow_path(p);
-+
-+	return false;
- }
- 
- /* Takes and releases task alloc lock using task_lock() */
-@@ -48,23 +48,14 @@ extern int freeze_kernel_threads(void);
- extern void thaw_processes(void);
- extern void thaw_kernel_threads(void);
- 
--/*
-- * DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION
-- * If try_to_freeze causes a lockdep warning it means the caller may deadlock
-- */
--static inline bool try_to_freeze_unsafe(void)
-+static inline bool try_to_freeze(void)
- {
- 	might_sleep();
- 	if (likely(!freezing(current)))
- 		return false;
--	return __refrigerator(false);
--}
--
--static inline bool try_to_freeze(void)
--{
- 	if (!(current->flags & PF_NOFREEZE))
- 		debug_check_no_locks_held();
--	return try_to_freeze_unsafe();
-+	return __refrigerator(false);
- }
- 
- extern bool freeze_task(struct task_struct *p);
-@@ -79,195 +70,6 @@ static inline bool cgroup_freezing(struc
- }
- #endif /* !CONFIG_CGROUP_FREEZER */
- 
--/*
-- * The PF_FREEZER_SKIP flag should be set by a vfork parent right before it
-- * calls wait_for_completion(&vfork) and reset right after it returns from this
-- * function.  Next, the parent should call try_to_freeze() to freeze itself
-- * appropriately in case the child has exited before the freezing of tasks is
-- * complete.  However, we don't want kernel threads to be frozen in unexpected
-- * places, so we allow them to block freeze_processes() instead or to set
-- * PF_NOFREEZE if needed. Fortunately, in the ____call_usermodehelper() case the
-- * parent won't really block freeze_processes(), since ____call_usermodehelper()
-- * (the child) does a little before exec/exit and it can't be frozen before
-- * waking up the parent.
-- */
--
--
--/**
-- * freezer_do_not_count - tell freezer to ignore %current
-- *
-- * Tell freezers to ignore the current task when determining whether the
-- * target frozen state is reached.  IOW, the current task will be
-- * considered frozen enough by freezers.
-- *
-- * The caller shouldn't do anything which isn't allowed for a frozen task
-- * until freezer_cont() is called.  Usually, freezer[_do_not]_count() pair
-- * wrap a scheduling operation and nothing much else.
-- */
--static inline void freezer_do_not_count(void)
--{
--	current->flags |= PF_FREEZER_SKIP;
--}
--
--/**
-- * freezer_count - tell freezer to stop ignoring %current
-- *
-- * Undo freezer_do_not_count().  It tells freezers that %current should be
-- * considered again and tries to freeze if freezing condition is already in
-- * effect.
-- */
--static inline void freezer_count(void)
--{
--	current->flags &= ~PF_FREEZER_SKIP;
--	/*
--	 * If freezing is in progress, the following paired with smp_mb()
--	 * in freezer_should_skip() ensures that either we see %true
--	 * freezing() or freezer_should_skip() sees !PF_FREEZER_SKIP.
--	 */
--	smp_mb();
--	try_to_freeze();
--}
--
--/* DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION */
--static inline void freezer_count_unsafe(void)
--{
--	current->flags &= ~PF_FREEZER_SKIP;
--	smp_mb();
--	try_to_freeze_unsafe();
--}
--
--/**
-- * freezer_should_skip - whether to skip a task when determining frozen
-- *			 state is reached
-- * @p: task in quesion
-- *
-- * This function is used by freezers after establishing %true freezing() to
-- * test whether a task should be skipped when determining the target frozen
-- * state is reached.  IOW, if this function returns %true, @p is considered
-- * frozen enough.
-- */
--static inline bool freezer_should_skip(struct task_struct *p)
--{
--	/*
--	 * The following smp_mb() paired with the one in freezer_count()
--	 * ensures that either freezer_count() sees %true freezing() or we
--	 * see cleared %PF_FREEZER_SKIP and return %false.  This makes it
--	 * impossible for a task to slip frozen state testing after
--	 * clearing %PF_FREEZER_SKIP.
--	 */
--	smp_mb();
--	return p->flags & PF_FREEZER_SKIP;
--}
--
--/*
-- * These functions are intended to be used whenever you want allow a sleeping
-- * task to be frozen. Note that neither return any clear indication of
-- * whether a freeze event happened while in this function.
-- */
--
--/* Like schedule(), but should not block the freezer. */
--static inline void freezable_schedule(void)
--{
--	freezer_do_not_count();
--	schedule();
--	freezer_count();
--}
--
--/* DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION */
--static inline void freezable_schedule_unsafe(void)
--{
--	freezer_do_not_count();
--	schedule();
--	freezer_count_unsafe();
--}
--
--/*
-- * Like schedule_timeout(), but should not block the freezer.  Do not
-- * call this with locks held.
-- */
--static inline long freezable_schedule_timeout(long timeout)
--{
--	long __retval;
--	freezer_do_not_count();
--	__retval = schedule_timeout(timeout);
--	freezer_count();
--	return __retval;
--}
--
--/*
-- * Like schedule_timeout_interruptible(), but should not block the freezer.  Do not
-- * call this with locks held.
-- */
--static inline long freezable_schedule_timeout_interruptible(long timeout)
--{
--	long __retval;
--	freezer_do_not_count();
--	__retval = schedule_timeout_interruptible(timeout);
--	freezer_count();
--	return __retval;
--}
--
--/* DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION */
--static inline long freezable_schedule_timeout_interruptible_unsafe(long timeout)
--{
--	long __retval;
--
--	freezer_do_not_count();
--	__retval = schedule_timeout_interruptible(timeout);
--	freezer_count_unsafe();
--	return __retval;
--}
--
--/* Like schedule_timeout_killable(), but should not block the freezer. */
--static inline long freezable_schedule_timeout_killable(long timeout)
--{
--	long __retval;
--	freezer_do_not_count();
--	__retval = schedule_timeout_killable(timeout);
--	freezer_count();
--	return __retval;
--}
--
--/* DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION */
--static inline long freezable_schedule_timeout_killable_unsafe(long timeout)
--{
--	long __retval;
--	freezer_do_not_count();
--	__retval = schedule_timeout_killable(timeout);
--	freezer_count_unsafe();
--	return __retval;
--}
--
--/*
-- * Like schedule_hrtimeout_range(), but should not block the freezer.  Do not
-- * call this with locks held.
-- */
--static inline int freezable_schedule_hrtimeout_range(ktime_t *expires,
--		u64 delta, const enum hrtimer_mode mode)
--{
--	int __retval;
--	freezer_do_not_count();
--	__retval = schedule_hrtimeout_range(expires, delta, mode);
--	freezer_count();
--	return __retval;
--}
--
--/*
-- * Freezer-friendly wrappers around wait_event_interruptible(),
-- * wait_event_killable() and wait_event_interruptible_timeout(), originally
-- * defined in <linux/wait.h>
-- */
--
--/* DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION */
--#define wait_event_freezekillable_unsafe(wq, condition)			\
--({									\
--	int __retval;							\
--	freezer_do_not_count();						\
--	__retval = wait_event_killable(wq, (condition));		\
--	freezer_count_unsafe();						\
--	__retval;							\
--})
--
- #else /* !CONFIG_FREEZER */
- static inline bool frozen(struct task_struct *p) { return false; }
- static inline bool freezing(struct task_struct *p) { return false; }
-@@ -281,35 +83,8 @@ static inline void thaw_kernel_threads(v
- 
- static inline bool try_to_freeze(void) { return false; }
- 
--static inline void freezer_do_not_count(void) {}
--static inline void freezer_count(void) {}
--static inline int freezer_should_skip(struct task_struct *p) { return 0; }
- static inline void set_freezable(void) {}
- 
--#define freezable_schedule()  schedule()
--
--#define freezable_schedule_unsafe()  schedule()
--
--#define freezable_schedule_timeout(timeout)  schedule_timeout(timeout)
--
--#define freezable_schedule_timeout_interruptible(timeout)		\
--	schedule_timeout_interruptible(timeout)
--
--#define freezable_schedule_timeout_interruptible_unsafe(timeout)	\
--	schedule_timeout_interruptible(timeout)
--
--#define freezable_schedule_timeout_killable(timeout)			\
--	schedule_timeout_killable(timeout)
--
--#define freezable_schedule_timeout_killable_unsafe(timeout)		\
--	schedule_timeout_killable(timeout)
--
--#define freezable_schedule_hrtimeout_range(expires, delta, mode)	\
--	schedule_hrtimeout_range(expires, delta, mode)
--
--#define wait_event_freezekillable_unsafe(wq, condition)			\
--		wait_event_killable(wq, condition)
--
- #endif /* !CONFIG_FREEZER */
- 
- #endif	/* FREEZER_H_INCLUDED */
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -81,25 +81,32 @@ struct task_group;
-  */
- 
- /* Used in tsk->state: */
--#define TASK_RUNNING			0x0000
--#define TASK_INTERRUPTIBLE		0x0001
--#define TASK_UNINTERRUPTIBLE		0x0002
--#define __TASK_STOPPED			0x0004
--#define __TASK_TRACED			0x0008
-+#define TASK_RUNNING			0x000000
-+#define TASK_INTERRUPTIBLE		0x000001
-+#define TASK_UNINTERRUPTIBLE		0x000002
-+#define __TASK_STOPPED			0x000004
-+#define __TASK_TRACED			0x000008
- /* Used in tsk->exit_state: */
--#define EXIT_DEAD			0x0010
--#define EXIT_ZOMBIE			0x0020
-+#define EXIT_DEAD			0x000010
-+#define EXIT_ZOMBIE			0x000020
- #define EXIT_TRACE			(EXIT_ZOMBIE | EXIT_DEAD)
- /* Used in tsk->state again: */
--#define TASK_PARKED			0x0040
--#define TASK_DEAD			0x0080
--#define TASK_WAKEKILL			0x0100
--#define TASK_WAKING			0x0200
--#define TASK_NOLOAD			0x0400
--#define TASK_NEW			0x0800
--/* RT specific auxilliary flag to mark RT lock waiters */
--#define TASK_RTLOCK_WAIT		0x1000
--#define TASK_STATE_MAX			0x2000
-+#define TASK_PARKED			0x000040
-+#define TASK_DEAD			0x000080
-+#define TASK_WAKEKILL			0x000100
-+#define TASK_WAKING			0x000200
-+#define TASK_NOLOAD			0x000400
-+#define TASK_NEW			0x000800
-+#define TASK_FREEZABLE			0x001000
-+#define __TASK_FREEZABLE_UNSAFE	       (0x002000 * IS_ENABLED(CONFIG_LOCKDEP))
-+#define TASK_FROZEN			0x004000
-+#define TASK_RTLOCK_WAIT		0x008000
-+#define TASK_STATE_MAX			0x010000
-+
-+/*
-+ * DO NOT ADD ANY NEW USERS !
-+ */
-+#define TASK_FREEZABLE_UNSAFE		(TASK_FREEZABLE | __TASK_FREEZABLE_UNSAFE)
- 
- /* Convenience macros for the sake of set_current_state: */
- #define TASK_KILLABLE			(TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)
-@@ -1714,7 +1721,6 @@ extern struct pid *cad_pid;
- #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
- #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
- #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
--#define PF_FROZEN		0x00010000	/* Frozen for system suspend */
- #define PF_KSWAPD		0x00020000	/* I am kswapd */
- #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
- #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
-@@ -1725,7 +1731,6 @@ extern struct pid *cad_pid;
- #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
- #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process policy */
- #define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to zones which allow long term pinning. */
--#define PF_FREEZER_SKIP		0x40000000	/* Freezer should not count it as freezable */
- #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_processes() and should not be frozen */
- 
- /*
---- a/include/linux/sunrpc/sched.h
-+++ b/include/linux/sunrpc/sched.h
-@@ -252,7 +252,7 @@ int		rpc_malloc(struct rpc_task *);
- void		rpc_free(struct rpc_task *);
- int		rpciod_up(void);
- void		rpciod_down(void);
--int		__rpc_wait_for_completion_task(struct rpc_task *task, wait_bit_action_f *);
-+int		rpc_wait_for_completion_task(struct rpc_task *task);
- #if IS_ENABLED(CONFIG_SUNRPC_DEBUG)
- struct net;
- void		rpc_show_tasks(struct net *);
-@@ -264,11 +264,6 @@ extern struct workqueue_struct *xprtiod_
- void		rpc_prepare_task(struct rpc_task *task);
- gfp_t		rpc_task_gfp_mask(void);
- 
--static inline int rpc_wait_for_completion_task(struct rpc_task *task)
--{
--	return __rpc_wait_for_completion_task(task, NULL);
--}
--
- #if IS_ENABLED(CONFIG_SUNRPC_DEBUG) || IS_ENABLED(CONFIG_TRACEPOINTS)
- static inline const char * rpc_qname(const struct rpc_wait_queue *q)
- {
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -361,8 +361,8 @@ do {										\
- } while (0)
- 
- #define __wait_event_freezable(wq_head, condition)				\
--	___wait_event(wq_head, condition, TASK_INTERRUPTIBLE, 0, 0,		\
--			    freezable_schedule())
-+	___wait_event(wq_head, condition, (TASK_INTERRUPTIBLE|TASK_FREEZABLE),	\
-+			0, 0, schedule())
- 
- /**
-  * wait_event_freezable - sleep (or freeze) until a condition gets true
-@@ -420,8 +420,8 @@ do {										\
- 
- #define __wait_event_freezable_timeout(wq_head, condition, timeout)		\
- 	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
--		      TASK_INTERRUPTIBLE, 0, timeout,				\
--		      __ret = freezable_schedule_timeout(__ret))
-+		      (TASK_INTERRUPTIBLE|TASK_FREEZABLE), 0, timeout,		\
-+		      __ret = schedule_timeout(__ret))
- 
- /*
-  * like wait_event_timeout() -- except it uses TASK_INTERRUPTIBLE to avoid
-@@ -642,8 +642,8 @@ do {										\
- 
- 
- #define __wait_event_freezable_exclusive(wq, condition)				\
--	___wait_event(wq, condition, TASK_INTERRUPTIBLE, 1, 0,			\
--			freezable_schedule())
-+	___wait_event(wq, condition, (TASK_INTERRUPTIBLE|TASK_FREEZABLE), 1, 0,\
-+			schedule())
- 
- #define wait_event_freezable_exclusive(wq, condition)				\
- ({										\
---- a/kernel/cgroup/legacy_freezer.c
-+++ b/kernel/cgroup/legacy_freezer.c
-@@ -113,7 +113,7 @@ static int freezer_css_online(struct cgr
- 
- 	if (parent && (parent->state & CGROUP_FREEZING)) {
- 		freezer->state |= CGROUP_FREEZING_PARENT | CGROUP_FROZEN;
--		atomic_inc(&system_freezing_cnt);
-+		static_branch_inc(&freezer_active);
- 	}
- 
- 	mutex_unlock(&freezer_mutex);
-@@ -134,7 +134,7 @@ static void freezer_css_offline(struct c
- 	mutex_lock(&freezer_mutex);
- 
- 	if (freezer->state & CGROUP_FREEZING)
--		atomic_dec(&system_freezing_cnt);
-+		static_branch_dec(&freezer_active);
- 
- 	freezer->state = 0;
- 
-@@ -179,6 +179,7 @@ static void freezer_attach(struct cgroup
- 			__thaw_task(task);
- 		} else {
- 			freeze_task(task);
-+
- 			/* clear FROZEN and propagate upwards */
- 			while (freezer && (freezer->state & CGROUP_FROZEN)) {
- 				freezer->state &= ~CGROUP_FROZEN;
-@@ -271,16 +272,8 @@ static void update_if_frozen(struct cgro
- 	css_task_iter_start(css, 0, &it);
- 
- 	while ((task = css_task_iter_next(&it))) {
--		if (freezing(task)) {
--			/*
--			 * freezer_should_skip() indicates that the task
--			 * should be skipped when determining freezing
--			 * completion.  Consider it frozen in addition to
--			 * the usual frozen condition.
--			 */
--			if (!frozen(task) && !freezer_should_skip(task))
--				goto out_iter_end;
--		}
-+		if (freezing(task) && !frozen(task))
-+			goto out_iter_end;
- 	}
- 
- 	freezer->state |= CGROUP_FROZEN;
-@@ -357,7 +350,7 @@ static void freezer_apply_state(struct f
- 
- 	if (freeze) {
- 		if (!(freezer->state & CGROUP_FREEZING))
--			atomic_inc(&system_freezing_cnt);
-+			static_branch_inc(&freezer_active);
- 		freezer->state |= state;
- 		freeze_cgroup(freezer);
- 	} else {
-@@ -366,9 +359,9 @@ static void freezer_apply_state(struct f
- 		freezer->state &= ~state;
- 
- 		if (!(freezer->state & CGROUP_FREEZING)) {
--			if (was_freezing)
--				atomic_dec(&system_freezing_cnt);
- 			freezer->state &= ~CGROUP_FROZEN;
-+			if (was_freezing)
-+				static_branch_dec(&freezer_active);
- 			unfreeze_cgroup(freezer);
- 		}
- 	}
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -374,10 +374,10 @@ static void coredump_task_exit(struct ta
- 			complete(&core_state->startup);
- 
- 		for (;;) {
--			set_current_state(TASK_UNINTERRUPTIBLE);
-+			set_current_state(TASK_UNINTERRUPTIBLE|TASK_FREEZABLE);
- 			if (!self.task) /* see coredump_finish() */
- 				break;
--			freezable_schedule();
-+			schedule();
- 		}
- 		__set_current_state(TASK_RUNNING);
- 	}
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1420,13 +1420,12 @@ static void complete_vfork_done(struct t
- static int wait_for_vfork_done(struct task_struct *child,
- 				struct completion *vfork)
- {
-+	unsigned int state = TASK_UNINTERRUPTIBLE|TASK_KILLABLE|TASK_FREEZABLE;
- 	int killed;
- 
--	freezer_do_not_count();
- 	cgroup_enter_frozen();
--	killed = wait_for_completion_killable(vfork);
-+	killed = wait_for_completion_state(vfork, state);
- 	cgroup_leave_frozen(false);
--	freezer_count();
- 
- 	if (killed) {
- 		task_lock(child);
---- a/kernel/freezer.c
-+++ b/kernel/freezer.c
-@@ -13,10 +13,11 @@
- #include <linux/kthread.h>
- 
- /* total number of freezing conditions in effect */
--atomic_t system_freezing_cnt = ATOMIC_INIT(0);
--EXPORT_SYMBOL(system_freezing_cnt);
-+DEFINE_STATIC_KEY_FALSE(freezer_active);
-+EXPORT_SYMBOL(freezer_active);
- 
--/* indicate whether PM freezing is in effect, protected by
-+/*
-+ * indicate whether PM freezing is in effect, protected by
-  * system_transition_mutex
-  */
- bool pm_freezing;
-@@ -29,7 +30,7 @@ static DEFINE_SPINLOCK(freezer_lock);
-  * freezing_slow_path - slow path for testing whether a task needs to be frozen
-  * @p: task to be tested
-  *
-- * This function is called by freezing() if system_freezing_cnt isn't zero
-+ * This function is called by freezing() if freezer_active isn't zero
-  * and tests whether @p needs to enter and stay in frozen state.  Can be
-  * called under any context.  The freezers are responsible for ensuring the
-  * target tasks see the updated state.
-@@ -52,41 +53,40 @@ bool freezing_slow_path(struct task_stru
- }
- EXPORT_SYMBOL(freezing_slow_path);
- 
-+bool frozen(struct task_struct *p)
-+{
-+	return READ_ONCE(p->__state) & TASK_FROZEN;
-+}
-+
- /* Refrigerator is place where frozen processes are stored :-). */
- bool __refrigerator(bool check_kthr_stop)
- {
--	/* Hmm, should we be allowed to suspend when there are realtime
--	   processes around? */
-+	unsigned int state = get_current_state();
- 	bool was_frozen = false;
--	unsigned int save = get_current_state();
- 
- 	pr_debug("%s entered refrigerator\n", current->comm);
- 
-+	WARN_ON_ONCE(state && !(state & TASK_NORMAL));
-+
- 	for (;;) {
--		set_current_state(TASK_UNINTERRUPTIBLE);
-+		bool freeze;
-+
-+		set_current_state(TASK_FROZEN);
- 
- 		spin_lock_irq(&freezer_lock);
--		current->flags |= PF_FROZEN;
--		if (!freezing(current) ||
--		    (check_kthr_stop && kthread_should_stop()))
--			current->flags &= ~PF_FROZEN;
-+		freeze = freezing(current) && !(check_kthr_stop && kthread_should_stop());
- 		spin_unlock_irq(&freezer_lock);
- 
--		if (!(current->flags & PF_FROZEN))
-+		if (!freeze)
- 			break;
-+
- 		was_frozen = true;
- 		schedule();
- 	}
-+	__set_current_state(TASK_RUNNING);
- 
- 	pr_debug("%s left refrigerator\n", current->comm);
- 
--	/*
--	 * Restore saved task state before returning.  The mb'd version
--	 * needs to be used; otherwise, it might silently break
--	 * synchronization which depends on ordered task state change.
--	 */
--	set_current_state(save);
--
- 	return was_frozen;
- }
- EXPORT_SYMBOL(__refrigerator);
-@@ -101,6 +101,44 @@ static void fake_signal_wake_up(struct t
- 	}
- }
- 
-+static int __set_task_frozen(struct task_struct *p, void *arg)
-+{
-+	unsigned int state = READ_ONCE(p->__state);
-+
-+	if (p->on_rq)
-+		return 0;
-+
-+	if (p != current && task_curr(p))
-+		return 0;
-+
-+	if (!(state & (TASK_FREEZABLE | __TASK_STOPPED | __TASK_TRACED)))
-+		return 0;
-+
-+	/*
-+	 * Only TASK_NORMAL can be augmented with TASK_FREEZABLE, since they
-+	 * can suffer spurious wakeups.
-+	 */
-+	if (state & TASK_FREEZABLE)
-+		WARN_ON_ONCE(!(state & TASK_NORMAL));
-+
-+#ifdef CONFIG_LOCKDEP
-+	/*
-+	 * It's dangerous to freeze with locks held; there be dragons there.
-+	 */
-+	if (!(state & __TASK_FREEZABLE_UNSAFE))
-+		WARN_ON_ONCE(debug_locks && p->lockdep_depth);
-+#endif
-+
-+	WRITE_ONCE(p->__state, TASK_FROZEN);
-+	return TASK_FROZEN;
-+}
-+
-+static bool __freeze_task(struct task_struct *p)
-+{
-+	/* TASK_FREEZABLE|TASK_STOPPED|TASK_TRACED -> TASK_FROZEN */
-+	return task_call_func(p, __set_task_frozen, NULL);
-+}
-+
- /**
-  * freeze_task - send a freeze request to given task
-  * @p: task to send the request to
-@@ -116,20 +154,8 @@ bool freeze_task(struct task_struct *p)
- {
- 	unsigned long flags;
- 
--	/*
--	 * This check can race with freezer_do_not_count, but worst case that
--	 * will result in an extra wakeup being sent to the task.  It does not
--	 * race with freezer_count(), the barriers in freezer_count() and
--	 * freezer_should_skip() ensure that either freezer_count() sees
--	 * freezing == true in try_to_freeze() and freezes, or
--	 * freezer_should_skip() sees !PF_FREEZE_SKIP and freezes the task
--	 * normally.
--	 */
--	if (freezer_should_skip(p))
--		return false;
--
- 	spin_lock_irqsave(&freezer_lock, flags);
--	if (!freezing(p) || frozen(p)) {
-+	if (!freezing(p) || frozen(p) || __freeze_task(p)) {
- 		spin_unlock_irqrestore(&freezer_lock, flags);
- 		return false;
- 	}
-@@ -137,19 +163,52 @@ bool freeze_task(struct task_struct *p)
- 	if (!(p->flags & PF_KTHREAD))
- 		fake_signal_wake_up(p);
- 	else
--		wake_up_state(p, TASK_INTERRUPTIBLE);
-+		wake_up_state(p, TASK_NORMAL);
- 
- 	spin_unlock_irqrestore(&freezer_lock, flags);
- 	return true;
- }
- 
-+/*
-+ * The special task states (TASK_STOPPED, TASK_TRACED) keep their canonical
-+ * state in p->jobctl. If either of them got a wakeup that was missed because
-+ * TASK_FROZEN, then their canonical state reflects that and the below will
-+ * refuse to restore the special state and instead issue the wakeup.
-+ */
-+static int __set_task_special(struct task_struct *p, void *arg)
-+{
-+	unsigned int state = 0;
-+
-+	if (p->jobctl & JOBCTL_TRACED)
-+		state = TASK_TRACED;
-+
-+	else if (p->jobctl & JOBCTL_STOPPED)
-+		state = TASK_STOPPED;
-+
-+	if (state)
-+		WRITE_ONCE(p->__state, state);
-+
-+	return state;
-+}
-+
- void __thaw_task(struct task_struct *p)
- {
--	unsigned long flags;
-+	unsigned long flags, flags2;
- 
- 	spin_lock_irqsave(&freezer_lock, flags);
--	if (frozen(p))
--		wake_up_process(p);
-+	if (WARN_ON_ONCE(freezing(p)))
-+		goto unlock;
-+
-+	if (lock_task_sighand(p, &flags2)) {
-+		/* TASK_FROZEN -> TASK_{STOPPED,TRACED} */
-+		bool ret = task_call_func(p, __set_task_special, NULL);
-+		unlock_task_sighand(p, &flags2);
-+		if (ret)
-+			goto unlock;
-+	}
-+
-+	wake_up_state(p, TASK_FROZEN);
-+unlock:
- 	spin_unlock_irqrestore(&freezer_lock, flags);
- }
- 
---- a/kernel/futex/waitwake.c
-+++ b/kernel/futex/waitwake.c
-@@ -334,7 +334,7 @@ void futex_wait_queue(struct futex_hash_
- 	 * futex_queue() calls spin_unlock() upon completion, both serializing
- 	 * access to the hash list and forcing another memory barrier.
- 	 */
--	set_current_state(TASK_INTERRUPTIBLE);
-+	set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
- 	futex_queue(q, hb);
- 
- 	/* Arm the timer */
-@@ -352,7 +352,7 @@ void futex_wait_queue(struct futex_hash_
- 		 * is no timeout, or if it has yet to expire.
- 		 */
- 		if (!timeout || timeout->task)
--			freezable_schedule();
-+			schedule();
- 	}
- 	__set_current_state(TASK_RUNNING);
- }
-@@ -430,7 +430,7 @@ static int futex_wait_multiple_setup(str
- 			return ret;
- 	}
- 
--	set_current_state(TASK_INTERRUPTIBLE);
-+	set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
- 
- 	for (i = 0; i < count; i++) {
- 		u32 __user *uaddr = (u32 __user *)(unsigned long)vs[i].w.uaddr;
-@@ -504,7 +504,7 @@ static void futex_sleep_multiple(struct
- 			return;
- 	}
- 
--	freezable_schedule();
-+	schedule();
- }
- 
- /**
---- a/kernel/hung_task.c
-+++ b/kernel/hung_task.c
-@@ -95,8 +95,8 @@ static void check_hung_task(struct task_
- 	 * Ensure the task is not frozen.
- 	 * Also, skip vfork and any other user process that freezer should skip.
- 	 */
--	if (unlikely(t->flags & (PF_FROZEN | PF_FREEZER_SKIP)))
--	    return;
-+	if (unlikely(READ_ONCE(t->__state) & (TASK_FREEZABLE | TASK_FROZEN)))
-+		return;
- 
- 	/*
- 	 * When a freshly created task is scheduled once, changes its state to
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -24,7 +24,7 @@
- unsigned int lock_system_sleep(void)
- {
- 	unsigned int flags = current->flags;
--	current->flags |= PF_FREEZER_SKIP;
-+	current->flags |= PF_NOFREEZE;
- 	mutex_lock(&system_transition_mutex);
- 	return flags;
- }
-@@ -48,8 +48,8 @@ void unlock_system_sleep(unsigned int fl
- 	 * Which means, if we use try_to_freeze() here, it would make them
- 	 * enter the refrigerator, thus causing hibernation to lockup.
- 	 */
--	if (!(flags & PF_FREEZER_SKIP))
--		current->flags &= ~PF_FREEZER_SKIP;
-+	if (!(flags & PF_NOFREEZE))
-+		current->flags &= ~PF_NOFREEZE;
- 	mutex_unlock(&system_transition_mutex);
- }
- EXPORT_SYMBOL_GPL(unlock_system_sleep);
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -50,8 +50,7 @@ static int try_to_freeze_tasks(bool user
- 			if (p == current || !freeze_task(p))
- 				continue;
- 
--			if (!freezer_should_skip(p))
--				todo++;
-+			todo++;
- 		}
- 		read_unlock(&tasklist_lock);
- 
-@@ -96,8 +95,7 @@ static int try_to_freeze_tasks(bool user
- 		if (!wakeup || pm_debug_messages_on) {
- 			read_lock(&tasklist_lock);
- 			for_each_process_thread(g, p) {
--				if (p != current && !freezer_should_skip(p)
--				    && freezing(p) && !frozen(p))
-+				if (p != current && freezing(p) && !frozen(p))
- 					sched_show_task(p);
- 			}
- 			read_unlock(&tasklist_lock);
-@@ -129,7 +127,7 @@ int freeze_processes(void)
- 	current->flags |= PF_SUSPEND_TASK;
- 
- 	if (!pm_freezing)
--		atomic_inc(&system_freezing_cnt);
-+		static_branch_inc(&freezer_active);
- 
- 	pm_wakeup_clear(0);
- 	pr_info("Freezing user space processes ... ");
-@@ -190,7 +188,7 @@ void thaw_processes(void)
- 
- 	trace_suspend_resume(TPS("thaw_processes"), 0, true);
- 	if (pm_freezing)
--		atomic_dec(&system_freezing_cnt);
-+		static_branch_dec(&freezer_active);
- 	pm_freezing = false;
- 	pm_nosig_freezing = false;
- 
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -269,7 +269,7 @@ static int ptrace_check_attach(struct ta
- 	read_unlock(&tasklist_lock);
- 
- 	if (!ret && !ignore_state &&
--	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
-+	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED|TASK_FROZEN)))
- 		ret = -ESRCH;
- 
- 	return ret;
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6429,7 +6429,7 @@ static void __sched notrace __schedule(u
- 			prev->sched_contributes_to_load =
- 				(prev_state & TASK_UNINTERRUPTIBLE) &&
- 				!(prev_state & TASK_NOLOAD) &&
--				!(prev->flags & PF_FROZEN);
-+				!(prev_state & TASK_FROZEN);
- 
- 			if (prev->sched_contributes_to_load)
- 				rq->nr_uninterruptible++;
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2304,7 +2304,7 @@ static int ptrace_stop(int exit_code, in
- 	read_unlock(&tasklist_lock);
- 	cgroup_enter_frozen();
- 	preempt_enable_no_resched();
--	freezable_schedule();
-+	schedule();
- 	cgroup_leave_frozen(true);
- 
- 	/*
-@@ -2473,7 +2473,7 @@ static bool do_signal_stop(int signr)
- 
- 		/* Now we don't run again until woken by SIGCONT or SIGKILL */
- 		cgroup_enter_frozen();
--		freezable_schedule();
-+		schedule();
- 		return true;
- 	} else {
- 		/*
-@@ -2548,11 +2548,11 @@ static void do_freezer_trap(void)
- 	 * immediately (if there is a non-fatal signal pending), and
- 	 * put the task into sleep.
- 	 */
--	__set_current_state(TASK_INTERRUPTIBLE);
-+	__set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
- 	clear_thread_flag(TIF_SIGPENDING);
- 	spin_unlock_irq(&current->sighand->siglock);
- 	cgroup_enter_frozen();
--	freezable_schedule();
-+	schedule();
- }
- 
- static int ptrace_signal(int signr, kernel_siginfo_t *info, enum pid_type type)
-@@ -3600,9 +3600,9 @@ static int do_sigtimedwait(const sigset_
- 		recalc_sigpending();
- 		spin_unlock_irq(&tsk->sighand->siglock);
- 
--		__set_current_state(TASK_INTERRUPTIBLE);
--		ret = freezable_schedule_hrtimeout_range(to, tsk->timer_slack_ns,
--							 HRTIMER_MODE_REL);
-+		__set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
-+		ret = schedule_hrtimeout_range(to, tsk->timer_slack_ns,
-+					       HRTIMER_MODE_REL);
- 		spin_lock_irq(&tsk->sighand->siglock);
- 		__set_task_blocked(tsk, &tsk->real_blocked);
- 		sigemptyset(&tsk->real_blocked);
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -2037,11 +2037,11 @@ static int __sched do_nanosleep(struct h
- 	struct restart_block *restart;
- 
- 	do {
--		set_current_state(TASK_INTERRUPTIBLE);
-+		set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
- 		hrtimer_sleeper_start_expires(t, mode);
- 
- 		if (likely(t->task))
--			freezable_schedule();
-+			schedule();
- 
- 		hrtimer_cancel(&t->timer);
- 		mode = HRTIMER_MODE_ABS;
---- a/kernel/umh.c
-+++ b/kernel/umh.c
-@@ -404,6 +404,7 @@ EXPORT_SYMBOL(call_usermodehelper_setup)
-  */
- int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
- {
-+	unsigned int state = TASK_UNINTERRUPTIBLE;
- 	DECLARE_COMPLETION_ONSTACK(done);
- 	int retval = 0;
- 
-@@ -437,25 +438,22 @@ int call_usermodehelper_exec(struct subp
- 	if (wait == UMH_NO_WAIT)	/* task has freed sub_info */
- 		goto unlock;
- 
-+	if (wait & UMH_KILLABLE)
-+		state |= TASK_KILLABLE;
-+
- 	if (wait & UMH_FREEZABLE)
--		freezer_do_not_count();
-+		state |= TASK_FREEZABLE;
- 
--	if (wait & UMH_KILLABLE) {
--		retval = wait_for_completion_killable(&done);
--		if (!retval)
--			goto wait_done;
-+	retval = wait_for_completion_state(&done, state);
-+	if (!retval)
-+		goto wait_done;
- 
-+	if (wait & UMH_KILLABLE) {
- 		/* umh_complete() will see NULL and free sub_info */
- 		if (xchg(&sub_info->complete, NULL))
- 			goto unlock;
--		/* fallthrough, umh_complete() was already called */
- 	}
- 
--	wait_for_completion(&done);
--
--	if (wait & UMH_FREEZABLE)
--		freezer_count();
--
- wait_done:
- 	retval = sub_info->retval;
- out:
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -730,8 +730,8 @@ static void khugepaged_alloc_sleep(void)
- 	DEFINE_WAIT(wait);
- 
- 	add_wait_queue(&khugepaged_wait, &wait);
--	freezable_schedule_timeout_interruptible(
--		msecs_to_jiffies(khugepaged_alloc_sleep_millisecs));
-+	__set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
-+	schedule_timeout(msecs_to_jiffies(khugepaged_alloc_sleep_millisecs));
- 	remove_wait_queue(&khugepaged_wait, &wait);
- }
- 
---- a/net/sunrpc/sched.c
-+++ b/net/sunrpc/sched.c
-@@ -269,7 +269,7 @@ EXPORT_SYMBOL_GPL(rpc_destroy_wait_queue
- 
- static int rpc_wait_bit_killable(struct wait_bit_key *key, int mode)
- {
--	freezable_schedule_unsafe();
-+	schedule();
- 	if (signal_pending_state(mode, current))
- 		return -ERESTARTSYS;
- 	return 0;
-@@ -333,14 +333,12 @@ static int rpc_complete_task(struct rpc_
-  * to enforce taking of the wq->lock and hence avoid races with
-  * rpc_complete_task().
-  */
--int __rpc_wait_for_completion_task(struct rpc_task *task, wait_bit_action_f *action)
-+int rpc_wait_for_completion_task(struct rpc_task *task)
- {
--	if (action == NULL)
--		action = rpc_wait_bit_killable;
- 	return out_of_line_wait_on_bit(&task->tk_runstate, RPC_TASK_ACTIVE,
--			action, TASK_KILLABLE);
-+			rpc_wait_bit_killable, TASK_KILLABLE|TASK_FREEZABLE_UNSAFE);
- }
--EXPORT_SYMBOL_GPL(__rpc_wait_for_completion_task);
-+EXPORT_SYMBOL_GPL(rpc_wait_for_completion_task);
- 
- /*
-  * Make an RPC task runnable.
-@@ -964,7 +962,7 @@ static void __rpc_execute(struct rpc_tas
- 		trace_rpc_task_sync_sleep(task, task->tk_action);
- 		status = out_of_line_wait_on_bit(&task->tk_runstate,
- 				RPC_TASK_QUEUED, rpc_wait_bit_killable,
--				TASK_KILLABLE);
-+				TASK_KILLABLE|TASK_FREEZABLE);
- 		if (status < 0) {
- 			/*
- 			 * When a sync task receives a signal, it exits with
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -2543,13 +2543,14 @@ static long unix_stream_data_wait(struct
- 				  struct sk_buff *last, unsigned int last_len,
- 				  bool freezable)
- {
-+	unsigned int state = TASK_INTERRUPTIBLE | freezable * TASK_FREEZABLE;
- 	struct sk_buff *tail;
- 	DEFINE_WAIT(wait);
- 
- 	unix_state_lock(sk);
- 
- 	for (;;) {
--		prepare_to_wait(sk_sleep(sk), &wait, TASK_INTERRUPTIBLE);
-+		prepare_to_wait(sk_sleep(sk), &wait, state);
- 
- 		tail = skb_peek_tail(&sk->sk_receive_queue);
- 		if (tail != last ||
-@@ -2562,10 +2563,7 @@ static long unix_stream_data_wait(struct
- 
- 		sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
- 		unix_state_unlock(sk);
--		if (freezable)
--			timeo = freezable_schedule_timeout(timeo);
--		else
--			timeo = schedule_timeout(timeo);
-+		timeo = schedule_timeout(timeo);
- 		unix_state_lock(sk);
- 
- 		if (sock_flag(sk, SOCK_DEAD))
+And there was a previous attempt to add support for the PNP0C32 devices:
+https://marc.info/?l=linux-acpi&m=120550727131007
+https://lkml.org/lkml/2010/5/28/327
 
+And this even made it into drivers/staging for a while, if you do:
+git revert 0be013e3dc2ee79ffab8a438bbb4e216837e3d52
+you will get a: drivers/staging/quickstart/quickstart.c file.
+
+Note this is not great code:
+
+1. If you do:
+  ls /sys/bus/platform/devices
+  You should already see a couple of PNP0C32 platform devices there and the
+  driver should simply bind to those rather then creating its own platform device
+2. As mentioned this really should use the standard /dev/input/event interface
+  for event reporting and allow userspace to change the scancode to EV_KEY*
+  mapping. You can do this e.g. by using a sparse_keymap for the scancode to
+  EV_KEY* mapping which will give you this for free.
+
+> Before I start coding on these more complex issues I would like advice in
+> order to avoid wasting my time on bad designs. In particular, on how to
+> proceed with the "Hardware buttons" section below.
+
+I believe that sending the magic command to make these keys generate events
+should be part of toshiba_acpi, combined with a generic PNP0C32 driver
+for actually reporting the key-presses.
+
+
+
+> 
+> Best regards,
+> Arvid Norlander
+> 
+> Table of contents
+> =================
+> 1. Short info on the laptop and methodology
+> 2. Background on Toshiba ACPI communication methods
+> 3. LED: "Eco" LED ................................ [implemented in patch 1]
+> 4. Battery charge mode ........................... [implemented in patch 2]
+> 5. Hardware buttons ...................................... [Advice wanted!]
+> 6. Panel power control via HCI
+> 7. BIOS setting control from the OS ................... [should we bother?]
+>    7.1 Setting boot order
+>    7.2 Setting USB memory emulation
+>    7.3 Display during boot
+>    7.4 CPU control
+>    7.5 Wake on LAN
+>    7.6 SATA power control
+>    7.8 Legacy USB
+>    7.9 Wake on keyboard
+> 8. Other features .... [nothing actionable as of now, for information only]
+> 
+> 
+> 1. Short info on the laptop and methodology
+> ===========================================
+> 
+> The Toshiba Z830-10W laptop is a so-called "Ultrabook" dating from 2011.
+> It has BIOS, not UEFI.
+> 
+> The Toshiba Z830-10W laptop has several features that don't work properly
+> under Linux. I have performed reverse engineering by tracing ACPI calls
+> with WinDbg using the "AMLI" feature while performing various actions to
+> determine what the Windows drivers do. My user space tracing on Windows
+> has been limited to determine which programs interact with the driver so
+> that I could kill those that I was not testing behaviour of at the moment.
+> 
+> I have then tested these features using the "acpi_call" kernel module on
+> Linux to issue the relevant calls under Linux. In the following sections
+> is a feature by feature breakdown.
+> 
+> 
+> 2. Background on Toshiba ACPI communication methods
+> ===================================================
+> 
+> This is a short summary of the general protocol. This is already
+> implemented in the toshiba_acpi driver. If you are already familiar with
+> that you can skip this section.
+> 
+> Almost all vendor specific features work via the \_SB_.VALZ ACPI device
+> defined in the DSDT. There are a handful of interesting methods on this
+> object, but for the purposes of this write-up only "GHCI" is relevant. This
+> method takes 6 integer (32-bit) arguments and returns a buffer 6 32-bit
+> integers.
+> 
+> The general format of queries is: {OPERATION, REGISTER, ARG1, ..., ARG4 }.
+> The operation is one of HCI_GET/HCI_SET or SCI_GET/SCI_SET (plus SCI_OPEN
+> and  SCI_CLOSE). This allows for getting and setting various registers to
+> control features or read out data.
+> 
+> The data returned varies a bit, but is /generally/ on the form:
+> {STATUS_CODE, REGISTER_FROM_QUERY, VAL1, ..., VAL4 }
+> 
+> What is the difference between HCI_* and SCI_* calls? The only important
+> difference here is that for SCI_GET/SET you first need to call SCI_OPEN and
+> then follow the get or set with an SCI_CLOSE call.
+> 
+> Much of the rest of this write-up consists of documenting registers
+> previously not handled by the toshiba_acpi Linux driver.
+> 
+> 
+> 3. LED: "Eco" LED [implemented in patch 1]
+> =================
+> 
+> The toshiba_acpi driver has support for controlling some LEDs including the
+> "Eco" LED. Unfortunately that LED works differently on this laptop.
+> 
+> The toshiba_acpi driver checks for TOS_INPUT_DATA_ERROR and tries a
+> different format. On the Z830 the error returned is TOS_NOT_SUPPORTED
+> though the different format still works.
+
+This looks good I'll go and merge it into my for-next git branch
+sometime this week (I usually merge patches in batches).
+
+> 4. Battery charge mode [implemented in patch 2]
+> ======================
+> 
+> This laptop supports not charging the battery fully in order to prolong
+> battery life. Unlike for example ThinkPads where this control is granular
+> here it is just off/on. When off it charges to 100%. When on it charges to
+> about 80%.
+> 
+> According to the Windows program used to control the feature the setting
+> will not take effect until the battery has been discharged to around 50%.
+> However, in my testing it takes effect as soon as the charge drops below
+> 80%. On Windows Toshiba branded this feature as "Eco charging"
+> 
+> In the following example ACPI calls I will use the following newly defined
+> constants:
+> #define HCI_BATTERY_CHARGE_MODE 0xba
+> #define BATTERY_CHARGE_FULL 0
+> #define BATTERY_CHARGE_80_PERCENT 1
+> 
+> To set the feature:
+>   {HCI_SET, HCI_BATTERY_CHARGE_MODE, charge_mode, 0, 0, 0}
+> To query for the existence of the feature:
+>   {HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 0}
+> To read the feature:
+>   {HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 1}
+> 
+> The read may need to be retried if TOS_DATA_NOT_AVAILABLE is returned as
+> the status code. This rarely happens (I have never observed it on Linux),
+> but I have seen it happen under Windows once, and the software did retry
+> it.
+
+Hmm, this is interesting if you look at:
+
+Documentation/ABI/testing/sysfs-class-power
+
+You will see there already is a standard API for this in the form of
+adding a "charge_control_end_threshold" attribute to the standard
+ACPI /sys/class/power_supply/BAT*/ sysfs interface. See e.g.
+drivers/platform/x86/thinkpad_acpi.c
+
+For an example of how to add sysfs attributes to a battery
+which is managed by the standard drivers/acpi/battery.c driver.
+
+I think you can use this standard attribute enabling eco charging
+for any writes with a value <= 90 and disabling it for values
+> 90 (90 being halfway between 80 and 100).
+
+While always showing 80 or 100 on read.
+
+You should then also write a patch for:
+
+Documentation/ABI/testing/sysfs-class-power
+
+Adding something like this to the "charge_control_end_threshold"
+section:
+
+"not all hardware is capable of setting this to an arbitrary
+percentage. Drivers will round written values to the nearest
+supported value. Reading back the value will show the actual
+threshold set by the driver."
+
+(feel free to copy verbatim, but maybe you can do better)
+
+
+> 5. Hardware buttons [Advice wanted!]
+> ===================
+> 
+> All the Fn+<key> hotkeys work. However, there are some hardware buttons
+> that do not. These buttons are:
+> 
+> * A button between space and the touchpad to turn off/on the touchpad.
+> * Two buttons next to the power button, one is "eco-mode", the other is
+> "projector".
+> 
+> The two buttons next to the power button both send Windows+X by default.
+> The touchpad control button does nothing that Linux can detect.
+> 
+> To enable this functionality several changes are needed.
+> 
+> The toshiba_acpi driver currently uses
+>   {HCI_SET, HCI_HOTKEY_EVENT, HCI_HOTKEY_ENABLE, 0, ...}
+> to enable the Fn+<key> hotkeys, where HCI_HOTKEY_ENABLE = 0x09. However on
+> this laptop the value 0x05 must be used instead.
+> 
+> This is not the whole story however, as these keys do not work like any of
+> the Fn-hotkeys (ACPI notification on \_SB_.VALZ). Instead, once enabled via
+> the above method they start sending notifications on various PNP0C32
+> devices. These are currently not handled by Linux. According to a search
+> PNP0C32 is "HIDACPI Button Device", so perhaps a generic driver should be
+> created.
+> 
+> The devices in question are:
+> PNP0C32 \_SB_.HS81 UID 0x03 = Enable/disable trackpad
+> PNP0C32 \_SB_.HS87 UID 0x01 = Eco button
+> PNP0C32 \_SB_.HS86 UID 0x02 = Monitor/projector button
+> 
+> Only the "path" and the "UID" value in the ACPI DSDT tell these devices
+> apart.
+> 
+> The notification always uses the value 0x80.
+> 
+> I'm not sure what the best approach to implement support for these would
+> be.
+
+Discussed above.
+
+> 6. Panel power control via HCI
+> ==============================
+> 
+> The toshiba_acpi driver supports controlling the panel power via SCI calls
+> (SCI_PANEL_POWER_ON). Based on the fact that the toshiba_acpi driver
+> outputs a message about reboot being needed I assume this is related to
+> panel power during boot?
+> 
+> However there is a HCI call that can turn the panel off or on immediately:
+> 
+> #define HCI_PANEL_POWER_ON 0x2
+> #define PANEL_ON 1
+> #define PANEL_OFF 0
+> 
+> To read/query existence: {HCI_GET, HCI_PANEL_POWER_ON, 0, 0, 0, 0}
+> To write: {HCI_SET, HCI_PANEL_POWER_ON, panel_on, 0, 0, 0}
+> 
+> This could be related to some backlight issues this laptop is having where
+> backlight control stops working after a suspend/resume.
+> 
+> Control via /sys/class/backlight/intel_backlight always works on this
+> laptop, however, most desktop environment seems to prefer the acpi_video or
+> vendor backlight controls if those exist.
+> 
+> I have tried acpi_backlight=vendor/native but that is broken in the same
+> way. With acpi_backlight=none, the screen never turns on after a resume.
+> However if I turn it on using the above HCI call, everything works
+> normally after that. And since only the intel_backlight driver is left,
+> the desktop environment controls backlight via that method.
+>   
+> I have yet to find a satisfactory solution to this problem, but I suspect
+> the correct solution would be to fix backlight control from acpi_video,
+> if that is possible. Suggestions?
+
+I think this is another case of some Toshiba devices needing the
+acpi_video backlight level save/restore behavior over suspend/resume
+while leaving the actual backlight control to intel_backlight.
+
+Quoting from: drivers/acpi/acpi_video.c :
+
+         * Some machines have a broken acpi-video interface for brightness
+         * control, but still need an acpi_video_device_lcd_set_level() call
+         * on resume to turn the backlight power on.  We Enable backlight
+         * control on these systems, but do not register a backlight sysfs
+         * as brightness control does not work.
+         */
+        {
+         /* https://bugzilla.kernel.org/show_bug.cgi?id=21012 */
+         .callback = video_disable_backlight_sysfs_if,
+         .ident = "Toshiba Portege R700",
+         .matches = {
+                DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
+                DMI_MATCH(DMI_PRODUCT_NAME, "PORTEGE R700"),
+                },
+        },
+
+Also:
+Toshiba Portege R830:    https://bugs.freedesktop.org/show_bug.cgi?id=82634
+Toshiba Satellite R830:  https://bugzilla.kernel.org/show_bug.cgi?id=21012
+
+You can see if the same option fixes things for you by adding:
+"video.disable_backlight_sysfs_if=1" to your kernel commandline while
+removing all other options. If this works, please submit a patch to
+add your model to the list in drivers/acpi/acpi_video.c, or provide
+dmidecode output, then I can do it for you.
+
+> 7. BIOS setting control from the OS [should we bother?]
+> ===================================
+> Several of the BIOS settings can be controlled from the OS. This all
+> happens via SCI calls. On Windows the "Hwsetup.exe" program offers this
+> control. I'm not sure how useful any of this is (as this is already
+> available via the BIOS).
+> 
+> If you think it is a good idea I could absolutely implement support for
+> this. Otherwise I might build a simple user space tool on top of acpi_call
+> for this. 
+
+As discussed above I don't really think we should bother; and IMHO
+certainly not something worth spending time on before the other issues
+are wrapped up.
+
+> 7.1 Setting boot order
+> ----------------------
+> This is a BIOS (not UEFI) laptop, so boot order could normally not be
+> controlled from the OS. However here it is possible:
+> 
+> #define SCI_BOOT_ORDER 0x157
+> 
+> In this SCI register the boot order is stored as a list with each nibble
+> indicating a device:
+> #define SCI_BOOT_ORDER_FDD 0x0
+> #define SCI_BOOT_ORDER_HDD 0x1
+> #define SCI_BOOT_ORDER_LAN 0x3
+> #define SCI_BOOT_ORDER_USB_MEMORY 0x4
+> #define SCI_BOOT_ORDER_USB_CD 0x7
+> #define SCI_BOOT_ORDER_USB_UNUSED 0xf
+> 
+> These are then combined as follows:
+> 
+> Set boot order to USB memory, USB CD, HDD, LAN, FDD:
+> {SCI_SET, SCI_BOOT_ORDER, 0xfff03174, 0, 0, 0}
+> 
+> Each nibble indicates a device, with the lowest nibble being the first
+> device in the boot order. As this device doesn't have a physical FDD I
+> assume that this refers to USB attached devices, but I have not tested this
+> (I do have a USB floppy drive if anyone really cares).
+> 
+> When reading the data out the result is a bit surprising:
+>   {0x0, 0x8505, 0xfff30174, 0x5, 0xfff30741, 0x0}
+> Presumably these other values also mean something, the boot order in this
+> case is USB memory, USB CD, HDD, FDD, LAN, so the third value is the boot
+> order.
+> 
+> I'm not sure what a suitable API for exposing this setting to userspace via
+> sysfs would be.
+> 
+> 7.2 Setting USB memory emulation
+> --------------------------------
+> The BIOS can either treat USB drives as HDDs or FDDs for booting purposes:
+> 
+> #define SCI_BOOT_FLOPPY_EMULATION 0x511
+> #define SCI_BOOT_FLOPPY_EMULATION_FDD 0x1
+> #define SCI_BOOT_FLOPPY_EMULATION_HDD 0x0
+> 
+> To set: {SCI_SET, SCI_BOOT_FLOPPY_EMULATION, value, 0, 0, 0}
+> Getting/existence query: {SCI_GET, SCI_BOOT_FLOPPY_EMULATION, 0, 0, 0, 0}
+> 
+> 7.3 Display during boot
+> -----------------------
+> This controls if BIOS/GRUB/etc is shown on just the internal monitor or
+> if the montior is automatically selected.
+> 
+> Note: When changing this in Windows it tells me a restart is required.
+> 
+> #define SCI_BOOT_DISPLAY 0x300
+> #define SCI_BOOT_DISPLAY_INTERNAL 0x1250
+> #define SCI_BOOT_DISPLAY_AUTO 0x3250
+> 
+> To set: {SCI_SET, SCI_BOOT_DISPLAY, value, 0, 0, 0}
+> Getting/existence query as usual.
+> 
+> Note! I have not tested the effects of this, as the only external monitors
+> I have that are not in storage use DisplayPort, while this laptop has HDMI
+> and VGA. I *do* have an old VGA TFT in storage if anyone cares though...
+> 
+> 7.4 CPU control
+> ---------------
+> I presume this is only for operating systems that don't manage this
+> themselves, I don't know for sure. The wording in the documentation is
+> vague, but I believe it controls CPU frequency behaviour.
+> 
+> Note: When changing this in Windows it tells me a restart is required.
+> 
+> #define SCI_CPU_FREQUENCY 0x132
+> #define SCI_CPU_FREQUENCY_DYNAMIC 0x0
+> #define SCI_CPU_FREQUENCY_HIGH 0x1
+> #define SCI_CPU_FREQUENCY_LOW 0x2
+> 
+> Set and get as usual ({SCI_GET/SET, SCI_CPU_FREQUENCY, value, 0, 0, 0}).
+> 
+> 7.5 Wake on LAN
+> ---------------
+> Note! This only controls Wake on LAN when off/hibernated (and since this
+> laptop has Intel Rapid Start, presumably in that mode too). It is not
+> relevant to WoL when in sleep.
+> 
+> Here the Windows driver seem to query several possibilities until it hits
+> on one that works:
+> #define SCI_WAKE_ON_LAN 0x700
+> 
+> #define SCI_WAKE_ON_LAN_OFF 0x1
+> #define SCI_WAKE_ON_LAN_ON 0x1
+> 
+> #define SCI_WAKE_ON_LAN_REG1 0x0
+> #define SCI_WAKE_ON_LAN_REG2 0x1000
+> #define SCI_WAKE_ON_LAN_REG3 0x800
+> 
+> To set:
+>   {SCI_SET, SCI_WAKE_ON_LAN, value | register, 0, 0, 0}
+> To get/query:
+>   {SCI_GET, SCI_WAKE_ON_LAN, register, 0, 0, 0}
+> 
+> For example on this specific laptop to enable WoL:
+>   {SCI_SET, SCI_WAKE_ON_LAN, SCI_WAKE_ON_LAN_ON | SCI_WAKE_ON_LAN_REG3, 0, 0, 0}
+> 
+> REG1 and REG2 give return code TOS_INPUT_DATA_ERROR on this laptop, but
+> presumably they are needed on some laptops, or the Windows program would
+> not be attempting to use them.
+> 
+> 7.6 SATA power control
+> ----------------------
+> This is another one that I don't know what exactly it corresponds to, maybe
+> it is something Linux can control directly:
+> 
+> #define SCI_SATA_POWER 0x406
+> #define SCI_SATA_POWER_BATTERY_LIFE 0x1
+> #define SCI_SATA_POWER_PERFORMANCE 0x0
+> 
+> Get/set/query as expected: {SCI_SET, SCI_SATA_POWER, value, 0, 0, 0}
+> 
+> 7.8 Legacy USB
+> --------------
+> Controls Legacy USB support in BIOS.
+> 
+> Note: When changing this in Windows it tells me a restart is required.
+> 
+> #define SCI_LEGACY_USB 0x50c
+> #define SCI_LEGACY_USB_ENABLED 0x1
+> #define SCI_LEGACY_USB_DISABLED 0x0
+> 
+> 
+> Get/set/query as expected: {SCI_SET, SCI_LEGACY_USB, value, 0, 0, 0}
+> 
+> 7.9 Wake on keyboard
+> --------------------
+> This controls if pressing a key on the keyboard wakes the laptop from
+> sleep. Otherwise, only opening the monitor or pressing the power button
+> works for this.
+> 
+> #define SCI_WAKE_ON_KEYBOARD 0x137
+> #define SCI_WAKE_ON_KEYBOARD_ENABLE 0x8
+> #define SCI_WAKE_ON_KEYBOARD_DISABLE 0x0
+> 
+> Set: {SCI_SET, SCI_WAKE_ON_KEYBOARD, value, 0, 0, 0}
+> 
+> Get/query on the standard form but with slightly weird return values:
+>   {TOS_SUCCESS2, 0x800a, value, 0x38, 0x0, 0x0}
+> 
+> 
+> 8. Other features
+> =================
+> 
+> I should note that I did discover some additional registers, but I don't
+> fully understand them yet. I have thus not included them here in order to
+> not waste your time. However I did write a blog post about this which
+> includes that information, which is available should you be interested:
+> 
+> https://vorpal.se/posts/2022/aug/21/reverse-engineering-acpi-functionality-on-a-toshiba-z830-ultrabook/#other-features_1
+> 
+> 
+> Arvid Norlander (2):
+>   platform/x86: Fix ECO LED control on Toshiba Z830
+>   platform/x86: Battery charge mode in toshiba_acpi
+> 
+>  drivers/platform/x86/toshiba_acpi.c | 115 +++++++++++++++++++++++++++-
+>  1 file changed, 114 insertions(+), 1 deletion(-)
+> 
+> 
+> base-commit: e3f259d33c0ebae1b6e4922c7cdb50e864c81928
+
+
+Regards,
+
+Hans
 
