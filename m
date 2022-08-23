@@ -2,53 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299E859E6F1
+	by mail.lfdr.de (Postfix) with ESMTP id BADD959E6F3
 	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244463AbiHWQWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 12:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S244470AbiHWQWM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 12:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244470AbiHWQVx (ORCPT
+        with ESMTP id S244476AbiHWQVx (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 12:21:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FE916D2CD
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:42:46 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 12:42:43 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA0616D2D1
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:42:47 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 12:42:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661258565;
+        s=2020; t=1661258566;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NdK6tgMqhuVYD37LZ41cVeRyp/AztC1pWQUvIEtKN+g=;
-        b=KUJmeN76dC8IGYG7EljqHX2v+ct4vvGG1Q3GzizcJI39+5JcjeiVHfOvY4lk8PBzNlrPVl
-        KI/JU/ivoqABbAJqOE0Wm7KA46gJDN8dB06SOUKLx3Gve2IZQ59HDgqxy3EWKQ9DZ/cydS
-        hyyjpOaGPo+DHe6SLJEvQs0kehfGe2k3aDPxywxcLCVYTBE86tGsE44uDfCxym7SN76vTT
-        Vi0mYPWwQFOYEymv8tTGQgFv9YwXHx9que18GZc9NY7jl+KGoGcLMVzeo4m2qPrq0UAW9/
-        5Yj4znohaOva2+p0yYOGkkrMD1aFt1Sx8scHx4JRVgDG4lHt9ytFm6qCitSLLQ==
+        bh=4CZtoTEX34bv34DtTlhoEYE/uS10o3lIhpvvbC7wZEg=;
+        b=qSe6sAbj3vDNiAHCa3pW5Sh4CXvxz+1MNBBywYfDw/kXZmmUaw8JkgcOQdqDOGJj7HwmuX
+        xrWJdsQEMAE0ghCEJpdgdBPegR2bKzrX6S1WURwGDR3qiIwWdpmAIAKUVb4c2Bi1lc5ELi
+        jbIh9LdfXjC8MIJsDWhGmUEq4VKKTDxd8azgbMrpN+kbttrY/exZ6ckbowWU8YplI4iyt9
+        tqxvGN3+R5n/3q8/1OK1Ck1Wa8b+coUW5zPecqFjYuhX0BRE1/UZgCjZGfUj+HFUoHU6qG
+        JR3/BSa1D5rf46SX3jP2+wmYiiOINQLCfFfKDNAflX61wqTF6aaV5Ag0s2vlqQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661258565;
+        s=2020e; t=1661258566;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NdK6tgMqhuVYD37LZ41cVeRyp/AztC1pWQUvIEtKN+g=;
-        b=zVXxAXEkiDH0g9F3znsvmjiI9466kc1xpBL4USwunpfqmriiiCsBH5QGBkjN3lRAHhWlRE
-        kQsg4/nzkW4iR8AQ==
-From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
+        bh=4CZtoTEX34bv34DtTlhoEYE/uS10o3lIhpvvbC7wZEg=;
+        b=J53Qcaz6Nyk837T7B8J4tVYol0WktoTwMWDVn96LBvzVzMpZa6+gCBDGUHVEFnswIvce05
+        mjk5q8baA1MJycBw==
+From:   "thermal-bot for Jiapeng Chong" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/core: Rearm the monitoring only one time
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
-        amitk@kernel.org
-In-Reply-To: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
-References: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
+Subject: [thermal: thermal/next] thermal/drivers/qcom/spmi-adc-tm5: Remove
+ unnecessary print function dev_err()
+Cc:     Abaci Robot <abaci@linux.alibaba.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20220809034346.128607-1-jiapeng.chong@linux.alibaba.com>
+References: <20220809034346.128607-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Message-ID: <166125856384.401.8782554627619918395.tip-bot2@tip-bot2>
+Message-ID: <166125856489.401.13603202925739175296.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,53 +69,43 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     9662756a9a1c34b3ee606dcddfda6a457f89b07f
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//9662756a9a1c34b3ee606dcddfda6a457f89b07f
-Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Fri, 05 Aug 2022 17:38:30 +02:00
+Commit-ID:     e920209847c396ca243259160b7d10d0dae17b35
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//e920209847c396ca243259160b7d10d0dae17b35
+Author:        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+AuthorDate:    Tue, 09 Aug 2022 11:43:46 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Wed, 17 Aug 2022 14:09:39 +02:00
 
-thermal/core: Rearm the monitoring only one time
+thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary print function dev_err()
 
-The current code calls monitor_thermal_zone() inside the
-handle_thermal_trip() function. But this one is called in a loop for
-each trip point which means the monitoring is rearmed several times
-for nothing (assuming there could be several passive and active trip
-points).
+The print function dev_err() is redundant because platform_get_irq()
+already prints an error.
 
-Move the monitor_thermal_zone() function out of the
-handle_thermal_trip() function and after the thermal trip loop, so the
-timer will be disabled or rearmed one time.
+./drivers/thermal/qcom/qcom-spmi-adc-tm5.c:1029:2-9: line 1029 is redundant because platform_get_irq() already prints an error.
 
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=1846
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220809034346.128607-1-jiapeng.chong@linux.alibaba.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20220805153834.2510142-1-daniel.lezcano@linaro.org
 ---
- drivers/thermal/thermal_core.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 69447ab..ea41ea6 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -383,11 +383,6 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
- 		handle_critical_trips(tz, trip, trip_temp, type);
- 	else
- 		handle_non_critical_trips(tz, trip);
--	/*
--	 * Alright, we handled this trip successfully.
--	 * So, start monitoring again.
--	 */
--	monitor_thermal_zone(tz);
- }
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index add6f40..af68adf 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -1025,10 +1025,8 @@ static int adc_tm5_probe(struct platform_device *pdev)
+ 	adc_tm->base = reg;
  
- static void update_temperature(struct thermal_zone_device *tz)
-@@ -503,6 +498,8 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		dev_err(dev, "get_irq failed: %d\n", irq);
++	if (irq < 0)
+ 		return irq;
+-	}
  
- 	for (count = 0; count < tz->num_trips; count++)
- 		handle_thermal_trip(tz, count);
-+
-+	monitor_thermal_zone(tz);
- }
- EXPORT_SYMBOL_GPL(thermal_zone_device_update);
- 
+ 	ret = adc_tm5_get_dt_data(adc_tm, node);
+ 	if (ret) {
