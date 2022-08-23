@@ -2,98 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3428859E93F
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 19:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF5559EA5E
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 19:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233357AbiHWRXJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 13:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S232262AbiHWR4J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 13:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243847AbiHWRVs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 13:21:48 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B60AC25E;
-        Tue, 23 Aug 2022 07:57:45 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id v12-20020a9d7d0c000000b00638e210c995so9924421otn.13;
-        Tue, 23 Aug 2022 07:57:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=KlgGuD4Ropt00q+3PBD1uO0vFomMoCDePQdd5wGHVIY=;
-        b=ccCtbFfrJgeLnsDaEbi64bsmbwbDc/eGm4MT7R2HiXoUXAWnJma4wYJibCuoAqj81u
-         qyNKRFNTC+liOX/5Ju9QfWBW7ST/DisTH809V05gYezRA55nK9JutVksxtpRlNkKiyiV
-         ynhZWc4+VJdLv0BVa7cebvf+q+xz+YRAWCucdjs1nxwYnAgK0O/WLMMUOWthXEdlg+S6
-         05EZ4TbAUWbsIsSgl/qtJkK0c9U0iE1KEmX5CRZVSKzVkyXVUpCdKEzImo6DT4MC00Ol
-         hra7C+avAhmVhKQpE/dYd4HoHlMiJ0AwmNPSDf6morZS948iD8F3icK5aCT4A11UeKQx
-         j0vw==
-X-Gm-Message-State: ACgBeo2rgapze7Nwy+l2RDYM1wfJp5/qQjJsLpLm6z42iIrqKs9Yr4jR
-        NP4FY7oCMet0uJ9ZXXjtqQ==
-X-Google-Smtp-Source: AA6agR674PIV086rHGCdQdraD7gGhkGpmf9VvJELSNqfoV3WZUxBi5lkBuO7P2w4Ehae1rDXBZan0g==
-X-Received: by 2002:a9d:5508:0:b0:636:ee02:ff7c with SMTP id l8-20020a9d5508000000b00636ee02ff7cmr9920439oth.249.1661266664456;
-        Tue, 23 Aug 2022 07:57:44 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 07:57:43 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Ilia Lin <ilia.lin@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Niklas Cassel <nks@flawful.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: opp: Add missing (unevaluated|additional)Properties on child nodes
-Date:   Tue, 23 Aug 2022 09:56:48 -0500
-Message-Id: <20220823145649.3118479-17-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S233923AbiHWRzm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 13:55:42 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A694F6BD7E
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 08:59:36 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 1361082A4B;
+        Tue, 23 Aug 2022 17:59:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1661270374;
+        bh=WV1ptfKxfUDjjXI1EEmB5WMDP/ktXDZQKGb6xgjKHDI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=I0d6aK2lv8oCvUA8ukVZKumHTUdpT9iZn+vAKGK4TdmwXk/SvaplsuQ6TX0F7Mg8J
+         SDWHNoZ0bcyZy2eNWRnTaxi9Z954xi3U+oojpesRsmvlqlq9RJE9GODefWYW9/8Oxp
+         Ceo4hwe88k6u+tQ/pDR9vCRKUcM8ujGBrJrdVKqgvYzC8RXC57qS2k8NgB5eZqtlRQ
+         jKlNr1neuFTAUtUU5OiDSJkZht9gKo8anSsjgA0ZM/pZC+6m7yi83Gt7d0Mcba0NZw
+         7G2zCDDBFgYzkcXO0d631EF4siuc/as5JCVPLwqS7/9zMJcVVti0arlwtkuklm3JEp
+         B/Y1lA78wpMSw==
+Message-ID: <31ab3c4d-9d5e-4e09-cbeb-a764fb467264@denx.de>
+Date:   Tue, 23 Aug 2022 17:59:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2] power: supply: bq25890: Add support for setting IINLIM
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20220801025727.778218-1-marex@denx.de>
+ <b8235890-7878-c982-caf2-1c7a69859f69@redhat.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <b8235890-7878-c982-caf2-1c7a69859f69@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In order to ensure only documented properties are present, node schemas
-must have unevaluatedProperties or additionalProperties set to false
-(typically).
+On 8/1/22 09:15, Hans de Goede wrote:
+> Hi,
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 1 +
- Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 1 +
- 2 files changed, 2 insertions(+)
+Hi,
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-index 59663e897dae..a202b6c6561d 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-@@ -40,6 +40,7 @@ properties:
- patternProperties:
-   '^opp-?[0-9]+$':
-     type: object
-+    additionalProperties: false
- 
-     properties:
-       opp-hz: true
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-index 14a7a689ad6d..df8442fb11f0 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-@@ -19,6 +19,7 @@ properties:
- patternProperties:
-   '^opp-?[0-9]+$':
-     type: object
-+    additionalProperties: false
- 
-     properties:
-       opp-level: true
--- 
-2.34.1
+> On 8/1/22 04:57, Marek Vasut wrote:
+>> Let user set input current limit via sysfs. This is useful in case there
+>> are multiple chargers connected to the device, each of which with its own
+>> arbitrary maximum current which it can provide, some of which may provide
+>> more than the default 500mA. In that case, userspace can listen for plug
+>> events generated by each charger and adjust the current limit accordingly,
+>> e.g. to permit battery to charge faster.
+>>
+>> Note that the IINLIM is reset every time the bq25890 is disconnected from
+>> a charger, so the userspace must adjust the limit repeatly on every plug
+>> event.
+>>
+>> Signed-off-by: Marek Vasut <marex@denx.de>
+> 
+> Thanks, patch looks good to me:
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
+Can this be applied now ?
