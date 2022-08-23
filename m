@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAABE59E707
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD0E59E710
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244725AbiHWQWu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 12:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S244692AbiHWQWv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 12:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244661AbiHWQWb (ORCPT
+        with ESMTP id S241561AbiHWQWb (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 12:22:31 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BE5F8FE5
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:43:19 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 12:43:16 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF4D9E13E
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:43:20 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 12:43:17 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661258597;
+        s=2020; t=1661258598;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Eots+1s2d5DwEDXd1GD/NNHMhOiPY7ybvllqEs7H9xc=;
-        b=jtzAfeZaRffW7N2nxIAH2iwQ4cA0ksfYt5ne7AEDIzQDM/g2/X+LCKfdn4lqzy/6AALJM6
-        I/oXXPL5SmfzjelO6uZmzzYLpIZ2ZmSFTjMYKh50sLOOObJQniQhJ+xU4wEm72TLbVH033
-        GluALYeRKg+H9aScP9Ige4qWmbBSyxxVNdjT2A/5oomDXaCFQ5TlBNd0KIKOpcPqAUShBU
-        RpkNBvzVQeUMorzrcLqZryLnh0sJVQV6Vnj7+kIDQxoUDnFbAOFT2KsTrDRyxdDkMXBzEh
-        6z4mAik3OBqImWgDGLUAP+IojmA/yoMUzDeewqiE1DVONUGQVlKYOZdpFGedCQ==
+        bh=B4HtOS66rDPxrLTmMCol0X1aFA0foft7ETCbmwoZ6Lw=;
+        b=HXmFyYDyMwdo2FjW5iC8O+N2JQgfuHnfVLBquC6xeHy6Tlv3nxKGomdLBNdat0XYOC2iQ+
+        zzENxqM4gJnRVc16U1VpUZRauS/CB94ibLL6OrqaGD4f2ryVUFdPSVVADo16hGa85zdNu1
+        zzZDFxjQtAwJuczH8QT38UlbuDkHdP/aJavRlcsrNU/TUe9snFE90xvyshy+LhE8QLYqOL
+        lRiAQulZbvRJundISVYNlqw4mQk3dsrDmSYBN921Gicjk0NQ3uQx6S938B03ojlJyMZq5w
+        FlPK4SPTt4G7D2MPaHOC/tY9mLgVNm0sbUGc7HjxdJ5vOfWQkdoKvDu5qHODyg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661258597;
+        s=2020e; t=1661258598;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Eots+1s2d5DwEDXd1GD/NNHMhOiPY7ybvllqEs7H9xc=;
-        b=zdACGHwqGOrrdRSFJrwb0+3kp3cACRC1SeVbjRB1pWbZu9CemrRWngcgHNKqkdx6kwYxcy
-        mrnln1bE9RBXccBQ==
+        bh=B4HtOS66rDPxrLTmMCol0X1aFA0foft7ETCbmwoZ6Lw=;
+        b=r43tYInTANrqhUnxdE6FiI0D55igHePc1Ks8tVWcP90GdHM9DC7mKP+6ZTetI4TwV0YeW+
+        GmoT1PMkcrtsB0Bw==
 From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/rockchip: Switch to new of API
+Subject: [thermal: thermal/next] thermal/of: Make new code and old code co-exist
 Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220804224349.1926752-4-daniel.lezcano@linexp.org>
-References: <20220804224349.1926752-4-daniel.lezcano@linexp.org>
+In-Reply-To: <20220804224349.1926752-3-daniel.lezcano@linexp.org>
+References: <20220804224349.1926752-3-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Message-ID: <166125859656.401.884933545625642663.tip-bot2@tip-bot2>
+Message-ID: <166125859753.401.12203848347786618091.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,74 +66,87 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     90b2ca02a969963bb37c30b42510fc3dfb0a3ae7
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//90b2ca02a969963bb37c30b42510fc3dfb0a3ae7
+Commit-ID:     48ad3b104b9ec85de58c2b4e38fdad9a26446f99
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//48ad3b104b9ec85de58c2b4e38fdad9a26446f99
 Author:        Daniel Lezcano <daniel.lezcano@linexp.org>
-AuthorDate:    Fri, 05 Aug 2022 00:43:19 +02:00
+AuthorDate:    Fri, 05 Aug 2022 00:43:18 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Wed, 17 Aug 2022 14:09:37 +02:00
 
-thermal/drivers/rockchip: Switch to new of API
+thermal/of: Make new code and old code co-exist
 
-The thermal OF code has a new API allowing to migrate the OF
-initialization to a simpler approach. The ops are no longer device
-tree specific and are the generic ones provided by the core code.
+This transient change allows to use old and new OF together until all
+the drivers are converted to use the new OF API.
 
-Convert the ops to the thermal_zone_device_ops format and use the new
-API to register the thermal zone with these generic ops.
+This will go away when the old OF code will be removed.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-Link: https://lore.kernel.org/r/20220804224349.1926752-4-daniel.lezcano@linexp.org
+Link: https://lore.kernel.org/r/20220804224349.1926752-3-daniel.lezcano@linexp.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/rockchip_thermal.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/thermal/thermal_core.c |  6 ------
+ drivers/thermal/thermal_of.c   | 13 +++++++++++--
+ 2 files changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index dc3a9c2..819e059 100644
---- a/drivers/thermal/rockchip_thermal.c
-+++ b/drivers/thermal/rockchip_thermal.c
-@@ -1211,9 +1211,9 @@ static irqreturn_t rockchip_thermal_alarm_irq_thread(int irq, void *dev)
- 	return IRQ_HANDLED;
- }
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 50d50ce..69447ab 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1492,10 +1492,6 @@ static int __init thermal_init(void)
+ 	if (result)
+ 		goto unregister_governors;
  
--static int rockchip_thermal_set_trips(void *_sensor, int low, int high)
-+static int rockchip_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+-	result = of_parse_thermal_zones();
+-	if (result)
+-		goto unregister_class;
+-
+ 	result = register_pm_notifier(&thermal_pm_nb);
+ 	if (result)
+ 		pr_warn("Thermal: Can not register suspend notifier, return %d\n",
+@@ -1503,8 +1499,6 @@ static int __init thermal_init(void)
+ 
+ 	return 0;
+ 
+-unregister_class:
+-	class_unregister(&thermal_class);
+ unregister_governors:
+ 	thermal_unregister_governors();
+ error:
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index c5cbe25..a17087c 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -485,6 +485,15 @@ thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
  {
--	struct rockchip_thermal_sensor *sensor = _sensor;
-+	struct rockchip_thermal_sensor *sensor = tz->devdata;
- 	struct rockchip_thermal_data *thermal = sensor->thermal;
- 	const struct rockchip_tsadc_chip *tsadc = thermal->chip;
+ 	struct device_node *np, *child, *sensor_np;
+ 	struct thermal_zone_device *tzd = ERR_PTR(-ENODEV);
++	static int old_tz_initialized;
++	int ret;
++
++	if (!old_tz_initialized) {
++		ret = of_parse_thermal_zones();
++		if (ret)
++			return ERR_PTR(ret);
++		old_tz_initialized = 1;
++	}
  
-@@ -1224,9 +1224,9 @@ static int rockchip_thermal_set_trips(void *_sensor, int low, int high)
- 				     sensor->id, thermal->regs, high);
+ 	np = of_find_node_by_name(NULL, "thermal-zones");
+ 	if (!np)
+@@ -1004,7 +1013,7 @@ free_tz:
+ 	return ERR_PTR(ret);
  }
  
--static int rockchip_thermal_get_temp(void *_sensor, int *out_temp)
-+static int rockchip_thermal_get_temp(struct thermal_zone_device *tz, int *out_temp)
+-static __init void of_thermal_free_zone(struct __thermal_zone *tz)
++static void of_thermal_free_zone(struct __thermal_zone *tz)
  {
--	struct rockchip_thermal_sensor *sensor = _sensor;
-+	struct rockchip_thermal_sensor *sensor = tz->devdata;
- 	struct rockchip_thermal_data *thermal = sensor->thermal;
- 	const struct rockchip_tsadc_chip *tsadc = sensor->thermal->chip;
- 	int retval;
-@@ -1239,7 +1239,7 @@ static int rockchip_thermal_get_temp(void *_sensor, int *out_temp)
- 	return retval;
- }
- 
--static const struct thermal_zone_of_device_ops rockchip_of_thermal_ops = {
-+static const struct thermal_zone_device_ops rockchip_of_thermal_ops = {
- 	.get_temp = rockchip_thermal_get_temp,
- 	.set_trips = rockchip_thermal_set_trips,
- };
-@@ -1326,8 +1326,8 @@ rockchip_thermal_register_sensor(struct platform_device *pdev,
- 
- 	sensor->thermal = thermal;
- 	sensor->id = id;
--	sensor->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev, id,
--					sensor, &rockchip_of_thermal_ops);
-+	sensor->tzd = devm_thermal_of_zone_register(&pdev->dev, id, sensor,
-+						    &rockchip_of_thermal_ops);
- 	if (IS_ERR(sensor->tzd)) {
- 		error = PTR_ERR(sensor->tzd);
- 		dev_err(&pdev->dev, "failed to register sensor %d: %d\n",
+ 	struct __thermal_bind_params *tbp;
+ 	int i, j;
+@@ -1523,7 +1532,7 @@ EXPORT_SYMBOL_GPL(devm_thermal_of_zone_unregister);
+  * Return: 0 on success, proper error code otherwise
+  *
+  */
+-int __init of_parse_thermal_zones(void)
++int of_parse_thermal_zones(void)
+ {
+ 	struct device_node *np, *child;
+ 	struct __thermal_zone *tz;
