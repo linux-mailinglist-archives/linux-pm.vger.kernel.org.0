@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B3E59E719
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5727959E71E
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244718AbiHWQWq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 12:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
+        id S242105AbiHWQWr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 12:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243824AbiHWQW1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 12:22:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896839F0E7
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:43:13 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 12:43:10 -0000
+        with ESMTP id S244619AbiHWQW2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 12:22:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B87C5787
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:43:14 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 12:43:11 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661258591;
+        s=2020; t=1661258592;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OTlO5H+z1kTX92IS1WWaRF7VE+/lmEmATqdZ1RMrVIU=;
-        b=Gd0KEFwGr+ZhibaxyTj7Z2VPq5MLSRU6DIAVFq9iBPz1yJEOsRlzRu/yCdXTPqwn+72qWQ
-        gLYAEgRVlRtHBTmzTbHkdI0nZKEbGPeu0u09NTURUdvCO5NJhR67l34/Yjb5oYpqysXSjD
-        pJKmpvOiBcsXyAXc8eCsfaOZ8tDvOsOG9r110dvv+wXazRT7JFCfJmQ8BaLG/T8Y+daQ5o
-        fNIs9UDyYDMtvXRShYv4Q4wUjw4DSMBulsdcaxXRyK3TK+tW4+hlSxLtxVKAJzVIyfPIfm
-        BkWMKl5Wn4dFWmwNKw9OWEP79IMoLJw4oTgkRKXa5MItO77C1gMRr73w8LIqAg==
+        bh=sT5Zr2H9n4DkXk/RRXAB5p6h2nqvuqKMSIba1Rhxlkw=;
+        b=X0/0ZPEOGdZ3yb3Qh0aj0X4Xpl0z3xrlZum4sNkcIv+e8fwAfahbpJ6PeZ1XXVYdiAJIq3
+        +UzqzBHVtQ8FJti+tKaIdAsGMzhpe91EcY6ynSqMP2pzmzYPT3EuRd/o2n7hF8691aJuXn
+        Fl15+c1SthNPjsLsWnPuR4aR5sAJGa55vJ1VZNmQb/uWV33co0CoK4qHLswWVqgm9W7FQe
+        wLz1RSiplGbZwDrfP8kSlxt4gXrd3b9gHG/r8pBOpyso0KjwkOX60Xa4LNsKakZIx6GQBD
+        RQ+Ae50qaw+8X6Kq4QtWyyRliv2QsPtkcXkxCjcDu9/D8b3LHJf57K4t5SdddQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661258591;
+        s=2020e; t=1661258592;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OTlO5H+z1kTX92IS1WWaRF7VE+/lmEmATqdZ1RMrVIU=;
-        b=TPa2Ss3H9imowwRNRa41pHJaWgaowIP7HycUgonEFgAv6MgGxuSRv2sRIPvSgB/CxfkZkO
-        3jL6Su2Jv3keXWDw==
+        bh=sT5Zr2H9n4DkXk/RRXAB5p6h2nqvuqKMSIba1Rhxlkw=;
+        b=/iyfgsY2PmbTQK10U8Bx/BvozfITApM0D4Is+6pm/eNUOKokN0M37Xzu+mrFzvlOsUM8LT
+        QsMhUCndE3DvIRCw==
 From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/sprd: Switch to new of API
+Subject: [thermal: thermal/next] thermal/drivers/sun8i: Switch to new of API
 Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220804224349.1926752-10-daniel.lezcano@linexp.org>
-References: <20220804224349.1926752-10-daniel.lezcano@linexp.org>
+In-Reply-To: <20220804224349.1926752-9-daniel.lezcano@linexp.org>
+References: <20220804224349.1926752-9-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Message-ID: <166125859054.401.13497850415503854828.tip-bot2@tip-bot2>
+Message-ID: <166125859152.401.10987956639020381327.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,14 +66,14 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     7f689a2ef4f6422b200682f80be225c1f61218f7
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//7f689a2ef4f6422b200682f80be225c1f61218f7
+Commit-ID:     2e2150c7946764f289bafd716cbd6721283dc9ce
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//2e2150c7946764f289bafd716cbd6721283dc9ce
 Author:        Daniel Lezcano <daniel.lezcano@linexp.org>
-AuthorDate:    Fri, 05 Aug 2022 00:43:25 +02:00
+AuthorDate:    Fri, 05 Aug 2022 00:43:24 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Wed, 17 Aug 2022 14:09:38 +02:00
 
-thermal/drivers/sprd: Switch to new of API
+thermal/drivers/sun8i: Switch to new of API
 
 The thermal OF code has a new API allowing to migrate the OF
 initialization to a simpler approach. The ops are no longer device
@@ -83,60 +83,49 @@ Convert the ops to the thermal_zone_device_ops format and use the new
 API to register the thermal zone with these generic ops.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-Link: https://lore.kernel.org/r/20220804224349.1926752-10-daniel.lezcano@linexp.org
+Link: https://lore.kernel.org/r/20220804224349.1926752-9-daniel.lezcano@linexp.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/sprd_thermal.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/thermal/sun8i_thermal.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-index fff80fc..ac88451 100644
---- a/drivers/thermal/sprd_thermal.c
-+++ b/drivers/thermal/sprd_thermal.c
-@@ -204,9 +204,9 @@ static int sprd_thm_temp_to_rawdata(int temp, struct sprd_thermal_sensor *sen)
- 	return clamp(val, val, (u32)(SPRD_THM_RAW_DATA_HIGH - 1));
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 212c87e..e64d06d 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -108,9 +108,9 @@ static int sun50i_h5_calc_temp(struct ths_device *tmdev,
+ 		return -1590 * reg / 10 + 276000;
  }
  
--static int sprd_thm_read_temp(void *devdata, int *temp)
-+static int sprd_thm_read_temp(struct thermal_zone_device *tz, int *temp)
+-static int sun8i_ths_get_temp(void *data, int *temp)
++static int sun8i_ths_get_temp(struct thermal_zone_device *tz, int *temp)
  {
--	struct sprd_thermal_sensor *sen = devdata;
-+	struct sprd_thermal_sensor *sen = tz->devdata;
- 	u32 data;
+-	struct tsensor *s = data;
++	struct tsensor *s = tz->devdata;
+ 	struct ths_device *tmdev = s->tmdev;
+ 	int val = 0;
  
- 	data = readl(sen->data->base + SPRD_THM_TEMP(sen->id)) &
-@@ -217,7 +217,7 @@ static int sprd_thm_read_temp(void *devdata, int *temp)
+@@ -135,7 +135,7 @@ static int sun8i_ths_get_temp(void *data, int *temp)
  	return 0;
  }
  
--static const struct thermal_zone_of_device_ops sprd_thm_ops = {
-+static const struct thermal_zone_device_ops sprd_thm_ops = {
- 	.get_temp = sprd_thm_read_temp,
+-static const struct thermal_zone_of_device_ops ths_ops = {
++static const struct thermal_zone_device_ops ths_ops = {
+ 	.get_temp = sun8i_ths_get_temp,
  };
  
-@@ -408,10 +408,10 @@ static int sprd_thm_probe(struct platform_device *pdev)
+@@ -468,10 +468,10 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+ 		tmdev->sensor[i].tmdev = tmdev;
+ 		tmdev->sensor[i].id = i;
+ 		tmdev->sensor[i].tzd =
+-			devm_thermal_zone_of_sensor_register(tmdev->dev,
+-							     i,
+-							     &tmdev->sensor[i],
+-							     &ths_ops);
++			devm_thermal_of_zone_register(tmdev->dev,
++						      i,
++						      &tmdev->sensor[i],
++						      &ths_ops);
+ 		if (IS_ERR(tmdev->sensor[i].tzd))
+ 			return PTR_ERR(tmdev->sensor[i].tzd);
  
- 		sprd_thm_sensor_init(thm, sen);
- 
--		sen->tzd = devm_thermal_zone_of_sensor_register(sen->dev,
--								sen->id,
--								sen,
--								&sprd_thm_ops);
-+		sen->tzd = devm_thermal_of_zone_register(sen->dev,
-+							 sen->id,
-+							 sen,
-+							 &sprd_thm_ops);
- 		if (IS_ERR(sen->tzd)) {
- 			dev_err(&pdev->dev, "register thermal zone failed %d\n",
- 				sen->id);
-@@ -523,8 +523,8 @@ static int sprd_thm_remove(struct platform_device *pdev)
- 
- 	for (i = 0; i < thm->nr_sensors; i++) {
- 		sprd_thm_toggle_sensor(thm->sensor[i], false);
--		devm_thermal_zone_of_sensor_unregister(&pdev->dev,
--						       thm->sensor[i]->tzd);
-+		devm_thermal_of_zone_unregister(&pdev->dev,
-+						thm->sensor[i]->tzd);
- 	}
- 
- 	clk_disable_unprepare(thm->clk);
