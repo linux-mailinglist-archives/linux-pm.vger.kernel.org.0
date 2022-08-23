@@ -2,204 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C5359EC2C
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 21:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC78359ECA4
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 21:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbiHWTXl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 15:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S233153AbiHWTnW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 15:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbiHWTXK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 15:23:10 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00735135AF0;
-        Tue, 23 Aug 2022 11:05:01 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-32a09b909f6so400929707b3.0;
-        Tue, 23 Aug 2022 11:05:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7wKGoZnic5LNVksHZqOyLyRJxA/khS3FDx7SnbOPfSk=;
-        b=24SAA5iB0GtU3ppNSW6ocMoHnb5q2gRsIoE/SoDUQqdtPcXth8wwclokUmCBagwNDk
-         ogtuTpTvdq1PYQEgr08EJmBRg4PqkaYf1+VaMwfNE9JGZJkrDRkM0v146PjgzbHyvbGV
-         ZBBr8rbt+CDHAR+JZOhc3ZlS4z3B38kwRBZ+Qlo93le4POTP2Xvn3wOOyXT83W+iu/NI
-         IkMT9tkICRzPQ/Msbq85I0x2N4A8j/ubIqfbp3xGbc63FiJ/IVmNPeoz206siB1GU65h
-         G8rh5S51z4h2ppDdJa9IEURhYoixhpd11T9cTS4efVqgMjkMGtlC4FoJvAOgbfNoULDy
-         bc/w==
-X-Gm-Message-State: ACgBeo1jy9On7ZBFeAmWk3SDH8CUkeFJSX6A/INJvGYI+ttiuzVsTnpN
-        tXXeESsCQ1cquWrFaYa503ldg6ai0V+paxM6B8Q=
-X-Google-Smtp-Source: AA6agR5bJErDIx47Az9fb4XE1uDN119UnaityOWnQElZjnOMZ0i23r0BIxfoRglwuZWVZypvWOlUby9Uw+M+A+DEZA4=
-X-Received: by 2002:a25:c204:0:b0:692:72b9:a778 with SMTP id
- s4-20020a25c204000000b0069272b9a778mr25476145ybf.81.1661277900880; Tue, 23
- Aug 2022 11:05:00 -0700 (PDT)
+        with ESMTP id S229685AbiHWTnI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 15:43:08 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02olkn2079.outbound.protection.outlook.com [40.92.44.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374BC26F;
+        Tue, 23 Aug 2022 11:43:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hAO4LD+okeZ1GtoLkmghqU6UTKliwOTqYQJd3VClSIxj+uX4wF6Ty7NV5f/yoLzT3x8vPX9noWB++XnyUbz8z4TfGSMrHlaC9kqHQFqt7enFTZv4EZQBzlDR8t7qkWemN1Cdnq+SBPGFhalw60Lg/uNj0FNDA2I683Aym+/0b5qgW8xufMeKk4ANZxZlDisIe+XLk2N33vgxeqta6kSbLBnBl2vgOmC9WJBLEhUuFlaGHID5WNV3cmR6w2yUkpi/Xle4X/6ythOrSSQ9fVSQU4SsXw8ID8YFTM/XLSEijJoEeD0CX+6+lq4ZRKBvxnrxBb3E31fKK6WZyKSmXAC3Ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g4XMeTBAHoz5LjOdOQIqEJI7eMkB95Li4Bw88vlAjTE=;
+ b=V35JndU9nMOZCf1ly+zZGd9jhILLI7xPd+NaLS/fLDAyc6MvCkLsOkIpR4rELXNSpy7BjhVBd9GhrUKT+IjWwj+Of1VM+ha/Y3TXZAPab7eyZWWurtLgOrlHX9N7Lv0SMESrXY1n6zgQSdCNrKe6sk7RZugz+uJuVUQ9aP4gBh6/DgWWlGIAR7W97P6vzaL1q1YMcnRamZaAwNl6QnS3gKUs0zbQkaFtMt4fdYtTIxb7/WfUS+4zwEd4kQZWSo085auXkEYqhjyCWFXM5PuPlUSn2s7dywLB7aUNBqf+RNt6s3+NWL0n4GrH9wk6BR1lfKxd6KHDbwuvSQq7d2LiQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g4XMeTBAHoz5LjOdOQIqEJI7eMkB95Li4Bw88vlAjTE=;
+ b=IOUldoxxDLztXbBMedFidS82wjpEf73jBoIqQB3FqDd3e/YdOhGj8Yj8YV8YTEo7vd8P6yzYXxAdjc2JCdcQRh/BssgIKecnatfRmB1jnkd4Q0+5jwZ6QKZ37L0EvFWgiwmjban7/R8odjScapvFRA6veaWrMPf8Y5DNC/b6do4/TjRx6VSyfubyVCoevYXjGNo6m81++E6InkBsLOem9U1tCfn/kedjJsWLKo2AZ3k2CZTYy56bXFurcNlbQJoFgz6nu9e+Jx6NKwiO4ikboHdx8e1S2TbyKV/+HjDZhPbqTrkfheVIEgl4jzp+D00ANlSNc9uiF1sftFsoK05g1w==
+Received: from SN6PR06MB5342.namprd06.prod.outlook.com (2603:10b6:805:f9::31)
+ by BYAPR06MB5349.namprd06.prod.outlook.com (2603:10b6:a03:d5::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Tue, 23 Aug
+ 2022 18:43:40 +0000
+Received: from SN6PR06MB5342.namprd06.prod.outlook.com
+ ([fe80::20e7:bc40:7e9d:b46e]) by SN6PR06MB5342.namprd06.prod.outlook.com
+ ([fe80::20e7:bc40:7e9d:b46e%4]) with mapi id 15.20.5546.022; Tue, 23 Aug 2022
+ 18:43:40 +0000
+Date:   Tue, 23 Aug 2022 13:43:37 -0500
+From:   Chris Morgan <macromorgan@hotmail.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Chris Morgan <macroalpha82@gmail.com>, linux-pm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        zhangqing@rock-chips.com, zyw@rock-chips.com,
+        jon.lin@rock-chips.com, heiko@sntech.de,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lee@kernel.org, Maya Matuszczyk <maccraft123mc@gmail.com>
+Subject: Re: [PATCH v8 3/4] power: supply: Add charger driver for Rockchip
+ RK817
+Message-ID: <SN6PR06MB5342D31AA67E4BBBAC1F934EA5709@SN6PR06MB5342.namprd06.prod.outlook.com>
+References: <20220808173809.11320-1-macroalpha82@gmail.com>
+ <20220808173809.11320-4-macroalpha82@gmail.com>
+ <20220823163540.dg2z7fngaqklejvx@mercury.elektranox.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823163540.dg2z7fngaqklejvx@mercury.elektranox.org>
+X-TMN:  [JQ2eVutySnoXgGeTYuRolKvpsDL21Avu]
+X-ClientProxiedBy: SA9PR10CA0015.namprd10.prod.outlook.com
+ (2603:10b6:806:a7::20) To SN6PR06MB5342.namprd06.prod.outlook.com
+ (2603:10b6:805:f9::31)
+X-Microsoft-Original-Message-ID: <20220823184337.GA9384@wintermute.localdomain>
 MIME-Version: 1.0
-References: <20220816130629.3178-1-lukasz.luba@arm.com>
-In-Reply-To: <20220816130629.3178-1-lukasz.luba@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 20:04:49 +0200
-Message-ID: <CAJZ5v0jR2RozeV301u4g90-BpNqkQMRrN=dgaOkJ7veVZ02=aw@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: schedutil: Move max CPU capacity to sugov_policy
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 08ff96dc-69e5-4f80-f24c-08da8537657d
+X-MS-TrafficTypeDiagnostic: BYAPR06MB5349:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wORwy+FalHdtJIMyKqzBEkiBSOoHQFW8KocwOWLTacRHJjtVP8iRSSmpFpazEp5VMJwMc8Nxqsg4xc7ucVS/TGE1gfFBaO/U04/nCe+Mei92GumM6ONFsUt3J/l7MhH9A8Nb58fmzlc1BFCqfRUkdIb7VwCLxeMeVRUGQvkLpXZwkYfEQzQqFSFaEGI2CLGGA1CdCCyLc6EPQJSSWg/dEdEm9X0JvaQPZiXRNfazZrT649+b7X/yx3mMR8SayUuW60BVi1go8E+Ytjkzin35je3msq2a8fhh5xxWiKWmys1x9gypFJE/S1MnIqKspaZeznf+w3jnxJfTFSgvI8Atf0Wztg3rFqT1Bft0adBKLokSqi9c8et3pDzV9lcKf6LZSCc2lNYb9vCnq0X0q34OmcNDHq0CAZd9d8JyZHq4KXEPDRWOCpa23QAQz4aO7WJtS1yCl2SbSH2kAQ0KAwrZrooqiTCbDS/wR9BHg2w87htnmJ57MhtBD9VCd/CE+pOKp57SBDOWy6RsnT6NaL1WwYshSlYhlidXClhvJaKSuikcvOY65oxephjzz22xZu8hyI5t5GUr1TrTuz9gM4xGGFEsxyj4J9Bz7o7viZ75xA/2m8/LCWhlsy2gaL+AMEiRXNwUNGzb/ox3CYwxYtPYFUxNboxEmAGJhJRnnSieBCskDwi7UZhTp+Hyl0TQHMhG
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uSaTCkaOXZO/Ar1QzOUF1TO+HRLEZgC1NidBbcra6Kbd5ww+wL5noaETtDKM?=
+ =?us-ascii?Q?RGZeePrmtU3Iu3QOx3yZTQ9qNWlBm17ZQiUtHX+KvxmtwYOV58X/6ldC9bY2?=
+ =?us-ascii?Q?UtGvF9NCkyO7CXs3akSu2itZgj566HdlTTkpX/95Dvgewt+AW+0bTV0rvxSe?=
+ =?us-ascii?Q?DqEONFSH4ZQiZqruLdsgzWRaJz7Sqqxvv214nnqrvzZIAPAS/Y792N1IVc2e?=
+ =?us-ascii?Q?06Od5FDIKXHaM9YVRDvUSj4enLCKQSGXpClBc6oxhnURUEIGkFygCxi8godK?=
+ =?us-ascii?Q?6jd+i8HqmmpCv3Ro8psGoWyfiBNEMSLtnRjh2U+5yRmrLRgu019tA7XPNSdE?=
+ =?us-ascii?Q?N8Zzu9x4vSpq9YYqOBrssSJRRzDNu4HI/DsgShlZ3djICR6GLW34k5LQSUL6?=
+ =?us-ascii?Q?qHqKHlM4uRJaC/2M9GVarbo4ir6dgmcs5cRiSeGuESJYtFTVIxLeyQiRJ7gV?=
+ =?us-ascii?Q?4tysy+Gx7lR4GDHBHulK1H1iRWD+C6GMyXJi933A3sHh7h5g8eGHt8S635lX?=
+ =?us-ascii?Q?F2KweF5DfFbZDPMhRl+VJehP15xLh2szR+aX9yanhc3LarQ2PpU1pw4anUnT?=
+ =?us-ascii?Q?lW+zqi10gvoqbmEYp8n9h/dJ/2ilZgVZ5grVzGZ4WFZD11XiDxlomhLz/VIV?=
+ =?us-ascii?Q?EffxCM/6/34Q4fP8294i+tuPHqUhsFvzfVWkoFhVA+g+CVTmvEDRVHuXLcDJ?=
+ =?us-ascii?Q?WJpXfKHkSfSuC9SfMHsaMy9ZZPhWIvC4277ODWvJ17Lz96C+UlGMRqbg/x//?=
+ =?us-ascii?Q?DVu0X13Ff3Nn5WDy7NYjfBv8B55z/ANkGvVx3P9JnMaHI20tSh+WaL4tN/0g?=
+ =?us-ascii?Q?7vaPpvsh/VWmoLgqs748CZIiuddh4pOd63Mttg+EMG3j1OZGFQNHWv4LiR1H?=
+ =?us-ascii?Q?t/rdp7jvea4PCJiVAFVLyPSDPUu0aKjIYQmhAePtz6jRalxIloaVgs9sC1fx?=
+ =?us-ascii?Q?e+7zFSHFbLibncYRE3R6HOVNBrc33OANnG7BpbVK4ws+CD1S4U0H+qg66MZt?=
+ =?us-ascii?Q?ZRP4Y63IzYKO3LtWba30UilZtDPiT+/D6vWD4V4SZKBTjLFRxvZUX5P1kM1M?=
+ =?us-ascii?Q?ygZolU7Y7g1fxPXzFPFYYakRd+J6prnIRs/uBnAWOqo5nWBKYjfjiQbNSsBG?=
+ =?us-ascii?Q?P6PHig8uoaUVy8Zh+qwWdPuU01hbdabJDLEkXdx7GMnQ7OHWdQytUbGL0SiA?=
+ =?us-ascii?Q?ep9VyPNdVIZOG/34VViGHrt+CdYs34kDo2C6vyuroQ28D/y+QFTflZqjNqcg?=
+ =?us-ascii?Q?HqdrlAtt2+YoiZbYK/WnQHI7KxEpkyaQHNgRr0kgDw=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-89723.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08ff96dc-69e5-4f80-f24c-08da8537657d
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR06MB5342.namprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 18:43:40.5513
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR06MB5349
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 3:06 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> There is no need to keep the max CPU capacity in the per_cpu instance.
-> Furthermore, there is no need to check and update that variable
-> (sg_cpu->max) every time in the frequency change request, which is part
-> of hot path. Instead use struct sugov_policy to store that information.
-> Initialize the max CPU capacity during the setup and start callback.
-> We can do that since all CPUs in the same frequency domain have the same
-> max capacity (capacity setup and thermal pressure are based on that).
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
-> Changes v2:
-> - collected ACK from Viresh
-> - re-based on top of latest mainline where the previously conflicting
->   change is now merged
->
->  kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
->
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 1207c78f85c1..9161d1136d01 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -25,6 +25,9 @@ struct sugov_policy {
->         unsigned int            next_freq;
->         unsigned int            cached_raw_freq;
->
-> +       /* max CPU capacity, which is equal for all CPUs in freq. domain */
-> +       unsigned long           max;
-> +
->         /* The next fields are only needed if fast switch cannot be used: */
->         struct                  irq_work irq_work;
->         struct                  kthread_work work;
-> @@ -48,7 +51,6 @@ struct sugov_cpu {
->
->         unsigned long           util;
->         unsigned long           bw_dl;
-> -       unsigned long           max;
->
->         /* The field below is for single-CPU policies only: */
->  #ifdef CONFIG_NO_HZ_COMMON
-> @@ -158,7 +160,6 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
->  {
->         struct rq *rq = cpu_rq(sg_cpu->cpu);
->
-> -       sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
->         sg_cpu->bw_dl = cpu_bw_dl(rq);
->         sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
->                                           FREQUENCY_UTIL, NULL);
-> @@ -253,6 +254,7 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
->   */
->  static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
->  {
-> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
->         unsigned long boost;
->
->         /* No boost currently required */
-> @@ -280,7 +282,8 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
->          * sg_cpu->util is already in capacity scale; convert iowait_boost
->          * into the same scale so we can compare.
->          */
-> -       boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
-> +       boost = sg_cpu->iowait_boost * sg_policy->max;
-> +       boost >>= SCHED_CAPACITY_SHIFT;
->         boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
->         if (sg_cpu->util < boost)
->                 sg_cpu->util = boost;
-> @@ -337,7 +340,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
->         if (!sugov_update_single_common(sg_cpu, time, flags))
->                 return;
->
-> -       next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
-> +       next_f = get_next_freq(sg_policy, sg_cpu->util, sg_policy->max);
->         /*
->          * Do not reduce the frequency if the CPU has not been idle
->          * recently, as the reduction is likely to be premature then.
-> @@ -373,6 +376,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
->                                      unsigned int flags)
->  {
->         struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
-> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
->         unsigned long prev_util = sg_cpu->util;
->
->         /*
-> @@ -399,7 +403,8 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
->                 sg_cpu->util = prev_util;
->
->         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> -                                  map_util_perf(sg_cpu->util), sg_cpu->max);
-> +                                  map_util_perf(sg_cpu->util),
-> +                                  sg_policy->max);
->
->         sg_cpu->sg_policy->last_freq_update_time = time;
->  }
-> @@ -408,25 +413,19 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
->  {
->         struct sugov_policy *sg_policy = sg_cpu->sg_policy;
->         struct cpufreq_policy *policy = sg_policy->policy;
-> -       unsigned long util = 0, max = 1;
-> +       unsigned long util = 0;
->         unsigned int j;
->
->         for_each_cpu(j, policy->cpus) {
->                 struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-> -               unsigned long j_util, j_max;
->
->                 sugov_get_util(j_sg_cpu);
->                 sugov_iowait_apply(j_sg_cpu, time);
-> -               j_util = j_sg_cpu->util;
-> -               j_max = j_sg_cpu->max;
->
-> -               if (j_util * max > j_max * util) {
-> -                       util = j_util;
-> -                       max = j_max;
-> -               }
-> +               util = max(j_sg_cpu->util, util);
->         }
->
-> -       return get_next_freq(sg_policy, util, max);
-> +       return get_next_freq(sg_policy, util, sg_policy->max);
->  }
->
->  static void
-> @@ -752,7 +751,7 @@ static int sugov_start(struct cpufreq_policy *policy)
->  {
->         struct sugov_policy *sg_policy = policy->governor_data;
->         void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
-> -       unsigned int cpu;
-> +       unsigned int cpu = cpumask_first(policy->cpus);
->
->         sg_policy->freq_update_delay_ns = sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
->         sg_policy->last_freq_update_time        = 0;
-> @@ -760,6 +759,7 @@ static int sugov_start(struct cpufreq_policy *policy)
->         sg_policy->work_in_progress             = false;
->         sg_policy->limits_changed               = false;
->         sg_policy->cached_raw_freq              = 0;
-> +       sg_policy->max                          = arch_scale_cpu_capacity(cpu);
->
->         sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
->
-> --
+On Tue, Aug 23, 2022 at 06:35:40PM +0200, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Mon, Aug 08, 2022 at 12:38:08PM -0500, Chris Morgan wrote:
+> > From: Chris Morgan <macromorgan@hotmail.com>
+> > 
+> > Add support for the Rockchip rk817 battery charger integrated into the
+> > rk817 PMIC.
+> > 
+> > Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> > Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+> > ---
+> 
+> Looks mostly good. Just three things:
+> 
+> > [...]
+> > --- /dev/null
+> > +++ b/drivers/power/supply/rk817_charger.c
+> > @@ -0,0 +1,1151 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Charger Driver for Rockchip rk817
+> > + *
+> > + * Copyright (c) 2021
+> 
+> The Copyright line is incomplete.
 
-Applied as 6.1 material, thanks!
+Thank you, I'll update it to say 
+Copyright (c) 2021 Maya Matuszczyk <maccraft123mc@gmail.com> since
+while it's heavily modified it's based on her original work.
+
+> 
+> > + *
+> > + * Authors: Maya Matuszczyk <maccraft123mc@gmail.com>
+> > + *	    Chris Morgan <macromorgan@hotmail.com>
+> > + */
+> > +
+> > +#include <linux/mfd/rk808.h>
+> > +#include <linux/irq.h>
+> > +#include <linux/of_gpio.h>
+> > [...]
+> 
+> Why are you including of_gpio.h? You are not using any.
+
+Thanks, sorry. I'll change it to just linux/of.h since I am using a few
+things from that. Might have been from a previous version where I had
+used GPIOs instead of PMIC registers to detect charger status.
+
+> 
+> > +	INIT_DELAYED_WORK(&charger->work, rk817_charging_monitor);
+> > +	/* Get and populate the first set of values. */
+> > +	schedule_delayed_work(&charger->work, 0);
+> > [...]
+> 
+> what happens with the delayed work when you remove the driver?
+> Check for devm_delayed_work_autocancel().
+
+I'll test using that and submit again once I've confirmed it works.
+Thank you for all your feedback.
+
+> 
+> 
+> -- Sebastian
+
+
