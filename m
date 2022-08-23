@@ -2,183 +2,255 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F9A59EB20
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 20:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB6F59EB54
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 20:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiHWSgL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 14:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
+        id S233140AbiHWSqy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 14:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbiHWSfc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 14:35:32 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC36D1C912
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 09:58:41 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id r22so12797216pgm.5
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 09:58:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc;
-        bh=D1JqdC//Serb/+q2ZC0Lc9nyEPPpJAz4Y0oLCkh+a+E=;
-        b=1079pP/qi8/hFsdlxZoOswFi4M4s8Q7sD3MwRysTkASm6AxXBpzfaK7Sz2/SeGD0DT
-         dWKch9y1KMi1FdEoGM4VuucOiwrSbgkoQYglrTyHuqBVXvsukmyxbtJ2CkqKhx1GHjFP
-         fYXekF6cT2cdfXbLnWkQWkSUDSSTm5MMDdTT8CdqryxbdPVWOCeG5CnnbN8GmrOd69tC
-         XNXNQrtyMhrQwa52iiqJsqU7ORq+xrxd9fxb2m2MErUZ7OZ62cDM7gTOD1qgbsr2icQ7
-         KMPWMqDd+CTmKzorzroIfBMVvLDEkv1/IVkin0Yp6pY0BN0ZwfOkHC7JWrzskDhy7SiV
-         KbPA==
+        with ESMTP id S233225AbiHWSq1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 14:46:27 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136D211946D;
+        Tue, 23 Aug 2022 10:10:23 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3246910dac3so395988207b3.12;
+        Tue, 23 Aug 2022 10:10:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=D1JqdC//Serb/+q2ZC0Lc9nyEPPpJAz4Y0oLCkh+a+E=;
-        b=GijlWhMDB6Dm5cIoWb9T2tt03RLnPSI6Rw6sBzAJixNvVaE8xgITVcRLXS+riwsRwv
-         xW4tJL4q+Y6l/gp7EndFtfSOKeSH3MpnMRugYuFpfODVwArGYIt2dc6cbUudY3+PsdXY
-         WR5EAJTUEtzY8VDrxYI4KrAeU8Fwc1Eyr/zPg8rcyPVg73df+mveQrvet1nrxUpMv2Wr
-         NCo0WMbYi+gxQ18XcHVFLxxRShD6eX5NIp/10D3mZXfgoitSnJep2lc+vWVuLslZ2XpQ
-         D7zgIMHZt/y50uT06lxIzWVYmXQ7WOVUCEioBV8z7z1GfXCwzC53AlwkKiPUB342z5vu
-         J9ug==
-X-Gm-Message-State: ACgBeo25WvJloWsjswd8TTbUZww3guu1INGlAsswJOmYhVoWHkoTzt4D
-        frCJt6hlPKSfDFN4mIXpYWT7iWwtJ+pKy6qO
-X-Google-Smtp-Source: AA6agR4VsmNHYEbOfYUNjqzhQJ5lPU3Yu+/mAnAOAB5nrTEiFHyeqj3ERjNSW+RwkjX1BegmBuHsCA==
-X-Received: by 2002:a63:81c7:0:b0:42a:9b7a:1f95 with SMTP id t190-20020a6381c7000000b0042a9b7a1f95mr10544865pgd.401.1661273920737;
-        Tue, 23 Aug 2022 09:58:40 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w128-20020a623086000000b00536463e3802sm7299261pfw.36.2022.08.23.09.58.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 09:58:40 -0700 (PDT)
-Message-ID: <63050740.620a0220.e25fb.d28b@mx.google.com>
-Date:   Tue, 23 Aug 2022 09:58:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=aYLKVpg5yVDWtotHGoWYBt4fEQDgWxmuqw+G5UwcEAU=;
+        b=nYn82dPrJhTaWUpVyQircDfW/m2zwBvuB0FDdHdQJduX4KIwQw/tPzrkSTXVOQvvyc
+         wGNc/IeuskeKgUYWg9T9nwNW72NVoUbq5aHuzAuWSYIs6K2oCCysodtBDoghYOwkEfCV
+         9YPHhyCbgtWyjhe6ewdOSTypt9OEYizY6IRjwpVXhQ0dth/rmbe77Fvqi8Uz4OdF2qBZ
+         o9JooW3xxzpIjdNQ5mUckjykbS6BltIdpaBeO9dDCdWiDboAGWS0hur7Nvc5GO92du3G
+         FJ6haAbRJJ0mcCv6ZKjTdZbKSyr5gbt4DIU8v9QkcA5WDOH1J4apilA7pkybprb0ZeWT
+         7oRA==
+X-Gm-Message-State: ACgBeo1bO62KgdQZGdPThF3A+rAJK/XzeyWv3dtfI4g2D+FWaeaC7vjy
+        RhHG3tTnU3qxqAp1NL+Kjg7A5TeGX1KYwCYbbhY=
+X-Google-Smtp-Source: AA6agR44AtVGf3gmCvfccYN9fpIOVwfitY+Itybpcu+4MROlyuIqQd/ktBqJ6LrK7SdQu2x2pGJ8bnQ/1AFeeUQgnDg=
+X-Received: by 2002:a25:8d84:0:b0:695:836a:fcaf with SMTP id
+ o4-20020a258d84000000b00695836afcafmr14329754ybl.633.1661274623018; Tue, 23
+ Aug 2022 10:10:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.0-rc2-7-gce20aaef438b
-Subject: pm/testing baseline: 75 runs, 3 regressions (v6.0-rc2-7-gce20aaef438b)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220818211619.4193362-1-jeremy.linton@arm.com> <20220818211619.4193362-2-jeremy.linton@arm.com>
+In-Reply-To: <20220818211619.4193362-2-jeremy.linton@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 Aug 2022 19:10:12 +0200
+Message-ID: <CAJZ5v0h7s0WnyBtwuQbTZXwq+jmYDF74gjc9-c-=Krt23KgF1w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] ACPI: CPPC: Disable FIE if registers in PCC regions
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.or>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Punit Agrawal <punit.agrawal@bytedance.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 75 runs, 3 regressions (v6.0-rc2-7-gce20aaef438b)
+On Thu, Aug 18, 2022 at 11:24 PM Jeremy Linton <jeremy.linton@arm.com> wrote:
+>
+> PCC regions utilize a mailbox to set/retrieve register values used by
+> the CPPC code. This is fine as long as the operations are
+> infrequent. With the FIE code enabled though the overhead can range
+> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+> based machines.
+>
+> So, before enabling FIE assure none of the registers used by
+> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+> enable a module parameter which can also disable it at boot or module
+> reload.
+>
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> ---
+>  drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>  drivers/cpufreq/cppc_cpufreq.c | 31 +++++++++++++++++++++----
+>  include/acpi/cppc_acpi.h       |  5 +++++
+>  3 files changed, 73 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 1e15a9f25ae9..c840bf606b30 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1240,6 +1240,47 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
+>
+> +/**
+> + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
+> + *
+> + * CPPC has flexibility about how counters describing CPU perf are delivered.
 
-Regressions Summary
--------------------
-
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 1     =
-     =
-
-kontron-pitx-imx8m    | arm64 | lab-kontron | gcc-10   | defconfig | 2     =
-     =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.0-rc2=
--7-gce20aaef438b/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.0-rc2-7-gce20aaef438b
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      ce20aaef438bb6033b9e42bdebdcbc2f854f1967 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 1     =
-     =
+"CPU performance counters are accessed"
 
 
-  Details:     https://kernelci.org/test/plan/id/6304fdcb6e5509994a35564d
+> + * One of the choices is PCC regions, which can have a high access latency. This
+> + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
+> + *
+> + * Return: true if any of the counters are in PCC regions, false otherwise
+> + */
+> +bool cppc_perf_ctrs_in_pcc(void)
+> +{
+> +       int cpu;
+> +
+> +       for_each_present_cpu(cpu) {
+> +               struct cpc_register_resource *ref_perf_reg;
+> +               struct cpc_desc *cpc_desc;
+> +
+> +               cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> +
+> +               if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+> +                   CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+> +                   CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+> +                       return true;
+> +
+> +
+> +               ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+> +
+> +               /*
+> +                * If reference perf register is not supported then we should
+> +                * use the nominal perf value
+> +                */
+> +               if (!CPC_SUPPORTED(ref_perf_reg))
+> +                       ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+> +
+> +               if (CPC_IN_PCC(ref_perf_reg))
+> +                       return true;
+> +       }
+> +       return false;
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+> +
+>  /**
+>   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+>   * @cpunum: CPU from which to read counters.
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 24eaf0ec344d..32fcb0bf74a4 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
+>
+>  static struct cpufreq_driver cppc_cpufreq_driver;
+>
+> +static enum {
+> +       FIE_UNSET = -1,
+> +       FIE_ENABLED,
+> +       FIE_DISABLED
+> +} fie_disabled = FIE_UNSET;
+> +
+>  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+> +module_param(fie_disabled, int, 0444);
+> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
+>
+>  /* Frequency invariance support */
+>  struct cppc_freq_invariance {
+> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>         struct cppc_freq_invariance *cppc_fi;
+>         int cpu, ret;
+>
+> -       if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +       if (fie_disabled)
+>                 return;
+>
+>         for_each_cpu(cpu, policy->cpus) {
+> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+>         struct cppc_freq_invariance *cppc_fi;
+>         int cpu;
+>
+> -       if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +       if (fie_disabled)
+>                 return;
+>
+>         /* policy->cpus will be empty here, use related_cpus instead */
+> @@ -229,7 +237,21 @@ static void __init cppc_freq_invariance_init(void)
+>         };
+>         int ret;
+>
+> -       if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +       switch (fie_disabled) {
+> +       /* honor user request */
+> +       case FIE_DISABLED:
+> +       case FIE_ENABLED:
+> +               break;
+> +       case FIE_UNSET:
+> +       default:
 
-  Results:     94 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.0-rc2-7-gce20aae=
-f438b/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.0-rc2-7-gce20aae=
-f438b/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220805.0/arm64/rootfs.cpio.gz =
+Would be more straightforward to do
 
+if (fie_disabled == FIE_UNSET) {
 
+here.
 
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
-04fdcb6e5509994a35565a
-        failing since 77 days (last pass: v5.18-rc7-183-g45785e0ed597, firs=
-t fail: v5.19-rc1-2-g6a8964e282382)
+> +               fie_disabled = FIE_ENABLED;
+> +               if (cppc_perf_ctrs_in_pcc()) {
+> +                       pr_info("FIE not enabled on systems with registers in PCC\n");
+> +                       fie_disabled = FIE_DISABLED;
+> +               }
+> +               break;
+> +       }
+> +       if (fie_disabled)
+>                 return;
+>
+>         kworker_fie = kthread_create_worker(0, "cppc_fie");
+> @@ -247,7 +269,7 @@ static void __init cppc_freq_invariance_init(void)
+>
+>  static void cppc_freq_invariance_exit(void)
+>  {
+> -       if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +       if (fie_disabled)
+>                 return;
+>
+>         kthread_destroy_worker(kworker_fie);
+> @@ -936,6 +958,7 @@ static void cppc_check_hisi_workaround(void)
+>                     wa_info[i].oem_revision == tbl->oem_revision) {
+>                         /* Overwrite the get() callback */
+>                         cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
+> +                       fie_disabled = FIE_DISABLED;
+>                         break;
+>                 }
+>         }
+> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> index f73d357ecdf5..c5614444031f 100644
+> --- a/include/acpi/cppc_acpi.h
+> +++ b/include/acpi/cppc_acpi.h
+> @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+>  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>  extern int cppc_set_enable(int cpu, bool enable);
+>  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+> +extern bool cppc_perf_ctrs_in_pcc(void);
+>  extern bool acpi_cpc_valid(void);
+>  extern bool cppc_allow_fast_switch(void);
+>  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+> @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+>  {
+>         return -ENOTSUPP;
+>  }
+> +static inline bool cppc_perf_ctrs_in_pcc(void)
+> +{
+> +       return false;
+> +}
+>  static inline bool acpi_cpc_valid(void)
+>  {
+>         return false;
+> --
 
-    2022-08-23T16:18:11.554364  /lava-158610/1/../bin/lava-test-case
-    2022-08-23T16:18:11.554782  <8>[   19.549301] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
+Apart from the above it looks fine to me, but I would like to get an
+ACK from Viresh on the second patch.
 
- =
-
-
-
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-kontron-pitx-imx8m    | arm64 | lab-kontron | gcc-10   | defconfig | 2     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/6304fd663b66e4cc9e3556a6
-
-  Results:     50 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.0-rc2-7-gce20aae=
-f438b/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.0-rc2-7-gce20aae=
-f438b/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220805.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.imx6q-pcie-pcie0-probed: https://kernelci.org/test/case=
-/id/6304fd663b66e4cc9e3556b8
-        failing since 0 day (last pass: v5.19-rc8-92-ge240a33f1bc48, first =
-fail: v6.0-rc1-6-g977346c02019)
-
-    2022-08-23T16:16:26.014861  /lava-158606/1/../bin/lava-test-case
-    2022-08-23T16:16:26.015260  <8>[   19.420974] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dimx6q-pcie-pcie0-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.intel-igb-probed: https://kernelci.org/test/case/id/630=
-4fd663b66e4cc9e3556ba
-        failing since 0 day (last pass: v5.19-rc8-92-ge240a33f1bc48, first =
-fail: v6.0-rc1-6-g977346c02019)
-
-    2022-08-23T16:16:27.052376  /lava-158606/1/../bin/lava-test-case
-    2022-08-23T16:16:27.052777  <8>[   20.465262] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dintel-igb-probed RESULT=3Dfail>   =
-
- =20
+Thanks!
