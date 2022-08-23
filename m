@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC0559E708
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D7559E709
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244696AbiHWQWc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 12:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
+        id S244704AbiHWQWe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 12:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244656AbiHWQWD (ORCPT
+        with ESMTP id S244701AbiHWQWD (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 12:22:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EFA9E129
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:42:54 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 12:42:51 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F2816D2E6
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:42:55 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 12:42:52 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661258572;
+        s=2020; t=1661258573;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9ZNEoPDMgu7Dnc+Q81mBJzJP6PlkVWuSLA0HYl0CXI4=;
-        b=Q2wMCfgIeTct9/i63uQHqpXUYLjliMeLqnlG4IjWvR/HOTaHZScdSbLMzwdJhTP7FkhyFu
-        auwzUKeeGRjDSryxZa6YCqPZGAyaD/0ByAcJdjaOyELiEShnAnQmJ2r8LEI2s1uflnroOl
-        DRjWjAavmSIhd2YR8zWRpXvvep+Lc78BmA/oXa51RW2rgoV3YfPXKI1IEsKeI0iyO967dp
-        L8OkT0Q1/twKtTUTpDqVEJEahJ4vN8ZP9mdYI7QWoGQzuSKXc5zZaHvuMkGwInhyg1BcCH
-        1ngEE+6KgyPqjwP8OhwKUDeE964Yo5C8P+B3wQKExl6fBYJ9/vkeVcmySWsfvw==
+        bh=RnUpvB6bQb21d+7touRUJzajsmcaSHYhVQnoaNS/0Gw=;
+        b=kA8BgHMoUMqQfxXSfn/60okPxUHOzGysnOCcVXM08ZwRHOnW+vJaBp8xqxUy86xopDY7F2
+        SY/cvRe+enouZY80/jY3ii3EaaaiCW/4lpv7aG9n8LCE47fx1UomqFHTOJ0g3d7pLzsHTq
+        LjcIJP0S38G8iqaGqWfGBbHVoEoL9GMD8b1rMdENfiFRHtVg7axJtr4XA7/aZltFxX/Q9a
+        37QhZFfvleg076kxBoeYmRG1JrNe61le7s1SHo+Faxd6Qys4fI5i0U2KO4/ZtmUBBy8Rbr
+        xHxJdPVz0UhcPnlWQc2cnO2cZPSm6e0dz9PjPFqk1Mottcdw16J0/LkDXNYJ4w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661258572;
+        s=2020e; t=1661258573;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9ZNEoPDMgu7Dnc+Q81mBJzJP6PlkVWuSLA0HYl0CXI4=;
-        b=dH0sKlm32pMo/n3J7ECafjL5AAmeItv5VcZp+mWshDmMc/j6Z9QFxvQIoChtnSzq79iqbX
-        2lGUqFPI4tFOqHBA==
+        bh=RnUpvB6bQb21d+7touRUJzajsmcaSHYhVQnoaNS/0Gw=;
+        b=YvPz3PLjf6hj+9aVWXGXAh/Vcq1KHDmE0Pgraom80tCJe9qQGdU5jwRagn36PRsxVqZnBO
+        n/ADGVEmnQ1AVlDA==
 From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] iio/drivers/sun4i_gpadc: Switch to new of thermal API
+Subject: [thermal: thermal/next] hwmon/drivers/core: Switch to new of thermal API
 Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220804224349.1926752-29-daniel.lezcano@linexp.org>
-References: <20220804224349.1926752-29-daniel.lezcano@linexp.org>
+In-Reply-To: <20220804224349.1926752-28-daniel.lezcano@linexp.org>
+References: <20220804224349.1926752-28-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Message-ID: <166125857153.401.7273845337314539525.tip-bot2@tip-bot2>
+Message-ID: <166125857250.401.5672846591252609703.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,14 +67,14 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     de15b8403fa9872cb626a52651b257089b34f5d2
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//de15b8403fa9872cb626a52651b257089b34f5d2
+Commit-ID:     e5181331359d9311b3cc7e09d9d1cb2ffe87f602
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//e5181331359d9311b3cc7e09d9d1cb2ffe87f602
 Author:        Daniel Lezcano <daniel.lezcano@linexp.org>
-AuthorDate:    Fri, 05 Aug 2022 00:43:44 +02:00
+AuthorDate:    Fri, 05 Aug 2022 00:43:43 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Wed, 17 Aug 2022 14:09:39 +02:00
 
-iio/drivers/sun4i_gpadc: Switch to new of thermal API
+hwmon/drivers/core: Switch to new of thermal API
 
 The thermal OF code has a new API allowing to migrate the OF
 initialization to a simpler approach. The ops are no longer device
@@ -85,58 +84,99 @@ Convert the ops to the thermal_zone_device_ops format and use the new
 API to register the thermal zone with these generic ops.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220804224349.1926752-29-daniel.lezcano@linexp.org
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20220804224349.1926752-28-daniel.lezcano@linexp.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/iio/adc/sun4i-gpadc-iio.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/hwmon/hwmon.c      | 14 +++++++-------
+ drivers/hwmon/scpi-hwmon.c | 14 +++++++-------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/iio/adc/sun4i-gpadc-iio.c b/drivers/iio/adc/sun4i-gpadc-iio.c
-index 2d393a4..a6ade70 100644
---- a/drivers/iio/adc/sun4i-gpadc-iio.c
-+++ b/drivers/iio/adc/sun4i-gpadc-iio.c
-@@ -412,9 +412,9 @@ static int sun4i_gpadc_runtime_resume(struct device *dev)
- 	return 0;
- }
- 
--static int sun4i_gpadc_get_temp(void *data, int *temp)
-+static int sun4i_gpadc_get_temp(struct thermal_zone_device *tz, int *temp)
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 2e2cd79..4218750 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -151,9 +151,9 @@ static DEFINE_IDA(hwmon_ida);
+  * between hwmon and thermal_sys modules.
+  */
+ #ifdef CONFIG_THERMAL_OF
+-static int hwmon_thermal_get_temp(void *data, int *temp)
++static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
  {
--	struct sun4i_gpadc_iio *info = data;
-+	struct sun4i_gpadc_iio *info = tz->devdata;
- 	int val, scale, offset;
- 
- 	if (sun4i_gpadc_temp_read(info->indio_dev, &val))
-@@ -428,7 +428,7 @@ static int sun4i_gpadc_get_temp(void *data, int *temp)
+-	struct hwmon_thermal_data *tdata = data;
++	struct hwmon_thermal_data *tdata = tz->devdata;
+ 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
+ 	int ret;
+ 	long t;
+@@ -168,9 +168,9 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
  	return 0;
  }
  
--static const struct thermal_zone_of_device_ops sun4i_ts_tz_ops = {
-+static const struct thermal_zone_device_ops sun4i_ts_tz_ops = {
- 	.get_temp = &sun4i_gpadc_get_temp,
+-static int hwmon_thermal_set_trips(void *data, int low, int high)
++static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+ {
+-	struct hwmon_thermal_data *tdata = data;
++	struct hwmon_thermal_data *tdata = tz->devdata;
+ 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
+ 	const struct hwmon_chip_info *chip = hwdev->chip;
+ 	const struct hwmon_channel_info **info = chip->info;
+@@ -203,7 +203,7 @@ static int hwmon_thermal_set_trips(void *data, int low, int high)
+ 	return 0;
+ }
+ 
+-static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
++static const struct thermal_zone_device_ops hwmon_thermal_ops = {
+ 	.get_temp = hwmon_thermal_get_temp,
+ 	.set_trips = hwmon_thermal_set_trips,
+ };
+@@ -227,8 +227,8 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
+ 	tdata->dev = dev;
+ 	tdata->index = index;
+ 
+-	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
+-						   &hwmon_thermal_ops);
++	tzd = devm_thermal_of_zone_register(dev, index, tdata,
++					    &hwmon_thermal_ops);
+ 	if (IS_ERR(tzd)) {
+ 		if (PTR_ERR(tzd) != -ENODEV)
+ 			return PTR_ERR(tzd);
+diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+index 5187c6d..4d75385 100644
+--- a/drivers/hwmon/scpi-hwmon.c
++++ b/drivers/hwmon/scpi-hwmon.c
+@@ -62,9 +62,9 @@ static void scpi_scale_reading(u64 *value, struct sensor_data *sensor)
+ 	}
+ }
+ 
+-static int scpi_read_temp(void *dev, int *temp)
++static int scpi_read_temp(struct thermal_zone_device *tz, int *temp)
+ {
+-	struct scpi_thermal_zone *zone = dev;
++	struct scpi_thermal_zone *zone = tz->devdata;
+ 	struct scpi_sensors *scpi_sensors = zone->scpi_sensors;
+ 	struct scpi_ops *scpi_ops = scpi_sensors->scpi_ops;
+ 	struct sensor_data *sensor = &scpi_sensors->data[zone->sensor_id];
+@@ -121,7 +121,7 @@ scpi_show_label(struct device *dev, struct device_attribute *attr, char *buf)
+ 	return sprintf(buf, "%s\n", sensor->info.name);
+ }
+ 
+-static const struct thermal_zone_of_device_ops scpi_sensor_ops = {
++static const struct thermal_zone_device_ops scpi_sensor_ops = {
+ 	.get_temp = scpi_read_temp,
  };
  
-@@ -637,9 +637,9 @@ static int sun4i_gpadc_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
+@@ -275,10 +275,10 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
  
- 	if (IS_ENABLED(CONFIG_THERMAL_OF)) {
--		info->tzd = thermal_zone_of_sensor_register(info->sensor_device,
--							    0, info,
--							    &sun4i_ts_tz_ops);
-+		info->tzd = devm_thermal_of_zone_register(info->sensor_device,
-+							  0, info,
-+							  &sun4i_ts_tz_ops);
+ 		zone->sensor_id = i;
+ 		zone->scpi_sensors = scpi_sensors;
+-		z = devm_thermal_zone_of_sensor_register(dev,
+-							 sensor->info.sensor_id,
+-							 zone,
+-							 &scpi_sensor_ops);
++		z = devm_thermal_of_zone_register(dev,
++						  sensor->info.sensor_id,
++						  zone,
++						  &scpi_sensor_ops);
  		/*
- 		 * Do not fail driver probing when failing to register in
- 		 * thermal because no thermal DT node is found.
-@@ -681,8 +681,6 @@ static int sun4i_gpadc_remove(struct platform_device *pdev)
- 	if (!IS_ENABLED(CONFIG_THERMAL_OF))
- 		return 0;
- 
--	thermal_zone_of_sensor_unregister(info->sensor_device, info->tzd);
--
- 	if (!info->no_irq)
- 		iio_map_array_unregister(indio_dev);
- 
+ 		 * The call to thermal_zone_of_sensor_register returns
+ 		 * an error for sensors that are not associated with
