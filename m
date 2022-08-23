@@ -2,63 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F76B59D1B5
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 09:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1BB59D393
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 10:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240838AbiHWHJs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 03:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S242554AbiHWITS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 04:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240635AbiHWHJp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 03:09:45 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29BB61B0D;
-        Tue, 23 Aug 2022 00:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1661238583; x=1692774583;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AHjGqzbn5AEN1DPa4fi7l7adOs/3lxb+lkmMBcf6O7Y=;
-  b=l+Cksc4yFPjMS4a4WELy9l8RU2oF1OzK19/6QIYpoSV1qcgLZtH08Uje
-   3nGDw9Af3zzGWRvFj/IzIZ6Pi0w0yXWj2jubu8wPWv4pKBpT9xuhHmTT7
-   e17XXlx9iTk8pKW3BNdCmHttpq6aLKVzgaXrBxq0ZcLOOViScz8z6sSo9
-   W5xHPV7HutwFHfONllIr//GS2OO56PLmMygMILslZ5TPtO+sVQ0hxc3l2
-   b+aYdcaTZWI/dIrnEU9t7x+m2fH4tyiNgsQ9pcLRheS7AJIc7odf/JPN8
-   cnwzbVW+8mbvvJsFwTyifznhaEx8itM4VcfX1KPTk4aCSYN2L22PKiQe9
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,256,1654552800"; 
-   d="scan'208";a="25745654"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 23 Aug 2022 09:09:39 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 23 Aug 2022 09:09:39 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 23 Aug 2022 09:09:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1661238579; x=1692774579;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AHjGqzbn5AEN1DPa4fi7l7adOs/3lxb+lkmMBcf6O7Y=;
-  b=O89a04YFCt75bvQHupeYZgzQ5IYiSPHRv7/Fxvkika6jAVXwg8pHlMC/
-   GfY8tQiL/S9X6oBp+5oFeKnFmY+SmsnOZqAtL5AjTWnHQYxLkMoG6fBxW
-   /yF53dSYaqZ5vpsI+MstouunEiA3aSHDSofWZ5HXrtGbWVZpeKSJIK4WF
-   iCBr7UnZiFyAjSbnMNkJm/ECGZYEbFLS0pLLvnC5583ULKW0howNfU3PJ
-   CSQAgUGBO52Hz0//IRFg1bP4P7+wurLR9WK4hilmyPUK0MfOVsxY+RBKq
-   vOuObOQuDaklWU/x43onsnguZ9W+64b4fHdu8OAwR3RpFaKu/zVM4UJVS
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,256,1654552800"; 
-   d="scan'208";a="25745653"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 23 Aug 2022 09:09:39 +0200
-Received: from steina-w.localnet (unknown [10.123.49.11])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        with ESMTP id S242560AbiHWIRz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 04:17:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC1B655C;
+        Tue, 23 Aug 2022 01:11:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 16CBE280056;
-        Tue, 23 Aug 2022 09:09:39 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FBF36129B;
+        Tue, 23 Aug 2022 08:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B1C7C433C1;
+        Tue, 23 Aug 2022 08:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661242301;
+        bh=ZMn1wFd6P28w1tT+WxK1KNO2SOwhs16BL7x3iFsoQk0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nDj/GuXIV02S+bEtqiVRh31cKYd2KRgbJqbI2xHK6Fro22GKICkJQdRCI8GZU5Yfx
+         +rmwVh+EtTHjIwfJusfxk7xNyZuPuL6MsqLrGEJdEp1S8/w8vCwIa9qOTvH+2Rtrxu
+         1D43pHTzhqyy5+yIGJ90kDGPDg7xi5rdCMfKF+ofRaOdkVnWY1+nRM9SXUa60GWU92
+         btNflJCasnz8Qle5FBlqRVobbWdlpcxaisk/zTZJ/FkllgpaKdiMBNFf9Gudrbp8Gx
+         2KO5FbQwF9aPGpJx1j+EUBRmne2pJ1HPPFOmdRa2MPZLFZSv78iKk5vkdHlT3AbzvH
+         b50Q+R7MKCj/A==
+Date:   Tue, 23 Aug 2022 09:11:32 +0100
+From:   Jean-Philippe Brucker <jpb@kernel.org>
 To:     Saravana Kannan <saravanak@google.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -73,79 +47,71 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Peng Fan <peng.fan@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>, Peng Fan <peng.fan@nxp.com>,
         Luca Weiss <luca.weiss@fairphone.com>,
         Doug Anderson <dianders@chromium.org>,
         Colin Foster <colin.foster@in-advantage.com>,
         Tony Lindgren <tony@atomide.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Naresh Kamboju <naresh.kamboju@linaro.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
         kernel-team@android.com, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, iommu@lists.linux.dev,
         netdev@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Bring back driver_deferred_probe_check_state() for now
-Date:   Tue, 23 Aug 2022 09:09:38 +0200
-Message-ID: <6787064.lOV4Wx5bFT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220819221616.2107893-1-saravanak@google.com>
+Subject: Re: [PATCH v2 4/4] Revert "iommu/of: Delete usage of
+ driver_deferred_probe_check_state()"
+Message-ID: <YwSLtPBeOotDSUa8@myrica>
 References: <20220819221616.2107893-1-saravanak@google.com>
+ <20220819221616.2107893-5-saravanak@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819221616.2107893-5-saravanak@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Saravana,
-
-Am Samstag, 20. August 2022, 00:16:10 CEST schrieb Saravana Kannan:
-> A bunch of issues have been reported in the original series[1] that removed
-> driver_deferred_probe_check_state(). While most of the issues have been
-> fixed in a new series that improved fw_devlink [2], there are still a few
-> unresolved issues I need to address.
+On Fri, Aug 19, 2022 at 03:16:14PM -0700, Saravana Kannan wrote:
+> This reverts commit b09796d528bbf06e3e10a4a8f78038719da7ebc6.
 > 
-> So let's bring back driver_deferred_probe_check_state() until the other
-> issues are resolved.
+> An issue was reported[1] on the original commit. I'll need to address that
+> before I can delete the use of driver_deferred_probe_check_state().  So,
+> bring it back for now.
 > 
-> Greg,
+> [1] - https://lore.kernel.org/lkml/4799738.LvFx2qVVIh@steina-w/
+
+https://lore.kernel.org/lkml/Yv+dpeIPvde7oDHi@myrica/
+
 > 
-> Can we get this into 6.0-rcX please?
+> Fixes: b09796d528bb ("iommu/of: Delete usage of driver_deferred_probe_check_state()")
+> Reported-by: Jean-Philippe Brucker <jpb@kernel.org>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 
-On my TQMa8MQ + MBa8Mxon top of 072e51356cd5 ("Merge tag 'nfs-for-5.20-2' of 
-git://git.linux-nfs.org/projects/trondmy/linux-nfs"):
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Tested-by: Jean-Philippe Brucker <jpb@kernel.org>
 
-> [1] -
-> https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
-> [2] -
-> https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
+> ---
+>  drivers/iommu/of_iommu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> v1 -> v2:
-> - Added a revert of the iommu change too.
+> diff --git a/drivers/iommu/of_iommu.c b/drivers/iommu/of_iommu.c
+> index 41f4eb005219..5696314ae69e 100644
+> --- a/drivers/iommu/of_iommu.c
+> +++ b/drivers/iommu/of_iommu.c
+> @@ -40,7 +40,7 @@ static int of_iommu_xlate(struct device *dev,
+>  	 * a proper probe-ordering dependency mechanism in future.
+>  	 */
+>  	if (!ops)
+> -		return -ENODEV;
+> +		return driver_deferred_probe_check_state(dev);
+>  
+>  	if (!try_module_get(ops->owner))
+>  		return -ENODEV;
+> -- 
+> 2.37.1.595.g718a3a8f04-goog
 > 
-> Saravana Kannan (4):
->   Revert "driver core: Delete driver_deferred_probe_check_state()"
->   Revert "net: mdio: Delete usage of
->     driver_deferred_probe_check_state()"
->   Revert "PM: domains: Delete usage of
->     driver_deferred_probe_check_state()"
->   Revert "iommu/of: Delete usage of driver_deferred_probe_check_state()"
-> 
->  drivers/base/dd.c              | 30 ++++++++++++++++++++++++++++++
->  drivers/base/power/domain.c    |  2 +-
->  drivers/iommu/of_iommu.c       |  2 +-
->  drivers/net/mdio/fwnode_mdio.c |  4 +++-
->  include/linux/device/driver.h  |  1 +
->  5 files changed, 36 insertions(+), 3 deletions(-)
-
-
-
-
