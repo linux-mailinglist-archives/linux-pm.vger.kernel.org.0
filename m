@@ -2,54 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F67959E71F
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83DA59E717
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243076AbiHWQWq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 12:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
+        id S244650AbiHWQWs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 12:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242105AbiHWQW2 (ORCPT
+        with ESMTP id S244623AbiHWQW2 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 12:22:28 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5E710BE37
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:43:17 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 12:43:14 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3678B2766A3
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 05:43:18 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 12:43:15 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661258595;
+        s=2020; t=1661258596;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1fdKRBm4SymdZ9fUxs2OSErSa7PP1KOuS4CBskegczQ=;
-        b=IrIwvWWndOdEVdzQLLPkXft4dIQxeKMwuL65VNWXgBNPY0V7ubaD4XrxKdNIzyYwAP8mB3
-        HB4HDIDYWCIzgW6b7j6UjgHdYOamdv7Gr2LS8/wY3LJGWpz1A2Hg31SBgXEAnTF03aYLW8
-        4aeeWyXHJn69nWzuSBwSVtNNK9EqvuN/VbSKL2eiW9J9oWEnWi1LTsmpqlyFg6UPR90JAU
-        VmpVVZh7Yn+bMv0hzHwJBJaZ83k1WopUC+ZkT57xblNMAMB/RdrME51LlszGeK7buqMc2g
-        sD6m3eaOLq3s4mUBdQTulrKIWjm3EUjfxInENasLSAadMlUxUSGk9Y8Q1WmCxg==
+        bh=3Cig2qySzMI7oitE5pkhI86SbtTKcabi1nEAK6pHdLI=;
+        b=Jm3CuU8gSQAiy3pTJXVDJFhtaILfULTSVg0Qs2bmwOndvoY3hxWky4w7aYRaoXGH65o3+I
+        SgPyCNLXd6BctBwEUr/kxFeJfz7uDShyDi3lTeVYXhijdvKkPFzV2RLkOz0Ozdd1dpCz1l
+        89deTKAT+7mZgbSgB+f3B+tAOA3QtWTF8ZtCn59d817TznHdPBHUbOMUXOpPRDx2pv/znG
+        4H8m1PX0p886LcK3Nv71TitYpWM1po4hZaaWsNG9zQlr5lA6VREnXMl+ISBkhv0jWfVKwm
+        EBfP4vWh9IqU8CnOzQVaFcJ9hRm77ae+ggk8hAdKR7QYcPEtlDJN1cTNliDVjw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661258595;
+        s=2020e; t=1661258596;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1fdKRBm4SymdZ9fUxs2OSErSa7PP1KOuS4CBskegczQ=;
-        b=pCrDTWW7SvJZ+WgbhxzI7ZSdwAJu/2eMCWKVRkztvKmD5xJCe35ysBeJzYTg1ghx4W2rvX
-        dPDDa8xVIRGXP6DA==
+        bh=3Cig2qySzMI7oitE5pkhI86SbtTKcabi1nEAK6pHdLI=;
+        b=LpZKDo2wZx9sK74uKPpTHLqpJ0xRLqEh+Xt1lICK8wgZ3eLqCmAawOJySp6Igv/XPTiluG
+        LIF3AkBbtr/2K8Cg==
 From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/generic-adc: Switch to new of API
+Subject: [thermal: thermal/next] thermal/drivers/uniphier: Switch to new of API
 Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220804224349.1926752-6-daniel.lezcano@linexp.org>
-References: <20220804224349.1926752-6-daniel.lezcano@linexp.org>
+In-Reply-To: <20220804224349.1926752-5-daniel.lezcano@linexp.org>
+References: <20220804224349.1926752-5-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Message-ID: <166125859454.401.12310607782291415368.tip-bot2@tip-bot2>
+Message-ID: <166125859556.401.14538867754583402542.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,14 +67,14 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     2ff66cba5beb9302f5787fd34617c5f64ad98309
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//2ff66cba5beb9302f5787fd34617c5f64ad98309
+Commit-ID:     c5f12023ff1d5622c7499352786233399beab7f8
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//c5f12023ff1d5622c7499352786233399beab7f8
 Author:        Daniel Lezcano <daniel.lezcano@linexp.org>
-AuthorDate:    Fri, 05 Aug 2022 00:43:21 +02:00
+AuthorDate:    Fri, 05 Aug 2022 00:43:20 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Wed, 17 Aug 2022 14:09:37 +02:00
 
-thermal/drivers/generic-adc: Switch to new of API
+thermal/drivers/uniphier: Switch to new of API
 
 The thermal OF code has a new API allowing to migrate the OF
 initialization to a simpler approach. The ops are no longer device
@@ -83,45 +84,46 @@ Convert the ops to the thermal_zone_device_ops format and use the new
 API to register the thermal zone with these generic ops.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-Link: https://lore.kernel.org/r/20220804224349.1926752-6-daniel.lezcano@linexp.org
+Link: https://lore.kernel.org/r/20220804224349.1926752-5-daniel.lezcano@linexp.org
+Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/thermal-generic-adc.c | 10 +++++-----
+ drivers/thermal/uniphier_thermal.c | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
-index 73665c3..323e273 100644
---- a/drivers/thermal/thermal-generic-adc.c
-+++ b/drivers/thermal/thermal-generic-adc.c
-@@ -52,9 +52,9 @@ static int gadc_thermal_adc_to_temp(struct gadc_thermal_info *gti, int val)
- 	return temp;
+diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
+index 4cae556..4111d99 100644
+--- a/drivers/thermal/uniphier_thermal.c
++++ b/drivers/thermal/uniphier_thermal.c
+@@ -187,9 +187,9 @@ static void uniphier_tm_disable_sensor(struct uniphier_tm_dev *tdev)
+ 	usleep_range(1000, 2000);	/* The spec note says at least 1ms */
  }
  
--static int gadc_thermal_get_temp(void *data, int *temp)
-+static int gadc_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+-static int uniphier_tm_get_temp(void *data, int *out_temp)
++static int uniphier_tm_get_temp(struct thermal_zone_device *tz, int *out_temp)
  {
--	struct gadc_thermal_info *gti = data;
-+	struct gadc_thermal_info *gti = tz->devdata;
- 	int val;
+-	struct uniphier_tm_dev *tdev = data;
++	struct uniphier_tm_dev *tdev = tz->devdata;
+ 	struct regmap *map = tdev->regmap;
  	int ret;
- 
-@@ -68,7 +68,7 @@ static int gadc_thermal_get_temp(void *data, int *temp)
+ 	u32 temp;
+@@ -204,7 +204,7 @@ static int uniphier_tm_get_temp(void *data, int *out_temp)
  	return 0;
  }
  
--static const struct thermal_zone_of_device_ops gadc_thermal_ops = {
-+static const struct thermal_zone_device_ops gadc_thermal_ops = {
- 	.get_temp = gadc_thermal_get_temp,
+-static const struct thermal_zone_of_device_ops uniphier_of_thermal_ops = {
++static const struct thermal_zone_device_ops uniphier_of_thermal_ops = {
+ 	.get_temp = uniphier_tm_get_temp,
  };
  
-@@ -143,8 +143,8 @@ static int gadc_thermal_probe(struct platform_device *pdev)
- 	gti->dev = &pdev->dev;
- 	platform_set_drvdata(pdev, gti);
+@@ -289,8 +289,8 @@ static int uniphier_tm_probe(struct platform_device *pdev)
  
--	gti->tz_dev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, gti,
--							   &gadc_thermal_ops);
-+	gti->tz_dev = devm_thermal_of_zone_register(&pdev->dev, 0, gti,
-+						    &gadc_thermal_ops);
- 	if (IS_ERR(gti->tz_dev)) {
- 		ret = PTR_ERR(gti->tz_dev);
- 		if (ret != -EPROBE_DEFER)
+ 	platform_set_drvdata(pdev, tdev);
+ 
+-	tdev->tz_dev = devm_thermal_zone_of_sensor_register(dev, 0, tdev,
+-						&uniphier_of_thermal_ops);
++	tdev->tz_dev = devm_thermal_of_zone_register(dev, 0, tdev,
++						     &uniphier_of_thermal_ops);
+ 	if (IS_ERR(tdev->tz_dev)) {
+ 		dev_err(dev, "failed to register sensor device\n");
+ 		return PTR_ERR(tdev->tz_dev);
