@@ -2,42 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F73559E736
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 18:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC9359E87F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Aug 2022 19:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244073AbiHWQ2h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 12:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
+        id S244626AbiHWQ55 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 12:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242455AbiHWQ2U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 12:28:20 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A5F11BB2B;
-        Tue, 23 Aug 2022 05:55:46 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1661259272tqvnoyqj
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 23 Aug 2022 20:54:26 +0800 (CST)
-X-QQ-SSF: 01000000002000B0B000B00A0000000
-X-QQ-FEAT: +ynUkgUhZJk6LdAbhrlAVbiXtAb5Z4jbwsMiEEw+N+DQMZvqgZuwknZEMCPuH
-        NxyG7T/oa5QGHsMzz49okPMky1AvA63dzPQPhsf4BJW7DT2kSlM6Z2o6ygMV/PpCOW7Pqf4
-        D3CFb8XnDfLxYfjoR7dTM8T5E678nSlaQWlNG9KGN1w9x/luKIqesV+yHP+S+9hDmnNRMNP
-        oD4hVB4Dg1q6RhYqEI8TXaW8v/TkwS1RxHE9VmWR8zZndW0UpjuBmn9tlyzBPjy3LysX6V5
-        RqhRMQTEckHFdnJjw5EU7w1l7MUwCyWn1wkRcCvae+pt975buy4ZPH5OofpMbIdDl8mEqo6
-        2rVtN9+fIHaFR6Bz/VJzHTjPQNSR007OWA4A7+kCrW7TO41dgqB8F4+GMvRHTjxmEH9mRda
-X-QQ-GoodBg: 0
-From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] cpuidle: coupled: Fix double word in comments
-Date:   Tue, 23 Aug 2022 08:54:25 -0400
-Message-Id: <20220823125425.621-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S244673AbiHWQ5T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 12:57:19 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B05140CAC;
+        Tue, 23 Aug 2022 06:28:05 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id f8c4d1ad43365a18; Tue, 23 Aug 2022 15:28:03 +0200
+Received: from kreacher.localnet (unknown [213.134.169.58])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 001D466D0AC;
+        Tue, 23 Aug 2022 15:28:02 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomasz Figa <tfiga@chromium.org>
+Subject: [PATCH] ACPI: PM: Fix up documentation reference
+Date:   Tue, 23 Aug 2022 15:28:02 +0200
+Message-ID: <5852809.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.169.58
+X-CLIENT-HOSTNAME: 213.134.169.58
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeiledgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrdduieelrdehkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieelrdehkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgt
+ ohhmpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepthhfihhgrgestghhrhhomhhiuhhmrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -47,26 +51,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Remove the repeated word "are" in comments.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+The acpi_dev_state_d0() kerneldoc comment should refer to
+non-d0-probe.rst which is there in the tree instead of
+low-power-probe.rst which is not.  Fix it up.
+
+While at it, adjust the formatting of that comment to save space.
+
+No functional impact.
+
+Fixes: b82a7df4a7f3 ("ACPI: Add a convenience function to tell a device is in D0 state")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/coupled.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/device_pm.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpuidle/coupled.c b/drivers/cpuidle/coupled.c
-index 74068742cef3..9acde71558d5 100644
---- a/drivers/cpuidle/coupled.c
-+++ b/drivers/cpuidle/coupled.c
-@@ -54,7 +54,7 @@
-  * variable is not locked.  It is only written from the cpu that
-  * it stores (or by the on/offlining cpu if that cpu is offline),
-  * and only read after all the cpus are ready for the coupled idle
-- * state are are no longer updating it.
-+ * state are no longer updating it.
+Index: linux-pm/drivers/acpi/device_pm.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/device_pm.c
++++ linux-pm/drivers/acpi/device_pm.c
+@@ -1460,9 +1460,8 @@ EXPORT_SYMBOL_GPL(acpi_storage_d3);
+  * passed to acpi_device_set_power() and before that function returns, so it is
+  * not valid to ask for the ACPI power state of the device in that time frame.
   *
-  * Three atomic counters are used.  alive_count tracks the number
-  * of cpus in the coupled set that are currently or soon will be
--- 
-2.35.1
+- * This function is intended to be used in a driver's probe or remove
+- * function. See Documentation/firmware-guide/acpi/low-power-probe.rst for
+- * more information.
++ * This function is intended to be used in a driver's probe or remove function.
++ * See Documentation/firmware-guide/acpi/non-d0-probe.rst for more information.
+  */
+ bool acpi_dev_state_d0(struct device *dev)
+ {
+
+
 
