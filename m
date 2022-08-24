@@ -2,179 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B7F59F102
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 03:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F295859F2B6
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 06:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbiHXBd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 21:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S230505AbiHXElH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Aug 2022 00:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbiHXBdu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 21:33:50 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37777F112
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 18:33:46 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-334dc616f86so424209777b3.8
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 18:33:46 -0700 (PDT)
+        with ESMTP id S230245AbiHXElG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 00:41:06 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCB782FAC;
+        Tue, 23 Aug 2022 21:41:05 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id f21so15925057pjt.2;
+        Tue, 23 Aug 2022 21:41:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=15+zFGICN73u7PZkuVftuGFAaRqO2hNiuUPbcuB/iDw=;
-        b=ammrl+ffQIbxpXELKnFxaurs3Fbe2bx9R/IRI2+J5pQAM/wfjFh1aSFzyWG/E1RD5I
-         rshOZlmvK+Bt4a2MNbUFbSpkCeSrrxRT3zaVTQqLRUMz4elzDZb4CyvIvtQzq4jGwi+1
-         HBILJXTenmBL8ezDV/XzSltMyRVW8N5pGLVc6ZMhlIDEvl+mrwxpUc5n+db5z5Pfve4k
-         jWbqAzYB3Hyg5oa2ZHgXfW73ElDNxOwcp7mMt28pojnFNBEyD2+0HttoLOb68bdPn3gz
-         h+F5uqyOw5Q9oI+0N52Nr3XEpZ0TzyQMzlW05rWkdP3Hj3nW89n+8r+x6EjcJTcjYaCu
-         dSgA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Jt/G83ni7I/FU67eFbWq1WL9BdjfSCuvjzHq4MUmPEs=;
+        b=q1XIf8ztW5mT9Sh2FdsF9dkp7at9wmuUtHs7Av1YAgmiTtmG6WZUs0+SUrfEYPDpQo
+         6oe6YnWx7Sk6v2rJg79rpBc2hQ9108SMJMziJ7P6rzmg4MrA9I220VYwz+6YrC3GSVsE
+         f1MZnUr6IiM22JgngydNpGMo7q6vWG0ZQNT29sEOKTnZqrMEMfRATKwK9dQWf4wwKkrg
+         rOZ4cbprq7pmkkCghzJu5CB+Bwzt9z+H6lpGFJXov6GbtI3cUGwDWcus9hYkmVVX9prB
+         XKtVmeL3guur/Xp+a+XpxgZaGFV4Ykx1D/a37yZqeBprGDQCiK26FGmLlurP9ep6WqDS
+         D8bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=15+zFGICN73u7PZkuVftuGFAaRqO2hNiuUPbcuB/iDw=;
-        b=JsWNE8kPfVOWqLTQ6cen4IJTwU33e6S6icbhrP8owdj2IcEnsnIGdNYMKDKsyBirI7
-         e8n0IJHLTyrPtixwQOsGmvn3L0dsxbiGLNu9jtgEJ27bO8XZh1vG8z7Zlft8qH7xOxRs
-         SPL9nmI4liV8QVoUNuRelQ6w0e7zQEogwm9xjVZLR/h1i6hS7DzGce6v/9E6XrdMQLgA
-         uTCa0EnC3Myg6Hw3ErxEv07b509So0aTHi7S8dBEWd2RXY0V512tyFUjR7icPsbI+dWk
-         eC6EcBv9jQFQvHcDKog666EX+7Q/BbVSH6SKL5zajSEz9fUcBgAELKgKSkItBev8qoK2
-         aJXA==
-X-Gm-Message-State: ACgBeo1KTIcaH58RufGdHcvknXTX1VecKNmZ+lW55pMnIgsuI/BSPJqh
-        F8rEmy+eV06F5U+mtFRMugdzPlj8kUZKVJp2C5cVEg==
-X-Google-Smtp-Source: AA6agR5VUVZnLczkpHKFOKrnd+Tscg/SlOlcCZoOHfOkTvdY9LhPO1gaSJJ+tW/v5A56NSwT8mnZVrMApq5J4jdaQcY=
-X-Received: by 2002:a25:1546:0:b0:68f:8758:7348 with SMTP id
- 67-20020a251546000000b0068f87587348mr24825887ybv.563.1661304824786; Tue, 23
- Aug 2022 18:33:44 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Jt/G83ni7I/FU67eFbWq1WL9BdjfSCuvjzHq4MUmPEs=;
+        b=FBIK9m1vQhkXi+CF+JD+tNtFgc3KGzVlZIZZT+GtLdpYKajOKWWncXDmajHL5kuhgU
+         r1/BrCYlp4MNPaBZlaVU+KvMaBgBYX+kK2spmjcxd+oZhYbfsIt9SDjIAQ+MZJNJN7uD
+         Z5GUiEnVOW3+JKNnXfrEe9IaNWiPOBn3TcapiHG9Z0xPQ3Hrvf55it3eLhdRxcXX07Cf
+         Dj+Q3fZ5cwS8Djov3OrkVjyZPCJbijrlJJjxsCt6r+KxoCQbcOECBXfM7RDExbu7MixM
+         +mIXTvEjkX/X35NDD542krR8S4JFqr8q3kLVFQxSVAZvj5/dtMT7BBIMfRi68XXvV4rE
+         jpXA==
+X-Gm-Message-State: ACgBeo1ws3v+6YIOuIPHQUK0n/wYAxFD+SXKO5Dg7K3LR40YlPvdQIWw
+        qMyYBDL/BfacqljdPcWUWoH1GFWQ1Pw=
+X-Google-Smtp-Source: AA6agR4y83+GFBiVnDjmvYo0cbNHn+OGbaSKsWoLdo6c8JA1AqWsywufMRb7rrB6FtrkxBmKBkYVfQ==
+X-Received: by 2002:a17:902:c94a:b0:16f:81c1:255a with SMTP id i10-20020a170902c94a00b0016f81c1255amr26475771pla.35.1661316064937;
+        Tue, 23 Aug 2022 21:41:04 -0700 (PDT)
+Received: from localhost.localdomain ([218.150.75.42])
+        by smtp.gmail.com with ESMTPSA id p7-20020a170902ebc700b00172b27404a2sm7551512plg.120.2022.08.23.21.41.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 21:41:04 -0700 (PDT)
+From:   Juhyung Park <qkrwngud825@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        chrome-platform@lists.linux.dev, len.brown@intel.com,
+        kaleshsingh@google.com, Juhyung Park <qkrwngud825@gmail.com>
+Subject: [PATCH] PM: suspend: select SUSPEND_SKIP_SYNC too if PM_USERSPACE_AUTOSLEEP is selected
+Date:   Wed, 24 Aug 2022 13:40:13 +0900
+Message-Id: <20220824044013.29354-1-qkrwngud825@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220701012647.2007122-1-saravanak@google.com> <YwS5J3effuHQJRZ5@kroah.com>
-In-Reply-To: <YwS5J3effuHQJRZ5@kroah.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 23 Aug 2022 18:33:07 -0700
-Message-ID: <CAGETcx8C_Hw588J_DsDELp2rS-UNnezpqqqvUixqGR7m2wDKaA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Pali Rohar <pali@kernel.org>,
-        Andreas Farber <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Timur Tabi <timur@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh@kernel.org>,
-        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-actions@lists.infradead.org,
-        linux-unisoc@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 4:25 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
-> > These patches are on top of driver-core-next.
-> >
-> > Even if stdout-path isn't set in DT, this patch should take console
-> > probe times back to how they were before the deferred_probe_timeout
-> > clean up series[1].
->
-> Now dropped from my queue due to lack of a response to other reviewer's
-> questions.
+Commit 2fd77fff4b44 ("PM / suspend: make sync() on suspend-to-RAM build-time
+optional") added an option to skip sync() on suspend entry to avoid heavy
+overhead on platforms with frequent suspends.
 
-Sorry, I somehow missed those emails. I'll respond later today/tomorrow.
+Years later, commit 261e224d6a5c ("pm/sleep: Add PM_USERSPACE_AUTOSLEEP
+Kconfig") added a dedicated config for indicating that the kernel is subject to
+frequent suspends.
 
--Saravana
+While SUSPEND_SKIP_SYNC is also available as a knob that the userspace can
+configure, it makes sense to enable this by default if PM_USERSPACE_AUTOSLEEP
+is selected already.
+
+Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
+---
+ kernel/power/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index 60a1d3051cc7..5725df6c573b 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -23,6 +23,7 @@ config SUSPEND_SKIP_SYNC
+ 	bool "Skip kernel's sys_sync() on suspend to RAM/standby"
+ 	depends on SUSPEND
+ 	depends on EXPERT
++	default PM_USERSPACE_AUTOSLEEP
+ 	help
+ 	  Skip the kernel sys_sync() before freezing user processes.
+ 	  Some systems prefer not to pay this cost on every invocation
+-- 
+2.37.2
+
