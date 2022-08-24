@@ -2,127 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5B959FDB4
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 17:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A470359FE48
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 17:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237674AbiHXPBE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 11:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S239503AbiHXP0t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Aug 2022 11:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235726AbiHXPBD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 11:01:03 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24772275D1;
-        Wed, 24 Aug 2022 08:01:02 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-33dac4c9cbcso18565787b3.12;
-        Wed, 24 Aug 2022 08:01:02 -0700 (PDT)
+        with ESMTP id S239256AbiHXP0s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 11:26:48 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B8D9A689
+        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 08:26:44 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g18so17437596pju.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 08:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=7cYr8vAfRHCWuiirD4vPsPn+6q5Wbv188oHbQU7Rxhk=;
+        b=mgRkttJT3eCwZMRg+uvkdAvCsSWdhcCN9w9fVa3lDY8f/I4OgJwYT2zDhiFRZHZA8Q
+         qX4oX5RQiF26QWesS358K6RkTJId0PuSWWLSd1tmG0sq+8IMis3L7hBwoptwTfXT5EiW
+         M5UB4ltzcs5FDAKDpj+i88uB3XsIIX6mk3ftHKylzKRAM/BxmXMOMwMnqYauTifoghcE
+         s9OhNfLStbubvbhs8v6JFMGt71eSlVtJCBi6koG9daNoODMbScFqlVtMWdpW9C4lYlHI
+         eUVdmVyFvq4o48IUZUoWMuDpvFBOZ+X4KAG0UxrAovnc1f3LICr55Ghq97sE4LuTsklX
+         q/AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=w/neHTaTWq1ptoHqjo7z/PdpJgw6jeoMDrumR+964UM=;
-        b=wCMFsd5lcjrJIMZLuL7T2u2RYP4DMljk/WS35U1k9/Kx5apmh+CvMBgKjpG/U1xy0a
-         pFshGd/BueXIxi1AMny+xScLaRaDCP7livOl6WxyGlFbMQ95nA2KJDoi3y7vw4BQk9PC
-         FmDFlC4BJgsqW/1qhjmLoEud97i06OCg9PvsGdiAIOBvMbB27DeBPnn3+yQNcz+Fb+VU
-         zS+rGfZ+DgSLwoUxz0MwB6j6e0N0XsXa2Tmst0NeNKK8b7RIpVNLv6amNQj/rLHc4Oq9
-         fnt2voWGgG8WEA7jM73Pmdmx2YSPlR3e9/RMCkNP1U682z3iwSCA6IgDk/u5y81C4cDq
-         zWGw==
-X-Gm-Message-State: ACgBeo00zUnjcaNQlq0N3c6xs3nB2ToqLq8kpHgLt5+bSWeukGHkU299
-        TIZpbSeG7vMSucIDvmmr2tbeLGzHpRVv0UeJk6U=
-X-Google-Smtp-Source: AA6agR6/lAmWch493Semg1Kd4FFp/bUFNZNfcthgZaX2pgKcypwxarkt1Qr548YVHjI6HNTUbTAocunJffuYpdMzP2I=
-X-Received: by 2002:a25:b749:0:b0:68f:171f:96bd with SMTP id
- e9-20020a25b749000000b0068f171f96bdmr29627443ybm.137.1661353261244; Wed, 24
- Aug 2022 08:01:01 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=7cYr8vAfRHCWuiirD4vPsPn+6q5Wbv188oHbQU7Rxhk=;
+        b=2hnpzWKwqbFm2hFgh71Jh3mDwFLmhkXvZ7IAZEjXC5dpfTuqJMRMAntRIFYFPyObhY
+         i0wpK5FViFr8Z9xb6sWyC6xuRrupOsKMKVHIDINYkPHPsBp8ranmzUZZxyXPMEG8iz7C
+         +5eLBEHg2sR21g/ojfE7NHsB5BJDIk6U13GOyZzb2N7OLqRe/yRi0c+j8ciYVaoYoOTB
+         DYxEo+Tvap5iD9WvR8jvzu6vqY4qD2D0sWYxi0tShfyZlZOIsK0taUkzG/XriCC5pPmB
+         rOe3GPrRHNfdZUZpnKvhZhgyQopZgBFpVVtW2hZ8L1414EjIHUUy1kF0xBVQvj5babli
+         Qx/Q==
+X-Gm-Message-State: ACgBeo2KfoCGXRSQJW+1dSjxIgS9ikBH9+muUmyoGScxhYrxfkvOvKI4
+        hv0R4KiLBWmm7Ymqp385oPnSFQ==
+X-Google-Smtp-Source: AA6agR5piYiLGl91DJ+WGiCQqFgwEJssZpJdddayt4oyPxEfPJpGKcc+JSQkywuvBiPbxPtQrUz4Kg==
+X-Received: by 2002:a17:903:11c7:b0:170:cde7:d24a with SMTP id q7-20020a17090311c700b00170cde7d24amr29338758plh.91.1661354803396;
+        Wed, 24 Aug 2022 08:26:43 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id qi3-20020a17090b274300b001f3162e4e55sm1538091pjb.35.2022.08.24.08.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 08:26:43 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 15:26:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dapeng Mi <dapeng1.mi@intel.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, pbonzini@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, zhenyuw@linux.intel.com
+Subject: Re: [PATCH] KVM: x86: use TPAUSE to replace PAUSE in halt polling
+Message-ID: <YwZDL4yv7F2Y4JBP@google.com>
+References: <20220824091117.767363-1-dapeng1.mi@intel.com>
 MIME-Version: 1.0
-References: <20220824044013.29354-1-qkrwngud825@gmail.com> <CAJZ5v0jmDeGn-L6U-=JOxOHVy3CRS8T5Y_06F50cL9bjUhgbPQ@mail.gmail.com>
- <CAD14+f1YEoqdnM8eTd2hUHSy+M4+AKQp6_FjV03TK=TSDxPfYw@mail.gmail.com>
-In-Reply-To: <CAD14+f1YEoqdnM8eTd2hUHSy+M4+AKQp6_FjV03TK=TSDxPfYw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Aug 2022 17:00:49 +0200
-Message-ID: <CAJZ5v0hXAgA2xfYfvXk1GZgu6h+ZVOv_XwgzVS5cpmkiChm7gw@mail.gmail.com>
-Subject: Re: [PATCH] PM: suspend: select SUSPEND_SKIP_SYNC too if
- PM_USERSPACE_AUTOSLEEP is selected
-To:     Juhyung Park <qkrwngud825@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        chrome-platform@lists.linux.dev, Len Brown <len.brown@intel.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220824091117.767363-1-dapeng1.mi@intel.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 3:36 PM Juhyung Park <qkrwngud825@gmail.com> wrote:
->
-> Hi Rafael,
->
-> On Wed, Aug 24, 2022 at 10:11 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Wed, Aug 24, 2022 at 6:41 AM Juhyung Park <qkrwngud825@gmail.com> wrote:
-> > >
-> > > Commit 2fd77fff4b44 ("PM / suspend: make sync() on suspend-to-RAM build-time
-> > > optional") added an option to skip sync() on suspend entry to avoid heavy
-> > > overhead on platforms with frequent suspends.
-> > >
-> > > Years later, commit 261e224d6a5c ("pm/sleep: Add PM_USERSPACE_AUTOSLEEP
-> > > Kconfig") added a dedicated config for indicating that the kernel is subject to
-> > > frequent suspends.
-> > >
-> > > While SUSPEND_SKIP_SYNC is also available as a knob that the userspace can
-> > > configure, it makes sense to enable this by default if PM_USERSPACE_AUTOSLEEP
-> > > is selected already.
-> > >
-> > > Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
-> > > ---
-> > >  kernel/power/Kconfig | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> > > index 60a1d3051cc7..5725df6c573b 100644
-> > > --- a/kernel/power/Kconfig
-> > > +++ b/kernel/power/Kconfig
-> > > @@ -23,6 +23,7 @@ config SUSPEND_SKIP_SYNC
-> > >         bool "Skip kernel's sys_sync() on suspend to RAM/standby"
-> > >         depends on SUSPEND
-> > >         depends on EXPERT
-> > > +       default PM_USERSPACE_AUTOSLEEP
-> >
-> > Why is this better than selecting SUSPEND_SKIP_SYNC from PM_USERSPACE_AUTOSLEEP?
->
-> That won't allow developers to opt-out from SUSPEND_SKIP_SYNC when
-> they still want PM_USERSPACE_AUTOSLEEP.
+On Wed, Aug 24, 2022, Dapeng Mi wrote:
+> TPAUSE is a new instruction on Intel processors which can instruct
+> processor enters a power/performance optimized state. Halt polling
+> uses PAUSE instruction to wait vCPU is waked up. The polling time
+> could be long and cause extra power consumption in some cases.
+> 
+> Use TPAUSE to replace the PAUSE instruction in halt polling to get
+> a better power saving and performance.
 
-I see.
+Better power savings, yes.  Better performance?  Not necessarily.  Using TPAUSE
+for  a "successful" halt poll is likely to yield _worse_ performance from the
+vCPU's perspective due to the increased latency.
 
-It is not particularly clear, so at least please mention it in the changelog.
+> Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
+> ---
+>  drivers/cpuidle/poll_state.c |  3 ++-
+>  include/linux/kvm_host.h     | 20 ++++++++++++++++++++
+>  virt/kvm/kvm_main.c          |  2 +-
+>  3 files changed, 23 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+> index f7e83613ae94..51ec333cbf80 100644
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/sched/clock.h>
+>  #include <linux/sched/idle.h>
+> +#include <linux/kvm_host.h>
+>  
+>  #define POLL_IDLE_RELAX_COUNT	200
+>  
+> @@ -25,7 +26,7 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
+>  		limit = cpuidle_poll_time(drv, dev);
+>  
+>  		while (!need_resched()) {
+> -			cpu_relax();
+> +			kvm_cpu_poll_pause(limit);
+
+poll_idle() absolutely should not be calling into KVM code.
+
+>  			if (loop_count++ < POLL_IDLE_RELAX_COUNT)
+>  				continue;
+>  
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index f4519d3689e1..810e749949b7 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -35,6 +35,7 @@
+>  #include <linux/interval_tree.h>
+>  #include <linux/rbtree.h>
+>  #include <linux/xarray.h>
+> +#include <linux/delay.h>
+>  #include <asm/signal.h>
+>  
+>  #include <linux/kvm.h>
+> @@ -2247,6 +2248,25 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+>  }
+>  #endif /* CONFIG_KVM_XFER_TO_GUEST_WORK */
+>  
+> +/*
+> + * This function is intended to replace the cpu_relax function in
+> + * halt polling. If TPAUSE instruction is supported, use TPAUSE
+> + * instead fo PAUSE to get better power saving and performance.
+> + * Selecting 1 us is a compromise between scheduling latency and
+> + * power saving time.
+> + */
+> +static inline void kvm_cpu_poll_pause(u64 timeout_ns)
+> +{
+> +#ifdef CONFIG_X86
+
+This is not preferred the way to insert arch-specific behavior into common KVM code.
+Assuming the goal is to avoid a function call, use an #ifndef here and then #define
+the flag in x86's kvm_host.h, e.g.
+
+#ifndef CONFIG_HAVE_KVM_ARCH_HALT_POLL_PAUSE
+static inline kvm_cpu_halt_poll_pause(u64 timeout_ns)
+{
+	cpu_relax();
+}
+#endif
+
+It's not obvious that we need to avoid a call here though, in which case a
+
+  __weak void kvm_arch_cpu_halt_poll_pause(struct kvm *kvm)
+  {
+
+  }
+
+with an x86 implementation will suffice.
 
 
-> (Can't think of a valid reason
-> for this though, as PM_USERSPACE_AUTOSLEEP is only used by Android and
-> probably Chromium, afaik.)
->
-> I don't think SUSPEND_SKIP_SYNC is critical enough to enforce when
-> PM_USERSPACE_AUTOSLEEP is enabled, but I don't have a strong opinion
-> on this either.
-> (We could do `imply SUSPEND_SKIP_SYNC` from PM_USERSPACE_AUTOSLEEP,
-> but that doesn't look good semantically imho.)
->
-> If you want, I can send a v2 with 'PM_USERSPACE_AUTOSLEEP select
-> SUSPEND_SKIP_SYNC'.
+> +	if (static_cpu_has(X86_FEATURE_WAITPKG) && timeout_ns > 1000)
+> +		udelay(1);
 
-Personally, I would use "select" and I would amend the
-PM_USERSPACE_AUTOSLEEP help text to say that it will disable sync on
-suspend by default explicitly.
+This is far too arbitrary.  Wake events from other vCPU are not necessarily
+accompanied by an IRQ, which means that delaying for 1us may really truly delay
+for 1us before detecting a pending wake event.
 
-IMV otherwise it is more confusing than it needs to be.
+If this is something we want to utilize in KVM, it should be controllable by
+userspace, probably via module param, and likely off by default.
 
-I'm also wondering about a particular use case addressed by this
-change.  Is there any?
+E.g. 
+
+  unsigned int halt_poll_tpause_ns;
+
+and then
+
+  if (timeout_ns >= halt_poll_tpause_ns)
+  	udelay(halt_poll_tpause_ns);
+
+with halt_poll_tpause_ns zeroed out during setup if TPAUSE isn't supported.
+
+I say "if", because I think this needs to come with performance numbers to show
+the impact on guest latency so that KVM and its users can make an informed decision.
+And if it's unlikely that anyone will ever want to enable TPAUSE for halt polling,
+then it's not worth the extra complexity in KVM.
+
+> +	else
+> +		cpu_relax();
+> +#else
+> +	cpu_relax();
+> +#endif
+> +}
+> +
+>  /*
+>   * This defines how many reserved entries we want to keep before we
+>   * kick the vcpu to the userspace to avoid dirty ring full.  This
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 584a5bab3af3..4afa776d21bd 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3510,7 +3510,7 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+>  			 */
+>  			if (kvm_vcpu_check_block(vcpu) < 0)
+>  				goto out;
+> -			cpu_relax();
+> +			kvm_cpu_poll_pause(vcpu->halt_poll_ns);
+
+This is wrong, vcpu->halt_poll_ns is the total poll time, not the time remaining.
+E.g. if the max poll time is 1001 ns, and KVM has already waited for 1000 ns, then
+udelay(1) will cause KVM to wait for ~2000ns total.  There's always going to be
+some amount of overrun, but overrun by a few ns is quite different than overrun
+by a few thousand ns.
+
+>  			poll_end = cur = ktime_get();
+>  		} while (kvm_vcpu_can_poll(cur, stop));
+>  	}
+> -- 
+> 2.34.1
+> 
