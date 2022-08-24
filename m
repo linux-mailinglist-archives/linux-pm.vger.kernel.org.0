@@ -2,245 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306275A0384
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 23:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC66C5A04CE
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 01:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235186AbiHXV6Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 17:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S231219AbiHXXmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Aug 2022 19:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233455AbiHXV6X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 17:58:23 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B909A52E75
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 14:58:21 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id y17so5753440ilp.10
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 14:58:21 -0700 (PDT)
+        with ESMTP id S231482AbiHXXmQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 19:42:16 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7839751A11
+        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 16:42:15 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id i191-20020a6387c8000000b0042b44ad723bso479927pge.19
+        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 16:42:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=QNfa8mrO6DZZ6utajVZARmp8HfWOuCIyTAsumuknhTc=;
-        b=LUBCvs7w/yHqEsl/GjKnkBwqndy5B3jZLLs9Y8lhgX7wLd8xQgn/W01gQ/Y7x01gzy
-         O6CunAS43oZIZnZa60MvdvR8xuePCEL0Xjt6zQW6ZUAaVplf2X4QTD6GxZvVj/UC5v9A
-         ICMPXWVupvv9Eaw9O0iiL3ucR0hXV6qq/8Jtk=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=GgNtt8XHsncrMgE4IbFRR5+V66rX8top3EG46fAYnRQ=;
+        b=TkwbARh0dZMRE7NNmMKzQlT77SIZaFyNqwvglcl62fiCu+FaVN1DDQfnQNcqxl1vll
+         PhPkHhlVODagqIz4tOQH43BaiM2ryWm+xZSXhAossnzohFLZSs+2A8oX3zn//MSOMIEB
+         urVepvzcnyoWCw8fvVDJPxIuspFkyvYUrga4TCZ14ZMrMeVpUJJMfRYK5dD0aP+Sossv
+         cU6qmYxY2kKa5AlDkc3R705d9YOAeNYmXbHg2hE5AnBn51FwPSreQ31kq4W8fi2ILaCi
+         o5uUEvWoWzQnYliEL6hJCdZ55gk3zSKWuIxJm4oZY3fzNdDPICAZzK1Q09wgMrreTAl4
+         f5LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=QNfa8mrO6DZZ6utajVZARmp8HfWOuCIyTAsumuknhTc=;
-        b=kurYBqz53N03GX/C85IVn2pRtXhUtIc9staUab+Hr24sWcqqarwJcw43STMwFr4y5t
-         PPAVoY0RME9kF+QboDVIaOLkA7BJ9IlotUtjyuOTI/rodrZCinHumZ92X7xfqqQygWst
-         HntvpMVztJ6huXpxPvAPHKGqGeHtDxNDmR7Q+9pnEyb/EG2bsXsM2XWhfcth7KSF6hH2
-         A0PKlcmNtbQLiHARDGxyLdxefGvnN3we3IrzyNQzJ/GMIvEpK1yCAfEs7j5NQafvaVb9
-         bW3RmfcABUg7+8Bj36nHeTZrOt/2LbCFCNO3g/slp7/edybm4ZM4LHf8RLVTHn3ky55p
-         3fFA==
-X-Gm-Message-State: ACgBeo0jXwHUGK6xnqSuyoRgb9xfJGA66XBZZvlObH49dGvIqQq0qzn2
-        reImVGGeSoGzzMjSzb+Pg3xmsA==
-X-Google-Smtp-Source: AA6agR7tilWgf4Oq1aJhpWSJkjNUW6mJT+raD34bYCMS63TyofuRVwlHmrURT8RlDpazGbb4tsO30g==
-X-Received: by 2002:a05:6e02:2187:b0:2e4:45e3:8dfb with SMTP id j7-20020a056e02218700b002e445e38dfbmr429660ila.210.1661378301018;
-        Wed, 24 Aug 2022 14:58:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y17-20020a056602179100b0067ba7abc4cesm267180iox.50.2022.08.24.14.58.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 14:58:20 -0700 (PDT)
-Subject: Re: [RESEND PATCH 0/4] Add unit test module for AMD P-State driver
-To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
-        linux-pm@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220817034630.1172065-1-li.meng@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <c5b18849-1856-e0f0-4112-fdbd0b436bef@linuxfoundation.org>
-Date:   Wed, 24 Aug 2022 15:58:19 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220817034630.1172065-1-li.meng@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=GgNtt8XHsncrMgE4IbFRR5+V66rX8top3EG46fAYnRQ=;
+        b=MBFEI3YiESf/RHK+7odsdSnX5DJiBKtAuBtXSs6i7yaZKm1yATfq30NsRiXvItPcE+
+         zvV1DBt8m0xVDLyA2JanjLn3jaPP13mtCxRtQM83HjFfT+F5d0PhJbk2s4UFx2AKtyJk
+         x076IVW9gojVpIrANYQed+59dcpkL3Ug7HLSX7SP6tA03ODKQpaCvqSCrsWWW/p3vzb1
+         Fh+LRRYKXfiqPs+M3Pc9k6gGZnYs/UWE2Ya/J1lscaMF937b/kN0WDfCcM64fkuXJ7mB
+         L2UyZFyO8PqqgnFL6ehNUgHCL4IM9IIPKSbHF8/FAo3W/wqe0sqWewdFk9RvQzDYRVIc
+         rWSg==
+X-Gm-Message-State: ACgBeo2eXbMqBihsn4YTDUoRO5JpKh2BcDCF87hspY9Mi5dYkBF4f1OC
+        ykcGQ/d1x9XlzPQ90eCF5JlVVmBipnc=
+X-Google-Smtp-Source: AA6agR6x5JpK2ntXNc8GBL28Et5asGmcl9MZgoMJ3jvSRbAgpvHAOAHK5SwfyRyWL8p/UZjWA2Fo4nhGynM=
+X-Received: from pshier-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1b0b])
+ (user=pshier job=sendgmr) by 2002:a17:90b:33d2:b0:1fb:971b:c5e9 with SMTP id
+ lk18-20020a17090b33d200b001fb971bc5e9mr1509609pjb.90.1661384534988; Wed, 24
+ Aug 2022 16:42:14 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 16:42:11 -0700
+Message-Id: <20220824234211.1625026-1-pshier@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH v2] intel_idle: avoid tracing MSR writes while idling
+From:   Peter Shier <pshier@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michael Roth <michael.roth@amd.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Peter Shier <pshier@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/16/22 9:46 PM, Meng Li wrote:
-> Hi all:
-> 
-> According to shuah's review comments, update the patches based on
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
-> 
-> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing the
-> functions of amd-pstate driver.
-> It could import as a module to launch some test tasks.
-> 1) It can help all users to verify their processor support (SBIOS/
-> Firmware or Hardware).
-> 2) Kernel can have a basic function test to avoid the kernel regression
-> during the update.
-> 3) We can introduce more functional or performance tests to align the
-> together, it will benefit power and performance scale optimization.
-> 
-> We upstream out AMD P-state driver into Linux kernel and use this unit
-> test module to verify the required conditions and basic functions of
-> amd-pstate before integration test.
-> 
-> We use test module in the kselftest frameworks to implement it.
-> We create amd-pstate-ut module and tie it into kselftest.
-> 
-> For example: The test case aput_acpi_cpc is used to check whether the
-> _CPC object is exist in SBIOS.
-> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
-> existed at the detected processor, so it is a necessary condition.
-> 
-> At present, it only implements the basic framework and some simple test
-> cases.
-> 
-> TODO : 1) we will add more test cases to improve the depth and coverage
-> of the test. E.X. use the script to trigger the tbench, gitsource,
-> kernbench, netperf, speedometer, and etc. testing and monitor the cpu
-> frequency and performance goals change, power consumption at runtime.
-> 
-> Please check the documentation amd-pstate.rst for details of the test
-> steps.
-> 
-> See patch series in below git repo:
-> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
-> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
-> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
-> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
-> V5: https://lore.kernel.org/lkml/20220505022913.329259-1-li.meng@amd.com/
-> V6: https://lore.kernel.org/lkml/20220519134737.359290-1-li.meng@amd.com/
-> V7: https://lore.kernel.org/lkml/20220522115423.1147282-1-li.meng@amd.com/
-> 
-> Changes from V1 -> V2:
-> - cpufreq: amd-pstate:
-> - - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER.
-> - selftests: cpufreq:
-> - - add a wrapper shell script for the amd_pstate_testmod module.
-> - selftests: cpufreq:
-> - - remove amd_pstate_testmod kernel module to
->    .../cpufreq/amd_pstate_testmod.
-> - Documentation: amd-pstate:
-> - - amd_pstate_testmod rst document is not provided at present.
-> 
-> Changes from V2 -> V3:
-> - cpufreq: amd-pstate:
-> - - adjust the order of add amd-pstate.h in MAINTAINERS.
-> - selftests: cpufreq:
-> - - remove the call of amd_pstate_testmod.sh from cpufreq Makefile to
->    main.sh.
-> - selftests: cpufreq:
-> - - add explain the goal or intention of the AMD P-State Unit Test
->    module.
-> - - modify comments.
-> - - use the checkpatch.pl to check my patches.
-> - - add conditions judgment before formal test.
-> - - delete some unnecessary test cases.
-> - - modify test cases about perf and performance etc.
-> 
-> Changes from V3 -> V4:
-> - selftests: amd-pstate:
-> - - remove script and test module to tools/testing/selftests/amd-pstate/
-> - - uniformly named amd-pstate-ut.
-> - - check current architectures and cpufreq driver in amd-pstate-ut.sh
-> - - delete codes about conditions in amd-pstate-ut.c
-> - Documentation: amd-pstate:
-> - - add introduce document about amd-pstate unit test.
-> 
-> Changes from V4 -> V5:
-> - selftests: amd-pstate:
-> - - add print the current scaling_driver.
-> - - add amd-pstate-ut.ko into TEST_GEN_FILES.
-> - - move "insmod/rmmod amd-pstate-ut.ko" stuff into script
->    amd_pstate_ut.sh
-> - - add a check of read back from X86_FEATURE_CPPC in get_shared_mem().
-> - Documentation: amd-pstate:
-> - - delete the test step about insmod/rmmod amd-pstate-ut.ko
-> 
-> Changes from V5 -> V6:
-> - cpufreq: amd-pstate:
-> - - add amd-pstate-ut test codes to drivers/cpurfreq
-> - - add the macro CONFIG_X86_AMD_PSTATE_UT
-> - selftests: amd-pstate:
-> - - delete amd-pstate-ut test codes from
->    tools/testing/selftests/amd-pstate/
-> 
-> Changes from V6 -> V7:
-> - cpufreq: amd-pstate:
-> - - modify X86_AMD_PSTATE_UT dependencies and default value.
-> - - modify a brief description of the amd-pstate-ut module.
-> - - remove kselftest_module.h header include.
-> - - modify shortform for AMD P-State unit test.
-> - - add prefix for the names of test cases.
-> - - in the file operation log, add the file path.
-> - - add comments about the test cases.
-> - - correct syntax errors.
-> - selftests: amd-pstate:
-> - - delete TEST_GEN_FILES$(TEST_GEN_FILES): $(HEADERS) form amd-pstate
->    Makefile.
-> - - simplify the judgment about ARCH.
-> - - add the judgment about cpu vendor.
-> - - modify the method about load the amd-pstate-ut module.
-> - Documentation: amd-pstate:
-> - - update the name of the test function.
-> - - update kernel log about test result.
-> 
-> Changes from V7 -> V8:
-> - cpufreq: amd-pstate:
-> - - amend commit message.
-> - - amend module description.
-> - Documentation: amd-pstate:
-> - - amend commit message.
-> - - Remove the personal data.
-> 
-> Thanks,
-> Jasmine
-> 
-> Meng Li (4):
->    cpufreq: amd-pstate: Expose struct amd_cpudata
->    cpufreq: amd-pstate: Add test module for amd-pstate driver
->    selftests: amd-pstate: Add test trigger for amd-pstate driver
->    Documentation: amd-pstate: Add unit test introduction
-> 
->   Documentation/admin-guide/pm/amd-pstate.rst   |  76 +++++
->   MAINTAINERS                                   |   1 +
->   drivers/cpufreq/Kconfig.x86                   |   7 +
->   drivers/cpufreq/Makefile                      |   1 +
->   drivers/cpufreq/amd-pstate-ut.c               | 293 ++++++++++++++++++
->   drivers/cpufreq/amd-pstate.c                  |  60 +---
->   include/linux/amd-pstate.h                    |  77 +++++
->   tools/testing/selftests/Makefile              |   1 +
->   tools/testing/selftests/amd-pstate/Makefile   |   9 +
->   .../selftests/amd-pstate/amd-pstate-ut.sh     |  55 ++++
->   tools/testing/selftests/amd-pstate/config     |   1 +
->   11 files changed, 522 insertions(+), 59 deletions(-)
->   create mode 100644 drivers/cpufreq/amd-pstate-ut.c
->   create mode 100644 include/linux/amd-pstate.h
->   create mode 100644 tools/testing/selftests/amd-pstate/Makefile
->   create mode 100755 tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
->   create mode 100644 tools/testing/selftests/amd-pstate/config
-> 
+With commit bf5835bcdb963 ("intel_idle: Disable IBRS during long idle"),
+enabling wrmsr trace with CONFIG_LOCKDEP causes "suspicious
+rcu_dereference_check() usage" warning because do_trace_write_msr does not
+use trace_write_msr_rcuidle.
 
-Rafael, Viresh,
+Change intel_idle_ibrs to use native_wrmsr to avoid tracing
 
-I plan to apply these patches to linux-kselftest next for Linux 6.1
-Please let me know if you have any objections.
+Sample warning:
+============================
+WARNING: suspicious RCU usage
+6.0.0-dbg-DEV #7 Tainted: G S         O
+-----------------------------
+arch/x86/include/asm/msr-trace.h:48 suspicious rcu_dereference_check() usage!
 
-thanks,
--- Shuah
+other info that might help us debug this:
+
+rcu_scheduler_active = 2, debug_locks = 1
+RCU used illegally from extended quiescent state!
+no locks held by swapper/59/0.
+
+stack backtrace:
+CPU: 59 PID: 0 Comm: swapper/59 Tainted: G S         O       6.0.0-dbg-DEV #7
+Call Trace:
+ dump_stack_lvl
+ dump_stack
+ lockdep_rcu_suspicious
+ trace_write_msr
+ do_trace_write_msr
+ intel_idle_ibrs
+ cpuidle_enter_state
+ cpuidle_enter
+ do_idle
+ cpu_startup_entry
+ start_secondary
+ secondary_startup_64_no_verify
+
+Tested on skylake using:
+echo "msr:write_msr" >/sys/kernel/debug/tracing/set_event
+with and without patch.
+
+Signed-off-by: Peter Shier <pshier@google.com>
+---
+
+v2:
+- changed to avoid tracing
+
+v1: https://lore.kernel.org/all/20220823234353.937002-1-pshier@google.com/
+
+ drivers/idle/intel_idle.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 3e101719689a..df129c73786f 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -187,12 +187,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+ 	int ret;
+ 
+ 	if (smt_active)
+-		wrmsrl(MSR_IA32_SPEC_CTRL, 0);
++		native_wrmsr(MSR_IA32_SPEC_CTRL, 0);
+ 
+ 	ret = __intel_idle(dev, drv, index);
+ 
+ 	if (smt_active)
+-		wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
++		native_wrmsr(MSR_IA32_SPEC_CTRL, spec_ctrl);
+ 
+ 	return ret;
+ }
+-- 
