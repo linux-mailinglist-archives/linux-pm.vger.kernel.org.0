@@ -2,126 +2,246 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD08B5A0076
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 19:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420CB5A0139
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 20:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240187AbiHXRey (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 13:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S238057AbiHXSRN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 Aug 2022 14:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbiHXRex (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 13:34:53 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4531160
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 10:34:53 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id w197so20204941oie.5
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 10:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=iUc7iTn6xTAH7nh/o6yxXHdfKGNX4Z/5Jv6PbbsrmvE=;
-        b=RlaeiBa5eL8zu0NgF7ARiV93OK31F7GkkyowxpdoTtVaIt6Yd6AwdmZeT4UhqxTOir
-         TaQbTq0RY8Y6y+tGLDAhuRgnPvpdkEIOG/XPkwF4v5NCae8dReQI9E0ZTHaROIT2w45q
-         f9sqGu0D99xgh/NvOUXrlPA/eOIMcCfk0srM0=
+        with ESMTP id S240325AbiHXSRM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 14:17:12 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E53863E6;
+        Wed, 24 Aug 2022 11:17:11 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-333b049f231so482533917b3.1;
+        Wed, 24 Aug 2022 11:17:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=iUc7iTn6xTAH7nh/o6yxXHdfKGNX4Z/5Jv6PbbsrmvE=;
-        b=XAljEO1swpL3mQRUt/91MqdlzuwmpaBKt5unDiH5u8CRg6TDtbZmqQW2JdVfphG3Ko
-         FTpw7HTysHg/A5pWrxfkumvr+mD9462t9oB0WJe3wjTZsZJaqxs39xpgZlqyKqKPFxS5
-         vxnCLmbwIN1Sk5aMm3qfIRwUzXavET3I928NJyR4QA2/wDFa0i40/IDP6yIBmPONj8h1
-         KLPZBI09JHzDMOtw5V+Zau/U0+GAII4799QjThvL3BwmTiNlbKk3eeZT4abjaRJO07ca
-         RZZm5hyxZrOZJAs5b+DdJz2MQ3t1n51CtA7ZOLz+JsTJoDILAUpP+iditOzM6+nNjYcS
-         1uMA==
-X-Gm-Message-State: ACgBeo2fqZ3ejuMrFxcAQKYseoqYWBvsX/kfemXWjN5VUlHDDLoSA8px
-        Sr4ZxZHocyWTR56HbNXfR3RvVEARB/GFEQ==
-X-Google-Smtp-Source: AA6agR7qYpcKEIoFxmr2mYiJ6VmABRIfmpjjnTYWQZd739tma2yCQ0FA0ktrZ7nYyDlwgU+Ed5JDtg==
-X-Received: by 2002:a05:6808:210c:b0:343:509f:2f8b with SMTP id r12-20020a056808210c00b00343509f2f8bmr3536283oiw.228.1661362489945;
-        Wed, 24 Aug 2022 10:34:49 -0700 (PDT)
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com. [209.85.167.170])
-        by smtp.gmail.com with ESMTPSA id bs1-20020a056830398100b0061c4d5a5616sm4600127otb.63.2022.08.24.10.34.47
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 10:34:48 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id u14so20217047oie.2
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 10:34:47 -0700 (PDT)
-X-Received: by 2002:a05:6808:3096:b0:342:ff93:4672 with SMTP id
- bl22-20020a056808309600b00342ff934672mr120785oib.174.1661362486729; Wed, 24
- Aug 2022 10:34:46 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=h84Zr9r9rSsYZ8SwNyGHfmMeTe1hr9idQvFt4tmHIBc=;
+        b=m1OYainTvYwEXlWvHk4aMkpT/GrdCuvq+hKJabvZ7CtBUJFbho0O586O2tPQXITUmM
+         qJ1aow7VRsOG9kYCHpTsDekAVWdGvHx906okEHVTO7fTbcHkTalz0nrxPu0QAsGBKzON
+         WALZWASMhdK/3LWmpmMnrA1XQwSEfxxBDz3ZCs869PhLulfz8c0cWVAWmfCV221Q7+U1
+         mooqtsFlvYBbkcbwUoCAcNt5aHCFLlu2pIkPa1XfrPgiXL+4ed9AQsbtOp2GbglygI9u
+         TIIAzK/5yf5i/BHX2yljZG52u5zcXRRieSgLLiQSiJLiqbouJkWameUAOXr6fXEknWlA
+         uLqQ==
+X-Gm-Message-State: ACgBeo2U+mzqic5pjfrmS8fT1OVh6uhtU/S0vjUpMwufB/yDuS37CQlP
+        fzwlC8p6TUNMTmQiZpEomqjvJxl6/fUGy/giPXg=
+X-Google-Smtp-Source: AA6agR5ntzbx9qbVRJuIgmxELzoNlDVZmrPwKD05VaZ1sHrrY63Eqm5w3WASH3U4HSMrxvii54aOev+bHdDujdc9GXk=
+X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
+ z15-20020a25664f000000b0066cd0f436ccmr354284ybm.482.1661365030507; Wed, 24
+ Aug 2022 11:17:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid> <YwYR/rzvrkvgZzBm@farprobe>
-In-Reply-To: <YwYR/rzvrkvgZzBm@farprobe>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 24 Aug 2022 10:34:10 -0700
-X-Gmail-Original-Message-ID: <CAE=gft48Tg6NnEUqfM-n1eOT3qa35dtowQGYCL3sbYBmr_Wm_w@mail.gmail.com>
-Message-ID: <CAE=gft48Tg6NnEUqfM-n1eOT3qa35dtowQGYCL3sbYBmr_Wm_w@mail.gmail.com>
-Subject: Re: [PATCH v2 04/10] security: keys: trusted: Allow storage of PCR
- values in creation data
-To:     list.lkml.keyrings@me.benboeckel.net
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Jarkko Sakkinen <jarkko@kernel.org>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
+References: <0fc7062d-696a-0794-8730-48ef08bcb8bd@linaro.org>
+In-Reply-To: <0fc7062d-696a-0794-8730-48ef08bcb8bd@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 Aug 2022 20:16:59 +0200
+Message-ID: <CAJZ5v0h0r2dW7xW+GW3=KDEZZEkyYOXVCOmD3fad=a2enNhddA@mail.gmail.com>
+Subject: Re: [GIT PULL] early thermal changes for v6.1-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 4:56 AM Ben Boeckel <me@benboeckel.net> wrote:
+On Wed, Aug 24, 2022 at 1:38 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Tue, Aug 23, 2022 at 15:25:20 -0700, Evan Green wrote:
-> > diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-> > index 0bfb4c33974890..dc9e11bb4824da 100644
-> > --- a/Documentation/security/keys/trusted-encrypted.rst
-> > +++ b/Documentation/security/keys/trusted-encrypted.rst
-> > @@ -199,6 +199,10 @@ Usage::
-> >         policyhandle= handle to an authorization policy session that defines the
-> >                       same policy and with the same hash algorithm as was used to
-> >                       seal the key.
-> > +       creationpcrs= hex integer representing the set of PCR values to be
-> > +                     included in the PCR creation data. The bit corresponding
-> > +                  to each PCR should be 1 to be included, 0 to be ignored.
-> > +                  TPM2 only.
 >
-> There's inconsistent whitespace here. Given the context, I suspect the
-> tabs should be expanded to spaces.
+> Hi Rafael,
 >
-> As for the docs themselves, this might preferrably mention how large
-> this is supposed to be. It seems to be limited to 32bits by the code.
-> What happens if fewer are provided? More? Will there always be at most
-> 32 PCR values? Also, how are the bits interpreted? I presume bit 0 is
-> for PCR value 0?
-
-Makes sense, I'll pin down the specification a bit better here and fix
-up the spacing.
-
+> this cycle will contain certainly a higher number of changes than the
+> previous ones. That will come from the rework of the thermal trip
+> handling / consolidation which is still WIP but where the drivers
+> changes are partly acked-by the different maintainers. The result will
+> be great IMO in terms of cleanup, encapsulation and maintainability.
 >
-> Thanks for including docs.
+> The thermal OF cleanup and rework have been consolidated meanwhile.
+>
+> In order to not have a huge pull request at the end of the v6.1
+> development cycle, I propose to send early but smaller pull requests
+> (release often, release early), so hopefully that will make the changes
+> smooth and may be hit the potential bugs for those who are sticking to
+> linux-pm instead of linux-next.
+>
+> This pull request is the first one and has been in the linux-next branch
+> since a couple of weeks.
+>
+> It includes the thermal OF rework, with the corresponding fixes and the
+> monitoring locking scheme path changes.
 
-Thanks for looking at them!
+Pulled, thanks!
 
--Evan
+
+> The following changes since commit 8c596324232d22e19f8df59ba03410b9b5b0f3d7:
+>
+>    dt-bindings: thermal: Fix missing required property (2022-08-15
+> 20:38:40 +0200)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.1-rc1
+>
+> for you to fetch changes up to 06f36055121769b9eb9b7d28c7499d1cc8269dc3:
+>
+>    Revert "mlxsw: core: Add the hottest thermal zone detection"
+> (2022-08-17 20:32:27 +0200)
+>
+> ----------------------------------------------------------------
+> - Rework the device tree initialization, convert the drivers to the
+>    new API and remove the old OF code (Daniel Lezcano)
+>
+> - Fix return value to -ENODEV when searching for a specific thermal
+>    zone which does not exist (Daniel Lezcano)
+>
+> - Fix the return value inspection in of_thermal_zone_find() (Dan
+>    Carpenter)
+>
+> - Fix kernel panic when kasan is enabled as it detects an use after
+>    free when unregistering a thermal zone (Daniel Lezcano)
+>
+> - Move the set_trip ops inside the thermal sysfs code (Daniel Lezcano)
+>
+> - Remove unnecessary error message as it is already showed in the
+>    underlying function (Jiapeng Chong)
+>
+> - Rework the monitoring path and move the locks upper in the call
+>    stack to fix some potentials race windows (Daniel Lezcano)
+>
+> - Fix lockdep_assert() warning introduced by the lock rework (Daniel
+>    Lezcano)
+>
+> - Revert the Mellanox 'hotter thermal zone' feature because it is
+>    already handled in the thermal framework core code (Daniel Lezcano)
+>
+> ----------------------------------------------------------------
+> Dan Carpenter (1):
+>        thermal/of: Fix error code in of_thermal_zone_find()
+>
+> Daniel Lezcano (42):
+>        thermal/of: Rework the thermal device tree initialization
+>        thermal/of: Return -ENODEV instead of -EINVAL if registration fails
+>        thermal/of: Fix free after use in thermal_of_unregister()
+>        thermal/of: Make new code and old code co-exist
+>        thermal/drivers/rockchip: Switch to new of API
+>        thermal/drivers/uniphier: Switch to new of API
+>        thermal/drivers/generic-adc: Switch to new of API
+>        thermal/drivers/mmio: Switch to new of API
+>        thermal/drivers/tegra: Switch to new of API
+>        thermal/drivers/sun8i: Switch to new of API
+>        thermal/drivers/sprd: Switch to new of API
+>        thermal/drivers/broadcom: Switch to new of API
+>        thermal/drivers/qcom: Switch to new of API
+>        thermal/drivers/st: Switch to new of API
+>        thermal/drivers/amlogic: Switch to new of API
+>        thermal/drivers/armada: Switch to new of API
+>        thermal/drivers/db8500: Switch to new of API
+>        thermal/drivers/imx: Switch to new of API
+>        thermal/drivers/rcar: Switch to new of API
+>        thermal/drivers/rzg2l: Switch to new of API
+>        thermal/drivers/qoriq: Switch to new of API
+>        thermal/drivers/mtk: Switch to new of API
+>        thermal/drivers/banggap: Switch to new of API
+>        thermal/drivers/maxim: Switch to new of API
+>        thermal/drivers/hisilicon: Switch to new of API
+>        thermal/drivers/ti-soc: Switch to new of API
+>        ata/drivers/ahci_imx: Switch to new of thermal API
+>        hwmon: pm_bus: core: Switch to new of thermal API
+>        hwmon/drivers/core: Switch to new of thermal API
+>        iio/drivers/sun4i_gpadc: Switch to new of thermal API
+>        Input: sun4i-ts - switch to new of thermal API
+>        regulator/drivers/max8976: Switch to new of thermal API
+>        thermal/drivers/samsung: Switch to new of thermal API
+>        thermal/core: Move set_trip_temp ops to the sysfs code
+>        thermal/of: Remove old OF code
+>        thermal/core: Rearm the monitoring only one time
+>        thermal/core: Rework the monitoring a bit
+>        thermal/governors: Group the thermal zone lock inside the
+> throttle function
+>        thermal/core: Move the thermal zone lock out of the governors
+>        thermal/core: Move the mutex inside the
+> thermal_zone_device_update() function
+>        thermal/core: Fix lockdep_assert() warning
+>        Revert "mlxsw: core: Add the hottest thermal zone detection"
+>
+> Jiapeng Chong (1):
+>        thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary print
+> function dev_err()
+>
+>   drivers/ata/ahci_imx.c                             |   15 +-
+>   drivers/hwmon/hwmon.c                              |   14 +-
+>   drivers/hwmon/pmbus/pmbus_core.c                   |   10 +-
+>   drivers/hwmon/scpi-hwmon.c                         |   14 +-
+>   drivers/iio/adc/sun4i-gpadc-iio.c                  |   14 +-
+>   drivers/input/touchscreen/sun4i-ts.c               |   10 +-
+>   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |   77 +-
+>   drivers/regulator/max8973-regulator.c              |   10 +-
+>   drivers/thermal/amlogic_thermal.c                  |   16 +-
+>   drivers/thermal/armada_thermal.c                   |   12 +-
+>   drivers/thermal/broadcom/bcm2711_thermal.c         |   14 +-
+>   drivers/thermal/broadcom/bcm2835_thermal.c         |   14 +-
+>   drivers/thermal/broadcom/brcmstb_thermal.c         |   20 +-
+>   drivers/thermal/broadcom/ns-thermal.c              |   50 +-
+>   drivers/thermal/broadcom/sr-thermal.c              |   16 +-
+>   drivers/thermal/db8500_thermal.c                   |    8 +-
+>   drivers/thermal/gov_bang_bang.c                    |   10 +-
+>   drivers/thermal/gov_fair_share.c                   |    3 +-
+>   drivers/thermal/gov_power_allocator.c              |   20 +-
+>   drivers/thermal/gov_step_wise.c                    |   10 +-
+>   drivers/thermal/hisi_thermal.c                     |   14 +-
+>   drivers/thermal/imx8mm_thermal.c                   |   14 +-
+>   drivers/thermal/imx_sc_thermal.c                   |   14 +-
+>   drivers/thermal/k3_bandgap.c                       |   12 +-
+>   drivers/thermal/k3_j72xx_bandgap.c                 |   12 +-
+>   drivers/thermal/max77620_thermal.c                 |    8 +-
+>   drivers/thermal/mtk_thermal.c                      |   10 +-
+>   drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   23 +-
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   12 +-
+>   drivers/thermal/qcom/tsens.c                       |   16 +-
+>   drivers/thermal/qoriq_thermal.c                    |   12 +-
+>   drivers/thermal/rcar_gen3_thermal.c                |   16 +-
+>   drivers/thermal/rcar_thermal.c                     |   13 +-
+>   drivers/thermal/rockchip_thermal.c                 |   14 +-
+>   drivers/thermal/rzg2l_thermal.c                    |   10 +-
+>   drivers/thermal/samsung/exynos_tmu.c               |   24 +-
+>   drivers/thermal/sprd_thermal.c                     |   18 +-
+>   drivers/thermal/st/stm_thermal.c                   |   18 +-
+>   drivers/thermal/sun8i_thermal.c                    |   14 +-
+>   drivers/thermal/tegra/soctherm.c                   |   21 +-
+>   drivers/thermal/tegra/tegra-bpmp-thermal.c         |   19 +-
+>   drivers/thermal/tegra/tegra30-tsensor.c            |   12 +-
+>   drivers/thermal/thermal-generic-adc.c              |   10 +-
+>   drivers/thermal/thermal_core.c                     |   63 +-
+>   drivers/thermal/thermal_core.h                     |    4 +-
+>   drivers/thermal/thermal_helpers.c                  |   73 +-
+>   drivers/thermal/thermal_mmio.c                     |   17 +-
+>   drivers/thermal/thermal_of.c                       | 1148
+> +++++++-------------
+>   drivers/thermal/thermal_sysfs.c                    |   11 +-
+>   drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   16 +-
+>   drivers/thermal/uniphier_thermal.c                 |   10 +-
+>   include/linux/thermal.h                            |   85 +-
+>   52 files changed, 796 insertions(+), 1324 deletions(-)
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
