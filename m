@@ -2,213 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C6759FB69
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 15:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F53859FB79
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 15:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbiHXNbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 09:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S238133AbiHXNgE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Aug 2022 09:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237867AbiHXNbc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 09:31:32 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D98C74DE5
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 06:31:25 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bt10so11029737lfb.1
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 06:31:25 -0700 (PDT)
+        with ESMTP id S238283AbiHXNgC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 09:36:02 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5718B786C6;
+        Wed, 24 Aug 2022 06:35:58 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id h22so23313818ejk.4;
+        Wed, 24 Aug 2022 06:35:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=/IenWy/p40/CNXuFHNI+gb1QvEr/h9waQZxVYY7VtNA=;
-        b=Vngrw9lShipNLvEXsA+IF/7Qgw/5CAr21iEyiIDB3tfF8HE1j9whkx2nzgD3FZPTjY
-         l5pJLdWoG2QCfauSzSAYf7ZyzAwdbZlu6qSfkPHsnY7hSwdsK01A6iL9NEc6jwiuL7fc
-         4s7UPn4w62w37ULGtqnYszVGIrhdyejdPzEXFObyNH9Ppm93tYWaiEc5ybp1HmxepakP
-         2/yNnnlYUaRu5qFbplo/uBNTApWfB62YLDIrYCNDTFyRsXlPQCUq7cMNqSS/2uOV+evH
-         2KtXeDwgcylnmBwkHuH6vpvmQViNfgCA+FPR/TTPNfkI3uoMh24mX8/Ri3QD7ogiJ0/C
-         upLA==
+        bh=YJF/VwA2mzDN6MSkPG2T+mKWxJTEYBZ1TSfzmhRiSak=;
+        b=R9gl5wXeQfCG8uiYehnAeR3v/OEYCuTPDmd/1TNe0sotS6OatzHswNMV+vpydDeuZ+
+         Nry6Uw7h6RaXcLOXUdUP1JO3/cqsz8UaaPA3D9ek55/RD3uHWHAz3nmJ4sfnx/uRPS57
+         FsNKpwySB94vkx6KFQlV1JRnY1hoWZziD1C8HUquIpxYa0DNSP/np0MVmb9NzrMi/FNt
+         H/p29EYX8l8mNG3XdMcZz8XTPlfHM8MP9K2VLaWA7J1trYkBBmpGqkrlqXCGoCQuTm0c
+         ek833ROccmN71xDurLvPkf5+d06+GDQnhcXcvyGV5i0MKsyfz2nUo6Es5k1kjReVjE1t
+         H71Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=/IenWy/p40/CNXuFHNI+gb1QvEr/h9waQZxVYY7VtNA=;
-        b=Aap9lh87YAXLe2ZQJffGWg7jlzk3Lrv41PK02AVMGlMZHYHi5a+xSreZYDp+zhvy0i
-         xyggiFzfCy31xnFj+tbwrlxCuYgsGELY56IM68Bk2GEIP92NasMYtrRNJ9R4gg3hw1Oq
-         HVNR3FuYWzWJjo3Psk/XQX6hVwdIeMbOIoeAyHscqghl0xrDJrY2Wal8bSjXbuCWpHG/
-         ZrB3z3hG9DzcA0JOLzlqeAGn18cZgLc7SdH2mcgvtm8+5ZG4dwyCpw5onvcKBMXg77sI
-         SCKYxZmxbwIfAuVcVf1IprDNl/Rm+yes3VV+j4/RVIk1KjbFYGpBoSqL42g8j8LKL0EE
-         X6BQ==
-X-Gm-Message-State: ACgBeo3J8k8JtFBh7BYtnaBluPWEf2D8c2+PxjzgReZ2hLPGjDBEhdNb
-        sxh5+gQtXqdqlTpvQnnK3CWjeY/uSbUxMG1GU3d5jw==
-X-Google-Smtp-Source: AA6agR7aG4e2SL7nOyVn87QFL7QjxbVK06xMjGUHAovRGzCaUPQqfwQ4OJbyp5/rhtJoMq3QQqaoUK4HES51ulCbeoA=
-X-Received: by 2002:ac2:59cf:0:b0:492:bf97:9a03 with SMTP id
- x15-20020ac259cf000000b00492bf979a03mr10776265lfn.233.1661347883822; Wed, 24
- Aug 2022 06:31:23 -0700 (PDT)
+        bh=YJF/VwA2mzDN6MSkPG2T+mKWxJTEYBZ1TSfzmhRiSak=;
+        b=XYoNwsDNrIOWFLN2PoCQtacOt891x4TSDICzx7qgXhUUeOVm8thXy64B9XjHNUNNPF
+         UQWHG8qt1gzjGB7rp0g4zb+odWAhdaZTNCy2QSw8wXJX8/sDIX4qyqicALSSHwa1D/FZ
+         h/3A/ezQ2+bOcZR3dWAjecbt8BV88j6Fhqj795klxm/rvjOzt2I6sjGTRW6BAN1SDaGI
+         7HINU/stLwBfl/6xniYrZDr80eZOjZm51rwsO/OiE+ZAW5p5DXyQU4kPK46QEeAYo8pn
+         iKLVOcV+jFv5QPqbROi3WtkfICNlt2R92uoxk/NEbnkQfwbH8SBbnrPmxNhfS+SsD8lR
+         YxrQ==
+X-Gm-Message-State: ACgBeo3a2uc6bgk71wNrdVFZezFGSisyPtsiaXD4z9nhI/NktVKAMAhk
+        3xh15C5mtks6Sm+bdHxQY7zRcXpes4CW2NxKWpo=
+X-Google-Smtp-Source: AA6agR7lw/fobBjH73PzZWmf8nrsUxZFGAqZHhPw1j17fQTgk9/IfDwNCuXesiIgyvgw7r26L2bSENsYjKb7Qm06zF0=
+X-Received: by 2002:a17:907:60c7:b0:731:2be4:f72d with SMTP id
+ hv7-20020a17090760c700b007312be4f72dmr3004924ejc.639.1661348156634; Wed, 24
+ Aug 2022 06:35:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
- <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
- <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm> <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
- <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm>
-In-Reply-To: <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 24 Aug 2022 15:30:47 +0200
-Message-ID: <CAPDyKFoS=E3c9XWWCaG2byMm-3nvvW5jXS0X7Bh-NK_msTUykQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220824044013.29354-1-qkrwngud825@gmail.com> <CAJZ5v0jmDeGn-L6U-=JOxOHVy3CRS8T5Y_06F50cL9bjUhgbPQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jmDeGn-L6U-=JOxOHVy3CRS8T5Y_06F50cL9bjUhgbPQ@mail.gmail.com>
+From:   Juhyung Park <qkrwngud825@gmail.com>
+Date:   Wed, 24 Aug 2022 22:35:45 +0900
+Message-ID: <CAD14+f1YEoqdnM8eTd2hUHSy+M4+AKQp6_FjV03TK=TSDxPfYw@mail.gmail.com>
+Subject: Re: [PATCH] PM: suspend: select SUSPEND_SKIP_SYNC too if
+ PM_USERSPACE_AUTOSLEEP is selected
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        chrome-platform@lists.linux.dev, Len Brown <len.brown@intel.com>,
+        Kalesh Singh <kaleshsingh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 22 Aug 2022 at 10:38, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
+Hi Rafael,
+
+On Wed, Aug 24, 2022 at 10:11 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
-> > On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
-> > <martin.kepplinger@puri.sm> wrote:
-> > >
-> > > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf Hansson:
-> > > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
-> > > > <martin.kepplinger@puri.sm> wrote:
-> > > > >
-> > > > > If for example the power-domains' power-supply node (regulator)
-> > > > > needs
-> > > > > interrupts to work, the current setup with noirq callbacks
-> > > > > cannot
-> > > > > work; for example a pmic regulator on i2c, when suspending,
-> > > > > usually
-> > > > > already
-> > > > > times out during suspend_noirq:
-> > > > >
-> > > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > > > >
-> > > > > So fix system suspend and resume for these power-domains by
-> > > > > using
-> > > > > the
-> > > > > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
-> > > > > librem5 board,
-> > > > > but by looking at the dts, this will fix imx8mq-evk and
-> > > > > possibly
-> > > > > many other
-> > > > > boards too.
-> > > > >
-> > > > > This is designed so that genpd providers just say "this genpd
-> > > > > needs
-> > > > > interrupts" (by setting the flag) - without implying an
-> > > > > implementation.
-> > > > >
-> > > > > Initially system suspend problems had been discussed at
-> > > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > > > > which led to discussing the pmic that contains the regulators
-> > > > > which
-> > > > > serve as power-domain power-supplies:
-> > > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > > > >
-> > > > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > > > ---
-> > > > >  drivers/base/power/domain.c | 13 +++++++++++--
-> > > > >  include/linux/pm_domain.h   |  5 +++++
-> > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/base/power/domain.c
-> > > > > b/drivers/base/power/domain.c
-> > > > > index 5a2e0232862e..58376752a4de 100644
-> > > > > --- a/drivers/base/power/domain.c
-> > > > > +++ b/drivers/base/power/domain.c
-> > > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
-> > > > > genpd_spin_ops = {
-> > > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
-> > > > > GENPD_FLAG_ACTIVE_WAKEUP)
-> > > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
-> > > > > GENPD_FLAG_CPU_DOMAIN)
-> > > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
-> > > > > GENPD_FLAG_RPM_ALWAYS_ON)
-> > > > > +#define genpd_irq_on(genpd)            (genpd->flags &
-> > > > > GENPD_FLAG_IRQ_ON)
-> > > > >
-> > > > >  static inline bool irq_safe_dev_in_sleep_domain(struct device
-> > > > > *dev,
-> > > > >                 const struct generic_pm_domain *genpd)
-> > > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
-> > > > > generic_pm_domain
-> > > > > *genpd,
-> > > > >         genpd->domain.ops.runtime_suspend =
-> > > > > genpd_runtime_suspend;
-> > > > >         genpd->domain.ops.runtime_resume =
-> > > > > genpd_runtime_resume;
-> > > > >         genpd->domain.ops.prepare = genpd_prepare;
-> > > > > -       genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
-> > > > > -       genpd->domain.ops.resume_noirq = genpd_resume_noirq;
-> > > > > +
-> > > > > +       if (genpd_irq_on(genpd)) {
-> > > > > +               genpd->domain.ops.suspend =
-> > > > > genpd_suspend_noirq;
-> > > > > +               genpd->domain.ops.resume = genpd_resume_noirq;
-> > > > > +       } else {
-> > > > > +               genpd->domain.ops.suspend_noirq =
-> > > > > genpd_suspend_noirq;
-> > > > > +               genpd->domain.ops.resume_noirq =
-> > > > > genpd_resume_noirq;
-> > > >
-> > > > As we discussed previously, I am thinking that it may be better
-> > > > to
-> > > > move to using genpd->domain.ops.suspend_late and
-> > > > genpd->domain.ops.resume_early instead.
-> > >
-> > > Wouldn't that better be a separate patch (on top)? Do you really
-> > > want
-> > > me to change the current behaviour (default case) to from noirq to
-> > > late? Then I'll resend this series with such a patch added.
+> On Wed, Aug 24, 2022 at 6:41 AM Juhyung Park <qkrwngud825@gmail.com> wrote:
 > >
-> > Sorry, I wasn't clear enough, the default behaviour should remain as
-> > is.
+> > Commit 2fd77fff4b44 ("PM / suspend: make sync() on suspend-to-RAM build-time
+> > optional") added an option to skip sync() on suspend entry to avoid heavy
+> > overhead on platforms with frequent suspends.
 > >
-> > What I meant was, when genpd_irq_on() is true, we should use the
-> > genpd->domain.ops.suspend_late and genpd->domain.ops.resume_early.
+> > Years later, commit 261e224d6a5c ("pm/sleep: Add PM_USERSPACE_AUTOSLEEP
+> > Kconfig") added a dedicated config for indicating that the kernel is subject to
+> > frequent suspends.
+> >
+> > While SUSPEND_SKIP_SYNC is also available as a knob that the userspace can
+> > configure, it makes sense to enable this by default if PM_USERSPACE_AUTOSLEEP
+> > is selected already.
+> >
+> > Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
+> > ---
+> >  kernel/power/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> > index 60a1d3051cc7..5725df6c573b 100644
+> > --- a/kernel/power/Kconfig
+> > +++ b/kernel/power/Kconfig
+> > @@ -23,6 +23,7 @@ config SUSPEND_SKIP_SYNC
+> >         bool "Skip kernel's sys_sync() on suspend to RAM/standby"
+> >         depends on SUSPEND
+> >         depends on EXPERT
+> > +       default PM_USERSPACE_AUTOSLEEP
 >
-> Testing that shows that this isn't working. I can provide the logs
-> later, but suspend fails and I think it makes sense: "suspend_late" is
-> simply already too late when i2c (or any needed driver) uses "suspend".
+> Why is this better than selecting SUSPEND_SKIP_SYNC from PM_USERSPACE_AUTOSLEEP?
 
-Okay, I see.
+That won't allow developers to opt-out from SUSPEND_SKIP_SYNC when
+they still want PM_USERSPACE_AUTOSLEEP. (Can't think of a valid reason
+for this though, as PM_USERSPACE_AUTOSLEEP is only used by Android and
+probably Chromium, afaik.)
 
-The reason why I suggested moving the callbacks to "suspend_late", was
-that I was worried that some of the attached devices to genpd could
-use "suspend_late" themselves. This is the case for some drivers for
-DMA/clock/gpio/pinctrl-controllers, for example. That said, I am
-curious to look at the DT files for the platform you are running,
-would you mind giving me a pointer?
+I don't think SUSPEND_SKIP_SYNC is critical enough to enforce when
+PM_USERSPACE_AUTOSLEEP is enabled, but I don't have a strong opinion
+on this either.
+(We could do `imply SUSPEND_SKIP_SYNC` from PM_USERSPACE_AUTOSLEEP,
+but that doesn't look good semantically imho.)
 
-So, this made me think about this a bit more. In the end, just using
-different levels (suspend, suspend_late, suspend_noirq) of callbacks
-are just papering over the real *dependency* problem.
+If you want, I can send a v2 with 'PM_USERSPACE_AUTOSLEEP select
+SUSPEND_SKIP_SYNC'.
 
-What we need for the genpd provider driver, is to be asked to be
-suspended under the following conditions:
-1. All consumer devices (and child-domains) for its corresponding PM
-domain have been suspended.
-2. All its supplier devices supplies must remain resumed, until the
-genpd provider has been suspended.
+Thanks.
 
-Please allow me a few more days to think in more detail about this.
-
-In some way, it looks like we should be able to combine the
-information genpd has about its devices and child-domains, use PM
-callbacks for the genpd provider driver - so we can rely on the
-depency-path the fw_devlinks would give us for its supplier devices.
-
-Kind regards
-Uffe
+>
+> >         help
+> >           Skip the kernel sys_sync() before freezing user processes.
+> >           Some systems prefer not to pay this cost on every invocation
+> > --
