@@ -2,162 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDCF5A01A8
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 21:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42A25A01C8
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 21:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiHXTAF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 15:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        id S234181AbiHXTHP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Aug 2022 15:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237076AbiHXTAE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 15:00:04 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8596D266D;
-        Wed, 24 Aug 2022 12:00:02 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11cb3c811d9so20341885fac.1;
-        Wed, 24 Aug 2022 12:00:02 -0700 (PDT)
+        with ESMTP id S231866AbiHXTHP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 15:07:15 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70AE48C95
+        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 12:07:11 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id a9so9306211ilr.12
+        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 12:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=/0z86Y1Ax3THDI2n37xfCLeqcjNOe/tbgac1pPiMxAA=;
+        b=gwdHIYr3S0ZyGWyNV+pn9DrDu8z9hUsb5+TkrabU12fIVqPgQPoB/CgvwbzTqjuU5B
+         VSMzgBj1B7MRbbxPnBY2JGO4wgr0Q+q6lILKpanCDYsUmk40BlP0zIiaodse6xFSNLhk
+         SgtEINCm3vwoYan4NLuZg9kUM0n1+8LCARuY4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=81l0urtAdm0422pnKoKdlCLZ2vzf1mvmJMvLVoU13lg=;
-        b=xAypobFnfiKofCtwLpOKR49rC6sprOsygrsEEjV8i1/hZG+ZhxAK6Gqe+rlbnurFZf
-         hpmCtpWe/bvgZiueZauXtNEMpxQwsl5HCYMx0mjWVqPB7NJ8z7Ha//gipV5G8p706sgJ
-         KygE7FgAZO0bdXLUSnu4CF6PcrZ+a1uVHmswqoOw9MPK01l1ndO/B8GHKS/gIXvoZNf0
-         KbM9nFc5E428TNhSu8bjVWWQfmzdBjk/p+yR+/RxkNHR3X7ElGNjNYy/YMtvLE7Cs5uE
-         8Led/rQBrnnr24nQdZ6VOczpWU4NJSdbJymjq84JsAeqm6bXwSb041djnOIdvp5vLKeX
-         NoPg==
-X-Gm-Message-State: ACgBeo0j7mSvsEkO+lhYNop+i5/vLt6G6SuGG/LRHEidKf0umEykwl2L
-        JLJ4MyBauvjWWOLMZL1rpg==
-X-Google-Smtp-Source: AA6agR6gq3odLONnxn7ScxB+V2o8PveOUtauGIp5PDlneckDi2uJ7Qp0CsDQVTyW8ZtEB9eX0Fhn4Q==
-X-Received: by 2002:a05:6870:3321:b0:11c:b8f5:e57a with SMTP id x33-20020a056870332100b0011cb8f5e57amr250189oae.100.1661367601746;
-        Wed, 24 Aug 2022 12:00:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h17-20020a056808015100b0032f0fd7e1f8sm4208742oie.39.2022.08.24.12.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 12:00:01 -0700 (PDT)
-Received: (nullmailer pid 2700641 invoked by uid 1000);
-        Wed, 24 Aug 2022 18:59:59 -0000
-Date:   Wed, 24 Aug 2022 13:59:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, zhangqing@rock-chips.com,
-        zyw@rock-chips.com, jon.lin@rock-chips.com,
-        maccraft123mc@gmail.com, sre@kernel.org, heiko@sntech.de,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH V9 1/4] dt-bindings: Add Rockchip rk817 battery charger
- support
-Message-ID: <20220824185959.GA2699257-robh@kernel.org>
-References: <20220823193015.10229-1-macroalpha82@gmail.com>
- <20220823193015.10229-2-macroalpha82@gmail.com>
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=/0z86Y1Ax3THDI2n37xfCLeqcjNOe/tbgac1pPiMxAA=;
+        b=lsdcnYBLQ8KbMXwWUpYoUDRCEgzA3ZUoRhMuG3arN5ptGcg5AiD0jTZlr93m1/85X0
+         OCg9ikuvYamkxKC5jNIu4P/mZW57da/vX5HxR6HJmUJTogIQDzcz1gBBhVuWT+mlkcm0
+         Lme4uibJmlXcIn7dEZpeEottuT4r/yX/Y9SaOxDlhWfsM+uzeK6AeqhJmq826x7uNv5C
+         P36XHruxUDJqGFTmVo/l2rDvxiyr6aPdZJ/CnET/t2UksC7dNdSydcnJ1Nj1lK00i6gl
+         jhE4wvl+AjJ7w/7Ud5c/hsxg3BjAhqndCeOPPT9O8b8/cQ/yLAVD+GrDSwi+YCWmvR3S
+         W1eQ==
+X-Gm-Message-State: ACgBeo2URmP56zusbil0ScLOBeG80qL2OFaFt++SOkZIPf0LopJBjq2+
+        X7Pzykw2nTS+49TIdfd7VEOkOFm9H8TAPg==
+X-Google-Smtp-Source: AA6agR5QNbLkv8efd9OL2qGCGpwbf8PakwKXqb+zg7HsQsNZYFeY9GuN1L/O8JOq1d+kLvit5stWpQ==
+X-Received: by 2002:a05:6e02:164f:b0:2df:b190:6dd9 with SMTP id v15-20020a056e02164f00b002dfb1906dd9mr235486ilu.94.1661368030628;
+        Wed, 24 Aug 2022 12:07:10 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h27-20020a022b1b000000b00346c6e75dffsm111593jaa.161.2022.08.24.12.07.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 12:07:10 -0700 (PDT)
+Subject: Re: [PATCH] cpupowerutils: Delete repeated word in comments
+To:     shaomin Deng <dengshaomin@cdjrlc.com>, trenn@suse.com,
+        shuah@kernel.org
+Cc:     linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220802154530.18521-1-dengshaomin@cdjrlc.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8eec893c-822f-ed8b-fb14-f9ea8ad1fd7f@linuxfoundation.org>
+Date:   Wed, 24 Aug 2022 13:07:09 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823193015.10229-2-macroalpha82@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220802154530.18521-1-dengshaomin@cdjrlc.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 02:30:12PM -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
+On 8/2/22 9:45 AM, shaomin Deng wrote:
+> From: Shaomin Deng <dengshaomin@cdjrlc.com>
 > 
-> Create dt-binding documentation to document rk817 battery and charger
-> usage. New device-tree properties have been added.
+> Delete the repeated word "cpu" in comments.
 > 
-> - rockchip,resistor-sense-micro-ohms: The value in microohms of the
->                                       sample resistor.
-> - rockchip,sleep-enter-current-microamp: The value in microamps of the
->                                          sleep enter current.
-> - rockchip,sleep-filter-current: The value in microamps of the sleep
->                                  filter current.
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
 > ---
->  .../bindings/mfd/rockchip,rk817.yaml          | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
+>   tools/power/cpupower/bench/system.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
-> index bfc1720adc43..d0dccb1aaf4c 100644
-> --- a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
-> @@ -117,6 +117,47 @@ properties:
->          description:
->            Describes if the microphone uses differential mode.
->  
-> +  charger:
-> +    description: |
-> +      The child node for the charger to hold additional properties. If a
-> +      battery is not in use, this node can be omitted.
-> +    type: object
+> diff --git a/tools/power/cpupower/bench/system.c b/tools/power/cpupower/bench/system.c
+> index 40f3679e70b5..eb79dd9ac670 100644
+> --- a/tools/power/cpupower/bench/system.c
+> +++ b/tools/power/cpupower/bench/system.c
+> @@ -37,7 +37,7 @@ long long int get_time()
+>    * sets the cpufreq governor
+>    *
+>    * @param governor cpufreq governor name
+> - * @param cpu cpu for which the governor should be set
+> + * @param cpu for which the governor should be set
 
-       additionalProperties: false
+This is good as is. The first cpu is associated with param.
 
-> +    properties:
-> +      monitored-battery:
-> +        description: |
-> +          A phandle to a monitored battery node that contains a valid
-> +          value for:
-> +          charge-full-design-microamp-hours,
-> +          charge-term-current-microamp,
-> +          constant-charge-current-max-microamp,
-> +          constant-charge-voltage-max-microvolt,
-> +          voltage-max-design-microvolt,
-> +          voltage-min-design-microvolt,
-> +          and a valid ocv-capacity table.
-> +
-> +      rockchip,resistor-sense-micro-ohms:
-> +        description: |
-> +          Value in microohms of the battery sense resistor. This value is
-> +          used by the driver to set the correct divisor value to translate
-> +          ADC readings into the proper units of measure.
-> +        enum: [10000, 20000]
-> +
-> +      rockchip,sleep-enter-current-microamp:
-> +        description: |
-> +          Value in microamps of the sleep enter current for the charger.
-> +          Value is used by the driver to calibrate the relax threshold.
-> +
-> +      rockchip,sleep-filter-current-microamp:
-> +        description:
-> +          Value in microamps of the sleep filter current for the charger.
-> +          Value is used by the driver to derive the sleep sample current.
-> +
-> +    required:
-> +      - monitored-battery
-> +      - rockchip,resistor-sense-micro-ohms
-> +      - rockchip,sleep-enter-current-microamp
-> +      - rockchip,sleep-filter-current-microamp
-> +
->  allOf:
->    - if:
->        properties:
-> @@ -323,6 +364,13 @@ examples:
->                  };
->              };
->  
-> +            rk817_charger: charger {
-> +                monitored-battery = <&battery>;
-> +                rockchip,resistor-sense-micro-ohms = <10000>;
-> +                rockchip,sleep-enter-current-microamp = <300000>;
-> +                rockchip,sleep-filter-current-microamp = <100000>;
-> +            };
-> +
->              rk817_codec: codec {
->                  rockchip,mic-in-differential;
->              };
-> -- 
-> 2.25.1
-> 
-> 
+thanks,
+-- Shuah
+
