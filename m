@@ -2,208 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD20A59EFD2
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 01:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B7F59F102
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 03:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbiHWXoC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Aug 2022 19:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
+        id S233661AbiHXBd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Aug 2022 21:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiHWXoA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 19:44:00 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2BA8A6D5
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 16:43:59 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 92-20020a17090a09e500b001d917022847so6571087pjo.1
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 16:43:59 -0700 (PDT)
+        with ESMTP id S233637AbiHXBdu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Aug 2022 21:33:50 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37777F112
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 18:33:46 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-334dc616f86so424209777b3.8
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 18:33:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=buqUxxwCuurQCGvIWcBzNGEGiMpXO6f0MopvbFAVuy4=;
-        b=s/Oyq3bRVMysOt8x1cdAlmAVaIQaKOVzdheav1QwmS/why5h7fuGl6FotWAtmCy+Ic
-         311rK/Dfs3CoeZbhiTK/EV9qg4CTFVe9PRqhF55GA1M6x0Qazif190N4PDrL4Iw8e22I
-         Or2ddCuIb+nCXb0Oq09xFIU6w+tZZa2CYkFCtfHbqQmsHEbVpR/HaykE718hfD/2+cmK
-         FHCsHVR/BzQT5aIaRQXrR2krqsAu4c1izZCkVr+W5nRiDk2q6/9pDHE4N4r9mRi5UiDX
-         +uZA43S6aKRTYPnA/t+VEktQhywGjsdlU8JDZpVqw6aVn0GvJCle5n89MdNDfLt/fwxJ
-         Imsg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=15+zFGICN73u7PZkuVftuGFAaRqO2hNiuUPbcuB/iDw=;
+        b=ammrl+ffQIbxpXELKnFxaurs3Fbe2bx9R/IRI2+J5pQAM/wfjFh1aSFzyWG/E1RD5I
+         rshOZlmvK+Bt4a2MNbUFbSpkCeSrrxRT3zaVTQqLRUMz4elzDZb4CyvIvtQzq4jGwi+1
+         HBILJXTenmBL8ezDV/XzSltMyRVW8N5pGLVc6ZMhlIDEvl+mrwxpUc5n+db5z5Pfve4k
+         jWbqAzYB3Hyg5oa2ZHgXfW73ElDNxOwcp7mMt28pojnFNBEyD2+0HttoLOb68bdPn3gz
+         h+F5uqyOw5Q9oI+0N52Nr3XEpZ0TzyQMzlW05rWkdP3Hj3nW89n+8r+x6EjcJTcjYaCu
+         dSgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=buqUxxwCuurQCGvIWcBzNGEGiMpXO6f0MopvbFAVuy4=;
-        b=jjc56g4ks0IkQ/anZWD50rcFlmxWwvTyVI/EcfqNhXblTrASXdL/Aj/+ABlieBTtus
-         s/TCeJyWYZWtyQMj+U/rKS9lhJp9rzR43SllinoZNVkYyBsuWb9mL7Iv9yO+qT09Oj1v
-         TJiJlPaU5hw9hryTOC7FMEQIAAgpshiiXTeelPMTiIsgKYVcc2I/XX8O0VaOASIGsisu
-         jMUJ1D7axjc0hRKw7GVjG5vRgLHFl0pw5uJeDMtDvpTdvvKhO9+mWVCl3R2zjDyoanIo
-         Rm0aDem+bCBvvybI8INN++IX9Vvd6vkGg4BWWwAjGZTO8LSdpjQI5FkvV+Lm+LUqbxxK
-         NLUQ==
-X-Gm-Message-State: ACgBeo1Y3+src4/sWLEdW9CUyExV2Pt7m3iCVnKs5hE9gfFMTzujmuEL
-        8FwEUV0dOuDe+0nfUm1r4D/GPeiVf2o=
-X-Google-Smtp-Source: AA6agR5+C8UQv+q7r1T7kLEd8fXqzZIi6N5tjhP3Ko5nQNLbJjezxePfaQk5d1pCxegFzhVlFxLYJf2DCnQ=
-X-Received: from pshier-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1b0b])
- (user=pshier job=sendgmr) by 2002:a17:902:c945:b0:16d:d425:324a with SMTP id
- i5-20020a170902c94500b0016dd425324amr25716205pla.7.1661298238537; Tue, 23 Aug
- 2022 16:43:58 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 16:43:53 -0700
-Message-Id: <20220823234353.937002-1-pshier@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] x86/msr: add idle version of wrmsr trace
-From:   FirstName LastName <pshier@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Roth <michael.roth@amd.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Peter Shier <pshier@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=15+zFGICN73u7PZkuVftuGFAaRqO2hNiuUPbcuB/iDw=;
+        b=JsWNE8kPfVOWqLTQ6cen4IJTwU33e6S6icbhrP8owdj2IcEnsnIGdNYMKDKsyBirI7
+         e8n0IJHLTyrPtixwQOsGmvn3L0dsxbiGLNu9jtgEJ27bO8XZh1vG8z7Zlft8qH7xOxRs
+         SPL9nmI4liV8QVoUNuRelQ6w0e7zQEogwm9xjVZLR/h1i6hS7DzGce6v/9E6XrdMQLgA
+         uTCa0EnC3Myg6Hw3ErxEv07b509So0aTHi7S8dBEWd2RXY0V512tyFUjR7icPsbI+dWk
+         eC6EcBv9jQFQvHcDKog666EX+7Q/BbVSH6SKL5zajSEz9fUcBgAELKgKSkItBev8qoK2
+         aJXA==
+X-Gm-Message-State: ACgBeo1KTIcaH58RufGdHcvknXTX1VecKNmZ+lW55pMnIgsuI/BSPJqh
+        F8rEmy+eV06F5U+mtFRMugdzPlj8kUZKVJp2C5cVEg==
+X-Google-Smtp-Source: AA6agR5VUVZnLczkpHKFOKrnd+Tscg/SlOlcCZoOHfOkTvdY9LhPO1gaSJJ+tW/v5A56NSwT8mnZVrMApq5J4jdaQcY=
+X-Received: by 2002:a25:1546:0:b0:68f:8758:7348 with SMTP id
+ 67-20020a251546000000b0068f87587348mr24825887ybv.563.1661304824786; Tue, 23
+ Aug 2022 18:33:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220701012647.2007122-1-saravanak@google.com> <YwS5J3effuHQJRZ5@kroah.com>
+In-Reply-To: <YwS5J3effuHQJRZ5@kroah.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 23 Aug 2022 18:33:07 -0700
+Message-ID: <CAGETcx8C_Hw588J_DsDELp2rS-UNnezpqqqvUixqGR7m2wDKaA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Peter Shier <pshier@google.com>
+On Tue, Aug 23, 2022 at 4:25 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > These patches are on top of driver-core-next.
+> >
+> > Even if stdout-path isn't set in DT, this patch should take console
+> > probe times back to how they were before the deferred_probe_timeout
+> > clean up series[1].
+>
+> Now dropped from my queue due to lack of a response to other reviewer's
+> questions.
 
-With commit bf5835bcdb963 ("intel_idle: Disable IBRS during long idle"),
-enabling wrmsr trace with CONFIG_LOCKDEP causes "suspicious
-rcu_dereference_check() usage" warning because do_trace_write_msr does not
-use trace_write_msr_rcuidle.
+Sorry, I somehow missed those emails. I'll respond later today/tomorrow.
 
-Add idle versions of needed routines and change intel_idle_ibrs to use it.
-
-Sample warning:
-============================
-WARNING: suspicious RCU usage
-6.0.0-dbg-DEV #7 Tainted: G S         O      
------------------------------
-arch/x86/include/asm/msr-trace.h:48 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-rcu_scheduler_active = 2, debug_locks = 1
-RCU used illegally from extended quiescent state!
-no locks held by swapper/59/0.
-
-stack backtrace:
-CPU: 59 PID: 0 Comm: swapper/59 Tainted: G S         O       6.0.0-dbg-DEV #7
-Call Trace:
- dump_stack_lvl
- dump_stack
- lockdep_rcu_suspicious
- trace_write_msr
- do_trace_write_msr
- intel_idle_ibrs
- cpuidle_enter_state
- cpuidle_enter
- do_idle
- cpu_startup_entry
- start_secondary
- secondary_startup_64_no_verify
-
-
-Tested on skylake using:
-echo "msr:write_msr" >/sys/kernel/debug/tracing/set_event
-with and without patch.
-
-Signed-off-by: Peter Shier <pshier@google.com>
----
- arch/x86/include/asm/msr.h | 16 ++++++++++++++++
- arch/x86/lib/msr.c         |  6 ++++++
- drivers/idle/intel_idle.c  |  4 ++--
- 3 files changed, 24 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
-index 65ec1965cd28..248cc58b7758 100644
---- a/arch/x86/include/asm/msr.h
-+++ b/arch/x86/include/asm/msr.h
-@@ -62,10 +62,12 @@ DECLARE_TRACEPOINT(read_msr);
- DECLARE_TRACEPOINT(write_msr);
- DECLARE_TRACEPOINT(rdpmc);
- extern void do_trace_write_msr(unsigned int msr, u64 val, int failed);
-+extern void do_trace_write_msr_idle(unsigned int msr, u64 val, int failed);
- extern void do_trace_read_msr(unsigned int msr, u64 val, int failed);
- extern void do_trace_rdpmc(unsigned int msr, u64 val, int failed);
- #else
- static inline void do_trace_write_msr(unsigned int msr, u64 val, int failed) {}
-+extern void do_trace_write_msr_idle(unsigned int msr, u64 val, int failed) {}
- static inline void do_trace_read_msr(unsigned int msr, u64 val, int failed) {}
- static inline void do_trace_rdpmc(unsigned int msr, u64 val, int failed) {}
- #endif
-@@ -148,6 +150,15 @@ native_write_msr(unsigned int msr, u32 low, u32 high)
- 		do_trace_write_msr(msr, ((u64)high << 32 | low), 0);
- }
- 
-+static inline void notrace
-+native_write_msr_idle(unsigned int msr, u32 low, u32 high)
-+{
-+	__wrmsr(msr, low, high);
-+
-+	if (tracepoint_enabled(write_msr))
-+		do_trace_write_msr_idle(msr, ((u64)high << 32 | low), 0);
-+}
-+
- /* Can be uninlined because referenced by paravirt */
- static inline int notrace
- native_write_msr_safe(unsigned int msr, u32 low, u32 high)
-@@ -262,6 +273,11 @@ static inline void wrmsrl(unsigned int msr, u64 val)
- 	native_write_msr(msr, (u32)(val & 0xffffffffULL), (u32)(val >> 32));
- }
- 
-+static inline void wrmsrl_idle(unsigned int msr, u64 val)
-+{
-+	native_write_msr_idle(msr, (u32)(val & 0xffffffffULL), (u32)(val >> 32));
-+}
-+
- /* wrmsr with exception handling */
- static inline int wrmsr_safe(unsigned int msr, u32 low, u32 high)
- {
-diff --git a/arch/x86/lib/msr.c b/arch/x86/lib/msr.c
-index b09cd2ad426c..58fdf0f13850 100644
---- a/arch/x86/lib/msr.c
-+++ b/arch/x86/lib/msr.c
-@@ -121,6 +121,12 @@ void do_trace_write_msr(unsigned int msr, u64 val, int failed)
- EXPORT_SYMBOL(do_trace_write_msr);
- EXPORT_TRACEPOINT_SYMBOL(write_msr);
- 
-+void do_trace_write_msr_idle(unsigned int msr, u64 val, int failed)
-+{
-+	trace_write_msr_rcuidle(msr, val, failed);
-+}
-+EXPORT_SYMBOL(do_trace_write_msr_idle);
-+
- void do_trace_read_msr(unsigned int msr, u64 val, int failed)
- {
- 	trace_read_msr(msr, val, failed);
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 3e101719689a..bdecd2638c59 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -187,12 +187,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
- 	int ret;
- 
- 	if (smt_active)
--		wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-+		wrmsrl_idle(MSR_IA32_SPEC_CTRL, 0);
- 
- 	ret = __intel_idle(dev, drv, index);
- 
- 	if (smt_active)
--		wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-+		wrmsrl_idle(MSR_IA32_SPEC_CTRL, spec_ctrl);
- 
- 	return ret;
- }
--- 
-
-
+-Saravana
