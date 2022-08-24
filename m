@@ -2,114 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E4459F363
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 08:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DD859F37F
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 08:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbiHXGEl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 02:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
+        id S234835AbiHXGNn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Aug 2022 02:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbiHXGEl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 02:04:41 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9D6923F0
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 23:04:40 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id r69so14154529pgr.2
-        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 23:04:40 -0700 (PDT)
+        with ESMTP id S234871AbiHXGNm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 02:13:42 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD29422D8
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id io24so1505396plb.1
+        for <linux-pm@vger.kernel.org>; Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=Dk8XzDm9D48Wg0yOKNV6jG+OQwP/124WGzj8tislXC0=;
-        b=GV2EUQSbNojALXv87dCRbopnxuVC/rIx0y82s6hI/GqE8tRc7A12byQ3c2V4h8ispa
-         8xxLUnrIuLPQF4Ne8XNC+OKGJpXHk62Ct75oDChoBcKh4GQCIPh/xW3vm5oAPb760/85
-         oqnHDsBgg1UGtSQjBhtq717O86m0WqW2uiqIg8ukV0ysFZ2Cc5a6ufebPpw0MGwJ062M
-         pVO7zQUGtvzGgJdbQMeCYIOFDdZek0T0F7MYm5zRPnGk+Qi1WxuzlLhFJZt13PU+/7pC
-         uqCtRNXXQRPGG7dGqj6pq/+ZFxcd7xbvZZZz8/AVdCWsxaoKcBlpc8uzoDBPYtZvd25t
-         RZEw==
+        bh=AjR9XSu1Nnujm9uAtsWKpMZYdgaGmcyKS3pcgGtNRUM=;
+        b=l/pSwXqA6guVnJ/fx7K2+lSbwt6YRJjnrqrTJHpYb5w/lPaPEyCRI2QoDK9P6vhblk
+         fuThyVN/dGpp+Qa47H5eIUfXYMlTxKI/vPK+mX8cGggbUV+ERX/lHsq5kzJbLd8hsd+7
+         /j8Nnj8egrXjVUqmrxGY2F/0XfEoEmNtx5y/uZpVJKTva2JbXG7Y4SOC/NHX3s/W1T6e
+         jSuevNypXxEV2OKm1jYaGvpZ7nsSCDMITwizhqOQis7oPtDvWOKLH8Q/3lVZFo27LCQz
+         i930bzrmqKe+VZIuiDLHFTsoIIAOQYXIGWcPzIxewmQsPGKCHgMAHoLyMuTCq0hvs5Dh
+         1bEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Dk8XzDm9D48Wg0yOKNV6jG+OQwP/124WGzj8tislXC0=;
-        b=1sOGktipyz3S/JfPh5mV/8xG4EEAU2O9iOf9D+8IoBirFARSato9SMkfKKtkmOSVtT
-         u1hjIp/lz//b73mggDMRJ4btbahLG0ubqkJLiKDDLZEK0uy7mfn8dGLVMBOw9SzMh7c0
-         CL13udXKNKj6C42Mi1/Gsy4TerwGbamO6ctbFKiXzk7mYq6hxA/EpTLN4QkD7Bc+gVS2
-         1TsADECoWPigOozhx5ErionzX3Tn7eTK2HfH+rQc7LeyeJRIklEUhLMklZOxXEtFnOhT
-         OCZfrvMgQnpTe89EU+qbyB2Ys19Krx5Oi8W0dHjvBFFqhF4QCQz9V2phKHfRxpvPT3T4
-         EfmQ==
-X-Gm-Message-State: ACgBeo0dNMRPQehgStKLsIdQAaMO35Q0if18f6wag33SGOMUWL08hoSJ
-        Ohmo66lANjBmDHKLYA4n+aaA+A==
-X-Google-Smtp-Source: AA6agR42Mf+/DePJe3KKIFqhmxuPv3YBRiHOFkeDdcXPFc6xg94SgVGRNpLAt2WM0u7q3E2/nzEtRw==
-X-Received: by 2002:a05:6a00:88f:b0:530:dec:81fd with SMTP id q15-20020a056a00088f00b005300dec81fdmr28642736pfj.64.1661321079747;
-        Tue, 23 Aug 2022 23:04:39 -0700 (PDT)
+        bh=AjR9XSu1Nnujm9uAtsWKpMZYdgaGmcyKS3pcgGtNRUM=;
+        b=Csp7EenYAxQ8AmXczrWsCeFJVBMHBR5QNvXfy5aqM8dQZPeEHuvEYugQyT1Pe1UJoD
+         W9OQp+xLfOchKl+JUH4Y7zV5QGsKL9Jr+iRtIASocyJGvu3EzUkEDNPfXefUzo9tezMs
+         UYVaX/uC1BHkU4xLnScz4K/R1heeTZSrGtFZh18hTd807qE9qdpSNEZTQHJZ7xVwu7Bp
+         3yD0B/pfWEd2rpelT5mrLYzehkXIYihJridgCm2l5D8KN7JklB6o+OIRgZsrNLTZ8qux
+         Or5m9ZDSfk07SPQQ4+MiUHrXMdy9WWVLhQdxFtxRnelEJA41NkxH9e3yJR/q8hqu1RI3
+         trEQ==
+X-Gm-Message-State: ACgBeo2IHZBjhSS2FNbwPQXXr691pSTeDprG40C4OQcQ94OIe3lgNXPw
+        y5HLpJ2f+WV17jRlSyKsyoeg+g==
+X-Google-Smtp-Source: AA6agR7q00M3tCfGwdQsjPNGovJMwuhXdx/RcRhLw9z81kXeVR2UCGA4aOdveVFjy27b+5HqazB7tg==
+X-Received: by 2002:a17:902:c945:b0:16d:d425:324a with SMTP id i5-20020a170902c94500b0016dd425324amr26788193pla.7.1661321620331;
+        Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id x63-20020a623142000000b0052d24402e52sm11805350pfx.79.2022.08.23.23.04.38
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902684700b0016d93c84049sm11572397pln.54.2022.08.23.23.13.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 23:04:38 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 11:34:36 +0530
+        Tue, 23 Aug 2022 23:13:39 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 11:43:37 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Ilia Lin <ilia.lin@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Niklas Cassel <nks@flawful.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: opp: Add missing
- (unevaluated|additional)Properties on child nodes
-Message-ID: <20220824060436.in2weji5hpyabtsl@vireshk-i7>
-References: <20220823145649.3118479-17-robh@kernel.org>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.or, lenb@kernel.org,
+        robert.moore@intel.com, punit.agrawal@bytedance.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-kernel@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Message-ID: <20220824061337.dtgfmhgossyhzjpy@vireshk-i7>
+References: <20220818211619.4193362-1-jeremy.linton@arm.com>
+ <20220818211619.4193362-2-jeremy.linton@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220823145649.3118479-17-robh@kernel.org>
+In-Reply-To: <20220818211619.4193362-2-jeremy.linton@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-08-22, 09:56, Rob Herring wrote:
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 1 +
->  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> index 59663e897dae..a202b6c6561d 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> @@ -40,6 +40,7 @@ properties:
->  patternProperties:
->    '^opp-?[0-9]+$':
->      type: object
-> +    additionalProperties: false
->  
->      properties:
->        opp-hz: true
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> index 14a7a689ad6d..df8442fb11f0 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> @@ -19,6 +19,7 @@ properties:
->  patternProperties:
->    '^opp-?[0-9]+$':
->      type: object
-> +    additionalProperties: false
->  
->      properties:
->        opp-level: true
+On 18-08-22, 16:16, Jeremy Linton wrote:
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> +bool cppc_perf_ctrs_in_pcc(void)
+> +{
+> +	int cpu;
+> +
+> +	for_each_present_cpu(cpu) {
+> +		struct cpc_register_resource *ref_perf_reg;
+> +		struct cpc_desc *cpc_desc;
+> +
+> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> +
+> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+> +			return true;
+> +
+> +
+> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+> +
+> +		/*
+> +		 * If reference perf register is not supported then we should
+> +		 * use the nominal perf value
+> +		 */
+> +		if (!CPC_SUPPORTED(ref_perf_reg))
+> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+> +
+> +		if (CPC_IN_PCC(ref_perf_reg))
+> +			return true;
+> +	}
 
-Applied. Thanks.
+Add a blank line here please.
+
+> +	return false;
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+> +
+>  /**
+>   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+>   * @cpunum: CPU from which to read counters.
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 24eaf0ec344d..32fcb0bf74a4 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
+>  
+>  static struct cpufreq_driver cppc_cpufreq_driver;
+>  
+> +static enum {
+> +	FIE_UNSET = -1,
+> +	FIE_ENABLED,
+> +	FIE_DISABLED
+> +} fie_disabled = FIE_UNSET;
+> +
+>  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+> +module_param(fie_disabled, int, 0444);
+> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
+>  
+>  /* Frequency invariance support */
+>  struct cppc_freq_invariance {
+> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>  	struct cppc_freq_invariance *cppc_fi;
+>  	int cpu, ret;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	for_each_cpu(cpu, policy->cpus) {
+> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+>  	struct cppc_freq_invariance *cppc_fi;
+>  	int cpu;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	/* policy->cpus will be empty here, use related_cpus instead */
+> @@ -229,7 +237,21 @@ static void __init cppc_freq_invariance_init(void)
+>  	};
+>  	int ret;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	switch (fie_disabled) {
+> +	/* honor user request */
+> +	case FIE_DISABLED:
+> +	case FIE_ENABLED:
+> +		break;
+> +	case FIE_UNSET:
+> +	default:
+> +		fie_disabled = FIE_ENABLED;
+> +		if (cppc_perf_ctrs_in_pcc()) {
+> +			pr_info("FIE not enabled on systems with registers in PCC\n");
+> +			fie_disabled = FIE_DISABLED;
+> +		}
+> +		break;
+> +	}
+
+here too.
+
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	kworker_fie = kthread_create_worker(0, "cppc_fie");
+> @@ -247,7 +269,7 @@ static void __init cppc_freq_invariance_init(void)
+>  
+>  static void cppc_freq_invariance_exit(void)
+>  {
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	kthread_destroy_worker(kworker_fie);
+> @@ -936,6 +958,7 @@ static void cppc_check_hisi_workaround(void)
+>  		    wa_info[i].oem_revision == tbl->oem_revision) {
+>  			/* Overwrite the get() callback */
+>  			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
+> +			fie_disabled = FIE_DISABLED;
+>  			break;
+>  		}
+>  	}
+> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> index f73d357ecdf5..c5614444031f 100644
+> --- a/include/acpi/cppc_acpi.h
+> +++ b/include/acpi/cppc_acpi.h
+> @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+>  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>  extern int cppc_set_enable(int cpu, bool enable);
+>  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+> +extern bool cppc_perf_ctrs_in_pcc(void);
+>  extern bool acpi_cpc_valid(void);
+>  extern bool cppc_allow_fast_switch(void);
+>  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+> @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+>  {
+>  	return -ENOTSUPP;
+>  }
+> +static inline bool cppc_perf_ctrs_in_pcc(void)
+> +{
+> +	return false;
+> +}
+>  static inline bool acpi_cpc_valid(void)
+>  {
+>  	return false;
+
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
