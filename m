@@ -2,56 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A896759F418
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 09:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AB959F55E
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 10:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbiHXHW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 03:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        id S233029AbiHXIdb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Aug 2022 04:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiHXHW1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 03:22:27 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5083E74B;
-        Wed, 24 Aug 2022 00:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Mix4Z1ieLqwGJpAe/P3K6Otr3/J9t+fBDCBXsDZJNGA=; b=SRq2wmllmF/baBGSQo++fRl8eC
-        1Dmkq/nLeW7kFGOZj/FuTzPLLrD7d/KwA1yWpXszKRR/fqmQzhFI3uj49YJPEkjQt+hQ+dpEz7DWC
-        PHRThED7wBAE+JkAoh/pwKSAP4wyyd1iAKA7SeOiPzbyZePRrA3wfu5EDh6kDoG2brO4oWZAP0YNF
-        zhPGqdgemzbeTTIuJba4vGg33w6BRDanUFTwXpdZB1klQNrnaZ4dK1c4WOMs151BFHQL4h262Y92M
-        IPqhTDkz0/m7E+WDt9KcFke6ojhwr0MLMZQ/kxFo5wZ3wiPeTj4UANiFYM4h5V7ocnmMiSZ/GAD/+
-        16KWXnzg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQkiI-005eus-T7; Wed, 24 Aug 2022 07:22:11 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 030E5980403; Wed, 24 Aug 2022 09:22:09 +0200 (CEST)
-Date:   Wed, 24 Aug 2022 09:22:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     FirstName LastName <pshier@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Michael Roth <michael.roth@amd.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] x86/msr: add idle version of wrmsr trace
-Message-ID: <YwXRoUfI87HYOnTd@worktop.programming.kicks-ass.net>
-References: <20220823234353.937002-1-pshier@google.com>
- <YwXJwTOFWRFPilOy@worktop.programming.kicks-ass.net>
+        with ESMTP id S232621AbiHXIda (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 04:33:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1003D5B9;
+        Wed, 24 Aug 2022 01:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661330009; x=1692866009;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tVYV8x5KqSC9OSZo8dHmjJz6cGc4M/c0VgmXCI9d7qs=;
+  b=d/hcibLeRwq0wjwGPCPm3DXDLmMym9XGVV0wWsSWfjuUl0xH/d5w0yPe
+   J2KWSxMeyE0FXIKT4vRvUaORqIyUoLtuRhGEq7bLmyCChX9wXhTa7nUZz
+   zcGFSWfPJGkt0eSKTXJBBNzEa2ZGaS/Lzt6Qbn8uvMw6OkEe0Dm+OjzNR
+   bg8up/YJ0ZEasM+qHxtf9PcNIiMKTWKSrzoJkQCba5mmOwDQYf781DG5c
+   7DKu7uPnXcbYuwBEAZFlt9aLOo/HXYKpN13bnM1eOKCEEyfFcs01EELgY
+   lMfo6R7yvC1mZRmgR3d3sgk3ewyUJRSiKA+yDykYjUAbUYrLh9oGgfzY/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="292649768"
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="292649768"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 01:33:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="735799593"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 24 Aug 2022 01:33:11 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id DC93A19D; Wed, 24 Aug 2022 11:33:25 +0300 (EEST)
+Date:   Wed, 24 Aug 2022 11:33:25 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomasz Figa <tfiga@chromium.org>
+Subject: Re: [PATCH] ACPI: PM: Fix up documentation reference
+Message-ID: <YwXiVUigUmesHRuS@black.fi.intel.com>
+References: <5852809.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwXJwTOFWRFPilOy@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <5852809.lOV4Wx5bFT@kreacher>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,26 +64,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 08:48:33AM +0200, Peter Zijlstra wrote:
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 3e101719689a..6e82b2df29cb 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -187,12 +187,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
->  	int ret;
->  
->  	if (smt_active)
-> -		wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-> +		__native_wrmsr(MSR_IA32_SPEC_CTRL, 0);
->  
->  	ret = __intel_idle(dev, drv, index);
->  
->  	if (smt_active)
-> -		wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-> +		__native_wrmsr(MSR_IA32_SPEC_CTRL, spec_ctrl);
->  
->  	return ret;
->  }
+On Tue, Aug 23, 2022 at 03:28:02PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The acpi_dev_state_d0() kerneldoc comment should refer to
+> non-d0-probe.rst which is there in the tree instead of
+> low-power-probe.rst which is not.  Fix it up.
+> 
+> While at it, adjust the formatting of that comment to save space.
+> 
+> No functional impact.
+> 
+> Fixes: b82a7df4a7f3 ("ACPI: Add a convenience function to tell a device is in D0 state")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Clearly I should not be sending email before having wake-up-juice.. that
-should of course be native_wrmsr(SPEC_CTRL, val, 0) etc..
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
