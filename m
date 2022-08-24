@@ -2,108 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA5D5A0169
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 20:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDCF5A01A8
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Aug 2022 21:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240043AbiHXSeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 14:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S230243AbiHXTAF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Aug 2022 15:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239788AbiHXSem (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 14:34:42 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33E07A515;
-        Wed, 24 Aug 2022 11:34:40 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-33db4e5ab43so1368647b3.4;
-        Wed, 24 Aug 2022 11:34:40 -0700 (PDT)
+        with ESMTP id S237076AbiHXTAE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 15:00:04 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8596D266D;
+        Wed, 24 Aug 2022 12:00:02 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11cb3c811d9so20341885fac.1;
+        Wed, 24 Aug 2022 12:00:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0fJKE51ZwEoPTaUMc8JUaf3dO19a2GBvZUGjA8lc9aM=;
-        b=ZwAmpYJALVf29JVgH/ycyVZHqUcyuoaZ6sYEDbMsahFUFuGFpzyCXTn0WU5ndQ/tpA
-         mq5tv9ClbV+js8SHHUsqFNeWqmvIafm3M/Ne2avIuO31a6Mdjppt0a56ys2i/J/1QXO2
-         q2L/XFYyja+gUKO3GxH6imB/nQfSIj9ayY4MFNJii5HDYlyxN5FYHo6qOIhzbDDTQEDS
-         hcd7drI46ljsW6UPWFvRx3nSn7Eskf2+CRT9/1OlEHbx1m+pKVdVhpEEk5fW0y2+G1Qs
-         SMOFt3fl3Dwivwj4jaPzWwEAfnQrQSArFq9Gc9Eb9c9vQfxt/4ydt+6YoS2WAJJ0Gynq
-         hJZQ==
-X-Gm-Message-State: ACgBeo0G1FhTBOxPa//btogDVvolGNl9lEfsd9goR8xGd1h31cINtu9S
-        Z7nHOAhI1DcMxjNxdvU1ZpAgMfV/386trPfSKdo=
-X-Google-Smtp-Source: AA6agR5aJcrYwH49iHESjxTPAWqPBe0D8n9Ip5MMV3jUkGvXtNya+iOVTI3qvJUxh/NHkFav+oANxQPheMLPeXRe+wM=
-X-Received: by 2002:a25:664a:0:b0:695:e7cc:9a20 with SMTP id
- z10-20020a25664a000000b00695e7cc9a20mr415847ybm.153.1661366079973; Wed, 24
- Aug 2022 11:34:39 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=81l0urtAdm0422pnKoKdlCLZ2vzf1mvmJMvLVoU13lg=;
+        b=xAypobFnfiKofCtwLpOKR49rC6sprOsygrsEEjV8i1/hZG+ZhxAK6Gqe+rlbnurFZf
+         hpmCtpWe/bvgZiueZauXtNEMpxQwsl5HCYMx0mjWVqPB7NJ8z7Ha//gipV5G8p706sgJ
+         KygE7FgAZO0bdXLUSnu4CF6PcrZ+a1uVHmswqoOw9MPK01l1ndO/B8GHKS/gIXvoZNf0
+         KbM9nFc5E428TNhSu8bjVWWQfmzdBjk/p+yR+/RxkNHR3X7ElGNjNYy/YMtvLE7Cs5uE
+         8Led/rQBrnnr24nQdZ6VOczpWU4NJSdbJymjq84JsAeqm6bXwSb041djnOIdvp5vLKeX
+         NoPg==
+X-Gm-Message-State: ACgBeo0j7mSvsEkO+lhYNop+i5/vLt6G6SuGG/LRHEidKf0umEykwl2L
+        JLJ4MyBauvjWWOLMZL1rpg==
+X-Google-Smtp-Source: AA6agR6gq3odLONnxn7ScxB+V2o8PveOUtauGIp5PDlneckDi2uJ7Qp0CsDQVTyW8ZtEB9eX0Fhn4Q==
+X-Received: by 2002:a05:6870:3321:b0:11c:b8f5:e57a with SMTP id x33-20020a056870332100b0011cb8f5e57amr250189oae.100.1661367601746;
+        Wed, 24 Aug 2022 12:00:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h17-20020a056808015100b0032f0fd7e1f8sm4208742oie.39.2022.08.24.12.00.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 12:00:01 -0700 (PDT)
+Received: (nullmailer pid 2700641 invoked by uid 1000);
+        Wed, 24 Aug 2022 18:59:59 -0000
+Date:   Wed, 24 Aug 2022 13:59:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, zhangqing@rock-chips.com,
+        zyw@rock-chips.com, jon.lin@rock-chips.com,
+        maccraft123mc@gmail.com, sre@kernel.org, heiko@sntech.de,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH V9 1/4] dt-bindings: Add Rockchip rk817 battery charger
+ support
+Message-ID: <20220824185959.GA2699257-robh@kernel.org>
+References: <20220823193015.10229-1-macroalpha82@gmail.com>
+ <20220823193015.10229-2-macroalpha82@gmail.com>
 MIME-Version: 1.0
-References: <12036348.O9o76ZdvQC@kreacher> <2196460.iZASKD2KPV@kreacher>
- <5857822.lOV4Wx5bFT@kreacher> <CAHp75VcjxUjH4p_NOEQjOuFO8LcSdUU_stEvfWvtbQc8hfud0w@mail.gmail.com>
-In-Reply-To: <CAHp75VcjxUjH4p_NOEQjOuFO8LcSdUU_stEvfWvtbQc8hfud0w@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Aug 2022 20:34:28 +0200
-Message-ID: <CAJZ5v0hm8NszTDsq-KJ4iO452WZ7C7u4ufbfTDdFXX9YnXmTDw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] ACPI: Drop parent field from struct acpi_device
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823193015.10229-2-macroalpha82@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 8:23 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Aug 24, 2022 at 8:13 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > The parent field in struct acpi_device is, in fact, redundant,
-> > because the dev.parent field in it effectively points to the same
-> > object and it is used by the driver core.
-> >
-> > Accordingly, the parent field can be dropped from struct acpi_device
-> > and for this purpose define acpi_dev_parent() to retrieve a parent
-> > struct acpi_device pointer from the dev.parent field in struct
-> > acpi_device.  Next, update all of the users of the parent field
-> > in struct acpi_device to use acpi_dev_parent() instead of it and
-> > drop it.
-> >
-> > While at it, drop the ACPI_IS_ROOT_DEVICE() macro that is only used
-> > in one place in a confusing way.
-> >
-> > No intentional functional impact.
->
-> Side note: Should we not convert these to use acpi_dev_parent()?
->
-> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/acpi/property.c#L1271
-> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/bus/hisi_lpc.c#L397
+On Tue, Aug 23, 2022 at 02:30:12PM -0500, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
+> 
+> Create dt-binding documentation to document rk817 battery and charger
+> usage. New device-tree properties have been added.
+> 
+> - rockchip,resistor-sense-micro-ohms: The value in microohms of the
+>                                       sample resistor.
+> - rockchip,sleep-enter-current-microamp: The value in microamps of the
+>                                          sleep enter current.
+> - rockchip,sleep-filter-current: The value in microamps of the sleep
+>                                  filter current.
+> 
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/mfd/rockchip,rk817.yaml          | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+> index bfc1720adc43..d0dccb1aaf4c 100644
+> --- a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+> @@ -117,6 +117,47 @@ properties:
+>          description:
+>            Describes if the microphone uses differential mode.
+>  
+> +  charger:
+> +    description: |
+> +      The child node for the charger to hold additional properties. If a
+> +      battery is not in use, this node can be omitted.
+> +    type: object
 
-That can be done later, but thanks for the pointers!
+       additionalProperties: false
+
+> +    properties:
+> +      monitored-battery:
+> +        description: |
+> +          A phandle to a monitored battery node that contains a valid
+> +          value for:
+> +          charge-full-design-microamp-hours,
+> +          charge-term-current-microamp,
+> +          constant-charge-current-max-microamp,
+> +          constant-charge-voltage-max-microvolt,
+> +          voltage-max-design-microvolt,
+> +          voltage-min-design-microvolt,
+> +          and a valid ocv-capacity table.
+> +
+> +      rockchip,resistor-sense-micro-ohms:
+> +        description: |
+> +          Value in microohms of the battery sense resistor. This value is
+> +          used by the driver to set the correct divisor value to translate
+> +          ADC readings into the proper units of measure.
+> +        enum: [10000, 20000]
+> +
+> +      rockchip,sleep-enter-current-microamp:
+> +        description: |
+> +          Value in microamps of the sleep enter current for the charger.
+> +          Value is used by the driver to calibrate the relax threshold.
+> +
+> +      rockchip,sleep-filter-current-microamp:
+> +        description:
+> +          Value in microamps of the sleep filter current for the charger.
+> +          Value is used by the driver to derive the sleep sample current.
+> +
+> +    required:
+> +      - monitored-battery
+> +      - rockchip,resistor-sense-micro-ohms
+> +      - rockchip,sleep-enter-current-microamp
+> +      - rockchip,sleep-filter-current-microamp
+> +
+>  allOf:
+>    - if:
+>        properties:
+> @@ -323,6 +364,13 @@ examples:
+>                  };
+>              };
+>  
+> +            rk817_charger: charger {
+> +                monitored-battery = <&battery>;
+> +                rockchip,resistor-sense-micro-ohms = <10000>;
+> +                rockchip,sleep-enter-current-microamp = <300000>;
+> +                rockchip,sleep-filter-current-microamp = <100000>;
+> +            };
+> +
+>              rk817_codec: codec {
+>                  rockchip,mic-in-differential;
+>              };
+> -- 
+> 2.25.1
+> 
+> 
