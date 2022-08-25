@@ -2,88 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1009B5A0F72
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 13:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8596C5A0F81
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 13:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239263AbiHYLkv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Aug 2022 07:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S231190AbiHYLoL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Aug 2022 07:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236307AbiHYLku (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 07:40:50 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AEE4199B
-        for <linux-pm@vger.kernel.org>; Thu, 25 Aug 2022 04:40:45 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 27PBeRiT006924
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Thu, 25 Aug 2022 19:40:27 +0800 (CST)
-        (envelope-from Xuewen.Yan@unisoc.com)
-Received: from BJ10918PCW.spreadtrum.com (10.0.74.50) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 25 Aug 2022 19:40:28 +0800
-From:   Xuewen Yan <xuewen.yan@unisoc.com>
-To:     <viresh.kumar@linaro.org>, <lukasz.luba@arm.com>,
-        <amit.kachhap@gmail.com>, <daniel.lezcano@linaro.org>,
-        <rafael@kernel.org>
-CC:     <amitk@kernel.org>, <rui.zhang@intel.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xuewen.yan94@gmail.com>, <di.shen@unisoc.com>
-Subject: [PATCH] thermal: Check the policy first in cpufreq_cooling_register
-Date:   Thu, 25 Aug 2022 19:40:17 +0800
-Message-ID: <20220825114018.1715-1-xuewen.yan@unisoc.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S239596AbiHYLoK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 07:44:10 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A871281B11;
+        Thu, 25 Aug 2022 04:44:09 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-33dba2693d0so40357477b3.12;
+        Thu, 25 Aug 2022 04:44:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ozD6CY2x6K1FzUcGJO15mxn7aTrKxed4LQaWveS8TK0=;
+        b=TTpMR3n4dcO7+3DHNv8daf5aRvvM5HppLTJmAAKsbGRrirqyQ2cBCFQRphCBGzAtz0
+         nM14BePmQqyk8hpGOoDpj3zNDWS6cmZCmBWIqreexh9Pvz9AYcz7BssA0unqyoTTy+4A
+         9Kg6bqVJQVG8jFdy6Uc0PQl8vXR0oNuzWAwGUwWhwiHhWakJl179PV2diBzuJ0NwnEDO
+         Q5PvFygF/AY3QqqIaciVhth086IOjbDdwDC6BSIE2oyoC7nDZbel361ec/hN0KGBgzlJ
+         XQJvGAqj5pDlaVqGXWyuwrudzLaz8+DymPPbg+cO/4+I0WKzbBDA9psp/lmldAu9kR3L
+         jphQ==
+X-Gm-Message-State: ACgBeo20x9QTSEgyty7EJR0wlvMP8wErYiIwYRRoltb8q5BWlhqTlG9x
+        LjBW554jxvej/OycOwUclc3AHRkLLUuAb+jRH4c=
+X-Google-Smtp-Source: AA6agR7v+frDsoKkUOH0fMPRIRwFGM4Xooj11S51tIOI8FlBT+BmTxc/A6t9WXu9SnQr4PjJsilXTryF8er9+SvZbY8=
+X-Received: by 2002:a25:8d02:0:b0:696:42f8:fa6f with SMTP id
+ n2-20020a258d02000000b0069642f8fa6fmr1191765ybl.365.1661427848960; Thu, 25
+ Aug 2022 04:44:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.74.50]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 27PBeRiT006924
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220824234211.1625026-1-pshier@google.com>
+In-Reply-To: <20220824234211.1625026-1-pshier@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 25 Aug 2022 13:43:57 +0200
+Message-ID: <CAJZ5v0j6xDeQhiqEmCu5sfDBcWx9BvPo=8fXUrN93Exx0p=LTw@mail.gmail.com>
+Subject: Re: [PATCH v2] intel_idle: avoid tracing MSR writes while idling
+To:     Peter Shier <pshier@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michael Roth <michael.roth@amd.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since the policy needs to be accessed first when obtaining cpu devices,
-first check whether the policy is legal before this.
+On Thu, Aug 25, 2022 at 1:42 AM Peter Shier <pshier@google.com> wrote:
+>
+> With commit bf5835bcdb963 ("intel_idle: Disable IBRS during long idle"),
+> enabling wrmsr trace with CONFIG_LOCKDEP causes "suspicious
+> rcu_dereference_check() usage" warning because do_trace_write_msr does not
+> use trace_write_msr_rcuidle.
+>
+> Change intel_idle_ibrs to use native_wrmsr to avoid tracing
+>
+> Sample warning:
+> ============================
+> WARNING: suspicious RCU usage
+> 6.0.0-dbg-DEV #7 Tainted: G S         O
+> -----------------------------
+> arch/x86/include/asm/msr-trace.h:48 suspicious rcu_dereference_check() usage!
+>
+> other info that might help us debug this:
+>
+> rcu_scheduler_active = 2, debug_locks = 1
+> RCU used illegally from extended quiescent state!
+> no locks held by swapper/59/0.
+>
+> stack backtrace:
+> CPU: 59 PID: 0 Comm: swapper/59 Tainted: G S         O       6.0.0-dbg-DEV #7
+> Call Trace:
+>  dump_stack_lvl
+>  dump_stack
+>  lockdep_rcu_suspicious
+>  trace_write_msr
+>  do_trace_write_msr
+>  intel_idle_ibrs
+>  cpuidle_enter_state
+>  cpuidle_enter
+>  do_idle
+>  cpu_startup_entry
+>  start_secondary
+>  secondary_startup_64_no_verify
+>
+> Tested on skylake using:
+> echo "msr:write_msr" >/sys/kernel/debug/tracing/set_event
+> with and without patch.
+>
+> Signed-off-by: Peter Shier <pshier@google.com>
 
-Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
----
- drivers/thermal/cpufreq_cooling.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index b76293cc989c..7838b6e2dba5 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -501,17 +501,17 @@ __cpufreq_cooling_register(struct device_node *np,
- 	struct thermal_cooling_device_ops *cooling_ops;
- 	char *name;
- 
-+	if (IS_ERR_OR_NULL(policy)) {
-+		pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	dev = get_cpu_device(policy->cpu);
- 	if (unlikely(!dev)) {
- 		pr_warn("No cpu device for cpu %d\n", policy->cpu);
- 		return ERR_PTR(-ENODEV);
- 	}
- 
--	if (IS_ERR_OR_NULL(policy)) {
--		pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
--		return ERR_PTR(-EINVAL);
--	}
--
- 	i = cpufreq_table_count_valid_entries(policy);
- 	if (!i) {
- 		pr_debug("%s: CPUFreq table not found or has no valid entries\n",
--- 
-2.25.1
-
+> ---
+>
+> v2:
+> - changed to avoid tracing
+>
+> v1: https://lore.kernel.org/all/20220823234353.937002-1-pshier@google.com/
+>
+>  drivers/idle/intel_idle.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index 3e101719689a..df129c73786f 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -187,12 +187,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+>         int ret;
+>
+>         if (smt_active)
+> -               wrmsrl(MSR_IA32_SPEC_CTRL, 0);
+> +               native_wrmsr(MSR_IA32_SPEC_CTRL, 0);
+>
+>         ret = __intel_idle(dev, drv, index);
+>
+>         if (smt_active)
+> -               wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
+> +               native_wrmsr(MSR_IA32_SPEC_CTRL, spec_ctrl);
+>
+>         return ret;
+>  }
+> --
