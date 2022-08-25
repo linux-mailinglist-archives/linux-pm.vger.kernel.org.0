@@ -2,168 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F835A07CB
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 06:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D6F5A0841
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 07:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiHYETT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Aug 2022 00:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
+        id S232867AbiHYFAs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Aug 2022 01:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiHYETS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 00:19:18 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292759CCF2;
-        Wed, 24 Aug 2022 21:19:17 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id s11so24502071edd.13;
-        Wed, 24 Aug 2022 21:19:17 -0700 (PDT)
+        with ESMTP id S229741AbiHYFAr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 01:00:47 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506FA6D9F5
+        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 22:00:46 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo3736899pjd.3
+        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 22:00:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Rf7A1N3M8eXRQTfFVYNwPPvk6e2z76n204IQCLMe0go=;
-        b=HfJjtGl1KtGKSrwt4GbSOLfKxPC1KxIVcSho7oaeTgJr2KYTfDPQPIx99inKyesWLS
-         YZG1kDI9s8fNFkXuKAELT/oebz0Ta97HJPiil0S9Af2pWd1YQ7pW547xDPvVDwLwNN4z
-         4jNn2dzeKtTWPlZ7RYy4ysJcb7VSFLsExikkCeI/pwruJUsbea695pDyb7MKHEiCsn/m
-         JJkEqKz58tj4yJ1gBgmr3RsxSoSMhGbQcF03PCD4kWyNxj/w6JnfpQ83p7DkT3zs7J6v
-         OOrB9Ko8YCOKypd6vEqv1GgrilMC6YaLyDj0ylGDZFpfmystH69A7aTJXLRRoM7OHDs1
-         YfIg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=UWjij6HfXG1L6CDyEPygsAN2cmdpPEE9uumQe7csasE=;
+        b=P/1STGabxCTV+e4rAyeIpVbH6ReMZxIVb5Tz8/mIn2Gc6FfVZg0fXX+kGME4tH51k5
+         bpK3eaEVFAHO70cLUuAEUOWPFtmJ3EikhPydwufSF9m+778sFoE23IhIbGf1E2RfYJJH
+         uDrpoVcnv3bqzteAwjCOp/5c2pBPjJ4PVXgMOIJgapcJMUu5q5nl6lSPXPhHen30bzxJ
+         wRbPSd2IThnOIS10K4DAw7sZYFrsb+IOhDrNv2nFtemgzK5iWuq1EeeH0qyC57aDX/oN
+         bvwdZUSC8MXf8lHejbX1sMHonI7E4ADASU1UBDJNpmMghc3RI2qtq++TIXt8djQl0RrF
+         1mMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Rf7A1N3M8eXRQTfFVYNwPPvk6e2z76n204IQCLMe0go=;
-        b=u6KI+cVMdm0OuuOpv2+5U7PwUkNxcVj+O3sbG4/YbXG0Bq/b25oXsejab/e2t7GllP
-         BrR74XesNUssJZxtg5mco+G0D86J62eyramcjiP829Gg+h6CFY3xWwANZg3Kkl8AWwWL
-         ZfCVnLPBhRGZJx7G72NbGk6+Iu8CNOY/vxqfTypqi/yJU+bF6cKRGjC+WAWxvMayuInP
-         sgVK1gsmWZpz5m0L1v4taiHJGfVKVUPGdBblrBkAtMnNfNMk7ZFX8Jx9Snj9jRoTkT9q
-         l//uP2Kct6+IAFS7fozuLVSuaq8LIE/he/eo4H1k0D3xgIY0pVjmqf0E9NCaGGCIExRa
-         wy2g==
-X-Gm-Message-State: ACgBeo0+bqSVagv2WAXVMZcE/ItqzoGMnWl+MGFccAQTDvOj3OIR/Y+Y
-        a8BJNYzRKA3FJmN8ui9oKzhLNQJYirg+Lh+cby0=
-X-Google-Smtp-Source: AA6agR64o0dGJm1wGkJEebsAJmMWu3uZGUy52q4NvZOd0SKpY+lDQOoltvzUhV0MyBid91Sn6q6/kAyE5Ti5DNyI1UY=
-X-Received: by 2002:a05:6402:328c:b0:446:bcc8:bf49 with SMTP id
- f12-20020a056402328c00b00446bcc8bf49mr1633351eda.309.1661401155587; Wed, 24
- Aug 2022 21:19:15 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=UWjij6HfXG1L6CDyEPygsAN2cmdpPEE9uumQe7csasE=;
+        b=LnVY/KkwsH6TWMKmeOtZYUZvqAO6Fd3oyUrzpyrFHkrl+rg+BHKJfL3rzkGwOuJvub
+         c6HbrEcTCbNCGJiPqULHs+r46S9yHhl0B2bkNDP6EpFIgCEY61jmpnt9ZXISoduEfHJC
+         kHippC6dnVbvTuuBeeW8hDSUNEH+ha/fD9H9CsI+9GXZkEJrhiiioITCoj8jX2tTHAWZ
+         3sBRU+lQlMXb4+X8g5SowK6yk8Dg6aBTemOtQ+44BHzXYLM4gy9W680mOKmE7x+69m22
+         UdnRdR7pPej4bXBVWeeBTkDPEmgYDqyRMmLi10Sdwtj6Nvz+mQglQWby+l1IMKT+0b4/
+         5Vzg==
+X-Gm-Message-State: ACgBeo37j1R+33THU3vHNN5zII9cdMFdGZXTYZBlpqSdjexrlBIzjMMa
+        A92LKZeVTm5HggzAMpR7/5yKLMFq75iGTQ==
+X-Google-Smtp-Source: AA6agR7ghZumwKN6U4xN03qeYZ/JcfJw21XBoLkuYVevA3Pbl8s7GAHmo+fiKyLq1SwMehMoKpeuuw==
+X-Received: by 2002:a17:903:187:b0:172:f1c0:ff37 with SMTP id z7-20020a170903018700b00172f1c0ff37mr2209242plg.113.1661403645464;
+        Wed, 24 Aug 2022 22:00:45 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id s6-20020a17090a698600b001f04479017fsm2359523pjj.29.2022.08.24.22.00.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 22:00:45 -0700 (PDT)
+Message-ID: <67080ec0-9947-0521-63b1-bb6bee7aeea7@linaro.org>
+Date:   Thu, 25 Aug 2022 10:30:39 +0530
 MIME-Version: 1.0
-References: <20220824044013.29354-1-qkrwngud825@gmail.com> <CAJZ5v0jmDeGn-L6U-=JOxOHVy3CRS8T5Y_06F50cL9bjUhgbPQ@mail.gmail.com>
- <CAD14+f1YEoqdnM8eTd2hUHSy+M4+AKQp6_FjV03TK=TSDxPfYw@mail.gmail.com> <CAJZ5v0hXAgA2xfYfvXk1GZgu6h+ZVOv_XwgzVS5cpmkiChm7gw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hXAgA2xfYfvXk1GZgu6h+ZVOv_XwgzVS5cpmkiChm7gw@mail.gmail.com>
-From:   Juhyung Park <qkrwngud825@gmail.com>
-Date:   Thu, 25 Aug 2022 13:19:03 +0900
-Message-ID: <CAD14+f0D4j_76vuPTpGZ+aYKKD3W3NC+reW8vMh=hDHP=wp-SA@mail.gmail.com>
-Subject: Re: [PATCH] PM: suspend: select SUSPEND_SKIP_SYNC too if
- PM_USERSPACE_AUTOSLEEP is selected
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        chrome-platform@lists.linux.dev, Len Brown <len.brown@intel.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 0/4] Add support for tsens controller reinit via
+ trustzone
+Content-Language: en-US
+To:     linux-pm@vger.kernel.org
+Cc:     bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
+        robh+dt@kernel.org, rafael@kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220804054638.3197294-1-bhupesh.sharma@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <20220804054638.3197294-1-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 12:01 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Aug 24, 2022 at 3:36 PM Juhyung Park <qkrwngud825@gmail.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On Wed, Aug 24, 2022 at 10:11 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Wed, Aug 24, 2022 at 6:41 AM Juhyung Park <qkrwngud825@gmail.com> wrote:
-> > > >
-> > > > Commit 2fd77fff4b44 ("PM / suspend: make sync() on suspend-to-RAM build-time
-> > > > optional") added an option to skip sync() on suspend entry to avoid heavy
-> > > > overhead on platforms with frequent suspends.
-> > > >
-> > > > Years later, commit 261e224d6a5c ("pm/sleep: Add PM_USERSPACE_AUTOSLEEP
-> > > > Kconfig") added a dedicated config for indicating that the kernel is subject to
-> > > > frequent suspends.
-> > > >
-> > > > While SUSPEND_SKIP_SYNC is also available as a knob that the userspace can
-> > > > configure, it makes sense to enable this by default if PM_USERSPACE_AUTOSLEEP
-> > > > is selected already.
-> > > >
-> > > > Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
-> > > > ---
-> > > >  kernel/power/Kconfig | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> > > > index 60a1d3051cc7..5725df6c573b 100644
-> > > > --- a/kernel/power/Kconfig
-> > > > +++ b/kernel/power/Kconfig
-> > > > @@ -23,6 +23,7 @@ config SUSPEND_SKIP_SYNC
-> > > >         bool "Skip kernel's sys_sync() on suspend to RAM/standby"
-> > > >         depends on SUSPEND
-> > > >         depends on EXPERT
-> > > > +       default PM_USERSPACE_AUTOSLEEP
-> > >
-> > > Why is this better than selecting SUSPEND_SKIP_SYNC from PM_USERSPACE_AUTOSLEEP?
-> >
-> > That won't allow developers to opt-out from SUSPEND_SKIP_SYNC when
-> > they still want PM_USERSPACE_AUTOSLEEP.
->
-> I see.
->
-> It is not particularly clear, so at least please mention it in the changelog.
 
-Will do.
+On 8/4/22 11:16 AM, Bhupesh Sharma wrote:
+> Changes since v2:
+> -----------------
+> - v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220724122424.2509021-1-bhupesh.sharma@linaro.org/
+> - Dropped sm6375 specific patch from v3, as suggested by Konrad.
+> - Rebased on latest linux-next (master branch) tip.
+> 
+> Changes since v1:
+> -----------------
+> - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220701145815.2037993-1-bhupesh.sharma@linaro.org/
+> - Addressed several comments from Bjorn regarding locking, serialization
+>    etc received on v1.
+> - Addressed Konrad's concerns about the tsens controller found on sm6375
+>    SoC which seems to start in a bad state or is disabled when entering
+>    the linux world.
+> - This series would depend on sm6375 tsens controller changes being
+>    added by Konrad. It is based on linux-next (master branch) tip.
+> 
+> Some versions of Qualcomm tsens controller might enter a
+> 'bad state' causing sensor temperatures/interrupts status
+> to be in an 'invalid' state.
+> 
+> It is recommended to re-initialize the tsens controller
+> via trustzone (secure registers) using scm call(s) when that
+> happens.
+> 
+> This patchset adds the support for the same.
+> 
+> Cc: bjorn.andersson@linaro.org
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: Thara Gopinath <thara.gopinath@gmail.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-arm-msm@vger.kernel.org
+> 
+> Bhupesh Sharma (4):
+>    firmware: qcom: scm: Add support for tsens reinit workaround
+>    thermal: qcom: tsens: Add hooks for supplying platform specific reinit
+>      quirks
+>    thermal: qcom: tsens: Add driver support for re-initialization quirk
+>    thermal: qcom: tsens: Add reinit quirk support for tsens v2
+>      controllers
+> 
+>   drivers/firmware/qcom_scm.c     |  15 +++
+>   drivers/firmware/qcom_scm.h     |   4 +
+>   drivers/thermal/qcom/tsens-v2.c |  15 +++
+>   drivers/thermal/qcom/tsens.c    | 200 ++++++++++++++++++++++++++++++++
+>   drivers/thermal/qcom/tsens.h    |  18 ++-
+>   include/linux/qcom_scm.h        |   2 +
+>   6 files changed, 253 insertions(+), 1 deletion(-)
+> 
 
->
->
-> > (Can't think of a valid reason
-> > for this though, as PM_USERSPACE_AUTOSLEEP is only used by Android and
-> > probably Chromium, afaik.)
-> >
-> > I don't think SUSPEND_SKIP_SYNC is critical enough to enforce when
-> > PM_USERSPACE_AUTOSLEEP is enabled, but I don't have a strong opinion
-> > on this either.
-> > (We could do `imply SUSPEND_SKIP_SYNC` from PM_USERSPACE_AUTOSLEEP,
-> > but that doesn't look good semantically imho.)
-> >
-> > If you want, I can send a v2 with 'PM_USERSPACE_AUTOSLEEP select
-> > SUSPEND_SKIP_SYNC'.
->
-> Personally, I would use "select" and I would amend the
-> PM_USERSPACE_AUTOSLEEP help text to say that it will disable sync on
-> suspend by default explicitly.
->
-> IMV otherwise it is more confusing than it needs to be.
+Gentle ping.
 
-Agreed.
-
->
-> I'm also wondering about a particular use case addressed by this
-> change.  Is there any?
-
-I've personally manually enabled SUSPEND_SKIP_SYNC for all my Android
-kernels for the past 7-8 years (even before SUSPEND_SKIP_SYNC was
-implemented upstream) as it was quite apparent that the sync() path
-during suspend was quite expensive, more so when the phone was under a
-"suspend storm" which tries to enter suspend dozens of times per
-second but was aborted/awakened due to devices with spurious
-interrupts or suspend code path failures.
-
-Do note that I do not represent any vendor at this moment.
-
-Also, I think I'll have to mention that Google's Android kernel
-(GKI/ACK) currently does not enable SUSPEND_SKIP_SYNC by default while
-some OEMs do (can't think of which ones to be specific). So this
-changes the default Android behavior, which is why I cc'ed Kalesh and
-f2fs folks. I do not know if SUSPEND_SKIP_SYNC on Android was simply
-overlooked or was consciously disabled. Android userspace also doesn't
-change this via sysfs knob.
-
-I still think this patch makes enough sense, but I'd love to hear
-others' thoughts.
-
-Thanks.
+Thanks,
+Bhupesh
