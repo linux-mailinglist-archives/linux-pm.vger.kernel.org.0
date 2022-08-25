@@ -2,136 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D6F5A0841
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 07:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A240B5A094D
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 08:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbiHYFAs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Aug 2022 01:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S234669AbiHYG6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Aug 2022 02:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiHYFAr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 01:00:47 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506FA6D9F5
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 22:00:46 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo3736899pjd.3
-        for <linux-pm@vger.kernel.org>; Wed, 24 Aug 2022 22:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=UWjij6HfXG1L6CDyEPygsAN2cmdpPEE9uumQe7csasE=;
-        b=P/1STGabxCTV+e4rAyeIpVbH6ReMZxIVb5Tz8/mIn2Gc6FfVZg0fXX+kGME4tH51k5
-         bpK3eaEVFAHO70cLUuAEUOWPFtmJ3EikhPydwufSF9m+778sFoE23IhIbGf1E2RfYJJH
-         uDrpoVcnv3bqzteAwjCOp/5c2pBPjJ4PVXgMOIJgapcJMUu5q5nl6lSPXPhHen30bzxJ
-         wRbPSd2IThnOIS10K4DAw7sZYFrsb+IOhDrNv2nFtemgzK5iWuq1EeeH0qyC57aDX/oN
-         bvwdZUSC8MXf8lHejbX1sMHonI7E4ADASU1UBDJNpmMghc3RI2qtq++TIXt8djQl0RrF
-         1mMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=UWjij6HfXG1L6CDyEPygsAN2cmdpPEE9uumQe7csasE=;
-        b=LnVY/KkwsH6TWMKmeOtZYUZvqAO6Fd3oyUrzpyrFHkrl+rg+BHKJfL3rzkGwOuJvub
-         c6HbrEcTCbNCGJiPqULHs+r46S9yHhl0B2bkNDP6EpFIgCEY61jmpnt9ZXISoduEfHJC
-         kHippC6dnVbvTuuBeeW8hDSUNEH+ha/fD9H9CsI+9GXZkEJrhiiioITCoj8jX2tTHAWZ
-         3sBRU+lQlMXb4+X8g5SowK6yk8Dg6aBTemOtQ+44BHzXYLM4gy9W680mOKmE7x+69m22
-         UdnRdR7pPej4bXBVWeeBTkDPEmgYDqyRMmLi10Sdwtj6Nvz+mQglQWby+l1IMKT+0b4/
-         5Vzg==
-X-Gm-Message-State: ACgBeo37j1R+33THU3vHNN5zII9cdMFdGZXTYZBlpqSdjexrlBIzjMMa
-        A92LKZeVTm5HggzAMpR7/5yKLMFq75iGTQ==
-X-Google-Smtp-Source: AA6agR7ghZumwKN6U4xN03qeYZ/JcfJw21XBoLkuYVevA3Pbl8s7GAHmo+fiKyLq1SwMehMoKpeuuw==
-X-Received: by 2002:a17:903:187:b0:172:f1c0:ff37 with SMTP id z7-20020a170903018700b00172f1c0ff37mr2209242plg.113.1661403645464;
-        Wed, 24 Aug 2022 22:00:45 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
-        by smtp.gmail.com with ESMTPSA id s6-20020a17090a698600b001f04479017fsm2359523pjj.29.2022.08.24.22.00.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 22:00:45 -0700 (PDT)
-Message-ID: <67080ec0-9947-0521-63b1-bb6bee7aeea7@linaro.org>
-Date:   Thu, 25 Aug 2022 10:30:39 +0530
+        with ESMTP id S233215AbiHYG6k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 02:58:40 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32031A033A;
+        Wed, 24 Aug 2022 23:58:39 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 6170AE1171;
+        Wed, 24 Aug 2022 23:58:08 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GMMjKO_RXaO4; Wed, 24 Aug 2022 23:58:07 -0700 (PDT)
+Message-ID: <2c609579d9fba41a6fcbd47788ccbcf1f4fa0f2a.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1661410687; bh=UO5XV5GOXaJUp2qheZTnBxncOA0cWICbUUFp+tuLMbo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=kTNNzvR2unUbjb/QrtWtKSeMmYzYcFAS16woPrlSBmRiA2zqPbeZXMFoteeotSVd2
+         ppqFKvvx7uXdbF2CSEkzcahDUHlhTWo7t+mteq1axuIzsIzgr4rFpRL/tyktQzvTfr
+         gdCD78kRakHzVg5aTF12FitR19ugqiI6DzKrT3B4BVV/yIbKklbOW3V8EPeTtL1d6O
+         024kx31apwQCB3/AHVgZU7PI3qjCYI84z2hhvXGli0SKptH6FlIGVNaG6MAxzHoXvi
+         0mCDg9w0r4DbdJKLAqAfDQz8fIDPXFwUpcfcrlniMnbs5Dl+nspO2khLZ8kY/Vmkfm
+         gh0HTHw33Jzxw==
+Subject: Re: [PATCH v2 3/4] Revert "PM: domains: Delete usage of
+ driver_deferred_probe_check_state()"
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peng Fan <peng.fan@nxp.com>, Luca Weiss <luca.weiss@fairphone.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+        netdev@vger.kernel.org
+Date:   Thu, 25 Aug 2022 08:57:58 +0200
+In-Reply-To: <20220819221616.2107893-4-saravanak@google.com>
+References: <20220819221616.2107893-1-saravanak@google.com>
+         <20220819221616.2107893-4-saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/4] Add support for tsens controller reinit via
- trustzone
-Content-Language: en-US
-To:     linux-pm@vger.kernel.org
-Cc:     bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
-        robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220804054638.3197294-1-bhupesh.sharma@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20220804054638.3197294-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Am Freitag, dem 19.08.2022 um 15:16 -0700 schrieb Saravana Kannan:
+> This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
+> 
+> Quite a few issues have been reported [1][2][3][4][5][6] on the
+> original
+> commit. While about half of them have been fixed, I'll need to fix
+> the rest
+> before driver_deferred_probe_check_state() can be deleted. So, revert
+> the
+> deletion for now.
+> 
+> [1] -
+> https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
+> [2] - https://lore.kernel.org/all/CM6REZS9Z8AC.2KCR9N3EFLNQR@otso/
+> [3] -
+> https://lore.kernel.org/all/CAD=FV=XYVwaXZxqUKAuM5c7NiVjFz5C6m6gAHSJ7rBXBF94_Tg@mail.gmail.com/
+> [4] - https://lore.kernel.org/all/Yvpd2pwUJGp7R+YE@euler/
+> [5] -
+> https://lore.kernel.org/lkml/20220601070707.3946847-2-saravanak@google.com/
+> [6] -
+> https://lore.kernel.org/all/CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com/
+> 
+> Fixes: 5a46079a9645 ("PM: domains: Delete usage of
+> driver_deferred_probe_check_state()")
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+> Reported-by: Doug Anderson <dianders@chromium.org>
+> Reported-by: Colin Foster <colin.foster@in-advantage.com>
+> Reported-by: Tony Lindgren <tony@atomide.com>
+> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  drivers/base/power/domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/power/domain.c
+> b/drivers/base/power/domain.c
+> index 5a2e0232862e..55a10e6d4e2a 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2733,7 +2733,7 @@ static int __genpd_dev_pm_attach(struct device
+> *dev, struct device *base_dev,
+>                 mutex_unlock(&gpd_list_lock);
+>                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+>                         __func__, PTR_ERR(pd));
+> -               return -ENODEV;
+> +               return driver_deferred_probe_check_state(base_dev);
+>         }
+>  
+>         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
 
-On 8/4/22 11:16 AM, Bhupesh Sharma wrote:
-> Changes since v2:
-> -----------------
-> - v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220724122424.2509021-1-bhupesh.sharma@linaro.org/
-> - Dropped sm6375 specific patch from v3, as suggested by Konrad.
-> - Rebased on latest linux-next (master branch) tip.
-> 
-> Changes since v1:
-> -----------------
-> - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220701145815.2037993-1-bhupesh.sharma@linaro.org/
-> - Addressed several comments from Bjorn regarding locking, serialization
->    etc received on v1.
-> - Addressed Konrad's concerns about the tsens controller found on sm6375
->    SoC which seems to start in a bad state or is disabled when entering
->    the linux world.
-> - This series would depend on sm6375 tsens controller changes being
->    added by Konrad. It is based on linux-next (master branch) tip.
-> 
-> Some versions of Qualcomm tsens controller might enter a
-> 'bad state' causing sensor temperatures/interrupts status
-> to be in an 'invalid' state.
-> 
-> It is recommended to re-initialize the tsens controller
-> via trustzone (secure registers) using scm call(s) when that
-> happens.
-> 
-> This patchset adds the support for the same.
-> 
-> Cc: bjorn.andersson@linaro.org
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-arm-msm@vger.kernel.org
-> 
-> Bhupesh Sharma (4):
->    firmware: qcom: scm: Add support for tsens reinit workaround
->    thermal: qcom: tsens: Add hooks for supplying platform specific reinit
->      quirks
->    thermal: qcom: tsens: Add driver support for re-initialization quirk
->    thermal: qcom: tsens: Add reinit quirk support for tsens v2
->      controllers
-> 
->   drivers/firmware/qcom_scm.c     |  15 +++
->   drivers/firmware/qcom_scm.h     |   4 +
->   drivers/thermal/qcom/tsens-v2.c |  15 +++
->   drivers/thermal/qcom/tsens.c    | 200 ++++++++++++++++++++++++++++++++
->   drivers/thermal/qcom/tsens.h    |  18 ++-
->   include/linux/qcom_scm.h        |   2 +
->   6 files changed, 253 insertions(+), 1 deletion(-)
-> 
+Fixes imx8mq where ENODEV results in:
+[    1.048019] imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV: failed
+to attach power domain "bus"
 
-Gentle ping.
 
-Thanks,
-Bhupesh
+Tested-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+
+thanks for fixing this,
+
+                                martin
+
+
