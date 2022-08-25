@@ -2,151 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9EE5A1A7A
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 22:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E665A1B9F
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 23:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243840AbiHYUit (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Aug 2022 16:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
+        id S244001AbiHYVuy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Aug 2022 17:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241806AbiHYUig (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 16:38:36 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33BDBCC1E;
-        Thu, 25 Aug 2022 13:38:32 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PK4EBu020422;
-        Thu, 25 Aug 2022 20:38:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : references : cc : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=dFikT3XVayx/CWDubhGXmTcuWC1BILcHV7LOVPNtIFM=;
- b=trZBqw+qUjR5Fwh11LP/3lsirRrd9xXCJqItc5hiY3ohTJwIe5C6i8HQRqCi4UansGo/
- IjqgtfD7iMpyIZeuYAsktE4b/VPQJCmEeJwT1E/x6oxU7G9jPEQIJfBomD6X1rKyziaD
- V1+D9kAmzj0JTcsDyCyEFAm1MLgBb7144qc+qMFFlt0MAgg97r7ZrNfbcYLsLvRoUlei
- dj5Xw9ToTxDlyJSwHBPeahYMo/bVJ3HwKDflZir4iwnezoB2pb11nqLeehTm9Oiibjsa
- zbBE6vAPN9MvpdTRYvZRPPtlN6C52hy7kU92KkPJzQQT74YHYPTPd7Qzf2PZ0eXLUxRx Kw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j5aww5avf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 20:38:28 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27PKBSLZ009635;
-        Thu, 25 Aug 2022 20:38:28 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n6nek5p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 20:38:27 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=brGc9WTSUhZouUWpFeyWASWMoj/k3tU7L/wnFgmJ50zpO6YShYV5aV4DLEYgSMcWFjBV50Kon7oDLIjpp2E8le8LlicvjlT7RtfYS8s1+YLVgZpQjKQWPXvcROrgAiDielXflcvcO+VDJoha4ECr6raMl6xmD+N/BtotCX18M0KFuDQ6ATu4rdpmp/ImwF7PK8dAdazAB2NxQOdToOB1rsyC/zfiZZEGSwmp6iKHm79zkTdkj6DB/lsaToKpYS4PYlVGVFC9Fet4CcYYxeaDz5NNW/yKXkbI8ALFQhHGyJAfBRW32SSL1RBfmOKDtn2sOuz0g/8WDTspsyzul/mpIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dFikT3XVayx/CWDubhGXmTcuWC1BILcHV7LOVPNtIFM=;
- b=IyA2tDgHb32IeTcMVy7M+Afoy3y2bAcr4qhAt3sACPhQTGAg1N6m8e4FgEWUO2kGTAVAs5v+ff8YAhYKA+9DzxUXlKiewbc4UZNFsb+bvq4pkQw2FW4dT0nJU0XdXQLPuVpZuyYIGOnGsnvSfx/UwMMVjmbYZDuebtEDYsA1DD419Fx0oWzaHe/zzR3C34tOxIlvlpjU9T3tzFcF9BV7D4kJ/ElD7rilqd6/CqviRKjRkt1hNLk1EUb3HnGLuA8I0IgT7PGsnB0we7oSzjkMCvjcl2w+ff6TjvZElo0K1jIreRo/9uKO1zuSEUKig/huOchDV3Hnv1Uh2DCB1etzmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dFikT3XVayx/CWDubhGXmTcuWC1BILcHV7LOVPNtIFM=;
- b=r1A3pZUoS7uoJQMCbrBGtr2Tx0kXERh02kdel0LU29zyFAzDcdu5cO/P9kzBVUTE8/BdIXzYayLcdD7X1w2yyi0oRNSnBgpzLBZFrFcXC2ooPSJovswioMcAtCosUo48e8xZcAW/s72EAVGq36fV9LSuBYejz2yF67iY8lAPZ3o=
-Received: from DM6PR10MB3817.namprd10.prod.outlook.com (2603:10b6:5:1fd::22)
- by DM4PR10MB6230.namprd10.prod.outlook.com (2603:10b6:8:8d::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5546.22; Thu, 25 Aug 2022 20:38:26 +0000
-Received: from DM6PR10MB3817.namprd10.prod.outlook.com
- ([fe80::9d39:3715:87b3:c9f3]) by DM6PR10MB3817.namprd10.prod.outlook.com
- ([fe80::9d39:3715:87b3:c9f3%6]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
- 20:38:26 +0000
-Message-ID: <4efd2c33-c561-b784-b52a-fb90f1c44fe0@oracle.com>
-Date:   Thu, 25 Aug 2022 13:38:23 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH 1/1] turbostat: cpu9: msr offset 0x614 read failed:
- Input/output error
-Content-Language: en-US
-To:     linux-pm@vger.kernel.org
-References: <20220124180445.1137-1-samasth.norway.ananda@oracle.com>
-Cc:     lenb@kernel.org, linux-kernel@vger.kernel.org
-From:   samasth.norway.ananda@oracle.com
-In-Reply-To: <20220124180445.1137-1-samasth.norway.ananda@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA0PR11CA0139.namprd11.prod.outlook.com
- (2603:10b6:806:131::24) To DM6PR10MB3817.namprd10.prod.outlook.com
- (2603:10b6:5:1fd::22)
+        with ESMTP id S244358AbiHYVuh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 17:50:37 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269E680B4F
+        for <linux-pm@vger.kernel.org>; Thu, 25 Aug 2022 14:49:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A0AF9CE2D35
+        for <linux-pm@vger.kernel.org>; Thu, 25 Aug 2022 21:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA07BC43470;
+        Thu, 25 Aug 2022 21:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661464151;
+        bh=zKxG/wMDgBRifFRVlOLa1W2yMYBRc2ISMtyD9VC/wew=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LcCxG7bBHhFYLnjKTH6/iZA0yoUPBIcjQTvyevucgFserJPxOINgrWEgUS9zaUpgA
+         lbr+3oGSt5k+iwH0UTasOq7FbrFMU4xolkYN0t9OwFgPhMTGQSHY+KA6jxpJGmZA3H
+         qQpqiICk9MrxE9wvTsUUMZcWZhw47Xz3pTK4MbxmydYIs8yz/wAv11eqwcvefYGBjJ
+         zEVR14v1gmBz4M8xk0WsqC4gpAbHVdH0mXa3XzfytsL2MfRXrMyq3hyBn6vK7LETrx
+         qu8F+t4O28+VPSNE2bVRQi/EWx9oD+QuO6JxrBDbjAwtPo7lssVRAzhooxM3RaaPSs
+         RmwfA/aXvG7CQ==
+Received: by pali.im (Postfix)
+        id 6F8C775F; Thu, 25 Aug 2022 23:49:07 +0200 (CEST)
+Date:   Thu, 25 Aug 2022 23:49:07 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     Elad Nachman <enachman@marvell.com>,
+        Wojciech Bartczak <wbartczak@marvell.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Tomasz Maciej Nowak <tmn505@gmail.com>,
+        Anders Trier Olesen <anders.trier.olesen@gmail.com>,
+        Philip Soares <philips@netisense.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, nnet <nnet@fastmail.fm>,
+        =?utf-8?Q?G=C3=A9rald?= Kerma <gandalf@gk2.net>
+Subject: Re: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for
+ 1.2 GHz variant
+Message-ID: <20220825214907.xcscshrmfzdrby6n@pali>
+References: <BN9PR18MB42514ADBD547CADD93BD7646DB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
+ <20220801175645.bnknpfg26acbat7c@pali>
+ <BN9PR18MB42518C761E574D862D30CDA7DB9A9@BN9PR18MB4251.namprd18.prod.outlook.com>
+ <CA+HBbNEHRhU4HOK-NGGLxak0UUfwjZvtkuLtzCk=fvSaS=MMEA@mail.gmail.com>
+ <BN9PR18MB4251336FB8E017605FE4D088DB9D9@BN9PR18MB4251.namprd18.prod.outlook.com>
+ <CA+HBbNHp9duBYT7JGa14rn_OKpQFLQikFrZ5ktD2sAKsxGM8TQ@mail.gmail.com>
+ <20220802171736.n7jwtbssnwr5hojv@pali>
+ <CA+HBbNGKXu+TAT0i40MmACrmRuw_zB6PWSdRCn70B8h7qp6eLQ@mail.gmail.com>
+ <20220817231005.5nonyify5os6opah@pali>
+ <CA+HBbNEGRsT0hjtAQD8qgWDqh9gOH77e7Fry-RtZf-4DYgFqOQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1fb69751-2101-4a7c-b9d0-08da86d9c2ed
-X-MS-TrafficTypeDiagnostic: DM4PR10MB6230:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Bh48L4x8K7HXGf6kt57IBZ2SXYgEAwf8ipIJ/TaYfRa7IxMcNhO/8lcFgULMUdh8haoVbK1u4jY4xPvLl2joQzpeNv8ZinvhC3Y9KCUFYNoxnLW5ovMukOPYKQaikJP3jCjd0V3YIxfFY48ZvwJen7KCnUJFd55yPRAbqfT+uLZQy0gR+4S2lZjFDr+GRdYB2mM9Zbb+LKlUF/gHTEDwsy5Wph4llRzDp6TOUCAKN08bHgMTqREjaxYc4HavAqMXhJvTIZc6h7InQk2o9MOQZ3T98rWFn+Arlo7EddTCRGolqsOv6+lmTefhVa2QrhItKahvHDpsRdu7T3CPrq8L4T3kvMReNWwbg58kjWgwzs9cIZAYge6MTAXd4lE48hMXDtrvElH+0IhTKvmsp/Yi8t/aI8RDpXc7xTa/bKb5wjdvyP/94zBuSzgoAvdNB6VcoYNq26faj69w7h9iDIUrJK0h/PpAEBepKBPXTn3Rq6rDlO1GBjxEMGJ2tYRXYgD+tdyM7Bvjkr+4ZmBQ1ld+jHE5cQRWZCwwIUYKTMF52avT5BWbD+5uzdLjIRIUwMDQM+lBEKRDYeNWnTNLgORG2jO0IJWOKEhWNnIY2ko3EauYGzdjDCPkKYHEXzU0JME8cPVamY5gXxnC9EqfKPuLS4CaZyGcDoWAAkQyxO9zZ5krelqiT22cUx4CXfxZ3tVsuEOMzbcluWZgdGLSl813lxeGW+PHLJfU92Gpa0ZaxodPY3Q/RRxi8oKsCj9m6IBY3Ui7HylbtSUquIFlAhYzWPvjZX/MpI3mtUXSBNrPqYNsksuwq8ZzcpE0PYtQsCGBxEEubVevL9aIqUjU5BdzRw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB3817.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39860400002)(136003)(366004)(396003)(376002)(83380400001)(31696002)(86362001)(6512007)(38100700002)(6506007)(6916009)(9686003)(316002)(8936002)(5660300002)(66476007)(66946007)(53546011)(2906002)(66556008)(4326008)(8676002)(66574015)(41300700001)(26005)(186003)(478600001)(6486002)(31686004)(36756003)(2616005)(966005)(6666004)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SE5PaUxFcTB6RldINGJ6Rzc0M2xKVnR3WHNraytkeGduMnZIbUVDbHRwZzFl?=
- =?utf-8?B?bzZ0NXRVUi92WHJ5b05yK1hHMi84MWlyTytZZlZjYjBscHRNR0VYeHY3dkRB?=
- =?utf-8?B?Q05VbXpHQk1CMjVPdGR6YktmR0dMeFhjWlp5YTRHbU1pRFJKczhiN2l1dDgw?=
- =?utf-8?B?bzIwdktVbVZ5Y1FzN05icUt6VnR5by9ZT0tVYVYrMHFQa3NqVGY3Q1g3SDBC?=
- =?utf-8?B?U0lRS3lnZm1GUExscUlXQy9Dc3R3ZUNaWDVJZFc2eGtvSlBnU01qV3kvc1Zn?=
- =?utf-8?B?aFBzSmVhSEJhRytRTlNjdVhzNkltNnZoOEtBU0FTamZyK3AxZXBKN2k0SnMy?=
- =?utf-8?B?WXZIczQyWkwxbG5JU2h5Y3F6elc0L09HNnExOUxhT0hKVlAwYUVhTi9vWENm?=
- =?utf-8?B?QXNJajIvSHJseDVtSFlPbURDTjVBdU1oRk1kVmNuV1ZlRi9jeFpmVjZkVG1X?=
- =?utf-8?B?T0RTV3hScm4xVThkb3lBTmNhNmx5ejRnMEZDM3AwWDJ5emtmNnhwRVh0T1Zy?=
- =?utf-8?B?cFBMR2ViMjNtM3RDL3ZUdDdidFhURE1xQXMwcnpwT1dYdm1Ea1poS3NmMGZT?=
- =?utf-8?B?dmJYQ1J4QUI3MlVHN1YzbUdOOHB3YU83dS9pSVpWR1NRMkxUaFBSSVlrSk81?=
- =?utf-8?B?MTNqbEluZk84TWwvY3ZhaDNVRHYzak1uSWVmdlh1TFFDbnpkcDhUM0pVZEFV?=
- =?utf-8?B?NmdxNnJpZ3ZpZVlVY2hoNEZua21iaDV2M1ZFTTZKa3NGeC9pRHhRcTJCN3pG?=
- =?utf-8?B?Rk0wRWt3cEtiN0lDYnNRcUw1eG5DUndtdzgrOWZHaWpOelhSWDlRTFNNcXNG?=
- =?utf-8?B?NHdpWFI4YnJDcm12amYyOUR1VUowQlhZZ2xPNXpyWEJXUVMzTGF2WVNCUnFt?=
- =?utf-8?B?WjIzNkFMZFhwLzlac2RaU0x2cERzWUM4MGlVZ3Nia2ZIRkFHQVZFaGkyNkVS?=
- =?utf-8?B?emhMNW9UeUtaelpHdC9QWmJDRk5QdlpMbmJVcUo3c0NqNTlQc0pkcklVdDR0?=
- =?utf-8?B?RklnUUZGUXRBcCt1WGU3QzFPUkltUlJZMys4MTdpaUlkTHZzSjR0dTF5ektY?=
- =?utf-8?B?RXordTFMM3pEWEgyNTNranFPV0dYWlJSQkVtOWlSK0lOSUdNaCtBVGZmdGpY?=
- =?utf-8?B?RDl1eVR4TGdwUkpnaXdaZ2NmU1I1MFpwT0dRay9zZTczRlh6aUVMMEZWaWZM?=
- =?utf-8?B?YjVESjdEL2JOdk4wa0VJU3ZtWm16S29rTFZpTFI2U3gwOSs5Q3l1YWFHMEk0?=
- =?utf-8?B?akRCcTVxTmQrdG16UWw2MTV0QkRhUEdkZmh4NnE0QTJOckk1cHcxc2ZnT0Nw?=
- =?utf-8?B?MHp0T2xtbjlrRmZGc3pua1VTa2FyNWw2OHJQNENmbFZWUlgwbTdhVjZ3d1h2?=
- =?utf-8?B?cVQrS3ZLV2lIMHJzQlBzR0owNHZJMFc5NmJURFBFdmhPTFFoOXNsQTNWRzFz?=
- =?utf-8?B?SFhMTWpOS0dyYnBRd2Y0dnZMa0dTaGc5YVZTdXJhYzZ6UmpTWXc3OHFTRjhy?=
- =?utf-8?B?RnR4WjB0ZXMrRnQzcnZKQkgvVzY4TXJxbTFTanBEb2NaWTB6MkRJWmsvVm5t?=
- =?utf-8?B?SHdKd2hkSTlGYmtVVmJmaWw1cVRMRzA5M2FzNmFnSDNvNXlXYWxjdnh3eU5Z?=
- =?utf-8?B?NnBnWHJoV1QzMGVXRkdwQ08zMHloQWJUSS95U2dsRnVZemFnaWJyS3EvTDZQ?=
- =?utf-8?B?eVVVUXhKdTg1YmxDTVlZbTZ1UXZYYVJReHZESHF3cExKcTkrMlpEV3RwbnIv?=
- =?utf-8?B?RURnckx6bmJxWTEyc05EdVZBczRkWDNuK2ptd2dHQ2tkM3BhZ2JrNUpyS3hy?=
- =?utf-8?B?bGc3RUNYeVZwNk9wMkR1VGpJUllpZ3VzbFRwZGdQQ281L0Z4aS9Nd2hTWXNY?=
- =?utf-8?B?SWlFbDkvVE13VTZSKzg2KzZQQTFSajl2KzgwcWRhWTNVajZnRFZXWUJBNlNs?=
- =?utf-8?B?MkowaFhnbUtHQjBFVmVJZnVRYUltLy9sZXhOZmVkMXZQL3IxV25PNm9qN0py?=
- =?utf-8?B?a0oxZXNSaThqUzRHbzBRU0tJeTZUTTB5WWdnY1UxK0RTV2xvOW1qdm02MXI1?=
- =?utf-8?B?eFQxRXVjUVB3WktXVkxMTk4yYk5SbXZkTEFVaFRxRVoxNDJON2UwdWJHamgw?=
- =?utf-8?B?Vm1VTENBRnpxb2hCV3FpZjh3SVE5QUNGTTFLWnQvTDMyY05FK2VoWU9HVHhK?=
- =?utf-8?Q?iEAHGY5qBQXyjx1928D2JEg=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1fb69751-2101-4a7c-b9d0-08da86d9c2ed
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB3817.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 20:38:26.4293
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yxAKI5VJ/DiTlXsdZagNGhC4IoHlr2gar1zagY+xG5ixEsP6sby8S+OrVGWMruxUuYcNmW5FpU+ZM6e2cuqHHIvMPZ4JxahxxO9m0WnSt5q13bCCiy8bMuFwvO/4D/hT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6230
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_10,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208250078
-X-Proofpoint-GUID: wwVqbuF3NXWlZy8Mk2IeEUQFomvmXOrs
-X-Proofpoint-ORIG-GUID: wwVqbuF3NXWlZy8Mk2IeEUQFomvmXOrs
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+HBbNEGRsT0hjtAQD8qgWDqh9gOH77e7Fry-RtZf-4DYgFqOQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,129 +78,348 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thursday 18 August 2022 10:14:26 Robert Marko wrote:
+> On Thu, Aug 18, 2022 at 1:10 AM Pali Rohár <pali@kernel.org> wrote:
+> >
+> > On Wednesday 17 August 2022 11:40:32 Robert Marko wrote:
+> > > On Tue, Aug 2, 2022 at 7:17 PM Pali Rohár <pali@kernel.org> wrote:
+> > > >
+> > > > On Tuesday 02 August 2022 18:56:07 Robert Marko wrote:
+> > > > > On Tue, Aug 2, 2022 at 6:52 PM Elad Nachman <enachman@marvell.com> wrote:
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > Unless the logs are misleading, then I see here:
+> > > > > >
+> > > > > > cpu cpu0: _set_opp: switching OPP: Freq 200000000 -> 1200000000 Hz, Level 0 -> 0, Bw 0 -> 0
+> > > > > >
+> > > > > > Which violates the errata.
+> > > > > > If there is an interim step in between, I think it should be printed out in the debug so we can clearly understand what is the interim frequency setting between 200 and 1200 MHz.
+> > > > >
+> > > > > This is printed directly by the _set_opp from the cpufreq core, so it
+> > > > > should be accurate.
+> > > > > Pali, am I doing this correctly or I need to print from the A3K
+> > > > > cpufreq or clk drivers?
+> > > >
+> > > > Hello! You need to print it from a3k clk driver. cpufreq core just ask
+> > > > driver to switch speed from 200000000 to 1200000000 and clk driver then
+> > > > change it with its own workaround function.
+> > > >
+> > > > The real change of Level is done at these places:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/clk/mvebu/armada-37xx-periph.c?h=v5.19#n548
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/clk/mvebu/armada-37xx-periph.c?h=v5.19#n592
+> > > >
+> > > > Check places where is done write operation to register
+> > > > ARMADA_37XX_NB_CPU_LOAD.
+> > >
+> > > Ok, finally got time to try it.
+> > > I am now printing from the clk driver instead, hopefully in the right places:
+> > > https://gist.github.com/robimarko/d297c81f70ef9620c830435bad8a6a8d
+> > >
+> > > Trying to enlarge the wait to 100ms does not help.
+> >
+> > Could you provide also diff which you applied to driver?
+> 
+> Sure, here it is:
+> https://gist.github.com/robimarko/a2b8942b5f22b107c62fba9695220881
 
+You should print debug logs when _calling_ regmap_update_bits(). And
+current log is very strange, you are printing message line
+"%pCn requested rate %lu load_level %u" for iteration in for-loop, also
+when "val != div". So log contains lot of incorrect lines.
 
-On 1/24/22 10:04 AM, samasth.norway.ananda wrote:
-> I get the following error running Turbostat on an intel virtual machine.
+> Regards,
+> Robert
+> >
+> > > Regards,
+> > > Robert
+> > > >
+> > > > > Regards,
+> > > > > Robert
+> > > > > >
+> > > > > > Elad.
+> > > > > >
+> > > > > > -----Original Message-----
+> > > > > > From: Robert Marko <robert.marko@sartura.hr>
+> > > > > > Sent: Tuesday, August 2, 2022 7:42 PM
+> > > > > > To: Elad Nachman <enachman@marvell.com>
+> > > > > > Cc: Pali Rohár <pali@kernel.org>; Wojciech Bartczak <wbartczak@marvell.com>; Marek Behún <kabel@kernel.org>; Viresh Kumar <viresh.kumar@linaro.org>; Gregory CLEMENT <gregory.clement@bootlin.com>; Tomasz Maciej Nowak <tmn505@gmail.com>; Anders Trier Olesen <anders.trier.olesen@gmail.com>; Philip Soares <philips@netisense.com>; linux-pm@vger.kernel.org; Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>; linux-arm-kernel@lists.infradead.org; nnet <nnet@fastmail.fm>; Gérald Kerma <gandalf@gk2.net>
+> > > > > > Subject: Re: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq for 1.2 GHz variant
+> > > > > >
+> > > > > > On Mon, Aug 1, 2022 at 8:50 PM Elad Nachman <enachman@marvell.com> wrote:
+> > > > > > >
+> > > > > > > Hi Pali,
+> > > > > > >
+> > > > > > > Could you please provide the crash dump / call trace?
+> > > > > > >
+> > > > > > > Also, if you can please annotate with printk the exact voltage/frequency changes taken by the driver, up to the point of the crash?
+> > > > > > >
+> > > > > > > This will help understand the sequence of events leading to the crash.
+> > > > > > >
+> > > > > > > Thanks,
+> > > > > > >
+> > > > > > > Elad.
+> > > > > >
+> > > > > >
+> > > > > > Hi Elad,
+> > > > > > Here are 2 bootlogs, but I dont think they are of any use as the traces are rather random and they are always different, like a real voltage issue:
+> > > > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__gist.github.com_robimarko_113216f566ccf159dfd33933889da042&d=DwIFaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=u39n7XPBdQVaoaviM32QcFaiO0KDs3BVzkeF-4zrqPKElNH3igH9KqEKfxSKLz-H&s=jvmR3Myk443DelvNZv1OkhmpqnMp9Y8mvzzYz2g13rM&e=
+> > > > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__gist.github.com_robimarko_990d757870d44a3c5acdfeb957547705&d=DwIFaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=u39n7XPBdQVaoaviM32QcFaiO0KDs3BVzkeF-4zrqPKElNH3igH9KqEKfxSKLz-H&s=XrMFeJpEGO5A4rIKjkHLNc4MHzPGOBKeOktDWCbQMAc&e=
+> > > > > >
+> > > > > > Here is a bootleg with the frequency changes, OPP points that are set by the CPUFreq driver are also here:
+> > > > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__gist.github.com_robimarko_1a81b0c6e93735b75ff4461d405c8033&d=DwIFaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=u39n7XPBdQVaoaviM32QcFaiO0KDs3BVzkeF-4zrqPKElNH3igH9KqEKfxSKLz-H&s=02ljqhQAdZki-JwDYNPKaStmzSkhuitBRP6R17iOZqA&e=
+> > > > > >
+> > > > > > I am still digging to print the voltage changes as _set_opp_voltage is not being used.
+> > > > > >
+> > > > > > Regards,
+> > > > > > Robert
+> > > > > > >
+> > > > > > >
+> > > > > > > ________________________________
+> > > > > > > מאת: Pali Rohár <pali@kernel.org>
+> > > > > > > ‏‏נשלח: יום שני 01 אוגוסט 2022 20:56
+> > > > > > > ‏‏אל: Elad Nachman <enachman@marvell.com>
+> > > > > > > עותק: Wojciech Bartczak <wbartczak@marvell.com>; Marek Behún
+> > > > > > > <kabel@kernel.org>; Viresh Kumar <viresh.kumar@linaro.org>; Gregory
+> > > > > > > CLEMENT <gregory.clement@bootlin.com>; Robert Marko
+> > > > > > > <robert.marko@sartura.hr>; Tomasz Maciej Nowak <tmn505@gmail.com>;
+> > > > > > > Anders Trier Olesen <anders.trier.olesen@gmail.com>; Philip Soares
+> > > > > > > <philips@netisense.com>; linux-pm@vger.kernel.org
+> > > > > > > <linux-pm@vger.kernel.org>; Sebastian Hesselbarth
+> > > > > > > <sebastian.hesselbarth@gmail.com>;
+> > > > > > > linux-arm-kernel@lists.infradead.org
+> > > > > > > <linux-arm-kernel@lists.infradead.org>; nnet <nnet@fastmail.fm>;
+> > > > > > > Gérald Kerma <gandalf@gk2.net>
+> > > > > > > ‏‏נושא: Re: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq
+> > > > > > > for 1.2 GHz variant
+> > > > > > >
+> > > > > > > Hello Elad!
+> > > > > > >
+> > > > > > > Robert (in CC) tested this proposed change. But increasing delay to
+> > > > > > > 100ms does not help. CPU still crashes early during boot.
+> > > > > > >
+> > > > > > > On Monday 01 August 2022 14:15:27 Elad Nachman wrote:
+> > > > > > > > Hi,
+> > > > > > > >
+> > > > > > > > As first step, please try to increase the delay to 100ms, see if it helps.
+> > > > > > > >
+> > > > > > > > Elad.
+> > > > > > > >
+> > > > > > > > -----Original Message-----
+> > > > > > > > From: Pali Rohár <pali@kernel.org>
+> > > > > > > > Sent: Monday, August 1, 2022 5:13 PM
+> > > > > > > > To: Elad Nachman <enachman@marvell.com>
+> > > > > > > > Cc: Wojciech Bartczak <wbartczak@marvell.com>; Marek Behún
+> > > > > > > > <kabel@kernel.org>; Viresh Kumar <viresh.kumar@linaro.org>; Gregory
+> > > > > > > > CLEMENT <gregory.clement@bootlin.com>; Robert Marko
+> > > > > > > > <robert.marko@sartura.hr>; Tomasz Maciej Nowak <tmn505@gmail.com>;
+> > > > > > > > Anders Trier Olesen <anders.trier.olesen@gmail.com>; Philip Soares
+> > > > > > > > <philips@netisense.com>; linux-pm@vger.kernel.org; Sebastian
+> > > > > > > > Hesselbarth <sebastian.hesselbarth@gmail.com>;
+> > > > > > > > linux-arm-kernel@lists.infradead.org; nnet <nnet@fastmail.fm>
+> > > > > > > > Subject: Re: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid
+> > > > > > > > cpufreq for 1.2 GHz variant
+> > > > > > > >
+> > > > > > > > Hello Elad and thank you for response!
+> > > > > > > >
+> > > > > > > > This errata is already implemented in the kernel for a longer time by Gregory's commit:
+> > > > > > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__git.kernel.org_
+> > > > > > > > pub_scm_linux_kernel_git_stable_linux.git_commit_-3Fid-3D61c40f35f5c
+> > > > > > > > d6f67ccbd7319a1722eb78c815989&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eT
+> > > > > > > > eNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=-E-AwB9STVx8xgapaCNSpDJI
+> > > > > > > > PPnkrzrWkZX0uFz2bfNGFnckZelT_XaovUUPrNIg&s=4EUcdDWB_gqnEV8nREQi9E_iy
+> > > > > > > > m5bjoM6l5zLrbh_GVs&e=
+> > > > > > > >
+> > > > > > > > There is also 20ms delay after L2/L3 to L1 state switch.
+> > > > > > > >
+> > > > > > > > Any idea what could be wrong here? Or is something more than above commit needed to correctly implement that errata?
+> > > > > > > >
+> > > > > > > > On Monday 01 August 2022 14:01:07 Elad Nachman wrote:
+> > > > > > > > > Hi Pali,
+> > > > > > > > >
+> > > > > > > > > There is an errata for that.
+> > > > > > > > >
+> > > > > > > > > "
+> > > > > > > > > Switching from L2/L3 state (200/300 MHz) to L0 state (1200 MHz)
+> > > > > > > > > requires sudden changes of VDD supply, and it requires time to
+> > > > > > > > > stabilize the VDD supply. The solution is to use gradual switching from L2/L3 to L1 and then L1 to L0 state.
+> > > > > > > > > "
+> > > > > > > > >
+> > > > > > > > > I would also add additional delay for the VDD supply stabilization.
+> > > > > > > > >
+> > > > > > > > > FYI,
+> > > > > > > > >
+> > > > > > > > > Elad.
+> > > > > > > > >
+> > > > > > > > > -----Original Message-----
+> > > > > > > > > From: Pali Rohár <pali@kernel.org>
+> > > > > > > > > Sent: Monday, August 1, 2022 3:36 PM
+> > > > > > > > > To: Elad Nachman <enachman@marvell.com>; Wojciech Bartczak
+> > > > > > > > > <wbartczak@marvell.com>
+> > > > > > > > > Cc: Marek Behún <kabel@kernel.org>; Viresh Kumar
+> > > > > > > > > <viresh.kumar@linaro.org>; Gregory CLEMENT
+> > > > > > > > > <gregory.clement@bootlin.com>; Robert Marko
+> > > > > > > > > <robert.marko@sartura.hr>; Tomasz Maciej Nowak <tmn505@gmail.com>;
+> > > > > > > > > Anders Trier Olesen <anders.trier.olesen@gmail.com>; Philip Soares
+> > > > > > > > > <philips@netisense.com>; linux-pm@vger.kernel.org; Sebastian
+> > > > > > > > > Hesselbarth <sebastian.hesselbarth@gmail.com>;
+> > > > > > > > > linux-arm-kernel@lists.infradead.org; nnet <nnet@fastmail.fm>
+> > > > > > > > > Subject: [EXT] Re: [PATCH v2] cpufreq: armada-37xx: forbid cpufreq
+> > > > > > > > > for
+> > > > > > > > > 1.2 GHz variant
+> > > > > > > > >
+> > > > > > > > > External Email
+> > > > > > > > >
+> > > > > > > > > ------------------------------------------------------------------
+> > > > > > > > > ----
+> > > > > > > > > + Elad and Wojciech from Marvell
+> > > > > > > > >
+> > > > > > > > > Could you please look at this issue and/or forward it to relevant Marvell team?
+> > > > > > > > >
+> > > > > > > > > Maintainer Viresh already wrote that we cannot hang forever for Marvell and patch which disables support for 1.2 GHz was merged:
+> > > > > > > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.o
+> > > > > > > > > rg_l
+> > > > > > > > > inux-2Dpm_20210809040224.j2rvopmmqda3utc5-40vireshk-2Di7_&d=DwIDaQ
+> > > > > > > > > &c=n
+> > > > > > > > > KjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrw
+> > > > > > > > > Q&m=
+> > > > > > > > > 5nMMKyKOOM3XdMe_PerZRx8L7-D7MkWhCl7GxpXTPiotVf1TR4j8v3bpjQmRKCLC&s
+> > > > > > > > > =cXi CZByknfz1rOIgJl4fJHl1KLLRq2shHul2-VPpYP0&e=
+> > > > > > > > >
+> > > > > > > > > On Sunday 08 August 2021 21:30:26 Pali Rohár wrote:
+> > > > > > > > > > Gentle reminder. This is really serious issue. Could you please look at it?
+> > > > > > > > > >
+> > > > > > > > > > Adding more MarvellEmbeddedProcessors people to the loop: Evan,
+> > > > > > > > > > Benjamin an Igal
+> > > > > > > > > >
+> > > > > > > > > > On Thursday 15 July 2021 21:33:21 Pali Rohár wrote:
+> > > > > > > > > > > Ping! Gentle reminder for Marvell people.
+> > > > > > > > > > >
+> > > > > > > > > > > On Thursday 08 July 2021 16:34:51 Pali Rohár wrote:
+> > > > > > > > > > > > Konstantin, Nadav, Ken, Victor, Jason: This issue is pretty
+> > > > > > > > > > > > serious, CPU on 1.2GHz A3720 is crashing. Could you please look at it?
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Friday 02 July 2021 18:30:35 Pali Rohár wrote:
+> > > > > > > > > > > > > +Jason from GlobalScale as this issue affects GlobalScale Espressobin Ultra and V7 1.2 GHz boards.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > On Thursday 01 July 2021 00:56:01 Marek Behún wrote:
+> > > > > > > > > > > > > > The 1.2 GHz variant of the Armada 3720 SOC is unstable
+> > > > > > > > > > > > > > with
+> > > > > > > > > > > > > > DVFS: when the SOC boots, the WTMI firmware sets clocks
+> > > > > > > > > > > > > > and AVS values that work correctly with 1.2 GHz CPU
+> > > > > > > > > > > > > > frequency, but random crashes occur once cpufreq driver starts scaling.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > We do not know currently what is the reason:
+> > > > > > > > > > > > > > - it may be that the voltage value for L0 for 1.2 GHz variant provided
+> > > > > > > > > > > > > >   by the vendor in the OTP is simply incorrect when
+> > > > > > > > > > > > > > scaling is used,
+> > > > > > > > > > > > > > - it may be that some delay is needed somewhere,
+> > > > > > > > > > > > > > - it may be something else.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > The most sane solution now seems to be to simply forbid
+> > > > > > > > > > > > > > the cpufreq driver on 1.2 GHz variant.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Signed-off-by: Marek Behún <kabel@kernel.org>
+> > > > > > > > > > > > > > Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for
+> > > > > > > > > > > > > > Armada
+> > > > > > > > > > > > > > 37xx")
+> > > > > > > > > > > > > > ---
+> > > > > > > > > > > > > > If someone from Marvell could look into this, it would
+> > > > > > > > > > > > > > be great since basically 1.2 GHz variant cannot scale,
+> > > > > > > > > > > > > > which is a feature that was claimed to be supported by the SOC.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Ken Ma / Victor Gu, you have worked on commit
+> > > > > > > > > > > > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__github.
+> > > > > > > > > > > > > > co
+> > > > > > > > > > > > > > m_MarvellEmbeddedProcessors_linux-2Dmarvell_commit_d6719
+> > > > > > > > > > > > > > fdc2
+> > > > > > > > > > > > > > b3
+> > > > > > > > > > > > > > cac58064f41b531f86993c919aa9a&d=DwIDaQ&c=nKjWec2b6R0mOyP
+> > > > > > > > > > > > > > az7x
+> > > > > > > > > > > > > > tf
+> > > > > > > > > > > > > > Q&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=5nMMKy
+> > > > > > > > > > > > > > KOOM
+> > > > > > > > > > > > > > 3X
+> > > > > > > > > > > > > > dMe_PerZRx8L7-D7MkWhCl7GxpXTPiotVf1TR4j8v3bpjQmRKCLC&s=b
+> > > > > > > > > > > > > > 9cDK em t70OiTJF6KXj0ySzbxpsB_nuteXJE87via80&e=
+> > > > > > > > > > > > > > in linux-marvell.
+> > > > > > > > > > > > > > Your patch takes away the 1202 mV constant for 1.2 GHz
+> > > > > > > > > > > > > > base CPU frequency and instead adds code that computes
+> > > > > > > > > > > > > > the voltages from the voltage found in L0 AVS register (which is filled in by WTMI firmware).
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Do you know why the code does not work correctly for
+> > > > > > > > > > > > > > some
+> > > > > > > > > > > > > > 1.2 GHz boards? Do we need to force the L0 voltage to
+> > > > > > > > > > > > > > 1202 mV if it is lower, or something?
+> > > > > > > > > > > > > > ---
+> > > > > > > > > > > > > >  drivers/cpufreq/armada-37xx-cpufreq.c | 6 +++++-
+> > > > > > > > > > > > > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > > > > > > > > > > b/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > > > > > > > > > > index 3fc98a3ffd91..c10fc33b29b1 100644
+> > > > > > > > > > > > > > --- a/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > > > > > > > > > > +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
+> > > > > > > > > > > > > > @@ -104,7 +104,11 @@ struct armada_37xx_dvfs {  };
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > >  static struct armada_37xx_dvfs armada_37xx_dvfs[] = {
+> > > > > > > > > > > > > > - {.cpu_freq_max = 1200*1000*1000, .divider = {1, 2, 4,
+> > > > > > > > > > > > > > 6} },
+> > > > > > > > > > > > > > + /*
+> > > > > > > > > > > > > > +  * The cpufreq scaling for 1.2 GHz variant of the SOC
+> > > > > > > > > > > > > > +is currently
+> > > > > > > > > > > > > > +  * unstable because we do not know how to configure it properly.
+> > > > > > > > > > > > > > +  */
+> > > > > > > > > > > > > > + /* {.cpu_freq_max = 1200*1000*1000, .divider = {1, 2,
+> > > > > > > > > > > > > > +4, 6} }, */
+> > > > > > > > > > > > > >    {.cpu_freq_max = 1000*1000*1000, .divider = {1, 2, 4, 5} },
+> > > > > > > > > > > > > >    {.cpu_freq_max = 800*1000*1000,  .divider = {1, 2, 3, 4} },
+> > > > > > > > > > > > > >    {.cpu_freq_max = 600*1000*1000,  .divider = {2, 4, 5,
+> > > > > > > > > > > > > > 6} },
+> > > > > > > > > > > > > > --
+> > > > > > > > > > > > > > 2.31.1
+> > > > > > > > > > > > > >
+> > > > > >
+> > > > > >
+> > > > > >
+> > > > > > --
+> > > > > > Robert Marko
+> > > > > > Staff Embedded Linux Engineer
+> > > > > > Sartura Ltd.
+> > > > > > Lendavska ulica 16a
+> > > > > > 10000 Zagreb, Croatia
+> > > > > > Email: robert.marko@sartura.hr
+> > > > > > Web: https://urldefense.proofpoint.com/v2/url?u=http-3A__www.sartura.hr&d=DwIFaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=u39n7XPBdQVaoaviM32QcFaiO0KDs3BVzkeF-4zrqPKElNH3igH9KqEKfxSKLz-H&s=_aBokTETNVzTrHqewupr4PeLusBNf7LGrTmjI2hppFk&e=
+> > > > >
+> > > > >
+> > > > >
+> > > > > --
+> > > > > Robert Marko
+> > > > > Staff Embedded Linux Engineer
+> > > > > Sartura Ltd.
+> > > > > Lendavska ulica 16a
+> > > > > 10000 Zagreb, Croatia
+> > > > > Email: robert.marko@sartura.hr
+> > > > > Web: www.sartura.hr
+> > >
+> > >
+> > >
+> > > --
+> > > Robert Marko
+> > > Staff Embedded Linux Engineer
+> > > Sartura Ltd.
+> > > Lendavska ulica 16a
+> > > 10000 Zagreb, Croatia
+> > > Email: robert.marko@sartura.hr
+> > > Web: www.sartura.hr
 > 
-> turbostat.5.4.17-2136.300.7.el7uek.x86_64: cpu49: msr offset 0x614 read
-> failed: Input/output error
 > 
-> The below patch gives a more user friendly message. It is based on the
-> patch for turbostat from Prarit Bhargava that was posted some time ago.
-> The patch is "[v2] turbostat: Running on virtual machine is not supported" [1]
-> and also similar to the patch for x86_energy_perf_policy posted by Ondřej Lysoněk.
-> The patch is “tools/power x86_energy_perf_policy: Input/output error in a VM"[2].
 > 
-> KVM disables MONITOR/MWAIT in __do_cpuid_func(). Hence no VM will have MWAIT
-> and hence turbostat will not be able to read any C-state related registers
-> like the failures we see when we run turbostat. Therefore, turbostat should
-> also gracefully error-out like x86_energy_perf_policy.c.
-> 
-> [1] https://patchwork.kernel.org/patch/9868587/
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0936cdfbb527
-> 
-> Signed-off-by: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
-> ---
->   tools/power/x86/turbostat/turbostat.c | 68 ++++++++++++++++++++++-----
->   1 file changed, 55 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> index 47d3ba895d6d..c2904c1c0830 100644
-> --- a/tools/power/x86/turbostat/turbostat.c
-> +++ b/tools/power/x86/turbostat/turbostat.c
-> @@ -538,14 +538,68 @@ int get_instr_count_fd(int cpu)
->   	return fd_instr_count_percpu[cpu];
->   }
->   
-> +/*
-> + *  * Open a file, and exit on failure
-> + *   */
-> +FILE *fopen_or_die(const char *path, const char *mode)
-> +{
-> +        FILE *filep = fopen(path, mode);
-> +
-> +        if (!filep)
-> +                err(1, "%s: open failed", path);
-> +        return filep;
-> +}
-> +
-> +void err_on_hypervisor(void)
-> +{
-> +	FILE *cpuinfo;
-> +	char *flags, *hypervisor;
-> +	char *buffer;
-> +
-> +	/* On VMs /proc/cpuinfo contains a "flags" entry for hypervisor */
-> +	cpuinfo = fopen_or_die("/proc/cpuinfo", "ro");
-> +
-> +	buffer = malloc(4096);
-> +	if (!buffer) {
-> +		fclose(cpuinfo);
-> +		err(-ENOMEM, "buffer malloc fail");
-> +	}
-> +
-> +	if (!fread(buffer, 1024, 1, cpuinfo)) {
-> +		fclose(cpuinfo);
-> +		free(buffer);
-> +		err(1, "Reading /proc/cpuinfo failed");
-> +	}
-> +
-> +	flags = strstr(buffer, "flags");
-> +	rewind(cpuinfo);
-> +	fseek(cpuinfo, flags - buffer, SEEK_SET);
-> +	if (!fgets(buffer, 4096, cpuinfo)) {
-> +		fclose(cpuinfo);
-> +		free(buffer);
-> +		err(1, "Reading /proc/cpuinfo failed");
-> +	}
-> +	fclose(cpuinfo);
-> +
-> +	hypervisor = strstr(buffer, "hypervisor");
-> +
-> +	free(buffer);
-> +
-> +	if (hypervisor)
-> +		err(-1,
-> +		    "not supported on this virtual machine");
-> +}
-> +
->   int get_msr(int cpu, off_t offset, unsigned long long *msr)
->   {
->   	ssize_t retval;
->   
->   	retval = pread(get_msr_fd(cpu), msr, sizeof(*msr), offset);
->   
-> -	if (retval != sizeof *msr)
-> +	if (retval != sizeof *msr){
-> +		err_on_hypervisor();
->   		err(-1, "cpu%d: msr offset 0x%llx read failed", cpu, (unsigned long long)offset);
-> +	}
->   
->   	return 0;
->   }
-> @@ -1858,18 +1912,6 @@ static unsigned long long rdtsc(void)
->   	return low | ((unsigned long long)high) << 32;
->   }
->   
-> -/*
-> - * Open a file, and exit on failure
-> - */
-> -FILE *fopen_or_die(const char *path, const char *mode)
-> -{
-> -	FILE *filep = fopen(path, mode);
-> -
-> -	if (!filep)
-> -		err(1, "%s: open failed", path);
-> -	return filep;
-> -}
-> -
->   /*
->    * snapshot_sysfs_counter()
->    *
-A gentle reminder, I haven't received any response on this. Any 
-comments/feedback/concern?
-
-Thanks,
-Samasth.
-Oracle Linux Team.
+> -- 
+> Robert Marko
+> Staff Embedded Linux Engineer
+> Sartura Ltd.
+> Lendavska ulica 16a
+> 10000 Zagreb, Croatia
+> Email: robert.marko@sartura.hr
+> Web: www.sartura.hr
