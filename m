@@ -2,129 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A472A5A065B
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 03:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F835A07CB
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Aug 2022 06:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiHYBkH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Aug 2022 21:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S229450AbiHYETT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Aug 2022 00:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbiHYBjP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Aug 2022 21:39:15 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2050.outbound.protection.outlook.com [40.107.92.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0561B9AFBA;
-        Wed, 24 Aug 2022 18:37:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U3AA1RNLbn6BXWy5+AsAMkhTt44wz/viNd4oDZ/ZrGl/rG6sWDB/xssRWyyEYtcV7pyG+zNqh2eo/PpnsWFOyAs59eTvQbMgG0FRJ1PCI7QLaoXYzxqZ9Sx8Ih7XNeVlfHj+rZaCSxutVCCAkjt7+bNGifXMs+xMaj20C0xCr9vLwPGzwc7qy2u601TtkW9OADjkBhGJ3noPmWUPJ1JPVjhMa7flgbdp+BZVVSo91WzfcN8hhU7YK60MoC1VTIC5jsHcLfUm/TqNoMma88CKx2UU/UXg5emikT1sRVtoynwA5vNjqE9eMm3KWKcvZ5nsAxFN6q5jW373/jkrQtoTmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rSXJTWJAkOevlkQOcdatUI/9iBx1ww+5Hfk1x3QVHPY=;
- b=Hd/My88i9oxuKNKTdjt+uRR6CfI3TXItHv/LDDzOPs9NjV6zZAiCpR8MVp6odkOqMzSQFQwTXpOqzb6IiqJSZ7A7+cMbDAxBqj1vqvj1dNyN55CrA+BUDGjp0f6PUrtrOu768ACHU/KIzaWHK4eUjxCE1e+AREK5640K7ncDchWX9nzzbq2E4c002A8Ude557Otip1ueu1bO0opFztYzuTlyKp56G8JWG9kXDCUDWfis9zxbplLgr50nlO5gCyWivd8M2i1YyTBZADE0+vjV7yCSyE2fI0CF55KflOfdDwKRIHnrSp8MnsCsP8+/pkHEXrrnO7iCgQGwtMAixHmylw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rSXJTWJAkOevlkQOcdatUI/9iBx1ww+5Hfk1x3QVHPY=;
- b=czUIdv+/gRlW87A35WpEd553KcU9a1aWLhq1pmL+7ujvedGRdNCcvM8lBl6fU5/WVG43OoCDRxYU2qkBwxoUO8mH92JYivhWvxUSRkN/VWx3DD/SWhQODVcsvS4e4ffkvk0ioVqvvti24P0gV1IV3n07VrCHRCcodtjWRor+/5Y=
-Received: from DS7PR03CA0165.namprd03.prod.outlook.com (2603:10b6:5:3b2::20)
- by BN8PR12MB3218.namprd12.prod.outlook.com (2603:10b6:408:6b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Thu, 25 Aug
- 2022 01:36:50 +0000
-Received: from DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b2:cafe::3c) by DS7PR03CA0165.outlook.office365.com
- (2603:10b6:5:3b2::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15 via Frontend
- Transport; Thu, 25 Aug 2022 01:36:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT068.mail.protection.outlook.com (10.13.173.67) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5566.15 via Frontend Transport; Thu, 25 Aug 2022 01:36:50 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 24 Aug
- 2022 20:36:44 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Mario Limonciello" <mario.limonciello@amd.com>
-Subject: [PATCH] PM: wakeup: Add extra debugging statement for multiple active IRQs
-Date:   Wed, 24 Aug 2022 20:36:30 -0500
-Message-ID: <20220825013630.16311-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229437AbiHYETS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Aug 2022 00:19:18 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292759CCF2;
+        Wed, 24 Aug 2022 21:19:17 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id s11so24502071edd.13;
+        Wed, 24 Aug 2022 21:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Rf7A1N3M8eXRQTfFVYNwPPvk6e2z76n204IQCLMe0go=;
+        b=HfJjtGl1KtGKSrwt4GbSOLfKxPC1KxIVcSho7oaeTgJr2KYTfDPQPIx99inKyesWLS
+         YZG1kDI9s8fNFkXuKAELT/oebz0Ta97HJPiil0S9Af2pWd1YQ7pW547xDPvVDwLwNN4z
+         4jNn2dzeKtTWPlZ7RYy4ysJcb7VSFLsExikkCeI/pwruJUsbea695pDyb7MKHEiCsn/m
+         JJkEqKz58tj4yJ1gBgmr3RsxSoSMhGbQcF03PCD4kWyNxj/w6JnfpQ83p7DkT3zs7J6v
+         OOrB9Ko8YCOKypd6vEqv1GgrilMC6YaLyDj0ylGDZFpfmystH69A7aTJXLRRoM7OHDs1
+         YfIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Rf7A1N3M8eXRQTfFVYNwPPvk6e2z76n204IQCLMe0go=;
+        b=u6KI+cVMdm0OuuOpv2+5U7PwUkNxcVj+O3sbG4/YbXG0Bq/b25oXsejab/e2t7GllP
+         BrR74XesNUssJZxtg5mco+G0D86J62eyramcjiP829Gg+h6CFY3xWwANZg3Kkl8AWwWL
+         ZfCVnLPBhRGZJx7G72NbGk6+Iu8CNOY/vxqfTypqi/yJU+bF6cKRGjC+WAWxvMayuInP
+         sgVK1gsmWZpz5m0L1v4taiHJGfVKVUPGdBblrBkAtMnNfNMk7ZFX8Jx9Snj9jRoTkT9q
+         l//uP2Kct6+IAFS7fozuLVSuaq8LIE/he/eo4H1k0D3xgIY0pVjmqf0E9NCaGGCIExRa
+         wy2g==
+X-Gm-Message-State: ACgBeo0+bqSVagv2WAXVMZcE/ItqzoGMnWl+MGFccAQTDvOj3OIR/Y+Y
+        a8BJNYzRKA3FJmN8ui9oKzhLNQJYirg+Lh+cby0=
+X-Google-Smtp-Source: AA6agR64o0dGJm1wGkJEebsAJmMWu3uZGUy52q4NvZOd0SKpY+lDQOoltvzUhV0MyBid91Sn6q6/kAyE5Ti5DNyI1UY=
+X-Received: by 2002:a05:6402:328c:b0:446:bcc8:bf49 with SMTP id
+ f12-20020a056402328c00b00446bcc8bf49mr1633351eda.309.1661401155587; Wed, 24
+ Aug 2022 21:19:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 844c85e6-da5f-4348-1846-08da863a4877
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3218:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rkbDkycT6NZh1O39mTty/ylx8Hx0i+GjHtqwYy5LQa1KRAGje89ZQjnxDYJAXSUi31pk+XhUPNugagBD5/KmHjQe19PAuxiiBKR1KspKa33ZLUmlnz2XJTO+Xwj4C9p04yRhWPU/ysj+xYKJT0H/0QClhu+dQeghn/aLykqhocxAYV0zFNtd25rO/aMidn3qRn1ZWV/FNNIB9Q1oClcXJ9ZGOf38UV3Ty/Tt8S3zgROg3bP3/G3fYmvPv1gQLHo1ENTVVNgthwFFPIQYgLDRY+ei9CnPfzM4KjkuRq5ubsQJU5VcjVKqHsUmy2cAVbkZYV7iVfLEzCjVx9Imj/QmjZW0b60Rdf5UHj4PuCWUTjRkBzHqG2/EJZqHqtIRTFJ5UOZE0vnmAA1b4+YLIxKUDABqaccmHMCgA91t9r3euPfk2d+KOdvFGS5dk8fMHGQEbKRGOUA+e0i45XjU/6JAfeDcro5YzaEaIeVTsu8ynjbjkQW4bSBEXhXWz/KQum4pDS+wvFvMxz4VPrDMCI+vMk5uSNgYrbaH6DD3CXgAa2kPwh1bLolvdX7vRBoWktNfqozWkcJHWblKLW5H91aUPkQXRjcmU5B00gavMLw8UeqHOCuizR1ZqAvvPYfCIbdU9NIYLy9E5DCqtIu1BSnKNjNqVlL3+lGDf6AcaryI8viG3UKzz74bis0TkwVlNtSv3Fv1CAB3NwhyC+yStg5wBGMm+7ouuFlSPGlJM8tOADzP5OBLHZy9k9ssenEvu9tq/zBu8GppjHwD8Utl/7nsmaaXlYw/xXN3Ib/aXzPpO4/5HxncFiC4Py22uxYkdVNFWJfbHQvusYkzAe/oPZZTfA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(39860400002)(396003)(40470700004)(46966006)(36840700001)(5660300002)(54906003)(2616005)(44832011)(1076003)(47076005)(8936002)(336012)(186003)(83380400001)(316002)(8676002)(16526019)(4326008)(70206006)(82740400003)(356005)(81166007)(70586007)(86362001)(40480700001)(2906002)(82310400005)(26005)(426003)(36860700001)(40460700003)(7696005)(478600001)(110136005)(6666004)(36756003)(41300700001)(966005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 01:36:50.7242
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 844c85e6-da5f-4348-1846-08da863a4877
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3218
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220824044013.29354-1-qkrwngud825@gmail.com> <CAJZ5v0jmDeGn-L6U-=JOxOHVy3CRS8T5Y_06F50cL9bjUhgbPQ@mail.gmail.com>
+ <CAD14+f1YEoqdnM8eTd2hUHSy+M4+AKQp6_FjV03TK=TSDxPfYw@mail.gmail.com> <CAJZ5v0hXAgA2xfYfvXk1GZgu6h+ZVOv_XwgzVS5cpmkiChm7gw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hXAgA2xfYfvXk1GZgu6h+ZVOv_XwgzVS5cpmkiChm7gw@mail.gmail.com>
+From:   Juhyung Park <qkrwngud825@gmail.com>
+Date:   Thu, 25 Aug 2022 13:19:03 +0900
+Message-ID: <CAD14+f0D4j_76vuPTpGZ+aYKKD3W3NC+reW8vMh=hDHP=wp-SA@mail.gmail.com>
+Subject: Re: [PATCH] PM: suspend: select SUSPEND_SKIP_SYNC too if
+ PM_USERSPACE_AUTOSLEEP is selected
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        chrome-platform@lists.linux.dev, Len Brown <len.brown@intel.com>,
+        Kalesh Singh <kaleshsingh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit cb1f65c1e1424 ("PM: s2idle: ACPI: Fix wakeup interrupts
-handling") was introduced the kernel can now handle multiple
-simultaneous interrupts during wakeup.  Ths uncovered some existing
-subtle firmware bugs where multiple IRQs are unintentionally active.
+On Thu, Aug 25, 2022 at 12:01 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Aug 24, 2022 at 3:36 PM Juhyung Park <qkrwngud825@gmail.com> wrote:
+> >
+> > Hi Rafael,
+> >
+> > On Wed, Aug 24, 2022 at 10:11 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > >
+> > > On Wed, Aug 24, 2022 at 6:41 AM Juhyung Park <qkrwngud825@gmail.com> wrote:
+> > > >
+> > > > Commit 2fd77fff4b44 ("PM / suspend: make sync() on suspend-to-RAM build-time
+> > > > optional") added an option to skip sync() on suspend entry to avoid heavy
+> > > > overhead on platforms with frequent suspends.
+> > > >
+> > > > Years later, commit 261e224d6a5c ("pm/sleep: Add PM_USERSPACE_AUTOSLEEP
+> > > > Kconfig") added a dedicated config for indicating that the kernel is subject to
+> > > > frequent suspends.
+> > > >
+> > > > While SUSPEND_SKIP_SYNC is also available as a knob that the userspace can
+> > > > configure, it makes sense to enable this by default if PM_USERSPACE_AUTOSLEEP
+> > > > is selected already.
+> > > >
+> > > > Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
+> > > > ---
+> > > >  kernel/power/Kconfig | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> > > > index 60a1d3051cc7..5725df6c573b 100644
+> > > > --- a/kernel/power/Kconfig
+> > > > +++ b/kernel/power/Kconfig
+> > > > @@ -23,6 +23,7 @@ config SUSPEND_SKIP_SYNC
+> > > >         bool "Skip kernel's sys_sync() on suspend to RAM/standby"
+> > > >         depends on SUSPEND
+> > > >         depends on EXPERT
+> > > > +       default PM_USERSPACE_AUTOSLEEP
+> > >
+> > > Why is this better than selecting SUSPEND_SKIP_SYNC from PM_USERSPACE_AUTOSLEEP?
+> >
+> > That won't allow developers to opt-out from SUSPEND_SKIP_SYNC when
+> > they still want PM_USERSPACE_AUTOSLEEP.
+>
+> I see.
+>
+> It is not particularly clear, so at least please mention it in the changelog.
 
-To help with fixing those bugs add an extra message when PM debugging
-is enabled that can show the individual IRQs triggered as if a variety
-are fired they'll potentially be lost as /sys/power/pm_wakeup_irq only
-contains the first one that triggered the wakeup after resume is
-complete but all may be needed to demonstrate the whole picture.
+Will do.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215770
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/base/power/wakeup.c | 1 +
- 1 file changed, 1 insertion(+)
+>
+>
+> > (Can't think of a valid reason
+> > for this though, as PM_USERSPACE_AUTOSLEEP is only used by Android and
+> > probably Chromium, afaik.)
+> >
+> > I don't think SUSPEND_SKIP_SYNC is critical enough to enforce when
+> > PM_USERSPACE_AUTOSLEEP is enabled, but I don't have a strong opinion
+> > on this either.
+> > (We could do `imply SUSPEND_SKIP_SYNC` from PM_USERSPACE_AUTOSLEEP,
+> > but that doesn't look good semantically imho.)
+> >
+> > If you want, I can send a v2 with 'PM_USERSPACE_AUTOSLEEP select
+> > SUSPEND_SKIP_SYNC'.
+>
+> Personally, I would use "select" and I would amend the
+> PM_USERSPACE_AUTOSLEEP help text to say that it will disable sync on
+> suspend by default explicitly.
+>
+> IMV otherwise it is more confusing than it needs to be.
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index e3befa2c1b661..dcd06eac30afd 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -943,6 +943,7 @@ void pm_system_irq_wakeup(unsigned int irq_number)
- 		wakeup_irq[1] = irq_number;
- 	else
- 		irq_number = 0;
-+	pm_pr_dbg("Triggering wakeup from IRQ %d\n", irq_number);
- 
- 	raw_spin_unlock_irqrestore(&wakeup_irq_lock, flags);
- 
--- 
-2.25.1
+Agreed.
 
+>
+> I'm also wondering about a particular use case addressed by this
+> change.  Is there any?
+
+I've personally manually enabled SUSPEND_SKIP_SYNC for all my Android
+kernels for the past 7-8 years (even before SUSPEND_SKIP_SYNC was
+implemented upstream) as it was quite apparent that the sync() path
+during suspend was quite expensive, more so when the phone was under a
+"suspend storm" which tries to enter suspend dozens of times per
+second but was aborted/awakened due to devices with spurious
+interrupts or suspend code path failures.
+
+Do note that I do not represent any vendor at this moment.
+
+Also, I think I'll have to mention that Google's Android kernel
+(GKI/ACK) currently does not enable SUSPEND_SKIP_SYNC by default while
+some OEMs do (can't think of which ones to be specific). So this
+changes the default Android behavior, which is why I cc'ed Kalesh and
+f2fs folks. I do not know if SUSPEND_SKIP_SYNC on Android was simply
+overlooked or was consciously disabled. Android userspace also doesn't
+change this via sysfs knob.
+
+I still think this patch makes enough sense, but I'd love to hear
+others' thoughts.
+
+Thanks.
