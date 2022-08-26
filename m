@@ -2,251 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2BA5A2768
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Aug 2022 14:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E4C5A28D6
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Aug 2022 15:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbiHZMHl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Aug 2022 08:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S1344058AbiHZNv2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Aug 2022 09:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiHZMHk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 08:07:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BA5DCFEF
-        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 05:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661515658;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e9/CwmDtq1Of3AfWB1nTEpdK5mjodhqUPd+kCfaJyaI=;
-        b=iZoXNDEJSdqB0fry7eUVkKkeSEDTRpf3KsgfpeLK4h7nRiZ5lTlBFHItO0HKgeJYzikSbk
-        VRARj89ymAP/+HFiEWffQXGGDK7Nght7qICurSOGf/M5edKhdO5lPGlOM8lnn1URIZVBCT
-        t99/0St8q7SbxgykO20zb4OpujwQPdc=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-374-RGeBB0ScOxeI_8FPOfMnkA-1; Fri, 26 Aug 2022 08:07:37 -0400
-X-MC-Unique: RGeBB0ScOxeI_8FPOfMnkA-1
-Received: by mail-ej1-f70.google.com with SMTP id qf15-20020a1709077f0f00b0073d6dfb7556so533495ejc.12
-        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 05:07:37 -0700 (PDT)
+        with ESMTP id S1343588AbiHZNv1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 09:51:27 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B37BA17C
+        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 06:51:25 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id m5so2094632lfj.4
+        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 06:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Y2l9bTh3XUs5YKIzQSTCxLqvYEJTEkHLpP5cGtmOIiw=;
+        b=zLLCu36Iy57QP/hL5yT4LCCazH11eC6IZlsw0aIIwlGZh+KImrOh2dn8PBwe9YwdTQ
+         ZBujQ/kcT5HwGE7ec3XCxSDovJbcicsQbZiNxvL0JC9seelbJ3TA5Pt6HxjE6lnbPU55
+         Kxko21qWFVeTm8r+PEPSzveLwSrbP3g7RvsX5o4TCLC92rbsBilUWnTedD6MyUilE5Aa
+         bLiZEi1fciLdZIMGxuyAjdkunYZBgGZHBLQfuFRdEbU3AaQTu2nnoiwXrI6gRXsfn0mQ
+         qHZBlhZ7Lm96Nn2rK3oRiCQ3GOO1DUDNZATRgSFa2iFxA4A+26KBIjoyS31iPW/dm9Ib
+         u+WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=e9/CwmDtq1Of3AfWB1nTEpdK5mjodhqUPd+kCfaJyaI=;
-        b=yF+R24ZHlbPwrTFIY1Zzfbd5nUHU1lxcIPvQFod98Q1GL5gLAA1ZBE/3CeGNXJe+p/
-         sLIy5OJ9oxGA/m5iPWfvY/FpMxctNAokaN2TD+l78OU0vXwwYpfl87P6VOKfimPxaPFK
-         l8Apn5pnSLpQ0s1dzk1SHIYABPgEIWYLuXxWzy3h9ug5hehM5Hv+g0Kqxo3tXCrcvW7h
-         NcUMOY0GY1WOVtBhE4mBUZyhCoWbeUqUkqHK+8/pfQ85D1wsQZhmEJhzD8wAHMM3HTm0
-         035UbxuR0YQnxXJ92hd59Ucn7QoM+2si4zt6+h16GAdmTxz+xEtmKEiDGskSK/knVhol
-         ZYDg==
-X-Gm-Message-State: ACgBeo1md+f4OsstCYEGubthKgUc/g3eikNS9CN4exYHSF3MoKoHuTw/
-        DOcoIPKtaIeYF8YDQEFUXFBaqGWP7GJeZRizwUt2/KQNnHelZbyHdxhiGZQnc7UXHjDfjvU3afB
-        JxYpmu+7VkMKv/7na0Xc=
-X-Received: by 2002:a05:6402:2802:b0:43a:9098:55a0 with SMTP id h2-20020a056402280200b0043a909855a0mr6584414ede.179.1661515656271;
-        Fri, 26 Aug 2022 05:07:36 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5lDRxiLgcEVMZBTG6n3QzcW6euXrZRrakgpSuixzcJ6IKONcJmEHt1wuI8kIJ+4/xuEUzw5Q==
-X-Received: by 2002:a05:6402:2802:b0:43a:9098:55a0 with SMTP id h2-20020a056402280200b0043a909855a0mr6584401ede.179.1661515655979;
-        Fri, 26 Aug 2022 05:07:35 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id ky11-20020a170907778b00b0072abb95eaa4sm800435ejc.215.2022.08.26.05.07.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 05:07:35 -0700 (PDT)
-Message-ID: <123960a4-7a38-234b-24ca-dfe3655e32de@redhat.com>
-Date:   Fri, 26 Aug 2022 14:07:34 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Y2l9bTh3XUs5YKIzQSTCxLqvYEJTEkHLpP5cGtmOIiw=;
+        b=HQ3toETNjEuxF3jjRIVTlly39S7N/zUs9zoOtuSY5lB/Yt+YgV9yOlqQFlp9I3GhXv
+         /O2pe6JvLg8EeN8eI2kCGUb9QuubJbctQhMNsvyxoYrs+wS2ySFbTXkm1fUn3deJxEDi
+         XlxPO6khGZ54fuDgi8FTE4BQUkZUXtXa1RUE66rfYtCOm+gqq99OonTVDnfB1VVgcq/+
+         JRDRwReuSERHOouvcT41SaDhSzGtMIYBgm1bXeue1RcJI3KRGxbtwla3hbg+nTJDncqV
+         xXAXFwIoLK1NOWw6dubijKH64dDS+bBh3zan7waLtciI6E3lSczY71k23C8ds9abXULz
+         tAOQ==
+X-Gm-Message-State: ACgBeo0kGhRCd2NEtx3mKtrQwRxMIT2ULYFwUO6S032C1fP4HNJAs1Xc
+        IGIqoLSYnLYrk04A1BjDB5PiUmM/vpKFYIfQxP5rFw==
+X-Google-Smtp-Source: AA6agR6731hY6W3f0y2L3JzHdc41U+Xgvox8D2w/g/nEHhwlH5Uv+hyHCT1xMzOJCEW3F0U0J5cyBh0Rie5REAA42Vo=
+X-Received: by 2002:ac2:59cf:0:b0:492:bf97:9a03 with SMTP id
+ x15-20020ac259cf000000b00492bf979a03mr2837904lfn.233.1661521883493; Fri, 26
+ Aug 2022 06:51:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 0/2] [RFC] platform/x86: Fixes for Toshiba Z830
-Content-Language: en-US
-To:     Arvid Norlander <lkml@vorpal.se>,
-        platform-driver-x86@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Azael Avalos <coproscefalo@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220821200821.1837460-1-lkml@vorpal.se>
- <2ddade8b-7260-8497-12f2-c8b13cf35e6a@redhat.com>
- <12a39cf6-1247-d2a3-bf07-51297e9b6640@vorpal.se>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <12a39cf6-1247-d2a3-bf07-51297e9b6640@vorpal.se>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+ <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
+ <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
+ <20220726160337.GA41736@francesco-nb.int.toradex.com> <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
+ <20220728112146.GA97654@francesco-nb.int.toradex.com>
+In-Reply-To: <20220728112146.GA97654@francesco-nb.int.toradex.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 26 Aug 2022 15:50:46 +0200
+Message-ID: <CAPDyKFqtCxrjALeCmhuqQ2VmmUHhi-DjXO30uHChTPFeDbp+JQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Max Krummenacher <max.oss.09@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Thu, 28 Jul 2022 at 13:21, Francesco Dolcini
+<francesco.dolcini@toradex.com> wrote:
+>
+> On Thu, Jul 28, 2022 at 11:37:07AM +0200, Ulf Hansson wrote:
+> > On Tue, 26 Jul 2022 at 18:03, Francesco Dolcini
+> > <francesco.dolcini@toradex.com> wrote:
+> > >
+> > > Hello Ulf and everybody,
+> > >
+> > > On Wed, Jul 13, 2022 at 01:43:28PM +0200, Ulf Hansson wrote:
+> > > > On Thu, 23 Jun 2022 at 18:14, Max Krummenacher <max.oss.09@gmail.com> wrote:
+> > > > > So our plan is to explicitly handle a (shared) regulator in every
+> > > > > driver involved, adding that regulator capability for drivers not
+> > > > > already having one.
+> > > >
+> > > > Please don't! I have recently rejected a similar approach for Tegra
+> > > > platforms, which now have been converted into using the power domain
+> > > > approach.
+> > >
+> > > Just to quickly re-iterate how our hardware design looks like, we do
+> > > have a single gpio that control the power of a whole board area that is
+> > > supposed to be powered-off in suspend mode, this area could contains
+> > > devices that have a proper Linux driver and some passive driver-less
+> > > components (e.g. level shifter) - the exact mix varies.
+> > >
+> > > Our proposal in this series was to model this as a power domain that
+> > > could be controlled with a regulator. Krzysztof, Robin and others
+> > > clearly argued against this idea.
+> >
+> > Well, historically we haven't modelled these kinds of power-rails
+> > other than through power-domains. And this is exactly what genpd and
+> > PM domains in Linux are there to help us with.
+> >
+> > Moreover, on another SoC/platform, maybe the power-rails are deployed
+> > differently and maybe those have the ability to scale performance too.
+> > Then it doesn't really fit well with the regulator model anymore.
+> >
+> > If we want to continue to keep drivers portable, I don't see any
+> > better option than continuing to model these power-rails as
+> > power-domains.
+> >
+> > >
+> > > The other approach would be to have a single regulator shared with the
+> > > multiple devices we have there (still not clear how that would work in
+> > > case we have only driver-less passive components). This is just a
+> > > device-tree matter, maybe we would need to add support for a supply to
+> > > some device drivers.
+> > >
+> > > Honestly my conclusion from this discussion is that the only viable
+> > > option is this second one, do I miss something?
+> >
+> > No thanks!
+> >
+> > Well, unless you can convince me there are benefits to this approach
+> > over the power-domain approach.
+>
+> I'm fine with our current power-domain proposal here, I do not need to
+> convince you, I have the other problem to convince someone to merge
+> it :-)
+>
+> Maybe Krzysztof, Robin or Mark can comment again after you explained
+> your view on this topic.
 
-On 8/24/22 14:31, Arvid Norlander wrote:
-> On 2022-08-22 13:39, Hans de Goede wrote:
+To move things forward, I suggest you re-start with the power domain approach.
 
-<snip>
+Moreover, to avoid any churns, just implement it as another new SoC
+specific genpd provider and let the provider deal with the regulator.
+In this way, you don't need to invent any new types of DT bindings,
+but can re-use existing ones.
 
->> For 2. you can actually just copy and paste a lot of this email,
->> I believe that having the info in this email in a
->> Documentation/admin-guide/laptops/toshiba_acpi.rst file
->> will make it a lot easier to find in the future then only having
->> it in the mailinglist archives.
->>
->>> * For the hardware buttons I describe below, is a solution specific to
->>>   toshiba_acpi preferred, or should additional effort be spent on
->>>   investigating a generic solution?
->>
->> Ok, this is interesting there actually is a specification from
->> Microsoft for this:
->> http://download.microsoft.com/download/9/c/5/9c5b2167-8017-4bae-9fde-d599bac8184a/dirapplaunch.docx
->>
->> And there was a previous attempt to add support for the PNP0C32 devices:
->> https://marc.info/?l=linux-acpi&m=120550727131007
->> https://lkml.org/lkml/2010/5/28/327
->>
->> And this even made it into drivers/staging for a while, if you do:
->> git revert 0be013e3dc2ee79ffab8a438bbb4e216837e3d52
->> you will get a: drivers/staging/quickstart/quickstart.c file.
->>
->> Note this is not great code:
->>
->> 1. If you do:
->>   ls /sys/bus/platform/devices
->>   You should already see a couple of PNP0C32 platform devices there and the
->>   driver should simply bind to those rather then creating its own platform device
->> 2. As mentioned this really should use the standard /dev/input/event interface
->>   for event reporting and allow userspace to change the scancode to EV_KEY*
->>   mapping. You can do this e.g. by using a sparse_keymap for the scancode to
->>   EV_KEY* mapping which will give you this for free.
-> 
-> I have yet to have time to look at it. However this seems to suggest that
-> these buttons should work when the laptop is off. That is not the case on
-> the Z830. They only do anything when the computer is on and I can't find
-> any settings to change that.
+If you post a new version, please keep me cced, then I will help to review it.
 
-Not necessarily fully off, but maybe when suspended ?
-
-> Looking at the specification it also mentions several different
-> notification codes for the button. The only one used on the Z830 is 0x80.
-> That is, as far as I can tell from the decompilation of the DSDT.
-> 
-> Thus I worry I will not be able to test any sort of generic implementation
-> very well, if the Z830 only implements a small subset of the functionality.
-
-Right I understand still I think there should be a separate
-
-drivers/platform/x86/acpi_pnp0c32_buttons.c 
-
-driver for this IMHO. If it is only tested on your one model that
-is fine (should be documented with a comment in the code though).
-
-Then at least we have something to serve as a basis for if people
-want to add support for this on more laptop models.
-
-Does that sound reasonable ?
-
->>> Before I start coding on these more complex issues I would like advice in
->>> order to avoid wasting my time on bad designs. In particular, on how to
->>> proceed with the "Hardware buttons" section below.
->>
->> I believe that sending the magic command to make these keys generate events
->> should be part of toshiba_acpi, combined with a generic PNP0C32 driver
->> for actually reporting the key-presses.
-> 
-> I guess there is no way to figure out what the buttons are supposed to mean in
-> this case, and we simply have to leave that to the user to map as they see fit
-> (as long as the IDs are stable). I'm not sure how well that works with the event
-> subsystem, as when I test evtest it seems to asign some sort of labels to the
-> events (e.g. KEY_SLEEP, KEY_BLUETOOTH, ...).
-
-Ack.
-
-<snip>
-
->>> 4. Battery charge mode [implemented in patch 2]
->>> ======================
->>>
->>> This laptop supports not charging the battery fully in order to prolong
->>> battery life. Unlike for example ThinkPads where this control is granular
->>> here it is just off/on. When off it charges to 100%. When on it charges to
->>> about 80%.
->>>
->>> According to the Windows program used to control the feature the setting
->>> will not take effect until the battery has been discharged to around 50%.
->>> However, in my testing it takes effect as soon as the charge drops below
->>> 80%. On Windows Toshiba branded this feature as "Eco charging"
->>>
->>> In the following example ACPI calls I will use the following newly defined
->>> constants:
->>> #define HCI_BATTERY_CHARGE_MODE 0xba
->>> #define BATTERY_CHARGE_FULL 0
->>> #define BATTERY_CHARGE_80_PERCENT 1
->>>
->>> To set the feature:
->>>   {HCI_SET, HCI_BATTERY_CHARGE_MODE, charge_mode, 0, 0, 0}
->>> To query for the existence of the feature:
->>>   {HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 0}
->>> To read the feature:
->>>   {HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 1}
->>>
->>> The read may need to be retried if TOS_DATA_NOT_AVAILABLE is returned as
->>> the status code. This rarely happens (I have never observed it on Linux),
->>> but I have seen it happen under Windows once, and the software did retry
->>> it.
->>
->> Hmm, this is interesting if you look at:
->>
->> Documentation/ABI/testing/sysfs-class-power
->>
->> You will see there already is a standard API for this in the form of
->> adding a "charge_control_end_threshold" attribute to the standard
->> ACPI /sys/class/power_supply/BAT*/ sysfs interface. See e.g.
->> drivers/platform/x86/thinkpad_acpi.c
->>
->> For an example of how to add sysfs attributes to a battery
->> which is managed by the standard drivers/acpi/battery.c driver.
->>
->> I think you can use this standard attribute enabling eco charging
->> for any writes with a value <= 90 and disabling it for values
->>> 90 (90 being halfway between 80 and 100).
->>
->> While always showing 80 or 100 on read.
->>
->> You should then also write a patch for:
->>
->> Documentation/ABI/testing/sysfs-class-power
->>
->> Adding something like this to the "charge_control_end_threshold"
->> section:
->>
->> "not all hardware is capable of setting this to an arbitrary
->> percentage. Drivers will round written values to the nearest
->> supported value. Reading back the value will show the actual
->> threshold set by the driver."
->>
->> (feel free to copy verbatim, but maybe you can do better)
->>
->>
-> 
-> This makes perfect sense, but I don't know if it is guaranteed to be 80%
-> on all Toshiba laptops. Do you know of any other Toshiba laptops that
-> have/had this feature, and if so, what the limits are? The Windows driver
-> for this laptop does not document exactly what the limit is. 80% is simply
-> what I have observed in practice.
-
-Right, the idea is to document that the hw/fw/driver may only
-support some fixed values and that written values will be
-rounded to one of the supported fixed values. There is no need
-to document what those fixed values are.  The idea is that
-userspace consumers will read back the value to see what
-they actually got. 
-
-Regards,
-
-Hans
-
+Kind regards
+Uffe
