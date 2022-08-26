@@ -2,191 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFCD5A2294
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Aug 2022 10:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CDF5A2576
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Aug 2022 12:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343524AbiHZIGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Aug 2022 04:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S1343525AbiHZKHX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Aug 2022 06:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245184AbiHZIGd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 04:06:33 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE8BD4742
-        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 01:06:30 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-33dbbf69b3dso17778067b3.1
-        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 01:06:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=7Mq11P25bR3wlSS6rhp/KK7HEHcVP2nqSIE7qecBSHI=;
-        b=A6bJ+AnhSeKOqL2xoFgZgqXmcNg60G7gBzknU5skktv31cbrZtiqklVBvs+nmq2jBm
-         y6mTIeVsVgtR5v+CnFSal6nO1qBaDJMjwBpArsPYg63W9RrTb5QhdkZMrcMdTmgS5jkv
-         PMo5OKXzNGhw7zJ1mOVDZwD2NFY60tqzH//Wul+1voGYIhOKpA/VvmtTNtQXnVHsK7a3
-         BcWq3qzH65wl9D4aFjgTkN1zLOTRuV259Th5v16GqLTjQZyxO+JmhDNCEB4Q9PRuIt9J
-         NjkE58DwKus4IgFslbGcg0EtNvBEX/paL9LgvEz0rilkjPBepSdq5S1JAQvLlAqunZrs
-         1WFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=7Mq11P25bR3wlSS6rhp/KK7HEHcVP2nqSIE7qecBSHI=;
-        b=5AIuaa+GKAzSv9JlOb4ObPf3XitV0AxflOCbyjYFTDQAGkVGH9t6Bv8IEJl0uugypQ
-         JN1kdNGRSOXkVfeIJYlRdTe/SBa2N6vavUbHjGuEfdpsNMS9JKVqdh6AWq5KbntcwYRB
-         fjS2W+iG3H+y1/ZsXSa7RKsFaBdWqgWVBvhG/gHJvsbEdPvlos+GSPUwNzsgftYGfHOh
-         kEjddagLGVD3IELIBIBShNwgANvhKDm/5YMfhBuN+B2XXqXWfBhE25K/HhP7ny3FabjR
-         f39K/CFMzQke63PgdB4B6/Ym2RFBmod6JID+iaMCaE7kjXiaHTqX7XAlnKVHhreQGRX2
-         m3zg==
-X-Gm-Message-State: ACgBeo3IP7EOHzhf9SEyfXS4IDniQkmFBlMQ5kDPlL1PrdHabaw15rVv
-        jygFKrXyJQOGnrlAnIHMGC8I+Yrm437mxD7Fyi3HTg==
-X-Google-Smtp-Source: AA6agR6FRbsPnMzYQMsuZG4nfrnAtmeF6GVqmVA9wFaaxz61tGMBwBc+pUgqKF23zqjXCnnpgwdYoweEHrVV87xeqLE=
-X-Received: by 2002:a81:9296:0:b0:33c:ba30:6ff8 with SMTP id
- j144-20020a819296000000b0033cba306ff8mr7080387ywg.285.1661501190206; Fri, 26
- Aug 2022 01:06:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-5-bchihi@baylibre.com>
- <05fa19f7-7997-51c3-767f-c40cb321d2a4@linaro.org>
-In-Reply-To: <05fa19f7-7997-51c3-767f-c40cb321d2a4@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Fri, 26 Aug 2022 10:05:52 +0200
-Message-ID: <CAGuA+opoKKvQvC0aij_L1t8BQG2rHJDwx-U=XjgvaqK5Bg-WdQ@mail.gmail.com>
-Subject: Re: [PATCH v9,4/7] thermal: mediatek: Add LVTS driver for mt8192
- thermal zones
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S245469AbiHZKGt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 06:06:49 -0400
+X-Greylist: delayed 237 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 26 Aug 2022 03:05:27 PDT
+Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFE7DA3FF
+        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 03:05:26 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by fx405.security-mail.net (Postfix) with ESMTP id DFE65323849
+        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1661508088;
+        bh=IXh1AnWpkuXoC7TbTvhFYHh6T+ctHCL9u2fV7eqXuqc=;
+        h=From:To:Cc:Subject:Date;
+        b=Oi7L6RBy4DVbslfFD+B1p28MmHJwdP3W5LeQZgKkn+I6WTEsFkdFLLyA5w2CyJed+
+         7TyFTLBEW9cuc1RaRygVK4njLlebZCB1JS2B1N8HqLoY8mZi2mFtzv5RMx2v9kNQlA
+         eDgaRFi1KVWu9q44y627kfMFZzdk+fQFB1rWyK2k=
+Received: from fx405 (localhost [127.0.0.1])
+        by fx405.security-mail.net (Postfix) with ESMTP id 2A9DB3237E2;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
+X-Virus-Scanned: E-securemail
+Secumail-id: <8c06.630899f3.17464.0>
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
+        by fx405.security-mail.net (Postfix) with ESMTPS id 1937C3236E3;
+        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id EC49527E0397;
+        Fri, 26 Aug 2022 12:01:22 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id D5B4227E0392;
+        Fri, 26 Aug 2022 12:01:22 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu D5B4227E0392
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508082;
+        bh=AEdCki1kaU7qrTk791Ry5BYT1smvHLvfdWrisP7ew1Y=;
+        h=From:To:Date:Message-Id;
+        b=ee/kuYMyGCET6s+ufDectbkcwFejqCsWLAdI1YHhk07T8JU++YLpzmr+p0Dn075u9
+         Gm7JqC0mZX2R0EXcwlg7CScqKXNNewSjGTDf0lUAV/0RvRvfECOrBdNS5Y8LfViIDw
+         7L1vqThUzkI/mVB1FJlspFwPSao1hSwycrvsPyP0=
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kvPAhY-jR2an; Fri, 26 Aug 2022 12:01:22 +0200 (CEST)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id C588627E02FA;
+        Fri, 26 Aug 2022 12:01:22 +0200 (CEST)
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH] power: supply: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:45 +0200
+Message-Id: <20220826100052.22945-17-jmaselbas@kalray.eu>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: by Secumail
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Daniel,
+Remove redundant word `the`.
 
-Thank you for the feedback.
+CC: Sebastian Reichel <sre@kernel.org>
+CC: linux-pm@vger.kernel.org
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+---
+ drivers/power/supply/power_supply_sysfs.c | 2 +-
+ drivers/power/supply/tps65217_charger.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I hope this information will explain better the LVTS Driver.
-I will add this like the following.
-Is this ok for you?
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index 4239591e1522..5369abaceb5c 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -442,7 +442,7 @@ static int add_prop_uevent(struct device *dev, struct kobj_uevent_env *env,
+ 	if (ret == -ENODEV || ret == -ENODATA) {
+ 		/*
+ 		 * When a battery is absent, we expect -ENODEV. Don't abort;
+-		 * send the uevent with at least the the PRESENT=0 property
++		 * send the uevent with at least the PRESENT=0 property
+ 		 */
+ 		return 0;
+ 	}
+diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supply/tps65217_charger.c
+index ba33d1617e0b..a4bc9f2a10bc 100644
+--- a/drivers/power/supply/tps65217_charger.c
++++ b/drivers/power/supply/tps65217_charger.c
+@@ -50,7 +50,7 @@ static int tps65217_config_charger(struct tps65217_charger *charger)
+ 	 * tps65217 rev. G, p. 31 (see p. 32 for NTC schematic)
+ 	 *
+ 	 * The device can be configured to support a 100k NTC (B = 3960) by
+-	 * setting the the NTC_TYPE bit in register CHGCONFIG1 to 1. However it
++	 * setting the NTC_TYPE bit in register CHGCONFIG1 to 1. However it
+ 	 * is not recommended to do so. In sleep mode, the charger continues
+ 	 * charging the battery, but all register values are reset to default
+ 	 * values. Therefore, the charger would get the wrong temperature
+-- 
+2.17.1
 
-[v9,7/7] thermal: mediatek: Add LVTS driver settings for mt8195 thermal zon=
-es
-One Clock and one Reset for Thermal.
-Thermal have two domain : CPU related (mcu) and non-CPU related (ap).
-TC : Thermal Controller to control the thermal sensor's HW behavior.
-TS : Thermal Sensor for measuring temperature the HW module.
-thermal
-=E2=94=9C=E2=94=80=E2=94=80 ap
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_0
-=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS4_0 - vpu1
-=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS4_1 - vpu2
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_1
-=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS5_0 - gpu1
-=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS5_1 - gpu2
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_2
-=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_0 - vdec
-=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_1 - img
-=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS6_2 - infra
-=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 tc_3
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS7_0 - cam1
-=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS7_1 - cam2
-=E2=94=94=E2=94=80=E2=94=80 mcu
-=E2=94=9C=E2=94=80=E2=94=80 tc_0
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS1_0 - cpu_big1
-=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS1_1 - cpu_big2
-=E2=94=9C=E2=94=80=E2=94=80 tc_1
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS2_0 - cpu_big3
-=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS2_1 - cpu_big4
-=E2=94=94=E2=94=80=E2=94=80 tc_2
-=E2=94=9C=E2=94=80=E2=94=80 TS3_0 - cpu_little1
-=E2=94=9C=E2=94=80=E2=94=80 TS3_1 - cpu_little2
-=E2=94=9C=E2=94=80=E2=94=80 TS3_2 - cpu_little3
-=E2=94=94=E2=94=80=E2=94=80 TS3_3 - cpu_little4
-
-[v9,4/7] thermal: mediatek: Add LVTS driver for mt8192 thermal zones
-One Clock and one Reset for Thermal.
-Thermal have two domain : CPU related (mcu) and non-CPU related (ap).
-TC : Thermal Controller to control the thermal sensor's HW behavior.
-TS : Thermal Sensor for measuring temperature the HW module.
-thermal
-=E2=94=9C=E2=94=80=E2=94=80 ap
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_0
-=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS4_0 - vpu1
-=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS4_1 - vpu2
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_1
-=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS5_0 - gpu1
-=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS5_1 - gpu2
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_2
-=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_0 - infra
-=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS6_1 - cam
-=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 tc_3
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS7_0 - md2
-=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS7_1 - md3
-| =E2=94=94=E2=94=80=E2=94=80 TS6_2 - md1
-=E2=94=94=E2=94=80=E2=94=80 mcu
-=E2=94=9C=E2=94=80=E2=94=80 tc_0
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS1_0 - cpu_big1
-=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS1_1 - cpu_big2
-=E2=94=9C=E2=94=80=E2=94=80 tc_1
-=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS2_0 - cpu_big3
-=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS2_1 - cpu_big4
-=E2=94=94=E2=94=80=E2=94=80 tc_2
-=E2=94=9C=E2=94=80=E2=94=80 TS3_0 - cpu_little1
-=E2=94=9C=E2=94=80=E2=94=80 TS3_1 - cpu_little2
-=E2=94=9C=E2=94=80=E2=94=80 TS3_2 - cpu_little3
-=E2=94=94=E2=94=80=E2=94=80 TS3_3 - cpu_little4
-
-Best regards,
-Balsam.
-
-On Thu, Aug 25, 2022 at 7:29 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Balsam,
->
-> On 17/08/2022 10:07, bchihi@baylibre.com wrote:
-> > From: Michael Kao <michael.kao@mediatek.com>
-> >
-> > Add LVTS v4 (Low Voltage Thermal Sensor) driver to report junction
-> > temperatures in MediaTek SoC mt8192 and register the maximum temperatur=
-e
-> > of sensors and each sensor as a thermal zone.
->
-> Thanks for your work
->
-> First of all, the patch is way too big.
->
-> The organization of the data is hard to understand.
->
-> Could you give a description of the sensors, how they are organized ?
->
-> I can see the there are 'tc' and each have a group of sensing points? Is
-> that correct? Do have the 'tc's a shared clock? etc ...
->
-> I have another email with the comments inline but without more insights
-> on the hardware it is difficult to review accurately. This driver looks
-> more complex than the other ones I've reviewed. At least that is what
-> looks like with the different macros names found.
->
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
