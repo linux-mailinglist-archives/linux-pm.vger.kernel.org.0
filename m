@@ -2,75 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FD25A290B
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Aug 2022 16:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E845A2921
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Aug 2022 16:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344396AbiHZOGD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Aug 2022 10:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        id S231774AbiHZOM3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Aug 2022 10:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbiHZOGC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 10:06:02 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE4DC0E61
-        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 07:05:59 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k9so1979534wri.0
-        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 07:05:59 -0700 (PDT)
+        with ESMTP id S229704AbiHZOM1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 10:12:27 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B398F950
+        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 07:12:24 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so4147305wms.0
+        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 07:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=Z+0yDajJ0wMjpgyqOUnKw47mL+zdc8UQAtbyK28TADE=;
-        b=1TrEMsMjrNGXQg3zlIfMbp6DcGA/mnvnYEcXOVNWIZtxGMMtIIDBXFAdTbQdg1JhiZ
-         NOUGwIig0tV7ocKG7N6MfxSRKKhCjxzyzNULveaen25A473Kz6VG6VewMXb6F9ODrHl3
-         prvKMEYieaPC+isGsSBb5ZIGpmk1EXoIf7Xw/CMMowCQsPdIVOPsUbH3NE90Rjt6Vgsb
-         wFetqy6U4nj5bS5DNnxsjUfxh4KXHMP2z9YMVBFv7o0B8WdX4pq+IybwfAv9Uh3nXWjK
-         EtbG3Zxi2O/zO0WdLbyauOW08/7V+J6sJJ+2QI6d9IPSydep7VVX/UsSRlXBZFPlcItP
-         /Dkg==
+        bh=ltPOdgdKPOgNk+QCQTfLV/0eQufbKuZ/Z6D7J07Ijbg=;
+        b=Ylk+YjK5vRWW62xLjvKqKh8WyUVgEu8zd2EjP28CyAJOu/KJU9qsWtcOJVtC6jcSf5
+         rcKNA58kz8tnPhndOOBnCfqBCGoWH/9L2ZsvhRLaeHRdNZePyxydJGxhkkzG/i2bkvl1
+         ETfcyPlTWtwVpRaeprOr5SKdPr83WHsjvUCGh6CKNLd3BPGjtUoHY/dEj1Y9YczMAohG
+         IuMfT3QM44GlzDXfJIQwBH35tpM42KBS+nMbIBakgJmCwyEh97nBzFxGThUS+7l27A2f
+         sZ0BUx/uWc7MaowR7Md5ewjiR9JfZZCYzqsPlYQzI/2Zd1HtGLX4lOA80STnQMVNH2Yb
+         4cvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=Z+0yDajJ0wMjpgyqOUnKw47mL+zdc8UQAtbyK28TADE=;
-        b=k+XHBDxCzQ7AMDec0eac+rWjOArT4fnxGUxovibJQuL8X93DAqwCLEXTru56ALgo4W
-         c7rUPVdD5ekgUgXY7F1kH+fDCi/pPCPic2jZ4PB+j+iUzhbCdBb0RDf7rOZ4okc2IHDE
-         ZhJvxtutkU1GERU2PY3USTV5C0pf+w5bieN+yeL5j/IOqzBC0jiUwQcEj5HnomSBoFaU
-         V+PSkSEpDrIe6joWlt3LfGp8QvWZYrdMjuxaI2aafXlX8bTdNGUli/giYiUTomYf9wy2
-         q1JA3GhI8h2l3O61T964JaD+VHm3+h4fgeVRfTCI98b9j3romvFKmK197mx5OZDqK7ub
-         8d8w==
-X-Gm-Message-State: ACgBeo2O4A2uojt4SlXH6PduIGjG0/0ZuMrJcapAvTI8msRNLdjU78hu
-        OzAiglqw/ahzdPosViUNAbrZYQ==
-X-Google-Smtp-Source: AA6agR5LuyIlDMydRhgyzTFzClAGY8aeGYDhoH5FtmW4fur5TkLAwiWQlSHq4jMGUpVO741aer/a0w==
-X-Received: by 2002:a5d:5305:0:b0:225:453a:be9b with SMTP id e5-20020a5d5305000000b00225453abe9bmr5058563wrv.516.1661522757838;
-        Fri, 26 Aug 2022 07:05:57 -0700 (PDT)
+        bh=ltPOdgdKPOgNk+QCQTfLV/0eQufbKuZ/Z6D7J07Ijbg=;
+        b=lg+T7Rp5Dt6tsTc8Y++qbFtklFxcljE5b7GLiFLAGFFkJZRluzv5fOvBzk3WJ+Vljq
+         z0yJewoI8M5xw6dnmLrpnNFT1rSCmI6kX/HdeiHv2H4rXQ849EMhqUy5IRFBpbMMnp4/
+         KMbKzVOX5tYyyrSb6so6oYIc0dz0rn13X6pe5exL9ISxUznUktYboY9a2kLweDYClI6d
+         L8xHcFvd12fol7QjqS6PEKZvYChzx3hfr5Khr4PNSG4uvy5VKZg7E9Sj7dhTw56ABEKW
+         MXdI37mLWx5tIOik6kPRTKM0Hj92h+cIf8GKZDLxfPhiUvAeldHungaNEGSekZ3WEfNO
+         Gaiw==
+X-Gm-Message-State: ACgBeo2Gkgs9ef1e3R45nePXTcVK72FlNDjs4Hgm57t9IUrsPnlebC1C
+        0k9RECZoG4hMK9iu6Xwb/pHfBQ==
+X-Google-Smtp-Source: AA6agR74rTXidXuRME3oXuHCtp1ZXLI+aD5krgZxj/g3TEb7Whgmu8sX27kK2BrgnqVjoIn9wfwYdQ==
+X-Received: by 2002:a1c:a145:0:b0:3a5:b84b:f746 with SMTP id k66-20020a1ca145000000b003a5b84bf746mr5429572wme.127.1661523142981;
+        Fri, 26 Aug 2022 07:12:22 -0700 (PDT)
 Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id j2-20020adff542000000b0021e51c039c5sm1967727wrp.80.2022.08.26.07.05.56
+        by smtp.gmail.com with ESMTPSA id r6-20020a5d4986000000b0021e4829d359sm1918437wrq.39.2022.08.26.07.12.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 07:05:57 -0700 (PDT)
-Message-ID: <cf60d0a7-2dec-a6c7-879f-ab4812a1e034@baylibre.com>
-Date:   Fri, 26 Aug 2022 16:05:54 +0200
+        Fri, 26 Aug 2022 07:12:22 -0700 (PDT)
+Message-ID: <cb355b34-f3d2-af63-ad5a-92ea19bf7fcb@baylibre.com>
+Date:   Fri, 26 Aug 2022 16:12:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH v2 3/4] thermal: mediatek: control buffer enablement
- tweaks
+Subject: Re: [PATCH v2 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
-Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     amitk@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, fparent@baylibre.com,
+        hsinyi@chromium.org, krzysztof.kozlowski+dt@linaro.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        robh+dt@kernel.org, rui.zhang@intel.com,
-        Markus Schneider-Pargmann <msp@baylibre.com>
+        matthias.bgg@gmail.com, michael.kao@mediatek.com,
+        rafael@kernel.org, robh+dt@kernel.org, rui.zhang@intel.com
 References: <20220720181854.547881-1-aouledameur@baylibre.com>
- <20220720181854.547881-4-aouledameur@baylibre.com>
- <a143dfcd-7a6a-49ff-6bed-4ffdb0fa1c4a@collabora.com>
+ <20220720181854.547881-5-aouledameur@baylibre.com>
+ <92540bf4-f2de-0aae-d764-ce6edfda1ab1@wanadoo.fr>
 From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <a143dfcd-7a6a-49ff-6bed-4ffdb0fa1c4a@collabora.com>
+In-Reply-To: <92540bf4-f2de-0aae-d764-ce6edfda1ab1@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,78 +82,233 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Angelo,
+Hi Christophe,
 
-On 7/21/22 10:11, AngeloGioacchino Del Regno wrote:
-> Il 20/07/22 20:18, Amjad Ouled-Ameur ha scritto:
->> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On 7/20/22 20:54, Christophe JAILLET wrote:
+> Le 20/07/2022 à 20:18, Amjad Ouled-Ameur a écrit :
+>> Provide thermal zone to read thermal sensor in the SoC. We can read 
+>> all the
+>> thermal sensors value in the SoC by the node /sys/class/thermal/
 >>
->> Add logic in order to be able to turn on the control buffer on MT8365.
->> This change now allows to have control buffer support for 
->> MTK_THERMAL_V1,
->> and it allows to define the register offset, and mask used to enable it.
+>> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+>> on the first read of sensor that often are bogus values.
+>> This can avoid following warning on boot:
 >>
->> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
->> Signed-off-by: Fabien Parent <fparent@baylibre.com>
->> Reviewed-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> Tested-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+>>    thermal thermal_zone6: failed to read out thermal zone (-13)
+>>
+>> Signed-off-by: default avatarMichael Kao 
+>> <michael.kao-NuS5LvNUpcJWk0Htik3J/w@public.gmane.org>
+>> Signed-off-by: default avatarHsin-Yi Wang 
+>> <hsinyi-F7+t8E8rja9g9hUCZPvPmw@public.gmane.org>
+>> Signed-off-by: Amjad Ouled-Ameur 
+>> <aouledameur-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
+>> Tested-by: Amjad Ouled-Ameur 
+>> <aouledameur-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
 >> ---
->>   drivers/thermal/mtk_thermal.c | 23 +++++++++++++++++------
->>   1 file changed, 17 insertions(+), 6 deletions(-)
+>>   drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
+>>   1 file changed, 76 insertions(+), 24 deletions(-)
 >>
 >> diff --git a/drivers/thermal/mtk_thermal.c 
 >> b/drivers/thermal/mtk_thermal.c
->> index 216eb0d61c5b..1dc276f8c4f1 100644
+>> index 1dc276f8c4f1..79b14ce1a08d 100644
 >> --- a/drivers/thermal/mtk_thermal.c
 >> +++ b/drivers/thermal/mtk_thermal.c
->> @@ -283,6 +283,9 @@ struct mtk_thermal_data {
->>       bool need_switch_bank;
->>       struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
->>       enum mtk_thermal_version version;
->> +    u32 apmixed_buffer_ctl_reg;
->> +    u32 apmixed_buffer_ctl_mask;
->> +    u32 apmixed_buffer_ctl_set;
->>   };
->>     struct mtk_thermal {
->> @@ -578,6 +581,9 @@ static const struct mtk_thermal_data 
->> mt7622_thermal_data = {
->>       .adcpnp = mt7622_adcpnp,
->>       .sensor_mux_values = mt7622_mux_values,
->>       .version = MTK_THERMAL_V2,
->> +    .apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
->> +    .apmixed_buffer_ctl_mask = ~0x37,
+>> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
+>>     struct mtk_thermal;
+>>   +struct mtk_thermal_zone {
+>> +    struct mtk_thermal *mt;
+>> +    int id;
+>> +};
+>> +
+>>   struct thermal_bank_cfg {
+>>       unsigned int num_sensors;
+>>       const int *sensors;
+>> @@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct 
+>> mtk_thermal_bank *bank)
+>>           mutex_unlock(&mt->lock);
+>>   }
+>>   +static u32 _get_sensor_temp(struct mtk_thermal *mt, int id)
+>> +{
+>> +    u32 raw;
+>> +    int temp;
+>> +
+>> +    const struct mtk_thermal_data *conf = mt->conf;
+>> +
+>> +    raw = readl(mt->thermal_base + conf->msr[id]);
+>> +
+>> +    if (mt->conf->version == MTK_THERMAL_V1)
+>> +        temp = raw_to_mcelsius_v1(mt, id, raw);
+>> +    else
+>> +        temp = raw_to_mcelsius_v2(mt, id, raw);
+>> +
+>> +    /*
+>> +     * The first read of a sensor often contains very high bogus
+>> +     * temperature value. Filter these out so that the system does
+>> +     * not immediately shut down.
+>> +     */
+>> +
+>> +    if (temp > 200000)
+>> +        return  -EAGAIN;
 >
-> This is effectively GENMASK(31, 6) | BIT(3) :-)
+> This function returns a u32. Is it ok to return -EAGAIN?
 >
->> +    .apmixed_buffer_ctl_set = 0x1,
+_get_sensor_temp() should normally return int instead u32, will fix it 
+in V3.
+> There is also 2 spaces here...
 >
-> ...and this is BIT(0)
+>> +    else
+>> +        return    temp;
 >
-Thank you for the catch, will update them appropriately.
->>   }; >
->>   /*
->> @@ -1031,14 +1037,18 @@ static const struct of_device_id 
->> mtk_thermal_of_match[] = {
->>   };
->>   MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
->>   -static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
->> +static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
->> +                       void __iomem *apmixed_base)
+> ... and a tab here.
+>
+will fix them in V3.
+>> +}
+>> +
+>>   /**
+>>    * mtk_thermal_bank_temperature - get the temperature of a bank
+>>    * @bank:    The bank
+>> @@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct 
+>> mtk_thermal_bank *bank)
+>>       struct mtk_thermal *mt = bank->mt;
+>>       const struct mtk_thermal_data *conf = mt->conf;
+>>       int i, temp = INT_MIN, max = INT_MIN;
+>> -    u32 raw;
+>>         for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+>> -        raw = readl(mt->thermal_base + conf->msr[i]);
+>> -
+>> -        if (mt->conf->version == MTK_THERMAL_V1) {
+>> -            temp = raw_to_mcelsius_v1(
+>> -                mt, conf->bank_data[bank->id].sensors[i], raw);
+>> -        } else {
+>> -            temp = raw_to_mcelsius_v2(
+>> -                mt, conf->bank_data[bank->id].sensors[i], raw);
+>> -        }
+>> -
+>> -        /*
+>> -         * The first read of a sensor often contains very high bogus
+>> -         * temperature value. Filter these out so that the system does
+>> -         * not immediately shut down.
+>> -         */
+>> -        if (temp > 200000)
+>> -            temp = 0;
+>> +        temp = _get_sensor_temp(mt, i);
+>
+> Is it ok if _get_sensor_temp() returns -EAGAIN?
+>
+drivers/thermal/thermal_core.c:update_temperature() checks for -EAGAIN 
+after
+
+thermal_zone_get_temp() is called, thus, I think it's good to return 
+-EAGAIN in
+
+case of failure.
+
+>>             if (temp > max)
+>>               max = temp;
+>> @@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct 
+>> mtk_thermal_bank *bank)
+>>     static int mtk_read_temp(void *data, int *temperature)
 >>   {
->>       int tmp;
+>> -    struct mtk_thermal *mt = data;
+>> +    struct mtk_thermal_zone *tz = data;
+>> +    struct mtk_thermal *mt = tz->mt;
+>>       int i;
+>>       int tempmax = INT_MIN;
+>>   @@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int 
+>> *temperature)
+>>       return 0;
+>>   }
+>>   +static int mtk_read_sensor_temp(void *data, int *temperature)
+>> +{
+>> +    struct mtk_thermal_zone *tz = data;
+>> +    struct mtk_thermal *mt = tz->mt;
+>> +    int id = tz->id - 1;
+>> +
+>> +    if (id < 0)
+>> +        return  -EACCES;
 >
-> Since you're practically restructuring this function, please fix this 
-> wrong
-> variable type, as this should be a u32.
+> 2 spaces.
 >
-Sure agreed.
 
-
-Thank you Angelo for the review.
+will fix it in V3.
+>> +
+>> +    *temperature = _get_sensor_temp(mt, id);
+>
+> If _get_sensor_temp() returns -EAGAIN, should this be propagated to 
+> the caller?
+>
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+>>       .get_temp = mtk_read_temp,
+>>   };
+>>   +static const struct thermal_zone_of_device_ops 
+>> mtk_thermal_sensor_ops = {
+>> +    .get_temp = mtk_read_sensor_temp,
+>> +};
+>> +
+>>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>>                     u32 apmixed_phys_base, u32 auxadc_phys_base,
+>>                     int ctrl_id)
+>> @@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct 
+>> platform_device *pdev)
+>>       u64 auxadc_phys_base, apmixed_phys_base;
+>>       struct thermal_zone_device *tzdev;
+>>       void __iomem *apmixed_base, *auxadc_base;
+>> +    struct mtk_thermal_zone *tz;
+>>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>>       if (!mt)
+>> @@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct 
+>> platform_device *pdev)
+>>         platform_set_drvdata(pdev, mt);
+>>   -    tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+>> -                             &mtk_thermal_ops);
+>> -    if (IS_ERR(tzdev)) {
+>> -        ret = PTR_ERR(tzdev);
+>> -        goto err_disable_clk_peri_therm;
+>> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+>> +        tz = kmalloc(sizeof(*tz), GFP_KERNEL);
+>
+> Should this memory allocation be a devm_kmalloc(), or is this memory 
+> freed at some point by the framework?
+>
+> (I don't know the thermal_zone API and the patch has no kfree())
+AFAIK, thermal API does not free private data, therefore devm_kmalloc() 
+should be used.
+>
+> CJ
+>
+>> +        if (!tz)
+>> +            return -ENOMEM;
+>> +
+>> +        tz->mt = mt;
+>> +        tz->id = i;
+>> +
+>> +        tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, 
+>> tz, (i == 0) ?
+>> +                                 &mtk_thermal_ops :
+>> +                                 &mtk_thermal_sensor_ops);
+>> +
+>> +        if (IS_ERR(tzdev)) {
+>> +            if (PTR_ERR(tzdev) == -ENODEV) {
+>> +                dev_warn(&pdev->dev,
+>> +                     "sensor %d not registered in thermal zone in 
+>> dt\n", i);
+>> +                continue;
+>> +            }
+>> +            if (PTR_ERR(tzdev) == -EACCES) {
+>> +                ret = PTR_ERR(tzdev);
+>> +                goto err_disable_clk_peri_therm;
+>> +            }
+>> +        }
+>>       }
+>>         ret = devm_thermal_add_hwmon_sysfs(tzdev);
+>
+Thank you Christophe for the review.
 
 Regards,
 
 Amjad
 
-> Regards,
-> Angelo
