@@ -2,152 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F265A227C
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Aug 2022 09:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFCD5A2294
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Aug 2022 10:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245739AbiHZH7N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Aug 2022 03:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S1343524AbiHZIGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Aug 2022 04:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245714AbiHZH7M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 03:59:12 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CA0D475C;
-        Fri, 26 Aug 2022 00:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661500751; x=1693036751;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gY1t62Dh1/1E5AbJkxKEBER/k9+hXi1zG813UEJ1pKA=;
-  b=XzxL7VfNZzqXHbtu8u9FOz/cClXIpALSUcR0w/rl6GIJmPe3TPs09LGM
-   iAVRk8PtmaZ2MkEiAGT56K2YyZnGdAnZC7+7NRrcDdQfXVGVQq90huELo
-   +aLz9kuI7cvWPUA/OQd2GbyOJCz8onMgAr4kDS5IM1oWLNEoyMHqEewDf
-   Q0+SY+iwSRON4XIXR6PEpiPEb0c5HpZI49+FYiOFXq4LmqTH7fzhHgfk/
-   rc3M68PZtF9JHaIUizq8VlRf24ZIiT2gw17Zx5Gr7B0dSPbGu2DR8HyCv
-   piLjS5skqRls7+DdPipkoIdluWoqqdVFg0YqD8u69foFX4zXpNBP9HtFk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="356168666"
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="356168666"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 00:59:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,264,1654585200"; 
-   d="scan'208";a="938666564"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2022 00:59:07 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oRUF9-0003eM-16;
-        Fri, 26 Aug 2022 07:59:07 +0000
-Date:   Fri, 26 Aug 2022 15:58:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 3da4255837efe5d8ae47e0cf88e27e86d912c54e
-Message-ID: <63087d1d.nDmDFLxcgW+VpczK%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S245184AbiHZIGd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 04:06:33 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE8BD4742
+        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 01:06:30 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-33dbbf69b3dso17778067b3.1
+        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 01:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=7Mq11P25bR3wlSS6rhp/KK7HEHcVP2nqSIE7qecBSHI=;
+        b=A6bJ+AnhSeKOqL2xoFgZgqXmcNg60G7gBzknU5skktv31cbrZtiqklVBvs+nmq2jBm
+         y6mTIeVsVgtR5v+CnFSal6nO1qBaDJMjwBpArsPYg63W9RrTb5QhdkZMrcMdTmgS5jkv
+         PMo5OKXzNGhw7zJ1mOVDZwD2NFY60tqzH//Wul+1voGYIhOKpA/VvmtTNtQXnVHsK7a3
+         BcWq3qzH65wl9D4aFjgTkN1zLOTRuV259Th5v16GqLTjQZyxO+JmhDNCEB4Q9PRuIt9J
+         NjkE58DwKus4IgFslbGcg0EtNvBEX/paL9LgvEz0rilkjPBepSdq5S1JAQvLlAqunZrs
+         1WFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=7Mq11P25bR3wlSS6rhp/KK7HEHcVP2nqSIE7qecBSHI=;
+        b=5AIuaa+GKAzSv9JlOb4ObPf3XitV0AxflOCbyjYFTDQAGkVGH9t6Bv8IEJl0uugypQ
+         JN1kdNGRSOXkVfeIJYlRdTe/SBa2N6vavUbHjGuEfdpsNMS9JKVqdh6AWq5KbntcwYRB
+         fjS2W+iG3H+y1/ZsXSa7RKsFaBdWqgWVBvhG/gHJvsbEdPvlos+GSPUwNzsgftYGfHOh
+         kEjddagLGVD3IELIBIBShNwgANvhKDm/5YMfhBuN+B2XXqXWfBhE25K/HhP7ny3FabjR
+         f39K/CFMzQke63PgdB4B6/Ym2RFBmod6JID+iaMCaE7kjXiaHTqX7XAlnKVHhreQGRX2
+         m3zg==
+X-Gm-Message-State: ACgBeo3IP7EOHzhf9SEyfXS4IDniQkmFBlMQ5kDPlL1PrdHabaw15rVv
+        jygFKrXyJQOGnrlAnIHMGC8I+Yrm437mxD7Fyi3HTg==
+X-Google-Smtp-Source: AA6agR6FRbsPnMzYQMsuZG4nfrnAtmeF6GVqmVA9wFaaxz61tGMBwBc+pUgqKF23zqjXCnnpgwdYoweEHrVV87xeqLE=
+X-Received: by 2002:a81:9296:0:b0:33c:ba30:6ff8 with SMTP id
+ j144-20020a819296000000b0033cba306ff8mr7080387ywg.285.1661501190206; Fri, 26
+ Aug 2022 01:06:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-5-bchihi@baylibre.com>
+ <05fa19f7-7997-51c3-767f-c40cb321d2a4@linaro.org>
+In-Reply-To: <05fa19f7-7997-51c3-767f-c40cb321d2a4@linaro.org>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Fri, 26 Aug 2022 10:05:52 +0200
+Message-ID: <CAGuA+opoKKvQvC0aij_L1t8BQG2rHJDwx-U=XjgvaqK5Bg-WdQ@mail.gmail.com>
+Subject: Re: [PATCH v9,4/7] thermal: mediatek: Add LVTS driver for mt8192
+ thermal zones
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 3da4255837efe5d8ae47e0cf88e27e86d912c54e  Merge branch 'acpi-bus' into bleeding-edge
+Hello Daniel,
 
-elapsed time: 720m
+Thank you for the feedback.
 
-configs tested: 70
-configs skipped: 2
+I hope this information will explain better the LVTS Driver.
+I will add this like the following.
+Is this ok for you?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+[v9,7/7] thermal: mediatek: Add LVTS driver settings for mt8195 thermal zon=
+es
+One Clock and one Reset for Thermal.
+Thermal have two domain : CPU related (mcu) and non-CPU related (ap).
+TC : Thermal Controller to control the thermal sensor's HW behavior.
+TS : Thermal Sensor for measuring temperature the HW module.
+thermal
+=E2=94=9C=E2=94=80=E2=94=80 ap
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_0
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS4_0 - vpu1
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS4_1 - vpu2
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_1
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS5_0 - gpu1
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS5_1 - gpu2
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_2
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_0 - vdec
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_1 - img
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS6_2 - infra
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 tc_3
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS7_0 - cam1
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS7_1 - cam2
+=E2=94=94=E2=94=80=E2=94=80 mcu
+=E2=94=9C=E2=94=80=E2=94=80 tc_0
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS1_0 - cpu_big1
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS1_1 - cpu_big2
+=E2=94=9C=E2=94=80=E2=94=80 tc_1
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS2_0 - cpu_big3
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS2_1 - cpu_big4
+=E2=94=94=E2=94=80=E2=94=80 tc_2
+=E2=94=9C=E2=94=80=E2=94=80 TS3_0 - cpu_little1
+=E2=94=9C=E2=94=80=E2=94=80 TS3_1 - cpu_little2
+=E2=94=9C=E2=94=80=E2=94=80 TS3_2 - cpu_little3
+=E2=94=94=E2=94=80=E2=94=80 TS3_3 - cpu_little4
 
-gcc tested configs:
-i386                                defconfig
-um                             i386_defconfig
-arc                                 defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-powerpc                           allnoconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-alpha                               defconfig
-x86_64                        randconfig-a004
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                        randconfig-a002
-s390                                defconfig
-x86_64                        randconfig-a006
-s390                             allmodconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                             allyesconfig
-arm                                 defconfig
-i386                          randconfig-a014
-i386                          randconfig-a003
-i386                          randconfig-a012
-sh                               allmodconfig
-i386                          randconfig-a016
-x86_64                        randconfig-a015
-i386                          randconfig-a005
-mips                             allyesconfig
-s390                             allyesconfig
-x86_64                          rhel-8.3-func
-i386                          randconfig-a001
-m68k                             allyesconfig
-arm                              allyesconfig
-powerpc                          allmodconfig
-x86_64                         rhel-8.3-kunit
-m68k                             allmodconfig
-x86_64                           rhel-8.3-kvm
-riscv                randconfig-r042-20220824
-arm64                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-arc                              allyesconfig
-x86_64                           rhel-8.3-syz
-arc                  randconfig-r043-20220824
-alpha                            allyesconfig
-s390                 randconfig-r044-20220824
-arc                  randconfig-r043-20220823
-arc                  randconfig-r043-20220825
-ia64                             allmodconfig
+[v9,4/7] thermal: mediatek: Add LVTS driver for mt8192 thermal zones
+One Clock and one Reset for Thermal.
+Thermal have two domain : CPU related (mcu) and non-CPU related (ap).
+TC : Thermal Controller to control the thermal sensor's HW behavior.
+TS : Thermal Sensor for measuring temperature the HW module.
+thermal
+=E2=94=9C=E2=94=80=E2=94=80 ap
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_0
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS4_0 - vpu1
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS4_1 - vpu2
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_1
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS5_0 - gpu1
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS5_1 - gpu2
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 tc_2
+=E2=94=82 =E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS6_0 - infra
+=E2=94=82 =E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS6_1 - cam
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 tc_3
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS7_0 - md2
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS7_1 - md3
+| =E2=94=94=E2=94=80=E2=94=80 TS6_2 - md1
+=E2=94=94=E2=94=80=E2=94=80 mcu
+=E2=94=9C=E2=94=80=E2=94=80 tc_0
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS1_0 - cpu_big1
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS1_1 - cpu_big2
+=E2=94=9C=E2=94=80=E2=94=80 tc_1
+=E2=94=82 =E2=94=9C=E2=94=80=E2=94=80 TS2_0 - cpu_big3
+=E2=94=82 =E2=94=94=E2=94=80=E2=94=80 TS2_1 - cpu_big4
+=E2=94=94=E2=94=80=E2=94=80 tc_2
+=E2=94=9C=E2=94=80=E2=94=80 TS3_0 - cpu_little1
+=E2=94=9C=E2=94=80=E2=94=80 TS3_1 - cpu_little2
+=E2=94=9C=E2=94=80=E2=94=80 TS3_2 - cpu_little3
+=E2=94=94=E2=94=80=E2=94=80 TS3_3 - cpu_little4
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a002
-i386                          randconfig-a015
-x86_64                        randconfig-a014
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220825
-hexagon              randconfig-r045-20220825
-i386                          randconfig-a006
-hexagon              randconfig-r041-20220823
-riscv                randconfig-r042-20220825
-hexagon              randconfig-r041-20220824
-hexagon              randconfig-r045-20220824
-s390                 randconfig-r044-20220823
-s390                 randconfig-r044-20220825
-riscv                randconfig-r042-20220823
-hexagon              randconfig-r045-20220823
+Best regards,
+Balsam.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Thu, Aug 25, 2022 at 7:29 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Balsam,
+>
+> On 17/08/2022 10:07, bchihi@baylibre.com wrote:
+> > From: Michael Kao <michael.kao@mediatek.com>
+> >
+> > Add LVTS v4 (Low Voltage Thermal Sensor) driver to report junction
+> > temperatures in MediaTek SoC mt8192 and register the maximum temperatur=
+e
+> > of sensors and each sensor as a thermal zone.
+>
+> Thanks for your work
+>
+> First of all, the patch is way too big.
+>
+> The organization of the data is hard to understand.
+>
+> Could you give a description of the sensors, how they are organized ?
+>
+> I can see the there are 'tc' and each have a group of sensing points? Is
+> that correct? Do have the 'tc's a shared clock? etc ...
+>
+> I have another email with the comments inline but without more insights
+> on the hardware it is difficult to review accurately. This driver looks
+> more complex than the other ones I've reviewed. At least that is what
+> looks like with the different macros names found.
+>
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
