@@ -2,133 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367055A378A
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Aug 2022 14:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCB25A37DE
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Aug 2022 15:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiH0MFy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Aug 2022 08:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S229840AbiH0NTj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Aug 2022 09:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiH0MFx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Aug 2022 08:05:53 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5929612602;
-        Sat, 27 Aug 2022 05:05:52 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id t129so3978835pfb.6;
-        Sat, 27 Aug 2022 05:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Xm1nhA4qs4Pjpc09I2GPMsrr76SU/YUnQePs9+vlA4Y=;
-        b=PWCRF10ZlJ8x5xSxr1AjjIxi6mMod5unparcdBbL3CcXvXAQFnQ2TJoGEUCRy5POdy
-         UhgUv0+3VT6SUzsIC9qjmOULw14A76zXogxudPTe5lPsfxZVTXNvPRRLXYYgf5B2jZD+
-         59Q4eIhj9GdjbS23gzjW+4EwJpd8NFK9XOde7YUOlmMv263S/sNdE/375KtEmOsiNIgH
-         +VZS31LlrnyxD+t8LCFijQzSJiiXH2U/fB0WLRbAkuzBI4FPKw3iF4e+VSQG7aPu6+nT
-         PflxEjpZvfi4BcPt1IHw73VMAfYPxJdlgrystLflrRsW9K74a30q/vorUcCQaJg4NZpC
-         7a7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Xm1nhA4qs4Pjpc09I2GPMsrr76SU/YUnQePs9+vlA4Y=;
-        b=VmdNJQLEBl4VfqqdOF4zYoDay4Rgvwiy16mN/MEekp6FKfBF+4/DP6haJqZFM3gDDb
-         czmH7nK5pYKyirw8p+bVevHCZaLqlP0kvLLUCM7n8oHtr7bRvh6pKG7v3myV8ItPcPrx
-         w/xsvAuWY9SlMzBM9rknv6l2EbgbeG7bo35ijsB+Dvtrh/zXfkAU6YgAzeM+SdjcQMYZ
-         HL/OQpgp7O8bpiZN8u0Jes9C3ingxyUFmI1Ky2ntKyDgHM4NEUhAd+7TmIjoJJrfPBnw
-         BvvpIIAgyolzlgj8/7iuaAJFMJ8qvv+eI/fssSEZBOxdmIgcvdMkY69Ecd8FZmAFfDWu
-         TN+A==
-X-Gm-Message-State: ACgBeo3NY0IF2AM/ipP/hGFg4n0lscNuyQ0r01hSB2I0lsLwOKmuPDaW
-        NoA9cDOfy7mdmJN9dtdSDRg=
-X-Google-Smtp-Source: AA6agR7NWXqJVbjUgWkTmIL7EezW2s1Rs+B6k/9g1ebsxLxD/uvFuUTj8hLYhwKfxJkfC/wEje0t+g==
-X-Received: by 2002:a63:da13:0:b0:42a:7f03:a00e with SMTP id c19-20020a63da13000000b0042a7f03a00emr6777867pgh.332.1661601951215;
-        Sat, 27 Aug 2022 05:05:51 -0700 (PDT)
-Received: from DESKTOP-KA7F9LU.localdomain ([49.207.219.204])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1709027fcf00b0017446f8d494sm2621921plb.240.2022.08.27.05.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 05:05:50 -0700 (PDT)
-Date:   Sat, 27 Aug 2022 17:35:45 +0530
-From:   Vimal Kumar <vimal.kumar32@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
-        Vishal Badole <badolevishal1116@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] PM: runtime: Add support to disable wakeup sources
-Message-ID: <20220827120545.GA332@DESKTOP-KA7F9LU.localdomain>
-References: <20220825173457.23298-1-vimal.kumar32@gmail.com>
- <YwnPFdYL0W3e5E+n@kroah.com>
+        with ESMTP id S229677AbiH0NTi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Aug 2022 09:19:38 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B587198A;
+        Sat, 27 Aug 2022 06:19:37 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MFHJc4yxCzkWV9;
+        Sat, 27 Aug 2022 21:16:00 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 21:19:35 +0800
+Received: from [10.174.178.247] (10.174.178.247) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 27 Aug 2022 21:19:34 +0800
+Subject: Re: [PATCH v2 5/5] ACPI: Drop parent field from struct acpi_device
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Andreas Noever" <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        <linux-hyperv@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, "Will Deacon" <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>
+References: <12036348.O9o76ZdvQC@kreacher> <2196460.iZASKD2KPV@kreacher>
+ <5857822.lOV4Wx5bFT@kreacher>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <a0cab176-3c3a-707a-02c3-74ffc1b4926e@huawei.com>
+Date:   Sat, 27 Aug 2022 21:19:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwnPFdYL0W3e5E+n@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5857822.lOV4Wx5bFT@kreacher>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.247]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 10:00:21AM +0200, Greg KH wrote:
-> On Thu, Aug 25, 2022 at 11:04:41PM +0530, Vimal Kumar wrote:
-> > User could find many wakeup sources available in the bsp, which
-> > they won't be using. Currently users can only get the status and
-> > list of enabled wakeup sources, but users can't disable it runtime.
-> > It's very difficult to find the driver for each wakeup sources from
-> > where it's getting enabled and make the changes for disabling it.
-> > 
-> > This will help users to disable any wakeup sources at runtime,
-> > avoiding any code change and re-compilation. A new class attribute
-> > "disable_ws" will be added in the wakeup calss. If user want to disable
-> > any wakeup sources, user need to find the wakeup dev node associated
-> > with the particular wakeup source and write the devnode name to the
-> > class attribute "disable_ws".
-> > 
-> > Example:
-> > Need to disable the wakeup source '1c08000.qcom,pcie'. The dev node
-> > associated with this wakeup source is:
-> > cat /sys/class/wakeup3/name ==> "1c08000.qcom,pcie", then for disabling
-> > this wakeup source :
-> > 	echo wakeup3 > /sys/class/wakeup/disable_ws
-> > 
-> > Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
-> > Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-> > Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
-> > Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
-> > Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-wakeup | 16 +++++
-> >  drivers/base/power/wakeup_stats.c            | 65 +++++++++++++++++++-
-> >  2 files changed, 80 insertions(+), 1 deletion(-)
-> 
-> Based on previous discussions on the original submission that you seem
-> to have taken private, sorry but no, I can't even consider this
-> submission from you.
-> 
-> Please work on other portions of the kernel first to get used to the
-> development process.
-> 
-> Rafael, please don't worry about this.
-> 
-> greg k-h
+Hi Rafael,
 
-Hi Greg k-h,
+On 2022/8/25 0:59, Rafael J. Wysocki wrote:
+> Index: linux-pm/include/acpi/acpi_bus.h
+> ===================================================================
+> --- linux-pm.orig/include/acpi/acpi_bus.h
+> +++ linux-pm/include/acpi/acpi_bus.h
+> @@ -365,7 +365,6 @@ struct acpi_device {
+>   	int device_type;
+>   	acpi_handle handle;		/* no handle for fixed hardware */
+>   	struct fwnode_handle fwnode;
+> -	struct acpi_device *parent;
+>   	struct list_head wakeup_list;
+>   	struct list_head del_list;
+>   	struct acpi_device_status status;
+> @@ -458,6 +457,14 @@ static inline void *acpi_driver_data(str
+>   #define to_acpi_device(d)	container_of(d, struct acpi_device, dev)
+>   #define to_acpi_driver(d)	container_of(d, struct acpi_driver, drv)
+>   
+> +static inline struct acpi_device *acpi_dev_parent(struct acpi_device *adev)
+> +{
+> +	if (adev->dev.parent)
+> +		return to_acpi_device(adev->dev.parent);
+> +
+> +	return NULL;
+> +}
+> +
+>   static inline void acpi_set_device_status(struct acpi_device *adev, u32 sta)
+>   {
+>   	*((u32 *)&adev->status) = sta;
+> @@ -478,6 +485,7 @@ void acpi_initialize_hp_context(struct a
+>   /* acpi_device.dev.bus == &acpi_bus_type */
+>   extern struct bus_type acpi_bus_type;
+>   
+> +struct acpi_device *acpi_dev_parent(struct acpi_device *adev);
 
-My sincere apologies for responding privetly on the original
-submission, It was not intended to do so. There was some issue
-while responding via mutt and I end up responding privetly.
+We have a static inline function above, is it duplicated here?
+Or did I miss some use cases?
 
-I have responded publicly on original submission as well. Please 
-consider this second version, I have taken care of some previous
-reviews.
-
-Thanks Rafael, for the review comments as well, I will be respondig
-to the queries in a seperate thread.  
-
-
-Warm Regards,
-Vimal Kumar
+Thanks
+Hanjun
