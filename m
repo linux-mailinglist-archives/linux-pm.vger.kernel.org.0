@@ -2,44 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9148C5A357B
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Aug 2022 09:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2875A35B9
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Aug 2022 10:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344317AbiH0HOj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Aug 2022 03:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S232640AbiH0IAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Aug 2022 04:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239945AbiH0HOi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Aug 2022 03:14:38 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B18DB8A6D;
-        Sat, 27 Aug 2022 00:14:36 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MF7Cl6z84zlWCT;
-        Sat, 27 Aug 2022 15:11:15 +0800 (CST)
-Received: from CHINA (10.175.102.38) by canpemm500009.china.huawei.com
- (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 27 Aug
- 2022 15:14:34 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Sebastian Reichel <sre@kernel.org>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next 2/2] power: supply: adp5061: show unknown capacity_level as text
-Date:   Sat, 27 Aug 2022 07:32:24 +0000
-Message-ID: <20220827073224.713803-3-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220827073224.713803-1-weiyongjun1@huawei.com>
-References: <20220827073224.713803-1-weiyongjun1@huawei.com>
+        with ESMTP id S231452AbiH0IAJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Aug 2022 04:00:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A18515702;
+        Sat, 27 Aug 2022 01:00:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC079612A8;
+        Sat, 27 Aug 2022 08:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A24AC433C1;
+        Sat, 27 Aug 2022 08:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661587207;
+        bh=Fnq8NIGJXiku9CNy3wBtWa2wsxQQpEDGAa8sHzP/QBg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Eqq6eTo8MVP0sp/uExWMxflFAbzxQkG4qCNnSCL6oNYYrHySyE98Solis3BdxVsSh
+         Mr6y0DLjf/gwTolfDjCKm/VBoiXlrodxzkWU/nUGaJ0rNflOZjq041u6uDg/kPTj4l
+         BSmCOUsjsYQUrV8GAtnzA/UBqsWssPRpYlxjUZvY=
+Date:   Sat, 27 Aug 2022 10:00:21 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vimal Kumar <vimal.kumar32@gmail.com>
+Cc:     chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
+        Vishal Badole <badolevishal1116@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] PM: runtime: Add support to disable wakeup sources
+Message-ID: <YwnPFdYL0W3e5E+n@kroah.com>
+References: <20220825173457.23298-1-vimal.kumar32@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.102.38]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825173457.23298-1-vimal.kumar32@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,29 +53,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-adp5061_get_battery_status() only defined show chg_status <= 4, others will
-be show as '-1731902199' from /sys/class/power_supply/xx/capacity_level.
-switch to show them as 'Unknown'.
+On Thu, Aug 25, 2022 at 11:04:41PM +0530, Vimal Kumar wrote:
+> User could find many wakeup sources available in the bsp, which
+> they won't be using. Currently users can only get the status and
+> list of enabled wakeup sources, but users can't disable it runtime.
+> It's very difficult to find the driver for each wakeup sources from
+> where it's getting enabled and make the changes for disabling it.
+> 
+> This will help users to disable any wakeup sources at runtime,
+> avoiding any code change and re-compilation. A new class attribute
+> "disable_ws" will be added in the wakeup calss. If user want to disable
+> any wakeup sources, user need to find the wakeup dev node associated
+> with the particular wakeup source and write the devnode name to the
+> class attribute "disable_ws".
+> 
+> Example:
+> Need to disable the wakeup source '1c08000.qcom,pcie'. The dev node
+> associated with this wakeup source is:
+> cat /sys/class/wakeup3/name ==> "1c08000.qcom,pcie", then for disabling
+> this wakeup source :
+> 	echo wakeup3 > /sys/class/wakeup/disable_ws
+> 
+> Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
+> Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
+> Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
+> Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
+> Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+> ---
+>  Documentation/ABI/testing/sysfs-class-wakeup | 16 +++++
+>  drivers/base/power/wakeup_stats.c            | 65 +++++++++++++++++++-
+>  2 files changed, 80 insertions(+), 1 deletion(-)
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/power/supply/adp5061.c | 3 +++
- 1 file changed, 3 insertions(+)
+Based on previous discussions on the original submission that you seem
+to have taken private, sorry but no, I can't even consider this
+submission from you.
 
-diff --git a/drivers/power/supply/adp5061.c b/drivers/power/supply/adp5061.c
-index daee1161c305..fcf8ff0bc974 100644
---- a/drivers/power/supply/adp5061.c
-+++ b/drivers/power/supply/adp5061.c
-@@ -493,6 +493,9 @@ static int adp5061_get_battery_status(struct adp5061_state *st,
- 	case 0x4: /* VBAT_SNS > VWEAK */
- 		val->intval = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
- 		break;
-+	default:
-+		val->intval = POWER_SUPPLY_CAPACITY_LEVEL_UNKNOWN;
-+		break;
- 	}
- 
- 	return ret;
--- 
-2.34.1
+Please work on other portions of the kernel first to get used to the
+development process.
 
+Rafael, please don't worry about this.
+
+greg k-h
