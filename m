@@ -2,135 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD7A5A321B
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Aug 2022 00:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40655A33C1
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Aug 2022 04:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345061AbiHZWgf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Aug 2022 18:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
+        id S232312AbiH0CQf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Aug 2022 22:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbiHZWge (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 18:36:34 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544D2A61DC
-        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 15:36:32 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id t140so3679629oie.8
-        for <linux-pm@vger.kernel.org>; Fri, 26 Aug 2022 15:36:32 -0700 (PDT)
+        with ESMTP id S232022AbiH0CQf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Aug 2022 22:16:35 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B99220E7;
+        Fri, 26 Aug 2022 19:16:34 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id u14so4161384oie.2;
+        Fri, 26 Aug 2022 19:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=Ofhm5bu3mqX4oZOke1Uk6LLRRxsC4M1BT8VbT7XnGuU=;
-        b=Cn2RHA0xopllp4bDKXkq8Vniq2sdgYPx7j1g+kcS14Nn7aGFvcMyVn4kPcpQcKPVm6
-         j8xRrMyTaZL+nBHL7BH2j0a7LTB4EQ/CNDdtJgcFIb3Wf5yBv66/7uR+rdapHSCbX6/y
-         3MRrhupuyyywMQtgKkTKdjPNuhGEz+okxgKAA=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=uCjhCul81Cqo/4TLKT7kgAedULjOyk61ASUhuZAyenU=;
+        b=EMZPeiH/04z82Sz/VFDuBELHlTzkmPIgINT2ff17YAKSHrTvlXZ+QU99sboKZxhi57
+         MQZkkFCPSVer4BI1MbgrLvzQ+0bJBsAQzodr96aWcSmYi2pkzeeiuGF3jocZtHRPYOKO
+         SmrERCdXgHcK4RobplfnOWFuu7trXi9n3PRYBGzRFjJh8APKRUGVVj3jaNTjM/gA28LB
+         dTg4HWqPchapi4vAkSY/+FFHGe3aIzkKMhGSxrQJyuFgaTo7/nsQ3Z9uDK8+xcLsVUvY
+         vOLyLcKZW+YN7Z7y+cPooE19Ol6LsVABnSvJeSES+vYbhxDQKglbLuR1uEmcBTyNXW6s
+         uV4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=Ofhm5bu3mqX4oZOke1Uk6LLRRxsC4M1BT8VbT7XnGuU=;
-        b=6CdDCnP+Fp67mxJ7E8cvkM0BizQxHNJNp2E+fZJ+foyhrv5P+U49P4Zmu573YkALcY
-         mg78K0cxfHGEP1xzBJAxmuUQiwjSc+LW1tkKmxrUF5mmnakX/Uyt3g75y7JAh5mlmpGE
-         8Uqi4zafBJx5OKhyJtNG6IVNgAGwa31yUGkEFYRNWeGXrb6uuUA8KbNxp3qxwrRrmGfD
-         XXZwxGsFv12AsKiJJOhek9jG9EBv2piYicj5sHkowxxmKmJUpfjTqu53fbibOh4vpDwz
-         TxmgJllX5UF29Za2FPmUJlnCqiqfwZeyCKhdYKDAvssD083uSZb+hdpQGuf+c5pWHgD0
-         k+AQ==
-X-Gm-Message-State: ACgBeo3fTgGrQ/LmnlZnFC246OFOKB3sk6S+5N7xV3/N9DV9zBIJ79x8
-        aU4+hhva0DJ/8MGd5XTauskW8A==
-X-Google-Smtp-Source: AA6agR5eAKTdiz4NHx9btzEqNq+lUU2Dib4LQjotSGU5os8ZrxHdYmc1dH2vR7hAWdyvnk4NVDN8hQ==
-X-Received: by 2002:aca:b05:0:b0:343:53bf:3221 with SMTP id 5-20020aca0b05000000b0034353bf3221mr2536066oil.75.1661553391647;
-        Fri, 26 Aug 2022 15:36:31 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id e5-20020aca1305000000b00344e3751fc4sm1560445oii.36.2022.08.26.15.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 15:36:31 -0700 (PDT)
-Subject: Re: [RESEND PATCH 2/4] cpufreq: amd-pstate: Add test module for
- amd-pstate driver
-To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220817034630.1172065-1-li.meng@amd.com>
- <20220817034630.1172065-3-li.meng@amd.com>
- <0f9706b7-6dd5-663d-70cf-7221b5a1bfc5@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <dafdc2de-3846-2612-1b52-d15c02f89b81@linuxfoundation.org>
-Date:   Fri, 26 Aug 2022 16:36:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=uCjhCul81Cqo/4TLKT7kgAedULjOyk61ASUhuZAyenU=;
+        b=fJyjBJ4fClH280EEHtg3qAsEic42vLULBE6idA8lZgl1Oo/lmkqPhHCzAmq7/310m7
+         EawwKMMAzbip5ipv3cQ6mv+zVpB33O+YLenIQCe+WE5y2DndBW7UH+yegM+4+jwg44eS
+         D6RwL7zEefKInStpdDWJOxmhcGWCL/y2DwVMn14xjv+Yk3KJKU2gxerGuM5aMOG2jzEY
+         3KylGi1pwMRAICTpMWunp4dkYsScLkf8EnUV8NjHMt3mHUEsFJLVzYrfJpVTE7EM+vlM
+         4CA5qRVEncx4rvlLZ3BLX7vxtDxcQNWJHtevmjaigSV00fIwppnGCUYLBTC7aK+Bm491
+         0njg==
+X-Gm-Message-State: ACgBeo2VlCxwXNR4Avi4/jbGRg9IB6X7OgouzqPf04+uHAaGw5gjxUrU
+        0YuAFB0dxdHqDO1Kw9EMbZNXFdOow48=
+X-Google-Smtp-Source: AA6agR7+Q8vvl4O9bkoz/4+31jc8T2hEg+ElJGoMDJGBlVLSM7QSIHxcJTiAp7kfnXNEEIoN2sdklw==
+X-Received: by 2002:a54:4e82:0:b0:345:47df:9224 with SMTP id c2-20020a544e82000000b0034547df9224mr2858650oiy.222.1661566593065;
+        Fri, 26 Aug 2022 19:16:33 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id q4-20020a9d7c84000000b0061cd208fadesm1925752otn.71.2022.08.26.19.16.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 19:16:32 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        zhangqing@rock-chips.com, zyw@rock-chips.com,
+        jon.lin@rock-chips.com, maccraft123mc@gmail.com, sre@kernel.org,
+        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, lee@kernel.org, philip@pscan.uk,
+        mazziesaccount@gmail.com, Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH V10 0/4] power: supply: Add Support for RK817 Charger
+Date:   Fri, 26 Aug 2022 21:16:19 -0500
+Message-Id: <20220827021623.23829-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <0f9706b7-6dd5-663d-70cf-7221b5a1bfc5@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/26/22 3:47 PM, Shuah Khan wrote:
-> On 8/16/22 9:46 PM, Meng Li wrote:
->> Add amd-pstate-ut test module, this module is used by kselftest
->> to unit test amd-pstate functionality. This module will be
->> expected by some of selftests to be present and loaded.
->>
->> Signed-off-by: Meng Li <li.meng@amd.com>
->> Acked-by: Huang Rui <ray.huang@amd.com>
->> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
->> ---
->>   drivers/cpufreq/Kconfig.x86     |   7 +
->>   drivers/cpufreq/Makefile        |   1 +
->>   drivers/cpufreq/amd-pstate-ut.c | 293 ++++++++++++++++++++++++++++++++
->>   3 files changed, 301 insertions(+)
->>   create mode 100644 drivers/cpufreq/amd-pstate-ut.c
->>
->> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
->> index 55516043b656..fdd819069d72 100644
->> --- a/drivers/cpufreq/Kconfig.x86
->> +++ b/drivers/cpufreq/Kconfig.x86
->> @@ -51,6 +51,13 @@ config X86_AMD_PSTATE
->>         If in doubt, say N.
->> +config X86_AMD_PSTATE_UT
->> +    tristate "selftest for AMD Processor P-State driver"
->> +    depends on X86 && ACPI_PROCESSOR
+From: Chris Morgan <macromorgan@hotmail.com>
 
-This has to specify dependency on X86_AMD_PSTATE
+This series is to add support for the Rockchip rk817 battery charger
+which is present in all Rockchip RK817 PMICs. The driver was written
+as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+myself Chris Morgan <macromorgan@hotmail.com>.
 
->> +    default n
->> +    help
->> +      This kernel module is used for testing. It's safe to say M here.
->> +
-> 
-> Shouldn't this X86_AMD_PSTATE_UT depend on X86_AMD_PSTATE?
-> I am running a few tests and when I have X86_AMD_PSTATE_UT
-> enabled as built-in and X86_AMD_PSTATE is disabled, test
-> fails saying incorrect cpufreq driver?
-> 
-> Skipped: Test can only run on amd-pstate driver.
-> 
-> So it sounds like X86_AMD_PSTATE_UT depends on X86_AMD_PSTATE.
-> 
+The driver requires some basic parameters be described about the
+battery in the devicetree such as the maximum capacity, the minimum
+and maximum voltage for the battery, the maximum charge current, the
+maximum charge voltage, and the value of sample resistors and sleep
+currents.
 
-Once I enabled X86_AMD_PSTATE and X86_AMD_PSTATE_UT=m, the test
-ran correctly.
+The hardware itself contains an ADC capable of measuring the voltage,
+current, and temperature of the battery (though my implementation of an
+Odroid Go Advance lacks a thermistor for temperature). It also contains
+a columb counter, registers for tracking the measured voltage and
+current at boot, and a few bytes of nvram for storing data.
 
-Please fix the dependencies and send me a new version. Send all
-the patches so it is easier to apply them all at once.
+Changes from V9:
+ - Corrected devicetree documentation to note that there are no
+   additional properties for the charger than what is listed.
+ - Fixed error handling on invalid parameters from the monitored
+   battery node. Previously was checking for non zero values which
+   could miss some error conditions. Now check for values equal to
+   or less than zero.
+ - After investigating an issue first identified by Philip Christian
+   <philip@pscan.uk> I changed the behavior for storing the rsoc value
+   to nvram. It actually looks like the BSP kernel and U-Boot stores
+   the remaining charge in mAh, not remaining capacity. I also added
+   additional sanity checking on reading nvram values before they are
+   used to prevent further issues.
 
-thanks,
--- Shuah
+Changes from V8:
+ - Updated copyright notice.
+ - Replaced linux/of_gpio.h header with of.h.
+ - Changed to use devm_delayed_work_autocancel to manage work queue.
+
+Changes from V7:
+ - Fix error reported by kernel test robot <lkp@intel.com> in patch v7.
+   Problem appeared to be related to incomplete removal of fields I
+   used previously in debugging.
+
+Changes from V6:
+ - Updated devicetree binding patch to reference the required
+   prerequisite patch in the correct manner (relocated it below the ---
+   and pointed it to lore.kernel.org).
+
+Changes from V5:
+ - Renamed mfd-cell from "battery" to "charger".
+ - Added note for devicetree binding documentation that it requires
+   application of an additional pending patch (to convert documentation
+   to yaml).
+
+Changes from V4:
+ - Massively redesigned the battery driver to improve measurement
+   accuracy and reliability. Driver now checks values every 8
+   seconds (mimicking BSP driver behavior), or whenever a plug event
+   is detected.
+ - Removed OCV, boot voltage, and boot current as values were found
+   to be unreliable.
+ - Updated first-boot behavior to perform a "best guess" at capacity.
+ - Added ability to calibrate columb counter to full state of charge
+   when charger reports full, and added ability calibrate full charge
+   capacity when battery discharges from full charge to minimum
+   voltage.
+ - Expose state of charge as capacity (in percents).
+ - Updated storing of values to nvram to preserve compatibility with
+   BSP kernel.
+
+Changes from V3:
+
+ - Corrected issues in device tree documentation.
+ - Added additional logic to battery to correct for columb counter
+   drift when the device stays plugged in at a full charge state.
+
+Changes from V2:
+
+ - Updated devicetree bindings to use common property units.
+ - Removed unneeded includes.
+ - Updated rk817_chg_cur_to_reg to make more legible.
+ - Simplified formula for displaying calibrated voltage.
+ - Updated power supply type to POWER_SUPPLY_TYPE_USB.
+ - Implemented get/put_unaligned macros for bulk reads and writes.
+ - Changed numerous dev_err() to dev_err_probe().
+ - Call power_supply_put_battery_info() at end of probe function.
+ - Removed unneeded whitespace.
+
+Changes from V1:
+
+ - Fixed a CLANG warning regarding an uninitalized variable.
+ - Fixed a CLANG warning regarding a pointer as a bool value always
+   returning as true.
+ - Added Maya Matuszczyk to the Signed-off-by.
+
+Chris Morgan (4):
+  dt-bindings: Add Rockchip rk817 battery charger support
+  mfd: Add Rockchip rk817 battery charger support
+  power: supply: Add charger driver for Rockchip RK817
+  arm64: dts: rockchip: add rk817 chg to Odroid Go Advance
+
+ .../bindings/mfd/rockchip,rk817.yaml          |   50 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |   26 +
+ drivers/mfd/rk808.c                           |   16 +-
+ drivers/power/supply/Kconfig                  |    6 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/rk817_charger.c          | 1211 +++++++++++++++++
+ include/linux/mfd/rk808.h                     |   91 ++
+ 7 files changed, 1400 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/power/supply/rk817_charger.c
+
+-- 
+2.25.1
+
