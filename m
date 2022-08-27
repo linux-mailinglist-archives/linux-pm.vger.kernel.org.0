@@ -2,57 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F465A37F8
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Aug 2022 15:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081A45A39F1
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Aug 2022 22:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiH0Nm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Aug 2022 09:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        id S229919AbiH0UGA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Aug 2022 16:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiH0NmY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Aug 2022 09:42:24 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0572E2408C;
-        Sat, 27 Aug 2022 06:42:24 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-333a4a5d495so97420747b3.10;
-        Sat, 27 Aug 2022 06:42:23 -0700 (PDT)
+        with ESMTP id S229462AbiH0UF7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Aug 2022 16:05:59 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D281C4CA2B;
+        Sat, 27 Aug 2022 13:05:57 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id q81so3714790iod.9;
+        Sat, 27 Aug 2022 13:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=9gJkjTGEZU9ZOB2WMExjMNuesjVOq7C3vZk82DKgQyc=;
-        b=H+w0fc4C56QDdlnsH91zVlHNRbjHy31CNaHSo3+UDHRf+N/dj2dUvWjSZzyTZ+IXuR
-         /7eEAZNZzeLIejACewXx3J6vBuWmNU/7Ce65Gk88S1SGy6Sc6TpwyTzrxOnlDcxQgU4G
-         RxzpM2xXb2Yv/CoswV71GJrGFnnN4Qwwxp0MSF9zM+YFbv8xG/kUKk2oTHVrOAfBNVsa
-         QBEPsi2dgJ7SjBHF7jzHYO6k5AX/yrZslKnxoERHxrrH0xL2EuxKM9/pcu61gnAvguet
-         tnKu3UFgcEZSTzPvBonfsPalGcXPG5pnyMSLBKGRc3YdXFthPyllRjLJA4/FmEOjKRn5
-         kbbA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=U3nX4cdNXZqpfLJDqBLA44CtW4+U9zWhNzo9DHIZoaU=;
+        b=qpg69lwLsm8EE0skmNswnst9smx0Xds+vzMdByGY6gmduLxuLspE9phL6buIhnVJii
+         gOA3bRG+OSl/7uh1on599nc9npfT6Yh1ba/sM3iu+lGhwsmqHF4U5rLzBRnyBAPCX8sq
+         A9TvAAvOwXrlQdFeRfW9UuzuUw3vww8lWn6uxYwtTv1tnmdbn1d22O/q3CUSPulW0WPL
+         V3SEDXs0avUTx4F3/cnxVjmaFqbp874jWn9z6Ya9VdULkXtCM3DdLvuaL6ID5XtYGQiK
+         jEWy9nQlziImFjAh2r5uNaB+sIUM5monEGG2OOIBulqltmPEMA4qmZrcNAVlK1/wD/0I
+         efXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=9gJkjTGEZU9ZOB2WMExjMNuesjVOq7C3vZk82DKgQyc=;
-        b=oFO3T5V5gHE2yMThJU5VgAcUlV2ff8KRT3VE10SdkzibBrkJV/fFtEGq+eSaZqbzZ1
-         g1A+NM1v/F9KeoY/v8UVfUDxWeSGscAOz5FhznkiQAi2O6agh4FgmGaSXJVQCVmtP2ib
-         fO0HarlwGnp1up2IIOqk9yBAP/KfwsSaSJGEgYUyvtnZy8bxsNTkf33joTK9/aQYXh7R
-         ZFmqtJa4H5olTIR6+K20E/iBnL9TOcrEa5hOiBJyCaMKiSs0cEBphbbagY4fQ0eGmLGh
-         BlhkL/yCHEM5y5UDCUzwCk7It3UPyUhbPYwtViHgFDbmzAsTk8C6tEx3iuyUYfEl7kEP
-         ZbrA==
-X-Gm-Message-State: ACgBeo3k9NvQ4s/hpO8iwW9HxzJn7gIVgE1s5rWXWtk1Oio8gAf5NIa1
-        U6nViZhmK4IropXVEfS6uBMsUUiHzGri6UUl0vFs1qbhYqM=
-X-Google-Smtp-Source: AA6agR7Z7R3cfNn0+9UD8Fiu4StynBTli+vD60DP0II7NPIOsS4na+4kpey2JW0vNEyNapbrHtN8/Y+44jr8/1GHr4Q=
-X-Received: by 2002:a25:ec0c:0:b0:690:d092:2d56 with SMTP id
- j12-20020a25ec0c000000b00690d0922d56mr3076972ybh.622.1661607743294; Sat, 27
- Aug 2022 06:42:23 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=U3nX4cdNXZqpfLJDqBLA44CtW4+U9zWhNzo9DHIZoaU=;
+        b=HGaL2LAcHyrANq/za4WYHuioXaD38JLp8GZlRrPL6mznAv3/GNGem4UH5TxAZe3WJr
+         fZ7Q9kgftnouQFIE26hoCMwWvk3XS5kESaZikqELRDFgWQ4+lOGCwDFbsKWewvzjwtum
+         o2yD/qw5gs5HXsi/pZQHU9iSWRAvJwlEd4uY1zJB5qQkRuU/7fCuGtfobfRyjlTCOgc0
+         0ZQtdjAIMbnI20iusEC0CCHLxyyVPdtbf5Rmykyu5rk0L7wCMYlL5C1CFu3LgajhoQ5k
+         FDs+AP+mHRXzgU54tqszwonHAvciZ6DubvMDyjPK8oni/kapqH6cbhjVKA0WgvUd7Tyx
+         +bog==
+X-Gm-Message-State: ACgBeo2M3hjbB4bqA6kdhDe0FonzXrqiGc5q2TH5pTahmKTWiqZrR2+R
+        hHKQtilmO6/ZPjo8PTsmRfZl11jaR+neVnVGJ+c=
+X-Google-Smtp-Source: AA6agR6mQKT+8qybXjCS/+jRJabXAhyutX/JaN8GU1n3O7tgg0juo+fbdSfQyWB6w+kVUABbS8dUgR8xb7E9H6GGeZw=
+X-Received: by 2002:a02:1d01:0:b0:349:d886:df1 with SMTP id
+ 1-20020a021d01000000b00349d8860df1mr6860680jaj.307.1661630757268; Sat, 27 Aug
+ 2022 13:05:57 -0700 (PDT)
 MIME-Version: 1.0
-From:   =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>
-Date:   Sat, 27 Aug 2022 15:42:12 +0200
-Message-ID: <CAJZ5v0gzTEAf6NGQAsrG=AiWEXgBtD40gvGEp7BDzQxyXhC9BQ@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.0-rc3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220821200821.1837460-1-lkml@vorpal.se> <2ddade8b-7260-8497-12f2-c8b13cf35e6a@redhat.com>
+ <12a39cf6-1247-d2a3-bf07-51297e9b6640@vorpal.se> <CAGdLNWFYizajrM3X7ww_=Yz6DiA34-eGoRfE0r=388+t3OAhWQ@mail.gmail.com>
+ <be56c117-a62d-e0b5-db50-71fda9c04f76@vorpal.se>
+In-Reply-To: <be56c117-a62d-e0b5-db50-71fda9c04f76@vorpal.se>
+From:   Azael Avalos <coproscefalo@gmail.com>
+Date:   Sat, 27 Aug 2022 14:05:47 -0600
+Message-ID: <CAGdLNWEqaONoJ0xqwPPg0+=YsTq+6yvjC_VG+JVwXoPXbeB5sQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] [RFC] platform/x86: Fixes for Toshiba Z830
+To:     Arvid Norlander <lkml@vorpal.se>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -63,51 +70,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+Hi there
 
-Please pull from the tag
+El s=C3=A1b, 27 ago 2022 a la(s) 05:51, Arvid Norlander (lkml@vorpal.se) es=
+cribi=C3=B3:
+>
+> Hi,
+>
+> On 2022-08-25 19:00, Azael Avalos wrote:
+> > Hi there
+> >
+> > Sorry for pinging in a bit late, been under a lot of work lately.
+>
+> It happens to all of us.
+>
+> > You can poke the Toshiba BIOS interface directly via /dev/toshiba_acpi
+> > to test your findings, once it is ironed out, you can start making patc=
+hes
+> > for inclusion in the kernel.
+>
+> Interesting. I'm new to kernel development and I can't find where in
+> toshiba_acpi.c this is implemented. Nor do I see any documentation for th=
+is
+> interface. I would love some hints with regards to this.
+>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.0-rc3
+From line 2248 onwards
 
-with top-most commit 3bf1b1571224e713f1a186de21b2204c06f1cb5e
+Here's a link to some documents you might find interesting:
+http://www.buzzard.me.uk/toshiba/docs.html
 
- Merge branch 'thermal-core'
+The interface was introduced to the kernel many years ago, back when
+the (char) toshiba module
+was used, i just added support to the toshiba_acpi via ACPI calls
 
-on top of commit 1c23f9e627a7b412978b4e852793c5e3c3efc555
+> For now I have been using the out-of-tree acpi_call module:
+>
+> https://github.com/nix-community/acpi_call
+>
+> Arch Linux (which I use) packages it as a DKMS module. Handy to test with=
+,
+> but probably really easy to screw up your system using it if you don't kn=
+ow
+> what you are doing.
 
- Linux 6.0-rc2
+The interface is pretty straight forward, you can make a small C prog to te=
+st,
+basically you just need to:
+- Open the (/dev/toshiba_acpi) device for R/W (make sure you have permissio=
+ns)
+- Fill out the SMMRegisters struct with your query and get the results
+- Rinse and repeat till you find what you're looking for
 
-to receive thermal control fixes for 6.0-rc3.
+WARNING: This might (or might not) set your house on fire...
 
-They fix two issues introduced recently and one driver problem leading
-to a NULL pointer dereference in some cases.
+>
+> > I know there are a lot of areas where the driver is lacking features du=
+e to
+> > hardware restrictions on the machines I had at the time, so it's good t=
+o
+> > see a bit more movement here.
+> >
+> > Cheers
+> > Azael
+> >
+>
+> Best regards,
+> Arvid Norlander
+>
+> <snip>
 
-Specifics:
-
- - Add missing EXPORT_SYMBOL_GPL in the thermal core and add back the
-   required 'trips' property to the thermal zone DT bindings (Daniel
-   Lezcano).
-
- - Prevent the int340x_thermal driver from crashing when a package
-   with a buffer of 0 length is returned by an ACPI control method
-   evaluated by it (Lee, Chun-Yi).
-
-Thanks!
+Saludos
+Azael
 
 
----------------
 
-Daniel Lezcano (2):
-      thermal/core: Add missing EXPORT_SYMBOL_GPL
-      dt-bindings: thermal: Fix missing required property
-
-Lee, Chun-Yi (1):
-      thermal/int340x_thermal: handle data_vault when the value is ZERO_SIZE_PTR
-
----------------
-
- Documentation/devicetree/bindings/thermal/thermal-zones.yaml | 1 +
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c      | 9 +++++----
- drivers/thermal/thermal_core.c                               | 1 +
- 3 files changed, 7 insertions(+), 4 deletions(-)
+--=20
+-- El mundo apesta y vosotros apestais tambien --
