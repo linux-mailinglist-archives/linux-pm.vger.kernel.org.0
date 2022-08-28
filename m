@@ -2,97 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E7B5A3D6E
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Aug 2022 14:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FD35A3F73
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Aug 2022 21:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiH1MAA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Aug 2022 08:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
+        id S229750AbiH1TaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Aug 2022 15:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiH1MAA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Aug 2022 08:00:00 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C275F959B
-        for <linux-pm@vger.kernel.org>; Sun, 28 Aug 2022 04:59:58 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oSGxG-0000QA-1t; Sun, 28 Aug 2022 13:59:54 +0200
-Message-ID: <3470af88-a3bf-eb0c-c9db-ec1101b456f5@leemhuis.info>
-Date:   Sun, 28 Aug 2022 13:59:53 +0200
+        with ESMTP id S230041AbiH1TaM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Aug 2022 15:30:12 -0400
+Received: from vorpal.se (vorpal.se [IPv6:2a01:7e00::f03c:91ff:fe73:398e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BEF10FCA;
+        Sun, 28 Aug 2022 12:29:55 -0700 (PDT)
+Received: by vorpal.se (Postfix) with ESMTPSA id 4896114629;
+        Sun, 28 Aug 2022 19:29:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=vorpal.se; s=2019;
+        t=1661714993; bh=27gm5R3zURqjI4/mvmf25FHer+yapIFUWqt2wrWO/M0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZUUwVq6R3IKwoT37UflOBJburjgXVo6F9yF03FydtrP40IjIbQn903VFMhT4E0vVM
+         SpnxNhCFyNjlT9gOV5D7xgtPVysKh67IvYJW8zxDrvwi6bhQPq7fX7Ohw06VOBHMAZ
+         0g39Ve7Sm9pHSFErDYzobU0o9WYQtpl8agKo72fOj2KG0hz37zn97JL3i8gUWqF0j6
+         bwL/OoQS8LSYmwO64p6FzpF8RwoOTP/4VXoTaf2Bv7pomAkUF4iNSmfmNNqvrqynGG
+         erhuODdre76rwdBGXNDl7psszo1syrRBLx04aszG2qebC4EGKSfvgvSAaGDxT5tQpe
+         0yAeWG1XQVKTA==
+From:   Arvid Norlander <lkml@vorpal.se>
+To:     platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Azael Avalos <coproscefalo@gmail.com>,
+        Arvid Norlander <lkml@vorpal.se>
+Subject: [PATCH 0/3] platform/x86: Battery charge mode in toshiba_acpi
+Date:   Sun, 28 Aug 2022 21:29:17 +0200
+Message-Id: <20220828192920.805253-1-lkml@vorpal.se>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: Regression: PM: domains: Delete usage of
- driver_deferred_probe_check_state #forregzbot
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <2c69b2bb-418c-ac78-703a-79c6a30f7a35@leemhuis.info>
-In-Reply-To: <2c69b2bb-418c-ac78-703a-79c6a30f7a35@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661687998;6bb06378;
-X-HE-SMSGID: 1oSGxG-0000QA-1t
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
+This is an improved version of the battery charge control for Toshiba
+Satellite Z830. The full background is available in the two emails linked
+below, but a short summary will follow, including only what is relevant
+for battery charge control.
 
-On 17.08.22 12:47, Thorsten Leemhuis wrote:
-> [TLDR: I'm adding this regression report to the list of tracked
-> regressions; all text from me you find below is based on a few templates
-> paragraphs you might have encountered already already in similar form.]
-> 
-> Hi, this is your Linux kernel regression tracker.
-> 
-> On 16.08.22 08:21, Peng Fan wrote:
->> Hi Saravana,
->>
->> The following two patches breaks NXP i.MX8ULP, but I think
->> it may break others use SCMI.
->> [...]
->> When sdhc driver probe, the scmi power domain provider has not
->> been registered. So __genpd_dev_pm_attach directly return
->> -ENODEV.
->>
->> device_links_check_suppliers should already check suppliers,
->> but scmi protocol device not have compatible, so 
->> of_link_to_phandle
->>       |-> of_get_compat_node
->> use the parent node of scmi protocol as supplier if I understand
->> correct.
->>
->> I am not sure whether we need to revert the above two patches,
->> or do you have other suggestions?
-> 
-> Thanks for the report. To be sure the issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-> tracking bot:
-> 
-> #regzbot ^introduced 5a46079a9645
-> #regzbot title pm: booting on NXP i.MX8ULP broke
-> #regzbot monitor:
-> https://lore.kernel.org/all/20220727185012.3255200-1-saravanak@google.com/
-> #regzbot duplicate: https://lore.kernel.org/all/Yvpd2pwUJGp7R+YE@euler/
-> #regzbot ignore-activity
 
-#regzbot fixed-by: 13a8e0f6b01b1
+Background (from link 1)
+==========
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+The Toshiba Satellite/Portege Z830 supports not charging the battery fully
+in order to prolong battery life. Unlike for example ThinkPads where this
+control is granular here it is just off/on. When off it charges to 100%.
+When on it charges to about 80%.
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+According to the Windows program used to control the feature the setting
+will not take effect until the battery has been discharged to around 50%.
+However, in my testing it takes effect as soon as the charge drops below
+80%. On Windows Toshiba branded this feature as "Eco charging"
+
+In the following example ACPI calls I will use the following newly defined
+constants:
+#define HCI_BATTERY_CHARGE_MODE 0xba
+#define BATTERY_CHARGE_FULL 0
+#define BATTERY_CHARGE_80_PERCENT 1
+
+To set the feature:
+  {HCI_SET, HCI_BATTERY_CHARGE_MODE, charge_mode, 0, 0, 0}
+To query for the existence of the feature:
+  {HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 0}
+To read the feature:
+  {HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 1}
+
+The read may need to be retried if TOS_DATA_NOT_AVAILABLE is returned as
+the status code. This rarely happens (I have never observed it on Linux),
+but I have seen it happen under Windows once, and the software did retry
+it.
+
+
+Improvements
+============
+
+As discussed in link 2 & 3 below, the original approach was suboptimal.
+
+This patch series instead consists of two patches.
+
+The first patch implements detecting the feature as well as internal
+getter/setter methods.
+
+The second patch adds battery hooks (heavily based on the code for this in
+thinkpad_acpi) which creates the standard charge_control_end_threshold file
+under /sys/class/power_supply/BAT1.
+
+Side note: There is no BAT0 on this Toshiba, I'm not sure why the numbering
+ends up starting from 1 instead of 0 here. This differs from my Thinkpads,
+where the numbering starts from 0, with BAT1 being the second battery.
+However, I haven't spent much effort investigating this, as it did not seem
+important.
+
+Patch 3 updates the ABI test documentation as suggested by Hans de Goede.
+Note that only the charge_control_end_threshold is updated, as this is the
+only limit supported by the Toshiba Z830. Possibly
+charge_control_start_threshold should also be updated similarly, or would
+it be better to wait for an actual example of this in the wild first?
+
+Link (1): https://www.spinics.net/lists/platform-driver-x86/msg34314.html
+Link (2): https://www.spinics.net/lists/platform-driver-x86/msg34354.html
+Link (3): https://www.spinics.net/lists/platform-driver-x86/msg34320.html
+
+Arvid Norlander (3):
+  platform/x86: Battery charge mode in toshiba_acpi (internals)
+  platform/x86: Battery charge mode in toshiba_acpi (sysfs)
+  docs: ABI: charge_control_end_threshold may not support all values
+
+ Documentation/ABI/testing/sysfs-class-power |   5 +-
+ drivers/platform/x86/toshiba_acpi.c         | 162 ++++++++++++++++++++
+ 2 files changed, 166 insertions(+), 1 deletion(-)
+
+
+base-commit: 1c23f9e627a7b412978b4e852793c5e3c3efc555
+-- 
+2.37.2
+
