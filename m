@@ -2,131 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FD35A3F73
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Aug 2022 21:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751525A3F75
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Aug 2022 21:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiH1TaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Aug 2022 15:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S230041AbiH1TaP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Aug 2022 15:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiH1TaM (ORCPT
+        with ESMTP id S230102AbiH1TaM (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Aug 2022 15:30:12 -0400
-Received: from vorpal.se (vorpal.se [IPv6:2a01:7e00::f03c:91ff:fe73:398e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BEF10FCA;
-        Sun, 28 Aug 2022 12:29:55 -0700 (PDT)
-Received: by vorpal.se (Postfix) with ESMTPSA id 4896114629;
-        Sun, 28 Aug 2022 19:29:53 +0000 (UTC)
+Received: from vorpal.se (vorpal.se [151.236.221.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419BD18B29;
+        Sun, 28 Aug 2022 12:30:02 -0700 (PDT)
+Received: by vorpal.se (Postfix) with ESMTPSA id ADE8A147F2;
+        Sun, 28 Aug 2022 19:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=vorpal.se; s=2019;
-        t=1661714993; bh=27gm5R3zURqjI4/mvmf25FHer+yapIFUWqt2wrWO/M0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZUUwVq6R3IKwoT37UflOBJburjgXVo6F9yF03FydtrP40IjIbQn903VFMhT4E0vVM
-         SpnxNhCFyNjlT9gOV5D7xgtPVysKh67IvYJW8zxDrvwi6bhQPq7fX7Ohw06VOBHMAZ
-         0g39Ve7Sm9pHSFErDYzobU0o9WYQtpl8agKo72fOj2KG0hz37zn97JL3i8gUWqF0j6
-         bwL/OoQS8LSYmwO64p6FzpF8RwoOTP/4VXoTaf2Bv7pomAkUF4iNSmfmNNqvrqynGG
-         erhuODdre76rwdBGXNDl7psszo1syrRBLx04aszG2qebC4EGKSfvgvSAaGDxT5tQpe
-         0yAeWG1XQVKTA==
+        t=1661715001; bh=FaOvQr79TG5ATDewzu8RG5QTZhCequRtKc7TeqIozvw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Mom5Ku7OfM4U4pC/QzCjT5ML1nHgQfgbV+cHgNB4CGdggPp6NtqoMhGD1Tb9SKvQO
+         9uMAx3X1MsuTGeyx/0pPQJxDZ7ZfmMG/jwIHfh4InEuRZcWIRmlsu7LiSa1fBxR/Gl
+         DziGfluUdZph5YJcuwCBGpsI0XGEPK+6FVYaCgPN919nwko+eH5M3Bm/K7bvh5kJU0
+         b2nXRMW3zhKTnn8Bmdu6gFj0yqCvCa8mFa7f+tiAajFvxgIY/pGXFBmEwPQcSXHtTV
+         FK9jMfY4hG1VqurrkcP5UVYoPqssoJNICDjvuz5sx8Dx4IseU5vmBQ2PquCtd2jl1J
+         AA8NXkDjr8fNg==
 From:   Arvid Norlander <lkml@vorpal.se>
 To:     platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     Sebastian Reichel <sre@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
         Azael Avalos <coproscefalo@gmail.com>,
         Arvid Norlander <lkml@vorpal.se>
-Subject: [PATCH 0/3] platform/x86: Battery charge mode in toshiba_acpi
-Date:   Sun, 28 Aug 2022 21:29:17 +0200
-Message-Id: <20220828192920.805253-1-lkml@vorpal.se>
+Subject: [PATCH 1/3] platform/x86: Battery charge mode in toshiba_acpi (internals)
+Date:   Sun, 28 Aug 2022 21:29:18 +0200
+Message-Id: <20220828192920.805253-2-lkml@vorpal.se>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220828192920.805253-1-lkml@vorpal.se>
+References: <20220828192920.805253-1-lkml@vorpal.se>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is an improved version of the battery charge control for Toshiba
-Satellite Z830. The full background is available in the two emails linked
-below, but a short summary will follow, including only what is relevant
-for battery charge control.
+This commit adds the internal functions to control the Toshiba laptop.
 
+Unlike for example ThinkPads where this control is granular here it is
+just off/on. When off it charges to 100%. When on it charges to about 80%.
 
-Background (from link 1)
-==========
+Controlling this setting is done via HCI register 0x00ba. Setting to value
+1 will result in limiting the charing to 80% of the battery capacity,
+while setting it to 0 will allow charging to 100%.
 
-The Toshiba Satellite/Portege Z830 supports not charging the battery fully
-in order to prolong battery life. Unlike for example ThinkPads where this
-control is granular here it is just off/on. When off it charges to 100%.
-When on it charges to about 80%.
+Reading the current state is a bit weird, and needs a 1 set in the last
+position of the query for whatever reason. In addition, the read may
+return 0x8d20 (Data not available) rarely, so a retry mechanism is needed.
 
 According to the Windows program used to control the feature the setting
 will not take effect until the battery has been discharged to around 50%.
 However, in my testing it takes effect as soon as the charge drops below
-80%. On Windows Toshiba branded this feature as "Eco charging"
+80%. On Windows Toshiba branded this feature as "Eco charging".
 
-In the following example ACPI calls I will use the following newly defined
-constants:
-#define HCI_BATTERY_CHARGE_MODE 0xba
-#define BATTERY_CHARGE_FULL 0
-#define BATTERY_CHARGE_80_PERCENT 1
+Signed-off-by: Arvid Norlander <lkml@vorpal.se>
+---
+ drivers/platform/x86/toshiba_acpi.c | 69 +++++++++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-To set the feature:
-  {HCI_SET, HCI_BATTERY_CHARGE_MODE, charge_mode, 0, 0, 0}
-To query for the existence of the feature:
-  {HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 0}
-To read the feature:
-  {HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 1}
-
-The read may need to be retried if TOS_DATA_NOT_AVAILABLE is returned as
-the status code. This rarely happens (I have never observed it on Linux),
-but I have seen it happen under Windows once, and the software did retry
-it.
-
-
-Improvements
-============
-
-As discussed in link 2 & 3 below, the original approach was suboptimal.
-
-This patch series instead consists of two patches.
-
-The first patch implements detecting the feature as well as internal
-getter/setter methods.
-
-The second patch adds battery hooks (heavily based on the code for this in
-thinkpad_acpi) which creates the standard charge_control_end_threshold file
-under /sys/class/power_supply/BAT1.
-
-Side note: There is no BAT0 on this Toshiba, I'm not sure why the numbering
-ends up starting from 1 instead of 0 here. This differs from my Thinkpads,
-where the numbering starts from 0, with BAT1 being the second battery.
-However, I haven't spent much effort investigating this, as it did not seem
-important.
-
-Patch 3 updates the ABI test documentation as suggested by Hans de Goede.
-Note that only the charge_control_end_threshold is updated, as this is the
-only limit supported by the Toshiba Z830. Possibly
-charge_control_start_threshold should also be updated similarly, or would
-it be better to wait for an actual example of this in the wild first?
-
-Link (1): https://www.spinics.net/lists/platform-driver-x86/msg34314.html
-Link (2): https://www.spinics.net/lists/platform-driver-x86/msg34354.html
-Link (3): https://www.spinics.net/lists/platform-driver-x86/msg34320.html
-
-Arvid Norlander (3):
-  platform/x86: Battery charge mode in toshiba_acpi (internals)
-  platform/x86: Battery charge mode in toshiba_acpi (sysfs)
-  docs: ABI: charge_control_end_threshold may not support all values
-
- Documentation/ABI/testing/sysfs-class-power |   5 +-
- drivers/platform/x86/toshiba_acpi.c         | 162 ++++++++++++++++++++
- 2 files changed, 166 insertions(+), 1 deletion(-)
-
-
-base-commit: 1c23f9e627a7b412978b4e852793c5e3c3efc555
+diff --git a/drivers/platform/x86/toshiba_acpi.c b/drivers/platform/x86/toshiba_acpi.c
+index 0fc9e8b8827b..c927d5d0f8cd 100644
+--- a/drivers/platform/x86/toshiba_acpi.c
++++ b/drivers/platform/x86/toshiba_acpi.c
+@@ -112,6 +112,7 @@ MODULE_LICENSE("GPL");
+ #define HCI_KBD_ILLUMINATION		0x0095
+ #define HCI_ECO_MODE			0x0097
+ #define HCI_ACCELEROMETER2		0x00a6
++#define HCI_BATTERY_CHARGE_MODE		0x00ba
+ #define HCI_SYSTEM_INFO			0xc000
+ #define SCI_PANEL_POWER_ON		0x010d
+ #define SCI_ILLUMINATION		0x014e
+@@ -201,6 +202,7 @@ struct toshiba_acpi_dev {
+ 	unsigned int usb_three_supported:1;
+ 	unsigned int wwan_supported:1;
+ 	unsigned int cooling_method_supported:1;
++	unsigned int battery_charge_mode_supported:1;
+ 	unsigned int sysfs_created:1;
+ 	unsigned int special_functions;
+ 
+@@ -1282,6 +1284,69 @@ static int toshiba_cooling_method_set(struct toshiba_acpi_dev *dev, u32 state)
+ 	return (result == TOS_SUCCESS || result == TOS_SUCCESS2) ? 0 : -EIO;
+ }
+ 
++/* Battery charge control */
++static void toshiba_battery_charge_mode_available(struct toshiba_acpi_dev *dev)
++{
++	u32 in[TCI_WORDS] = { HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 0 };
++	u32 out[TCI_WORDS];
++	acpi_status status;
++
++	dev->battery_charge_mode_supported = 0;
++
++	status = tci_raw(dev, in, out);
++	if (ACPI_FAILURE(status)) {
++		pr_err("ACPI call to get Battery Charge Mode failed\n");
++		return;
++	}
++
++	if (out[0] != TOS_SUCCESS && out[0] != TOS_SUCCESS2)
++		return;
++
++	dev->battery_charge_mode_supported = 1;
++}
++
++static int toshiba_battery_charge_mode_get(struct toshiba_acpi_dev *dev, u32 *state)
++{
++	u32 in[TCI_WORDS] = { HCI_GET, HCI_BATTERY_CHARGE_MODE, 0, 0, 0, 0x1 };
++	u32 out[TCI_WORDS];
++	int retries = 3;
++
++	do {
++		acpi_status status = tci_raw(dev, in, out);
++
++		if (ACPI_FAILURE(status))
++			pr_err("ACPI call to get Battery Charge Mode failed\n");
++		switch (out[0]) {
++		case TOS_SUCCESS:
++		case TOS_SUCCESS2:
++			*state = out[2];
++			return 0;
++		case TOS_NOT_SUPPORTED:
++			return -ENODEV;
++		case TOS_DATA_NOT_AVAILABLE:
++			retries--;
++			break;
++		default:
++			return -EIO;
++		}
++	} while (retries);
++
++	return -EIO;
++}
++
++static int toshiba_battery_charge_mode_set(struct toshiba_acpi_dev *dev, u32 state)
++{
++	u32 result = hci_write(dev, HCI_BATTERY_CHARGE_MODE, state);
++
++	if (result == TOS_FAILURE)
++		pr_err("ACPI call to set Battery Charge Mode failed\n");
++
++	if (result == TOS_NOT_SUPPORTED)
++		return -ENODEV;
++
++	return (result == TOS_SUCCESS || result == TOS_SUCCESS2) ? 0 : -EIO;
++}
++
+ /* Transflective Backlight */
+ static int get_tr_backlight_status(struct toshiba_acpi_dev *dev, u32 *status)
+ {
+@@ -2956,6 +3021,8 @@ static void print_supported_features(struct toshiba_acpi_dev *dev)
+ 		pr_cont(" wwan");
+ 	if (dev->cooling_method_supported)
+ 		pr_cont(" cooling-method");
++	if (dev->battery_charge_mode_supported)
++		pr_cont(" battery-charge-mode");
+ 
+ 	pr_cont("\n");
+ }
+@@ -3163,6 +3230,8 @@ static int toshiba_acpi_add(struct acpi_device *acpi_dev)
+ 
+ 	toshiba_cooling_method_available(dev);
+ 
++	toshiba_battery_charge_mode_available(dev);
++
+ 	print_supported_features(dev);
+ 
+ 	ret = sysfs_create_group(&dev->acpi_dev->dev.kobj,
 -- 
 2.37.2
 
