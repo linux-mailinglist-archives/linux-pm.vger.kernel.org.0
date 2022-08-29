@@ -2,115 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3E15A433B
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Aug 2022 08:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD925A44D1
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Aug 2022 10:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiH2G2y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Aug 2022 02:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S229862AbiH2IRA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Aug 2022 04:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiH2G2x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Aug 2022 02:28:53 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73A74B0FA;
-        Sun, 28 Aug 2022 23:28:52 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11f0fa892aeso1024415fac.7;
-        Sun, 28 Aug 2022 23:28:52 -0700 (PDT)
+        with ESMTP id S229446AbiH2IQ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Aug 2022 04:16:59 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C9D50067;
+        Mon, 29 Aug 2022 01:16:53 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id b142so5946689iof.10;
+        Mon, 29 Aug 2022 01:16:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=dHQJKSyHKH/RlxhxZ4Q/EKqTBZjMDarnF1XaHz0S2gU=;
-        b=XCdQxL63SAkWPhdSckr1KRYpMwuInjqA5hL6NqW7+L3ZU8SIYVCPCWIexWqvjsVnvt
-         Iw1hAANity4bXp7k2QT87/LpO5kWHKdqU4KLWmIt+f06LpNg2IW3BW2vlS7mAFYQv7XZ
-         oH8gSg6WccFk+ohOGZP5VXV9W7QBvGKkLu3SW88JpVcqOgcdOh1acG2M+9AN+ElLgnxd
-         4JC8o/Km51u5OeJWbEUeZEj65ca58ZuB7buySpzk9l+biB7HOimLrxOubfm20bMV5WQc
-         Go0cS7YfjPPH70E5EsVrZmaAHXPJjTQ6kfxiwvZoPWxGc+5zX/ffwpBLkBZJ5LeC0bLa
-         ccqg==
+        bh=SR2zs66VfZ+7cR5z7A6IvTd2O6F2fkE2TEOJvg0bu0I=;
+        b=PTiQgniWppKvxkEzmd65ZhoEsm6L8mv1pdTOpYZYU0um2dXu20/Ay0lDQZhlb3y7YV
+         Z6PrrCJid38YfRz/WBeg9z+M+MgKo2emiGXW7xNTpmnapY2372F06UOxTa8L0IalIx2E
+         XG8ccXtuMXVBc6b2RUop8g659t17ZKYoX43+E9LyrD0eao3ydclhyqH1iOfLwMGssORl
+         QhUwG0jExizZ3Vd6E2v3Vw7mH+6VbVqhAjFmQnf10oPCcNz0BHn8SKJo8UAg64RLr9G9
+         wU6Mw09FG3hk7EXhiaFsVfExIr66P0WWArwI3M9KB8ei62rxRzyLXyPbDHHuqGWbrH/j
+         M8NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=dHQJKSyHKH/RlxhxZ4Q/EKqTBZjMDarnF1XaHz0S2gU=;
-        b=jd4woTRFtvXxjeBBFUCLO+kcZE+d1TaIkglz+zPxUYeHMAQk54VFohITVVfIQpbvPQ
-         yDg8PhAM4Qh703LVyIWFvDlw7vF1WctBHPKnhRdwHGZr7zc6ObX7Wk7h07nA3KLqrfOf
-         J6qIUMxXSEbyl5FsyeXaXmqhfOQH2KlWm9jNVQxLVXeJNctkdQq0rLTdiNpnYqRxlIuQ
-         Dm3DK6FxOz0+bMwCFZsm7+iVf5WEQAK6TPRevUfAySNePz/oNa12zaZBpdah6dox146X
-         haUC5ANbQqQLiNodRLytSWJOXGWaXTBOTwQi3HklE0HVjO5zbBWS0llyfuqSQ276LV9m
-         Ry/w==
-X-Gm-Message-State: ACgBeo3tzHo7w42/4p43viqjwnWP/mZjGvr9u8Lh7/ee0MVuxM4wBYfd
-        +lgqsQb5g1/jiZYYnxKIogto/du20O/LfxrLyh4=
-X-Google-Smtp-Source: AA6agR6QWzfrwtXmIwOND+BLUkGH9SQkq7gxiFCylMZ1UEuJJq+j0L10LQlJsHA29k0GcUzIkiAGwcJYBvz7BtMTv94=
-X-Received: by 2002:a05:6870:64a1:b0:11c:5ca9:e519 with SMTP id
- cz33-20020a05687064a100b0011c5ca9e519mr7385632oab.4.1661754532245; Sun, 28
- Aug 2022 23:28:52 -0700 (PDT)
+        bh=SR2zs66VfZ+7cR5z7A6IvTd2O6F2fkE2TEOJvg0bu0I=;
+        b=eGLrxQwOKF3cYJlt7XjzpgaNEV36OoJO2O8LpRGepdi2D0/4Q9NDSa7EDpzfwQvHWh
+         YP1lghjxN7Mv/YsqeOUgqPlPFYyaF7OWVoHDBCwKEqs6CWIkkiVzZQyAs/SyeelcvbHE
+         I4O4bNg02qMJzCz2auH9FYOVkoUZ+8y7+KG4kR71u/608ClfMCgGhXbZsnRPVcu0neq9
+         3ZNhnv7pZV3lqyTvcO3GTr5LJ853Zk7FFPaQ04xji8KtvjpXRjJP1FI6rfTst7EA8rUI
+         X+Ee/dIJnTK4IdhbsF5tQJCBcfzniVhpRRZ7BxAVeX7iquyxUddQ+FfzmcV7jj4UgPkC
+         18Cg==
+X-Gm-Message-State: ACgBeo3Pa6wCI//JR9afVgews4BF8AdyeMimTPMDayPQS+0EQiVbjdBQ
+        g/bDlCysTjODc0v61h5Ut66iRt0dzoQjA5I096U=
+X-Google-Smtp-Source: AA6agR5w+knSfmVPltVfcUUnZ62s8C1vDjkSljRB9xvXicYviWK7mE+Hfygcmzi/6VAoy72EtqSMkaAc7FqcDgPzgQI=
+X-Received: by 2002:a05:6638:4117:b0:346:b5e1:383a with SMTP id
+ ay23-20020a056638411700b00346b5e1383amr9940873jab.264.1661761012858; Mon, 29
+ Aug 2022 01:16:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825114018.1715-1-xuewen.yan@unisoc.com>
-In-Reply-To: <20220825114018.1715-1-xuewen.yan@unisoc.com>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Mon, 29 Aug 2022 14:28:41 +0800
-Message-ID: <CAB8ipk-su6DRo0DsgaY38Vf2AuxBuvG0GQ0xA22se7Wx5eH0Pg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Check the policy first in cpufreq_cooling_register
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     viresh.kumar@linaro.org, lukasz.luba@arm.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        di.shen@unisoc.com
+References: <20220828192920.805253-3-lkml@vorpal.se> <202208290605.gE9IGbxE-lkp@intel.com>
+ <90ae872b-9da6-f5a9-56e0-5a61fe3b84ed@vorpal.se>
+In-Reply-To: <90ae872b-9da6-f5a9-56e0-5a61fe3b84ed@vorpal.se>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 29 Aug 2022 10:16:41 +0200
+Message-ID: <CANiq72m+PnnVojGx_swBaNF-zVv0XGyXbPn5C71h06jHsTeUpw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] platform/x86: Battery charge mode in toshiba_acpi (sysfs)
+To:     Arvid Norlander <lkml@vorpal.se>
+Cc:     kernel test robot <lkp@intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Sebastian Reichel <sre@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Azael Avalos <coproscefalo@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+On Mon, Aug 29, 2022 at 12:50 AM Arvid Norlander <lkml@vorpal.se> wrote:
+>
+> It would be nice to see these warnings locally, anyone know how to turn them on?
 
-Any comments?
+Compiling with W=1 (and possibly with Clang) should show them. Or
+doesn't that work for you?
 
-On Thu, Aug 25, 2022 at 7:42 PM Xuewen Yan <xuewen.yan@unisoc.com> wrote:
->
-> Since the policy needs to be accessed first when obtaining cpu devices,
-> first check whether the policy is legal before this.
->
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> ---
->  drivers/thermal/cpufreq_cooling.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index b76293cc989c..7838b6e2dba5 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -501,17 +501,17 @@ __cpufreq_cooling_register(struct device_node *np,
->         struct thermal_cooling_device_ops *cooling_ops;
->         char *name;
->
-> +       if (IS_ERR_OR_NULL(policy)) {
-> +               pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
-> +               return ERR_PTR(-EINVAL);
-> +       }
-> +
->         dev = get_cpu_device(policy->cpu);
->         if (unlikely(!dev)) {
->                 pr_warn("No cpu device for cpu %d\n", policy->cpu);
->                 return ERR_PTR(-ENODEV);
->         }
->
-> -       if (IS_ERR_OR_NULL(policy)) {
-> -               pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
-> -               return ERR_PTR(-EINVAL);
-> -       }
-> -
->         i = cpufreq_table_count_valid_entries(policy);
->         if (!i) {
->                 pr_debug("%s: CPUFreq table not found or has no valid entries\n",
-> --
-> 2.25.1
->
-
-THanks!
+Cheers,
+Miguel
