@@ -2,128 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED2F5A40E4
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Aug 2022 04:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424705A4111
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Aug 2022 04:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiH2CLP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Aug 2022 22:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S229567AbiH2C2G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Aug 2022 22:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiH2CLP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Aug 2022 22:11:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2C82BB32;
-        Sun, 28 Aug 2022 19:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661739074; x=1693275074;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wKDcFe66lT4ug9hfNULlB7hplFGh+Yopi+wGiirwzZQ=;
-  b=fqQ4hmSV4jvizWjjV6HFwFTDFsa0KF78Y1dc9da7/MVilfrKWMqmZZx5
-   GuMB0ed8nQYo5fxBMiDDcX9k32DWmeF6CwKHbJK9Z+ms7rkS2zDmSNN7I
-   dAWTrEN4p2AXj0DEvXfCnIo9Iltn7RSc+NdTVy55H1bC1Jzi8JpSeq5Pz
-   mPWs1TpzRpFBbxrGpMlydpGGaGPse9CB7DbX5NaBsfLobUEa24GixnnwL
-   GIb7zY9VQgjK0Z3yq5+7DAdzP0tZq/V6DX2A8RLsRfQeenaHu9TXJUlOR
-   wq5PDM3kGxBNU2lsZO/6QsMEzOgVM4fCJTCP17NdMdlGXE3wZ+GPhTNDH
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="295567564"
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="295567564"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 19:11:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="587985382"
-Received: from lkp-server01.sh.intel.com (HELO b2bbdd52f619) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Aug 2022 19:11:10 -0700
-Received: from kbuild by b2bbdd52f619 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSUF4-00003H-0z;
-        Mon, 29 Aug 2022 02:11:10 +0000
-Date:   Mon, 29 Aug 2022 10:10:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, hdegoede@redhat.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/4] ACPI: s2idle: Add a new ->enter() callback for
- platform_s2idle_ops
-Message-ID: <202208291045.mtIt51vk-lkp@intel.com>
-References: <20220828222121.4951-2-mario.limonciello@amd.com>
+        with ESMTP id S229462AbiH2C2D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Aug 2022 22:28:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2DB220E0;
+        Sun, 28 Aug 2022 19:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=PO7cJBFihQeNVhVlYLRbma6dh9Gy9x7adrAO453Twb0=; b=bPqnn3CW6xQRwD6JjWz14jxZdr
+        kMnVFfoaBwrW5AF+BfDMLpXQ8IoJFwlUWCG4PLfLWems1Q8OBX2jMIwkJ5oySLAyCCg7xAQ0XyLjS
+        GtGoY8383o6BcX5fdnthyKbBTbS8EFfDJizIm1K1k3ff1b0zv/LPoRRIpokLuAxUc2+0HxAldahWe
+        3rO/GTVfaPC7E2SH4H1MWTxz/bURqJb5HAnIaVnNjv0Pkm7CzALezZUrgOCzrxSBVKxbkxSvVcw2C
+        tJkRxMy1G34P75tY1qugd4DKO3Xhk32Sr+oOGlxB4SL1aWAwrsMbcRwbbnF01wa1ZgftQVaIKkIMF
+        7po+Jr2Q==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSUUx-003jOd-DL; Mon, 29 Aug 2022 02:27:38 +0000
+Message-ID: <d6ddb57b-4a6c-1549-1352-800a7bb4d529@infradead.org>
+Date:   Sun, 28 Aug 2022 19:27:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220828222121.4951-2-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] cpuidle: qcom_scm: fix Kconfig dependencies again
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        He Ying <heying24@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20210421135723.3601743-1-arnd@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20210421135723.3601743-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Mario,
+Hi--
 
-Thank you for the patch! Perhaps something to improve:
+Can we get Arnd's patch merged, please?
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.0-rc3 next-20220826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+It's been awhile...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/Add-some-extra-debugging-mechanisms-for-s0i3/20220829-062334
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: x86_64-randconfig-a011-20220829 (https://download.01.org/0day-ci/archive/20220829/202208291045.mtIt51vk-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/af6400b51370a2bc04906697aeec5a938e6ee446
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/Add-some-extra-debugging-mechanisms-for-s0i3/20220829-062334
-        git checkout af6400b51370a2bc04906697aeec5a938e6ee446
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
+On 4/21/21 06:57, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The previous compile time fix was incomplete and still results in
+> warnings like:
+> 
+> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+>   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+>   Selected by [y]:
+>   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+> 
+> WARNING: unmet direct dependencies detected for QCOM_SCM
+>   Depends on [n]: (ARM [=y] || ARM64) && HAVE_ARM_SMCCC [=n]
+>   Selected by [y]:
+>   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+> 
+> Use a dependency on ARCH_SUSPEND_POSSIBLE as a prerequisite for
+> selecting ARM_CPU_SUSPEND, and a dependency on HAVE_ARM_SMCCC
+> for QCOM_SCM.
+> 
+> Fixes: 498ba2a8a275 ("cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
-All warnings (new ones prefixed by >>):
+> ---
+>  drivers/cpuidle/Kconfig.arm | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+> index 334f83e56120..fc596494251c 100644
+> --- a/drivers/cpuidle/Kconfig.arm
+> +++ b/drivers/cpuidle/Kconfig.arm
+> @@ -107,7 +107,8 @@ config ARM_TEGRA_CPUIDLE
+>  
+>  config ARM_QCOM_SPM_CPUIDLE
+>  	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
+> -	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64 && MMU
+> +	depends on ARCH_QCOM || (ARCH_SUSPEND_POSSIBLE && COMPILE_TEST)
+> +	depends on ARM && HAVE_ARM_SMCCC
+>  	select ARM_CPU_SUSPEND
+>  	select CPU_IDLE_MULTIPLE_DRIVERS
+>  	select DT_IDLE_STATES
 
->> drivers/acpi/x86/s2idle.c:489:6: warning: no previous prototype for function 'acpi_s2idle_enter' [-Wmissing-prototypes]
-   void acpi_s2idle_enter(void)
-        ^
-   drivers/acpi/x86/s2idle.c:489:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void acpi_s2idle_enter(void)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/acpi_s2idle_enter +489 drivers/acpi/x86/s2idle.c
-
-   488	
- > 489	void acpi_s2idle_enter(void)
-   490	{
-   491		struct acpi_s2idle_dev_ops *handler;
-   492	
-   493		if (!lps0_device_handle || sleep_no_lps0)
-   494			return;
-   495	
-   496		list_for_each_entry(handler, &lps0_s2idle_devops_head, list_node) {
-   497			if (handler->enter)
-   498				handler->enter();
-   499		}
-   500	}
-   501	
-
+Thanks.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy
