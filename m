@@ -2,55 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381415A57C5
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 01:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 798785A580C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 01:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiH2XqV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Aug 2022 19:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S229988AbiH2Xrp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Aug 2022 19:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiH2XqU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Aug 2022 19:46:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9F598588;
-        Mon, 29 Aug 2022 16:46:19 -0700 (PDT)
+        with ESMTP id S229897AbiH2Xq7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Aug 2022 19:46:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F071A5C59;
+        Mon, 29 Aug 2022 16:46:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FEB1B815A1;
-        Mon, 29 Aug 2022 23:46:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E13DC433D6;
-        Mon, 29 Aug 2022 23:46:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94437B815CE;
+        Mon, 29 Aug 2022 23:46:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E5AAC433B5;
+        Mon, 29 Aug 2022 23:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661816777;
-        bh=+VvePBFLp/LWmK5hX6RIjAP6zHRRsMudqWZ6EI8ufAk=;
+        s=k20201202; t=1661816801;
+        bh=dv17Y2mhXBQx2sTKnqhChtP+LSnUSVZsPo/u12Xln0w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BEUFplEohMizRY5cMmxOHX5fEqyEQp1OOmKmxtPpmCx/tDNAJRtzpsc3cnZ6Zz9nt
-         NFeXcVoAOSpjyB3BN4Tn669fMPUe7CRfsrTq0EJglgoSO8V1UJce1rc5QTl2d0YEik
-         1cxbbMZ1dm16q+rZzR7k+izR1LqEi5aTHvPx3E7Tu8fFfAgv7xOEVCBYPHFgLG4yPC
-         xlI66+r26noL8Wo9denx0EXkWNsVPwfg1gNf5O8cv/lmzktFdH9lccrcTwX9ipbRoA
-         LMa3PIaOd+stnvWxcLv8shrEP3l31Wu1lBl2AalOkd70k0dWRxnFgVL6M2dMwlhkSq
-         cY7NJzt/xL3jw==
+        b=Zg6WtVBQcH39ZzpTXC3/Z2VBryinOvvkUV1c1EBSuzxAsD3+M4meTBGkOviD5hYWk
+         3LEZoWroNVEypAHPspCx/aSBbTeuhcEwmhYudhpqSIgl6LCL3Vkb0WqaJ6ZoWQ3lJ+
+         9qaH1hM+baKKks9H24Fr8/epRL8d23aiATOSyRImXAsWg+sz8mfQ5c4+Ik9FL+nxjH
+         x4DSslerZsIUS3Zj9CVaOle+ubLq8oocp8dX7n7Tw12s5TvA+6L0rbIc5qaPHzIWq8
+         VW0BoTet6E8nRBBwMS+K3FSoo90hdNhxaFRwQZ1p9Ch6l+4KUWi/O0n3P2VGbNd/gv
+         U/MlJuZ0qr6tA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     a39.skl@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-mmc@vger.kernel.org,
-        vkoul@kernel.org, linux-arm-msm@vger.kernel.org, will@kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, iommu@lists.linux.dev,
-        konrad.dybcio@somainline.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        linux-arm-kernel@lists.infradead.org, robdclark@chromium.org,
-        loic.poulain@linaro.org, rafael@kernel.org,
-        dmaengine@vger.kernel.org, bhupesh.sharma@linaro.org,
-        phone-devel@vger.kernel.org, robin.murphy@arm.com,
-        Viresh Kumar <viresh.kumar@linaro.org>, ulf.hansson@linaro.org,
-        emma@anholt.net, robh+dt@kernel.org, joro@8bytes.org,
-        linux-kernel@vger.kernel.org, quic_saipraka@quicinc.com
-Subject: Re: (subset) [PATCH 0/7] Compatibles for SM6115
-Date:   Mon, 29 Aug 2022 18:45:38 -0500
-Message-Id: <166181675976.322065.5888575144597732401.b4-ty@kernel.org>
+To:     linux-arm-msm@vger.kernel.org, luca.weiss@fairphone.com
+Cc:     linux-pm@vger.kernel.org, okukatla@codeaurora.org,
+        georgi.djakov@linaro.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 0/5] Add interconnect support for SM6350
+Date:   Mon, 29 Aug 2022 18:46:03 -0500
+Message-Id: <166181675955.322065.18365644806860060536.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220815100952.23795-1-a39.skl@gmail.com>
-References: <20220815100952.23795-1-a39.skl@gmail.com>
+In-Reply-To: <20220525144404.200390-1-luca.weiss@fairphone.com>
+References: <20220525144404.200390-1-luca.weiss@fairphone.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,25 +56,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 15 Aug 2022 12:09:38 +0200, Adam Skladowski wrote:
-> This patch series add bunch of compatibles in preparation
-> for sending device tree patches for Snapdragon 662 SoC
+On Wed, 25 May 2022 16:43:56 +0200, Luca Weiss wrote:
+> This series adds interconnect support for the various NoCs found on
+> sm6350.
 > 
-> Adam Skladowski (7):
->   dt-bindings: dmaengine: qcom: gpi: add compatible for SM6115
->   dmaengine: qcom: gpi: Add SM6115 support
->   dt-bindings: mmc: sdhci-msm: Document the SM6115 compatible
->   cpufreq: Add SM6115 to cpufreq-dt-platdev blocklist
->   dt-bindings: arm-smmu: Add compatible for Qualcomm SM6115
->   iommu/arm-smmu-qcom: Add SM6115 support
->   dt-bindings: firmware: document Qualcomm SM6115 SCM
+> A more special modification is allowing child NoC devices, like done for
+> rpm-based qcm2290 which was already merged, but now for rpmh-based
+> interconnect.
 > 
 > [...]
 
 Applied, thanks!
 
-[7/7] dt-bindings: firmware: document Qualcomm SM6115 SCM
-      commit: f2567b732b0aa2160228a956e0c2007feaeb4b64
+[5/5] arm64: dts: qcom: sm6350: Add interconnect support
+      commit: 38c5c4fe17014130dee4f85e663c5d919655801e
 
 Best regards,
 -- 
