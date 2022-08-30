@@ -2,97 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4E35A5BAC
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 08:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE465A5D93
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 10:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiH3GVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Aug 2022 02:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S230245AbiH3IBO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Aug 2022 04:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiH3GVI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 02:21:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90EB73323;
-        Mon, 29 Aug 2022 23:21:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52C6761407;
-        Tue, 30 Aug 2022 06:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93272C433D7;
-        Tue, 30 Aug 2022 06:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661840464;
-        bh=4pblfYpA63CrE4rMWyeeR7WMMlRkZGVcfIrjeRiiXz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X0lVDNWwDs0piYuKSZk4VHLRFseVcxbpP6HucMF7+eCB2612CLy1kIWMwmnBeIs+c
-         T7ibHa1Qym3Ik7wZocYQ9/Cfz//5yURLwjqVPrKFdEpjnib54SOGZb385BPqwLkloO
-         p8CwTCO/wu1uGyVYhP8/IpHlPzNDo/3IdtlscjGpKhPMk1EpOOVSgMRWHbDbbQeicK
-         1ndJU+IIYlJ3giv8NHI/IIaKKK5JluMNfgJCZOHHf3cM2ntiRdc78d5eZ0dSbSEuKN
-         s2iFapYfReXT0fu07fzYUgfe58nQLzXfRbeTn2mxzkBc4CV5TcS2Vp8UdPpFwgBLQ+
-         NkEEediBSO2Rg==
-Date:   Tue, 30 Aug 2022 11:50:50 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
-Message-ID: <20220830062050.GA7066@workstation>
-References: <cover.1657695140.git.viresh.kumar@linaro.org>
- <20220715160933.GD12197@workstation>
- <20220718015742.uwskqo55qd67jx2w@vireshk-i7>
- <20220801023756.76jswkbwivuntqof@vireshk-i7>
- <20220830032456.z4olnogsyg32vhiz@builder.lan>
- <20220830054042.akj7pf366inelvpo@vireshk-i7>
+        with ESMTP id S230373AbiH3IBI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 04:01:08 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86760C56;
+        Tue, 30 Aug 2022 01:01:03 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MH05b0yHkz1N7cK;
+        Tue, 30 Aug 2022 15:57:23 +0800 (CST)
+Received: from [10.67.110.73] (10.67.110.73) by canpemm500005.china.huawei.com
+ (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
+ 2022 16:01:00 +0800
+Message-ID: <954cdab4-62d3-b413-f615-9c7b1563c1b1@huawei.com>
+Date:   Tue, 30 Aug 2022 16:01:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830054042.akj7pf366inelvpo@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH] cpufreq: bmips-cpufreq: Use module_init and add
+ module_exit
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <mmayer@broadcom.com>, <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220826021845.2283648-1-chris.zjh@huawei.com>
+ <20220830052922.aedexy7ovdus5pzk@vireshk-i7>
+From:   "zhangjianhua (E)" <chris.zjh@huawei.com>
+In-Reply-To: <20220830052922.aedexy7ovdus5pzk@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 11:10:42AM +0530, Viresh Kumar wrote:
-> On 29-08-22, 22:24, Bjorn Andersson wrote:
-> > Conceptually, it sounds like a good idea to express the clock feeding
-> > the CPU clusters, which is controlled by the OSM/EPSS.  But do you
-> > expect the OPP framework to actually do something with the clock, or
-> > just to ensure that the relationship is properly described?
-> 
-> No, the OPP core will never try to set the clock rate in your case,
-> though it will do clk_get().
-> 
 
-Okay. Then I think it is a fair argument to make qcom-cpufreq-hw as the
-clock provider for CPUs.
+在 2022/8/30 13:29, Viresh Kumar 写道:
+> On 26-08-22, 10:18, Zhang Jianhua wrote:
+>> - Use module_init instead of device_initcall.
+>> - Add a function for module_exit to unregister driver.
+>>
+>> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+>> ---
+>>   drivers/cpufreq/bmips-cpufreq.c | 10 ++++++++--
+>>   1 file changed, 8 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/bmips-cpufreq.c b/drivers/cpufreq/bmips-cpufreq.c
+>> index f7c23fa468f0..21c0417c95e1 100644
+>> --- a/drivers/cpufreq/bmips-cpufreq.c
+>> +++ b/drivers/cpufreq/bmips-cpufreq.c
+>> @@ -156,7 +156,7 @@ static struct cpufreq_driver bmips_cpufreq_driver = {
+>>   	.name		= BMIPS_CPUFREQ_PREFIX,
+>>   };
+>>   
+>> -static int __init bmips_cpufreq_probe(void)
+>> +static int __init bmips_cpufreq_driver_init(void)
+>>   {
+>>   	struct cpufreq_compat *cc;
+>>   	struct device_node *np;
+>> @@ -176,7 +176,13 @@ static int __init bmips_cpufreq_probe(void)
+>>   
+>>   	return cpufreq_register_driver(&bmips_cpufreq_driver);
+>>   }
+>> -device_initcall(bmips_cpufreq_probe);
+>> +module_init(bmips_cpufreq_driver_init);
+>> +
+>> +static void __exit bmips_cpufreq_driver_exit(void)
+>> +{
+>> +	cpufreq_unregister_driver(&bmips_cpufreq_driver);
+>> +}
+>> +module_exit(bmips_cpufreq_driver_exit)
+> Semicolon ? Did you even compile this ? :)
 
-I will send the RFC soon.
+Semicolon is not necessary for module_exit, and it can be compiled. I will send v2 patch to keep the format consistent, thanks.
 
-Thanks,
-Mani
-
-> > FWIW, the possible discrepancy between the requested frequency and the
-> > actual frequency comes from the fact that OSM/EPSS throttles the cluster
-> > frequency based on a number of different factors (thermal, voltages
-> > ...).
-> > This is reported back to the kernel using the thermal pressure
-> > interface. It would be quite interesting to see some investigation in
-> > how efficient the kernel is at making use of this feedback.
-> 
-> -- 
-> viresh
+>>   
+>>   MODULE_AUTHOR("Markus Mayer <mmayer@broadcom.com>");
+>>   MODULE_DESCRIPTION("CPUfreq driver for Broadcom BMIPS SoCs");
+>> -- 
+>> 2.31.0
