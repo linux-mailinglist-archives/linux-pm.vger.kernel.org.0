@@ -2,75 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36EE5A5B32
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 07:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7335A5B3B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 07:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiH3Fkr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Aug 2022 01:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S229801AbiH3FpD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Aug 2022 01:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiH3Fkq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 01:40:46 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606CF85AB1
-        for <linux-pm@vger.kernel.org>; Mon, 29 Aug 2022 22:40:45 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id x23so10072803pll.7
-        for <linux-pm@vger.kernel.org>; Mon, 29 Aug 2022 22:40:45 -0700 (PDT)
+        with ESMTP id S229538AbiH3FpA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 01:45:00 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0180C13F46
+        for <linux-pm@vger.kernel.org>; Mon, 29 Aug 2022 22:44:59 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f12so9908494plb.11
+        for <linux-pm@vger.kernel.org>; Mon, 29 Aug 2022 22:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=/AXxGSKHD9gHotHgPkcKQJDg7QFNUaxs4G1mHC7A7EM=;
-        b=GZdC/rr42yOk2UFksu/R3G3rPbI2L9UJtIKaPIria2iMwQfoKStV/mLDhnoeMiWHwT
-         7u4Y7HYJD6VAZ7PmsZW1KcHuHnNAOtRAHAUA6mpvhVj2vskhNKnc6law/JlK2fu3+pVh
-         6jRCrLuXzaGl7Gi8XzAeWCwDHtOEqwzI24b6Q7tiUqR9iVshq/DN9yD5dDLLaN7CUk+s
-         12EjTAip3/Js0sVZ4iRH7jTIuo5GrPzOpZygmQPcTvqPnbB1R1GPTTRfm1qiToyL8Gy/
-         pPBfE1kQK6420hWrFUeTgvDk3zhmmjeWmWzF8Tb9TTOpKwTIjFQJ3O79Lgo5ZgIf9uQL
-         hXFg==
+        bh=OZrB1r5czbXocki1k9M1K47PMyoT2lGbE+m2as71vbM=;
+        b=Mre5u/psT8WNvzhuroGVULvJC5NMcDvaLlPHw2b1cX5H0SYPShdXYNuemxzcakUpoW
+         iM1stJwHC9wP5S66wY/0Q62lLnSgoJw2+Y9VCUjLayiacdnaWMSGwkQTr/TadtSp4din
+         9ZelUQ14tNa9fKomTov7Hnqh3bFyysgpjRdzVX4TW08PmJ04wc7XvmuKl/cepCquiPh2
+         zAa4t0cj/JBeO/wOkq6xZf4JISIZUkzkzo4ptzCnvCEl6XP2HavtSoQZR3Slh5GzkNRT
+         y5pxjw3RAc/WxPVBLVGb3qNYRk0CiWq3bfOMvt1tsQkG1qrZZyfaQSdNiSnGUSxIzhTO
+         K6vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/AXxGSKHD9gHotHgPkcKQJDg7QFNUaxs4G1mHC7A7EM=;
-        b=Ks3DEoXFa7+XMi+FB9xFnY2xOjJOJmEDDi8SbI7I+J5LZQPDUcx9pPxASVKVAsS6pJ
-         63Sl7/u7D4xj6PiwwNKDVkkHYT8xlU0lXTLvtM7qluAu9fEmT0IzVrNr93BQTA8OId7D
-         wcfi7KY6Y8emk8D+Fz1Z1usQRTDd8rUN1iFQe5I5MzRbSGOcfSVB+4kDSMUAt7nahHdH
-         ahvWo6aDuN+2tyX70JBlHQMFRPt/yGPzOY/INIKnlY0iS/RC/ZAWkVw5GlLAVt7wqwM8
-         eyj+Rvz/b/X9KVJ1jrlrweu+VhLiJWvuGb6DMTxHJyP81jjX38VIV3AXhFYw4fCI6kAA
-         NbrA==
-X-Gm-Message-State: ACgBeo3NY+99ZEb74akCiql4fTQmulQro6oCDnIRhZXU4ds3orytWdn3
-        0Tp5PBnwfMAncEXt6GvKMzw/mA==
-X-Google-Smtp-Source: AA6agR4fz8JV9EJ3UVqdHB6K8oLv+ZN6CiYLpiAiB1jb8u1lfRtFBL6/xYco7Xh2MRfH9OHHAYnhzw==
-X-Received: by 2002:a17:902:d4c9:b0:172:f480:bdd with SMTP id o9-20020a170902d4c900b00172f4800bddmr19669902plg.170.1661838044911;
-        Mon, 29 Aug 2022 22:40:44 -0700 (PDT)
+        bh=OZrB1r5czbXocki1k9M1K47PMyoT2lGbE+m2as71vbM=;
+        b=aQIfmwcofIbxov7uNj9I73yXK6oRwL8jaKskzbRHE502MRCpzN37rCdubnYKTn69Zn
+         RYYtn8TdSBE0cWhXFnNgeuZ5okTuj04Na2RkD4NF+ux4btTeSqmLh1KTe07w2XlJnKMp
+         qsCasOvsD+2D5YPFxIYeKAf4ZQQQNPes9jyAyb7qo+I+Q0/i6A7pdsSglunL/nQtKRF5
+         LR2l4rxFdwVf0eFjS1SI4fAatjWebnavfL6XSQJumiUMBjX3DPj1nnT5SwgjOfkO1JJX
+         tojUZfj8XOjfIqyDLX64+5iPHWNX3E88Ux1QXs+BoF8bPA6fDm3e168beks+/lXbok0m
+         sGvg==
+X-Gm-Message-State: ACgBeo1b5w7DwsduzrnrBcIxPd+zRT9nk3YoaaFCmLfCwV2uSFfd4K+t
+        yQfullmcxTy+UtcayrE+b5nyEQ==
+X-Google-Smtp-Source: AA6agR5BViIHecxmZ6xtzj9KH/goF9PYHSdULnv0XdS2by1e/G3zHkzh1+Dg0Qc1q0AVHKyxFlAiZA==
+X-Received: by 2002:a17:902:8f87:b0:172:83b5:d771 with SMTP id z7-20020a1709028f8700b0017283b5d771mr19656028plo.159.1661838298529;
+        Mon, 29 Aug 2022 22:44:58 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id l5-20020a170903120500b00174c1855cd9sm3787283plh.267.2022.08.29.22.40.43
+        by smtp.gmail.com with ESMTPSA id k4-20020a17090a3cc400b001fada871e97sm7631907pjd.13.2022.08.29.22.44.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 22:40:44 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 11:10:42 +0530
+        Mon, 29 Aug 2022 22:44:57 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 11:14:55 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
-Message-ID: <20220830054042.akj7pf366inelvpo@vireshk-i7>
-References: <cover.1657695140.git.viresh.kumar@linaro.org>
- <20220715160933.GD12197@workstation>
- <20220718015742.uwskqo55qd67jx2w@vireshk-i7>
- <20220801023756.76jswkbwivuntqof@vireshk-i7>
- <20220830032456.z4olnogsyg32vhiz@builder.lan>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.or, lenb@kernel.org,
+        robert.moore@intel.com, punit.agrawal@bytedance.com,
+        ionela.voinescu@arm.com, pierre.gondois@arm.com,
+        linux-kernel@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Souvik Chakravarty <souvik.chakravarty@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        vincent.guittot@linaro.org
+Subject: Re: [PATCH v3 2/2] cpufreq: CPPC: Change FIE default
+Message-ID: <20220830054455.pezg63zqxg6az77n@vireshk-i7>
+References: <20220818211619.4193362-1-jeremy.linton@arm.com>
+ <20220818211619.4193362-3-jeremy.linton@arm.com>
+ <20220824061430.3aflygc4gno5j47y@vireshk-i7>
+ <0d49c40d-02af-5190-76b0-e88f3622ab7a@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830032456.z4olnogsyg32vhiz@builder.lan>
+In-Reply-To: <0d49c40d-02af-5190-76b0-e88f3622ab7a@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -81,22 +80,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-08-22, 22:24, Bjorn Andersson wrote:
-> Conceptually, it sounds like a good idea to express the clock feeding
-> the CPU clusters, which is controlled by the OSM/EPSS.  But do you
-> expect the OPP framework to actually do something with the clock, or
-> just to ensure that the relationship is properly described?
+On 24-08-22, 15:04, Lukasz Luba wrote:
+> On 8/24/22 07:14, Viresh Kumar wrote:
+> > On 18-08-22, 16:16, Jeremy Linton wrote:
+> > > FIE is mostly implemented as PCC mailboxes on arm machines.  This was
+> > > enabled by default without any data suggesting that it does anything
+> > > but hurt system performance. Lets change the default to 'n' until
+> > > hardware appears which clearly benefits.
+> > > 
+> > > Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> > > ---
+> > >   drivers/cpufreq/Kconfig.arm | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> > > index 954749afb5fe..ad66d8f15db0 100644
+> > > --- a/drivers/cpufreq/Kconfig.arm
+> > > +++ b/drivers/cpufreq/Kconfig.arm
+> > > @@ -22,7 +22,7 @@ config ACPI_CPPC_CPUFREQ
+> > >   config ACPI_CPPC_CPUFREQ_FIE
+> > >   	bool "Frequency Invariance support for CPPC cpufreq driver"
+> > >   	depends on ACPI_CPPC_CPUFREQ && GENERIC_ARCH_TOPOLOGY
+> > > -	default y
+> > > +	default n
+> > >   	help
+> > >   	  This extends frequency invariance support in the CPPC cpufreq driver,
+> > >   	  by using CPPC delivered and reference performance counters.
+> > 
+> > Why is this required after we have the first patch in ?
+> > 
 
-No, the OPP core will never try to set the clock rate in your case,
-though it will do clk_get().
+Well, my question was for the way the patches were added. If we are
+disabling the feature based on platform, then there is no need to
+disable the feature by default.
 
-> FWIW, the possible discrepancy between the requested frequency and the
-> actual frequency comes from the fact that OSM/EPSS throttles the cluster
-> frequency based on a number of different factors (thermal, voltages
-> ...).
-> This is reported back to the kernel using the thermal pressure
-> interface. It would be quite interesting to see some investigation in
-> how efficient the kernel is at making use of this feedback.
+> There are a few issues with this ACPI_CPPC_CPUFREQ_FIE solution:
+> 1. The design is very heavy and that kernel thread can be ~512 util
+>    (that's what we have been told by one of our partners from servers'
+>    world)
+> 2. The HW & FW design is not suited for this task. Newer HW will just
+>    have AMU counters (on Arm64) for FIE
+> 3. The patches haven't been tested in terms of performance overhead
+>    AFAIK. Although, it affects existing Arm64 servers with their
+>    workloads.
+> 4. AFAIK non of our server partners wasn't complaining about issues with
+>    old FIE mechanism.
+> 
+> In our team we are not allowed to send code that we cannot prove in many
+> ways.
+> 
+> I would just not compile this at all (or even revert this feature).
+> If someone compiled in this by accident - make sure we disable it
+> after checks like in the patch 1/2. I'll add also some comments
+> to that patch.
+
+If we don't really want the feature, which is open for discussion
+(added Vincent to have a look as well), then we better mark it BROKEN
+in Kconfig.
 
 -- 
 viresh
