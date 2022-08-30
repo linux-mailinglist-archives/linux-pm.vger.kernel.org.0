@@ -2,705 +2,407 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A043F5A647F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 15:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A38E5A65AF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 15:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiH3NQu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Aug 2022 09:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
+        id S230330AbiH3Nyc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Aug 2022 09:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiH3NQu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 09:16:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6188BD1E06;
-        Tue, 30 Aug 2022 06:16:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 306491042;
-        Tue, 30 Aug 2022 06:16:54 -0700 (PDT)
-Received: from [10.57.16.5] (unknown [10.57.16.5])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D50FE3F71A;
-        Tue, 30 Aug 2022 06:16:44 -0700 (PDT)
-Message-ID: <9ee42d60-1bdd-c1e8-ec6e-38d0e1fcf4d8@arm.com>
-Date:   Tue, 30 Aug 2022 14:16:42 +0100
+        with ESMTP id S230089AbiH3NyJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 09:54:09 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6865E13E96;
+        Tue, 30 Aug 2022 06:53:50 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id b26so4532195ljk.12;
+        Tue, 30 Aug 2022 06:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=lhGydNxK55q9xkCqNJ9J0S3Q5544ZKHenHWr3Bzy3jM=;
+        b=e6G6ylWJGCb5IL4CsgicyiO7rBiH5bx4Zjuh9qXJyzDoFHI/56tkUFtH8wYTqC0ItM
+         RxIKkNYOVRhBdmVC3Tti8gF274YCgtRJcFrDb7vBy8lntSKIMiUz2scfXxdcuB0sg59A
+         5mSQ0EsoQynJhdwj0S0dN8b97evfyJOk+Jo7XrKDwZ6EdlrbH/yEMs3yd0DN87ONOsy2
+         a5365n97iUAQwrRRRvxczADbT+Kwo7APpOExgcrbkcMopUNS84MzNYa/PboQvR+5oK6f
+         CBO3+pUx8md1UbAFgbnJ7Iyk7r6REV3IdBygiNRAhlLi+c4j5QYWIT16WEe/psI972f2
+         B8gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=lhGydNxK55q9xkCqNJ9J0S3Q5544ZKHenHWr3Bzy3jM=;
+        b=HMO7ciMTWe3+tsGfY1kwgTxcmjuQeD9qd7ki6+QELHPZa1nfkIBa6FlG3zOTQMNXgw
+         Wsa1A1qpe3J03Y8afTijsktiaGfe4CLhv6AuTkZ3DNTGVGRWLl5Gc+74B9EXQCp69H64
+         Jczbyz2TtvvjLefOmG3mfkp0CsMv+zzF8SJu3KlFaQJStIu8+8ioOIwTw7324PCDvr5m
+         G52Hj0S0c90R84s7eL12oN/Z9/18HN6pTwxW0zjYTZqjqyVQ0eFW9MzjO8uMeuaiQVoS
+         uct7/93RAl+1mkq11FKvpHZCDhrc2qHaDy4IH3vVrJ/VlPn1j00x4YVxGG1h4+pVSFAY
+         AAVg==
+X-Gm-Message-State: ACgBeo0E0FiDSgZ1/Vq1BFMz6tdtziOhJtQHRxIFnkEKOtSyPiydnw07
+        RM0k5BK2RaOsDJfosbYeZrZtCj4CAnYbsw==
+X-Google-Smtp-Source: AA6agR4RoPtxvc0EvzqIUGkAyDy9bJK8zIm/5LtTVZXxAbwKTrnfFyOLx4PAya+jHwO18zUD9b8BpQ==
+X-Received: by 2002:a05:6402:40d1:b0:448:7247:4994 with SMTP id z17-20020a05640240d100b0044872474994mr8109400edb.319.1661866866668;
+        Tue, 30 Aug 2022 06:41:06 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id z14-20020a1709060ace00b0073d6d6e698bsm5800938ejf.187.2022.08.30.06.41.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 06:41:06 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+        Joel Stanley <joel@jms.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Michael Walle <michael@walle.cc>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V2 1/2] nvmem: prefix all symbols with NVMEM_
+Date:   Tue, 30 Aug 2022 15:40:58 +0200
+Message-Id: <20220830134059.18744-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/3] powercap: arm_scmi: Add SCMI Powercap based driver
-Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
-        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com,
-        dan.carpenter@oracle.com, "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <20220817105424.3124006-1-cristian.marussi@arm.com>
- <20220817105424.3124006-2-cristian.marussi@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220817105424.3124006-2-cristian.marussi@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Cristian,
+From: Rafał Miłecki <rafal@milecki.pl>
 
-On 8/17/22 11:54, Cristian Marussi wrote:
-> Add a powercap driver that, using the ARM SCMI Protocol to query the SCMI
-> platform firmware for the list of existing Powercap domains, registers all
-> of such discovered domains under the new 'arm-scmi' powercap control type.
-> 
-> A new simple powercap zone and constraint is registered for all the SCMI
-> powercap zones that are found.
-> 
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
-> v4 --> v5
-> - fix _init cleaning up powerctrl zone on failure
-> - removed uneeded casting
-> - simplified normalization helpers
-> v3 --> v4
-> - get rid of scmi setup/teardwn and use std module_init/module_exit
-> v1 --> v2
-> - fix sparse warning about missing static on global  *scmi_top_pcntrl;
-> ---
->   drivers/powercap/Kconfig             |  13 +
->   drivers/powercap/Makefile            |   1 +
->   drivers/powercap/arm_scmi_powercap.c | 544 +++++++++++++++++++++++++++
->   3 files changed, 558 insertions(+)
->   create mode 100644 drivers/powercap/arm_scmi_powercap.c
-> 
-> diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-> index 515e3ceb3393..90d33cd1b670 100644
-> --- a/drivers/powercap/Kconfig
-> +++ b/drivers/powercap/Kconfig
-> @@ -44,6 +44,19 @@ config IDLE_INJECT
->   	  synchronously on a set of specified CPUs or alternatively
->   	  on a per CPU basis.
->   
-> +config ARM_SCMI_POWERCAP
-> +	tristate "ARM SCMI Powercap driver"
-> +	depends on ARM_SCMI_PROTOCOL
-> +	help
-> +	  This enables support for the ARM Powercap based on ARM SCMI
-> +	  Powercap protocol.
-> +
-> +	  ARM SCMI Powercap protocol allows power limits to be enforced
-> +	  and monitored against the SCMI Powercap domains advertised as
-> +	  available by the SCMI platform firmware.
-> +
-> +	  When compiled as module it will be called arm_scmi_powercap.ko.
-> +
->   config DTPM
->   	bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
->   	depends on OF
-> diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
-> index 494617cdad88..4474201b4aa7 100644
-> --- a/drivers/powercap/Makefile
-> +++ b/drivers/powercap/Makefile
-> @@ -6,3 +6,4 @@ obj-$(CONFIG_POWERCAP)	+= powercap_sys.o
->   obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
->   obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
->   obj-$(CONFIG_IDLE_INJECT) += idle_inject.o
-> +obj-$(CONFIG_ARM_SCMI_POWERCAP) += arm_scmi_powercap.o
-> diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
-> new file mode 100644
-> index 000000000000..9f3b8386b4d8
-> --- /dev/null
-> +++ b/drivers/powercap/arm_scmi_powercap.c
-> @@ -0,0 +1,544 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * SCMI Powercap support.
-> + *
-> + * Copyright (C) 2022 ARM Ltd.
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/math.h>
-> +#include <linux/limits.h>
-> +#include <linux/list.h>
-> +#include <linux/module.h>
-> +#include <linux/powercap.h>
-> +#include <linux/scmi_protocol.h>
-> +
-> +#define to_scmi_powercap_zone(z)		\
-> +	container_of(z, struct scmi_powercap_zone, zone)
-> +
-> +static const struct scmi_powercap_proto_ops *powercap_ops;
-> +
-> +struct scmi_powercap_zone {
-> +	unsigned int height;
-> +	struct device *dev;
-> +	struct scmi_protocol_handle *ph;
-> +	const struct scmi_powercap_info *info;
-> +	struct scmi_powercap_zone *spzones;
-> +	struct powercap_zone zone;
-> +	struct list_head node;
-> +};
-> +
-> +struct scmi_powercap_root {
-> +	unsigned int num_zones;
-> +	struct scmi_powercap_zone *spzones;
-> +	struct list_head *registered_zones;
-> +};
-> +
-> +static struct powercap_control_type *scmi_top_pcntrl;
-> +
-> +static int scmi_powercap_zone_release(struct powercap_zone *pz)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int scmi_powercap_get_max_power_range_uw(struct powercap_zone *pz,
-> +						u64 *max_power_range_uw)
-> +{
-> +	*max_power_range_uw = U32_MAX;
+This unifies all NVMEM symbols. They follow one style now.
 
-Shouldn't be calculated based on pai info from the platform FW?
-e.g.
-*max_power_range_uw = spz->info->max_power_cap - spz->info->min_power_cap
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ arch/arm/configs/multi_v7_defconfig |  6 +++---
+ arch/arm/configs/qcom_defconfig     |  2 +-
+ arch/arm64/configs/defconfig        | 10 +++++-----
+ arch/mips/configs/ci20_defconfig    |  2 +-
+ drivers/cpufreq/Kconfig.arm         |  2 +-
+ drivers/nvmem/Kconfig               | 24 ++++++++++++------------
+ drivers/nvmem/Makefile              | 24 ++++++++++++------------
+ drivers/soc/mediatek/Kconfig        |  2 +-
+ drivers/thermal/qcom/Kconfig        |  2 +-
+ 9 files changed, 37 insertions(+), 37 deletions(-)
 
-(but with uW conversion in mind if needed)
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index b1a25b8c11e7..b61b2e3d116b 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -1188,11 +1188,11 @@ CONFIG_TI_PIPE3=y
+ CONFIG_TWL4030_USB=m
+ CONFIG_RAS=y
+ CONFIG_NVMEM_IMX_OCOTP=y
+-CONFIG_QCOM_QFPROM=y
+-CONFIG_ROCKCHIP_EFUSE=m
++CONFIG_NVMEM_QCOM_QFPROM=y
++CONFIG_NVMEM_ROCKCHIP_EFUSE=m
+ CONFIG_NVMEM_SUNXI_SID=y
+ CONFIG_NVMEM_VF610_OCOTP=y
+-CONFIG_MESON_MX_EFUSE=m
++CONFIG_NVMEM_MESON_MX_EFUSE=m
+ CONFIG_NVMEM_RMEM=m
+ CONFIG_FSI=m
+ CONFIG_FSI_MASTER_GPIO=m
+diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+index 12b82c662359..8e1f13faeee5 100644
+--- a/arch/arm/configs/qcom_defconfig
++++ b/arch/arm/configs/qcom_defconfig
+@@ -282,7 +282,7 @@ CONFIG_PHY_QCOM_QMP=y
+ CONFIG_PHY_QCOM_USB_HS=y
+ CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=y
+ CONFIG_PHY_QCOM_USB_HSIC=y
+-CONFIG_QCOM_QFPROM=y
++CONFIG_NVMEM_QCOM_QFPROM=y
+ CONFIG_INTERCONNECT=y
+ CONFIG_INTERCONNECT_QCOM=y
+ CONFIG_INTERCONNECT_QCOM_MSM8974=m
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 265454620682..91e58cf59c99 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1238,12 +1238,12 @@ CONFIG_QCOM_L3_PMU=y
+ CONFIG_HISI_PMU=y
+ CONFIG_NVMEM_IMX_OCOTP=y
+ CONFIG_NVMEM_IMX_OCOTP_SCU=y
+-CONFIG_MTK_EFUSE=y
+-CONFIG_QCOM_QFPROM=y
+-CONFIG_ROCKCHIP_EFUSE=y
++CONFIG_NVMEM_MTK_EFUSE=y
++CONFIG_NVMEM_QCOM_QFPROM=y
++CONFIG_NVMEM_ROCKCHIP_EFUSE=y
+ CONFIG_NVMEM_SUNXI_SID=y
+-CONFIG_UNIPHIER_EFUSE=y
+-CONFIG_MESON_EFUSE=m
++CONFIG_NVMEM_UNIPHIER_EFUSE=y
++CONFIG_NVMEM_MESON_EFUSE=m
+ CONFIG_NVMEM_RMEM=m
+ CONFIG_NVMEM_LAYERSCAPE_SFP=m
+ CONFIG_FPGA=y
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index 955b6ac581ab..11f08b6a3013 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -143,7 +143,7 @@ CONFIG_MEMORY=y
+ CONFIG_JZ4780_NEMC=y
+ CONFIG_PWM=y
+ CONFIG_PWM_JZ4740=m
+-CONFIG_JZ4780_EFUSE=y
++CONFIG_NVMEM_JZ4780_EFUSE=y
+ CONFIG_JZ4770_PHY=y
+ CONFIG_EXT4_FS=y
+ # CONFIG_DNOTIFY is not set
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 954749afb5fe..82e5de1f6f8c 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -153,7 +153,7 @@ config ARM_OMAP2PLUS_CPUFREQ
+ config ARM_QCOM_CPUFREQ_NVMEM
+ 	tristate "Qualcomm nvmem based CPUFreq"
+ 	depends on ARCH_QCOM
+-	depends on QCOM_QFPROM
++	depends on NVMEM_QCOM_QFPROM
+ 	depends on QCOM_SMEM
+ 	select PM_OPP
+ 	help
+diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+index bab8a29c9861..691375c13381 100644
+--- a/drivers/nvmem/Kconfig
++++ b/drivers/nvmem/Kconfig
+@@ -52,7 +52,7 @@ config NVMEM_IMX_OCOTP_SCU
+ 	  This is a driver for the SCU On-Chip OTP Controller (OCOTP)
+ 	  available on i.MX8 SoCs.
+ 
+-config JZ4780_EFUSE
++config NVMEM_JZ4780_EFUSE
+ 	tristate "JZ4780 EFUSE Memory Support"
+ 	depends on MACH_INGENIC || COMPILE_TEST
+ 	depends on HAS_IOMEM
+@@ -96,7 +96,7 @@ config NVMEM_MXS_OCOTP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nvmem-mxs-ocotp.
+ 
+-config MTK_EFUSE
++config NVMEM_MTK_EFUSE
+ 	tristate "Mediatek SoCs EFUSE support"
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+ 	depends on HAS_IOMEM
+@@ -107,7 +107,7 @@ config MTK_EFUSE
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called efuse-mtk.
+ 
+-config MICROCHIP_OTPC
++config NVMEM_MICROCHIP_OTPC
+ 	tristate "Microchip OTPC support"
+ 	depends on ARCH_AT91 || COMPILE_TEST
+ 	help
+@@ -126,7 +126,7 @@ config NVMEM_NINTENDO_OTP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nvmem-nintendo-otp.
+ 
+-config QCOM_QFPROM
++config NVMEM_QCOM_QFPROM
+ 	tristate "QCOM QFPROM Support"
+ 	depends on ARCH_QCOM || COMPILE_TEST
+ 	depends on HAS_IOMEM
+@@ -145,7 +145,7 @@ config NVMEM_SPMI_SDAM
+ 	  Qualcomm Technologies, Inc. PMICs. It provides the clients
+ 	  an interface to read/write to the SDAM module's shared memory.
+ 
+-config ROCKCHIP_EFUSE
++config NVMEM_ROCKCHIP_EFUSE
+ 	tristate "Rockchip eFuse Support"
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	depends on HAS_IOMEM
+@@ -156,7 +156,7 @@ config ROCKCHIP_EFUSE
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nvmem_rockchip_efuse.
+ 
+-config ROCKCHIP_OTP
++config NVMEM_ROCKCHIP_OTP
+ 	tristate "Rockchip OTP controller support"
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	depends on HAS_IOMEM
+@@ -199,7 +199,7 @@ config NVMEM_SUNXI_SID
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nvmem_sunxi_sid.
+ 
+-config UNIPHIER_EFUSE
++config NVMEM_UNIPHIER_EFUSE
+ 	tristate "UniPhier SoCs eFuse support"
+ 	depends on ARCH_UNIPHIER || COMPILE_TEST
+ 	depends on HAS_IOMEM
+@@ -221,7 +221,7 @@ config NVMEM_VF610_OCOTP
+ 	  This driver can also be build as a module. If so, the module will
+ 	  be called nvmem-vf610-ocotp.
+ 
+-config MESON_EFUSE
++config NVMEM_MESON_EFUSE
+ 	tristate "Amlogic Meson GX eFuse Support"
+ 	depends on (ARCH_MESON || COMPILE_TEST) && MESON_SM
+ 	help
+@@ -231,7 +231,7 @@ config MESON_EFUSE
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nvmem_meson_efuse.
+ 
+-config MESON_MX_EFUSE
++config NVMEM_MESON_MX_EFUSE
+ 	tristate "Amlogic Meson6/Meson8/Meson8b eFuse Support"
+ 	depends on ARCH_MESON || COMPILE_TEST
+ 	help
+@@ -251,13 +251,13 @@ config NVMEM_SNVS_LPGPR
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nvmem-snvs-lpgpr.
+ 
+-config RAVE_SP_EEPROM
++config NVMEM_RAVE_SP_EEPROM
+ 	tristate "Rave SP EEPROM Support"
+ 	depends on RAVE_SP_CORE
+ 	help
+ 	  Say y here to enable Rave SP EEPROM support.
+ 
+-config SC27XX_EFUSE
++config NVMEM_SC27XX_EFUSE
+ 	tristate "Spreadtrum SC27XX eFuse Support"
+ 	depends on MFD_SC27XX_PMIC || COMPILE_TEST
+ 	depends on HAS_IOMEM
+@@ -278,7 +278,7 @@ config NVMEM_ZYNQMP
+ 
+ 	  If sure, say yes. If unsure, say no.
+ 
+-config SPRD_EFUSE
++config NVMEM_SPRD_EFUSE
+ 	tristate "Spreadtrum SoC eFuse Support"
+ 	depends on ARCH_SPRD || COMPILE_TEST
+ 	depends on HAS_IOMEM
+diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+index 399f9972d45b..7ac988c6966e 100644
+--- a/drivers/nvmem/Makefile
++++ b/drivers/nvmem/Makefile
+@@ -15,7 +15,7 @@ obj-$(CONFIG_NVMEM_IMX_OCOTP)	+= nvmem-imx-ocotp.o
+ nvmem-imx-ocotp-y		:= imx-ocotp.o
+ obj-$(CONFIG_NVMEM_IMX_OCOTP_SCU)	+= nvmem-imx-ocotp-scu.o
+ nvmem-imx-ocotp-scu-y		:= imx-ocotp-scu.o
+-obj-$(CONFIG_JZ4780_EFUSE)		+= nvmem_jz4780_efuse.o
++obj-$(CONFIG_NVMEM_JZ4780_EFUSE)		+= nvmem_jz4780_efuse.o
+ nvmem_jz4780_efuse-y		:= jz4780-efuse.o
+ obj-$(CONFIG_NVMEM_LPC18XX_EEPROM)	+= nvmem_lpc18xx_eeprom.o
+ nvmem_lpc18xx_eeprom-y	:= lpc18xx_eeprom.o
+@@ -25,37 +25,37 @@ obj-$(CONFIG_NVMEM_MXS_OCOTP)	+= nvmem-mxs-ocotp.o
+ nvmem-mxs-ocotp-y		:= mxs-ocotp.o
+ obj-$(CONFIG_NVMEM_NINTENDO_OTP)	+= nvmem-nintendo-otp.o
+ nvmem-nintendo-otp-y		:= nintendo-otp.o
+-obj-$(CONFIG_MTK_EFUSE)		+= nvmem_mtk-efuse.o
++obj-$(CONFIG_NVMEM_MTK_EFUSE)		+= nvmem_mtk-efuse.o
+ nvmem_mtk-efuse-y		:= mtk-efuse.o
+-obj-$(CONFIG_QCOM_QFPROM)	+= nvmem_qfprom.o
++obj-$(CONFIG_NVMEM_QCOM_QFPROM)	+= nvmem_qfprom.o
+ nvmem_qfprom-y			:= qfprom.o
+ obj-$(CONFIG_NVMEM_SPMI_SDAM)	+= nvmem_qcom-spmi-sdam.o
+ nvmem_qcom-spmi-sdam-y		+= qcom-spmi-sdam.o
+-obj-$(CONFIG_ROCKCHIP_EFUSE)	+= nvmem_rockchip_efuse.o
++obj-$(CONFIG_NVMEM_ROCKCHIP_EFUSE)	+= nvmem_rockchip_efuse.o
+ nvmem_rockchip_efuse-y		:= rockchip-efuse.o
+-obj-$(CONFIG_ROCKCHIP_OTP)	+= nvmem-rockchip-otp.o
++obj-$(CONFIG_NVMEM_ROCKCHIP_OTP)	+= nvmem-rockchip-otp.o
+ nvmem-rockchip-otp-y		:= rockchip-otp.o
+ obj-$(CONFIG_NVMEM_SUNXI_SID)	+= nvmem_sunxi_sid.o
+ nvmem_stm32_romem-y 		:= stm32-romem.o
+ obj-$(CONFIG_NVMEM_STM32_ROMEM) += nvmem_stm32_romem.o
+ nvmem_sunxi_sid-y		:= sunxi_sid.o
+-obj-$(CONFIG_UNIPHIER_EFUSE)	+= nvmem-uniphier-efuse.o
++obj-$(CONFIG_NVMEM_UNIPHIER_EFUSE)	+= nvmem-uniphier-efuse.o
+ nvmem-uniphier-efuse-y		:= uniphier-efuse.o
+ obj-$(CONFIG_NVMEM_VF610_OCOTP)	+= nvmem-vf610-ocotp.o
+ nvmem-vf610-ocotp-y		:= vf610-ocotp.o
+-obj-$(CONFIG_MESON_EFUSE)	+= nvmem_meson_efuse.o
++obj-$(CONFIG_NVMEM_MESON_EFUSE)	+= nvmem_meson_efuse.o
+ nvmem_meson_efuse-y		:= meson-efuse.o
+-obj-$(CONFIG_MESON_MX_EFUSE)	+= nvmem_meson_mx_efuse.o
++obj-$(CONFIG_NVMEM_MESON_MX_EFUSE)	+= nvmem_meson_mx_efuse.o
+ nvmem_meson_mx_efuse-y		:= meson-mx-efuse.o
+ obj-$(CONFIG_NVMEM_SNVS_LPGPR)	+= nvmem_snvs_lpgpr.o
+ nvmem_snvs_lpgpr-y		:= snvs_lpgpr.o
+-obj-$(CONFIG_RAVE_SP_EEPROM)	+= nvmem-rave-sp-eeprom.o
++obj-$(CONFIG_NVMEM_RAVE_SP_EEPROM)	+= nvmem-rave-sp-eeprom.o
+ nvmem-rave-sp-eeprom-y		:= rave-sp-eeprom.o
+-obj-$(CONFIG_SC27XX_EFUSE)	+= nvmem-sc27xx-efuse.o
++obj-$(CONFIG_NVMEM_SC27XX_EFUSE)	+= nvmem-sc27xx-efuse.o
+ nvmem-sc27xx-efuse-y		:= sc27xx-efuse.o
+ obj-$(CONFIG_NVMEM_ZYNQMP)	+= nvmem_zynqmp_nvmem.o
+ nvmem_zynqmp_nvmem-y		:= zynqmp_nvmem.o
+-obj-$(CONFIG_SPRD_EFUSE)	+= nvmem_sprd_efuse.o
++obj-$(CONFIG_NVMEM_SPRD_EFUSE)	+= nvmem_sprd_efuse.o
+ nvmem_sprd_efuse-y		:= sprd-efuse.o
+ obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
+ nvmem-rmem-y			:= rmem.o
+@@ -67,7 +67,7 @@ obj-$(CONFIG_NVMEM_SUNPLUS_OCOTP)	+= nvmem_sunplus_ocotp.o
+ nvmem_sunplus_ocotp-y		:= sunplus-ocotp.o
+ obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
+ nvmem-apple-efuses-y 		:= apple-efuses.o
+-obj-$(CONFIG_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
++obj-$(CONFIG_NVMEM_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
+ nvmem-microchip-otpc-y		:= microchip-otpc.o
+ obj-$(CONFIG_NVMEM_U_BOOT_ENV)	+= nvmem_u-boot-env.o
+ nvmem_u-boot-env-y		:= u-boot-env.o
+diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+index 73e63920b1b9..40d0cc600cae 100644
+--- a/drivers/soc/mediatek/Kconfig
++++ b/drivers/soc/mediatek/Kconfig
+@@ -77,7 +77,7 @@ config MTK_MMSYS
+ 
+ config MTK_SVS
+ 	tristate "MediaTek Smart Voltage Scaling(SVS)"
+-	depends on MTK_EFUSE && NVMEM
++	depends on NVMEM_MTK_EFUSE && NVMEM
+ 	help
+ 	  The Smart Voltage Scaling(SVS) engine is a piece of hardware
+ 	  which has several controllers(banks) for calculating suitable
+diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
+index bfd889422dd3..2c7f3f9a26eb 100644
+--- a/drivers/thermal/qcom/Kconfig
++++ b/drivers/thermal/qcom/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config QCOM_TSENS
+ 	tristate "Qualcomm TSENS Temperature Alarm"
+-	depends on QCOM_QFPROM
++	depends on NVMEM_QCOM_QFPROM
+ 	depends on ARCH_QCOM || COMPILE_TEST
+ 	help
+ 	  This enables the thermal sysfs driver for the TSENS device. It shows
+-- 
+2.34.1
 
-> +	return 0;
-> +}
-> +
-> +static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
-> +				      u64 *power_uw)
-> +{
-> +	int ret;
-> +	u32 avg_power, pai;
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-
-Please order these lines from longest (on top) to shortest.
-
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	if (!spz->info->powercap_monitoring)
-> +		return -EINVAL;
-
-Those checks might be done during setup. Please find my comment there.
-
-> +
-> +	ret = powercap_ops->measurements_get(spz->ph, spz->info->id, &avg_power,
-> +					     &pai);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (spz->info->powercap_scale_mw)
-> +		*power_uw = avg_power * 1000;
-> +	else
-> +		*power_uw = avg_power;
-
-Maybe:
-
-	*power_uw = avg_power;
-	if (spz->info->powercap_scale_mw)
-		*power_uw *= 1000;
-
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct powercap_zone_ops zone_ops = {
-> +	.get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
-> +	.get_power_uw = scmi_powercap_get_power_uw,
-> +	.release = scmi_powercap_zone_release,
-> +};
-> +
-> +static inline void
-
-Drop inline here, compiler will figure out.
-
-> +scmi_powercap_normalize_cap(const struct scmi_powercap_info *info,
-> +			    u64 power_limit_uw, u32 *normalized)
-> +{
-> +	u64 req_power;
-> +
-> +	if (info->powercap_scale_mw)
-> +		req_power = DIV_ROUND_UP_ULL(power_limit_uw, 1000);
-> +	else
-> +		req_power = power_limit_uw;
-> +
-> +	if (req_power > info->max_power_cap)
-> +		*normalized = info->max_power_cap;
-> +	else if (req_power < info->min_power_cap)
-> +		*normalized = info->min_power_cap;
-> +	else
-> +		/*
-> +		 * This cast is lossless since here @req_power is certain to be
-> +		 * within the range [min_power_cap, max_power_cap] whose bounds
-> +		 * are assured to be two unsigned 32bits quantities.
-> +		 */
-> +		*normalized = (u32)req_power;
-
-clamp() or clamp_t() might simplify those lines
-
-> +
-> +	*normalized = rounddown(*normalized, info->power_cap_step);
-> +}
-> +
-> +static int scmi_powercap_set_power_limit_uw(struct powercap_zone *pz, int cid,
-> +					    u64 power_uw)
-> +{
-> +	u32 norm_power;
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-
-sorting ^^^
-
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	if (!spz->info->powercap_cap_config)
-> +		return -EINVAL;
-> +
-> +	scmi_powercap_normalize_cap(spz->info, power_uw, &norm_power);
-> +
-> +	return powercap_ops->cap_set(spz->ph, spz->info->id, norm_power, false);
-> +}
-> +
-> +static int scmi_powercap_get_power_limit_uw(struct powercap_zone *pz, int cid,
-> +					    u64 *power_limit_uw)
-> +{
-> +	int ret;
-> +	u32 power;
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-
-sorting ^^^
-
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	ret = powercap_ops->cap_get(spz->ph, spz->info->id, &power);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (spz->info->powercap_scale_mw)
-> +		*power_limit_uw = power * 1000;
-> +	else
-> +		*power_limit_uw = power;
-
-	*power_limit_uw = power;
-	if (spz->info->powercap_scale_mw)
-		*power_limit_uw *= 1000;
-
-> +
-> +	return 0;
-> +}
-> +
-> +static inline void
-
-IMO inline not needed here, compiler will know.
-
-> +scmi_powercap_normalize_time(const struct scmi_powercap_info *info,
-> +			     u64 time_us, u32 *normalized)
-> +{
-> +	if (time_us > info->max_pai)
-> +		*normalized = info->max_pai;
-> +	else if (time_us < info->min_pai)
-> +		*normalized = info->min_pai;
-> +	else
-> +		/*
-> +		 * This cast is lossless since here @time_us is certain to be
-> +		 * within the range [min_pai, max_pai] whose bounds
-> +		 * are assured to be two unsigned 32bits quantities.
-> +		 */
-> +		*normalized = (u32)time_us;
-
-clamp() ?
-
-> +
-> +	*normalized = rounddown(*normalized, info->pai_step);
-> +}
-> +
-> +static int scmi_powercap_set_time_window_us(struct powercap_zone *pz, int cid,
-> +					    u64 time_window_us)
-> +{
-> +	u32 norm_pai;
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	if (!spz->info->powercap_pai_config)
-> +		return -EINVAL;
-> +
-> +	scmi_powercap_normalize_time(spz->info, time_window_us, &norm_pai);
-> +
-> +	return powercap_ops->pai_set(spz->ph, spz->info->id, norm_pai);
-> +}
-> +
-> +static int scmi_powercap_get_time_window_us(struct powercap_zone *pz, int cid,
-> +					    u64 *time_window_us)
-> +{
-> +	int ret;
-> +	u32 pai;
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-
-sorting
-
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	ret = powercap_ops->pai_get(spz->ph, spz->info->id, &pai);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*time_window_us = pai;
-> +
-> +	return 0;
-> +}
-> +
-> +static int scmi_powercap_get_max_power_uw(struct powercap_zone *pz, int cid,
-> +					  u64 *max_power_uw)
-> +{
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	if (spz->info->powercap_scale_uw)
-> +		*max_power_uw = spz->info->max_power_cap;
-> +	else
-> +		*max_power_uw = spz->info->max_power_cap * 1000;
-
-	*max_power_uw = spz->info->max_power_cap;
-	if (spz->info->powercap_scale_mw)
-		*max_power_uw *= 1000;
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int scmi_powercap_get_min_power_uw(struct powercap_zone *pz, int cid,
-> +					  u64 *min_power_uw)
-> +{
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	if (spz->info->powercap_scale_uw)
-> +		*min_power_uw = spz->info->min_power_cap;
-> +	else
-> +		*min_power_uw = spz->info->min_power_cap * 1000;
-
-	*min_power_uw = spz->info->min_power_cap;
-	if (spz->info->powercap_scale_mw)
-		*min_power_uw *= 1000;
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int scmi_powercap_get_max_time_window_us(struct powercap_zone *pz,
-> +						int cid, u64 *time_window_us)
-> +{
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	*time_window_us = spz->info->max_pai;
-> +
-> +	return 0;
-> +}
-> +
-> +static int scmi_powercap_get_min_time_window_us(struct powercap_zone *pz,
-> +						int cid, u64 *time_window_us)
-> +{
-> +	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-> +
-> +	if (!spz->info)
-> +		return -ENODEV;
-> +
-> +	*time_window_us = (u64)spz->info->min_pai;
-> +
-> +	return 0;
-> +}
-> +
-> +static const char *scmi_powercap_get_name(struct powercap_zone *pz, int cid)
-> +{
-> +	return "SCMI power-cap";
-> +}
-> +
-> +static const struct powercap_zone_constraint_ops constraint_ops  = {
-> +	.set_power_limit_uw = scmi_powercap_set_power_limit_uw,
-> +	.get_power_limit_uw = scmi_powercap_get_power_limit_uw,
-> +	.set_time_window_us = scmi_powercap_set_time_window_us,
-> +	.get_time_window_us = scmi_powercap_get_time_window_us,
-> +	.get_max_power_uw = scmi_powercap_get_max_power_uw,
-> +	.get_min_power_uw = scmi_powercap_get_min_power_uw,
-> +	.get_max_time_window_us = scmi_powercap_get_max_time_window_us,
-> +	.get_min_time_window_us = scmi_powercap_get_min_time_window_us,
-> +	.get_name = scmi_powercap_get_name,
-> +};
-> +
-> +static void scmi_powercap_unregister_all_zones(struct scmi_powercap_root *pr)
-> +{
-> +	int i;
-> +
-> +	/* Un-register children zones first starting from the leaves */
-> +	for (i = pr->num_zones - 1; i >= 0; i--) {
-> +		if (!list_empty(&pr->registered_zones[i])) {
-> +			struct scmi_powercap_zone *spz;
-> +
-> +			list_for_each_entry(spz, &pr->registered_zones[i], node)
-> +				powercap_unregister_zone(scmi_top_pcntrl,
-> +							 &spz->zone);
-> +		}
-> +	}
-> +}
-> +
-> +static inline bool
-> +scmi_powercap_is_zone_registered(struct scmi_powercap_zone *spz)
-> +{
-> +	return !list_empty(&spz->node);
-> +}
-> +
-> +static inline unsigned int
-> +scmi_powercap_get_zone_height(struct scmi_powercap_zone *spz)
-> +{
-> +	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-> +		return 0;
-> +
-> +	return spz->spzones[spz->info->parent_id].height + 1;
-> +}
-> +
-> +static inline struct scmi_powercap_zone *
-> +scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
-> +{
-> +	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-> +		return NULL;
-> +
-> +	return &spz->spzones[spz->info->parent_id];
-> +}
-> +
-> +/**
-> + * scmi_powercap_register_zone  - Register an SCMI powercap zone recursively
-> + *
-> + * @pr: A reference to the root powercap zones descriptors
-> + * @spz: A reference to the SCMI powercap zone to register
-> + *
-> + * When registering SCMI powercap zones with the powercap framework we should
-> + * take care to always register zones starting from the root ones and to
-> + * deregister starting from the leaves.
-> + *
-> + * Unfortunately we cannot assume that the array of available SCMI powercap
-> + * zones provided by the SCMI platform firmware is built to comply with such
-> + * requirement.
-> + *
-> + * This function, given an SCMI powercap zone to register, takes care to walk
-> + * the SCMI powercap zones tree up to the root looking recursively for
-> + * unregistered parent zones before registering the provided zone; at the same
-> + * time each registered zone height in such a tree is accounted for and each
-> + * zone, once registered, is stored in the @registered_zones array that is
-> + * indexed by zone height: this way will be trivial, at unregister time, to walk
-> + * the @registered_zones array backward and unregister all the zones starting
-> + * from the leaves, removing children zones before parents.
-> + *
-> + * While doing this, we prune away any zone marked as invalid (like the ones
-> + * sporting an SCMI abstract power scale) as long as they are positioned as
-> + * leaves in the SCMI powercap zones hierarchy: any non-leaf invalid zone causes
-> + * the entire process to fail since we cannot assume the correctness of an SCMI
-> + * powercap zones hierarchy if some of the internal nodes are missing.
-> + *
-> + * Note that the array of SCMI powercap zones as returned by the SCMI platform
-> + * is known to be sane, i.e. zones relationships have been validated at the
-> + * protocol layer.
-> + *
-> + * Return: 0 on Success
-> + */
-> +static int scmi_powercap_register_zone(struct scmi_powercap_root *pr,
-> +				       struct scmi_powercap_zone *spz)
-> +{
-> +	int ret = 0;
-> +	struct scmi_powercap_zone *parent;
-> +
-> +	if (!spz->info)
-> +		return ret;
-> +
-> +	parent = scmi_powercap_get_parent_zone(spz);
-> +	if (parent && !scmi_powercap_is_zone_registered(parent)) {
-> +		/*
-> +		 * Bail out if a parent domain was marked as unsupported:
-> +		 * only domains participating as leaves can be skipped.
-> +		 */
-> +		if (!parent->info)
-> +			return -ENODEV;
-> +
-> +		ret = scmi_powercap_register_zone(pr, parent);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	if (!scmi_powercap_is_zone_registered(spz)) {
-> +		struct powercap_zone *z;
-> +
-> +		z = powercap_register_zone(&spz->zone,
-> +					   scmi_top_pcntrl,
-> +					   spz->info->name,
-> +					   parent ? &parent->zone : NULL,
-> +					   &zone_ops, 1, &constraint_ops);
-> +		if (!IS_ERR(z)) {
-> +			spz->height = scmi_powercap_get_zone_height(spz);
-> +			list_add(&spz->node,
-> +				 &pr->registered_zones[spz->height]);
-> +			dev_dbg(spz->dev,
-> +				"Registered node %s - parent %s - height:%d\n",
-> +				spz->info->name,
-> +				parent ? parent->info->name : "ROOT",
-> +				spz->height);
-> +			ret = 0;
-> +		} else {
-> +			ret = PTR_ERR(z);
-> +			dev_err(spz->dev,
-> +				"Error registering node:%s - parent:%s - h:%d - ret:%d\n",
-> +				 spz->info->name,
-> +				 parent ? parent->info->name : "ROOT",
-> +				 spz->height, ret);
-> +		}
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int scmi_powercap_probe(struct scmi_device *sdev)
-> +{
-> +	int ret, i;
-> +	struct scmi_powercap_root *pr;
-> +	struct scmi_powercap_zone *spz;
-> +	struct scmi_protocol_handle *ph;
-> +	struct device *dev = &sdev->dev;
-> +	const struct scmi_handle *handle = sdev->handle;
-
-I would drop 'handle' since it's used once only, then sort those
-lines in order.
-
-> +
-> +	if (!handle)
-
-maybe:
-	if (!sdev->handle)
-
-> +		return -ENODEV;
-> +
-> +	powercap_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_POWERCAP,
-
-and here 'sdev->handle'
-
-> +						 &ph);
-> +	if (IS_ERR(powercap_ops))
-> +		return PTR_ERR(powercap_ops);
-> +
-> +	pr = devm_kzalloc(dev, sizeof(*pr), GFP_KERNEL);
-> +	if (!pr)
-> +		return -ENOMEM;
-> +
-> +	pr->num_zones = powercap_ops->num_domains_get(ph);
-> +	if (pr->num_zones < 0) {
-> +		dev_err(dev, "number of powercap domains not found\n");
-> +		return pr->num_zones;
-> +	}
-> +
-> +	pr->spzones = devm_kcalloc(dev, pr->num_zones,
-> +				   sizeof(*pr->spzones), GFP_KERNEL);
-> +	if (!pr->spzones)
-> +		return -ENOMEM;
-> +
-> +	/* Allocate for worst possible scenario of maximum tree height. */
-> +	pr->registered_zones = devm_kcalloc(dev, pr->num_zones,
-> +					    sizeof(*pr->registered_zones),
-> +					    GFP_KERNEL);
-> +	if (!pr->registered_zones)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-> +		/*
-> +		 * Powercap domains are validate by the protocol layer, i.e.
-> +		 * when only non-NULL domains are returned here, whose
-> +		 * parent_id is assured to point to another valid domain.
-> +		 */
-> +		spz->info = powercap_ops->info_get(ph, i);
-> +
-> +		spz->dev = dev;
-> +		spz->ph = ph;
-> +		spz->spzones = pr->spzones;
-> +		INIT_LIST_HEAD(&spz->node);
-> +		INIT_LIST_HEAD(&pr->registered_zones[i]);
-> +
-> +		/*
-> +		 * Forcibly skip powercap domains using an abstract scale.
-> +		 * Note that only leaves domains can be skipped, so this could
-> +		 * lead later to a global failure.
-> +		 */
-> +		if (!spz->info->powercap_scale_uw &&
-> +		    !spz->info->powercap_scale_mw) {
-> +			dev_warn(dev,
-> +				 "Abstract power scale not supported. Skip %s.\n",
-> +				 spz->info->name);
-> +			spz->info = NULL;
-> +			continue;
-> +		}
-
-We can say that the power scale should be consistent in
-a platform. Then we can bail out when abstract scale has
-been found. This could also simplify code by a bit.
-
-Can we also validate here some those lines, which are
-checked in many callback funcitons?
-
-These are the lines, which could be then removed if we bail
-out here earlier:
-	if (!spz->info)
-		return -ENODEV;
-	if (!spz->info->powercap_pai_config)
-		return -EINVAL;
-	if (!spz->info->powercap_monitoring)
-		return -EINVAL;
-
-> +	}
-> +
-> +	/*
-> +	 * Scan array of retrieved SCMI powercap domains and register them
-> +	 * recursively starting from the root domains.
-> +	 */
-> +	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-> +		ret = scmi_powercap_register_zone(pr, spz);
-> +		if (ret) {
-> +			dev_err(dev,
-> +				"Failed to register powercap zone %s - ret:%d\n",
-> +				spz->info->name, ret);
-> +			scmi_powercap_unregister_all_zones(pr);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	dev_set_drvdata(dev, pr);
-> +
-> +	dev_info(dev, "Registered %d SCMI Powercap domains !\n", pr->num_zones);
-> +
-> +	return ret;
-> +}
-> +
-
-
-Regards,
-Lukasz
