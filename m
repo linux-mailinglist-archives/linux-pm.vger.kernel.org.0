@@ -2,146 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06C55A68EC
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 18:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D075A6934
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 19:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiH3Q6h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Aug 2022 12:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
+        id S229896AbiH3REG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Aug 2022 13:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiH3Q6e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 12:58:34 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7C7B69CF;
-        Tue, 30 Aug 2022 09:58:32 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id y197so429553yby.13;
-        Tue, 30 Aug 2022 09:58:32 -0700 (PDT)
+        with ESMTP id S230309AbiH3REF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 13:04:05 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DEB15A1F
+        for <linux-pm@vger.kernel.org>; Tue, 30 Aug 2022 10:04:03 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id x19so10081059pfr.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Aug 2022 10:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=mITTU0JUdJBVWxufdBgXC/bZoCiqWhtDy6UOJ+PtbWI=;
+        b=z87+nW/xi7tXZ91FTBXqyjQkdBpGPgv77brysCESoyftv3sOzFpZ9SF1bn1hgP8Y5c
+         22hBaKUqJaqD6pCoJZlAp82JKeqPfMJpyQJ/sMGo3moRe5HvR7TfBXUHTsivQOCoPqXa
+         GuCcYa+WHQwhO6qBD5on4vz0ppsnGW3JsDydF+4VQcjHLqN4Ox5NiujzE6CuqY/ZCFyQ
+         cnUi8KpG5CsZk24TYGJhddet7/6O4RMB1VoyVxBrcDtZIerNylvVUqcFsqSavEa/I9Zv
+         rOFMu9WbIYLS7Uph2HFuqM662hgO3jSuFTsd+qrXJC0ymesawLoJCfbCOs1E7CLd7pbj
+         KKAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=QwTPzippv9nFknfyh2bt7Km8y3L5Y24/vUQnMoNu/zw=;
-        b=YNFZdZlfGNc4/e4qpIJTi5d6fY7hVg48oZmQDZtG5s+2/z0yJ3pZ4+so8DeQYRW8Sn
-         BwSlmDSAxC+4XjuaXHuo1Rw8SAWjcD9M9HKmL2qyDP+9NuHDzAZ8QDYkt+Pc/pXJvwFI
-         1+T86dhJ/SCBOMZoXjk+uuFp3DziusujNuC/jQ3qTVTjyEk92flJJZumR7NblpR+7aq1
-         qoJ/zP6c5oSfJEFtR1fRNUxqmY/cwCz3wZ4Uz7IbgpqtqeKpiYETxTOmcvvB2uzDJT4g
-         QtEW//LmL602bc1CB69l7qXL09HnMn81uSyPWg1lXSUzBCAsGaSioEi3S2MAcpZlQkyp
-         R+Lg==
-X-Gm-Message-State: ACgBeo0zhRqtKo2z77viDhLANW2zzJwsSjkdpvzHu1SgFHBlczSbAUmd
-        JS+zM8HlTVdJjbJnnPZNps8CAqaWxfQjWZYq/vw=
-X-Google-Smtp-Source: AA6agR7mtrFfiiYWCG6KyM2N/ARGZmXb9oaS4qpQFGTPfFI/HmT+X3xNmdn7/Sel5cGAE2qOC38m61YoCH88sHdJSIA=
-X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
- z15-20020a25664f000000b0066cd0f436ccmr12426812ybm.482.1661878711809; Tue, 30
- Aug 2022 09:58:31 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=mITTU0JUdJBVWxufdBgXC/bZoCiqWhtDy6UOJ+PtbWI=;
+        b=DHcQxl+tKgkzAl4pmpLTxX4iAqO5PLciTROgtkx0IUPWM33alUzaCr2SqrMkTROuSt
+         jpu0JgxlA2dWktA914JnqfCGAZcSItRda7l4Q7fq2vh3qQEZeUuuJtPYa20QJULESANz
+         E9We2ol7hJJYbLpVZNmz3YRimsA6YUn6fEG0UTDPzo9k3W3mHZbd0EcslpR5mn+SUXB5
+         yMfZFgQwuwCkUjlLF3+2BtlnTFUtnP3CrhmvrIgcUtyFTm5svI+07b31gJ5TYy1DuNhd
+         MrlgZZyv+6T3Z9IbAkJMz0jvq6DT79YRLq0khKlwbQlJ59bzA9JLRIKDBotAbcQJXRMd
+         SZ/g==
+X-Gm-Message-State: ACgBeo1JFI1IiDEWcUuGR8Y/gv4ixB37iNZDlAVTCryaxn/OYTmCU6SZ
+        dlRZ+FrRhqPMpz9jfF8QRQucDg==
+X-Google-Smtp-Source: AA6agR6dRTu4OFyj4OnDRjT05ZFU3Db4NLRFQDVl6LpqvWdRCnhMttqhurD1VcXdOLvM8SDWo9oCVA==
+X-Received: by 2002:a63:e507:0:b0:42c:65d3:f3b6 with SMTP id r7-20020a63e507000000b0042c65d3f3b6mr5967820pgh.395.1661879042894;
+        Tue, 30 Aug 2022 10:04:02 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id p125-20020a62d083000000b00537e40747b0sm7771654pfg.42.2022.08.30.10.03.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 10:04:02 -0700 (PDT)
+Message-ID: <99a569fd-6a7c-0ed2-3a32-aab16f3bad92@linaro.org>
+Date:   Tue, 30 Aug 2022 22:33:56 +0530
 MIME-Version: 1.0
-References: <20220830104913.1620539-2-rajvi.jingar@linux.intel.com> <20220830162529.GA106073@bhelgaas>
-In-Reply-To: <20220830162529.GA106073@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Aug 2022 18:58:20 +0200
-Message-ID: <CAJZ5v0jL812FKOJsmijE7gx5GEYp0hQ9+3UtQ_WUr-Uf5pgxAg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3 2/2] PCI/PTM: fix to maintain pci_dev->ptm_enabled
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        David Box <david.e.box@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/4] firmware: qcom: scm: Add support for tsens reinit
+ workaround
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220804054638.3197294-1-bhupesh.sharma@linaro.org>
+ <20220804054638.3197294-2-bhupesh.sharma@linaro.org>
+ <20220829221551.uch6jdtaglzebu23@builder.lan>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <20220829221551.uch6jdtaglzebu23@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 6:25 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+cc Kai-Heng]
->
-> On Tue, Aug 30, 2022 at 03:49:13AM -0700, Rajvi Jingar wrote:
-> > pci_dev->ptm_enabled needs to be maintained to reflect the current PTM
-> > state of the device. In pci_ptm_disable(), clear ptm_enabled from
-> > 'struct pci_dev' on disabling PTM state for the device.
-> > In pci_restore_ptm_state(), set dev->ptm_enabled based on the restored
-> > PTM state of the device.
-> >
-> > In pci_ptm_disable(), perform ptm_enabled check to avoid config space
-> > access in case if PTM is already disabled for the device. ptm_enabled
-> > won't be set for non-PCIe devices so pci_is_pcie(dev) check is not
-> > needed anymore.
->
-> This one sounds like it's supposed to fix something, but I'm not clear
-> exactly what.
->
-> I have a vague memory of config accesses messing up a low power state.
-> But this is still completely magical and unmaintainable since AFAIK
-> there is nothing in the PCIe spec about avoiding config accesses when
-> PTM is disabled.
 
-Because ptm_enabled is expected to always reflect the hardware state,
-pci_disable_ptm() needs to be amended to clear it.  Also it is prudent
-to explicitly make it reflect the new hardware state in
-pci_restore_ptm_state().
+On 8/30/22 3:45 AM, Bjorn Andersson wrote:
+> On Thu, Aug 04, 2022 at 11:16:35AM +0530, Bhupesh Sharma wrote:
+>> Some versions of Qualcomm tsens controller might enter a
+>> 'bad state' while running stability tests causing sensor
+>> temperatures/interrupts status to be in an 'invalid' state.
+>>
+>> It is recommended to re-initialize the tsens controller
+>> via trustzone (secure registers) using scm call(s) when that
+>> happens.
+>>
+>> Add support for the same in the qcom_scm driver.
+>>
+>> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> Cc: Amit Kucheria <amitk@kernel.org>
+>> Cc: Thara Gopinath <thara.gopinath@gmail.com>
+>> Cc: linux-pm@vger.kernel.org
+>> Cc: linux-arm-msm@vger.kernel.org
+>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> ---
+>>   drivers/firmware/qcom_scm.c | 15 +++++++++++++++
+>>   drivers/firmware/qcom_scm.h |  4 ++++
+>>   include/linux/qcom_scm.h    |  2 ++
+>>   3 files changed, 21 insertions(+)
+>>
+>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+>> index cdbfe54c8146..93adcc046a62 100644
+>> --- a/drivers/firmware/qcom_scm.c
+>> +++ b/drivers/firmware/qcom_scm.c
+>> @@ -858,6 +858,21 @@ int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+>>   }
+>>   EXPORT_SYMBOL(qcom_scm_mem_protect_video_var);
+>>   
+>> +int qcom_scm_tsens_reinit(void)
+>> +{
+>> +	int ret;
+>> +	const struct qcom_scm_desc desc = {
+>> +		.svc = QCOM_SCM_SVC_TSENS,
+>> +		.cmd = QCOM_SCM_TSENS_INIT_ID,
+>> +	};
+>> +	struct qcom_scm_res res;
+>> +
+>> +	ret = qcom_scm_call(__scm->dev, &desc, &res);
+>> +
+>> +	return ret ? : res.result[0];
+>> +}
+>> +EXPORT_SYMBOL(qcom_scm_tsens_reinit);
+>> +
+>>   static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
+>>   				 size_t mem_sz, phys_addr_t src, size_t src_sz,
+>>   				 phys_addr_t dest, size_t dest_sz)
+>> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+>> index 0d51eef2472f..495fa00230c7 100644
+>> --- a/drivers/firmware/qcom_scm.h
+>> +++ b/drivers/firmware/qcom_scm.h
+>> @@ -94,6 +94,10 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+>>   #define QCOM_SCM_PIL_PAS_IS_SUPPORTED	0x07
+>>   #define QCOM_SCM_PIL_PAS_MSS_RESET	0x0a
+>>   
+>> +/* TSENS Services and Function IDs */
+>> +#define QCOM_SCM_SVC_TSENS		0x1E
+> 
+> It would be nice if this 'E' was lowercase.
 
-Then, pci_disable_ptm() can be made bail out if ptm_enabled is clear,
-because it has nothing to do then and the pci_is_pcie() check in there
-is not necessary, because ptm_enabled will never be set for devices
-that are not PCIe.
+Sure, will fix this in v4.
 
-> At the very least, we would need more details in the commit log and
-> a hint in the code about this.
->
-> > Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-> > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  v1->v2:
-> >    - add ptm_enabled check in pci_ptm_disable().
-> >    - set the dev->ptm_enabled value in pci_restore_ptm_state().
-> >  v2->v3:
-> >    - remove pci_is_pcie(dev) check in pci_ptm_disable().
-> >    - add Reviewed-by tag in commit message
-> > ---
-> >  drivers/pci/pcie/ptm.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-> > index 368a254e3124..1ce241d4538f 100644
-> > --- a/drivers/pci/pcie/ptm.c
-> > +++ b/drivers/pci/pcie/ptm.c
-> > @@ -34,7 +34,7 @@ void pci_disable_ptm(struct pci_dev *dev)
-> >       int ptm;
-> >       u16 ctrl;
-> >
-> > -     if (!pci_is_pcie(dev))
-> > +     if (!dev->ptm_enabled)
-> >               return;
->
-> This will conflict with a change Kai-Heng Feng and I have been working
-> on, but I can resolve it when applying.
->
-> >       ptm = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
-> > @@ -44,6 +44,7 @@ void pci_disable_ptm(struct pci_dev *dev)
-> >       pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
-> >       ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
-> >       pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
-> > +     dev->ptm_enabled = 0;
-> >  }
-> >
-> >  void pci_save_ptm_state(struct pci_dev *dev)
-> > @@ -83,6 +84,7 @@ void pci_restore_ptm_state(struct pci_dev *dev)
-> >
-> >       cap = (u16 *)&save_state->cap.data[0];
-> >       pci_write_config_word(dev, ptm + PCI_PTM_CTRL, *cap);
-> > +     dev->ptm_enabled = !!(*cap & PCI_PTM_CTRL_ENABLE);
-> >  }
-> >
-> >  void pci_ptm_init(struct pci_dev *dev)
-> > --
-> > 2.25.1
-> >
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+
+Thanks,
+Bhupesh
+
+>> +#define QCOM_SCM_TSENS_INIT_ID		0x5
+>> +
+>>   #define QCOM_SCM_SVC_IO			0x05
+>>   #define QCOM_SCM_IO_READ		0x01
+>>   #define QCOM_SCM_IO_WRITE		0x02
+>> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+>> index f8335644a01a..5c37e1658cef 100644
+>> --- a/include/linux/qcom_scm.h
+>> +++ b/include/linux/qcom_scm.h
+>> @@ -124,4 +124,6 @@ extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+>>   extern int qcom_scm_lmh_profile_change(u32 profile_id);
+>>   extern bool qcom_scm_lmh_dcvsh_available(void);
+>>   
+>> +extern int qcom_scm_tsens_reinit(void);
+>> +
+>>   #endif
+>> -- 
+>> 2.35.3
+>>
