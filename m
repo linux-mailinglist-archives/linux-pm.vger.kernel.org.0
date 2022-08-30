@@ -2,129 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905345A6852
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 18:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1717D5A6855
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 18:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiH3QZe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Aug 2022 12:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S229827AbiH3QZz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Aug 2022 12:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiH3QZe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 12:25:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9208D7F13B;
-        Tue, 30 Aug 2022 09:25:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 308D4616EC;
-        Tue, 30 Aug 2022 16:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DEC3C433D6;
-        Tue, 30 Aug 2022 16:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661876731;
-        bh=fX7lFkw2y3pdMg4VZBDhdTZbmlADf2lW89e/h6BNv1Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=gWSU5o/BDYQwHOOxA02WWMV7MiZJmwdgbPkYtqDMwpL9jaf4xEeUh8/W3mjsKlwV9
-         536yo7lJeLyxr6edq9HHeX1l+Qw2bAyNIMPUBP413iGqYGOO2TVOrKwmZJjoHi/+vN
-         mS1OyMzZ187YZEvSlxBCmmgRVIVIJc/pyLt+8qQIyvqnC2f47W3HUVWcTGIr7ZzkN4
-         B/BWvbqo/ipODa3NCTJ31jYqVmrbJ6J7h9PHuwqyJm+cfm08ra3+Jth+EfK82jHVoz
-         PjJTtjLoNm/4xzm2C5Y8CH2tCfnSCGKKyWtdCN0xijCiGElR1Svfs0vVHnpr1uwJPP
-         TpzxXPI0GR5ag==
-Date:   Tue, 30 Aug 2022 11:25:29 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rajvi Jingar <rajvi.jingar@linux.intel.com>
-Cc:     rafael.j.wysocki@intel.com, bhelgaas@google.com,
-        david.e.box@linux.intel.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [RESEND PATCH v3 2/2] PCI/PTM: fix to maintain
- pci_dev->ptm_enabled
-Message-ID: <20220830162529.GA106073@bhelgaas>
+        with ESMTP id S229453AbiH3QZy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 12:25:54 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42435FC3;
+        Tue, 30 Aug 2022 09:25:53 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id c17-20020a4a8ed1000000b004452faec26dso2059171ool.5;
+        Tue, 30 Aug 2022 09:25:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=YaikjxgLyqtsdLt2khR2V2BKYtZ+YK4d/SvwCpASp/E=;
+        b=i5BhVP7JqbMkkk9UFs7mz2wftvBvSXSKl7B9qYKEA3e9XBTW3/X0dE+IPGJU73Srh/
+         LZFKxJgg7mEny1eMRqn/iz5uSUvjSia+pt2sFLO2ooBf5n1VyYF9eTqRni39m+nxyj05
+         0aqieBfcZWM5Y57LmqaBsvJK2CVnhy815BBkZHAuYJQGUTJgWykCGniQU/NAI3uO+04c
+         GWfzhlOm/ip2DPzNs/qDFph6Ik/014vT0JtGD5czmkwH7FC3NVjBF8OR0qy2uWxcegKm
+         RLzoo1AkDBc7bONvv+CVDDphFZfYOZF2om8BEOWTxs68vLy05cLjhdBKUO78TVPnK5zG
+         zSew==
+X-Gm-Message-State: ACgBeo3IjHmkoz58Svl79zRhRBmVl2RlWvw8MupxDZVrJ4fGGxhaNKDj
+        hVCHNhDZ1cwIt1QWnEgpRabs7q/3Hg==
+X-Google-Smtp-Source: AA6agR7prvgwV09hc+PdOo95qlSdVRWy8WF9lKniw/j7mhhG0n5nzc730p6IwvmEgZxOf/5UVllw7g==
+X-Received: by 2002:a4a:ddcc:0:b0:44a:d491:b11e with SMTP id i12-20020a4addcc000000b0044ad491b11emr7542038oov.34.1661876753193;
+        Tue, 30 Aug 2022 09:25:53 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c4-20020a9d6844000000b00636f7059b27sm7595493oto.5.2022.08.30.09.25.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 09:25:52 -0700 (PDT)
+Received: (nullmailer pid 1514589 invoked by uid 1000);
+        Tue, 30 Aug 2022 16:25:51 -0000
+Date:   Tue, 30 Aug 2022 11:25:51 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH] dt-bindings: thermal: qcom-spmi-adc-tm5: add qcom,adc-tm7
+Message-ID: <20220830162551.GA1514331-robh@kernel.org>
+References: <20220828081022.96813-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830104913.1620539-2-rajvi.jingar@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220828081022.96813-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Kai-Heng]
-
-On Tue, Aug 30, 2022 at 03:49:13AM -0700, Rajvi Jingar wrote:
-> pci_dev->ptm_enabled needs to be maintained to reflect the current PTM
-> state of the device. In pci_ptm_disable(), clear ptm_enabled from
-> 'struct pci_dev' on disabling PTM state for the device.
-> In pci_restore_ptm_state(), set dev->ptm_enabled based on the restored
-> PTM state of the device.
+On Sun, 28 Aug 2022 11:10:22 +0300, Krzysztof Kozlowski wrote:
+> The qcom,adc-tm7 compatible is already used in PMK8350 so add it to the
+> Qualcomm PMIC Thermal Monitoring ADC.  Based on downstream sources, the
+> new compatible for TM7 differs from older TM5 by allowing configuring
+> per sensor decimation, time measurement and number of sample averaging -
+> unlike one configuration per entire device.  This was not reflected in
+> the bindings, therefore comment the new compatible as incomplete as it
+> might change and its ABI is no stable.
 > 
-> In pci_ptm_disable(), perform ptm_enabled check to avoid config space
-> access in case if PTM is already disabled for the device. ptm_enabled
-> won't be set for non-PCIe devices so pci_is_pcie(dev) check is not
-> needed anymore.
-
-This one sounds like it's supposed to fix something, but I'm not clear
-exactly what.
-
-I have a vague memory of config accesses messing up a low power state.
-But this is still completely magical and unmaintainable since AFAIK
-there is nothing in the PCIe spec about avoiding config accesses when
-PTM is disabled.
-
-At the very least, we would need more details in the commit log and
-a hint in the code about this.
-
-> Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  v1->v2:
->    - add ptm_enabled check in pci_ptm_disable().
->    - set the dev->ptm_enabled value in pci_restore_ptm_state().
->  v2->v3:
->    - remove pci_is_pcie(dev) check in pci_ptm_disable().
->    - add Reviewed-by tag in commit message
-> ---
->  drivers/pci/pcie/ptm.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-> index 368a254e3124..1ce241d4538f 100644
-> --- a/drivers/pci/pcie/ptm.c
-> +++ b/drivers/pci/pcie/ptm.c
-> @@ -34,7 +34,7 @@ void pci_disable_ptm(struct pci_dev *dev)
->  	int ptm;
->  	u16 ctrl;
->  
-> -	if (!pci_is_pcie(dev))
-> +	if (!dev->ptm_enabled)
->  		return;
 
-This will conflict with a change Kai-Heng Feng and I have been working
-on, but I can resolve it when applying.
-
->  	ptm = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
-> @@ -44,6 +44,7 @@ void pci_disable_ptm(struct pci_dev *dev)
->  	pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
->  	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
->  	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
-> +	dev->ptm_enabled = 0;
->  }
->  
->  void pci_save_ptm_state(struct pci_dev *dev)
-> @@ -83,6 +84,7 @@ void pci_restore_ptm_state(struct pci_dev *dev)
->  
->  	cap = (u16 *)&save_state->cap.data[0];
->  	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, *cap);
-> +	dev->ptm_enabled = !!(*cap & PCI_PTM_CTRL_ENABLE);
->  }
->  
->  void pci_ptm_init(struct pci_dev *dev)
-> -- 
-> 2.25.1
-> 
+Acked-by: Rob Herring <robh@kernel.org>
