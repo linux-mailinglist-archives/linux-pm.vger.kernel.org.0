@@ -2,119 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0DC5A6114
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 12:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82895A623F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 13:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiH3KtT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Aug 2022 06:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S231233AbiH3Lld (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Aug 2022 07:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiH3KtS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 06:49:18 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDB4DF4C2;
-        Tue, 30 Aug 2022 03:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661856556; x=1693392556;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TUQ7avMuLxhf37gvjWMg7acpWzikzJL0j5/UqprSQsU=;
-  b=asj4GmMeODMHhG6VJQAf4xzI3RmH/Temr/drCTi9YVraDXsfpENwcKCq
-   JTKkvi+XpqXTJH80gVCtLU11WWCGb3I9tWzX4UhKkmZHpR9R98APbqmJo
-   3wM0bvAfbbgierXJPl+tb4FXQUHKJJV7hn4ccQB/TCj28IKzN1B1D8XMf
-   KqfxHcXIkikK8hSdA+09prU7HUGpRYMKDKVIvwAFXsfP2behE+jSBAtwC
-   j3sJjnBPHtHd2AWvLdxarfIrNbT8EgV4AFlbfbdCFYas6cUcywo69ACDL
-   DBRcVLdemPKOKnvlYfsX9uLv/QPlLnZYMB199hWQmNGQcKMJaR3UU9R6V
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="278160876"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="278160876"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 03:49:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="607795711"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 30 Aug 2022 03:49:16 -0700
-Received: from rjingar-desk5.amr.corp.intel.com (bdsebast-mobl2.amr.corp.intel.com [10.209.149.131])
-        by linux.intel.com (Postfix) with ESMTP id 0BBCF5808F0;
-        Tue, 30 Aug 2022 03:49:16 -0700 (PDT)
-From:   Rajvi Jingar <rajvi.jingar@linux.intel.com>
-To:     rafael.j.wysocki@intel.com, bhelgaas@google.com
-Cc:     rajvi.jingar@linux.intel.com, david.e.box@linux.intel.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [RESEND PATCH v3 2/2] PCI/PTM: fix to maintain pci_dev->ptm_enabled
-Date:   Tue, 30 Aug 2022 03:49:13 -0700
-Message-Id: <20220830104913.1620539-2-rajvi.jingar@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220830104913.1620539-1-rajvi.jingar@linux.intel.com>
-References: <20220830104913.1620539-1-rajvi.jingar@linux.intel.com>
+        with ESMTP id S231236AbiH3LlA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 07:41:00 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D35314FC82;
+        Tue, 30 Aug 2022 04:39:26 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-334dc616f86so265484857b3.8;
+        Tue, 30 Aug 2022 04:39:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=uV5cfbuaLiTKcX8ebdpr5XbHeoGI6rysE5BbBclWCfI=;
+        b=zjsrBYCgzlhIsAkh7yQHqC7udor2hSvTI4ciFQ2THtTYcGCzifMhc4kkgrFo5/nPv9
+         /ieqy9lTL6DpUDLW+oXtwWCcHR2im1i/jZP3X3aB7zRNHF8NnTD6OOPTR6CY06qbjxOo
+         /nwWvUKNqWM3Eh7n00CETnRMc67Hv1RZlqF/DnOI5WLAuXvmJe8Zv9Efod+sEWT3fXO9
+         02XwZoyLUaRPRonWztVRGwUaBKnZgTMR7g3Ef7CswT+8NGDolmpQ3xn38NByizSBg/7k
+         UsLcRH8/JAo3+jFz5rb3HvEt2D/YzUyz3yVFNV6cR4qq0J36PCmdJ0KWZe+LuFu8z6El
+         MPPQ==
+X-Gm-Message-State: ACgBeo05EV14k3JjFCUbSlvmBJkIcoob+/YrZtBuVf/4p3MymKWQHPxa
+        diIQF9/WTIA26o6DVBjP4zPsGHhklS2n3QBPazTF7pVA
+X-Google-Smtp-Source: AA6agR4+KpbjY1aZb0VdgicXjYCJlvpgSIMRfqYob1yrYyrIGmJU1BotmLajKO2nBE3guHCl/eeE1pmLbzmU7/q+Cj8=
+X-Received: by 2002:a0d:da83:0:b0:329:9c04:fe6d with SMTP id
+ c125-20020a0dda83000000b003299c04fe6dmr13902110ywe.196.1661859564844; Tue, 30
+ Aug 2022 04:39:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220829162953.5947-1-mario.limonciello@amd.com> <20220829162953.5947-2-mario.limonciello@amd.com>
+In-Reply-To: <20220829162953.5947-2-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 30 Aug 2022 13:39:09 +0200
+Message-ID: <CAJZ5v0iF1_MUptawLL4DD0RqZpysH2B+Pk5sj_=gLv9AOVdy=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] ACPI: s2idle: Add a new ->check() callback for platform_s2idle_ops
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Hans de Goede <hdegoede@redhat.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pci_dev->ptm_enabled needs to be maintained to reflect the current PTM
-state of the device. In pci_ptm_disable(), clear ptm_enabled from
-'struct pci_dev' on disabling PTM state for the device.
-In pci_restore_ptm_state(), set dev->ptm_enabled based on the restored
-PTM state of the device.
+On Mon, Aug 29, 2022 at 6:29 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> On some platforms it is found that Linux more aggressively enters s2idle
+> than Windows enters Modern Standby and this uncovers some synchronization
+> issues for the platform.  To aid in debugging this class of problems in
+> the future, add support for an extra optional callback intended for
+> drivers to emit extra debugging.
+>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-In pci_ptm_disable(), perform ptm_enabled check to avoid config space
-access in case if PTM is already disabled for the device. ptm_enabled
-won't be set for non-PCIe devices so pci_is_pcie(dev) check is not
-needed anymore.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- v1->v2:
-   - add ptm_enabled check in pci_ptm_disable().
-   - set the dev->ptm_enabled value in pci_restore_ptm_state().
- v2->v3:
-   - remove pci_is_pcie(dev) check in pci_ptm_disable().
-   - add Reviewed-by tag in commit message
----
- drivers/pci/pcie/ptm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+and I'm assuming that this is for Hans.
 
-diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-index 368a254e3124..1ce241d4538f 100644
---- a/drivers/pci/pcie/ptm.c
-+++ b/drivers/pci/pcie/ptm.c
-@@ -34,7 +34,7 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	int ptm;
- 	u16 ctrl;
- 
--	if (!pci_is_pcie(dev))
-+	if (!dev->ptm_enabled)
- 		return;
- 
- 	ptm = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
-@@ -44,6 +44,7 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
- 	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
-+	dev->ptm_enabled = 0;
- }
- 
- void pci_save_ptm_state(struct pci_dev *dev)
-@@ -83,6 +84,7 @@ void pci_restore_ptm_state(struct pci_dev *dev)
- 
- 	cap = (u16 *)&save_state->cap.data[0];
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, *cap);
-+	dev->ptm_enabled = !!(*cap & PCI_PTM_CTRL_ENABLE);
- }
- 
- void pci_ptm_init(struct pci_dev *dev)
--- 
-2.25.1
-
+> ---
+> v2->v3:
+>  * Rename to *check
+> v1->v2:
+>  * Add a prototype for `acpi_s2idle_enter`
+>
+>  drivers/acpi/sleep.h      |  1 +
+>  drivers/acpi/x86/s2idle.c | 14 ++++++++++++++
+>  include/linux/acpi.h      |  1 +
+>  include/linux/suspend.h   |  1 +
+>  kernel/power/suspend.c    |  3 +++
+>  5 files changed, 20 insertions(+)
+>
+> diff --git a/drivers/acpi/sleep.h b/drivers/acpi/sleep.h
+> index 7fe41ee489d6..d960a238be4e 100644
+> --- a/drivers/acpi/sleep.h
+> +++ b/drivers/acpi/sleep.h
+> @@ -18,6 +18,7 @@ static inline acpi_status acpi_set_waking_vector(u32 wakeup_address)
+>  extern int acpi_s2idle_begin(void);
+>  extern int acpi_s2idle_prepare(void);
+>  extern int acpi_s2idle_prepare_late(void);
+> +extern void acpi_s2idle_check(void);
+>  extern bool acpi_s2idle_wake(void);
+>  extern void acpi_s2idle_restore_early(void);
+>  extern void acpi_s2idle_restore(void);
+> diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
+> index f9ac12b778e6..474aa46f82f6 100644
+> --- a/drivers/acpi/x86/s2idle.c
+> +++ b/drivers/acpi/x86/s2idle.c
+> @@ -486,6 +486,19 @@ int acpi_s2idle_prepare_late(void)
+>         return 0;
+>  }
+>
+> +void acpi_s2idle_check(void)
+> +{
+> +       struct acpi_s2idle_dev_ops *handler;
+> +
+> +       if (!lps0_device_handle || sleep_no_lps0)
+> +               return;
+> +
+> +       list_for_each_entry(handler, &lps0_s2idle_devops_head, list_node) {
+> +               if (handler->check)
+> +                       handler->check();
+> +       }
+> +}
+> +
+>  void acpi_s2idle_restore_early(void)
+>  {
+>         struct acpi_s2idle_dev_ops *handler;
+> @@ -527,6 +540,7 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
+>         .begin = acpi_s2idle_begin,
+>         .prepare = acpi_s2idle_prepare,
+>         .prepare_late = acpi_s2idle_prepare_late,
+> +       .check = acpi_s2idle_check,
+>         .wake = acpi_s2idle_wake,
+>         .restore_early = acpi_s2idle_restore_early,
+>         .restore = acpi_s2idle_restore,
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 6f64b2f3dc54..acaa2ddc067d 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -1075,6 +1075,7 @@ acpi_status acpi_os_prepare_extended_sleep(u8 sleep_state,
+>  struct acpi_s2idle_dev_ops {
+>         struct list_head list_node;
+>         void (*prepare)(void);
+> +       void (*check)(void);
+>         void (*restore)(void);
+>  };
+>  int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg);
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 70f2921e2e70..03ed42ed2c7f 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -191,6 +191,7 @@ struct platform_s2idle_ops {
+>         int (*begin)(void);
+>         int (*prepare)(void);
+>         int (*prepare_late)(void);
+> +       void (*check)(void);
+>         bool (*wake)(void);
+>         void (*restore_early)(void);
+>         void (*restore)(void);
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 827075944d28..c6272d466e58 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -136,6 +136,9 @@ static void s2idle_loop(void)
+>                         break;
+>                 }
+>
+> +               if (s2idle_ops && s2idle_ops->check)
+> +                       s2idle_ops->check();
+> +
+>                 s2idle_enter();
+>         }
+>
+> --
+> 2.34.1
+>
