@@ -2,57 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BD15A6756
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 17:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D309F5A67FA
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Aug 2022 18:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiH3PZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Aug 2022 11:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
+        id S230527AbiH3QRr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Aug 2022 12:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiH3PZO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 11:25:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0992427CEC;
-        Tue, 30 Aug 2022 08:25:07 -0700 (PDT)
+        with ESMTP id S229698AbiH3QRq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Aug 2022 12:17:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3CD9A965;
+        Tue, 30 Aug 2022 09:17:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C277C615E2;
-        Tue, 30 Aug 2022 15:25:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13DB8C433C1;
-        Tue, 30 Aug 2022 15:25:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33964B81CD4;
+        Tue, 30 Aug 2022 16:17:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFCCC433C1;
+        Tue, 30 Aug 2022 16:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661873106;
-        bh=wqq8ccHiaVcGJrHvcHsUjlz7+Yg37w0KNDO1IuJO2Y0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VQ7am+eQ3qlfElEH1csUPhlwYbV3o6m5l+VfqmgZIKEbxhg/RkI02uk5HmExF2Z90
-         vDxpOApwi4ktzIY96428dv/QlSfIeOz11Gov7N4zjuPXLHsy7QNjvHAg3qXWd4Buxo
-         ZbQsJkf7bekoLj6TohWIBveyK54wbNOVLlPNzmomnmoOe8y1x4acTGZPIIyDj36ktx
-         BE90EayGF6J6cqBUEu77UBATFpIj9DwpLCkPdw0jWBo8xZdesJBubGBj0L3BzkbIiL
-         Qk+/WWKUtCVEaV9+V6Z09sR1VaVM6tvq9TwbB5vpEDaILUccI0WBqQbkTpE03arQ9h
-         SQ6G5gnrK8uiA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oT36t-0003LI-E6; Tue, 30 Aug 2022 17:25:03 +0200
-Date:   Tue, 30 Aug 2022 17:25:03 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 4/4] power: supply: Introduce Qualcomm PMIC GLINK power
- supply
-Message-ID: <Yw4rzyTDaoLFXQOx@hovoldconsulting.com>
-References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
- <20220818031512.319310-5-bjorn.andersson@linaro.org>
+        s=k20201202; t=1661876262;
+        bh=DSrVqL1VD3WM18Xm2UsNFG860qRy8Dj2FnWp76OHsZ8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=pjYn6czElsD94jyIbkijnC7xpBdqszyie5eTJWsdxwH4hXVGkAh4lkJbRPoWRwWqV
+         R3WwWajEbk/uJo+Nr2fBCDrHKRyQWk0oPq6XhsWDNpINX4PjTiZ8I6JrrUskXJZlap
+         XNX0wqhzibFIRfQLgSQ5pqhbs8/mHKrx54gHUc7TlA9ATD7V6STEL3Ipgb5KFUi6h2
+         T9SxrdZr5V8EoxrddAjdmR724ii7QJuglAUJ+vI1tuNoMh0D9tKaXPMi4GNNttzavU
+         daJCUHPk78+pFtYt+9CGgByExF10rzrAjFpxjC0KpoNWnVUVw9oXrBE9Xal78j17nX
+         C4W0d6MtGfifQ==
+Date:   Tue, 30 Aug 2022 11:17:41 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        David Box <david.e.box@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [RESEND PATCH v3 1/2] PCI/PM: refactor pci_pm_suspend_noirq()
+Message-ID: <20220830161741.GA105724@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220818031512.319310-5-bjorn.andersson@linaro.org>
+In-Reply-To: <CAJZ5v0hhc+n+WbLCxbJ2VPSWj0RAy4AM+pvqy8eiAJVtBecVWg@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,218 +57,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 08:15:12PM -0700, Bjorn Andersson wrote:
-> The PMIC GLINK service, running on a coprocessor of modern Qualcomm
-> platforms, deals with battery charging and fuel gauging, as well as
-> reporting status of AC and wireless power supplies.
+On Tue, Aug 30, 2022 at 01:44:43PM +0200, Rafael J. Wysocki wrote:
+> Hi Bjorn,
 > 
-> As this is just one of the functionalities provided by the PMIC GLINK
-> service, this power supply driver is implemented as an auxilirary bus
-> driver, spawned by the main "pmic glink" driver when the PMIC GLINK
-> service is detected.
+> On Tue, Aug 30, 2022 at 12:49 PM Rajvi Jingar
+> <rajvi.jingar@linux.intel.com> wrote:
+> >
+> > The state of the device is saved during pci_pm_suspend_noirq(), if it
+> > has not already been saved, regardless of the skip_bus_pm flag value. So
+> > skip_bus_pm check is removed before saving the device state.
+> >
+> > Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
+> > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
+> I have reviewed this and the [2/2] already and they are clear
+> improvements to me.
+> 
+> Do you have any concerns regarding any of them?
 
-> +static int qcom_battmgr_request(struct qcom_battmgr *battmgr, void *data, size_t len)
-> +{
-> +	unsigned long left;
-> +	int ret;
-> +
-> +	reinit_completion(&battmgr->ack);
-> +
-> +	battmgr->error = 0;
-> +
-> +	ret = pmic_glink_send(battmgr->client, data, len);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	left = wait_for_completion_timeout(&battmgr->ack, HZ);
-> +	if (!left)
-> +		return -ETIMEDOUT;
-> +
-> +	return battmgr->error;
-> +}
+Since the log doesn't mention fixing a problem, I guess this one is
+only a simplification, right?  It looks functionally equivalent to me.
 
-> +static void qcom_battmgr_notification(struct qcom_battmgr *battmgr,
-> +				      const struct qcom_battmgr_message *msg,
-> +				      int len)
-> +{
-> +	size_t payload_len = len - sizeof(struct pmic_glink_hdr);
-> +	unsigned int notification;
-> +
-> +	if (payload_len != sizeof(msg->notification)) {
-> +		dev_warn(battmgr->dev, "ignoring notification with invalid length\n");
-> +		return;
-> +	}
-> +
-> +	notification = le32_to_cpu(msg->notification);
-> +	switch (notification) {
-> +	case NOTIF_BAT_INFO:
-> +		battmgr->info.valid = false;
-> +		fallthrough;
-> +	case NOTIF_BAT_PROPERTY:
-> +		power_supply_changed(battmgr->bat_psy);
-> +		break;
-> +	case NOTIF_USB_PROPERTY:
-> +		power_supply_changed(battmgr->usb_psy);
-> +		break;
-> +	case NOTIF_WLS_PROPERTY:
-> +		power_supply_changed(battmgr->wls_psy);
-> +		break;
-> +	default:
-> +		dev_err(battmgr->dev, "unknown notification: %#x\n", notification);
-> +		break;
-> +	}
-> +}
+> If not, do you want me to pick them up or do you plan to take care of
+> them yourself?
 
-> +static void qcom_battmgr_callback(const void *data, size_t len, void *priv)
-> +{
-> +	const struct pmic_glink_hdr *hdr = data;
-> +	struct qcom_battmgr *battmgr = priv;
-> +	unsigned int opcode = le32_to_cpu(hdr->opcode);
-> +
-> +	if (opcode == BATTMGR_NOTIFICATION)
-> +		qcom_battmgr_notification(battmgr, data, len);
-> +	else if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
-> +		qcom_battmgr_sc8280xp_callback(battmgr, data, len);
-> +	else
-> +		qcom_battmgr_sm8350_callback(battmgr, data, len);
-> +}
-> +
-> +static void qcom_battmgr_enable_worker(struct work_struct *work)
-> +{
-> +	struct qcom_battmgr *battmgr = container_of(work, struct qcom_battmgr, enable_work);
-> +	struct qcom_battmgr_enable_request req = {
-> +		.hdr.owner = PMIC_GLINK_OWNER_BATTMGR,
-> +		.hdr.type = PMIC_GLINK_NOTIFY,
-> +		.hdr.opcode = BATTMGR_REQUEST_NOTIFICATION,
-> +	};
-> +	int ret;
-> +
-> +	ret = qcom_battmgr_request(battmgr, &req, sizeof(req));
-> +	if (ret)
-> +		dev_err(battmgr->dev, "failed to request power notifications\n");
-> +}
-> +
-> +static void qcom_battmgr_pdr_notify(void *priv, int state)
-> +{
-> +	struct qcom_battmgr *battmgr = priv;
-> +
-> +	if (state == SERVREG_SERVICE_STATE_UP) {
-> +		battmgr->service_up = true;
-> +		schedule_work(&battmgr->enable_work);
-> +	} else {
-> +		battmgr->service_up = false;
-> +	}
-> +}
-> +
-> +static const struct of_device_id qcom_battmgr_of_variants[] = {
-> +	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-> +	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-> +	/* Unmatched devices falls back to QCOM_BATTMGR_SM8350 */
-> +	{}
-> +};
-> +
-> +static char *qcom_battmgr_battery[] = { "battery" };
-> +
-> +static int qcom_battmgr_probe(struct auxiliary_device *adev,
-> +			      const struct auxiliary_device_id *id)
-> +{
-> +	struct power_supply_config psy_cfg_supply = {};
-> +	struct power_supply_config psy_cfg = {};
-> +	const struct of_device_id *match;
-> +	struct qcom_battmgr *battmgr;
-> +	struct device *dev = &adev->dev;
-> +
-> +	battmgr = devm_kzalloc(dev, sizeof(*battmgr), GFP_KERNEL);
-> +	if (!battmgr)
-> +		return -ENOMEM;
-> +
-> +	battmgr->dev = dev;
-> +
-> +	psy_cfg.drv_data = battmgr;
-> +	psy_cfg.of_node = adev->dev.of_node;
-> +
-> +	psy_cfg_supply.drv_data = battmgr;
-> +	psy_cfg_supply.of_node = adev->dev.of_node;
-> +	psy_cfg_supply.supplied_to = qcom_battmgr_battery;
-> +	psy_cfg_supply.num_supplicants = 1;
-> +
-> +	INIT_WORK(&battmgr->enable_work, qcom_battmgr_enable_worker);
-> +	mutex_init(&battmgr->lock);
-> +	init_completion(&battmgr->ack);
-> +
-> +	match = of_match_device(qcom_battmgr_of_variants, dev->parent);
-> +	if (match)
-> +		battmgr->variant = (unsigned long)match->data;
-> +	else
-> +		battmgr->variant = QCOM_BATTMGR_SM8350;
-> +
-> +	battmgr->client = devm_pmic_glink_register_client(dev,
-> +							  PMIC_GLINK_OWNER_BATTMGR,
-> +							  qcom_battmgr_callback,
-> +							  qcom_battmgr_pdr_notify,
-> +							  battmgr);
-> +	if (IS_ERR(battmgr->client))
-> +		return PTR_ERR(battmgr->client);
+Let me take them; I want to at least wrap the comment to align with
+the rest of the file.
 
-This is racy as you register the callbacks before registering the power
-supplies below.
+> > ---
+> >  v1->v2: no change
+> >  v2->v3: no change
 
-I've seen NULL derefs in qcom_battmgr_notification() when trying to
-access the power supplies before they have been allocated due to early
-notifications on both CRD and X13s. This can easily be reproduced by
-adding some sleep here.
+Why are we bumping the version numbers if there's truly no change?
 
-On the other hand, I guess you can't just move the callback registration
-after registering the supplies as battmgr->client is needed to process
-requests.
-
-> +
-> +	if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
-> +		battmgr->bat_psy = devm_power_supply_register(dev, &sc8280xp_bat_psy_desc, &psy_cfg);
-> +		if (IS_ERR(battmgr->bat_psy))
-> +			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
-> +					     "failed to register battery power supply\n");
-> +
-> +		battmgr->ac_psy = devm_power_supply_register(dev, &sc8280xp_ac_psy_desc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->ac_psy))
-> +			return dev_err_probe(dev, PTR_ERR(battmgr->ac_psy),
-> +					     "failed to register AC power supply\n");
-> +
-> +		battmgr->usb_psy = devm_power_supply_register(dev, &sc8280xp_usb_psy_desc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->usb_psy))
-> +			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
-> +					     "failed to register USB power supply\n");
-> +
-> +		battmgr->wls_psy = devm_power_supply_register(dev, &sc8280xp_wls_psy_desc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->wls_psy))
-> +			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
-> +					     "failed to register wireless charing power supply\n");
-> +	} else {
-> +		battmgr->bat_psy = devm_power_supply_register(dev, &sm8350_bat_psy_desc, &psy_cfg);
-> +		if (IS_ERR(battmgr->bat_psy))
-> +			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
-> +					     "failed to register battery power supply\n");
-> +
-> +		battmgr->usb_psy = devm_power_supply_register(dev, &sm8350_usb_psy_desc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->usb_psy))
-> +			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
-> +					     "failed to register USB power supply\n");
-> +
-> +		battmgr->wls_psy = devm_power_supply_register(dev, &sm8350_wls_psy_desc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->wls_psy))
-> +			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
-> +					     "failed to register wireless charing power supply\n");
-> +	}
-> +
-> +	dev_set_drvdata(dev, battmgr);
-
-You never use the driver data so you shouldn't set it.
-
-> +
-> +	return 0;
-> +}
-
-Johan
+> > ---
+> >  drivers/pci/pci-driver.c | 18 ++++++------------
+> >  1 file changed, 6 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > index 49238ddd39ee..1f64de3e5280 100644
+> > --- a/drivers/pci/pci-driver.c
+> > +++ b/drivers/pci/pci-driver.c
+> > @@ -867,20 +867,14 @@ static int pci_pm_suspend_noirq(struct device *dev)
+> >                 }
+> >         }
+> >
+> > -       if (pci_dev->skip_bus_pm) {
+> > +       if (!pci_dev->state_saved) {
+> > +               pci_save_state(pci_dev);
+> >                 /*
+> > -                * Either the device is a bridge with a child in D0 below it, or
+> > -                * the function is running for the second time in a row without
+> > -                * going through full resume, which is possible only during
+> > -                * suspend-to-idle in a spurious wakeup case.  The device should
+> > -                * be in D0 at this point, but if it is a bridge, it may be
+> > -                * necessary to save its state.
+> > +                * If the device is a bridge with a child in D0 below it, it needs to
+> > +                * stay in D0, so check skip_bus_pm to avoid putting it into a
+> > +                * low-power state in that case.
+> >                  */
+> > -               if (!pci_dev->state_saved)
+> > -                       pci_save_state(pci_dev);
+> > -       } else if (!pci_dev->state_saved) {
+> > -               pci_save_state(pci_dev);
+> > -               if (pci_power_manageable(pci_dev))
+> > +               if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+> >                         pci_prepare_to_sleep(pci_dev);
+> >         }
+> >
+> > --
+> > 2.25.1
+> >
