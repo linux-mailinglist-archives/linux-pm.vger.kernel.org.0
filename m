@@ -2,50 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3395A8612
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 20:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95095A861C
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 20:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbiHaSwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Aug 2022 14:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S232713AbiHaS4H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Aug 2022 14:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiHaSwL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 14:52:11 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9EEC0E5D;
-        Wed, 31 Aug 2022 11:52:10 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-33da3a391d8so316186017b3.2;
-        Wed, 31 Aug 2022 11:52:10 -0700 (PDT)
+        with ESMTP id S232226AbiHaS4G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 14:56:06 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B7461D46;
+        Wed, 31 Aug 2022 11:56:04 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3376851fe13so316202837b3.6;
+        Wed, 31 Aug 2022 11:56:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=8F+MKnc7NEx1tCUG6AjVWftljzM2XX58i00lGsYN45Y=;
-        b=CctjZ1bOnvRwvjh4SiFreXMlclQK4XpuuuhtailPid4NNwoh6NHro4fEUpwFK6BDYC
-         OMgnX+x+br+PuXNfV56b0Pm3G3wsz291lhBnD5vwWHdyqtynD6D1X6nSgI6yDZzWDCy9
-         lQB/3qpcMvmh+1WRtD2RlQEj5uVWY8t52q40srLSZyqIM0ZNwtXsX2qTrE9Ey8SpmoCk
-         PJ6itYrsoMZ9ja5JymEaNrhWldjwqRcXamczxp7IDCkucBVACD/Mhz/dBFRStwX0eQEj
-         WPIXhPJ9RM2wXfp8lP3kfCRBV9ZN1TA/y0HyU1hvShGvEOy3vE8M8dX/qroY/fftVlY/
-         +imw==
-X-Gm-Message-State: ACgBeo0CbISCRuR+3HDO1V/gKRiGfAArJ++ySEIINj8e20cKhaeX4EiU
-        1QHjO8fTlIix7x2uyLD11i+etIREG+L2w9Ep5PJQ4BG9
-X-Google-Smtp-Source: AA6agR41gg5UpOUbPB+MyjwQbY19lSM7ygPu4k+f+x/vBYfPbFREMuR+cZsss0AeJ9Q5P3hj13hfwYdNMEYlAz4yZSM=
-X-Received: by 2002:a0d:e701:0:b0:336:90d7:c67a with SMTP id
- q1-20020a0de701000000b0033690d7c67amr18993617ywe.7.1661971929512; Wed, 31 Aug
- 2022 11:52:09 -0700 (PDT)
+        bh=GlDBbqQGEUSGUTxcKRe7u2M4/gH0IknucXRHAJlwKWY=;
+        b=HokelKnleAYKY5XMocSjaOZX9zD1lRnE68ovZ8bPITgi7KBAlYwTvQrjWlfjF8URln
+         wShsWkwsBF4dsBdeTvjJjQgNldxDle/N0IrifrcnLBuTPXAPX0mrKyiEhhyts96wxLOc
+         IZljpu/WsTdQ9dw7dgQUwpSg5/N69Ii8muF08zT0hqiaa5ylOulMhaNvSn0jFh4ppg6a
+         oM7T+RKMTL6qKGjwI0dq9/J5wqqtnZV5j44EFEgK99+pxU3ZVqa5+dke4n9nzqSSHE21
+         EE58m6MpiPoq8cgvykl3rBpClEFt0ljIT8GYnHREQsbHsAyTPO/e5OAklh1iqWlbPUEf
+         mcAQ==
+X-Gm-Message-State: ACgBeo2UsNuHtDLzHiCxeNzt7KkG5ZA++xKPXFApR5li1HthQFox4isQ
+        LFLh6wtiESX2dK7hWgKagcD17Eyp9GfsfEiw/38=
+X-Google-Smtp-Source: AA6agR6qG6dVIYh8CrroiengqgkLkvUbuz2mHoW0DTxXiVTBq7D+1N4PbIe1pWtUvEtgKrLse2SnMUSRkspXaT4Bnlk=
+X-Received: by 2002:a0d:c841:0:b0:33d:bf96:f823 with SMTP id
+ k62-20020a0dc841000000b0033dbf96f823mr18679668ywd.326.1661972164250; Wed, 31
+ Aug 2022 11:56:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220804135938.7f69f5d9@endymion.delvare>
-In-Reply-To: <20220804135938.7f69f5d9@endymion.delvare>
+References: <20220811120450.13886-1-wangborong@cdjrlc.com>
+In-Reply-To: <20220811120450.13886-1-wangborong@cdjrlc.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 31 Aug 2022 20:51:58 +0200
-Message-ID: <CAJZ5v0gav_OpDE=x=yb6+_2159_F-hPd9b5BJX6PW5LE=cjysw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/thermal_mmio: Drop of_match_ptr()
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Talel Shenhar <talel@amazon.com>,
+Date:   Wed, 31 Aug 2022 20:55:53 +0200
+Message-ID: <CAJZ5v0g5GO97E4b2EWtktrdP1pKEAbZ-wUvBeTiPZAQ5G88rUw@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle/coupled: Fix comment typo
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -57,38 +56,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 1:59 PM Jean Delvare <jdelvare@suse.de> wrote:
+On Thu, Aug 11, 2022 at 2:05 PM Jason Wang <wangborong@cdjrlc.com> wrote:
 >
-> From: Jean Delvare <jdelvare@suse.de>
-> Subject: thermal/drivers/thermal_mmio: Drop of_match_ptr()
+> The double `are' is duplicated in the comment, remove one.
 >
-> Now that the driver depends on OF, we know what of_match_ptr() will
-> always resolve to, so we might as well save cpp some work.
->
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Cc: Talel Shenhar <talel@amazon.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 > ---
-> This could have been folded into my previous patch, sorry for missing
-> it.
->
->  drivers/thermal/thermal_mmio.c |    2 +-
+>  drivers/cpuidle/coupled.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> --- linux-5.18.orig/drivers/thermal/thermal_mmio.c      2022-05-22 21:52:31.000000000 +0200
-> +++ linux-5.18/drivers/thermal/thermal_mmio.c   2022-08-04 13:50:46.426178245 +0200
-> @@ -107,7 +107,7 @@ static struct platform_driver thermal_mm
->         .probe = thermal_mmio_probe,
->         .driver = {
->                 .name = "thermal-mmio",
-> -               .of_match_table = of_match_ptr(thermal_mmio_id_table),
-> +               .of_match_table = thermal_mmio_id_table,
->         },
->  };
->
->
->
+> diff --git a/drivers/cpuidle/coupled.c b/drivers/cpuidle/coupled.c
+> index 74068742cef3..9acde71558d5 100644
+> --- a/drivers/cpuidle/coupled.c
+> +++ b/drivers/cpuidle/coupled.c
+> @@ -54,7 +54,7 @@
+>   * variable is not locked.  It is only written from the cpu that
+>   * it stores (or by the on/offlining cpu if that cpu is offline),
+>   * and only read after all the cpus are ready for the coupled idle
+> - * state are are no longer updating it.
+> + * state are no longer updating it.
+>   *
+>   * Three atomic counters are used.  alive_count tracks the number
+>   * of cpus in the coupled set that are currently or soon will be
 > --
 
-Applied as 6.1 material, thanks!
+Applied as 6.1 material under a modified subject, thanks!
