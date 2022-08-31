@@ -2,57 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EC35A866D
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 21:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B145A8674
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 21:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiHaTIC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Aug 2022 15:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S229555AbiHaTLQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Aug 2022 15:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbiHaTIB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 15:08:01 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B95CE4AA;
-        Wed, 31 Aug 2022 12:07:59 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3413ad0640dso160937147b3.13;
-        Wed, 31 Aug 2022 12:07:59 -0700 (PDT)
+        with ESMTP id S229472AbiHaTLO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 15:11:14 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9EFD7D39;
+        Wed, 31 Aug 2022 12:11:12 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 130so5552357ybw.8;
+        Wed, 31 Aug 2022 12:11:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ECApI1mXwTphgXDXF1CXlcGlLXFAydIzvSTDA98xmCw=;
-        b=uNRgp6qmaMBw8qrR7HRo/LuFWWwsJnoaIluoyUumNMiztsp6BoikIo0sCRTNbKAZwg
-         zZHKdFbDKdgkt7hnOb1LUT6CE7XTr1i1iZRmUPbuEvfm3fIlWAOm1TUqhqA5EGBBn6aP
-         2g5ys/rkvCVtXe955ejgmXdw6vg3rcpSj9n1yX1eyOo6a3aBwdaqUxSCcbPK6TGSy9T2
-         pE/unVx2zaAAH+ee75NtELkm31+bMWSHKW8dfHnr2cUXPwaEi2YloawbKcti8X9MYL8W
-         Y/PsvHfSueG2JwXzCRABOdaBuLUxdgW98NIBXti80H9B3pyYWIbpJrooQnVEM+FuLCOV
-         bKsQ==
-X-Gm-Message-State: ACgBeo2tyTgbTM2IsPTpWrRwDoXSwLn7jSTQlQHpkiNDK1DIfYwuQaoC
-        h6kQg1+wSFg77drsGi1/2cLoI1Gmvj2IIyfncbQ=
-X-Google-Smtp-Source: AA6agR67JqE3CxLVd+PFYqgQBQ6xB7RJPopj/VD+bnO12bFvde7dhwCgDJngMFO4xdK2MCydDfG/quFxeHl2XmmXiJM=
-X-Received: by 2002:a0d:cdc2:0:b0:335:debd:2b3d with SMTP id
- p185-20020a0dcdc2000000b00335debd2b3dmr18965515ywd.19.1661972879024; Wed, 31
- Aug 2022 12:07:59 -0700 (PDT)
+        bh=URbpXJ4q66/lNagKlH7vANsFH1a/wXrZe4dE+Lnpq0g=;
+        b=bhBubadahkwc6NxdpRj7v+3mVUgxeoCz9nSN5yUyaA9iV2l+CXyOjEPEka8+p8qqm8
+         j+FisPbXyL/4ruAAFwW/5l/tyB0icwwT5IjanlOSG5RCGX2/bO9vam+rz5q3akVTPnhM
+         1u2U+VOz7H7zgE1FsYxZjmlIqRF8MDh6etfuaXN1a4+FINKjUYyQX0mvwzXqn6VdTJzg
+         nMB5R4W77bW+Yv222GvavPCFU/1g9EOEuCWfTW2iAjDQy+tjA/DwUxORqHL3GdYrDdLw
+         mIvp2RZHTMWtCy6DA9w0yI80g2yHaOhan4LOaKckyEbOs0+JERRbrWhyTk2dFEtiTi37
+         RTXQ==
+X-Gm-Message-State: ACgBeo0APUsYBFfbochhPPE0CbpPBCJv3m4d/jK36HU1D3M5BQmIHa6f
+        i5LCSmw+1sjZ42fAjB3hpR2AeJhFxa2jBvdBou8=
+X-Google-Smtp-Source: AA6agR5JeancUPtatg6WllmkxPT2/jaJqxc7/49bPElDDAL1Els6SYlMy87a+ivHYpvG5kIgUOa7xLcazAHaJej0b28=
+X-Received: by 2002:a25:8204:0:b0:69e:3b25:273 with SMTP id
+ q4-20020a258204000000b0069e3b250273mr2338645ybk.482.1661973071716; Wed, 31
+ Aug 2022 12:11:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220814163548.326686-1-Perry.Yuan@amd.com> <20220814163548.326686-4-Perry.Yuan@amd.com>
-In-Reply-To: <20220814163548.326686-4-Perry.Yuan@amd.com>
+References: <20220818210002.6624-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210002.6624-1-wsa+renesas@sang-engineering.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 31 Aug 2022 21:07:48 +0200
-Message-ID: <CAJZ5v0iNr_C_aGHtFZ-t-pT8jrVpcQWuvA1VFyhiw39SJf9WMQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/7] cpufreq: amd-pstate: fix white-space
-To:     Perry Yuan <Perry.Yuan@amd.com>
-Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Deepak Sharma <Deepak.Sharma@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
-        Nathan Fontenot <Nathan.Fontenot@amd.com>,
-        Alex Deucher <Alexander.Deucher@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>, Shimmer.Huang@amd.com,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+Date:   Wed, 31 Aug 2022 21:11:00 +0200
+Message-ID: <CAJZ5v0hOi8q65wz4FSjW0s9cWQhjUdNqiV=5n-Ef5hQKiJjB8w@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: move from strlcpy with unused retval to strscpy
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -64,40 +60,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 6:49 PM Perry Yuan <Perry.Yuan@amd.com> wrote:
+On Thu, Aug 18, 2022 at 11:00 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
 >
-> Remove the white space and correct mixed-up indentation
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
 >
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
->  drivers/cpufreq/amd-pstate.c | 4 ++--
+>  drivers/cpuidle/cpuidle-powernv.c | 4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index b31bb5e6cefc..5cdef6638681 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -115,7 +115,7 @@ struct amd_cpudata {
->         struct amd_aperf_mperf cur;
->         struct amd_aperf_mperf prev;
->
-> -       u64 freq;
-> +       u64     freq;
->         bool    boost_supported;
->  };
->
-> @@ -651,7 +651,7 @@ static struct cpufreq_driver amd_pstate_driver = {
->         .resume         = amd_pstate_cpu_resume,
->         .set_boost      = amd_pstate_set_boost,
->         .name           = "amd-pstate",
-> -       .attr           = amd_pstate_attr,
-> +       .attr           = amd_pstate_attr,
->  };
->
->  static int __init amd_pstate_init(void)
+> diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
+> index c32c600b3cf8..0b5461b3d7dd 100644
+> --- a/drivers/cpuidle/cpuidle-powernv.c
+> +++ b/drivers/cpuidle/cpuidle-powernv.c
+> @@ -233,8 +233,8 @@ static inline void add_powernv_state(int index, const char *name,
+>                                      unsigned int exit_latency,
+>                                      u64 psscr_val, u64 psscr_mask)
+>  {
+> -       strlcpy(powernv_states[index].name, name, CPUIDLE_NAME_LEN);
+> -       strlcpy(powernv_states[index].desc, name, CPUIDLE_NAME_LEN);
+> +       strscpy(powernv_states[index].name, name, CPUIDLE_NAME_LEN);
+> +       strscpy(powernv_states[index].desc, name, CPUIDLE_NAME_LEN);
+>         powernv_states[index].flags = flags;
+>         powernv_states[index].target_residency = target_residency;
+>         powernv_states[index].exit_latency = exit_latency;
 > --
 
-Applied as 6.1 material along with patches [3-6/7].
-
-The [7/7] was applied earlier and there was a change request for patch [1/7].
+Applied as 6.1 material, thanks!
