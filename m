@@ -2,63 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8A65A8688
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 21:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989B05A8695
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 21:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbiHaTOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Aug 2022 15:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        id S229706AbiHaTRr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Aug 2022 15:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbiHaTOv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 15:14:51 -0400
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF1A5FFA;
-        Wed, 31 Aug 2022 12:14:47 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-33da3a391d8so316719947b3.2;
-        Wed, 31 Aug 2022 12:14:47 -0700 (PDT)
+        with ESMTP id S229787AbiHaTRq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 15:17:46 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1CFDAA0A;
+        Wed, 31 Aug 2022 12:17:44 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-33dc31f25f9so316349677b3.11;
+        Wed, 31 Aug 2022 12:17:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UxHlOQMugDaVV7UYDxc+0l2BNrOEmI2OzpGjB/xQSeE=;
-        b=KPEpGC5LW7EPfpTob6218KVmECEFQ65Xfny28XIXibr5QgSYBVo2ocQPEjMS4/hrW8
-         HAPmWq2NAGaXy2wie7Zkwpy65/hHJdPgWP0WkU9uF0eDoXFYzCGtAgVqkjM4oPvSCIbN
-         +ZSeoAWs8mTv7bxm7l5n5OucPip2g9XPb6fAX5D+T21/T9hAGHNA0f6nHh+gCAkpDShJ
-         j6/v/PMTI+TqoFRc9DH3O95L7nKtRYemGJ2o9i1Gzi05wjCvFeUSJeKVIGw1oDIEurh9
-         ZwjhhJKIyVmDNFnVsyuYZxe9bQC1PDTxBM3oCLSxOb6CJNWxFpWrwVAlN8HVMr2YEs/8
-         OQ8g==
-X-Gm-Message-State: ACgBeo1osmv2hjbM1Xmu8Nzu6koLr96ZAQjViXuu13l88xJkvR6bA+RX
-        fpBpOKbi3WTD4gxasWj4ZuEmIVTDegMYnZwStZY=
-X-Google-Smtp-Source: AA6agR4X2lbZBMaghLfgyNowdP9lOcQ6HAeNQ4uR6Oz5Tos4Jt6Evl+deqp1CGEumSkeFvgbOL5EDLMKZpyBfZUOpO4=
-X-Received: by 2002:a81:4850:0:b0:33c:922b:5739 with SMTP id
- v77-20020a814850000000b0033c922b5739mr19198053ywa.515.1661973286804; Wed, 31
- Aug 2022 12:14:46 -0700 (PDT)
+        bh=IeKc8Sl/UbzolBc4HIfYvc0Z0mGSys/TxO53fWi2waE=;
+        b=mNre9lpvaZXtGZRgNWlu+b1Ls21UT/pUY9IWuKfuVOnEvbNxtqd8syJvuhBy78QDlh
+         7eEEzy80W6sCcCcW5wuOBPHA4fXp2VIK1gbLM6/abxbxdBxl3mXiCfF6p6PDXovEupSB
+         uuh8E0SKFERiqlQRoZtetZ9fKJBbGetbDmdSdYa2SPzZdupWKy0rNKX8MjxL5Q/ooYSV
+         Y7vFHEq4Q7h5muxB2TMc1pFKYxV7ch9ay8/Eh6aG+HvrJz9d/hUhacG4Kh3rtsnSUwel
+         IXvFe5oEKnTldqeXM17YMzYG7l0ydNkYB81MXqtNhGovtlOuktIIZNGXnwOWIEBAvsL5
+         ag9Q==
+X-Gm-Message-State: ACgBeo2injkKH1maw3TKVIgzqNTTp+8/c8pzTgYmFGWQObFZHMDqckPo
+        xdm//YSNWyUOjIgtQfHiHNLNFS0xuLUUorUxxeGlWfv8
+X-Google-Smtp-Source: AA6agR7tcY3bgvO94O9ypmvOMg6GvQ70DA8QcJJF1cSsOUKj8jXRLPIdk/L1SBe2cxn4U+wKIWk1ItkTeBHFjpZ8+fI=
+X-Received: by 2002:a0d:cdc2:0:b0:335:debd:2b3d with SMTP id
+ p185-20020a0dcdc2000000b00335debd2b3dmr18997247ywd.19.1661973463707; Wed, 31
+ Aug 2022 12:17:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220818210111.7445-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220818210111.7445-1-wsa+renesas@sang-engineering.com>
+References: <20220818210156.8143-1-wsa+renesas@sang-engineering.com> <20220818210156.8143-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210156.8143-2-wsa+renesas@sang-engineering.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 31 Aug 2022 21:14:35 +0200
-Message-ID: <CAJZ5v0hBsSA9aeE1divdaTxXUu8bT23tx8f+J+=pZPcP4viGjQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: move from strlcpy with unused retval to strscpy
+Date:   Wed, 31 Aug 2022 21:17:32 +0200
+Message-ID: <CAJZ5v0jt6XWU1_O0f_M8TeV6DukujgsjcX1oam_34HJ31Xb_bQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: move from strlcpy with unused retval to strscpy
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:03 PM Wolfram Sang
+On Thu, Aug 18, 2022 at 11:05 PM Wolfram Sang
 <wsa+renesas@sang-engineering.com> wrote:
 >
 > Follow the advice of the below link and prefer 'strscpy' in this
@@ -68,36 +66,22 @@ On Thu, Aug 18, 2022 at 11:03 PM Wolfram Sang
 > Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
->  drivers/thermal/thermal_core.c  | 2 +-
->  drivers/thermal/thermal_hwmon.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  include/linux/suspend.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 6a5d0ae5d7a4..0d1dae4ed7f6 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1239,7 +1239,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
->         }
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 70f2921e2e70..23a253df7f6b 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -75,7 +75,7 @@ extern struct suspend_stats suspend_stats;
 >
->         tz->id = id;
-> -       strlcpy(tz->type, type, sizeof(tz->type));
-> +       strscpy(tz->type, type, sizeof(tz->type));
->
->         result = dev_set_name(&tz->device, "thermal_zone%d", tz->id);
->         if (result)
-> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-> index 09e49ec8b6f4..f53f4ceb6a5d 100644
-> --- a/drivers/thermal/thermal_hwmon.c
-> +++ b/drivers/thermal/thermal_hwmon.c
-> @@ -147,7 +147,7 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_device *tz)
->                 return -ENOMEM;
->
->         INIT_LIST_HEAD(&hwmon->tz_list);
-> -       strlcpy(hwmon->type, tz->type, THERMAL_NAME_LENGTH);
-> +       strscpy(hwmon->type, tz->type, THERMAL_NAME_LENGTH);
->         strreplace(hwmon->type, '-', '_');
->         hwmon->device = hwmon_device_register_for_thermal(&tz->device,
->                                                           hwmon->type, hwmon);
+>  static inline void dpm_save_failed_dev(const char *name)
+>  {
+> -       strlcpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
+> +       strscpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
+>                 name,
+>                 sizeof(suspend_stats.failed_devs[0]));
+>         suspend_stats.last_failed_dev++;
 > --
 
 Applied as 6.1 material, thanks!
