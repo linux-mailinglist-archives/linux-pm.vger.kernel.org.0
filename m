@@ -2,79 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5E15A76E1
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 08:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED8E5A7786
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 09:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiHaGqc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Aug 2022 02:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S229947AbiHaHb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Aug 2022 03:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiHaGq3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 02:46:29 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E0DBFC41
-        for <linux-pm@vger.kernel.org>; Tue, 30 Aug 2022 23:46:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661928387; x=1693464387;
-  h=from:to:cc:subject:date:message-id;
-  bh=XhbHQKBK6dMMX1YYDTqim0h/h9vTGqFUSgbRHcu7+5I=;
-  b=KEi0INY9fErpTJQPA9wiUj3nct8niNtnNSNHNu1SQjlHWEsMx4TgDWY8
-   2aSQT8Jk1WTJzZkldE8HrL6E7M77D2HYUBpW2aJmElVuAlYGP+J78cYI3
-   fIaUKrN3Rsyng3BV2aL98GoPkn1gfe0fP5bXC53Fx1FDNNHNCZ4HpPdgb
-   0kil4buhDMwWm42/+bRsAnQ57wf9P76pja6LJQ7dGXfehI40KrXyoN5uB
-   GPIou4FEC3eB8BgrcwlQHD0IZFCS6rujhVdYmL573hkYLC5TgrW3Up3Mx
-   cJMMeq4H6PKMOyvuZPLPb+mUAhXm5w9nXqpdr5Yb/q9sBsvTpQLN5Riky
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296170653"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="296170653"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 23:46:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="588929161"
-Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by orsmga006.jf.intel.com with ESMTP; 30 Aug 2022 23:46:25 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org, rui.zhang@intel.com
-Subject: [PATCH] tools/power turbostat: add support for RPL-S
-Date:   Wed, 31 Aug 2022 14:49:57 +0800
-Message-Id: <20220831064957.1773-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229926AbiHaHb1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 03:31:27 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A89BC833
+        for <linux-pm@vger.kernel.org>; Wed, 31 Aug 2022 00:31:25 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id bx38so13680200ljb.10
+        for <linux-pm@vger.kernel.org>; Wed, 31 Aug 2022 00:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=SowT+GgtM4rpf2Tm7Xdg2PLTWLyEuq4YWLGVJCfBBo4=;
+        b=eDUHucZHmNWPS4dcTDAvSB+3Gf6B84OpnmrxcPBg31ZikUd8NxfnOhl5KSqS8dqwTH
+         By91LHkdLFJWxuU3BZip5eaLMrQ3CxsdmPbKI+MBD5j0nW1JUI4YzW3nktfZKPaQBcHx
+         KtZG8TaSTS9srPQOsqMP85vqWbBerDKMiFGow/qtjx4HobjfONZP21xmc1c5FfT+xX+j
+         nIg8aDpdTtf7gCUwKdLU6g4jzLSvaiPTv8zA9dKiV3jUY+6cVOhIcxEpmKsLBKokL/TW
+         zbez57XmSuj33sarUwUCCEpvsSsp5xK9z8nlhK8VXyG0a1y862EP0dyou+0fo27AGZu0
+         Oc8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=SowT+GgtM4rpf2Tm7Xdg2PLTWLyEuq4YWLGVJCfBBo4=;
+        b=4d46n4q53lo1jwWguE3MlgYOpPp3Am5ChTQKsSnvYWRmuYeP60RaUTF6UXDGdSbmF4
+         pWUVTIXiyJHY+2rbJT9QCxd9Fvb3WMjwyutJe9YFf9L+UTwfZj/b5aTX8cC1qtpGe3xA
+         skUM7EVP9JAqdyNg6olaic4An4YX6/ZQTL7ixSiZhLOiRXc3N4it83mwFkcGJFqVEt3r
+         TKs2lRZSOq1nMAbrrAND45pgIUhfVSdwIMUUGc8stEvzpm0RyMTtj7ywvmlDOuMAzbf2
+         kW+TtW+EnQxq9lV20YsoERjh0DydGPeyLvvQmhlATeD5AuNpz4xP9BiGg9Ri62xDM66U
+         bPXA==
+X-Gm-Message-State: ACgBeo0a+GMgLAl4bVIX1JvzMe8R4x3VHSNqD9LT7FCPQaPybPRtcgni
+        W/y0xVlKxhcfMS2Xkf07kh3p4Q==
+X-Google-Smtp-Source: AA6agR4/QCHMtUzdlfGAL1xvdig57DJ6Ktw8Nv3Fk/1Sl/NMSIE1w3emriDGwD5pekMf0VCiwhuuGw==
+X-Received: by 2002:a05:651c:199f:b0:261:d789:cd6c with SMTP id bx31-20020a05651c199f00b00261d789cd6cmr8281851ljb.450.1661931083551;
+        Wed, 31 Aug 2022 00:31:23 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id c7-20020a056512104700b0049468f9e697sm1135488lfb.236.2022.08.31.00.31.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 00:31:23 -0700 (PDT)
+Message-ID: <373fdedb-447e-b552-df83-737267068296@linaro.org>
+Date:   Wed, 31 Aug 2022 10:31:22 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
+References: <20220820102925.29476-1-pali@kernel.org>
+ <20220830230012.9429-1-pali@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220830230012.9429-1-pali@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add turbostat support for RAPTORLAKE_S platform, which behaves the same
-as RAPTORLAKE and RAPTORLAKE_P platforms.
+On 31/08/2022 02:00, Pali Rohár wrote:
+> This new optional priority property allows to specify custom priority level
+> of reset device. Default level was always 192.
 
-RPL-S 601/801 have different CPU ID than the Hybrid ADL-S platforms.
+You still did not explain why do we need this. You only explained what
+you did here, which is obvious and visible from the diff. What you
+should explain is why you are doing it, what problem you are solving.
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 831dc32d45fa..df040d87edd8 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5447,6 +5447,7 @@ unsigned int intel_model_duplicates(unsigned int model)
- 	case INTEL_FAM6_ALDERLAKE_N:
- 	case INTEL_FAM6_RAPTORLAKE:
- 	case INTEL_FAM6_RAPTORLAKE_P:
-+	case INTEL_FAM6_RAPTORLAKE_S:
- 		return INTEL_FAM6_CANNONLAKE_L;
- 
- 	case INTEL_FAM6_ATOM_TREMONT_L:
--- 
-2.25.1
-
+Best regards,
+Krzysztof
