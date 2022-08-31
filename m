@@ -2,79 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638E85A7829
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 09:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C85A5A787B
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 10:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiHaHw7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Aug 2022 03:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S229822AbiHaIFk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Aug 2022 04:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbiHaHwo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 03:52:44 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAC02B1A6
-        for <linux-pm@vger.kernel.org>; Wed, 31 Aug 2022 00:52:41 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id z23so10892029ljk.1
-        for <linux-pm@vger.kernel.org>; Wed, 31 Aug 2022 00:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Lckl7K+XuyktEVYPye4vGCDmH7688b5CS8zBA9Y9oIE=;
-        b=PIg8+3d6PEsrGdo3r1QYFHSWChCwHGdEWlOiDvnIf+PiQBBAwBUXtWJkNksAnTUOdx
-         siSmwzup/w6GIG11wuc4CA7s8hiwImPIJykM8qSfVmDS9ItqvvqqLv0cJ/0gI2lKJjYb
-         fyvxf0Qg0bju9AN0WlDrOi3qP/EcVIDl2DBn0NVFLLfdSYA2bYmSWlqQcKy8ere2Vun0
-         8igzsOczmuT6N7Gy6Jj7C71jU46qL8y+NWRgTfDUUPNPROIPD/g9BXvHaul7iU1v7czs
-         c18I48wi3FALMEmLjq+PdfCUAJK/vSBnms332fshTtUvaJyQvqGjV4ydxrRtiFRBXfpF
-         wrEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Lckl7K+XuyktEVYPye4vGCDmH7688b5CS8zBA9Y9oIE=;
-        b=j8pRLH2c/Cwqhs5wFUmlok8AGbZUTB3nx4fVf8ZVrdlSDv1eeXFL/VsCLoELgtx51U
-         LqZaWbmBIJJn285U4Szcg4ev8GEGeGaKEcAbaGEIPVnz8XhY6X5kS6mRr7qnXcUOq5HA
-         kdkzRzM81xk493RCI5f+/u6hP1rlMfK8ebqpAcPVg7cuiq2zMApxYYbjj/exrLTjbDWU
-         8v6k5UDg8BUn7YitdF82fEkSexKTiuolFIh+WTrlGktGnsyE8gy5r8TychAkCbsV4bDI
-         2ktumx7mQelXgDCOJ47Jpxou4UHm8o+GFzy/EOp9ZhJdDMWByNJxH9un0jdIaxBLe2Ne
-         4Irw==
-X-Gm-Message-State: ACgBeo0z053wzKLSN64vSVMx0jUBElYuwSHw7WftKGb0ddS3jcO0jo+q
-        0ct2Qf1onG1K7T2WvlLF9LwdSQ==
-X-Google-Smtp-Source: AA6agR7kerViFsEYIJs3B2EKamdow9afs0StxBSpkQBm+SKgwDA2fKkd5vv/1r6NG1EAam5/yvWDDQ==
-X-Received: by 2002:a2e:5002:0:b0:264:2b08:9a3d with SMTP id e2-20020a2e5002000000b002642b089a3dmr4494279ljb.286.1661932360265;
-        Wed, 31 Aug 2022 00:52:40 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id p17-20020a2ea4d1000000b002688844741bsm125809ljm.126.2022.08.31.00.52.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 00:52:39 -0700 (PDT)
-Message-ID: <dcd25b00-f2e6-311c-fc1d-6175158f32b3@linaro.org>
-Date:   Wed, 31 Aug 2022 10:52:38 +0300
+        with ESMTP id S230398AbiHaIFi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 04:05:38 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83591BE32;
+        Wed, 31 Aug 2022 01:05:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661933122; x=1693469122;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FTZUE/HMB0MTCpZxliUKMFEJs8Y03+K0ziFDxUfaydI=;
+  b=fxtGGMJyS1kQqr2PormtuThtTPg6ZyPrkVhZ9RXvFJPVCyf5Katw5VMt
+   T/46lSqswKEUpR2UI+WZsbV/s9nvTlgJleq9OYE1tDCLO+twL5moTEARd
+   UgqFnSGMcFJu5xrseMAanhHGzQXJcIGi/GQ1F2zPfF1cUyDRig0N0Do/H
+   Ywv3lN3nlxCH4FektlU1Rn2ojznOK3v84YISgpcPC5MWk8dFu7gO/mRPP
+   S6b29MgGBhtw60eoUuDSZjw6KrzZxoRuFOYwFpcnkmzi97heJYWB64lQd
+   45CuwrGCGblNq7cxdYpX23WOLYMNBaGUubiOZSpaHXsePKki82EjZdCyr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="294139221"
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="294139221"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 01:05:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="612016964"
+Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 31 Aug 2022 01:04:59 -0700
+Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTIiZ-00006U-0y;
+        Wed, 31 Aug 2022 08:04:59 +0000
+Date:   Wed, 31 Aug 2022 16:04:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 41607487f81ccdf20e796adacc277483ecc9c234
+Message-ID: <630f1603.6+GZXZtnLrO93ZoE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: reset: syscon-reboot: Add priority
- property
-Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
-References: <20220820102925.29476-1-pali@kernel.org>
- <20220830230012.9429-1-pali@kernel.org>
- <373fdedb-447e-b552-df83-737267068296@linaro.org>
- <20220831073622.5bp3ftf3fkea5rdk@pali>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220831073622.5bp3ftf3fkea5rdk@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,24 +63,118 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/08/2022 10:36, Pali Rohár wrote:
-> On Wednesday 31 August 2022 10:31:22 Krzysztof Kozlowski wrote:
->> On 31/08/2022 02:00, Pali Rohár wrote:
->>> This new optional priority property allows to specify custom priority level
->>> of reset device. Default level was always 192.
->>
->> You still did not explain why do we need this. You only explained what
->> you did here, which is obvious and visible from the diff. What you
->> should explain is why you are doing it, what problem you are solving.
->>
->> Best regards,
->> Krzysztof
-> 
-> Look at patch 3/3, thanks.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 41607487f81ccdf20e796adacc277483ecc9c234  Merge branch 'thermal-core' into linux-next
 
-This commit should explain it why you add new property. Some other
-commits going via different trees/branches and ending up in entirely
-different time/place in history do not really count.
+elapsed time: 722m
 
-Best regards,
-Krzysztof
+configs tested: 97
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                  randconfig-r043-20220830
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                              defconfig
+i386                          randconfig-a001
+x86_64                          rhel-8.3-func
+powerpc                           allnoconfig
+i386                          randconfig-a003
+x86_64                         rhel-8.3-kunit
+i386                             allyesconfig
+x86_64                           allyesconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a005
+powerpc                          allmodconfig
+x86_64                           rhel-8.3-kvm
+sh                               allmodconfig
+x86_64                               rhel-8.3
+x86_64                    rhel-8.3-kselftests
+i386                          randconfig-a014
+x86_64                           rhel-8.3-syz
+arm                                 defconfig
+i386                          randconfig-a012
+mips                             allyesconfig
+i386                          randconfig-a016
+ia64                             allmodconfig
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+arm64                            allyesconfig
+arm                              allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+sparc                               defconfig
+mips                      loongson3_defconfig
+m68k                       m5475evb_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                       bmips_be_defconfig
+arm                       imx_v6_v7_defconfig
+mips                           jazz_defconfig
+powerpc                     stx_gp3_defconfig
+powerpc                     asp8347_defconfig
+sh                           se7619_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+sh                         apsh4a3a_defconfig
+arm64                            alldefconfig
+mips                        bcm47xx_defconfig
+powerpc                       eiger_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sparc                             allnoconfig
+sh                           se7721_defconfig
+sh                        edosk7760_defconfig
+m68k                            mac_defconfig
+xtensa                  cadence_csp_defconfig
+x86_64                           alldefconfig
+arm                         nhk8815_defconfig
+arc                        vdk_hs38_defconfig
+arm                           u8500_defconfig
+arm                           tegra_defconfig
+arm                          badge4_defconfig
+i386                          randconfig-c001
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arc                        nsim_700_defconfig
+microblaze                      mmu_defconfig
+arm                        realview_defconfig
+ia64                      gensparse_defconfig
+sh                             sh03_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220830
+
+clang tested configs:
+hexagon              randconfig-r045-20220830
+riscv                randconfig-r042-20220830
+hexagon              randconfig-r041-20220830
+s390                 randconfig-r044-20220830
+i386                          randconfig-a013
+x86_64                        randconfig-a001
+i386                          randconfig-a015
+i386                          randconfig-a002
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a011
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-k001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
