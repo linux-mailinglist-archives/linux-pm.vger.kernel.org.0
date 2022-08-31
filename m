@@ -2,100 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463135A7EA1
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 15:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D385A822B
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Aug 2022 17:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiHaNXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Aug 2022 09:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S229882AbiHaPtT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Aug 2022 11:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiHaNXE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 09:23:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57570A2211;
-        Wed, 31 Aug 2022 06:23:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D28D261ABD;
-        Wed, 31 Aug 2022 13:23:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F16E0C433D6;
-        Wed, 31 Aug 2022 13:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661952183;
-        bh=tfMwNPtQLlX+SnAmAHcp4e9lcD14DH5x+PNXHRaF5Ao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tCFsvhzsLWW6kCGY3+i4jK/tTu3xmqJdqTJL94dqn8qRfB0lEhq5QIsse049NH2tl
-         ssOzp2t+EfzKyNIz/PgU+3SiEVjffEi67w8nuzmUZV/7/4cfjiiCe1hZ11URzy86bf
-         YThlRzmA7vlKp4FJN3BIC5vgKSoOsDglUFi/WOMUm+ttRM5H37JZYowQCllNsFJzZE
-         AAKL9y2sG2wsor3U/6aT6dp7HGx2FtnLCS93T4hVfCNKnrYVdK1oMPj6/pwFmq8LOg
-         D3tKYDWFyziV/wovfJJBJdz2noWulH5CVCdT6Qz9UE/SfasXWHBwh1YgrvCASugPQJ
-         KQcMOSlTj73ag==
-Date:   Wed, 31 Aug 2022 08:23:01 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Koba Ko <koba.ko@canonical.com>,
-        "David E . Box" <david.e.box@linux.intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PCI: Disable PTM on Upstream Ports during suspend
-Message-ID: <20220831132301.GA177609@bhelgaas>
+        with ESMTP id S231976AbiHaPtP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Aug 2022 11:49:15 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6CDAC;
+        Wed, 31 Aug 2022 08:49:13 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1661960948twaldri9
+Received: from localhost.localdomain ( [182.148.13.26])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 31 Aug 2022 23:49:06 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000B00A0000000
+X-QQ-FEAT: G46xFj+wOV/n5f2V0sXg0WXxitei3nEZS1U5Wj6HXsPhwk296M1wlIYc8AV88
+        bC8r7jGk88OWIbdHorhKSq3qXK6Zo3kuU7FVMabU8oJdy/BGPCv7GW9EwCIocpQhBtUpy1f
+        VOnGChG4nF3AFYmr1GgRXGKHgthp/0bTQgxzplN7R0zALEsuLbTcbTNONZLVNR6hjq6tOpM
+        Rsypfr5TAUek4RFadtLU58E8QUl9LJDTTcre48tGxUAOp22LVgeEZTpDbgLmSw0VWYet4jy
+        86To/LMlNFmKvXc+ypIWLSjbVin6DtO69M/mfxWuzzT7oL4VLaE0AZuNhwab9ShmleQz+s2
+        1bwie0t6WWzEd1bG9wDQ1HggIIpvlmdmrnjBrRrxYRPA/criBBjBl3cOx3US/U6kpvWAJzD
+X-QQ-GoodBg: 0
+From:   Shaomin Deng <dengshaomin@cdjrlc.com>
+To:     sre@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] power: supply: tps65217: Fix comments typo
+Date:   Wed, 31 Aug 2022 11:49:05 -0400
+Message-Id: <20220831154905.1513-1-dengshaomin@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yw8vgYeqY6a79HDR@black.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
+        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *      [43.155.67.158 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Rafael, Rajvi, linux-pm]
+Delete the unneeded word "the" in comments.
 
-On Wed, Aug 31, 2022 at 12:53:05PM +0300, Mika Westerberg wrote:
-> On Tue, Aug 30, 2022 at 10:52:24AM -0500, Bjorn Helgaas wrote:
-> > +	type = pci_pcie_type(dev);
-> > +	if (!(type == PCI_EXP_TYPE_ROOT_PORT ||
-> > +	      type == PCI_EXP_TYPE_UPSTREAM ||
-> > +	      type == PCI_EXP_TYPE_ENDPOINT))
-> > +		return;
-> 
-> Perhaps switch () instead?
-> 
-> switch (pci_pcie_type(dev)) {
-> case PCI_EXP_TYPE_ROOT_PORT:
-> case PCI_EXP_TYPE_UPSTREAM:
-> case PCI_EXP_TYPE_ENDPOINT:
-> 	break;
-> default:
-> 	return;
-> }
-> 
-> Either way,
-> 
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+---
+ drivers/power/supply/tps65217_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!  I dropped this patch for now.  I think Rajvi's similar
-patch [1] is much better because we only need this kind of check in
-one place -- where we enable PTM.
+diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supply/tps65217_charger.c
+index ba33d1617e0b..a4bc9f2a10bc 100644
+--- a/drivers/power/supply/tps65217_charger.c
++++ b/drivers/power/supply/tps65217_charger.c
+@@ -50,7 +50,7 @@ static int tps65217_config_charger(struct tps65217_charger *charger)
+ 	 * tps65217 rev. G, p. 31 (see p. 32 for NTC schematic)
+ 	 *
+ 	 * The device can be configured to support a 100k NTC (B = 3960) by
+-	 * setting the the NTC_TYPE bit in register CHGCONFIG1 to 1. However it
++	 * setting the NTC_TYPE bit in register CHGCONFIG1 to 1. However it
+ 	 * is not recommended to do so. In sleep mode, the charger continues
+ 	 * charging the battery, but all register values are reset to default
+ 	 * values. Therefore, the charger would get the wrong temperature
+-- 
+2.35.1
 
-Also, we need to tighten this up so we *always* disable PTM [2].  The
-patch I posted still calls pci_disable_ptm() from
-pci_prepare_to_sleep(), which means we only do it when
-!pdev->state_saved, so we leave PTM enabled if the driver saves its
-own state.
-
-Bjorn
-
-[1] https://lore.kernel.org/r/20220830104913.1620539-2-rajvi.jingar@linux.intel.com
-[2] https://lore.kernel.org/r/CAJZ5v0iHckqia4OywKzSNWFCaq7eOkJcm5yXJdT2_sNdd36gDw@mail.gmail.com
