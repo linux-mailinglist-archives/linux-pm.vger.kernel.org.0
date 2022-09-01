@@ -2,129 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208E15A929B
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 11:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F445A951A
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 12:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbiIAJBB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 05:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S234131AbiIAKye (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 06:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234411AbiIAJAT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 05:00:19 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771964AD75;
-        Thu,  1 Sep 2022 02:00:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=daKwIXnG21f5IQnwFLtP9tfgO380G8YdT3cnUzVBJyD8r52OT+38AqkrcjdrLbOfj4HE0NPZalQWsbeGP5npJSUqLjsyppM4fxv8uHXrKAKz6rnTxv/8uoyRaE8BrcrrtoP7noiqw352WowpjSS8pj3M5TR7/j+OpUi2nPJxIQf9PlaOev6Wk/u6t8L2gY5p5jvsX++zji3NB0YGLxdver7s13dExdFevn1MTLbzZZzrE1lVy/MQYSP3hbybjxnPzkEZHXaIimCWp3zV+JzHkndPEhic15+mDr4DyKDwUh8kQZj28Xg1Zz6jUVBlrwTKhLbIkN1YVZc+Z8ti7yboRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lOwv1GDUtAoqnMgcMKPJGv6/T0bXxpHqD3jQSPNQWvM=;
- b=F1++p52BPRMSRBaZgZ1JtTKSs5UiIWjTCqhfAitUf/7rLuJT9WYSzgcHw7VazHZj0pa/VZaLo0cBYeYeOriKfGfXAnQSf/6biOC4AFkDrLFvkIELjRh48s39htybIHqK4OdSOQspBOmOHYoPBtXaNYZ8G3xoYvrDs2TqIqIbxhWURaib5QhiV6H/3V2H6dYUMuY1v7mgMc7RYQLOYLbZzj1TU1uP0EPz3Z7QrVc/MiaA0Uy2JXj2dytTU1HK4ieYz9Im2TkWxBCuQqQ19kX0te1yvApWFKWzK4uiyO3sCnhOzEsU536Bh7thsEIK6zguSfPOiDThcNBdk7dB6F+UQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lOwv1GDUtAoqnMgcMKPJGv6/T0bXxpHqD3jQSPNQWvM=;
- b=CYOq2TzJfEzuMKnpHuS0rkiSmwbLAnwaPxGVTEISmJItUOhwzDj0vfFz1hP+y9v2B3cVzQiM+79i4CLOhvjbwmnic14IjOPYa9OIsrAOICdXnRMpt/txLxLg3dcDvamU6pdd2FI6Fwu1QcyhD/YYdOd7g+CcU/mCF89sme5umsA=
-Received: from MW4PR04CA0317.namprd04.prod.outlook.com (2603:10b6:303:82::22)
- by MW4PR12MB5668.namprd12.prod.outlook.com (2603:10b6:303:16b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 09:00:01 +0000
-Received: from CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:82:cafe::7d) by MW4PR04CA0317.outlook.office365.com
- (2603:10b6:303:82::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.13 via Frontend
- Transport; Thu, 1 Sep 2022 09:00:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT009.mail.protection.outlook.com (10.13.175.61) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5588.10 via Frontend Transport; Thu, 1 Sep 2022 09:00:01 +0000
-Received: from aerithdevpyuan.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 1 Sep
- 2022 03:59:55 -0500
-From:   Perry Yuan <Perry.Yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
-        <viresh.kumar@linaro.org>
-CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
-        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
-        <Jinzhou.Su@amd.com>, <Shimmer.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Subject: [PATCH v3] x86/cpu/amd: fix the highest perf query for new AMD processors
-Date:   Thu, 1 Sep 2022 16:59:39 +0800
-Message-ID: <20220901085939.2388861-1-Perry.Yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S233080AbiIAKyc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 06:54:32 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF29A12CB20
+        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 03:54:29 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id m2so16737993pls.4
+        for <linux-pm@vger.kernel.org>; Thu, 01 Sep 2022 03:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=2j/euuewrJLsmuH7PP5LuRSskWex4MK4oenY2YNmi7o=;
+        b=TbZl7S2tkGZvo64LY0ebTP/BW0w7CEo9wRD3fni+bu2LoIcaSC3RsN1j2a9D5p4Cte
+         l4YM+fizu2O9DwG/CDcZ1Re5rMqXlRMnOE0W2TrlA77q52LVDnmgf/l4NGOoe9ritQxe
+         2DjHFEva0mj3FCO6L4ZhH0fBoMlLX65aQ55hjmtq0J6MAtklj3VVReWDD88Yz+bUpzy+
+         Ek1vJ4FVAxbYYr0mA3aU8pi2TE4AUitLfieLTueKMzMMN8m25PMpM8VXpsfuDcIr0LSw
+         eR46jCvJ2av61H3vVKJfFyYWKme0iGc2+l9UQ4eZOBFTTavnr+wkDmaS8/F56QTcYx0S
+         xmAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=2j/euuewrJLsmuH7PP5LuRSskWex4MK4oenY2YNmi7o=;
+        b=tGop0XG3RChzfv14BDCd8k9XMWqIfRnfn0SQVjJOVneFeMWYazd3WJtIgALq9CDQ9T
+         JCBD9eAL+FMTf4aypL5oN9EfF0A0jSG+kaqa16g3yYwv9EEorL2J4/wZB5QdHBW5TspD
+         q5hsU0bg94kH9AfAkAqFq0xMEzdC3CjWtURO24gglCwBCchnnIAyojp4D47pGtCdVWSW
+         OLaNEEJN+5MT+VV4dhyN0sgvquzRaNfzntL41zm+/YED+qF4G5OcRddSEqMMkOcZLgZS
+         NkwlGlfdDgpvM+Jz0bGvf98+AEB8dXREyxvcRTL41gjk88kLgln19I3BToFs3dLiswbf
+         wRNQ==
+X-Gm-Message-State: ACgBeo0u4aLLIMJ2uhTPkgRl0sCOqJBpoUqqwVP4hyc7RZxs+4DNhRCB
+        UeQ3/zTTHtjoqINYY1uuWTUD5cOJlLydvA==
+X-Google-Smtp-Source: AA6agR4X3IrGw9Bu8aLpEws0oDKUEuYQZPfL9DS3huamNRggIRsK5P/pRA3DqtdZdhsdCAc6I+RCTg==
+X-Received: by 2002:a17:90b:3907:b0:1fe:34a0:e760 with SMTP id ob7-20020a17090b390700b001fe34a0e760mr6671416pjb.45.1662029668590;
+        Thu, 01 Sep 2022 03:54:28 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:5362:8069:f46:34af:eb19])
+        by smtp.gmail.com with ESMTPSA id ij13-20020a170902ab4d00b0016c57657977sm13508910plb.41.2022.09.01.03.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 03:54:28 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-pm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Subject: [PATCH v4 0/4] Add support for tsens controller reinit via trustzone
+Date:   Thu,  1 Sep 2022 16:24:10 +0530
+Message-Id: <20220901105414.1171813-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: afc578a8-d0e7-4853-6899-08da8bf85a7e
-X-MS-TrafficTypeDiagnostic: MW4PR12MB5668:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KESPGvNPpAuGVIycdHq3+ouZO+SdfKDruHpZga9QHd9L8a+Fe/wUmK7DtI+Qq05aKJiI5zgsU2lPgsEFc/U84jAL3LWaW7SgVGN6kF/mPue5cE5P5/znxfJpSvUu+xYvjeMUu93wb+wOkxyjQif1rTsIGRVNrWgFz1dEa3z2V5A+/vKIwHsWKMhSoAAY0XfISxu9VDWvOGlKQfa+gB/nHj4n9TlWhZ0UVMGTzWfybdlO8ackkm2tT1wtnzD2VhtsYFRMH4cdLBFFbxco/8bXD0scNLjtVCGPnJURIlyM5YBKMjcc6YRM7gS3GdDJH1LeQLcLkpUJywkNQ1IytI/LhwBMpXiZjOSzUlYEIxZABuuEA+AC5XUe1hXnkJfvgn4GOtG4ndYUMw/uHGRbz8BLJT0fmB4nUWxBHayav6BTaa15aigC0grz5/tKbfKqIODXYjXNh2jkc8k0PC9waFXXxVV46VETogxoXWt+JWVW1cRkd9DIC6pJNvXHAgvgr7ZWgPG1MY2/6D217IwSBTCyBWwYQ/xGaA4XMIvqlsi4Kcv/1duhxUAz+HGO5KgrUzFXeQ+PBJZHl7GAVRp48K0yAK4YT/WbhokmKXfLNwRWyhviG7lIreYRo9sfmhch2McBWua5Y9XzJeeBr+TjKj3e8X1a59oNqq4+h3QVnmaQ1pKyxIXRGMjlC2Tyyu0iYoHWYFZ/FZ45TmIY+iqKnSzn4ei36AQyOTW1f63MfKsXowpF0ewa0ArdCgGnduiRzFbKuUQqpORvhb1lKXK9RTAIyvCEUQxcnp0/1QFM8BhWtn+Dqbygq7xiki69v5gBwt2eDhHkSHwYnzcscuC9i2tU/w==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(346002)(376002)(36840700001)(40470700004)(46966006)(40460700003)(47076005)(426003)(6666004)(4744005)(26005)(7696005)(2616005)(1076003)(82740400003)(16526019)(336012)(8936002)(86362001)(82310400005)(186003)(478600001)(41300700001)(36860700001)(110136005)(356005)(5660300002)(4326008)(83380400001)(40480700001)(54906003)(316002)(36756003)(81166007)(2906002)(8676002)(70586007)(70206006)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 09:00:01.0855
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: afc578a8-d0e7-4853-6899-08da8bf85a7e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5668
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In order to get the corrent highest perf for some new AMD processors,
-the amd_get_highest_perf() call will check the CPU model and
-return correct highest perf value.
+Changes since v3:
+-----------------
+- v3 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220804054638.3197294-1-bhupesh.sharma@linaro.org/
+- Addressed review comments from Bjorn regarding early exit paths, spin
+  lock being held while returning from func, etc.
+- Also added Bjorn's R-Bs for v3 patches.
+- Rebased on latest linux-next (master branch) tip.
 
-Acked-by: Huang Rui <ray.huang@amd.com>
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
----
- arch/x86/kernel/cpu/amd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes since v2:
+-----------------
+- v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220724122424.2509021-1-bhupesh.sharma@linaro.org/
+- Dropped sm6375 specific patch from v3, as suggested by Konrad.
+- Rebased on latest linux-next (master branch) tip.
 
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 48276c0e479d..bdb0bfa80525 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -1184,7 +1184,8 @@ u32 amd_get_highest_perf(void)
- 	struct cpuinfo_x86 *c = &boot_cpu_data;
- 
- 	if (c->x86 == 0x17 && ((c->x86_model >= 0x30 && c->x86_model < 0x40) ||
--			       (c->x86_model >= 0x70 && c->x86_model < 0x80)))
-+			       (c->x86_model >= 0x70 && c->x86_model < 0x80) ||
-+			       (c->x86_model >= 0xa0 && c->x86_model < 0xb0)))
- 		return 166;
- 
- 	if (c->x86 == 0x19 && ((c->x86_model >= 0x20 && c->x86_model < 0x30) ||
+Changes since v1:
+-----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220701145815.2037993-1-bhupesh.sharma@linaro.org/
+- Addressed several comments from Bjorn regarding locking, serialization
+  etc received on v1.
+- Addressed Konrad's concerns about the tsens controller found on sm6375
+  SoC which seems to start in a bad state or is disabled when entering
+  the linux world.
+- This series would depend on sm6375 tsens controller changes being
+  added by Konrad. It is based on linux-next (master branch) tip.
+
+Some versions of Qualcomm tsens controller might enter a
+'bad state' causing sensor temperatures/interrupts status
+to be in an 'invalid' state.
+
+It is recommended to re-initialize the tsens controller
+via trustzone (secure registers) using scm call(s) when that
+happens.
+
+This patchset adds the support for the same.
+
+Cc: andersson@kernel.org
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Thara Gopinath <thara.gopinath@gmail.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
+
+Bhupesh Sharma (4):
+  firmware: qcom: scm: Add support for tsens reinit workaround
+  thermal: qcom: tsens: Add hooks for supplying platform specific reinit
+    quirks
+  thermal: qcom: tsens: Add driver support for re-initialization quirk
+  thermal: qcom: tsens: Add reinit quirk support for tsens v2
+    controllers
+
+ drivers/firmware/qcom_scm.c     |  15 +++
+ drivers/firmware/qcom_scm.h     |   4 +
+ drivers/thermal/qcom/tsens-v2.c |  15 +++
+ drivers/thermal/qcom/tsens.c    | 193 ++++++++++++++++++++++++++++++++
+ drivers/thermal/qcom/tsens.h    |  18 ++-
+ include/linux/qcom_scm.h        |   2 +
+ 6 files changed, 246 insertions(+), 1 deletion(-)
+
 -- 
-2.34.1
+2.37.1
 
