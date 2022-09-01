@@ -2,134 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560475A9C16
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 17:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8E75A9C4F
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 17:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbiIAPrO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 11:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S233055AbiIAP4z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 11:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbiIAPrL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 11:47:11 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B268A7DA
-        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 08:47:08 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id a9so6935984ilh.1
-        for <linux-pm@vger.kernel.org>; Thu, 01 Sep 2022 08:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=cR8Ir4R4yuVk1/9w3KJlXK3iQYqpW+6/KYRzY74rKiY=;
-        b=R3UKzrAlLHtXUKFQIbdjd9rA5YoDFOjI4Qk1Qqo9oBR4ezcyVqEHXgLUMH+qpdsEb8
-         HwGF8DOSLPC0IxGL432SE13xG1QLKKNBKqomF4yKq8rITRUrF8AYOCrAajjmNyrLYKa8
-         qKn9BM5o57RTGEMubeedPi2ytz3EyhCNOrAlg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=cR8Ir4R4yuVk1/9w3KJlXK3iQYqpW+6/KYRzY74rKiY=;
-        b=6i2MnYFIvKtWLZ3yVKEsbIL61sHGQNycvxgIFyPwuiZ1EDFI+D5uHwL/UPi3c2gpLU
-         DmVtLMMCuLFt0mvra3aFMHP6/ZQ6+qBliAM3gJXpmf7WGamEANg9NDfuBwsonGlupMXz
-         BucBMZcRDOHd+eJLF4Kmg7QdQIRhLmuquo9EZxGBVqtWV0RvM6VOv0L1wlUtS3ug7QyS
-         PNk7EIGo0WI3LNxNswXtkrYOcnp760rCFVPv2irMGiFUMI4iMCKM3UuT2lJ5d/SH1q6/
-         nUlS3d85Ax4K3zOtEfDB6qX1apfTrdA6WUHZG95yGZ8TBhMurqX9xz8KZzucofitMKO/
-         NOFw==
-X-Gm-Message-State: ACgBeo0xuWxuJAsOrz9+7D7cYAhbRICB1x5lU1dVHfNg+hKStzGxBiUW
-        Tg4jc9zakmTiArAH5W51YtAqaw==
-X-Google-Smtp-Source: AA6agR6ETM5ONYFMDYU3TZ91zzC/yTF/90lCTohpaRzj5uHJ0D9aODBPkl06wrbUYPuM9mT4rBeBrQ==
-X-Received: by 2002:a05:6e02:1347:b0:2ea:e939:fef1 with SMTP id k7-20020a056e02134700b002eae939fef1mr11598351ilr.114.1662047227677;
-        Thu, 01 Sep 2022 08:47:07 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a5-20020a056e0208a500b002eb9fb2d4e3sm1467428ilt.76.2022.09.01.08.47.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 08:47:07 -0700 (PDT)
-Message-ID: <d9b85490-94f2-611f-a228-ea9434a95805@linuxfoundation.org>
-Date:   Thu, 1 Sep 2022 09:47:06 -0600
+        with ESMTP id S229720AbiIAP4z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 11:56:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DEA8000D;
+        Thu,  1 Sep 2022 08:56:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 196F861F31;
+        Thu,  1 Sep 2022 15:56:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE578C433C1;
+        Thu,  1 Sep 2022 15:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662047813;
+        bh=PO3JHixyGeTvQB4eTxI5p4EHFoeyb/XZAm6c6Dd80j0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0T35UNSHQHSgOBUKHNO9VBJ4BCdHZK/qYKZOXB4euigOIxuLMeBeNeQXG2NnGbzPo
+         69V1C046Lmbr9BIZXNGGWplxACTZMdvDQnBEiDj1VbhTjK3o3LwT80tPrdv0gf3cx1
+         a0eUc2sOlFbPEW6WWLONFhW74FIq5wtbX/tYV468=
+Date:   Thu, 1 Sep 2022 17:56:50 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vimal Kumar <vimal.kumar32@gmail.com>
+Cc:     chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
+        Vishal Badole <badolevishal1116@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] PM: runtime: Add support to disable wakeup sources
+Message-ID: <YxDWQjMlEGQH4yz3@kroah.com>
+References: <20220821134533.22901-1-vimal.kumar32@gmail.com>
+ <YwI7PM9wVF/H9hQL@kroah.com>
+ <20220827114028.GA258@DESKTOP-KA7F9LU.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [Suggested-by:Shuah Khan Patch 1/1] cpufreq: amd-pstate: Add
- explanation for X86_AMD_PSTATE_UT
-Content-Language: en-US
-To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220901143313.1491951-1-li.meng@amd.com>
- <20220901143313.1491951-2-li.meng@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220901143313.1491951-2-li.meng@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220827114028.GA258@DESKTOP-KA7F9LU.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/1/22 08:33, Meng Li wrote:
-> This kernel module is used for testing. It's safe to say M here.
-> It can be modprobed even without amd-pstate module.
-> When the comparison test is performed, it can load other module
-> like acpi-cpufreq to test cases, then compare the test  results.
-> When only the test for amd-pstate is performed, it can tell the
-> users they loaded a wrong module like acpi-cpufreq.
-> 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> ---
->   drivers/cpufreq/Kconfig.x86 | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-> index fdd819069d72..fd1582716c58 100644
-> --- a/drivers/cpufreq/Kconfig.x86
-> +++ b/drivers/cpufreq/Kconfig.x86
-> @@ -58,6 +58,12 @@ config X86_AMD_PSTATE_UT
->   	help
->   	  This kernel module is used for testing. It's safe to say M here.
->   
-> +	  It can be modprobed even without amd-pstate module.
+On Sat, Aug 27, 2022 at 05:10:28PM +0530, Vimal Kumar wrote:
+> On Sun, Aug 21, 2022 at 04:03:40PM +0200, Greg KH wrote:
+> > On Sun, Aug 21, 2022 at 07:15:32PM +0530, Vimal Kumar wrote:
+> > > User could find many wakeup sources available in the bsp, which
+> > > they won't be using. Currently users can only get the status and
+> > > list of enabled wakeup sources, but users can't disable it runtime.
+> > > It's very difficult to find the driver for each wakeup sources from
+> > > where it's getting enabled and make the changes for disabling it.
+> > > 
+> > > This will help users to disable any wakeup sources at runtime,
+> > > avoiding any code change and re-compilation. A new class attribute
+> > > "disable_ws" will be added in the wakeup calss. If user want to disable
+> > > any wakeup sources, user need to find the wakeup dev node associated
+> > > with the particular wakeup source and write the devnode name to the
+> > > class attribute "disable_ws".
 
-It can also be built-in without X86_AMD_PSTATE enabled.
-I would rephrase this as:
+What userspace tool will use this new interface?
 
-This config option can be enabled without X86_AMD_PSTATE enabled.
+Who is supposed to interact with it?  Why is this even needed?  Who
+would disable this dynamically, shouldn't the kernel handle this all
+automatically with no need for usersapce to get involved?
 
-Also change the information below to sat enabled as opposed to module
-as both these options can be built-in
-
-> +	  When the comparison test is performed, it can load other module
-> +	  like acpi-cpufreq to test cases, then compare the test results.
-> +	  When only the test for amd-pstate is performed, it can tell the
-> +	  users they loaded a wrong module like acpi-cpufreq.
-> +
->   config X86_ACPI_CPUFREQ
->   	tristate "ACPI Processor P-States driver"
->   	depends on ACPI_PROCESSOR
-
-Thank you - In addition to this patch please make change to the test
-script as well when it fails detecting that X86_AMD_PSTATE is disabled
-to say what user has to do to run the test.
-
-This run-time message will be helpful to users.
+What is the root problem here you are trying to solve?
 
 thanks,
--- Shuah
 
-  
+greg k-h
