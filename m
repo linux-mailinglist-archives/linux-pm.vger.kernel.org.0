@@ -2,260 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BE65A993D
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 15:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570585A9A6C
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 16:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbiIANl7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 09:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S234770AbiIAOdt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 10:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbiIANl0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 09:41:26 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ABA32B9B
-        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 06:40:10 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id h1so9040063wmd.3
-        for <linux-pm@vger.kernel.org>; Thu, 01 Sep 2022 06:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=PXZk2g+XOqGMjXGT66nViEOp7155I8tzUe2hmezbk9c=;
-        b=17fsFK3ztgm/SVq5u0ayzndJktrteVKsCKcEqAK3Qn//5L3IkRaOUCawLwShBDJFtl
-         euAItBnkxj6Kr+gObW2PdMQJyW+JNckoeeEdJcOyJ8odVyjv9qwSo+Aa+Agrw1D7uadm
-         NjFL4ytCQsfAsiYRX2ZCnWbkqyjhSvU2ArcGakqT0/pe/tzKAGY5ANhWjbKSskm01+SV
-         e08NiN7JfQwTyq8kqygPzg04A3j1sVIHbYcg2+MQmLJ0G2Z5+pbYD3vww9tiFNQdTwNx
-         Wb/b6iHsoxdWnVPAvK6uJ58Bt5C5ENxo+MtunbH7ABwWaEcZ0kMUtDms8wCLcCUx5Vlk
-         EiCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=PXZk2g+XOqGMjXGT66nViEOp7155I8tzUe2hmezbk9c=;
-        b=FpnGS7SOqo8DR+QetokkJt5hALmEt8TDNuhGoEHAUSTlUDZKeTwyd0aJGSQDzl8GFp
-         vDMeqlBqdiq9slhqBU0KVG0YwAU2CmKJmrVhdlEfUVroBF3zKLD99NFILKePvCAnNg6e
-         QdRqNZ5WztVLuKOq3L2RV4aY5adah7sDoOwVfsIqmbJlWQK8xYDwi62P5i2c2AwZW4k7
-         APoYcW241l7yW1wLWvys/s6g/KdlsDg/WuDEBpsjWOvj0lQ9ASI8k+EKKgkKru0VFsF2
-         0glbACJB5Tt/n8AKYZH5XHiY3G56OVDh2Emr2QuZvJau48ZOEU3yzfaB6Wbj4Eeb7+IA
-         COIA==
-X-Gm-Message-State: ACgBeo37FGgHnHvXv8ig+u8JBTN376C1YR1YEEKR5Yd1FZK3xp4+VbsM
-        CsQtfYyFGcUHb/3oS6N+LQvJnA==
-X-Google-Smtp-Source: AA6agR42cS6iV9udNENWfEp+1c99N36znNphQvHct12z9G9cTwZBqzId0Md8KfkxH6g9DJOJUI8Dcw==
-X-Received: by 2002:a05:600c:4148:b0:3a5:4f94:577b with SMTP id h8-20020a05600c414800b003a54f94577bmr5357868wmm.167.1662039606770;
-        Thu, 01 Sep 2022 06:40:06 -0700 (PDT)
-Received: from localhost.localdomain (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.googlemail.com with ESMTPSA id e3-20020adfe383000000b0021ef34124ebsm15399016wrm.11.2022.09.01.06.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 06:40:06 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     matthias.bgg@gmail.com
-Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>, rafael@kernel.org,
-        fparent@baylibre.com, amitk@kernel.org, daniel.lezcano@linaro.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        robh+dt@kernel.org, rui.zhang@intel.com,
-        Michael Kao <michael.kao@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Subject: [PATCH v3 4/4] thermal: mediatek: add another get_temp ops for thermal sensors
-Date:   Thu,  1 Sep 2022 15:39:50 +0200
-Message-Id: <20220901133950.115122-5-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220901133950.115122-1-aouledameur@baylibre.com>
-References: <20220901133950.115122-1-aouledameur@baylibre.com>
+        with ESMTP id S234804AbiIAOdi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 10:33:38 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2883D6FA18;
+        Thu,  1 Sep 2022 07:33:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TJduRuz4BxxlpLBeKrZpnlScEpj8DGGv2Rtva2Kk6fAUi7WsjKBSKuw0QpCPUR/l0iGuKhm1Ges75fMCgGZayUi/4wd4sctuuJN503wzmxTLjlPs9ctu4UkNYe1euBlooM1SqClLMb5oDL608mnrnvVJz/sr3nMjbSO3kXXVZAlqsxyhzPuI0z1CpS8kdoeV/KkKhS/Pt8JkNS914CtGP1OVILmK1QMALCZ6DHG41mjAX3EV3i3FxScrn4aqMWsvnkfugDlQN9Nrd/rlYr/za0DY/KV77QCjrkWWyEwcKhMQLq1ZF7G1PExO/JsdYcClq+U+lm5Le0IWU9P+7M5aQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KeXH7BRgXTCkpCKmgAhR72Q1WvbpZbXS1SXiP6cNnkY=;
+ b=GPAE1vOUtBAPT9cfDGB5Z50Y8a5+C+QQmW9zYoXMSa9Qv8dr+1UZkvi8ejSgqRERZvhOhuUFcdYFVQ8KmDE7sYOKMGLZh3QPlbCOkZFWe5oTQJEqfMrqvEDmJ+UQ7KloiLuvgfM1mh4ZqWPWVkHh84cMVYS1wvxQ64gAPnJTgDej2rUxkGbS/VWlexFSE2kwpSNnvCpTzdtEX4AXOomYU+dK3JssQxfNgcGcR7bumoQFt9zuryGfZfV6LhI+FIrlZ2XuskTNPPtPmFomLSA30GU7DXYKCISIovu7IwAw0/NsN2t2xY6oX7kczcdfgjSG8pyK4P2vvCRRXh88RqHNBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KeXH7BRgXTCkpCKmgAhR72Q1WvbpZbXS1SXiP6cNnkY=;
+ b=QENjYabqOG0xXxCnw+4XsPFLQWgYmwqaL0TOSTKjD5n9F08+BjgNH6VQDhJm/BOyozTkdF4UasoCKw9cnypyw7f0S1sUZgqIUjAWzlz5ap00xEuioNdHtpJ71NUGqjCLxrNAKtH5Z2lQIJJUdMpThPpPfXbLJL+8e7dvlZVFc2o=
+Received: from MW4PR04CA0112.namprd04.prod.outlook.com (2603:10b6:303:83::27)
+ by BL1PR12MB5301.namprd12.prod.outlook.com (2603:10b6:208:31f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
+ 2022 14:33:34 +0000
+Received: from CO1PEPF00001A60.namprd05.prod.outlook.com
+ (2603:10b6:303:83:cafe::4f) by MW4PR04CA0112.outlook.office365.com
+ (2603:10b6:303:83::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10 via Frontend
+ Transport; Thu, 1 Sep 2022 14:33:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF00001A60.mail.protection.outlook.com (10.167.241.7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5588.7 via Frontend Transport; Thu, 1 Sep 2022 14:33:33 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 1 Sep
+ 2022 09:33:26 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [Suggested-by:Shuah Khan Patch 0/1] iAdd explanation for
+Date:   Thu, 1 Sep 2022 22:33:12 +0800
+Message-ID: <20220901143313.1491951-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fad6696b-26be-4563-ca73-08da8c26f315
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5301:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TozokaVx0V0vwH2F6BT4TKKr7lNEpsptJrKazQpNMOASUfYXar7/VS5r3FkyN+mA7tJ4Jp90uuXg/9OaxH7OpW5OUJJhWuhCBA9BppVMrzDyejEQdOKQsMG4XrpSoe9wm6p7FuHVQh6UKP+6mmoIOURh47w2kcd5X6CJ0ddSnLuxTKxO5TkVJuWDIjyjPp5Q3TWHN3V6cznLgsprAYRODBHriJjgZw+FFVnlx7kEJd+6T39jvHgq14Wq/LtcBpso+1yKAeCp3Hu+oXuK7mzLbra3XXSfWKGqGyd4lH7jV+B6AgxuMTseqOq2X3TrI/tGeK6D++NF+6XKhydnActmims4pSS4nRcrxc5U+LUkpWPj44ZNeia/HgFyQGDduVPYqzG7Fc7yfLP32vfuk5kAI2Lr6K+CgfRMpxuq2qsnFn4LdIQ9BkHTrdmiu607nF86HNLKvY9+9kWk/Qxk/c5qmQiZ1vYPfh/P/YwA1gx5H1jYEaU4jVSV4HOZgfk7M2C1w2tdWzgCBSWwktKk6SgPxdPxuE4ZlBBLab2vodjqkCBmF7GwReQq80dI4Ghr5I/bFqniMmgXz65PxNqInbOTnbQb8DpIMAiwAITa+CxizcAdJ0/hO0k7+Dm1aXjADgR6qX4iwqqkoHBRc9Ndk50RAViorQMyXQoJpuWqXnKn1mYUygmvSO9/bgyNINJNByKa0l6hp9Vzc7jTHOxEWnV/ElChdXB6atFF4P+7SBvXq4Wc8+76FROZJGImiY9L00Ct/yFMY45JM49YxrHEZmxgJA6qVIZET8hMvt85P3feCVw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(376002)(39860400002)(36840700001)(40470700004)(46966006)(356005)(81166007)(36860700001)(40460700003)(82740400003)(70586007)(4326008)(8676002)(82310400005)(110136005)(2616005)(316002)(2906002)(70206006)(54906003)(1076003)(336012)(40480700001)(5660300002)(4744005)(8936002)(26005)(426003)(7696005)(47076005)(16526019)(186003)(41300700001)(478600001)(6666004)(86362001)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 14:33:33.9252
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fad6696b-26be-4563-ca73-08da8c26f315
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A60.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5301
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Provide thermal zone to read thermal sensor in the SoC. We can read all the
-thermal sensors value in the SoC by the node /sys/class/thermal/
+Hi all:
 
-In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-on the first read of sensor that often are bogus values.
-This can avoid following warning on boot:
+According to Shuah's review comments, add a new patches for expain
+X86_AMD_PSTATE_UT.
 
-  thermal thermal_zone6: failed to read out thermal zone (-13)
+amd-pstate-ut can be modprobed even without amd-pstate module.
+When the comparison test is performed, it can load other module
+like acpi-cpufreq to test cases, then compare the test results.
+When only the test for amd-pstate is performed, it can tell the
+users they loaded a wrong module like acpi-cpufreq.
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
----
-Changes in V3:
-- Use proper types.
-- Use devm_kmalloc() instead of kmalloc().
-- Fix tabs and spaces.
+Thanks,
+Jasmine
 
- drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
- 1 file changed, 76 insertions(+), 24 deletions(-)
+Meng Li (1):
+  cpufreq: amd-pstate: Add explanation for X86_AMD_PSTATE_UT
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 088c388da241..5901787c57f5 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -259,6 +259,11 @@ enum mtk_thermal_version {
- 
- struct mtk_thermal;
- 
-+struct mtk_thermal_zone {
-+	struct mtk_thermal *mt;
-+	int id;
-+};
-+
- struct thermal_bank_cfg {
- 	unsigned int num_sensors;
- 	const int *sensors;
-@@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
- 		mutex_unlock(&mt->lock);
- }
- 
-+static int _get_sensor_temp(struct mtk_thermal *mt, int id)
-+{
-+	u32 raw;
-+	int temp;
-+
-+	const struct mtk_thermal_data *conf = mt->conf;
-+
-+	raw = readl(mt->thermal_base + conf->msr[id]);
-+
-+	if (mt->conf->version == MTK_THERMAL_V1)
-+		temp = raw_to_mcelsius_v1(mt, id, raw);
-+	else
-+		temp = raw_to_mcelsius_v2(mt, id, raw);
-+
-+	/*
-+	 * The first read of a sensor often contains very high bogus
-+	 * temperature value. Filter these out so that the system does
-+	 * not immediately shut down.
-+	 */
-+
-+	if (temp > 200000)
-+		return -EAGAIN;
-+	else
-+		return temp;
-+}
-+
- /**
-  * mtk_thermal_bank_temperature - get the temperature of a bank
-  * @bank:	The bank
-@@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	struct mtk_thermal *mt = bank->mt;
- 	const struct mtk_thermal_data *conf = mt->conf;
- 	int i, temp = INT_MIN, max = INT_MIN;
--	u32 raw;
- 
- 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
--		raw = readl(mt->thermal_base + conf->msr[i]);
--
--		if (mt->conf->version == MTK_THERMAL_V1) {
--			temp = raw_to_mcelsius_v1(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		} else {
--			temp = raw_to_mcelsius_v2(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		}
--
--		/*
--		 * The first read of a sensor often contains very high bogus
--		 * temperature value. Filter these out so that the system does
--		 * not immediately shut down.
--		 */
--		if (temp > 200000)
--			temp = 0;
-+		temp = _get_sensor_temp(mt, i);
- 
- 		if (temp > max)
- 			max = temp;
-@@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 
- static int mtk_read_temp(void *data, int *temperature)
- {
--	struct mtk_thermal *mt = data;
-+	struct mtk_thermal_zone *tz = data;
-+	struct mtk_thermal *mt = tz->mt;
- 	int i;
- 	int tempmax = INT_MIN;
- 
-@@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int *temperature)
- 	return 0;
- }
- 
-+static int mtk_read_sensor_temp(void *data, int *temperature)
-+{
-+	struct mtk_thermal_zone *tz = data;
-+	struct mtk_thermal *mt = tz->mt;
-+	int id = tz->id - 1;
-+
-+	if (id < 0)
-+		return -EACCES;
-+
-+	*temperature = _get_sensor_temp(mt, id);
-+
-+	return 0;
-+}
-+
- static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
- 	.get_temp = mtk_read_temp,
- };
- 
-+static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
-+	.get_temp = mtk_read_sensor_temp,
-+};
-+
- static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 				  u32 apmixed_phys_base, u32 auxadc_phys_base,
- 				  int ctrl_id)
-@@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	void __iomem *apmixed_base, *auxadc_base;
-+	struct mtk_thermal_zone *tz;
- 
- 	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
- 	if (!mt)
-@@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, mt);
- 
--	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
--						     &mtk_thermal_ops);
--	if (IS_ERR(tzdev)) {
--		ret = PTR_ERR(tzdev);
--		goto err_disable_clk_peri_therm;
-+	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-+		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-+		if (!tz)
-+			return -ENOMEM;
-+
-+		tz->mt = mt;
-+		tz->id = i;
-+
-+		tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, tz, (i == 0) ?
-+							     &mtk_thermal_ops :
-+							     &mtk_thermal_sensor_ops);
-+
-+		if (IS_ERR(tzdev)) {
-+			if (PTR_ERR(tzdev) == -ENODEV) {
-+				dev_warn(&pdev->dev,
-+					 "sensor %d not registered in thermal zone in dt\n", i);
-+				continue;
-+			}
-+			if (PTR_ERR(tzdev) == -EACCES) {
-+				ret = PTR_ERR(tzdev);
-+				goto err_disable_clk_peri_therm;
-+			}
-+		}
- 	}
- 
- 	ret = devm_thermal_add_hwmon_sysfs(tzdev);
+ drivers/cpufreq/Kconfig.x86 | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
 -- 
-2.37.3
+2.34.1
 
