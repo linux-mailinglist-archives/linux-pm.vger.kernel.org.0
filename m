@@ -2,67 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6756F5A9AF8
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 16:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE8B5A9B06
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 16:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbiIAOzl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 10:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
+        id S232731AbiIAO65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 10:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234488AbiIAOzf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 10:55:35 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C0737F96
-        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 07:55:31 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id h1so9165083wmd.3
-        for <linux-pm@vger.kernel.org>; Thu, 01 Sep 2022 07:55:31 -0700 (PDT)
+        with ESMTP id S232713AbiIAO6y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 10:58:54 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C9D82F95
+        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 07:58:53 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso1529879wmh.5
+        for <linux-pm@vger.kernel.org>; Thu, 01 Sep 2022 07:58:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
          :subject:cc:to:from:from:to:cc;
-        bh=Qm7z+n9v24oP6zpPgqQul26KMHD50paO2Y9IVMFiRhQ=;
-        b=dd+Zsnugr8tFEBhl38/jbIsJ0BodE3L0d6on+MXP5Gp/QC92iSbt90u+oraLzgx0iP
-         chX8O52Z11VUfusvEYE06r25mQwVDyBw/hwgmJ8scDQb6qlWx8H6L1n+h/IgpHkisROE
-         TvBY9xGjVEDYq8aipQJ54wC0EyalZ3OWVNYKeqQepIPeX1FT+0zLOIAokKToNo2u5qcq
-         PT6NS8ANAUJ1QpZ3tSoBW+gIIU2QUUIOWzG1G56x+KDOddNrzJiyiqtnRqOVnfROLXph
-         YkbuF6dazdnIRYZe6gjQhJX5hi3YiTYVDswYAlYr1KZsuR0QKzH505dJHQvZJPyTXjng
-         fvOg==
+        bh=l3pN9WTLDzQ+8KlJCzXudDXCI9w3a6U/8FEdLZWkej4=;
+        b=t+yRLYgFAfpYbsBsNZOMWvUa+LWldRxgBE7fvUhpUuVzNEGpITBxg7Tlr5Zry9aMX8
+         Y93d//8aL++EZLaQkezBtD2T19ybIJm2DvG3BTRVMiRrUnOjFtruZU1gO0LD6xr/22Az
+         x2khOiJ1T1ffUU4ouAzRCY2FW8hbhe+My9hIxFz1DsEhPG/UZ2srIXqgtx0WM36Lmf+L
+         nOG+zyUHRCZD1byF3R7yiLjLcuyHA/R7pMJyFgyIpeLTGvY/ZlMUYWcagKpnRS18c7XH
+         hirgSXStTeYhe/ozeOr7L8BlOvPb4B4Q96A7QR+cZMeIugzz8o1TRjpdxBqA5v0iIGku
+         GR8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
          :subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Qm7z+n9v24oP6zpPgqQul26KMHD50paO2Y9IVMFiRhQ=;
-        b=JlrbhnNkjMIVVTSDomr3rzjDHbhBm7IXpkpyVAfi6Kv6OlTiWGa/Ra8T/v8RgUOWiQ
-         sTctHHiGcQ0VUAVMIutH2SvpR3WnfeycKi8MdG9G6thp4tuORfp/uQjuovfxYQ5QoHiI
-         N7Dn+my17sXaru98cGdmc9zseOItXLXyoWdDbj8gXN3zqFP5RYIgAbRvndmEU7quib/c
-         sPu/BpDU5O7zuLg9V4k3sOxz0E0mfiswcTULMMIhd5Xdu3KlFRB2p6YFm+vfE/vUuQ8X
-         jiVI67Kx0ez68yPZIa1Jtj+iybls5Ma5BnuJrqalE0OcZUkrIrlzbMJgbmwKO00f6gTg
-         kVbQ==
-X-Gm-Message-State: ACgBeo3WL64GkSnkHdQKokmfAaIipG9pfTjo42u3gdfd9piHK/frlEsq
-        A3J1jg2VBZzAjE0Tood2Qij07A==
-X-Google-Smtp-Source: AA6agR44HpRoT6gpp2fWtRApwrHYPW65PMjZqe5oGuSrovokUtg4BrlR9Cjq87AC1M2f/BCYYIqWag==
-X-Received: by 2002:a05:600c:35d0:b0:3a8:3f16:2c38 with SMTP id r16-20020a05600c35d000b003a83f162c38mr5695050wmq.162.1662044129389;
-        Thu, 01 Sep 2022 07:55:29 -0700 (PDT)
+        bh=l3pN9WTLDzQ+8KlJCzXudDXCI9w3a6U/8FEdLZWkej4=;
+        b=bkuS3dHkLI/1JnRgpZYrhhiNWztmDcqhxviu/33WVA2sExWS4s65F/+3mwBACZG5Xf
+         o1zzzdWf+nMuwm1ANfALgNEzPJge2V8Zxg0n3NMBjvQfk5OSxqOm27FAWOUowk7zapwc
+         Mzk5jy+kzgDuJkaqBKc3YO9xcLcMMOvt9V1FXJfWdFI50BBqWYM4JcXrI4TxrhecozQn
+         GtrifNqj06zf9h84sfpnsimem9n3LvIWHtuSqj60PQ8kUpdkV//j5Nj38Xi+GW1wPauF
+         jO8/YHYNXwYgldcGueQr1s1+OPObC0G9XlEqRskFqLeMl2zv+7XOPEyAU8MrE1LwaYho
+         y0aw==
+X-Gm-Message-State: ACgBeo1T/GMul7kYlN6cr01HNQ4iMJrKdUXeFX6Bh7dKTYSlLAtBQDfh
+        5x7NVLEGflo74jmnKk0TFB4exQ==
+X-Google-Smtp-Source: AA6agR40O+tmrN/8P8ot5nar8rBJAIDfzuJMk9lDEruG3cNSKjK9L5xlXYjGdR/2prsmMv8+9Kj0sQ==
+X-Received: by 2002:a05:600c:2909:b0:3a6:2ef5:772e with SMTP id i9-20020a05600c290900b003a62ef5772emr5414445wmd.16.1662044332316;
+        Thu, 01 Sep 2022 07:58:52 -0700 (PDT)
 Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id e20-20020a05600c4e5400b003a5bd5ea215sm5559533wmq.37.2022.09.01.07.55.28
+        by smtp.gmail.com with ESMTPSA id n5-20020a05600c3b8500b003a319b67f64sm12398970wms.0.2022.09.01.07.58.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 07:55:28 -0700 (PDT)
+        Thu, 01 Sep 2022 07:58:51 -0700 (PDT)
 From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Perry Yuan <Perry.Yuan@amd.com>
-Cc:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
-        <viresh.kumar@linaro.org>, <Deepak.Sharma@amd.com>,
-        <Mario.Limonciello@amd.com>, <Nathan.Fontenot@amd.com>,
-        <Alexander.Deucher@amd.com>, <Jinzhou.Su@amd.com>,
-        <Shimmer.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6] cpufreq: amd-pstate: cleanup the unused and
- duplicated headers declaration
-In-Reply-To: <20220901062339.2357552-1-Perry.Yuan@amd.com> (Perry Yuan's
-        message of "Thu, 1 Sep 2022 14:23:39 +0800")
-References: <20220901062339.2357552-1-Perry.Yuan@amd.com>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 4/7] cpufreq: amd_pstate: fix wrong lowest perf fetch
+References: <20220814163548.326686-1-Perry.Yuan@amd.com>
+        <20220814163548.326686-5-Perry.Yuan@amd.com> <87edxhim3j.fsf@stealth>
+        <DM4PR12MB52786384C0BFEFF5E0A381079C789@DM4PR12MB5278.namprd12.prod.outlook.com>
+Date:   Thu, 01 Sep 2022 15:58:50 +0100
+In-Reply-To: <DM4PR12MB52786384C0BFEFF5E0A381079C789@DM4PR12MB5278.namprd12.prod.outlook.com>
+        (Perry Yuan's message of "Wed, 31 Aug 2022 08:53:29 +0000")
+Message-ID: <87pmgfcf9x.fsf@stealth>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Thu, 01 Sep 2022 15:55:27 +0100
-Message-ID: <87y1v3cffk.fsf@stealth>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,47 +83,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Perry,
+"Yuan, Perry" <Perry.Yuan@amd.com> writes:
 
-Perry Yuan <Perry.Yuan@amd.com> writes:
+[...]
 
-> Cleanup the headers declaration which are not used
-> actually and some duplicated declaration which is declarated in some
-> other headers already, it will help to simplify the header part.
+>> Perry Yuan <Perry.Yuan@amd.com> writes:
+>> 
+>> > Fix the wrong lowest perf value reading which is used for new des_perf
+>> > calculation by governor requested, the incorrect min_perf will get
+>> > incorrect des_perf to be set , that will cause the system frequency
+>> > changing unexpectedly.
+>> >
+>> > Reviewed-by: Huang Rui <ray.huang@amd.com>
+>> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+>> > Signed-off-by: Su Jinzhou <jinzhou.su@amd.com>
+>> > ---
+>> >  drivers/cpufreq/amd-pstate.c | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> > diff --git a/drivers/cpufreq/amd-pstate.c
+>> > b/drivers/cpufreq/amd-pstate.c index 5cdef6638681..183cdd4ba00e 100644
+>> > --- a/drivers/cpufreq/amd-pstate.c
+>> > +++ b/drivers/cpufreq/amd-pstate.c
+>> > @@ -307,7 +307,7 @@ static int amd_pstate_target(struct cpufreq_policy
+>> *policy,
+>> >               return -ENODEV;
+>> >
+>> >       cap_perf = READ_ONCE(cpudata->highest_perf);
+>> > -     min_perf = READ_ONCE(cpudata->lowest_nonlinear_perf);
+>> > +     min_perf = READ_ONCE(cpudata->lowest_perf);
+>> >       max_perf = cap_perf;
+>> >
+>> >       freqs.old = policy->cur;
+>> 
+>> This looks to be a pretty big change (lowest nonlinear vs lowest). Does the patch
+>> need to be backported to older kernels?
 >
-> Reviewed-by: Huang Rui <ray.huang@amd.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 9ac75c1cde9c..9cf7bc162e7c 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -31,19 +31,15 @@
->  #include <linux/compiler.h>
->  #include <linux/dmi.h>
->  #include <linux/slab.h>
-> -#include <linux/acpi.h>
->  #include <linux/io.h>
->  #include <linux/delay.h>
->  #include <linux/uaccess.h>
->  #include <linux/static_call.h>
->  
-> -#include <acpi/processor.h>
->  #include <acpi/cppc_acpi.h>
->  
->  #include <asm/msr.h>
->  #include <asm/processor.h>
-> -#include <asm/cpufeature.h>
-> -#include <asm/cpu_device_id.h>
->  #include "amd-pstate-trace.h"
->  
->  #define AMD_PSTATE_TRANSITION_LATENCY	0x20000
+> The patch fixes the min perf initial value, the correct min perf is lowest_perf which is captured through MSR_AMD_CPPC_CAP1 register or the cppc_get_perf_caps().
+> Yes, the patch will need to be backported to other kernel branch as issue fix.
 
-The patch has the same issue as mentioned in the previous version.
+Great, thanks for confirming!
 
-Please don't remove any header includes whose definitions are directly
-used in amd-pstate.c. Look at example from my previous comment.
+[...]
+
