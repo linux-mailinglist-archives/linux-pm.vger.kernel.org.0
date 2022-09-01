@@ -2,161 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88735A9674
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 14:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4635A9935
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 15:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbiIAMOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 08:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
+        id S232992AbiIANlj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 09:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiIAMOW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 08:14:22 -0400
-Received: from sonic308-11.consmr.mail.ne1.yahoo.com (sonic308-11.consmr.mail.ne1.yahoo.com [66.163.187.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D751114C7F
-        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 05:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1662034461; bh=1hNsVfqCY6LT7YTLp21HTSPBwyvmKxE/8qy+3OfbQzY=; h=Date:From:Subject:To:Cc:In-Reply-To:References:From:Subject:Reply-To; b=D5jqyRJcbm5ODwpKTfncxYUZqGUgSrHuEyIpQ9HJJwxPBT7mfGMy2rl4paE0vUzxoDYvQWtxlFbTFGO1uNNv0TnVu7Kr3tOaBe6t/sHqQcJ0qj5gM5bmPu1p4EfeOc/wg2azuFMkPPza7yfLR/fkGPVTitAaoctoE0M42sTHXvM=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1662034461; bh=DGrXafvk06r5mx0Q9a9Vt2y9Y+hIhdCXStTis9GBvit=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=W1VQD2o9naV4tRQ6PXMzwy2suGaM/dyDypWjFHQ08g1DWoRO7y9hwz7dZPYJ4GepjvmI/j1q4MWHWq4zbk72YJU3aM2qrviTHmPb3/3CooQ2BipWBn5DWfQg0GdIp9Rh+ZtBrXEAGQbUjmnsSEgZbj8NSVJula0zO0WX06SvLLrqF7qvdRzDloHvNkgGQGNOvyBl8zwbgdWoWQk7d5Jk2yhRW0idsGN6LWj5GKZzVrnn6QgiSS6TpjhlB/G37dXNA8QoGNJVFnxkrM5dp/uoiOLn2bY5eyX25SuvzUibxOve0lQ91/pLN3eBTMhcC7KT+LZiuqnpkFStXOWO4MgwIg==
-X-YMail-OSG: KQIpQUwVM1lf43XIzdjnAhO08irtbFnwvjF0cRQ8JQhQ.INm64rfYIxm_4X.RA4
- kTYuaKLGe2jon0KLudI03wh1bq2s6gqxkp0G6ev8P4IKSUVqPwJzpqB4wBge1ueIkY7tSokRPMFP
- RaX.5oSb89DIgt4CrXFBvsRPhn.Jl5RWGzlon6ND3WcbGiDGdoXG3uWC5PtbT_x.2oZib2_r7Znc
- PRe.p0BHHcmQC0z6FVmb9PemQhTzoZ2nJhsUTYxjzTTr3HqH16ES6UAqrmxD4uakLixmoBY2eNWF
- GqXB8kom.t1n0YDiFF9WqbSzJCf3.8SS9QCUdA9nJuUp3jJKZRFDOq6yeCakmWqfN9zwqsaPxkMP
- r8wPgX_3MxanRFFPSZgjMuGYVydbBWo2lNECRUDMHms9cUC58YFP4DTckP.4LbyB2uSbLPneTreH
- ViqLc95HgZBvTDI9VUO76e.km7pLIfkoH6vJMmdv9ENEw6YYEyY5HcScERIzfhcvXBL1sWYRH6OM
- 5y5lesT5PutmlvnjzbQUV2gx2lbp0iLhfv_JFcUE4Z9kwNeE7ivN3DXbGdrN6kibut3NOjKIQqpD
- X_mqZxK1FNQSx95raSVDpQNqdWD_mcGH_ujpXsguI70OH0mB.ppqbJXD52ZjkjM0nxstAVz_jNM4
- oXKBaNhsxbxXiKFmpwvaBP1unw5gvK5_55c8EJDO17wqv_cJDfdKokXwKbDkQGRmCj2zOp1EBrjL
- FAjq0En2Bv4Yxd9t7sza9v8ID3re1b56xfFiXzNncYglY3hbwdfRRj0kNcivwsCTJbnUm3p2tZd0
- PvxXuEu795ntY4ypDjjD4A7zucIKK3ZcyA9Xi0HLmIQgaX4z_yzYcksCbCjTY1Cr6aZxHjEr5710
- uCuf1Lp_sVrZye5C4UstnUm_DZhm9svk7cy..Px8o4CAAZkXaiPFbtGoaMOR2DR36cNLrIA6Ny7l
- ZpuTp9ZTx7omWhzSPVaj5rBqmiSVMi7kRyKy1KJcCR_KvSdgMUUa7jhGbV5DxXdGC.ZGlyKXpOl2
- ET5rdqh18gYs7GG1j61DMZIaBrA8k4hgsQx0zMXk3EAzfo9vxGkYW65Ym8W_pd5x.y.HqI8P_q56
- kvH0t9BYgVc0neHynukGKSfcox6sO0ebPN.zHw6y6pKgQiaq_dejssHjDq9Xd5pNgtWoM9n45jpY
- xre_4qBuEZNMjuHkPpO1aIzEnYjngsBhNjwGOu8hFm2ZGQ7wuLbGUxELEjVXoRXCa1R1dpY6xa1n
- DqOmu4Ncf10M5rNEt_MUNpIykxg5zXIPGY11uBRjzQwaV_ayUl8oI7njerZpad5wZhoc6qXIGTkp
- 8PnsZosqY5XhVDye7poZrvkE67aBo7qW7w_ZRNMONlRgFhpXoKhobsBEpN3tKAR_BpK3HIVLTySo
- xzUpeoiF5nQP0Kmxpc_qCbS73ft7YxvptQk9JosONu42uQAMfDDF5.aTvLl9DgO8Jp61Re0YIpGB
- KTvaq3SKWYzeOYiuVC.DICIZ5XCaDodVkCjjFC6I.YGZUpR7wjwS9zynPnSZdo9RhQtzDrqo_2Fv
- iOzI9hB5pjw3Pqsawkj6oIQwMtxwcmzmDYh50PdS5PjMQ9VnIJWAD4mnth8YtpJjELaQ5Qv6fNNB
- XGUV_bLJ9sVyD8LtIOoLy6iRwE7UilMJxJ7WpaldZG40G0eWwdrQ5WUmSgEI1BgCtiBj2CGigq1b
- Jr7kW_URHbyxBV.YygCaTn5WrBWa0FZ51uqRLZiMOErA_VOWNjOMNTcmSlPje2bh9rKusTbVoiqB
- 0VpDNJoKZ62C1YphElWufc9vjSjDrf3wppA9cBn_AT9BKGFQC9x8SBZq3xY8hG.6QvAE3hQ4pJj4
- wSVyRFTrtmgaxuclusH9TZKNn.l6L972UEC.aqHDlq.4z9DjBQKwxe5mEzUZQ34K.lcp6DJQdyGv
- 4yz15e3c1IJIR_27QUEnrFxgaeNRyKt34JiPgnZMj4rmH2nghFJ9o2J3vWWeAoUuf39Usno15I69
- kFWzj1NkFTyeE8v5FWR9jAaG8
-X-Sonic-MF: <pheonix.sja@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Thu, 1 Sep 2022 12:14:21 +0000
-Received: by hermes--production-ne1-7fdb795c57-j45rv (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a9daef07438b8223431cc67a31a2c457;
-          Thu, 01 Sep 2022 12:14:18 +0000 (UTC)
-Date:   Thu, 01 Sep 2022 08:14:11 -0400
-From:   Steven J Abner <pheonix.sja@att.net>
-Subject: Re: thermal driver patch
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
-Message-Id: <NZ5JHR.JGO592OT0D961@att.net>
-In-Reply-To: <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
-References: <DL9RGR.8W3XFSCFFYXI2.ref@att.net> <DL9RGR.8W3XFSCFFYXI2@att.net>
-        <0f961ea6-4948-0b7a-e01d-d62ca4065af8@infradead.org>
-        <L9MDHR.JVBXTJ2L6TPP2@att.net>
-        <cf3a3cbd-c189-a120-124f-98d6adac058d@infradead.org>
-        <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
-X-Mailer: geary/3.36.1
+        with ESMTP id S233101AbiIANlW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 09:41:22 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908C52625
+        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 06:40:04 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id n17-20020a05600c501100b003a84bf9b68bso1474419wmr.3
+        for <linux-pm@vger.kernel.org>; Thu, 01 Sep 2022 06:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=fbdFWdGoT5TyChVzYAZHBA9+fCifaM+n+YZpxGlEIlA=;
+        b=YkyloLFSaMRlRbS0LNqxBw/KBaGy50J7eVlBh3OgmcCNcKEYvHjsdT6riJKiYAApuz
+         70gS8KwXJe0jglFkZ4GXcFGjMqAt5/xKEx9kNugUhWkAKPHy4OABZ+wxMI9273tig6bC
+         FZZyd+vijCPQMFe+0II/bsw751CjzwxUx7k5bGr2oCehH2CgC6s/yXtlSkV+qn9yZsM8
+         qbLqH7Sia9HJ2B4+hgVYpoKdCGOqrtvBDCX3pKyRXXsdpn33El6WupdSCqMP26HjMqcb
+         SImbyKhefhB6zd9wasjJCfbx+7jp19L99HRu6ZmNNxOpsQUZOruxQN+wDCVGfpXdoQOS
+         HBlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=fbdFWdGoT5TyChVzYAZHBA9+fCifaM+n+YZpxGlEIlA=;
+        b=XMoLCjAEvDWZMLxo8XMFsntz2rTnAPjgTPiwyMxO4R99lpUIehQ6C8r6yYnkyCyxWu
+         z5YQQ5S2RuyHGunCvG2TkArKiECPpNgr2v11KELMwCwY9SnsTDnIZt+8Obllg6BGSBI5
+         ymGOTW1O4OCoxAfFwbT2c9cFAeV9fNxFKwWpxECMIXkm69d1DIX4B5ZpUx9YWXZXb5EP
+         LMTLHsXta3FiaM9aj9JgFrtCrS9NcCtREXARoz2a8dp6aF2vRGHXySkOt3EQe3Phrb30
+         ViqfajzilumtOYwUhuyhxrRo7MyVU6ZXL+Qn2PfI56Q1aFTbovNan3sVHUSwXrxXKd83
+         pVjw==
+X-Gm-Message-State: ACgBeo2h/uxX+4vVE+7ASC16pbNN7lVP9nd42ep1O4BJ8ExNv8dO2O3J
+        4LGdeQByEQs9jWMkBn+rjzm4UOVA2o0QP/1I
+X-Google-Smtp-Source: AA6agR7Qo1EbkHVH2Rb7zV3Lv9+qvbPXOjb9N1DAQF94ZpIh0K/Z7ceowWedOH8REBvxlFzOvJfcdQ==
+X-Received: by 2002:a05:600c:1c19:b0:3a5:51aa:d041 with SMTP id j25-20020a05600c1c1900b003a551aad041mr5235294wms.172.1662039598864;
+        Thu, 01 Sep 2022 06:39:58 -0700 (PDT)
+Received: from localhost.localdomain (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.googlemail.com with ESMTPSA id e3-20020adfe383000000b0021ef34124ebsm15399016wrm.11.2022.09.01.06.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 06:39:58 -0700 (PDT)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     matthias.bgg@gmail.com
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>, rafael@kernel.org,
+        fparent@baylibre.com, amitk@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        robh+dt@kernel.org, rui.zhang@intel.com
+Subject: [PATCH v3 0/4] thermal: mediatek: Add support for MT8365 SoC
+Date:   Thu,  1 Sep 2022 15:39:46 +0200
+Message-Id: <20220901133950.115122-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This patchset adds thermal support for MT8365 SoC which contains three
+thermal sensors.
 
-On Thu, Sep 1, 2022 at 05:59, Daniel Lezcano 
-<daniel.lezcano@linaro.org> wrote:
-> Could it be related to this bug?
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=201761
-> 
-> Is it possible to give the thermal zone 'type'
+Amjad Ouled-Ameur (1):
+  thermal: mediatek: add another get_temp ops for thermal sensors
 
-Did verify that that my thermal_zone0 is my wifi:
-used lm-sensor and cat /sys/class/thermal/thermal_zone0/temp
-along with wifi load to heat to temps different then others to check 
-outputs.
-The above mentioned bug page could have lead to this, I can't say or 
-track.
+Fabien Parent (2):
+  dt-bindings: thermal: mediatek: add binding documentation for MT8365
+    SoC
+  thermal: mediatek: add support for MT8365 SoC
 
-Prefix the following with I'm not an expert, just info provider:
+Markus Schneider-Pargmann (1):
+  thermal: mediatek: control buffer enablement tweaks
 
-My guess is not supposed to be calling function during initial kernel 
-loading, based on following:
+ .../bindings/thermal/mediatek-thermal.txt     |   1 +
+ drivers/thermal/mtk_thermal.c                 | 193 +++++++++++++++---
+ 2 files changed, 163 insertions(+), 31 deletions(-)
 
-from thermal_core.c:
-18:
-#include <linux/thermal.h>
-
-397:
-static void update_temperature(struct thermal_zone_device *tz)
-{
-	int temp, ret;
-
-	ret = thermal_zone_get_temp(tz, &temp);
-	if (ret) {
-		if (ret != -EAGAIN)
-			dev_warn(&tz->device,
-				 "failed to read out thermal zone (%d)\n",
-				 ret);
-		return;
-	}
-
-	mutex_lock(&tz->lock);
-	tz->last_temperature = tz->temperature;
-	tz->temperature = temp;
-	mutex_unlock(&tz->lock);
-
-	trace_thermal_temperature(tz);
-
-	thermal_genl_sampling_temp(tz->id, temp);
-}
-
-from linux/thermal.h:
-429:
-static inline int thermal_zone_get_temp(
-		struct thermal_zone_device *tz, int *temp)
-{ return -ENODEV; }
-
-
-compiler should then read:
-static void update_temperature(struct thermal_zone_device *tz)
-{
-	int temp, ret;
-
-	ret = -ENODEV;
-	if (ret) {
-		if (ret != -EAGAIN)
-			dev_warn(&tz->device,
-				 "failed to read out thermal zone (%d)\n",
-				 ret);
-		return;
-	}
-
-however did find with extra search:
-in /drivers/thermal/thermal_helpers.c:
-78:
-int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
-and
-115:
-EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
-
-
-so is this bootup vs system hand off?
-where bootup call thermal_zone_get_temp() shouldn't occur?
-
-Steve
-
+-- 
+2.37.3
 
