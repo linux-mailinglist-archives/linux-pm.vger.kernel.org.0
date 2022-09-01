@@ -2,141 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905B15A9A6A
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 16:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6756F5A9AF8
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 16:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234833AbiIAOdu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 10:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S234328AbiIAOzl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 10:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234831AbiIAOdj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 10:33:39 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2071.outbound.protection.outlook.com [40.107.96.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141895F20C;
-        Thu,  1 Sep 2022 07:33:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gNL6Dm0keavM2lQbln4Vi5T0IfhLSJpub/ocobvr9A8BdaMzHahPvB+PPbe/uu0rQOjVL4s/XPXKaXXsXmFyt+vgPOVAE5JSByKXvLYx1/cAfHQVnOS4i6crauk8ho9ROkpSNc8iFrJdiOA+hIyFW/Goer6rjMQdjKoQfS7XpKigkWVw6vQAwFsBklgsiOLwv6boUZ/jALYY9vJvrgP4JXpMSIgZLr4im0hzaN90RZ9bimbtUn5XlX1ou87uBPvWsGDs6BqqZWMd5OZvmtrNwz5y8co8H6clPvds9EBlxBya5VU+wy9WfFYK7OwWyFkrCnfnO/fSUzv4x0ifLUo51A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EjpOsNB24bsbE2XZ1RtpKQuk8WQ3/mVz/1WHwUfhYA8=;
- b=JM8UkXp5AURDwHiIcLYZKp35qfiL9bzy8LbpC+lR3vm1jGPjJHM1OtBg0zjfH9kPFI8oZKjfhWZNa70cN1PlJVbRwYRqODeOd+0ReFd9m7ZQF4QCc+zR/CYmXNdbv3sI5uoMQHCeFTEubncR9FZpXAIakKmoMLHSvJ175zkE7NJ5T0AhMRiByHdv202PeMY7cAAV999GZA4mq69djAWmYPMTM61gWElqYe6s4beou0d4Dry2LEP6bsSn3rjMY+4AbcyZMEPOf7ihU8bWf/s7BMytADLPeTe+E10jPAWBMh9sZrcIZv+Hs5h1CIqNNZ/whr+2JH2EnWfFpn9mrzscTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EjpOsNB24bsbE2XZ1RtpKQuk8WQ3/mVz/1WHwUfhYA8=;
- b=OjyZXt4F+aSB4/D5uJ3R0/CZsBq/tCRskF9BV+772KNUpnEN5mhbV6qh+7wRHjOvyKaTXxYPchVTHj1oiDgakI2rhzeT7an25Yd64c04onLDkrosmA1h3riquIDoFZDrM2BqbN8BpagLFD7T3egufHplYHEmE7mCxD2R1Zzx0Og=
-Received: from MW4PR04CA0110.namprd04.prod.outlook.com (2603:10b6:303:83::25)
- by DM6PR12MB4466.namprd12.prod.outlook.com (2603:10b6:5:2ae::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Thu, 1 Sep
- 2022 14:33:35 +0000
-Received: from CO1PEPF00001A60.namprd05.prod.outlook.com
- (2603:10b6:303:83:cafe::d6) by MW4PR04CA0110.outlook.office365.com
- (2603:10b6:303:83::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12 via Frontend
- Transport; Thu, 1 Sep 2022 14:33:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF00001A60.mail.protection.outlook.com (10.167.241.7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5588.7 via Frontend Transport; Thu, 1 Sep 2022 14:33:34 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 1 Sep
- 2022 09:33:30 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
-        Meng Li <li.meng@amd.com>
-Subject: [Suggested-by:Shuah Khan Patch 1/1] cpufreq: amd-pstate: Add explanation for X86_AMD_PSTATE_UT
-Date:   Thu, 1 Sep 2022 22:33:13 +0800
-Message-ID: <20220901143313.1491951-2-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220901143313.1491951-1-li.meng@amd.com>
-References: <20220901143313.1491951-1-li.meng@amd.com>
+        with ESMTP id S234488AbiIAOzf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 10:55:35 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C0737F96
+        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 07:55:31 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id h1so9165083wmd.3
+        for <linux-pm@vger.kernel.org>; Thu, 01 Sep 2022 07:55:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc;
+        bh=Qm7z+n9v24oP6zpPgqQul26KMHD50paO2Y9IVMFiRhQ=;
+        b=dd+Zsnugr8tFEBhl38/jbIsJ0BodE3L0d6on+MXP5Gp/QC92iSbt90u+oraLzgx0iP
+         chX8O52Z11VUfusvEYE06r25mQwVDyBw/hwgmJ8scDQb6qlWx8H6L1n+h/IgpHkisROE
+         TvBY9xGjVEDYq8aipQJ54wC0EyalZ3OWVNYKeqQepIPeX1FT+0zLOIAokKToNo2u5qcq
+         PT6NS8ANAUJ1QpZ3tSoBW+gIIU2QUUIOWzG1G56x+KDOddNrzJiyiqtnRqOVnfROLXph
+         YkbuF6dazdnIRYZe6gjQhJX5hi3YiTYVDswYAlYr1KZsuR0QKzH505dJHQvZJPyTXjng
+         fvOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=Qm7z+n9v24oP6zpPgqQul26KMHD50paO2Y9IVMFiRhQ=;
+        b=JlrbhnNkjMIVVTSDomr3rzjDHbhBm7IXpkpyVAfi6Kv6OlTiWGa/Ra8T/v8RgUOWiQ
+         sTctHHiGcQ0VUAVMIutH2SvpR3WnfeycKi8MdG9G6thp4tuORfp/uQjuovfxYQ5QoHiI
+         N7Dn+my17sXaru98cGdmc9zseOItXLXyoWdDbj8gXN3zqFP5RYIgAbRvndmEU7quib/c
+         sPu/BpDU5O7zuLg9V4k3sOxz0E0mfiswcTULMMIhd5Xdu3KlFRB2p6YFm+vfE/vUuQ8X
+         jiVI67Kx0ez68yPZIa1Jtj+iybls5Ma5BnuJrqalE0OcZUkrIrlzbMJgbmwKO00f6gTg
+         kVbQ==
+X-Gm-Message-State: ACgBeo3WL64GkSnkHdQKokmfAaIipG9pfTjo42u3gdfd9piHK/frlEsq
+        A3J1jg2VBZzAjE0Tood2Qij07A==
+X-Google-Smtp-Source: AA6agR44HpRoT6gpp2fWtRApwrHYPW65PMjZqe5oGuSrovokUtg4BrlR9Cjq87AC1M2f/BCYYIqWag==
+X-Received: by 2002:a05:600c:35d0:b0:3a8:3f16:2c38 with SMTP id r16-20020a05600c35d000b003a83f162c38mr5695050wmq.162.1662044129389;
+        Thu, 01 Sep 2022 07:55:29 -0700 (PDT)
+Received: from localhost ([95.148.15.66])
+        by smtp.gmail.com with ESMTPSA id e20-20020a05600c4e5400b003a5bd5ea215sm5559533wmq.37.2022.09.01.07.55.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 07:55:28 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Perry Yuan <Perry.Yuan@amd.com>
+Cc:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
+        <viresh.kumar@linaro.org>, <Deepak.Sharma@amd.com>,
+        <Mario.Limonciello@amd.com>, <Nathan.Fontenot@amd.com>,
+        <Alexander.Deucher@amd.com>, <Jinzhou.Su@amd.com>,
+        <Shimmer.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6] cpufreq: amd-pstate: cleanup the unused and
+ duplicated headers declaration
+In-Reply-To: <20220901062339.2357552-1-Perry.Yuan@amd.com> (Perry Yuan's
+        message of "Thu, 1 Sep 2022 14:23:39 +0800")
+References: <20220901062339.2357552-1-Perry.Yuan@amd.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Thu, 01 Sep 2022 15:55:27 +0100
+Message-ID: <87y1v3cffk.fsf@stealth>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e0de4e50-b735-45c8-c548-08da8c26f391
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4466:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M864fWAHq3yuiHvY1z3DfZjAD4tjKh+ZKquZ/v/etib/hCUmeRKlGiIjCkf1RZFW4JJmZQPBu4EvmkPr2Ua/CnM4+pc791NkFU2b+RzO7bjToeIZ3FmfcKGA3MO/vTDV9d4K7wbGF23QAsv93n2QW8GiNqLFsOC0yy7Emz5eYUQ9Afd1TIc7wCZklnKb5WB/k/P1ajGiQuq9sc9RiQCcgaTUfe2lB++29soTUA5TYesEX87+Omg+qtp4+HwQDM5Ag+rc96AONRj+H/Q6PY3IhQ9eNMZMG1i83dWc8Sr9Rly4ziFWv1QLad8OF+4O0RCgQd5OsGaC0DqsRiD4YWJb7FhjRqKa5JPfxwbWrE4F3Jkvq7SaA3g+sluKV+VQQnCvLY5XpRgMYp0/xeKIp+aaNTYofjf31z4tZ6VP3YS28qF3j/jkhOzotsZvDCj5Van5RGlQQ/qLY81hntuqwz3yTAAzXUuugGyYm4gZv5joLo5Y2Z7GU48Wf2Ug71bTjHXTzfzlzL7QbAkz4N0FKbQlS8LNm8hq2jZSnFr2XoMEFjV0x16yAggKdJ6F4fQINGRCnMJJCt39UoChCfyRys0hs+OlDtxYZpcQZwg2XPKNyHtMhh2J2D3nKR9Kvgp3GIoMER7L/ggmpBEt4hhjeESEHGMiY3nqc57HkohKgNDxbLiZVo4l57/DvSc4EUs+Wa35xVv6HHjDtOCappC7INMU9u4vpQPAjWxYBujNt6pYqo/6hdn6ZYEDajO3muX7k8tH/7xLxGCo9qYq7hzsNY9QnXUanPA37pduffDyfmAXlfELphcHHzcRAhFkektzAukr
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(39860400002)(136003)(376002)(46966006)(40470700004)(36840700001)(82740400003)(7696005)(356005)(81166007)(47076005)(336012)(186003)(426003)(16526019)(36860700001)(2616005)(1076003)(6666004)(8936002)(40460700003)(2906002)(8676002)(4326008)(86362001)(5660300002)(82310400005)(36756003)(478600001)(40480700001)(26005)(41300700001)(70586007)(70206006)(54906003)(316002)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 14:33:34.7377
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0de4e50-b735-45c8-c548-08da8c26f391
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A60.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4466
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This kernel module is used for testing. It's safe to say M here.
-It can be modprobed even without amd-pstate module.
-When the comparison test is performed, it can load other module
-like acpi-cpufreq to test cases, then compare the test  results.
-When only the test for amd-pstate is performed, it can tell the
-users they loaded a wrong module like acpi-cpufreq.
+Hi Perry,
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- drivers/cpufreq/Kconfig.x86 | 6 ++++++
- 1 file changed, 6 insertions(+)
+Perry Yuan <Perry.Yuan@amd.com> writes:
 
-diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-index fdd819069d72..fd1582716c58 100644
---- a/drivers/cpufreq/Kconfig.x86
-+++ b/drivers/cpufreq/Kconfig.x86
-@@ -58,6 +58,12 @@ config X86_AMD_PSTATE_UT
- 	help
- 	  This kernel module is used for testing. It's safe to say M here.
- 
-+	  It can be modprobed even without amd-pstate module.
-+	  When the comparison test is performed, it can load other module
-+	  like acpi-cpufreq to test cases, then compare the test results.
-+	  When only the test for amd-pstate is performed, it can tell the
-+	  users they loaded a wrong module like acpi-cpufreq.
-+
- config X86_ACPI_CPUFREQ
- 	tristate "ACPI Processor P-States driver"
- 	depends on ACPI_PROCESSOR
--- 
-2.34.1
+> Cleanup the headers declaration which are not used
+> actually and some duplicated declaration which is declarated in some
+> other headers already, it will help to simplify the header part.
+>
+> Reviewed-by: Huang Rui <ray.huang@amd.com>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9ac75c1cde9c..9cf7bc162e7c 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -31,19 +31,15 @@
+>  #include <linux/compiler.h>
+>  #include <linux/dmi.h>
+>  #include <linux/slab.h>
+> -#include <linux/acpi.h>
+>  #include <linux/io.h>
+>  #include <linux/delay.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/static_call.h>
+>  
+> -#include <acpi/processor.h>
+>  #include <acpi/cppc_acpi.h>
+>  
+>  #include <asm/msr.h>
+>  #include <asm/processor.h>
+> -#include <asm/cpufeature.h>
+> -#include <asm/cpu_device_id.h>
+>  #include "amd-pstate-trace.h"
+>  
+>  #define AMD_PSTATE_TRANSITION_LATENCY	0x20000
 
+The patch has the same issue as mentioned in the previous version.
+
+Please don't remove any header includes whose definitions are directly
+used in amd-pstate.c. Look at example from my previous comment.
