@@ -2,71 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D175A8DB1
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 07:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EA05A8DD9
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 08:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbiIAFyj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 01:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
+        id S231650AbiIAF7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 01:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiIAFyi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 01:54:38 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7361178F2
-        for <linux-pm@vger.kernel.org>; Wed, 31 Aug 2022 22:54:37 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id b5so20859024wrr.5
-        for <linux-pm@vger.kernel.org>; Wed, 31 Aug 2022 22:54:37 -0700 (PDT)
+        with ESMTP id S232975AbiIAF7m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 01:59:42 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8818C10A618
+        for <linux-pm@vger.kernel.org>; Wed, 31 Aug 2022 22:59:41 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id z14-20020a7bc7ce000000b003a5db0388a8so2560816wmk.1
+        for <linux-pm@vger.kernel.org>; Wed, 31 Aug 2022 22:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=E0h+4ukqcPWiSs+SEBzM01Cdvd6fCSITsOpksTq6c80=;
-        b=j8oQgX/SV1VH2ZiSDr9xoYd4HnKn8nQe5TB5bBlof5EoRbNayt/lmCCcpjU+M63tY6
-         uo9bRisVjIFAxzUot14T2Ao69wlVobS0YF9cQLb9YJEPgk8PPh+GnDdrGLcUFbumdNev
-         cyDwMPedz/wJZZ6jq5mbVFkk/WfvBzIaZdES5DUjfvKkx1KWqXTdpreOZb9bIELWt0lm
-         C9fk+AxkvXAC+teZVVoQ6uUlmamnJx9daji7sE+qo35L6gVxCua2LFP86702tDXHNCN6
-         KWBqRWW24YIqi56xFEiM4GfRTllvEAbGzW2KITSHNC3pYbuXgGAIR/kML51SFfBn+iu/
-         NmZg==
+        bh=q6PFOqpKmYyLxZjeSDCGsGBIQz8zT4aoax/wQsmKE8E=;
+        b=TLwbUpVo8TEEVjNV1j+KSP0jJYgUo+OMkPmaqZUI9tnjnDs+WJyugsU9wX1Hsdc9E9
+         Ctk90qzvDabls7KQCVCYE/Rc0ERzbKaeC9q9o2M28wggxOoxnxjCpXO32xTQYxbQQ47h
+         2ftrsglRLlXGecjOYfYaarg1veKJBu1JDDMTSCgRtnpVfDQNnlBvjVJSHgEvFju2/OZy
+         RwOI0KP0ALpOxKiSrCKbHO5HCCeBSRBhytAf8zQ3ToPeBRwr3VYK09JiOEWutSBJogMn
+         TsDXLSbeZarTdKDLZGFT7dH65jwShwCQEFYORzd0bP5gnP4qYzlMs6MuLwaWTpiz8nvJ
+         N+dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=E0h+4ukqcPWiSs+SEBzM01Cdvd6fCSITsOpksTq6c80=;
-        b=FmoTz8WGGiK4GNwnYrjaLE5g5YPfLGFqMxAo+hmBjGJeR8SNbwUYiT6ZtPy84vVsWp
-         RJTBK61MPu0oi6zekuVtniHG5D+k75SjT71nX7ACyXKv7/6eMWf/CJ4AOgLwTIo/okbF
-         N9ZltD1HegQIcnhssy+ViC4tSKaIEHokRRcmOY9RaHUBLuwgvbWF3tRsw5QkA1lpQ5F8
-         kN+J4FFYyHh8UNl72umFjp0eTw9XrrRFP40+pwsgHRo2WwaQ236bqhoUx699VChjpdV4
-         oUxSqlLokUF5rj3QatpwORfg7oCP3TqHx3gYzv5X/KLRgPikz41RkW01P7G2H6OMD0IH
-         a6Cw==
-X-Gm-Message-State: ACgBeo3cg/e2QLMTosntkdI4DWDTz6GtQFIaZdLM8DvSG9DyPRp/sxA9
-        p0XeUenUv+gDE716o4fLnJKDvA==
-X-Google-Smtp-Source: AA6agR4CMzSXrSknaRIMfiiTvnVtkoXMUBvNkZm/KX79WL9nNplggkPvyDfgOauhxEryLDwTlpmClQ==
-X-Received: by 2002:a05:6000:168d:b0:226:da6a:6d78 with SMTP id y13-20020a056000168d00b00226da6a6d78mr9869307wrd.180.1662011676066;
-        Wed, 31 Aug 2022 22:54:36 -0700 (PDT)
+        bh=q6PFOqpKmYyLxZjeSDCGsGBIQz8zT4aoax/wQsmKE8E=;
+        b=S9PaI+wiDlRtfF5B0inDyi5/qINoUWgqhzTwXwLueH29gtuEt8XYsIVnCDZFP80vnL
+         9uVhbXliVWk+fctll685wCRU2vNh9g0teNP0FkXpst4pE6UEcHSnjMvFMeRyxIn+YSSf
+         +zoMGnXNw62HNcbHI4q1lkQMzL5YV9W2pAeWc9RWqGkl1R9g87s4hswrQfbV83E+jK6k
+         PFYd56lgc2u5C/r+Qh2vjeHkebZr1yKAb+QN+LY2iZxC3KOMJO4RDofIqcBdfZ4+a1MU
+         OE2caoy1+mJ3aJ0G3OrjW0yLVMhbu/UNDtVHVgxMZKjxuQaDVDF/QHBUTtxha1lcAr2l
+         RTBQ==
+X-Gm-Message-State: ACgBeo1zRj3mznpZRO3PCCKd/J0rtn4q0If71RDw+FwGslD1g7XOX8it
+        TOImf2uJbSt1Tc3llAb21ZXVgA==
+X-Google-Smtp-Source: AA6agR7LfsWI9xpyRJMxc5NfZ24BUKLV76WMMcY/OJdLZ9ThXrmqZHDI6uKd1LcvSgPV2Nm3EzFkow==
+X-Received: by 2002:a05:600c:6009:b0:3a5:b069:5d34 with SMTP id az9-20020a05600c600900b003a5b0695d34mr3930057wmb.115.1662011980052;
+        Wed, 31 Aug 2022 22:59:40 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id z7-20020a05600c0a0700b003a5c1e916c8sm11910858wmp.1.2022.08.31.22.54.35
+        by smtp.googlemail.com with ESMTPSA id az19-20020a05600c601300b003a342933727sm4376692wmb.3.2022.08.31.22.59.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 22:54:35 -0700 (PDT)
-Message-ID: <9a174828-33b2-268d-747f-c6dcea726e01@linaro.org>
-Date:   Thu, 1 Sep 2022 07:54:34 +0200
+        Wed, 31 Aug 2022 22:59:39 -0700 (PDT)
+Message-ID: <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
+Date:   Thu, 1 Sep 2022 07:59:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [GIT PULL] early thermal changes for v6.1-rc1
+Subject: Re: thermal driver patch
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-References: <0fc7062d-696a-0794-8730-48ef08bcb8bd@linaro.org>
- <CAJZ5v0h0r2dW7xW+GW3=KDEZZEkyYOXVCOmD3fad=a2enNhddA@mail.gmail.com>
- <CAJZ5v0hNCezncvW-g1UVPoF-ZmeVWd192FCaZVWrV-+Ucsycpg@mail.gmail.com>
- <CAJZ5v0ipq3swfX28o4YTCgsX6oyAJfqe385tdYzZXF=2ysfuvQ@mail.gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Steven J Abner <pheonix.sja@att.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
+References: <DL9RGR.8W3XFSCFFYXI2.ref@att.net> <DL9RGR.8W3XFSCFFYXI2@att.net>
+ <0f961ea6-4948-0b7a-e01d-d62ca4065af8@infradead.org>
+ <L9MDHR.JVBXTJ2L6TPP2@att.net>
+ <cf3a3cbd-c189-a120-124f-98d6adac058d@infradead.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0ipq3swfX28o4YTCgsX6oyAJfqe385tdYzZXF=2ysfuvQ@mail.gmail.com>
+In-Reply-To: <cf3a3cbd-c189-a120-124f-98d6adac058d@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,29 +78,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Rafael,
-
-On 30/08/2022 20:18, Rafael J. Wysocki wrote:
-> On Tue, Aug 30, 2022 at 6:50 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-
-[ ... ]
-
->> commit 670a5e356cb6dfc61b87b599eba483af6a3a99ad
->> Author: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Date:   Fri Aug 5 17:38:33 2022 +0200
->>
->>     thermal/core: Move the thermal zone lock out of the governors
->>
->> as the first bad commit, but I'm not sure what can be wrong with it yet.
+On 30/08/2022 00:06, Randy Dunlap wrote:
+> Hi Steven,
 > 
-> See: https://patchwork.kernel.org/project/linux-pm/patch/12067136.O9o76ZdvQC@kreacher/
+> [adding Rafael, Daniel, linux-pm]
 > 
-> I'm adding this one to linux-next right away.
+> 
+>> [    5.244369] thermal thermal_zone0: failed to read out thermal zone (-61)
+> 
+> Some driver is returning -ENODATA to the thermal core....
+> 
+> Any suggestions?
+
+Could it be related to this bug?
+
+https://bugzilla.kernel.org/show_bug.cgi?id=201761
+
+Is it possible to give the thermal zone 'type'
 
 
-Sorry I was unreachable until now. Thanks for taking care of fixing the 
-issue!
+> On 8/29/22 05:20, Steven J Abner wrote:
+>>
+>>
+>> On Mon, Aug 29, 2022 at 05:47, Randy Dunlap <rdunlap@infradead.org> wrote:
+>>> a. the exact message(s) [copy-paste]
+>>> c. what kernel version is causing the problem
+>>
+>> [    0.000000] Linux version 5.18.12-051812-generic (kernel@sita) (gcc (Ubuntu 11.3.0-4ubuntu1) 11.3.0, GNU ld (GNU Binutils for Ubuntu) 2.38.50.20220629) #202207150942 SMP PREEMPT_DYNAMIC Fri Jul 15 10:10:55 UTC 2022
+>> [    5.244369] thermal thermal_zone0: failed to read out thermal zone (-61)
+>>
+>> [    0.000000] Linux version 5.4.204-0504204-generic (kernel@kathleen) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #202207071639 SMP Thu Jul 7 16:59:09 UTC 2022
+>> [    5.207243] thermal thermal_zone0: failed to read out thermal zone (-61)
+>>
+>> as to reproduce, can only think of saying: boot up kernel without patched?
+>>
+>> additional info that may? help:
+>> I did not trace what calls 'update_temperature', just saw any call to it
+>> will cause message due to it's call to 'thermal_zone_get_temp', which states
+>> no thermal_zone_device should provide or be requesting an update.
+>> It may be that if 'thermal_zone_get_temp' where removed was actual function's
+>> intent, and all instances in this file and other function's use was a case of designer debugging or signaling a deprecated API? That was my intent on saying
+>> 'for you to do and review', because it looked like a lot of functions could be
+>> updated to take into account that no device should call functions that start off
+>> by calling 'thermal_zone_get_temp'.
+>>   It is more probable that my patch suggestion is wrong and calls to
+>> 'update_temperature' are suppose to fail with return -ENODEV always allowing
+>> other calls to 'update_temperature' to fail also. With proposed code, I've not
+>> seen adverse side effects. It just removed dmesg error, but was hoping I would
+>> get lucky and it was the reason for CPUTIN -62C without actually hard work of
+>> finding real reason.
+>>
+>> additional dmesg info:
+>> only other 'thermal' are 'thermal_sys' loading governors
+>> smpboot: CPU0: AMD Ryzen 5 2400G with Radeon Vega Graphics (family: 0x17, model: 0x11, stepping: 0x0)
+>> from lspci:
+>> Kernel driver in use: k10temp
+>> from lsmod:
+>> nct6775
+>> hwmon_vid
+>> these 2 removed in personal configs, but used in the two ubuntu kernel builds:
+>> wmi
+>> wmi_bmof
+>>
+>> Steve
+>>
+>>
+> 
+
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
