@@ -2,135 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B00F5A915C
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 09:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208E15A929B
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 11:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbiIAH5X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 03:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
+        id S234088AbiIAJBB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 05:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiIAH5U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 03:57:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E92C9E8D;
-        Thu,  1 Sep 2022 00:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662019038; x=1693555038;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aM7RmM5oLdR57n0tmAUEZLSoOLEkDuToJf2Jbm2ZbqU=;
-  b=NSSWQqpnkil0Zt+bz1Z2MluH7CCnsweQaCLohg9AEqnaQk3iwMFL2y8z
-   Z6i+22WpfQen+6s6tPyINCxcvgjbiLu+uScSkb45oT0mSa+JNv+uqaCEp
-   Hyd0Xoui199Xaf3JfCu/UMOWyeni7Es0xDTBV7tyAMhePJ47F2X0U+Q0s
-   +Q8EiEarNygbFm3QDH772aafbcKT0mtFAsTzaYsGVrFlNtMd5JjmuiX/v
-   osKQbnx6mDg18sEE0xs/4ZLdLJlkmUVxUqyFTPwZtDy62EZf3uQnD4r4n
-   dwlLbKz7bL3dKmPgVBnjEWhG43Z8GQerZMByBFUR8I9Idf27NYGIYoHXh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="278664690"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="278664690"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 00:57:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="738399823"
-Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 01 Sep 2022 00:57:16 -0700
-Received: from kbuild by b138c9e8658c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTf4e-00005o-0U;
-        Thu, 01 Sep 2022 07:57:16 +0000
-Date:   Thu, 01 Sep 2022 15:56:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- f569faad1ef4d4f88432e6d5efba2562e0d1bc1f
-Message-ID: <631065a0.1f0caBq0YvTQRxgc%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S234411AbiIAJAT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 05:00:19 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771964AD75;
+        Thu,  1 Sep 2022 02:00:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=daKwIXnG21f5IQnwFLtP9tfgO380G8YdT3cnUzVBJyD8r52OT+38AqkrcjdrLbOfj4HE0NPZalQWsbeGP5npJSUqLjsyppM4fxv8uHXrKAKz6rnTxv/8uoyRaE8BrcrrtoP7noiqw352WowpjSS8pj3M5TR7/j+OpUi2nPJxIQf9PlaOev6Wk/u6t8L2gY5p5jvsX++zji3NB0YGLxdver7s13dExdFevn1MTLbzZZzrE1lVy/MQYSP3hbybjxnPzkEZHXaIimCWp3zV+JzHkndPEhic15+mDr4DyKDwUh8kQZj28Xg1Zz6jUVBlrwTKhLbIkN1YVZc+Z8ti7yboRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lOwv1GDUtAoqnMgcMKPJGv6/T0bXxpHqD3jQSPNQWvM=;
+ b=F1++p52BPRMSRBaZgZ1JtTKSs5UiIWjTCqhfAitUf/7rLuJT9WYSzgcHw7VazHZj0pa/VZaLo0cBYeYeOriKfGfXAnQSf/6biOC4AFkDrLFvkIELjRh48s39htybIHqK4OdSOQspBOmOHYoPBtXaNYZ8G3xoYvrDs2TqIqIbxhWURaib5QhiV6H/3V2H6dYUMuY1v7mgMc7RYQLOYLbZzj1TU1uP0EPz3Z7QrVc/MiaA0Uy2JXj2dytTU1HK4ieYz9Im2TkWxBCuQqQ19kX0te1yvApWFKWzK4uiyO3sCnhOzEsU536Bh7thsEIK6zguSfPOiDThcNBdk7dB6F+UQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lOwv1GDUtAoqnMgcMKPJGv6/T0bXxpHqD3jQSPNQWvM=;
+ b=CYOq2TzJfEzuMKnpHuS0rkiSmwbLAnwaPxGVTEISmJItUOhwzDj0vfFz1hP+y9v2B3cVzQiM+79i4CLOhvjbwmnic14IjOPYa9OIsrAOICdXnRMpt/txLxLg3dcDvamU6pdd2FI6Fwu1QcyhD/YYdOd7g+CcU/mCF89sme5umsA=
+Received: from MW4PR04CA0317.namprd04.prod.outlook.com (2603:10b6:303:82::22)
+ by MW4PR12MB5668.namprd12.prod.outlook.com (2603:10b6:303:16b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
+ 2022 09:00:01 +0000
+Received: from CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::7d) by MW4PR04CA0317.outlook.office365.com
+ (2603:10b6:303:82::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.13 via Frontend
+ Transport; Thu, 1 Sep 2022 09:00:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT009.mail.protection.outlook.com (10.13.175.61) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5588.10 via Frontend Transport; Thu, 1 Sep 2022 09:00:01 +0000
+Received: from aerithdevpyuan.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 1 Sep
+ 2022 03:59:55 -0500
+From:   Perry Yuan <Perry.Yuan@amd.com>
+To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
+        <viresh.kumar@linaro.org>
+CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
+        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
+        <Jinzhou.Su@amd.com>, <Shimmer.Huang@amd.com>,
+        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Perry Yuan <Perry.Yuan@amd.com>
+Subject: [PATCH v3] x86/cpu/amd: fix the highest perf query for new AMD processors
+Date:   Thu, 1 Sep 2022 16:59:39 +0800
+Message-ID: <20220901085939.2388861-1-Perry.Yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: afc578a8-d0e7-4853-6899-08da8bf85a7e
+X-MS-TrafficTypeDiagnostic: MW4PR12MB5668:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KESPGvNPpAuGVIycdHq3+ouZO+SdfKDruHpZga9QHd9L8a+Fe/wUmK7DtI+Qq05aKJiI5zgsU2lPgsEFc/U84jAL3LWaW7SgVGN6kF/mPue5cE5P5/znxfJpSvUu+xYvjeMUu93wb+wOkxyjQif1rTsIGRVNrWgFz1dEa3z2V5A+/vKIwHsWKMhSoAAY0XfISxu9VDWvOGlKQfa+gB/nHj4n9TlWhZ0UVMGTzWfybdlO8ackkm2tT1wtnzD2VhtsYFRMH4cdLBFFbxco/8bXD0scNLjtVCGPnJURIlyM5YBKMjcc6YRM7gS3GdDJH1LeQLcLkpUJywkNQ1IytI/LhwBMpXiZjOSzUlYEIxZABuuEA+AC5XUe1hXnkJfvgn4GOtG4ndYUMw/uHGRbz8BLJT0fmB4nUWxBHayav6BTaa15aigC0grz5/tKbfKqIODXYjXNh2jkc8k0PC9waFXXxVV46VETogxoXWt+JWVW1cRkd9DIC6pJNvXHAgvgr7ZWgPG1MY2/6D217IwSBTCyBWwYQ/xGaA4XMIvqlsi4Kcv/1duhxUAz+HGO5KgrUzFXeQ+PBJZHl7GAVRp48K0yAK4YT/WbhokmKXfLNwRWyhviG7lIreYRo9sfmhch2McBWua5Y9XzJeeBr+TjKj3e8X1a59oNqq4+h3QVnmaQ1pKyxIXRGMjlC2Tyyu0iYoHWYFZ/FZ45TmIY+iqKnSzn4ei36AQyOTW1f63MfKsXowpF0ewa0ArdCgGnduiRzFbKuUQqpORvhb1lKXK9RTAIyvCEUQxcnp0/1QFM8BhWtn+Dqbygq7xiki69v5gBwt2eDhHkSHwYnzcscuC9i2tU/w==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(346002)(376002)(36840700001)(40470700004)(46966006)(40460700003)(47076005)(426003)(6666004)(4744005)(26005)(7696005)(2616005)(1076003)(82740400003)(16526019)(336012)(8936002)(86362001)(82310400005)(186003)(478600001)(41300700001)(36860700001)(110136005)(356005)(5660300002)(4326008)(83380400001)(40480700001)(54906003)(316002)(36756003)(81166007)(2906002)(8676002)(70586007)(70206006)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 09:00:01.0855
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: afc578a8-d0e7-4853-6899-08da8bf85a7e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5668
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: f569faad1ef4d4f88432e6d5efba2562e0d1bc1f  Merge branch 'thermal-core' into bleeding-edge
+In order to get the corrent highest perf for some new AMD processors,
+the amd_get_highest_perf() call will check the CPU model and
+return correct highest perf value.
 
-elapsed time: 722m
+Acked-by: Huang Rui <ray.huang@amd.com>
+Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+---
+ arch/x86/kernel/cpu/amd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-configs tested: 53
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                  randconfig-r043-20220831
-s390                 randconfig-r044-20220831
-riscv                randconfig-r042-20220831
-x86_64                              defconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                               rhel-8.3
-x86_64                        randconfig-a015
-alpha                            allyesconfig
-arc                              allyesconfig
-sh                               allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                           allyesconfig
-i386                                defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-m68k                             allyesconfig
-i386                          randconfig-a014
-m68k                             allmodconfig
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-arm                                 defconfig
-x86_64                        randconfig-a006
-i386                             allyesconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20220831
-hexagon              randconfig-r045-20220831
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 48276c0e479d..bdb0bfa80525 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -1184,7 +1184,8 @@ u32 amd_get_highest_perf(void)
+ 	struct cpuinfo_x86 *c = &boot_cpu_data;
+ 
+ 	if (c->x86 == 0x17 && ((c->x86_model >= 0x30 && c->x86_model < 0x40) ||
+-			       (c->x86_model >= 0x70 && c->x86_model < 0x80)))
++			       (c->x86_model >= 0x70 && c->x86_model < 0x80) ||
++			       (c->x86_model >= 0xa0 && c->x86_model < 0xb0)))
+ 		return 166;
+ 
+ 	if (c->x86 == 0x19 && ((c->x86_model >= 0x20 && c->x86_model < 0x30) ||
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
