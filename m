@@ -2,151 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAD75A9528
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 12:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88735A9674
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Sep 2022 14:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234326AbiIAKzY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Sep 2022 06:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S232420AbiIAMOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Sep 2022 08:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiIAKzC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 06:55:02 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB21295B1
-        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 03:54:47 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y141so17135090pfb.7
-        for <linux-pm@vger.kernel.org>; Thu, 01 Sep 2022 03:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=9Rgza/BFhiKgz5qbn9tPTsIEssmmxYhCqKqdcg+i9QY=;
-        b=gSPF6cYdqAKPZBIfnj0ykq8qkjlihGmDcLYbY1JGovRpm98ByZ/r58JoGphkqYmn/W
-         saR5sAJ8dhx80eN8CLs3yhUzH9aDWx+57vnNlj/pkgxDik3jNmDPd7cGoIQr0qgHJ27L
-         z2KajvrNb9oAMZRVwKPWmlX732/E8MZVcdG4AknCEWmPfw9jvlQcXErOvqlFg3YBjrb0
-         T7pj/36wWglz35CHTiYG+M3Q+85w31cf9KKJUKNatDPlGuwuWz0Jzrs717RzwYtl0Jlz
-         Robmj4WKGtZJqBchIgsSeXXc7CQ2tbc85Yk0QdH157dsOMDbKlIqtPcTbiMi6Ta/gtNv
-         R0rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=9Rgza/BFhiKgz5qbn9tPTsIEssmmxYhCqKqdcg+i9QY=;
-        b=4aNfMyhPp+LYW7tnfiY1Du9skrqmx/P8WiDyB0Y64F0pfnjNb0NfJmdKHL79Sn9TcE
-         CKb1plCC3s1f/x9HDngCC2F4K4OSgB07ly9yl83D608F/lgInAO/JEnlMgtku6G2UVcC
-         O0pD7zTN7e3MaG2XURx2TKWT9ABqHTfJwYc9RAnoTyrur1Ld97+xhQjMhNJq+FSKuhls
-         VX44YZHNStCelVjkKBPTX8ePINQdyksQclO54XnRFYP0wC8Le0QH7hq/J95gdTjW4kBS
-         CdhDKsQaDF3KSwBRuxkbJp+ZdG0vjobTcgJoeUwJ1I4GUI6c7pFX0/GI4+yQpk3Q0rxw
-         Ahxw==
-X-Gm-Message-State: ACgBeo1PocV3fEpJnthCrYSLIBuGsHc1W7/nD8xqyAe0D0TPC7b1pqeZ
-        lrZO9r5kHLbyVGUbR5ctG79aLZfIYeCnNQ==
-X-Google-Smtp-Source: AA6agR5tOEba8IL4Jg1YiwEsoVUeCfd8Ux+DLPb4woSbhcyyLTvyIkvIYPlLjgqQvWYomSPtBhYbFg==
-X-Received: by 2002:a63:4503:0:b0:430:48ac:6046 with SMTP id s3-20020a634503000000b0043048ac6046mr4910890pga.74.1662029685943;
-        Thu, 01 Sep 2022 03:54:45 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:5362:8069:f46:34af:eb19])
-        by smtp.gmail.com with ESMTPSA id ij13-20020a170902ab4d00b0016c57657977sm13508910plb.41.2022.09.01.03.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 03:54:45 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-pm@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Subject: [PATCH v4 4/4] thermal: qcom: tsens: Add reinit quirk support for tsens v2 controllers
-Date:   Thu,  1 Sep 2022 16:24:14 +0530
-Message-Id: <20220901105414.1171813-5-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220901105414.1171813-1-bhupesh.sharma@linaro.org>
-References: <20220901105414.1171813-1-bhupesh.sharma@linaro.org>
+        with ESMTP id S229639AbiIAMOW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Sep 2022 08:14:22 -0400
+Received: from sonic308-11.consmr.mail.ne1.yahoo.com (sonic308-11.consmr.mail.ne1.yahoo.com [66.163.187.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D751114C7F
+        for <linux-pm@vger.kernel.org>; Thu,  1 Sep 2022 05:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1662034461; bh=1hNsVfqCY6LT7YTLp21HTSPBwyvmKxE/8qy+3OfbQzY=; h=Date:From:Subject:To:Cc:In-Reply-To:References:From:Subject:Reply-To; b=D5jqyRJcbm5ODwpKTfncxYUZqGUgSrHuEyIpQ9HJJwxPBT7mfGMy2rl4paE0vUzxoDYvQWtxlFbTFGO1uNNv0TnVu7Kr3tOaBe6t/sHqQcJ0qj5gM5bmPu1p4EfeOc/wg2azuFMkPPza7yfLR/fkGPVTitAaoctoE0M42sTHXvM=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1662034461; bh=DGrXafvk06r5mx0Q9a9Vt2y9Y+hIhdCXStTis9GBvit=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=W1VQD2o9naV4tRQ6PXMzwy2suGaM/dyDypWjFHQ08g1DWoRO7y9hwz7dZPYJ4GepjvmI/j1q4MWHWq4zbk72YJU3aM2qrviTHmPb3/3CooQ2BipWBn5DWfQg0GdIp9Rh+ZtBrXEAGQbUjmnsSEgZbj8NSVJula0zO0WX06SvLLrqF7qvdRzDloHvNkgGQGNOvyBl8zwbgdWoWQk7d5Jk2yhRW0idsGN6LWj5GKZzVrnn6QgiSS6TpjhlB/G37dXNA8QoGNJVFnxkrM5dp/uoiOLn2bY5eyX25SuvzUibxOve0lQ91/pLN3eBTMhcC7KT+LZiuqnpkFStXOWO4MgwIg==
+X-YMail-OSG: KQIpQUwVM1lf43XIzdjnAhO08irtbFnwvjF0cRQ8JQhQ.INm64rfYIxm_4X.RA4
+ kTYuaKLGe2jon0KLudI03wh1bq2s6gqxkp0G6ev8P4IKSUVqPwJzpqB4wBge1ueIkY7tSokRPMFP
+ RaX.5oSb89DIgt4CrXFBvsRPhn.Jl5RWGzlon6ND3WcbGiDGdoXG3uWC5PtbT_x.2oZib2_r7Znc
+ PRe.p0BHHcmQC0z6FVmb9PemQhTzoZ2nJhsUTYxjzTTr3HqH16ES6UAqrmxD4uakLixmoBY2eNWF
+ GqXB8kom.t1n0YDiFF9WqbSzJCf3.8SS9QCUdA9nJuUp3jJKZRFDOq6yeCakmWqfN9zwqsaPxkMP
+ r8wPgX_3MxanRFFPSZgjMuGYVydbBWo2lNECRUDMHms9cUC58YFP4DTckP.4LbyB2uSbLPneTreH
+ ViqLc95HgZBvTDI9VUO76e.km7pLIfkoH6vJMmdv9ENEw6YYEyY5HcScERIzfhcvXBL1sWYRH6OM
+ 5y5lesT5PutmlvnjzbQUV2gx2lbp0iLhfv_JFcUE4Z9kwNeE7ivN3DXbGdrN6kibut3NOjKIQqpD
+ X_mqZxK1FNQSx95raSVDpQNqdWD_mcGH_ujpXsguI70OH0mB.ppqbJXD52ZjkjM0nxstAVz_jNM4
+ oXKBaNhsxbxXiKFmpwvaBP1unw5gvK5_55c8EJDO17wqv_cJDfdKokXwKbDkQGRmCj2zOp1EBrjL
+ FAjq0En2Bv4Yxd9t7sza9v8ID3re1b56xfFiXzNncYglY3hbwdfRRj0kNcivwsCTJbnUm3p2tZd0
+ PvxXuEu795ntY4ypDjjD4A7zucIKK3ZcyA9Xi0HLmIQgaX4z_yzYcksCbCjTY1Cr6aZxHjEr5710
+ uCuf1Lp_sVrZye5C4UstnUm_DZhm9svk7cy..Px8o4CAAZkXaiPFbtGoaMOR2DR36cNLrIA6Ny7l
+ ZpuTp9ZTx7omWhzSPVaj5rBqmiSVMi7kRyKy1KJcCR_KvSdgMUUa7jhGbV5DxXdGC.ZGlyKXpOl2
+ ET5rdqh18gYs7GG1j61DMZIaBrA8k4hgsQx0zMXk3EAzfo9vxGkYW65Ym8W_pd5x.y.HqI8P_q56
+ kvH0t9BYgVc0neHynukGKSfcox6sO0ebPN.zHw6y6pKgQiaq_dejssHjDq9Xd5pNgtWoM9n45jpY
+ xre_4qBuEZNMjuHkPpO1aIzEnYjngsBhNjwGOu8hFm2ZGQ7wuLbGUxELEjVXoRXCa1R1dpY6xa1n
+ DqOmu4Ncf10M5rNEt_MUNpIykxg5zXIPGY11uBRjzQwaV_ayUl8oI7njerZpad5wZhoc6qXIGTkp
+ 8PnsZosqY5XhVDye7poZrvkE67aBo7qW7w_ZRNMONlRgFhpXoKhobsBEpN3tKAR_BpK3HIVLTySo
+ xzUpeoiF5nQP0Kmxpc_qCbS73ft7YxvptQk9JosONu42uQAMfDDF5.aTvLl9DgO8Jp61Re0YIpGB
+ KTvaq3SKWYzeOYiuVC.DICIZ5XCaDodVkCjjFC6I.YGZUpR7wjwS9zynPnSZdo9RhQtzDrqo_2Fv
+ iOzI9hB5pjw3Pqsawkj6oIQwMtxwcmzmDYh50PdS5PjMQ9VnIJWAD4mnth8YtpJjELaQ5Qv6fNNB
+ XGUV_bLJ9sVyD8LtIOoLy6iRwE7UilMJxJ7WpaldZG40G0eWwdrQ5WUmSgEI1BgCtiBj2CGigq1b
+ Jr7kW_URHbyxBV.YygCaTn5WrBWa0FZ51uqRLZiMOErA_VOWNjOMNTcmSlPje2bh9rKusTbVoiqB
+ 0VpDNJoKZ62C1YphElWufc9vjSjDrf3wppA9cBn_AT9BKGFQC9x8SBZq3xY8hG.6QvAE3hQ4pJj4
+ wSVyRFTrtmgaxuclusH9TZKNn.l6L972UEC.aqHDlq.4z9DjBQKwxe5mEzUZQ34K.lcp6DJQdyGv
+ 4yz15e3c1IJIR_27QUEnrFxgaeNRyKt34JiPgnZMj4rmH2nghFJ9o2J3vWWeAoUuf39Usno15I69
+ kFWzj1NkFTyeE8v5FWR9jAaG8
+X-Sonic-MF: <pheonix.sja@att.net>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Thu, 1 Sep 2022 12:14:21 +0000
+Received: by hermes--production-ne1-7fdb795c57-j45rv (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a9daef07438b8223431cc67a31a2c457;
+          Thu, 01 Sep 2022 12:14:18 +0000 (UTC)
+Date:   Thu, 01 Sep 2022 08:14:11 -0400
+From:   Steven J Abner <pheonix.sja@att.net>
+Subject: Re: thermal driver patch
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
+Message-Id: <NZ5JHR.JGO592OT0D961@att.net>
+In-Reply-To: <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
+References: <DL9RGR.8W3XFSCFFYXI2.ref@att.net> <DL9RGR.8W3XFSCFFYXI2@att.net>
+        <0f961ea6-4948-0b7a-e01d-d62ca4065af8@infradead.org>
+        <L9MDHR.JVBXTJ2L6TPP2@att.net>
+        <cf3a3cbd-c189-a120-124f-98d6adac058d@infradead.org>
+        <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
+X-Mailer: geary/3.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some Qualcomm tsens v2 controllers like those present on
-sm8150 SoC might require re-initialization via trustzone
-[via scm call(s)] when it enters a 'bad state' causing
-sensor temperatures/interrupts status to be in an
-'invalid' state.
 
-Add hooks for the same in the qcom tsens driver.
+On Thu, Sep 1, 2022 at 05:59, Daniel Lezcano 
+<daniel.lezcano@linaro.org> wrote:
+> Could it be related to this bug?
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=201761
+> 
+> Is it possible to give the thermal zone 'type'
 
-Devices requiring the same can pass the relevant
-compatible string in dt and the driver hook can
-be used accordingly.
+Did verify that that my thermal_zone0 is my wifi:
+used lm-sensor and cat /sys/class/thermal/thermal_zone0/temp
+along with wifi load to heat to temps different then others to check 
+outputs.
+The above mentioned bug page could have lead to this, I can't say or 
+track.
 
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Thara Gopinath <thara.gopinath@gmail.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-arm-msm@vger.kernel.org
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- drivers/thermal/qcom/tsens-v2.c | 12 ++++++++++++
- drivers/thermal/qcom/tsens.c    |  3 +++
- drivers/thermal/qcom/tsens.h    |  2 +-
- 3 files changed, 16 insertions(+), 1 deletion(-)
+Prefix the following with I'm not an expert, just info provider:
 
-diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
-index f521e4479cc5..431f17f99d34 100644
---- a/drivers/thermal/qcom/tsens-v2.c
-+++ b/drivers/thermal/qcom/tsens-v2.c
-@@ -104,6 +104,18 @@ struct tsens_plat_data data_tsens_v2 = {
- 	.fields	= tsens_v2_regfields,
- };
- 
-+/*
-+ * For some tsens v2 controllers, its suggested to monitor the
-+ * controller health periodically and in case an issue is detected
-+ * to reinit tsens controller via trustzone.
-+ */
-+struct tsens_plat_data data_tsens_v2_reinit = {
-+	.ops		= &ops_generic_v2,
-+	.feat		= &tsens_v2_feat,
-+	.needs_reinit_wa = true,
-+	.fields	= tsens_v2_regfields,
-+};
-+
- /* Kept around for backward compatibility with old msm8996.dtsi */
- struct tsens_plat_data data_8996 = {
- 	.num_sensors	= 13,
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index ecf544683e73..ab8561ddedb2 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -1138,6 +1138,9 @@ static const struct of_device_id tsens_table[] = {
- 	}, {
- 		.compatible = "qcom,msm8996-tsens",
- 		.data = &data_8996,
-+	}, {
-+		.compatible = "qcom,sm8150-tsens",
-+		.data = &data_tsens_v2_reinit,
- 	}, {
- 		.compatible = "qcom,tsens-v1",
- 		.data = &data_tsens_v1,
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 900d2a74d25e..03cc3a790972 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -607,6 +607,6 @@ extern struct tsens_plat_data data_8916, data_8939, data_8974, data_9607;
- extern struct tsens_plat_data data_tsens_v1, data_8976;
- 
- /* TSENS v2 targets */
--extern struct tsens_plat_data data_8996, data_tsens_v2;
-+extern struct tsens_plat_data data_8996, data_tsens_v2_reinit, data_tsens_v2;
- 
- #endif /* __QCOM_TSENS_H__ */
--- 
-2.37.1
+My guess is not supposed to be calling function during initial kernel 
+loading, based on following:
+
+from thermal_core.c:
+18:
+#include <linux/thermal.h>
+
+397:
+static void update_temperature(struct thermal_zone_device *tz)
+{
+	int temp, ret;
+
+	ret = thermal_zone_get_temp(tz, &temp);
+	if (ret) {
+		if (ret != -EAGAIN)
+			dev_warn(&tz->device,
+				 "failed to read out thermal zone (%d)\n",
+				 ret);
+		return;
+	}
+
+	mutex_lock(&tz->lock);
+	tz->last_temperature = tz->temperature;
+	tz->temperature = temp;
+	mutex_unlock(&tz->lock);
+
+	trace_thermal_temperature(tz);
+
+	thermal_genl_sampling_temp(tz->id, temp);
+}
+
+from linux/thermal.h:
+429:
+static inline int thermal_zone_get_temp(
+		struct thermal_zone_device *tz, int *temp)
+{ return -ENODEV; }
+
+
+compiler should then read:
+static void update_temperature(struct thermal_zone_device *tz)
+{
+	int temp, ret;
+
+	ret = -ENODEV;
+	if (ret) {
+		if (ret != -EAGAIN)
+			dev_warn(&tz->device,
+				 "failed to read out thermal zone (%d)\n",
+				 ret);
+		return;
+	}
+
+however did find with extra search:
+in /drivers/thermal/thermal_helpers.c:
+78:
+int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+and
+115:
+EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
+
+
+so is this bootup vs system hand off?
+where bootup call thermal_zone_get_temp() shouldn't occur?
+
+Steve
+
 
