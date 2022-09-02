@@ -2,158 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB135AA953
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Sep 2022 10:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 316885AAB49
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Sep 2022 11:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234788AbiIBIAs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Sep 2022 04:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S236033AbiIBJZc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Sep 2022 05:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbiIBIAr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Sep 2022 04:00:47 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2086.outbound.protection.outlook.com [40.107.220.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C879E2B630;
-        Fri,  2 Sep 2022 01:00:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D7EJrOJ/2rN6OAUjMxKryp2HLFQNvgvwhsOXRE7igjKBbMkO9KMgbytbhRzIsDF6EvM9GB6KMs29q54W5ToXDvv8oHQXhvHjzgUnHZAPV5XsDVPjsV7OCvf6BXHPtSkjLMTn+Y8UITROqG6X4Gg8tXF3yDOIl/OiGL5AxBmuQOjZvE0hIIA4fM+dMpCJex6hBhkA59rImGs1gr4Nsy7yrHV8cNh3/RroTJiloidPolIsI4RSi0WUXUlqnnZLbhKLg5f+0Uk8yHTXaSZBZtAkbGVj7yWux3xI7dEHoHUvla0K1I+ajbYitAsLeS1vaLZ+P/6WxoCGCBFU1/7ZixBoqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vAc6NoHIe4TRTh85s+UNR60FCk1XGkxBElH4xgyDXOA=;
- b=ADfvoJ8T9/Fi3wWAypBSl5lFa+QQo15vdMGL6npCvk0QsYvd5lpAWckK4MHoqaO/j/bmqNSwnDn6cFGw2BfucZX3C2b0pYygUjk6vWcGuL30Q//bh4+W5qMzBepXSMNYRiICOCQ8eC/WBUb21/H/KTfYZg93RjieG8uQZC2uB7zDk+KJr2nk5k1bW2WFI4mTGzm89Un0DqYQkXzE6rw037LCFU3Jvn1jOeLGEgSRn64xozexC9jla1OUTH7VcHaR6MpkRJpbEwXPiPTYvysupAZGaBgXBAVPIlqmvQ76Huv2RizjJJ2RiZwRtiuvuOTrI+l5M86hUMJKXae2NwYy5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vAc6NoHIe4TRTh85s+UNR60FCk1XGkxBElH4xgyDXOA=;
- b=n3d8nLAm08aH8U8wSsfKXeeHyChAvVEcAZWs+ObsJfY2qabgApp4n03fZBz74TBvTD+5y/04b+3XzrQ3qfudJcgzuuJpbUGLt2Ngo1/l+EB4y1SoucSwA1/Fo7RRyyIDxHDvJmrUi+y8Ye/yWUgALD/zMQm+dVHXWqfxm6Zmby8U62oRaPSi710qGK4WcffjxUM61W+FURVTWrwKRcTaWWRle1bbZ7lgM+wKBBOyx6uWF1/GkwjbCT/88xzFlTwvf9aHUoMqFNHd156XrwEaUHfaq3MCwC/0Wmq39Hla/4BYXfF2camGrWitpXIXofhUhJkCbxGa5Y9VY2FK+80+pw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13)
- by CH2PR12MB4875.namprd12.prod.outlook.com (2603:10b6:610:35::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Fri, 2 Sep
- 2022 08:00:45 +0000
-Received: from BL1PR12MB5304.namprd12.prod.outlook.com
- ([fe80::753c:8885:3057:b0a1]) by BL1PR12MB5304.namprd12.prod.outlook.com
- ([fe80::753c:8885:3057:b0a1%3]) with mapi id 15.20.5588.012; Fri, 2 Sep 2022
- 08:00:44 +0000
-Message-ID: <43807bc4-5206-2c1d-99c6-3fc566655748@nvidia.com>
-Date:   Fri, 2 Sep 2022 13:30:32 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v7 0/5] vfio/pci: power management changes
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20220829114850.4341-1-abhsahu@nvidia.com>
-From:   Abhishek Sahu <abhsahu@nvidia.com>
-X-Nvconfidentiality: public
-In-Reply-To: <20220829114850.4341-1-abhsahu@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA0PR01CA0067.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:ad::13) To BL1PR12MB5304.namprd12.prod.outlook.com
- (2603:10b6:208:314::13)
+        with ESMTP id S235950AbiIBJZb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Sep 2022 05:25:31 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC4540E39
+        for <linux-pm@vger.kernel.org>; Fri,  2 Sep 2022 02:25:26 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so1573614pjc.3
+        for <linux-pm@vger.kernel.org>; Fri, 02 Sep 2022 02:25:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=1bTDW9HnOkiIYV5uJ57r2XB6ZhefyzNRvfE7YurBQEo=;
+        b=AxLhRfI9R75qPsG2gU38kDjJE6+gQI1IxuS5UvbEKVwR+RpHAuLOPy2k25fSJN/2zl
+         c0kZopziRkgXAFT1PmJagrGzop2dWOJJlE8lMM4O44fFYQBtRoJwEe4DkBK5N9xWNga0
+         jCVHtUcWGs6Z+BsXFc6+qSDpwE+mfyte1Ab4NU4XKdFIrOZV/KUu+EYsb/Jji7RnBZLD
+         iFCwq3+Txw/mM+Q9HXabRCEeodOo6PCF91749PkivG+Gv+KTELhJm1zm5XMRe3N65o8A
+         T8RCNI0s1JP4mm8MvfsdFRtFQq09f+TTiI49Zd0eB+ZXLprw5jvqyv8wHPwJs9odb4c3
+         jaig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1bTDW9HnOkiIYV5uJ57r2XB6ZhefyzNRvfE7YurBQEo=;
+        b=n0L/itR5Niv0+/v+5AJbIFaZ9DsTUfQlDfKz4yT2LMTTDTFjW8a1c1XSO8Nka3diZv
+         tqWUm03zMy8dSB5Y7WDYk79CPBmLFHKAnhvTgoaHa20XX5BdN6h36urJWXUYsOvOuyhE
+         4gFir3Eu3eoAwbCwovxuO/unPIw0t6JiID/fjenz7j8a55rkXK7OwWu/9ciqHds6HbLo
+         SxERTPDd3xqVd1vlHyguLJ2I4IhFzyaoyLOcyJPm9yuVs1FRTkrxbSm+xpqGmO2HbIqZ
+         MJ4lHeYMZvyjd+daUmph5emhLmcrl02d+VM6efyPY/59aEKeNa23/e5lEBT+xHxHkqv8
+         db2g==
+X-Gm-Message-State: ACgBeo3zwav1rVeKHrWSVk0OYOUnLi6Eukg/lOznkIuFx86LfcLqFfaF
+        nC38YmQN05vRfGKYQUusWv2cKiEP3Sa27g==
+X-Google-Smtp-Source: AA6agR703vVUNiUJs+wEbCRE7Q3PqGL/0ksxZ5aMw4iWUxLstSZPLNkWHqA8WmHx+gBlSutsukvN4A==
+X-Received: by 2002:a17:902:e751:b0:174:89f8:cef2 with SMTP id p17-20020a170902e75100b0017489f8cef2mr26838879plf.156.1662110725762;
+        Fri, 02 Sep 2022 02:25:25 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id h15-20020a170902f54f00b001728ac8af94sm1110860plf.248.2022.09.02.02.25.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 02:25:25 -0700 (PDT)
+Message-ID: <58ab7d34-71af-f69c-1961-fd484cb477ac@linaro.org>
+Date:   Fri, 2 Sep 2022 14:55:20 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9121202e-5f59-4f08-2943-08da8cb93ce5
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4875:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Df/XDKM6MpLV7nDdlEqUAgQveFEsALhewBHM0A/z9Jsh5q/FABe3lVOpc5gKon85KS2yiwyVfRxCxERD5qnmA1xoIa1Nm2SYvvFp5L0ADnbuTG1fj007EZlhk3lfJ2XyPU6ygLh2y/X7wBNJWxnKtuv032w/zhq7PUPqktIQLJVNf3tWDCntjYu5X9NaaM/Plv1GSvPiwOWYFHA7GqABXoXN/+BSQANvxEwNWoLCsxc1XMijNuinvYPXQj+TaOvDRhaM+ZQ/+RdvfOR3bFF9tO/vOemgCZ1RlhPkaZjNSrIRdFa9dFJ22JJd8lHuwDD9YZ0i5EWxs1dgCXqlQWK0n6JVbwykJch3U9us4KwMLs+rW0Po9EXcytKkcCYt8+ESaxXwRRuCePQYA8RnM3UTUMt3PSYoCQ9CtAHF0rrXZuOCkKqS3V8a5SANVxqcBQuBh9p4WUaVwSWdwMUzThnkyMlJWGCus0meyg4zBrIaiWRbU5p5jaOKpmho85O33g3Ra9oZ43El8wXgtnbrIFLDrN79ZLQt52TyXRd89jAijEmKLaFcnnaaqkW3tj+UodXBoyYzge634VymgPo8ZKFYx4l8DCvDtuVDZo1FhOo1vyMuqFIDvZAVzzQ0iQBSxLrBE97pPIWbqnjxC7MraKeXyQl4tljFDOJkiE0OwKc4crGIjdxdPSMgEExf6qTlM7/+vjvKVorGPoBYDqxMBVbxkKNaZHrz/fPIFVZlKnX9LhDqpouD/0C/8hxgUl//YJfrLBeX0AGlil4atqpdLUboKTB8UcztNmWLzlFey8MTapJWi4fkw1uXGYp2vXcjhlcz4/Yu+cUVmPxSBgDY/GWq616ipaJl6bnUd85Axy7OwlnB4CGRIDGHel2GhoGt/S4JPP4rTJ1HJ80f1CeTCqk6FfJAFVKcLp8V4fowMkFIg/U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5304.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(366004)(39860400002)(136003)(346002)(83380400001)(31696002)(38100700002)(66946007)(66556008)(66476007)(8676002)(4326008)(110136005)(54906003)(316002)(2906002)(4744005)(7416002)(8936002)(5660300002)(55236004)(6506007)(6512007)(26005)(186003)(2616005)(966005)(41300700001)(478600001)(6486002)(86362001)(6666004)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?THR3Qldwa09yT1hLSUhoMzM4SFdJdVVDUVU2UmNDR3YrSTRmZFlwK2lJTFlw?=
- =?utf-8?B?cDFnNEo5YkhYQ21aNW9GVUxRR1pYQUpPL0ZRa1diSXRhRkd5dkdIQVh2RjJG?=
- =?utf-8?B?VjFYd0NmZEhsN2pQNW9iSS9wWWN0OTVuM285YVkxeEt2bnlEM2toUlIwc0Ny?=
- =?utf-8?B?MFl6MGZyRTJBY1JRL0J0c3oyV0xuZG9LbzBmeXMxUjZ3c3dTQnBwd3JHZ005?=
- =?utf-8?B?ODl3YWRXSUlDQWJhL2Fzc0lwTGJsbTIreXpFREFXOFRiOE0yRk5GVS9NaGZn?=
- =?utf-8?B?M1pLcDVYS2p2eGJwQnNxK3ByaCtpZXRaUUJ3MXBxdmp1Vi9XTEd0VDdtOEpw?=
- =?utf-8?B?ZVk4bzJ2eSswQUhjVmcxL3BvWnBRN3ZMMXVuS0JXbTdNMEpPY0phTXZTQjBE?=
- =?utf-8?B?R05US3pyTUtXYko2eUQ1YVZ1K3hNT3FjSjNNVUVxM08xQlFRSEE4VGJRZDBS?=
- =?utf-8?B?aFJoMHNDM2Vjd2oxMVlPTEttZE42QjRVWEtrelhmWGNvTTV3R2FMZ2pPRHVp?=
- =?utf-8?B?dW1weDhWYXFuYkhWQTFZVDhhT3RmaUdpd09NdVYxZkNkZnNZanZNMnVIeHEv?=
- =?utf-8?B?aUtJYWJFeEJ1SWNDTHhVK1I0SHZMUTJWL042Rm1YTCtsdVVrMXcyVGgrRVcw?=
- =?utf-8?B?MjVwaE5zRTg2bjI5UnJFdlhldTlIZU9jbHBOYTF0QjZWTHd0ZXFLOHpUb3Vq?=
- =?utf-8?B?MzlxYUFHNzhUSmp6ZUlmd3N0OXNQdGg1L2g2Uy9hTnM2eFRKUmxwaGIrY2Qv?=
- =?utf-8?B?NzlRWDRtbkZ2STFrRjVhOCt1UTg3Q3d3MVg3c3ZmN3Q4MjQzRm01Z1J5UTZX?=
- =?utf-8?B?Rm9nSVYrZEFzeTErRDVoSkJlY25NU1hrRCswQ3dJV3pGaEU2dHVTQlVxbnho?=
- =?utf-8?B?MWJzc2hFSVk0Y0tkUzR0YXZjQXZhWk0rcm9TQjFlTzNpU29vT0N5OFNrY3hU?=
- =?utf-8?B?cHJua3hUb01CZm5IczZJNmMzWnIzZzhsdGY2SDVMWmdRa1RabjVWYW92RDND?=
- =?utf-8?B?MGVlZmQzUUdWd2pwZzIyNHUxYytzeDhQb2FTSzdCUEJDQkpTcGhxNGFHa2N2?=
- =?utf-8?B?UmVkTEorMm01bk9HbmxIbUh4ZXp6S2RMU3ZqRnJORElTbVZPRUxFay9LMk9z?=
- =?utf-8?B?aytBNVdTek5VZ1lud1hSZzJWYktCVXU3YmxMRm4vQW0zVFVTZS92VHFFKy95?=
- =?utf-8?B?YzJuQU1qc0RPbDhTaHUvQXAwN1BVN2JkNEQvSlJSaUM4VmNiakp6QUx2Q0Q0?=
- =?utf-8?B?dFM1dlR4YklSRmpQZjhvaHJUcWZyQWdPTDVhR0tOMGFXUXpYV3dkS1IzanpV?=
- =?utf-8?B?dVZ1Zk1JV2xQWndENSs2RENGcVhmLzhKR1NHQWplNW9sS3BaNXRpb0hKZmFv?=
- =?utf-8?B?QllmWFlqdTYxNzFmMDJXS1ZJTG1yMHVFUjduVEdvZkRjcHR5ZzZrR2kzeE9p?=
- =?utf-8?B?bGZ4TjY2emhNZiszK3FsdDFocEJUaDVLSlZKemxnWXVFaXMyK253cS9waENI?=
- =?utf-8?B?MTdKRE5ESG9ocUltWVZsNk90d1pBZWxvQWx4RjJzV2RsVU9KZXVJK1F5U2Ru?=
- =?utf-8?B?cnltYlJ1ZEhJd3hsaXNrLyttak5yTmc3K2M1VFdsQU05NzZOWUQrdFc3bjNt?=
- =?utf-8?B?NDZ0YjJMeHhSUG4zY2xSK0ZlTkRCYkFPdmdFbGQ1a2w1Mjc5VkFYUlgreHh5?=
- =?utf-8?B?dzQ1Skt6clFSdkNTTFJhR3pUNGdHc3VwajZ1NHhySUFUL2xNQ25ocXZWVXY4?=
- =?utf-8?B?dElybVRmeGVOdS9lUkx6RzBJMFJ0ekN0YTRkWmI3NmZibmovTjdSZEFWci91?=
- =?utf-8?B?UUVVNGxuSVVIVk1QZHJnUkRYSE9PU2h4NnE1YXZ2bWxKTkJpSGpITFpheCtK?=
- =?utf-8?B?S1RXT3pLNTJnWEo0b1pxNFRQVW93enZ6RWJQR0pXcFpxdTRYL3k4dDBXQ2pT?=
- =?utf-8?B?QVlhUHJwYnBlR052SXVZV3d6djYwVTBYbnZXL1JHa2c0TGxVbWZEM2o0bHhP?=
- =?utf-8?B?L3orMlk4M0V3OTdCSW84eENWNS9jNFZveTFnTS9INHlEZ0RtUjN3a1ZYUm9o?=
- =?utf-8?B?MlBacGt4MGp1SDlzbFp5c3hyTVdGNmtWaXh0UGtFc2pubkRtYkdHdlAyYllC?=
- =?utf-8?Q?i0p3gWqcsA1dzawk3PvaFcvrW?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9121202e-5f59-4f08-2943-08da8cb93ce5
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5304.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2022 08:00:44.8115
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hQjFCA2pDQ6x+pzdcbwpdodUZm2RNA94ICqWGgveXYpLK21uX4/o/5WkkEJkhc6bpUt3jxayOH4El+lzweH+pA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4875
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] dt-bindings: leds: Describe optional 'reg' property used
+ for Qualcomm LPG nodes
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh@kernel.org, pavel@ucw.cz, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220721195502.1525214-1-bhupesh.sharma@linaro.org>
+ <CAA8EJppGS38aP7gyd1c3kNgraAVJDoqUef2cDfZpu2aL_iwW0g@mail.gmail.com>
+ <YvFZgr1RRq6tYaVC@ripper> <a35dc076-e33f-1b31-2a01-27bb37301039@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <a35dc076-e33f-1b31-2a01-27bb37301039@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> * Changes in v7
+
+
+On 8/9/22 12:21 PM, Krzysztof Kozlowski wrote:
+> On 08/08/2022 21:44, Bjorn Andersson wrote:
+>> On Thu 21 Jul 13:19 PDT 2022, Dmitry Baryshkov wrote:
+>>
+>>> On Thu, 21 Jul 2022 at 22:55, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+>>>>
+>>>> As Bjorn noted in [1], it is useful to describe the optional
+>>>> 'reg' property for Qualcomm LPG nodes as it is used in
+>>>> some Qualcomm dts files.
+>>>
+>>> I don't think this is correct. LPG block maps to several regions, so
+>>> using just one of them in reg doesn't look correct.
+>>>
+>>
+>> I agree, but I also like the uniformity of having unit addresses for the
+>> devices on the spmi buses.
 > 
-> - Rebased patches over the following patch series
->   https://lore.kernel.org/all/0-v2-1bd95d72f298+e0e-vfio_pci_priv_jgg@nvidia.com
->   https://lore.kernel.org/all/0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com
+> regulators also do not have reg, so I guess consistency is already gone.
 > 
+> I vote here to reflect the real hardware/device which means:
+> 1. IIUC, the design of entire SPMI bindings and its implementation is
+> around parent device sitting on SPMI bus and children using its
+> regmap/io space.
+> 2. The children are not really re-usable for different cases/devices
+> (e.g. standalone WLED or LPG, outside of PMIC).
+> 3. This means entire design is tightly coupled and LPG (or wled,
+> regulators) bindings describe the piece of PMIC, thus I find appropriate
+> skipping "reg".
+> 4. If we want to keep the "reg", then it should rather reflect reality,
+> so if Dmitry said - multiple items for separate IO address ranges.
 
- This patch series is getting applied cleanly on top of Jason updated patch
- series as well. 
+Ok, so I think the majority opinion is to skip 'reg' from the 
+devicetree-binding. Lets stick to that.
 
- https://lore.kernel.org/all/0-v2-0f9e632d54fb+d6-vfio_ioctl_split_jgg@nvidia.com/
+>>
+>>>> This fixes the following 'make dtbs_check' error reported for
+>>>> pm8350c & sc8280xp pwm nodes:
+>>>>
+>>>> arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dtb:
+>>>>   pwm@e800: 'reg' does not match any of the regexes:
+>>>>   '^led@[0-9a-f]$', 'pinctrl-[0-9]+'
+>>>
+>>> I'd prefer to follow the existing schema and to drop the region from
+>>> those files.
+>>>
+>>
+>> I'm fine either way, but we have more of these nodes, so I would like to
+>> hear from the DT maintainers on the direction to take. All nodes on the
+>> spmi bus has an (at least one) address, so it would be accurate to state
+>> this in the node.
+>>
+>> It does however not seem like devicetree@, nor Krzysztof is Cc'ed on
+>> this patch, so I've added them...
+>>
+> 
+> Anyway this patch has to be resent to properly reach DT patchwork.
+> 
+> Bhupesh,
+> 
+> Please use scripts/get_maintainer.pl to Cc relevant folks and mailing
+> lists. While resending, add appropriate device prefix to subject, so:
+> dt-bindings: leds: qcom-lpg:
 
- Thanks,
- Abhishek
+Sure, will send v2 accordingly.
 
-> - Since is_intx() is now static function, so open coded the same
->   (s/is_intx()/vdev->irq_type == VFIO_PCI_INTX_IRQ_INDEX) and
->   updated the commit message for the same.
-> - Replaced 'void __user *arg' with
->   'struct vfio_device_low_power_entry_with_wakeup __user *arg'
-> - Added new device features in sorted order in
->   vfio_pci_core_ioctl_feature().
-
+Thanks.
