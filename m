@@ -2,129 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DF75AA8D5
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Sep 2022 09:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C065AA915
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Sep 2022 09:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiIBHjg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Sep 2022 03:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S233539AbiIBHvJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Sep 2022 03:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235344AbiIBHje (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Sep 2022 03:39:34 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9A0BA158
-        for <linux-pm@vger.kernel.org>; Fri,  2 Sep 2022 00:39:22 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d12so1090861plr.6
-        for <linux-pm@vger.kernel.org>; Fri, 02 Sep 2022 00:39:22 -0700 (PDT)
+        with ESMTP id S232221AbiIBHvI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Sep 2022 03:51:08 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A56569F50;
+        Fri,  2 Sep 2022 00:51:07 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u1-20020a17090a410100b001fff314d14fso1372975pjf.5;
+        Fri, 02 Sep 2022 00:51:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=wNDz/m+k0rmY0xmyC7oRNYzyqo8lp6wnwTdtifTQ9so=;
-        b=apha703V8dhsgf/KeV6Fhjsz11QeNOtando5LLC9PWB8KSvVW2VGZErMnLFqy6UhCD
-         +ghoiskYzPT3SNX+SkKjtscbI1q89E0FJpge21dqnR334ZBvsh7wgSw5Gb+8WJBb9WoP
-         PyFzBi5gDvzbYChOZtyKoSzlQOo0pBq00OnJxYvAUFLBll+uxVou5O0jOlbvHbDDbGg6
-         wFmX4AiBV3myzOZzSoTabaryQTvx14ifJT+ZYNsL3yCWYeFLDl7qJ1x4yzSIjmR8H3sW
-         i1EbOQ5CQTxphYSP5PLaLiq6Sz1hQBXf6W7qBJQpGJox7A8DSPdWmgLr9Qhg/n0S236D
-         v0gw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=l7PysdDE7wN+ye8WRTKSRcfMHgYlvrUlNtFAwiTdfkc=;
+        b=MSeXIxsWfHMOPCblIr986Y0cCuP9gohYjJX8CZpxJOj+F/Qdm13qgTB/AjfPZMageB
+         5iKcHihidqHEK3RxY/s/LXyUmETkKkkDhr3uQfjm3mhShonwTMJ7BmqDv3wxWobVgZDl
+         dYNq8+SrHrFN6ZErkysqCJNbw37QycEasVoMOoaRsPn6OWRmxImcdBUB5Jbc0Mt8Fluy
+         SsGube0vuJdG27vF5l1g1sGP3Ca+AJAUEOvL+IciEDPkd9alb2sWMWGGHDwoHLpn8IEt
+         f6gkb5/s7mGLrW1JnwT1MUrws8Xa6IyKIa+FEaU/T8UE/lo9QwDvb1JS8M7bTd+iFG1U
+         YnHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=wNDz/m+k0rmY0xmyC7oRNYzyqo8lp6wnwTdtifTQ9so=;
-        b=PdlyUMA3BydKp9nLtbXLpkrgoqOfJsuEy5BaNlORZ5cZIYvs7FUmB/IY3lzoR58g3L
-         ujy891Z6AI2wqe4WsGDEAVXSMoiFPyJWeXlI55xr7dUYSUkCmJBmxOMZQASk2fWo327M
-         87kTuBxxaOswxc2/x+r9u/p3t8eXE4wHNthwET1YlGYmDFniXWeo9lG4RJ4Q7gEx4/4Y
-         7wEZR4Bi1qsEuy6EgV7zXAWj+MDl5Y42sA9WADEfkyRciORqiwRvV2lCy+Mxh0q1IFXe
-         lKUs8l/+QRQbOyirw1OP++Rk/5OUSDL4Y16ruNeN251VVEn/sZXkM7pqziQOXT4UlKDf
-         E6vg==
-X-Gm-Message-State: ACgBeo3vGacoQtafaarL6Nok9dLp8L8kXOxYq7svPlgP+U3ImlhdHZUd
-        /pHrxiq1Rp2AfRYRbR3KPk3wWA==
-X-Google-Smtp-Source: AA6agR7apy39qMtkxwPATG2oo3z7xmYlnxoxluKt4TgnoJGOErMf2X2A2zSXwA6aaIy1apHVNTwuxw==
-X-Received: by 2002:a17:903:1109:b0:170:a092:c881 with SMTP id n9-20020a170903110900b00170a092c881mr33600605plh.68.1662104361793;
-        Fri, 02 Sep 2022 00:39:21 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
-        by smtp.gmail.com with ESMTPSA id f7-20020a635547000000b0042b117e8bf8sm773930pgm.23.2022.09.02.00.39.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 00:39:21 -0700 (PDT)
-Message-ID: <fa80cfba-2417-ec04-936a-88bea0b2a8e0@linaro.org>
-Date:   Fri, 2 Sep 2022 13:09:17 +0530
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=l7PysdDE7wN+ye8WRTKSRcfMHgYlvrUlNtFAwiTdfkc=;
+        b=IwCPn7uNHdJOc4xcKfEVhwGR7qK+nIfpgxrAVM/3dbduDdiLs+fon00mr5/vfsRQpt
+         tWpZXeN2kLn3Tpcmi8wOkIwLW9VaC+1XOLoR64hYo2cVxQrZpPxnQDOQMht9EF/LOJmN
+         KOBS8JRw8UBS6dspnW++WN5yEjl4kdEIAP68ci3EDQ3dfgxaVO9+0cDvAfNREp2+fAkc
+         QA9jMRLtyregHZNDx9HZVD0gFOfhRk8QT2QJXnVUTfbJZic0N+Ix7Y7ClldgmgjTggvO
+         wxe/qVww5PccBdeNPjBvHo3nlYrJtDkLV7rUY3AHsO+D3a/fP6haF1smKaYgOAvmQPcz
+         6WmA==
+X-Gm-Message-State: ACgBeo0r1MynZkAAYT4+2HD7Huz2gPmPpXlCME/z1TJyjRrGnEj+hwlM
+        imuZOUhM6CoJrikEU2l/cZfOYKaMNOM2jQ==
+X-Google-Smtp-Source: AA6agR4vsKeAwluDf0MR9ibQbnCUn+oeddwtCawAP9LGB2Ll3wWNF7w6acCv2BDoKD6LvXwB07ftiw==
+X-Received: by 2002:a17:903:41c6:b0:16e:fb38:e2c7 with SMTP id u6-20020a17090341c600b0016efb38e2c7mr34737565ple.75.1662105066815;
+        Fri, 02 Sep 2022 00:51:06 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id l10-20020a170903120a00b0016ef87334aesm911341plh.162.2022.09.02.00.51.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 00:51:06 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        Li Zhong <floridsleeves@gmail.com>
+Subject: [PATCH v1] arch/x86/kernel/acpi: check the return value of mp_find_ioapic()
+Date:   Fri,  2 Sep 2022 00:50:53 -0700
+Message-Id: <20220902075053.2212595-1-floridsleeves@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] thermal/drivers/qcom: Drop false build dependency of all
- QCOM drivers on QCOM_TSENS
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20220821160032.2206349-1-jic23@kernel.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20220821160032.2206349-1-jic23@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Check the return value of mp_find_ioapic(), which could be -1. Since
+ioapic will be used as index in mpc_ioapic_id(), we should check the
+return value ioapic here.
 
-On 8/21/22 9:30 PM, Jonathan Cameron wrote:
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> The SPMI QCOM drivers have no dependency in Kconfig, but the Makefile
-> will not be included without QCOM_TSENS. This unnecessarily reduces
-> build coverage.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-> 
-> Run into whilst trying to build test a namespace move for the IIO
-> interfaces used in these drivers.
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+---
+ arch/x86/kernel/acpi/boot.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Good catch. Actually, I am working on a detailed cleanup of the 
-Makefile, Kconfig and Maintainers entries for qcom thermal driver 
-entries as in the present form having all entries inside qcom/ directory 
-dependent on CONFIG_QCOM_TSENS doesn't seem optimal (especially with new
-driver files being added).
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 907cc98b1938..687111adfb90 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -463,6 +463,10 @@ static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
+ 	mp_irq.srcbus = number;
+ 	mp_irq.srcbusirq = (((devfn >> 3) & 0x1f) << 2) | ((pin - 1) & 3);
+ 	ioapic = mp_find_ioapic(gsi);
++	if (ioapic < 0) {
++		pr_warn("Failed to find ioapic for gsi : %u\n", gsi);
++		return;
++	}
+ 	mp_irq.dstapic = mpc_ioapic_id(ioapic);
+ 	mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
+ 
+-- 
+2.25.1
 
-> Maintainers entry for TSENS should probably also be made more
-> specific.
-> ---
->   drivers/thermal/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index def8e1a0399c..2506c6c8ca83 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -52,7 +52,7 @@ obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
->   obj-y				+= intel/
->   obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
->   obj-y				+= st/
-> -obj-$(CONFIG_QCOM_TSENS)	+= qcom/
-> +obj-y				+= qcom/
->   obj-y				+= tegra/
->   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
->   obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-
-For now, this looks good to me, so:
-
-Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-
-Thanks.
