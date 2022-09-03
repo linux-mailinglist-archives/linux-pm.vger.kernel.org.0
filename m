@@ -2,178 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264655AC05C
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Sep 2022 19:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AF75AC073
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Sep 2022 19:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbiICRm3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Sep 2022 13:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S232252AbiICR5F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Sep 2022 13:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiICRm1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Sep 2022 13:42:27 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3768250724;
-        Sat,  3 Sep 2022 10:42:25 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id p204so7433473yba.3;
-        Sat, 03 Sep 2022 10:42:25 -0700 (PDT)
+        with ESMTP id S229612AbiICR5E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Sep 2022 13:57:04 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6C53023;
+        Sat,  3 Sep 2022 10:57:03 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-334dc616f86so41016307b3.8;
+        Sat, 03 Sep 2022 10:57:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1Oh24JjJO3LtEF81yZui8vBF0ZiGpv8OhgBNhurKph4=;
-        b=FH2CsYiXibomipFA4EYuCzEgkeC8HtYPMzi+tpdJTN3+blXrCuY3xVpafDm1vmAw3A
-         nlXLrweTXemWU0HvINPyfnsIUiLq279t6NtBTjuD7M7+ybosHxhMGWDav3ifex+PjGV7
-         P6cIGlp869ioSQsZoJqfKShtoPjb6iEIwd5m3A3PQ03I+pMwVxzZPKd5panfAeWL12zf
-         +i8JDVmS2uNlh+wUBcX6r83LDeJf9HCUrV8e1IUr5PcmI9xkBxv9MX7BDDGFoGe7cHzp
-         st2su0jJMboncDKzgdswVDkyNLxpTCliMyimdfrz/RoqF8hXDRDHZ378ZOPZKd7Kjeo5
-         Xhhw==
-X-Gm-Message-State: ACgBeo0thODns2nJ+fSCGZVohqL1F8mVPMvnFdCXlbQzUh3Q3iMZmoBq
-        qgYeU7g7aiW0Sq83RHhKNq7dV83nVKDrq+1poW6k39N3
-X-Google-Smtp-Source: AA6agR46PFNH5PVO52b54ICBiP8sdJu9Fwr3ruyelbqhf0wAwMFXBgO3dIHlw9wt0aKF0pKyWPUhWvLtRgQJbEFmHwk=
-X-Received: by 2002:a25:2f0c:0:b0:6a8:f230:12ed with SMTP id
- v12-20020a252f0c000000b006a8f23012edmr288172ybv.633.1662226944425; Sat, 03
- Sep 2022 10:42:24 -0700 (PDT)
+        bh=6Z8GKPwv0VpZ/qZskdH19bolEfM25JaWF8WrYodGaEA=;
+        b=xfvitAcCgC/r/bW0pcjdTbBSukBZvKgRwpA/wUObv0TPKF2iW74bpp7m9X6Oca1Glo
+         w+ClXo9GAjlhrq0OWX1PIYFgt3QgcCaNdJ+Gg02CGM1PNFexHxi8luxUgRqxr+xuk0NK
+         HyMm7Xfs3z9m7kOh1kj0FuYa5y2nFdhe81+FTdHhfYMqQhv5EVN2vDHVuxF9/RID7oqE
+         XQtRQMJvKcNA34N1DKInGZjx6ffIUTRJ3vXW1R+eQy9w4d2L8hfPTl5MsV+tMlzvlOjG
+         jDVdPkTlXbXiJFReBKmmhJ3LyvPhTZ84/QpzuRwQ39g82PiBW1WV5vOEcCysQFYP2Gqo
+         n4Yg==
+X-Gm-Message-State: ACgBeo2TvUy9GPgFXBilFWv1CmwFDOWg/2qijO0ZEZRiTCBiNeND0kD9
+        TnSRZDPXxlco5sDFr+xys+rgo4jUlK+lzYKC1YM=
+X-Google-Smtp-Source: AA6agR7JLebP8UxAPve8tgfo84lBxzbx6wgRHlv9HUdLlk3fI/fr3SLoR4I3bxBuuOiTGg/lOxi+zcGvtfX0R1TjtOY=
+X-Received: by 2002:a0d:e701:0:b0:336:90d7:c67a with SMTP id
+ q1-20020a0de701000000b0033690d7c67amr31474683ywe.7.1662227822857; Sat, 03 Sep
+ 2022 10:57:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220902233543.390890-1-helgaas@kernel.org> <20220902233543.390890-3-helgaas@kernel.org>
- <CAJZ5v0jV94TwifmoF2UfiDpXNP_Kgt6qNkQH7zwQjo=ZhyU-4A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jV94TwifmoF2UfiDpXNP_Kgt6qNkQH7zwQjo=ZhyU-4A@mail.gmail.com>
+References: <20220822123239.28400-1-yuanjilin@cdjrlc.com>
+In-Reply-To: <20220822123239.28400-1-yuanjilin@cdjrlc.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 3 Sep 2022 19:42:13 +0200
-Message-ID: <CAJZ5v0jp2y=hKr0PG0qTtpVW5qOPLtKhMJDqsNFh2vV1=0Umtg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] PCI/PTM: Implement pci_enable_ptm() for Root
- Ports, Switch Upstream Ports
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Koba Ko <koba.ko@canonical.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "David E . Box" <david.e.box@linux.intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+Date:   Sat, 3 Sep 2022 19:56:51 +0200
+Message-ID: <CAJZ5v0idwPoK_VoHXTNr+eGzq8+d2=Y0v1sxS7NmwX-PkvNSBA@mail.gmail.com>
+Subject: Re: [PATCH] drivers/thermal: fix repeated words in comments
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     Amit Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Sep 3, 2022 at 7:40 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Mon, Aug 22, 2022 at 2:32 PM Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
 >
-> On Sat, Sep 3, 2022 at 1:35 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > ---
-> >  drivers/pci/pcie/ptm.c | 34 +++++++++++++++++++++++++++-------
-> >  1 file changed, 27 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-> > index b6a417247ce3..ad283818f37b 100644
-> > --- a/drivers/pci/pcie/ptm.c
-> > +++ b/drivers/pci/pcie/ptm.c
-> > @@ -167,11 +167,11 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
-> >         if (!pos)
-> >                 return -EINVAL;
-> >
-> > -       pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
-> > -       if (!(cap & PCI_PTM_CAP_REQ))
-> > -               return -EINVAL;
-> > -
-> >         /*
-> > +        * Root Ports and Switch Upstream Ports have been configured
-> > +        * by pci_ptm_init(), so preserve their PCI_PTM_CTRL_ROOT and
-> > +        * granularity.
-> > +        *
-> >          * For a PCIe Endpoint, PTM is only useful if the endpoint can
-> >          * issue PTM requests to upstream devices that have PTM enabled.
-> >          *
-> > @@ -179,19 +179,39 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
-> >          * device, so there must be some implementation-specific way to
-> >          * associate the endpoint with a time source.
-> >          */
-> > -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT) {
-> > +       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
-> > +           pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM) {
-> > +               if (pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM) {
-> > +                       ups = pci_upstream_bridge(dev);
-> > +                       if (!ups || !ups->ptm_enabled)
-> > +                               return -EINVAL;
-> > +               }
-> > +
-> > +               pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
-> > +               ctrl |= PCI_PTM_CTRL_ENABLE;
-> > +       } else if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT) {
-> > +               pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
-> > +               if (!(cap & PCI_PTM_CAP_REQ))
-> > +                       return -EINVAL;
-> > +
-> >                 ups = pci_upstream_bridge(dev);
-> >                 if (!ups || !ups->ptm_enabled)
-> >                         return -EINVAL;
-> >
-> >                 dev->ptm_granularity = ups->ptm_granularity;
-> > +               ctrl = PCI_PTM_CTRL_ENABLE;
-> > +               ctrl |= dev->ptm_granularity << 8;
-> >         } else if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_END) {
-> > +               pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
-> > +               if (!(cap & PCI_PTM_CAP_REQ))
-> > +                       return -EINVAL;
-> > +
-> >                 dev->ptm_granularity = 0;
-> > +               ctrl = PCI_PTM_CTRL_ENABLE;
-> > +               ctrl |= dev->ptm_granularity << 8;
-> >         } else
-> >                 return -EINVAL;
+>  Delete the redundant word 'device'.
+>  Delete the redundant word 'which'.
 >
-> I would do
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/thermal/cpufreq_cooling.c | 2 +-
+>  drivers/thermal/thermal_of.c      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> if ((pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM || pci_pcie_type(dev)
-> == PCI_EXP_TYPE_ENDPOINT)) {
->         ups = pci_upstream_bridge(dev);
->         if (!ups || !ups->ptm_enabled)
->                 return -EINVAL;
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index b8151d95a806..13551b386e72 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -495,7 +495,7 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
 >
->         dev->ptm_granularity = ups->ptm_granularity;
-> }
->
-> switch(pci_pcie_type(dev)) {
-> case PCI_EXP_TYPE_ROOT_PORT:
-> case PCI_EXP_TYPE_UPSTREAM:
->         pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
->         ctrl |= PCI_PTM_CTRL_ENABLE;
->         break;
-> case PCI_EXP_TYPE_ENDPOINT:
-> case PCI_EXP_TYPE_RC_END:
+>  /**
+>   * __cpufreq_cooling_register - helper function to create cpufreq cooling device
+> - * @np: a valid struct device_node to the cooling device device tree node
+> + * @np: a valid struct device_node to the cooling device tree node
+>   * @policy: cpufreq policy
+>   * Normally this should be same as cpufreq policy->related_cpus.
+>   * @em: Energy Model of the cpufreq policy
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index b65d435cb92f..91bbed308305 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -651,7 +651,7 @@ EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_register);
+>  /**
+>   * devm_thermal_zone_of_sensor_unregister - Resource managed version of
+>   *                             thermal_zone_of_sensor_unregister().
+> - * @dev: Device for which which resource was allocated.
+> + * @dev: Device for which resource was allocated.
+>   * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
+>   *
+>   * This function removes the sensor callbacks and private data from the
+> --
 
-I missed the cap check here, sorry.
+Applied (as 6.1 material) under edited subject and with rewritten changelog.
 
->         ctrl = PCI_PTM_CTRL_ENABLE;
->         break;
-> default:
->         return -EINVAL;
-> }
->
-> >
-> > -       ctrl = PCI_PTM_CTRL_ENABLE;
-> > -       ctrl |= dev->ptm_granularity << 8;
->
-> And I wouldn't remove the line above.
->
-> Note that for root ports dev->ptm_granularity must be set and reflect
-> the register setting or else the code wouldn't have worked for
-> downstream components.
->
-> >         pci_write_config_dword(dev, pos + PCI_PTM_CTRL, ctrl);
-> >         dev->ptm_enabled = 1;
-> >
-> > --
+Thanks!
