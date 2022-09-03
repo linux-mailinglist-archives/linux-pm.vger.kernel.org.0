@@ -2,175 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B985AC154
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Sep 2022 22:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD9E5AC161
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Sep 2022 22:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbiICUTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Sep 2022 16:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        id S229901AbiICUf4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Sep 2022 16:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiICUTU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Sep 2022 16:19:20 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1269A57565
-        for <linux-pm@vger.kernel.org>; Sat,  3 Sep 2022 13:10:41 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 199so5134242pfz.2
-        for <linux-pm@vger.kernel.org>; Sat, 03 Sep 2022 13:10:41 -0700 (PDT)
+        with ESMTP id S229491AbiICUfz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Sep 2022 16:35:55 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E584DB6F;
+        Sat,  3 Sep 2022 13:35:53 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id p16so9997792ejb.9;
+        Sat, 03 Sep 2022 13:35:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=EvfghXpx773dNfHEgXewcxcLLr9GxGw0JDQFe1doWMw=;
-        b=EsGfiEOEvFVCN1E/RK9e1+kcE3rvsJnlVJo0uh90shxO6fMrJ2u5c6HVeZcgJpAiZh
-         RxJpdggLVSjWVsZya/5AB6keQKtYpRmsLKm9ueZTjBlTogIglulxuqiTrj/C+ys69ZN+
-         lVkznh7Utc+HTWC7e7kCmXGmvhyO8shLkWchK8Ym7ZouH73NULkgNTtnnXnKhbswiWA0
-         Jz/PA5u2QkUvZiRBqJ1Eb4BjWl50q5NGakUHKUDYPifQDH6Pa4PDR/i6OVqmZhjCLLRq
-         oDClty6mG/C4dXXpLCxzZWsEyQn+N3PjTOMZpoccyRhgSJOtB6J3atISR2dt3b9mnKQW
-         VxAg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=o1W5HEvQkI52jMHmGzSP14GXStCG+OfGJsNyrQi6xOc=;
+        b=WBPGSjO8Zj5EvG7pLAD9AhZpr9dfUJ0G1d/8S03eVMS09iqDVm3rSmUOoCKQ8MUACc
+         nmujmsYhaPhM9J6JvlEKq8e3PX2bvvKUDPGJRlD3ZBprfOaLmx6uodsonsImMUe36Rlk
+         xZFzjhiHoN+JLc7StZSDnee/csD+88PyICsR9Oye7RiNB0t8Kyb9H7M3WmXqABYnBNDO
+         L67AlWzUIhmzzOnn2iygQBOCHQaQ5n0K/OlSC33un612HyPKF71cb1Yva0FGegFw9Of4
+         nK5s0HOni/nbXnuCzCydj0KuBEvR206zmp20Ce7Mosq0CACyF81XtR5u2jvqGg+cQVLt
+         s2mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=EvfghXpx773dNfHEgXewcxcLLr9GxGw0JDQFe1doWMw=;
-        b=GImmTaJjw5iOx6bTkIo2z2BN8GqJYv971cmMUylizD3VlCKOIWB5G3UCApCgh3/ov2
-         h2TFLzBnAODjhdXPiGniSfdi9cOhQL2FyDTUbye9fvUEsg/f9DacI3FHcZXLy2LpteDF
-         mrcKXPNG/8/kmZa490OLTK5UK2L2UzKBW0AUj7iqFLqCK029aj6MxE5rxNUKXTH2b+8F
-         HPpgoIG0MnLYEm9pO3/UIsNADKQwvMUUwp2MfUDyAWJyeRCE7U60web0VRbpNlYodplx
-         4ZjAhdc2VWzhX3SEqQcqXGvlwtvid3ixSHfOM2rJ4Sk+EAWbQwvqe994xQ9qU0QqJTlw
-         1YeQ==
-X-Gm-Message-State: ACgBeo0fXD2EUylvF3jm/XlFDaITsfa8MZI1xNyvP5ijJRb/OgUpiCAO
-        kW8KKTBYBoxoh6VSPGBbo2lIWg==
-X-Google-Smtp-Source: AA6agR7UzlVr+zwk9r5F8oEn2ocM6QDuQHV993xIjAN6PLKVERrU/BC0DCSmSCvRnPiXEkxYadyp0g==
-X-Received: by 2002:a63:1f1b:0:b0:429:b4be:72f0 with SMTP id f27-20020a631f1b000000b00429b4be72f0mr35042722pgf.622.1662235840589;
-        Sat, 03 Sep 2022 13:10:40 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 136-20020a62158e000000b0052d52de6726sm4375907pfv.124.2022.09.03.13.10.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 13:10:40 -0700 (PDT)
-Message-ID: <6313b4c0.620a0220.274ec.6bd9@mx.google.com>
-Date:   Sat, 03 Sep 2022 13:10:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=o1W5HEvQkI52jMHmGzSP14GXStCG+OfGJsNyrQi6xOc=;
+        b=KRy4apV2/1JnKUFD1Q0qlyY6j1MNQ/5A3L/qeDQKGMno/6K2QFvL4YTwrGkJeImrdj
+         Fv7UEhkX2RtW0yCjraAb/XKvAg4OXXfLR6MlpMNeGZphyTCJLBSjp0pyNJddBr628J0G
+         fcA5tbkrBW/8d7KMekZ+dVnZQWpw+abiCavqyClZb1iv01uJa2ODcPssX6bEAVy88TaE
+         uLKlKqHeWEXWGsBTqrhWxHsG/Oc/48qsdYRImDejBa0vGiLQGhkTJ6j/LrWK/DS8SQOn
+         ReMmWG1ORum5neH27Qyyi66ZHNxiNOe8n8uWT+lz3hISNfU8AbL4cbH+LlIRpauZIIzC
+         c7/g==
+X-Gm-Message-State: ACgBeo06QNUFo49IDA+g6pzbITOMTafl+yhfMbHpm8nnXtTIsxZ4oif7
+        XgzlJ2B/SUBWCy14XyIikixQKqvut60oXN5iPLc=
+X-Google-Smtp-Source: AA6agR6QLG961Ixs7ILW/ahcGV52DV/sQJ5j9+k2F9rB2hX9ZzdzH4sV2Kz1xirkrti+66lWa0n+Ynz4nbh05HgbLoA=
+X-Received: by 2002:a17:906:7307:b0:73c:c9ee:8b5c with SMTP id
+ di7-20020a170906730700b0073cc9ee8b5cmr30499934ejc.310.1662237352286; Sat, 03
+ Sep 2022 13:35:52 -0700 (PDT)
 MIME-Version: 1.0
+References: <cover.1589528491.git.viresh.kumar@linaro.org> <CAJiuCceftArjKPyiEW8AnT5TtuCJFsRGGA-_8y2zG5GDTxHO4Q@mail.gmail.com>
+ <CAJiuCcejjaM=+XWsmOe93idbC8TyyxLj30+Lf+5C=yv=hxT80g@mail.gmail.com>
+In-Reply-To: <CAJiuCcejjaM=+XWsmOe93idbC8TyyxLj30+Lf+5C=yv=hxT80g@mail.gmail.com>
+From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date:   Sat, 3 Sep 2022 22:35:40 +0200
+Message-ID: <CAJiuCccmVtyHbd7ZvEwmw67aesyPe=eVzSE5z_KjCC5__7brjQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] opp: core: add regulators enable and disable
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     k.konieczny@samsung.com,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Mark Brown <broonie@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.0-rc3-85-gf6f4c123bfbc
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.0-rc3-85-gf6f4c123bfbc)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.0-rc3-85-gf6=
-f4c123bfbc)
+Hi Viresh,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-0-rc3-85-gf6f4c123bfbc/
+On Thu, 21 May 2020 at 14:23, Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com=
+> wrote:
+>
+> Hi,
+>
+> On Fri, 15 May 2020 at 14:00, Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.c=
+om> wrote:
+> >
+> > Hi Viresh,
+> >
+> > On Fri, 15 May 2020 at 09:57, Viresh Kumar <viresh.kumar@linaro.org> wr=
+ote:
+> > >
+> > > Hi,
+> > >
+> > > This series reintroduces the usage of regulator_enable/disable() to t=
+he
+> > > OPP core after the previous attempt was reverted [1] shortly after ge=
+tting
+> > > applied. This time the regulator is enabled only after it is configur=
+ed
+> > > by the OPP core.
+> > >
+> > > Marek, Kamil and Cl=C3=A9ment: Can you guys please test this out and =
+report
+> > > if this doesn't work as expected ?
+> >
+> > I have reviewed the patch and it seems fine for my use case.
+> > Unfortunately I can't test it until next week.
+>
+> Ok, before the patch the regulator was released by regulator_late_cleanup=
+() :
+> [   33.756849] vdd-gpu: disabling
+>
+> Now it works fine and the vdd-gpu is no more disabled.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.0-rc3-85-gf6f4c123bfbc
-Git Commit: f6f4c123bfbc88ef6d4aa7ade3c70d57e1cbbcfa
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Today, I compiled my kernel without any program requiring GPU
+computing at boot. This makes the dev_pm_opp_set_rate() to never be
+called and so the regulator is not enabled before the regulator
+framework switches off all the regulators that haven't been enabled.
 
-Warnings Detected:
+Unfortunately switching off the GPU regulator makes my board hang..
 
-arc:
+I'm not sure what is the best approach to fix this.
 
-arm64:
+Is it required that the dev_pm_opp_set_rate() must be called one time
+at the GPU driver init?
 
-arm:
+Panfost already calls devfreq_recommended_opp() and dev_pm_opp_put()
+but that doesn't trigger dev_pm_opp_set_rate().
 
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 3 warnings
-
-x86_64:
+Thanks for your help,
+BR,
+Clement
 
 
-Warnings summary:
-
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    1    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+>
+> Tested-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
+>
+> Regards,
+> Clement
+>
+> >
+> > Acked-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
+> >
+> > Regards,
+> > Clement
+> >
+> >
+> > >
+> > > --
+> > > viresh
+> > >
+> > > [1] https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@s=
+amsung.com/
+> > >
+> > > Kamil Konieczny (1):
+> > >   opp: core: add regulators enable and disable
+> > >
+> > > Viresh Kumar (1):
+> > >   opp: Reorder the code for !target_freq case
+> > >
+> > >  drivers/opp/core.c | 39 ++++++++++++++++++++++++++++++++++-----
+> > >  drivers/opp/opp.h  |  2 ++
+> > >  2 files changed, 36 insertions(+), 5 deletions(-)
+> > >
+> > > --
+> > > 2.25.0.rc1.19.g042ed3e048af
+> > >
