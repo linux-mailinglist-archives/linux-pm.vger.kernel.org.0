@@ -2,97 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90465AC09A
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Sep 2022 20:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B985AC154
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Sep 2022 22:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiICSWY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Sep 2022 14:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S232557AbiICUTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Sep 2022 16:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbiICSWX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Sep 2022 14:22:23 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26A24E85A
-        for <linux-pm@vger.kernel.org>; Sat,  3 Sep 2022 11:22:22 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-324ec5a9e97so41330947b3.7
-        for <linux-pm@vger.kernel.org>; Sat, 03 Sep 2022 11:22:22 -0700 (PDT)
+        with ESMTP id S232026AbiICUTU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Sep 2022 16:19:20 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1269A57565
+        for <linux-pm@vger.kernel.org>; Sat,  3 Sep 2022 13:10:41 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 199so5134242pfz.2
+        for <linux-pm@vger.kernel.org>; Sat, 03 Sep 2022 13:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=EvfghXpx773dNfHEgXewcxcLLr9GxGw0JDQFe1doWMw=;
+        b=EsGfiEOEvFVCN1E/RK9e1+kcE3rvsJnlVJo0uh90shxO6fMrJ2u5c6HVeZcgJpAiZh
+         RxJpdggLVSjWVsZya/5AB6keQKtYpRmsLKm9ueZTjBlTogIglulxuqiTrj/C+ys69ZN+
+         lVkznh7Utc+HTWC7e7kCmXGmvhyO8shLkWchK8Ym7ZouH73NULkgNTtnnXnKhbswiWA0
+         Jz/PA5u2QkUvZiRBqJ1Eb4BjWl50q5NGakUHKUDYPifQDH6Pa4PDR/i6OVqmZhjCLLRq
+         oDClty6mG/C4dXXpLCxzZWsEyQn+N3PjTOMZpoccyRhgSJOtB6J3atISR2dt3b9mnKQW
+         VxAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=F8zhM+daxg1TLdqJQ/5eX5qsWSvgSM2N0WFzuAiR1qg=;
-        b=nohdoowA2ySNpQgi5cZ2m1r89WlhXOh4+ZuzFKpJOiAMtysd/jbP5rUtXmvfw73P0d
-         fC1HhW78bnVbkgnGrvGnt8K6w2xGwpMcG3GoLpkxV038wSZL34nfVG0ZDfLEUAnG18ZC
-         3/gULJwgXVsq7gyvK0Har/gfjjQrQzkdr0gXi3GSNdvaabV/Z8cjMTK6uupDrVfUcxZB
-         +04mYf9WOvRa4gzmuSstw+Ay2/TAxvA75uyu1eVhCq+TvC5pX4ci2QeoFDbtFqL0YqVp
-         YkAyjoGUsnr/TI4rTz+WoXML5oxk9f+KgQ6xkovG5C0zJC4e4k7RSWxSqADIN1TDL5BR
-         jg1g==
-X-Gm-Message-State: ACgBeo2n/ujnHp8wHnCAknX4JPOiB9CgOupKeGSlB4vt3+8FiEk7ugLQ
-        uwTTXR3k69gs0Y4G5qmbuBIY24Ukr8CmcEk+JD9a2eIC
-X-Google-Smtp-Source: AA6agR7Zhcptt+7Qd0JMwhDHa1+VHY27xMuK2lIH3LxX+A5fzohchfb2iZYydSn1eMJyRROVvkigBo2mBdU6Gy/ElyQ=
-X-Received: by 2002:a0d:da83:0:b0:329:9c04:fe6d with SMTP id
- c125-20020a0dda83000000b003299c04fe6dmr32609564ywe.196.1662229342174; Sat, 03
- Sep 2022 11:22:22 -0700 (PDT)
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=EvfghXpx773dNfHEgXewcxcLLr9GxGw0JDQFe1doWMw=;
+        b=GImmTaJjw5iOx6bTkIo2z2BN8GqJYv971cmMUylizD3VlCKOIWB5G3UCApCgh3/ov2
+         h2TFLzBnAODjhdXPiGniSfdi9cOhQL2FyDTUbye9fvUEsg/f9DacI3FHcZXLy2LpteDF
+         mrcKXPNG/8/kmZa490OLTK5UK2L2UzKBW0AUj7iqFLqCK029aj6MxE5rxNUKXTH2b+8F
+         HPpgoIG0MnLYEm9pO3/UIsNADKQwvMUUwp2MfUDyAWJyeRCE7U60web0VRbpNlYodplx
+         4ZjAhdc2VWzhX3SEqQcqXGvlwtvid3ixSHfOM2rJ4Sk+EAWbQwvqe994xQ9qU0QqJTlw
+         1YeQ==
+X-Gm-Message-State: ACgBeo0fXD2EUylvF3jm/XlFDaITsfa8MZI1xNyvP5ijJRb/OgUpiCAO
+        kW8KKTBYBoxoh6VSPGBbo2lIWg==
+X-Google-Smtp-Source: AA6agR7UzlVr+zwk9r5F8oEn2ocM6QDuQHV993xIjAN6PLKVERrU/BC0DCSmSCvRnPiXEkxYadyp0g==
+X-Received: by 2002:a63:1f1b:0:b0:429:b4be:72f0 with SMTP id f27-20020a631f1b000000b00429b4be72f0mr35042722pgf.622.1662235840589;
+        Sat, 03 Sep 2022 13:10:40 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 136-20020a62158e000000b0052d52de6726sm4375907pfv.124.2022.09.03.13.10.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 13:10:40 -0700 (PDT)
+Message-ID: <6313b4c0.620a0220.274ec.6bd9@mx.google.com>
+Date:   Sat, 03 Sep 2022 13:10:40 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220830030134.8111-1-rui.zhang@intel.com> <efe3eb3d0ad53d58ebd1a54cb5b3a27fdaec3487.camel@intel.com>
-In-Reply-To: <efe3eb3d0ad53d58ebd1a54cb5b3a27fdaec3487.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 3 Sep 2022 20:22:11 +0200
-Message-ID: <CAJZ5v0gJLyS_fUpXhNC6Pr42aD5S+-t+SfRKDsXvGBMbOCmVCQ@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Add support for RAPTORLAKE_S
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.0-rc3-85-gf6f4c123bfbc
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.0-rc3-85-gf6f4c123bfbc)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 5:01 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Note that this patch depends on commit
-> ea902bcc1943 ("x86/cpu: Add new Raptor Lake CPU model number") which
-> was merged in 6.0-rc3.
->
-> thanks,
-> rui
->
-> On Tue, 2022-08-30 at 11:01 +0800, Zhang Rui wrote:
-> > Add intel_rapl support for RAPTORLAKE_S platform, which behaves the
-> > same
-> > as RAPTORLAKE and RAPTORLAKE_P platforms.
-> >
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > ---
-> >  drivers/powercap/intel_rapl_common.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/powercap/intel_rapl_common.c
-> > b/drivers/powercap/intel_rapl_common.c
-> > index 21d624f9f5fb..6812c1ca3100 100644
-> > --- a/drivers/powercap/intel_rapl_common.c
-> > +++ b/drivers/powercap/intel_rapl_common.c
-> > @@ -1110,6 +1110,7 @@ static const struct x86_cpu_id rapl_ids[]
-> > __initconst = {
-> >       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,         &rapl_default
-> > s_core),
-> >       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,          &rapl_default
-> > s_core),
-> >       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &rapl_defaults_
-> > core),
-> > +     X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,        &rapl_defaults_core),
-> >       X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &rapl_default
-> > s_spr_server),
-> >       X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,           &rapl_default
-> > s_core),
-> >
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.0-rc3-85-gf6=
+f4c123bfbc)
 
-Applied as 6.1 material, on top of 6.0-rc3.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+0-rc3-85-gf6f4c123bfbc/
 
-Thanks!
+Tree: pm
+Branch: testing
+Git Describe: v6.0-rc3-85-gf6f4c123bfbc
+Git Commit: f6f4c123bfbc88ef6d4aa7ade3c70d57e1cbbcfa
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 3 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    1    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
