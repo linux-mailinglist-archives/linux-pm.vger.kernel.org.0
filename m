@@ -2,62 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FAA5AD351
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Sep 2022 14:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03C65AD602
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Sep 2022 17:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237511AbiIEM5t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Sep 2022 08:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S237313AbiIEPRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Sep 2022 11:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237491AbiIEM5q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Sep 2022 08:57:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734BF20F61
-        for <linux-pm@vger.kernel.org>; Mon,  5 Sep 2022 05:57:45 -0700 (PDT)
+        with ESMTP id S236173AbiIEPRQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Sep 2022 11:17:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5B918E3B;
+        Mon,  5 Sep 2022 08:17:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2CFF612A0
-        for <linux-pm@vger.kernel.org>; Mon,  5 Sep 2022 12:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1BCC43140
-        for <linux-pm@vger.kernel.org>; Mon,  5 Sep 2022 12:57:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A16AF61326;
+        Mon,  5 Sep 2022 15:17:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024F9C433D6;
+        Mon,  5 Sep 2022 15:17:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662382664;
-        bh=2LopleuYkVPMOTSip8CWwYLWQWXAbn7FNeuEEoKh8Uk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mOTyB9OmYUX2YxyIN4gORcDv2ZFFa4IUCarZBHl+KpDs7Y4FF9vgV/Fh5WuUqlZmf
-         mgAPm7E7M72XsDGIGbyg7u/v4ZM0zASTSZVoPQZiCxNrI+1OLPx3H08BLkUhoaGpd5
-         ec2icMeXHXsGyMG8msYK4ArVkxcZTu3F7PQU/FgmcfZO6t+C0UFQ5gcs8fWNNk5mbd
-         /p3B3osxGP9vPwT/Lc/VNaApJ4+Kj9tgUxuFrcx4Mkk7AkTadx1/IIaRJQPx9weDsw
-         sSrJF+zTWiNreEzx4a85Gumc+vfIMC5hk2S0trnF5M05flaHU8s+fYvCqsxiPbuDUr
-         jj0Kg+7y4g8HA==
-Received: by mail-lf1-f54.google.com with SMTP id br21so13116954lfb.0
-        for <linux-pm@vger.kernel.org>; Mon, 05 Sep 2022 05:57:44 -0700 (PDT)
-X-Gm-Message-State: ACgBeo21M5KYIWwfX/Igo9BfRxAdVPgp09lBmgz7snepUZf5IIcoHrxp
-        LxNSTjFB+ChQqm+cyB4FhR0CDKM9tCoWAqR9SfWXTQ==
-X-Google-Smtp-Source: AA6agR5kKACcc5Sb9c7D7rwYKKM6h5pvGfpnRaNoFCC2nHYpp3BKQRqqKMzP+HuIaLOicjrPhA+zt15V/Tc1MT6KCiE=
-X-Received: by 2002:a05:6512:146:b0:494:6704:885a with SMTP id
- m6-20020a056512014600b004946704885amr11650534lfo.447.1662382662303; Mon, 05
- Sep 2022 05:57:42 -0700 (PDT)
+        s=k20201202; t=1662391035;
+        bh=+1JZVikczD6oMQstBHmmQ6IUy+FzfgWRuCZFth/S+Dw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JjbTx5WsrgNdOUEf0hAeeafisFv1eS6CmLwbhpwQvtLdLcpPH1peisZcFAhR5xTMZ
+         Nr4nbdRktkjImvMIYnfyYcT33pNCCM3qy0U4PiMeM8ynYP5oJ+KgoPe17ExxQuily0
+         tuXegK4H++l+ffyv6CWE6+VOanhV082OMtBVim7GWweaeUqFYPPg4bxuYsLCZJHgiR
+         LMucXbg1Wtj5poQ9yZfXbhK2vKTi8Kg4rNguspyeq+PiRQ2kPg1AoV3EVK7HDAbA12
+         XAj9zaehTm2IRrCSqw09jRmL4FnEoTSRxBteU8pTg1Fs8qL0kVnXQcNwPC8c7Nhqxb
+         p3KAfpKGDnoJQ==
+Date:   Mon, 5 Sep 2022 16:17:03 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, deller@gmx.de, broonie@kernel.org,
+        mazziesaccount@gmail.com, andriy.shevchenko@linux.intel.com,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, szunichen@gmail.com,
+        andy.shevchenko@gmail.com
+Subject: Re: [PATCH v9 10/10] video: backlight: mt6370: Add MediaTek MT6370
+ support
+Message-ID: <YxYS7/dZI69lMXeh@google.com>
+References: <20220830034042.9354-2-peterwu.pub@gmail.com>
+ <20220830034042.9354-11-peterwu.pub@gmail.com>
 MIME-Version: 1.0
-References: <20220821160032.2206349-1-jic23@kernel.org>
-In-Reply-To: <20220821160032.2206349-1-jic23@kernel.org>
-From:   Amit Kucheria <amitk@kernel.org>
-Date:   Mon, 5 Sep 2022 18:27:31 +0530
-X-Gmail-Original-Message-ID: <CAHLCerOYALNuRLMMdrH=t8-zXLiy7v8eLdtuuhC+1XCPFBhrHg@mail.gmail.com>
-Message-ID: <CAHLCerOYALNuRLMMdrH=t8-zXLiy7v8eLdtuuhC+1XCPFBhrHg@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/qcom: Drop false build dependency of all
- QCOM drivers on QCOM_TSENS
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220830034042.9354-11-peterwu.pub@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,44 +67,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 10:05 PM Jonathan Cameron <jic23@kernel.org> wrote:
->
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->
-> The SPMI QCOM drivers have no dependency in Kconfig, but the Makefile
-> will not be included without QCOM_TSENS. This unnecessarily reduces
-> build coverage.
->
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+On Tue, 30 Aug 2022, ChiaEn Wu wrote:
 
-Acked-by: Amit Kucheria <amitk@kernel.org>
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> driver, display bias voltage supply, one general purpose LDO, and the
+> USB Type-C & PD controller complies with the latest USB Type-C and PD
+> standards.
+> 
+> Add support for the MediaTek MT6370 backlight driver.
+> It controls 4 channels of 8 series WLEDs in
+> 2048 (only for MT6370/MT6371) / 16384 (only for MT6372)
+> current steps (30 mA) in exponential or linear mapping curves.
+> 
+> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+> 
+> v9
+> - Revise the format of the comments.
+> ---
+>  drivers/video/backlight/Kconfig            |  13 ++
+>  drivers/video/backlight/Makefile           |   1 +
+>  drivers/video/backlight/mt6370-backlight.c | 351 +++++++++++++++++++++++++++++
+>  3 files changed, 365 insertions(+)
+>  create mode 100644 drivers/video/backlight/mt6370-backlight.c
 
-> ---
->
-> Run into whilst trying to build test a namespace move for the IIO
-> interfaces used in these drivers.
->
-> Maintainers entry for TSENS should probably also be made more
-> specific.
-> ---
->  drivers/thermal/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index def8e1a0399c..2506c6c8ca83 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -52,7 +52,7 @@ obj-$(CONFIG_DA9062_THERMAL)  += da9062-thermal.o
->  obj-y                          += intel/
->  obj-$(CONFIG_TI_SOC_THERMAL)   += ti-soc-thermal/
->  obj-y                          += st/
-> -obj-$(CONFIG_QCOM_TSENS)       += qcom/
-> +obj-y                          += qcom/
->  obj-y                          += tegra/
->  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
->  obj-$(CONFIG_MTK_THERMAL)      += mtk_thermal.o
-> --
-> 2.37.2
->
+Applied, thanks.
+
+-- 
+Lee Jones [李琼斯]
