@@ -2,209 +2,245 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CB65ACE0A
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Sep 2022 10:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303BA5AD00A
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Sep 2022 12:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237840AbiIEIpn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Sep 2022 04:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S231738AbiIEKYN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Sep 2022 06:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236591AbiIEIpl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Sep 2022 04:45:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D79EB874;
-        Mon,  5 Sep 2022 01:45:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A44CED1;
-        Mon,  5 Sep 2022 01:45:44 -0700 (PDT)
-Received: from [10.57.17.6] (unknown [10.57.17.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B93A73F534;
-        Mon,  5 Sep 2022 01:45:34 -0700 (PDT)
-Message-ID: <31b205ad-6ce9-df41-85fc-d8fee8e26f20@arm.com>
-Date:   Mon, 5 Sep 2022 09:45:32 +0100
+        with ESMTP id S235407AbiIEKYM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Sep 2022 06:24:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A894393;
+        Mon,  5 Sep 2022 03:24:11 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2534A6601EB2;
+        Mon,  5 Sep 2022 11:24:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662373449;
+        bh=bYfDLiA2ERg8hGGzHNEQdP7PWNDTavkHqOv/zPnBBww=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WgGwH1cmE6gheXGmxT/u4IMMyAum+qgVztsmQr7lxhp3QOOSpYLqsbzghWxVF+/JI
+         YYzGdRvlB1synFtDv8yu00wqK3Sm69PSJg0FUZnP+DI99eM8ZdWFG82M1Wf7EzF886
+         cChSHa4suMf0gvaVvRwpeg2y0yYU3Xcgy3gAyn9BOv1G690kzVFPdAyS+n31bRSk+8
+         9yyj1AVgYq3E43gLsdIT7EisyY9aFefKCb2ExDu9NFgrB+RnJQJA46BOHp1G42XZN2
+         YUG08HZZUbvWST4rkXJi+3+nvGBvViTiqTJNs6NTkx56RCHwMfU8Pozr7MWbaubLnU
+         xlIOJbDYSxkJA==
+Message-ID: <f7913808-d9b7-9f42-1a16-aedcc0d21497@collabora.com>
+Date:   Mon, 5 Sep 2022 12:24:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/3] powercap: arm_scmi: Add SCMI Powercap based driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 00/19] Add driver for dvfsrc, support for interconnect
 Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
-        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com,
-        dan.carpenter@oracle.com, "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <20220817105424.3124006-1-cristian.marussi@arm.com>
- <20220817105424.3124006-2-cristian.marussi@arm.com>
- <9ee42d60-1bdd-c1e8-ec6e-38d0e1fcf4d8@arm.com> <YxTHQ9PRU8spf5x2@e120937-lin>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <YxTHQ9PRU8spf5x2@e120937-lin>
+To:     Dawei Chien <dawei.chien@mediatek.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ryan Case <ryandcase@chromium.org>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Boichat <drinkcat@google.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Fan Chen <fan.chen@mediatek.com>,
+        Arvin Wang <arvin.wang@mediatek.com>,
+        James Liao <jamesjj.liao@mediatek.com>
+References: <20210812085846.2628-1-dawei.chien@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20210812085846.2628-1-dawei.chien@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello Dawei,
+this series brings very nice improvements to many MediaTek platforms, it would
+be a real pity to abandon it.
+
+Can you, or anyone else from MediaTek, please respin on the latest -next?
+
+Thanks,
+Angelo
+
+> This series is based on v5.14-rc1.
+> 
+> The patchsets add support for MediaTek hardware module named DVFSRC
+> (dynamic voltage and frequency scaling resource collector). The DVFSRC is
+> a HW module which is used to collect all the requests from both software
+> and hardware and turn into the decision of minimum operating voltage and
+> minimum DRAM frequency to fulfill those requests.
+> 
+> So, This series is to implement the dvfsrc driver to collect all the
+> requests of operating voltage or DRAM bandwidth from other device drivers
+> likes GPU/Camera through 3 frameworks basically:
+> 
+> 1. interconnect framework: to aggregate the bandwidth
+>     requirements from different clients
+> 
+> [1] https://patchwork.kernel.org/cover/10766329/
+> 
+> There has a hw module "DRAM scheduler", which used to control the
+> throughput.
+> The DVFSRC will collect forecast data of dram bandwidth from
+> SW consumers(camera/gpu...), and according the forecast to change the DRAM
+> frequency
+> 
+> 2. Regualtor framework: to handle the operating voltage requirement from
+>     user or cosumer which not belong any power domain
+> 
+> Changes in V11:
+> * rebase all patches on v5.14-rc1.
+> * support platform mt8195.
+> * add initial bw in mediatek interconnect driver.
+> * add one more pcie client in mediatek interconnect driver.
+> * add compatible for MT8195 dvfsrc.
+> 
+> Changes in V10:
+> * rebase all patches on v5.13-rc1
+> * add acked TAG for interconnect provider driver (Georgi)
+> * update comment message for typos. (Georgi)
+> * update cover leter for typos.
+> 
+> Changes in V9:
+> * modify the configuration of dvfsrc.yaml. (Rob)
+> 
+> Changes in V8:
+> * Fixed the dt_binding_check error of dvfsrc.yaml. (Rob)
+> * Remove Kconfig dependency of DVFSRC
+> 
+> Changes in V7:
+> * Fixed the dt_binding_check error of dvfsrc.yaml. (Rob)
+> * Fixed the checkpatch complains of "Signed-off-by:
+> email name mismatch". (Georgi)
+> * Fixed coding style of interconnect driver. (Georgi)
+> * Update comment of the years to 2021. (Georgi)
+> 
+> Changes in V6:
+> * Remove the performace state support, because the request from consumer
+> can be replaced by using interconnect and regulator framework.
+> * Update the DT patches and convert them to DT schema. (Georgi)
+> * Modify the comment format and coding style. (Mark)
+> 
+> Changes in V5:
+> * Support more platform mt6873/mt8192
+> * Drop the compatible and interconnect provider node and make the parent
+> node an interconnect provider. (Rob/Georgi)
+> * Make modification of interconnect driver from coding suggestion. (Georgi)
+> * Move interconnect diagram into the commit text of patch. (Georgi)
+> * Register the interconnect provider as a platform sub-device. (Georgi)
+> 
+> Changes in V4:
+> * Add acked TAG on dt-bindings patches. (Rob)
+> * Declaration of emi_icc_aggregate since the prototype of aggregate
+> function has changed meanwhile. (Georgi)
+> * Used emi_icc_remove instead of icc_provider_del on probe. (Georgi)
+> * Add dvfsrc regulator driver into series.
+> * Bug fixed of mt8183_get_current_level.
+> * Add mutex protection for pstate operation on dvfsrc_set_performance.
+> 
+> Changes in V3:
+> * Remove RFC from the subject prefix of the series
+> * Combine dt-binding patch and move interconnect dt-binding document into
+> dvfsrc. (Rob)
+> * Remove unused header, add unit descirption to the bandwidth, rename
+> compatible name on interconnect driver. (Georgi)
+> * Fixed some coding style: check flow, naming, used readx_poll_timeout
+> on dvfsrc driver. (Ryan)
+> * Rename interconnect driver mt8183.c to mtk-emi.c
+> * Rename interconnect header mtk,mt8183.h to mtk,emi.h
+> * mtk-scpsys.c: Add opp table check first to avoid OF runtime parse failed
+> 
+> Changes in RFC V2:
+> * Remove the DT property dram_type. (Rob)
+> * Used generic dts property 'opp-level' to get the performace
+> state. (Stephen)
+> * Remove unnecessary dependency config on Kconfig. (Stephen)
+> * Remove unused header file, fixed some coding style issue, typo,
+> error handling on dvfsrc driver. (Nicolas/Stephen)
+> * Remove irq handler on dvfsrc driver. (Stephen)
+> * Remove init table on dvfsrc driver, combine hw init on trustzone.
+> * Add interconnect support of mt8183 to aggregate the emi bandwidth.
+> (Georgi)
+> 
+> v10: https://patchwork.kernel.org/project/linux-mediatek/list/?series=494095
+> V9: https://patchwork.kernel.org/project/linux-mediatek/list/?series=440389
+> V8: https://patchwork.kernel.org/project/linux-mediatek/list/?series=421713
+> V7: https://patchwork.kernel.org/project/linux-mediatek/list/?series=411057
+> V6: https://patchwork.kernel.org/project/linux-mediatek/list/?series=406077
+> V5: https://patchwork.kernel.org/project/linux-mediatek/list/?series=348065
+> V4: https://lore.kernel.org/patchwork/cover/1209284/
+> V3: https://patchwork.kernel.org/cover/11118867/
+> RFC V2: https://lore.kernel.org/patchwork/patch/1068113/
+> RFC V1: https://lore.kernel.org/patchwork/cover/1028535/
+> 
+> Dawei Chien (8):
+>    dt-bindings: mediatek: add compatible for MT8195 dvfsrc
+>    soc: mediatek: add support for mt8195
+>    arm64: dts: mt8195: add dvfsrc related nodes
+>    dt-bindings: interconnect: add MT8195 interconnect dt-bindings
+>    interconnect: mediatek: add support for mt8195
+>    interconnect: mediatek: add initial bandwidth
+>    regulator: mediatek: add support for mt8195
+>    arm64: dts: mt8195: add dvfsrc related nodes
+> 
+> Henry Chen (11):
+>    dt-bindings: soc: Add dvfsrc driver bindings
+>    soc: mediatek: add header for mediatek SIP interface
+>    soc: mediatek: add driver for dvfsrc support
+>    soc: mediatek: add support for mt6873
+>    arm64: dts: mt8183: add dvfsrc related nodes
+>    arm64: dts: mt8192: add dvfsrc related nodes
+>    dt-bindings: interconnect: add MT6873 interconnect dt-bindings
+>    interconnect: mediatek: Add interconnect provider driver
+>    arm64: dts: mt8183: add dvfsrc related nodes
+>    arm64: dts: mt8192: add dvfsrc related nodes
+>    arm64: dts: mt8192: add dvfsrc regulator nodes
+> 
+>   .../devicetree/bindings/soc/mediatek/dvfsrc.yaml   |  68 +++
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi           |   7 +
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi           |  14 +
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi           |   7 +
+>   drivers/interconnect/Kconfig                       |   1 +
+>   drivers/interconnect/Makefile                      |   1 +
+>   drivers/interconnect/mediatek/Kconfig              |  13 +
+>   drivers/interconnect/mediatek/Makefile             |   3 +
+>   drivers/interconnect/mediatek/mtk-emi.c            | 385 +++++++++++++++
+>   drivers/regulator/mtk-dvfsrc-regulator.c           |  23 +
+>   drivers/soc/mediatek/Kconfig                       |  11 +
+>   drivers/soc/mediatek/Makefile                      |   1 +
+>   drivers/soc/mediatek/mtk-dvfsrc.c                  | 538 +++++++++++++++++++++
+>   include/dt-bindings/interconnect/mtk,mt6873-emi.h  |  41 ++
+>   include/dt-bindings/interconnect/mtk,mt8183-emi.h  |  21 +
+>   include/dt-bindings/interconnect/mtk,mt8195-emi.h  |  42 ++
+>   include/linux/soc/mediatek/mtk_dvfsrc.h            |  35 ++
+>   include/linux/soc/mediatek/mtk_sip_svc.h           |   4 +
+>   18 files changed, 1215 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/soc/mediatek/dvfsrc.yaml
+>   create mode 100644 drivers/interconnect/mediatek/Kconfig
+>   create mode 100644 drivers/interconnect/mediatek/Makefile
+>   create mode 100644 drivers/interconnect/mediatek/mtk-emi.c
+>   create mode 100644 drivers/soc/mediatek/mtk-dvfsrc.c
+>   create mode 100644 include/dt-bindings/interconnect/mtk,mt6873-emi.h
+>   create mode 100644 include/dt-bindings/interconnect/mtk,mt8183-emi.h
+>   create mode 100644 include/dt-bindings/interconnect/mtk,mt8195-emi.h
+>   create mode 100644 include/linux/soc/mediatek/mtk_dvfsrc.h
+> 
 
 
-On 9/4/22 16:41, Cristian Marussi wrote:
-> On Tue, Aug 30, 2022 at 02:16:42PM +0100, Lukasz Luba wrote:
->> Hi Cristian,
->>
-> 
-> Hi Lukasz,
-> 
 
-[snip]
-
->>> +static int scmi_powercap_get_max_power_range_uw(struct powercap_zone *pz,
->>> +						u64 *max_power_range_uw)
->>> +{
->>> +	*max_power_range_uw = U32_MAX;
->>
->> Shouldn't be calculated based on pai info from the platform FW?
->> e.g.
->> *max_power_range_uw = spz->info->max_power_cap - spz->info->min_power_cap
->>
->> (but with uW conversion in mind if needed)
->>
-> 
-> I double checked this and in include/linux/powercap.h these
-> powercap_zone_ops are defined as:
-> 
->   * @get_max_power_range_uw:	Get maximum range of power counter in
->   *				micro-watts.
->   * @get_power_uw:		Get current power counter in micro-watts.
-> 
-> so these are really data related to average power consumed, i.e. in SCMI
-> parlance, info counters I can retrieve for a powercapping domain with
-> POWERCAP_MEASUREMENTS_GET, which returns a uint32 representing the
-> "average power consumption of the powercapping domain in the last PAI"
-> 
-> It seemed to me that this was unrelated to min/max powercap but more
-> something used to report actual powercap domain consumption, so I use
-> UINT32_MAX to represent the max range...on the other side in Linux these
-> powercap ops may seem more to expect to report a sort of progressive
-> accumulated comsuption value while I can only expose the average consumption
-> as calculated and reported by fw across the last PAI. (SCMI 4.10.3.10)
-> 
-> Looking again at this, I'm not sure really if this is ok for the powercap
-> Linux framework or should I instead try to keep a running accumulated value
-> inside this driver (built from the values I get from
-> POWERCAP_MEASUREMENTS_GET) and expose that....
-> 
-> ... so thanks for pointing this out because it triggered more doubts :D
-> ...any hint about this welcome.
-
-I recalled this code in DTPM [1]. Although, I have checked the
-documentation of Powercap sysfs for this file [2]. This 'range'
-for power (or energy) describes the values for related: 'power_uw'
-or 'energy_uj'. Which means the 'power_uw' value can be actually
-lower that setting in 'min_power_cap' (e.g. due to lightly loaded CPU).
-I'm not sure for the upper bound: 'max_power_cap'. In real world
-we can get a power spike which is bigger than that, so probably
-your original U32_MAX is OK.
-
-Therefore, probably the DTPM [1] could be adjusted not your aproach.
-
-
-[snip]
-
->>> +	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
->>> +		/*
->>> +		 * Powercap domains are validate by the protocol layer, i.e.
->>> +		 * when only non-NULL domains are returned here, whose
->>> +		 * parent_id is assured to point to another valid domain.
->>> +		 */
->>> +		spz->info = powercap_ops->info_get(ph, i);
->>> +
->>> +		spz->dev = dev;
->>> +		spz->ph = ph;
->>> +		spz->spzones = pr->spzones;
->>> +		INIT_LIST_HEAD(&spz->node);
->>> +		INIT_LIST_HEAD(&pr->registered_zones[i]);
->>> +
->>> +		/*
->>> +		 * Forcibly skip powercap domains using an abstract scale.
->>> +		 * Note that only leaves domains can be skipped, so this could
->>> +		 * lead later to a global failure.
->>> +		 */
->>> +		if (!spz->info->powercap_scale_uw &&
->>> +		    !spz->info->powercap_scale_mw) {
->>> +			dev_warn(dev,
->>> +				 "Abstract power scale not supported. Skip %s.\n",
->>> +				 spz->info->name);
->>> +			spz->info = NULL;
->>> +			continue;
->>> +		}
->>
->> We can say that the power scale should be consistent in
->> a platform. Then we can bail out when abstract scale has
->> been found. This could also simplify code by a bit.
->>
-> 
-> I do NOT agree on this since I do NOT think from the SCMI spec we can
-> assume this semplification: Linux powercap has indeed this limitation on
-> scales BUT other non-Linux agents could indeed support abstract scales and
-> the SCMI server could advertise a well built hierarchy of powercap domains
-> including some abstract scale ones tha, if placed as leaves of the hierarchy,
-> could be ignored by Linux but used instead by other agents...or in the future
-> used by Linux too ?
-
-This diversity makes me a headache ;) I would hope the SCMI spec would
-restrict the span of variety. Although, I cannot find in the spec that
-all powercap domains must use the same power scale...
-
-It looks like, you will have to implement it this way.
-
-> 
-> I'll double check with Archs since I had already an internal exchange on
-> this and seemed to me that the current approach (of only bailing out when
-> non-leaves abstract scale domains are found) was fine, i.e. that I could
-> not just assume to receive only uw/mv scale domains.
-> 
->> Can we also validate here some those lines, which are
->> checked in many callback funcitons?
->>
-> 
-> Partially yes....see below...
-> 
->> These are the lines, which could be then removed if we bail
->> out here earlier:
->> 	if (!spz->info)
->> 		return -ENODEV;
-> 
-> I can remove this surely from everywhere since I really never register a
-> zone with NULL spx->info, this check all-around, my bad, is redundant.
-> 
->> 	if (!spz->info->powercap_pai_config)
->> 		return -EINVAL;
->> 	if (!spz->info->powercap_monitoring)
->> 		return -EINVAL;
->>
-> 
-> Instead I cannot see why a powercap domain missing this capabilities
-> (PAI configuration and power consumption monitoring) should be
-> excluded as a whole...for this reason (if valid from the scale
-> perspective as said above) I currently register these powercap SCMI
-> zones even if lacking these supports and then return -EINVAL only for
-> the related Powercap unsupported callbacks...while still supporting as
-> an example setting min/max powercaps.
-
-It's a bit more complicated than I thought. We cannot simplify too much
-and make weak assumption. You're right, please keep your approach.
-
-
-
-[1] 
-https://elixir.bootlin.com/linux/latest/source/drivers/powercap/dtpm.c#L54
-[2] 
-https://elixir.bootlin.com/linux/latest/source/Documentation/power/powercap/powercap.rst#L206
