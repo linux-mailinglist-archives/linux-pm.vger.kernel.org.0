@@ -2,100 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB085ADD8E
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 04:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0E15ADDE2
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 05:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbiIFCtR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Sep 2022 22:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S231768AbiIFDTU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Sep 2022 23:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237829AbiIFCtQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Sep 2022 22:49:16 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765C56BD48;
-        Mon,  5 Sep 2022 19:49:13 -0700 (PDT)
+        with ESMTP id S231570AbiIFDTS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Sep 2022 23:19:18 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E61526576;
+        Mon,  5 Sep 2022 20:19:17 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YHg3aRVYR6y9Bhji8SeIucscqOlRAtzu+XXt0qbxwqIp3atC7Ol+TFcxvVMNcLllwhWAJ9LiTaHxq4gafD52f9agNSnF7OoqOCmbNKRFoZTU0xISQ/sFh137dAlOZl7GJZZBVUjUq6gQUejB8OdFupZPFoAjRoBOqdZ/Oly1FJuYqJHv86h5MLQO4BcpIAuStG6+voW1MnqOfqP2vLABlWPVbejdYI5r10ppgW0JQLiCCnZoOBelO7OZyNGvT27HAOq7UQRPAiprzdJlXAlf2t40G3vrIjKt0i/kP74g46pnYxK9fUH/T6ZwyzIG+agIHMInJSv9D7782AWHzxL/sQ==
+ b=BcPdsKFFQxpM93SM/uNcTGOpF8gL7x7RejIUrvYLrKDalhhkFptPLnZW2NWCwaOLO0IbVbFwY4m7p4lsrs7LzPtYBUZYrX1s5aQ797llb1Yv/WJjiqNSj4/vVgIAZsUfYsGnD2sfimLH5sBs6RbPMwwEE2s8bhvBBfLmnw/J4dKCiul73a9S5DiCIbo6wgdVy2DZr+DtJMh4Clxlaz/Q+zDAFycpMq2ztB4ZZkvOe8jxKaeu7nEbQJCT2vi5bLysZdFiKplwJXnET1k2mZCJV4U2Sc37LBdWrkufXIHGQBqOG3CrW3BQawAlvRTnKafTj48dRBBg4xWNbrHJLJLeYA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9CrBC10jwm86GbkWjGEJA2So7o/1u90HqmQoHfUurPg=;
- b=PV8polWYtGGyEdTpc26NDAtMVOZ4ekag1C9O78DULIxZL9kFq0p0Wc9mus0b29c7FbD+Z8RPDwNGreERdMxzl/v5gp3UdTGd06qtd1IYY9N8Nm5jP5D9Wn3ASLMYy0SqmrF9MtMMpsnnCtmT5KXgWGINIOwFwhjpwz1UTBuIoPy9z3P84bu7b2FBCGU5NArZ0ADggDYauXaiSyWEM3fovxtLcl2IIAmkcrU02KnB1t3bYWZ2C/QQlHQphDjdHkuC7rJK7TIYaQzrrpF3kGbFpUygpDrOcenA4lvZbtTATrQFQ0R4DKZAgtpUVU8Te/yP5Iva1iHcP/CmrJU3zTVOoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
+ bh=B2mMQHV4zfxseO6vW48cEkZwrkilUJnqLxwiiYc9og0=;
+ b=W6idxFlOVry5MYdfwRC9MQnyhWrmFstaY+mt8Z/zHn4X0kI61lWbw52Jeq47pJ9Ef6nLVoEcXlZ2MqwMxPhHuN0bOnj4evCdca4KhUKL+oT90P/zhGmySNTliBrcKCuSY0/BMQP1aKVVCp9O3kEoMDxIsb6FBBI1I7bTKQRorYF0pcgEif+8pn5UcUTWJMpKbK/FtjdfpwRTmYr4Y6SYE90z+fL72yKqf+JJTg8ASNUwAbPT5/8t/uml0e9vOev+03zzDt+1J6gnFyQPTP/7fVVOQJ5mMOt+KJO8GVkJczS0PAq9jLCjPLsXpfm6g5M/ERXsFn2kQKBidz8WJiL1ZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9CrBC10jwm86GbkWjGEJA2So7o/1u90HqmQoHfUurPg=;
- b=OWxg4ev/hJTYrqEq7gcy6TG4ppzo4+cIhZD9MS2Xv3F0M/2T8btEJ4WVnQmVBvzCax29GusndCrAG6fthfELnBgcoB9KJH9wE0tD1nky5WfQmLB/kYffMCZ0qS8RBIqmJD1ALaBgX1GiewDr9cScNFa1gH2y4vCbOarwkiO2rCM=
-Received: from MW4P222CA0007.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::12)
- by BN9PR12MB5337.namprd12.prod.outlook.com (2603:10b6:408:102::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Tue, 6 Sep
- 2022 02:49:11 +0000
-Received: from CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:114:cafe::55) by MW4P222CA0007.outlook.office365.com
- (2603:10b6:303:114::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18 via Frontend
- Transport; Tue, 6 Sep 2022 02:49:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT046.mail.protection.outlook.com (10.13.174.203) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5588.10 via Frontend Transport; Tue, 6 Sep 2022 02:49:10 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 5 Sep
- 2022 21:49:05 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
-        Meng Li <li.meng@amd.com>, kernel test robot <lkp@intel.com>
-Subject: [Patch] cpufreq: amd-pstate: modify type in argument 2 for filp_open
-Date:   Tue, 6 Sep 2022 10:48:26 +0800
-Message-ID: <20220906024826.1560949-1-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
+ bh=B2mMQHV4zfxseO6vW48cEkZwrkilUJnqLxwiiYc9og0=;
+ b=VO5MRf1Xlz9vG+UykvZog1U58fx6lmkdFAwr4rz1Nt7pW34LH+WoTQNkheuRzdEZUgWl3U4NR72WpguK/dVpNeJNQAGsRrB/z//DfPXN8VxoigOhK/LWr1wYJQ44tCorL+aPP1mbmJvfLQl/rvbyFqmkPXdwQkK7CJhMzmpQYdU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ DS0PR12MB6655.namprd12.prod.outlook.com (2603:10b6:8:d0::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.18; Tue, 6 Sep 2022 03:19:15 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::cfb:b63:3255:646c]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::cfb:b63:3255:646c%5]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 03:19:15 +0000
+Date:   Tue, 6 Sep 2022 11:18:49 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>
+Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] cpufreq: amd_pstate: Fix initial highest_perf value
+Message-ID: <Yxa8GTmbMvMTOmjG@amd.com>
+References: <20220829055901.24593-1-Perry.Yuan@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220829055901.24593-1-Perry.Yuan@amd.com>
+X-ClientProxiedBy: SG2PR02CA0023.apcprd02.prod.outlook.com
+ (2603:1096:3:17::35) To DM5PR12MB2504.namprd12.prod.outlook.com
+ (2603:10b6:4:b5::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 44f48535-55fb-45db-3537-08da8fb25fef
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5337:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ad4b792-ef7b-4152-b8e0-08da8fb693fa
+X-MS-TrafficTypeDiagnostic: DS0PR12MB6655:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BcIRKyK8EnmLb6wyys8Whz9kOyy1XHN0XBJOOK5m/8UzNELS7CyB69fwiCMWtnDJI8hYCzT3wsgzjGvSBIXtfnaDc0xF0zCzeKTts3zrVVhGixGkC9Y+IOsRURMiev+OwR6eh5Yf7I5APJF64Ylb2NH2Og1IQt4tqRve/vNuWkx79/mPsDoNVQodFDJdvdHI6Vn2a2gKjqnvnj0ubY4PJ1c4KaYCb8tLjinvnMDyymEPgUr3+/IKDbNrbtaZpJpuy/AdFjWsqEovV5ASz/j5yrsWDycigzDehs7vjq4fuciWMvXJmfGYUFGf9x8qLEJnuFysJLmfpn52yfjp0SknVp4ROiCI1Q4nLLp/zIAoUTykJlR55pOWMBBPsX6OXWbrUDCc5ObYMvIjE0B0oTbMX1vhhvvTYLbkNd/6878HVZA/1bkCT4vGOIy7vDAduK0jbh+xCNakc3/p9b41bYYwR1UB2eMWF0tlfkbAual9W5cCAYhMRslArooQFwQnT4ha1KGPZBWojV7YnyDnhLzSUgcRZa/UHAujgPvuLhw1jSyIJnX3rHwrGuCkC28va/+geh+JSfQibMq7zZ19cR8uNg+MYP/BtEmR1To9K2Axxozz5g6/6hZlGp7PhMuPGLE4FqvvUMozaYLHS1MVcni7PpbCs9tqHgPfeO/tR/Wwg5hwM30x9XZjCE/dEnivvm/kM0TXMhSDN1tsgkiT6erg3cQLQzE6Lv4H4HIO8M7hLxhudecrFU1Af1cXwU6CySTLCerI/U4qcMkQnwOX4c4jNHf66ikJfn/VOdEP1xskntwElOnTJ5tCpdsBtuoEBOEC
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(136003)(39860400002)(396003)(40470700004)(46966006)(36840700001)(26005)(2906002)(70206006)(8936002)(186003)(4326008)(6666004)(1076003)(86362001)(8676002)(41300700001)(478600001)(336012)(426003)(7696005)(70586007)(2616005)(47076005)(40460700003)(83380400001)(16526019)(36756003)(81166007)(356005)(82310400005)(40480700001)(316002)(5660300002)(36860700001)(82740400003)(110136005)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: GVKxUc1ldGMhmZZR09dKLRVaNZU3iIQOOocU2JfPVgNVMERCYWKzwlwplfFJFd+2OgeCLNEKBX52wB2HFixORs9GVbpVks6uNbGrQI0NMwIfJ3D4/HtiXySCVJG/ddl4/wuHSX1vLoMXe1znjd8FQm8MgLL/gHqqoB5x3woxGG1IM/bP2ezWv+mhdXBzsBao6boiepEuQuJhrroy7guejpuxNGBKA/mBAA3JpWMQBeydQBlnBAIDxVqgC+4gFm5+HMhrXcaR2CPbDrfDEjLKGitFA14nZPmcjIhBkH6+3bxToQqWIEf6Pff5nalusnMRJ3goAgS/JzjbW4sKJFTdcncenHzOLMpn6gk9/kM+3VRbgq8yyjIYqEK1SarylM2PSPkG0WS9qYeU4cegdBH6+p7NdMv9UrTLKFaS0d5pWZ+9eZ04nJ/MknWPQ+tlbgemID5kVs2xFOR6bHVsVMyTvaf/hnfx61GCX8NWYGaQfQGvuh7BNdWtBre4PWBCr2yPZs4cho9fY0d6KY56PUqLy8wL+AVhygrL1ixNaFn02YI3gWtnigwqU1tRftk7owG3FFKMRYiWPkjyf1ezDhvj11qo4mvDQN34XEvcTO2OjzymlVn8GPmh6HXuYaes/3lXn/pC2x/Cvv0IdyVEXwni4UE2xB93EG6cRQa8MptHR85CJrMAYm2VgHL7jtescL1v4XXQeuETBvmWWtaP5rhnYw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(366004)(136003)(39860400002)(396003)(8676002)(4326008)(66476007)(66946007)(66556008)(2616005)(38100700002)(6486002)(186003)(41300700001)(6512007)(6506007)(6666004)(54906003)(316002)(6636002)(83380400001)(26005)(37006003)(86362001)(8936002)(478600001)(5660300002)(2906002)(6862004)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i6GoGDfZeTXBx4cG+ZPObqZ1MQe2NZG3Myf60my8oSVf+Geg58EZ8+oKOjdN?=
+ =?us-ascii?Q?KdVdOxVChUrurOKKvuskgYP8HnP80+NPuPYgUJ5/BDLtCIFXnTbAzwZcllWv?=
+ =?us-ascii?Q?6JXkS4nwvz8Gi5N54S68jozETfMRUJqzow+/EoTYSwk28NmZbMUeOPs4V0Ev?=
+ =?us-ascii?Q?Vjhg/vD5xyxIJqydJfAKXLjWMB5se2jT1yW7785cvVwKcD0oGejZUbFF3Lak?=
+ =?us-ascii?Q?9j3mE5o0k/l/CV35aEicjWZto1Kh+JjvQXrAJoTSFUgn35LxcouSXG2QsgTO?=
+ =?us-ascii?Q?oJeJM9lPIj7lXvrwhA2z3efeaQVOy1VU8NHR5nEEyeIAtS8BvcuuFnB2nn/q?=
+ =?us-ascii?Q?mxxIlJYrMScq4SeCjRNKoh2ere0hd7AKASQ2fdCW4cN5iiAtUxC/PM3CZrFt?=
+ =?us-ascii?Q?azRBlYRX0cV77gYaZAUbiRY7yDGe/KIQ0oTiNEU7+CLX+ogfzONhmFJaNXNk?=
+ =?us-ascii?Q?QnvT0MxeYbHLIZtGpxsPL83r15pipZRoHjB+kBJZ7MQfcNYyNn6m6eUhEJuu?=
+ =?us-ascii?Q?/B8r+aiZ9sQxWVnk94Liw/uUJDwQnSkwUnG9AUNNZRw6Jc+ZyHTeTK/SxtPn?=
+ =?us-ascii?Q?oxQPrASugiSPbw+1Wb4Kc4+D07CzJ5qADmYWC9wxCh9627PzXxHqeae4NOXg?=
+ =?us-ascii?Q?afMy98xE/QESbNwU8PkncgL6rPvDFP7bhjqEJRWLcpt6BVe9CaWqprd1Jt5e?=
+ =?us-ascii?Q?K45dlA5GwL/J5IVK1w7lyR1s2DKJmeA3ZuCozTiSsxMbWmksx3HeJITCpZvX?=
+ =?us-ascii?Q?LXnl3lZz7nexQzSQkAnd8E8i4MeyD/DUTaWNr1Vma9IyHGMQh2mb9uAAqljv?=
+ =?us-ascii?Q?5OaBG9RXnPekRVQOMRvx3u/TrHLVPxVHidtxf4pLF4Dcg3reLmYxTnQme1sm?=
+ =?us-ascii?Q?qt1NLtfgwllC6FzwFtlHgl3/Dk5i1Pk+VPHWVFObX7w7Rg8hcwlQeF/+c65G?=
+ =?us-ascii?Q?uqEuosdu0clYj7CGtfIijGPWRkJhM4nAX8Sw5fmsYOxDwJbmVaqNcj6t+XGB?=
+ =?us-ascii?Q?O8UvRS2zDdJW+i4NLR26yAklv6vsBUkwAHBF5LYNbIwJwpsBE8gXzObkE5i0?=
+ =?us-ascii?Q?bhEb2Hz9y9GQiwLGVNArfBz3+3BfHt55o4hx9ZiJgEw3lP7cfFXU4NECrttz?=
+ =?us-ascii?Q?fq0nxhXJx5M97GSEodhmiy8V33P8xzO+HkgIFMYrvpNOzUrmVMtJ2yP8zXL4?=
+ =?us-ascii?Q?YHKjxKSBBmOGWLdCpV+NRU3HQUtCACe7ZU14VvqFMgkRqiaRJVxym9va1+Ms?=
+ =?us-ascii?Q?Gqs57nYV/zY+MTTxKtACdGa0XfU8kl40BZk5IkkuxZ3DCssUjzSRaPdKI78G?=
+ =?us-ascii?Q?Z6h0DD417mguEJJgTybCcDB0xZW8ATeRgVhbRrtL7XXjBjdjJebztEAtn62B?=
+ =?us-ascii?Q?48gUzRm8B2U8KlLqwsFv9a2D7WnU+DErntW2M4frm92mTLDyCXtTEj7ScqxC?=
+ =?us-ascii?Q?WMyTmMrHJJlsr9TjqQxfUMCS2zvj6ciziEUCRttHgdy1gzbpEYh70F4g/VJT?=
+ =?us-ascii?Q?NgJxWgP+C720sghTlNL5pFWNxFcYhko8YBIFerqcT3jCSonqO261BMaWbs0H?=
+ =?us-ascii?Q?5Hnr/Q4HmxKMZ6MXaPHGomWGE6CjpInKwPDYphoh?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 02:49:10.0934
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ad4b792-ef7b-4152-b8e0-08da8fb693fa
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 03:19:15.8504
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44f48535-55fb-45db-3537-08da8fb25fef
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5337
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /HJa8L89NWlOxi76/r9uxtjdh7OdPWERaWTl+hsqEo2gQpbWPAYXq1dTeMy+ciqL5XmOtWn0H+cOVYCZ6FSv/g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6655
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -106,35 +120,78 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Modify restricted FMODE_PREAD to experted int O_RDONLY to
-fix the sparse warnings below:
-sparse warnings: (new ones prefixed by >>)
->> drivers/cpufreq/amd-pstate-ut.c:74:40: sparse: sparse: incorrect type
->> in argument 2 (different base types) @@     expected int @@     got
->> restricted fmode_t [usertype] @@
-   drivers/cpufreq/amd-pstate-ut.c:74:40: sparse:     expected int
-   drivers/cpufreq/amd-pstate-ut.c:74:40: sparse:     got restricted
-fmode_t [usertype]
+On Mon, Aug 29, 2022 at 01:59:01PM +0800, Yuan, Perry wrote:
+> To avoid some new AMD processors use wrong highest perf when amd pstate
+> driver loaded, this fix will query the highest perf from MSR register
+> MSR_AMD_CPPC_CAP1 and cppc_acpi interface firstly, then compare with the
+> highest perf value got by calling amd_get_highest_perf() function.
+> 
+> The lower value will be the correct highest perf we need to use.
+> Otherwise the CPU max MHz will be incorrect if the
+> amd_get_highest_perf() did not cover the new process family and model ID.
+> 
+> Like this lscpu info, the max frequency is incorrect.
+> 
+> Vendor ID:               AuthenticAMD
+>     Socket(s):           1
+>     Stepping:            2
+>     CPU max MHz:         5410.0000
+>     CPU min MHz:         400.0000
+>     BogoMIPS:            5600.54
+> 
+> Fixes: 3743d55b289c2 (x86, sched: Fix the AMD CPPC maximum performance value on certain AMD Ryzen generations)
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 
-Signed-off-by: Meng Li <li.meng@amd.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- drivers/cpufreq/amd-pstate-ut.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Huang Rui <ray.huang@amd.com>
 
-diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index 3947b7138184..e4a5b4d90f83 100644
---- a/drivers/cpufreq/amd-pstate-ut.c
-+++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -71,7 +71,7 @@ static bool get_shared_mem(void)
- 	ssize_t ret;
- 
- 	if (!boot_cpu_has(X86_FEATURE_CPPC)) {
--		filp = filp_open(path, FMODE_PREAD, 0);
-+		filp = filp_open(path, O_RDONLY, 0);
- 		if (IS_ERR(filp))
- 			pr_err("%s unable to open %s file!\n", __func__, path);
- 		else {
--- 
-2.34.1
-
+> ---
+>  drivers/cpufreq/amd-pstate.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9f4375f7ab46..30fbd30c0949 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -354,6 +354,7 @@ static inline int amd_pstate_enable(bool enable)
+>  static int pstate_init_perf(struct amd_cpudata *cpudata)
+>  {
+>  	u64 cap1;
+> +	u32 highest_perf;
+>  
+>  	int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+>  				     &cap1);
+> @@ -365,7 +366,11 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+>  	 *
+>  	 * CPPC entry doesn't indicate the highest performance in some ASICs.
+>  	 */
+> -	WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+> +	highest_perf = amd_get_highest_perf();
+> +	if (highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
+> +		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
+> +
+> +	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+>  
+>  	WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
+>  	WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
+> @@ -377,12 +382,17 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+>  static int cppc_init_perf(struct amd_cpudata *cpudata)
+>  {
+>  	struct cppc_perf_caps cppc_perf;
+> +	u32 highest_perf;
+>  
+>  	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>  	if (ret)
+>  		return ret;
+>  
+> -	WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+> +	highest_perf = amd_get_highest_perf();
+> +	if (highest_perf > cppc_perf.highest_perf)
+> +		highest_perf = cppc_perf.highest_perf;
+> +
+> +	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+>  
+>  	WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+>  	WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+> -- 
+> 2.34.1
+> 
