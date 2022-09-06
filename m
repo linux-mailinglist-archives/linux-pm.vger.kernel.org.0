@@ -2,62 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A2E5AE80F
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 14:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 517B15AE926
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 15:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240094AbiIFM0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Sep 2022 08:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S234132AbiIFNLW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Sep 2022 09:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240110AbiIFMZ2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 08:25:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8C47D1D9;
-        Tue,  6 Sep 2022 05:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662466926; x=1694002926;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ac6/ZnvaxotntCoR53/68zz+h1Omy7csO+/TGUoEwRk=;
-  b=ILePcFT87MFjbQYIc4Fg+yotJFKziyUrAacYO0YwPD9TbpgXZEi6qetn
-   LL07rUgA7GnklYtBaKMWnxqTwS6qYObMukWvLAoZC40X5hn6ILHjWpRUN
-   NrLhYjwzj/R3z+UETYUi1AofOw30yZ+nx7Z9EELnvj6/y9qPocC0BAxLh
-   bKEOZhmFT/91CETFiGUK67V3Iut2gdgELMzeGy/l75ulO9q3p1L1gXgHb
-   NIUfUaDpvtiayhtpFDctcRdzsJzdaPnByTc7GSwLqN9SCtjiryB3astne
-   WXe0cE0H3xzgP/FsPJWhJeT43PBg5XS384X8/aOMBxcE/zJy6a9R5Hq50
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="360526721"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="360526721"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:21:43 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="675668300"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:21:42 -0700
-Message-ID: <030ca8bc8258a4edc1aef23b077f9b4463b24639.camel@linux.intel.com>
-Subject: Re: [PATCH linux-next] tools: power: x86: intel_pstate_tracer:
- intel_pstate_tracer: Replace the relative path of the called grep with an
- absolute path
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Doug Smythies <dsmythies@telus.net>, cgel.zte@gmail.com
-Cc:     linux-kernel@vger.kernel.org, xu.panda@zte.com.cn,
-        ray.huang@amd.com, rafael.j.wysocki@intel.com, Jinzhou.Su@amd.com,
-        Zeal Robot <zealci@zte.com.cn>,
-        zhanglin <zhang.lin16@zte.com.cn>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Tue, 06 Sep 2022 05:21:42 -0700
-In-Reply-To: <CAAYoRsUFF=ebThB3gKUw2G1G2HO_HmBXvd-+XiwYtiKpJ41zqw@mail.gmail.com>
-References: <20220829125447.268741-1-xu.panda@zte.com.cn>
-         <CAAYoRsUFF=ebThB3gKUw2G1G2HO_HmBXvd-+XiwYtiKpJ41zqw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        with ESMTP id S240145AbiIFNLT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 09:11:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831C3659F8;
+        Tue,  6 Sep 2022 06:11:11 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B80DF660037F;
+        Tue,  6 Sep 2022 14:11:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662469869;
+        bh=5QO1SLp5eg80ObSSt8FLqmBTFoFhiD0BogISlBa9BUQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mOY7c50kE5+Xmrb35k079cHSMFkYyUhYJe+5NjUUjK8ZUXDK2Cj5ao5UFUt6ANYUq
+         MbENZTEK+MC3hZgppOROxiXeWrvpQjkxT6YjcoMgmWubysUlbKG77vCqaEkWRDRal9
+         XXpS0HpF4+46bmoLB10JvyBEUVX9ZdQGSREbTyPXFsZn6YfaEG5VzCQDo8FnzKShL+
+         XBdK7rg58ksb9EzHK9Ozg4bd0EY8Yc3pKrEVM3aopMr0XqtFVapzbd8WRV3eV8G+7D
+         kXDLzfz9Muog+VR73hD4bNVxPc1EBMTiMUwEjla1rHk5Sro9Q91O0seQeTlmhd+iQq
+         3CWCI7wojCwxQ==
+Message-ID: <efe46a7d-89b7-2465-e593-8383d1546c16@collabora.com>
+Date:   Tue, 6 Sep 2022 16:11:03 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5 07/33] thermal/drivers/tegra: Switch to new of API
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220804224349.1926752-8-daniel.lezcano@linexp.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220804224349.1926752-8-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,67 +71,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2022-09-04 at 15:23 -0700, Doug Smythies wrote:
-> Note: Modifying the address list a little with this reply.
-> 
+On 8/5/22 01:43, Daniel Lezcano wrote:
+> diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
+> index 05886684f429..c34501287e96 100644
+> --- a/drivers/thermal/tegra/tegra30-tsensor.c
+> +++ b/drivers/thermal/tegra/tegra30-tsensor.c
+> @@ -159,9 +159,9 @@ static void devm_tegra_tsensor_hw_disable(void *data)
+>  	tegra_tsensor_hw_disable(ts);
+>  }
+>  
+> -static int tegra_tsensor_get_temp(void *data, int *temp)
+> +static int tegra_tsensor_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -	const struct tegra_tsensor_channel *tsc = data;
+> +	const struct tegra_tsensor_channel *tsc = tz->devdata;
+>  	const struct tegra_tsensor *ts = tsc->ts;
+>  	int err, c1, c2, c3, c4, counter;
+>  	u32 val;
+> @@ -217,9 +217,9 @@ static int tegra_tsensor_temp_to_counter(const struct tegra_tsensor *ts, int tem
+>  	return DIV_ROUND_CLOSEST(c2 * 1000000 - ts->calib.b, ts->calib.a);
+>  }
+>  
+> -static int tegra_tsensor_set_trips(void *data, int low, int high)
+> +static int tegra_tsensor_set_trips(struct thermal_zone_device *tz, int low, int high)
+>  {
+> -	const struct tegra_tsensor_channel *tsc = data;
+> +	const struct tegra_tsensor_channel *tsc = tz->devdata;
+>  	const struct tegra_tsensor *ts = tsc->ts;
+>  	u32 val;
+>  
+> @@ -240,7 +240,7 @@ static int tegra_tsensor_set_trips(void *data, int low, int high)
+>  	return 0;
+>  }
+>  
+> -static const struct thermal_zone_of_device_ops ops = {
+> +static const struct thermal_zone_device_ops ops = {
+>  	.get_temp = tegra_tsensor_get_temp,
+>  	.set_trips = tegra_tsensor_set_trips,
+>  };
+> @@ -516,7 +516,7 @@ static int tegra_tsensor_register_channel(struct tegra_tsensor *ts,
+>  	tsc->id = id;
+>  	tsc->regs = ts->regs + 0x40 * (hw_id + 1);
+>  
+> -	tsc->tzd = devm_thermal_zone_of_sensor_register(ts->dev, id, tsc, &ops);
+> +	tsc->tzd = devm_thermal_of_zone_register(ts->dev, id, tsc, &ops);
+>  	if (IS_ERR(tsc->tzd)) {
+>  		if (PTR_ERR(tsc->tzd) != -ENODEV)
+>  			return dev_err_probe(ts->dev, PTR_ERR(tsc->tzd),
 
-Subject can be "Use absolute path for grep"
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com> # Nexus7
 
-> On Mon, Aug 29, 2022 at 5:55 AM <cgel.zte@gmail.com> wrote:
-> > 
-> > From: xupanda <xu.panda@zte.com.cn>
-> > 
-> > Using absolute paths when invoking grep can lead to serious
-> > security
-> > issues. 
-I think you mean 
-"Not using absolute path when invoking grep can lead to serious
-security issues"
-
-Thanks,
-Srinivas
-
-> > A malicious operator may create a new file named grep in the
-> > PATH before the real grep file. When the program executes and calls
-> > grep, the fake grep file will be executed, so that the malicious
-> > operator can execute arbitrary code or even obtain root privileges.
-> > Using absolute paths when calling grep avoids this problem.
-> > 
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Signed-off-by: xupanda <xu.panda@zte.com.cn>
-> > Reviewed-by: zhanglin <zhang.lin16@zte.com.cn>
-> 
-> Acked-by: Doug Smythies <dsmythies@telus.net>
-> 
-> > 
-> > ---
-> >  tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 4 ++-
-> > -
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git
-> > a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> > b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> > index b46e9eb8f5aa..d6fae6e51d30 100755
-> > --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> > +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> > @@ -348,8 +348,8 @@ def split_csv(current_max_cpu, cpu_mask):
-> >      if os.path.exists('cpu.csv'):
-> >          for index in range(0, current_max_cpu + 1):
-> >              if cpu_mask[int(index)] != 0:
-> > -                os.system('grep -m 1 common_cpu cpu.csv >
-> > cpu{:0>3}.csv'.format(index))
-> > -                os.system('grep CPU_{:0>3} cpu.csv >>
-> > cpu{:0>3}.csv'.format(index, index))
-> > +                os.system('/usr/bin/grep -m 1 common_cpu cpu.csv >
-> > cpu{:0>3}.csv'.format(index))
-> > +                os.system('/usr/bin/grep CPU_{:0>3} cpu.csv >>
-> > cpu{:0>3}.csv'.format(index, index))
-> > 
-> >  def fix_ownership(path):
-> >      """Change the owner of the file to SUDO_UID, if required"""
-> > --
-> > 2.25.1
-> > 
-
-
+-- 
+Best regards,
+Dmitry
