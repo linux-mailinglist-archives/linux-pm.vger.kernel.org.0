@@ -2,274 +2,422 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD5D5AF198
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 19:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E3F5AF445
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 21:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233684AbiIFRDN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Sep 2022 13:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
+        id S229544AbiIFTOm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Sep 2022 15:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238738AbiIFRB6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 13:01:58 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13FA381
-        for <linux-pm@vger.kernel.org>; Tue,  6 Sep 2022 09:48:19 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso7817682wmb.2
-        for <linux-pm@vger.kernel.org>; Tue, 06 Sep 2022 09:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=vRZj1TG9rH/sMfp9OkBiGp6t4OgUDQ5YYefsVMCB1eo=;
-        b=GBWG4tL/hKbvJxKxG2T2ulhqTSAvLQIuLVRncjwt3m9xhGleA4sA7LSp5SQkCDnUsV
-         wTEAJUI0cmEZjCuEMU9y7E9A65bwpTOAjtyYd4/rQsYxKvnlZwS7Ff4ywTx66Gm0OKQL
-         GK3iwRjP0lMK6B3AKfWGLx7l4hMmTmWVRozznD/EFCjz8mNk1ZZYkEd0M0LeBfr/yKvx
-         RkoRVk998hyTpjBb75hak1P0gI/ktAovPX7DNRD3cBhzcraqzZ80DY+RyuBNY4dCx6pP
-         NHbPTbdO4H52eE/qQugUjs+FR0biH1mHY7882cWGoGLsJB/a0PtcloGxo95aLXtIE1+e
-         r+cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=vRZj1TG9rH/sMfp9OkBiGp6t4OgUDQ5YYefsVMCB1eo=;
-        b=xag+K5gkNsIPwXqB0ClqfnxdembsZ7jDj9tCcCDxoDjdNuRl+7DXNV7i1oWA3AMCtK
-         igGqiHZRD1zXgIx6yhhAh8N8MD2B+HXrv6rc7ii3S3qevDwjd3j2UVhNXuJx2wv8AYvS
-         2aqAx2bwsKnwO1dJK1KQGbLlkJ8dE0iHB7I4dvqHasATXHIktjr9rF+P3n7SWwy7xRjc
-         v9Iy9EBhVLd2bMPsuFD/lf0QSkhG5z+hSy9xshXNjlY38RgEI2keWe6fPJlRNurViUoZ
-         mPn/TCxysrLvqtxog9TEXKJuI08YiNWg2QBqlZ23Ud7SprmXZYJ2rV/8+OIlpzDFEk7W
-         XpAw==
-X-Gm-Message-State: ACgBeo2cZgb4r74ML4ETRkpd82Wl1FDtVht+Todp2J2rU24nvhSzbV5P
-        O//mOaVXf0GIjaRTKuaOFfmnRw==
-X-Google-Smtp-Source: AA6agR6uwdfDBK1mqOgN5okUQ2V9qzzDkkcWpezu9zCRVpAY/osMRW6z4hV2BpC+JOar8ASx6VEksw==
-X-Received: by 2002:a05:600c:354a:b0:3a5:b01b:2ab0 with SMTP id i10-20020a05600c354a00b003a5b01b2ab0mr13962312wmq.61.1662482897587;
-        Tue, 06 Sep 2022 09:48:17 -0700 (PDT)
-Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id e27-20020adf9bdb000000b0021f0ff1bc6csm7426600wrc.41.2022.09.06.09.48.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 09:48:17 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH v3 30/30] thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-Date:   Tue,  6 Sep 2022 18:47:20 +0200
-Message-Id: <20220906164720.330701-31-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220906164720.330701-1-daniel.lezcano@linaro.org>
-References: <20220906164720.330701-1-daniel.lezcano@linaro.org>
+        with ESMTP id S229614AbiIFTOk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 15:14:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD24517596;
+        Tue,  6 Sep 2022 12:14:38 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2867uq1s016412;
+        Tue, 6 Sep 2022 19:14:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=I6mZO6sVDnWBqZLAcQsxbmtHVqJwZDcr30OS+i2OYW8=;
+ b=C+ZidpmS17KSBsVS/mVtGC9PNyt/CeilYRChALXN3H7ZzSR5PM5AZdc7e2TFfkdVMVRd
+ 6bRU3+GaQepL39flChXjK7+aUPfMWbUK9qmtceWY956GLMoea1YSPlA8Co9SPZonbDDs
+ OqWOh4v/31xylvAJKZajZsGWVYe68Q+hUqUccbroKnPbcYPbWPOPKIA5PIEcPiso0dVd
+ +8/c2PCFL6IYNd7tSSji0vEDkiCxNhqoMyKAaeUQcv8jyUeVPbaBOi6Fngl45u5W8kJl
+ UzXiiI+BmP23Z1Q6xpILRlro5p84S4IubGi1iuusdMMoBznmpw2XJAHxYeg2H0MItWqs jQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3je1cdj7hw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 19:14:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 286JEYSM021389
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Sep 2022 19:14:34 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 6 Sep 2022 12:14:33 -0700
+From:   Mike Tipton <quic_mdtipton@quicinc.com>
+To:     <djakov@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_okukatla@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Subject: [PATCH] interconnect: Replace mutex with rt_mutex
+Date:   Tue, 6 Sep 2022 12:14:23 -0700
+Message-ID: <20220906191423.30109-1-quic_mdtipton@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9M7ga5VAn5nJ3Gpcj5iH389XXyt-f3HZ
+X-Proofpoint-ORIG-GUID: 9M7ga5VAn5nJ3Gpcj5iH389XXyt-f3HZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 phishscore=0 impostorscore=0 clxscore=1011 mlxscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2209060089
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
+Replace mutex with rt_mutex to prevent priority inversion between
+clients, which can cause unacceptable delays in some cases.
 
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
 ---
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 120 ++++++++++---------
- 1 file changed, 66 insertions(+), 54 deletions(-)
 
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index a0e234fce71a..e7c3b78d959c 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -53,6 +53,7 @@ struct zone_device {
- 	u32				msr_pkg_therm_high;
- 	struct delayed_work		work;
- 	struct thermal_zone_device	*tzone;
-+	struct thermal_trip		*trips;
- 	struct cpumask			cpumask;
- };
+We've run into a number of cases internally and from customers where
+high priority, RT clients (typically display) become blocked for long
+periods of time on lower priority, non-RT clients. Switching to rt_mutex
+has proven to help performance in these cases.
+
+ drivers/interconnect/core.c | 80 ++++++++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 25debded65a8..a536c013d9ca 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -14,7 +14,7 @@
+ #include <linux/interconnect-provider.h>
+ #include <linux/list.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
++#include <linux/rtmutex.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+ #include <linux/overflow.h>
+@@ -28,7 +28,7 @@ static DEFINE_IDR(icc_idr);
+ static LIST_HEAD(icc_providers);
+ static int providers_count;
+ static bool synced_state;
+-static DEFINE_MUTEX(icc_lock);
++static DEFINE_RT_MUTEX(icc_lock);
+ static struct dentry *icc_debugfs_dir;
  
-@@ -138,40 +139,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
- 	return -EINVAL;
- }
+ static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
+@@ -47,7 +47,7 @@ static int icc_summary_show(struct seq_file *s, void *data)
+ 	seq_puts(s, " node                                  tag          avg         peak\n");
+ 	seq_puts(s, "--------------------------------------------------------------------\n");
  
--static int sys_get_trip_temp(struct thermal_zone_device *tzd,
--			     int trip, int *temp)
--{
--	struct zone_device *zonedev = tzd->devdata;
--	unsigned long thres_reg_value;
--	u32 mask, shift, eax, edx;
--	int ret;
--
--	if (trip >= MAX_NUMBER_OF_TRIPS)
--		return -EINVAL;
--
--	if (trip) {
--		mask = THERM_MASK_THRESHOLD1;
--		shift = THERM_SHIFT_THRESHOLD1;
--	} else {
--		mask = THERM_MASK_THRESHOLD0;
--		shift = THERM_SHIFT_THRESHOLD0;
--	}
--
--	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
--			   &eax, &edx);
--	if (ret < 0)
--		return ret;
--
--	thres_reg_value = (eax & mask) >> shift;
--	if (thres_reg_value)
--		*temp = zonedev->tj_max - thres_reg_value * 1000;
--	else
--		*temp = THERMAL_TEMP_INVALID;
--	pr_debug("sys_get_trip_temp %d\n", *temp);
--
--	return 0;
--}
--
- static int
- sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- {
-@@ -212,18 +179,9 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- 			l, h);
- }
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
  
--static int sys_get_trip_type(struct thermal_zone_device *thermal, int trip,
--			     enum thermal_trip_type *type)
--{
--	*type = THERMAL_TRIP_PASSIVE;
--	return 0;
--}
--
- /* Thermal zone callback registry */
- static struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
--	.get_trip_temp = sys_get_trip_temp,
--	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
- };
- 
-@@ -328,6 +286,48 @@ static int pkg_thermal_notify(u64 msr_val)
- 	return 0;
- }
- 
-+static struct thermal_trip *pkg_temp_thermal_trips_init(int cpu, int tj_max, int num_trips)
-+{
-+	struct thermal_trip *trips;
-+	unsigned long thres_reg_value;
-+	u32 mask, shift, eax, edx;
-+	int ret, i;
-+
-+	trips = kzalloc(sizeof(*trips) * num_trips, GFP_KERNEL);
-+	if (!trips)
-+		return ERR_PTR(-ENOMEM);
-+	
-+	for (i = 0; i < num_trips; i++) {
-+
-+		if (i) {
-+			mask = THERM_MASK_THRESHOLD1;
-+			shift = THERM_SHIFT_THRESHOLD1;
-+		} else {
-+			mask = THERM_MASK_THRESHOLD0;
-+			shift = THERM_SHIFT_THRESHOLD0;
-+		}
-+
-+		ret = rdmsr_on_cpu(cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
-+				   &eax, &edx);
-+		if (ret < 0) {
-+			kfree(trips);
-+			return ERR_PTR(ret);
-+		}
-+
-+		thres_reg_value = (eax & mask) >> shift;
-+
-+		trips[i].temperature = thres_reg_value ?
-+			tj_max - thres_reg_value * 1000 : THERMAL_TEMP_INVALID;
-+
-+		trips[i].type = THERMAL_TRIP_PASSIVE;
-+		
-+		pr_debug("%s: cpu=%d, trip=%d, temp=%d\n",
-+			 __func__, cpu, i, trips[i].temperature);
-+	}
-+
-+	return trips;
-+}
-+
- static int pkg_temp_thermal_device_add(unsigned int cpu)
- {
- 	int id = topology_logical_die_id(cpu);
-@@ -353,24 +353,27 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	if (!zonedev)
- 		return -ENOMEM;
- 
-+	zonedev->trips = pkg_temp_thermal_trips_init(cpu, tj_max, thres_count);
-+	if (IS_ERR(zonedev->trips)) {
-+		err = PTR_ERR(zonedev->trips);
-+		goto out_kfree_zonedev;
-+	}
-+	
- 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
- 	zonedev->cpu = cpu;
- 	zonedev->tj_max = tj_max;
--	zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
--			thres_count,
-+	zonedev->tzone = thermal_zone_device_register_with_trips("x86_pkg_temp",
-+			zonedev->trips, thres_count,
- 			(thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
- 			zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
- 	if (IS_ERR(zonedev->tzone)) {
- 		err = PTR_ERR(zonedev->tzone);
--		kfree(zonedev);
--		return err;
-+		goto out_kfree_trips;
+ 	list_for_each_entry(provider, &icc_providers, provider_list) {
+ 		struct icc_node *n;
+@@ -73,7 +73,7 @@ static int icc_summary_show(struct seq_file *s, void *data)
+ 		}
  	}
- 	err = thermal_zone_device_enable(zonedev->tzone);
--	if (err) {
--		thermal_zone_device_unregister(zonedev->tzone);
--		kfree(zonedev);
--		return err;
--	}
-+	if (err)
-+		goto out_unregister_tz;
-+
- 	/* Store MSR value for package thermal interrupt, to restore at exit */
- 	rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev->msr_pkg_therm_low,
- 	      zonedev->msr_pkg_therm_high);
-@@ -379,7 +382,14 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	raw_spin_lock_irq(&pkg_temp_lock);
- 	zones[id] = zonedev;
- 	raw_spin_unlock_irq(&pkg_temp_lock);
--	return 0;
-+
-+out_unregister_tz:	
-+	thermal_zone_device_unregister(zonedev->tzone);
-+out_kfree_trips:
-+	kfree(zonedev->trips);
-+out_kfree_zonedev:
-+	kfree(zonedev);
-+	return err;
- }
  
- static int pkg_thermal_cpu_offline(unsigned int cpu)
-@@ -463,8 +473,10 @@ static int pkg_thermal_cpu_offline(unsigned int cpu)
- 	raw_spin_unlock_irq(&pkg_temp_lock);
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
  
- 	/* Final cleanup if this is the last cpu */
--	if (lastcpu)
-+	if (lastcpu) {
-+		kfree(zonedev->trips);
- 		kfree(zonedev);
-+	}
  	return 0;
  }
+@@ -104,7 +104,7 @@ static int icc_graph_show(struct seq_file *s, void *data)
+ 	int i;
+ 
+ 	seq_puts(s, "digraph {\n\trankdir = LR\n\tnode [shape = record]\n");
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	/* draw providers as cluster subgraphs */
+ 	cluster_index = 0;
+@@ -136,7 +136,7 @@ static int icc_graph_show(struct seq_file *s, void *data)
+ 					icc_graph_show_link(s, 1, n,
+ 							    n->links[i]);
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 	seq_puts(s, "}");
+ 
+ 	return 0;
+@@ -362,7 +362,7 @@ struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
+ 	if (!spec)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	list_for_each_entry(provider, &icc_providers, provider_list) {
+ 		if (provider->dev->of_node == spec->np) {
+ 			if (provider->xlate_extended) {
+@@ -378,7 +378,7 @@ struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
+ 			}
+ 		}
+ 	}
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	if (IS_ERR(node))
+ 		return ERR_CAST(node);
+@@ -490,9 +490,9 @@ struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
+ 		return ERR_CAST(dst_data);
+ 	}
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	path = path_find(dev, src_data->node, dst_data->node);
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 	if (IS_ERR(path)) {
+ 		dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+ 		goto free_icc_data;
+@@ -577,12 +577,12 @@ void icc_set_tag(struct icc_path *path, u32 tag)
+ 	if (!path)
+ 		return;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	for (i = 0; i < path->num_nodes; i++)
+ 		path->reqs[i].tag = tag;
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_set_tag);
+ 
+@@ -632,7 +632,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	old_avg = path->reqs[0].avg_bw;
+ 	old_peak = path->reqs[0].peak_bw;
+@@ -664,7 +664,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 		apply_constraints(path);
+ 	}
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	trace_icc_set_bw_end(path, ret);
+ 
+@@ -682,12 +682,12 @@ static int __icc_enable(struct icc_path *path, bool enable)
+ 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	for (i = 0; i < path->num_nodes; i++)
+ 		path->reqs[i].enabled = enable;
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	return icc_set_bw(path, path->reqs[0].avg_bw,
+ 			  path->reqs[0].peak_bw);
+@@ -726,7 +726,7 @@ struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
+ 	struct icc_node *src, *dst;
+ 	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	src = node_find(src_id);
+ 	if (!src)
+@@ -748,7 +748,7 @@ struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
+ 		path = ERR_PTR(-ENOMEM);
+ 	}
+ out:
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 	return path;
+ }
+ EXPORT_SYMBOL_GPL(icc_get);
+@@ -773,14 +773,14 @@ void icc_put(struct icc_path *path)
+ 	if (ret)
+ 		pr_err("%s: error (%d)\n", __func__, ret);
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	for (i = 0; i < path->num_nodes; i++) {
+ 		node = path->reqs[i].node;
+ 		hlist_del(&path->reqs[i].req_node);
+ 		if (!WARN_ON(!node->provider->users))
+ 			node->provider->users--;
+ 	}
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	kfree_const(path->name);
+ 	kfree(path);
+@@ -822,11 +822,11 @@ struct icc_node *icc_node_create(int id)
+ {
+ 	struct icc_node *node;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	node = icc_node_create_nolock(id);
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	return node;
+ }
+@@ -840,7 +840,7 @@ void icc_node_destroy(int id)
+ {
+ 	struct icc_node *node;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	node = node_find(id);
+ 	if (node) {
+@@ -848,7 +848,7 @@ void icc_node_destroy(int id)
+ 		WARN_ON(!hlist_empty(&node->req_list));
+ 	}
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	kfree(node);
+ }
+@@ -876,7 +876,7 @@ int icc_link_create(struct icc_node *node, const int dst_id)
+ 	if (!node->provider)
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	dst = node_find(dst_id);
+ 	if (!dst) {
+@@ -900,7 +900,7 @@ int icc_link_create(struct icc_node *node, const int dst_id)
+ 	node->links[node->num_links++] = dst;
+ 
+ out:
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	return ret;
+ }
+@@ -925,7 +925,7 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
+ 	if (IS_ERR_OR_NULL(dst))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	for (slot = 0; slot < src->num_links; slot++)
+ 		if (src->links[slot] == dst)
+@@ -946,7 +946,7 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
+ 		ret = -ENOMEM;
+ 
+ out:
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	return ret;
+ }
+@@ -962,7 +962,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 	if (WARN_ON(node->provider))
+ 		return;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	node->provider = provider;
+ 	list_add_tail(&node->node_list, &provider->nodes);
+@@ -988,7 +988,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 	node->avg_bw = 0;
+ 	node->peak_bw = 0;
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_node_add);
+ 
+@@ -998,11 +998,11 @@ EXPORT_SYMBOL_GPL(icc_node_add);
+  */
+ void icc_node_del(struct icc_node *node)
+ {
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	list_del(&node->node_list);
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_node_del);
+ 
+@@ -1041,12 +1041,12 @@ int icc_provider_add(struct icc_provider *provider)
+ 	if (WARN_ON(!provider->xlate && !provider->xlate_extended))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	INIT_LIST_HEAD(&provider->nodes);
+ 	list_add_tail(&provider->provider_list, &icc_providers);
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	dev_dbg(provider->dev, "interconnect provider added to topology\n");
+ 
+@@ -1060,22 +1060,22 @@ EXPORT_SYMBOL_GPL(icc_provider_add);
+  */
+ void icc_provider_del(struct icc_provider *provider)
+ {
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	if (provider->users) {
+ 		pr_warn("interconnect provider still has %d users\n",
+ 			provider->users);
+-		mutex_unlock(&icc_lock);
++		rt_mutex_unlock(&icc_lock);
+ 		return;
+ 	}
+ 
+ 	if (!list_empty(&provider->nodes)) {
+ 		pr_warn("interconnect provider still has nodes\n");
+-		mutex_unlock(&icc_lock);
++		rt_mutex_unlock(&icc_lock);
+ 		return;
+ 	}
+ 
+ 	list_del(&provider->provider_list);
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_provider_del);
+ 
+@@ -1110,7 +1110,7 @@ void icc_sync_state(struct device *dev)
+ 	if (count < providers_count)
+ 		return;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	synced_state = true;
+ 	list_for_each_entry(p, &icc_providers, provider_list) {
+ 		dev_dbg(p->dev, "interconnect provider is in synced state\n");
+@@ -1123,7 +1123,7 @@ void icc_sync_state(struct device *dev)
+ 			}
+ 		}
+ 	}
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_sync_state);
  
 -- 
-2.34.1
+2.17.1
 
