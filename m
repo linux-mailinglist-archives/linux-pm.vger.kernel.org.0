@@ -2,58 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83A75AE67D
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 13:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A2E5AE80F
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 14:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiIFLXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Sep 2022 07:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S240094AbiIFM0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Sep 2022 08:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239790AbiIFLXh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 07:23:37 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F345726E;
-        Tue,  6 Sep 2022 04:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Lr2b8+2Ceub55ZbeDBzcLTRIdb9YlSmsltMwJPK6Y20=; b=dEhWkeCCkKC0swqU0nf+i0XV3U
-        lovsX9dUPl7iNWiwZpxoyxzdz+w1unkH2mOdmqq24kgwstEtAkgX7pUMxMmpQhV4fxxLtnTukLnSn
-        QqpCFMzONI3WidXrtue0IcPFhqBBl6GymEs5iEDXRUyDM+wEmfCEZBwggexb7Hf6cpJ9A11vLoFJb
-        XZA4YWdA+gPp/SUnRQY7aiiNgebfpfV686sBPZhDH9jzp+/x9yUmATh2bKUj4meVaINK2c7ivYd5z
-        OKHl6MdxLYAvcCqK4f4Rueh1a1vDUmpoHbDWYGmKKLjy8rPTqRZ49GYx6vHQBPdCAlRdx284HdVpJ
-        ahKN+u5g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVWfj-00A9An-TP; Tue, 06 Sep 2022 11:23:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4E5DA3002A3;
-        Tue,  6 Sep 2022 13:23:14 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 098E12B6641C8; Tue,  6 Sep 2022 13:23:14 +0200 (CEST)
-Date:   Tue, 6 Sep 2022 13:23:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <YxctoffFFPXONESt@hirez.programming.kicks-ass.net>
-References: <20220822111816.760285417@infradead.org>
- <20220822114649.055452969@infradead.org>
- <YxR5Yauhd90WN/AY@gmail.com>
+        with ESMTP id S240110AbiIFMZ2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 08:25:28 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8C47D1D9;
+        Tue,  6 Sep 2022 05:22:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662466926; x=1694002926;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ac6/ZnvaxotntCoR53/68zz+h1Omy7csO+/TGUoEwRk=;
+  b=ILePcFT87MFjbQYIc4Fg+yotJFKziyUrAacYO0YwPD9TbpgXZEi6qetn
+   LL07rUgA7GnklYtBaKMWnxqTwS6qYObMukWvLAoZC40X5hn6ILHjWpRUN
+   NrLhYjwzj/R3z+UETYUi1AofOw30yZ+nx7Z9EELnvj6/y9qPocC0BAxLh
+   bKEOZhmFT/91CETFiGUK67V3Iut2gdgELMzeGy/l75ulO9q3p1L1gXgHb
+   NIUfUaDpvtiayhtpFDctcRdzsJzdaPnByTc7GSwLqN9SCtjiryB3astne
+   WXe0cE0H3xzgP/FsPJWhJeT43PBg5XS384X8/aOMBxcE/zJy6a9R5Hq50
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="360526721"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="360526721"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:21:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="675668300"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:21:42 -0700
+Message-ID: <030ca8bc8258a4edc1aef23b077f9b4463b24639.camel@linux.intel.com>
+Subject: Re: [PATCH linux-next] tools: power: x86: intel_pstate_tracer:
+ intel_pstate_tracer: Replace the relative path of the called grep with an
+ absolute path
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Doug Smythies <dsmythies@telus.net>, cgel.zte@gmail.com
+Cc:     linux-kernel@vger.kernel.org, xu.panda@zte.com.cn,
+        ray.huang@amd.com, rafael.j.wysocki@intel.com, Jinzhou.Su@amd.com,
+        Zeal Robot <zealci@zte.com.cn>,
+        zhanglin <zhang.lin16@zte.com.cn>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Date:   Tue, 06 Sep 2022 05:21:42 -0700
+In-Reply-To: <CAAYoRsUFF=ebThB3gKUw2G1G2HO_HmBXvd-+XiwYtiKpJ41zqw@mail.gmail.com>
+References: <20220829125447.268741-1-xu.panda@zte.com.cn>
+         <CAAYoRsUFF=ebThB3gKUw2G1G2HO_HmBXvd-+XiwYtiKpJ41zqw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxR5Yauhd90WN/AY@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,47 +65,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 04, 2022 at 12:09:37PM +0200, Ingo Molnar wrote:
-
-> BTW., we should probably mark/document all PF_ holes with a PF__RESERVED 
-> kind of scheme? Something simple, like:
+On Sun, 2022-09-04 at 15:23 -0700, Doug Smythies wrote:
+> Note: Modifying the address list a little with this reply.
 > 
->    #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
->    #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
->  + #define PF__RESERVED_04000	0x00004000	/* Unused */
->    #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
->  + #define PF__RESERVED_10000	0x00010000	/* Unused */
->    #define PF_KSWAPD		0x00020000	/* I am kswapd */
->    #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
->    #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
+
+Subject can be "Use absolute path for grep"
+
+> On Mon, Aug 29, 2022 at 5:55 AM <cgel.zte@gmail.com> wrote:
+> > 
+> > From: xupanda <xu.panda@zte.com.cn>
+> > 
+> > Using absolute paths when invoking grep can lead to serious
+> > security
+> > issues. 
+I think you mean 
+"Not using absolute path when invoking grep can lead to serious
+security issues"
+
+Thanks,
+Srinivas
+
+> > A malicious operator may create a new file named grep in the
+> > PATH before the real grep file. When the program executes and calls
+> > grep, the fake grep file will be executed, so that the malicious
+> > operator can execute arbitrary code or even obtain root privileges.
+> > Using absolute paths when calling grep avoids this problem.
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: xupanda <xu.panda@zte.com.cn>
+> > Reviewed-by: zhanglin <zhang.lin16@zte.com.cn>
+> 
+> Acked-by: Doug Smythies <dsmythies@telus.net>
+> 
+> > 
+> > ---
+> >  tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 4 ++-
+> > -
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git
+> > a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> > b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> > index b46e9eb8f5aa..d6fae6e51d30 100755
+> > --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> > +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> > @@ -348,8 +348,8 @@ def split_csv(current_max_cpu, cpu_mask):
+> >      if os.path.exists('cpu.csv'):
+> >          for index in range(0, current_max_cpu + 1):
+> >              if cpu_mask[int(index)] != 0:
+> > -                os.system('grep -m 1 common_cpu cpu.csv >
+> > cpu{:0>3}.csv'.format(index))
+> > -                os.system('grep CPU_{:0>3} cpu.csv >>
+> > cpu{:0>3}.csv'.format(index, index))
+> > +                os.system('/usr/bin/grep -m 1 common_cpu cpu.csv >
+> > cpu{:0>3}.csv'.format(index))
+> > +                os.system('/usr/bin/grep CPU_{:0>3} cpu.csv >>
+> > cpu{:0>3}.csv'.format(index, index))
+> > 
+> >  def fix_ownership(path):
+> >      """Change the owner of the file to SUDO_UID, if required"""
+> > --
+> > 2.25.1
+> > 
 
 
-How's this then, it immediately shows how holey it is :-)
-
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1722,7 +1722,9 @@ extern struct pid *cad_pid;
- #define PF_MEMALLOC		0x00000800	/* Allocating memory */
- #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
- #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
-+#define PF__HOLE__00004000	0x00004000	/* A HOLE */
- #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
-+#define PF__HOLE__00010000	0x00010000	/* A HOLE */
- #define PF_KSWAPD		0x00020000	/* I am kswapd */
- #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
- #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
-@@ -1730,9 +1732,14 @@ extern struct pid *cad_pid;
- 						 * I am cleaning dirty pages from some other bdi. */
- #define PF_KTHREAD		0x00200000	/* I am a kernel thread */
- #define PF_RANDOMIZE		0x00400000	/* Randomize virtual address space */
-+#define PF__HOLE__00800000	0x00800000	/* A HOLE */
-+#define PF__HOLE__01000000	0x01000000	/* A HOLE */
-+#define PF__HOLE__02000000	0x02000000	/* A HOLE */
- #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
- #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process policy */
- #define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to zones which allow long term pinning. */
-+#define PF__HOLE__20000000	0x20000000	/* A HOLE */
-+#define PF__HOLE__40000000	0x40000000	/* A HOLE */
- #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_processes() and should not be frozen */
- 
- /*
