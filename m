@@ -2,74 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192785AF5DD
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 22:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6915AF7D1
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 00:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiIFU3K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Sep 2022 16:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S229498AbiIFWX6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Sep 2022 18:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiIFU3H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 16:29:07 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FED9F18D
-        for <linux-pm@vger.kernel.org>; Tue,  6 Sep 2022 13:28:57 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id f24so12439844plr.1
-        for <linux-pm@vger.kernel.org>; Tue, 06 Sep 2022 13:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date;
-        bh=SApL559VYDv9mxhkQIS6YUpqlo0DYsAvN9Xj3AgwwP4=;
-        b=KKciEglp50UDtPQYV1U8Si6GNn/Hiq/jaSfPNvLXNp45LRMYss6qcUPsOuVDncEgnD
-         nCUXZXyifNEA7Nv/zmWpkbd9HMUTgbQdvVwVKcI++L8HysUmzVI9ByHbx7EImHttaRZy
-         TwRLBY4XxU4hQKME1v4sjFq/H/6XkoLI2tGx1hur+O4g0dJXTH/X5rhEUtc3k9T/Bw4a
-         uRE9ryzV9h/vSbR7GOFIFsSueYy6dlEVGhccIIKX6SBLhT+fGNtxUkMfv0X6CrxS+0rI
-         4DQEVyEXVWusMqXEFw9/vGKsPVfnIaMUWHj5dAockg1Iuzm1bKr0sl24+ARnaAuGr55r
-         9uzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=SApL559VYDv9mxhkQIS6YUpqlo0DYsAvN9Xj3AgwwP4=;
-        b=lAqaBFulv5qd09sF7rFKKge+N5hqyAfwq2LXMiBRqTr3EqfHwJELKWxRJIyJYQyP1Y
-         +gKk9f+VVvTOsADnCHPFsXmMgg2D3d09nP5TzLa3inA0EBA8eksEoSLcY6thfU1F3BkZ
-         DOxYWHQExXIFBwC7XCRVKP4ROhzVdkYHZvJ3SuZJez7CtUGHInvvKYZvyzo0huWyFh4v
-         YRFeyhtLQ71YqlmTBc+miz7ow8KkKf36jEffIBcfuqskfH/TDeoQGshh2xpmGOOzLXBr
-         G2jSrwJs4e8g+oMNq5mTHH08WjwAkiXMOxu7GxCRyy7wq05XeBmbUku8/+WUdyu97+/+
-         nl7w==
-X-Gm-Message-State: ACgBeo3fydIvSbpyUZhJo26OwHctv3gkp/Z8rJ4GCdwCEuEKhgb+rHh4
-        MThioGmIj8VX1JNmy8so+F6UwP/9j3dwmw==
-X-Google-Smtp-Source: AA6agR7OW3M4SN20bl/4uQ8Fo/RbeMbkiE0/fFGk7TUUcm3CNeoFe4xJ5BTKhJI7f9u9sEOHi4BfrQ==
-X-Received: by 2002:a17:902:a704:b0:174:3ad5:30b8 with SMTP id w4-20020a170902a70400b001743ad530b8mr257196plq.14.1662496137190;
-        Tue, 06 Sep 2022 13:28:57 -0700 (PDT)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id h4-20020a170902f54400b001715a939ac5sm10412275plf.295.2022.09.06.13.28.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Sep 2022 13:28:56 -0700 (PDT)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'srinivas pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        <lenb@kernel.org>, "'Rafael J. Wysocki'" <rafael@kernel.org>
-Cc:     <linux-pm@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "Doug Smythies" <dsmythies@telus.net>,
-        "'M. Cagri Ari'" <cagriari@pm.me>
-References: <003901d8c22d$02447f70$06cd7e50$@telus.net>
-In-Reply-To: <003901d8c22d$02447f70$06cd7e50$@telus.net>
-Subject: [PATCH] cpufreq: intel_pstate: Add Tigerlake support in no-HWP mode
-Date:   Tue, 6 Sep 2022 13:28:57 -0700
-Message-ID: <003c01d8c22f$4a8e2270$dfaa6750$@telus.net>
+        with ESMTP id S229488AbiIFWX5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 18:23:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A88A9C27;
+        Tue,  6 Sep 2022 15:23:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCE9761711;
+        Tue,  6 Sep 2022 22:23:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E484FC433C1;
+        Tue,  6 Sep 2022 22:23:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662503036;
+        bh=eAJVKKjSyS9O0xywzIN+Y34OoPYnRpz2oqS3VOvQdAw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oTQ5RW0zFq/HCqu8W9kLOhMyrlTUXGaT8irHzikNEKbB2jTw3yIAwkqhSpcNE5h+j
+         SlIveyaa2UXiVqfYpU2QiBT6lbtcAbIF4rgrj7UpB3hvO2ZUhKPr/sg8Zep13RGmQg
+         cREqHfYNiWnxskmm5Tcv178xb+MVjKmvqcOG3xNkL/uzB3KQot4bug36LpUyvwgmCI
+         CaqD7GL1tI1ojI1ZCxBGSvjINAMbDob4x2PioFzPJVY8Bi//mPtH5mR/Oc5G7QjAVX
+         ofP+Ic08lOrI7LNDODkX6Eqij+L/D7AvHv3Zwdk2tn49sY6LSS0p4uyyXC3fhG6wym
+         fCL4NNzP2pjLA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v3 00/10] PCI/PM: Always disable PTM for all devices during suspend
+Date:   Tue,  6 Sep 2022 17:23:41 -0500
+Message-Id: <20220906222351.64760-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQKqNjiovqToChG3xUCNkHPXWq7dTqwv7neQ
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,37 +58,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Users may disable HWP in firmware, in which case intel_pstate wouldn't load
-unless the CPU model is explicitly supported.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Add TIGERLAKE to the list of CPUs that can register intel_pstate while not
-advertising the HWP capability. Without this change, an TIGERLAKE in no-HWP
-mode could only use the acpi_cpufreq frequency scaling driver.
+We currently disable PTM for Root Ports during suspend.  Leaving PTM
+enabled for downstream devices causes UR errors if they send PTM Requests.
+The intent of this series is to:
 
-See also commits:
-d8de7a44e11f: cpufreq: intel_pstate: Add Skylake servers support
-fbdc21e9b038: cpufreq: intel_pstate: Add Icelake servers support in no-HWP mode
-706c5328851d: cpufreq: intel_pstate: Add Cometlake support in no-HWP mode
+  - Unconditionally disable PTM during suspend (even if the driver saves
+    its own state) by moving the disable from pci_prepare_to_sleep() to
+    pci_pm_suspend().
 
-Reported by: M. Cargi Ari <cagriari@pm.me>
-Signed-off-by: Doug Smythies <dsmythies@telus.net>
----
- drivers/cpufreq/intel_pstate.c | 1 +
- 1 file changed, 1 insertion(+)
+  - Disable PTM for all devices by removing the Root Port condition and
+    doing it early in the suspend paths.
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 57cdb3679885..fc3ebeb0bbe5 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2416,6 +2416,7 @@ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
- 	X86_MATCH(SKYLAKE_X,		core_funcs),
- 	X86_MATCH(COMETLAKE,		core_funcs),
- 	X86_MATCH(ICELAKE_X,		core_funcs),
-+	X86_MATCH(TIGERLAKE,		core_funcs),
- 	{}
- };
- MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
---
+  - Explicitly re-enable PTM during resume.
+
+This got long and pretty complicated to read via the patches.  The end
+result of ptm.c might help as a roadmap to where I hoped to go:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/tree/drivers/pci/pcie/ptm.c?h=07c2204ab0f3
+
+Basically I wanted to make pci_enable_ptm() and pci_disable_ptm() flip the
+PCI_PTM_CTRL_ENABLE bit and nothing else, with all the setup based on the
+PTM Capabilities register done in pci_ptm_init().
+
+Bjorn Helgaas (10):
+  PCI/PTM: Preserve PTM Root Select
+  PCI/PTM: Cache PTM Capability offset
+  PCI/PTM: Add pci_upstream_ptm() helper
+  PCI/PTM: Separate configuration and enable
+  PCI/PTM: Add pci_disable_ptm() wrapper
+  PCI/PTM: Add pci_enable_ptm() wrapper
+  PCI/PTM: Add suspend/resume
+  PCI/PTM: Move pci_ptm_info() body into its only caller
+  PCI/PTM: Reorder functions in logical order
+  PCI/PM: Always disable PTM for all devices during suspend
+
+ drivers/pci/pci-driver.c |  11 ++
+ drivers/pci/pci.c        |  28 +---
+ drivers/pci/pci.h        |   6 +-
+ drivers/pci/pcie/ptm.c   | 317 ++++++++++++++++++++-------------------
+ include/linux/pci.h      |   3 +
+ 5 files changed, 181 insertions(+), 184 deletions(-)
+
+-- 
 2.25.1
-
 
