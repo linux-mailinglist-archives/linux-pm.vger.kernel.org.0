@@ -2,125 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517B15AE926
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 15:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033D35AEF11
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Sep 2022 17:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbiIFNLW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Sep 2022 09:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48030 "EHLO
+        id S232542AbiIFPle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Sep 2022 11:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240145AbiIFNLT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 09:11:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831C3659F8;
-        Tue,  6 Sep 2022 06:11:11 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B80DF660037F;
-        Tue,  6 Sep 2022 14:11:06 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662469869;
-        bh=5QO1SLp5eg80ObSSt8FLqmBTFoFhiD0BogISlBa9BUQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mOY7c50kE5+Xmrb35k079cHSMFkYyUhYJe+5NjUUjK8ZUXDK2Cj5ao5UFUt6ANYUq
-         MbENZTEK+MC3hZgppOROxiXeWrvpQjkxT6YjcoMgmWubysUlbKG77vCqaEkWRDRal9
-         XXpS0HpF4+46bmoLB10JvyBEUVX9ZdQGSREbTyPXFsZn6YfaEG5VzCQDo8FnzKShL+
-         XBdK7rg58ksb9EzHK9Ozg4bd0EY8Yc3pKrEVM3aopMr0XqtFVapzbd8WRV3eV8G+7D
-         kXDLzfz9Muog+VR73hD4bNVxPc1EBMTiMUwEjla1rHk5Sro9Q91O0seQeTlmhd+iQq
-         3CWCI7wojCwxQ==
-Message-ID: <efe46a7d-89b7-2465-e593-8383d1546c16@collabora.com>
-Date:   Tue, 6 Sep 2022 16:11:03 +0300
+        with ESMTP id S239142AbiIFPiv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Sep 2022 11:38:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 004D1A00E1;
+        Tue,  6 Sep 2022 07:48:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8CF91A2D;
+        Tue,  6 Sep 2022 07:24:31 -0700 (PDT)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CBB33F7B4;
+        Tue,  6 Sep 2022 07:24:23 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
+        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, wbartczak@marvell.com,
+        dan.carpenter@oracle.com, lukasz.luba@arm.com,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH v2 0/3] Add ARM SCMI Powercap driver
+Date:   Tue,  6 Sep 2022 15:23:34 +0100
+Message-Id: <20220906142337.1697569-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v5 07/33] thermal/drivers/tegra: Switch to new of API
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
-        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
-        baolin.wang7@gmail.com, f.fainelli@gmail.com,
-        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
-        glaroque@baylibre.com, miquel.raynal@bootlin.com,
-        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
-        matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220804224349.1926752-8-daniel.lezcano@linexp.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220804224349.1926752-8-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/5/22 01:43, Daniel Lezcano wrote:
-> diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
-> index 05886684f429..c34501287e96 100644
-> --- a/drivers/thermal/tegra/tegra30-tsensor.c
-> +++ b/drivers/thermal/tegra/tegra30-tsensor.c
-> @@ -159,9 +159,9 @@ static void devm_tegra_tsensor_hw_disable(void *data)
->  	tegra_tsensor_hw_disable(ts);
->  }
->  
-> -static int tegra_tsensor_get_temp(void *data, int *temp)
-> +static int tegra_tsensor_get_temp(struct thermal_zone_device *tz, int *temp)
->  {
-> -	const struct tegra_tsensor_channel *tsc = data;
-> +	const struct tegra_tsensor_channel *tsc = tz->devdata;
->  	const struct tegra_tsensor *ts = tsc->ts;
->  	int err, c1, c2, c3, c4, counter;
->  	u32 val;
-> @@ -217,9 +217,9 @@ static int tegra_tsensor_temp_to_counter(const struct tegra_tsensor *ts, int tem
->  	return DIV_ROUND_CLOSEST(c2 * 1000000 - ts->calib.b, ts->calib.a);
->  }
->  
-> -static int tegra_tsensor_set_trips(void *data, int low, int high)
-> +static int tegra_tsensor_set_trips(struct thermal_zone_device *tz, int low, int high)
->  {
-> -	const struct tegra_tsensor_channel *tsc = data;
-> +	const struct tegra_tsensor_channel *tsc = tz->devdata;
->  	const struct tegra_tsensor *ts = tsc->ts;
->  	u32 val;
->  
-> @@ -240,7 +240,7 @@ static int tegra_tsensor_set_trips(void *data, int low, int high)
->  	return 0;
->  }
->  
-> -static const struct thermal_zone_of_device_ops ops = {
-> +static const struct thermal_zone_device_ops ops = {
->  	.get_temp = tegra_tsensor_get_temp,
->  	.set_trips = tegra_tsensor_set_trips,
->  };
-> @@ -516,7 +516,7 @@ static int tegra_tsensor_register_channel(struct tegra_tsensor *ts,
->  	tsc->id = id;
->  	tsc->regs = ts->regs + 0x40 * (hw_id + 1);
->  
-> -	tsc->tzd = devm_thermal_zone_of_sensor_register(ts->dev, id, tsc, &ops);
-> +	tsc->tzd = devm_thermal_of_zone_register(ts->dev, id, tsc, &ops);
->  	if (IS_ERR(tsc->tzd)) {
->  		if (PTR_ERR(tsc->tzd) != -ENODEV)
->  			return dev_err_probe(ts->dev, PTR_ERR(tsc->tzd),
+Hi all,
 
-Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com> # Nexus7
+this short series builts on top of recently introduced SCMI v3.1 Powercap
+protocol to implement an ARM SCMI Powercap driver which takes care to
+expose via the Powercap framework all the SCMI Powercap zones that have
+been discovered asking the SCMI platform firmware.
+
+Basic testing has been performed against an emulated SCMI platform
+supporting SCMIv3.1 Powercap protocol using powercap-utils.
+
+A couple of fixes spotted with Smatch by Dan are queued on top of the
+driver itself; these may have to be squashed finally into the driver itself
+but for now I have just added them here as patches on top, for clarity and
+to preserve authorship.
+
+The series is based on sudeep/for-next/scmi [1] on top of
+
+commit 40d30cf680cb ("firmware: arm_scmi: Harmonize SCMI tracing message format")
+
+Thanks,
+Cristian
+---
+v1 --> v2
+  - using clamp_t() to simplify normalizations
+  - cleanup style in block of var declarations
+  - refactor scale conversions code
+  - add MAINTAINER entry
+  - refactored normalizations and added dev_dbg
+
+Cristian Marussi (1):
+  powercap: arm_scmi: Add SCMI Powercap based driver
+
+Dan Carpenter (2):
+  powercap: arm_scmi: Fix signedness bug in probe
+  powercap: arm_scmi: Fix a NULL vs IS_ERR() bug
+
+ MAINTAINERS                          |   1 +
+ drivers/powercap/Kconfig             |  13 +
+ drivers/powercap/Makefile            |   1 +
+ drivers/powercap/arm_scmi_powercap.c | 509 +++++++++++++++++++++++++++
+ 4 files changed, 524 insertions(+)
+ create mode 100644 drivers/powercap/arm_scmi_powercap.c
 
 -- 
-Best regards,
-Dmitry
+2.32.0
+
