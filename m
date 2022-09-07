@@ -2,179 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC155B0085
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 11:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6835B025B
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 13:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiIGJbz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Sep 2022 05:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S229931AbiIGLGm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Sep 2022 07:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiIGJby (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 05:31:54 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F90B6EF29;
-        Wed,  7 Sep 2022 02:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zT7UOXIBjLCEJ5VBUdquxIoLhG3Q99iV2Ry3SdgK2r4=; b=eTctjCAlTASudbxIxAbP0BXI5D
-        U8btcf0L2jXI2A03skBpEMmDDgM1a1YKmDjY8v0vhdDr1pt2+LHrMMFdZY1HMqoc6zF6KXhuWcTMf
-        TKkwORktjTZ+hdWNC2rHa+lD/0MyIiUvnqsBjpWZBqFcVP+EkCYXb9kpz44aAWR3ruheR94m4GU5B
-        vTy1gzY9ozyukNkT3X8z7dLFC2TFUjpcrb+eC+fwaBGPYTxHag/gVegfZxuww649AUhQM4K7hdLHB
-        rRX5byG19bEr0mlElGKw8tkatejM1nltKgRCYrSNV7noSGWX1a08a6AFI05u8oGU+FFIUFr/x1bet
-        8bqeaX9Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVrOY-00APXe-7S; Wed, 07 Sep 2022 09:30:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CE5EF30013F;
-        Wed,  7 Sep 2022 11:30:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BA6342B99BB11; Wed,  7 Sep 2022 11:30:53 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 11:30:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] sched: Change wait_task_inactive()s match_state
-Message-ID: <YxhkzfuFTvRnpUaH@hirez.programming.kicks-ass.net>
-References: <20220822111816.760285417@infradead.org>
- <20220822114648.856734578@infradead.org>
- <YxSBlPb/oZ6x0jfw@gmail.com>
- <Yxcm6oOTbmCbsHvj@hirez.programming.kicks-ass.net>
+        with ESMTP id S229561AbiIGLGh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 07:06:37 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EE28B981
+        for <linux-pm@vger.kernel.org>; Wed,  7 Sep 2022 04:06:35 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id y29so2924436ljq.7
+        for <linux-pm@vger.kernel.org>; Wed, 07 Sep 2022 04:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=C5hIp9nN3W2D7dzzH3jnznt8lv8D1GoBfgVUxQcYfdA=;
+        b=V20/cduvs2Gj/9+T9/F/hCxAVQhflNMvFa6KbJQ16AHXe27a8mPFJEeMH7nD10zhgo
+         Tp3pwTeLQNQUNUhAtoHFogTUtv4dWPrLp0INzI4j5EWNJlzs4j/m9HKSlxuoo4Zx4Vc4
+         yHf7+xApdFQLTragTbZVbtQdBpa38jGE+Mfxbkxaiu0Ba3w1U8IzZQO/cT4VhvHBriHE
+         KnmWQeK9d5YV94Jvq3O6m0CCuFmQlIxEJuZEopJZUmsmx3trzm8+kZYWNq5RlRHBDwIx
+         kjesDAAQE/JcKDYkwXOgdGpAHH2YNvNIZQY2FhyPPrVSic5buTvS+joeuRJSm4CcAfqi
+         J1mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=C5hIp9nN3W2D7dzzH3jnznt8lv8D1GoBfgVUxQcYfdA=;
+        b=M9BoXekOgYKapm4ggJl7x/YjVgRRQ2lYSX7srtTQK2tZzja6tinbO/3HWZstnJfPMF
+         qLk9+HYDFAmLB4lWcgNVWr70frYjNBRAr343Yo/skkF/y8x6Pl0mZb/me3UVqe5TIfcZ
+         E9g/pPTaNbc6XExWmpiJ0JEs8m1zSyVtfMIAUv6J/AKysklFUqROCANVpzvd/TbcDu2C
+         EZYqjGDcUFNSzb6E3iK5IPi8rxwZfIgcT9Dr4cIuDpoECf6i5ka9feZSuXOoIs+SKX/w
+         7/w3GfdtmaxNBdy0dw6hQOxekd8wim3Y/tYsWj4sjXx+eD/baJh+o1zrrCRd4k7INyhq
+         y9nA==
+X-Gm-Message-State: ACgBeo1NvAeWKgkbaAbyqUCcaGxkx9r32KyYQRCxhAaP/eHlvoXF1aaB
+        xCKQBNz0rAIGrDJNvnVm2pBbtw==
+X-Google-Smtp-Source: AA6agR4kVpxGb+hu/RdLINCQjhOEouQk7sPF/ixkY18l6sQPYqSK2LTnY52/7OGqIcu4I1Dl9coZWQ==
+X-Received: by 2002:a2e:a54a:0:b0:261:caa2:8d74 with SMTP id e10-20020a2ea54a000000b00261caa28d74mr778475ljn.11.1662548794272;
+        Wed, 07 Sep 2022 04:06:34 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id h23-20020ac24db7000000b00496693860dcsm1292490lfe.232.2022.09.07.04.06.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 04:06:33 -0700 (PDT)
+Message-ID: <aad73da2-101c-6d76-5103-c6e66d7f2ea6@linaro.org>
+Date:   Wed, 7 Sep 2022 13:06:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxcm6oOTbmCbsHvj@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 08/30] thermal/drivers/exynos: Use generic
+ thermal_zone_get_trip() function
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220906164720.330701-1-daniel.lezcano@linaro.org>
+ <20220906164720.330701-9-daniel.lezcano@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220906164720.330701-9-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 12:54:34PM +0200, Peter Zijlstra wrote:
-
-> > Suggestion #3:
-> > 
-> > - Couldn't the following users with a 0 mask:
-> > 
-> >     drivers/powercap/idle_inject.c:         wait_task_inactive(iit->tsk, 0);
-> >     fs/coredump.c:                  wait_task_inactive(ptr->task, 0);
-> > 
-> >   Use ~0 instead (exposed as TASK_ANY or so) and then we can drop the
-> >   !match_state special case?
-> > 
-> >   They'd do something like:
-> > 
-> >     drivers/powercap/idle_inject.c:         wait_task_inactive(iit->tsk, TASK_ANY);
-> >     fs/coredump.c:                  wait_task_inactive(ptr->task, TASK_ANY);
-> > 
-> >   It's not an entirely 100% equivalent transformation though, but looks OK 
-> >   at first sight: ->__state will be some nonzero mask for genuine tasks 
-> >   waiting to schedule out, so any match will be functionally the same as a 
-> >   0 flag telling us not to check any of the bits, right? I might be missing 
-> >   something though.
+On 06/09/2022 18:46, Daniel Lezcano wrote:
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
 > 
-> I too am thinking that should work. Added patch for that.
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
----
-Subject: sched: Add TASK_ANY for wait_task_inactive()
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue Sep 6 12:39:55 CEST 2022
 
-Now that wait_task_inactive()'s @match_state argument is a mask (like
-ttwu()) it is possible to replace the special !match_state case with
-an 'all-states' value such that any blocked state will match.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Suggested-by: Ingo Molnar (mingo@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- drivers/powercap/idle_inject.c |    2 +-
- fs/coredump.c                  |    2 +-
- include/linux/sched.h          |    2 ++
- kernel/sched/core.c            |   16 ++++++++--------
- 4 files changed, 12 insertions(+), 10 deletions(-)
 
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -254,7 +254,7 @@ void idle_inject_stop(struct idle_inject
- 		iit = per_cpu_ptr(&idle_inject_thread, cpu);
- 		iit->should_run = 0;
- 
--		wait_task_inactive(iit->tsk, 0);
-+		wait_task_inactive(iit->tsk, TASK_ANY);
- 	}
- 
- 	cpu_hotplug_enable();
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -412,7 +412,7 @@ static int coredump_wait(int exit_code,
- 		 */
- 		ptr = core_state->dumper.next;
- 		while (ptr != NULL) {
--			wait_task_inactive(ptr->task, 0);
-+			wait_task_inactive(ptr->task, TASK_ANY);
- 			ptr = ptr->next;
- 		}
- 	}
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -101,6 +101,8 @@ struct task_group;
- #define TASK_RTLOCK_WAIT		0x1000
- #define TASK_STATE_MAX			0x2000
- 
-+#define TASK_ANY			(TASK_STATE_MAX-1)
-+
- /* Convenience macros for the sake of set_current_state: */
- #define TASK_KILLABLE			(TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)
- #define TASK_STOPPED			(TASK_WAKEKILL | __TASK_STOPPED)
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3254,12 +3254,12 @@ int migrate_swap(struct task_struct *cur
- /*
-  * wait_task_inactive - wait for a thread to unschedule.
-  *
-- * If @match_state is nonzero, it's the @p->state value just checked and
-- * not expected to change.  If it changes, i.e. @p might have woken up,
-- * then return zero.  When we succeed in waiting for @p to be off its CPU,
-- * we return a positive number (its total switch count).  If a second call
-- * a short while later returns the same number, the caller can be sure that
-- * @p has remained unscheduled the whole time.
-+ * Wait for the thread to block in any of the states set in @match_state.
-+ * If it changes, i.e. @p might have woken up, then return zero.  When we
-+ * succeed in waiting for @p to be off its CPU, we return a positive number
-+ * (its total switch count).  If a second call a short while later returns the
-+ * same number, the caller can be sure that @p has remained unscheduled the
-+ * whole time.
-  *
-  * The caller must ensure that the task *will* unschedule sometime soon,
-  * else this function might spin for a *long* time. This function can't
-@@ -3295,7 +3295,7 @@ unsigned long wait_task_inactive(struct
- 		 * is actually now running somewhere else!
- 		 */
- 		while (task_on_cpu(rq, p)) {
--			if (match_state && !(READ_ONCE(p->__state) & match_state))
-+			if (!(READ_ONCE(p->__state) & match_state))
- 				return 0;
- 			cpu_relax();
- 		}
-@@ -3310,7 +3310,7 @@ unsigned long wait_task_inactive(struct
- 		running = task_on_cpu(rq, p);
- 		queued = task_on_rq_queued(p);
- 		ncsw = 0;
--		if (!match_state || (READ_ONCE(p->__state) & match_state))
-+		if (READ_ONCE(p->__state) & match_state)
- 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
- 		task_rq_unlock(rq, p, &rf);
- 
+Best regards,
+Krzysztof
