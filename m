@@ -2,53 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2836A5B0A26
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 18:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB945B0A2F
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 18:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiIGQc1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Sep 2022 12:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
+        id S229523AbiIGQdk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Sep 2022 12:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiIGQcY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 12:32:24 -0400
+        with ESMTP id S229459AbiIGQdf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 12:33:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BBF86705;
-        Wed,  7 Sep 2022 09:32:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2CA7E013;
+        Wed,  7 Sep 2022 09:33:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 060A6619CC;
-        Wed,  7 Sep 2022 16:32:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D45CC4314B;
-        Wed,  7 Sep 2022 16:32:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA5D5619A9;
+        Wed,  7 Sep 2022 16:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE94DC433C1;
+        Wed,  7 Sep 2022 16:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662568341;
-        bh=5WbcCfZRJu9cYVet1elgBrqqShd4l0yonhdRZ64vnO0=;
+        s=k20201202; t=1662568414;
+        bh=AAB6Huu3ZlaINnAmbB+e3dt23bU2El2/Mz0SFEyyIxE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H97fhlhXq6e2nrOKRg9PF7TC1Q6l9sn2MBz27zi+IUf0q5wsBQEAqgiAXtUS6HbgT
-         UKy2oFx5RZ7KwFove4MSV+XQEWkp8nY5G4T3fZsXvB/8k4ZqUAuRn8WDqasb5DpiCY
-         6IahxcrMoYmKDMEaP/Pe4/6uPG5O4443p4Q8Z7fxp8R118A6XWExvvqrYGheNlunRj
-         Z9Zr8/rappROaHXCKGd2sjdQTNm4Bz89PWfOYn8zqh40K1Cdp31LDrSvXSaVb4fi2S
-         uGA8fu1O8WAPA20vlF1RmIVqxgEQ/U0mJo2+HbleVIV1iJ1aCLnU72nKwz1G350JOe
-         vUDDH81FXnCUA==
+        b=f+8BMs2CzlgjCDzTBmoW489NaCSwLjhVnegzttOeTHnOktXYFDM192XHs4sF2AGc+
+         diLyroyG1iD5TvGOdh1CVJnaF7pDtqrqAC6Lw/+jCy9yl39d/Ypjz01evcAK0J6WG2
+         dP9UGtbUJ7QoysWRtwjCNSKpPgCC2WeTPmGiTcy8ESQvnjZJs3vbCtZDST7wsGMIqJ
+         R4ym//XbwQtYnUk33tBGBH36tim4qSR0J0U56uSYrdA/oYBn/sAPxQrU1igKEgvC6s
+         jk2/p93qDyihdy+HC7/HqtbslxyYbODZ/4XJ9EYCs8+yn7ClgGPzDbPd8KcGRZHzFn
+         5Ew8iLMWRbjqQ==
 Received: by pali.im (Postfix)
-        id 3D8687F0; Wed,  7 Sep 2022 18:32:18 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 18:32:18 +0200
+        id 4B1FA7F0; Wed,  7 Sep 2022 18:33:31 +0200 (CEST)
+Date:   Wed, 7 Sep 2022 18:33:31 +0200
 From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: power: reset: restart-handler: add common
- schema
-Message-ID: <20220907163218.aja4pazw3sbxnoop@pali>
-References: <20220907123630.57383-1-krzysztof.kozlowski@linaro.org>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Subject: Re: [PATCH v3 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Message-ID: <20220907163331.zoumcdmmarnbkmm5@pali>
+References: <20220820102925.29476-1-pali@kernel.org>
+ <20220831081715.14673-1-pali@kernel.org>
+ <9a71a2f3-97f6-f3ac-8852-1d3da1a50370@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220907123630.57383-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9a71a2f3-97f6-f3ac-8852-1d3da1a50370@linaro.org>
 User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,100 +64,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday 07 September 2022 14:36:30 Krzysztof Kozlowski wrote:
-> Add common schema for restart and shutdown handlers, so they all use
-> same meaning of "priority" field.  The Linux drivers already have this
-> property and some systems want to customize it per-board in DTS.
+On Wednesday 07 September 2022 14:38:42 Krzysztof Kozlowski wrote:
+> On 31/08/2022 10:17, Pali Rohár wrote:
+> > This new optional priority property allows to specify custom priority level
+> > of reset device. Prior this change priority level was hardcoded to 192 and
+> > not possible to specify or change. Specifying other value is needed for
+> > some boards. Default level when not specified stays at 192 as before.
+> > 
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Thanks for the changes. Explanation looks good.
 > 
-> ---
+> I sent a patch adding the common schema with priority. If it gets
+> ack/review from Rob and Sebastian, please kindly rebase on top of it and
+> use same way as I did for gpio-restart.yaml
 > 
-> See also:
-> https://lore.kernel.org/all/8fe93da3-f768-16ae-7025-1cfa97a42b27@linaro.org/
-> https://lore.kernel.org/all/20220831081715.14673-1-pali@kernel.org/
-> ---
->  .../bindings/power/reset/gpio-restart.yaml    | 13 ++------
->  .../bindings/power/reset/restart-handler.yaml | 30 +++++++++++++++++++
->  2 files changed, 33 insertions(+), 10 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-> index a72d5c721516..d3d18e0f5db3 100644
-> --- a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-> @@ -25,6 +25,9 @@ description: >
->    inactive-delay, the GPIO is driven active again.  After a delay specified by wait-delay, the
->    restart handler completes allowing other restart handlers to be attempted.
->  
-> +allOf:
-> +  - $ref: restart-handler.yaml#
-> +
->  properties:
->    compatible:
->      const: gpio-restart
-> @@ -41,16 +44,6 @@ properties:
->        in its inactive state.
->  
->    priority:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
-> -    description: |
-> -      A priority ranging from 0 to 255 (default 129) according to the following guidelines:
-> -
-> -        0:   Restart handler of last resort, with limited restart capabilities.
-> -        128: Default restart handler; use if no other restart handler is expected to be available,
-> -             and/or if restart functionality is sufficient to restart the entire system.
-> -        255: Highest priority restart handler, will preempt all other restart handlers.
-> -    minimum: 0
-> -    maximum: 255
->      default: 129
->  
->    active-delay:
-> diff --git a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> new file mode 100644
-> index 000000000000..f5d22ca0cd45
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Restart and shutdown handler generic binding
-> +
-> +maintainers:
-> +  - Sebastian Reichel <sre@kernel.org>
-> +
-> +description:
-> +  Restart and shutdown handler device is responsible for powering off the
-> +  system, e.g. my cutting off the power.  System might have several restart
-> +  handlers, which usually are tried from most precise to last resort.
-> +
-> +properties:
-> +  priority:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+> Best regards,
+> Krzysztof
 
-IIRC priority is signed integer number, not unsigned.
-
-> +    description: |
-> +      A priority ranging from 0 to 255 according to the following guidelines::
-> +        0:   Restart handler of last resort, with limited restart capabilities.
-> +        128: Typical, default restart handler; use if no other restart handler
-> +             is expected to be available, and/or if restart functionality is
-> +             sufficient to restart the entire system.
-> +        255: Highest priority restart handler, will preempt all other restart handlers.
-> +    minimum: 0
-> +    maximum: 255
-
-And IIRC also other values (above 255 or below 0) are allowed for tuning
-two "highest" or two "last resort" handlers.
-
-This needs to be checked / tested to ensure that new schema is not incorrect.
-
-> +
-> +additionalProperties: true
-> -- 
-> 2.34.1
-> 
+Ok, so just by adding "allOf: - $ref: restart-handler.yaml#" right?
