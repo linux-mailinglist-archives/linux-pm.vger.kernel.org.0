@@ -2,95 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A9B5B029E
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 13:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC225B0392
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 14:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiIGLQL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Sep 2022 07:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S229495AbiIGMFH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Sep 2022 08:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiIGLQK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 07:16:10 -0400
-Received: from sonic308-11.consmr.mail.ne1.yahoo.com (sonic308-11.consmr.mail.ne1.yahoo.com [66.163.187.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5E685AB6
-        for <linux-pm@vger.kernel.org>; Wed,  7 Sep 2022 04:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1662549366; bh=D28LXyMm7oFN0CSwLIk1hUi8e910eghG1BhsXXW7YFw=; h=Date:From:Subject:To:Cc:In-Reply-To:References:From:Subject:Reply-To; b=oQ4Z3ElQ6sgUjf53I4GWTpTjEtFgaf9nswr8kUtK5k8kARRmoSnBGu2Fbw1Ll7RRmmmQDjYlWTG9cSqnS+qUiOkX0KoDZKAoaikmUmtAEx49UrRhHSta+xUf7rkqoyXb31PBbFRODWQX31/bj7V7z2SmAGqI+2W9jxM/P4lGYv8=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1662549366; bh=XPNJtkWyVPHyo2TToBLjXBtiYCIBR5qNyDX0TQAz56r=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=MtMq0Kwtvy2StrIpxshT9P1wIMJBABIezVr+XsVTPVpStLmiX2Xc1OXZml3KSJAi89jHgUaNhBLFrst0ykeGJqz9cwBnLqHDjkYRTcyD79JNznG+xy4aAxTmzJh9qVUF7CLI0X+OQVwZHHXLXhocZ6np5A2yUrSVAmcf0/2vtTDKygLG19oE6yFmDPSfMzra1IfTj2ohCQA/oAyfai8NV0zpSbQwY0b1nYBggim+PmZeQq6CstyDJgKqcd1F4r0bGZNKObEcrnrLUUOoI/qz0cgCN7WB1Mx6HlVvchndhaBCHO9KK9byu+ASEGKhPBsEI0ZkmPpLPiObTXw/Q3fi5A==
-X-YMail-OSG: vSXCuRQVM1n_azo_oFbV2qtWhyzYT_9Y1dHx2H6cgGipgEd3aOI.oNgYD8BVz9T
- aa3HY0V4CtC8gdCB5PIENKud4NPY5HtsTRnDLFJwcwSVASisFm3diFUvOP41QB85iFLdvjdxPrtm
- DqcOeq6Y1qE7KPWiL4DsxJr_K6q4KT4VJeSs3v7071fRXZbTe2HJB20qtbE_7o7uw0JGxydQDuI5
- HGg_KwtcQeBNNyGtzqggr8X2RR4Irft6iFEcW2sWe1_bV31eQcu5039_UDl4NqROZZuEpcazAmaT
- 4ymPa9VUxW2qPh4lOd3A5vtttSkt9almxtPm.5top2YCQodP7PFXd8_ZEepw.g9f4hXCPTsCkOAa
- 0_kw.u3sPFei_uKNszclM6ttlxsWEjkKm7G_M8_Q6xEmpoIFugWz74GWWxzWGPVspMaC6Ms9l3up
- MxWL7CMALUwsf8Oe_pxz6MLpDDp7MjpGNQBaGf0nvIJ61qeiOrWESyTSUrvtDvghmoGqWXwOPm24
- FXupgVdIO7vpMAdGbmZ1Kedn6Zwxc.tmlri7pLDHX6SwsGnPJxH6KvPvPFwGC3RkFV8vHcr49x3.
- gOW4l3UYrer0MKo138ZeSuiEaoYSqKER3wP586SXC9KfTSZMCZQP3K12YN1fX6ft1hI8nMgqSHvm
- GUKGwTHsiQU5vOdRizSxT8_4nrebAephSJRKRRdmpHhJ0UTqaw0gygHS726TUC35G_Lm.bgMWZXB
- 1cTEgNrIMywJ5_K4KnDzzKb1BBA_jBBSbgAsGdWlFfCxMQiL0Nngkdx6X7KqBOYskgNe5zV8pLXP
- BJvcOSeGYyL7iG5m2nhIUTUKquAuapokw08xZfeTqbwcn_kmkHlLlCUQG6dW6Wmevv2C_qpv62rC
- p6VFaJpP7Yifarikyte2itVNS_kg12TyEmkIyro.fPHJEBykUdjAcfMq45jBYT_jxcuwnWveRdI8
- W0b1k7QIONsQ17opeVOqG1ad_Qtw1jvyW4_0TgQJfGJnPjznVrg_g93PeEFGfbRWBJcb0UxAmHTj
- HfwOeaRjva8DWC3e.SIx.HzfjgWGwGcgRACOVIeW6TnstSniS2TajBae7zWABEvsukLsAkgqT.X7
- OimjVqcVWFpF73YkXMtkN.z_zrwhEmoSHGA0QWTEskbKK5b5.suAiBQYrZR6FhDTeOembsh6G18I
- Bnpo55tRGNbp6LV7fa2Hs6NEU4IzcHBydQGLWmiBQ48WxSqjpSO2MQqBVnngts9Q.wwEqR9pFjY9
- .pQfkcKEJA1hJdi_dLEeHZb_cZA.yV0geonnrarBm35zsJGY.ThzSOh5lRD487qWwyDe4ra7nP14
- B9_rj7GgERjUTTmqJ3E2wqkkW5u1IaDnIVf1QjjlPgqnUp0lFiGRDI1jDQVbjdBgdEqecKbKNqaC
- MzRWtQO5rmikpBR27kebnPodDx1jNP4Vgu5EhwWl93EIqINbQZ2Jug2H2JF7n9ehHck5LBmNIscM
- XeLyjnZt9sEv7XINyi60Enn_R6eJmvDhwc6ZEtv3FOn6l_coDRFArfle8amPg0DKKcZRc7G3LXpD
- lt7hMLjLYBPRTPVns9Uf.KuJTdasIS0ONLMP8PcDkocwsDOERbJSsa6c.k4IqnTxmBxlghZUOlNA
- ssTMW8rlBo7ARxiPTf.pKL_.guU4y7WAt.Kb9YR9j3.RAKqnjqqFUX4iWC60F1W47qUBEg.6WZW9
- S9caoMKKMapEIPc_GQqmhtAGKR3apcfQ1o16ltWklW3IX8oi0ZrKqY8JE1XXP7_s_V2HWGgQGb5r
- WCD62buYBtI4sRINeL9WDYBQjg861dZnbcbCrrN5q6xl.KPgrK0r2EMuHLMnWWgQilqcHZ6Xgd.o
- mltaz88f.qPb3GnWlPxQuuRgGTJ4bct9HUIH6jKRiW42HSF2M5Ic1O.JPI_Oqabz0LfSYsPaWgoL
- UKv..tSH2QGqoguWMJLfezHvctQK5aiOmeTslB9Scs967nQjhQszn3veJoLaHNjAy2dGIyZnN7W.
- r.YQVYSX2CoHXfeAcpO.T.DCHm7FAXqSORnJTgVT_jwLnqHlxYhzE8S0PGwS.DXsgbMCHINL5qe4
- 6ZaTG..4z0oEMxoe_4mWE52bzqpLYvFTkD_Jix.nnQuCU2rQbebNPoxB0PJKJLAa20O6jXvz4Mqb
- RaVBISKdJq008.MR_eppoac.AwPeIP9WdoZPesLZlxdVQyBJ1aUGUb07fjwxuVlr.LcTPrHfSVT2
- 5DwWAZUGCKHxe
-X-Sonic-MF: <pheonix.sja@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Sep 2022 11:16:06 +0000
-Received: by hermes--production-ne1-544744cc75-n6tzz (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID fbfc95aee6bd7e475c2a52445467b5fd;
-          Wed, 07 Sep 2022 11:16:02 +0000 (UTC)
-Date:   Wed, 07 Sep 2022 07:15:54 -0400
-From:   Steven J Abner <pheonix.sja@att.net>
-Subject: Re: thermal driver patch
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
-Message-Id: <IA7UHR.UBUE22H3MNMY2@att.net>
-In-Reply-To: <NZ5JHR.JGO592OT0D961@att.net>
-References: <DL9RGR.8W3XFSCFFYXI2.ref@att.net> <DL9RGR.8W3XFSCFFYXI2@att.net>
-        <0f961ea6-4948-0b7a-e01d-d62ca4065af8@infradead.org>
-        <L9MDHR.JVBXTJ2L6TPP2@att.net>
-        <cf3a3cbd-c189-a120-124f-98d6adac058d@infradead.org>
-        <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
-        <NZ5JHR.JGO592OT0D961@att.net>
-X-Mailer: geary/3.36.1
+        with ESMTP id S229486AbiIGMFG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 08:05:06 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1932C4F6A1
+        for <linux-pm@vger.kernel.org>; Wed,  7 Sep 2022 05:05:04 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id p5so2657113ljc.13
+        for <linux-pm@vger.kernel.org>; Wed, 07 Sep 2022 05:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=DhMnHgvZLgQGk2ZGophI8BLsqGSYtn3vHSRE9tq/2lc=;
+        b=kRm2RsAxbIs+iSLZ9oKd4TeqeEG/9qQUTTx/tagPGA+qeulAYcrw+eohBuBmuED+s2
+         PvzTUdaUSNIi06z+eT9QEj2j0AB8YzKDbuB04a9cnKShu5TOXNQWb+EW6PsUatONg072
+         fSu5amYp4xHISIc7Ry9woaIZ21OR9M0SMkoWxqNe2MA+p4A5ksu014Ky5rpM4O5+rdWT
+         gXSTMgIA7t6C2YIolvzBjj1aaiHcb5ZLwFAtrJVjKVLBZpW6Ca7xsduJv9dUXRFJ146/
+         Ry4GLNXz18Y8yycbwf6kG9Te4Cs7kowtQiiA0t4sGbhoO1sWk5R5gvB7mcSduHrLM/8w
+         p2dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=DhMnHgvZLgQGk2ZGophI8BLsqGSYtn3vHSRE9tq/2lc=;
+        b=f3tjvUg73cYqF1Pwm06sUVWLdbgYcLixThx5GXTKNR/Fba8cjKGjEuFFcOkGYzqLNa
+         kKZZYyYg1xjURNv6ubgD/dYbX9G/wBY+SjQOAgLx/UxcIm/anjJJi8odJ9Lxo8vUUlsd
+         UuMSpCktV0VvbDmhbWXG5Iy8p1Y2OPn8ktv8UGcEtEEKHz6bHqp+glc/yU785kH4GZyJ
+         DE4OW0Jq9AhqBGtqDIYneMqtUhvlWXz7K8hNKZQUkInEGSY9T+xbBJzGGmcdCMOp1LdG
+         0WCl0314QbvufhnRFiwfwsEjhM3yqcVXoRBmcpQgSe5SAX+zHkPsH9QVkNx2Jl2AWAiP
+         UDNg==
+X-Gm-Message-State: ACgBeo1oZTlGF79McOjhm1UF0SQMqb/Jusp22Ov8jNIEfYxSqG9VcoKh
+        a6o6IpVTXD3RdyYHUqtxYf9K2KY2qE812Q==
+X-Google-Smtp-Source: AA6agR6+5p1Hswq0aeSZ4aWoRWOZfD9rclbT9lObRE+Z3z0CQkpT/Unkl/wOyWCdDOyoAf+AFv9MgQ==
+X-Received: by 2002:a05:651c:218:b0:263:aeac:5939 with SMTP id y24-20020a05651c021800b00263aeac5939mr848435ljn.64.1662552302499;
+        Wed, 07 Sep 2022 05:05:02 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id l18-20020a2e7012000000b00261ca0f940esm2503661ljc.62.2022.09.07.05.04.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 05:04:59 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RESEND PATCH] dt-bindings: interconnect: fsl,imx8m-noc: drop Leonard Crestez
+Date:   Wed,  7 Sep 2022 14:04:52 +0200
+Message-Id: <20220907120452.52161-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Additional info:
-After an automatic overnight suspend, from dmesg:
-[23668.033055] thermal thermal_zone0: failed to read out thermal zone 
-(-61)
-[23668.033197] PM: suspend exit
+Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
+Access denied:), so change maintainer to Peng Fan from NXP.
 
-So is it possible that driver iwlwifi is built with 'return -ENODEV;' 
-into
-its init/reset code?
-Also this code from kernel 5.18.19 instead of 5.18.12 initial report 
-messaging.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Peng Fan <peng.fan@nxp.com>
 
-Steve
+---
 
+Resend with ack.
+---
+ .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+index 7d8d0896e979..f7a5e31c506e 100644
+--- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
++++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Generic i.MX bus frequency device
+ 
+ maintainers:
+-  - Leonard Crestez <leonard.crestez@nxp.com>
++  - Peng Fan <peng.fan@nxp.com>
+ 
+ description: |
+   The i.MX SoC family has multiple buses for which clock frequency (and
+-- 
+2.34.1
 
