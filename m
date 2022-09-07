@@ -2,141 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9395B0F3D
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 23:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A905B10AF
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 01:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbiIGViS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Sep 2022 17:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
+        id S229565AbiIGX6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Sep 2022 19:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiIGViR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 17:38:17 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B49B7EFB
-        for <linux-pm@vger.kernel.org>; Wed,  7 Sep 2022 14:38:16 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id d68so12542552iof.11
-        for <linux-pm@vger.kernel.org>; Wed, 07 Sep 2022 14:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=6rBN7kbnMQYf7kObJ9WtbMZk6eRV31FVrweeYnfKHJo=;
-        b=GsBUnRMkGO5dIw7tKSqvNBSv8O6uCa4sXvZoRyGF82NiJatez4G6FekKpAO2g5lHhb
-         ioBB06C8djv7sgDL5LJVAzCbNMAsD4opDc/GlUhhS/HCAc7i5bP5S29gHxqJXDeIORxA
-         wji2yJFZQJdtAeGEO2Y3xGnoGpDil7p7ZMFt4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=6rBN7kbnMQYf7kObJ9WtbMZk6eRV31FVrweeYnfKHJo=;
-        b=W8E5ctTl5HyA8ZBp4a/J+0khl+ii9QKgCfOWCN13z6/Rkkr2oNAeD5HJn9x85HLO6t
-         QO9cpfZcnnMk5ebLtKdOKB6OizxsW14LjsSxqsz20FRZfjhMxTu9TsRnDebgN0h9UoEo
-         NOoOYacnozW8KsUauLWEO2KOj1Ue/xDvCGnfnVKq9/0the0VT1xof2b34fCagkmOFGEj
-         DP/GW/lkloyAXYCvgKIJQtUT0wd0fjtdq5+behkJQhmWgQMrWI2MV99RSZL8VuVO2Ghu
-         kaLPKfGZ+lDleufJ2EfH2fmTyhxS8+rtb1XUPM9TGZ3OCz5v3L4X2O91TcBnAnDUbKJy
-         gBdg==
-X-Gm-Message-State: ACgBeo1xaostR+lh3fVfrenyEJB4g1sqi+kCKL/AZQyZS707W0cp8vVN
-        /BTj0wNb74jtWv26GqV3Aua5FQ==
-X-Google-Smtp-Source: AA6agR6B39GPaBcn12tQVkSuKNn+ADOzyYixhCwj8vYzrAK2PbdGI8JoV2lX1SICEk5Fv3cheNeRtQ==
-X-Received: by 2002:a05:6602:160c:b0:68a:9ed3:e6ff with SMTP id x12-20020a056602160c00b0068a9ed3e6ffmr2641420iow.207.1662586696063;
-        Wed, 07 Sep 2022 14:38:16 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a191-20020a0216c8000000b003583635ab97sm569577jaa.28.2022.09.07.14.38.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 14:38:15 -0700 (PDT)
-Message-ID: <23414197-aa0b-a5fb-a818-35873f7b0482@linuxfoundation.org>
-Date:   Wed, 7 Sep 2022 15:38:14 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [Suggested-by:Shuah Khan Patch V2 1/1] cpufreq: amd-pstate: Add
- explanation for X86_AMD_PSTATE_UT
-Content-Language: en-US
-To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220905071418.1518338-1-li.meng@amd.com>
- <20220905071418.1518338-2-li.meng@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220905071418.1518338-2-li.meng@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        with ESMTP id S229437AbiIGX57 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 19:57:59 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E21A026E;
+        Wed,  7 Sep 2022 16:57:58 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287MK2NA012222;
+        Wed, 7 Sep 2022 23:57:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=820+EKhapsnrzr5gXlP9Eaag26KNAvbVppsq0pW4h2g=;
+ b=NveRvg/AolxNpuFItmcXnq43BdQLMd01KfjF8hlnMMRahiheOwmhagDeH8jjZ3aMAzaW
+ 56mI0kw+hPctOTgpGut7DpAF5MQ6gnuWMiCEl+xbwSJnCPHT2aKLlWVHSfZ9NhLM5G38
+ Bjw/Q8VFssTGxEC7rlG5ZRurwWOaAGQvgvwndmnQ+qN66ZdZ8dnEjEcucNi4Suu1IG7r
+ i6nXkcd5k7f1CQwGFrECngMorCM9teCmi794TZ7DUoyUppXYB+rhoDuDCxsMPFWYUiS9
+ W8I6X8JUFvqZZLVlYpYHAWlQRyT0ZAXDBGpAPX/Sb0wPWLYPdXxzjqTy+ct1HM0nc24q tg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jf40j20qx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 23:57:32 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 287Nq66E009220;
+        Wed, 7 Sep 2022 23:57:31 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jf40j20qq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 23:57:31 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 287NoUPc013473;
+        Wed, 7 Sep 2022 23:57:30 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma02dal.us.ibm.com with ESMTP id 3jbxjam34g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 23:57:30 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 287NvTvo64094688
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Sep 2022 23:57:29 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 87B86AC05F;
+        Wed,  7 Sep 2022 23:57:29 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14C15AC05E;
+        Wed,  7 Sep 2022 23:57:28 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.79.89])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Sep 2022 23:57:27 +0000 (GMT)
+Message-ID: <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
+Subject: Re: TPM: hibernate with IMA PCR 10
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Evan Green <evgreen@chromium.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Matthew Garrett <mgarrett@aurora.tech>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniil Lunev <dlunev@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 07 Sep 2022 19:57:27 -0400
+In-Reply-To: <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
+References: <20220504232102.469959-1-evgreen@chromium.org>
+         <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+         <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com>
+         <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
+         <Yw7L+X2cHf9qprxl@kernel.org>
+         <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9fr5S-25Hmtv7OjmfbpBHRCJtpKAb59a
+X-Proofpoint-ORIG-GUID: KB8x7MGRKA0OymWJYKLJ504g9cIYrlyz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_10,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
+ clxscore=1011 adultscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/5/22 01:14, Meng Li wrote:
-> This kernel module is used for testing. It's safe to say M here.
-> It can also be built-in without X86_AMD_PSTATE enabled.
-> Currently, only tests for amd-pstate are supported. If X86_AMD_PSTATE
-> is set disabled, it can tell the users test can only run on amd-pstate
-> driver, please set X86_AMD_PSTATE enabled.
-> In the future, comparison tests will be added. It can set amd-pstate
-> disabled and set acpi-cpufreq enabled to run test cases, then compare
-> the test results.
+On Wed, 2022-09-07 at 13:47 -0700, Evan Green wrote:
+> On Tue, Aug 30, 2022 at 7:48 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
+> > > On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
+> > > >
+> > > > On 5/4/2022 7:20 PM, Evan Green wrote:
+> > > > > Enabling the kernel to be able to do encryption and integrity checks on
+> > > > > the hibernate image prevents a malicious userspace from escalating to
+> > > > > kernel execution via hibernation resume.  [snip]
+> > > >
+> > > > I have a related question.
+> > > >
+> > > > When a TPM powers up from hibernation, PCR 10 is reset.  When a
+> > > > hibernate image is restored:
+> > > >
+> > > > 1. Is there a design for how PCR 10 is restored?
+> > >
+> > > I don't see anything that does that at present.
+> > >
+> > > > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
+> > > > restored?
+> > >
+> > > They're part of the running kernel state, so should re-appear without
+> > > any special casing. However, in the absence of anything repopulating
+> > > PCR 10, they'll no longer match the in-TPM value.
+> >
+> > This feature could still be supported, if IMA is disabled
+> > in the kernel configuration, which I see a non-issue as
+> > long as config flag checks are there.
 > 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> ---
->   drivers/cpufreq/Kconfig.x86                         | 12 +++++++-----
->   tools/testing/selftests/amd-pstate/amd-pstate-ut.sh |  1 +
->   2 files changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-> index fd1582716c58..310779b07daf 100644
-> --- a/drivers/cpufreq/Kconfig.x86
-> +++ b/drivers/cpufreq/Kconfig.x86
-> @@ -58,11 +58,13 @@ config X86_AMD_PSTATE_UT
->   	help
->   	  This kernel module is used for testing. It's safe to say M here.
->   
-> -	  It can be modprobed even without amd-pstate module.
-> -	  When the comparison test is performed, it can load other module
-> -	  like acpi-cpufreq to test cases, then compare the test results.
-> -	  When only the test for amd-pstate is performed, it can tell the
-> -	  users they loaded a wrong module like acpi-cpufreq.
-> +	  It can also be built-in without X86_AMD_PSTATE enabled.
-> +	  Currently, only tests for amd-pstate are supported. If X86_AMD_PSTATE
-> +	  is set disabled, it can tell the users test can only run on amd-pstate
-> +	  driver, please set X86_AMD_PSTATE enabled.
-> +	  In the future, comparison tests will be added. It can set amd-pstate
-> +	  disabled and set acpi-cpufreq enabled to run test cases, then compare
-> +	  the test results.
->   
->   config X86_ACPI_CPUFREQ
->   	tristate "ACPI Processor P-States driver"
-> diff --git a/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh b/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
-> index 273364650285..f8e82d91ffcf 100755
-> --- a/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
-> +++ b/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
-> @@ -32,6 +32,7 @@ fi
->   scaling_driver=$(cat /sys/devices/system/cpu/cpufreq/policy0/scaling_driver)
->   if [ "$scaling_driver" != "amd-pstate" ]; then
->   	echo "$0 # Skipped: Test can only run on amd-pstate driver."
-> +	echo "$0 # Please set X86_AMD_PSTATE enabled."
->   	echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
->   	exit $ksft_skip
->   fi
+> Right, from what I understand about IMA, the TPM's PCR getting out of
+> sync with the in-kernel measurement list across a hibernate (because
+> TPM is reset) or kexec() (because in-memory list gets reset) is
+> already a problem. This series doesn't really address that, in that it
+> doesn't really make that situation better or worse.
 
-This patch doesn't apply on top of the previous patch series in
-linux-kselftest next - please rebase and resend the patch.
+For kexec, the PCRs are not reset, so the IMA measurment list needs to
+be carried across kexec and restored.  This is now being done on most
+architectures.  Afterwards, the IMA measurement list does match the
+PCRs.
 
+Hibernation introduces a different situation, where the the PCRs are
+reset, but the measurement list is restored, resulting in their not
+matching.
+
+-- 
 thanks,
--- Shuah
+
+Mimi
+
+
+
+
