@@ -2,90 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C905AFCB5
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 08:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67235AFD6D
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 09:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiIGGnq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Sep 2022 02:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
+        id S230029AbiIGHYy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Sep 2022 03:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiIGGng (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 02:43:36 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BC7114D22;
-        Tue,  6 Sep 2022 23:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2rIc6
-        tezrARE1+CFWv+5cFs1Lg6X5Lme/PX2cYrHUA8=; b=ALygE55e6myvo4zphyjfp
-        Os1x6wwOfIX4pmddSjq3sI9ZzuxQG1OQP9BRCBHQGIZpPFZ++2zrwobeaR+R7DVO
-        RrEsS5b/okcz3maBG/i4MdlEoNZUcAgGhEgTvkABcQQ//KuQydoTvV2OTPSD7MYr
-        niLSiwFRM4AMLEB04IftDY=
-Received: from localhost.localdomain (unknown [36.112.3.164])
-        by smtp1 (Coremail) with SMTP id GdxpCgA3UqOEPRhjZ0q_ag--.42658S4;
-        Wed, 07 Sep 2022 14:43:23 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] PM: hibernate: Fix potential memory leak in hibernate_preallocate_memory() and prepare_highmem_image()
-Date:   Wed,  7 Sep 2022 14:43:11 +0800
-Message-Id: <20220907064311.54475-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229765AbiIGHYg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 03:24:36 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B23A6AF0;
+        Wed,  7 Sep 2022 00:23:50 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id bz13so15496335wrb.2;
+        Wed, 07 Sep 2022 00:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=pvlii7/LubMD6DsgRlKRU70IFMr/6G9pQDznjmqp8qU=;
+        b=i6sUTE65cDDUQnCvos3MLz/CKYFFYIJ2bzlMxRaQGdYzSvfpdAAqgJxP7TXwV6MKzE
+         l6dyi03dB8s8leGT4pRuOUJi+UJXETsIrQiuifoI7nhuRowRwjYDXXDuxzUT0YBVk+3B
+         x0Xid5GM2gYyqPqvpWpqcO2OKnKxMxgaWGJAOGzwmnf5d71yN+HzF83hNMoFT5cahCaH
+         DKgxb8R7g54sJE5k8ZawfzH8cWHKe3y2bdSY650Z6E3JSoIsoLAsUGJSJ/HwK8XMaOqP
+         B2+XHgPeQCz72meq4PqwIVENV8QgNU84cWatm/lBEAxsBKEM4A2nAs7Ed/5bxdeM43il
+         J+NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=pvlii7/LubMD6DsgRlKRU70IFMr/6G9pQDznjmqp8qU=;
+        b=sFDx/BSoEWDR1wi7zFg678P0LloiQj6wb0pmcuTtt+81fZr0DHP5+/O9SL6NCiMaTU
+         7e7y+ewSXBn7pr0bemxJORS/+UVxcPFnhTC/XeEkEamOS7oYt8hGXJ+q6Jvk2t6jf0jI
+         Ur0gBan0XdoRdG8afhNVO6lffFfSMnr4Iip09NHh6CVDpcoBnOwDb+O03Tn5eMmKlZ5u
+         eKMk9EBU4tEbRfqdbu3E7wyr4YjFtxxnp3xJrAgfy13UAc+GQreM1YZfG8TFPZaNvvBo
+         QtROcjB7KL6MRfL45yLefDrqaoMmmCg7nwzfAxihDKXmajLuHWdcJa/FZS/7f6SfU5Aa
+         /MzQ==
+X-Gm-Message-State: ACgBeo0Ox4Jikpzt5O/1yoNci255TngIoIbDUZGxa8U8If1gHaERdhEB
+        9NlRW0LfhCnG8kNoiP2Vm1k=
+X-Google-Smtp-Source: AA6agR7dJ/PtKjWL/cUfEp6bVth8BTBwrjNN59bOAMx/E2kfLKWMRyMLS88/ymoevBSe5vtESO0piQ==
+X-Received: by 2002:a5d:4e88:0:b0:228:c8ed:2af8 with SMTP id e8-20020a5d4e88000000b00228c8ed2af8mr1173480wru.412.1662535428209;
+        Wed, 07 Sep 2022 00:23:48 -0700 (PDT)
+Received: from gmail.com (1F2EF41B.nat.pool.telekom.hu. [31.46.244.27])
+        by smtp.gmail.com with ESMTPSA id f6-20020adff586000000b00228c375d81bsm8821114wro.2.2022.09.07.00.23.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 00:23:46 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 7 Sep 2022 09:23:44 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        ebiederm@xmission.com, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 3/6] sched: Change wait_task_inactive()s match_state
+Message-ID: <YxhHAPlwNwv3l6gY@gmail.com>
+References: <20220822111816.760285417@infradead.org>
+ <20220822114648.856734578@infradead.org>
+ <YxSBlPb/oZ6x0jfw@gmail.com>
+ <Yxcm6oOTbmCbsHvj@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgA3UqOEPRhjZ0q_ag--.42658S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7XrW3Jw1rCr1kWrWkXF48Xrb_yoW8JF13pr
-        Z5KF4DGr1vywnrJ397tFn5Ca47ZwsYg345W39Ivwn5uF13WrnYva1rJrWjgr4Iyry0g3Wj
-        9FZ7Ww1UXanrKw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zieWldUUUUU=
-X-Originating-IP: [36.112.3.164]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiFQt1jF5mMevBQgAAsG
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yxcm6oOTbmCbsHvj@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-hibernate_preallocate_memory() and prepare_highmem_image() allocates
-memory chunk with memory_bm_create(). When the function gets some error
-after memory_bm_create(), relavent memory should be released with
-memory_bm_free().
 
-Fix it by calling memory_bm_free() at the right time.
+* Peter Zijlstra <peterz@infradead.org> wrote:
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- kernel/power/snapshot.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> On Sun, Sep 04, 2022 at 12:44:36PM +0200, Ingo Molnar wrote:
+> > 
+> > * Peter Zijlstra <peterz@infradead.org> wrote:
+> > 
+> > > Make wait_task_inactive()'s @match_state work like ttwu()'s @state.
+> > > 
+> > > That is, instead of an equal comparison, use it as a mask. This allows
+> > > matching multiple block conditions.
+> > > 
+> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > ---
+> > >  kernel/sched/core.c |    4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > --- a/kernel/sched/core.c
+> > > +++ b/kernel/sched/core.c
+> > > @@ -3295,7 +3295,7 @@ unsigned long wait_task_inactive(struct
+> > >  		 * is actually now running somewhere else!
+> > >  		 */
+> > >  		while (task_running(rq, p)) {
+> > > -			if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
+> > > +			if (match_state && !(READ_ONCE(p->__state) & match_state))
+> > >  				return 0;
+> > 
+> > We lose the unlikely annotation there - but I guess it probably never 
+> > really mattered anyway?
+> 
+> So any wait_task_inactive() caller does want that case to be true, but
+> the whole match_state precondition mostly wrecks things anyway. If
+> anything it should've been:
+> 
+> 		if (likely(match_state && !(READ_ONCE(p->__state) & match_state)))
+> 			return 0;
+> 
+> but I can't find it in me to care too much here.
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 2a406753af90..e5ec204ebe22 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -1752,6 +1752,7 @@ int hibernate_preallocate_memory(void)
- 
- 	error = memory_bm_create(&copy_bm, GFP_IMAGE, PG_ANY);
- 	if (error) {
-+		memory_bm_free(&orig_bm, PG_UNSAFE_CLEAR);
- 		pr_err("Cannot allocate copy bitmap\n");
- 		goto err_out;
- 	}
-@@ -2335,8 +2336,10 @@ static int prepare_highmem_image(struct memory_bitmap *bm,
- 	if (memory_bm_create(bm, GFP_ATOMIC, PG_SAFE))
- 		return -ENOMEM;
- 
--	if (get_highmem_buffer(PG_SAFE))
-+	if (get_highmem_buffer(PG_SAFE)) {
-+		memory_bm_free(bm, PG_UNSAFE_CLEAR);
- 		return -ENOMEM;
-+	}
- 
- 	to_alloc = count_free_highmem_pages();
- 	if (to_alloc > *nr_highmem_p)
--- 
-2.25.1
+Yeah, I agree that this is probably the most likely branch - and default 
+compiler code generation behavior should be pretty close to that to begin 
+with.
 
+Ie. ack on dropping the unlikely() annotation. :-)
+
+Might make sense to add a sentence to the changelog though, in case anyone 
+(like me) is wondering about whether the dropped annotation was intended.
+
+Thanks,
+
+	Ingo
