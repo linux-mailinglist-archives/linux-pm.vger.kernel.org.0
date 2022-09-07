@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BAF5AFD72
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 09:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36C95AFD91
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Sep 2022 09:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiIGH0d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Sep 2022 03:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S230003AbiIGHba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Sep 2022 03:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIGH0c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 03:26:32 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BB674CD8;
-        Wed,  7 Sep 2022 00:26:30 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id s23so8217631wmj.4;
-        Wed, 07 Sep 2022 00:26:29 -0700 (PDT)
+        with ESMTP id S230039AbiIGHa1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Sep 2022 03:30:27 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17F46EF14;
+        Wed,  7 Sep 2022 00:30:23 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id h1so8212792wmd.3;
+        Wed, 07 Sep 2022 00:30:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=AU9jIKk+0h8ttZnRp33BBGtBNG5irk59lqDDStwccxw=;
-        b=o2XFkV5YJyM2Y77cYaZx0C9+FoDVcTA9LUFoMJXSkHLRuMJUt8b0x7Q+7Tmlmp7t0g
-         5s04Kx9YdO8aq+em8aN3UFVi+2Mly2JLTm+bk9KzYW5UYUOxmgF0jZYQfH00G9u5DXQa
-         TLFccjCZQoErKRJ+jTk93X6foXOSk+FGyhu6P7JqpitD1VY5SKa5XO5n/wgpeLpwdHlG
-         qx3rJDV9sZSR6WmB6EgwJUKAWtDiDSfasP+PRuJC002Sm1okhCJgNbY6zBmUtXlpYIji
-         DknFG+7uiKrWc5xOyiSpF9XsAPUq9wQH/1fKMTRYuA6yw1erQ4KBSYzoCTavTFlXV1DL
-         YW8Q==
+        bh=ySTqzK77epAEdUaxdr9SqQHp6loTM9BjTxqnQisnV4Y=;
+        b=gtoLz2nrwbRfB9uwytDWgKXJ4VL4ukMunKy0Shm7qJek9eJFe42Sb/tvFghI4n+WH3
+         QibK1n0nmPYH4qVc3s0wocnybNPg84Trnt/YJQBlkY95sE3oPZ0ciEtYNOa7N4ZTI+0R
+         Jx9LjQU7Y/NIwxBWG0gT2qXmROxtMioeON/cR9bWwjiqK4nv6vzmy6uxzVaRaXAyOk7n
+         wOBd9ZQy9vmpMh1i7udNGoF9adsnImHFLAu7q+7fnB4hsRMlcwzwsRuK1iqGqdQOaFXH
+         peAVH6h5StBP/Nt0Zqxvo309L3BQUtkXad3jn/G2+ywQe9NpbJ+1QS5GZ+ergNy5c9es
+         fRMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=AU9jIKk+0h8ttZnRp33BBGtBNG5irk59lqDDStwccxw=;
-        b=Ja+RDtyTqNpcJMzSKsI9J/IVUQxkfKt9Mf5oCVDhRcWr0UeoO5bCcF1onlranx4P0k
-         cZkL9mmAWr1bvnKJt93oz2TK2ikYSrIlY+LDwYNHJl4GWURcxHVAOJelCcOS5NfolSx0
-         jfrA4n9ywU8Zxw1V/f6KuQqdRVcCZ+fHQ8u2hrJV38rygQqsqMFML2LtfV6Jz09sdUAq
-         Q6nIlYops8fLg8u67RXLOMMs2c5VnC63fPM6Q67VNsXKbRLbG+wn7ulmZqljipQJrJYF
-         kMQDvL/+wAk/JxEPWK25o9vtL+cx02Q9k1KbwszndJaIEytfGcBiygR+ZqoADg8wIyF3
-         Dr7w==
-X-Gm-Message-State: ACgBeo3ds/LikNtQkPHU9IdwRUWmUVRpU3QrK2N1x+1ZvvWsJc3OFxds
-        NYzMQbf3W3E6J6KLDsmmtno=
-X-Google-Smtp-Source: AA6agR6b9zfoq4j8CIHOCQua3fR8YoXabzdd6pLg3yOHSEKfJhtp4yVPmxyDETeIqzVv9AQEETVFDg==
-X-Received: by 2002:a1c:7214:0:b0:3a5:ea1c:c55b with SMTP id n20-20020a1c7214000000b003a5ea1cc55bmr16449906wmc.190.1662535588436;
-        Wed, 07 Sep 2022 00:26:28 -0700 (PDT)
+        bh=ySTqzK77epAEdUaxdr9SqQHp6loTM9BjTxqnQisnV4Y=;
+        b=Dk1jcwFTyMwjwv6vcUio0bugId3wFfx/zrmWciVpMGpozlRbs4kM1++qW0eWYI4Vq5
+         GLfClFxiyD+KuF7lfLRC7JUrtFN5fy40lSrS8w1hiSCQt4MeBJEJ7YbNzE4xHIdwh6cD
+         Bl7MblA9c8gijudP6l0bKPeLIMgq050hjpZDfo3btE/eMGTQkLwWfEXp1/LKtCTK5l90
+         YOocoh+Ug6fwpPiQQiNTg0TxHLEVDw4PApykfSQ0ZQb8mhCGm7TxcvgbFDkJvUKzOCXM
+         fyN7J7tP+l78yn0KGkYZv1l0BrF0UFQ/1GwYASAcF4M31HXuemleWpcM1qN9P03WlQR8
+         xN/w==
+X-Gm-Message-State: ACgBeo3xUosGNjmAGuDj3tkXO2BA/d4OsrhJASXD4i8A/1jgh/WgPPqL
+        1wmYSDoxn/cydd2cwBHoDKI=
+X-Google-Smtp-Source: AA6agR6QXSOqiTjyQTtNJzk4IEUWfEuAweEZzgWXQKuhdhlaNgxNa5neINPqd9VT6tcMQnmmG9NozQ==
+X-Received: by 2002:a05:600c:512a:b0:3a8:42e4:dfe7 with SMTP id o42-20020a05600c512a00b003a842e4dfe7mr16191439wms.193.1662535821967;
+        Wed, 07 Sep 2022 00:30:21 -0700 (PDT)
 Received: from gmail.com (1F2EF41B.nat.pool.telekom.hu. [31.46.244.27])
-        by smtp.gmail.com with ESMTPSA id h2-20020a5d4302000000b0021e51c039c5sm15802567wrq.80.2022.09.07.00.26.26
+        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b0021e4829d359sm16071633wrs.39.2022.09.07.00.30.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 00:26:27 -0700 (PDT)
+        Wed, 07 Sep 2022 00:30:20 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 7 Sep 2022 09:26:10 +0200
+Date:   Wed, 7 Sep 2022 09:30:18 +0200
 From:   Ingo Molnar <mingo@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     rjw@rjwysocki.net, oleg@redhat.com, vincent.guittot@linaro.org,
@@ -57,16 +57,16 @@ Cc:     rjw@rjwysocki.net, oleg@redhat.com, vincent.guittot@linaro.org,
         ebiederm@xmission.com, bigeasy@linutronix.de,
         Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
         tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] sched/wait: Add wait_event_state()
-Message-ID: <YxhHknM8n/b3W7wr@gmail.com>
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
+Message-ID: <YxhIim6NhyQkxOqA@gmail.com>
 References: <20220822111816.760285417@infradead.org>
- <20220822114648.989212021@infradead.org>
- <YxR18Qs8vqTpPFV5@gmail.com>
- <YxcqR/hSTwLnk3RK@hirez.programming.kicks-ass.net>
+ <20220822114649.055452969@infradead.org>
+ <YxR5Yauhd90WN/AY@gmail.com>
+ <YxctoffFFPXONESt@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxcqR/hSTwLnk3RK@hirez.programming.kicks-ass.net>
+In-Reply-To: <YxctoffFFPXONESt@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -81,64 +81,53 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 * Peter Zijlstra <peterz@infradead.org> wrote:
 
-> On Sun, Sep 04, 2022 at 11:54:57AM +0200, Ingo Molnar wrote:
-> > > +/**
-> > > + * wait_event_state - sleep until a condition gets true
-> > > + * @wq_head: the waitqueue to wait on
-> > > + * @condition: a C expression for the event to wait for
-> > > + * @state: state to sleep in
-> > > + *
-> > > + * The process is put to sleep (@state) until the @condition evaluates to true
-> > > + * or a signal is received.  The @condition is checked each time the waitqueue
-> > > + * @wq_head is woken up.
+> On Sun, Sep 04, 2022 at 12:09:37PM +0200, Ingo Molnar wrote:
+> 
+> > BTW., we should probably mark/document all PF_ holes with a PF__RESERVED 
+> > kind of scheme? Something simple, like:
 > > 
-> > Documentation inconsistency nit: if TASK_INTERRUPTIBLE isn't in @state then 
-> > we won't wake up when a signal is received. This probably got copy-pasted 
-> > from a signal variant.
-> > 
-> > > + *
-> > > + * wake_up() has to be called after changing any variable that could
-> > > + * change the result of the wait condition.
-> > > + *
-> > > + * The function will return -ERESTARTSYS if it was interrupted by a
-> > > + * signal and 0 if @condition evaluated to true.
-> > 
-> > That's not unconditionally true either if !TASK_INTERRUPTIBLE.
+> >    #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
+> >    #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
+> >  + #define PF__RESERVED_04000	0x00004000	/* Unused */
+> >    #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
+> >  + #define PF__RESERVED_10000	0x00010000	/* Unused */
+> >    #define PF_KSWAPD		0x00020000	/* I am kswapd */
+> >    #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
+> >    #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
 > 
 > 
-> --- a/include/linux/wait.h
-> +++ b/include/linux/wait.h
-> @@ -942,14 +942,14 @@ extern int do_wait_intr_irq(wait_queue_h
->   * @state: state to sleep in
->   *
->   * The process is put to sleep (@state) until the @condition evaluates to true
-> - * or a signal is received.  The @condition is checked each time the waitqueue
-> - * @wq_head is woken up.
-> + * or a signal is received (when allowed by @state).  The @condition is checked
-> + * each time the waitqueue @wq_head is woken up.
->   *
->   * wake_up() has to be called after changing any variable that could
->   * change the result of the wait condition.
->   *
-> - * The function will return -ERESTARTSYS if it was interrupted by a
-> - * signal and 0 if @condition evaluated to true.
-> + * The function will return -ERESTARTSYS if it was interrupted by a signal
-> + * (when allowed by @state) and 0 if @condition evaluated to true.
->   */
+> How's this then, it immediately shows how holey it is :-)
+> 
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1722,7 +1722,9 @@ extern struct pid *cad_pid;
+>  #define PF_MEMALLOC		0x00000800	/* Allocating memory */
+>  #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
+>  #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
+> +#define PF__HOLE__00004000	0x00004000	/* A HOLE */
+>  #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
+> +#define PF__HOLE__00010000	0x00010000	/* A HOLE */
+>  #define PF_KSWAPD		0x00020000	/* I am kswapd */
+>  #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
+>  #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
+> @@ -1730,9 +1732,14 @@ extern struct pid *cad_pid;
+>  						 * I am cleaning dirty pages from some other bdi. */
+>  #define PF_KTHREAD		0x00200000	/* I am a kernel thread */
+>  #define PF_RANDOMIZE		0x00400000	/* Randomize virtual address space */
+> +#define PF__HOLE__00800000	0x00800000	/* A HOLE */
+> +#define PF__HOLE__01000000	0x01000000	/* A HOLE */
+> +#define PF__HOLE__02000000	0x02000000	/* A HOLE */
+>  #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
+>  #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process policy */
+>  #define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to zones which allow long term pinning. */
+> +#define PF__HOLE__20000000	0x20000000	/* A HOLE */
+> +#define PF__HOLE__40000000	0x40000000	/* A HOLE */
+>  #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_processes() and should not be frozen */
+
+LGTM - OTOH this looks quite a bit more cluttery than I imagined it in my 
+head. :-/ So I'd leave out the comment part at minimum. With that:
 
 Reviewed-by: Ingo Molnar <mingo@kernel.org>
-
-> > > +#define wait_event_state(wq_head, condition, state)				\
-> > > +({										\
-> > > +	int __ret = 0;								\
-> > > +                                                                             \
-> > > +	might_sleep();								\
-> > 
-> > Like most (but not all ... :-/ ) of the existing primitives have.
-> 
-> Yeah, I'm going to leave it as is.
-
-Will queue up a cleanup patch, should I ever notice this detail again ... :-)
 
 Thanks,
 
