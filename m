@@ -2,431 +2,285 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17735B17AB
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 10:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2127D5B1800
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 11:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiIHIvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 04:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        id S231628AbiIHJHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 05:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiIHIuV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 04:50:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0786FE6;
-        Thu,  8 Sep 2022 01:50:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 76EAC1F6E6;
-        Thu,  8 Sep 2022 08:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662627009; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Aec2IFIciy0SMtMy1CqJkYQlSUiM7z4pNHB9RfHgYs=;
-        b=b3mxoISWSaevLeo3XWmtDO6Q3t4KaAeiiEywNs+82a4iKlxfAOSCH+erXsYW0is5zp99i+
-        ayfDMzqfhbeZQ639ZodmyVemdlO9NaFpGiiyx1PISJgjGGDlnFvOClgK1ZYMS1WS48qzgP
-        yA/IxzX9AEs535XHN4G9qeMCWGQ8rtU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E0CC1322C;
-        Thu,  8 Sep 2022 08:50:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id AMwXCsGsGWPbNgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 08 Sep 2022 08:50:09 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v3 09/10] x86/mtrr: add a stop_machine() handler calling only cache_cpu_init()
-Date:   Thu,  8 Sep 2022 10:49:13 +0200
-Message-Id: <20220908084914.21703-10-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220908084914.21703-1-jgross@suse.com>
-References: <20220908084914.21703-1-jgross@suse.com>
+        with ESMTP id S231697AbiIHJH3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 05:07:29 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1729BF7572
+        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 02:07:26 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n17-20020a05600c501100b003a84bf9b68bso1271505wmr.3
+        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 02:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=T2/9xebxzNWMrR2+6F0PLx9EMI9J8CEGmCncRuSsyL8=;
+        b=eO7It27k7B/0FNHemvQD+MMLVEn3cKOZgQC9kmQyiqoHCf6+wwQlVXpKES5hVLwTI5
+         s4i8Gwlmh6k1epjJ5OnNXpsvMPvbjcTyZZnooQcis2wC/kvWtpCOIn9qGCkCQYFn73mz
+         DA0ox9F/MgiiYRUnWyOVxLv4OwAVBdreWrj4RtdwYYadmAFfCcPElUKDmm5bf157mxwL
+         dOSXO7KknF7upphS4/Lgm7NDjUBfEKnWYuSiul7c1/Ke0xnOdA5y8xQlEg/wUQDyKJbB
+         0P4Dfy2KjKql4iUcjcwT6zL/m3YWhMhhgMl7Yy1t5B3WIeE2SKnGAL7vf7PL1PiyWZjo
+         yu4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=T2/9xebxzNWMrR2+6F0PLx9EMI9J8CEGmCncRuSsyL8=;
+        b=WAIhAzsw/p1qGa9rhVybUrS5aDHZngzG7Dm7BjmHzUsAz9eQu4j+dx7zcbIG7EdtLE
+         lbYAzipf2risRZQW3zslG6sULdsNeimW+UICt0gLlYNF7WGiwQnhNfN/PpJMoWgPKMvy
+         8+ROgrQ5gfRJMOk5G5ldApRBcTlIKfX8+r79be0DnLa6ZMaOK0nvKjeQrpGsnVv2al0h
+         z0Mo+6MUZq4SekZHZ4aXP5fartd1XfktMbOzNfr+ousiRK0OvjkEJBYSDWXvJjqfirC3
+         Q9xnRFNL3kD+C4Si4qo6JZeogJRqj/R+r8NkBWWdaPWs3OTN9PFP9y5jALrJLGtV0KEn
+         5p6A==
+X-Gm-Message-State: ACgBeo1B9oiI9SrWU0NLCvMg8of2E5f9d+7Ztc05OjsmwshGaiDsfu+/
+        ylKwalb3ZvcC8x/+7TzlcrHKZQ==
+X-Google-Smtp-Source: AA6agR5gqEKVSm7XgipK5ek0XMItcGd6Kv+VsWlDrzmuKyixgBo9ogpjC0Vx0PWoSmd1owvmCI7cBQ==
+X-Received: by 2002:a7b:cd91:0:b0:3a8:5262:6aa9 with SMTP id y17-20020a7bcd91000000b003a852626aa9mr1466610wmj.143.1662628044375;
+        Thu, 08 Sep 2022 02:07:24 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bz9-20020a056000090900b0022584c82c80sm21014654wrb.19.2022.09.08.02.07.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 02:07:23 -0700 (PDT)
+Message-ID: <a5fd6f3e-4795-5953-5fdf-8857051b5e87@linaro.org>
+Date:   Thu, 8 Sep 2022 11:07:22 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        matthias.bgg@gmail.com
+Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        robh+dt@kernel.org, rui.zhang@intel.com,
+        Michael Kao <michael.kao@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20220901133950.115122-1-aouledameur@baylibre.com>
+ <20220901133950.115122-5-aouledameur@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220901133950.115122-5-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Instead of having a stop_machine() handler for either a specific MTRR
-register or all state at once, add a handler just for calling
-cache_cpu_init() if appropriate.
 
-Add functions for calling stop_machine() with this handler as well.
+Hi Amjad,
 
-Add a generic replacements for mtrr_bp_restore() and a wrapper for
-mtrr_bp_init().
+On 01/09/2022 15:39, Amjad Ouled-Ameur wrote:
+> Provide thermal zone to read thermal sensor in the SoC. We can read all the
+> thermal sensors value in the SoC by the node /sys/class/thermal/
+> 
+> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+> on the first read of sensor that often are bogus values.
+> This can avoid following warning on boot:
+> 
+>    thermal thermal_zone6: failed to read out thermal zone (-13)
+> 
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> ---
+> Changes in V3:
+> - Use proper types.
+> - Use devm_kmalloc() instead of kmalloc().
+> - Fix tabs and spaces.
+> 
+>   drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
+>   1 file changed, 76 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 088c388da241..5901787c57f5 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
+>   
+>   struct mtk_thermal;
+>   
+> +struct mtk_thermal_zone {
+> +	struct mtk_thermal *mt;
+> +	int id;
+> +};
+> +
+>   struct thermal_bank_cfg {
+>   	unsigned int num_sensors;
+>   	const int *sensors;
+> @@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
+>   		mutex_unlock(&mt->lock);
+>   }
+>   
+> +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
+> +{
+> +	u32 raw;
+> +	int temp;
+> +
+> +	const struct mtk_thermal_data *conf = mt->conf;
+> +
+> +	raw = readl(mt->thermal_base + conf->msr[id]);
+> +
+> +	if (mt->conf->version == MTK_THERMAL_V1)
+> +		temp = raw_to_mcelsius_v1(mt, id, raw);
+> +	else
+> +		temp = raw_to_mcelsius_v2(mt, id, raw);
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- completely new replacement of former patch 2
----
- arch/x86/include/asm/cacheinfo.h |  5 +-
- arch/x86/include/asm/mtrr.h      |  4 --
- arch/x86/kernel/cpu/cacheinfo.c  | 59 +++++++++++++++++++++-
- arch/x86/kernel/cpu/common.c     |  3 +-
- arch/x86/kernel/cpu/mtrr/mtrr.c  | 87 +-------------------------------
- arch/x86/kernel/setup.c          |  3 +-
- arch/x86/kernel/smpboot.c        |  4 +-
- arch/x86/power/cpu.c             |  3 +-
- 8 files changed, 72 insertions(+), 96 deletions(-)
+Can you set a callback at init time instead of checking the version at 
+each get_sensor_temp() ?
 
-diff --git a/arch/x86/include/asm/cacheinfo.h b/arch/x86/include/asm/cacheinfo.h
-index e80ed3c523c8..a122a1aad936 100644
---- a/arch/x86/include/asm/cacheinfo.h
-+++ b/arch/x86/include/asm/cacheinfo.h
-@@ -14,6 +14,9 @@ void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu);
- 
- void cache_disable(void);
- void cache_enable(void);
--void cache_cpu_init(void);
-+void cache_bp_init(void);
-+void cache_bp_restore(void);
-+void cache_ap_init(void);
-+void cache_aps_init(void);
- 
- #endif /* _ASM_X86_CACHEINFO_H */
-diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
-index 5d31219c8529..ec73d1e5bafb 100644
---- a/arch/x86/include/asm/mtrr.h
-+++ b/arch/x86/include/asm/mtrr.h
-@@ -42,8 +42,6 @@ extern int mtrr_add_page(unsigned long base, unsigned long size,
- extern int mtrr_del(int reg, unsigned long base, unsigned long size);
- extern int mtrr_del_page(int reg, unsigned long base, unsigned long size);
- extern void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi);
--extern void mtrr_ap_init(void);
--extern void mtrr_aps_init(void);
- extern void mtrr_bp_restore(void);
- extern int mtrr_trim_uncached_memory(unsigned long end_pfn);
- extern int amd_special_default_mtrr(void);
-@@ -85,8 +83,6 @@ static inline int mtrr_trim_uncached_memory(unsigned long end_pfn)
- static inline void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi)
- {
- }
--#define mtrr_ap_init() do {} while (0)
--#define mtrr_aps_init() do {} while (0)
- #define mtrr_bp_restore() do {} while (0)
- #define mtrr_disable() do {} while (0)
- #define mtrr_enable() do {} while (0)
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index c6e7c93e45e8..4946f93eb16f 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -15,6 +15,7 @@
- #include <linux/capability.h>
- #include <linux/sysfs.h>
- #include <linux/pci.h>
-+#include <linux/stop_machine.h>
- 
- #include <asm/cpufeature.h>
- #include <asm/cacheinfo.h>
-@@ -1121,7 +1122,7 @@ void cache_enable(void) __releases(cache_disable_lock)
- 	raw_spin_unlock(&cache_disable_lock);
- }
- 
--void cache_cpu_init(void)
-+static void cache_cpu_init(void)
- {
- 	unsigned long flags;
- 
-@@ -1141,3 +1142,59 @@ void cache_cpu_init(void)
- }
- 
- bool cache_aps_delayed_init;
-+
-+static int cache_rendezvous_handler(void *unused)
-+{
-+	if (cache_aps_delayed_init || !cpu_online(smp_processor_id()))
-+		cache_cpu_init();
-+
-+	return 0;
-+}
-+
-+void __init cache_bp_init(void)
-+{
-+	mtrr_bp_init();
-+
-+	if (cache_generic)
-+		cache_cpu_init();
-+}
-+
-+void cache_bp_restore(void)
-+{
-+	if (cache_generic)
-+		cache_cpu_init();
-+}
-+
-+void cache_ap_init(void)
-+{
-+	if (!cache_generic || cache_aps_delayed_init)
-+		return;
-+
-+	/*
-+	 * Ideally we should hold mtrr_mutex here to avoid mtrr entries
-+	 * changed, but this routine will be called in cpu boot time,
-+	 * holding the lock breaks it.
-+	 *
-+	 * This routine is called in two cases:
-+	 *
-+	 *   1. very early time of software resume, when there absolutely
-+	 *      isn't mtrr entry changes;
-+	 *
-+	 *   2. cpu hotadd time. We let mtrr_add/del_page hold cpuhotplug
-+	 *      lock to prevent mtrr entry changes
-+	 */
-+	stop_machine_from_inactive_cpu(cache_rendezvous_handler, NULL,
-+				       cpu_callout_mask);
-+}
-+
-+/*
-+ * Delayed cache initialization for all AP's
-+ */
-+void cache_aps_init(void)
-+{
-+	if (!cache_generic || !cache_aps_delayed_init)
-+		return;
-+
-+	stop_machine(cache_rendezvous_handler, NULL, cpu_online_mask);
-+	cache_aps_delayed_init = false;
-+}
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 3e508f239098..fd058b547f8d 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -52,6 +52,7 @@
- #include <asm/cpu.h>
- #include <asm/mce.h>
- #include <asm/msr.h>
-+#include <asm/cacheinfo.h>
- #include <asm/memtype.h>
- #include <asm/microcode.h>
- #include <asm/microcode_intel.h>
-@@ -1948,7 +1949,7 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
- #ifdef CONFIG_X86_32
- 	enable_sep_cpu();
- #endif
--	mtrr_ap_init();
-+	cache_ap_init();
- 	validate_apic_and_package_id(c);
- 	x86_spec_ctrl_setup_ap();
- 	update_srbds_msr();
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index a47d46035240..5e8be11d1873 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -70,9 +70,6 @@ static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
- 
- const struct mtrr_ops *mtrr_if;
- 
--static void set_mtrr(unsigned int reg, unsigned long base,
--		     unsigned long size, mtrr_type type);
--
- void __init set_mtrr_ops(const struct mtrr_ops *ops)
- {
- 	if (ops->vendor && ops->vendor < X86_VENDOR_NUM)
-@@ -155,25 +152,8 @@ static int mtrr_rendezvous_handler(void *info)
- {
- 	struct set_mtrr_data *data = info;
- 
--	/*
--	 * We use this same function to initialize the mtrrs during boot,
--	 * resume, runtime cpu online and on an explicit request to set a
--	 * specific MTRR.
--	 *
--	 * During boot or suspend, the state of the boot cpu's mtrrs has been
--	 * saved, and we want to replicate that across all the cpus that come
--	 * online (either at the end of boot or resume or during a runtime cpu
--	 * online). If we're doing that, @reg is set to something special and on
--	 * all the cpu's we do cache_cpu_init() (On the logical cpu that
--	 * started the boot/resume sequence, this might be a duplicate
--	 * cache_cpu_init()).
--	 */
--	if (data->smp_reg != ~0U) {
--		mtrr_if->set(data->smp_reg, data->smp_base,
--			     data->smp_size, data->smp_type);
--	} else if (cache_aps_delayed_init || !cpu_online(smp_processor_id())) {
--		cache_cpu_init();
--	}
-+	mtrr_if->set(data->smp_reg, data->smp_base,
-+		     data->smp_size, data->smp_type);
- 	return 0;
- }
- 
-@@ -243,19 +223,6 @@ static void set_mtrr_cpuslocked(unsigned int reg, unsigned long base,
- 	stop_machine_cpuslocked(mtrr_rendezvous_handler, &data, cpu_online_mask);
- }
- 
--static void set_mtrr_from_inactive_cpu(unsigned int reg, unsigned long base,
--				      unsigned long size, mtrr_type type)
--{
--	struct set_mtrr_data data = { .smp_reg = reg,
--				      .smp_base = base,
--				      .smp_size = size,
--				      .smp_type = type
--				    };
--
--	stop_machine_from_inactive_cpu(mtrr_rendezvous_handler, &data,
--				       cpu_callout_mask);
--}
--
- /**
-  * mtrr_add_page - Add a memory type region
-  * @base: Physical base address of region in pages (in units of 4 kB!)
-@@ -764,7 +731,6 @@ void __init mtrr_bp_init(void)
- 						 CACHE_GENERIC_PAT;
- 				changed_by_mtrr_cleanup =
- 					mtrr_cleanup(phys_addr);
--				cache_cpu_init();
- 			}
- 		}
- 	}
-@@ -781,27 +747,6 @@ void __init mtrr_bp_init(void)
- 	}
- }
- 
--void mtrr_ap_init(void)
--{
--	if (!cache_generic || cache_aps_delayed_init)
--		return;
--
--	/*
--	 * Ideally we should hold mtrr_mutex here to avoid mtrr entries
--	 * changed, but this routine will be called in cpu boot time,
--	 * holding the lock breaks it.
--	 *
--	 * This routine is called in two cases:
--	 *
--	 *   1. very early time of software resume, when there absolutely
--	 *      isn't mtrr entry changes;
--	 *
--	 *   2. cpu hotadd time. We let mtrr_add/del_page hold cpuhotplug
--	 *      lock to prevent mtrr entry changes
--	 */
--	set_mtrr_from_inactive_cpu(~0U, 0, 0, 0);
--}
--
- /**
-  * mtrr_save_state - Save current fixed-range MTRR state of the first
-  *	cpu in cpu_online_mask.
-@@ -817,34 +762,6 @@ void mtrr_save_state(void)
- 	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
- }
- 
--/*
-- * Delayed MTRR initialization for all AP's
-- */
--void mtrr_aps_init(void)
--{
--	if (!cache_generic)
--		return;
--
--	/*
--	 * Check if someone has requested the delay of AP MTRR initialization,
--	 * by doing set_mtrr_aps_delayed_init(), prior to this point. If not,
--	 * then we are done.
--	 */
--	if (!cache_aps_delayed_init)
--		return;
--
--	set_mtrr(~0U, 0, 0, 0);
--	cache_aps_delayed_init = false;
--}
--
--void mtrr_bp_restore(void)
--{
--	if (!cache_generic)
--		return;
--
--	cache_cpu_init();
--}
--
- static int __init mtrr_init_finialize(void)
- {
- 	if (!mtrr_enabled)
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 216fee7144ee..e0e185ee0229 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -34,6 +34,7 @@
- #include <asm/numa.h>
- #include <asm/bios_ebda.h>
- #include <asm/bugs.h>
-+#include <asm/cacheinfo.h>
- #include <asm/cpu.h>
- #include <asm/efi.h>
- #include <asm/gart.h>
-@@ -1075,7 +1076,7 @@ void __init setup_arch(char **cmdline_p)
- 
- 	/* update e820 for memory not covered by WB MTRRs */
- 	if (IS_ENABLED(CONFIG_MTRR))
--		mtrr_bp_init();
-+		cache_bp_init();
- 	else
- 		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
- 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index ef7bce21cbe8..ff793f436904 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1445,7 +1445,7 @@ void arch_thaw_secondary_cpus_begin(void)
- 
- void arch_thaw_secondary_cpus_end(void)
- {
--	mtrr_aps_init();
-+	cache_aps_init();
- }
- 
- /*
-@@ -1488,7 +1488,7 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
- 
- 	nmi_selftest();
- 	impress_friends();
--	mtrr_aps_init();
-+	cache_aps_init();
- }
- 
- static int __initdata setup_possible_cpus = -1;
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index bb176c72891c..754221c9a1c3 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -23,6 +23,7 @@
- #include <asm/fpu/api.h>
- #include <asm/debugreg.h>
- #include <asm/cpu.h>
-+#include <asm/cacheinfo.h>
- #include <asm/mmu_context.h>
- #include <asm/cpu_device_id.h>
- #include <asm/microcode.h>
-@@ -261,7 +262,7 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
- 	do_fpu_end();
- 	tsc_verify_tsc_adjust(true);
- 	x86_platform.restore_sched_clock_state();
--	mtrr_bp_restore();
-+	cache_bp_restore();
- 	perf_restore_debug_store();
- 
- 	c = &cpu_data(smp_processor_id());
+> +	/*
+> +	 * The first read of a sensor often contains very high bogus
+> +	 * temperature value. Filter these out so that the system does
+> +	 * not immediately shut down.
+> +	 */
+> +
+> +	if (temp > 200000)
+> +		return -EAGAIN;
+> +	else
+> +		return temp;
+> +}
+> +
+>   /**
+>    * mtk_thermal_bank_temperature - get the temperature of a bank
+>    * @bank:	The bank
+> @@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   	struct mtk_thermal *mt = bank->mt;
+>   	const struct mtk_thermal_data *conf = mt->conf;
+>   	int i, temp = INT_MIN, max = INT_MIN;
+> -	u32 raw;
+>   
+>   	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+> -		raw = readl(mt->thermal_base + conf->msr[i]);
+> -
+> -		if (mt->conf->version == MTK_THERMAL_V1) {
+> -			temp = raw_to_mcelsius_v1(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		} else {
+> -			temp = raw_to_mcelsius_v2(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		}
+> -
+> -		/*
+> -		 * The first read of a sensor often contains very high bogus
+> -		 * temperature value. Filter these out so that the system does
+> -		 * not immediately shut down.
+> -		 */
+> -		if (temp > 200000)
+> -			temp = 0;
+> +		temp = _get_sensor_temp(mt, i);
+>   
+>   		if (temp > max)
+>   			max = temp;
+> @@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   
+>   static int mtk_read_temp(void *data, int *temperature)
+>   {
+> -	struct mtk_thermal *mt = data;
+> +	struct mtk_thermal_zone *tz = data;
+> +	struct mtk_thermal *mt = tz->mt;
+>   	int i;
+>   	int tempmax = INT_MIN;
+>   
+> @@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int *temperature)
+>   	return 0;
+>   }
+>   
+> +static int mtk_read_sensor_temp(void *data, int *temperature)
+> +{
+> +	struct mtk_thermal_zone *tz = data;
+> +	struct mtk_thermal *mt = tz->mt;
+> +	int id = tz->id - 1;
+> +
+> +	if (id < 0)
+> +		return -EACCES;
+> +
+> +	*temperature = _get_sensor_temp(mt, id);
+> +
+> +	return 0;
+> +}
+> +
+>   static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+>   	.get_temp = mtk_read_temp,
+>   };
+> 
+> +static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
+> +	.get_temp = mtk_read_sensor_temp,
+> +};
+
+Please respin against linux-next, the thermal_zone_of_device_ops 
+structure does no longer exist. The conversion is trivial, here is a 
+example:
+
+https://lore.kernel.org/all/20220804224349.1926752-21-daniel.lezcano@linexp.org/
+
+
+>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>   				  u32 apmixed_phys_base, u32 auxadc_phys_base,
+>   				  int ctrl_id)
+> @@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   	u64 auxadc_phys_base, apmixed_phys_base;
+>   	struct thermal_zone_device *tzdev;
+>   	void __iomem *apmixed_base, *auxadc_base;
+> +	struct mtk_thermal_zone *tz;
+>   
+>   	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>   	if (!mt)
+> @@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   
+>   	platform_set_drvdata(pdev, mt);
+>   
+> -	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+> -						     &mtk_thermal_ops);
+> -	if (IS_ERR(tzdev)) {
+> -		ret = PTR_ERR(tzdev);
+> -		goto err_disable_clk_peri_therm;
+> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
+> +		if (!tz)
+> +			return -ENOMEM;
+> +
+> +		tz->mt = mt;
+> +		tz->id = i;
+> +
+> +		tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, tz, (i == 0) ?
+> +							     &mtk_thermal_ops :
+> +							     &mtk_thermal_sensor_ops);
+> +
+> +		if (IS_ERR(tzdev)) {
+> +			if (PTR_ERR(tzdev) == -ENODEV) {
+> +				dev_warn(&pdev->dev,
+> +					 "sensor %d not registered in thermal zone in dt\n", i);
+> +				continue;
+> +			}
+> +			if (PTR_ERR(tzdev) == -EACCES) {
+> +				ret = PTR_ERR(tzdev);
+> +				goto err_disable_clk_peri_therm;
+> +			}
+> +		}
+>   	}
+>   
+>   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
+
+
 -- 
-2.35.3
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
