@@ -2,136 +2,290 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694E65B2166
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 16:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3215B22D7
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 17:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbiIHO45 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 10:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
+        id S230012AbiIHPwj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 11:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232575AbiIHO4y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 10:56:54 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7D411CD5F
-        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 07:56:51 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id q21so13942463lfo.0
-        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 07:56:51 -0700 (PDT)
+        with ESMTP id S231694AbiIHPwi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 11:52:38 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68278F56F2
+        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 08:52:34 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id e16so7580619wrx.7
+        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 08:52:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=AJmEg2q9mG/fH5ApWPAmlCUORJqYzRuMecwU+JJYy7c=;
-        b=suOq8Nck//LIb2Gnt9WDdFc62Oa1zliaLTDmluGSK0yAsThsDajGtvT1vb7/t5lmT+
-         NDwlzBJubLwCaH5bSfcRsTWNUUBTHXiuBEdnNHDulSIhZ4aIVxNAxoIcJn7+ujPAEbip
-         fp02FhpK7pStd1ylxpORRmMBwt3GLxBkXjKTkRdvyket8yESMsaS1x6JyzYNj7uWXZ3I
-         D5xye36d2w5N58E8UrW20Mo4CTAvJ4bhF8IeBOJsJSmYZmpbdC3DhbPMgyN+6+ar0phl
-         9Eofd1cFuwdetf/TqOvjqas7aAmo/QSuEv6z0c8x3AKcMzRq1GQOO5KxFkzcFDWZc1CL
-         9plA==
+        bh=EBSJBt/4rQeZDrPhVl92JJf+1TNIVaSARc45/lfhD5k=;
+        b=kAbENSgl5oBuyAsqN9csM5nPWPbMNDsODznGSODjKr4XRlpAuZL6v+RFXt1qNuv4q0
+         qd6k40C8yqN3BLXLyELPOQ33a59jMF3dRBbipe1WZTXnYX/UVEO1JojmosuG1RzDhqyA
+         2VUb2KNGDBzAvH3E0vtIoBCt0lOnAYLVcE40i4OLdDGbYnH2ZCrRa8DpxZHQEtrzoDBP
+         +GMAdJcTZ6o7MaV4+Edze/0uwd1uwgjBJB9i8iEpiRstBSmfPl5GX2izLnfNI2ciR9VJ
+         GELo9Dyb0jeyh8E2xo5xrVGjqwIo/ap54f32M36JJMIOLiW1O2IXqgyfL6pTX049x3h4
+         +w/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=AJmEg2q9mG/fH5ApWPAmlCUORJqYzRuMecwU+JJYy7c=;
-        b=A+Hd4/Ze5hHk8Nun5DPetjixeqkgr+WpWeC7uamT2Di4OQPft6Z/zl1Y2KYqlgH5qU
-         SVZ/u5OddklhLkgfQuCSGwhsIY1QkRl0S9kgxbs/J7CoQmAgPfVyqof/ov9wnOerIPdK
-         VUre9S2jTXWSNPUYWyD3VPkuZGtme8f3KuFmTMmgz/RfR1l1Odmvl9/6FKsmNhzd9yTQ
-         7pVfR5nFbrFnenPYhRx5YL6KjBL22crOIqrCBdzQqds81hB0DzCKwMdOXIcCAEeRsj21
-         o6e0wchPWuldrFFLm7W7r2hIbfYj97e0GykP6EfH6JNEAyLvVrRl2oVu0uh575+dCCS8
-         g3Xg==
-X-Gm-Message-State: ACgBeo1u/COPHqt2S/iVgIwzpulJudINPkYJs1l7A6oUQsh69sVces6h
-        WBAO6YXQofdnTuaEC1nnw1H/Bg==
-X-Google-Smtp-Source: AA6agR4yKt8FR62+ocnlzY5Vvxm8+qFHQD1FMbhG0EjNVe96hMqaezOVpdGmxZD9fOf7oWOwxt/QjA==
-X-Received: by 2002:a05:6512:3f19:b0:492:fdaa:b535 with SMTP id y25-20020a0565123f1900b00492fdaab535mr2611738lfa.267.1662649009795;
-        Thu, 08 Sep 2022 07:56:49 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a9-20020ac25e69000000b00498ee99a749sm277218lfr.304.2022.09.08.07.56.48
+        bh=EBSJBt/4rQeZDrPhVl92JJf+1TNIVaSARc45/lfhD5k=;
+        b=nRW/FF6VNwi/fOY4nvTh3WFkbuWSup0PS233HKaXTv9OKbQKNpOBWpmQqKP+Wykkxj
+         J39xUlyCjQfBW6CAYOm+g+iMViRyGACBL1dzQOX2p5JM4c92vXHHt9bh0TM4tqbKhT+8
+         +V1I1McywyLA+DRWXgVMelKRY5aKu7nQoDUQ6G69fSWy3u2tfIzVTyJ9dUOfZ00ek7TY
+         mJoThuQNmzeqP867v64frWZJx2YSnkh71h9Ngda89PMvcKlhqM/0SZXrA5ScgDNAdkIc
+         fAE1ZAOWAckb3sreVvXh48NFatapvG0YAfxBN4iRDJFx6epujkhQ/48LLqLK0FqjDLdY
+         rqcg==
+X-Gm-Message-State: ACgBeo00OaIpfcstkeo0J0luR7Ev8A4y9lGK6SLowSvzAvt85uU65Iop
+        pZHzscJ1Q3D4BspdH2dTanMBfw==
+X-Google-Smtp-Source: AA6agR4HtMD485TQhY3FS7WjuK4l4FWt4RBZAxXc90hNyiyULvd42jHlYtgBPSBjMyr8H+5QGmUwjA==
+X-Received: by 2002:adf:f54a:0:b0:228:951a:2949 with SMTP id j10-20020adff54a000000b00228951a2949mr5428850wrp.240.1662652352815;
+        Thu, 08 Sep 2022 08:52:32 -0700 (PDT)
+Received: from [10.1.4.17] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id y8-20020adfe6c8000000b00228de58ae2bsm8665682wrm.12.2022.09.08.08.52.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 07:56:49 -0700 (PDT)
-Message-ID: <e0b13195-0aed-094d-c7af-4581b61d6453@linaro.org>
-Date:   Thu, 8 Sep 2022 16:56:48 +0200
+        Thu, 08 Sep 2022 08:52:31 -0700 (PDT)
+Message-ID: <aa4cc3c6-7f1b-28ff-9d05-287287a1eaa3@baylibre.com>
+Date:   Thu, 8 Sep 2022 17:52:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH v4 2/2] power: reset: qcom-pon: add support for
- qcom,pmk8350-pon compatible string
+Subject: Re: [PATCH v3 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
 Content-Language: en-US
-To:     Anjelique Melendez <quic_amelende@quicinc.com>, corbet@lwn.net,
-        sre@kernel.org, robh+dt@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220725191314.19456-1-quic_amelende@quicinc.com>
- <20220725191314.19456-3-quic_amelende@quicinc.com>
- <57f8d9c4-6f49-ad3d-fc82-7a0f66d1775a@linaro.org>
- <f9853511-e64c-9daf-b4e3-e334035771a8@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f9853511-e64c-9daf-b4e3-e334035771a8@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, matthias.bgg@gmail.com
+Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        robh+dt@kernel.org, rui.zhang@intel.com,
+        Michael Kao <michael.kao@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20220901133950.115122-1-aouledameur@baylibre.com>
+ <20220901133950.115122-5-aouledameur@baylibre.com>
+ <a5fd6f3e-4795-5953-5fdf-8857051b5e87@linaro.org>
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+In-Reply-To: <a5fd6f3e-4795-5953-5fdf-8857051b5e87@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/08/2022 22:26, Anjelique Melendez wrote:
-> 
-> 
-> On 7/26/2022 3:27 AM, Krzysztof Kozlowski wrote:
->> On 25/07/2022 21:13, Anjelique Melendez wrote:
->>> Add support for the new "qcom,pmk8350-pon" comptaible string.
->>>
->>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->>> ---
->>>  drivers/power/reset/qcom-pon.c | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
->>> index 4a688741a88a..16bc01738be9 100644
->>> --- a/drivers/power/reset/qcom-pon.c
->>> +++ b/drivers/power/reset/qcom-pon.c
->>> @@ -82,6 +82,7 @@ static const struct of_device_id pm8916_pon_id_table[] = {
->>>  	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
->>>  	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
->>>  	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
->>> +	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN2_REASON_SHIFT },
->>>  	{ }
->>>  };
->>>  MODULE_DEVICE_TABLE(of, pm8916_pon_id_table);
+Hi Daniel,
+
+Thank you for the review.
+
+On 9/8/22 11:07, Daniel Lezcano wrote:
+>
+> Hi Amjad,
+>
+> On 01/09/2022 15:39, Amjad Ouled-Ameur wrote:
+>> Provide thermal zone to read thermal sensor in the SoC. We can read 
+>> all the
+>> thermal sensors value in the SoC by the node /sys/class/thermal/
 >>
->> This is now confusing. The new device has entirely different first and
->> second IO address spaces, but you do not code here any differences.
+>> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+>> on the first read of sensor that often are bogus values.
+>> This can avoid following warning on boot:
 >>
-> 
-> Based on previous responses to this patch series, it was decided that a new
-> "qcom,pmk8350-pon" compatible string is needed to differentiate between gen1/gen2
-> vs gen3 children pon devices. Currently the child handles obtaining the register
-> address(es) from its parent's regmap in drivers/input/misc/pm8941-pwrkey.c
-> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/misc/pm8941-pwrkey.c?h=v6.0-rc1#n287).
-> The patch that handled that change can be found at
-> https://lore.kernel.org/linux-arm-msm/20220422191239.6271-4-quic_amelende@quicinc.com/.
-> 
-> This driver, as the parent, does not actually need any changes besides adding the
-> new parent compatible string. Specifically this driver handles reboot mode support.
-> Everything needed to handle reboot mode is in the first register and reboot mode
-> is handled the same as a "qcom,pm8998-pon" parent. The split of the pon register
-> in pmk8350 does not affect reboot mode. This is why before we added a new compatible
-> string "qcom,pm8998-pon" still worked for gen3 children devices. Even though 2
-> registers could be defined in the device tree, as a 2nd register is optional for gen3
-> children devices,the fact that this driver uses of_property_read_u32() will ensure that
-> the base address used for reboot mode comes from the first register.  
-> 
+>>    thermal thermal_zone6: failed to read out thermal zone (-13)
+>>
+>> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+>> ---
+>> Changes in V3:
+>> - Use proper types.
+>> - Use devm_kmalloc() instead of kmalloc().
+>> - Fix tabs and spaces.
+>>
+>>   drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
+>>   1 file changed, 76 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/thermal/mtk_thermal.c 
+>> b/drivers/thermal/mtk_thermal.c
+>> index 088c388da241..5901787c57f5 100644
+>> --- a/drivers/thermal/mtk_thermal.c
+>> +++ b/drivers/thermal/mtk_thermal.c
+>> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
+>>     struct mtk_thermal;
+>>   +struct mtk_thermal_zone {
+>> +    struct mtk_thermal *mt;
+>> +    int id;
+>> +};
+>> +
+>>   struct thermal_bank_cfg {
+>>       unsigned int num_sensors;
+>>       const int *sensors;
+>> @@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct 
+>> mtk_thermal_bank *bank)
+>>           mutex_unlock(&mt->lock);
+>>   }
+>>   +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
+>> +{
+>> +    u32 raw;
+>> +    int temp;
+>> +
+>> +    const struct mtk_thermal_data *conf = mt->conf;
+>> +
+>> +    raw = readl(mt->thermal_base + conf->msr[id]);
+>> +
+>> +    if (mt->conf->version == MTK_THERMAL_V1)
+>> +        temp = raw_to_mcelsius_v1(mt, id, raw);
+>> +    else
+>> +        temp = raw_to_mcelsius_v2(mt, id, raw);
+>
+> Can you set a callback at init time instead of checking the version at 
+> each get_sensor_temp() ?
+>
+Good idea, will add it in v4.
+>> +    /*
+>> +     * The first read of a sensor often contains very high bogus
+>> +     * temperature value. Filter these out so that the system does
+>> +     * not immediately shut down.
+>> +     */
+>> +
+>> +    if (temp > 200000)
+>> +        return -EAGAIN;
+>> +    else
+>> +        return temp;
+>> +}
+>> +
+>>   /**
+>>    * mtk_thermal_bank_temperature - get the temperature of a bank
+>>    * @bank:    The bank
+>> @@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct 
+>> mtk_thermal_bank *bank)
+>>       struct mtk_thermal *mt = bank->mt;
+>>       const struct mtk_thermal_data *conf = mt->conf;
+>>       int i, temp = INT_MIN, max = INT_MIN;
+>> -    u32 raw;
+>>         for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+>> -        raw = readl(mt->thermal_base + conf->msr[i]);
+>> -
+>> -        if (mt->conf->version == MTK_THERMAL_V1) {
+>> -            temp = raw_to_mcelsius_v1(
+>> -                mt, conf->bank_data[bank->id].sensors[i], raw);
+>> -        } else {
+>> -            temp = raw_to_mcelsius_v2(
+>> -                mt, conf->bank_data[bank->id].sensors[i], raw);
+>> -        }
+>> -
+>> -        /*
+>> -         * The first read of a sensor often contains very high bogus
+>> -         * temperature value. Filter these out so that the system does
+>> -         * not immediately shut down.
+>> -         */
+>> -        if (temp > 200000)
+>> -            temp = 0;
+>> +        temp = _get_sensor_temp(mt, i);
+>>             if (temp > max)
+>>               max = temp;
+>> @@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct 
+>> mtk_thermal_bank *bank)
+>>     static int mtk_read_temp(void *data, int *temperature)
+>>   {
+>> -    struct mtk_thermal *mt = data;
+>> +    struct mtk_thermal_zone *tz = data;
+>> +    struct mtk_thermal *mt = tz->mt;
+>>       int i;
+>>       int tempmax = INT_MIN;
+>>   @@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int 
+>> *temperature)
+>>       return 0;
+>>   }
+>>   +static int mtk_read_sensor_temp(void *data, int *temperature)
+>> +{
+>> +    struct mtk_thermal_zone *tz = data;
+>> +    struct mtk_thermal *mt = tz->mt;
+>> +    int id = tz->id - 1;
+>> +
+>> +    if (id < 0)
+>> +        return -EACCES;
+>> +
+>> +    *temperature = _get_sensor_temp(mt, id);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+>>       .get_temp = mtk_read_temp,
+>>   };
+>>
+>> +static const struct thermal_zone_of_device_ops 
+>> mtk_thermal_sensor_ops = {
+>> +    .get_temp = mtk_read_sensor_temp,
+>> +};
+>
+> Please respin against linux-next, the thermal_zone_of_device_ops 
+> structure does no longer exist. The conversion is trivial, here is a 
+> example:
+>
+> https://lore.kernel.org/all/20220804224349.1926752-21-daniel.lezcano@linexp.org/ 
+>
+>
+Sure, will do.
+>
+>>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>>                     u32 apmixed_phys_base, u32 auxadc_phys_base,
+>>                     int ctrl_id)
+>> @@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct 
+>> platform_device *pdev)
+>>       u64 auxadc_phys_base, apmixed_phys_base;
+>>       struct thermal_zone_device *tzdev;
+>>       void __iomem *apmixed_base, *auxadc_base;
+>> +    struct mtk_thermal_zone *tz;
+>>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>>       if (!mt)
+>> @@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct 
+>> platform_device *pdev)
+>>         platform_set_drvdata(pdev, mt);
+>>   -    tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+>> -                             &mtk_thermal_ops);
+>> -    if (IS_ERR(tzdev)) {
+>> -        ret = PTR_ERR(tzdev);
+>> -        goto err_disable_clk_peri_therm;
+>> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+>> +        tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
+>> +        if (!tz)
+>> +            return -ENOMEM;
+>> +
+>> +        tz->mt = mt;
+>> +        tz->id = i;
+>> +
+>> +        tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, 
+>> tz, (i == 0) ?
+>> +                                 &mtk_thermal_ops :
+>> +                                 &mtk_thermal_sensor_ops);
+>> +
+>> +        if (IS_ERR(tzdev)) {
+>> +            if (PTR_ERR(tzdev) == -ENODEV) {
+>> +                dev_warn(&pdev->dev,
+>> +                     "sensor %d not registered in thermal zone in 
+>> dt\n", i);
+>> +                continue;
+>> +            }
+>> +            if (PTR_ERR(tzdev) == -EACCES) {
+>> +                ret = PTR_ERR(tzdev);
+>> +                goto err_disable_clk_peri_therm;
+>> +            }
+>> +        }
+>>       }
+>>         ret = devm_thermal_add_hwmon_sysfs(tzdev);
+>
+>
+Regards,
 
-Ah, makes sense.
+Amjad
 
-
-Best regards,
-Krzysztof
