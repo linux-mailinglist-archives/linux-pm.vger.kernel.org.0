@@ -2,290 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3215B22D7
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 17:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644A95B24D8
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 19:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiIHPwj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 11:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S232046AbiIHRj1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 13:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiIHPwi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 11:52:38 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68278F56F2
-        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 08:52:34 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id e16so7580619wrx.7
-        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 08:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=EBSJBt/4rQeZDrPhVl92JJf+1TNIVaSARc45/lfhD5k=;
-        b=kAbENSgl5oBuyAsqN9csM5nPWPbMNDsODznGSODjKr4XRlpAuZL6v+RFXt1qNuv4q0
-         qd6k40C8yqN3BLXLyELPOQ33a59jMF3dRBbipe1WZTXnYX/UVEO1JojmosuG1RzDhqyA
-         2VUb2KNGDBzAvH3E0vtIoBCt0lOnAYLVcE40i4OLdDGbYnH2ZCrRa8DpxZHQEtrzoDBP
-         +GMAdJcTZ6o7MaV4+Edze/0uwd1uwgjBJB9i8iEpiRstBSmfPl5GX2izLnfNI2ciR9VJ
-         GELo9Dyb0jeyh8E2xo5xrVGjqwIo/ap54f32M36JJMIOLiW1O2IXqgyfL6pTX049x3h4
-         +w/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=EBSJBt/4rQeZDrPhVl92JJf+1TNIVaSARc45/lfhD5k=;
-        b=nRW/FF6VNwi/fOY4nvTh3WFkbuWSup0PS233HKaXTv9OKbQKNpOBWpmQqKP+Wykkxj
-         J39xUlyCjQfBW6CAYOm+g+iMViRyGACBL1dzQOX2p5JM4c92vXHHt9bh0TM4tqbKhT+8
-         +V1I1McywyLA+DRWXgVMelKRY5aKu7nQoDUQ6G69fSWy3u2tfIzVTyJ9dUOfZ00ek7TY
-         mJoThuQNmzeqP867v64frWZJx2YSnkh71h9Ngda89PMvcKlhqM/0SZXrA5ScgDNAdkIc
-         fAE1ZAOWAckb3sreVvXh48NFatapvG0YAfxBN4iRDJFx6epujkhQ/48LLqLK0FqjDLdY
-         rqcg==
-X-Gm-Message-State: ACgBeo00OaIpfcstkeo0J0luR7Ev8A4y9lGK6SLowSvzAvt85uU65Iop
-        pZHzscJ1Q3D4BspdH2dTanMBfw==
-X-Google-Smtp-Source: AA6agR4HtMD485TQhY3FS7WjuK4l4FWt4RBZAxXc90hNyiyULvd42jHlYtgBPSBjMyr8H+5QGmUwjA==
-X-Received: by 2002:adf:f54a:0:b0:228:951a:2949 with SMTP id j10-20020adff54a000000b00228951a2949mr5428850wrp.240.1662652352815;
-        Thu, 08 Sep 2022 08:52:32 -0700 (PDT)
-Received: from [10.1.4.17] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id y8-20020adfe6c8000000b00228de58ae2bsm8665682wrm.12.2022.09.08.08.52.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 08:52:31 -0700 (PDT)
-Message-ID: <aa4cc3c6-7f1b-28ff-9d05-287287a1eaa3@baylibre.com>
-Date:   Thu, 8 Sep 2022 17:52:29 +0200
+        with ESMTP id S229862AbiIHRi4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 13:38:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4109DEE50E
+        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 10:38:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50E9814BF;
+        Thu,  8 Sep 2022 10:38:52 -0700 (PDT)
+Received: from bogus (unknown [10.57.45.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8BF3E3F71A;
+        Thu,  8 Sep 2022 10:38:43 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 18:38:40 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>, Peng Fan <peng.fan@nxp.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "npitre@baylibre.com" <npitre@baylibre.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+Subject: Re: Question: why call clk_prepare in pm_clk_acquire
+Message-ID: <20220908173840.rqy335cdeg5a2ww5@bogus>
+References: <DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <CAPDyKFrzJikk6rJr9xwV6W-whvdLe5tTUE+xO_EoRtm+9DAbNA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, matthias.bgg@gmail.com
-Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        robh+dt@kernel.org, rui.zhang@intel.com,
-        Michael Kao <michael.kao@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20220901133950.115122-1-aouledameur@baylibre.com>
- <20220901133950.115122-5-aouledameur@baylibre.com>
- <a5fd6f3e-4795-5953-5fdf-8857051b5e87@linaro.org>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <a5fd6f3e-4795-5953-5fdf-8857051b5e87@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrzJikk6rJr9xwV6W-whvdLe5tTUE+xO_EoRtm+9DAbNA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Thu, Sep 08, 2022 at 04:37:13PM +0200, Ulf Hansson wrote:
+> On Thu, 8 Sept 2022 at 09:33, Peng Fan <peng.fan@nxp.com> wrote:
+> >
+> > Hi All,
+> >
+> > We are facing an issue clk_set_rate fail with commit a3b884cef873 ("firmware:
+> > arm_scmi: Add clock management to the SCMI power domain") ,
+> 
+> Hmm, I wonder about the main reason behind that commit. Can we revert
+> it or is there some platform/driver that is really relying on it?
+>
 
-Thank you for the review.
+IIUC, at the time of the commit, it was needed on some Renesas platform.
+Not sure if it is still used or not.
 
-On 9/8/22 11:07, Daniel Lezcano wrote:
+> >
+> > we use scmi power domain, but not use scmi clk, but with upper commit, the clk is prepared
+> > when pm_clk_acquire.
+> >
+
+Is this based on latest SCMI clocks that support atomic or older one
+which doesn't. If latter, I see pm_clk_acquire doesn't actually call
+prepare as if clk_is_enabled_when_prepared(clk) = true. Do you see have
+issue ?
+
+> > However the clk has flag CLK_SET_RATE_GATE, clk_set_rate will fail in driver, because
+> > clk is prepared in pm_clk_acquire.
+> >
+
+Where is CLK_SET_RATE_GATE set exactly ?
+
+> > Looking into drivers/base/power/clock_ops.c, I see pm_clk_suspend/pm_clk_resume
+> > will handle clk prepare/unprepared, so why pm_clk_acquire will also prepare the clk?
 >
-> Hi Amjad,
+
+As asked above do you see the actual clk_prepare getting called as I
+see it isn't if lk_is_enabled_when_prepared(clk) = true.
+
+> I agree, the behaviour is certainly questionable to me too. However,
+> it may be tricky to change by now, due to the deployment that has
+> happened over the years.
 >
-> On 01/09/2022 15:39, Amjad Ouled-Ameur wrote:
->> Provide thermal zone to read thermal sensor in the SoC. We can read 
->> all the
->> thermal sensors value in the SoC by the node /sys/class/thermal/
->>
->> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
->> on the first read of sensor that often are bogus values.
->> This can avoid following warning on boot:
->>
->>    thermal thermal_zone6: failed to read out thermal zone (-13)
->>
->> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
->> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> ---
->> Changes in V3:
->> - Use proper types.
->> - Use devm_kmalloc() instead of kmalloc().
->> - Fix tabs and spaces.
->>
->>   drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
->>   1 file changed, 76 insertions(+), 24 deletions(-)
->>
->> diff --git a/drivers/thermal/mtk_thermal.c 
->> b/drivers/thermal/mtk_thermal.c
->> index 088c388da241..5901787c57f5 100644
->> --- a/drivers/thermal/mtk_thermal.c
->> +++ b/drivers/thermal/mtk_thermal.c
->> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
->>     struct mtk_thermal;
->>   +struct mtk_thermal_zone {
->> +    struct mtk_thermal *mt;
->> +    int id;
->> +};
->> +
->>   struct thermal_bank_cfg {
->>       unsigned int num_sensors;
->>       const int *sensors;
->> @@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct 
->> mtk_thermal_bank *bank)
->>           mutex_unlock(&mt->lock);
->>   }
->>   +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
->> +{
->> +    u32 raw;
->> +    int temp;
->> +
->> +    const struct mtk_thermal_data *conf = mt->conf;
->> +
->> +    raw = readl(mt->thermal_base + conf->msr[id]);
->> +
->> +    if (mt->conf->version == MTK_THERMAL_V1)
->> +        temp = raw_to_mcelsius_v1(mt, id, raw);
->> +    else
->> +        temp = raw_to_mcelsius_v2(mt, id, raw);
+
+Agreed.
+
+> In principle we would need to make the part where pm_clk_acquire
+> prepares the clock to become optional, in some clever way.
 >
-> Can you set a callback at init time instead of checking the version at 
-> each get_sensor_temp() ?
->
-Good idea, will add it in v4.
->> +    /*
->> +     * The first read of a sensor often contains very high bogus
->> +     * temperature value. Filter these out so that the system does
->> +     * not immediately shut down.
->> +     */
->> +
->> +    if (temp > 200000)
->> +        return -EAGAIN;
->> +    else
->> +        return temp;
->> +}
->> +
->>   /**
->>    * mtk_thermal_bank_temperature - get the temperature of a bank
->>    * @bank:    The bank
->> @@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct 
->> mtk_thermal_bank *bank)
->>       struct mtk_thermal *mt = bank->mt;
->>       const struct mtk_thermal_data *conf = mt->conf;
->>       int i, temp = INT_MIN, max = INT_MIN;
->> -    u32 raw;
->>         for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
->> -        raw = readl(mt->thermal_base + conf->msr[i]);
->> -
->> -        if (mt->conf->version == MTK_THERMAL_V1) {
->> -            temp = raw_to_mcelsius_v1(
->> -                mt, conf->bank_data[bank->id].sensors[i], raw);
->> -        } else {
->> -            temp = raw_to_mcelsius_v2(
->> -                mt, conf->bank_data[bank->id].sensors[i], raw);
->> -        }
->> -
->> -        /*
->> -         * The first read of a sensor often contains very high bogus
->> -         * temperature value. Filter these out so that the system does
->> -         * not immediately shut down.
->> -         */
->> -        if (temp > 200000)
->> -            temp = 0;
->> +        temp = _get_sensor_temp(mt, i);
->>             if (temp > max)
->>               max = temp;
->> @@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct 
->> mtk_thermal_bank *bank)
->>     static int mtk_read_temp(void *data, int *temperature)
->>   {
->> -    struct mtk_thermal *mt = data;
->> +    struct mtk_thermal_zone *tz = data;
->> +    struct mtk_thermal *mt = tz->mt;
->>       int i;
->>       int tempmax = INT_MIN;
->>   @@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int 
->> *temperature)
->>       return 0;
->>   }
->>   +static int mtk_read_sensor_temp(void *data, int *temperature)
->> +{
->> +    struct mtk_thermal_zone *tz = data;
->> +    struct mtk_thermal *mt = tz->mt;
->> +    int id = tz->id - 1;
->> +
->> +    if (id < 0)
->> +        return -EACCES;
->> +
->> +    *temperature = _get_sensor_temp(mt, id);
->> +
->> +    return 0;
->> +}
->> +
->>   static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
->>       .get_temp = mtk_read_temp,
->>   };
->>
->> +static const struct thermal_zone_of_device_ops 
->> mtk_thermal_sensor_ops = {
->> +    .get_temp = mtk_read_sensor_temp,
->> +};
->
-> Please respin against linux-next, the thermal_zone_of_device_ops 
-> structure does no longer exist. The conversion is trivial, here is a 
-> example:
->
-> https://lore.kernel.org/all/20220804224349.1926752-21-daniel.lezcano@linexp.org/ 
->
->
-Sure, will do.
->
->>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->>                     u32 apmixed_phys_base, u32 auxadc_phys_base,
->>                     int ctrl_id)
->> @@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct 
->> platform_device *pdev)
->>       u64 auxadc_phys_base, apmixed_phys_base;
->>       struct thermal_zone_device *tzdev;
->>       void __iomem *apmixed_base, *auxadc_base;
->> +    struct mtk_thermal_zone *tz;
->>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->>       if (!mt)
->> @@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct 
->> platform_device *pdev)
->>         platform_set_drvdata(pdev, mt);
->>   -    tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
->> -                             &mtk_thermal_ops);
->> -    if (IS_ERR(tzdev)) {
->> -        ret = PTR_ERR(tzdev);
->> -        goto err_disable_clk_peri_therm;
->> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->> +        tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->> +        if (!tz)
->> +            return -ENOMEM;
->> +
->> +        tz->mt = mt;
->> +        tz->id = i;
->> +
->> +        tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, 
->> tz, (i == 0) ?
->> +                                 &mtk_thermal_ops :
->> +                                 &mtk_thermal_sensor_ops);
->> +
->> +        if (IS_ERR(tzdev)) {
->> +            if (PTR_ERR(tzdev) == -ENODEV) {
->> +                dev_warn(&pdev->dev,
->> +                     "sensor %d not registered in thermal zone in 
->> dt\n", i);
->> +                continue;
->> +            }
->> +            if (PTR_ERR(tzdev) == -EACCES) {
->> +                ret = PTR_ERR(tzdev);
->> +                goto err_disable_clk_peri_therm;
->> +            }
->> +        }
->>       }
->>         ret = devm_thermal_add_hwmon_sysfs(tzdev);
->
->
+
+I see it is already, let us see what is Peng's observation.
+
+-- 
 Regards,
-
-Amjad
-
+Sudeep
