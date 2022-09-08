@@ -2,190 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3501F5B1FE4
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 16:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291DC5B20C1
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 16:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbiIHOAO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 10:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S232163AbiIHOh7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 10:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbiIHN7w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 09:59:52 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F534FF086
-        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 06:59:08 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso1792566wmc.0
-        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 06:59:08 -0700 (PDT)
+        with ESMTP id S232050AbiIHOh5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 10:37:57 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79225113C71
+        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 07:37:52 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id p7so28068613lfu.3
+        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 07:37:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date;
-        bh=M7E92wCvpAtXrboLofbMwI8QDT7eWvJxh9Ed8UPR9FE=;
-        b=rRHfSMHKzdPj0NBj/1WqdWtWFmpy0W4vezr8XGDbiuBih4zftWjVCgKCGalK0y7VyK
-         MO/6ZmTPvjYRqe+0u9ejiyUOQOQejMDa2H7LDA6vl8VIC6Ru3MocSx10fxu1riNDC+n4
-         Gi2dPhiF/dQMMlH7sLxvkA7fYoRaSfimqGC4u3xDBFajX57v9FXt9N70BlS9GyxMhbeb
-         /H7KJ53cZNPCooK9X4r8iH6pR0S4QVuP9f2ojyB3GMMmeq69LrEPqhnPnHagrSynhXq8
-         rvQK36kj1istg+2eDx319GK80QKmv2J0vw1pFmFPoC7elFZxnMjZhMfQiDJqx22tnMuB
-         h79A==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=nAbCObJGrW4tJgQzyhQTlgOAwdzjZ+UNcsNgAoaR8Mk=;
+        b=g63v4eTyzIPon5vz7ssslEDOVqngrF1XXUYAMBuLQzC7aWavm7OMEAcvXbBOxFbx3G
+         +YYy3S6xhPgy5CfIaCCR91YnGqVpKG4eAF9l2rEo91prydynP+x2EY0Atbwbbj7zx1a7
+         ImE2VDwP8ZWLnWMcyIwSj+HS526Phj3mU4vwaiodAHaL0YwxlWoA3bzKJH7myD4ZO3ux
+         hbIc/NHaq0qvp3/Cgl6eDEOb0196sCnqMaD5Tm30OgrgjklS7Bb3PVJsAvAXVQPSGg26
+         ZmafFE4MPyp+h1h7SXmmYslYgcj+XrXXirwU15/F+bRZPailjIfXdxjzy95pglD0gUzi
+         5+VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=M7E92wCvpAtXrboLofbMwI8QDT7eWvJxh9Ed8UPR9FE=;
-        b=dSVZ2zz0ROxR4ALRAg4ijdUKyX/Wx8PORlhL/XZjZGwTa4fUnX1a7/fEtIPywi8GJz
-         YuHP2S0OZp8KziX0lkulj5Ae3sy2NR1/LNrOolJs+hMoeiuFlT/PZJtll/3qGaEXiHUx
-         mN1kTDzCMjukq2SHn3RUjz593pjdLsmrPd8nWKW9syukGdAww3no/lz7MqLrl8V1qaC5
-         U4FlKcv/rtw1NJyyNrTmM0lRjA/U3SVTD0Mi1d9rnVtVNDrt0eVimFekni1I/kM78ERz
-         FPdP/4qaBIk6HfqszYbSxXxuu8Km2kcbocDBlYJUWAYhktIzLNl0wwf9s4xm87Wvycz0
-         3xZg==
-X-Gm-Message-State: ACgBeo25sR1k27xvYgYpbuv6Of5shwsS4lsJUIyhXDmLkhA6V1X0HjjH
-        BzmS4ei4dPA4clT+WXwMyOnO0A==
-X-Google-Smtp-Source: AA6agR5Y1ue2R4SpA013wGrxxP837wnkH1/ZIs48DYRN0QAmnqT3NJV5vcMPuyb7/Gk+sbz2YUi6gw==
-X-Received: by 2002:a05:600c:3217:b0:3a6:8235:4f6f with SMTP id r23-20020a05600c321700b003a682354f6fmr2328042wmp.96.1662645547031;
-        Thu, 08 Sep 2022 06:59:07 -0700 (PDT)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id g13-20020a05600c4ecd00b003a4c6e67f01sm3196979wmq.6.2022.09.08.06.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 06:59:06 -0700 (PDT)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        viresh.kumar@linaro.org, robert.moore@intel.com,
-        punit.agrawal@bytedance.com, lukasz.luba@arm.com,
-        ionela.voinescu@arm.com, pierre.gondois@arm.com,
-        linux-kernel@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] ACPI: CPPC: Disable FIE if registers in PCC regions
-References: <20220819162547.141333-1-jeremy.linton@arm.com>
-        <20220819162547.141333-2-jeremy.linton@arm.com>
-Date:   Thu, 08 Sep 2022 14:59:05 +0100
-In-Reply-To: <20220819162547.141333-2-jeremy.linton@arm.com> (Jeremy Linton's
-        message of "Fri, 19 Aug 2022 11:25:46 -0500")
-Message-ID: <87pmg6arx2.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nAbCObJGrW4tJgQzyhQTlgOAwdzjZ+UNcsNgAoaR8Mk=;
+        b=Dv0S0iTialytGqlnfPW+Cvb3qr238kfDqwE0NneXz34D/z9kEGjNEjP37hnryiNou9
+         +NOjbDCZ85ItLjy0M7xm9hEcOwgw7p9zfKROBh6C1YOj6Xsf14NczojZ+tPA3k8Q1/uX
+         bhCoI/nuafBmddrCBt7M/pi1VvN4hF1v9wlaqASl8faTRGzmXpUXcIX0c2mLTLJj5KTU
+         UAjTbw5SdJppgaxs/6mRisa5NksfE7nL4TXZ5/yTg0OaJQniu3BGtF8E5f6lTL64T9wr
+         dWoJhi99IJ0OHy/nkqrlX2cGOWFm30xNuM90p9OIg1pPIs5Y+5mOXgS2ugtoL69s9PJC
+         3FYQ==
+X-Gm-Message-State: ACgBeo0c7OnH3Sbrg0C7VTjny5ykfZo8jxQcEL5zDMMMqkL5qnm6mNE/
+        2ru7m0uvwWZY9QJv8a3aLmFUDWn1AXK1rV2o9YZ9lQ==
+X-Google-Smtp-Source: AA6agR6/y3Npe2+IxNZ93VvMBJGja+V5/n48i3/Flbp8FIOt2Cmq+yQr/9bO+47f0G9udbSPyVvOZHuGD5/BOOLbmCE=
+X-Received: by 2002:a05:6512:2629:b0:492:b1e7:bf26 with SMTP id
+ bt41-20020a056512262900b00492b1e7bf26mr2654688lfb.254.1662647870144; Thu, 08
+ Sep 2022 07:37:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Sep 2022 16:37:13 +0200
+Message-ID: <CAPDyKFrzJikk6rJr9xwV6W-whvdLe5tTUE+xO_EoRtm+9DAbNA@mail.gmail.com>
+Subject: Re: Question: why call clk_prepare in pm_clk_acquire
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "npitre@baylibre.com" <npitre@baylibre.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jeremy,
-
-I missed the previous version (holidays) but hopefully still in time for
-this one. A query / comment below.
-
-Jeremy Linton <jeremy.linton@arm.com> writes:
-
-> PCC regions utilize a mailbox to set/retrieve register values used by
-> the CPPC code. This is fine as long as the operations are
-> infrequent. With the FIE code enabled though the overhead can range
-> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-> based machines.
+On Thu, 8 Sept 2022 at 09:33, Peng Fan <peng.fan@nxp.com> wrote:
 >
-> So, before enabling FIE assure none of the registers used by
-> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
-> enable a module parameter which can also disable it at boot or module
-> reload.
+> Hi All,
 >
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> ---
->  drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->  drivers/cpufreq/cppc_cpufreq.c | 31 +++++++++++++++++++++----
->  include/acpi/cppc_acpi.h       |  5 +++++
->  3 files changed, 73 insertions(+), 4 deletions(-)
+> We are facing an issue clk_set_rate fail with commit a3b884cef873 ("firmware:
+> arm_scmi: Add clock management to the SCMI power domain") ,
+
+Hmm, I wonder about the main reason behind that commit. Can we revert
+it or is there some platform/driver that is really relying on it?
+
 >
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 1e15a9f25ae9..c840bf606b30 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1240,6 +1240,47 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
->  }
->  EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
->  
-> +/**
-> + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
-> + *
-> + * CPPC has flexibility about how counters describing CPU perf are delivered.
-> + * One of the choices is PCC regions, which can have a high access latency. This
-> + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
-> + *
-> + * Return: true if any of the counters are in PCC regions, false otherwise
-> + */
-> +bool cppc_perf_ctrs_in_pcc(void)
-> +{
-> +	int cpu;
-> +
-> +	for_each_present_cpu(cpu) {
-> +		struct cpc_register_resource *ref_perf_reg;
-> +		struct cpc_desc *cpc_desc;
-> +
-> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +
-> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> +			return true;
-> +
-> +
-> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-> +
-> +		/*
-> +		 * If reference perf register is not supported then we should
-> +		 * use the nominal perf value
-> +		 */
-> +		if (!CPC_SUPPORTED(ref_perf_reg))
-> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-> +
-> +		if (CPC_IN_PCC(ref_perf_reg))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-> +
->  /**
->   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->   * @cpunum: CPU from which to read counters.
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 24eaf0ec344d..32fcb0bf74a4 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
->  
->  static struct cpufreq_driver cppc_cpufreq_driver;
->  
-> +static enum {
-> +	FIE_UNSET = -1,
-> +	FIE_ENABLED,
-> +	FIE_DISABLED
-> +} fie_disabled = FIE_UNSET;
-> +
->  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-> +module_param(fie_disabled, int, 0444);
-> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
->  
->  /* Frequency invariance support */
->  struct cppc_freq_invariance {
-> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->  	struct cppc_freq_invariance *cppc_fi;
->  	int cpu, ret;
->  
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->  		return;
+> we use scmi power domain, but not use scmi clk, but with upper commit, the clk is prepared
+> when pm_clk_acquire.
+>
+> However the clk has flag CLK_SET_RATE_GATE, clk_set_rate will fail in driver, because
+> clk is prepared in pm_clk_acquire.
+>
+> Looking into drivers/base/power/clock_ops.c, I see pm_clk_suspend/pm_clk_resume
+> will handle clk prepare/unprepared, so why pm_clk_acquire will also prepare the clk?
 
-With this change, if FIE is enabled, the rest of the function will run
-even if the hisi workaround is enabled. Not sure if that is an
-intentional change. The same applies to similar other changes in the
-patch as well.
+I agree, the behaviour is certainly questionable to me too. However,
+it may be tricky to change by now, due to the deployment that has
+happened over the years.
 
-The rest of the changes look ok.
+In principle we would need to make the part where pm_clk_acquire
+prepares the clock to become optional, in some clever way.
 
-[...]
+>
+>
+> Thanks,
+> Peng.
 
+Kind regards
+Uffe
