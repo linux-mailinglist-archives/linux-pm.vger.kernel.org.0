@@ -2,68 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291DC5B20C1
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 16:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877CA5B2154
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 16:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiIHOh7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 10:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S232385AbiIHOzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 10:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbiIHOh5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 10:37:57 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79225113C71
-        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 07:37:52 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id p7so28068613lfu.3
-        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 07:37:52 -0700 (PDT)
+        with ESMTP id S232154AbiIHOzn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 10:55:43 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E823A9AFD8
+        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 07:55:40 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id c10so10734568ljj.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 07:55:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nAbCObJGrW4tJgQzyhQTlgOAwdzjZ+UNcsNgAoaR8Mk=;
-        b=g63v4eTyzIPon5vz7ssslEDOVqngrF1XXUYAMBuLQzC7aWavm7OMEAcvXbBOxFbx3G
-         +YYy3S6xhPgy5CfIaCCR91YnGqVpKG4eAF9l2rEo91prydynP+x2EY0Atbwbbj7zx1a7
-         ImE2VDwP8ZWLnWMcyIwSj+HS526Phj3mU4vwaiodAHaL0YwxlWoA3bzKJH7myD4ZO3ux
-         hbIc/NHaq0qvp3/Cgl6eDEOb0196sCnqMaD5Tm30OgrgjklS7Bb3PVJsAvAXVQPSGg26
-         ZmafFE4MPyp+h1h7SXmmYslYgcj+XrXXirwU15/F+bRZPailjIfXdxjzy95pglD0gUzi
-         5+VA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=fgfnhY3Ull0vFOfCmjRPglZnCyMcEKdcwqQSL0htN4s=;
+        b=Tfxv0wLLpxiul/CCTKgU19nq1+XuXriBZ9LEMrMatNFJ1wo2fzx/HSwJqbhQM44pmK
+         wwdS9BNxGTEgHi0RmOwgAN3usrdTi/vOqYrMp+qN/466jLe50E4voyYfGoqsfVRtk4Yu
+         GGs8UuleALrZvGc3Em9sxDAuWYiNV5JWHBznhh/PNQfGPRFewKAe78QbCzZvmo7D0fNH
+         p5z7id3h1Bd3mKefKckdHPrEHoFDDNOrQiQ2d0daHrehbFKtiuI1nHgpufCe1DWyLE/o
+         9QBOwZig6kQNYdGH4bSIzTozQCH3DT5PviCl1OC9UVmflrCatHXBpui/QATYDhZwXc7q
+         6Huw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nAbCObJGrW4tJgQzyhQTlgOAwdzjZ+UNcsNgAoaR8Mk=;
-        b=Dv0S0iTialytGqlnfPW+Cvb3qr238kfDqwE0NneXz34D/z9kEGjNEjP37hnryiNou9
-         +NOjbDCZ85ItLjy0M7xm9hEcOwgw7p9zfKROBh6C1YOj6Xsf14NczojZ+tPA3k8Q1/uX
-         bhCoI/nuafBmddrCBt7M/pi1VvN4hF1v9wlaqASl8faTRGzmXpUXcIX0c2mLTLJj5KTU
-         UAjTbw5SdJppgaxs/6mRisa5NksfE7nL4TXZ5/yTg0OaJQniu3BGtF8E5f6lTL64T9wr
-         dWoJhi99IJ0OHy/nkqrlX2cGOWFm30xNuM90p9OIg1pPIs5Y+5mOXgS2ugtoL69s9PJC
-         3FYQ==
-X-Gm-Message-State: ACgBeo0c7OnH3Sbrg0C7VTjny5ykfZo8jxQcEL5zDMMMqkL5qnm6mNE/
-        2ru7m0uvwWZY9QJv8a3aLmFUDWn1AXK1rV2o9YZ9lQ==
-X-Google-Smtp-Source: AA6agR6/y3Npe2+IxNZ93VvMBJGja+V5/n48i3/Flbp8FIOt2Cmq+yQr/9bO+47f0G9udbSPyVvOZHuGD5/BOOLbmCE=
-X-Received: by 2002:a05:6512:2629:b0:492:b1e7:bf26 with SMTP id
- bt41-20020a056512262900b00492b1e7bf26mr2654688lfb.254.1662647870144; Thu, 08
- Sep 2022 07:37:50 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=fgfnhY3Ull0vFOfCmjRPglZnCyMcEKdcwqQSL0htN4s=;
+        b=lPJGL5vgoAt48hNYswfRFjjpUJ4CU8e4LdQTQKCwV27m6TTBmA8MvN7NTiW+jjEZXC
+         pn5AxV3fX9ycmN14x3+XTco+wvdMucgF5tTc/hGPpErtqdLLHgkwKZTkqGbTIcdnjrKC
+         kZO6JMQ8MubpDyR0y+8d0wwwQ30mjczhXUplumJnpOC0IXlHyeDDfQsK3e5AVwNDS9sq
+         YrhDIhg2YTshnkQTAfCP+Q+cQ6tJZwl9IDmeN3JYADu9haBFn/AgZF4r9myqWpfyCNN3
+         gNfjhQ7Ps7IrrK8sMqNHe8654m7vJ5msl4ydPJZEiRrpB0uFfEcRmQP+aIotzfsVSt1k
+         +BzQ==
+X-Gm-Message-State: ACgBeo1fcObwuy1gyL7T3tbVdhg3RJtzpljdrWQDhe/6cqbxTwIJ7kvw
+        YvD6IIEIUCPOe0L9JhA/Ylc93w==
+X-Google-Smtp-Source: AA6agR7CdTkFme++fxO7yCuNAUYEhQGmRtghzjNi1mJGcVbSKLCJ2f0obGMN5IJudh/AGuecUAFTjg==
+X-Received: by 2002:a2e:a910:0:b0:26a:ed13:cda6 with SMTP id j16-20020a2ea910000000b0026aed13cda6mr1407716ljq.250.1662648939305;
+        Thu, 08 Sep 2022 07:55:39 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id c16-20020ac24150000000b0048afd0c496fsm3066503lfi.156.2022.09.08.07.55.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 07:55:38 -0700 (PDT)
+Message-ID: <889151be-9ea8-6a9e-e5fe-eac1dd93250c@linaro.org>
+Date:   Thu, 8 Sep 2022 16:55:37 +0200
 MIME-Version: 1.0
-References: <DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com>
-In-Reply-To: <DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 8 Sep 2022 16:37:13 +0200
-Message-ID: <CAPDyKFrzJikk6rJr9xwV6W-whvdLe5tTUE+xO_EoRtm+9DAbNA@mail.gmail.com>
-Subject: Re: Question: why call clk_prepare in pm_clk_acquire
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "npitre@baylibre.com" <npitre@baylibre.com>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v4 1/2] dt-bindings: power: reset: qcom-pon: update "reg"
+ property details
+Content-Language: en-US
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, corbet@lwn.net,
+        sre@kernel.org, robh+dt@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Collins <quic_collinsd@quicinc.com>
+References: <20220725191314.19456-1-quic_amelende@quicinc.com>
+ <20220725191314.19456-2-quic_amelende@quicinc.com>
+ <a47a33a5-aec7-2a52-f1e8-52c45307862e@linaro.org>
+ <0e6bf142-ca56-2414-86c4-1a18b74b3ba6@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0e6bf142-ca56-2414-86c4-1a18b74b3ba6@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,37 +83,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 8 Sept 2022 at 09:33, Peng Fan <peng.fan@nxp.com> wrote:
->
-> Hi All,
->
-> We are facing an issue clk_set_rate fail with commit a3b884cef873 ("firmware:
-> arm_scmi: Add clock management to the SCMI power domain") ,
+On 19/08/2022 22:26, Anjelique Melendez wrote:
+> 
+> Hi Krzysztof,
+> First I would like to apologize for my lack of response to this patch series
+> over these past few weeks. I have been out of office.
+> 
+> On 7/26/2022 3:25 AM, Krzysztof Kozlowski wrote:
+>> On 25/07/2022 21:13, Anjelique Melendez wrote:
+>>> From: David Collins <quic_collinsd@quicinc.com>
+>>>
+>>> Update the description of "reg" property to add the PON_PBS base
+>>> address along with PON_HLOS base address.  Also add "reg-names"
+>>> property constraints.
+>>>
+>>> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+>>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 50 +++++++++++++++++++++++++++---
+>>>  1 file changed, 46 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>>> index 353f155d..d7b6b875 100644
+>>> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>>> @@ -15,18 +15,27 @@ description: |
+>>>  
+>>>    This DT node has pwrkey and resin as sub nodes.
+>>>  
+>>> -allOf:
+>>> -  - $ref: reboot-mode.yaml#
+>>> -
+>>>  properties:
+>>>    compatible:
+>>>      enum:
+>>>        - qcom,pm8916-pon
+>>>        - qcom,pms405-pon
+>>>        - qcom,pm8998-pon
+>>> +      - qcom,pmk8350-pon
+>>>  
+>>>    reg:
+>>> -    maxItems: 1
+>>> +    description: |
+>>> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
+>>> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
+>>> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
+>>> +      peripherals.  In that case, the PON_PBS address needs to be specified to
+>>> +      facilitate software debouncing on some PMIC.
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>> +
+>>> +  reg-names:
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>>  
+>>>    pwrkey:
+>>>      type: object
+>>> @@ -42,6 +51,39 @@ required:
+>>>  
+>>>  unevaluatedProperties: false
+>>>  
+>>> +allOf:
+>>> +  - $ref: reboot-mode.yaml#
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - qcom,pm8916-pon
+>>> +              - qcom,pms405-pon
+>>> +              - qcom,pm8998-pon
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          maxItems: 1
+>>> +        reg-names:
+>>> +          items:
+>>> +            - const: pon
+>>
+>> All your previous patches were actually missing (in commit msg, in the
+>> code) that piece of information which you add here. You now add
+>> reg-names with "pon" for older devices. I assumed previous that it is
+>> somehow needed, so I gave you the hints how it should be coded. But I
+>> don't understand - why are you doing it
+>>
+>> This should be explained in commit msg. To me it is not needed at all...
+>> unless you want to mark that first address space is entirely different
+>> for other devices?
+> Adding reg-names "pon" for older devices is simply to provide clarification
+> about what the register relates to. Similar to reg-names "hlos" and "pbs"
+> for gen3 children devices, reg-names is completely optional and is not
+> consumed by any driver.
 
-Hmm, I wonder about the main reason behind that commit. Can we revert
-it or is there some platform/driver that is really relying on it?
+OK, can be. Include it in the commit msg, please.
 
->
-> we use scmi power domain, but not use scmi clk, but with upper commit, the clk is prepared
-> when pm_clk_acquire.
->
-> However the clk has flag CLK_SET_RATE_GATE, clk_set_rate will fail in driver, because
-> clk is prepared in pm_clk_acquire.
->
-> Looking into drivers/base/power/clock_ops.c, I see pm_clk_suspend/pm_clk_resume
-> will handle clk prepare/unprepared, so why pm_clk_acquire will also prepare the clk?
 
-I agree, the behaviour is certainly questionable to me too. However,
-it may be tricky to change by now, due to the deployment that has
-happened over the years.
-
-In principle we would need to make the part where pm_clk_acquire
-prepares the clock to become optional, in some clever way.
-
->
->
-> Thanks,
-> Peng.
-
-Kind regards
-Uffe
+Best regards,
+Krzysztof
