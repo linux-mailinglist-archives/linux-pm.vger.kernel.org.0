@@ -2,65 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79B75B1409
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 07:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037BB5B159B
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 09:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiIHFZU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 01:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S231313AbiIHH05 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 03:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiIHFZT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 01:25:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5353C697C;
-        Wed,  7 Sep 2022 22:25:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77687B81F74;
-        Thu,  8 Sep 2022 05:25:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27E1C433C1;
-        Thu,  8 Sep 2022 05:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662614715;
-        bh=osN0nyK8KwiIgCh1KT2OvlnB6W7vIWDWuXnKS0QOONI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fdFrY63l05XtHxT0jgjBilC5RsfiXOfLR8PaJw5hnprOQn9oBQZ0I0ftP6mjYDi2Z
-         bvWqDTib3obv+XUNvFrc5Lr9tV8eyh3Dfg035a2NMyZxdBcO94xp/HVU756mwf9/kL
-         2XvD92RzN259RKNwMrYSrp0tZGFABPWp9DAF5VnsEpYvpWHeNINkCOSPVOCmwvwNrl
-         xpzciixWdDs//CQl1IiV1gkVL95QUpvw7JTauZCk+m+OCTmefuoeaXDgNjX9EsJg2U
-         zlYLc3ZB3S7rzhMSaunVR9OgqD+xUC9iATj/x6QGtsw5NuC4rjADG+xrN5Ndd+M6Qf
-         jny6YHh5bu8FA==
-Date:   Thu, 8 Sep 2022 08:25:09 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: TPM: hibernate with IMA PCR 10
-Message-ID: <Yxl8tbJERqrmsgpU@kernel.org>
-References: <20220504232102.469959-1-evgreen@chromium.org>
- <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
- <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com>
- <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
- <Yw7L+X2cHf9qprxl@kernel.org>
- <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
- <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
+        with ESMTP id S231301AbiIHH0w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 03:26:52 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A23AB4D3
+        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 00:26:51 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id y29so6229258ljq.7
+        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 00:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=LF14xoV7ofKttTcBdi+LKav8yvezlrH+J2rWTVvf/OQ=;
+        b=NL7EBP7scniC5110h6lbEQucc1DlCz/xzdp65hnzWd0E1PsiQGhbG1lY7cAWfpbt9B
+         qkK8BkSq03YvbYWxA47Tol7OhUcAwjwhDLcmA4jWJ8hHxYbk1lwkjzQwIQtHHiiB5DXI
+         Fm9VctCVAnXJKfCUu7zPUDJ5guq+fh9lw6UsJuxB3DhOPDcti6gqoyyonUY5uTr9nN3i
+         wfL+ZXMcByJJtVYzf8fzM5exZrseMJjQ+g5Fo93s9smufA+u16LTK/Hng4wbUBzBSxNw
+         BrhG+c0e3B4T2ZYhxgHFXT7/Fss1AGB61jTCOKOJjTKhBmxjDnytgjARymuuL4cHEdl1
+         fiwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=LF14xoV7ofKttTcBdi+LKav8yvezlrH+J2rWTVvf/OQ=;
+        b=pm189Ltt0nFz1Oc8rWVO8lUmmWqHjx2HX99rED7dZIogjHilW/WWWow9FixEb9/1Tj
+         QWkJgbzpL/sZYCs/0HChbk9i85Vzcily1jFCdQXwI0kVrSXbasFHAaUXHP4aDqHMXpH1
+         EpVAufyqHoqJ1cpkkv4dmpxwFBQvxihGQaKdRohO0+O8SAbMwSeAsdXhVUN71StevIo7
+         dtENtjo1h5xK6YQ5VTBmC/PKCKUdUMfw056YTcs2FgCntF2w8CZ0LKuAK5+6rlGz+Qr+
+         /GOh+fivwd+E/VyP9w6bChnaeOCDUi7+TqPgT2XcBpk49H1kkw/UFz6vO+gop4ZPvLxq
+         Nt7g==
+X-Gm-Message-State: ACgBeo1RYQAdBKZP+Rekt0qB6P0/bIjcTtAerc30RR/Zc2xobOT03gsj
+        1rYIkEEVVXFSEeNS5A724e4S/g==
+X-Google-Smtp-Source: AA6agR4GpbjANjRRB/mggPAAMnjTCBrBoQ3zs7xDo36rYSrtHcx43GjsfBpcNuT6ZlDcZ53RODXr4g==
+X-Received: by 2002:a2e:9a97:0:b0:26b:3f4f:cb90 with SMTP id p23-20020a2e9a97000000b0026b3f4fcb90mr807088lji.137.1662622009507;
+        Thu, 08 Sep 2022 00:26:49 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u10-20020ac258ca000000b0048b0975ac7asm262844lfo.151.2022.09.08.00.26.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 00:26:49 -0700 (PDT)
+Message-ID: <37b21772-c128-36bb-dbc1-5047b2a82773@linaro.org>
+Date:   Thu, 8 Sep 2022 09:26:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
+References: <20220820102925.29476-1-pali@kernel.org>
+ <20220831081715.14673-1-pali@kernel.org>
+ <9a71a2f3-97f6-f3ac-8852-1d3da1a50370@linaro.org>
+ <20220907163331.zoumcdmmarnbkmm5@pali>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220907163331.zoumcdmmarnbkmm5@pali>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,54 +82,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 07:57:27PM -0400, Mimi Zohar wrote:
-> On Wed, 2022-09-07 at 13:47 -0700, Evan Green wrote:
-> > On Tue, Aug 30, 2022 at 7:48 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > >
-> > > On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
-> > > > On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
-> > > > >
-> > > > > On 5/4/2022 7:20 PM, Evan Green wrote:
-> > > > > > Enabling the kernel to be able to do encryption and integrity checks on
-> > > > > > the hibernate image prevents a malicious userspace from escalating to
-> > > > > > kernel execution via hibernation resume.  [snip]
-> > > > >
-> > > > > I have a related question.
-> > > > >
-> > > > > When a TPM powers up from hibernation, PCR 10 is reset.  When a
-> > > > > hibernate image is restored:
-> > > > >
-> > > > > 1. Is there a design for how PCR 10 is restored?
-> > > >
-> > > > I don't see anything that does that at present.
-> > > >
-> > > > > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
-> > > > > restored?
-> > > >
-> > > > They're part of the running kernel state, so should re-appear without
-> > > > any special casing. However, in the absence of anything repopulating
-> > > > PCR 10, they'll no longer match the in-TPM value.
-> > >
-> > > This feature could still be supported, if IMA is disabled
-> > > in the kernel configuration, which I see a non-issue as
-> > > long as config flag checks are there.
-> > 
-> > Right, from what I understand about IMA, the TPM's PCR getting out of
-> > sync with the in-kernel measurement list across a hibernate (because
-> > TPM is reset) or kexec() (because in-memory list gets reset) is
-> > already a problem. This series doesn't really address that, in that it
-> > doesn't really make that situation better or worse.
+On 07/09/2022 18:33, Pali Rohár wrote:
+> On Wednesday 07 September 2022 14:38:42 Krzysztof Kozlowski wrote:
+>> On 31/08/2022 10:17, Pali Rohár wrote:
+>>> This new optional priority property allows to specify custom priority level
+>>> of reset device. Prior this change priority level was hardcoded to 192 and
+>>> not possible to specify or change. Specifying other value is needed for
+>>> some boards. Default level when not specified stays at 192 as before.
+>>>
+>>> Signed-off-by: Pali Rohár <pali@kernel.org>
+>>
+>> Thanks for the changes. Explanation looks good.
+>>
+>> I sent a patch adding the common schema with priority. If it gets
+>> ack/review from Rob and Sebastian, please kindly rebase on top of it and
+>> use same way as I did for gpio-restart.yaml
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> For kexec, the PCRs are not reset, so the IMA measurment list needs to
-> be carried across kexec and restored.  This is now being done on most
-> architectures.  Afterwards, the IMA measurement list does match the
-> PCRs.
-> 
-> Hibernation introduces a different situation, where the the PCRs are
-> reset, but the measurement list is restored, resulting in their not
-> matching.
+> Ok, so just by adding "allOf: - $ref: restart-handler.yaml#" right?
 
-As I said earlier the feature still can be supported if
-kernel does not use IMA but obviously needs to be flagged.
+Yes.
 
-BR, Jarkko
+Best regards,
+Krzysztof
