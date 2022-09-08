@@ -2,136 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFACA5B251B
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 19:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAD55B2602
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 20:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiIHRrE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 13:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S232191AbiIHSmP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 14:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiIHRqr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 13:46:47 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 061BE63E2;
-        Thu,  8 Sep 2022 10:46:44 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,300,1654527600"; 
-   d="scan'208";a="132135180"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 09 Sep 2022 02:46:43 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 3B68C400C9E6;
-        Fri,  9 Sep 2022 02:46:39 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] thermal/core: Add a check before calling set_trip_temp()
-Date:   Thu,  8 Sep 2022 18:46:10 +0100
-Message-Id: <20220908174610.7837-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232185AbiIHSmO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 14:42:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 610DBE9035;
+        Thu,  8 Sep 2022 11:42:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25E00153B;
+        Thu,  8 Sep 2022 11:42:19 -0700 (PDT)
+Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.29])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A55483F71A;
+        Thu,  8 Sep 2022 11:42:12 -0700 (PDT)
+Message-ID: <641496a1-86f9-6d56-c22c-a77b38a4cf7c@arm.com>
+Date:   Thu, 8 Sep 2022 13:42:12 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 1/2] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Content-Language: en-US
+To:     Punit Agrawal <punit.agrawal@bytedance.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        viresh.kumar@linaro.org, robert.moore@intel.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-kernel@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+References: <20220819162547.141333-1-jeremy.linton@arm.com>
+ <20220819162547.141333-2-jeremy.linton@arm.com> <87pmg6arx2.fsf@stealth>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <87pmg6arx2.fsf@stealth>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal driver [0] for Renesas RZ/G2L SoC does not implement
-set_trip_temp() callback but has trips commit 9326167058e8
-("thermal/core: Move set_trip_temp ops to the sysfs code") changed
-the behaviour which causes the below panic when trying to set the
-trip temperature:
+Hi,
 
-root@smarc-rzg2l:~# echo 51000 > /sys/class/thermal/thermal_zone0/trip_point_0_temp
-[   92.461521] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-[   92.470958] Mem abort info:
-[   92.474311]   ESR = 0x0000000086000004
-[   92.478546]   EC = 0x21: IABT (current EL), IL = 32 bits
-[   92.484290]   SET = 0, FnV = 0
-[   92.487693]   EA = 0, S1PTW = 0
-[   92.491153]   FSC = 0x04: level 0 translation fault
-[   92.496461] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004e885000
-[   92.503736] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-[   92.510869] Internal error: Oops: 86000004 [#3] PREEMPT SMP
-[   92.516556] CPU: 0 PID: 290 Comm: sh Tainted: G      D            6.0.0-rc4-next-20220906-arm64-renesas-00124-g84633c87c5f6-dirty #509
-[   92.528814] Hardware name: Renesas SMARC EVK based on r9a07g044l2 (DT)
-[   92.535441] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   92.542516] pc : 0x0
-[   92.544764] lr : trip_point_temp_store+0x84/0x140
-[   92.549582] sp : ffff80000a92bc10
-[   92.552961] x29: ffff80000a92bc10 x28: ffff00000d8a45c0 x27: 0000000000000000
-[   92.560249] x26: 0000000000000000 x25: ffff8000082b53e8 x24: ffff00000eaffc20
-[   92.567532] x23: ffff80000a92bd68 x22: ffff00000d3e0f80 x21: 0000000000000006
-[   92.574814] x20: ffff800009149000 x19: ffff00000b8ab000 x18: 0000000000000000
-[   92.582097] x17: 0000000000000000 x16: 0000000000000000 x15: 0000aaab028cdee0
-[   92.589378] x14: 0000000000000000 x13: 0000000000000000 x12: ffff80000a92bbd0
-[   92.596659] x11: ffff00000d3e0f80 x10: ffff800009149eb8 x9 : 000000000000000a
-[   92.603940] x8 : 00000000ffffffc9 x7 : 0000000000000005 x6 : 000000000000002a
-[   92.611220] x5 : 000000000000c738 x4 : 00000000ffffffd3 x3 : 0000000000000000
-[   92.618500] x2 : 000000000000c738 x1 : 0000000000000000 x0 : ffff00000b8ab000
-[   92.625781] Call trace:
-[   92.628282]  0x0
-[   92.630176]  dev_attr_store+0x14/0x28
-[   92.633935]  sysfs_kf_write+0x4c/0x70
-[   92.637681]  kernfs_fop_write_iter+0x160/0x1e0
-[   92.642213]  vfs_write+0x474/0x540
-[   92.645703]  ksys_write+0x68/0xf8
-[   92.649100]  __arm64_sys_write+0x18/0x20
-[   92.653111]  invoke_syscall+0x40/0xf8
-[   92.656866]  el0_svc_common.constprop.3+0x88/0x110
-[   92.661758]  do_el0_svc+0x20/0x78
-[   92.665158]  el0_svc+0x3c/0x90
-[   92.668291]  el0t_64_sync_handler+0x90/0xb8
-[   92.672563]  el0t_64_sync+0x148/0x14c
-[   92.676322] Code: bad PC value
-[   92.679453] ---[ end trace 0000000000000000 ]---
-/bin/start_getty: line 40:   290 Segmentation fault      ${setsid:-} ${getty} -L $1 $2 $3
+On 9/8/22 08:59, Punit Agrawal wrote:
+> Hi Jeremy,
+> 
+> I missed the previous version (holidays) but hopefully still in time for
+> this one. A query / comment below.
+> 
+> Jeremy Linton <jeremy.linton@arm.com> writes:
+> 
+>> PCC regions utilize a mailbox to set/retrieve register values used by
+>> the CPPC code. This is fine as long as the operations are
+>> infrequent. With the FIE code enabled though the overhead can range
+>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>> based machines.
+>>
+>> So, before enabling FIE assure none of the registers used by
+>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>> enable a module parameter which can also disable it at boot or module
+>> reload.
+>>
+>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>> ---
+>>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>>   drivers/cpufreq/cppc_cpufreq.c | 31 +++++++++++++++++++++----
+>>   include/acpi/cppc_acpi.h       |  5 +++++
+>>   3 files changed, 73 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>> index 1e15a9f25ae9..c840bf606b30 100644
+>> --- a/drivers/acpi/cppc_acpi.c
+>> +++ b/drivers/acpi/cppc_acpi.c
+>> @@ -1240,6 +1240,47 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+>>   }
+>>   EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
+>>   
+>> +/**
+>> + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
+>> + *
+>> + * CPPC has flexibility about how counters describing CPU perf are delivered.
+>> + * One of the choices is PCC regions, which can have a high access latency. This
+>> + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
+>> + *
+>> + * Return: true if any of the counters are in PCC regions, false otherwise
+>> + */
+>> +bool cppc_perf_ctrs_in_pcc(void)
+>> +{
+>> +	int cpu;
+>> +
+>> +	for_each_present_cpu(cpu) {
+>> +		struct cpc_register_resource *ref_perf_reg;
+>> +		struct cpc_desc *cpc_desc;
+>> +
+>> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>> +
+>> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+>> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+>> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+>> +			return true;
+>> +
+>> +
+>> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+>> +
+>> +		/*
+>> +		 * If reference perf register is not supported then we should
+>> +		 * use the nominal perf value
+>> +		 */
+>> +		if (!CPC_SUPPORTED(ref_perf_reg))
+>> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+>> +
+>> +		if (CPC_IN_PCC(ref_perf_reg))
+>> +			return true;
+>> +	}
+>> +	return false;
+>> +}
+>> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+>> +
+>>   /**
+>>    * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+>>    * @cpunum: CPU from which to read counters.
+>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>> index 24eaf0ec344d..32fcb0bf74a4 100644
+>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
+>>   
+>>   static struct cpufreq_driver cppc_cpufreq_driver;
+>>   
+>> +static enum {
+>> +	FIE_UNSET = -1,
+>> +	FIE_ENABLED,
+>> +	FIE_DISABLED
+>> +} fie_disabled = FIE_UNSET;
+>> +
+>>   #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+>> +module_param(fie_disabled, int, 0444);
+>> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
+>>   
+>>   /* Frequency invariance support */
+>>   struct cppc_freq_invariance {
+>> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>>   	struct cppc_freq_invariance *cppc_fi;
+>>   	int cpu, ret;
+>>   
+>> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+>> +	if (fie_disabled)
+>>   		return;
+> 
+> With this change, if FIE is enabled, the rest of the function will run
+> even if the hisi workaround is enabled. Not sure if that is an
+> intentional change. The same applies to similar other changes in the
+> patch as well.
 
-Poky (Yocto Project Reference Distro) 3.2.1 smarc-rzg2l ttySC0
+Yah, I think its intentional, unless i'm missing something. The hisi 
+quirk detection path forces this off regardless of the user attempting 
+to force it on. Which is part of why I think the enum states must be as 
+above. The other reason is that the final result of whether FIE is 
+disabled ends up in /sys/modules/cppc_cpufreq/parameters/fie_disabled 
+which in this case may not reflect what the user requested.
 
-smarc-rzg2l login:
 
-This patch fixes the above issue by adding a check to see if
-set_trip_temp() callback is implemented before calling it.
+I have another patch that might be worth posting that I created while 
+implementing CPPC on a machine a year or so ago that removes this quirk 
+entirely. Instead it detects counters that aren't incrementing properly 
+and NULL's out the get routine so that cpupower/etc report that the 
+frequency is being retrieved from the kernel rather than the hardware. 
+Someone else will have to test it though, because I eventually figured 
+out how to synthesize both counters in a way that is generic enough to 
+work on most machines.
 
-[0] drivers/thermal/rzg2l_thermal.c
-
-Fixes: 9326167058e8 ("thermal/core: Move set_trip_temp ops to the sysfs code")
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-Note: Patch applies on top of [0].
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
----
- drivers/thermal/thermal_sysfs.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 78c5841bdfae..ec495c7dff03 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -128,9 +128,11 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
- 	if (kstrtoint(buf, 10, &temperature))
- 		return -EINVAL;
- 
--	ret = tz->ops->set_trip_temp(tz, trip, temperature);
--	if (ret)
--		return ret;
-+	if (tz->ops->set_trip_temp) {
-+		ret = tz->ops->set_trip_temp(tz, trip, temperature);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (tz->trips)
- 		tz->trips[trip].temperature = temperature;
--- 
-2.25.1
 
