@@ -2,80 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5FB5B16F1
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 10:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5882A5B17A7
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 10:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiIHI1H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 04:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S231699AbiIHIuW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 04:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiIHI04 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 04:26:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A4C65261;
-        Thu,  8 Sep 2022 01:26:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231698AbiIHIuE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 04:50:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C0D112B2D;
+        Thu,  8 Sep 2022 01:49:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FA3661BB6;
-        Thu,  8 Sep 2022 08:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE97DC433D6;
-        Thu,  8 Sep 2022 08:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662625608;
-        bh=sUV1o+v0ToEvegmITvK2iEIUqmKV/m3rYGgJK8I5bXo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YDdQxLRaqSCeBvC9ZukfdGmSyufC9gKMA4ERIeJiAAxBp5luh/a0aasgsNRK6dzLR
-         Lu/hUuEwTQtBYiit/vU9uOp+DWrh25bcJEV4FU6eS4jh8XZxRPPxpAPVbZrf8e1GVt
-         a3/LjxtZ7AUwBimJg4mZf9s/8rtOZf+mrEe+rUrAjojgab55/cVLdESxb1GELdDiLc
-         UZ8KbXhziWLxwO1Wm7sm8DtZ5LV8H79gbgxnMHPYyrFtsFtlIN8+IXnfZXNCDktDeU
-         eC2fHj9AEf/oOL2FTdteclrfdLpdchacreX41feRZTfGujUutUoYVpORwD8vVp7A0Z
-         t4GaJL/nqq5Xw==
-Date:   Thu, 8 Sep 2022 09:26:41 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, zhangqing@rock-chips.com,
-        zyw@rock-chips.com, jon.lin@rock-chips.com,
-        maccraft123mc@gmail.com, sre@kernel.org, heiko@sntech.de,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        philip@pscan.uk, mazziesaccount@gmail.com,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH V10 2/4] mfd: Add Rockchip rk817 battery charger support
-Message-ID: <YxmnQQWijnhlSGr4@google.com>
-References: <20220827021623.23829-1-macroalpha82@gmail.com>
- <20220827021623.23829-3-macroalpha82@gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EBF5D33D05;
+        Thu,  8 Sep 2022 08:49:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662626956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=kuOhhuYM01X1WNCSJC9RpxAFxvtKfmpSxPcD/Q8jFK4=;
+        b=YW9FOLRweC9p/pRp1PBv2+vTs9HdNmit7aXJKl9v4S/U9PWYWyRCGPpfjzECveNyNbo99i
+        brf7ewuLri/vyabba3j548/G1hE0WUOkgA/4ViIkZFJRbi4OtwJKRqiDEpZ5f8EcgOaYrG
+        A4uk+5AkoDk8LM/c+G5zDCgleAJOaYU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 941161322C;
+        Thu,  8 Sep 2022 08:49:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id C9HhIoysGWM1NgAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 08 Sep 2022 08:49:16 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v3 00/10] x86: make pat and mtrr independent from each other
+Date:   Thu,  8 Sep 2022 10:49:04 +0200
+Message-Id: <20220908084914.21703-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220827021623.23829-3-macroalpha82@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 26 Aug 2022, Chris Morgan wrote:
+Today PAT can't be used without MTRR being available, unless MTRR is at
+least configured via CONFIG_MTRR and the system is running as Xen PV
+guest. In this case PAT is automatically available via the hypervisor,
+but the PAT MSR can't be modified by the kernel and MTRR is disabled.
 
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> Add rk817 charger support cell to rk808 mfd driver.
-> 
-> Acked-for-mfd-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-> ---
->  drivers/mfd/rk808.c       | 16 ++++++-
->  include/linux/mfd/rk808.h | 91 +++++++++++++++++++++++++++++++++++++++
->  2 files changed, 106 insertions(+), 1 deletion(-)
+The same applies to a kernel built with no MTRR support: it won't
+allow to use the PAT MSR, even if there is no technical reason for
+that, other than setting up PAT on all cpus the same way (which is a
+requirement of the processor's cache management) is relying on some
+MTRR specific code.
 
-Already applied.
+Fix all of that by:
+
+- moving the function needed by PAT from MTRR specific code one level
+  up
+- reworking the init sequences of MTRR and PAT to be more similar to
+  each other without calling PAT from MTRR code
+- removing the dependency of PAT on MTRR
+
+While working on that I discovered two minor bugs in MTRR code, which
+are fixed, too.
+
+Changes in V3:
+- replace patch 1 by just adding a comment
+
+Changes in V2:
+- complete rework of the patches based on comments by Boris Petkov
+- added several patches to the series
+
+Juergen Gross (10):
+  x86/mtrr: add comment for set_mtrr_state() serialization
+  x86/mtrr: remove unused cyrix_set_all() function
+  x86/mtrr: replace use_intel() with a local flag
+  x86: move some code out of arch/x86/kernel/cpu/mtrr
+  x86/mtrr: split generic_set_all()
+  x86/mtrr: remove set_all callback from struct mtrr_ops
+  x86/mtrr: simplify mtrr_bp_init()
+  x86/mtrr: let cache_aps_delayed_init replace mtrr_aps_delayed_init
+  x86/mtrr: add a stop_machine() handler calling only cache_cpu_init()
+  x86: decouple pat and mtrr handling
+
+ arch/x86/include/asm/cacheinfo.h   |  14 +++
+ arch/x86/include/asm/memtype.h     |   5 +-
+ arch/x86/include/asm/mtrr.h        |  12 +--
+ arch/x86/kernel/cpu/cacheinfo.c    | 159 +++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/common.c       |   3 +-
+ arch/x86/kernel/cpu/mtrr/cyrix.c   |  34 ------
+ arch/x86/kernel/cpu/mtrr/generic.c | 107 ++-----------------
+ arch/x86/kernel/cpu/mtrr/mtrr.c    | 158 +++++-----------------------
+ arch/x86/kernel/cpu/mtrr/mtrr.h    |   5 -
+ arch/x86/kernel/setup.c            |  14 +--
+ arch/x86/kernel/smpboot.c          |   9 +-
+ arch/x86/mm/pat/memtype.c          | 127 +++++++----------------
+ arch/x86/power/cpu.c               |   3 +-
+ 13 files changed, 265 insertions(+), 385 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
+2.35.3
+
