@@ -2,181 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAD55B2602
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 20:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31C05B26C3
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 21:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbiIHSmP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 14:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        id S232269AbiIHTdA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 15:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbiIHSmO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 14:42:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 610DBE9035;
-        Thu,  8 Sep 2022 11:42:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25E00153B;
-        Thu,  8 Sep 2022 11:42:19 -0700 (PDT)
-Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.29])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A55483F71A;
-        Thu,  8 Sep 2022 11:42:12 -0700 (PDT)
-Message-ID: <641496a1-86f9-6d56-c22c-a77b38a4cf7c@arm.com>
-Date:   Thu, 8 Sep 2022 13:42:12 -0500
+        with ESMTP id S231360AbiIHTc7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 15:32:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E1EC5788
+        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 12:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662665577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kbSJ3Ub6+7lmJNrhe2b4vzhr03pyzD4LxIswRWlrDCQ=;
+        b=XQxFLGUQNJspQZwyJnJrU4/ViedbbaYhdc8tQjNEWqLWVH5Se3qP2QKO2NCCnk1eB8dgwg
+        fyrJfXifgFSZ0nMXQ5VMtDS4JFsWhs/aFFgFvWMvc+c85jcQ4DwTldEhLfbyjl/Ci1YPaE
+        vQxSOSrKkNKRrTZatHIJv/gJCoyp390=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-586-Yr3w2RzwNuGfP6bE3hcaDw-1; Thu, 08 Sep 2022 15:32:56 -0400
+X-MC-Unique: Yr3w2RzwNuGfP6bE3hcaDw-1
+Received: by mail-ej1-f72.google.com with SMTP id ds17-20020a170907725100b007419bfb5fd4so6809622ejc.4
+        for <linux-pm@vger.kernel.org>; Thu, 08 Sep 2022 12:32:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=kbSJ3Ub6+7lmJNrhe2b4vzhr03pyzD4LxIswRWlrDCQ=;
+        b=sFajt/rTaE3lpW/Oiqn++zc8mwEH6hy9PQH7RxbtRs1p4pvaNqjzTkDNyjGcv9cH1L
+         ufqF9z4bXBJpGmknYHgv0KWHXQncW248FZJSFCKoPJNL/KXI+cbvFDeAX6N45aSm6EvD
+         zNLUmFTqtYKLbWcKC9A0thFWmb72zzZAhyRwNEYGS7Jit74skgtLEoWT0JC0GkW5/3UY
+         3YLv2sh+1EbhHfAwWc/BIPAqXasFOKQYHsIDcEAIr+lIzgQJjhby09yVoN31fdBepV3X
+         quAJ0od6OaJG1HFEcWoRZV0ZCYMygZKJ/y3hmh6wjfi6fvrBax2fSqTy/8IWnLWkDI2W
+         Eb0A==
+X-Gm-Message-State: ACgBeo2/FxYrMkJV2Grdd4E1Y6CV6D8dzYbMeWK+Qc5eCGMVw8jnJQrn
+        QViAx31AKOpA6MUGK6lC61EuCFxz1hSvgRmEOm3JzjkJAakFo2Zp2wfYz4qVER0gvoifyqezvTb
+        vkHAv9KVDsDsBEYfrqcM=
+X-Received: by 2002:aa7:c556:0:b0:44e:9c95:a9a4 with SMTP id s22-20020aa7c556000000b0044e9c95a9a4mr8549338edr.301.1662665575273;
+        Thu, 08 Sep 2022 12:32:55 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4AvZockYvN5AJRgRMuc80Hj8WUnQ2vYTahdLC9bVwyDRX1AyGqYGnJKlpyK7spKPTM61OT+g==
+X-Received: by 2002:aa7:c556:0:b0:44e:9c95:a9a4 with SMTP id s22-20020aa7c556000000b0044e9c95a9a4mr8549328edr.301.1662665575054;
+        Thu, 08 Sep 2022 12:32:55 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id h18-20020a170906261200b0073dbc35a0desm1575978ejc.100.2022.09.08.12.32.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 12:32:54 -0700 (PDT)
+Message-ID: <dada2033-1db5-4205-319b-0308dbccd3b5@redhat.com>
+Date:   Thu, 8 Sep 2022 21:32:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 1/2] ACPI: CPPC: Disable FIE if registers in PCC
- regions
+ Thunderbird/91.12.0
 Content-Language: en-US
-To:     Punit Agrawal <punit.agrawal@bytedance.com>
-Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        viresh.kumar@linaro.org, robert.moore@intel.com,
-        lukasz.luba@arm.com, ionela.voinescu@arm.com,
-        pierre.gondois@arm.com, linux-kernel@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org
-References: <20220819162547.141333-1-jeremy.linton@arm.com>
- <20220819162547.141333-2-jeremy.linton@arm.com> <87pmg6arx2.fsf@stealth>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <87pmg6arx2.fsf@stealth>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: powernow-k8 lockdep warning with 6.0.0-rc#
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi All,
 
-On 9/8/22 08:59, Punit Agrawal wrote:
-> Hi Jeremy,
-> 
-> I missed the previous version (holidays) but hopefully still in time for
-> this one. A query / comment below.
-> 
-> Jeremy Linton <jeremy.linton@arm.com> writes:
-> 
->> PCC regions utilize a mailbox to set/retrieve register values used by
->> the CPPC code. This is fine as long as the operations are
->> infrequent. With the FIE code enabled though the overhead can range
->> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
->> based machines.
->>
->> So, before enabling FIE assure none of the registers used by
->> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
->> enable a module parameter which can also disable it at boot or module
->> reload.
->>
->> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
->> ---
->>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->>   drivers/cpufreq/cppc_cpufreq.c | 31 +++++++++++++++++++++----
->>   include/acpi/cppc_acpi.h       |  5 +++++
->>   3 files changed, 73 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->> index 1e15a9f25ae9..c840bf606b30 100644
->> --- a/drivers/acpi/cppc_acpi.c
->> +++ b/drivers/acpi/cppc_acpi.c
->> @@ -1240,6 +1240,47 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
->>   }
->>   EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
->>   
->> +/**
->> + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
->> + *
->> + * CPPC has flexibility about how counters describing CPU perf are delivered.
->> + * One of the choices is PCC regions, which can have a high access latency. This
->> + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
->> + *
->> + * Return: true if any of the counters are in PCC regions, false otherwise
->> + */
->> +bool cppc_perf_ctrs_in_pcc(void)
->> +{
->> +	int cpu;
->> +
->> +	for_each_present_cpu(cpu) {
->> +		struct cpc_register_resource *ref_perf_reg;
->> +		struct cpc_desc *cpc_desc;
->> +
->> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
->> +
->> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
->> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
->> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
->> +			return true;
->> +
->> +
->> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
->> +
->> +		/*
->> +		 * If reference perf register is not supported then we should
->> +		 * use the nominal perf value
->> +		 */
->> +		if (!CPC_SUPPORTED(ref_perf_reg))
->> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
->> +
->> +		if (CPC_IN_PCC(ref_perf_reg))
->> +			return true;
->> +	}
->> +	return false;
->> +}
->> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
->> +
->>   /**
->>    * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->>    * @cpunum: CPU from which to read counters.
->> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->> index 24eaf0ec344d..32fcb0bf74a4 100644
->> --- a/drivers/cpufreq/cppc_cpufreq.c
->> +++ b/drivers/cpufreq/cppc_cpufreq.c
->> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
->>   
->>   static struct cpufreq_driver cppc_cpufreq_driver;
->>   
->> +static enum {
->> +	FIE_UNSET = -1,
->> +	FIE_ENABLED,
->> +	FIE_DISABLED
->> +} fie_disabled = FIE_UNSET;
->> +
->>   #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
->> +module_param(fie_disabled, int, 0444);
->> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
->>   
->>   /* Frequency invariance support */
->>   struct cppc_freq_invariance {
->> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->>   	struct cppc_freq_invariance *cppc_fi;
->>   	int cpu, ret;
->>   
->> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
->> +	if (fie_disabled)
->>   		return;
-> 
-> With this change, if FIE is enabled, the rest of the function will run
-> even if the hisi workaround is enabled. Not sure if that is an
-> intentional change. The same applies to similar other changes in the
-> patch as well.
+Because of the backlight refactoring work which I have been doing
+I have been testing the latest kernel on some pretty old hw,
+including a MSI S270 laptop with a single core Turion amd64
+processor.
 
-Yah, I think its intentional, unless i'm missing something. The hisi 
-quirk detection path forces this off regardless of the user attempting 
-to force it on. Which is part of why I think the enum states must be as 
-above. The other reason is that the final result of whether FIE is 
-disabled ends up in /sys/modules/cppc_cpufreq/parameters/fie_disabled 
-which in this case may not reflect what the user requested.
+When the powernow-k8 driver loads on this laptop it triggers
+the following lockdep warning:
+
+[   81.371376] ======================================================
+[   81.371376] WARNING: possible circular locking dependency detected
+[   81.371376] 6.0.0-rc3+ #112 Tainted: G            E     
+[   81.371376] ------------------------------------------------------
+[   81.371376] sugov:0/554 is trying to acquire lock:
+[   81.371376] ffffa865c17cbe00 ((work_completion)(&wfc.work)){+.+.}-{0:0}, at: __flush_work+0x2f4/0x460
+[   81.371376] 
+               but task is already holding lock:
+[   81.371376] ffff9a88858ad528 (&sg_policy->work_lock){+.+.}-{3:3}, at: sugov_work+0x3c/0x60
+[   81.371376] 
+               which lock already depends on the new lock.
+
+[   81.371376] 
+               the existing dependency chain (in reverse order) is:
+[   81.371376] 
+               -> #4 (&sg_policy->work_lock){+.+.}-{3:3}:
+[   81.371376]        __mutex_lock+0x93/0x7e0
+[   81.371376]        sugov_limits+0x3a/0x90
+[   81.371376]        cpufreq_start_governor+0x69/0xb0
+[   81.371376]        cpufreq_set_policy+0x4ac/0x610
+[   81.371376]        cpufreq_online+0x2c6/0xa80
+[   81.371376]        cpufreq_add_dev+0x77/0x90
+[   81.371376]        subsys_interface_register+0x138/0x150
+[   81.371376]        cpufreq_register_driver+0x161/0x2c0
+[   81.371376]        powernowk8_init+0xb5/0x177 [powernow_k8]
+[   81.371376]        do_one_initcall+0x5d/0x300
+[   81.371376]        do_init_module+0x4a/0x1f0
+[   81.371376]        __do_sys_init_module+0x16a/0x1a0
+[   81.371376]        do_syscall_64+0x5b/0x80
+[   81.371376]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   81.371376] 
+               -> #3 (&policy->rwsem){+.+.}-{3:3}:
+[   81.371376]        down_write+0x3b/0x70
+[   81.371376]        cpufreq_online+0x51b/0xa80
+[   81.371376]        cpufreq_add_dev+0x77/0x90
+[   81.371376]        subsys_interface_register+0x138/0x150
+[   81.371376]        cpufreq_register_driver+0x161/0x2c0
+[   81.371376]        k8temp_probe+0x149/0x1ef [k8temp]
+[   81.371376]        do_one_initcall+0x5d/0x300
+[   81.371376]        do_init_module+0x4a/0x1f0
+[   81.371376]        __do_sys_init_module+0x16a/0x1a0
+[   81.371376]        do_syscall_64+0x5b/0x80
+[   81.371376]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   81.371376] 
+               -> #2 (subsys mutex#8){+.+.}-{3:3}:
+[   81.371376]        __mutex_lock+0x93/0x7e0
+[   81.371376]        subsys_interface_register+0x63/0x150
+[   81.371376]        cpufreq_register_driver+0x161/0x2c0
+[   81.371376]        k8temp_probe+0x149/0x1ef [k8temp]
+[   81.371376]        do_one_initcall+0x5d/0x300
+[   81.371376]        do_init_module+0x4a/0x1f0
+[   81.371376]        __do_sys_init_module+0x16a/0x1a0
+[   81.371376]        do_syscall_64+0x5b/0x80
+[   81.371376]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   81.371376] 
+               -> #1 (cpu_hotplug_lock){++++}-{0:0}:
+[   81.371376]        cpus_read_lock+0x3c/0xd0
+[   81.371376]        alloc_workqueue+0x38d/0x4c0
+[   81.371376]        scsi_host_alloc+0x367/0x3c0
+[   81.371376]        ata_scsi_add_hosts+0xba/0x130
+[   81.371376]        ata_host_register+0x11e/0x1a0
+[   81.371376]        ata_pci_sff_activate_host+0x7e/0x240
+[   81.371376]        ata_pci_init_one+0x137/0x160
+[   81.371376]        atiixp_init_one+0x45/0x50 [pata_atiixp]
+[   81.371376]        local_pci_probe+0x41/0x80
+[   81.371376]        work_for_cpu_fn+0x16/0x20
+[   81.371376]        process_one_work+0x257/0x570
+[   81.371376]        worker_thread+0x4f/0x3a0
+[   81.371376]        kthread+0xf5/0x120
+[   81.371376]        ret_from_fork+0x22/0x30
+[   81.371376] 
+               -> #0 ((work_completion)(&wfc.work)){+.+.}-{0:0}:
+[   81.371376]        __lock_acquire+0x12e7/0x1fa0
+[   81.371376]        lock_acquire+0xbf/0x2b0
+[   81.371376]        __flush_work+0x31b/0x460
+[   81.371376]        work_on_cpu+0x8a/0xa0
+[   81.371376]        powernowk8_target+0x23/0x30 [powernow_k8]
+[   81.371376]        __cpufreq_driver_target+0x260/0x6d0
+[   81.371376]        sugov_work+0x4d/0x60
+[   81.371376]        kthread_worker_fn+0xda/0x3c0
+[   81.371376]        kthread+0xf5/0x120
+[   81.371376]        ret_from_fork+0x22/0x30
+[   81.371376] 
+               other info that might help us debug this:
+
+[   81.371376] Chain exists of:
+                 (work_completion)(&wfc.work) --> &policy->rwsem --> &sg_policy->work_lock
+
+[   81.371376]  Possible unsafe locking scenario:
+
+[   81.371376]        CPU0                    CPU1
+[   81.371376]        ----                    ----
+[   81.371376]   lock(&sg_policy->work_lock);
+[   81.371376]                                lock(&policy->rwsem);
+[   81.371376]                                lock(&sg_policy->work_lock);
+[   81.371376]   lock((work_completion)(&wfc.work));
+[   81.371376] 
+                *** DEADLOCK ***
+
+[   81.371376] 1 lock held by sugov:0/554:
+[   81.371376]  #0: ffff9a88858ad528 (&sg_policy->work_lock){+.+.}-{3:3}, at: sugov_work+0x3c/0x60
+[   81.371376] 
+               stack backtrace:
+[   81.371376] CPU: 0 PID: 554 Comm: sugov:0 Tainted: G            E      6.0.0-rc3+ #112
+[   81.371376] Hardware name: MICRO-STAR INT'L CO.,LTD MS-1013, BIOS A1013AMS V4.30 01/09/2006
+[   81.371376] Call Trace:
+[   81.371376]  <TASK>
+[   81.371376]  dump_stack_lvl+0x5b/0x77
+[   81.371376]  check_noncircular+0xe2/0x110
+[   81.371376]  ? register_lock_class+0x38/0x480
+[   81.371376]  __lock_acquire+0x12e7/0x1fa0
+[   81.371376]  lock_acquire+0xbf/0x2b0
+[   81.371376]  ? __flush_work+0x2f4/0x460
+[   81.371376]  ? find_held_lock+0x2b/0x80
+[   81.371376]  __flush_work+0x31b/0x460
+[   81.371376]  ? __flush_work+0x2f4/0x460
+[   81.371376]  ? lock_is_held_type+0xe3/0x140
+[   81.371376]  ? queue_work_on+0x45/0x80
+[   81.371376]  ? queue_work_on+0x45/0x80
+[   81.371376]  ? lockdep_hardirqs_on+0x7d/0x100
+[   81.371376]  work_on_cpu+0x8a/0xa0
+[   81.371376]  ? __traceiter_workqueue_execute_end+0x50/0x50
+[   81.371376]  ? powernowk8_cpu_init+0xa30/0xa30 [powernow_k8]
+[   81.371376]  powernowk8_target+0x23/0x30 [powernow_k8]
+[   81.371376]  __cpufreq_driver_target+0x260/0x6d0
+[   81.371376]  ? _raw_spin_unlock_irqrestore+0x30/0x60
+[   81.371376]  ? kthread_worker_fn+0x145/0x3c0
+[   81.371376]  ? sugov_limits+0x90/0x90
+[   81.371376]  sugov_work+0x4d/0x60
+[   81.371376]  kthread_worker_fn+0xda/0x3c0
+[   81.371376]  ? kthread_create_worker_on_cpu+0x50/0x50
+[   81.371376]  kthread+0xf5/0x120
+[   81.371376]  ? kthread_complete_and_exit+0x20/0x20
+[   81.371376]  ret_from_fork+0x22/0x30
+[   81.371376]  </TASK>
 
 
-I have another patch that might be worth posting that I created while 
-implementing CPPC on a machine a year or so ago that removes this quirk 
-entirely. Instead it detects counters that aren't incrementing properly 
-and NULL's out the get routine so that cpupower/etc report that the 
-frequency is being retrieved from the kernel rather than the hardware. 
-Someone else will have to test it though, because I eventually figured 
-out how to synthesize both counters in a way that is generic enough to 
-work on most machines.
+I would be more then happy to test any patches to try and resolve this.
+
+Regards,
+
+Hans
 
 
