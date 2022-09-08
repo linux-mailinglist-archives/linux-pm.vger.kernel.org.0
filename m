@@ -2,103 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644A95B24D8
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 19:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFACA5B251B
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Sep 2022 19:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiIHRj1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 13:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S231344AbiIHRrE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 13:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiIHRi4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 13:38:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4109DEE50E
-        for <linux-pm@vger.kernel.org>; Thu,  8 Sep 2022 10:38:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50E9814BF;
-        Thu,  8 Sep 2022 10:38:52 -0700 (PDT)
-Received: from bogus (unknown [10.57.45.93])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8BF3E3F71A;
-        Thu,  8 Sep 2022 10:38:43 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 18:38:40 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>, Peng Fan <peng.fan@nxp.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "npitre@baylibre.com" <npitre@baylibre.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>
-Subject: Re: Question: why call clk_prepare in pm_clk_acquire
-Message-ID: <20220908173840.rqy335cdeg5a2ww5@bogus>
-References: <DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <CAPDyKFrzJikk6rJr9xwV6W-whvdLe5tTUE+xO_EoRtm+9DAbNA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFrzJikk6rJr9xwV6W-whvdLe5tTUE+xO_EoRtm+9DAbNA@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231749AbiIHRqr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 13:46:47 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 061BE63E2;
+        Thu,  8 Sep 2022 10:46:44 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.93,300,1654527600"; 
+   d="scan'208";a="132135180"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 09 Sep 2022 02:46:43 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 3B68C400C9E6;
+        Fri,  9 Sep 2022 02:46:39 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] thermal/core: Add a check before calling set_trip_temp()
+Date:   Thu,  8 Sep 2022 18:46:10 +0100
+Message-Id: <20220908174610.7837-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 04:37:13PM +0200, Ulf Hansson wrote:
-> On Thu, 8 Sept 2022 at 09:33, Peng Fan <peng.fan@nxp.com> wrote:
-> >
-> > Hi All,
-> >
-> > We are facing an issue clk_set_rate fail with commit a3b884cef873 ("firmware:
-> > arm_scmi: Add clock management to the SCMI power domain") ,
-> 
-> Hmm, I wonder about the main reason behind that commit. Can we revert
-> it or is there some platform/driver that is really relying on it?
->
+The thermal driver [0] for Renesas RZ/G2L SoC does not implement
+set_trip_temp() callback but has trips commit 9326167058e8
+("thermal/core: Move set_trip_temp ops to the sysfs code") changed
+the behaviour which causes the below panic when trying to set the
+trip temperature:
 
-IIUC, at the time of the commit, it was needed on some Renesas platform.
-Not sure if it is still used or not.
+root@smarc-rzg2l:~# echo 51000 > /sys/class/thermal/thermal_zone0/trip_point_0_temp
+[   92.461521] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[   92.470958] Mem abort info:
+[   92.474311]   ESR = 0x0000000086000004
+[   92.478546]   EC = 0x21: IABT (current EL), IL = 32 bits
+[   92.484290]   SET = 0, FnV = 0
+[   92.487693]   EA = 0, S1PTW = 0
+[   92.491153]   FSC = 0x04: level 0 translation fault
+[   92.496461] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004e885000
+[   92.503736] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+[   92.510869] Internal error: Oops: 86000004 [#3] PREEMPT SMP
+[   92.516556] CPU: 0 PID: 290 Comm: sh Tainted: G      D            6.0.0-rc4-next-20220906-arm64-renesas-00124-g84633c87c5f6-dirty #509
+[   92.528814] Hardware name: Renesas SMARC EVK based on r9a07g044l2 (DT)
+[   92.535441] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   92.542516] pc : 0x0
+[   92.544764] lr : trip_point_temp_store+0x84/0x140
+[   92.549582] sp : ffff80000a92bc10
+[   92.552961] x29: ffff80000a92bc10 x28: ffff00000d8a45c0 x27: 0000000000000000
+[   92.560249] x26: 0000000000000000 x25: ffff8000082b53e8 x24: ffff00000eaffc20
+[   92.567532] x23: ffff80000a92bd68 x22: ffff00000d3e0f80 x21: 0000000000000006
+[   92.574814] x20: ffff800009149000 x19: ffff00000b8ab000 x18: 0000000000000000
+[   92.582097] x17: 0000000000000000 x16: 0000000000000000 x15: 0000aaab028cdee0
+[   92.589378] x14: 0000000000000000 x13: 0000000000000000 x12: ffff80000a92bbd0
+[   92.596659] x11: ffff00000d3e0f80 x10: ffff800009149eb8 x9 : 000000000000000a
+[   92.603940] x8 : 00000000ffffffc9 x7 : 0000000000000005 x6 : 000000000000002a
+[   92.611220] x5 : 000000000000c738 x4 : 00000000ffffffd3 x3 : 0000000000000000
+[   92.618500] x2 : 000000000000c738 x1 : 0000000000000000 x0 : ffff00000b8ab000
+[   92.625781] Call trace:
+[   92.628282]  0x0
+[   92.630176]  dev_attr_store+0x14/0x28
+[   92.633935]  sysfs_kf_write+0x4c/0x70
+[   92.637681]  kernfs_fop_write_iter+0x160/0x1e0
+[   92.642213]  vfs_write+0x474/0x540
+[   92.645703]  ksys_write+0x68/0xf8
+[   92.649100]  __arm64_sys_write+0x18/0x20
+[   92.653111]  invoke_syscall+0x40/0xf8
+[   92.656866]  el0_svc_common.constprop.3+0x88/0x110
+[   92.661758]  do_el0_svc+0x20/0x78
+[   92.665158]  el0_svc+0x3c/0x90
+[   92.668291]  el0t_64_sync_handler+0x90/0xb8
+[   92.672563]  el0t_64_sync+0x148/0x14c
+[   92.676322] Code: bad PC value
+[   92.679453] ---[ end trace 0000000000000000 ]---
+/bin/start_getty: line 40:   290 Segmentation fault      ${setsid:-} ${getty} -L $1 $2 $3
 
-> >
-> > we use scmi power domain, but not use scmi clk, but with upper commit, the clk is prepared
-> > when pm_clk_acquire.
-> >
+Poky (Yocto Project Reference Distro) 3.2.1 smarc-rzg2l ttySC0
 
-Is this based on latest SCMI clocks that support atomic or older one
-which doesn't. If latter, I see pm_clk_acquire doesn't actually call
-prepare as if clk_is_enabled_when_prepared(clk) = true. Do you see have
-issue ?
+smarc-rzg2l login:
 
-> > However the clk has flag CLK_SET_RATE_GATE, clk_set_rate will fail in driver, because
-> > clk is prepared in pm_clk_acquire.
-> >
+This patch fixes the above issue by adding a check to see if
+set_trip_temp() callback is implemented before calling it.
 
-Where is CLK_SET_RATE_GATE set exactly ?
+[0] drivers/thermal/rzg2l_thermal.c
 
-> > Looking into drivers/base/power/clock_ops.c, I see pm_clk_suspend/pm_clk_resume
-> > will handle clk prepare/unprepared, so why pm_clk_acquire will also prepare the clk?
->
+Fixes: 9326167058e8 ("thermal/core: Move set_trip_temp ops to the sysfs code")
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Note: Patch applies on top of [0].
 
-As asked above do you see the actual clk_prepare getting called as I
-see it isn't if lk_is_enabled_when_prepared(clk) = true.
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
+---
+ drivers/thermal/thermal_sysfs.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-> I agree, the behaviour is certainly questionable to me too. However,
-> it may be tricky to change by now, due to the deployment that has
-> happened over the years.
->
-
-Agreed.
-
-> In principle we would need to make the part where pm_clk_acquire
-> prepares the clock to become optional, in some clever way.
->
-
-I see it is already, let us see what is Peng's observation.
-
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 78c5841bdfae..ec495c7dff03 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -128,9 +128,11 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
+ 	if (kstrtoint(buf, 10, &temperature))
+ 		return -EINVAL;
+ 
+-	ret = tz->ops->set_trip_temp(tz, trip, temperature);
+-	if (ret)
+-		return ret;
++	if (tz->ops->set_trip_temp) {
++		ret = tz->ops->set_trip_temp(tz, trip, temperature);
++		if (ret)
++			return ret;
++	}
+ 
+ 	if (tz->trips)
+ 		tz->trips[trip].temperature = temperature;
 -- 
-Regards,
-Sudeep
+2.25.1
+
