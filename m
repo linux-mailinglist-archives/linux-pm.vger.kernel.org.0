@@ -2,192 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2935B2AA9
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 01:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F345B2CF5
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 05:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiIHX5K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Sep 2022 19:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S229456AbiIIDcu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Sep 2022 23:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiIHX5K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 19:57:10 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D14F9120;
-        Thu,  8 Sep 2022 16:57:09 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288Nu9rg018354;
-        Thu, 8 Sep 2022 23:57:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xtNL9juSKiUlsYkTX1QTR8yYA0DFTAhoBW2fRPh34m0=;
- b=WRwzw/rQ4XDtGj8mIohegewcB+jDJ1Ic2jRXw3+AmEfDbhuKPgwHiJDJOGeJ87sGiBtw
- LFEwCF0YCn0+tlw+bNfn5Bs0gDzl2d07yoT4on9qfMTd+isV1eBt68S6V6QuIsqA0BL1
- pbXPzeg3j44UEoJzmxbjAH5pteahTgAKTXXA5F7Q8n0vYPpuBO04UiiOXjEJbPoUb9RD
- JHsn9+83xNZEXpNdAWciLOkV+1DirUJeDI4BM9/vK0ZLzcgUOuQJ1tDzuQi0N1wReesl
- kw+3G51Xaht00DeHBk6Fh0CRZ6zA/o/UzRuPjteZ3vfvFJuOU6dNqbmWZji9Vv8XmQd9 cw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfrhg88s1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 23:57:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 288Nv2g5004041
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Sep 2022 23:57:02 GMT
-Received: from [10.110.115.160] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 8 Sep 2022
- 16:57:01 -0700
-Message-ID: <725f50bf-96dc-7976-7982-4810e8fc0610@quicinc.com>
-Date:   Thu, 8 Sep 2022 16:57:00 -0700
+        with ESMTP id S229730AbiIIDct (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Sep 2022 23:32:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BEBE7F96;
+        Thu,  8 Sep 2022 20:32:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662694367; x=1694230367;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Rc9I+U8f8nZpjDWSe7O3ImjcloxzYbjAjY0cyXiQTyQ=;
+  b=h1KjOzateT2nUxix1X1RGuto24kKoW/dCRxs451ZHbvptHjldRY5V9GR
+   lxk4krGk7n9cnNYgqM/TpAsfjrt2QWfKJMy8AHtMQvLOJdPfpsnpMIX4t
+   4su6lpfnEHS6vh6MBtReMgfzn1QKDsFlm8yQdqYTFiqNTIr0f+5gY/3kL
+   BS4NVNHfS4ONP4M6T+A8tn/1dWX8JKDAW1LFFz6nxQzCl4/2RsCdFAjrO
+   9UIKC9AQ7DlPDabQ0b9wUPPk5baAdWCJlLRzzukik6IyOS1Vjt6zmYH5T
+   rEyz/SxS9jgh0b3oZU5MsHwzVINbvtE9KD9LwfuhcsSicQoFpBfhsLJyC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284406279"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="284406279"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 20:32:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="757457253"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Sep 2022 20:32:45 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWUl2-0000fJ-3B;
+        Fri, 09 Sep 2022 03:32:44 +0000
+Date:   Fri, 09 Sep 2022 11:32:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 2bc2aea001d35f669e1fe6c767df0ea79fe3e6e5
+Message-ID: <631ab3bf.OvSHvO7aKHQy5Uv/%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: power: reset: qcom-pon: update "reg"
- property details
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>
-References: <20220725191314.19456-1-quic_amelende@quicinc.com>
- <20220725191314.19456-2-quic_amelende@quicinc.com>
- <a47a33a5-aec7-2a52-f1e8-52c45307862e@linaro.org>
- <0e6bf142-ca56-2414-86c4-1a18b74b3ba6@quicinc.com>
- <889151be-9ea8-6a9e-e5fe-eac1dd93250c@linaro.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <889151be-9ea8-6a9e-e5fe-eac1dd93250c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: C8HElnYJyAJCIRpW5zK0uA_Z6dXVCVdi
-X-Proofpoint-GUID: C8HElnYJyAJCIRpW5zK0uA_Z6dXVCVdi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_14,2022-09-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- priorityscore=1501 malwarescore=0 mlxlogscore=999 suspectscore=0
- clxscore=1015 adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209080084
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 2bc2aea001d35f669e1fe6c767df0ea79fe3e6e5  Merge branch 'acpi-bus' into linux-next
 
+elapsed time: 795m
 
-On 9/8/2022 7:55 AM, Krzysztof Kozlowski wrote:
-> On 19/08/2022 22:26, Anjelique Melendez wrote:
->>
->> Hi Krzysztof,
->> First I would like to apologize for my lack of response to this patch series
->> over these past few weeks. I have been out of office.
->>
->> On 7/26/2022 3:25 AM, Krzysztof Kozlowski wrote:
->>> On 25/07/2022 21:13, Anjelique Melendez wrote:
->>>> From: David Collins <quic_collinsd@quicinc.com>
->>>>
->>>> Update the description of "reg" property to add the PON_PBS base
->>>> address along with PON_HLOS base address.  Also add "reg-names"
->>>> property constraints.
->>>>
->>>> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
->>>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->>>> ---
->>>>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 50 +++++++++++++++++++++++++++---
->>>>  1 file changed, 46 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->>>> index 353f155d..d7b6b875 100644
->>>> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->>>> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->>>> @@ -15,18 +15,27 @@ description: |
->>>>  
->>>>    This DT node has pwrkey and resin as sub nodes.
->>>>  
->>>> -allOf:
->>>> -  - $ref: reboot-mode.yaml#
->>>> -
->>>>  properties:
->>>>    compatible:
->>>>      enum:
->>>>        - qcom,pm8916-pon
->>>>        - qcom,pms405-pon
->>>>        - qcom,pm8998-pon
->>>> +      - qcom,pmk8350-pon
->>>>  
->>>>    reg:
->>>> -    maxItems: 1
->>>> +    description: |
->>>> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
->>>> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
->>>> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
->>>> +      peripherals.  In that case, the PON_PBS address needs to be specified to
->>>> +      facilitate software debouncing on some PMIC.
->>>> +    minItems: 1
->>>> +    maxItems: 2
->>>> +
->>>> +  reg-names:
->>>> +    minItems: 1
->>>> +    maxItems: 2
->>>>  
->>>>    pwrkey:
->>>>      type: object
->>>> @@ -42,6 +51,39 @@ required:
->>>>  
->>>>  unevaluatedProperties: false
->>>>  
->>>> +allOf:
->>>> +  - $ref: reboot-mode.yaml#
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            enum:
->>>> +              - qcom,pm8916-pon
->>>> +              - qcom,pms405-pon
->>>> +              - qcom,pm8998-pon
->>>> +    then:
->>>> +      properties:
->>>> +        reg:
->>>> +          maxItems: 1
->>>> +        reg-names:
->>>> +          items:
->>>> +            - const: pon
->>>
->>> All your previous patches were actually missing (in commit msg, in the
->>> code) that piece of information which you add here. You now add
->>> reg-names with "pon" for older devices. I assumed previous that it is
->>> somehow needed, so I gave you the hints how it should be coded. But I
->>> don't understand - why are you doing it
->>>
->>> This should be explained in commit msg. To me it is not needed at all...
->>> unless you want to mark that first address space is entirely different
->>> for other devices?
->> Adding reg-names "pon" for older devices is simply to provide clarification
->> about what the register relates to. Similar to reg-names "hlos" and "pbs"
->> for gen3 children devices, reg-names is completely optional and is not
->> consumed by any driver.
-> 
-> OK, can be. Include it in the commit msg, please.
+configs tested: 131
+configs skipped: 3
 
-ACK
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> 
-> 
-> Best regards,
-> Krzysztof
+gcc tested configs:
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+arm                                 defconfig
+arc                  randconfig-r043-20220908
+arm                              allyesconfig
+arc                  randconfig-r043-20220907
+arm64                            allyesconfig
+s390                 randconfig-r044-20220908
+riscv                randconfig-r042-20220908
+um                           x86_64_defconfig
+um                             i386_defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+i386                          randconfig-c001
+arm                             pxa_defconfig
+arc                              alldefconfig
+arm                           u8500_defconfig
+powerpc                      mgcoge_defconfig
+m68k                                defconfig
+arm                            hisi_defconfig
+xtensa                    smp_lx200_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+m68k                          atari_defconfig
+m68k                       m5475evb_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                     tqm8548_defconfig
+mips                     decstation_defconfig
+powerpc                     stx_gp3_defconfig
+sh                          sdk7780_defconfig
+mips                            ar7_defconfig
+mips                         rt305x_defconfig
+arc                      axs103_smp_defconfig
+openrisc                    or1ksim_defconfig
+sh                             shx3_defconfig
+xtensa                              defconfig
+mips                    maltaup_xpa_defconfig
+mips                  maltasmvp_eva_defconfig
+sh                        edosk7705_defconfig
+powerpc                      ppc40x_defconfig
+mips                      loongson3_defconfig
+sh                         apsh4a3a_defconfig
+parisc                           alldefconfig
+sh                            migor_defconfig
+openrisc                            defconfig
+arc                    vdk_hs38_smp_defconfig
+sh                         microdev_defconfig
+mips                           xway_defconfig
+sh                     magicpanelr2_defconfig
+sparc64                          alldefconfig
+arm                         nhk8815_defconfig
+m68k                          multi_defconfig
+nios2                            allyesconfig
+sh                             espt_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220908
+m68k                        m5307c3_defconfig
+sh                           se7721_defconfig
+powerpc                      bamboo_defconfig
+arm                      footbridge_defconfig
+arm                        realview_defconfig
+m68k                       m5275evb_defconfig
+parisc                           allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+ia64                             allmodconfig
+
+clang tested configs:
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+hexagon              randconfig-r041-20220907
+hexagon              randconfig-r041-20220908
+riscv                randconfig-r042-20220907
+hexagon              randconfig-r045-20220908
+hexagon              randconfig-r045-20220907
+s390                 randconfig-r044-20220907
+x86_64                        randconfig-k001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+powerpc                        fsp2_defconfig
+powerpc                 mpc8272_ads_defconfig
+mips                        qi_lb60_defconfig
+arm                          pcm027_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+mips                           mtx1_defconfig
+mips                          ath79_defconfig
+powerpc                     ppa8548_defconfig
+mips                           ip22_defconfig
+arm                          moxart_defconfig
+powerpc                 mpc8315_rdb_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
