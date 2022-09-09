@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A035B31D2
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 10:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445155B31E5
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 10:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiIIIfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Sep 2022 04:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S229849AbiIIIhM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Sep 2022 04:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiIIIfm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Sep 2022 04:35:42 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DB84BA42;
-        Fri,  9 Sep 2022 01:35:41 -0700 (PDT)
+        with ESMTP id S231357AbiIIIhL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Sep 2022 04:37:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1740D110A88;
+        Fri,  9 Sep 2022 01:37:05 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D95116601FB3;
-        Fri,  9 Sep 2022 09:35:38 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B05F66601FB3;
+        Fri,  9 Sep 2022 09:37:03 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662712539;
-        bh=e5h4NsyYx1mTUec4+K2kbOsmzRKmrL5mll5JoXOlGyY=;
+        s=mail; t=1662712624;
+        bh=sUFQFPB1ZomN7xd2eFsCtP/mZPhFujgM6qQtJ4pPldY=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kEKqaNRAPl/lBJ29lA0IzL5j3kq8u1IlWhNBE9frxkoh7xb3DNQMBigx2woIWLOZj
-         cZfnVTdHX4mAWms/tT0faWhkGgzYw9ivAHwx4EkKWWvaIePo1asQO1Kt232JT5/tBQ
-         ut8Ox4WqW+gIOR0l16ZUvQ5JjX/2le4C6UT9RVpgIb5UpvP0/aYFZlc9WfSMOhuo0e
-         cqDVgYK/M42huWhOSoWzDiYocT2V5IcKwW/cm8cB2Y7uZxtoGb699OVJ0nXhrcv+IR
-         LO1qTxMWUe2xHA2EExlhI9tgXR8ruJ7TkCqHazWy/4u2p3XEF9HBkl4lfeaKbiWxli
-         HXMibrGS7/tzQ==
-Message-ID: <92c5a7bc-62ce-eeb4-f78d-8ccb39f03c7e@collabora.com>
-Date:   Fri, 9 Sep 2022 10:35:36 +0200
+        b=m2CiJOwI2T/J4+wtOj/gwUevwNkJ49cTBVeYVI33A75SO2K/Z8X/12qc4+byfGehM
+         rNM+x8S4QB/zsUwr4ouCVQsl1i35bBr4NYncva6qVZ0T1HfjL+GjV4d5jN7gx9+hlk
+         ocgAX5gFwvF+DkBL1j+l/FdPzG/tXir7gAkkuOi5cHvW6aP6EXRJZKyuHj99b5ulTN
+         TF2pK9/lXh+0TNq1BWMkW87gZaPdqvFgAKTvlFgrKas3N/8+YK1K2YvAS8bInDvTzc
+         KqhiF+e0+sidAA3tV0/HankEIaYRqr5KRoUoyyFctVQsGOxE74aFtxlZKlN02GdTYK
+         dY77+FHZDY77g==
+Message-ID: <a3288784-18d2-c553-4a76-ddae4de3a751@collabora.com>
+Date:   Fri, 9 Sep 2022 10:37:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
@@ -74,14 +74,9 @@ Il 09/09/22 09:37, Amjad Ouled-Ameur ha scritto:
 > Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-Hello Amjad,
+Sorry for the previous reply. I got confused by a local tree.
+The driver is there upstream.
 
-I agree with these changes, but I can't give you my R-b tag: this driver
-has been moved to drivers/thermal/mediatek/soc_temp.c and, as a result,
-this series cannot be applied.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Please rebase.
-
-Regards,
-Angelo
 
