@@ -2,76 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189675B3F73
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 21:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD9B5B402F
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 21:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbiIITYM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Sep 2022 15:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S230259AbiIITvK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Sep 2022 15:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbiIITYL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Sep 2022 15:24:11 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89791449C7
-        for <linux-pm@vger.kernel.org>; Fri,  9 Sep 2022 12:24:08 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id s10so2406200ljp.5
-        for <linux-pm@vger.kernel.org>; Fri, 09 Sep 2022 12:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=FullVTAt4NLdIeDKelIlCFqGink5lLzTlWXTWIoGShU=;
-        b=gY7m5pkzHy9mVSPHdaIRzFpSD5O8vMgSFKnzkWSWOvdqJ91rm8AxYSjgqnXlB0PMQV
-         uEuwbcIjgM8TeBsRJOpLXjP14xJzR8FEkO46TBZFDbS4lc1Yc9mZEotUGvHRooVMu2BS
-         qJMHKXbr32g9pP5VOvmB3s3g8GtEyZRToMURsHxjrz4EQl3pl3mOjmaxt2qvAH0Y45Ty
-         SLCqVKciLk/dvdnbF75ie9iIu5SmthPlKkxeEW4vwGhRfNdZEwFnYUcM4oy59BqJAayl
-         4Fb1aGtMMq8WZzsTFmpTedDZteouaXVGsS35EmKWN6+Z1qCEtmr4zEJdKI4L3qkhOm4W
-         sywA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FullVTAt4NLdIeDKelIlCFqGink5lLzTlWXTWIoGShU=;
-        b=EHeZE4TR+6wu8iibvuA1z/CJRNTIo10V/0ALZ7cpU5nLlRgHxYSlo58TSs9xeg+pcl
-         nf3tGiHRpauVVlZDzqYXXfBuQ47NmwTl8z39RQy9KO0gAX9+LGQhXU1gQypBYg+nXkZQ
-         dDfskg3HdQ8CrfEU8curjysCb8ug4ef14VdNKy3zuXNBZv1xilTHtsVJtt5PaccU7KzX
-         tJl5djuDcKaKq6KRyWFE/nDw7CJyxk/77YreEnaHoX1SBj6umcwT0K3AOAkxuo6JMgfP
-         QqBCeItED4iXz1kpTtbR5umjoCteDaQryZvV4/TVlYHU+kBtsL1rMpCC81Nz4hvo2BTz
-         5dBg==
-X-Gm-Message-State: ACgBeo2UtcLny4RY88bZRnscgtXv+BPM4adphaRSbYH7dgSkvLDr2Tum
-        +QlgoLmbkYVwZpnKcz7gooreEQ==
-X-Google-Smtp-Source: AA6agR7Xty6bEZNFwVc9o5UlVTQNSYuLoZRzQM8sveYXmZcNyTkmFx7ajfrc9c6uuG8EUv5awnTy4w==
-X-Received: by 2002:a2e:92c4:0:b0:25d:9d30:5d61 with SMTP id k4-20020a2e92c4000000b0025d9d305d61mr4726427ljh.202.1662751446993;
-        Fri, 09 Sep 2022 12:24:06 -0700 (PDT)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id e22-20020ac24e16000000b004926689d410sm28982lfr.171.2022.09.09.12.24.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 12:24:06 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 21:24:05 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH] thermal: rcar_thermal: Constify static
- thermal_zone_device_ops
-Message-ID: <YxuS1ZjrPzTvMQWg@oden.dyn.berto.se>
-References: <20220909182838.11154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        with ESMTP id S229710AbiIITvJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Sep 2022 15:51:09 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FD12E6B9;
+        Fri,  9 Sep 2022 12:51:08 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289IJ1NY018025;
+        Fri, 9 Sep 2022 19:40:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=wHW1vNz16ltIDMS+8hT4yCgVJQqCNH1NVloPPsitZoE=;
+ b=D0ZOzjw6MsK0FF4bC4oAi2TFPsNcj/9Cv01k0ryLfkE34BJaAC9qtWoQRdJzs56JH4yG
+ FcWCjtJFHA6LMWhhWdKlGtrkTnuNvWxX5SERreZxM+RP7CAUMu8U1VDUj2QFNSQK9YYs
+ 6L+PHxMLGa8dkzmIhwbkSq0aP8MMHjqANoTNhvYrZQhmxZl3Es0A0nBgbX+93qpaKfCC
+ MQYKMe+TLA5vQLzRkzZ8NaEszScAm08ki7NU2x9qA6nzj+c0eXk6oG7Whoq/DYw812Nv
+ OhH/SgGv58+oPvUxWGBISuwNhR1sODozS3purx7y70eOQQ8ibireAhR5BxyeDftC6+SB ig== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfujq42ne-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 19:40:16 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 289JeFb1019667
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Sep 2022 19:40:15 GMT
+Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 9 Sep 2022 12:40:14 -0700
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <quic_collinsd@quicinc.com>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>
+Subject: [PATCH v5 0/2] add support for PON GEN3 device
+Date:   Fri, 9 Sep 2022 12:39:16 -0700
+Message-ID: <20220909193915.20057-1-quic_amelende@quicinc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220909182838.11154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Lt0PEa-5rPL6KHM2R1y1Ic2evwV-iM0u
+X-Proofpoint-GUID: Lt0PEa-5rPL6KHM2R1y1Ic2evwV-iM0u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_09,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 spamscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209090069
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,41 +79,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lad,
+Changes from v4:
+  - Updated commit message for patch 1/2
 
-Thanks for your work.
+Changes from v3:
+  - Addressed Krysztof's comments on patch 1/2
+    - Added missing minItems/maxItems
+    - Merged if statments with same constraints together
+    - Removed description from "reg-names"
+    
+Changes from v2:
+  - Added new "qcom,pmk8350-pon" compatible string as per Krysztof's
+    advice
+  - Updated dt logic to use comptaible strings to decide constraints
+    as per Krysztof's comment
+  - Added new patch (v3 2/2) to support new compatible string
 
-On 2022-09-09 19:28:38 +0100, Lad Prabhakar wrote:
-> The only usage of rcar_thermal_zone_of_ops is to pass its address to
-> devm_thermal_of_zone_register(), which takes a pointer to const struct
-> thermal_zone_device_ops. Make it const to allow the compiler to put
-> it in read-only memory.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Changes from v1:
+  - Updated path which was missing Documentation/devicetree prefix
+  - Updated CC list
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+New patch series to separate this patch from applied patches.
+Comments from original patch can be found
+https://lore.kernel.org/linux-arm-msm/27515993-18f3-8891-4835-9b6a8d7f86b0@quicinc.com/
 
-> ---
->  drivers/thermal/rcar_thermal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index 4df42d70d867..61c2b8855cb8 100644
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -316,7 +316,7 @@ static int rcar_thermal_get_trip_temp(struct thermal_zone_device *zone,
->  	return 0;
->  }
->  
-> -static struct thermal_zone_device_ops rcar_thermal_zone_of_ops = {
-> +static const struct thermal_zone_device_ops rcar_thermal_zone_of_ops = {
->  	.get_temp	= rcar_thermal_get_temp,
->  };
->  
-> -- 
-> 2.25.1
-> 
+David Collins (1):
+  dt-bindings: power: reset: qcom-pon: Add new compatible
+    "qcom,pmk8350-pon"
 
+Anjelique Melendez (1):
+  power: reset: qcom-pon: add support for qcom,pmk8350-pon compatible string
+
+ Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 50 +++++++++++++++++++++++++++---
+ drivers/power/reset/qcom-pon.c | 1 +
+ 2 file changed, 47 insertions(+), 4 deletions(-)
 -- 
-Kind Regards,
-Niklas Söderlund
+2.35.1
+
