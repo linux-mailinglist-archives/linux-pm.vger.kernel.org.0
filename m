@@ -2,148 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43A85B3090
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 09:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A035B31D2
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 10:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiIIHmg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Sep 2022 03:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S229994AbiIIIfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Sep 2022 04:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiIIHmJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Sep 2022 03:42:09 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E6B12B369
-        for <linux-pm@vger.kernel.org>; Fri,  9 Sep 2022 00:38:51 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id t7so1266530wrm.10
-        for <linux-pm@vger.kernel.org>; Fri, 09 Sep 2022 00:38:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=WAXuAdMYCi1g4B3dZtIrUPbn2Rjq0LvUklClvaIr8b8=;
-        b=hixeKMNDSjZK3KfMycWsysM82K7TRLETak/YdjVEpPzYcAiTEyk1am1Y6ucG8fceex
-         gOBbgIHZEWeBRdgDLIHXwL/X4Bl2ustyrVlJlTITV9SlwE6ZstmXh/kthIVTS1Hbo6Ty
-         4LOP/ZaSecGllpo7+qyebW78n6H7y/TICy3iRg5GW/WwK/8Fv/2mNWFX3zxZYwolR+OQ
-         +GfGCLfmC1vuUWsIIvGsq8HPALZUPSB9sR7qLw4yZHU0Jx0FWdVZcDQoahIOb6A9giT+
-         KDtlJQdeSPKs98fcE/Y9nj/GIKcWMT9HMZn7fsw0bzoCfE9lN9M4UuiDtHMoxgTcM6O9
-         mq7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=WAXuAdMYCi1g4B3dZtIrUPbn2Rjq0LvUklClvaIr8b8=;
-        b=R1HjgVM1tzpjO1CaoBosSbgFBQD6HEIcxrfg8PMSd4JvjHODQOigrTZUCsXYma/Jh2
-         QOcB3lB2XQ7jChAOhloaKj0ZoTI+vNQPIXgvOQNhnsUtepui7QOAYmkrCqZZtRin/BME
-         dUrhZ8KvutS84aIBdN/4SGudWN7VKgXnN/5HknGJ9+dDMaPUW/5RB0bnhLEpn/YHFAVP
-         vUFGv++93VIe0WWKL0Zkghz/1wrgypzrYQDDADNMGP1icNMUVTTOPsR4C3gNnu6Vt6vN
-         Ger4jrC0oAylHnQzN5Fh92z4Is8RsOdu7LsOcwnSq0H5XZIFaJoy5v7JP/x35C+zSQ2X
-         RmWw==
-X-Gm-Message-State: ACgBeo3PsbybdXJxUr0GEHv6SniaY4Lfo1GfzeCcdACbLoS/l7bgIoTu
-        OelACoh7HlCfu6h42piUoW2ncQ==
-X-Google-Smtp-Source: AA6agR75OF2EH+cFAiCFUtN0kMdkH9+f5B4FNPLDQ7a3iVi2EQXbEUCBkPoYSszQ+aDBYO//mF1y4w==
-X-Received: by 2002:a5d:494d:0:b0:228:d840:99f5 with SMTP id r13-20020a5d494d000000b00228d84099f5mr7203566wrs.458.1662709053950;
-        Fri, 09 Sep 2022 00:37:33 -0700 (PDT)
-Received: from amjad-ThinkPad-T490.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id h7-20020a05600c414700b003a83ca67f73sm1252976wmm.3.2022.09.09.00.37.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 00:37:33 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     matthias.bgg@gmail.com
+        with ESMTP id S229659AbiIIIfm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Sep 2022 04:35:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DB84BA42;
+        Fri,  9 Sep 2022 01:35:41 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D95116601FB3;
+        Fri,  9 Sep 2022 09:35:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662712539;
+        bh=e5h4NsyYx1mTUec4+K2kbOsmzRKmrL5mll5JoXOlGyY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kEKqaNRAPl/lBJ29lA0IzL5j3kq8u1IlWhNBE9frxkoh7xb3DNQMBigx2woIWLOZj
+         cZfnVTdHX4mAWms/tT0faWhkGgzYw9ivAHwx4EkKWWvaIePo1asQO1Kt232JT5/tBQ
+         ut8Ox4WqW+gIOR0l16ZUvQ5JjX/2le4C6UT9RVpgIb5UpvP0/aYFZlc9WfSMOhuo0e
+         cqDVgYK/M42huWhOSoWzDiYocT2V5IcKwW/cm8cB2Y7uZxtoGb699OVJ0nXhrcv+IR
+         LO1qTxMWUe2xHA2EExlhI9tgXR8ruJ7TkCqHazWy/4u2p3XEF9HBkl4lfeaKbiWxli
+         HXMibrGS7/tzQ==
+Message-ID: <92c5a7bc-62ce-eeb4-f78d-8ccb39f03c7e@collabora.com>
+Date:   Fri, 9 Sep 2022 10:35:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v4 2/4] thermal: mediatek: control buffer enablement
+ tweaks
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        matthias.bgg@gmail.com
 Cc:     Markus Schneider-Pargmann <msp@baylibre.com>, rafael@kernel.org,
         fparent@baylibre.com, amitk@kernel.org, daniel.lezcano@linaro.org,
         devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        robh+dt@kernel.org, rui.zhang@intel.com,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Subject: [PATCH v4 2/4] thermal: mediatek: control buffer enablement tweaks
-Date:   Fri,  9 Sep 2022 09:37:26 +0200
-Message-Id: <20220909073726.32423-1-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        robh+dt@kernel.org, rui.zhang@intel.com
+References: <20220909073726.32423-1-aouledameur@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220909073726.32423-1-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Markus Schneider-Pargmann <msp@baylibre.com>
+Il 09/09/22 09:37, Amjad Ouled-Ameur ha scritto:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> Add logic in order to be able to turn on the control buffer on MT8365.
+> This change now allows to have control buffer support for MTK_THERMAL_V1,
+> and it allows to define the register offset, and mask used to enable it.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-Add logic in order to be able to turn on the control buffer on MT8365.
-This change now allows to have control buffer support for MTK_THERMAL_V1,
-and it allows to define the register offset, and mask used to enable it.
+Hello Amjad,
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
----
- drivers/thermal/mtk_thermal.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+I agree with these changes, but I can't give you my R-b tag: this driver
+has been moved to drivers/thermal/mediatek/soc_temp.c and, as a result,
+this series cannot be applied.
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 8440692e3890..d8ddceb75372 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -271,6 +271,9 @@ struct mtk_thermal_data {
- 	bool need_switch_bank;
- 	struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
- 	enum mtk_thermal_version version;
-+	u32 apmixed_buffer_ctl_reg;
-+	u32 apmixed_buffer_ctl_mask;
-+	u32 apmixed_buffer_ctl_set;
- };
- 
- struct mtk_thermal {
-@@ -514,6 +517,9 @@ static const struct mtk_thermal_data mt7622_thermal_data = {
- 	.adcpnp = mt7622_adcpnp,
- 	.sensor_mux_values = mt7622_mux_values,
- 	.version = MTK_THERMAL_V2,
-+	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
-+	.apmixed_buffer_ctl_mask = GENMASK(31, 6) | BIT(3),
-+	.apmixed_buffer_ctl_set = BIT(0),
- };
- 
- /*
-@@ -963,14 +969,18 @@ static const struct of_device_id mtk_thermal_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
- 
--static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
-+static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
-+				       void __iomem *apmixed_base)
- {
--	int tmp;
-+	u32 tmp;
-+
-+	if (!mt->conf->apmixed_buffer_ctl_reg)
-+		return;
- 
--	tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
--	tmp &= ~(0x37);
--	tmp |= 0x1;
--	writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
-+	tmp = readl(apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
-+	tmp &= mt->conf->apmixed_buffer_ctl_mask;
-+	tmp |= mt->conf->apmixed_buffer_ctl_set;
-+	writel(tmp, apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
- 	udelay(200);
- }
- 
-@@ -1070,8 +1080,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		goto err_disable_clk_auxadc;
- 	}
- 
-+	mtk_thermal_turn_on_buffer(mt, apmixed_base);
-+
- 	if (mt->conf->version == MTK_THERMAL_V2) {
--		mtk_thermal_turn_on_buffer(apmixed_base);
- 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
- 	}
- 
--- 
-2.37.3
+Please rebase.
+
+Regards,
+Angelo
 
