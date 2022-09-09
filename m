@@ -2,135 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB925B3C40
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 17:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C9E5B3C86
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Sep 2022 18:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiIIPnC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Sep 2022 11:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
+        id S231585AbiIIQBL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Sep 2022 12:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiIIPnA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Sep 2022 11:43:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2B11D0765
-        for <linux-pm@vger.kernel.org>; Fri,  9 Sep 2022 08:42:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B22B165C;
-        Fri,  9 Sep 2022 08:43:04 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 630833F73D;
-        Fri,  9 Sep 2022 08:42:56 -0700 (PDT)
-Date:   Fri, 9 Sep 2022 16:42:54 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Peng Fan <peng.fan@nxp.com>, Sudeep Holla <sudeep.holla@arm.com>,
-        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "npitre@baylibre.com" <npitre@baylibre.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>
-Subject: Re: Question: why call clk_prepare in pm_clk_acquire
-Message-ID: <20220909154254.xy4jvj6ybpuynghc@bogus>
-References: <DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <CAPDyKFrzJikk6rJr9xwV6W-whvdLe5tTUE+xO_EoRtm+9DAbNA@mail.gmail.com>
- <20220908173840.rqy335cdeg5a2ww5@bogus>
- <CAPDyKFqYDNXxfKHd8PYy8T3di2s206nCiHY7cEf+_EHVrY1YbQ@mail.gmail.com>
+        with ESMTP id S230480AbiIIQBJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Sep 2022 12:01:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCE9ABF32
+        for <linux-pm@vger.kernel.org>; Fri,  9 Sep 2022 09:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662739267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MkilgVlqA2kdgmhZQ0iReqC0oZWmONGkCnLgx6F5YI4=;
+        b=eape8K73ZXyvYRy5FycUbxm1SD1+5DWria3y1r4BtWIjCmWLhrl/7vHvjd5IFx4ksS6PO/
+        CV0qJP8WT+2DOUrD+INjZzjdx8BwEQ6McStTtoha1Et6HcZb8zOiaWQl0Zo6cmT5Qs09uE
+        fUDEBM2zv4U1xyHssxklkX8SU9iKrWo=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-65-e2onQi2pPOKZ470cu5qIZg-1; Fri, 09 Sep 2022 12:01:05 -0400
+X-MC-Unique: e2onQi2pPOKZ470cu5qIZg-1
+Received: by mail-ed1-f70.google.com with SMTP id r11-20020a05640251cb00b004484ec7e3a4so1589404edd.8
+        for <linux-pm@vger.kernel.org>; Fri, 09 Sep 2022 09:01:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=MkilgVlqA2kdgmhZQ0iReqC0oZWmONGkCnLgx6F5YI4=;
+        b=73B3fvWcC5RXh8aYiUA39EoQDkbrAMELchfmMJ2DTGmkzE/WPpvjg6H7Z+zKIYykux
+         8VQSyd9mQeeJvyjvQ2T50ulEE0lKrxZr633/9DhvnDfMLA3+TXOrNbDGms0RhNhYjDoy
+         7X9kOpnuskq1vkzt6K361x5DOMMucYBYNQiUfr9HXDtdXfJWWv3LdhbGRLqRpiiXRIX1
+         A105Q1dcwFPYmZ1TuVVV6TozEAxpcw0U1Mui6Lg1rjAkndMvRNEjtqwdUv2oQS4VXVpq
+         paJACiRk16p4Xw16fMi2jmvR7akVlvhjhGUR1ugKAX9laf5tSc4+CsxMSFdZKbCYf7ET
+         S5sg==
+X-Gm-Message-State: ACgBeo0fz+1CoxfbUTvhszgJMH3ef11cjjRRftl195LLWdB3XgJexpCY
+        3UbkH9gehnFmEb0q8gqXD6g74o5HHVpe+ODKbOpgkjL+C6SYztk99WzlEM1+nDftRx5q4CurQTB
+        /QzgrIeCItCbRUeyUcew=
+X-Received: by 2002:a05:6402:43c4:b0:43b:c5eb:c9dd with SMTP id p4-20020a05640243c400b0043bc5ebc9ddmr11996989edc.402.1662739264695;
+        Fri, 09 Sep 2022 09:01:04 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR72OcWlz0Jbmm54CZLQ/xuPVPgg8tPeaEAnwi8Y5sOr7fgQ3xJUzER4kEnNijxbdDbaF4EzCw==
+X-Received: by 2002:a05:6402:43c4:b0:43b:c5eb:c9dd with SMTP id p4-20020a05640243c400b0043bc5ebc9ddmr11996963edc.402.1662739264420;
+        Fri, 09 Sep 2022 09:01:04 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:2a07:3a01:67e5:daf9:cec0:df6? (2001-1c00-2a07-3a01-67e5-daf9-cec0-0df6.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:67e5:daf9:cec0:df6])
+        by smtp.gmail.com with ESMTPSA id q16-20020aa7cc10000000b0044e84d05cd8sm640965edt.0.2022.09.09.09.01.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Sep 2022 09:01:03 -0700 (PDT)
+Message-ID: <75e632e6-07df-5b97-d9d7-c4b60a5a3b9b@redhat.com>
+Date:   Fri, 9 Sep 2022 18:01:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqYDNXxfKHd8PYy8T3di2s206nCiHY7cEf+_EHVrY1YbQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 0/4] Add some extra debugging mechanisms for s0i3
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org
+References: <20220829162953.5947-1-mario.limonciello@amd.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220829162953.5947-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 01:12:03PM +0200, Ulf Hansson wrote:
-> On Thu, 8 Sept 2022 at 19:38, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Thu, Sep 08, 2022 at 04:37:13PM +0200, Ulf Hansson wrote:
-> > > On Thu, 8 Sept 2022 at 09:33, Peng Fan <peng.fan@nxp.com> wrote:
-> > > >
-> > > > Hi All,
-> > > >
-> > > > We are facing an issue clk_set_rate fail with commit a3b884cef873 ("firmware:
-> > > > arm_scmi: Add clock management to the SCMI power domain") ,
-> > >
-> > > Hmm, I wonder about the main reason behind that commit. Can we revert
-> > > it or is there some platform/driver that is really relying on it?
-> > >
-> >
-> > IIUC, at the time of the commit, it was needed on some Renesas platform.
-> > Not sure if it is still used or not.
+Hi All,
+
+On 8/29/22 18:29, Mario Limonciello wrote:
+> Recently there have been reports of problems where the system consumes
+> too much power after certain interrupts occur that would notify the
+> kernel of some event but those events aren't marked for wakeup.
 > 
-> Okay! Maybe Nico remembers more, as he authored the patch...
->
-
-May be, or even check with Renesas team who tested his patch.
-
-> Normally it's best decided on a platform basis, whether it really
-> makes sense to use the GENPD_FLAG_PM_CLK. As the scmi power domain is
-> a cross platform power domain, it worries me that we lose some needed
-> flexibility, which is likely to make it more difficult to use it for
-> some platforms. Also note, the main point behind GENPD_FLAG_PM_CLK,
-> was just to consolidate code.
->
-
-I agree and share similar concern.
-
-> That said, I decided to do some research, by looking at the DTS files
-> in the kernel. So far, there is only Juno and the imx8 based
-> platform(s) that are using the scmi power domain.
->
-
-Yes but there are few without any DTS upstream that I know.
-
-> >
-> > > >
-> > > > we use scmi power domain, but not use scmi clk, but with upper commit, the clk is prepared
-> > > > when pm_clk_acquire.
-> > > >
-> >
-> > Is this based on latest SCMI clocks that support atomic or older one
-> > which doesn't. If latter, I see pm_clk_acquire doesn't actually call
-> > prepare as if clk_is_enabled_when_prepared(clk) = true. Do you see have
-> > issue ?
->
-> It doesn't really matter if we would be using an atomic clock or not.
->
-
-No what I meant is pm_clk_acquire doesn't call prepare as clk_is_enabled_when_prepared
-is true for scmi clocks(non atomic).
-
-> The problem is that when using GENPD_FLAG_PM_CLK, during runtime
-> resume (genpd_runtime_resume) we end up calling pm_clk_resume(), but
-> prior invoking the consumer driver's ->runtime_resume() callback. In
-> other words, the clock(s) will already be prepared and enabled when
-> the driver's ->runtime_resume() callback gets invoked. That certainly
-> isn't going to work for all cases.
->
-
-Any specific reasons ? Sorry I am missing to understand why that would
-be an issue ?
-
-
-[...]
-
-> In my opinion we should really try to move away from using
-> GENPD_FLAG_PM_CLK for the scmi power domain. I can prepare a patch, if
-> you think it makes sense?
+> These problems have been root caused to the timing of the kernel moving
+> the cores into ACPI C3 relative to other events from the previous wakeup
+> not being settled.  Linux will more aggressively move the cores into C3
+> for s2idle than Windows does for Modern Standby.
 > 
+> To aide with debugging this class of problems in the future add a new
+> set of optional debugging infrastructure.
+> 
+> Mario Limonciello (4):
+>   ACPI: s2idle: Add a new ->check() callback for platform_s2idle_ops
+>   platform/x86/amd: pmc: Add defines for STB events
+>   platform/x86/amd: pmc: Always write to the STB
+>   platform/x86/amd: pmc: Add an extra STB message for checking s2idle
+>     entry
 
-As along as Renesas is fine with that, it should be OK, but doesn't removing
-that flag means we can drop {attach,detach}_dev callbacks too as they are just
-adding clocks and without the flag it is useless. Sounds like we must revert
-the patch completely IIUC.
 
--- 
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
 Regards,
-Sudeep
+
+Hans
+
+
+
+> 
+>  drivers/acpi/sleep.h           |  1 +
+>  drivers/acpi/x86/s2idle.c      | 14 ++++++++++++++
+>  drivers/platform/x86/amd/pmc.c | 32 ++++++++++++++++++++------------
+>  include/linux/acpi.h           |  1 +
+>  include/linux/suspend.h        |  1 +
+>  kernel/power/suspend.c         |  3 +++
+>  6 files changed, 40 insertions(+), 12 deletions(-)
+> 
+
