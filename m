@@ -2,94 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CD35B4671
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Sep 2022 15:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20595B469B
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Sep 2022 16:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiIJNM0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Sep 2022 09:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S229514AbiIJOXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Sep 2022 10:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiIJNMZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Sep 2022 09:12:25 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A5F58509
-        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 06:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662815545; x=1694351545;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=24n3hcGa+f1fm1sS02iKmdfDXYW1deAmkOa7viGUnxc=;
-  b=Y8MoelHliyRc/fr9vHbXhO9Zuo8eJfivhcB7PihfiphmPqUqGEm0+0/y
-   VleriRki/eizWauH8NjQFo1cnymKrCaRpzQKBri9SV/IbGV0CeGbkxqVS
-   l4/HTLP1UgYMFWGCgkdmdHocivJBWFqKyYNFTb7YKDq3Vne6yLCNIa4i6
-   6+mTI89MQu5ZpDFHZLNXINbR1JIGAE8dU+RyN011X6ae6LJ7SUlTOYOo/
-   PrNWcdTDvVm1eUq7aZDQHtTwvHuW0cJxTuERfYprcRVPAF8VFfsRAOnZM
-   sDZcKisOP9mEXIggt+xJNP+q6i/sAPuWM/E0tekl0s0wdMUJVdp2Gwx4D
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="298440981"
-X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
-   d="scan'208";a="298440981"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 06:12:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,305,1654585200"; 
-   d="scan'208";a="677511852"
-Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Sep 2022 06:12:23 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org, rui.zhang@intel.com
-Subject: [PATCH 2/2] tools/power turbostat: Add support for MeteorLake platforms
-Date:   Sat, 10 Sep 2022 21:15:42 +0800
-Message-Id: <20220910131542.22708-2-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220910131542.22708-1-rui.zhang@intel.com>
-References: <20220910131542.22708-1-rui.zhang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229491AbiIJOXg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Sep 2022 10:23:36 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E4C852DEC
+        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 07:23:33 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id X1H3opcNk9RnzX1H3odu7c; Sat, 10 Sep 2022 16:16:01 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 10 Sep 2022 16:16:01 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH] PM / devfreq: rockchip-dfi: Fix an error message
+Date:   Sat, 10 Sep 2022 16:15:56 +0200
+Message-Id: <47627a29a443aedf3b36a4f72b3e1ad89933a0ea.1662819332.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add turbostat support for MeteorLake platforms, which behave the same
-as RaptorLake platforms.
+There is a typo in the message. The clock name should be 'pclk_ddr_mon'.
+Fix it.
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+While at it, switch to dev_err_probe() which is less verbose, filters
+-EPROBE_DEFER, and log the error code in a human readable way.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-
-Note:
-This patch depends on commit 5515d21c6817
-("x86/cpu: Add CPU model numbers for Meteor Lake") in the x86/urgent
-branch of tip tree.
-
-Note:
-This patch is made on top of patch
-"tools/power turbostat: add support for RPL-S" at
-https://patchwork.kernel.org/project/linux-pm/patch/20220831064957.1773-1-rui.zhang@intel.com/
-to avoid conflict.
-
+This looks like a cut'n'paste typo from drivers/devfreq/rk3399_dmc.c
 ---
- tools/power/x86/turbostat/turbostat.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/devfreq/event/rockchip-dfi.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index df040d87edd8..597cc2dbc456 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5448,6 +5448,8 @@ unsigned int intel_model_duplicates(unsigned int model)
- 	case INTEL_FAM6_RAPTORLAKE:
- 	case INTEL_FAM6_RAPTORLAKE_P:
- 	case INTEL_FAM6_RAPTORLAKE_S:
-+	case INTEL_FAM6_METEORLAKE:
-+	case INTEL_FAM6_METEORLAKE_L:
- 		return INTEL_FAM6_CANNONLAKE_L;
+diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
+index 9a88faaf8b27..39ac069cabc7 100644
+--- a/drivers/devfreq/event/rockchip-dfi.c
++++ b/drivers/devfreq/event/rockchip-dfi.c
+@@ -189,10 +189,9 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
+ 		return PTR_ERR(data->regs);
  
- 	case INTEL_FAM6_ATOM_TREMONT_L:
+ 	data->clk = devm_clk_get(dev, "pclk_ddr_mon");
+-	if (IS_ERR(data->clk)) {
+-		dev_err(dev, "Cannot get the clk dmc_clk\n");
+-		return PTR_ERR(data->clk);
+-	}
++	if (IS_ERR(data->clk))
++		return dev_err_probe(dev, PTR_ERR(data->clk),
++				     "Cannot get the clk pclk_ddr_mon\n");
+ 
+ 	/* try to find the optional reference to the pmu syscon */
+ 	node = of_parse_phandle(np, "rockchip,pmu", 0);
 -- 
-2.25.1
+2.34.1
 
