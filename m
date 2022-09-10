@@ -2,51 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C473C5B4644
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Sep 2022 14:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024AE5B4648
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Sep 2022 14:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiIJMrG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Sep 2022 08:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        id S229576AbiIJMrH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Sep 2022 08:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiIJMrF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Sep 2022 08:47:05 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E28457574
-        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 05:47:04 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id o2so5092474lfc.10
-        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 05:47:04 -0700 (PDT)
+        with ESMTP id S229583AbiIJMrG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Sep 2022 08:47:06 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D9F57881
+        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 05:47:05 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id x10so5156070ljq.4
+        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 05:47:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ygGjW9rzSm7+9sQEq9LAthoAlgsWeQrb6LhBAbELqYs=;
-        b=lnoVF8uYyAuPjsc+Zs2852If5yU+bFNZT7OqufJDVKLby3LsmFY6XM+RPWbVNTuc78
-         pNPFk05fqBejFctBVL0ulXrSQ26vr3w4JAuMxK1mwpBILYilPC9l+WLb5DXE/xEuErle
-         VEMw6avBb6iILCy9URRAsLW8ahr2/2bUs/aEEqji4qnE8QaV9fHr+RAo4x5ID/xJlccR
-         UsCIIVPUtyWi0ur2fN7HuuZ6vOAR5Hpf4iuGUWmaF1CWV5YJnJa7ahf+dyJPY0IFz8pA
-         ng3S295Nib47SaT44pLxjOlZH0C2mK9gpaU5/hFX1WoYG1hdGRZYFn5Yq+Sw/jofwBoH
-         Toxw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=vm+r24ViQXOdz41KkiBdX+nyXKDyoqOo1pLDhCPu3CQ=;
+        b=XlgveTwV+CSGcBo40DPAzYib5fqZ0Rlc2uhMxeGlkh0N/QxdzfAeBbbPF0UknLt2Q8
+         0g4LXrV2voRi+wEiTu/lSPEQDG6Jwxx7ivkP0AgDlKHLOnealU9Yki6AtX/zzYpc7P6a
+         0cUFrUPUZhNwFkv95fkKKT2qU1aOtpDTeG6lF4V+QR9yVXF4s2saBcE3p9dxdz14NNF6
+         +x7AfQtOAKBKxSFTjbHXIWFrgPyE66cbLtGSllF/YAFdy4NRT3G6f6omzZLDaqW4XodA
+         cUQUijxMGA1NPABDyYXlGk2oH1kR+fjYy7n3XusvUCNh+VhYAOm/ji+yEOh6rbZLSxZq
+         HoCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ygGjW9rzSm7+9sQEq9LAthoAlgsWeQrb6LhBAbELqYs=;
-        b=hLaYUV0iCtDiRY4JSqhEYpfHulJgDnUFLUp0Jocb8b0qO+0uk2FrkUxO7Uu9qBnXQq
-         hIZnl/oZzdnEKgMw7h6HYOpdy4Xfctq+J8+EI7u3PolSJo8sPx6ZsShuVr1MpgCX/wMy
-         uUOC6M9Z3Cj02uOklZ5t7eeXPM7YRGimr0aT5bxYQxO9fRSXmOJgXI2RxiR/G7Oi+cse
-         fpHGWnmX23EXnsvSwxYPuPDM1a3sn3jpS0uiscoIWf3jjCZRQYSCUtw5eUFxQM8Bpl+h
-         nN308kFB4y0cjW0ZW1y96V+YnTXRIOvbN3dtnUuy8Hs8hJPp8rYldzyGBBPTIzH/AZ2+
-         KoAQ==
-X-Gm-Message-State: ACgBeo22/Y9bfcd086d31OG17Qb49ncUxW/N2lys2VRVmieyYCK85o4A
-        8y5AndRbsLJ6dD8dKvahk6Y+5w==
-X-Google-Smtp-Source: AA6agR7LPqrahQNaRb3d6xjgAXgKZkCHZMlYWAHBupsVVGc/p/vsLSIcNu4VsS9cQlgXuDcju6u6Qg==
-X-Received: by 2002:a05:6512:1315:b0:492:cbc8:e10d with SMTP id x21-20020a056512131500b00492cbc8e10dmr5713163lfu.41.1662814022845;
-        Sat, 10 Sep 2022 05:47:02 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=vm+r24ViQXOdz41KkiBdX+nyXKDyoqOo1pLDhCPu3CQ=;
+        b=LccG09FUIKofQjj/c+vbJlrfsBzOPlAAADq0/guY0fili8m9sKi/ZdSef1dSQvElCI
+         REyndrJvGpTP1mF+tg8PVcrftwhlZfvJywmoZip4cMN84qfHbu49Cfyf90u4Yl5k0YNh
+         /iKk2/2pgLNicWAPuikIdGeHieOJ+O6MCPD06UFye70unFXj7/zRjVT6HFS03srYPQPP
+         L+QLtR/OiffOb5YcSQ3pvK+lyRR0C+ZKeS4EzkzdbzPtOWtcWeTg5bMl3noUlxVsh2St
+         w7tAhI3Ma4cNxPXnoLAcQhlZQdN9YI6OqdfyFqhb5oj0mrWdY0dQE6+bQCZlLRLGlMQu
+         lYtg==
+X-Gm-Message-State: ACgBeo10k1U4gN9OAJvYpmOrxOKJOV7uAKcZl/JSGDn1UOgmYwYtHkcC
+        B+dYCFmMPayhlocVbAdf5zXDbQ==
+X-Google-Smtp-Source: AA6agR6I4/LYZ8mWWcxCletV7K1sCraq9hcMdaAwolUuR/vgYHecTNmX2qVP3azJScUF8Ah9pe1Fhg==
+X-Received: by 2002:a2e:bd0e:0:b0:268:c03b:cf56 with SMTP id n14-20020a2ebd0e000000b00268c03bcf56mr5517651ljq.393.1662814023544;
+        Sat, 10 Sep 2022 05:47:03 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k14-20020a2e920e000000b002677a3ad1d9sm327463ljg.76.2022.09.10.05.47.01
+        by smtp.gmail.com with ESMTPSA id k14-20020a2e920e000000b002677a3ad1d9sm327463ljg.76.2022.09.10.05.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Sep 2022 05:47:02 -0700 (PDT)
+        Sat, 10 Sep 2022 05:47:03 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,15 +61,17 @@ To:     Andy Gross <agross@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [RFC PATCH 00/10] thermal/drivers/tsens: specify nvmem cells in DT rather than parsing them manually
-Date:   Sat, 10 Sep 2022 15:46:51 +0300
-Message-Id: <20220910124701.4060321-1-dmitry.baryshkov@linaro.org>
+Subject: [RFC PATCH 01/10] dt-bindings: thermal: tsens: support per-sensor calibration cells
+Date:   Sat, 10 Sep 2022 15:46:52 +0300
+Message-Id: <20220910124701.4060321-2-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220910124701.4060321-1-dmitry.baryshkov@linaro.org>
+References: <20220910124701.4060321-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,43 +79,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Historically the tsens driver fetches the calibration data as a blob and
-then parses the blob on its own. This results in semi-duplicated code
-spreading over the platform-specific functions.
+Allow specifing the exact calibration mode and calibration data as nvmem
+cells, rather than specifying just a single calibration data blob.
 
-This patch series changes tsens calibration code to use pre-parsed nvmem
-cells rather than parsing the blob in the driver. For backwards
-compatibility the old code is left in place for msm8916 and qcs404, two
-platforms which have in-tree DT files. For msm8974 the original function
-is left intact, since it differs significantly (and I can not test the
-code on msm8974). For all other affected platforms the old parsing code
-has been dropped as a part of this RFC.
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ .../bindings/thermal/qcom-tsens.yaml          | 64 ++++++++++++++++---
+ 1 file changed, 54 insertions(+), 10 deletions(-)
 
-The code was tested on msm8916 and qcs404 only, thus it is being sent as
-an RFC.
-
-Dmitry Baryshkov (10):
-  dt-bindings: thermal: tsens: support per-sensor calibration cells
-  thermal/drivers/tsens: Support using nvmem cells for calibration data
-  thermal/drivers/tsens: drop single-cell code for msm8939
-  thermal/drivers/tsens: drop single-cell code for mdm9607
-  thermal/drivers/tsens: drop msm8976-specific defines
-  thermal/drivers/tsens: use generic calibration routine for msm8976
-  thermal/drivers/tsens: use tsens_calibrate_nvmem for msm8976
-    calibration
-  thermal/drivers/tsens: drop single-cell code for msm8976
-  arm64: dts: qcom: msm8916: specify per-sensor calibration cells
-  arm64: dts: qcom: qcs404: specify per-sensor calibration cells
-
- .../bindings/thermal/qcom-tsens.yaml          |  64 +++++-
- arch/arm64/boot/dts/qcom/msm8916.dtsi         |  70 +++++-
- arch/arm64/boot/dts/qcom/qcs404.dtsi          | 120 +++++++++-
- drivers/thermal/qcom/tsens-v0_1.c             | 208 +-----------------
- drivers/thermal/qcom/tsens-v1.c               | 154 +------------
- drivers/thermal/qcom/tsens.c                  |  62 ++++++
- drivers/thermal/qcom/tsens.h                  |   4 +
- 7 files changed, 314 insertions(+), 368 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 038d81338fcf..b813f6f19c1d 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -77,18 +77,62 @@ properties:
+       - const: critical
+ 
+   nvmem-cells:
+-    minItems: 1
+-    maxItems: 2
+-    description:
+-      Reference to an nvmem node for the calibration data
++    oneOf:
++      - minItems: 1
++        maxItems: 2
++        description:
++          Reference to an nvmem node for the calibration data
++      - minItems: 5
++        maxItems: 35
++        description: |
++          Reference to an nvmem cells for the calibration mode, two calibration
++          bases and two cells per each sensor
+ 
+   nvmem-cell-names:
+-    minItems: 1
+-    items:
+-      - const: calib
+-      - enum:
+-          - calib_backup
+-          - calib_sel
++    oneOf:
++      - minItems: 1
++        items:
++          - const: calib
++          - enum:
++              - calib_backup
++              - calib_sel
++      - minItems: 5
++        items:
++          - const: mode
++          - const: base1
++          - const: base2
++          - const: s0_p1
++          - const: s0_p2
++          - const: s1_p1
++          - const: s1_p2
++          - const: s2_p1
++          - const: s2_p2
++          - const: s3_p1
++          - const: s3_p2
++          - const: s4_p1
++          - const: s4_p2
++          - const: s5_p1
++          - const: s5_p2
++          - const: s6_p1
++          - const: s6_p2
++          - const: s7_p1
++          - const: s7_p2
++          - const: s8_p1
++          - const: s8_p2
++          - const: s9_p1
++          - const: s9_p2
++          - const: s10_p1
++          - const: s10_p2
++          - const: s11_p1
++          - const: s11_p2
++          - const: s12_p1
++          - const: s12_p2
++          - const: s13_p1
++          - const: s13_p2
++          - const: s14_p1
++          - const: s14_p2
++          - const: s15_p1
++          - const: s15_p2
+ 
+   "#qcom,sensors":
+     description:
 -- 
 2.35.1
 
