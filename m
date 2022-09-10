@@ -2,94 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B5E5B4789
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Sep 2022 18:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1375B4802
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Sep 2022 21:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiIJQol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Sep 2022 12:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S229492AbiIJTBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Sep 2022 15:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiIJQok (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Sep 2022 12:44:40 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349DFB1CC
-        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 09:44:39 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id p69so254408yba.0
-        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 09:44:39 -0700 (PDT)
+        with ESMTP id S229446AbiIJTBw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Sep 2022 15:01:52 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876B2491D4
+        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 12:01:51 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id s11so7156350edd.13
+        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 12:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=qI17B0e4yJB+F1dL8FYkAI3R6t71e9uEt6K2KIj7Lc0=;
+        b=EBLuCDJGqBeQ+vVXWU2V+wW3ZrjSNvwez+ipRbVzfAK8zQAH/EoXrDkVSs4B640GQS
+         gSW4sTLCxdMKuvaKXl11kBNFyob/+yfa0yCC82OEO5JbTacyZhXLpzTecuqMHH5Ud8Qo
+         TYMIxZF2qKQAJopgU/GLlcdFhKhjkN8O0+4yIejF9nzMvxEb9e5ItnofOebeWy+6ShbY
+         jrpaH/HpEgJoidAtKz3t23U0mDs2NODje3jVCWMOWUG9FCJ8nuKarS7Oz2RyADeGDWpG
+         dw7cRptLw1F8j8/TTYLrhRDOMB2Ys1ypFC0+QdibyUef6wuMlgFnVX32S0h5YDB/TPpF
+         fGkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=2JUdp+VI+NzlDbv+/0UunaUlhoTB747kbhjI0m/8eKA=;
-        b=wlmhrHj47HpfWCyZEZB6H0viUsqzukG4VLs2E8SH95e97A93DBOVZc4b9qogqH2+sI
-         OLQFbGFSzDbDREupbzkO9RH98ISIkwWo1H/VV6oFEdbAMIlvkUPnLGGngErWYUZ+SOoO
-         9UEuSsS0aEP1Sy4aeFpV23SJL+F7P253ZD4+9KjIyaMLCQYrUhwMSMJZylPRZA3XsaA8
-         XC2+va5hNXu1NlGM33MydvHjebRQUGoqVyvaAOgVWCDGyn2JAL+9Orha6ZlhPJq5Dcvd
-         PfQGaVHoqYNxv5iTpv9CS0hygRwG2mTLf7NSoSDeCGDj5evR5ZDLHXQFi0jAd781aoZ7
-         ITfg==
-X-Gm-Message-State: ACgBeo0fzhpBBb9DqqXyw+th1830k7j9xKWR4rPKXT9iAl25s2/oDZGk
-        rGIPQ2IcXH7O5yirPMMjvVaHgLD29JgHkb8lN1Y=
-X-Google-Smtp-Source: AA6agR7VOfGrx6x4rUlcPCO9qH/BLlSqIksVIRUK2lOF2wdb2lnBUMMvbC8pviqYZso2b25fJHugTf0LLZ9qUvWN/W8=
-X-Received: by 2002:a25:2f0c:0:b0:6a8:f230:12ed with SMTP id
- v12-20020a252f0c000000b006a8f23012edmr15769788ybv.633.1662828278454; Sat, 10
- Sep 2022 09:44:38 -0700 (PDT)
+        bh=qI17B0e4yJB+F1dL8FYkAI3R6t71e9uEt6K2KIj7Lc0=;
+        b=3m5NOyTXZCF9gse5b6ljp7NoIZgSe2rxdWVvYzXqWVdu+I+xOlt8tPkR1Zk1rU0ndB
+         cl1kYMj6/M/M+h3i96TbaTklhAP9ajPK+T4/APoBtx0WLNodjXdOkZaxnQXFNSupFxRt
+         sIEJMrjY1oQE+k1kVNbXdbbhCjkGGUu6ytx2ttdSLGaEIc959Bw/dUm6ZDpxDxN3tHEa
+         pyK0Es6hPvTM6zv42oRwRqIo7Nh600DVwei9jkLKb1SphyAq5LPcU6p6yaJPbAKGRzVD
+         5yJiC1YRnQSSY/jW37o/O9+wp4J4mXKFdl8toupc5BBaCa6nQhGQ5xNAQXEdBM90pCnu
+         NcSA==
+X-Gm-Message-State: ACgBeo3uZ4DxkOWCeUnuUG6uCMngrNWgPx9P03sMPK4Fajyj9tpng800
+        9G2HDx2IqhFLO3K8pr64fTRXZog3fEkIJlsJOZPrMQ==
+X-Google-Smtp-Source: AA6agR6IzKPUM7epEfDZhvp0D8W8L0B9hFlIja5ZpA/pqoWM53+OgGd9FdmQjs0IZMBf8Ob7cSfP9ZZNy09swA/e6Sk=
+X-Received: by 2002:a05:6402:1f8c:b0:43e:8fab:76c with SMTP id
+ c12-20020a0564021f8c00b0043e8fab076cmr16121028edc.126.1662836510080; Sat, 10
+ Sep 2022 12:01:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220910131542.22708-1-rui.zhang@intel.com>
-In-Reply-To: <20220910131542.22708-1-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 10 Sep 2022 18:44:27 +0200
-Message-ID: <CAJZ5v0hPh21mgTLT6jZf4=bZqNbsLqFnu41j9G3K5TTo3=YKHQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] powercap: intel_rapl: Add support for MeteorLake platforms
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20220719114131.62470-1-linus.walleij@linaro.org>
+In-Reply-To: <20220719114131.62470-1-linus.walleij@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 10 Sep 2022 21:01:38 +0200
+Message-ID: <CACRpkdbYeCqJd1pqtEMb7oTFvYU+D5kJpE9OKnL7XGL8Ywiftg@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: Explain maintenance charging
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Matti Vaittineen <matti.vaittinen@fi.rohmeurope.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 3:12 PM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Add intel_rapl support for the MeteorLake platforms, which behave the
-> same as RaptorLake platforms.
->
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->
-> Note:
-> This patch depends on commit 5515d21c6817
-> ("x86/cpu: Add CPU model numbers for Meteor Lake") in the x86/urgent
-> branch of tip tree.
+On Tue, Jul 19, 2022 at 1:43 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-So I think I will have to rebase the powercap branch on top of a
-future -rc in order to apply this one.
+> In order for everyone to understand clearly why we want to use
+> maintenance charging for batteries, expand the description with two
+> diagrams and some text.
+>
+> Cc: Matti Vaittineen <matti.vaittinen@fi.rohmeurope.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-> Note:
-> This patch is made on top of commit 0d7a23b5f8e1
-> ("powercap: intel_rapl: Add support for RAPTORLAKE_S") in the
-> linux-next branch of pm tree to avoid conflict.
->
-> ---
->  drivers/powercap/intel_rapl_common.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 6812c1ca3100..949eb90f5733 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -1111,6 +1111,8 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
->         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,          &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,        &rapl_defaults_core),
-> +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,          &rapl_defaults_core),
-> +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,        &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &rapl_defaults_spr_server),
->         X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,           &rapl_defaults_core),
->
-> --
+Sebastian, could you apply this patch?
+
+I think I sent it in the merge window, so easily missed.
+
+Yours,
+Linus Walleij
