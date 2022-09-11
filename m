@@ -2,125 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB715B4ED7
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Sep 2022 14:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE2E5B4F1D
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Sep 2022 15:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiIKMn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Sep 2022 08:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S230159AbiIKNh0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Sep 2022 09:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiIKMn6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Sep 2022 08:43:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04F63340D
-        for <linux-pm@vger.kernel.org>; Sun, 11 Sep 2022 05:43:57 -0700 (PDT)
-Received: from mercury (unknown [77.241.232.19])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4F45A66015B2;
-        Sun, 11 Sep 2022 13:43:56 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662900236;
-        bh=ozj89aYMP7UzyKgrx94MCKLrztITpbzzMT/JnSNJAuQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SHNSiZSA1Q2EIaGkOVK3hWo3gErCODlgc0zAQx4pMPP/bovAOzlEVEX138L8diPAt
-         fDzHDOBdOpp+XxDxb3KwqvNcGPiVPg/Sn8k4+REKhLRAnyot1wErpb+mfrpHpsFVBk
-         T4SRVMIDcCEns2Hzwo6Y/XMX2dn3HXKzUgtjybDkNtDnTuMftE4Imt003SsfJntdlt
-         2ZGNTJnJYDN6Hs65VwRVAiyb7d29Pw/WhEeIgNz+pNESLPmTBUDPYuB4LIkcXtTtU6
-         UhHDcLV3O5v1Zkf/oVGwX4QQZcc4PjRTB44g/5lxn74/+dUG38Muf94tnOG5fAM624
-         Gz6tVOp4Y8yIA==
-Received: by mercury (Postfix, from userid 1000)
-        id 4959F1063360; Sun, 11 Sep 2022 14:43:52 +0200 (CEST)
-Date:   Sun, 11 Sep 2022 14:43:52 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2] power: supply: bq25890: Add support for setting IINLIM
-Message-ID: <20220911124352.xpdzp2vdmoroqlsm@mercury.elektranox.org>
-References: <20220801025727.778218-1-marex@denx.de>
- <b8235890-7878-c982-caf2-1c7a69859f69@redhat.com>
- <31ab3c4d-9d5e-4e09-cbeb-a764fb467264@denx.de>
+        with ESMTP id S229727AbiIKNhZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Sep 2022 09:37:25 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50931F18
+        for <linux-pm@vger.kernel.org>; Sun, 11 Sep 2022 06:37:24 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id q21so10764211lfo.0
+        for <linux-pm@vger.kernel.org>; Sun, 11 Sep 2022 06:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ae3obZ6xNwy7r5xGyrjRqVjIzsAgTF+V8+8P3DQs4ck=;
+        b=tEI1Vb3SiFQt1nVT79g4fTkhzFwPN9946CF/OeoCGSN9UpKje900PJE8wgeKBTThrT
+         O8YnrkKKbqhPPom9F+C6MQHKNHj1s5N71q/b4IfxSRPIGDLj6Olu2uXPgT5qbw6cRhDR
+         KKiLFho0ROSXJDcCl/xyjA9leXK2OElJMVpPQ/K6SjcMAC6fei3AmY/RnKMpNKPXffPF
+         PcoanndnxTTWf1TZXwYmO8wwQSNzurVFWQZ/3SQN2RZL38KmvU7j+FxQylaNe+4SMzip
+         6/gOiuzUjQupf7OlSseD1CSyFVFw6IxvkLZCDcx+O0pOolr4bzVYQfat0r0m2zE4Uzub
+         9h2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ae3obZ6xNwy7r5xGyrjRqVjIzsAgTF+V8+8P3DQs4ck=;
+        b=NiPt1XbjOMzhg6jEZ50aK9mHWqVtsMtoRr6P/SzApbPrT1pBHQiSLyFROceJaBKx9/
+         EEpIAV4oQlIaCr59EfucwRr+Nlc5t/FmaYdTCAxS6UB1PnzEeohuLYpYThwIq4UnXvLN
+         NZPBhM5ldbje+rrad5Qybuj+L7MMc43Foz82FtH3K5XLghy91QY8xuC6TB2USsDzbGEH
+         74VrZJpUTI4iBgIkkG/e8W0yfECuMjvJz2a8Lv2o5msvnNuOsrHyxeQggQgkYB6Tqfqg
+         et2CXBbPpJWzl9BpYJK7JbKAKKc9FQ7hfU9kPWShL/+jQZDdRahNoo/hJF69v4FmuCuB
+         qBsA==
+X-Gm-Message-State: ACgBeo0Ti1hM+jpKXSI2tGKl3lP1RFwFIhSzeRBQq5jDUYuKUh1C6tW7
+        h/3DSD7EJJSQAl/uq+kb8Y2oSA==
+X-Google-Smtp-Source: AA6agR6uGBP6sA6xiTk67d6e5N6CPYKgmdLRbR9Iasd8iydXnoRVaZa1bUt07RKUKqCJzenAxNbF/g==
+X-Received: by 2002:a05:6512:2255:b0:492:ebbb:5f0d with SMTP id i21-20020a056512225500b00492ebbb5f0dmr7027817lfu.304.1662903442721;
+        Sun, 11 Sep 2022 06:37:22 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id y24-20020a199158000000b004947984b385sm616645lfj.87.2022.09.11.06.37.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 06:37:22 -0700 (PDT)
+Message-ID: <c53ad0ba-7a0c-4f5b-e31d-ab63e2e9b6b7@linaro.org>
+Date:   Sun, 11 Sep 2022 15:37:21 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v7v4gjh7y4vagqlt"
-Content-Disposition: inline
-In-Reply-To: <31ab3c4d-9d5e-4e09-cbeb-a764fb467264@denx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RFC PATCH 01/10] dt-bindings: thermal: tsens: support per-sensor
+ calibration cells
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220910124701.4060321-1-dmitry.baryshkov@linaro.org>
+ <20220910124701.4060321-2-dmitry.baryshkov@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220910124701.4060321-2-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 10/09/2022 14:46, Dmitry Baryshkov wrote:
+> Allow specifing the exact calibration mode and calibration data as nvmem
+> cells, rather than specifying just a single calibration data blob.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../bindings/thermal/qcom-tsens.yaml          | 64 ++++++++++++++++---
+>  1 file changed, 54 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 038d81338fcf..b813f6f19c1d 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -77,18 +77,62 @@ properties:
+>        - const: critical
+>  
+>    nvmem-cells:
+> -    minItems: 1
+> -    maxItems: 2
+> -    description:
+> -      Reference to an nvmem node for the calibration data
+> +    oneOf:
+> +      - minItems: 1
+> +        maxItems: 2
+> +        description:
+> +          Reference to an nvmem node for the calibration data
+> +      - minItems: 5
+> +        maxItems: 35
+> +        description: |
+> +          Reference to an nvmem cells for the calibration mode, two calibration
 
---v7v4gjh7y4vagqlt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+s/an nvmem/nvmem/
 
-Hi,
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On Tue, Aug 23, 2022 at 05:59:33PM +0200, Marek Vasut wrote:
-> On 8/1/22 09:15, Hans de Goede wrote:
-> > On 8/1/22 04:57, Marek Vasut wrote:
-> > > Let user set input current limit via sysfs. This is useful in case th=
-ere
-> > > are multiple chargers connected to the device, each of which with its=
- own
-> > > arbitrary maximum current which it can provide, some of which may pro=
-vide
-> > > more than the default 500mA. In that case, userspace can listen for p=
-lug
-> > > events generated by each charger and adjust the current limit accordi=
-ngly,
-> > > e.g. to permit battery to charge faster.
-> > >=20
-> > > Note that the IINLIM is reset every time the bq25890 is disconnected =
-=66rom
-> > > a charger, so the userspace must adjust the limit repeatly on every p=
-lug
-> > > event.
-> > >=20
-> > > Signed-off-by: Marek Vasut <marex@denx.de>
-> >=20
-> > Thanks, patch looks good to me:
-> >=20
-> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->=20
-> Can this be applied now ?
 
-Thanks, queued to power-supply's for-next branch.
-
-Please make sure you are sending patches based on recent for-next
-branch next time. Your patch was from before eab25b4f93aa ("power:
-supply: bq25890: On the bq25892 set the IINLIM based on external
-charger detection") which was added in 5.18 :(
-
--- Sebastian
-
---v7v4gjh7y4vagqlt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMd2AcACgkQ2O7X88g7
-+ppg1g/9Gf3mdcWO1XbJOGNzNf+fGsu73a77CgN5MKuXOoNESb1YJXIn1wDdayBK
-nVVRm36bp5mxy+yXQsSf3GZA63rNKY00dPp1lbaSx7YgJb/ptUfziaSvyqtYnGWO
-7HAPBrmaLs9ymKaegSc6jXmMkjkK3Ow1XinhOKrFu7/7fi3t8y7qUG+tBa9qIcXR
-k7fyT6yzyg4edioIjHmt2LWUq/vC0CQsB0/Alv0TPK9dNwkRvxgualJmrn1wfKJa
-t54qPGtVJFNIs9J1lX7vXvEEXaNtGYMloO117OVMzu20/pHTwkmlAtEt6USThD0d
-zdxyCn2jjKcKHsIc65wi/5tjmEsdMexFGM6Qb1zTqtS23rshA6P+H6B4oYjQ38rL
-fAgqCTPav+Tqo8c+RuN1MngSrlraSGp7WUrldz9eRrdADLwFFdkNvWv0lEIlMIyO
-gFYmdPtwT+Hww9DReX/oQSj92SZsZICOdsqv3xx5TP3yH2GGoCeAweQSy0NIJQWz
-Nl+iHY0unOtmy+ze+MDXwV0vNmNw2ZlGgdglikd9VXC746zRSVAmd+eGFice67G9
-QTwHUg9yFOQsRILlVDXR+N9nw1NfScjv4zPvdc3VFiHImkUEaEEeFUjw0gJPf7Pr
-c5xzlgV//SYWlghlnFkjiv+zeBjKbIFS/wm5JvfX+4VlUSszVyA=
-=FAam
------END PGP SIGNATURE-----
-
---v7v4gjh7y4vagqlt--
+Best regards,
+Krzysztof
