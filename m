@@ -2,135 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E815B4C46
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Sep 2022 08:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393F75B4C8D
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Sep 2022 09:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIKGCm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Sep 2022 02:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S229464AbiIKH6A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Sep 2022 03:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiIKGCl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Sep 2022 02:02:41 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF4528E3A;
-        Sat, 10 Sep 2022 23:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662876161; x=1694412161;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=X3nGh2deOmHXffMmBLBZLiWJ36kF5JOTAJZQciA1cg8=;
-  b=n/EDAmfiUdXOxMoNDromksGNixPvu20Ovag7jHV87K7wsd/dlJtF/rzE
-   5U5BMtJYxcCFev+fuGomrf9NEuwUO6DoUqtzjgkQqRB46YBXuvOKBp51b
-   lHEYCBBVD9oYWhuGt/AzZOmlJn5WA6MJKk5gQiG9Cpy03L6WAPrg8ULlh
-   rA73/leD0g4er3wXoVudWsIQfneQsL3l0ecDm0cwxtzZ5cq2DcJEa8THx
-   QkK3HHhHmxNiionHbiPi4uijLgGvuU+JCrAw76qd60+96bH3k+PrdUJbM
-   Pdnqb/GyMBOeLzXLS892nMzpH7Pq7HOBLX/ptfnHeF3m47wHbwAhAA/MP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="383992869"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="383992869"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 23:02:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="758039261"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Sep 2022 23:02:39 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oXG3C-00012t-2V;
-        Sun, 11 Sep 2022 06:02:38 +0000
-Date:   Sun, 11 Sep 2022 14:02:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 58968b7be786652f48f712147e6f71831cfe684e
-Message-ID: <631d79e8.yiStyYaa6aEvt0eJ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229677AbiIKH57 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Sep 2022 03:57:59 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99E03AB3F
+        for <linux-pm@vger.kernel.org>; Sun, 11 Sep 2022 00:57:58 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id b35so8635943edf.0
+        for <linux-pm@vger.kernel.org>; Sun, 11 Sep 2022 00:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=qZ1BuQJx28wMXvsoVBMqJc5IKl69IQm9ZUTwaee9k38=;
+        b=WgtmVoxKYbKvYLatIH2oEI8qOXRR9PAzliGgj7jZqZZIJZ8nCi8KsueCgYszUMupU8
+         UwSjTZEb99Dod7HitrRQPf5uqihg6BKmOgi0/+niEcemlke1m9SZPecYWFh0mWwqYEXc
+         pDXSuaSUCjQNiP4QSfCOJmLf6Xbcamp5qjeWoI/ShH3b01Alt3C0YtjV3NYbX4Y7uE9v
+         09gpFgwcLLEoKSMP/hXrBc7u9cISRnLrpkSrZz0jpIhK18QCgWSHAtVU7DaBMCVeA/B2
+         grhB4ATtKtP4zSyZA/VRlqGzNCxyB8Ih0Z7nnIQPjYMtpBNQCCsqW3EX4SgsjbEp8XWf
+         SUYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=qZ1BuQJx28wMXvsoVBMqJc5IKl69IQm9ZUTwaee9k38=;
+        b=oXiJnKET2tlHSrvrvdlT6RllbNeKXtzS2Ilp7SoZsJ9tLr+KayjVYbtcHrg258lXW/
+         GBRqEelTSV6fjiCA/I1Wt7XxVIbFaK21ZaHb+N6PNW3h0UAaeEIit8hnw/ift0SnHMIX
+         O3B2bGtWWkNLF8kDYtGC3t0I+bbCMxQoYQJCYrz0+1C8lyypEmEvGLo3IXZfXmQO7rD6
+         /7zWrS1wwBi5FBkeVgdKE2ljbReHKcMfigmCaw8j1638t8gsWwBhziE0yP/c6SWwd/xC
+         IXm3ofqcRLnbytua+WGrUHlTdt6RG26sMTZ+7k0sB1+mbfJu58ScYm0JeNevOO+P5r10
+         ChDQ==
+X-Gm-Message-State: ACgBeo3ofsRAGnBd1W5SBjyrtIzanWzMqRuhVKYbMPpQKOPlmDWjJvrY
+        QPKVrjcPUpOoQfPq7utFKTMIyK+es98BbDmf+N1w/WahOyM=
+X-Google-Smtp-Source: AA6agR7+osthOjywaVGsAmf1PyC+ZtU4/m5wHWEsagoc3jvXaEaoEmgsSjVgRz4rqRsCvq3hNm6gXOMKQbc+fKrRI3A=
+X-Received: by 2002:a05:6402:501d:b0:443:1c7:ccb9 with SMTP id
+ p29-20020a056402501d00b0044301c7ccb9mr17954834eda.101.1662883077113; Sun, 11
+ Sep 2022 00:57:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Xhivat Hoxhiq <xhivo97@gmail.com>
+Date:   Sun, 11 Sep 2022 09:57:41 +0200
+Message-ID: <CAGtpHi=f1+HCL+4kbfYGCC+qrLZasrpdT4peMF6t8-h-5h8KWA@mail.gmail.com>
+Subject: Is Tigerlake Missing From intel_idle?
+To:     linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 58968b7be786652f48f712147e6f71831cfe684e  Merge branch 'pm-cpufreq' into bleeding-edge
+Hi!
 
-elapsed time: 723m
+I noticed that there is no mention of Tigerlake in the intel_idle driver.
+Is that by design or is it actually missing?
 
-configs tested: 53
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-x86_64                        randconfig-a004
-i386                          randconfig-a003
-x86_64                        randconfig-a006
-i386                          randconfig-a005
-x86_64                           allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                                defconfig
-arc                              allyesconfig
-arc                  randconfig-r043-20220911
-alpha                            allyesconfig
-i386                          randconfig-a014
-s390                 randconfig-r044-20220911
-riscv                randconfig-r042-20220911
-i386                          randconfig-a012
-i386                          randconfig-a016
-i386                             allyesconfig
-x86_64                        randconfig-a013
-m68k                             allyesconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a011
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-powerpc                          allmodconfig
-m68k                             allmodconfig
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a015
-x86_64                    rhel-8.3-kselftests
-arm                                 defconfig
-mips                             allyesconfig
-x86_64                           rhel-8.3-syz
-sh                               allmodconfig
-ia64                             allmodconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a005
-i386                          randconfig-a006
-hexagon              randconfig-r041-20220911
-i386                          randconfig-a013
-hexagon              randconfig-r045-20220911
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks!
+Xhivo
