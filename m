@@ -2,57 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2615B4B8B
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Sep 2022 06:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E815B4C46
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Sep 2022 08:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiIKEIg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Sep 2022 00:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S229771AbiIKGCm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Sep 2022 02:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiIKEIe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Sep 2022 00:08:34 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C36237FB5
-        for <linux-pm@vger.kernel.org>; Sat, 10 Sep 2022 21:08:34 -0700 (PDT)
+        with ESMTP id S229716AbiIKGCl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Sep 2022 02:02:41 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF4528E3A;
+        Sat, 10 Sep 2022 23:02:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662869314; x=1694405314;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=H1XO7fvDoNPhGNJLdO7pJ2Bmf8jk2VIr1Y2CNiymtl8=;
-  b=I0gZhRHaZySAV9H5jrLzpn4wL74sjFgRhq5Jc2oi35uwSI1+8PUnjTpv
-   i+t+5eGZ/9iLIUDiMt2alpxMVTENoLHDXgIvDWV6VqRFQXQR51rI0u/5c
-   I5Lpo2fJUsav07idrhSey0Xy4/nNDPCFfZON7mUEOuQXul8ErCorQ5/tU
-   VscPSUVIHMGwfIGjaO2kw7vFqxaBfhbTvPl+6gfbUT8EnHmFXcyFHmmf4
-   IEgwdRh82YePQZkS5PUvL+EzrtEQrE/dQAzEQrnHd69NvsK3iIUbdfGO3
-   xdQstCzWRrv6M1upDsU6A0OMnetegU9EDzi9Ir1PKfA7yawToqAdbY3cc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="297692501"
+  t=1662876161; x=1694412161;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=X3nGh2deOmHXffMmBLBZLiWJ36kF5JOTAJZQciA1cg8=;
+  b=n/EDAmfiUdXOxMoNDromksGNixPvu20Ovag7jHV87K7wsd/dlJtF/rzE
+   5U5BMtJYxcCFev+fuGomrf9NEuwUO6DoUqtzjgkQqRB46YBXuvOKBp51b
+   lHEYCBBVD9oYWhuGt/AzZOmlJn5WA6MJKk5gQiG9Cpy03L6WAPrg8ULlh
+   rA73/leD0g4er3wXoVudWsIQfneQsL3l0ecDm0cwxtzZ5cq2DcJEa8THx
+   QkK3HHhHmxNiionHbiPi4uijLgGvuU+JCrAw76qd60+96bH3k+PrdUJbM
+   Pdnqb/GyMBOeLzXLS892nMzpH7Pq7HOBLX/ptfnHeF3m47wHbwAhAA/MP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="383992869"
 X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="297692501"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 21:08:33 -0700
+   d="scan'208";a="383992869"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 23:02:40 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="566800664"
-Received: from clee6-mobl2.gar.corp.intel.com ([10.214.162.163])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2022 21:08:30 -0700
-Message-ID: <abe9bd8ca3620dae94b8788b62af53862f97c0f6.camel@intel.com>
-Subject: Re: [PATCH 1/2] powercap: intel_rapl: Add support for MeteorLake
- platforms
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Sun, 11 Sep 2022 12:08:18 +0800
-In-Reply-To: <CAJZ5v0hPh21mgTLT6jZf4=bZqNbsLqFnu41j9G3K5TTo3=YKHQ@mail.gmail.com>
-References: <20220910131542.22708-1-rui.zhang@intel.com>
-         <CAJZ5v0hPh21mgTLT6jZf4=bZqNbsLqFnu41j9G3K5TTo3=YKHQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+   d="scan'208";a="758039261"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Sep 2022 23:02:39 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXG3C-00012t-2V;
+        Sun, 11 Sep 2022 06:02:38 +0000
+Date:   Sun, 11 Sep 2022 14:02:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 58968b7be786652f48f712147e6f71831cfe684e
+Message-ID: <631d79e8.yiStyYaa6aEvt0eJ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,61 +63,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 2022-09-10 at 18:44 +0200, Rafael J. Wysocki wrote:
-> On Sat, Sep 10, 2022 at 3:12 PM Zhang Rui <rui.zhang@intel.com>
-> wrote:
-> > Add intel_rapl support for the MeteorLake platforms, which behave
-> > the
-> > same as RaptorLake platforms.
-> > 
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > ---
-> > 
-> > Note:
-> > This patch depends on commit 5515d21c6817
-> > ("x86/cpu: Add CPU model numbers for Meteor Lake") in the
-> > x86/urgent
-> > branch of tip tree.
-> 
-> So I think I will have to rebase the powercap branch on top of a
-> future -rc in order to apply this one.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 58968b7be786652f48f712147e6f71831cfe684e  Merge branch 'pm-cpufreq' into bleeding-edge
 
-Yeah, or we can wait for the next release cycle as this is not that
-urgent.
+elapsed time: 723m
 
-thanks,
-rui
-> 
-> > Note:
-> > This patch is made on top of commit 0d7a23b5f8e1
-> > ("powercap: intel_rapl: Add support for RAPTORLAKE_S") in the
-> > linux-next branch of pm tree to avoid conflict.
-> > 
-> > ---
-> >  drivers/powercap/intel_rapl_common.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/powercap/intel_rapl_common.c
-> > b/drivers/powercap/intel_rapl_common.c
-> > index 6812c1ca3100..949eb90f5733 100644
-> > --- a/drivers/powercap/intel_rapl_common.c
-> > +++ b/drivers/powercap/intel_rapl_common.c
-> > @@ -1111,6 +1111,8 @@ static const struct x86_cpu_id rapl_ids[]
-> > __initconst = {
-> >         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,          &rapl_defau
-> > lts_core),
-> >         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &rapl_defau
-> > lts_core),
-> >         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,        &rapl_defau
-> > lts_core),
-> > +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,          &rapl_defau
-> > lts_core),
-> > +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,        &rapl_defau
-> > lts_core),
-> >         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &rapl_defau
-> > lts_spr_server),
-> >         X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,           &rapl_defau
-> > lts_core),
-> > 
-> > --
+configs tested: 53
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+x86_64                        randconfig-a004
+i386                          randconfig-a003
+x86_64                        randconfig-a006
+i386                          randconfig-a005
+x86_64                           allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                                defconfig
+arc                              allyesconfig
+arc                  randconfig-r043-20220911
+alpha                            allyesconfig
+i386                          randconfig-a014
+s390                 randconfig-r044-20220911
+riscv                randconfig-r042-20220911
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                             allyesconfig
+x86_64                        randconfig-a013
+m68k                             allyesconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a011
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+powerpc                          allmodconfig
+m68k                             allmodconfig
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a015
+x86_64                    rhel-8.3-kselftests
+arm                                 defconfig
+mips                             allyesconfig
+x86_64                           rhel-8.3-syz
+sh                               allmodconfig
+ia64                             allmodconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a005
+i386                          randconfig-a006
+hexagon              randconfig-r041-20220911
+i386                          randconfig-a013
+hexagon              randconfig-r045-20220911
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
