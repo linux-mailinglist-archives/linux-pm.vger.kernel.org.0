@@ -2,61 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE06D5B4D7A
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Sep 2022 12:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB715B4ED7
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Sep 2022 14:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiIKKfZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Sep 2022 06:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S230103AbiIKMn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Sep 2022 08:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiIKKfS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Sep 2022 06:35:18 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4AD1403C
-        for <linux-pm@vger.kernel.org>; Sun, 11 Sep 2022 03:35:17 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id b35so8910001edf.0
-        for <linux-pm@vger.kernel.org>; Sun, 11 Sep 2022 03:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date;
-        bh=q3834ATZM4uW4E7+m37Jcaz9Vq5t/5NQIEJwA7O+k6o=;
-        b=XvBH1YOQqIJRGxyVtPX6Xm+v6zpD+aOfSya3dqGzrRCBg4ZLiFocTjzGRPwT6b/2dM
-         z8ZP92vNuxCenE9IK28/vTB9tNXB6tO1MpPfpsnYUznLWyH+hZDQdKMbbMSQw74bTstY
-         v6XHskf4vginFjZJS18qQBtTBaME392J8ppkFxAuG3BsiSXvw/Gtyk6N0mppsEVq2uwH
-         mJk5KqbLUih8OU5iODf4sssjKPCkkCEmK6xFsdbvo7hyMqh2XiHe/VX9xOHT+MI3Z6te
-         Ty9LhMXUpFGY585zGqtcmpVRaEU9tgmwRaSTOaqdDTTjmm1F6elnwsQPGkRLLMJ4ODni
-         T0uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=q3834ATZM4uW4E7+m37Jcaz9Vq5t/5NQIEJwA7O+k6o=;
-        b=NbzXOl3LcpiZALs4kPIafgM0kBZA2Atj+rgbBWnkgu6/UjRCDvoc9zpngQdZGbIqyW
-         ixMU7S6YpcXY5ViKEjjhlqTX9w62x84hL2rptW1DgBlcio6KKMlq/J7x25X8isC/II8q
-         lN9hcauv1YJdbQipQSEjmjNnsyt3h9HOzDTBYV/VXd/s5JKOqNsn3m46XuZnJ177mVqD
-         RdELIrDdOcrbsQhNsEgm8Ye2sJL96HDcN0McEI33NKc4Pt9JfqVm/FC5YiP7vIlnxcau
-         +6BCZExOIVm5oRAJsSDnMNclGgDhJsL07dIE52pgT4cmVjFR6Yxhtyvp0E8BpTEGcCcs
-         MHzA==
-X-Gm-Message-State: ACgBeo1au9lCHNCoDqQ6zj1RzxX9Wajm2tMH04y6IJdj14OlQ8fzCHZX
-        J1Yc9x5JEn/xGk3ltbN2p3G4yWMD5dB/YvtR7FGazjkZCxI=
-X-Google-Smtp-Source: AA6agR5kiwVnqu9KYElwqnZI8CfqSaCYPBvf6ZVBZejwDC8VjlQxPYwBEH9+3D7y1dM5coQjSs4N1o13nhW8mCtUmPo=
-X-Received: by 2002:a05:6402:148e:b0:44e:aa8c:abc5 with SMTP id
- e14-20020a056402148e00b0044eaa8cabc5mr18271631edv.145.1662892516205; Sun, 11
- Sep 2022 03:35:16 -0700 (PDT)
+        with ESMTP id S230090AbiIKMn6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Sep 2022 08:43:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04F63340D
+        for <linux-pm@vger.kernel.org>; Sun, 11 Sep 2022 05:43:57 -0700 (PDT)
+Received: from mercury (unknown [77.241.232.19])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4F45A66015B2;
+        Sun, 11 Sep 2022 13:43:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662900236;
+        bh=ozj89aYMP7UzyKgrx94MCKLrztITpbzzMT/JnSNJAuQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SHNSiZSA1Q2EIaGkOVK3hWo3gErCODlgc0zAQx4pMPP/bovAOzlEVEX138L8diPAt
+         fDzHDOBdOpp+XxDxb3KwqvNcGPiVPg/Sn8k4+REKhLRAnyot1wErpb+mfrpHpsFVBk
+         T4SRVMIDcCEns2Hzwo6Y/XMX2dn3HXKzUgtjybDkNtDnTuMftE4Imt003SsfJntdlt
+         2ZGNTJnJYDN6Hs65VwRVAiyb7d29Pw/WhEeIgNz+pNESLPmTBUDPYuB4LIkcXtTtU6
+         UhHDcLV3O5v1Zkf/oVGwX4QQZcc4PjRTB44g/5lxn74/+dUG38Muf94tnOG5fAM624
+         Gz6tVOp4Y8yIA==
+Received: by mercury (Postfix, from userid 1000)
+        id 4959F1063360; Sun, 11 Sep 2022 14:43:52 +0200 (CEST)
+Date:   Sun, 11 Sep 2022 14:43:52 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Marek Vasut <marex@denx.de>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2] power: supply: bq25890: Add support for setting IINLIM
+Message-ID: <20220911124352.xpdzp2vdmoroqlsm@mercury.elektranox.org>
+References: <20220801025727.778218-1-marex@denx.de>
+ <b8235890-7878-c982-caf2-1c7a69859f69@redhat.com>
+ <31ab3c4d-9d5e-4e09-cbeb-a764fb467264@denx.de>
 MIME-Version: 1.0
-References: <CAGtpHi=f1+HCL+4kbfYGCC+qrLZasrpdT4peMF6t8-h-5h8KWA@mail.gmail.com>
- <87b82371d2a209dda3d63f57a3cc259783577616.camel@intel.com>
-In-Reply-To: <87b82371d2a209dda3d63f57a3cc259783577616.camel@intel.com>
-From:   Xhivat Hoxhiq <xhivo97@gmail.com>
-Date:   Sun, 11 Sep 2022 12:35:00 +0200
-Message-ID: <CAGtpHi=bj9W3J-OcUW8UNDoXXVY3rMazktEwoEcagZ6BZXDzTQ@mail.gmail.com>
-Subject: Re: Is Tigerlake Missing From intel_idle?
-To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v7v4gjh7y4vagqlt"
+Content-Disposition: inline
+In-Reply-To: <31ab3c4d-9d5e-4e09-cbeb-a764fb467264@denx.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,29 +57,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rui,
 
-Thanks for the reply!
+--v7v4gjh7y4vagqlt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> intel_idle driver works with the cstate provided via _CST ACPI control
-> method on any platform by default.
+Hi,
 
-I see. Does this mean that C-States are entirely up to the vendor?
+On Tue, Aug 23, 2022 at 05:59:33PM +0200, Marek Vasut wrote:
+> On 8/1/22 09:15, Hans de Goede wrote:
+> > On 8/1/22 04:57, Marek Vasut wrote:
+> > > Let user set input current limit via sysfs. This is useful in case th=
+ere
+> > > are multiple chargers connected to the device, each of which with its=
+ own
+> > > arbitrary maximum current which it can provide, some of which may pro=
+vide
+> > > more than the default 500mA. In that case, userspace can listen for p=
+lug
+> > > events generated by each charger and adjust the current limit accordi=
+ngly,
+> > > e.g. to permit battery to charge faster.
+> > >=20
+> > > Note that the IINLIM is reset every time the bq25890 is disconnected =
+=66rom
+> > > a charger, so the userspace must adjust the limit repeatly on every p=
+lug
+> > > event.
+> > >=20
+> > > Signed-off-by: Marek Vasut <marex@denx.de>
+> >=20
+> > Thanks, patch looks good to me:
+> >=20
+> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>=20
+> Can this be applied now ?
 
-> I recalled that I did some measurement for TGL, but didn't find any
-> power/performance improvement using the measured latency numbers.
+Thanks, queued to power-supply's for-next branch.
 
-In terms of laptops, how device dependent is this? Would a customized table
-provide more consistent results over many different machines?
+Please make sure you are sending patches based on recent for-next
+branch next time. Your patch was from before eab25b4f93aa ("power:
+supply: bq25890: On the bq25892 set the IINLIM based on external
+charger detection") which was added in 5.18 :(
 
-> May I know why you need a customized table?
+-- Sebastian
 
-To squeeze as much battery life as I can! I'll be honest, I am very new to this
-so I assumed the missing table for TGL was an issue. I wasn't aware _CST ACPI
-control is a thing. Would you say it's a wasted effort to have a customized
-table for TGL? Every other platform seems to have them.
+--v7v4gjh7y4vagqlt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Any other pros/cons to having a customized cstate table?
+-----BEGIN PGP SIGNATURE-----
 
-Cheers,
-Xhivo
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMd2AcACgkQ2O7X88g7
++ppg1g/9Gf3mdcWO1XbJOGNzNf+fGsu73a77CgN5MKuXOoNESb1YJXIn1wDdayBK
+nVVRm36bp5mxy+yXQsSf3GZA63rNKY00dPp1lbaSx7YgJb/ptUfziaSvyqtYnGWO
+7HAPBrmaLs9ymKaegSc6jXmMkjkK3Ow1XinhOKrFu7/7fi3t8y7qUG+tBa9qIcXR
+k7fyT6yzyg4edioIjHmt2LWUq/vC0CQsB0/Alv0TPK9dNwkRvxgualJmrn1wfKJa
+t54qPGtVJFNIs9J1lX7vXvEEXaNtGYMloO117OVMzu20/pHTwkmlAtEt6USThD0d
+zdxyCn2jjKcKHsIc65wi/5tjmEsdMexFGM6Qb1zTqtS23rshA6P+H6B4oYjQ38rL
+fAgqCTPav+Tqo8c+RuN1MngSrlraSGp7WUrldz9eRrdADLwFFdkNvWv0lEIlMIyO
+gFYmdPtwT+Hww9DReX/oQSj92SZsZICOdsqv3xx5TP3yH2GGoCeAweQSy0NIJQWz
+Nl+iHY0unOtmy+ze+MDXwV0vNmNw2ZlGgdglikd9VXC746zRSVAmd+eGFice67G9
+QTwHUg9yFOQsRILlVDXR+N9nw1NfScjv4zPvdc3VFiHImkUEaEEeFUjw0gJPf7Pr
+c5xzlgV//SYWlghlnFkjiv+zeBjKbIFS/wm5JvfX+4VlUSszVyA=
+=FAam
+-----END PGP SIGNATURE-----
+
+--v7v4gjh7y4vagqlt--
