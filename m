@@ -2,49 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809E45B585D
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 12:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FD65B585A
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 12:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiILK2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Sep 2022 06:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S229815AbiILK2o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Sep 2022 06:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiILK2k (ORCPT
+        with ESMTP id S230187AbiILK2k (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 06:28:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564C83A140
-        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 03:28:39 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0016B386A2;
+        Mon, 12 Sep 2022 03:28:38 -0700 (PDT)
 Received: from mercury (unknown [185.122.133.20])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB2946601FE3;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B7B256601FE0;
         Mon, 12 Sep 2022 11:28:37 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662978518;
-        bh=iNmBW/pZ5k1lcPoOOq9rLFDlvwD6nReZtUJcntrWTbc=;
+        s=mail; t=1662978517;
+        bh=DRiZC5zI3w4caCIF0yPN0iBcoObFd36g1UxxkKSXqgQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VfuWxOLm/dMqL4Iln1pEUdxNpZJLoh6ydeqg+K0CZ25w+/9eLby4s32IJMws4TVbw
-         IwJQdDsRWYs8Sg1HiWsuAdn1eIcpmL4V1H4G0CMH42DhXxhxRxlOOGJ80xZcJVsEyM
-         rMeqfm6+kDQeydz9a3z4l3UGFWdsZdsPHgl5xt1IzuVEvtycFOIJUHPXJwuCHHMipP
-         +VBHSb3nhelnyGP5M291toxY2rH913HNBcb6VcbVaWTeQQ+F5JBzNFGsGqivkz0eP+
-         CkMgFMBz6bbTa6vD25drO+u0gJqpD0WwxEWzOqHYxwSow5UPXvmQ09OFyeSeFY6As6
-         bzZk6FpqbPDxA==
+        b=M4BzXAj26aLaZmdDj4BImvIfeWREijDpm2B8zCBilMMWF9oGicJ0hITLLrr5f9y74
+         C+ZqG//Lc1lwKZefepmYeGPis009R2ZQUPqeWOErugyfJ8l2mVECA8t0ojmQ8RYRbN
+         7iddZ0DcsLusCLzZxKG90rwHvBHimtf0TgL0TC4EUMwAzsv3MbE3OU00VDXSGWDuDl
+         7aKShpsTj1Lh9CiTlI+F6/SALVXMxe1wO4fJC+ODcP1h9vV5tzBe/8nmrGiJpCGOaX
+         lf08Db8RLQG8YXvU2lWjlGC9tzINW4SyesnxpHdgGFZfcD6OftcN6KYv5oWm8sVA/6
+         6zsLXIA7ijVJQ==
 Received: by mercury (Postfix, from userid 1000)
-        id CA924106335F; Sun, 11 Sep 2022 14:36:02 +0200 (CEST)
-Date:   Sun, 11 Sep 2022 14:36:02 +0200
+        id 403B81063360; Sun, 11 Sep 2022 14:55:45 +0200 (CEST)
+Date:   Sun, 11 Sep 2022 14:55:45 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: bq25890: Disable PUMPX_EN on errors
-Message-ID: <20220911123602.nzti4urhf5th7ulo@mercury.elektranox.org>
-References: <20220731100228.32920-1-hdegoede@redhat.com>
+To:     Mithil Bavishi <bavishimithil@gmail.com>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        tony@atomide.com, linux@armlinux.org.uk, contact@paulk.fr
+Subject: Re: [PATCH 03/10] power: reset: Add TWL6030 power driver, with
+ minimal support for power off
+Message-ID: <20220911125545.73afzbirtnsdbmgo@mercury.elektranox.org>
+References: <20220820071659.1215-1-bavishimithil@gmail.com>
+ <20220820071659.1215-4-bavishimithil@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7ub7uiy6quoyrep2"
+        protocol="application/pgp-signature"; boundary="kq6iicrq5qwpzlb4"
 Content-Disposition: inline
-In-Reply-To: <20220731100228.32920-1-hdegoede@redhat.com>
+In-Reply-To: <20220820071659.1215-4-bavishimithil@gmail.com>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
@@ -56,63 +63,198 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---7ub7uiy6quoyrep2
+--kq6iicrq5qwpzlb4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, Jul 31, 2022 at 12:02:28PM +0200, Hans de Goede wrote:
-> When bq25890_pump_express_work encounters an errors disable
-> the PUMPX_EN flag, just like the work does on a successful exit.
+On Sat, Aug 20, 2022 at 12:46:53PM +0530, Mithil Bavishi wrote:
+> From: Paul Kocialkowski <contact@paulk.fr>
 >=20
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> This adds a TWL6030 power driver, that currently only supports powering
+> off the device when the TWL is used as system power controller.
+>=20
+> This driver might be extended to support more power-related features of t=
+he
+> TWL6030.
+>=20
+> Signed-off-by: Paul Kocialkowski <contact@paulk.fr>
+> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
 > ---
+>  drivers/power/reset/Kconfig         | 10 ++++
+>  drivers/power/reset/Makefile        |  1 +
+>  drivers/power/reset/twl6030-power.c | 93 +++++++++++++++++++++++++++++
+>  3 files changed, 104 insertions(+)
+>  create mode 100644 drivers/power/reset/twl6030-power.c
+>=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index 39117b697..5156b1613 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -316,3 +316,13 @@ config TWL4030_POWER
+>            and load scripts controlling which resources are switched off/=
+on
+>            or reset when a sleep, wakeup or warm reset event occurs.
+>  endif
+> +
+> +config TWL6030_POWER
+> +	bool "TI TWL6030 power resources"
+> +	depends on TWL4030_CORE && ARM
+> +	help
+> +	  Say yes here if you want to use the power resources on the
+> +	  TWL6030 family chips.
+> +
+> +	  When used as system power controller, this driver allows turning off
+> +	  the main power supply.
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index e9db25b09..692d51cef 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -37,3 +37,4 @@ obj-$(CONFIG_POWER_RESET_SC27XX) +=3D sc27xx-poweroff.o
+>  obj-$(CONFIG_NVMEM_REBOOT_MODE) +=3D nvmem-reboot-mode.o
+>  obj-$(CONFIG_POWER_MLXBF) +=3D pwr-mlxbf.o
+>  obj-$(CONFIG_TWL4030_POWER) +=3D twl4030-power.o
+> +obj-$(CONFIG_TWL6030_POWER) +=3D twl6030-power.o
+> diff --git a/drivers/power/reset/twl6030-power.c b/drivers/power/reset/tw=
+l6030-power.c
+> new file mode 100644
+> index 000000000..78c8a02a3
+> --- /dev/null
+> +++ b/drivers/power/reset/twl6030-power.c
+> @@ -0,0 +1,93 @@
+> +/*
+> + * TWL6030 power
+> + *
+> + * Copyright (C) 2016 Paul Kocialkowski <contact@paulk.fr>
+> + *
+> + * This file is subject to the terms and conditions of the GNU General
+> + * Public License. See the file "COPYING" in the main directory of this
+> + * archive for more details.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
+> + */
 
-Thanks, queued to power-supply's for-next branch.
+Please use SPDX format for license.
+
+> +
+> +#include <linux/module.h>
+> +#include <linux/pm.h>
+> +#include <linux/mfd/twl.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +
+> +#define TWL6030_PHOENIX_DEV_ON		0x25
+> +
+> +#define TWL6030_PHOENIX_APP_DEVOFF	BIT(0)
+> +#define TWL6030_PHOENIX_CON_DEVOFF	BIT(1)
+> +#define TWL6030_PHOENIX_MOD_DEVOFF	BIT(2)
+> +
+> +void twl6030_power_off(void)
+> +{
+> +	int err;
+> +
+> +	err =3D twl_i2c_write_u8(TWL6030_MODULE_ID0, TWL6030_PHOENIX_APP_DEVOFF=
+ |
+> +		TWL6030_PHOENIX_CON_DEVOFF | TWL6030_PHOENIX_MOD_DEVOFF,
+> +		TWL6030_PHOENIX_DEV_ON);
+> +	if (err)
+> +		pr_err("TWL6030 Unable to power off\n");
+> +}
+> +
+> +static bool twl6030_power_use_poweroff(struct device_node *node)
+> +{
+> +	if (of_property_read_bool(node, "ti,system-power-controller"))
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id twl6030_power_of_match[] =3D {
+> +	{
+> +		.compatible =3D "ti,twl6030-power",
+> +	},
+> +	{ },
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, twl6030_power_of_match);
+> +#endif	/* CONFIG_OF */
+> +
+> +static int twl6030_power_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *node =3D pdev->dev.of_node;
+> +
+> +	if (!node) {
+> +		dev_err(&pdev->dev, "Platform data is missing\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Board has to be wired properly to use this feature */
+> +	if (twl6030_power_use_poweroff(node) && !pm_power_off)
+> +		pm_power_off =3D twl6030_power_off;
+
+Please devm_register_sys_off_handler or devm_register_power_off_handler().
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int twl6030_power_remove(struct platform_device *pdev)
+> +{
+> +	return 0;
+> +}
+
+Empty remove function can be removed.
+
+> +
+> +static struct platform_driver twl6030_power_driver =3D {
+> +	.driver =3D {
+> +		.name	=3D "twl6030_power",
+> +		.of_match_table =3D of_match_ptr(twl6030_power_of_match),
+
+The driver is not useful without CONFIG_OF, so you can just remove the
+#ifdef around twl6030_power_of_match and drop of_match_ptr here.
 
 -- Sebastian
 
->  drivers/power/supply/bq25890_charger.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/suppl=
-y/bq25890_charger.c
-> index 852a6fec4339..056260b2cb76 100644
-> --- a/drivers/power/supply/bq25890_charger.c
-> +++ b/drivers/power/supply/bq25890_charger.c
-> @@ -946,6 +946,7 @@ static void bq25890_pump_express_work(struct work_str=
-uct *data)
-> =20
->  	return;
->  error_print:
-> +	bq25890_field_write(bq, F_PUMPX_EN, 0);
->  	dev_err(bq->dev, "Failed to request hi-voltage charging\n");
->  }
-> =20
+> +	},
+> +	.probe		=3D twl6030_power_probe,
+> +	.remove		=3D twl6030_power_remove,
+> +};
+> +
+> +module_platform_driver(twl6030_power_driver);
+> +
+> +MODULE_AUTHOR("Paul Kocialkowski <contact@paulk.fr>");
+> +MODULE_DESCRIPTION("Power management for TWL6030");
+> +MODULE_LICENSE("GPL");
 > --=20
-> 2.37.1
+> 2.25.1
 >=20
 
---7ub7uiy6quoyrep2
+--kq6iicrq5qwpzlb4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMd1jIACgkQ2O7X88g7
-+pp0Zg/5AZsqRtgPD86cL7Vzaze8LjaCISEBX/TC9Z6KvH5+QZEmLX7awwL27eQ1
-rqKhBfBZUZBy9n0YMjLd0WzxzhS/FEsDKBqy4YXR/jTEIw6x/NgMs2Qr/Y5VsblR
-AA81QllcyJme0GaGNjXAuGa25TUcCQH8aJSUXN2+weCe2IYZ4vNfc3oJKmGKABfF
-PxrnsSlv2HBgBA8HPXI8wwx0X/3g9s8NlTpbNZEDjlmrbVs2Z/0PI0KyDJAPNFOT
-I4x00NC7j0UrnOASEgN/zLiGDVuxegaZ5vEpLa9/NP6xsAlYL6W22d+z8CchVTPY
-JBm55KasUEcPjn6//4/gRfD1YMmF8FCAu4F+mWlEMGgzQwNT1G2yXk7bCPy/1OKZ
-05nTafJFCh0dFGZtUoXZDnriUH/BVKRWzLcRZ0HaZ7q+RISw+JKcEvDqLhoba/9y
-2R39sIsZtzZ2l1qSddllCHIUm7FHfptIqr18YasLeo28Dfpav8FRtqd0jzH/uQVX
-QReOWHmWgvCylZW0t5t0kg4EQN6NUe8QrJk5RcUw9B6TrMmPudYqdIOVpKTwbGFf
-rsxx6ausBeJYoG6zlsWYqOLEnafILOCcxa/QjL4YEDguFzAQEcmC2a6AXW7vDhm/
-r03kSeYYpz7P+jfWj8brUXGgJ0ChIDYYtJsgzEKcmt4wgA16SG8=
-=Cz/i
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMd2s0ACgkQ2O7X88g7
++pq7pA//c8rhoEaTQYCtLWztRJSjzmHr9CN0dA3thpfcfumLKVuJwZ8G7nzx60Ye
+vaiDHTiN5yAjh6Ahwmm+qNuljUDIkt2bmLCSVGn+YimpHq1Rh+hl6JSsXIkdFQ8c
+Ko/R8PwW/kGRlh87aD2Doeau1CBU3uU4XZ0xhc1cm0BLCgaPHSRN9Gq7ClQgrb6h
+tgAoe/dAeV3fNusbsUhIKcX9AfGVl8tchy5Vg2AdSdIQGI2HlV2kOZrx+eP0CUm2
+XIE1VtlED5ApAaYcsVSOSEgU/YjB9Q1ME70ZyW5rpTNs6IEQ/jHZ7szZEQwcLHrm
+LgcDH8BS8KTiglbSc/L+PhSyRHQBVe47o1aI8Nu5PNXS/B4EkG92twf1fJ/T4lRE
+lKWj8vs4swRI0jyQC/mwtpfPuxxHysmFoKzR2evPlZ7IIaa84of7biwWEERrv083
+AAiVcdyGbaPFq81NZgjNyOxs4wLK8WrLkwUhuqr278aeUi656xPGSYPh0pHv/qsR
+ZG4Uqyv1luV3ZyhAavMgqZHJRZHDxxPBaHYmoVOJdZ/byF0G9t5W1ZOsopFtm7Wi
+8L+feuz3X2Vg6cVW487ryhbcEL82BrIKdb5t1GkNTsGE4SOhlHzZSCvyD0xBrwGP
+cqwSkgMEx8OzgIxY+x/x6uGk4vx2hDoebvhG9yH7DNYJ0IE5ST8=
+=rfEv
 -----END PGP SIGNATURE-----
 
---7ub7uiy6quoyrep2--
+--kq6iicrq5qwpzlb4--
