@@ -2,72 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3FF75B5ADD
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 15:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103165B5C0B
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 16:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiILNIc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Sep 2022 09:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S229942AbiILOR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Sep 2022 10:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiILNIc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 09:08:32 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D90529829
-        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 06:08:27 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 9so9586400ljr.2
-        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 06:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=osSAgKM1j6DRNQcQXA842NXUQk2GubTJs0svjrfNTko=;
-        b=dStm6lOrJO7AToXKpBAlpj8MbwpyjCgfRoc3/Tj19HyZapbdxxjbq+ByzUe83LZfI9
-         0thg7be7zw5ttafOSGrOfkJIraXqmajGxzDqNrUmrAGtRCZGyJ8ERrCEOleGmlvChj9L
-         EgtdLs8r5/jk6wgDY25X+0HJcpRHrMbcZDJ5Xh5GjfO5geWWVWNiPbMoOzkYc9K0v/1m
-         /OaZ9qhxRvzCd/YuyxGcM6Rxrdp72Jo5yiYKCwvqtiRLrxX35RLhedPilqiXx9CyDdxx
-         8hH8gAGdyRj/pPm15VWjylGwRsqQV0mCix3RzxWXyPtSNBPFAe+hIdEINpywOLIHRapY
-         0sgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=osSAgKM1j6DRNQcQXA842NXUQk2GubTJs0svjrfNTko=;
-        b=5VuI5e60X6+1PFg6YmhZC17SSYg7roM3U2/L4JB3Jk/rxFDa0Ca2mWp8gfBrlTqyC9
-         Tka55XtSlgLpeUAuiwZz/tTquHzB9SPeGnO1uYpsQ3zaEndjf/m5ebQFvNJjY+905AEM
-         iOjKtmw4oQN1ottZj91KEIDwCitVPqoOzFTpTO1rZskAxfa6WKbW6LPz6q3lg7IEihSc
-         VX2X0XdoGlzI0qq00H7RM0+zEiqBQ1bffKg4GpZipV8re5YgkkcrW/Os4o6geKT6M6gI
-         V/OHfVMazM394u1mhSt0es+zG5Z7XQfDI8r/eBv7JReP41thuuhJk6NjRIL4ip0czcjM
-         UsIg==
-X-Gm-Message-State: ACgBeo10PEVz27Xb9eJvPRjLylhcFhLWsJadd5KHGbBjI3mx7hCi9S9M
-        etMtKBCUl4nWUj+QklPYwWvUYQzMDPy36I9QPQ==
-X-Google-Smtp-Source: AA6agR4p8uo6L7edF+yxAP+dKOVAvjGgi3vx3DvXqJqUPQjmVbWwEHgB8k/Th4amBJH9EPAczX8X+Vh8X/LtQXsS/jE=
-X-Received: by 2002:a2e:a812:0:b0:261:8f2d:9530 with SMTP id
- l18-20020a2ea812000000b002618f2d9530mr7328907ljq.251.1662988105586; Mon, 12
- Sep 2022 06:08:25 -0700 (PDT)
+        with ESMTP id S229878AbiILOR2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 10:17:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5E925C6B;
+        Mon, 12 Sep 2022 07:17:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A962B80D55;
+        Mon, 12 Sep 2022 14:17:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582EBC433D6;
+        Mon, 12 Sep 2022 14:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662992244;
+        bh=jTbsk7yoEK+AZ3vZc8ogcuLE+gwzEOpP/ZeZUQAejUI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N2TPTBsaMrUDjAOP8g3X0PYhgmGhVVWX1TIzIUvPGYLN7AmbGJxb2/Ic7DAZhyk42
+         eFq6z/JznWLmMAZgq1GXf9n9Wg/VGkhgbyHCGWX/007Zwc9Ux8qoBDAP6C23y0ewil
+         y5p02FwkM+hYHeoqwFOG2LkrcWBPDZLMveUnibioOokNllXzjEf6G1eddFSovN6I5K
+         P/cWAszPKXKx60FDqyoqqX4cRMSTPEBiFrEYOIu2SixK90Ad9briXm30zOTsT3Uy09
+         Qlue/SDeCQ2RUUFFdjBTSmNHI6Apo3H5rfm/b+2kpwAuvxDHWq38glaz9yvf0j7TN6
+         TX2iQZrkheScQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Marek Vasut <marex@denx.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH -next] power: supply: bq25890: Fix enum conversion in bq25890_power_supply_set_property()
+Date:   Mon, 12 Sep 2022 07:15:53 -0700
+Message-Id: <20220912141553.1743568-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Received: by 2002:a05:6504:750:b0:1e7:2f02:63f with HTTP; Mon, 12 Sep 2022
- 06:08:24 -0700 (PDT)
-Reply-To: michellegoodman035@gmail.com
-From:   Michelle Goodman <michellegoodman035@gmail.com>
-Date:   Mon, 12 Sep 2022 13:08:24 +0000
-Message-ID: <CAPJ5U1-dGwzE6+3YLzd1Ea21Zgs7Oh8qJF3Z8aoLQUbSWb5vQw@mail.gmail.com>
-Subject: Hallo
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hallo, ich hoffe du hast meine Nachricht erhalten.
-Ich brauche schnelle Antworten
+Clang warns:
 
-Vielen Dank.
-Michelle
+  drivers/power/supply/bq25890_charger.c:625:40: error: implicit conversion from enumeration type 'enum bq25890_fields' to different enumeration type 'enum bq25890_table_ids' [-Werror,-Wenum-conversion]
+                  lval = bq25890_find_idx(val->intval, F_IINLIM);
+                         ~~~~~~~~~~~~~~~~              ^~~~~~~~
+  1 error generated.
+
+Use the proper value from the right enumerated type, TBL_IINLIM, so
+there is no more implcit conversion. The numerical values of F_IINLIM
+and TBL_IINLIM happen to be the same so there is no change in behavior.
+
+Fixes: 4a4748f28b0b ("power: supply: bq25890: Add support for setting IINLIM")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1707
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/power/supply/bq25890_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index f5368be32843..e6bd60fef0f6 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -622,7 +622,7 @@ static int bq25890_power_supply_set_property(struct power_supply *psy,
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+-		lval = bq25890_find_idx(val->intval, F_IINLIM);
++		lval = bq25890_find_idx(val->intval, TBL_IINLIM);
+ 		return bq25890_field_write(bq, F_IINLIM, lval);
+ 	default:
+ 		return -EINVAL;
+
+base-commit: f52c4d5f0bb486bc515b5f8a56130aea69fb29db
+-- 
+2.37.3
+
