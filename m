@@ -2,138 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF085B54E3
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 08:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7115B56A2
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 10:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiILG5b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Sep 2022 02:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S229926AbiILIvJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Sep 2022 04:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiILG51 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 02:57:27 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D686129836;
-        Sun, 11 Sep 2022 23:57:21 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id z187so7688046pfb.12;
-        Sun, 11 Sep 2022 23:57:21 -0700 (PDT)
+        with ESMTP id S229468AbiILIvI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 04:51:08 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CF22AE28
+        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 01:51:03 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id q62-20020a17090a17c400b00202a3497516so5157798pja.1
+        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 01:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=RH/VDeel2O1YnlzpP/dZvddnsVEsPqbgyyssL39vics=;
-        b=gOb/2EOHn/DXorTgYSkaeK/VP0b+XX5cx8PHCJXZwWKVQ/UlOotxXM2VVtmKmdcJqr
-         01FQqzVaQHC+N0ptiQjT/sTCtY5ZhOua1T3KdBpBc9wqNixcEhVA5FsiUcY64S9vfmvf
-         xM/QCRBFfBjzHB0Mf2uVlZLMclOKmqegY6rn6rKWYls9USHG345uJbaVzKjqBVYl8r9r
-         OdKDLuP9bxEUY8EWJt8mhgOyVOQtNCG08xImsPvYQ6do50kbpEjdCu9XROp0UycaBVMQ
-         Z9mMUqFhOu/lCHxqnOlmftitCXlEcXCCTAUJphXYhB8HNscg+/6QHhJHdfY4yuH1Rf+9
-         2CSw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/UeNpP+VC97GxtM/tp6ip0ihWytOFO+8NfMTiiZb64A=;
+        b=Tk2ZeLrKXwzkwyP2gg/3iL/biwqdAmBEtphjyT6uO6r63r19dU2BGwwnqRfoxF46wk
+         wgDK0HlRY1LYsPaHrVcBxLZ9wG07D78g2CrMCLX6QvgJ3nXDqXGR6q68U0uov3lpzkbW
+         bhlec8jh+BMtVOwvN9cBG5oZ+6bCrVZSjh0FqfJBuAQoXFpdxM2QBmCOozaZBka6uc8/
+         6VwN8sWSz0n4R/TQZii3awQ9itFtyGUiGSa06QGjbDJW0RDrV4uBPT5eEGC/noMPYcsR
+         ZZ88nGS8NU3vmBnwgyIZ/gnhNltoBswVTMhJ/o3PI01yL+rcEmA/nN/j0mLybKNSejNV
+         60lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RH/VDeel2O1YnlzpP/dZvddnsVEsPqbgyyssL39vics=;
-        b=GdPcGmMz+qOOzrDiG/bZhdhT1Ug+TbNLlIaMc/8fXw3t7hIfuQbc/lFRm0LAcOpUVa
-         fNi6nDT5fvqhJ8vtVnbWP343gv+cuzm0UbwAmc7l98pPgm0Ix/XenwhA6Mgo1Ki5Kg+l
-         a5roOW0N91M/kob2mm7wDMnsadoNPPT3KgrLGljOdIksOVjbCMOeKqzJhKpRcMnrCtXW
-         rjzSMG3Kno5Q4P9b30A6iCq2W3IGXBGh71dKDtthteDxCxPBfXtth37hzZ0UUCyN4ywA
-         5LnonRiZ4Mo/6mJrUSR4ngPCZ8rB2tDkTh6KeqaTOrgWIh3ns+x2e5BkOpdpZM4RCUDP
-         Fcqg==
-X-Gm-Message-State: ACgBeo0MlqLZNALV/WDiZFCCUigS5v4G+4MUhV99Dx5faWyOZYJlZiZt
-        gPf7U3uHr2JcB0HeEITLefo=
-X-Google-Smtp-Source: AA6agR7KjZMWdwPDH/jae1lbcmTSopZmpnSqprgC0cuM0EYlmKFfX7MGzzvOWi7Gh5tpVwrGcgLpeA==
-X-Received: by 2002:a63:5620:0:b0:429:9ad7:b4f2 with SMTP id k32-20020a635620000000b004299ad7b4f2mr21948494pgb.162.1662965840685;
-        Sun, 11 Sep 2022 23:57:20 -0700 (PDT)
-Received: from localhost.localdomain ([2402:7500:569:7171:597e:5b7:9ff9:1cd5])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b001743be790b4sm5044611pls.215.2022.09.11.23.57.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Sep 2022 23:57:20 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sre@kernel.org
-Cc:     mazziesaccount@gmail.com, alina_yu@richtek.com,
-        cy_huang@richtek.com, alinayu829@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v4 3/3] Documentation: power: rt9471: Document exported sysfs entries
-Date:   Mon, 12 Sep 2022 14:57:03 +0800
-Message-Id: <1662965823-17760-4-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1662965823-17760-1-git-send-email-u0084500@gmail.com>
-References: <1662965823-17760-1-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/UeNpP+VC97GxtM/tp6ip0ihWytOFO+8NfMTiiZb64A=;
+        b=H+vTmEvZ5cJtsCHH4lBOgVneu3g3iu1Hg/6T7M6hs++FdSU47GjzyuWAIp3VZzjvs8
+         51WGbYwP28e4Cy96nF1qsYacxB+LvgzsSl9cTvYggugkecMlE25Vuf7Z8I6a4Tudqs4P
+         O+nVMzp9cc3+SqjigXbN+Wqo0VfvyE33tqDMMci4qo0iRxBXxy18JUvAEwhTygpj3hLn
+         eqME0x/jvDKi/K5xv6ROVBqQjtOWfMFlV4G1X84pq4dEmBVPo2caGZ3slERzeNsCGvQO
+         D4V4Fpa8hxSKRnM3yKWgD2uoPLV+ooZ6kD/ZETdWH9HEIbYphhiouvsejV7kK6SlRa6w
+         R9xQ==
+X-Gm-Message-State: ACgBeo0Snjh6R7DyWypqNkwMPQEn3r8ZODkK0nZqVdLwXfwpZqBQtdFD
+        ONoNz0QVT8+ZWZpjLT/+c8mJcg==
+X-Google-Smtp-Source: AA6agR43dq9ilseW2ZLnOobj5xvkN3BRzRdVtKpqcF2vjeJLYTZspljXXlvcwBWS7skmTT0WCOmnCg==
+X-Received: by 2002:a17:902:bc44:b0:176:909f:f636 with SMTP id t4-20020a170902bc4400b00176909ff636mr25363438plz.21.1662972663290;
+        Mon, 12 Sep 2022 01:51:03 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170902f54d00b00172897952a0sm5326699plf.283.2022.09.12.01.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 01:51:03 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, robh@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com
+Subject: [PATCH 0/4] thermal: Introduce Qualcomm Cooling Driver suppport
+Date:   Mon, 12 Sep 2022 14:20:45 +0530
+Message-Id: <20220912085049.3517140-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+This patchset introduces the Qualcomm Cooling Driver (aka Qualcomm Thermal
+Mitigation Driver) and the related support code (dt-binding, MAINTAINER
+file etc).
 
-Document the settings exported by rt9471 charger driver through sysfs entries:
-- sysoff_enable
-- charge_term_enable
-- port_detect_enable
+Several Qualcomm Snapdragon SoCs have Thermal Mitigation Devices (TMDs)
+present on various remote subsystem(s) (for e.g. the Compute DSP, aka cDSP),
+which can be used for several mitigations for remote subsystem(s), including
+remote processor mitigation, rail voltage restriction etc. 
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- Documentation/ABI/testing/sysfs-class-power | 44 +++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Here we introduce the Qualcomm Cooling Driver which is based on the
+kernel thermal driver framework and also employs the kernel QMI interface
+to send the message to remote subsystem(s).
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index a9ce63c..1f8afe5 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -768,3 +768,47 @@ Description:
- 
- 		Access: Read
- 		Valid values: 1-31
-+
-+What:		/sys/class/power_supply/rt9471-*/sysoff_enable
-+Date:		Sep 2022
-+KernelVersion:	6.1
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry allows enabling the sysoff mode of rt9471 charger devices.
-+		If enabled and the input is removed, the internal battery FET is turned
-+		off to reduce the leakage from the BAT pin. See device datasheet for details.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9471-*/charge_term_enable
-+Date:		Sep 2022
-+KernelVersion:	6.1
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry allows enabling the charge termination function of rt9471 charger
-+		devices. If enabled, the battery charging current, and the battery voltage
-+		reachs charge termination condition, the internal battery FET will be turned off
-+		to optimize the battery life. See device datasheet for details.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9471-*/port_detect_enable
-+Date:		Sep 2022
-+KernelVersion:	6.1
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry allows enabling the USB BC12 port detect function of rt9471 charger
-+		devices. If enabled and VBUS is inserted, device will start to do the BC12
-+		port detect and report the usb port type when port detect is done. See
-+		datasheet for details.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
+At the very top-level, the dts is supposed to describe a TMD node, which
+should further represent the remote subsystem(s) present on the SoC and
+further each child of a subsystem should represent the separate cooling devices
+available on the remote subsystem.
+
+Note that this patchset is targeted for the 'linux-pm' tree and the dts
+patchset/changes targeted for 'linux-arm-msm' tree will be sent as a
+separate patchset.
+
+This patchset is based on the CONFIG_QCOM_THERMAL related fix sent via
+[1]. Otherwise the latest changes from 'linux-next/master' are used to
+rebase the patchset.
+
+[1]. https://lore.kernel.org/all/CAA8EJpoM5nW=pVJB4zy4Jh9Q3gE4KOju2QVy_WtmUokKMyXtuw@mail.gmail.com/T/#m4e2b765e68e3123b3c0e28c806409dae4b988432
+
+Cc: andersson@kernel.org
+Cc: robh@kernel.org
+Cc: daniel.lezcano@linaro.org
+Cc: rafael@kernel.org
+
+Bhupesh Sharma (4):
+  thermal: qcom: qmi_cooling: Add skeletal qmi cooling driver
+  thermal: qcom: Add Kconfig entry & compilation support for qmi cooling
+    driver
+  dt-bindings: thermal: Add qcom,qmi-tmd-device and qcom,tmd-device yaml
+    bindings
+  MAINTAINERS: Add entry for Qualcomm Cooling Driver
+
+ .../bindings/thermal/qcom,qmi-tmd-device.yaml |  78 +++
+ .../bindings/thermal/qcom,tmd-device.yaml     | 122 ++++
+ MAINTAINERS                                   |  10 +
+ drivers/thermal/qcom/Kconfig                  |   4 +
+ drivers/thermal/qcom/Makefile                 |   2 +
+ drivers/thermal/qcom/qmi_cooling/Kconfig      |  14 +
+ drivers/thermal/qcom/qmi_cooling/Makefile     |   3 +
+ .../qcom/qmi_cooling/qcom_qmi_cooling.c       | 632 ++++++++++++++++++
+ .../qcom/qmi_cooling/qcom_tmd_services.c      | 352 ++++++++++
+ .../qcom/qmi_cooling/qcom_tmd_services.h      | 120 ++++
+ include/dt-bindings/thermal/qcom,tmd.h        |  14 +
+ 11 files changed, 1351 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom,qmi-tmd-device.yaml
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom,tmd-device.yaml
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/Kconfig
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/Makefile
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/qcom_qmi_cooling.c
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/qcom_tmd_services.c
+ create mode 100644 drivers/thermal/qcom/qmi_cooling/qcom_tmd_services.h
+ create mode 100644 include/dt-bindings/thermal/qcom,tmd.h
+
 -- 
-2.7.4
+2.37.1
 
