@@ -2,111 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2E85B58D6
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 12:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8400E5B590C
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 13:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiILK5B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Sep 2022 06:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S230135AbiILLMH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Sep 2022 07:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiILK5A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 06:57:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2A233A3B;
-        Mon, 12 Sep 2022 03:56:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230167AbiILLMG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 07:12:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C002731DE5;
+        Mon, 12 Sep 2022 04:12:05 -0700 (PDT)
+Received: from mercury (unknown [185.122.133.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9741B6116E;
-        Mon, 12 Sep 2022 10:56:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C8BC433C1;
-        Mon, 12 Sep 2022 10:56:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CySJ+5cH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1662980215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fwiUXXyaDl64W0gR77hDL+1inITH1E0hryyhOBfnNHA=;
-        b=CySJ+5cHEwERUaAySyASiB4MUgIfRGKz9AZDD1Q/WoUtbZgu111yq5kBQrYro0mRbt2F91
-        2q/MTtbcgYAvTSD+sTvtsHJ5E+ubyFcxqRzxHxMFle7aaWT1JjOAsN2sBRD5G6KyN0j7QA
-        5bjU4FNY2JyBM9OIbThsnn2az1Gty0Y=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 37b6f6d7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 12 Sep 2022 10:56:55 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id d189so12075627ybh.12;
-        Mon, 12 Sep 2022 03:56:54 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1NKdrxzuXYTOhE+GsYF30EonmmmGJdDRyWN2+cSwo0pDkghJKE
-        cajT9DX0AOsJhfjYsZLf9CgOkPDI1CUdTxaW5sg=
-X-Google-Smtp-Source: AA6agR6cMHL5Yanxmy5O+FVq36ySuLwhW06E+MW8/V6CmXcyAVlRgoo0MfVBB3QUBajEC59cn2wWECIz7QcigRnz3OA=
-X-Received: by 2002:a25:7452:0:b0:6ae:c28d:f173 with SMTP id
- p79-20020a257452000000b006aec28df173mr7327298ybc.556.1662980214189; Mon, 12
- Sep 2022 03:56:54 -0700 (PDT)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 56EBB6601FDD;
+        Mon, 12 Sep 2022 12:12:04 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662981124;
+        bh=Gp9A2fQl73ZyLrnlWhsrPpz2tEWHWALZC2NoG8+cS9g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j4BO6VgCytBp7s77/ESjAuP7e+bivpGEiU9tUgdbv6DiXFW5CtbnYyxoBHcm8VFV0
+         WDNvUQXWRY6BBnAKy7izR5A5FiWERGjrS6sR/FoZj1oJe2cOImFpLj+LQXTs4U589c
+         CK6f5OYpustIAUPF6uSSzJgTZJJGqX5AUaXvVPoFPwqsnsXCbE5nNKiEpAeYneZlwV
+         vhHoEFC6ChWrvfas4BXcZjD+7JM2CXDUHvrvBCI3HCO17zYWTDnT59gyDyzQPJL81B
+         SVNvKdAV4k4fjhmD9EZuyTBjkpd+6ahMAdO1PMWsyajPJ+mfP96/f8vXV/zur9DBET
+         VmRpcxhSAX0rQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 5D88F106084A; Mon, 12 Sep 2022 13:12:01 +0200 (CEST)
+Date:   Mon, 12 Sep 2022 13:12:01 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mazziesaccount@gmail.com, alina_yu@richtek.com,
+        cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] Documentation: power: rt9471: Document exported
+ sysfs entries
+Message-ID: <20220912111201.nxjgqzpa7pftzwlb@mercury.elektranox.org>
+References: <1661742391-11378-1-git-send-email-u0084500@gmail.com>
+ <1661742391-11378-4-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-References: <CAJZ5v0js78b3qZXoxgXEwG7g0a7n_ALnEYjjzBGaQW7q4_ceCA@mail.gmail.com>
- <20220905172428.105564-1-Jason@zx2c4.com> <20220911123346.a7xbzdlbb7r5p6ih@mercury.elektranox.org>
- <Yx8N0hGNcbVPnJxW@zx2c4.com> <CAHmME9popsZskH5xR0sX2Prhd_R78Dc9mEO3BKy6qcvaok1MXQ@mail.gmail.com>
-In-Reply-To: <CAHmME9popsZskH5xR0sX2Prhd_R78Dc9mEO3BKy6qcvaok1MXQ@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 12 Sep 2022 11:56:43 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qUirnDQCxLvcQPTVYjSXEgGZcTnYTfRRVkVUwziFTywQ@mail.gmail.com>
-Message-ID: <CAHmME9qUirnDQCxLvcQPTVYjSXEgGZcTnYTfRRVkVUwziFTywQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND] power: supply: avoid nullptr deref in __power_supply_is_system_supplied
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Mark Pearson <mpearson@lenovo.com>
-Cc:     linux-pm@vger.kernel.org, stable@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pameyxirnllnovkl"
+Content-Disposition: inline
+In-Reply-To: <1661742391-11378-4-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CC+ Mark Pearson from Lenovo
-Full thread is here:
-https://lore.kernel.org/all/YwDsy3ZUgTtlKH9r@zx2c4.com/
 
-On Mon, Sep 12, 2022 at 11:48 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Ah another thing:
->
-> On Mon, Sep 12, 2022 at 11:45 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > My machine went through three changes I know about between the threshold
-> > of "not crashing" and "crashing":
-> > - Upgraded to 5.19 and then 6.0-rc1.
-> > - I used my laptop on batteries for a prolonged period of time for the
-> >   first time in a while.
-> > - I updated KDE, whose power management UI elements may or may not make
-> >   frequent calls to this subsystem to update some visual representation.
->
-> - Updated my BIOS.
+--pameyxirnllnovkl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-GASP! The plot thickens.
+Hi,
 
-It appears that the BIOS update I applied has been removed from
-https://pcsupport.lenovo.com/fr/en/downloads/ds551052-bios-update-utility-bootable-cd-for-windows-10-64-bit-and-linux-thinkpad-p1-gen-4-x1-extreme-gen-4
-and now it only shows the 1.16 version. I updated from 1.16 to 1.18.
+On Mon, Aug 29, 2022 at 11:06:31AM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>=20
+> Document the settings exported by rt9471 charger driver through sysfs ent=
+ries:
+> - sysoff_enable
+> - charge_term_enable
+> - port_detect_enable
+>=20
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  Documentation/ABI/testing/sysfs-class-power | 44 +++++++++++++++++++++++=
+++++++
+>  1 file changed, 44 insertions(+)
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
+ABI/testing/sysfs-class-power
+> index a9ce63c..1f8afe5 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power
+> +++ b/Documentation/ABI/testing/sysfs-class-power
+> @@ -768,3 +768,47 @@ Description:
+> =20
+>  		Access: Read
+>  		Valid values: 1-31
+> +
+> +What:		/sys/class/power_supply/rt9471-*/sysoff_enable
+> +Date:		Sep 2022
+> +KernelVersion:	6.1
+> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
+> +Description:
+> +		This entry allows enabling the sysoff mode of rt9471 charger devices.
+> +		If enabled and the input is removed, the internal battery FET is turned
+> +		off to reduce the leakage from the BAT pin. See device datasheet for d=
+etails.
+> +
+> +		Access: Read, Write
+> +		Valid values:
+> +		- 1: enabled
+> +		- 0: disabled
 
-The missing release notes are still online if you futz with the URL:
-https://download.lenovo.com/pccbbs/mobiles/n40ur14w.txt
-https://download.lenovo.com/pccbbs/mobiles/n40ur15w.txt
+This is not a very good description of what the control does. When
+do you expect users to control this?
 
-One of the items for 1.17 says:
-> - (Fix) Fixed an issue where it took a long time to update the battery FW.
+> +What:		/sys/class/power_supply/rt9471-*/charge_term_enable
+> +Date:		Sep 2022
+> +KernelVersion:	6.1
+> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
+> +Description:
+> +		This entry allows enabling the charge termination function of rt9471 c=
+harger
+> +		devices. If enabled, the battery charging current, and the battery vol=
+tage
+> +		reachs charge termination condition, the internal battery FET will be =
+turned off
+> +		to optimize the battery life. See device datasheet for details.
+> +
+> +		Access: Read, Write
+> +		Valid values:
+> +		- 1: enabled
+> +		- 0: disabled
 
-So maybe something was happening here...
+Just write 0 to .../charge_term_current to disable it.
+No need for a custom property.
 
-I'm CC'ing Mark from Lenovo to see if he has any insight as to why
-this BIOS update was pulled.
+> +What:		/sys/class/power_supply/rt9471-*/port_detect_enable
+> +Date:		Sep 2022
+> +KernelVersion:	6.1
+> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
+> +Description:
+> +		This entry allows enabling the USB BC12 port detect function of rt9471=
+ charger
+> +		devices. If enabled and VBUS is inserted, device will start to do the =
+BC12
+> +		port detect and report the usb port type when port detect is done. See
+> +		datasheet for details.
+> +
+> +		Access: Read, Write
+> +		Valid values:
+> +		- 1: enabled
+> +		- 0: disabled
 
-Maybe the battery was appearing and disappearing rapidly. If that's
-correct, then it'd indicate that this bandaid patch is *wrong* and
-what actually is needed is some kind of reference counting or RCU
-around that sysfs interface (and maybe others).
+Why would one want to disable this?
+Can't the driver just enable it unconditionally?
 
-Jason
+-- Sebastian
+
+--pameyxirnllnovkl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMfE/wACgkQ2O7X88g7
++poN5A//e2GwrsU29B5CvHNwF9pakLNcbw8DuGqSelVL2J3+8mEODmWMv1TWsxaU
+D4w898MpRUBS40c9wA+yt+Fu0HO9Cz9egXIGUJAmAVkD8x9HtaJ4WMLrOrxxwQsk
+Jt4o81fB6dGEeC1sQy7GVzLADTqHDk8nMziX7XmExXXxIT2XzolRFIagx63U3JSz
++whjNgpxOUsEY24r8DpWe7V/bK4i55EU+9bx7uHH61453Wj0hLNuTV9lt5EHykha
+YlDUzgMogWAxavSI0r8sfNcaqlAsQ2Gcn/Tkj6RDDTR2WCycZrt4UrpNfKZDE8ic
+3GaI396kawRm6VzPz8MNMGNiw06CaI+nZP+jjK1SkY8BCk+4Hzu5WCqAoniBH6E1
+8n0Do7nOsIgOprMiBxlL6LOa2SadVLFaeufppHridMZhuB5n0y0CjWBj3ntAYv0u
+fv9Al8Y/Gv5vYuFedEjlBD+72oQltri2soeOVDXOfHDV2sp8MSEIP0eCOSj0htLk
+IGlWbqoVnrVf9EVNGe842DXZj0PjQtUGzEnnNOxdW3AgPCf9GqZPOw0EQns1dP6P
+bOnayVbdRolfvqgbedXvgygu3QOPlo0WKfWqY98HTjSUP66bCGPyGfGGg7GC3afY
+rQ4fAw4j8Cm16NYu59Zgc61zWRpzYISbU5CPYn8C0NthGn8u32Y=
+=xo/s
+-----END PGP SIGNATURE-----
+
+--pameyxirnllnovkl--
