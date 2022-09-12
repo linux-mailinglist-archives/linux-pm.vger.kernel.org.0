@@ -2,69 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563CD5B5EB7
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 19:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8835B5EBF
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Sep 2022 19:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiILRA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Sep 2022 13:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
+        id S229873AbiILRBw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Sep 2022 13:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiILRAX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 13:00:23 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA3612620
-        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 10:00:20 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id t14so16365202wrx.8
-        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 10:00:20 -0700 (PDT)
+        with ESMTP id S229821AbiILRBr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 13:01:47 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC84D31DE0
+        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 10:01:46 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id p18so9167133plr.8
+        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 10:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=rt3yoziUAGWDulBUXGkf7un8lAh62T62yCVwsD4s6kc=;
-        b=Wu4ScIG39lXUQrwe6f7oSytrBgwKSE9fimWa6JXY/2WTutxFvhZ1QFiDt0v7vE3FbY
-         TsdhAtJYSLhQgdUhmw0Z4dsc6Nfxfjnpq90g0TuLNWRhb1oPnLOoe6L1FFb90gHzNFlQ
-         ewS+eCpzo9A7EKzd8coDDQs7FD5POnnbUUHk5ArLH2r8UP17+1o10pyMZ6sXaBYEqwUV
-         3FMqSuUy6e9zxsuMzFqkQWEdIpj9hms1dsWDN01sV9jf3q2GEpb9wf6+iEzUg/PhLKgl
-         Rm/1G/w12dKItK5FlnpsefKxXnuIPf1NzOhT9OLxKiekkuvYekRKg1zQ6kT4DLUsj4zV
-         ECOg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=KRfVvGxMcWVVzyGzWdz/B07EZ2xM4AP12X10HeNX+YA=;
+        b=gOyUjZPNIXCMEPph8GNoIbJnxXERolL4pKU35zKKCoWurdjbLEcvEJq7C24/ChModv
+         rX4FvfvLMH8Lqrj8NkiCyiJVJw8FkSvuDVVQp7n3XkPkFNdkuVOENYLDrJbZ2bC3uYCD
+         MgsarfSZIl57U/mW9XHOGVcXUBbyU3KmBs0+BH3L7tGnoGdpdhQxJFKiEwrOwCkAGIpA
+         h7MfIKpSXe/PC/Rsx+hmRcpxfTMJriDByqsfsqNc4P62m/5vC1FgUnTOqHUCVZoPH+N1
+         Iv+75iJ1j9j8ttGNqnv17LMQ+oJ9qZuVeXePtDqJa8iycqnMdtHZSPE1pE70/aPQO65x
+         KPkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=rt3yoziUAGWDulBUXGkf7un8lAh62T62yCVwsD4s6kc=;
-        b=gCbzlxsaGplgMrbYNp2cv3vE/SNdyHNWo3ORF8SABYm7FmNHtoSKNwQKmY6nFJEbPU
-         DavzGsHzFxv5PTu1jojZN+nLj12WAoRf870CQkYYAX+4TdrZKes2K0H5lAyV2ygPA7Fg
-         wRZ8AsqXwdYZzGSpnYDs9Fz0voTfwlPP9TeS8o6IGZweLjAb3jwL7gl+ZnU8A1zzB8Wa
-         o8BQFR1hPIwHHL5UKDmhsuRRK02x42AwVGKlEiTOF6x0w8CWtCf+RFE7pcIjGffeKIim
-         7emiY6IUBAunPdedd+TUbb2vYZlkbam7GE9YLJuFjbXA+b97G+3ID8VvheNON7Kk3Isb
-         9Kqw==
-X-Gm-Message-State: ACgBeo1GAuapZf9MPqWUAbijtI8yXNYx+BU+OJGZxFh76uuLTd3kzQE5
-        FTiEPkq+RxPBUQtBfAXL4asB5dYwktBwQ9+g
-X-Google-Smtp-Source: AA6agR4CkektO3xwwZTFQDyJ6PwzkdB29gaDQDAXNNQiyn8LnAPMQ8lUqwurq0lrgehoZAWWkjWOhg==
-X-Received: by 2002:a5d:5150:0:b0:22a:43a8:145b with SMTP id u16-20020a5d5150000000b0022a43a8145bmr8997168wrt.170.1663002019266;
-        Mon, 12 Sep 2022 10:00:19 -0700 (PDT)
-Received: from bullseye-11-arm64.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id c19-20020a05600c4a1300b003a1980d55c4sm9520626wmp.47.2022.09.12.10.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 10:00:18 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 17:00:17 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/2] power: supply: Add Lenovo Yoga C630 EC driver
-Message-ID: <20220912165802.dvlf3eeqx5g3bzdm@maple.lan>
-References: <20220810030500.2793882-1-bjorn.andersson@linaro.org>
- <20220810030500.2793882-3-bjorn.andersson@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=KRfVvGxMcWVVzyGzWdz/B07EZ2xM4AP12X10HeNX+YA=;
+        b=pVM6l6Qqv4LuVerBMfkgSVac2IvTtqStsHYO1iMrtiDXNWrqEtN6/E4UEHhFphKZ3Y
+         M2RnMN3yGXvWs30/wMn/Dx+2Z4DRTanln8oIB8wzXJX7JhHOeNgmJ403N/pvKrFTzBox
+         G2PsOhZoikShD1ZRY8XYFabYE24SVqsllbzGOqQmfUDOP0dFnwmgD6XmlpU/8OmgvqdE
+         pVmFsmMYBFLDXXi7mF+GBCYBlBfFMtGHygCujbMCaE9ARLyiQ+4TQYOQNHs8PGrU4DnA
+         B6v9fTqTnVNKbKisy43Cxj+5iQEqHm/LOGHdaTgWHwos6wj514w4IcmSw00TblLfo0DT
+         OV9w==
+X-Gm-Message-State: ACgBeo2v/W4Y68AFDD9+f3qGO9ckA3lEGkQIYtwLS/nKxwEuqe4cgT6v
+        Uk/YsmpRoRfCwhBE03iwS6PAeF3AkFHXvw==
+X-Google-Smtp-Source: AA6agR41bjUAzmYUs5QGJtGHWvfbasRXehs7fmqo8Z5czTetdmgzfi5tCsTKsKGzOZJTXLRSxovbFA==
+X-Received: by 2002:a17:90b:4b88:b0:202:e381:e643 with SMTP id lr8-20020a17090b4b8800b00202e381e643mr2930028pjb.148.1663002105819;
+        Mon, 12 Sep 2022 10:01:45 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id j8-20020a170903028800b0017829f95ca2sm3504900plr.286.2022.09.12.10.01.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Sep 2022 10:01:45 -0700 (PDT)
+Message-ID: <42a21b98-b920-868b-999e-2a43c8f4093b@linaro.org>
+Date:   Mon, 12 Sep 2022 22:31:40 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220810030500.2793882-3-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 0/4] Add support for tsens controller reinit via
+ trustzone
+Content-Language: en-US
+To:     linux-pm@vger.kernel.org
+Cc:     bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
+        robh+dt@kernel.org, rafael@kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220901105414.1171813-1-bhupesh.sharma@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <20220901105414.1171813-1-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,93 +79,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 10:05:00PM -0500, Bjorn Andersson wrote:
-> The Qualcomm Snapdragon-based Lenovo Yoga C630 has some sort of EC
-> providing AC-adapter and battery status, as well as USB Type-C altmode
-> notifications for Displayport operation.
+On 9/1/22 4:24 PM, Bhupesh Sharma wrote:
+> Changes since v3:
+> -----------------
+> - v3 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220804054638.3197294-1-bhupesh.sharma@linaro.org/
+> - Addressed review comments from Bjorn regarding early exit paths, spin
+>    lock being held while returning from func, etc.
+> - Also added Bjorn's R-Bs for v3 patches.
+> - Rebased on latest linux-next (master branch) tip.
+> 
+> Changes since v2:
+> -----------------
+> - v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220724122424.2509021-1-bhupesh.sharma@linaro.org/
+> - Dropped sm6375 specific patch from v3, as suggested by Konrad.
+> - Rebased on latest linux-next (master branch) tip.
+> 
+> Changes since v1:
+> -----------------
+> - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220701145815.2037993-1-bhupesh.sharma@linaro.org/
+> - Addressed several comments from Bjorn regarding locking, serialization
+>    etc received on v1.
+> - Addressed Konrad's concerns about the tsens controller found on sm6375
+>    SoC which seems to start in a bad state or is disabled when entering
+>    the linux world.
+> - This series would depend on sm6375 tsens controller changes being
+>    added by Konrad. It is based on linux-next (master branch) tip.
+> 
+> Some versions of Qualcomm tsens controller might enter a
+> 'bad state' causing sensor temperatures/interrupts status
+> to be in an 'invalid' state.
+> 
+> It is recommended to re-initialize the tsens controller
+> via trustzone (secure registers) using scm call(s) when that
+> happens.
+> 
+> This patchset adds the support for the same.
+> 
+> Cc: andersson@kernel.org
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: Thara Gopinath <thara.gopinath@gmail.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-arm-msm@vger.kernel.org
+> 
+> Bhupesh Sharma (4):
+>    firmware: qcom: scm: Add support for tsens reinit workaround
+>    thermal: qcom: tsens: Add hooks for supplying platform specific reinit
+>      quirks
+>    thermal: qcom: tsens: Add driver support for re-initialization quirk
+>    thermal: qcom: tsens: Add reinit quirk support for tsens v2
+>      controllers
+> 
+>   drivers/firmware/qcom_scm.c     |  15 +++
+>   drivers/firmware/qcom_scm.h     |   4 +
+>   drivers/thermal/qcom/tsens-v2.c |  15 +++
+>   drivers/thermal/qcom/tsens.c    | 193 ++++++++++++++++++++++++++++++++
+>   drivers/thermal/qcom/tsens.h    |  18 ++-
+>   include/linux/qcom_scm.h        |   2 +
+>   6 files changed, 246 insertions(+), 1 deletion(-)
 
-There's a couple of minor review comments but before we get to that:
-woo hoo!
+Gentle Ping.
 
-
-> The Yoga C630 ships with Windows, where these operations primarily are
-> implemented in ACPI, but due to various issues with the hardware
-> representation therein it's not possible to run Linux on this
-> information. As such this is a best-effort re-implementation of these
-> operations, based on the register map expressed in ACPI and a fair
-> amount of trial and error.
->
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/power/supply/Kconfig        |  11 +
->  drivers/power/supply/Makefile       |   1 +
->  drivers/power/supply/yoga-c630-ec.c | 547 ++++++++++++++++++++++++++++
->  3 files changed, 559 insertions(+)
->  create mode 100644 drivers/power/supply/yoga-c630-ec.c
->
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 1aa8323ad9f6..6e706e948ad2 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -897,4 +897,15 @@ config BATTERY_UG3105
->  	  device is off or suspended, the functionality of this driver is
->  	  limited to reporting capacity only.
->
-> +config LENOVO_YOGA_C630_EC
-> +	tristate "Lenovo Yoga C630 EC battery driver"
-> +	depends on DRM
-> +	depends on I2C
-
-This needs a "depends on TYPEC" in order to avoid linker errors.
-
-
-> +	help
-> +	  Driver for the Embedded Controller in the Qualcomm Snapdragon-based
-> +	  Lenovo Yoga C630, which provides battery information and USB Type-C
-> +	  altmode notifications.
-> +
-> +	  Say M or Y here to include this support.
-> +
->  endif # POWER_SUPPLY
-> diff --git a/drivers/power/supply/yoga-c630-ec.c b/drivers/power/supply/yoga-c630-ec.c
-> new file mode 100644
-> index 000000000000..1fa0b5844e01
-> --- /dev/null
-> +++ b/drivers/power/supply/yoga-c630-ec.c
-> @@ -0,0 +1,547 @@
-> <snip>
-> +static int yoga_c630_ec_bat_get_property(struct power_supply *psy,
-> +					 enum power_supply_property psp,
-> +					 union power_supply_propval *val)
-> +{
-> +	struct yoga_c630_ec *ec = power_supply_get_drvdata(psy);
-> +	int rc = 0;
-> +
-> +	if (ec->bat_present)
-> +		yoga_c630_ec_maybe_update_bat_status(ec);
-> +	else if (psp != POWER_SUPPLY_PROP_PRESENT)
-> +		return -ENODEV;
-> +
-> +	switch (psp) {
->       <snip>
-> +	case POWER_SUPPLY_PROP_TECHNOLOGY:
-> +		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
-> +		break;
-> +	case POWER_SUPPLY_PROP_MODEL_NAME:
-> +		val->strval = "PABAS0241231";
-> +		break;
-> +	case POWER_SUPPLY_PROP_MANUFACTURER:
-> +		val->strval = "Compal";
-> +		break;
-> +	case POWER_SUPPLY_PROP_SERIAL_NUMBER:
-> +		val->strval = "05072018";
-> +		break;
-
-I'm a little sceptical that hardcoding a serial number into the
-driver provides anybody any benefit (regardless of whether the
-AML code does this). AFAICT this is not a commonly implemented property
-in other power supplies so I'm not clear why this is needed.
-
-
-Daniel.
+Thanks,
+Bhupesh
