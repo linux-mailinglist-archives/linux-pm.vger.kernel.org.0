@@ -2,75 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0183F5B6338
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 00:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088B15B63AE
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 00:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiILWAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Sep 2022 18:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
+        id S230032AbiILW1l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Sep 2022 18:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiILWAb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 18:00:31 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5396474EB
-        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 15:00:28 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id a8so17016442lff.13
-        for <linux-pm@vger.kernel.org>; Mon, 12 Sep 2022 15:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=AyY1pS1gIoihV9h/TOHQQzSTghwaQhWl/8N88+vxDvY=;
-        b=WQRN/VO2MUAPdhBeT6WWJnL7tyU8NFnCcS90ahHnIrwcx9G1LuvV+3Y498rgIqbKlY
-         YmqUqekXgv1zkVD6PzVK2c9iLBNhh1Cm9Iw4EW717UaUYJaZdrP/m5Zl3gpuce0Haca+
-         XrHDHoCR/KqzWdeB3iPWpMh6Qx4yZliP1Ma/BiNc+WNhHjnGPFNmcUhIT+HJnX6XYo+i
-         lgq2yF+hxPW+3cFtVjerChY2tSBAe2jv1YiTchv/6CZUDXqH1Hqnlozns1FwdbmDCDxc
-         qfaOFpD6IModzjrzui8NlB/ktycOlhMXYXnc2oosVtkaNboE4yKK85uxa252LlFB8Ghh
-         JL6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AyY1pS1gIoihV9h/TOHQQzSTghwaQhWl/8N88+vxDvY=;
-        b=1FDC7YD7a4l6LaZUnv72Rl54iitIPZaWp+yTOlv1hd3JtdkTzfUsNyXQ3XS8aSrFBu
-         WVb+6j50rFrlyrFjTsrD3H37niRnwpN9Q/Xw4z43/HrqkvaviPNGDWd6Gx5giDK7gs1B
-         62rcawywams2GyNGRCbKOgM6ftw8dGsrj83r1dE4poY5NwB93Wrk4cbiHoJruc96MV35
-         TbAfafqyVsy4WpJvUc7keKJZgSiFAOZb5hGFA8vdW2ByHruWDGp2bBvmXwK7IliN2BHc
-         xTKPgeWJTat/Rr5FVnOwSMpPOO6ewrc6YXzZL/Ejw5DK/xtszh/Z/h7bZkUh+wo3PFHj
-         sp/Q==
-X-Gm-Message-State: ACgBeo0lNu18nrGqsSebt9qUAjm1z+JcPpxVZxKHKxXEe7nDSaxHK3ll
-        AmNq2YLJInPYW6u/T0lFr/E/Gw==
-X-Google-Smtp-Source: AA6agR7EKL31HEne7c+QEs97qL44is6/wEkfX62OvNB/cmAa5ZN6XISKO26CdeTItkKMytdiDGts0w==
-X-Received: by 2002:a05:6512:3b20:b0:498:d7bc:28af with SMTP id f32-20020a0565123b2000b00498d7bc28afmr7408563lfv.65.1663020026956;
-        Mon, 12 Sep 2022 15:00:26 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id o25-20020ac25e39000000b00492d270db5esm1288184lfg.242.2022.09.12.15.00.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Sep 2022 15:00:26 -0700 (PDT)
-Message-ID: <09c3d23a-a6f1-b5ec-bff9-3636fcdfca50@linaro.org>
-Date:   Tue, 13 Sep 2022 01:00:25 +0300
+        with ESMTP id S229945AbiILW1j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Sep 2022 18:27:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C53921E20;
+        Mon, 12 Sep 2022 15:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663021658; x=1694557658;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EBpU68xsLpcCQoQ5Ydg1RH2aVA+reCYJEVoDTaANPPA=;
+  b=nl9VE//yxBqesvPVzsL245xruckL6l9slG3PmZlQWwB/tjDLNvxwW5Gj
+   Z4+5bwPSUXBK5atrkGz26fKS8FKcorREsRJqPpYW3AQKc8es+xOylulY9
+   xzwyhNCCnjN/G4MrB2ALl5lAuvHiawZXWbthq3sq44+FZpcNS7jmQ5c4z
+   wo1HxmUIp9lZTif6wtBhaqG6epHHpRsQ5f5ZQxpJ2ZEFa09/TRVXk/g2b
+   Cb+AinTRupqjEGY8vsDwFO51VjxPKOSi+a80f7rrnQSiH2MzmMz0DmW4E
+   b8U5hF+iL0KaS4yaTY5S7OXJeFBqFv6xSSuY9S3ykHK5UTuDBIiJmV6EE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="384281027"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="384281027"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:27:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="646659772"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 12 Sep 2022 15:27:33 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXrts-0002w5-1D;
+        Mon, 12 Sep 2022 22:27:32 +0000
+Date:   Tue, 13 Sep 2022 06:26:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        bpf@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        alsa-devel@alsa-project.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 044b771be9c5de9d817dfafb829d2f049c71c3b4
+Message-ID: <631fb230.qcoZqD19biA2J50w%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 1/2] thermal: Introduce CONFIG_QCOM_THERMAL in Makefile
- and qcom/Kconfig
-Content-Language: en-GB
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     bhupesh.linux@gmail.com, andersson@kernel.org,
-        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,94 +67,193 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/09/2022 22:40, Bhupesh Sharma wrote:
-> Introduce CONFIG_QCOM_THERMAL to allow better control
-> over selection of various Qualcomm Thermal drivers
-> available inside qcom/ directory.
-> 
-> This is a preparatory change to allow new drivers to
-> be added inside qcom/ directory in a more structured
-> fashion later-on.
-> 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-> - v1 can be viewed here: https://www.spinics.net/lists/kernel/msg4510793.html
-> - Fixed review comments from Dmitry received in v1.
-> 
->   drivers/thermal/Makefile     |  2 +-
->   drivers/thermal/qcom/Kconfig | 12 ++++++++++++
->   2 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index def8e1a0399c..2506c6c8ca83 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -52,7 +52,7 @@ obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
->   obj-y				+= intel/
->   obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
->   obj-y				+= st/
-> -obj-$(CONFIG_QCOM_TSENS)	+= qcom/
-> +obj-y				+= qcom/
->   obj-y				+= tegra/
->   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
->   obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
-> index 2c7f3f9a26eb..ccfd090273c1 100644
-> --- a/drivers/thermal/qcom/Kconfig
-> +++ b/drivers/thermal/qcom/Kconfig
-> @@ -1,8 +1,17 @@
->   # SPDX-License-Identifier: GPL-2.0-only
-> +
-> +config QCOM_THERMAL
-> +	tristate "Thermal drivers on Qualcomm Snapdragon series of SoCs"
-> +	help
-> +	  Support for thermal drivers on Qualcomm Snapdragon series of SoCs.
-> +	  There are several thermal sensors available on the Qualcomm Socs
-> +	  which can be used for thermal mitigation purposes.
-> +
->   config QCOM_TSENS
->   	tristate "Qualcomm TSENS Temperature Alarm"
->   	depends on NVMEM_QCOM_QFPROM
->   	depends on ARCH_QCOM || COMPILE_TEST
-> +	select QCOM_THERMAL
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 044b771be9c5de9d817dfafb829d2f049c71c3b4  Add linux-next specific files for 20220912
 
-What's the point of QCOM_THERMAL if other drivers are `select'ing it? 
-I'd have understood if it would be a menuconfig guarding all Qualcomm 
-thermal drivers.
+Error/Warning reports:
 
->   	help
->   	  This enables the thermal sysfs driver for the TSENS device. It shows
->   	  up in Sysfs as a thermal zone with multiple trip points. Disabling the
-> @@ -15,6 +24,7 @@ config QCOM_SPMI_ADC_TM5
->   	depends on OF && SPMI && IIO
->   	select REGMAP_SPMI
->   	select QCOM_VADC_COMMON
-> +	select QCOM_THERMAL
->   	help
->   	  This enables the thermal driver for the ADC thermal monitoring
->   	  device. It shows up as a thermal zone with multiple trip points.
-> @@ -25,6 +35,7 @@ config QCOM_SPMI_TEMP_ALARM
->   	tristate "Qualcomm SPMI PMIC Temperature Alarm"
->   	depends on OF && SPMI && IIO
->   	select REGMAP_SPMI
-> +	select QCOM_THERMAL
->   	help
->   	  This enables a thermal sysfs driver for Qualcomm plug-and-play (QPNP)
->   	  PMIC devices. It shows up in sysfs as a thermal sensor with multiple
-> @@ -35,6 +46,7 @@ config QCOM_SPMI_TEMP_ALARM
->   config QCOM_LMH
->   	tristate "Qualcomm Limits Management Hardware"
->   	depends on ARCH_QCOM && QCOM_SCM
-> +	select QCOM_THERMAL
->   	help
->   	  This enables initialization of Qualcomm limits management
->   	  hardware(LMh). LMh allows for hardware-enforced mitigation for cpus based on
+https://lore.kernel.org/linux-media/202209020437.eXEOdmfe-lkp@intel.com
+https://lore.kernel.org/linux-mm/202209042337.FQi69rLV-lkp@intel.com
+https://lore.kernel.org/linux-mm/202209060229.dVuyxjBv-lkp@intel.com
+https://lore.kernel.org/linux-mm/202209080718.y5QmlNKH-lkp@intel.com
+
+Error/Warning: (recently discovered and may have been fixed)
+
+ERROR: modpost: "ioread64" [drivers/pci/switch/switchtec.ko] undefined!
+drivers/gpu/drm/amd/amdgpu/imu_v11_0_3.c:139:6: warning: no previous prototype for 'imu_v11_0_3_program_rlc_ram' [-Wmissing-prototypes]
+drivers/gpu/drm/drm_atomic_helper.c:802: warning: expecting prototype for drm_atomic_helper_check_wb_connector_state(). Prototype was for drm_atomic_helper_check_wb_encoder_state() instead
+drivers/pinctrl/pinctrl-amd.c:288 amd_gpio_dbg_show() warn: format string contains non-ascii character '\x9a'
+drivers/pinctrl/pinctrl-amd.c:288 amd_gpio_dbg_show() warn: format string contains non-ascii character '\xa1'
+drivers/pinctrl/pinctrl-amd.c:370 amd_gpio_dbg_show() warn: format string contains non-ascii character '\x95'
+drivers/scsi/qla2xxx/qla_os.c:2854:23: warning: assignment to 'struct trace_array *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'? [-Werror=implicit-function-declaration]
+drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function 'trace_array_put' [-Werror=implicit-function-declaration]
+kernel/bpf/memalloc.c:499 bpf_mem_alloc_destroy() error: potentially dereferencing uninitialized 'c'.
+sound/soc/codecs/tas2562.c:442:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_get_by_name
+|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_put
+|   |-- drivers-scsi-qla2xxx-qla_os.c:warning:assignment-to-struct-trace_array-from-int-makes-pointer-from-integer-without-a-cast
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- alpha-randconfig-r005-20220911
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- alpha-randconfig-r033-20220911
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- alpha-randconfig-r035-20220911
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arc-axs101_defconfig
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r016-20220912
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r032-20220912
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r043-20220911
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r043-20220912
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm-defconfig
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arm-randconfig-c034-20220911
+|   `-- net-bluetooth-mgmt.c:WARNING:kzalloc-should-be-used-for-rp-instead-of-kmalloc-memset
+|-- arm-randconfig-r032-20220911
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm64-buildonly-randconfig-r002-20220912
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+clang_recent_errors
+|-- arm64-randconfig-r011-20220912
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|-- hexagon-allyesconfig
+|   |-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|   `-- drivers-staging-media-deprecated-cpia2-cpia2_usb.c:warning:variable-frame_count-set-but-not-used
+|-- i386-randconfig-a012-20220912
+|   `-- sound-soc-intel-skylake-skl.c:warning:unused-variable-skl
+|-- i386-randconfig-a015-20220912
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|-- mips-randconfig-r021-20220911
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|-- powerpc-randconfig-r002-20220911
+|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-function-imu_v11_0_3_program_rlc_ram
+|-- riscv-randconfig-r015-20220912
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+`-- riscv-randconfig-r042-20220912
+    `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+
+elapsed time: 724m
+
+configs tested: 82
+configs skipped: 2
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64               randconfig-a001-20220912
+arc                          axs101_defconfig
+x86_64               randconfig-a002-20220912
+i386                 randconfig-a001-20220912
+x86_64                               rhel-8.3
+x86_64               randconfig-a003-20220912
+x86_64                          rhel-8.3-func
+arm                           stm32_defconfig
+alpha                            allyesconfig
+sh                           se7724_defconfig
+x86_64                           allyesconfig
+arm                                 defconfig
+alpha                             allnoconfig
+i386                 randconfig-a002-20220912
+x86_64                         rhel-8.3-kunit
+riscv                             allnoconfig
+m68k                             allmodconfig
+x86_64                           rhel-8.3-kvm
+x86_64               randconfig-a006-20220912
+i386                 randconfig-a004-20220912
+x86_64               randconfig-a004-20220912
+csky                              allnoconfig
+arc                               allnoconfig
+sh                           se7705_defconfig
+i386                                defconfig
+i386                             allyesconfig
+m68k                            q40_defconfig
+i386                 randconfig-a003-20220912
+arc                              allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+arm                          iop32x_defconfig
+x86_64               randconfig-a005-20220912
+powerpc                           allnoconfig
+m68k                             allyesconfig
+riscv                randconfig-r042-20220911
+arm                        trizeps4_defconfig
+i386                 randconfig-a006-20220912
+arc                  randconfig-r043-20220912
+mips                             allyesconfig
+sparc64                             defconfig
+i386                 randconfig-a005-20220912
+powerpc                          allmodconfig
+arm64                            allyesconfig
+sh                               allmodconfig
+s390                          debug_defconfig
+arm                              allyesconfig
+arc                  randconfig-r043-20220911
+s390                 randconfig-r044-20220911
+ia64                             allmodconfig
+sh                           sh2007_defconfig
+sh                         ecovec24_defconfig
+sh                               alldefconfig
+sh                          rsk7269_defconfig
+
+clang tested configs:
+x86_64               randconfig-a011-20220912
+x86_64               randconfig-a012-20220912
+i386                 randconfig-a013-20220912
+x86_64               randconfig-a013-20220912
+i386                 randconfig-a011-20220912
+x86_64               randconfig-a014-20220912
+mips                           rs90_defconfig
+arm                          pcm027_defconfig
+x86_64               randconfig-a016-20220912
+i386                 randconfig-a012-20220912
+arm                          ixp4xx_defconfig
+x86_64               randconfig-a015-20220912
+i386                 randconfig-a014-20220912
+arm                        vexpress_defconfig
+i386                 randconfig-a015-20220912
+riscv                randconfig-r042-20220912
+hexagon              randconfig-r041-20220912
+i386                 randconfig-a016-20220912
+hexagon              randconfig-r045-20220911
+hexagon              randconfig-r041-20220911
+hexagon              randconfig-r045-20220912
+s390                 randconfig-r044-20220912
+mips                malta_qemu_32r6_defconfig
+powerpc                    gamecube_defconfig
+x86_64                          rhel-8.3-rust
 
 -- 
-With best wishes
-Dmitry
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
