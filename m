@@ -2,51 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B205B7A95
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 21:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C63C5B7AA8
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 21:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiIMTLA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Sep 2022 15:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S229830AbiIMTTE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Sep 2022 15:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiIMTK6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Sep 2022 15:10:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2E061117;
-        Tue, 13 Sep 2022 12:10:55 -0700 (PDT)
+        with ESMTP id S229677AbiIMTTD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Sep 2022 15:19:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AAB6AA1F
+        for <linux-pm@vger.kernel.org>; Tue, 13 Sep 2022 12:19:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 371A961557;
-        Tue, 13 Sep 2022 19:10:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8A0FC433D6;
-        Tue, 13 Sep 2022 19:10:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5076C61554
+        for <linux-pm@vger.kernel.org>; Tue, 13 Sep 2022 19:19:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF6DC433D7
+        for <linux-pm@vger.kernel.org>; Tue, 13 Sep 2022 19:19:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663096254;
-        bh=ZLkA04AtkkAj7ap7zMdoFumFhJP+cqx7AqrTUyGLtUY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DAAYwTQw/R3F+U5kbFcMkrdU2Ok+RGyXFOLk6iv3JAn3tgAyUkjPejnQZpYI6AxTd
-         nyEyf7yoId9ph2FMOs4mF6Ze+F8RG9EXrCXc9xiSWLhhUi2CqjGmJm9Umk0916CZ4W
-         LiXoD8JBh0XY1aXOZAtS5bQDSSgC0/dB1jBHkq4sE6ssFHphpLYcyAmLNTBlInqP0x
-         N9Z2miPgfyMq0Ym9wF+PcHa6hrINdHzNLn5dJNDeLLCvsA28nI3dWQU2BgTN3u6v+b
-         aqE9rjIPdyIFBJQF/ngja81zJitblEp6oAV0OOwsQxVtFnr85mqjnPXoPXAk0NzdYM
-         pfhDHg58u8ewQ==
-Date:   Tue, 13 Sep 2022 14:10:51 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
-        robh@kernel.org, rafael@kernel.org, bhupesh.linux@gmail.com
-Subject: Re: [PATCH 3/4] dt-bindings: thermal: Add qcom,qmi-tmd-device and
- qcom,tmd-device yaml bindings
-Message-ID: <20220913191051.vx7leo6c4qbcuyns@builder.lan>
-References: <20220912085049.3517140-1-bhupesh.sharma@linaro.org>
- <20220912085049.3517140-4-bhupesh.sharma@linaro.org>
+        s=k20201202; t=1663096741;
+        bh=dFfU93QgX3/XwwgLgngjJJh72IVzy8E8amu7kIfjONw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nQT/Edy+2WDgu+WENhwPzLPeumgFDURAThknFq1kvotQXnSYDeiZ2dE+oWTs8eBUD
+         CeO7eKrkpCfvfpEcGWTnoWheu7p79cL63qCgyTMdic9juN1bbpecxlA8s3vKr5ugWL
+         xJp1okHW+xD9dmZQe5eDPcX3UcWHfyZJGRXyF+XYRyaogX+N0I3nV6573aqSfYhkwk
+         iPXwNlBFePlJd7xyV5h0a9OAsVkNEzQYaSqWAyHaEjjV4lgP3UU1RqOOABULLoFLix
+         lhy+sIpZEbkACm/CynYfawh3Ckofy11VS+wscrgRl1J75YWn290mA+3G6gI18FGYfZ
+         1ayBQPR/1PppQ==
+Received: by mail-lf1-f45.google.com with SMTP id s6so10484871lfo.7
+        for <linux-pm@vger.kernel.org>; Tue, 13 Sep 2022 12:19:01 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3N8qtRUxNu4ZkFloAVLQfsYrg3kxhY3d0tTr+BKpYnTHT5Ejqx
+        JCqdTnjtSuQ2Ps/hLP5f6tnNamy25BZO1KT2u1x3yQ==
+X-Google-Smtp-Source: AA6agR7ozGuytVn26t25xLvK0AxyvmgDxU5pQqGtKIKvsRDItnaRX6lbuoNCheQrcINvsVwIuRJNm8BDLRS+qhKObKU=
+X-Received: by 2002:a05:6512:2207:b0:496:db23:c2a3 with SMTP id
+ h7-20020a056512220700b00496db23c2a3mr10240081lfu.447.1663096739648; Tue, 13
+ Sep 2022 12:18:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912085049.3517140-4-bhupesh.sharma@linaro.org>
+References: <20220910124701.4060321-1-dmitry.baryshkov@linaro.org> <20220910124701.4060321-3-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220910124701.4060321-3-dmitry.baryshkov@linaro.org>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Wed, 14 Sep 2022 00:48:48 +0530
+X-Gmail-Original-Message-ID: <CAHLCerPhxGEUfpabu6dpnrkSL0Aab7qrthaffWn69Wz_z8aFDQ@mail.gmail.com>
+Message-ID: <CAHLCerPhxGEUfpabu6dpnrkSL0Aab7qrthaffWn69Wz_z8aFDQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 02/10] thermal/drivers/tsens: Support using nvmem
+ cells for calibration data
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,310 +73,157 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 02:20:48PM +0530, Bhupesh Sharma wrote:
-> Add qcom,qmi-tmd-device and qcom,tmd-device yaml bindings.
+Hi Dmitry,
 
-Looks like a duplicate of $subject.
+I like this clean up.
 
-> 
-> Qualcomm QMI based TMD cooling device(s) are used for various
-
-What is "TMD" an abbreviation of?
-
-> mitigations for remote subsystem(s) including remote processor
-> mitigation, rail voltage restriction etc.
-> 
-> Each child node represents one remote subsystem and each child
-> of this subsystem in-turn represents separate TMD cooling device.
-> 
-> Cc: daniel.lezcano@linaro.org
-> Cc: rafael@kernel.org
-> Cc: andersson@kernel.org
-> Cc: robh@kernel.org
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+On Sat, Sep 10, 2022 at 6:17 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> Add a unified function using nvmem cells for parsing the calibration
+> data rather than parsing the calibration blob manually.
+>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  .../bindings/thermal/qcom,qmi-tmd-device.yaml |  78 +++++++++++
->  .../bindings/thermal/qcom,tmd-device.yaml     | 122 ++++++++++++++++++
->  include/dt-bindings/thermal/qcom,tmd.h        |  14 ++
->  3 files changed, 214 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom,qmi-tmd-device.yaml
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom,tmd-device.yaml
->  create mode 100644 include/dt-bindings/thermal/qcom,tmd.h
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom,qmi-tmd-device.yaml b/Documentation/devicetree/bindings/thermal/qcom,qmi-tmd-device.yaml
-> new file mode 100644
-> index 000000000000..dfda5b611a93
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/qcom,qmi-tmd-device.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>  drivers/thermal/qcom/tsens-v0_1.c | 15 ++++++++
+>  drivers/thermal/qcom/tsens-v1.c   |  6 ++-
+>  drivers/thermal/qcom/tsens.c      | 62 +++++++++++++++++++++++++++++++
+>  drivers/thermal/qcom/tsens.h      |  4 ++
+>  4 files changed, 86 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index f136cb350238..2974eea578f4 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -229,6 +229,11 @@ static int calibrate_8916(struct tsens_priv *priv)
+>         u32 p1[5], p2[5];
+>         int mode = 0;
+>         u32 *qfprom_cdata, *qfprom_csel;
+> +       int ret;
 > +
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/thermal/qcom,qmi-tmd-device.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +       ret = tsens_calibrate_nvmem(priv, 3);
+> +       if (!ret)
+> +               return 0;
+>
+>         qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
+>         if (IS_ERR(qfprom_cdata))
+> @@ -286,6 +291,11 @@ static int calibrate_8939(struct tsens_priv *priv)
+>         int mode = 0;
+>         u32 *qfprom_cdata;
+>         u32 cdata[6];
+> +       int ret;
 > +
-> +title: Qualcomm QMI based thermal mitigation (TMD) cooling devices.
+> +       ret = tsens_calibrate_nvmem(priv, 2);
+> +       if (!ret)
+> +               return 0;
+>
+>         qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
+>         if (IS_ERR(qfprom_cdata))
+> @@ -491,6 +501,11 @@ static int calibrate_9607(struct tsens_priv *priv)
+>         u32 p1[5], p2[5];
+>         int mode = 0;
+>         u32 *qfprom_cdata;
+> +       int ret;
 > +
-> +maintainers:
-> +  - Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> +       ret = tsens_calibrate_nvmem(priv, 2);
+> +       if (!ret)
+> +               return 0;
+>
+>         qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
+>         if (IS_ERR(qfprom_cdata))
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index 573e261ccca7..868d7b4c9e36 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -172,7 +172,11 @@ static int calibrate_v1(struct tsens_priv *priv)
+>         u32 p1[10], p2[10];
+>         u32 mode = 0, lsb = 0, msb = 0;
+>         u32 *qfprom_cdata;
+> -       int i;
+> +       int i, ret;
 > +
-> +description:
-> +  Qualcomm QMI based TMD cooling device(s) are used for various
-> +  mitigations for remote subsystem(s) including remote processor
-> +  mitigation, rail voltage restriction etc.
+> +       ret = tsens_calibrate_nvmem(priv, 2);
+> +       if (!ret)
+> +               return 0;
+>
+>         qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
+>         if (IS_ERR(qfprom_cdata))
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index e49f58e83513..8331b924325a 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -70,6 +70,68 @@ char *qfprom_read(struct device *dev, const char *cname)
+>         return ret;
+>  }
+>
+> +int tsens_calibrate_nvmem(struct tsens_priv *priv, int shift)
+> +{
+> +       u32 mode;
+> +       u32 base1, base2;
+> +       u32 p1[MAX_SENSORS], p2[MAX_SENSORS];
+> +       char name[] = "sX_pY";
+> +       int i, ret;
 > +
-> +properties:
-> +  $nodename:
-> +    const: qmi-tmd-devices
+> +       if (priv->num_sensors > MAX_SENSORS)
+> +               return -EINVAL;
 > +
-> +  compatible:
-> +    items:
-> +      - const: qcom,qmi-tmd-devices
-> +
-> +  modem0:
-> +    $ref: /schemas/thermal/qcom,tmd-device.yaml#
-> +
-> +  adsp:
-> +    $ref: /schemas/thermal/qcom,tmd-device.yaml#
-> +
-> +  cdsp:
-> +    $ref: /schemas/thermal/qcom,tmd-device.yaml#
-> +
-> +  slpi:
-> +    $ref: /schemas/thermal/qcom,tmd-device.yaml#
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/thermal/qcom,tmd.h>
-> +    qmi-tmd-devices {
+> +       ret = nvmem_cell_read_variable_le_u32(priv->dev, "mode", &mode);
+> +       if (ret == -ENOENT)
+> +               dev_warn(priv->dev, "Please migrate to sepate nvmem cells for calibration data\n");
 
-Looking at the implementation I see no relationship between the
-individual instances (i.e. between the children of this node).
+typo: separate
 
-My suggestion is that you drop this top-level node and just list out
-modem, adsp etc individually - which would mean that you can remove one
-layer of indirection in the driver, as each instance would just need a
-list of cooling-devices.
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       dev_dbg(priv->dev, "calibration mode is %d\n", mode);
+> +
+> +       ret = nvmem_cell_read_variable_le_u32(priv->dev, "base1", &base1);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       ret = nvmem_cell_read_variable_le_u32(priv->dev, "base2", &base2);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       for (i = 0; i < priv->num_sensors; i++) {
+> +               ret = snprintf(name, sizeof(name), "s%d_p1", i);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &p1[i]);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               p1[i] = (base1 + p1[i]) << shift;
+> +
+> +               ret = snprintf(name, sizeof(name), "s%d_p2", i);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &p2[i]);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               p2[i] = (base2 + p2[i]) << shift;
 
-> +      compatible = "qcom,qmi-tmd-devices";
-> +
-> +      modem0 {
+Have you verified that the p1 and p2 arrays end up with identical
+values before and after this conversion?
 
-So you would move the compatible here.
 
-> +        qcom,instance-id = <MODEM0_INSTANCE_ID>;
+> +       }
 > +
-> +        modem0_pa: tmd-device0 {
-> +          label = "pa";
-> +          #cooling-cells = <2>;
-> +        };
+> +       if (mode == NO_PT_CALIB) {
+> +               dev_dbg(priv->dev, "calibrationless mode\n");
+> +               for (i = 0; i < priv->num_sensors; i++) {
+> +                       p1[i] = 500;
+> +                       p2[i] = 780;
+> +               }
+> +       }
 > +
-> +        modem0_proc: tmd-device1 {
-> +          label = "modem";
-> +          #cooling-cells = <2>;
-> +        };
+> +       compute_intercept_slope(priv, p1, p2, mode);
 > +
-> +        modem0_current: tmd-device2 {
-> +          label = "modem_current";
-> +          #cooling-cells = <2>;
-> +        };
+> +       return 0;
+> +}
 > +
-> +        modem0_skin: tmd-device3 {
-> +          label = "modem_skin";
-> +          #cooling-cells = <2>;
-> +        };
-> +
-> +        modem0_vdd: tmd-device4 {
-> +          label = "cpuv_restriction_cold";
-> +          #cooling-cells = <2>;
-> +        };
-> +      };
-> +    };
-> +...
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom,tmd-device.yaml b/Documentation/devicetree/bindings/thermal/qcom,tmd-device.yaml
-> new file mode 100644
-> index 000000000000..38ac62f03376
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/qcom,tmd-device.yaml
-> @@ -0,0 +1,122 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/thermal/qcom,tmd-device.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-
-I see no reason for splitting this into a separate binding.
-
-> +title: Qualcomm thermal mitigation (TMD) cooling devices
-> +
-> +maintainers:
-> +  - Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> +
-> +description:
-> +  Qualcomm thermal mitigation (TMD) cooling devices. Each child node
-> +  represents one remote subsystem and each child of this subsystem in-turn
-> +  represents separate cooling devices.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^(modem|adsp|cdsp|slpi[0-9])?$"
-> +
-> +  qcom,instance-id:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Remote subsystem QMI server instance id to be used for communicating with QMI.
-> +
-> +patternProperties:
-> +  "^tmd-device[0-9]?$":
-
-So max 10 cooling devices per remote?
-
-> +    type: object
-> +    description:
-> +      Subnodes indicating tmd cooling device of a specific category.
-> +    properties:
-> +      label:
-> +        maxItems: 1
-> +        description: |
-> +          Remote subsystem device identifier. Acceptable device names -
-> +          "pa" -> for pa cooling device,
-> +          "cpuv_restriction_cold" -> for vdd restriction,
-> +          "cx_vdd_limit" -> for vdd limit,
-> +          "modem" -> for processor passive cooling device,
-> +          "modem_current" -> for current limiting device,
-> +          "modem_bw" ->  for bus bandwidth limiting device,
-> +          "cpr_cold" -> for cpr restriction.
-
-Afaict there are about 50 valid cooling devices listed in the driver.
-Why limit this to these 7 here?
-
-> +
-> +      "#cooling-cells":
-> +        const: 2
-> +
-> +    required:
-> +      - label
-> +      - "#cooling-cells"
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - qcom,instance-id
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/thermal/qcom,tmd.h>
-> +    modem0 {
-
-As written here this example is incomplete, as these nodes can't live on
-their own.
-
-But this is actually what I propose above.
-
-> +      qcom,instance-id = <MODEM0_INSTANCE_ID>;
-> +
-> +      modem0_pa: tmd-device0 {
-> +        label = "pa";
-> +        #cooling-cells = <2>;
-> +      };
-> +
-> +      modem0_proc: tmd-device1 {
-> +        label = "modem";
-> +        #cooling-cells = <2>;
-> +      };
-> +
-> +      modem0_current: tmd-device2 {
-> +        label = "modem_current";
-> +        #cooling-cells = <2>;
-> +      };
-> +
-> +      modem0_skin: tmd-device3 {
-> +        label = "modem_skin";
-> +        #cooling-cells = <2>;
-> +      };
-> +
-> +      modem0_vdd: tmd-device4 {
-> +        label = "cpuv_restriction_cold";
-> +        #cooling-cells = <2>;
-> +      };
-> +    };
-> +
-> +  - |
-> +    #include <dt-bindings/thermal/qcom,tmd.h>
-> +    adsp {
-> +      qcom,instance-id = <ADSP_INSTANCE_ID>;
-> +
-> +      adsp_vdd: tmd-device1 {
-> +        label = "cpuv_restriction_cold";
-> +        #cooling-cells = <2>;
-> +      };
-> +    };
-> +
-> +  - |
-> +    #include <dt-bindings/thermal/qcom,tmd.h>
-> +    cdsp {
-> +      qcom,instance-id = <CDSP_INSTANCE_ID>;
-> +
-> +      cdsp_vdd: tmd-device1 {
-> +        label = "cpuv_restriction_cold";
-> +        #cooling-cells = <2>;
-> +      };
-> +    };
-> +
-> +  - |
-> +    #include <dt-bindings/thermal/qcom,tmd.h>
-> +    slpi {
-> +      qcom,instance-id = <SLPI_INSTANCE_ID>;
-> +
-> +      slpi_vdd: tmd-device1 {
-> +        label = "cpuv_restriction_cold";
-> +        #cooling-cells = <2>;
-> +      };
-> +    };
-> diff --git a/include/dt-bindings/thermal/qcom,tmd.h b/include/dt-bindings/thermal/qcom,tmd.h
-> new file mode 100644
-> index 000000000000..5ede4422e04e
-> --- /dev/null
-> +++ b/include/dt-bindings/thermal/qcom,tmd.h
-
-This is a quite generic name, how about qcom,qmi-cooling.h?
-
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * This header provides constants for the Qualcomm TMD instances.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_THERMAL_QCOM_TMD_H_
-> +#define _DT_BINDINGS_THERMAL_QCOM_TMD_H_
-> +
-> +#define MODEM0_INSTANCE_ID	0x0
-> +#define ADSP_INSTANCE_ID	0x1
-> +#define CDSP_INSTANCE_ID	0x43
-> +#define SLPI_INSTANCE_ID	0x53
-
-QMI cooling isn't the only thing dealing with "instance id" and all of
-them would deal with instances ids of type modem, adsp, cdsp, slpi etc.
-
-As such I think these are too generic, how about
-
-QMI_COOLING_ADSP etc?
-
-Regards,
-Bjorn
-
-> +
-> +#endif
-> -- 
-> 2.37.1
-> 
+>  /*
