@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FAF5B7A45
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 20:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183405B7A58
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 20:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbiIMS4S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Sep 2022 14:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
+        id S232237AbiIMS6T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Sep 2022 14:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232858AbiIMSzp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Sep 2022 14:55:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69B063AA;
-        Tue, 13 Sep 2022 11:44:38 -0700 (PDT)
+        with ESMTP id S232020AbiIMS5z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Sep 2022 14:57:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A64AEB4;
+        Tue, 13 Sep 2022 11:51:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48DA761550;
-        Tue, 13 Sep 2022 18:44:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D15C433C1;
-        Tue, 13 Sep 2022 18:44:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B99E6B80EA6;
+        Tue, 13 Sep 2022 18:51:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4055C433D6;
+        Tue, 13 Sep 2022 18:51:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663094677;
-        bh=Zytat1F3jXVHc8gfFWkMjilhBmLy2eleoKoPE6R/IZc=;
+        s=k20201202; t=1663095093;
+        bh=VpyC8lUP63HV4xeVdsJSfKE7jnXv9o0yRKVx04lPK5Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AztK4zp9cgSvfv7Ce9QhBKx77h01V1kyhBJPJkBtQNa7KaCUdrJX71sc6lf0tDViT
-         momTR18Y6t/NrSRIok9RtCgQBkkF3bOklr6au096GiF2Te18uXSQY7ItKSS4/GWBka
-         bWBRb00FWh7bSvcyW7NjrVI+hk29fUz8JtwWVJPJirOMA4l5nQ7Fb246irIsZHU1Ki
-         NbJTD57FXsUaUMvTtmu7Y7PmnKs5RuoBkwDQHgl9E7LdWjxzD7eIa22Azn45QH2JBI
-         l+U6cdktbVWL3gNSViGY4q4oruzSbmQnYTVRf3jIkUUJW0Df7AoOCmPY0VmEbOzTnm
-         ICgxPP/x3Cj/w==
-Date:   Tue, 13 Sep 2022 13:44:34 -0500
+        b=RICEpambJkz/GD/KM08LAU1KfanG8H+Ycjf0MNU8HEkyDZHW89q44bpcLfniSe6Bz
+         LFvr6ZVsH20fvRmBL23Q5Nh+SzuKVzW+zdv+DM9cyX0k9HR0E0kImJ3GkM1HGk0kVh
+         5MnDxAl/TlZlGZN4opSxi3TrKMgHM8LBrkeF+pGUZmCeowxewMrS+eOYyWEGifFmd2
+         ZWBKY5RQ9aXw1JXmsepYtTSusuJ6u8urTRZ7X0W8KKNxLpyOF63S+LWnyRdhqOwb+j
+         ONbeAoM7VFoo6TI4OhhvG39pbXsKglfPL70XxxScXqb2jMZu7CVrSe3A5CqjpXCvXT
+         gCROjv9XpD5YQ==
+Date:   Tue, 13 Sep 2022 13:51:30 -0500
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -39,14 +39,14 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         daniel.lezcano@linaro.org, rafael@kernel.org,
         dmitry.baryshkov@linaro.org, Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@gmail.com>
-Subject: Re: [PATCH v2 2/2] MAINTAINERS: Update Qualcomm Thermal Driver entry
-Message-ID: <20220913184434.uticdyotwvvvx43z@builder.lan>
+Subject: Re: [PATCH v2 1/2] thermal: Introduce CONFIG_QCOM_THERMAL in
+ Makefile and qcom/Kconfig
+Message-ID: <20220913185130.4eui3q2cvwjn4t7x@builder.lan>
 References: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
- <20220912194028.3584378-2-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912194028.3584378-2-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220912194028.3584378-1-bhupesh.sharma@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,48 +57,106 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 01:10:28AM +0530, Bhupesh Sharma wrote:
-> Since there are several Qualcomm Thermal drivers now available
-> (for e.g. LMH, SPMI PMICs and TSENS) inside 'drivers/thermal/qcom'
-> directory, so it makes sense to list all the supported dt-bindings
-> YAML files here.
+On Tue, Sep 13, 2022 at 01:10:27AM +0530, Bhupesh Sharma wrote:
+> Introduce CONFIG_QCOM_THERMAL to allow better control
+> over selection of various Qualcomm Thermal drivers
+> available inside qcom/ directory.
 > 
-> Also, the entry header is updated to better reflect the same.
+> This is a preparatory change to allow new drivers to
+> be added inside qcom/ directory in a more structured
+> fashion later-on.
 > 
 > Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 > Cc: Amit Kucheria <amitk@kernel.org>
 > Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-
 > ---
->  MAINTAINERS | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> - v1 can be viewed here: https://www.spinics.net/lists/kernel/msg4510793.html
+> - Fixed review comments from Dmitry received in v1.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d213a831133f..e72839f5629c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17043,12 +17043,16 @@ F:	Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
->  F:	drivers/net/ethernet/qualcomm/rmnet/
->  F:	include/linux/if_rmnet.h
->  
-> -QUALCOMM TSENS THERMAL DRIVER
-> +QUALCOMM THERMAL DRIVERS (TSENS, LMH and SPMI PMIC)
->  M:	Amit Kucheria <amitk@kernel.org>
->  M:	Thara Gopinath <thara.gopinath@gmail.com>
->  L:	linux-pm@vger.kernel.org
->  L:	linux-arm-msm@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
-> +F:	Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> +F:	Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml
-> +F:	Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
->  F:	Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->  F:	drivers/thermal/qcom/
->  
+>  drivers/thermal/Makefile     |  2 +-
+>  drivers/thermal/qcom/Kconfig | 12 ++++++++++++
+>  2 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index def8e1a0399c..2506c6c8ca83 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -52,7 +52,7 @@ obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
+>  obj-y				+= intel/
+>  obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
+>  obj-y				+= st/
+> -obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+> +obj-y				+= qcom/
+
+This change makes sense to me. Please send this as a separate patch.
+
+>  obj-y				+= tegra/
+>  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+>  obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
+> index 2c7f3f9a26eb..ccfd090273c1 100644
+> --- a/drivers/thermal/qcom/Kconfig
+> +++ b/drivers/thermal/qcom/Kconfig
+> @@ -1,8 +1,17 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config QCOM_THERMAL
+
+As written here this would allow you to make things conditional on any
+Qualcomm thermal code being enabled in any form. But I'm afraid I don't
+understand the purpose of this.
+
+Alternatively if you had made below additions depends on QCOM_THERMAL
+this would have "cleaned up" the menuconfig slightly. But IMHO there
+isn't a lot of benefit to this (and we'd end up with people running
+without thermal drivers, as they forget to set CONFIG_QCOM_THERMAL).
+
+> +	tristate "Thermal drivers on Qualcomm Snapdragon series of SoCs"
+> +	help
+> +	  Support for thermal drivers on Qualcomm Snapdragon series of SoCs.
+> +	  There are several thermal sensors available on the Qualcomm Socs
+> +	  which can be used for thermal mitigation purposes.
+
+This help text indicates that the option actually changes something or
+enables some support for something, but afaict it doesn't.
+
+Regards,
+Bjorn
+> +
+>  config QCOM_TSENS
+>  	tristate "Qualcomm TSENS Temperature Alarm"
+>  	depends on NVMEM_QCOM_QFPROM
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> +	select QCOM_THERMAL
+>  	help
+>  	  This enables the thermal sysfs driver for the TSENS device. It shows
+>  	  up in Sysfs as a thermal zone with multiple trip points. Disabling the
+> @@ -15,6 +24,7 @@ config QCOM_SPMI_ADC_TM5
+>  	depends on OF && SPMI && IIO
+>  	select REGMAP_SPMI
+>  	select QCOM_VADC_COMMON
+> +	select QCOM_THERMAL
+>  	help
+>  	  This enables the thermal driver for the ADC thermal monitoring
+>  	  device. It shows up as a thermal zone with multiple trip points.
+> @@ -25,6 +35,7 @@ config QCOM_SPMI_TEMP_ALARM
+>  	tristate "Qualcomm SPMI PMIC Temperature Alarm"
+>  	depends on OF && SPMI && IIO
+>  	select REGMAP_SPMI
+> +	select QCOM_THERMAL
+>  	help
+>  	  This enables a thermal sysfs driver for Qualcomm plug-and-play (QPNP)
+>  	  PMIC devices. It shows up in sysfs as a thermal sensor with multiple
+> @@ -35,6 +46,7 @@ config QCOM_SPMI_TEMP_ALARM
+>  config QCOM_LMH
+>  	tristate "Qualcomm Limits Management Hardware"
+>  	depends on ARCH_QCOM && QCOM_SCM
+> +	select QCOM_THERMAL
+>  	help
+>  	  This enables initialization of Qualcomm limits management
+>  	  hardware(LMh). LMh allows for hardware-enforced mitigation for cpus based on
 > -- 
 > 2.37.1
 > 
