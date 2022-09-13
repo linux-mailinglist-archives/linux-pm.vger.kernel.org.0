@@ -2,92 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 170F95B685F
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 09:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AA75B6947
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 10:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiIMHIn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Sep 2022 03:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S230149AbiIMINz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Sep 2022 04:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiIMHIm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Sep 2022 03:08:42 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B976E2A27A
-        for <linux-pm@vger.kernel.org>; Tue, 13 Sep 2022 00:08:40 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id iw17so10932878plb.0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Sep 2022 00:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=mvmuLsSAKf6NFlks0U+6xfWp1Ez97s8X79X4CqxYQyc=;
-        b=tSMTDdnP+rodHt16YIhNWSeH6jTmhIUNFsSUyqyW4VOSX1aEycQ8N625T/4WaA4j70
-         37ssDFg80n5PlJ9Uu376GShkjgQfUwqJeaZv027jIz5aVMjWcnQ1Nm2BSjB+0OJfcwGn
-         3qDw+4gUe/IpTaP2LGdWrH1gpJ6sJoPl2s/MNFZO4Y8t21uAvkVz1X/uqXMS2EhoOltt
-         q7mKndYb88lXgfHAbnVsXz4bK4ub7ARV7lroG40T3wFjRdHw3DTE/aATy8kjwyLOBAZD
-         s/RZwalHP3Ov6f6IHGFv8bF36+HwBUh3LpTn1Rs6998OxQLjHEL+kVpEOhBUmvu8gzbr
-         gOFA==
+        with ESMTP id S231357AbiIMINy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Sep 2022 04:13:54 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3845A883;
+        Tue, 13 Sep 2022 01:13:53 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-3452214cec6so130678717b3.1;
+        Tue, 13 Sep 2022 01:13:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=mvmuLsSAKf6NFlks0U+6xfWp1Ez97s8X79X4CqxYQyc=;
-        b=pcEk3C69OdM3pwZFiwm/mUq2k7ssoogUeMb9dHXO5+KrUlV0+Hcr8rr2EXO5N07cDM
-         ZYGaYaiGT64nJTSj4vEtucD3+TCcMnU6+JIN+Qq7YTCpcot2zOs/mRYRbnzbUkc1+aUk
-         WA9MlmCu5gH1wRZtruZtqFKq/sYBR6zGwmlNIv6RR/5MrMgi6EyFM+/5sxc4T+SO70KQ
-         8zzB86qRLC89v0ZhSbCHGs4QFKvMgPGjnRqVLJBQC27MsX1OpYJF/lzjHq/9OyXWyXwv
-         X4n0K/TDF/DRXb94t3f6HxxnxNvUazDHvpNs3YOItGU/l1f5Fd+QOKCj1A/oiw9WdIA8
-         B+aA==
-X-Gm-Message-State: ACgBeo1TELTOPnPxB1ZjVKk9t9EfGtoTDTHV432QDZlIEnMi6G9WImYi
-        ixC15h2CnnDxjTyLWZVyB7HDGw==
-X-Google-Smtp-Source: AA6agR5PgbUtdW6ugx5JM1ibGxaJ2oK46ZcXQKSQSQHweAIzkqqN8tBb8c5sTchHxjpZ1HHffSq6Bw==
-X-Received: by 2002:a17:90b:1e0f:b0:200:61cb:c718 with SMTP id pg15-20020a17090b1e0f00b0020061cbc718mr2467018pjb.36.1663052920108;
-        Tue, 13 Sep 2022 00:08:40 -0700 (PDT)
-Received: from leoy-huanghe.lan (173.242.123.178.16clouds.com. [173.242.123.178])
-        by smtp.gmail.com with ESMTPSA id jj15-20020a170903048f00b001769ee307d8sm7404651plb.59.2022.09.13.00.08.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 00:08:39 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 15:08:34 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Huang Yiwei <quic_hyiwei@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, djakov@kernel.org,
-        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: qcom: Add the missing MODULE_LICENSE
-Message-ID: <YyAscuyA1pKmEDH1@leoy-huanghe.lan>
-References: <20220913062721.5986-1-quic_hyiwei@quicinc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=9sLM6RJy6I6JLzRHcKSPJWKNKk6jtaeZF6Edx/6Pve0=;
+        b=XQq80t0mRs7BMUFpptwTiRk5uHA3ZvE5hGeH3oKUTdenbKqr0+9o0ZNZw09ptfSIUB
+         hUrAYFOoF9DplpkPh8SxTvSU29cxcK8Byw8ys9bfDg2W1anol1L7tAjT1UXzAjlmooGx
+         I5fZyxPJj3J0KDys8dKkp4vUvZmYNkgNV6zQDnOqIPjDm8B00EumQrA2Z4UW+6kjKwjW
+         E88HqMfrZQZMmZcPs6uFXsmdsNecNCLAQh6nimqTNoYlg2PM4Jn+zXWBlOeg9MS/uWaY
+         Etni99U+V556j4ZC5c/w8vyzRnZ37npENnDO0YTu5czZiXH/H//A18aP8s0KsMRUoVEa
+         Zv3g==
+X-Gm-Message-State: ACgBeo2NSnEpdSark038Sj+ppTUJruq430ilwUu9mxbnomVPX5FSBixi
+        U0+JHYrQqdw3mt1j1iIO2R/Nj3KVMNOd38BNg4I=
+X-Google-Smtp-Source: AA6agR5WgrB5LKptPjltFV5HyxgV+69DAbH09My27NgjzeNaXZIOdRzKMTvc3H0xqFCKSqucFzlUUG70Xy+qgJvpKsI=
+X-Received: by 2002:a81:9407:0:b0:345:6683:d757 with SMTP id
+ l7-20020a819407000000b003456683d757mr24666022ywg.326.1663056832590; Tue, 13
+ Sep 2022 01:13:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913062721.5986-1-quic_hyiwei@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <Yx6yl9jNu6S8xOJ+@black.fi.intel.com> <20220912203619.GA537411@bhelgaas>
+In-Reply-To: <20220912203619.GA537411@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 13 Sep 2022 10:13:41 +0200
+Message-ID: <CAJZ5v0g6EBwtT9B0tUNc05-N4XjMt0i0Cm2zO+uJAibV9FrxfQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/9] PCI/PM: Always disable PTM for all devices during suspend
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Koba Ko <koba.ko@canonical.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Yiwei,
+On Mon, Sep 12, 2022 at 10:36 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Mon, Sep 12, 2022 at 07:16:23AM +0300, Mika Westerberg wrote:
+> > On Fri, Sep 09, 2022 at 03:24:56PM -0500, Bjorn Helgaas wrote:
+> > > Bjorn Helgaas (9):
+> > >   PCI/PTM: Cache PTM Capability offset
+> > >   PCI/PTM: Add pci_upstream_ptm() helper
+> > >   PCI/PTM: Separate configuration and enable
+> > >   PCI/PTM: Add pci_suspend_ptm() and pci_resume_ptm()
+> > >   PCI/PTM: Move pci_ptm_info() body into its only caller
+> > >   PCI/PTM: Preserve RsvdP bits in PTM Control register
+> > >   PCI/PTM: Reorder functions in logical order
+> > >   PCI/PTM: Consolidate PTM interface declarations
+> > >   PCI/PM: Always disable PTM for all devices during suspend
+> >
+> > For the whole series,
+> >
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>
+> Thank you very much, Mika, Kuppuswamy, and Rajvi for your effort in
+> reviewing and testing these.  I know that's a lot of work, and I
+> really appreciate it.
+>
+> I put these on pci/pm together with Rajvi's pci_pm_suspend_noirq()
+> simplification for v6.1.
 
-On Tue, Sep 13, 2022 at 02:27:21PM +0800, Huang Yiwei wrote:
-> Since icc-common.c can be compiled as module, add the missing
-> MODULE_LICENSE to avoid compile errors.
-
-Just curious how you can enable config INTERCONNECT_QCOM as "m"
-(module)?
-
-I checked the config INTERCONNECT_QCOM which is dependent on
-INTERCONNECT, and INTERCONNECT has below dependency:
-
-  - DRM_TEGRA [=n] && HAS_IOMEM [=y] && (ARCH_TEGRA [=y] || ARM && COMPILE_TEST [=n]) && COMMON_CLK [=y] && DRM [=m] && OF [=y]
-  - TEGRA_MC [=n] && MEMORY [=y] && (ARCH_TEGRA [=y] || COMPILE_TEST [=n] && COMMON_CLK [=y])
-
-Seems to me, it's impossible to enable INTERCONNECT as "m" because the
-dependency ARCH_TEGRA/OF/COMMON_CLK cannot be configured as "m".
-
-Thanks,
-Leo
+Awesome, thanks!
