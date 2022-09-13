@@ -2,243 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC575B6D33
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 14:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970E45B764F
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Sep 2022 18:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiIMM0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Sep 2022 08:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S231715AbiIMQVG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Sep 2022 12:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbiIMM02 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Sep 2022 08:26:28 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB259140DC;
-        Tue, 13 Sep 2022 05:26:27 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DBptiN015687;
-        Tue, 13 Sep 2022 12:26:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=KWhf+9y4Twe3kN6SJ/H/i8sS8Uc+GlmjIG+kRv57r1I=;
- b=GrO/dKEHEVbf6eO0tT/Q/k0GkxHeytvkDhTgSBQn8VcNowfkdXloY3YDdu2XO8wnykUQ
- b57qbRlxAnM/B0qmuDMUFjNHMt8HAZ9QHd9Z+9yu5slno3Cm6nQAFQWIg/fow8cympes
- W4Hg8KcL59Km6HS6+GDWiLIkCS1Tgti+c3Ae59AgbuBh5hcJcxWNHceed+SgYBx47Y5a
- /axFtvsO2zvk0h34ZnvGlZF6jjxdtd80RGW4Ye2S2xIxT9entckCNqxW5mo2u/uPqLyZ
- oPWCBLyLAALBtSbfGTGVNxuCxNFC5hn7v5CJjrF708qm0dYr4ebxDk6D6V2uhqnP643m 6w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jjsc698fy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 12:26:15 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28DBtCoM026084;
-        Tue, 13 Sep 2022 12:26:14 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jjsc698fc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 12:26:14 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28DCLt2Y028932;
-        Tue, 13 Sep 2022 12:26:13 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma04wdc.us.ibm.com with ESMTP id 3jgj79buu3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Sep 2022 12:26:13 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28DCQD5822151670
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Sep 2022 12:26:13 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 72C577805F;
-        Tue, 13 Sep 2022 12:40:34 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E807C7805E;
-        Tue, 13 Sep 2022 12:40:32 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Sep 2022 12:40:32 +0000 (GMT)
-Message-ID: <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com>
-Date:   Tue, 13 Sep 2022 08:26:09 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 02/10] tpm: Allow PCR 23 to be restricted to
- kernel-only use
+        with ESMTP id S230449AbiIMQUf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Sep 2022 12:20:35 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20620.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::620])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE7DA5C59;
+        Tue, 13 Sep 2022 08:15:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PzbHxA8kpLcyvb3kYttbHiwhnbPDMVwn65avKQQ/bGgM25lDLC9+/LR/DoAFPatG86LTg1WxEWiO6BfaoYc5lkUaBHK0Ae4puW+e7QUV+/pO1610F86uY3ySCBCswEPJInDTlQ32qdT0mHXfUCAndNbKd5S9auiNWFbIBTSeBpCKfFwC1UtEsaY7D9MAC6jiLaApg2JYOoohjXsw+z2reivRESeW69kChRjTdRvcpUgASoYOk6cwu8lk49ykTJTzoDLPPOSCRvP556ExgKjeBDOCttpc+Nni7XuC7CO2mQi3WIV6xq3EeteHHRpFCcABLCtAkOJPx02ZoX39f31r6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6fu3QcFPzLqbDHiY08f3eFnTehqtyQ7HH3FkjWq3OPA=;
+ b=PNTyOv+c5SjkVoRko+9IE7El+3c50T9/CY93wSu/X1PL4SYsGRwMK0Flh+hdNK0CXobHbt/U0UP9OZ9mhtNhipHBl8Z1ZVCpW2ssMn6ndy41R4O/C+/XEPlc1qwB/BcBgQVOgbtrr0zeIyXyHb4wwSXjEzLPWyMf6GXD6uIf14QlcAaRIRNv2S48PLER0kBXQmuuhsfhrJ2y1fLAZi7uLAFIkM77rY0bI8VUIZ8loQR1CDOHUBMKJZX1c3OkC9l7ZV0hkttr06hRFPQLVNAKgPTyCeeTc18vAw4ZoGGnBZS0rFZh89AChfp5NpjTRIYvcVsaurkzFlxghrYmGN5PlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6fu3QcFPzLqbDHiY08f3eFnTehqtyQ7HH3FkjWq3OPA=;
+ b=eBpDikUYpUNGwDp1SAQUyTIF6ZAuz/VJXeHmjVKCr6Ik5KjMUzoI7RChlGF4u3WAp0wtRlzq1lby0W+vBovfa+GtqL9X83xXK6HpZdbG6iPGre/9wV6Cvz0F1ixE96ekglcKTLlf0hvIw50BElV4+c7bWJRMu09XJj68j0IF3Gc=
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
+ by CH2PR12MB4280.namprd12.prod.outlook.com (2603:10b6:610:ac::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Tue, 13 Sep
+ 2022 15:14:14 +0000
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::d862:67a:d93b:8128]) by DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::d862:67a:d93b:8128%5]) with mapi id 15.20.5612.022; Tue, 13 Sep 2022
+ 15:14:14 +0000
+From:   "Yuan, Perry" <Perry.Yuan@amd.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>
+CC:     "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/7] cpufreq: amd_pstate: add module parameter to load amd
+ pstate EPP driver
+Thread-Topic: [PATCH 2/7] cpufreq: amd_pstate: add module parameter to load
+ amd pstate EPP driver
+Thread-Index: AQHYxGvMfyM5wc0bSEifIZSI5R0+Ja3XcP6AgAYD7wA=
+Date:   Tue, 13 Sep 2022 15:14:13 +0000
+Message-ID: <DM4PR12MB52785281752518053A305D519C479@DM4PR12MB5278.namprd12.prod.outlook.com>
+References: <20220909164534.71864-1-Perry.Yuan@amd.com>
+ <20220909164534.71864-3-Perry.Yuan@amd.com>
+ <abb1ec0e-2a1f-09bc-f11c-8e5be4526927@amd.com>
+In-Reply-To: <abb1ec0e-2a1f-09bc-f11c-8e5be4526927@amd.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org
-Cc:     gwendal@chromium.org, Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, apronin@chromium.org,
-        dlunev@google.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        corbet@lwn.net, jejb@linux.ibm.com,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: bgbPq4D_WT8GHfx8tSoSOqyBdOCVg8-u
-X-Proofpoint-ORIG-GUID: AsknTBA13Kzga_E9gQcxwUrj9mePNgp0
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-09-13T15:14:10Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=c3c32774-09f1-466e-85a3-92a2563de631;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-09-13T15:14:10Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 9f39354d-5338-4e74-a229-80b78da7660b
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5278:EE_|CH2PR12MB4280:EE_
+x-ms-office365-filtering-correlation-id: 427f2397-2ea8-4847-c31b-08da959a9e4b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BfI0wx2pqm6/NT8GB9eWAt2gxRSAOt2LXTFUjBvpfyskue8aT1cm7mnicuXYLWVvU1MHgmErBxABH1cNaDHjbPSONHp8di4QVTMH7z090ytSVuyYNu3Tw9zaWI+/oEgWdMNKrSwkR7b8Bq6XTDBwzB3N01H8/bXv6uicTd1F862U7FAbf2PcAySDPJOJeBwjG+jcUPkktsyggWZsXr/BviFS42gIAZEvEnyLHXgsg637TMbhhKMccHAEsahrvy7QKFkiFhQbj/GVCPfoaVdoO1KzO0v2UC+WI7dBowfZH+PKivVmsTYvD3Z5zaBK+8qpA2gdkegGztmX0rk4J7uk9ILX4v3cVr5V+7EUweQqn0X6kswyWBPj0lOiABLU3G5w2Ug9N6VQmcDtdcGoPEmXEn1Wgp8epsDyD7rrZ0DAAMSIkNzciKb7DJzSRY0quVFeHZqaYLxXWFMr+2PAQ1unCJCLLhNwl2l2Y4xpV0qDczSRjZJP2CscslfYZWOQLkmV5hM+fnw8lVCKWIVY+V/95OJWkuYi2Y/N09/zHVDiH+KjGGBJo8JtReOHk8p+qedB59sJZjCCphYS/lzwVtUwJ+4SAGYEnohFRZnhx5eGcFAJEWqDPYPh47/i+UxBAoteiZiXXf6+PBuGIYliu8BcIKNcyBrhNC5rKukGQoAweHXwH8DzQ8oTWiY2BKl8ZXdHCikCqd0b5wqNyaR3qQHwpDPrzZa4djI1rQvqo4a2zCO5p/lIBEZ5vc32TkXhaNcwajUQkc3A86AzSSP7fUEeog==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199015)(8676002)(76116006)(4326008)(66446008)(66476007)(52536014)(6506007)(186003)(38070700005)(316002)(7696005)(71200400001)(110136005)(54906003)(2906002)(66556008)(66946007)(478600001)(53546011)(41300700001)(26005)(9686003)(64756008)(5660300002)(86362001)(122000001)(8936002)(55016003)(38100700002)(33656002)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cG5ibTl5ak5IRFpqdmExWk9kNy9SMUt5THRXSkVtKys1VXNsV1hnM0QraGwz?=
+ =?utf-8?B?MExKRXluSllGZVYzNjVSY3RqSEVrQ05CeVhibXhlMWV4NTZmTzhyaTM4NS9Q?=
+ =?utf-8?B?K2JzTm9IQk51Z2YxaGkzYm5VVHBqVlFMZlUxNUlIblRMZDd4YWc0VkZUT3BL?=
+ =?utf-8?B?SlZTWUVKeDk0ZGhzWW1NL3doMDRRZmU4Vmc0MEc5NGZaZFdtRWNkRUlVaGpm?=
+ =?utf-8?B?VGczMkxwakVvTVVZOG9saFlIWFBMSTJ4MTVqenhJNVU5dEV3OGwwQ0tNb3JM?=
+ =?utf-8?B?YnQ1NTQyWjJBN0hNMGRvY3Q3dHFXVDFGU2hUeU1qdUtsWlpWZHdib3g1dXdl?=
+ =?utf-8?B?ckY0WjdVeDdNR0QvWWFQRGpXeWgvTXRJNEczQlBlM29XdTNGc3Q5MXd4MXF4?=
+ =?utf-8?B?NHc0cGVLSjVSVStGdGtnMDBlTjI5TFhkVndQcHg3c0hWNHVVUU9uUXg0VFky?=
+ =?utf-8?B?UG5ramVHV3VTYS8rQWx6V2RGQ01KdzJFeS9oRWc5U2o3L05OR2w5R1diRUt4?=
+ =?utf-8?B?Rk1PSkNxYVEwb3Y3d2tyMU9CdXA4ajdWTDYzaDYwc013eUlHSDh5b2J4SlZ1?=
+ =?utf-8?B?ckZiSlFtMFZNNU5uaTk1OW43bmRzUDhLRkdBcnRmR1BmUlB5bUcrSlR2MlZI?=
+ =?utf-8?B?Nk5XbWFqY2k1b2R6Sm1mWWdScStKdXZmcVNQbkVtNkFBT1dyb0lWZjJnWTk4?=
+ =?utf-8?B?TnZUeWhzWXZVWTZMM1hUVjJoQmdHdmZFM09EcDhHQVFKcU5La1FuZllBeU4y?=
+ =?utf-8?B?WnNad1pVWFNpeW0xWFRPRm5EaGpURHoyOHJzYm5jMEYxMkdwSGJFMEd6T0Zz?=
+ =?utf-8?B?blJXd3huSkxVS1FydXJ3OS9oVXNSYUZCQnhtYTBkMVBiTTVvL25NTWdKZlB6?=
+ =?utf-8?B?NHp1QUJvWDhwNDlMMFZOKytRanhQem5VbTBPMXkvMXFkeHZrQTM4akZkSU04?=
+ =?utf-8?B?bkkvcGZVRndsQitIOTMwM0ZYYmt2b3Y3V3RxWDFxZk00MTJIdE5RZkEvSTkw?=
+ =?utf-8?B?c2FjOGdHVVJWL1daeTBaVUR0V3E5cUZKSEJBUmd0aWpsZUFJZTJRUXk5ZjNa?=
+ =?utf-8?B?WkNsaWYvTXo3Tk82Rlh1ZW9zUWVwT0QyaUQ1KzRQL1o5VThUT2pET3JHSldp?=
+ =?utf-8?B?eW1MRGY3eFJPRHNrU2UrYmpybG9jWnZaOGZZQUhUMENueFhJTEJwbHNwYm9I?=
+ =?utf-8?B?NitGWHY2VXpYOVBVbEp5Y3U0RGFGc3VMYTBsVWZUWXlTeUl1UzhkbUxoOFUr?=
+ =?utf-8?B?Z0tzLzBsbGN1WWgzMGNLMUNVZWd1ZzhFVDdnc29VenJWZlRHakdsVzBzZ1hv?=
+ =?utf-8?B?RWZTRFJaMjlTZHF2TzB5V25Dc0FWMXJjRHlvREJiN0Jxb3BKOWU4ekk3MExw?=
+ =?utf-8?B?OVlLenEwRTVtbzY5TGZYV2lIeXhpelNtM1I1UjI4UW1zWksvdTlFb2oxZDhj?=
+ =?utf-8?B?NTBFSHJDRXhVMnlUOWllRXBJcitKUzV4ekRuQXRGUERuQUZHYWdBUG1QVXJ4?=
+ =?utf-8?B?T3ZUTUFuSG9TNGNORDdtUWlVbUJ6VnI2TGlKdFk4UCtLQnR4aVhIT3lqemVz?=
+ =?utf-8?B?cTFmU1BDMEw5enBOcXRxRXpDZkEwV0s5cllkb05IQ2NlVkRsd1pWZzEzNWxO?=
+ =?utf-8?B?MzQ4TDZNMTBrNkZiMjdiV3YrVWtBdVdwcGltTGZSRTdLMWV3eFVRc3BIR1cx?=
+ =?utf-8?B?WTkxVXdraTFvSW8wOEkvTkVhazR3Vm0wY0NQcGxmdTRYTWluWlZrN0dCZ2Zm?=
+ =?utf-8?B?aHlYNWV1T25UaVJhNXgrK3JSU3R2N09OTWYweVJob1Q5K3dHN2FzMVlZYVMx?=
+ =?utf-8?B?WWZweDl1RkNZdXY3RG4zWnl4bE4yQ3Q3SEpYV05jd0tqYTdCU1hWR0pjY3l4?=
+ =?utf-8?B?QUp3cktwcjhtaUpTTzVOd3Q0MW9haU5Db3Z4Ty9IK1VwK2R4ZnN6OHpDOTZD?=
+ =?utf-8?B?UnNnWVp1Z295ZmN1UXJjMmNRbHcxSHZoVkttZ2NWYUpVamZKU3crQzRoanRk?=
+ =?utf-8?B?TEdoTkd5YTlnb3ljZkhUVG1sK2dZcW8yMnR4eXhuMVZxTHh5ZVZEcU1FaGZB?=
+ =?utf-8?B?L3VsdmtwNExkUkc0bjFTRGo5UGRHekM2dTNndTIyVm9xMEd6ZllhQ040UmRj?=
+ =?utf-8?Q?ACAVnn2wQhqJjtVbR2+EgeKkF?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_05,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 spamscore=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 impostorscore=0 clxscore=1011 adultscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209130054
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 427f2397-2ea8-4847-c31b-08da959a9e4b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2022 15:14:13.9133
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iDPtXUoAqboWTnXn7aiybuZDGEUgV1Y/YyHk/178ADr5F4nh0vnlZRp2Q0R+EQ3ClYr1KdvCFSPvW8J66+rPGA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4280
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 8/23/22 18:25, Evan Green wrote:
-> From: Matthew Garrett <matthewgarrett@google.com>
-> 
-> Under certain circumstances it might be desirable to enable the creation
-> of TPM-backed secrets that are only accessible to the kernel. In an
-> ideal world this could be achieved by using TPM localities, but these
-> don't appear to be available on consumer systems. An alternative is to
-> simply block userland from modifying one of the resettable PCRs, leaving
-> it available to the kernel. If the kernel ensures that no userland can
-> access the TPM while it is carrying out work, it can reset PCR 23,
-> extend it to an arbitrary value, create or load a secret, and then reset
-> the PCR again. Even if userland somehow obtains the sealed material, it
-> will be unable to unseal it since PCR 23 will never be in the
-> appropriate state.
-> 
-> From: Matthew Garrett <mjg59@google.com>
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> 
-> Signed-off-by: Evan Green <evgreen@chromium.org>
-> ---
-> Matthew's original version of this patch is at:
-> https://patchwork.kernel.org/patch/12096491/
-> 
-> Changes in v2:
->   - Fixed sparse warnings
-> 
->   drivers/char/tpm/Kconfig          | 10 +++++++++
->   drivers/char/tpm/tpm-dev-common.c |  8 +++++++
->   drivers/char/tpm/tpm.h            | 21 +++++++++++++++++++
->   drivers/char/tpm/tpm1-cmd.c       | 35 +++++++++++++++++++++++++++++++
->   drivers/char/tpm/tpm2-cmd.c       | 22 +++++++++++++++++++
->   drivers/char/tpm/tpm2-space.c     |  2 +-
->   6 files changed, 97 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> index 927088b2c3d3f2..4483b61a428b11 100644
-> --- a/drivers/char/tpm/Kconfig
-> +++ b/drivers/char/tpm/Kconfig
-> @@ -211,4 +211,14 @@ config TCG_FTPM_TEE
->   	  This driver proxies for firmware TPM running in TEE.
->   
->   source "drivers/char/tpm/st33zp24/Kconfig"
-> +
-> +config TCG_TPM_RESTRICT_PCR
-> +	bool "Restrict userland access to PCR 23"
-> +	depends on TCG_TPM
-> +	help
-> +	  If set, block userland from extending or resetting PCR 23. This
-> +	  allows it to be restricted to in-kernel use, preventing userland
-> +	  from being able to make use of data sealed to the TPM by the kernel.
-> +	  This is required for secure hibernation support, but should be left
-> +	  disabled if any userland may require access to PCR23.
->   endif # TCG_TPM
-> diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-> index dc4c0a0a512903..7a4e618c7d1942 100644
-> --- a/drivers/char/tpm/tpm-dev-common.c
-> +++ b/drivers/char/tpm/tpm-dev-common.c
-> @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
->   	priv->response_read = false;
->   	*off = 0;
->   
-> +	if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
-> +		ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
-> +	else
-> +		ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
-> +
-> +	if (ret)
-> +		goto out;
-> +
->   	/*
->   	 * If in nonblocking mode schedule an async job to send
->   	 * the command return the size.
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index a80b341d38eb8c..077c3ca0a127ba 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -229,6 +229,8 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
->   unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
->   int tpm2_probe(struct tpm_chip *chip);
->   int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
-> +int tpm_find_and_validate_cc(struct tpm_chip *chip, struct tpm_space *space,
-> +			     const void *buf, size_t bufsiz);
->   int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
->   int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
->   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
-> @@ -244,4 +246,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
->   void tpm_bios_log_teardown(struct tpm_chip *chip);
->   int tpm_dev_common_init(void);
->   void tpm_dev_common_exit(void);
-> +
-> +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> +#define TPM_RESTRICTED_PCR 23
-> +
-> +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-> +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-> +#else
-> +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-> +				      size_t size)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-> +				      size_t size)
-> +{
-> +	return 0;
-> +}
-> +#endif
->   #endif
-> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> index 8ec743dec26544..318e75ae42fb85 100644
-> --- a/drivers/char/tpm/tpm1-cmd.c
-> +++ b/drivers/char/tpm/tpm1-cmd.c
-> @@ -845,3 +845,38 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
->   
->   	return 0;
->   }
-> +
-> +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
-> +{
-> +	struct tpm_header *header = (struct tpm_header *)buffer;
-> +	char len, offset;
-> +	__be32 *pcr;
-> +	int pos;
-> +
-> +	switch (be32_to_cpu(header->ordinal)) {
-> +	case TPM_ORD_PCR_EXTEND:
-> +		if (size < (TPM_HEADER_SIZE + sizeof(u32)))
-> +			return -EINVAL;
-> +		pcr = (__be32 *)&buffer[TPM_HEADER_SIZE];
-> +		if (be32_to_cpu(*pcr) == TPM_RESTRICTED_PCR)
-> +			return -EPERM;
-
-FYI: TPM 1.2 has transport sessions where the command is tunneled in an 
-encrypted channel and this check could be circumvented...
-
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhJIE1hcmlvDQoNCj4gLS0tLS1P
+cmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTGltb25jaWVsbG8sIE1hcmlvIDxNYXJpby5M
+aW1vbmNpZWxsb0BhbWQuY29tPg0KPiBTZW50OiBTYXR1cmRheSwgU2VwdGVtYmVyIDEwLCAyMDIy
+IDI6NTAgQU0NCj4gVG86IFl1YW4sIFBlcnJ5IDxQZXJyeS5ZdWFuQGFtZC5jb20+OyByYWZhZWwu
+ai53eXNvY2tpQGludGVsLmNvbTsgSHVhbmcsDQo+IFJheSA8UmF5Lkh1YW5nQGFtZC5jb20+OyB2
+aXJlc2gua3VtYXJAbGluYXJvLm9yZw0KPiBDYzogU2hhcm1hLCBEZWVwYWsgPERlZXBhay5TaGFy
+bWFAYW1kLmNvbT47IEZvbnRlbm90LCBOYXRoYW4NCj4gPE5hdGhhbi5Gb250ZW5vdEBhbWQuY29t
+PjsgRGV1Y2hlciwgQWxleGFuZGVyDQo+IDxBbGV4YW5kZXIuRGV1Y2hlckBhbWQuY29tPjsgU3Us
+IEppbnpob3UgKEpvZSkgPEppbnpob3UuU3VAYW1kLmNvbT47DQo+IEh1YW5nLCBTaGltbWVyIDxT
+aGltbWVyLkh1YW5nQGFtZC5jb20+OyBEdSwgWGlhb2ppYW4NCj4gPFhpYW9qaWFuLkR1QGFtZC5j
+b20+OyBNZW5nLCBMaSAoSmFzc21pbmUpIDxMaS5NZW5nQGFtZC5jb20+OyBsaW51eC0NCj4gcG1A
+dmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6
+IFJlOiBbUEFUQ0ggMi83XSBjcHVmcmVxOiBhbWRfcHN0YXRlOiBhZGQgbW9kdWxlIHBhcmFtZXRl
+ciB0bw0KPiBsb2FkIGFtZCBwc3RhdGUgRVBQIGRyaXZlcg0KPiANCj4gT24gOS85LzIwMjIgMTE6
+NDUsIFBlcnJ5IFl1YW4gd3JvdGU6DQo+ID4gVGhlIGFtZF9wc3RhdGUgbW9kZSBwYXJhbWV0ZXIg
+d2lsbCBhbGxvdyB1c2VyIHRvIHNlbGVjdCB3aGljaCBhbWQNCj4gPiBwc3RhdGUgd29ya2luZyBt
+b2RlIGFzIGJvb3RpbmcgbW9kZSwgYW1kX3BzdGF0ZSBpbnN0YW5jZSBvcg0KPiBhbWRfcHN0YXRl
+X2VwcCBpbnN0YW5jZS4NCj4gPg0KPiA+IDEpIGFtZF9wc3RhdGUgaW5zdGFuY2UgaXMgZGVwZW5k
+aW5nIG9uIHRoZSB0YXJnZXQgb3BlcmF0aW9uIG1vZGUuDQo+ID4gMikgYW1kX3BzdGF0ZV9lcHAg
+aW5zdGFuY2UgaXMgZGVwZW5kaW5nIG9uIHRoZSBzZXRfcG9saWN5IG9wZXJhdGlvbg0KPiBtb2Rl
+Lkl0DQo+ID4gICAgIGlzIGFsc28gY2FsbGVkIGFjdGl2ZSBtb2RlIHRoYXQgQU1EIFNNVSBoYXMg
+RVBQIGFsZ29yaXRobSB0byBjb250cm9sIHRoZQ0KPiA+ICAgICBDUFUgcnVudGltZSBmcmVxdWVu
+Y3kgYWNjb3JkaW5nIHRvIHRoZSBFUFAgc2V0IHZhbHVlIGFuZCB3b3JrbG9hZC4NCj4gPg0KPiA+
+IFNpZ25lZC1vZmYtYnk6IFBlcnJ5IFl1YW4gPFBlcnJ5Lll1YW5AYW1kLmNvbT4NCj4gPiAtLS0N
+Cj4gPiAgIGRyaXZlcnMvY3B1ZnJlcS9hbWQtcHN0YXRlLmMgfCA2ICsrKysrKw0KPiA+ICAgMSBm
+aWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvY3B1ZnJlcS9hbWQtcHN0YXRlLmMNCj4gPiBiL2RyaXZlcnMvY3B1ZnJlcS9hbWQtcHN0YXRl
+LmMgaW5kZXggYTI0NjNmNzg1MzIyLi40NTEyOTUyODRhMjYgMTAwNjQ0DQo+ID4gLS0tIGEvZHJp
+dmVycy9jcHVmcmVxL2FtZC1wc3RhdGUuYw0KPiA+ICsrKyBiL2RyaXZlcnMvY3B1ZnJlcS9hbWQt
+cHN0YXRlLmMNCj4gPiBAQCAtNTgsNiArNTgsMTIgQEAgbW9kdWxlX3BhcmFtKHNoYXJlZF9tZW0s
+IGJvb2wsIDA0NDQpOw0KPiA+ICAgTU9EVUxFX1BBUk1fREVTQyhzaGFyZWRfbWVtLA0KPiA+ICAg
+CQkgImVuYWJsZSBhbWQtcHN0YXRlIG9uIHByb2Nlc3NvcnMgd2l0aCBzaGFyZWQgbWVtb3J5DQo+
+IHNvbHV0aW9uDQo+ID4gKGZhbHNlID0gZGlzYWJsZWQgKGRlZmF1bHQpLCB0cnVlID0gZW5hYmxl
+ZCkiKTsNCj4gPg0KPiA+ICtzdGF0aWMgYm9vbCBlcHBfZW5hYmxlZCA9IHRydWU7DQo+ID4gK21v
+ZHVsZV9wYXJhbShlcHBfZW5hYmxlZCwgYm9vbCwgMDQ0NCk7DQo+IE1PRFVMRV9QQVJNX0RFU0Mo
+ZXBwX2VuYWJsZWQsDQo+ID4gKyAgICAgICAgICAgICAgICAibG9hZCBhbWRfcHN0YXRlIG9yIGFt
+ZF9wc3RhdGVfZXBwICh0cnVlID0NCj4gPiArYW1kX3BzdGF0ZV9lcHAgZHJpdmVyIGluc3RhbmNl
+IChkZWZhdWx0KSwgZmFsc2UgPSBhbWRfcHN0YXRlIGRyaXZlcg0KPiA+ICtpbnN0YW5jZSkiKTsN
+Cj4gPiArDQo+IA0KPiBJZiB5b3UncmUgb3BlcmF0aW5nIGluIEVQUCBtb2RlIG9yIG5vdCB0aGUg
+a2VybmVsIG1vZHVsZSBpcyBzdGlsbCAnYW1kLXBzdGF0ZScuDQo+IFNvIHRvIGEgdXNlciBJIHRo
+aW5rIHRoaXMgaXMgYSBwcmV0dHkgY29uZnVzaW5nIGRlc2lnbmF0aW9uLg0KPiANCj4gSSB3b3Vs
+ZCBwcm9wb3NlIHRoZSBmb2xsb3dpbmcgaW5zdGVhZDoNCj4gDQo+ICA+ICtzdGF0aWMgYm9vbCBl
+cHAgPSB0cnVlOw0KPiAgPiArbW9kdWxlX3BhcmFtKGVwcCwgYm9vbCwgMDQ0NCk7DQo+ICA+ICtN
+T0RVTEVfUEFSTV9ERVNDKGVwcCwNCj4gID4gKyAgICAgICAgICAgICAgICAiRW5hYmxlIGVuZXJn
+eSBwZXJmb3JtYW5jZSBwcmVmZXJlbmNlIChFUFApIGNvbnRyb2wiKTsNCj4gDQo+ID4gKw0KPiA+
+ICAgc3RhdGljIHN0cnVjdCBjcHVmcmVxX2RyaXZlciBhbWRfcHN0YXRlX2RyaXZlcjsNCj4gPg0K
+PiA+ICAgLyoqDQoNCk1ha2Ugc2Vuc2UsIHdpbGwgbWFrZSB0aGlzIGNoYW5nZSBpbiB0aGUgVjIu
+IA0KVGhhbmtzLg0KDQpQZXJyeS4gDQo=
