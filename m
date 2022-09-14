@@ -2,62 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4995B8837
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Sep 2022 14:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AD35B88B1
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Sep 2022 14:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiINM0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Sep 2022 08:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        id S229772AbiINM4d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Sep 2022 08:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiINM00 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Sep 2022 08:26:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBCD7DF6F;
-        Wed, 14 Sep 2022 05:26:25 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F851660201C;
-        Wed, 14 Sep 2022 13:26:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663158384;
-        bh=EOvPaAPQay6+H5/vvnMCA8FXSUgtfRiBJVkGqDS8b+A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=B8evYpC5rHOn3wXLr1ltYq8EJ/5zjF2RvyMBqF0VMnFwt0Cj37FWOeW33+VTg/oeQ
-         Vvs7390adjB2YYZ4b6U7+xqzI48EolCfCJxJOQMYUp5CCDoVaj+9ddRKD9iYBcJVfZ
-         SB6my2f00Mjz35i4iOrgVGN2OZNHISpukps2pw1iMptIpMvdi6xE8ucwdaQylrIdbh
-         LrTP+2jSTAcjE4L0Ty0nT/pjR0raKAUPTyaIn4apX/dle0G6Cmgeb5sQ3tuV1RRuMz
-         ICRwRuoFeaUMQ4hs2+/yjDBUoFJ3YStsTmeQEOXxGVHaz9ne669YneRBQEHAjvcAaN
-         Bd/iZIY7+F/DA==
-Message-ID: <c7d49663-8da1-9c49-c15d-ea3a8fe3d317@collabora.com>
-Date:   Wed, 14 Sep 2022 14:26:20 +0200
+        with ESMTP id S229641AbiINM4b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Sep 2022 08:56:31 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB2D66116
+        for <linux-pm@vger.kernel.org>; Wed, 14 Sep 2022 05:56:29 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-324ec5a9e97so178903827b3.7
+        for <linux-pm@vger.kernel.org>; Wed, 14 Sep 2022 05:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=mmcKEjTS1hv6gEdnWK2Uvw+XT407+XmrNmwBWhV8Lok=;
+        b=E3tQcQgTwxMM8Jz3YFNM2CB98b1QbEi2wST6iyzoPV0qeijgEGW7rV3WUcjqTE71Hn
+         0NTSsnXkcz2xFaaGiTt/6YT0CTa9XFVvYlm5zhXzJqJmjyrTuKNkfS9pgFhE8jRHISRR
+         fXQOUdhLOPVRGiPar1YyTtu06rfJloenQf9Cdd2TlNv4v+A3wcvluYwD6EfVkQq1wS5k
+         deBt9FO2MCw9DcT+zBrJHdxEoCe6Ts3KrzMGE/82yrRnwbeGTRJ48fbRS+lcVkmQKm/q
+         Qbx2gdL57D/j8QJTpDZh1bYsBSzbm/yiVmlq/KIFb0nugWvzQR8aTztgPXnOkADYq+ja
+         46+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mmcKEjTS1hv6gEdnWK2Uvw+XT407+XmrNmwBWhV8Lok=;
+        b=DlwTjK17fLrY+lRmQ671shUyKj7lh55/4J9brSgTE9sf9l6gBLPemdR6jVL8YQnSqb
+         uzyGBcfyGtdiqjlujzwo9nQnGthzL8o7M/WD2/m5AE9fPhM8wBey04hi7HayyaERfSBM
+         EQWf26WYOMrZXrWY4/0gpuZkWLFN+pfBW/en38dF6+nWy2Fm+est5BZvColg/kgvOfxu
+         WV7l+d4qK5zHgLTVc9T2Lcsvwiowq8a7S7LG8ECcRDX7Gx59Yaem6+n8V3nUD0Hb9xLd
+         ibk7LX/E6Noc3z+XbJuHfQ1TsFIbhdvvlQ0fLHpq8oCyWgk0ZSSTDowJDu+WGoUuVwk6
+         df+g==
+X-Gm-Message-State: ACgBeo1thIyg8WQgJKtJ0MJIdQPE5xUw13O5vQgLKMjJc+ol1/qvCCPz
+        8i2FspKhYq8sko7fY5euN+uGLrV0ZVmqgoByEROg6g==
+X-Google-Smtp-Source: AA6agR4CWQ6/k5R9xvM/2hZ7UEs2ayJ5TYG/Br2SOS3GeCeaVI11cKB8LqqUD5RjhxjT2z6m2HTdQnRqrXAzpUSsxvU=
+X-Received: by 2002:a0d:f204:0:b0:333:c23f:d793 with SMTP id
+ b4-20020a0df204000000b00333c23fd793mr30919559ywf.71.1663160188392; Wed, 14
+ Sep 2022 05:56:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v9,3/7] arm64: dts: mt8192: Add thermal zones and thermal
- nodes
-Content-Language: en-US
-To:     bchihi@baylibre.com, rafael@kernel.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-2-bchihi@baylibre.com>
+ <48cb4f47-754c-9994-2489-7ffabfc1b3b9@collabora.com>
+In-Reply-To: <48cb4f47-754c-9994-2489-7ffabfc1b3b9@collabora.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 14 Sep 2022 14:55:52 +0200
+Message-ID: <CAGuA+oqnqzABCs1fmeH+bmEGgz_7_rt7co8g8GbyeqHnqaOohQ@mail.gmail.com>
+Subject: Re: [PATCH v9,1/7] thermal: mediatek: Relocate driver to mediatek folder
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
         fan.chen@mediatek.com, louis.yu@mediatek.com,
         rex-bc.chen@mediatek.com, abailon@baylibre.com
-References: <20220817080757.352021-1-bchihi@baylibre.com>
- <20220817080757.352021-4-bchihi@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220817080757.352021-4-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,61 +74,120 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 17/08/22 10:07, bchihi@baylibre.com ha scritto:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add thermal zones and thermal nodes for the mt8192.
-> 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 111 +++++++++++++++++++++++
->   1 file changed, 111 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index cbae5a5ee4a0..59ef4da06a70 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -12,6 +12,7 @@
->   #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
->   #include <dt-bindings/phy/phy.h>
->   #include <dt-bindings/power/mt8192-power.h>
-> +#include <dt-bindings/reset/mt8192-resets.h>
->   
->   / {
->   	compatible = "mediatek,mt8192";
-> @@ -599,6 +600,28 @@ spi0: spi@1100a000 {
->   			status = "disabled";
->   		};
->   
-> +		lvts_ap: thermal-sensor@1100b000 {
-> +			compatible = "mediatek,mt8192-lvts-ap";
-> +			#thermal-sensor-cells = <1>;
-> +			reg = <0 0x1100b000 0 0x1000>;
-> +			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&infracfg CLK_INFRA_THERM>;
-> +			resets = <&infracfg MT8192_INFRA_RST0_THERM_CTRL_SWRST>;
-> +			nvmem-cells = <&lvts_e_data1>;
-> +			nvmem-cell-names = "lvts_calib_data1";
-> +		};
-> +
-> +		lvts_mcu: thermal-sensor@11278000 {
+Hi Angelo,
 
-Please keep the nodes ordered by reg start.
+Nice to hear from you again.
+Understood. The changes you asked for will be implemented in the v10
+of this series.
+It will be sent very soon, I'm still working on Daniel's review too.
 
-Regards,
-Angelo
+Thank you for the review!
 
-> +			compatible = "mediatek,mt8192-lvts-mcu";
-> +			#thermal-sensor-cells = <1>;
-> +			reg = <0 0x11278000 0 0x1000>;
-> +			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&infracfg CLK_INFRA_THERM>;
-> +			resets = <&infracfg MT8192_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
-> +			nvmem-cells = <&lvts_e_data1>;
-> +			nvmem-cell-names = "lvts_calib_data1";
-> +		};
-> +
->   		spi1: spi@11010000 {
->   			compatible = "mediatek,mt8192-spi",
->   				     "mediatek,mt6765-spi";
+Best regards,
+Balsam
 
+On Wed, Sep 14, 2022 at 1:58 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 17/08/22 10:07, bchihi@baylibre.com ha scritto:
+> > From: Michael Kao <michael.kao@mediatek.com>
+> >
+> > Add MediaTek proprietary folder to upstream more thermal zone and cooler
+> > drivers, relocate the original thermal controller driver to it, and rename it
+> > as "auxadc_thermal.c" to show its purpose more clearly.
+> >
+> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> > Co-developed-by: Ben Tseng <ben.tseng@mediatek.com>
+> > Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> > Co-developed-by: Balsam CHIHI <bchihi@baylibre.com>
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > ---
+> >   drivers/thermal/Kconfig                       | 14 ++++--------
+> >   drivers/thermal/Makefile                      |  2 +-
+> >   drivers/thermal/mediatek/Kconfig              | 22 +++++++++++++++++++
+> >   drivers/thermal/mediatek/Makefile             |  1 +
+> >   .../auxadc_thermal.c}                         |  2 +-
+> >   5 files changed, 29 insertions(+), 12 deletions(-)
+> >   create mode 100644 drivers/thermal/mediatek/Kconfig
+> >   create mode 100644 drivers/thermal/mediatek/Makefile
+> >   rename drivers/thermal/{mtk_thermal.c => mediatek/auxadc_thermal.c} (99%)
+> >
+> > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> > index e052dae614eb..d35f63daca3b 100644
+> > --- a/drivers/thermal/Kconfig
+> > +++ b/drivers/thermal/Kconfig
+> > @@ -412,16 +412,10 @@ config DA9062_THERMAL
+> >         zone.
+> >         Compatible with the DA9062 and DA9061 PMICs.
+> >
+> > -config MTK_THERMAL
+> > -     tristate "Temperature sensor driver for mediatek SoCs"
+> > -     depends on ARCH_MEDIATEK || COMPILE_TEST
+> > -     depends on HAS_IOMEM
+> > -     depends on NVMEM || NVMEM=n
+> > -     depends on RESET_CONTROLLER
+> > -     default y
+> > -     help
+> > -       Enable this option if you want to have support for thermal management
+> > -       controller present in Mediatek SoCs
+> > +menu "Mediatek thermal drivers"
+> > +depends on ARCH_MEDIATEK || COMPILE_TEST
+> > +source "drivers/thermal/mediatek/Kconfig"
+> > +endmenu
+> >
+> >   config AMLOGIC_THERMAL
+> >       tristate "Amlogic Thermal Support"
+> > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> > index def8e1a0399c..f7daeb8056c4 100644
+> > --- a/drivers/thermal/Makefile
+> > +++ b/drivers/thermal/Makefile
+> > @@ -55,7 +55,7 @@ obj-y                               += st/
+> >   obj-$(CONFIG_QCOM_TSENS)    += qcom/
+> >   obj-y                               += tegra/
+> >   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> > -obj-$(CONFIG_MTK_THERMAL)    += mtk_thermal.o
+> > +obj-y                                += mediatek/
+> >   obj-$(CONFIG_GENERIC_ADC_THERMAL)   += thermal-generic-adc.o
+> >   obj-$(CONFIG_UNIPHIER_THERMAL)      += uniphier_thermal.o
+> >   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> > diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> > new file mode 100644
+> > index 000000000000..8ff32370b591
+> > --- /dev/null
+> > +++ b/drivers/thermal/mediatek/Kconfig
+> > @@ -0,0 +1,22 @@
+> > +config MTK_THERMAL
+> > +     tristate "MediaTek thermal drivers"
+> > +     depends on THERMAL_OF
+> > +     help
+> > +       This is the option for MediaTek thermal software solutions.
+> > +       Please enable corresponding options to get temperature
+> > +       information from thermal sensors or turn on throttle
+> > +       mechaisms for thermal mitigation.
+> > +
+> > +if MTK_THERMAL
+> > +
+> > +config MTK_SOC_THERMAL
+> > +     tristate "AUXADC temperature sensor driver for MediaTek SoCs"
+> > +     depends on HAS_IOMEM
+> > +     depends on NVMEM
+>
+> That's not true. This driver doesn't depend on NVMEM, as in function
+> mtk_thermal_get_calibration_data(), the calibration params are initialized
+> with default values and if no "calibration-data" cell was found, it will
+> return 0 and simply go on with probing... and this is because not all SoCs
+> need calibration data from eFuses.
+> If you check carefully, the original entry says "NVMEM || NVMEM=n".
+>
+> Please drop the NVMEM dependency from this config entirely.
+>
+> > +     depends on RESET_CONTROLLER
+>
+> While at it, can you please also drop the dependency for RESET_CONTROLLER?
+> I know it was present on the original config entry, but that's wrong, as
+> the driver doesn't strictly require resets, as it uses device_reset_optional().
+>
+>
+> Regards,
+> Angelo
+>
