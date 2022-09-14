@@ -2,292 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E74F5B89CE
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Sep 2022 16:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1409A5B8A65
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Sep 2022 16:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiINODU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Sep 2022 10:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
+        id S230103AbiINOZ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Sep 2022 10:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiINOCr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Sep 2022 10:02:47 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9696E7C32B
-        for <linux-pm@vger.kernel.org>; Wed, 14 Sep 2022 07:01:59 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-333a4a5d495so181407657b3.10
-        for <linux-pm@vger.kernel.org>; Wed, 14 Sep 2022 07:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Jpvw6KQrg1S/1pBzjKmf1uB7j3K3Ydzu3g9Y661w0mg=;
-        b=SkZLLCuVFtvkjNpiUf9LPgljx+x3GViN3GfToJE6bAHwx8xwEol/R5nw9W/QyFzRZ7
-         gXOjT5KI08bgm1JpKwaz3Sxs9Et4ZJDxyn4xb2JZFOVP13qFGJvXO1nxuXEid0AQ1WLm
-         SnZaYOTTr+rUN0Te1fG7rm+RBTk2Hk2ZJu1CnqLwW0o9DPkv4gTJL3Cj/ctaMZ/zDRZH
-         a/IH8DAJxjb+9Qf8wXXAKSziVHP6QPIwJBC+gjpYM9N5kzTF/BQdeNbghraGPXv/8hiU
-         HQ3AooobyqGbhFAMkhOhrL+1N27n6yOZlA2cMDGzRmp9Y4e6w2kqJSHZaK+9ldoEF0Q8
-         38uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Jpvw6KQrg1S/1pBzjKmf1uB7j3K3Ydzu3g9Y661w0mg=;
-        b=rONMKZGXUOR9wFiRohY6ONNSk8BVezz2Vni6TbGCEn44/MMkWaxpti96CAYpZ26YdD
-         O6HSBXOQpBfheNiEUSyfo4IgiT/z8wiQC0zRa0TCdLxCriNZ3Z7i++gZE2HMfMClK+gk
-         P62b/48+/9971NsvH7XKdUyfw/itGXf9eS8op1ce1Sr7UHe/bpg4/eHeSWvxrk3BWeMV
-         IYaDStwOdXF+qeyT0oIp6RsZ4uDkTGpA73jZHa7LrNhCyEKtK13XWemuFoCUeurHL3Ru
-         GXq+JmXngPzeuzXsoy0hL87crLPqNqzrTVIRM+qsIYPjvRuXT2tL79sE5a+exyhOzW3C
-         0R/A==
-X-Gm-Message-State: ACgBeo0N1qQkpwNIGJta03EpNjJ3lHu7S1K4Ev/pxzPS+2Or7GvWArLA
-        mB5bDHgnyCZaGTOSdpVcHCRl8HbFh7uo02NYlg0sjQ==
-X-Google-Smtp-Source: AA6agR4nfEc6ZNsx4IMOTInLJ4GeQaYzxa2yEmi0xC39dBnNrVhTzdhx3g4hnT+XIUeaBnxCZhEg3BlhYDeiFM6ISHA=
-X-Received: by 2002:a81:1604:0:b0:345:3b96:a166 with SMTP id
- 4-20020a811604000000b003453b96a166mr31947771yww.30.1663164118168; Wed, 14 Sep
- 2022 07:01:58 -0700 (PDT)
+        with ESMTP id S230145AbiINOZJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Sep 2022 10:25:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA087F252;
+        Wed, 14 Sep 2022 07:24:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65016B81BB9;
+        Wed, 14 Sep 2022 14:24:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC2BC433D7;
+        Wed, 14 Sep 2022 14:24:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663165459;
+        bh=NvfoMMo+Nx1efU9lK47+5nG0WFKmIKRgLN1C/9z/3AM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZRMucNmm2F9xKNj/6lE8j1vzwmz0slpfACJIwrK4skgfU+GB1S/Q8vSSyzm56BIPf
+         9VzqutzMfWJToZLukvbl0u8Pp8DlzsOc1Of7EcsrcWVkwv5MKaHdRGohUFHq0BXCRv
+         fPH2VOqwUoUCvOPqOFqNykCOTe7chYVgBRgPt9GZ27XLxSqUyJFhCI9Hs168XZMra0
+         Bx1sY81PbHoptwNWoF9eox/KpFynuEQGh6INA2ZpzkW6ZToO32o7gicesKeihf77Rf
+         LL8M2Hh24Q1v1Mp02HpAwpI/OAuTitV5tqsWjxdJNea0dG+gNdPEkCE+VogeyLbPZ0
+         MHcPnUTzIpaQw==
+Date:   Wed, 14 Sep 2022 09:24:16 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Huang Yiwei <quic_hyiwei@quicinc.com>
+Cc:     djakov@kernel.org, agross@kernel.org, konrad.dybcio@somainline.org,
+        dmitry.baryshkov@linaro.org, leo.yan@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] interconnect: qcom: Kconfig: Make INTERCONNECT_QCOM
+ tristate
+Message-ID: <20220914142416.iuqqlwxaqywnwdlv@builder.lan>
+References: <20220914064122.16222-1-quic_hyiwei@quicinc.com>
 MIME-Version: 1.0
-References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-3-bchihi@baylibre.com>
- <716d6471-f0e2-489e-5f9e-9e38e9e7953a@collabora.com>
-In-Reply-To: <716d6471-f0e2-489e-5f9e-9e38e9e7953a@collabora.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 14 Sep 2022 16:01:22 +0200
-Message-ID: <CAGuA+orxfcycwcUMpLe+dkjnXPQkELQsz0vBggGKTQ04XRGc+g@mail.gmail.com>
-Subject: Re: [PATCH v9,2/7] dt-bindings: thermal: Add dt-binding document for
- LVTS thermal controllers
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914064122.16222-1-quic_hyiwei@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Angelo,
+On Wed, Sep 14, 2022 at 02:41:22PM +0800, Huang Yiwei wrote:
+> Make INTERCONNECT_QCOM tristate so that icc-common.c can be
+> compiled as a module.
+> 
+> Signed-off-by: Huang Yiwei <quic_hyiwei@quicinc.com>
 
-I've got the following errors after implementing these changes :
-[...]
-  nvmem-cells:
-    minItems: 1
-    description: Calibration eFuse data for LVTS
+Looks like this could be useful to other platforms that need of_xlate
+with tags, so we should be able to push this helper into the
+interconnect core and get rid of icc-common.c.
 
-  nvmem-cell-names:
-    minItems: 1
-    items:
-      pattern: 'lvts-calib-data[0-9]+$'
+But in the meantime, I like your change.
 
-  "#thermal-sensor-cells":
-    const: 1
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-allOf:
-  - $ref: thermal-sensor.yaml#
+Regards,
+Bjorn
 
-  - if:
-      properties:
-        compatible:
-          contains:
-            enum:
-              - mediatek,mt8192-lvts-ap
-              - mediatek,mt8192-lvts-mcu
-    then:
-      properties:
-        nvmem-cells:
-          maxItems: 1
-
-        nvmem-cell-names:
-          maxItems: 1
-
-  - if:
-      properties:
-        compatible:
-          contains:
-            enum:
-              - mediatek,mt8195-lvts-ap
-              - mediatek,mt8195-lvts-mcu
-    then:
-      properties:
-        nvmem-cells:
-          maxItems: 2
-
-        nvmem-cell-names:
-          maxItems: 2
-[...]
-
-$ make DT_CHECKER_FLAGS=-m dt_binding_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-  LINT    Documentation/devicetree/bindings
-  CHKDT   Documentation/devicetree/bindings/processed-schema.json
-/home/balsam/src/linux-mtk-lvts-newThermalOF/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml:
-properties:nvmem-cell-names:items: {'pattern':
-'lvts-calib-data[0-9]+$'} is not of type 'array'
-from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
-  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-/home/balsam/src/linux-mtk-lvts-newThermalOF/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml:
-ignoring, error in schema: properties: nvmem-cell-names: items
-  DTEX    Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.example.dts
-  DTC     Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.example.dtb
-  CHECK   Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.example.dtb
-Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.example.dtb:0:0:
-/example-0/soc/thermal-sensor@1100b000: failed to match any schema
-with compatible: ['mediatek,mt8192-lvts-ap']
-
-am I missing something?
-
-Best regards,
-Balsam
-
-On Wed, Sep 14, 2022 at 2:19 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 17/08/22 10:07, bchihi@baylibre.com ha scritto:
-> > From: Alexandre Bailon <abailon@baylibre.com>
-> >
-> > Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
-> >
-> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> > Co-developed-by: Balsam CHIHI <bchihi@baylibre.com>
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> > ---
-> >   .../thermal/mediatek,lvts-thermal.yaml        | 152 ++++++++++++++++++
-> >   1 file changed, 152 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> > new file mode 100644
-> > index 000000000000..31d9e220513a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> > @@ -0,0 +1,152 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek SoC LVTS thermal controller
->
-> title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
->
-> > +
-> > +maintainers:
-> > +  - Yu-Chia Chang <ethan.chang@mediatek.com>
-> > +  - Ben Tseng <ben.tseng@mediatek.com>
-> > +
-> > +description: |
->
-> description:
->    LVTS is a thermal management architecture composed of three subsystems,
->    a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
->    a Convertor - Low Voltage Thermal Sensor convertor (LVTS), and
->    a Digital controller (LVTS_CTRL).
->
-> > +  LVTS (Low Voltage Thermal Sensor).
-> > +  The architecture will be first used on mt8192 and mt8195.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt8192-lvts-ap
-> > +      - mediatek,mt8192-lvts-mcu
-> > +      - mediatek,mt8195-lvts-ap
-> > +      - mediatek,mt8195-lvts-mcu
-> > +
-> > +  "#thermal-sensor-cells":
-> > +    const: 1
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +    description: LVTS instance registers.
->
-> This description looks obvious, as it doesn't really say anything "new"...
-> I would rather drop it.
->
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +    description: LVTS instance interrupts.
->
-> Same here
->
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +    description: LVTS instance clock.
->
-> and here.
->
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +    description: |
-> > +      LVTS instance SW reset for HW AP/MCU domain to clean temporary data
-> > +      on HW initialization/resume.
->
-> What about something like...
->
->    resets:
->      items:
->        - description: LVTS reset for clearing temporary data on AP/MCU
->
-> > +
-> > +  nvmem-cells:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +    description: Calibration efuse data for LVTS
->
->    nvmem-cells:
->      minItems: 1
->      items:
->        - description: Calibration eFuse data for LVTS
->        - description: Additional eFuse data (?)
->
->
-> > +
-> > +  nvmem-cell-names:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +    description: Calibration efuse cell names for LVTS
->
-> Actually, maxItems is not really two, but it depends on how many
-> eFuse arrays / nvmem cells we have for each SoC, so I was thinking...
->
-> ...what about doing something like
->
->    nvmem-cell-names:
->      minItems: 1
->      items:
->        pattern: 'lvts-calib-data[0-9]+$'
->
-> and then,
->    if:
->      properties:
->        compatible:
->          contains:
->            enum:
->              - mediatek,blahblah-something
->    then:
->      properties:
->        nvmem-cell-names:
->          maxItems: 2 (or 3, 4, 5...)
->
-> P.S.: I haven't tried any binding check on the proposed lines.
->
-> Krzysztof, any opinions on that?
->
-> Regards,
-> Angelo
->
->
->
+> ---
+>  drivers/interconnect/qcom/Kconfig      | 2 +-
+>  drivers/interconnect/qcom/icc-common.c | 3 +++
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+> index 25d5b4baf6f6..1a1c941635a2 100644
+> --- a/drivers/interconnect/qcom/Kconfig
+> +++ b/drivers/interconnect/qcom/Kconfig
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config INTERCONNECT_QCOM
+> -	bool "Qualcomm Network-on-Chip interconnect drivers"
+> +	tristate "Qualcomm Network-on-Chip interconnect drivers"
+>  	depends on ARCH_QCOM
+>  	help
+>  	  Support for Qualcomm's Network-on-Chip interconnect hardware.
+> diff --git a/drivers/interconnect/qcom/icc-common.c b/drivers/interconnect/qcom/icc-common.c
+> index 0822ce207b5d..f27f4fdc4531 100644
+> --- a/drivers/interconnect/qcom/icc-common.c
+> +++ b/drivers/interconnect/qcom/icc-common.c
+> @@ -5,6 +5,7 @@
+>  
+>  #include <linux/of.h>
+>  #include <linux/slab.h>
+> +#include <linux/module.h>
+>  
+>  #include "icc-common.h"
+>  
+> @@ -32,3 +33,5 @@ struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void
+>  	return ndata;
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_icc_xlate_extended);
+> +
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.17.1
+> 
