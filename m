@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297005B87AB
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Sep 2022 13:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB635B8812
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Sep 2022 14:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiINL6k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Sep 2022 07:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S230142AbiINMTT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Sep 2022 08:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiINL6j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Sep 2022 07:58:39 -0400
+        with ESMTP id S230036AbiINMTR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Sep 2022 08:19:17 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CBC501A6;
-        Wed, 14 Sep 2022 04:58:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FB680377;
+        Wed, 14 Sep 2022 05:19:15 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4CCC36601D9B;
-        Wed, 14 Sep 2022 12:58:35 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CA1F56602024;
+        Wed, 14 Sep 2022 13:19:12 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663156716;
-        bh=shSymtIAxGsCHrnbATpRaFoRfpKmWQ0G2qmKifjEWQ0=;
+        s=mail; t=1663157953;
+        bh=DCleAYfEI4FJICAKJmFAzxyRVAsE5kyhf9NIXG8/TQg=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OI18wQE+hAXB+BPsNMLhS4Fcg4vEbzpxLY8CRUGvYkZvTJaoBhrl4dXnYv0gE5Pvu
-         QNQRUikenrDUMNPBAQzn1IG4je905fA2B4PbGiq/TXXcEdcBZyliFcRmF1ODAExZx9
-         /8XIb1AGQYWphZG3+GBUBbSkBI2/qRTY3xwoV3i6qCj/iHq+M68KIMyTXHwLrjo96E
-         LCNyrFANVNsZvA8uJJ3IKWJNiYtCmqTjHj87LLe5Cb5FA3OFJE0aaRwzS/l4T6qRJu
-         L96oOwx7leewIwSEm1pgcUuxb46OafzKoDwwlyZsHlQZEsvmjLPfgywFriphG8jXyi
-         OcgcdTp/hpzKw==
-Message-ID: <48cb4f47-754c-9994-2489-7ffabfc1b3b9@collabora.com>
-Date:   Wed, 14 Sep 2022 13:58:32 +0200
+        b=iLNpgK4Z8geWBsieZdhoFb89uWkA+E0sHPCj139QVypsVXlxeCsTgUOj/UNUgt7Ih
+         Prb1DDFgDgnfvWFu15+3ZWQJ681MbW/Wz44S5Z63Jr9NQePTvxKaphp2dUWUxiooTC
+         5ayh0D2LyUEKhfCULmEsUC/5wP80dzkhDG8RZlmoygwlWjTOy3uapatuQ75hSV8sd0
+         49Sopl5KuwI2m7dxKaXbYgpyG/s6Y8LZliDZJj3a1NqFcXsN19/ttr32ZRrZov5Y7r
+         JVjGbP0eCFFNi1bzZTlQOqD+jwbUvI8K/jDtAW9GIaHLSoVK/wApxUBxRjcrN9mc3C
+         htufRQwrpSmXA==
+Message-ID: <716d6471-f0e2-489e-5f9e-9e38e9e7953a@collabora.com>
+Date:   Wed, 14 Sep 2022 14:19:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
-Subject: Re: [PATCH v9,1/7] thermal: mediatek: Relocate driver to mediatek
- folder
+Subject: Re: [PATCH v9,2/7] dt-bindings: thermal: Add dt-binding document for
+ LVTS thermal controllers
 Content-Language: en-US
 To:     bchihi@baylibre.com, rafael@kernel.org, rui.zhang@intel.com,
         daniel.lezcano@linaro.org, amitk@kernel.org
@@ -49,10 +49,10 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         fan.chen@mediatek.com, louis.yu@mediatek.com,
         rex-bc.chen@mediatek.com, abailon@baylibre.com
 References: <20220817080757.352021-1-bchihi@baylibre.com>
- <20220817080757.352021-2-bchihi@baylibre.com>
+ <20220817080757.352021-3-bchihi@baylibre.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220817080757.352021-2-bchihi@baylibre.com>
+In-Reply-To: <20220817080757.352021-3-bchihi@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -66,104 +66,142 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 Il 17/08/22 10:07, bchihi@baylibre.com ha scritto:
-> From: Michael Kao <michael.kao@mediatek.com>
+> From: Alexandre Bailon <abailon@baylibre.com>
 > 
-> Add MediaTek proprietary folder to upstream more thermal zone and cooler
-> drivers, relocate the original thermal controller driver to it, and rename it
-> as "auxadc_thermal.c" to show its purpose more clearly.
+> Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
 > 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Co-developed-by: Ben Tseng <ben.tseng@mediatek.com>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 > Co-developed-by: Balsam CHIHI <bchihi@baylibre.com>
 > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 > ---
->   drivers/thermal/Kconfig                       | 14 ++++--------
->   drivers/thermal/Makefile                      |  2 +-
->   drivers/thermal/mediatek/Kconfig              | 22 +++++++++++++++++++
->   drivers/thermal/mediatek/Makefile             |  1 +
->   .../auxadc_thermal.c}                         |  2 +-
->   5 files changed, 29 insertions(+), 12 deletions(-)
->   create mode 100644 drivers/thermal/mediatek/Kconfig
->   create mode 100644 drivers/thermal/mediatek/Makefile
->   rename drivers/thermal/{mtk_thermal.c => mediatek/auxadc_thermal.c} (99%)
+>   .../thermal/mediatek,lvts-thermal.yaml        | 152 ++++++++++++++++++
+>   1 file changed, 152 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
 > 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index e052dae614eb..d35f63daca3b 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -412,16 +412,10 @@ config DA9062_THERMAL
->   	  zone.
->   	  Compatible with the DA9062 and DA9061 PMICs.
->   
-> -config MTK_THERMAL
-> -	tristate "Temperature sensor driver for mediatek SoCs"
-> -	depends on ARCH_MEDIATEK || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	depends on NVMEM || NVMEM=n
-> -	depends on RESET_CONTROLLER
-> -	default y
-> -	help
-> -	  Enable this option if you want to have support for thermal management
-> -	  controller present in Mediatek SoCs
-> +menu "Mediatek thermal drivers"
-> +depends on ARCH_MEDIATEK || COMPILE_TEST
-> +source "drivers/thermal/mediatek/Kconfig"
-> +endmenu
->   
->   config AMLOGIC_THERMAL
->   	tristate "Amlogic Thermal Support"
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index def8e1a0399c..f7daeb8056c4 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -55,7 +55,7 @@ obj-y				+= st/
->   obj-$(CONFIG_QCOM_TSENS)	+= qcom/
->   obj-y				+= tegra/
->   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-> +obj-y				+= mediatek/
->   obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
->   obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
 > new file mode 100644
-> index 000000000000..8ff32370b591
+> index 000000000000..31d9e220513a
 > --- /dev/null
-> +++ b/drivers/thermal/mediatek/Kconfig
-> @@ -0,0 +1,22 @@
-> +config MTK_THERMAL
-> +	tristate "MediaTek thermal drivers"
-> +	depends on THERMAL_OF
-> +	help
-> +	  This is the option for MediaTek thermal software solutions.
-> +	  Please enable corresponding options to get temperature
-> +	  information from thermal sensors or turn on throttle
-> +	  mechaisms for thermal mitigation.
+> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> @@ -0,0 +1,152 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +if MTK_THERMAL
+> +title: MediaTek SoC LVTS thermal controller
+
+title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
+
 > +
-> +config MTK_SOC_THERMAL
-> +	tristate "AUXADC temperature sensor driver for MediaTek SoCs"
-> +	depends on HAS_IOMEM
-> +	depends on NVMEM
+> +maintainers:
+> +  - Yu-Chia Chang <ethan.chang@mediatek.com>
+> +  - Ben Tseng <ben.tseng@mediatek.com>
+> +
+> +description: |
 
-That's not true. This driver doesn't depend on NVMEM, as in function
-mtk_thermal_get_calibration_data(), the calibration params are initialized
-with default values and if no "calibration-data" cell was found, it will
-return 0 and simply go on with probing... and this is because not all SoCs
-need calibration data from eFuses.
-If you check carefully, the original entry says "NVMEM || NVMEM=n".
+description:
+   LVTS is a thermal management architecture composed of three subsystems,
+   a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
+   a Convertor - Low Voltage Thermal Sensor convertor (LVTS), and
+   a Digital controller (LVTS_CTRL).
 
-Please drop the NVMEM dependency from this config entirely.
+> +  LVTS (Low Voltage Thermal Sensor).
+> +  The architecture will be first used on mt8192 and mt8195.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8192-lvts-ap
+> +      - mediatek,mt8192-lvts-mcu
+> +      - mediatek,mt8195-lvts-ap
+> +      - mediatek,mt8195-lvts-mcu
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: LVTS instance registers.
 
-> +	depends on RESET_CONTROLLER
+This description looks obvious, as it doesn't really say anything "new"...
+I would rather drop it.
 
-While at it, can you please also drop the dependency for RESET_CONTROLLER?
-I know it was present on the original config entry, but that's wrong, as
-the driver doesn't strictly require resets, as it uses device_reset_optional().
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description: LVTS instance interrupts.
 
+Same here
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description: LVTS instance clock.
+
+and here.
+
+> +
+> +  resets:
+> +    maxItems: 1
+> +    description: |
+> +      LVTS instance SW reset for HW AP/MCU domain to clean temporary data
+> +      on HW initialization/resume.
+
+What about something like...
+
+   resets:
+     items:
+       - description: LVTS reset for clearing temporary data on AP/MCU
+
+> +
+> +  nvmem-cells:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description: Calibration efuse data for LVTS
+
+   nvmem-cells:
+     minItems: 1
+     items:
+       - description: Calibration eFuse data for LVTS
+       - description: Additional eFuse data (?)
+
+
+> +
+> +  nvmem-cell-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description: Calibration efuse cell names for LVTS
+
+Actually, maxItems is not really two, but it depends on how many
+eFuse arrays / nvmem cells we have for each SoC, so I was thinking...
+
+...what about doing something like
+
+   nvmem-cell-names:
+     minItems: 1
+     items:
+       pattern: 'lvts-calib-data[0-9]+$'
+
+and then,
+   if:
+     properties:
+       compatible:
+         contains:
+           enum:
+             - mediatek,blahblah-something
+   then:
+     properties:
+       nvmem-cell-names:
+         maxItems: 2 (or 3, 4, 5...)
+
+P.S.: I haven't tried any binding check on the proposed lines.
+
+Krzysztof, any opinions on that?
 
 Regards,
 Angelo
+
+
 
