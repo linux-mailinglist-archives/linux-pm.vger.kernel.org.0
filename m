@@ -2,120 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1F45BA020
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Sep 2022 18:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61685BA044
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Sep 2022 19:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiIOQ6y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Sep 2022 12:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
+        id S229733AbiIORMO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Sep 2022 13:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiIOQ6x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Sep 2022 12:58:53 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A474C915D2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Sep 2022 09:58:50 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id c9so28602355ybf.5
-        for <linux-pm@vger.kernel.org>; Thu, 15 Sep 2022 09:58:50 -0700 (PDT)
+        with ESMTP id S229621AbiIORMN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Sep 2022 13:12:13 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408E897EC9
+        for <linux-pm@vger.kernel.org>; Thu, 15 Sep 2022 10:12:10 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id z12so13550957wrp.9
+        for <linux-pm@vger.kernel.org>; Thu, 15 Sep 2022 10:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=DGGPltysYKSp/7lQwYUdbyRbVIJyU3VFPRDcDMDYhRs=;
-        b=GTpQoXRELGKRGGrEnQpUG6fqFn95MU+JX7Awv2d0h+D+NLsQ/r1UDWlPfW+GzOhld8
-         bAGtuk2DCu/dhAJ6RnbkX/ET49JQClyB7mybPtc+ltnm1nb1hsch1CDbW6bYdS0x51cb
-         CWeDIJm/TL5RPQ3+maQlmciTLLWbP7C5UsLFr7N/8C951nfRSa/6oNnXrjdC8pKXgaYD
-         Ubx6YxV13D04BE0gT/4Alk5fBE1OaKJkLAdMY3GdGXv4B0C5jGrlPOY9+X1Qb4j/7Rjq
-         YYmW6MriaI0Ik0g8rSswhW7g7gDHZvTJ+kUKai/+YL5bNKnmo183NUkjYIVe7EnfgT67
-         PCfg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=2l+yAhDGJcVHWRPAUd5IGqWQpdGPXrRqo+Mo7rCnu9g=;
+        b=qYLUuKwg7TmcQaCUmiqbSOSwWPHJ7BOSf7OUqyRyJ3RDJwhbXvpzzUvwOJ2LS2xjI5
+         /H82/CJ4BtXEjNcjgJVECsKq+Ld49iUvTQspx5JGfaQiA/oi3e/BocD+gFhSI8btsLbU
+         Ss7yyFQKAwTvDkeV8GbLErQaCpNuTrMsJU0jKKQS0DF2qqzAxS9A5al/VX+0ACp89cdB
+         2BNcfghBBQfbqvq7o5SHdTQhYFUjjxNUFFuRmL5Cc6zCH7kybyjMPUot0CyYkFWxPPfa
+         KgaCspXXxXrNPZXRTaAKfo80+mBYKf6AE9XM+95iIAqhT5J2QaQ6e1WioRNqewpeCdsC
+         L6Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=DGGPltysYKSp/7lQwYUdbyRbVIJyU3VFPRDcDMDYhRs=;
-        b=Utj0oBWTJm9cTo58zg84JANvmn8WlyPAQB78zrZ8Wvaf3j3RE4E0lOTwEAXeKbLhKB
-         u8BvhfEi0MUTimb62gy40cbl0g3mCb4gaThkxxoTl97bqADYaxe9jNdIOf0+udkhgqmQ
-         a3PTA0ousoKqfAxAvKMvSiHrWeJjfFTwILVMXiZD7pfY0mOwwiUSs5mOvZlyTSL4hrrL
-         6RxvHLCKUIrtQBfs/9R3YwySL46pJvwkhdqPgIgQ3Uu9C63T+D2IqgCxLIsDswE1DZQg
-         mPnqnqS6yVO9vopgMnOoVZXmUPLbOcKj6NwPTD00CMRMpUM2Q7MJIcNDMr5BFInkYIL0
-         /aNQ==
-X-Gm-Message-State: ACrzQf27L5oLTxJmcOOIfR/6+9AGEwZ5NyN3L5NfETt4h/A9+KkjkTgs
-        9idANHFOPTHe3LLHpuwzFg0evYFoM6fhFeFjVeCp1A==
-X-Google-Smtp-Source: AMsMyM49cq5D3GONdx4uJlA3ekuaqH1iwlSdpHLW6fbdANnjlZkcRMf5cVhFmFbRDuF08i7luVZpESHqd3EkEGxXQH4=
-X-Received: by 2002:a25:e74f:0:b0:6ae:eaef:36cb with SMTP id
- e76-20020a25e74f000000b006aeeaef36cbmr649534ybh.199.1663261129842; Thu, 15
- Sep 2022 09:58:49 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2l+yAhDGJcVHWRPAUd5IGqWQpdGPXrRqo+Mo7rCnu9g=;
+        b=kb6j9s28qNEnthcthuLsCYdx+jCdmxwVmGxNsI6jvyEt5Cq9s5Y/FJOQBOwlQISJCF
+         PlocafUYcYHiumNc/RULxlkf6MVNx4plK+kKGRip3yu1Gty5ygLkhBe2oZ49m5Oley1J
+         +Zb4h0BtG0BHgzINseeiyYk78vu5dkCQNQwQ9W/W2Y50EETFJOganD3VN3syJ1iMezW5
+         gKMuCUrf3dn33Wy8gp2wuD4lgrxmf8FX4wijaTUj04154Fs/eObOfhs1zgIwFBnibuSC
+         XT7cVLk5DM3vaBw9pbFSD/RtIG5oCrJUVF5VAPEdjHgXXlAWtFftpubiluBdgpwdrbfp
+         7qKQ==
+X-Gm-Message-State: ACrzQf2ey57uapfVntIioT4WUKjji76TlFCqETavY6E0x5w98V+Zyd4K
+        cuwjT6DUJ3wqVplzSI/TioJeBw==
+X-Google-Smtp-Source: AMsMyM70kaWkZlnA6Fn5V8cPrO3Vg61CS3ixMnGXXYV5uT8dD90iLhhDw+2OMvK97nrOmKmG8UpJsg==
+X-Received: by 2002:a5d:58f1:0:b0:22a:dab5:9aa0 with SMTP id f17-20020a5d58f1000000b0022adab59aa0mr459058wrd.28.1663261928744;
+        Thu, 15 Sep 2022 10:12:08 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id q1-20020a056000136100b00228c2462a78sm3171395wrz.24.2022.09.15.10.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 10:12:08 -0700 (PDT)
+Message-ID: <da17f8f0-8800-e459-e145-58a296296031@linaro.org>
+Date:   Thu, 15 Sep 2022 19:11:57 +0200
 MIME-Version: 1.0
-References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-5-bchihi@baylibre.com>
- <8d6383e0-329e-ca91-6e79-85b3806a2af3@collabora.com>
-In-Reply-To: <8d6383e0-329e-ca91-6e79-85b3806a2af3@collabora.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Thu, 15 Sep 2022 18:58:13 +0200
-Message-ID: <CAGuA+ooEHPiHuGYXOh7s68HRTv9HSr-BexFsCLUPWTMQ3szCfg@mail.gmail.com>
-Subject: Re: [PATCH v9,4/7] thermal: mediatek: Add LVTS driver for mt8192
- thermal zones
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] thermal/core: Add a check before calling set_trip_temp()
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220908174610.7837-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220908174610.7837-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Angelo,
+On 08/09/2022 19:46, Lad Prabhakar wrote:
+> The thermal driver [0] for Renesas RZ/G2L SoC does not implement
+> set_trip_temp() callback but has trips commit 9326167058e8
+> ("thermal/core: Move set_trip_temp ops to the sysfs code") changed
+> the behaviour which causes the below panic when trying to set the
+> trip temperature:
+> 
 
-> > +static int soc_temp_lvts_read_temp(void *data, int *temperature)
-> > +{
-> > +     struct soc_temp_tz *lvts_tz = (struct soc_temp_tz *)data;
-> > +     struct lvts_data *lvts_data = lvts_tz->lvts_data;
-> > +     struct device *dev = lvts_data->dev;
-> > +     unsigned int msr_raw;
-> > +
-> > +     msr_raw = readl(lvts_data->reg[lvts_tz->id]) & MRS_RAW_MASK;
-> > +     if (msr_raw == 0) {
-> > +             /* Prevents a false critical temperature trap */
-> > +             *temperature = 0;
-> > +             dev_dbg(dev, "LVTS not yet ready\n");
->
-> ...and you're not returning an error code, despite this function was called
-> while LVTS is still not ready? :-)
->
+[ ... ]
 
-if I add "return -ENAVAIL;" here, I will get the following errors on boot :
-[    0.292094] thermal thermal_zone0: failed to read out thermal zone (-119)
-[    0.293019] thermal thermal_zone1: failed to read out thermal zone (-119)
-[    0.294158] thermal thermal_zone6: failed to read out thermal zone (-119)
-[    0.295697] thermal thermal_zone9: failed to read out thermal zone (-119)
-[    0.296600] thermal thermal_zone10: failed to read out thermal zone (-119)
-[    0.297698] thermal thermal_zone15: failed to read out thermal zone (-119)
-[    0.298625] thermal thermal_zone16: failed to read out thermal zone (-119)
+> Fixes: 9326167058e8 ("thermal/core: Move set_trip_temp ops to the sysfs code")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-I just preferred : *temperature = 0; to avoid a false critical temperature trap,
-and "return 0;" to suppress these errors.
-After that (first read at boot when LVTS is not fully ready),
-"msr_raw" will be always != 0.
-And I did not want to add a "delay" or a "sleep".
-Please let me know if you have any suggestions that could fix it in a
-better way.
+Applied, thanks for sending this fix
 
-> > +
-> > +     } else
-> > +             *temperature = lvts_raw_to_temp(&lvts_data->coeff, msr_raw);
-> > +
-> > +     return 0;
-> > +}
 
-Best regards,
-Balsam
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
