@@ -2,114 +2,239 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3EB5B9A37
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Sep 2022 13:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15135B9A9F
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Sep 2022 14:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiIOL7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Sep 2022 07:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S229682AbiIOMVV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Sep 2022 08:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIOL7G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Sep 2022 07:59:06 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2CF2B1;
-        Thu, 15 Sep 2022 04:59:05 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id o204so1905783oia.12;
-        Thu, 15 Sep 2022 04:59:05 -0700 (PDT)
+        with ESMTP id S229685AbiIOMVU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Sep 2022 08:21:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDCD8981A;
+        Thu, 15 Sep 2022 05:21:19 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id 13so12722160ejn.3;
+        Thu, 15 Sep 2022 05:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=k83bs0hBxICFx55i2HJIwrB5h1+F3bDwhE6gHy6icWA=;
+        b=D/nB8oD2fkq618/mURvaCoHwpL4dgnIOW4OyecdZ68hRgLCe3/LpQmP4JsF31gNPSS
+         O5qEyZk0q7guRNYSfdQ6XT5JRMLmtG58ipbXCMIDPkpgZzVYT0Qk/OT6oM/hvNLwry9+
+         lJUq8ywGu533PKH5zXX52ej8DOZ+vcyYAPbTjM5vBfRbA0Ex/AzpL3Oy7qx2Y8n2kKY6
+         FL4QxtR/1KGh9zFNIKBFC2uCKw+3y8QYF0w4eLLJqSQKUSsP2GegWQIRLe8Z8orARY/X
+         +L9abGGUKm+ESOyEJR0360Eo+KKa8uBFWmklTtQv88qh1qdwpIF09bFGAUIKRedsPcYX
+         w6BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Z+Uk70wenuE2avVZw1KYjIwZYeZGOnR3WHL7he3UtOU=;
-        b=vz2Wy+s1JjmOFKTKAKJus36qPcmotwslIGbAmAvQF1tQEM8Q81Dj1aWbDgx/uYJ6KV
-         5HVkmhiWYBJqNDyc3RhdL81MVPXy+ln4wkErmdRiZKOPjr2Yg1kvWdaFOO0yDsvwww8V
-         7q2E3rFt0OkX4FfmpsxL0MKLWhR3sQW6QzyfBfnjkuXw9c62+2Yu7eyuHzKMHKT4E5B2
-         ORun/28lPboL3fj+vJj+uSm4JE/xXNioGLxTm3qZAv3MiPLf+AUfT1WSZIkfFsnOWAu0
-         vQ84+gD7Q9kFAdAINF9WNNnYBVWzD3bCJhJa5iSbLFQ+4yOBYXeCTZVz3pqKCBeF4nvY
-         i9oA==
-X-Gm-Message-State: ACgBeo2m/O1CKrHczIekeMwMsYJHMD9AtZf1JHDW9I8Ng4Dwam4r2zGd
-        e8dMpOK0pHI7iaiFlvG5xA==
-X-Google-Smtp-Source: AA6agR49VcAXbJ6flKXkElRGNVqdgLKhCCqHMxvV8f9HxhM/De4Z+GNeFJnd7dQ9ytUjuxfD6+kfcQ==
-X-Received: by 2002:a05:6808:13cd:b0:343:41aa:4cbe with SMTP id d13-20020a05680813cd00b0034341aa4cbemr3803456oiw.264.1663243144633;
-        Thu, 15 Sep 2022 04:59:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bm52-20020a0568081ab400b00339befdfad0sm7567647oib.50.2022.09.15.04.59.03
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=k83bs0hBxICFx55i2HJIwrB5h1+F3bDwhE6gHy6icWA=;
+        b=ip4kG4YslBBIlZWL9F8ja+Ygh0a9DuHcbOQZcWnWvyNFY5EbVEsW6oaGXrj7GabeAE
+         Iquct/Z1qnkOB1dClQT9sH1QkLEO6O6Fb6HeXYWF0RlcPfxM3y85LrkKZsEixY6jYsQ7
+         i1fQVYiwoCTsLCEuGQJo6bzuUvqq5fI5ESt2Yf8tZgtSULBoV2hpCojMxcKX8CISZCwx
+         IXp5EKOpmsBJka829sJ2VlgpzmTQUaOkSMCZmRJMMcyCE9PjtDT6T4YBkndln1DpGsfe
+         5P5Miu39kz/DMsPHxUfjFEcJ4hJDvSjMHCIhzBXGZXeXyE5D9PokaDX+7cAAcfeVCv4U
+         Xo6A==
+X-Gm-Message-State: ACgBeo0k9YzvwOqvvD6IEvsS6NVMaWO3P83Jz7/JTYKQH4gsuas/2lQh
+        7vY8zkKvyExj0KanolbhAcA=
+X-Google-Smtp-Source: AA6agR4sFQyJadPBbcrwlDaYMGlvDinRXNtejShnRWoBKLKAYDN4baD15rfPh70nfDqaH6+N1F0NKw==
+X-Received: by 2002:a17:907:3d86:b0:780:2e5b:58e0 with SMTP id he6-20020a1709073d8600b007802e5b58e0mr5710749ejc.312.1663244478168;
+        Thu, 15 Sep 2022 05:21:18 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id fq32-20020a1709069da000b00770812e2394sm9021717ejc.160.2022.09.15.05.21.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 04:59:04 -0700 (PDT)
-Received: (nullmailer pid 986126 invoked by uid 1000);
-        Thu, 15 Sep 2022 11:59:03 -0000
-Date:   Thu, 15 Sep 2022 06:59:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     cy_huang <u0084500@gmail.com>, sre@kernel.org,
-        alina_yu@richtek.com, alinayu829@gmail.com,
-        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cy_huang@richtek.com, mazziesaccount@gmail.com
-Subject: Re: [PATCH v5 1/3] dt-bindings: power: supply: Add Richtek RT9471
- battery charger
-Message-ID: <20220915115903.GA984598-robh@kernel.org>
-References: <1663173015-7934-1-git-send-email-u0084500@gmail.com>
- <1663173015-7934-2-git-send-email-u0084500@gmail.com>
- <20220915095121.lh5c5gbn53qedtgw@krzk-bin>
+        Thu, 15 Sep 2022 05:21:17 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 14:21:15 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     viresh.kumar@linaro.org, rafael@kernel.org, treding@nvidia.com,
+        jonathanh@nvidia.com, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bbasu@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com
+Subject: Re: [Patch] cpufreq: tegra239: Add support for T239
+Message-ID: <YyMYu9Y38OeaM1WS@orome>
+References: <20220905155759.17743-1-sumitg@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eqokmArovlNi/Exy"
 Content-Disposition: inline
-In-Reply-To: <20220915095121.lh5c5gbn53qedtgw@krzk-bin>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220905155759.17743-1-sumitg@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 10:51:21AM +0100, Krzysztof Kozlowski wrote:
-> On Thu, 15 Sep 2022 00:30:13 +0800, cy_huang wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> > 
-> > Add bindings for the Richtek RT9471 I2C controlled battery charger.
-> > 
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Co-developed-by: Alina Yu <alina_yu@richtek.com>
-> > Signed-off-by: Alina Yu <alina_yu@richtek.com>
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> > Since v3
-> > - Move unevaluatedProperties line after $ref for binding patch.
-> > - Add Reviewed-by tag for binding patch.
-> > 
-> > Since v2
-> > - Remove the properties for interrupt controller things in the binding documentation.
-> > - Fix dtc error for typo, it's 'regulator-name', not 'regulator-compatible'.
-> > - Add regulator min/max microamp to allow otg vbus current adjustable in example.
-> > - Specify the active-level for charge-enable-gpios in binding example.
-> > 
-> > ---
-> >  .../bindings/power/supply/richtek,rt9471.yaml      | 73 ++++++++++++++++++++++
-> >  1 file changed, 73 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: Unevaluated properties are not allowed ('dma-channels', 'dma-masters', 'dma-requests' were unexpected)
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
 
-Ignore this. Unrelated.
+--eqokmArovlNi/Exy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+On Mon, Sep 05, 2022 at 09:27:59PM +0530, Sumit Gupta wrote:
+> Adding support for Tegra239 SoC which has eight cores in
+> a single cluster. Also, moving num_clusters to soc data
+> to avoid over allocating memory for four clusters always.
+>=20
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/cpufreq/tegra194-cpufreq.c | 29 +++++++++++++++--------------
+>  1 file changed, 15 insertions(+), 14 deletions(-)
+
+The subject is a little confusing. Typically the prefix refers to the
+driver, so it would be something like "cpufreq: tegra194: ".
+
+Furthermore, please always spell out Tegra239 for consistency. This
+makes it easier to grep for.
+
+Otherwise, looks good. So with the above fixed, this is:
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+>=20
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra19=
+4-cpufreq.c
+> index 1216046cf4c2..f38a760da61b 100644
+> --- a/drivers/cpufreq/tegra194-cpufreq.c
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -38,14 +38,6 @@
+>  /* cpufreq transisition latency */
+>  #define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanosec=
+onds */
+> =20
+> -enum cluster {
+> -	CLUSTER0,
+> -	CLUSTER1,
+> -	CLUSTER2,
+> -	CLUSTER3,
+> -	MAX_CLUSTERS,
+> -};
+> -
+>  struct tegra_cpu_ctr {
+>  	u32 cpu;
+>  	u32 coreclk_cnt, last_coreclk_cnt;
+> @@ -67,12 +59,12 @@ struct tegra_cpufreq_ops {
+>  struct tegra_cpufreq_soc {
+>  	struct tegra_cpufreq_ops *ops;
+>  	int maxcpus_per_cluster;
+> +	size_t num_clusters;
+>  	phys_addr_t actmon_cntr_base;
+>  };
+> =20
+>  struct tegra194_cpufreq_data {
+>  	void __iomem *regs;
+> -	size_t num_clusters;
+>  	struct cpufreq_frequency_table **tables;
+>  	const struct tegra_cpufreq_soc *soc;
+>  };
+> @@ -166,6 +158,14 @@ static const struct tegra_cpufreq_soc tegra234_cpufr=
+eq_soc =3D {
+>  	.ops =3D &tegra234_cpufreq_ops,
+>  	.actmon_cntr_base =3D 0x9000,
+>  	.maxcpus_per_cluster =3D 4,
+> +	.num_clusters =3D 3,
+> +};
+> +
+> +const struct tegra_cpufreq_soc tegra239_cpufreq_soc =3D {
+> +	.ops =3D &tegra234_cpufreq_ops,
+> +	.actmon_cntr_base =3D 0x4000,
+> +	.maxcpus_per_cluster =3D 8,
+> +	.num_clusters =3D 1,
+>  };
+> =20
+>  static void tegra194_get_cpu_cluster_id(u32 cpu, u32 *cpuid, u32 *cluste=
+rid)
+> @@ -382,7 +382,7 @@ static int tegra194_cpufreq_init(struct cpufreq_polic=
+y *policy)
+> =20
+>  	data->soc->ops->get_cpu_cluster_id(policy->cpu, NULL, &clusterid);
+> =20
+> -	if (clusterid >=3D data->num_clusters || !data->tables[clusterid])
+> +	if (clusterid >=3D data->soc->num_clusters || !data->tables[clusterid])
+>  		return -EINVAL;
+> =20
+>  	start_cpu =3D rounddown(policy->cpu, maxcpus_per_cluster);
+> @@ -433,6 +433,7 @@ static struct tegra_cpufreq_ops tegra194_cpufreq_ops =
+=3D {
+>  static const struct tegra_cpufreq_soc tegra194_cpufreq_soc =3D {
+>  	.ops =3D &tegra194_cpufreq_ops,
+>  	.maxcpus_per_cluster =3D 2,
+> +	.num_clusters =3D 4,
+>  };
+> =20
+>  static void tegra194_cpufreq_free_resources(void)
+> @@ -525,15 +526,14 @@ static int tegra194_cpufreq_probe(struct platform_d=
+evice *pdev)
+> =20
+>  	soc =3D of_device_get_match_data(&pdev->dev);
+> =20
+> -	if (soc->ops && soc->maxcpus_per_cluster) {
+> +	if (soc->ops && soc->maxcpus_per_cluster && soc->num_clusters) {
+>  		data->soc =3D soc;
+>  	} else {
+>  		dev_err(&pdev->dev, "soc data missing\n");
+>  		return -EINVAL;
+>  	}
+> =20
+> -	data->num_clusters =3D MAX_CLUSTERS;
+> -	data->tables =3D devm_kcalloc(&pdev->dev, data->num_clusters,
+> +	data->tables =3D devm_kcalloc(&pdev->dev, data->soc->num_clusters,
+>  				    sizeof(*data->tables), GFP_KERNEL);
+>  	if (!data->tables)
+>  		return -ENOMEM;
+> @@ -558,7 +558,7 @@ static int tegra194_cpufreq_probe(struct platform_dev=
+ice *pdev)
+>  		goto put_bpmp;
+>  	}
+> =20
+> -	for (i =3D 0; i < data->num_clusters; i++) {
+> +	for (i =3D 0; i < data->soc->num_clusters; i++) {
+>  		data->tables[i] =3D init_freq_table(pdev, bpmp, i);
+>  		if (IS_ERR(data->tables[i])) {
+>  			err =3D PTR_ERR(data->tables[i]);
+> @@ -590,6 +590,7 @@ static int tegra194_cpufreq_remove(struct platform_de=
+vice *pdev)
+>  static const struct of_device_id tegra194_cpufreq_of_match[] =3D {
+>  	{ .compatible =3D "nvidia,tegra194-ccplex", .data =3D &tegra194_cpufreq=
+_soc },
+>  	{ .compatible =3D "nvidia,tegra234-ccplex-cluster", .data =3D &tegra234=
+_cpufreq_soc },
+> +	{ .compatible =3D "nvidia,tegra239-ccplex-cluster", .data =3D &tegra239=
+_cpufreq_soc },
+>  	{ /* sentinel */ }
+>  };
+> =20
+> --=20
+> 2.17.1
+>=20
+
+--eqokmArovlNi/Exy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMjGLsACgkQ3SOs138+
+s6E6RhAAkOM+qtlaafy1K18OV+dbEYuZmgEA9LTfzEiURxgh0xQWDetovYhQ9aNq
+92SA2NZgEActCeIPJKICB7nJvzs7/5eW3j7SuNEpyRvweV3JALWWxvrFRFPtR5FG
+QuK/iTgytQ4J1FuqCIiPd/FRwyR9fBE74o+9qhmLq6KdXF1VB8O79n2ORfROlau+
+ahKMqU4+F5SAiUSx7+EW7cC/BgFWK7WImxnCrctcJJcyIcdI2tFdLzsOMF6YxtbI
+pjb3CLyOITgAmT9hDX+vo2QllyxDgr0rUzM785Tk/lEVzk9/1jCSxxpB36ssPXmp
+UQVMDYzndSMs7EdRS+m3vSPnBntEfmMTKZr0fapEDHzdCQhywpyzHNBtG5a5m+04
+md4vRO+kzqgdo+ZFU4AiHySWLBX2dqp8lUvAdtrutF5hQEhP6FaI0yOt2yHIIdOy
+l6pE15n+zjDsSBpTJUjtFGl3MkEZOgIbnBl9sxOmDY5WYOa4SuZ8/aO4193G85Ej
+kGyiLvxA/JcpCdRQXfqklVksrCFQoWXdrrUCERU5fDSLe1aiDil2lq87YmbCWP09
+D4MuI0z4YilrQPPpfOTDKn1UV3fWhoCJwbLyuaTMtyvowmQXBdLjX6rxquROsLy8
+vtoEug5fHNVFawjzU5w1xmevM692k8uO8w07P7Pbcfd5KstU1/w=
+=Ja4c
+-----END PGP SIGNATURE-----
+
+--eqokmArovlNi/Exy--
