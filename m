@@ -2,72 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C905B9AA5
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Sep 2022 14:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B725B9F36
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Sep 2022 17:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiIOMXB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Sep 2022 08:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S229544AbiIOPxh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Sep 2022 11:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiIOMW4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Sep 2022 08:22:56 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7B689812;
-        Thu, 15 Sep 2022 05:22:55 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id m3so6845039eda.12;
-        Thu, 15 Sep 2022 05:22:55 -0700 (PDT)
+        with ESMTP id S229850AbiIOPxe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Sep 2022 11:53:34 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56E47F117
+        for <linux-pm@vger.kernel.org>; Thu, 15 Sep 2022 08:53:32 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id e16so31540485wrx.7
+        for <linux-pm@vger.kernel.org>; Thu, 15 Sep 2022 08:53:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=8W3ePrho10IJuw4z7hoEUly3NS+NeZ7T3273mT8cs48=;
-        b=MXZrORyvfoCWHn593WD9E7F/vuXYRt0Ssj0vrB0WbK6WkHD6DaWN801IiiBiuZNYV+
-         +tsq3PFUVVKmDdkjWvRQmkOYplDGiOBbOZNIXoNQxfMXXfPPAwLtu7h0nmmf4VP3r4I3
-         VLGYbiHNbe+EREBYq1JhGh2i2EJFO0OVGBIGkk1Qe0DigfewooYffc0msgY7dZTfvGmh
-         8mNgyCYHEvaJx9Hg9shs4jBDbBSX6HbH/Hhryh9XLP1aejgea2x7zaUe3laFH34V606V
-         fTIZE+eR7+nBj9pekcs76uZfLbwPnTgokJbUDn1u81CUQPoEm3zJ/u3HhPX8D1PyuIwW
-         VoAA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/3wMcFW+Q2QkQYcgxSwnwev38w4amXX73UlBpLdQGfw=;
+        b=SjegSkPXCFmpyiHfBdu98vP76DdfhYVOvbr/LBihuRn6MatxIy3ClbyqSIX2XpM0f2
+         WElfJqmd1PRrBXCxH62Cod/tKmSjr11eXB8/exFsbTr/WMKQva40g4PkDBpe+3/nSGoe
+         WbUglcsu+yUPIBlRrMRKE/ZbYsdi/d1qe4gYhWS/VBnSUxCX3N1/IXkhuVVH3p5+qCIZ
+         Jknz8kgCpHmBkh/9HomdCKdV4xJ+rBBG/BZ7EYEdzU2h2gisCG7Rp/uqx8mGUkh+7MI5
+         6Ftxjdh4O40UbO4OFEXK9+A/wnWLBj1iwT9GYAn4YyiMT0AsjOirgQvhmgiPfjG9vTs/
+         7Meg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=8W3ePrho10IJuw4z7hoEUly3NS+NeZ7T3273mT8cs48=;
-        b=MfjNr9+pv8sNgBFMRpXuRY1khnPZQf8N8aKKnHVmksuRt+Vk08DoIZEPfBr22vagVk
-         CJ1RZlYPKhqRebH0zahzHUIkSILHnPISQGbiPCc5lJcxKH+TOyVlszxt35/5rIOGjf7/
-         PRsL6jWe8xhyD0NwGMvlSYPErDyYRbPADwKANBfQhmzxe0Zk5y4WiiSXP1Xdv+Cag1R0
-         or9+c5EQM09gydAmLXzrGBdYAIWXJw1PBkUehpAvH/AVmTKAJntjoCgUN9BdQHhpKWYn
-         aafLtM319roy5xle7JgtsvErWkzsdJAaVmoxXRVmGw8urkz+PIgk58kL263DU/35sBXh
-         w4tA==
-X-Gm-Message-State: ACgBeo38KidaTKaRuEAKWmnv40tOTeASzGJrJDmJs6ABMa4dRYr79g3Q
-        juvnDTgL7C+ij8a6Ab+94DAQ+VHACeY=
-X-Google-Smtp-Source: AA6agR7mqpGbWoirsws2WzvDFQCYpIXanS0pYxVHi6yhtUn4hac8oKiCNb1XgW4v7yr9R1VZkawQNQ==
-X-Received: by 2002:a05:6402:33c4:b0:448:e63e:4f40 with SMTP id a4-20020a05640233c400b00448e63e4f40mr34167088edc.203.1663244573852;
-        Thu, 15 Sep 2022 05:22:53 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id v17-20020aa7d9d1000000b0044f21c69608sm11740115eds.10.2022.09.15.05.22.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 05:22:53 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 14:22:51 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     viresh.kumar@linaro.org, rafael@kernel.org, treding@nvidia.com,
-        jonathanh@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bbasu@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com
-Subject: Re: [Patch] cpufreq: tegra239: Add support for T239
-Message-ID: <YyMZG9ydqFYTWf0a@orome>
-References: <20220905155759.17743-1-sumitg@nvidia.com>
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/3wMcFW+Q2QkQYcgxSwnwev38w4amXX73UlBpLdQGfw=;
+        b=e+VFAM46pRdp6m9uBPj40TsZGmBH+oO4dgAndu4SiQpC0qXKYetJQALvvdWWuXfYyL
+         xA83ZxvVaMEPzBhs+VXWtURSiqp7QINEUuaG6a5vsA6CYyIuGhRNPVf0OCFrB/HO6WK7
+         BGO/aHo5C6F/o1U01gTXEhCkRY3aCh1/kHthLQEFIn6xbgSKtMG+1I/glkYJPCXKb5RO
+         Z2dXmTyf3GtQZjp17f9nLECOFyR82yCm6mB0Paj2ucUv6/0octWFyimw0MhDaulbNdHO
+         XLFbbYIdhM3TydMvI3BfKYuco4s2DEIdbnjwZ/qtloqD1JjAMFMjRdcVX3Sj9uuYyEF8
+         g4Bg==
+X-Gm-Message-State: ACrzQf3a51A37eRlTopccDVc1UcjXXE0LOuAigeSYubvSsp7m9AhjoK2
+        ebNTnEAo8d+MV9qEZxlGAcFW0w==
+X-Google-Smtp-Source: AMsMyM7ZOkmT70Vmw/HZ6InphqFsxwBe0lN9yQVkNrorY1EAAFc5Tl2dD8twdKHggcwKeFq4EtvUQg==
+X-Received: by 2002:adf:e94e:0:b0:228:da92:3691 with SMTP id m14-20020adfe94e000000b00228da923691mr216490wrn.1.1663257211361;
+        Thu, 15 Sep 2022 08:53:31 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id n3-20020a05600c3b8300b003a319b67f64sm3824359wms.0.2022.09.15.08.53.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 08:53:30 -0700 (PDT)
+Message-ID: <92e80c4b-f41f-8822-93f1-2476499d0b6e@linaro.org>
+Date:   Thu, 15 Sep 2022 17:53:19 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VSgregLn1wDWg58s"
-Content-Disposition: inline
-In-Reply-To: <20220905155759.17743-1-sumitg@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] thermal/drivers/imx_sc: Rely on the platform data
+ to get the resource id
+Content-Language: en-US
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220818082316.2717095-1-daniel.lezcano@linaro.org>
+ <17d09638-01e6-038f-c3db-cbe02ccb9327@linaro.org>
+In-Reply-To: <17d09638-01e6-038f-c3db-cbe02ccb9327@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,76 +83,103 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---VSgregLn1wDWg58s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Shawn, Sascha,
 
-On Mon, Sep 05, 2022 at 09:27:59PM +0530, Sumit Gupta wrote:
-> Adding support for Tegra239 SoC which has eight cores in
-> a single cluster. Also, moving num_clusters to soc data
+if there is no comment on these two patches. I'll pick them up
 
-Found two more minor things: s/soc/SoC/ for consistent spelling.
+Thanks
 
-> to avoid over allocating memory for four clusters always.
->=20
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/cpufreq/tegra194-cpufreq.c | 29 +++++++++++++++--------------
->  1 file changed, 15 insertions(+), 14 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra19=
-4-cpufreq.c
-> index 1216046cf4c2..f38a760da61b 100644
-> --- a/drivers/cpufreq/tegra194-cpufreq.c
-> +++ b/drivers/cpufreq/tegra194-cpufreq.c
-> @@ -38,14 +38,6 @@
->  /* cpufreq transisition latency */
->  #define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanosec=
-onds */
-> =20
-> -enum cluster {
-> -	CLUSTER0,
-> -	CLUSTER1,
-> -	CLUSTER2,
-> -	CLUSTER3,
-> -	MAX_CLUSTERS,
-> -};
-> -
->  struct tegra_cpu_ctr {
->  	u32 cpu;
->  	u32 coreclk_cnt, last_coreclk_cnt;
-> @@ -67,12 +59,12 @@ struct tegra_cpufreq_ops {
->  struct tegra_cpufreq_soc {
->  	struct tegra_cpufreq_ops *ops;
->  	int maxcpus_per_cluster;
-> +	size_t num_clusters;
+   -- D.
 
-Might want to make this unsigned int while at it. size_t is preferred
-for things that actually refer to the size of something, while this is a
-count, so unsigned int fits slightly better. It's admittedly a bit
-pedantic...
+On 26/08/2022 00:28, Daniel Lezcano wrote:
+> On 18/08/2022 10:23, Daniel Lezcano wrote:
+>> Currently the imx_sc driver is reimplementing part of the thermal zone
+>> parsing from the thermal OF tree code to get the sensor id associated
+>> with a thermal zone sensor.
+>>
+>> The driver platform specific code should know what sensor is present
+>> and not rely on the thermal zone description to do a discovery. Well
+>> that is arguable but all the other drivers have a per platform data
+>> telling what sensor id to use.
+>>
+>> The imx_sc thermal driver is the only one using a different
+>> approach. Not invalid but forcing to keep a specific function
+>> 'thermal_zone_of_get_sensor_id()' to get the sensor id for a specific
+>> thermal zone as the self-explanatory function tells and having device
+>> tree code inside the driver.
+>>
+>> The thermal OF code had a rework and remains now self-encapsulated
+>> with a register/unregister functions and their 'devm' variants, except
+>> for the function mentioned above.
+>>
+>> After investigating, it appears the imx_sc sensor is defined in
+>> arch/arm64/boot/dts/freescale/imx8qxp.dtsi:
+>>
+>> which defines the cpu-thermal zone with the id: IMX_SC_R_SYSTEM
+>>
+>> This dtsi is included by:
+>>   - imx8qxp-ai_ml.dts
+>>   - imx8qxp-colibri.dtsi
+>>   - imx8qxp-mek.dts
+>>
+>> The two first ones do not define more thermal zones
+>> The third one adds the pmic-thermal0 zone with id: IMX_SC_R_PMIC_0
+>>
+>> The thermal OF code returns -ENODEV if the thermal zone registration
+>> with a specific id fails because the description is not available in
+>> the DT for such a sensor id. In this case we continue with the other
+>> ids without bailing out with an error.
+>>
+>> So we can build for the 'fsl,imx-sc-thermal' a compatible data, an
+>> array of sensor ids containing IMX_SC_R_SYSTEM and IMX_SC_R_PMIC_0.
+>>
+>> The latter won't be found but that will not result in an error but a
+>> normal case where we continue the initialization with other ids.
+>>
+>> Just to clarify, it is what the thermal framework does and what the
+>> other drivers are expecting: when a registration fails with -ENODEV
+>> this is not an error but a case where the description is not found in
+>> the device tree, that be can the entire thermal zones description or a
+>> specific thermal zone with an unknown id.
+>>
+>> There is one small functional change but without impact. When there is
+>> no 'thermal-zones' description the probe function was returning
+>> '-ENODEV', now it returns zero. When a thermal zone fails to register
+>> with an error different from '-ENODEV', the error is detected and
+>> returned.
+>>
+>> Change the code accordingly and remove the OF code from the driver.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>> The changes apply on the linux-next branch:
+>>
+>>   
+>> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next 
+>>
+>>
+>> I don't have the platform, so I was not able to test the changes.
+>>
+>> Changelog:
+>>   v2:
+>>      - Clarified a bit more the changes description
+>>
+>>      - Fix use-after-free and add a couple of comments to reflect the
+>>       patch description
+>>
+>>      - Put back the error message in case there is an error with the
+>>        registration
+>>
+> 
+> Is there any comment on this change ?
+> 
+> 
+> 
 
-Thierry
 
---VSgregLn1wDWg58s
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMjGRsACgkQ3SOs138+
-s6Gx3A/+PaXRkEuVONdV64pgBJOx2j5tUm0Dfkscj3amnxKz3YN47Tx+PK2NtOn8
-hILMZoXSyjHxthf3P8nbUlo/nPHR4ePvkBSyi0b/EFC9+0uiiSV1YFTV1I9EcVgX
-OF6W/5S2HIPEDEo4KbAUXakJ824LBUdJhj61UPwnJHWEvF36kbgFzFufNiZiszoB
-9mpw21qnU+GzleSvY6t4H18TpdU79m1q9YqAMgMCygWKVO0z4wFnU5HhSTAv43di
-aEB695hAlsYai8sPJCe8aNnge+byMBdRg46Ex4AeW1j7jee9CbSaXfnSQBb7NrUC
-dZzDmXocP+lvdQw6wWUE/47mlRpOUbz29ua9yibP1c7m0YqmkloBPZ270uqw2ZRz
-SjXrxI49YARWAbfeUogcLzaZkhBZlW6XKMVDrhoGaxqFB7wVi88+zd8xx7QG+L3v
-5JKDnWXAVWIQTd1u1SCpizAxfDEoit938q/Fu25LzfVw3x6+RYGNmVy/t3JRnHDi
-t8xRC8dPUDu9F/Y7bduO0JCR/K9b5EhiIAtQHfTCzm8lvwQOcrM0vpRanTLcRmAy
-QanNJbHdtTmwTKlhIo4VC5DTkaqnIs7DCG8sWb3WoBkE//jWOIJIqOzdGrSCrYKM
-AedvQw3JND4aI1vsV4RryNqx46iHJHT5Gg531EoGgEb65xGw/u4=
-=Zqyw
------END PGP SIGNATURE-----
-
---VSgregLn1wDWg58s--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
