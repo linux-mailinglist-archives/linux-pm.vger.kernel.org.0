@@ -2,131 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23E25B984F
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Sep 2022 11:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6905B994C
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Sep 2022 13:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiIOJzs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Sep 2022 05:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S229676AbiIOLE5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Sep 2022 07:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiIOJyi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Sep 2022 05:54:38 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2FB9C1E7
-        for <linux-pm@vger.kernel.org>; Thu, 15 Sep 2022 02:51:28 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id u15-20020a05600c19cf00b003b4acef34b1so842593wmq.4
-        for <linux-pm@vger.kernel.org>; Thu, 15 Sep 2022 02:51:28 -0700 (PDT)
+        with ESMTP id S229636AbiIOLE4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Sep 2022 07:04:56 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A74B5C950;
+        Thu, 15 Sep 2022 04:04:55 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z13so12413771edb.13;
+        Thu, 15 Sep 2022 04:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=wjD3Rda5b0oR4mJqCQK7HYHWqvwSAKNkgLt/eJ3V0/U=;
-        b=BGVWdbev+6iSQl6A8jyRQ3AY4iJda+FLNqE/QSyTXnMSd/IzDYBzxfY7KRJb3I8AiZ
-         NKtbYXRVjlY58IB+e9x/Ngsn/z+4wp/Ny2k2l7Eeii3lJ1jZAF9fUY2oZBRdEWSjWQ9Z
-         XNUsUX497/OD1DIGGlV5nImLSDTiEz7nkLQUW5zi1CaCaI4jALgnk6RK/nB7D4AoHWwU
-         4fFOtBfRA17eKntdX0Y+vl8w7My1rhWYy4bNYbvkErlWHaucIiIOJoLfTLzuRU+dOZHN
-         tT636NqwcQIuTcQzwxZPKoyvgwnhvIUWAKYVn9uKaOll7OrissiHeFAt+dO55SQ7G/65
-         AITg==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=epQ8InS75MD280wupDQB3IBzd82ZH3sQJKCVkfM2TGg=;
+        b=ciDGfT7HtzQDgSHYqWXlOO/+arroyPF21ToQUqDajPdpqQm1ZoGZdZmzbfqZ5lePxi
+         jlyWDf0dlHru/Ip9EF6gRjb0syWftBFbkmjFlkIxvyVaQog3MfIrMyEPMoJj1RPihfbw
+         4SL2WK+l4bns8g+KkMUctmZ4MhgDsUSRt02N8rrFb66mWjouPb/B7e2muf589amzbB+A
+         BtmE6NUIBcaHz8XS6R8jpqsrQ1UfGUK8cSjr45Cu5+vCsdtPI+z9NDeaDB9w++jKyzYp
+         BUKypeMc5+cGZUxYryldVNCyquhXIJRYQC/BiqQ6LTCiADFqscc4XekxpMHw6yFLfwOJ
+         uo4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=wjD3Rda5b0oR4mJqCQK7HYHWqvwSAKNkgLt/eJ3V0/U=;
-        b=Uh3B33ilCKx5B3radK3FVETw51ZXSv9m2rRUnLP5QqtZ0a0gWTXrTkXlmY8xrbvwZV
-         +bbHGHq0xQFVOqjdMNGMZ+RzWHz97nx+m8krle87xlnjxDTYnSAjfiXT7iijp+0O9Cv+
-         Xvfz4m0wW3bXdYYXDflf9okwLQEdfHDx2uNy5MWmscMRBCTkgeErat7gUaljvJMzDEqz
-         dBY0YltrrcGZxX/iQPr2OrS+qMFdismy9PecEXkrmR3TjrAY2b4W7fD2MggvblvYu1fq
-         IYhKNtkuTYgyUnU3FyWfTHjKJqbCIEaP8bL5IZiVrdP+muf48NkYsyO6sVihPUoBbwmH
-         7N6A==
-X-Gm-Message-State: ACgBeo2xeSoEYKxnZlKtJ3j9ds2TePg5BLR4EX7byJGF0fErPny5cyS5
-        UxFqsExDYFaJkmQQUfcr9KS1Zw==
-X-Google-Smtp-Source: AA6agR4DH9zplXQIZi6cCraYB02fxzCPyryWneL2J0OFL4KuChOQ+g+Yd/wMITPSdeNkEUfShn+iiw==
-X-Received: by 2002:a05:600c:4fce:b0:3b4:935f:b952 with SMTP id o14-20020a05600c4fce00b003b4935fb952mr5995633wmq.197.1663235483265;
-        Thu, 15 Sep 2022 02:51:23 -0700 (PDT)
-Received: from krzk-bin ([89.101.193.73])
-        by smtp.gmail.com with ESMTPSA id k22-20020a05600c1c9600b003a3442f1229sm2313343wms.29.2022.09.15.02.51.22
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=epQ8InS75MD280wupDQB3IBzd82ZH3sQJKCVkfM2TGg=;
+        b=0kmQbVW3855xcUkt881oRXLH81hm/hXTSrL6XhLGwH034U3AdHXvJ/74G3BGB1TvLx
+         8NeHVPv9e7mosRXkPqdFlmaAPE6zp3GM3favSyy+2YWNgt1Grrwm5gOCPC0Z4FmoGK4n
+         AQfmgE75nGutdViO3j/svvGBfwL7osemeyf85zmlTu5FmwxHWJF25SIqbviiZ/hITJLo
+         B07dzE5o1HwE6hqo+fbD0hed48Xr033j6uaGqV5NW6MqgFKj7b3tsBSAjm5yWat6UX12
+         wJHYSuLrFSlKLd8JZGS4xAcW/72+DR7t35Ltdn722pfogkE+LXAJ9wmK2uy6Wuhv0fgD
+         G32Q==
+X-Gm-Message-State: ACgBeo2InFfZNq+7Hz5rSxJZJp+mAKB2rsFmt6welsJa/V8G4qE8n7GU
+        +f+FHpIvwttZhBDC2iJD08Q=
+X-Google-Smtp-Source: AA6agR4/jmZ6j70+E1u5vwISD+3igDZWFjvJ41mlLCc9W3Rx1k2I6VMawVE/+rA8V8wsI8982zq3OA==
+X-Received: by 2002:aa7:da4f:0:b0:44e:864b:7a3e with SMTP id w15-20020aa7da4f000000b0044e864b7a3emr35151743eds.378.1663239893690;
+        Thu, 15 Sep 2022 04:04:53 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id b13-20020aa7c90d000000b0044eda621b08sm11784112edt.54.2022.09.15.04.04.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 02:51:22 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 10:51:21 +0100
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     sre@kernel.org, alina_yu@richtek.com, alinayu829@gmail.com,
-        linux-pm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cy_huang@richtek.com, mazziesaccount@gmail.com, robh+dt@kernel.org
-Subject: Re: [PATCH v5 1/3] dt-bindings: power: supply: Add Richtek RT9471
- battery charger
-Message-ID: <20220915095121.lh5c5gbn53qedtgw@krzk-bin>
-References: <1663173015-7934-1-git-send-email-u0084500@gmail.com>
- <1663173015-7934-2-git-send-email-u0084500@gmail.com>
+        Thu, 15 Sep 2022 04:04:52 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 13:04:51 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpuidle: tegra: Fix comment typo
+Message-ID: <YyMG0xBCp3j21vxP@orome>
+References: <20220715050144.24638-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wjX9SZ+Gk/1NXCEd"
 Content-Disposition: inline
-In-Reply-To: <1663173015-7934-2-git-send-email-u0084500@gmail.com>
+In-Reply-To: <20220715050144.24638-1-wangborong@cdjrlc.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 15 Sep 2022 00:30:13 +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add bindings for the Richtek RT9471 I2C controlled battery charger.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Co-developed-by: Alina Yu <alina_yu@richtek.com>
-> Signed-off-by: Alina Yu <alina_yu@richtek.com>
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+
+--wjX9SZ+Gk/1NXCEd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jul 15, 2022 at 01:01:44PM +0800, Jason Wang wrote:
+> The double `that' is duplicated in line 275, remove one.
+>=20
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 > ---
-> Since v3
-> - Move unevaluatedProperties line after $ref for binding patch.
-> - Add Reviewed-by tag for binding patch.
-> 
-> Since v2
-> - Remove the properties for interrupt controller things in the binding documentation.
-> - Fix dtc error for typo, it's 'regulator-name', not 'regulator-compatible'.
-> - Add regulator min/max microamp to allow otg vbus current adjustable in example.
-> - Specify the active-level for charge-enable-gpios in binding example.
-> 
-> ---
->  .../bindings/power/supply/richtek,rt9471.yaml      | 73 ++++++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
-> 
+>  drivers/cpuidle/cpuidle-tegra.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-yamllint warnings/errors:
+--wjX9SZ+Gk/1NXCEd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.example.dtb: dma-router@a0: dma-masters:0: [4294967295, 4294967295] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/dma-router.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: dma-masters:0: [4294967295, 4294967295] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.example.dtb: dma-router@40020800: Unevaluated properties are not allowed ('dma-channels', 'dma-masters', 'dma-requests' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
+-----BEGIN PGP SIGNATURE-----
 
-doc reference errors (make refcheckdocs):
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMjBtIACgkQ3SOs138+
+s6GtVg/+PGXrwMBuRguZzhdIsG0XLqZ3sNbquJjNzLboECmthcYlKyi5d2xUNxNp
+wf2CiMw95KgAxeLrqGI6c5ClWlkp8RJ6AcRNSUe/FRk5KCRJDEaELP/QeL71Xpo6
+7HFUHXzXLxATtqn78Mm4Z25N8YMVQebfb6Zd4QqN5U7R1n+Psej1WStKUJs373H8
+1XokCQBgI6x6fxN4d5KnULepFiwj/OxUIHCHVWYO6CQgH2RsXYg7/HtNoZ4doDAz
+0/lDjM7xkwLZNdyMv5yYKM5ZXyHBiFQ9x3DOPEufKGdhB/hInravhqjKqWXeKcQ0
+VL2QYNEXm9L4/lYrK3pp4eUPO3E+/L1+KT/RMJetYAL6VrXvucwWLbkdL40y5QeN
+T1twnwbXGiZcp28X4KDc0W136Xia6VU0anmD4SVDQmCm0TLGW4qyBbF/J3Avt11v
+7CtqTEgL37XQ47jstaKWcYC45KKWpuZg4IBFox0Sh+wmsOA3cuICJeKZn6uk33kD
+HVF03XeKFq4qt0KI/CV5WzlVY1x0Gq6P7cmSMf04fWPULYsG1EIjg2wKi1ILmxOv
+WHZEw5jS7Gx/Oe2Dcmc31uK/pgfHBeBW4oDDSyuOwLakBuq/wcwrKZZqjDvjIbrh
+2SGoY3gvRiDc3VAQlJEzgTIeE/6dNdVS48QE5Wudx41y6Wqm9xM=
+=V2qv
+-----END PGP SIGNATURE-----
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+--wjX9SZ+Gk/1NXCEd--
