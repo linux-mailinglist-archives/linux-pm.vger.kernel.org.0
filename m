@@ -2,69 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959645BB166
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Sep 2022 19:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523E35BB168
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Sep 2022 19:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiIPRA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Sep 2022 13:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S229783AbiIPRC7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Sep 2022 13:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiIPRAY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Sep 2022 13:00:24 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273711ADA5
-        for <linux-pm@vger.kernel.org>; Fri, 16 Sep 2022 10:00:23 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id e16so36934824wrx.7
-        for <linux-pm@vger.kernel.org>; Fri, 16 Sep 2022 10:00:23 -0700 (PDT)
+        with ESMTP id S229698AbiIPRC4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Sep 2022 13:02:56 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F08BA50F7
+        for <linux-pm@vger.kernel.org>; Fri, 16 Sep 2022 10:02:54 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso170522wmq.2
+        for <linux-pm@vger.kernel.org>; Fri, 16 Sep 2022 10:02:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=Xd2uJbGHAG4KxDTbdiFsRgEoAtDupFBZUXylnQzUv3E=;
-        b=Jv8NMCVobfWdWvCbJEH6Tv6/1I29MBt5TM4jbf86DjaufB5kNeyoJaIAzhftTiOY96
-         d+slEUTACGHu/9x/QUNicfqcGKuyXTbuAUuVhHXu1EwMz+LRzIFCaby3jQaDC9dmT5Af
-         Jgk1G8TaDA3+5szF5fsygP7eSZFfenRh/2u4x5eCnSyIFUi1ftq7WL/fPde06Do8X1Hm
-         PZhMrT5magolSlwONTZWR7gZlvQZkDdUBw/Qdk6ev8xkompGmm54fmWZ6N10aq4Aa6VG
-         YKwE+BGtiVoRJRu3296KBHnxXqRjbODbaaGqA7zIWwZVQ7+f27tJz/mGxBoQMhmpGpBe
-         p+jg==
+        bh=QYsB+8ZBh5lPceks2B9b9m9Azf8iMnQ2SX2Ay/jTkis=;
+        b=fL3jdb6zAkkcvyjoOri5S+Vg1FoWrboT7QKwLfO1/p6cy9nSRL8ceJxMFYHciitmi7
+         ZE4UeFewoyoLLsPdYuWF8Bv1vUnJJw3slB8Dc6Dy0raFOi5PFbkO1OYl4Gvm6tMsYWoG
+         4/9P5TInGCzatEAfd2a369eKhUSAiGM+ap4kglNpE9cHq23NXis39eeVUHiFgN/m45ra
+         iHF+NiyNU06WjBUG0HOHaLq2txh1rAo3TVmZipORHg+g0S7avSaqZvEy0ACusgHQ3lro
+         CCPFUnqEl6/6yutKzeuiqUEQLuVi0CNib4Ek7iosWMfdcpQLrFdi+SkOFq24lrXBRtf7
+         Gy2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=Xd2uJbGHAG4KxDTbdiFsRgEoAtDupFBZUXylnQzUv3E=;
-        b=i5Ae8ORQGzhkzUUtJAtN3+QJH49qqMI4vpKFowrKPDbGfErwRQq4eeopanUlE7JSf9
-         ODrQRJWhcazrsfXHskLlHBBykowEhiYuIL+wsYaN+FhlGfcxleV/oU+PStzI5ge7TUxf
-         ljY//n6Ju/cMSrViojwhvT9qVFGOv/TfbwPRmFXBz0+u5mb2D35ufOO/h1Md/3r1sjp+
-         jffnQlqH1SDfcFkCmofvuCAYsTAIAqccoB5yatlDmf1B4+S4Ft5SJg6u38Ex+o6TRM5C
-         0T6AtVKv3mTFxWTlvx+eefWfpnzdYJhpunpTkpryk3CiwDDVPYLyvKl27SZy6zZpe3gY
-         wwlg==
-X-Gm-Message-State: ACrzQf2IObcIW6h1XP7rgw5ZWQYGr4LJ0CZQ/gj8yInNJiNgDPKDutBl
-        mwSZpf2Eq1diayneA6pxpJO5iw==
-X-Google-Smtp-Source: AMsMyM7CcWZCCo1yJCD46oPuW0FRRfr8eQEUC7V1cVayE7g7It+x6iw5BeMNrIDU6ihhiVMN/C9zLQ==
-X-Received: by 2002:adf:fa52:0:b0:228:9675:e6f3 with SMTP id y18-20020adffa52000000b002289675e6f3mr3357936wrr.151.1663347621594;
-        Fri, 16 Sep 2022 10:00:21 -0700 (PDT)
+        bh=QYsB+8ZBh5lPceks2B9b9m9Azf8iMnQ2SX2Ay/jTkis=;
+        b=FVoDROTkmuRhppbESP2Mw0R5czYcya3eH4H2W8/o4kDmOLcXbCGLsnPtgLRr4+4u5X
+         Tjr8/7bjLOvWVIWNOZ1vOsdrIWwKkBTOIMYHjGdi3Mso88Qh4vwLLtmaRkhFW7J+zeGQ
+         FyY0PECA4wu9ASMSaYpyS4Fo695pOD8n3V9cRN/eEzVrVvWvobgJdL/kUXqcL0sZWA35
+         w0LavzgZ+aB8mpTuYDPMiajugzk68Q1/izyi7DOUBV+iCU9NK1Meq+MVA1qCQm6grx/C
+         dac2/yUsCveAe0b+AqS6lPemcVC7iaSrPXPHaBa8UW2aNu77/ZVpQ9Fc7gVQQbEnBYRA
+         QEmA==
+X-Gm-Message-State: ACgBeo3rc5IYlc95Xy38VoA1SAa5eG4SdJeb3PlvAQRSQEZ8x03QAf0l
+        mMWhSeKK9mLYcwYUprVC3+eQGQ==
+X-Google-Smtp-Source: AA6agR5BYrHMmtLqKtDeyLwZmLPyYPjpk5xMJ7H1dPplWOTY7wiOrKN/ivoGKaVycZstsZK4KtOS8Q==
+X-Received: by 2002:a05:600c:1caa:b0:3a8:4066:981d with SMTP id k42-20020a05600c1caa00b003a84066981dmr10994501wms.54.1663347772906;
+        Fri, 16 Sep 2022 10:02:52 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id f8-20020a05600c154800b003b477532e66sm8896630wmg.2.2022.09.16.10.00.20
+        by smtp.googlemail.com with ESMTPSA id d1-20020a5d4f81000000b00228a6ce17b4sm5390047wru.37.2022.09.16.10.02.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 10:00:21 -0700 (PDT)
-Message-ID: <8b260b5d-3f97-846c-c96d-c9ada57ce33f@linaro.org>
-Date:   Fri, 16 Sep 2022 19:00:20 +0200
+        Fri, 16 Sep 2022 10:02:52 -0700 (PDT)
+Message-ID: <e8cf3273-0a2d-4749-a427-95111363d2c3@linaro.org>
+Date:   Fri, 16 Sep 2022 19:02:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v3 15/30] thermal/drivers/armada: Use generic
+Subject: Re: [PATCH v3 22/30] thermal/drivers/imx: Use generic
  thermal_zone_get_trip() function
 Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>, rafael@kernel.org,
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
 References: <20220906164720.330701-1-daniel.lezcano@linaro.org>
- <20220906164720.330701-16-daniel.lezcano@linaro.org>
+ <20220906164720.330701-23-daniel.lezcano@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220906164720.330701-16-daniel.lezcano@linaro.org>
+In-Reply-To: <20220906164720.330701-23-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,9 +83,7 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Miquel,
-
-any comment on this patch?
+Hi,
 
 On 06/09/2022 18:47, Daniel Lezcano wrote:
 > The thermal framework gives the possibility to register the trip
@@ -88,70 +92,174 @@ On 06/09/2022 18:47, Daniel Lezcano wrote:
 > 
 > Convert ops content logic into generic trip points and register them with the
 > thermal zone.
-> 
+
+Any comment on this patch?
+
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->   drivers/thermal/armada_thermal.c | 39 ++++++++++++++++----------------
->   1 file changed, 20 insertions(+), 19 deletions(-)
+>   drivers/thermal/imx_thermal.c | 72 +++++++++++++----------------------
+>   1 file changed, 27 insertions(+), 45 deletions(-)
 > 
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-> index 52d63b3997fe..9444e5a22ca0 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -785,33 +785,34 @@ static int armada_configure_overheat_int(struct armada_thermal_priv *priv,
->   					 int sensor_id)
->   {
->   	/* Retrieve the critical trip point to enable the overheat interrupt */
-> -	const struct thermal_trip *trips = of_thermal_get_trip_points(tz);
-> +	struct thermal_trip trip;
->   	int ret;
->   	int i;
+> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> index 16663373b682..fb0d5cab70af 100644
+> --- a/drivers/thermal/imx_thermal.c
+> +++ b/drivers/thermal/imx_thermal.c
+> @@ -76,7 +76,6 @@
+>   enum imx_thermal_trip {
+>   	IMX_TRIP_PASSIVE,
+>   	IMX_TRIP_CRITICAL,
+> -	IMX_TRIP_NUM,
+>   };
 >   
-> -	if (!trips)
-> -		return -EINVAL;
-> -
-> -	for (i = 0; i < of_thermal_get_ntrips(tz); i++)
-> -		if (trips[i].type == THERMAL_TRIP_CRITICAL)
-> -			break;
-> +	for (i = 0; i < thermal_zone_get_num_trips(tz); i++) {
+>   #define IMX_POLLING_DELAY		2000 /* millisecond */
+> @@ -115,6 +114,11 @@ struct thermal_soc_data {
+>   	u32 low_alarm_shift;
+>   };
 >   
-> -	if (i == of_thermal_get_ntrips(tz))
-> -		return -EINVAL;
-> +		ret = thermal_zone_get_trip(tz, i, &trip);
-> +		if (ret)
-> +			return ret;
-> +		
-> +		if (trip.type != THERMAL_TRIP_CRITICAL)
-> +			continue;
+> +static struct thermal_trip trips[] = {
+> +	[IMX_TRIP_PASSIVE]  = { .type = THERMAL_TRIP_PASSIVE  },
+> +	[IMX_TRIP_CRITICAL] = { .type = THERMAL_TRIP_CRITICAL },
+> +};
+> +
+>   static struct thermal_soc_data thermal_imx6q_data = {
+>   	.version = TEMPMON_IMX6Q,
 >   
-> -	ret = armada_select_channel(priv, sensor_id);
-> -	if (ret)
-> -		return ret;
-> +		ret = armada_select_channel(priv, sensor_id);
-> +		if (ret)
-> +			return ret;
-> +		
-> +		armada_set_overheat_thresholds(priv, trip.temperature,
-> +					       trip.hysteresis);
-> +		priv->overheat_sensor = tz;
-> +		priv->interrupt_source = sensor_id;
+> @@ -201,8 +205,6 @@ struct imx_thermal_data {
+>   	struct thermal_cooling_device *cdev;
+>   	struct regmap *tempmon;
+>   	u32 c1, c2; /* See formula in imx_init_calib() */
+> -	int temp_passive;
+> -	int temp_critical;
+>   	int temp_max;
+>   	int alarm_temp;
+>   	int last_temp;
+> @@ -279,12 +281,12 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
 >   
-> -	armada_set_overheat_thresholds(priv,
-> -				       trips[i].temperature,
-> -				       trips[i].hysteresis);
-> -	priv->overheat_sensor = tz;
-> -	priv->interrupt_source = sensor_id;
-> +		armada_enable_overheat_interrupt(priv);
->   
-> -	armada_enable_overheat_interrupt(priv);
-> +		return 0;
-> +	}
->   
-> -	return 0;
-> +	return -EINVAL;
+>   	/* Update alarm value to next higher trip point for TEMPMON_IMX6Q */
+>   	if (data->socdata->version == TEMPMON_IMX6Q) {
+> -		if (data->alarm_temp == data->temp_passive &&
+> -			*temp >= data->temp_passive)
+> -			imx_set_alarm_temp(data, data->temp_critical);
+> -		if (data->alarm_temp == data->temp_critical &&
+> -			*temp < data->temp_passive) {
+> -			imx_set_alarm_temp(data, data->temp_passive);
+> +		if (data->alarm_temp == trips[IMX_TRIP_PASSIVE].temperature &&
+> +			*temp >= trips[IMX_TRIP_PASSIVE].temperature)
+> +			imx_set_alarm_temp(data, trips[IMX_TRIP_CRITICAL].temperature);
+> +		if (data->alarm_temp == trips[IMX_TRIP_CRITICAL].temperature &&
+> +			*temp < trips[IMX_TRIP_PASSIVE].temperature) {
+> +			imx_set_alarm_temp(data, trips[IMX_TRIP_PASSIVE].temperature);
+>   			dev_dbg(&tz->device, "thermal alarm off: T < %d\n",
+>   				data->alarm_temp / 1000);
+>   		}
+> @@ -330,29 +332,10 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+>   	return 0;
 >   }
 >   
->   static int armada_thermal_probe(struct platform_device *pdev)
+> -static int imx_get_trip_type(struct thermal_zone_device *tz, int trip,
+> -			     enum thermal_trip_type *type)
+> -{
+> -	*type = (trip == IMX_TRIP_PASSIVE) ? THERMAL_TRIP_PASSIVE :
+> -					     THERMAL_TRIP_CRITICAL;
+> -	return 0;
+> -}
+> -
+>   static int imx_get_crit_temp(struct thermal_zone_device *tz, int *temp)
+>   {
+> -	struct imx_thermal_data *data = tz->devdata;
+> -
+> -	*temp = data->temp_critical;
+> -	return 0;
+> -}
+> -
+> -static int imx_get_trip_temp(struct thermal_zone_device *tz, int trip,
+> -			     int *temp)
+> -{
+> -	struct imx_thermal_data *data = tz->devdata;
+> +	*temp = trips[IMX_TRIP_CRITICAL].temperature;
+>   
+> -	*temp = (trip == IMX_TRIP_PASSIVE) ? data->temp_passive :
+> -					     data->temp_critical;
+>   	return 0;
+>   }
+>   
+> @@ -371,10 +354,10 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+>   		return -EPERM;
+>   
+>   	/* do not allow passive to be set higher than critical */
+> -	if (temp < 0 || temp > data->temp_critical)
+> +	if (temp < 0 || temp > trips[IMX_TRIP_CRITICAL].temperature)
+>   		return -EINVAL;
+>   
+> -	data->temp_passive = temp;
+> +	trips[IMX_TRIP_PASSIVE].temperature = temp;
+>   
+>   	imx_set_alarm_temp(data, temp);
+>   
+> @@ -423,8 +406,6 @@ static struct thermal_zone_device_ops imx_tz_ops = {
+>   	.unbind = imx_unbind,
+>   	.get_temp = imx_get_temp,
+>   	.change_mode = imx_change_mode,
+> -	.get_trip_type = imx_get_trip_type,
+> -	.get_trip_temp = imx_get_trip_temp,
+>   	.get_crit_temp = imx_get_crit_temp,
+>   	.set_trip_temp = imx_set_trip_temp,
+>   };
+> @@ -507,8 +488,8 @@ static void imx_init_temp_grade(struct platform_device *pdev, u32 ocotp_mem0)
+>   	 * Set the critical trip point at 5 °C under max
+>   	 * Set the passive trip point at 10 °C under max (changeable via sysfs)
+>   	 */
+> -	data->temp_critical = data->temp_max - (1000 * 5);
+> -	data->temp_passive = data->temp_max - (1000 * 10);
+> +	trips[IMX_TRIP_PASSIVE].temperature = data->temp_max - (1000 * 10);
+> +	trips[IMX_TRIP_CRITICAL].temperature = data->temp_max - (1000 * 5);
+>   }
+>   
+>   static int imx_init_from_tempmon_data(struct platform_device *pdev)
+> @@ -743,12 +724,13 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>   		goto legacy_cleanup;
+>   	}
+>   
+> -	data->tz = thermal_zone_device_register("imx_thermal_zone",
+> -						IMX_TRIP_NUM,
+> -						BIT(IMX_TRIP_PASSIVE), data,
+> -						&imx_tz_ops, NULL,
+> -						IMX_PASSIVE_DELAY,
+> -						IMX_POLLING_DELAY);
+> +	data->tz = thermal_zone_device_register_with_trips("imx_thermal_zone",
+> +							   trips,
+> +							   ARRAY_SIZE(trips),
+> +							   BIT(IMX_TRIP_PASSIVE), data,
+> +							   &imx_tz_ops, NULL,
+> +							   IMX_PASSIVE_DELAY,
+> +							   IMX_POLLING_DELAY);
+>   	if (IS_ERR(data->tz)) {
+>   		ret = PTR_ERR(data->tz);
+>   		dev_err(&pdev->dev,
+> @@ -758,8 +740,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>   
+>   	dev_info(&pdev->dev, "%s CPU temperature grade - max:%dC"
+>   		 " critical:%dC passive:%dC\n", data->temp_grade,
+> -		 data->temp_max / 1000, data->temp_critical / 1000,
+> -		 data->temp_passive / 1000);
+> +		 data->temp_max / 1000, trips[IMX_TRIP_CRITICAL].temperature / 1000,
+> +		 trips[IMX_TRIP_PASSIVE].temperature / 1000);
+>   
+>   	/* Enable measurements at ~ 10 Hz */
+>   	regmap_write(map, data->socdata->measure_freq_ctrl + REG_CLR,
+> @@ -767,10 +749,10 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>   	measure_freq = DIV_ROUND_UP(32768, 10); /* 10 Hz */
+>   	regmap_write(map, data->socdata->measure_freq_ctrl + REG_SET,
+>   		     measure_freq << data->socdata->measure_freq_shift);
+> -	imx_set_alarm_temp(data, data->temp_passive);
+> +	imx_set_alarm_temp(data, trips[IMX_TRIP_PASSIVE].temperature);
+>   
+>   	if (data->socdata->version == TEMPMON_IMX6SX)
+> -		imx_set_panic_temp(data, data->temp_critical);
+> +		imx_set_panic_temp(data, trips[IMX_TRIP_CRITICAL].temperature);
+>   
+>   	regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
+>   		     data->socdata->power_down_mask);
 
 
 -- 
