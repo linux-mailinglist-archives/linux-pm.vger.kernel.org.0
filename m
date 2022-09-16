@@ -2,302 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BD35BB332
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Sep 2022 22:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D87D5BB54A
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Sep 2022 03:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIPUGc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Sep 2022 16:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S229794AbiIQBTl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Sep 2022 21:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiIPUG1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Sep 2022 16:06:27 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B197B9411;
-        Fri, 16 Sep 2022 13:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663358785; x=1694894785;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VwaTlTJBVVv07UusDTC05D7hwHhcnsqfYzaVzoJAAYc=;
-  b=PI+dxi90Nm4Lr4G7ubg7w0J1MrO+w+BU0Pxl3+pywegPCio/p8fsmr+m
-   mosad6z0RfCdDn6FXmFFk6KOzB0g5WxARF6/kooNaYvJSvpX7nb5/+zek
-   0rFIFM2MekEHWLPoYj+ZoAVroBOql4LYl5/PfWJSUmJbnizeGi9HfvU79
-   OlMEmxtIv43gG5RjyU/iaHN3IOe/PqpZlhLkQlK4Zp0y3Rx9tU/yDlYav
-   ls53oCU23HDdJ6gOzNLAerEqPKMyzyWnK0Uk4xvKUyanjjGrsp2394M0E
-   h3YqhrA2evXmZfd2xdH1/3bqK9UBY9DsJ0RV815wXQzjtC3WnaD2hkh8R
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="325347196"
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="325347196"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 13:06:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="650981444"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 16 Sep 2022 13:06:22 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oZHbR-00027G-14;
-        Fri, 16 Sep 2022 20:06:21 +0000
-Date:   Sat, 17 Sep 2022 04:06:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-scsi@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- d5538ab91d3a9a237805be6f8c6c272af2987995
-Message-ID: <6324d739.Ulh6jXX5QoKvYKlU%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229450AbiIQBTk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Sep 2022 21:19:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00ACBE0F5;
+        Fri, 16 Sep 2022 18:19:36 -0700 (PDT)
+Received: from mercury (dyndsl-095-033-170-064.ewe-ip-backbone.de [95.33.170.64])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D35F7660204C;
+        Sat, 17 Sep 2022 02:19:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663377574;
+        bh=IsuXn3QptS+dxxrin6TxULXzoMk1Gf4+cQTcLgbCwmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bpdI9QuGAegny+PcB1Lyr+xDl3mlldCBg20Q1qjxiqgRleQnsj8g4ABqRNU3+bMsA
+         N6y138Rg9o6kSKT+Cflq3SN9EEZwt/HjzZ6wrby5eahIpZOUF34/Cpb90i9KTxhprK
+         9YlExzv3QIrbA45DpgmdH/zLE84awO5MYZjUkBG8b9EvaLeRAqRz79wzcMVWWEyNEk
+         WRQb8uS1vr+oYpJKmxhoNexQsHNXxHSfzEvyxud9KqzWKsS00gEZxEOACXNTjXXryP
+         Ruv/T1IlB1BPrU3hRtQQl4c+zN02gpBCmlyYxFr7MGo0eM7fcf3D41OWOttTD6qGK6
+         DFtere756kpSQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 752CE1060849; Fri, 16 Sep 2022 20:08:23 +0200 (CEST)
+Date:   Fri, 16 Sep 2022 20:08:23 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mazziesaccount@gmail.com, alina_yu@richtek.com,
+        cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] Documentation: power: rt9471: Document exported
+ sysfs entries
+Message-ID: <20220916180823.p672rojsrjbpy4ft@mercury.elektranox.org>
+References: <1663173015-7934-1-git-send-email-u0084500@gmail.com>
+ <1663173015-7934-4-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        SUSPICIOUS_RECIPS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="g5wty46coo2wjhpl"
+Content-Disposition: inline
+In-Reply-To: <1663173015-7934-4-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: d5538ab91d3a9a237805be6f8c6c272af2987995  Add linux-next specific files for 20220916
 
-Error/Warning reports:
+--g5wty46coo2wjhpl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/linux-media/202209162214.LZFXhn2B-lkp@intel.com
-https://lore.kernel.org/linux-mm/202209150141.WgbAKqmX-lkp@intel.com
-https://lore.kernel.org/linux-mm/202209150959.hEWCNjXH-lkp@intel.com
-https://lore.kernel.org/linux-mm/202209160607.sE3qvgTy-lkp@intel.com
-https://lore.kernel.org/linux-mm/202209170126.OGPr2Nd1-lkp@intel.com
-https://lore.kernel.org/llvm/202209161913.VNdFWG7o-lkp@intel.com
+Hi,
 
-Error/Warning: (recently discovered and may have been fixed)
+On Thu, Sep 15, 2022 at 12:30:15AM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>=20
+> Document the settings exported by rt9471 charger driver through sysfs ent=
+ries:
+> - sysoff_enable
+> - port_detect_enable
+>=20
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Since v5:
+> - Recover all the change in sysfs-class-power.
+> - New a sysfs-class-power-rt9471 file.
+> - Remove 'charge_term_enable' sysfs entry, directly integrate it in
+>   'charge_term_current' power supply property control.
+>=20
+> ---
+>  Documentation/ABI/testing/sysfs-class-power-rt9471 | 29 ++++++++++++++++=
+++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9471
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9471 b/Documen=
+tation/ABI/testing/sysfs-class-power-rt9471
+> new file mode 100644
+> index 00000000..ad5b049
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-class-power-rt9471
+> @@ -0,0 +1,29 @@
+> +What:		/sys/class/power_supply/rt9471-*/sysoff_enable
+> +Date:		Oct 2022
+> +KernelVersion:	6.1
+> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
+> +Description:
+> +		This entry allows enabling the sysoff mode of rt9471 charger devices.
+> +		If enabled and the input is removed, the internal battery FET is turned
+> +		off to reduce the leakage from the BAT pin. See device datasheet for d=
+etails.
+> +		It's commonly used when the product enter shipping stage.
+> +
+> +		Access: Read, Write
+> +		Valid values:
+> +		- 1: enabled
+> +		- 0: disabled
 
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/clk/xilinx/clk-xlnx-clock-wizard.ko] undefined!
-ERROR: modpost: "dm365_vpss_set_pg_frame_size" [drivers/staging/media/deprecated/vpfe_capture/isif.ko] undefined!
-ERROR: modpost: "dm365_vpss_set_sync_pol" [drivers/staging/media/deprecated/vpfe_capture/isif.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "vpss_clear_wbl_overflow" [drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.ko] undefined!
-ERROR: modpost: "vpss_enable_clock" [drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.ko] undefined!
-ERROR: modpost: "vpss_enable_clock" [drivers/staging/media/deprecated/vpfe_capture/isif.ko] undefined!
-ERROR: modpost: "vpss_select_ccdc_source" [drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.ko] undefined!
-ERROR: modpost: "vpss_select_ccdc_source" [drivers/staging/media/deprecated/vpfe_capture/isif.ko] undefined!
-arch/arm/include/asm/arch_gicv3.h:18:41: error: implicit declaration of function '__ACCESS_CP15' [-Werror=implicit-function-declaration]
-arch/arm/include/asm/arch_gicv3.h:18:55: error: 'c12' undeclared (first use in this function)
-arch/arm/include/asm/arch_gicv3.h:19:63: error: 'c11' undeclared (first use in this function)
-arch/arm/include/asm/arch_gicv3.h:21:41: error: implicit declaration of function '__ACCESS_CP15_64' [-Werror=implicit-function-declaration]
-arch/arm/include/asm/arch_gicv3.h:22:55: error: 'c4' undeclared (first use in this function)
-arch/arm/include/asm/arch_gicv3.h:22:62: error: 'c6' undeclared (first use in this function)
-arch/arm/include/asm/arch_gicv3.h:29:63: error: 'c8' undeclared (first use in this function); did you mean 'u8'?
-arch/arm/include/asm/arch_gicv3.h:35:63: error: 'c9' undeclared (first use in this function)
-arch/arm/include/asm/arch_gicv3.h:44:9: error: implicit declaration of function 'write_sysreg' [-Werror=implicit-function-declaration]
-arch/arm/include/asm/arch_gicv3.h:48:16: error: implicit declaration of function 'read_sysreg' [-Werror=implicit-function-declaration]
-arch/parisc/lib/iomap.c:363:5: warning: no previous prototype for 'ioread64_lo_hi' [-Wmissing-prototypes]
-arch/parisc/lib/iomap.c:373:5: warning: no previous prototype for 'ioread64_hi_lo' [-Wmissing-prototypes]
-arch/parisc/lib/iomap.c:448:6: warning: no previous prototype for 'iowrite64_lo_hi' [-Wmissing-prototypes]
-arch/parisc/lib/iomap.c:454:6: warning: no previous prototype for 'iowrite64_hi_lo' [-Wmissing-prototypes]
-drivers/gpu/drm/drm_atomic_helper.c:802: warning: expecting prototype for drm_atomic_helper_check_wb_connector_state(). Prototype was for drm_atomic_helper_check_wb_encoder_state() instead
-drivers/scsi/qla2xxx/qla_os.c:2854:23: warning: assignment to 'struct trace_array *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'? [-Werror=implicit-function-declaration]
-drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function 'trace_array_put' [-Werror=implicit-function-declaration]
-drivers/thermal/thermal_helpers.c:79:6: warning: Redundant initialization for 'ret'. The initialized value is overwritten before it is read. [redundantInitialization]
-make[5]: *** No rule to make target 'drivers/crypto/aspeed/aspeed_crypto.o', needed by 'drivers/crypto/aspeed/'.
-s390-linux-ld: (.text+0x24a4): undefined reference to `ftrace_likely_update'
+I still fail to see why this needs to be controllable at runtime.
+This looks like a hardware property. Are there any known products,
+which need this disabled?
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+> +What:		/sys/class/power_supply/rt9471-*/port_detect_enable
+> +Date:		Oct 2022
+> +KernelVersion:	6.1
+> +Contact:	ChiYuan Huang <cy_huang@richtek.com>
+> +Description:
+> +		This entry allows enabling the USB BC12 port detect function of rt9471=
+ charger
+> +		devices. If enabled and VBUS is inserted, device will start to do the =
+BC12
+> +		port detect and report the usb port type when port detect is done. See
+> +		datasheet for details. Normally controlled when TypeC/USBPD port integ=
+rated.
+> +
+> +		Access: Read, Write
+> +		Valid values:
+> +		- 1: enabled
+> +		- 0: disabled
 
-ERROR: modpost: "devm_ioremap_resource" [drivers/crypto/ccree/ccree.ko] undefined!
+So basically this depends on the hardware integration (e.g. it
+should be disabled when power source is a DC barrel jack instead
+of USB) and is not supposed to change at all during runtime? Then
+the information wether it needs to be enabled should be derived
+=66rom the device tree.
 
-Error/Warning ids grouped by kconfigs:
+-- Sebastian
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_get_by_name
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_put
-|   `-- drivers-scsi-qla2xxx-qla_os.c:warning:assignment-to-struct-trace_array-from-int-makes-pointer-from-integer-without-a-cast
-|-- alpha-randconfig-r014-20220916
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arc-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arc-buildonly-randconfig-r003-20220916
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arc-randconfig-r043-20220916
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arm-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arm-defconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- arm-randconfig-c003-20220916
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:c11-undeclared-(first-use-in-this-function)
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:c12-undeclared-(first-use-in-this-function)
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:c4-undeclared-(first-use-in-this-function)
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:c6-undeclared-(first-use-in-this-function)
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:c8-undeclared-(first-use-in-this-function)
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:c9-undeclared-(first-use-in-this-function)
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:implicit-declaration-of-function-__ACCESS_CP15
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:implicit-declaration-of-function-__ACCESS_CP15_64
-|   |-- arch-arm-include-asm-arch_gicv3.h:error:implicit-declaration-of-function-read_sysreg
-|   `-- arch-arm-include-asm-arch_gicv3.h:error:implicit-declaration-of-function-write_sysreg
-|-- arm64-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-allyesconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-defconfig
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-randconfig-a003
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-randconfig-a012
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-randconfig-a014
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- i386-randconfig-a016
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-|-- ia64-allmodconfig
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_get_by_name
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_put
-|   `-- drivers-scsi-qla2xxx-qla_os.c:warning:assignment-to-struct-trace_array-from-int-makes-pointer-from-integer-without-a-cast
-|-- ia64-randconfig-r026-20220916
-|   `-- make:No-rule-to-make-target-drivers-crypto-aspeed-aspeed_crypto.o-needed-by-drivers-crypto-aspeed-.
-|-- loongarch-randconfig-r022-20220916
-|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
-clang_recent_errors
-|-- arm64-randconfig-r012-20220916
-|   `-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-function-apply_alternatives_vdso
-|-- arm64-randconfig-r013-20220916
-|   `-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-function-apply_alternatives_vdso
-|-- arm64-randconfig-r025-20220916
-|   |-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-function-apply_alternatives_vdso
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- hexagon-buildonly-randconfig-r002-20220916
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- hexagon-randconfig-r015-20220916
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- hexagon-randconfig-r032-20220916
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- hexagon-randconfig-r033-20220916
-|   |-- drivers-media-platform-mediatek-mdp3-mtk-mdp3-comp.c:warning:unused-variable-mdp_comp_dt_ids
-|   `-- drivers-media-platform-mediatek-mdp3-mtk-mdp3-comp.c:warning:unused-variable-mdp_sub_comp_dt_ids
-|-- i386-randconfig-a002
-|   |-- ERROR:___ratelimit-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:__per_cpu_offset-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:__phys_addr-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:__ubsan_handle_out_of_bounds-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:__warn_printk-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:_printk-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:cpu_number-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:kvm_find_user_return_msr-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:kvm_spurious_fault-arch-x86-kvm-kvm-intel.ko-undefined
-|   |-- ERROR:smp_call_function_single-arch-x86-kvm-kvm-intel.ko-undefined
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- i386-randconfig-a015
-|   |-- ERROR:__cpuhp_remove_state-arch-x86-events-intel-intel-cstate.ko-undefined
-|   |-- ERROR:__cpuhp_setup_state-arch-x86-events-intel-intel-cstate.ko-undefined
-|   |-- ERROR:_printk-arch-x86-events-intel-intel-cstate.ko-undefined
-|   |-- ERROR:boot_cpu_data-arch-x86-events-intel-intel-cstate.ko-undefined
-|   |-- ERROR:cpu_bit_bitmap-arch-x86-events-intel-intel-cstate.ko-undefined
-|   |-- ERROR:perf_msr_probe-arch-x86-events-intel-intel-cstate.ko-undefined
-|   |-- ERROR:perf_pmu_register-arch-x86-events-intel-intel-cstate.ko-undefined
-|   |-- ERROR:perf_pmu_unregister-arch-x86-events-intel-intel-cstate.ko-undefined
-|   |-- ERROR:x86_match_cpu-arch-x86-events-intel-intel-cstate.ko-undefined
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- powerpc-buildonly-randconfig-r005-20220916
-|   |-- drivers-macintosh-ams-ams-i2c.c:error:conflicting-types-for-ams_i2c_remove
-|   `-- drivers-macintosh-ams-ams-i2c.c:error:incompatible-function-pointer-types-initializing-void-(-)(struct-i2c_client-)-with-an-expression-of-type-int-(struct-i2c_client-)
-|-- riscv-randconfig-r033-20220915
-|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-get_symbol_offset:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_markers
-|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-get_symbol_offset:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_names
-|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-update_iter:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_names
-|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-update_iter:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_offsets
-|   |-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-update_iter:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_relative_base
-|   `-- ld.lld:error:vmlinux.a(kernel-kallsyms.o):(function-update_iter:.text):relocation-R_RISCV_PCREL_HI20-out-of-range:is-not-in-references-kallsyms_token_index
-|-- s390-buildonly-randconfig-r005-20220916
+--g5wty46coo2wjhpl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-elapsed time: 720m
+-----BEGIN PGP SIGNATURE-----
 
-configs tested: 62
-configs skipped: 2
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMku4wACgkQ2O7X88g7
++ppIIQ//UtV9sEuUQW1evu3Xg9UgdWAbELRCg6IJI5rkE/6z8dy1y0u6jTz93BzP
+G/AV4jY8Lk1agbW0SpwXONH//7DHqv7b2EQvOB+SmY2IlDIBxFQYYBkI5oXJ9HO4
+gvBX6xWN/khnQEUuA075AlzUKzL0l9MSTjHbx1bHbuq3jHoAj6Oo+jduofD8OAfI
+hGFyq2icRuJoUGeUREoTc0vIApTjSyWANLwBM1P1sQ0ivJG3R6acPUJQgznQo+W+
+2CKfCZ+QWCyjTAisfTvfPdM+F0mxgpaF2QHHnwa6gP9F5yycxYPEciYq/sNTdL43
+v2aX6A34enMOpMr4BCpieS/bXoPTqxiA1sHE60ZYQNUV4azFkyFw9SMATSAzKYnE
+N9yMthiUuV4TWFTQKdCSPYsf79foJqeDi2UZaSnc92mcTtqMLgT5Lgmairjp/xpw
+QxNDVxRzd9gLeeYU4HTYCpLwxxvilWtXa4pUyR1W+NT+Aaa9o+IMrXSIfOEB2wBU
+YTBrCaH3XVu4l85W5tA3VuSH0KUTkq5kNfNaX8cbZY844aZCcX6NAh1BLm7S3r5i
+msA1hioHCD1OBxh0e7Jt6yL8AIMuJm14Gc7LPa2rRzS9X9slKhFsD8+/VKGdDh+v
+Lztv+jlo/yE6cE+T9mGW6aJddY6zLwldGCQ+THIFHcGRWbLoivw=
+=kE+V
+-----END PGP SIGNATURE-----
 
-gcc tested configs:
-i386                                defconfig
-arc                                 defconfig
-alpha                               defconfig
-x86_64                              defconfig
-s390                             allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                               rhel-8.3
-i386                          randconfig-a001
-i386                          randconfig-a003
-s390                                defconfig
-x86_64                           allyesconfig
-i386                          randconfig-a005
-arc                  randconfig-r043-20220916
-i386                             allyesconfig
-s390                             allyesconfig
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-arm                                 defconfig
-i386                          randconfig-a012
-x86_64                        randconfig-a004
-i386                          randconfig-a016
-x86_64                        randconfig-a002
-x86_64                           rhel-8.3-kvm
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a006
-m68k                             allmodconfig
-powerpc                          allmodconfig
-arc                              allyesconfig
-x86_64                           rhel-8.3-syz
-mips                             allyesconfig
-x86_64                          rhel-8.3-func
-powerpc                           allnoconfig
-x86_64                         rhel-8.3-kunit
-alpha                            allyesconfig
-m68k                             allyesconfig
-ia64                             allmodconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-sh                               allmodconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-arc                               allnoconfig
-
-clang tested configs:
-i386                          randconfig-a002
-riscv                randconfig-r042-20220916
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r045-20220916
-s390                 randconfig-r044-20220916
-hexagon              randconfig-r041-20220916
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--g5wty46coo2wjhpl--
