@@ -2,114 +2,353 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD1B5BBAE0
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Sep 2022 00:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014825BBAE4
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Sep 2022 00:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiIQWbk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Sep 2022 18:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
+        id S229447AbiIQWvz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Sep 2022 18:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiIQWbj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Sep 2022 18:31:39 -0400
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AAC22B0E
-        for <linux-pm@vger.kernel.org>; Sat, 17 Sep 2022 15:31:38 -0700 (PDT)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-3378303138bso299854337b3.9
-        for <linux-pm@vger.kernel.org>; Sat, 17 Sep 2022 15:31:38 -0700 (PDT)
+        with ESMTP id S229483AbiIQWvy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Sep 2022 18:51:54 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B8BBC16
+        for <linux-pm@vger.kernel.org>; Sat, 17 Sep 2022 15:51:53 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id m65so26364879vsc.1
+        for <linux-pm@vger.kernel.org>; Sat, 17 Sep 2022 15:51:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date;
-        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
-        b=NrS1isCn7N5y43Qlk5+QPMcpimLruBhGMq4Qmq7NTUsiyQq4RI/T4BLbPt+XE+56Rl
-         oEWBPKFpgIUe27pBjgy2Qb3cqFeLSFWROtFzS5dlz3tYdtq2AOsbHjt/34lRoXVIw+Qa
-         ZVg1LZZj/GspG36kl0aZkYH3vVlT/MsH5Q3x32nJPxEXYx2I+t4uHTfcT7049udnloKA
-         IfyCfzrTxpyD77wPuIYUpcJ489vd6Lpw6LZDL9GPKLWMOPq6HtRjA81qmAh4axRE0VlJ
-         yHWJEGVx5O6jJZkGAofdcOt3YpT8T6dnqJDlKacgwGMd1nyAv0FJsF+1vJ+al933JQD2
-         dfuQ==
+        d=telus.net; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=zhVbauSCHIqSTrZ46LyX7IvRStT/0PO8IONI/ynrObY=;
+        b=fNJKbDCWVK1H8vsU8LNcsdPHliCpb0BSeUUq4+g3LX5rnUOXAA/MWFmDeDaJ/JPyLj
+         YSbmtD5Axfrnh/lm/2GZ/P6OEpRf4GxfRuzBffxJy2+o5jkgTnSvGqR0/UwNHyrdizD1
+         J2LsvRhUKayQLTGkwR/mGEOK2G2YYFz45DNTypnKFERFeq1omkVN6uu9bkpKi7soYJ6Y
+         R1jabKCyvb3C2SvTBb9yxuEEQmFOPrK9laSjeZ8ximf4LeZ+himeSryzaxbVKXt8clq+
+         WEkXZq+aBQv90xlAVog0K35qKbFF/0xEWPsKZz8vWQ5bB1B5CtnzZAXGK+zPaMajI1ht
+         +evQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3rHWukX/982VVQshnDvvj6GQbQddSOFHJAD6q40l/44=;
-        b=VQbe4rhJ5oN9yjizrcf1zp1kJMv2O1frFS++6Qa2ovyh/yjzU8VvLcO0G04Js/P0rb
-         xgMB1F18rpPLZXqYYjcCo68+ie4YIMdLk1TtDtj3+UL1xJiuoa1qlulqw+bZjBauqd3H
-         w1JHpqUxib76uSXxwJo5EPqPPUGXBPPoN+H0roRGGjC3I7NsmqNkLqrFiv6TZkHASsw1
-         905f9Es6g0aPmRm3pJETnF3S/ScTWRmaHZutb+IqcOQQTqEJIoII8S2Yfg0YtXZnCAQB
-         LhbVywp7U+omD+VIH6k/W07EAbJeXX23CsNiYcmWtM39TnuUw01clwe7MqSFzicrlpVt
-         CAZw==
-X-Gm-Message-State: ACrzQf0QYSt6eJRl6nwrQOrQ+6HuPGBA0mA5Bh1m5HFDW3VHhgXGjowf
-        WgQ+OKcydscg3+FCZKv9he8J7RtppU6XI9hOIC8=
-X-Google-Smtp-Source: AMsMyM5QCLEC/Tnzr0uwflqBzAV4fXo9XP7U+VEMVzbAGbkdMzALAM2D+dnEEUp9eCPxGIFqCYhUFAFhrUpWtftSQoY=
-X-Received: by 2002:a81:6a54:0:b0:345:4292:4dfe with SMTP id
- f81-20020a816a54000000b0034542924dfemr9364599ywc.62.1663453897802; Sat, 17
- Sep 2022 15:31:37 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=zhVbauSCHIqSTrZ46LyX7IvRStT/0PO8IONI/ynrObY=;
+        b=0RXVgcyWO0r8TWH1tOCdUAkbJk+KoyR4E+pDuLdnusrsdSc01miQ+woy0iuHDfTE2q
+         vNHkjex97HqNT2IBwd96uVzfgWeI64IKT3s07SiRgAFBUMMIJvnmu3MXEwgQct1toHCA
+         fERfKPCJSPG6EkTibBw/t9NV1BFJGK4Pc5lkshjmBhohZlNrD7HCm38t1NxDyFNPs4Gj
+         gn9Za2c30PqJe4JDuHg61ChmFjLXFcTrYOF95yPQQzK01IpbxJivzvZY462wUqODcpHJ
+         JvqPr+6WyVkY9nb38flvKphyYZcSkoVXFjE0pb/m2gJRLi856gtxN0K79J88ytKsk/K1
+         Pp8g==
+X-Gm-Message-State: ACrzQf3wVqL3VVAj7pfYmqKyXP76YO+81s+pwpPGYt+mTh0rM7Zsj6TD
+        lzBI2ai8UjzhgzU3VyszS/Xqk2Knap42fHZl5pgMuQ==
+X-Google-Smtp-Source: AMsMyM7AfQL+7pDetFvxgg0qs1Pphtyz3PrVoR4sfAlTf9d3uBZDwVg06qWeYwrQe03RAT2tyl1HbB9kwUyjmbMIDPg=
+X-Received: by 2002:a05:6102:3a61:b0:398:2728:6a72 with SMTP id
+ bf1-20020a0561023a6100b0039827286a72mr4158678vsb.36.1663455111322; Sat, 17
+ Sep 2022 15:51:51 -0700 (PDT)
 MIME-Version: 1.0
-Sender: joy.lisa.kones@gmail.com
-Received: by 2002:a05:6919:45c3:b0:dc:a12e:3a77 with HTTP; Sat, 17 Sep 2022
- 15:31:35 -0700 (PDT)
-From:   Juliette Morgan <juliettemorgan21@gmail.com>
-Date:   Sun, 18 Sep 2022 00:31:35 +0200
-X-Google-Sender-Auth: ayL7IE1wieD5Wc96bFaNdS8-DhM
-Message-ID: <CAMFU_KmFRQVstWfiMNYhxrW-FKbvee=kezZFkkrTKgyvKEz7_A@mail.gmail.com>
-Subject: READ AND REPLY URGENT
-To:     undisclosed-recipients:;
+References: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
+In-Reply-To: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Sat, 17 Sep 2022 15:51:41 -0700
+Message-ID: <CAAYoRsXwPmKHJ8m2aex0ddpf+=dr8ceXDSJM9kX=v5JdeRfgiA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] cpuidle: teo: Introduce optional util-awareness
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Doug Smythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_MONEY_PERCENT,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Dear God,s Select Good Day,
+On Thu, Sep 15, 2022 at 9:45 AM Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
+>
+> Hi,
 
-I apologized, If this mail find's you disturbing, It might not be the
-best way to approach you as we have not met before, but due to the
-urgency of my present situation i decided  to communicate this way, so
-please pardon my manna, I am writing this mail to you with heavy tears
-In my eyes and great sorrow in my heart, My Name is Mrs.Juliette
-Morgan, and I am contacting you from my country Norway, I want to tell
-you this because I don't have any other option than to tell you as I
-was touched to open up to you,
+Hi,
 
-I married to Mr.sami Morgan. Who worked with Norway embassy in Burkina
-Faso for nine years before he died in the year 2020.We were married
-for eleven years without a child He died after a brief illness that
-lasted for only five days. Since his death I decided not to remarry,
-When my late husband was alive he deposited the sum of =E2=82=AC 8.5 Millio=
-n
-Euro (Eight million, Five hundred thousand Euros) in a bank in
-Ouagadougou the capital city of Burkina Faso in west Africa Presently
-this money is still in bank. He made this money available for
-exportation of Gold from Burkina Faso mining.
+I tried it.
 
-Recently, My Doctor told me that I would not last for the period of
-seven months due to cancer problem. The one that disturbs me most is
-my stroke sickness.Having known my condition I decided to hand you
-over this money to take care of the less-privileged people, you will
-utilize this money the way I am going to instruct herein.
+>
+> At the moment, all the available idle governors operate mainly based on t=
+heir own past performance
+> without taking into account any scheduling information. Especially on int=
+eractive systems, this
+> results in them frequently selecting a deeper idle state and then waking =
+up before its target
+> residency is hit, thus leading to increased wakeup latency and lower perf=
+ormance with no power
+> saving. For 'menu' while web browsing on Android for instance, those type=
+s of wakeups ('too deep')
+> account for over 24% of all wakeups.
+>
+> At the same time, on some platforms C0 can be power efficient enough to w=
+arrant wanting to prefer
+> it over C1. Sleeps that happened in C0 while they could have used C1 ('to=
+o shallow') only save
+> less power than they otherwise could have. Too deep sleeps, on the other =
+hand, harm performance
+> and nullify the potential power saving from using C1 in the first place. =
+While taking this into
+> account, it is clear that on balance it is preferable for an idle governo=
+r to have more too shallow
+> sleeps instead of more too deep sleeps.
+>
+> Currently the best available governor under this metric is TEO which on a=
+verage results in less than
+> half the percentage of too deep sleeps compared to 'menu', getting much b=
+etter wakeup latencies and
+> increased performance in the process.
+>
+> This proposed optional extension to TEO would specifically tune it for mi=
+nimising too deep
+> sleeps and minimising latency to achieve better performance. To this end,=
+ before selecting the next
+> idle state it uses the avg_util signal of a CPU's runqueue in order to de=
+termine to what extent the
+> CPU is being utilized. This util value is then compared to a threshold de=
+fined as a percentage of
+> the cpu's capacity (capacity >> 6 ie. ~1.5% in the current implementation=
+).
 
-I want you to take 30 Percent of the total money for your personal use
-While 70% of the money will go to charity, people in the street and
-helping the orphanage. I grew up as an Orphan and I don't have any
-body as my family member, just to endeavour that the house of God is
-maintained. Am doing this so that God will forgive my sins and accept
-my soul because these sicknesses have suffered me so much.
+That seems quite a bit too low to me. However on my processor the
+energy cost of using
+idle state 0 verses anything deeper is very high, so I do not have a
+good way to test.
 
-As soon as I receive your reply I shall give you the contact of the
-bank in Burkina Faso and I will also instruct the Bank Manager to
-issue you an authority letter that will prove you the present
-beneficiary of the money in the bank that is if you assure me that you
-will act accordingly as I Stated herein.
+Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+On an idle system :
+with only Idle state 0 enabled, processor package power is ~46 watts.
+with only idle state 1 enabled, processor package power is ~2.6 watts
+with all idle states enabled,  processor package power is ~1.4 watts
 
-Always reply to my alternative for security purposes
+> If the util is above the
+> threshold, the governor directly selects the shallowest available idle st=
+ate. If the util is below
+> the threshold, the governor defaults to the TEO metrics mechanism to try =
+to select the deepest
+> available idle state based on the closest timer event and its own past co=
+rrectness.
+>
+> Effectively this functions like a governor that on the fly disables deepe=
+r idle states when there
+> are things happening on the cpu and then immediately reenables them as so=
+on as the cpu isn't
+> being utilized anymore.
+>
+> Initially I am sending this as a patch for TEO to visualize the proposed =
+mechanism and simplify
+> the review process. An alternative way of implementing it while not inter=
+fering
+> with existing TEO code would be to fork TEO into a separate but mostly id=
+entical for the time being
+> governor (working name 'idleutil') and then implement util-awareness ther=
+e, so that the two
+> approaches can coexist and both be available at runtime instead of relyin=
+g on a compile-time option.
+> I am happy to send a patchset doing that if you think it's a cleaner appr=
+oach than doing it this way.
 
-Hoping to receive your reply:
-From Mrs.Juliette Morgan,
+I would prefer the two to coexist for testing, as it makes it easier
+to manually compare some
+areas of focus.
+
+>
+> This approach can outperform all the other currently available governors,=
+ at least on mobile device
+> workloads, which is why I think it is worth keeping as an option.
+>
+> Additionally, in my view, the reason why it makes more sense to implement=
+ this type of mechanism
+> inside a governor rather than outside using something like QoS or some ot=
+her way to disable certain
+> idle states on the fly are the governor's metrics. If we were disabling i=
+dle states and reenabling
+> them without the governor 'knowing' about it, the governor's metrics woul=
+d end up being updated
+> based on state selections not caused by the governor itself. This could i=
+nterfere with the
+> correctness of said metrics as that's not what they were designed for as =
+far as I understand.
+> This approach skips metrics updates whenever a state was selected based o=
+n the util and not based
+> on the metrics.
+>
+> There is no particular attachment or reliance on TEO for this mechanism, =
+I simply chose to base
+> it on TEO because it performs the best out of all the available options a=
+nd I didn't think there was
+> any point in reinventing the wheel on the side of computing governor metr=
+ics. If a
+> better approach comes along at some point, there's no reason why the same=
+ idle aware mechanism
+> couldn't be used with any other metrics algorithm. That would, however, r=
+equire implemeting it as
+> a separate governor rather than a TEO add-on.
+>
+> As for how the extension performs in practice, below I'll add some benchm=
+ark results I got while
+> testing this patchset.
+>
+> Pixel 6 (Android 12, mainline kernel 5.18):
+>
+> 1. Geekbench 5 (latency-sensitive, heavy load test)
+>
+> The values below are gmean values across 3 back to back iteration of Geek=
+bench 5.
+> As GB5 is a heavy benchmark, after more than 3 iterations intense throttl=
+ing kicks in on mobile devices
+> resulting in skewed benchmark scores, which makes it difficult to collect=
+ reliable results. The actual
+> values for all of the governors can change between runs as the benchmark =
+might be affected by factors
+> other than just latency. Nevertheless, on the runs I've seen, util-aware =
+TEO frequently achieved better
+> scores than all the other governors.
+>
+> 'shallow' is a trivial governor that only ever selects the shallowest ava=
+ilable state, included here
+> for reference and to establish the lower bound of latency possible to ach=
+ieve through cpuidle.
+>
+> 'gmean too deep %' and 'gmean too shallow %' are percentages of too deep =
+and too shallow sleeps
+> computed using the new trace event - cpu_idle_miss. The percentage is obt=
+ained by counting the two
+> types of misses over the course of a run and then dividing them by the to=
+tal number of wakeups.
+>
+> | metric                                | menu           | teo           =
+    | shallow           | teo + util-aware  |
+> | ------------------------------------- | -------------  | --------------=
+-   | ---------------   | ---------------   |
+> | gmean score                           | 2716.4 (0.0%)  | 2795 (+2.89%) =
+    | 2780.5 (+2.36%)   | 2830.8 (+4.21%)   |
+> | gmean too deep %                      | 16.64%         | 9.61%         =
+    | 0%                | 4.19%             |
+> | gmean too shallow %                   | 2.66%          | 5.54%         =
+    | 31.47%            | 15.3%             |
+> | gmean task wakeup latency (gb5)       | 82.05=CE=BCs (0.0%) | 73.97=CE=
+=BCs (-9.85%)  | 42.05=CE=BCs (-48.76%) | 66.91=CE=BCs (-18.45%) |
+> | gmean task wakeup latency (asynctask) | 75.66=CE=BCs (0.0%) | 56.58=CE=
+=BCs (-25.22%) | 65.78=CE=BCs (-13.06%) | 55.35=CE=BCs (-26.84%) |
+>
+> In case of this benchmark, the difference in latency does seem to transla=
+te into better scores.
+>
+> Additionally, here's a set of runs of Geekbench done after holding the ph=
+one in
+> the fridge for exactly an hour each time in order to minimise the impact =
+of thermal issues.
+>
+> | metric                                | menu           | teo           =
+    | teo + util-aware  |
+> | ------------------------------------- | -------------  | --------------=
+-   | ---------------   |
+> | gmean multicore score                 | 2792.1 (0.0%)  | 2845.2 (+1.9%)=
+    | 2857.4 (+2.34%)   |
+> | gmean single-core score               | 1048.3 (0.0%)  | 1052.6 (+0.41%=
+)   | 1055.3 (+0.67%)   |
+>
+> 2. PCMark Web Browsing (non latency-sensitive, normal usage test)
+>
+> The table below contains gmean values across 20 back to back iterations o=
+f PCMark 2 Web Browsing.
+>
+> | metric                    | menu           | teo               | shallo=
+w          | teo + util-aware  |
+> | ------------------------- | -------------  | ---------------   | ------=
+---------  | ---------------   |
+> | gmean score               | 6283.0 (0.0%)  | 6262.9 (-0.32%)   | 6258.4=
+ (-0.39%)  | 6323.7 (+0.65%)   |
+> | gmean too deep %          | 24.15%         | 10.32%            | 0%    =
+           | 3.2%              |
+> | gmean too shallow %       | 2.81%          | 7.68%             | 27.69%=
+           | 17.189%           |
+> | gmean power usage [mW]    | 209.1 (0.0%)   | 187.8 (-10.17%)   | 205.5 =
+(-1.71%)   | 205 (-1.96%)      |
+> | gmean task wakeup latency | 204.6=CE=BCs (0.0%) | 184.39=CE=BCs (-9.87%=
+) | 95.55=CE=BCs (-53.3%) | 95.98=CE=BCs (-53.09%) |
+>
+> As this is a web browsing benchmark, the task for which the wakeup latenc=
+y was recorded was Chrome's
+> rendering task, ie CrRendererMain. The latency improvement for the actual=
+ benchmark task was very
+> similar.
+>
+> In this case the large latency improvement does not translate into a nota=
+ble increase in benchmark score as
+> this particular benchmark mainly responds to changes in operating frequen=
+cy. Nevertheless, the small power
+> saving compared to menu with no decrease in benchmark score indicate that=
+ there are no regressions for this
+> type of workload while using this governor.
+>
+> Note: The results above were as mentioned obtained on the 5.18 kernel. Re=
+sults for Geekbench obtained after
+> backporting CFS patches from the most recent mainline can be found in the=
+ pdf linked below [1].
+> The results and improvements still hold up but the numbers change slightl=
+y. Additionally, the pdf contains
+> plots for all the relevant results obtained with this and other idle gove=
+rnors.
+>
+> At the very least this approach seems promising so I wanted to discuss it=
+ in RFC form first.
+> Thank you for taking your time to read this!
+
+There might be a way forward for my type of processor if the algorithm
+were to just reduce the idle
+depth by 1 instead of all the way to idle state 0. Not sure. It seems
+to bypass all that the teo
+governor is attempting to achieve.
+
+For a single periodic workflow at any work sleep frequency (well, I
+test 5 hertz to 411 hertz) and very
+light workload: Processor package powers for 73 hertz work/sleep frequency:
+
+teo: ~1.5 watts
+menu: ~1.5 watts
+util: ~19 watts
+
+For 12 periodic workflow threads at 73 hertz work/sleep frequency
+(well, I test 5 hertz to 411 hertz) and very
+workload: Processor package powers:
+
+teo: ~2.8watts
+menu: ~2.8 watts
+util: ~49 watts
+
+My test computer is a server, with no gui. I started a desktop linux
+VM guest that isn't doing much:
+
+teo: ~1.8 watts
+menu: ~1.8 watts
+util: ~7.8 watts
+
+>
+> --
+> Kajetan
+>
+> [1] https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc=
+676b942c8e6498fb9bd03/idle_util_aware.pdf
+>
+>
+> Kajetan Puchalski (1):
+>   cpuidle: teo: Introduce optional util-awareness
+>
+>  drivers/cpuidle/Kconfig         | 12 +++++
+>  drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
+>  2 files changed, 98 insertions(+)
+>
+> --
+> 2.37.1
+>
