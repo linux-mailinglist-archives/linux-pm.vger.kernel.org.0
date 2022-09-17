@@ -1,143 +1,118 @@
 Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5705A5BB54C
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Sep 2022 03:19:45 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5275BB803
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Sep 2022 13:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiIQBTm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Sep 2022 21:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S229583AbiIQLmX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Sep 2022 07:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiIQBTk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Sep 2022 21:19:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA626366;
-        Fri, 16 Sep 2022 18:19:36 -0700 (PDT)
-Received: from mercury (dyndsl-095-033-170-064.ewe-ip-backbone.de [95.33.170.64])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D8A12660204D;
-        Sat, 17 Sep 2022 02:19:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663377575;
-        bh=yqaC0PvBVidOF8Av25zyiT7pjFZ/iTKywbyjXrnbYvg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MilfT3BTIhIq+zYmQ7U5eYGdXz86psnvJ/+uIX/QS7q2U/khLo6D7H68u/szJ8StO
-         DJsGwhtDAHfBKojS/RgtPavCSIfGAzlukHnl3NIeww7wj6ejeRe34MaGXpFRnXoAtg
-         x0btlbQOOnAuwLd/Tm8OnAMdUZbEwleIcTVMmnS1wu+EQXiCL/M+wzNIRxwwgtffXg
-         neGyXPF1dAd+PcuM7qt96EoEvE3Ul77kHWLhiCMWHwLlC1Htn+jGqI+TYuCXT0R2uO
-         lYeLO8P6OTCbtF4uWkmRhv7vJTJRZku+yVG5wWB/yMdGlGOlXbHqZVP/d0v9OKgN+E
-         Qv+XGozy63+TQ==
-Received: by mercury (Postfix, from userid 1000)
-        id B24CA106084B; Sat, 17 Sep 2022 00:25:21 +0200 (CEST)
-Date:   Sat, 17 Sep 2022 00:25:21 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: core: Ignore -EIO for uevent
-Message-ID: <20220916222521.hxkgml5pslc6ln5v@mercury.elektranox.org>
-References: <20220824165459.1.I059ae712dd6d324897162ee9f37c22849aa22745@changeid>
- <20220825140243.tgotqpymswduzlyy@mercury.elektranox.org>
- <YwgdraBXTWk1DhCE@google.com>
+        with ESMTP id S229484AbiIQLmV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Sep 2022 07:42:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8532FFEC
+        for <linux-pm@vger.kernel.org>; Sat, 17 Sep 2022 04:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663414938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SzetDHPEuYHOyKUUGQoVLG/7B0wMNg9j9zSS25jq5MM=;
+        b=QVva219ELGYTWlE8WGRxOhArZZPkk/7IVZjTMaMAeq04Eft3F5H+Pjxqfob4A9LslUELQt
+        HAP4V2p0zYFJVO+lWiexTiiwDJoCy6JL3R3KDU1zJHVhdW4yfwaqyIHvhar19IHUnkaCvi
+        nlWkniaXylF55E58fl5lXhDcc0M2kmo=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-664-9hkdRFboPWe2zCHF5019sg-1; Sat, 17 Sep 2022 07:42:16 -0400
+X-MC-Unique: 9hkdRFboPWe2zCHF5019sg-1
+Received: by mail-ed1-f71.google.com with SMTP id b17-20020a056402351100b00453b19d9bd0so332853edd.4
+        for <linux-pm@vger.kernel.org>; Sat, 17 Sep 2022 04:42:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=SzetDHPEuYHOyKUUGQoVLG/7B0wMNg9j9zSS25jq5MM=;
+        b=F5lSbhByEhCu53zmzZJiztyF1FllD5GzVtOp7nGWv9Pqcfe8X2JJ1A/lOaJ5ig16+u
+         I18DduwxmrYC5rSXvGHagpa5Mzu2DzGXaTxrx0YzSFJnfulKa9Ta6wR5WvjvC+MdoVLh
+         mkoW82sLsgFv9YrwiueqE4YMQ+024xyEzbXl1tgFQ2rS0FDl3lwTmoTFhDskPwa7PH3c
+         tviKYtitmDXtvQzywO0nr4L/79J9dlfZSKk1J7awy8dtraqLOjPv26PLG+CInDjTMesH
+         2CAliqNW/C5TsOBjwzBv9xLAQ6nDcrBD0m49f4LMZewxIkzdJquqFjz+U2bgdQvkMqdi
+         FZZw==
+X-Gm-Message-State: ACrzQf2m+JcTDXNbb3iuZL37DmTI3rOb/W9NvHCHHLUQJG6yBmdN9q6F
+        //Sdac2L05bRg1u/3fQTn1UpwfvTJjbD+R+GphEuUK0MrZNhyBNUlZaQOu7xsfVtgjMQi3IXj+/
+        CQbWeXuv/9fCmTVba8XE=
+X-Received: by 2002:a17:907:2d9e:b0:775:3737:ac45 with SMTP id gt30-20020a1709072d9e00b007753737ac45mr6450409ejc.714.1663414935044;
+        Sat, 17 Sep 2022 04:42:15 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7oMErWER0UZu2Kpobfn3BHnBemLLcyN70BPZAUhIqgFsMLf6ExJ1mlCXDdXOp6xGiEBjxAdQ==
+X-Received: by 2002:a17:907:2d9e:b0:775:3737:ac45 with SMTP id gt30-20020a1709072d9e00b007753737ac45mr6450390ejc.714.1663414934818;
+        Sat, 17 Sep 2022 04:42:14 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id 1-20020a170906218100b00730b61d8a5esm12095627eju.61.2022.09.17.04.42.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Sep 2022 04:42:14 -0700 (PDT)
+Message-ID: <5097a283-6111-bedc-13c6-61a581f8b72c@redhat.com>
+Date:   Sat, 17 Sep 2022 13:42:13 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6hlcum573u663t4h"
-Content-Disposition: inline
-In-Reply-To: <YwgdraBXTWk1DhCE@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 0/3] Check enumeration before MSR save/restore
+Content-Language: en-US
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        antonio.gomez.iglesias@linux.intel.com
+References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+ <20220913005053.vk7qmhr6tqqynags@desk>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220913005053.vk7qmhr6tqqynags@desk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---6hlcum573u663t4h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 Hi,
 
-On Thu, Aug 25, 2022 at 06:11:09PM -0700, Brian Norris wrote:
-> Hi Sebastian,
->=20
-> Thanks for the response.
->=20
-> On Thu, Aug 25, 2022 at 04:02:43PM +0200, Sebastian Reichel wrote:
-> > > For uevents, we enumerate all properties. Some battery implementations
-> > > don't implement all standard properties, and may return -EIO for
-> > > properties that aren't recognized. This means we never report uevents
-> > > for such batteries.
-> > >=20
-> > > It's better to ignore these errors and skip the property, as we do wi=
-th
-> > > ENODATA and ENODEV.
-> > >=20
-> > > Example battery implementation: Acer Chromebook Tab 10 (a.k.a. Google
-> > > Gru-Scarlet) has a virtual "SBS" battery implementation in its Embedd=
-ed
-> > > Controller on top of an otherwise non-SBS battery.
-> > >=20
-> > > Signed-off-by: Brian Norris <briannorris@chromium.org>
-> > > ---
-> >=20
-> > -EIO means input/output error. If a driver is reporting that for an
-> > unimplemented feature it's a bug that should be fixed in the driver.
-> > Handling it here means userspace ABI changes for temporary issues.
->=20
-> I suppose I can agree with your last sentence.
->=20
-> But the first part is much easier said than done. This is sbs-battery.c,
-> on top of i2c-cros-ec-tunnel.c, talking to an EC (whose firmware is
-> pretty much unchangeable at this point), which implements a subset of
-> commands.
->=20
-> The intention is that i2c-cros-ec-tunnel.c will see something like a NAK
-> / "invalid argument" response, and it converts that to ENXIO.
-> Unforunately, for reasons I have yet to figure out, it's very common for
-> retries (|i2c_retry_count|) to eventually yield an unexpected response
-> size, which i2c_smbus_xfer_emulated() treats as EIO; so this layer is
-> seeing EIO.
->=20
-> Anyway, I might be able to coax the i2c/sbs-battery driver to return
-> ENXIO instead. Would you consider that to be a better case to handle
-> here? "No such device or address" seems like an appropriate description
-> of a permanent error, and not a temporary IO error.
->=20
-> Brian
+On 9/13/22 02:50, Pawan Gupta wrote:
+> On Mon, Sep 12, 2022 at 04:38:44PM -0700, Pawan Gupta wrote:
+>> Hi,
+>>
+>> This patchset is to fix the "unchecked MSR access error" [1] during S3
+>> resume. Patch 1/3 adds a feature bit for MSR_IA32_TSX_CTRL.
+>>
+>> Patch 2/3 adds a feature bit for MSR_AMD64_LS_CFG.
+>>
+>> Patch 3/3 adds check for feature bit before adding any speculation
+>> control MSR to the list of MSRs to save/restore.
+>>
+>> [1] https://lore.kernel.org/lkml/20220906201743.436091-1-hdegoede@redhat.com/
+> 
+> Added the correct email-id of Hans de Goede <hdegoede@redhat.com>.
 
-The device is obviously not fully implementing the SBS standard,
-so I think the best is to create a new compatible value. Then the
-driver can register a different set of properties based on that
-and you never run into any error at all and userspace knows what
-to expect.
+I have tested this series and I can confirm that it fixes the exception
+which I was seeing on a Packard Bell Dot SC with an Atom N2600 CPU:
 
--- Sebastian
+Tested-by: Hans de Goede <hdegoede@redhat.com>
 
---6hlcum573u663t4h
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
 
------BEGIN PGP SIGNATURE-----
+Hans
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMk984ACgkQ2O7X88g7
-+ppzhQ/7B69yz3FJDXabgb6fD3Y2/g+yKs4mzqimNNyzOojCOGsktIuFqbKBa/G7
-DTDwEswL0agxSen2YoMcXkByDgafI/XaVPcwAKfsM1uSK5iwO0NXoNz56kNsIixS
-OKuU3Jcl4aAkXOU0QGab8QQ71nAJO5qfVSf3mQU7Dmrcid2QbH2d4Pv5iGsyivzG
-9GJ9k7bMtQVLrRXsQ35RG3Fwm4nuDnKemfwlH0yGSEr9WZiQXwtj5USCqrA4JGES
-doNfr9MKXRjFh+CTEcxlF1i0L6B3/HSNFqSiFu5hUK8DmcvWu8DqcH+XpMfw+AA0
-EV1e1iq1T+cSLcvV4W2tav8NS1k0IVhVoAHvCMEeo4XPOwN6E/g0DwDdTkYjVLKE
-RZGBqYU8BqmZPxU0a8uBhA5jSV7EreOo+ow06p2JsgNI1VE/ar7fWDme5e+RFIkn
-1mW9TvWp2J5dC7B5/AmJnKvxzda/OrljuHbiyVwRYt6XnE6Nwh/2xN/a6WzRv5HV
-bsWrXewij3V/W+F6D9LvmHaK0rVLHqwjhMHn0DkXWc3aPBDF1gU0cTEagIjlZWXB
-cM9KWwFRqme6qVfDAuZ1A2R5ANqVG8HdsY9o0YZP1BcPiwFGjbIk4dt2lGpLin/T
-T8qXD34cju0GySAypjwxBhsuIZRD0zHjvw6G2Zgo5IbDX36sdTM=
-=abHX
------END PGP SIGNATURE-----
-
---6hlcum573u663t4h--
