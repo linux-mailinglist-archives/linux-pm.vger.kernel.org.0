@@ -2,145 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA655BC48D
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 10:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904825BC5CB
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 11:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiISIoq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Sep 2022 04:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S229815AbiISJx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Sep 2022 05:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiISIop (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 04:44:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D1E5F5F;
-        Mon, 19 Sep 2022 01:44:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80A31B816B8;
-        Mon, 19 Sep 2022 08:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE61C433C1;
-        Mon, 19 Sep 2022 08:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663577080;
-        bh=Vd83dSwOxxVSmijrL/0T0PlkhSMj1d5PUkUDnXOIUyE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dlSngLTIaXTUHmuHDJgtMdbNwSHKqUJq9SLyDbvIvDthukzpSXHybBsTRhVVyFNJ2
-         1qqCtuHfpcMr/GliCB6rzwJjMLC2MHRH03VKiFCffo41yXNOwwmKRS/fEC1f2Cxj7R
-         DLEvYnlAXyJ2KzF8cFOljKYCXKTJeMmqp7ByoylE=
-Date:   Mon, 19 Sep 2022 10:45:06 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Olof Johansson <olof@lixom.net>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Pali Rohar <pali@kernel.org>,
-        Andreas Farber <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Timur Tabi <timur@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh@kernel.org>,
-        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-actions@lists.infradead.org,
-        linux-unisoc@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        sparclinux@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
-Message-ID: <YygsEtxKz8dsEstc@kroah.com>
-References: <20220701012647.2007122-1-saravanak@google.com>
- <YwS5J3effuHQJRZ5@kroah.com>
- <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+        with ESMTP id S229746AbiISJx5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 05:53:57 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AAE12AE6
+        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 02:53:56 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id x29so963134ljq.2
+        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 02:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Ozine1LMZl3lCyd+gDTUkyJgK4VZq5xPo6I1YmSTgwk=;
+        b=C0bfl5Yo6yR3581/nF0n6kJEeIj5RBteWgMCu0HqpgK61dWDWcYla+fmuc5Xa/XSlZ
+         bI+aUabiJ2ho4ZkmCZrqa9UhvilCmYPTrPhRdQybAb1P0uShrmNfbaHPiRiAdNYjcvxV
+         1U1F5GqNzqP94l0HJet1lbepiCS6UMBYc9qHpd3AN8M7AS7tGoZplkQmF3kqokpJC8yK
+         La4Vn9NSOkLeUr5Yzym5qG5wfWB5GWKt/E+qkAR8xwG+ZDhV26ALPbgMMmVCnIZisXyU
+         R0o+PGTSeD9rQyiFMbX5NbqwRhyfeXk8kxyr8RHZl5FC5l1s/D00wMnkuQ2jcYAF/B83
+         +nZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ozine1LMZl3lCyd+gDTUkyJgK4VZq5xPo6I1YmSTgwk=;
+        b=y/IHTk1DDfUZ9kZUzUpyVHSSF5N/KgxjCfONjIN/Ya7kCXv0ckfPkKWSkGrDysHh5b
+         256hG3BFtsLj/HfPrxa8cRfouog00yzVPzYfpjeK4qTv0qrFj1GF7KLo5Fiylk3EG+iK
+         xeyOUXq0YObDvGi2rqW3KCL4kgjpssEjpSwUF5m1Jwcpu9lOL2FT6XTcKQS9mKlQMBaD
+         ikFKUV7fEpmb4y1W15qvbkbHeHjUB9bz/OF2h/sn5SQUeJ6zLcuafI4YimhhVOYI51Ri
+         bh9ufjJPlx38W4OvBoTDXGFuLaTHFK1Ck28wE6Yd2IWl7k9JjFTtS0vYoV8kpMmT5X5y
+         BZFQ==
+X-Gm-Message-State: ACrzQf3Pz0G//qQ/MV/AGpTe07Z9gd0xJP61lREDZl6YTyOKeHIBATO8
+        byEKwnAPAWubpBwC4fenPZrOII+nKkRlP+ghGW2rhg==
+X-Google-Smtp-Source: AMsMyM5fWor7zFcZGDCoNv8tt/+3I7m5yu8diMswgk2YJB7/em0eqqnIXj479N3TRcb3sLl9C829jV6tZUmCE6lurpU=
+X-Received: by 2002:a2e:b744:0:b0:26c:40bf:eaba with SMTP id
+ k4-20020a2eb744000000b0026c40bfeabamr3683897ljo.367.1663581234550; Mon, 19
+ Sep 2022 02:53:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <CAPDyKFrzJikk6rJr9xwV6W-whvdLe5tTUE+xO_EoRtm+9DAbNA@mail.gmail.com>
+ <20220908173840.rqy335cdeg5a2ww5@bogus> <CAPDyKFqYDNXxfKHd8PYy8T3di2s206nCiHY7cEf+_EHVrY1YbQ@mail.gmail.com>
+ <20220909154254.xy4jvj6ybpuynghc@bogus> <CAMuHMdXvTWvZHjE-7CKOxCKjuPF++xQQRGedHeL2Zy-wsnHviw@mail.gmail.com>
+ <CAMuHMdX2rJq0DJo9D_RSMoAj9GPc-Zts5+UNCFQGF3+EYVSXgQ@mail.gmail.com>
+ <20220914153038.inbch35g7ldsyzhx@bogus> <81pr96n7-p42q-s3s-1541-n777or1p612@syhkavp.arg>
+In-Reply-To: <81pr96n7-p42q-s3s-1541-n777or1p612@syhkavp.arg>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 19 Sep 2022 11:53:18 +0200
+Message-ID: <CAPDyKFoBvX7WmJu0E1p0RuVCEKFFk===ZVnYtbz9o=RZPzHSTA@mail.gmail.com>
+Subject: Re: Question: why call clk_prepare in pm_clk_acquire
+To:     Nicolas Pitre <nico@fluxnic.net>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Dien Pham <dien.pham.ry@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,39 +78,77 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
-> On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
-> > > These patches are on top of driver-core-next.
+On Wed, 14 Sept 2022 at 19:05, Nicolas Pitre <nico@fluxnic.net> wrote:
+>
+> On Wed, 14 Sep 2022, Sudeep Holla wrote:
+>
+> > On Mon, Sep 12, 2022 at 06:58:49PM +0100, Geert Uytterhoeven wrote:
+> > > Hi Sudeep,
 > > >
-> > > Even if stdout-path isn't set in DT, this patch should take console
-> > > probe times back to how they were before the deferred_probe_timeout
-> > > clean up series[1].
+> > > CC Dien Pham
+> > >
+> > > On Mon, Sep 12, 2022 at 6:49 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > On Fri, Sep 9, 2022 at 4:51 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > > > On Fri, Sep 09, 2022 at 01:12:03PM +0200, Ulf Hansson wrote:
+> > > > > > On Thu, 8 Sept 2022 at 19:38, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > > > > > On Thu, Sep 08, 2022 at 04:37:13PM +0200, Ulf Hansson wrote:
+> > > > > > > > On Thu, 8 Sept 2022 at 09:33, Peng Fan <peng.fan@nxp.com> wrote:
+> > > > > > > > > We are facing an issue clk_set_rate fail with commit a3b884cef873 ("firmware:
+> > > > > > > > > arm_scmi: Add clock management to the SCMI power domain") ,
+> > > > > > > >
+> > > > > > > > Hmm, I wonder about the main reason behind that commit. Can we revert
+> > > > > > > > it or is there some platform/driver that is really relying on it?
+> > > > > > > >
+> > > > > > >
+> > > > > > > IIUC, at the time of the commit, it was needed on some Renesas platform.
+> > > > > > > Not sure if it is still used or not.
+> > > > > >
+> > > > > > Okay! Maybe Nico remembers more, as he authored the patch...
+> > > > > >
+> > > > >
+> > > > > May be, or even check with Renesas team who tested his patch.
+> > > >
+> > > > I'm not aware of Renesas platforms using SCMI...
+> > >
+> > > Upon closer look, Diep Pham did report a build issue in the SCMI code, so
+> > > perhaps Diep knows more...
+> > >
 > >
-> > Now dropped from my queue due to lack of a response to other reviewer's
-> > questions.
-> 
-> What happened to this patch? I have a 10 second timeout on console
-> probe on my SiFive Unmatched, and I don't see this flag being set for
-> the serial driver. In fact, I don't see it anywhere in-tree. I can't
-> seem to locate another patchset from Saravana around this though, so
-> I'm not sure where to look for a missing piece for the sifive serial
-> driver.
-> 
-> This is the second boot time regression (this one not fatal, unlike
-> the Layerscape PCIe one) from the fw_devlink patchset.
-> 
-> Greg, can you revert the whole set for 6.0, please? It's obviously
-> nowhere near tested enough to go in and I expect we'll see a bunch of
-> -stable fixups due to this if we let it remain in.
+> > Yes indeed, Diep Pham tested the original patch IIRC and also has reported
+> > few bugs in SCMI clock code which are fixed. Hence I know it is used by
+> > Renesas.
+> >
+> > Hi Peng,
+> >
+> > Absence of DTS changes indicate nothing. I am aware of couple of vendors
+> > who use SCMI on several platforms and do report issues regularly and help
+> > in review of the code. So DTS is not a good indicator of SCMI usage
+> > unfortunately. On reason could be that since it is a firmware, bootloaders
+> > can detect and update DTS, just my thought and may differ from the reality.
+>
+> Sorry for the delay.
+>
+> This patch was indeed requested by Renesas for one of their platform
+> that uses SCMI clocks. I didn't have access to the platform myself at
+> the time but the patch was positively validated and tested by Renesas.
+>
+> This works in conjunction with commit 0bfa0820c274 that made generic
+> clock pm code usable with the SCMI layer.
+>
+> I didn't touch any clock stuff since then and I forgot about the finer
+> details unfortunately.
 
-What exactly is "the whole set"?  I have the default option fix queued
-up and will send that to Linus later this week (am traveling back from
-Plumbers still), but have not heard any problems about any other issues
-at all other than your report.
+Thanks Nico for coming back with this information. To me, it looks
+like the patch may be applicable to some Renesas' downstream kernel
+then.
 
-thnaks,
+In my opinion I think we should rather try to revert, to avoid any
+further problems. So I am going to send that patch and see what people
+think about it.
 
-greg k-h
+Another option, which Sudeep doesn't seem very happy about too, is to
+make the GENPD_FLAG_PM_CLK conditional, based on a platform
+compatible.
+
+Kind regards
+Uffe
