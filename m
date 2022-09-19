@@ -2,303 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAD85BC327
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 08:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC865BC341
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 08:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiISGzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Sep 2022 02:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S229910AbiISG65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Sep 2022 02:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiISGzL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 02:55:11 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC55C13DDD;
-        Sun, 18 Sep 2022 23:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663570509; x=1695106509;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VOF/tVrPEbyx6JpFuiAUdGzRjWw+ufhb/I1351qHpTs=;
-  b=OH8hpqGrdrWWeA+bwfpDedUi8ydPr555Lz8uGCKweGjSPjAUBYU8cHED
-   PEXdDlFRZi3T0HgMJQuhFFpkbgm98zE65TFJBJTRJ+225HtjactCwK+OQ
-   LgnyBUrWa3UMK/MD9S6X9zOSdExpYHPTFaLG/7hwyI6bdvo19ZG9MulOl
-   owBn+a9ETVpFWv/C7DCfQ7dDJSp2jAW9k6NHfzFAKA2Xx0ki3eqSH+l87
-   /1WsWJPmCw81EkDuUWhpVs91SgDMZnlIujekGcFurYn67F7LuhSxx8f6i
-   mYLXwuhJi585RRNWimczZsRDxsO0nEmYPu+6NbhTIsPi3F1zUFcjil28T
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="385611386"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="385611386"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:54:56 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="793744150"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:54:56 -0700
-Message-ID: <45a483ff097220ca4bc534ada3c7c5d5fca5b19e.camel@linux.intel.com>
-Subject: Re: [PATCH v3 30/30] thermal/drivers/intel: Use generic
- thermal_zone_get_trip() function
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
+        with ESMTP id S229913AbiISG6v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 02:58:51 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A691D32D
+        for <linux-pm@vger.kernel.org>; Sun, 18 Sep 2022 23:58:48 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id z20so32749044ljq.3
+        for <linux-pm@vger.kernel.org>; Sun, 18 Sep 2022 23:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=UXvzNY9WWFT1v7vAfbxWfr9qr5ssnDrbFnxCDWveRyQ=;
+        b=UU45yYL68ivM+qw9w8N9YhmGzkm5v0qu7kGADmPxdb0xhywN1VMrAmsNwRjx2dadO1
+         O0tQTmdaMTLgsA+vVW+s3XqHJqCyrycEXh7AKfk5UrT1RVmo58KxQ//AzXzjtkWvc34y
+         th6BMBWBviuo6syks5HwfZcdk2ZQApkv5z0yFzYHANX2sW5kxTX20mq4aEXPz3ccwsrW
+         QSnqNL2tilihrik7qk7yntR+ZI0eJYfesH40IDRcg0fmz1nNdnYiiuq6UHRDCxQZQ8jp
+         mHDW5VQotpo0YGRsiVnp6ApaNVPUx2XIYwLGOKKnNUQK+4PzQa3pwASICQJJ8ZXrgrdj
+         rsOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=UXvzNY9WWFT1v7vAfbxWfr9qr5ssnDrbFnxCDWveRyQ=;
+        b=q/HsFWL2oAkgkzIGjU+p3vvdqS6R+tuk38UUCL3xCARhUIYkOvGueYcA4DCXOc+/je
+         GX2idwMoaWS8g6lP0ntCEmOd5LZvFDSWSf3X717x64cEMG2AeAloX6EgUGKFSEAxvy4+
+         R6IZ20HxkJcsL6x9XzEJqs9ylEyL+saXVYJBY+dt8tT4gONejSnR7POTm3bdJzer5uvZ
+         hiCBw7I7TKenP7uzh3tHq/JIj5R3TmTp+ox/ATTovbXfHd1icXwesuRNnEOso6TcW4Yq
+         IrjPN6bMjpt7olCp2kKkKkLZTWp6s0kFFgptZ0zC1/uOSy4+pPdzs08iAEAG49ZV3stY
+         nN2A==
+X-Gm-Message-State: ACrzQf2NXvPVV04bDp8GYZypveRvfaORWYWOzj5FveY46DxS0SMYie6c
+        CpVw1BUs/opZ7G7jq19i95IBBg==
+X-Google-Smtp-Source: AMsMyM7Qh/83u/LK4ogM1Bxeq4ntIDeo+3CCpkxbVjK1fcSeFAztCrA2iCJdT7aw1zzUsTxpnNlq1Q==
+X-Received: by 2002:a2e:bc11:0:b0:26c:565:12f6 with SMTP id b17-20020a2ebc11000000b0026c056512f6mr4528557ljf.91.1663570726912;
+        Sun, 18 Sep 2022 23:58:46 -0700 (PDT)
+Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f36-20020a0565123b2400b0049f530939aasm1904249lfv.126.2022.09.18.23.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Sep 2022 23:58:46 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 08:58:44 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Amit Kucheria <amitk@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        devicetree@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Date:   Sun, 18 Sep 2022 23:54:55 -0700
-In-Reply-To: <0e986fbb-e76b-9663-26c2-b84d887b4c98@linaro.org>
-References: <20220906164720.330701-1-daniel.lezcano@linaro.org>
-         <20220906164720.330701-31-daniel.lezcano@linaro.org>
-         <0e986fbb-e76b-9663-26c2-b84d887b4c98@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] dt-bindings: thermal: Convert ls2k to json-schema
+Message-ID: <20220919065844.su3hpqbwzdqmzzw5@krzk-bin>
+References: <20220919034915.26912-1-zhuyinbo@loongson.cn>
+ <20220919034915.26912-2-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220919034915.26912-2-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-09-16 at 19:06 +0200, Daniel Lezcano wrote:
+On Mon, 19 Sep 2022 11:49:14 +0800, Yinbo Zhu wrote:
+> Convert the ls2k thermal binding to DT schema format using json-schema
 > 
-> Hi Srinivas,
-> 
-> I've Cc'ed you on this patch in case you have any comment
-> 
-> Thanks
-> 
->    -- D.
-> 
-> On 06/09/2022 18:47, Daniel Lezcano wrote:
-> > The thermal framework gives the possibility to register the trip
-> > points with the thermal zone. When that is done, no get_trip_* ops
-> > are
-> > needed and they can be removed.
-> > 
-> > Convert ops content logic into generic trip points and register them
-> > with the
-> > thermal zone.
-> > 
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-
-
-> > ---
-> >   drivers/thermal/intel/x86_pkg_temp_thermal.c | 120 ++++++++++------
-> > ---
-> >   1 file changed, 66 insertions(+), 54 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> > b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> > index a0e234fce71a..e7c3b78d959c 100644
-> > --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> > +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-> > @@ -53,6 +53,7 @@ struct zone_device {
-> >         u32                             msr_pkg_therm_high;
-> >         struct delayed_work             work;
-> >         struct thermal_zone_device      *tzone;
-> > +       struct thermal_trip             *trips;
-> >         struct cpumask                  cpumask;
-> >   };
-> >   
-> > @@ -138,40 +139,6 @@ static int sys_get_curr_temp(struct
-> > thermal_zone_device *tzd, int *temp)
-> >         return -EINVAL;
-> >   }
-> >   
-> > -static int sys_get_trip_temp(struct thermal_zone_device *tzd,
-> > -                            int trip, int *temp)
-> > -{
-> > -       struct zone_device *zonedev = tzd->devdata;
-> > -       unsigned long thres_reg_value;
-> > -       u32 mask, shift, eax, edx;
-> > -       int ret;
-> > -
-> > -       if (trip >= MAX_NUMBER_OF_TRIPS)
-> > -               return -EINVAL;
-> > -
-> > -       if (trip) {
-> > -               mask = THERM_MASK_THRESHOLD1;
-> > -               shift = THERM_SHIFT_THRESHOLD1;
-> > -       } else {
-> > -               mask = THERM_MASK_THRESHOLD0;
-> > -               shift = THERM_SHIFT_THRESHOLD0;
-> > -       }
-> > -
-> > -       ret = rdmsr_on_cpu(zonedev->cpu,
-> > MSR_IA32_PACKAGE_THERM_INTERRUPT,
-> > -                          &eax, &edx);
-> > -       if (ret < 0)
-> > -               return ret;
-> > -
-> > -       thres_reg_value = (eax & mask) >> shift;
-> > -       if (thres_reg_value)
-> > -               *temp = zonedev->tj_max - thres_reg_value * 1000;
-> > -       else
-> > -               *temp = THERMAL_TEMP_INVALID;
-> > -       pr_debug("sys_get_trip_temp %d\n", *temp);
-> > -
-> > -       return 0;
-> > -}
-> > -
-> >   static int
-> >   sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int
-> > temp)
-> >   {
-> > @@ -212,18 +179,9 @@ sys_set_trip_temp(struct thermal_zone_device
-> > *tzd, int trip, int temp)
-> >                         l, h);
-> >   }
-> >   
-> > -static int sys_get_trip_type(struct thermal_zone_device *thermal,
-> > int trip,
-> > -                            enum thermal_trip_type *type)
-> > -{
-> > -       *type = THERMAL_TRIP_PASSIVE;
-> > -       return 0;
-> > -}
-> > -
-> >   /* Thermal zone callback registry */
-> >   static struct thermal_zone_device_ops tzone_ops = {
-> >         .get_temp = sys_get_curr_temp,
-> > -       .get_trip_temp = sys_get_trip_temp,
-> > -       .get_trip_type = sys_get_trip_type,
-> >         .set_trip_temp = sys_set_trip_temp,
-> >   };
-> >   
-> > @@ -328,6 +286,48 @@ static int pkg_thermal_notify(u64 msr_val)
-> >         return 0;
-> >   }
-> >   
-> > +static struct thermal_trip *pkg_temp_thermal_trips_init(int cpu, int
-> > tj_max, int num_trips)
-> > +{
-> > +       struct thermal_trip *trips;
-> > +       unsigned long thres_reg_value;
-> > +       u32 mask, shift, eax, edx;
-> > +       int ret, i;
-> > +
-> > +       trips = kzalloc(sizeof(*trips) * num_trips, GFP_KERNEL);
-> > +       if (!trips)
-> > +               return ERR_PTR(-ENOMEM);
-> > +       
-> > +       for (i = 0; i < num_trips; i++) {
-> > +
-> > +               if (i) {
-> > +                       mask = THERM_MASK_THRESHOLD1;
-> > +                       shift = THERM_SHIFT_THRESHOLD1;
-> > +               } else {
-> > +                       mask = THERM_MASK_THRESHOLD0;
-> > +                       shift = THERM_SHIFT_THRESHOLD0;
-> > +               }
-> > +
-> > +               ret = rdmsr_on_cpu(cpu,
-> > MSR_IA32_PACKAGE_THERM_INTERRUPT,
-> > +                                  &eax, &edx);
-> > +               if (ret < 0) {
-> > +                       kfree(trips);
-> > +                       return ERR_PTR(ret);
-> > +               }
-> > +
-> > +               thres_reg_value = (eax & mask) >> shift;
-> > +
-> > +               trips[i].temperature = thres_reg_value ?
-> > +                       tj_max - thres_reg_value * 1000 :
-> > THERMAL_TEMP_INVALID;
-> > +
-> > +               trips[i].type = THERMAL_TRIP_PASSIVE;
-> > +               
-> > +               pr_debug("%s: cpu=%d, trip=%d, temp=%d\n",
-> > +                        __func__, cpu, i, trips[i].temperature);
-> > +       }
-> > +
-> > +       return trips;
-> > +}
-> > +
-> >   static int pkg_temp_thermal_device_add(unsigned int cpu)
-> >   {
-> >         int id = topology_logical_die_id(cpu);
-> > @@ -353,24 +353,27 @@ static int pkg_temp_thermal_device_add(unsigned
-> > int cpu)
-> >         if (!zonedev)
-> >                 return -ENOMEM;
-> >   
-> > +       zonedev->trips = pkg_temp_thermal_trips_init(cpu, tj_max,
-> > thres_count);
-> > +       if (IS_ERR(zonedev->trips)) {
-> > +               err = PTR_ERR(zonedev->trips);
-> > +               goto out_kfree_zonedev;
-> > +       }
-> > +       
-> >         INIT_DELAYED_WORK(&zonedev->work,
-> > pkg_temp_thermal_threshold_work_fn);
-> >         zonedev->cpu = cpu;
-> >         zonedev->tj_max = tj_max;
-> > -       zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
-> > -                       thres_count,
-> > +       zonedev->tzone =
-> > thermal_zone_device_register_with_trips("x86_pkg_temp",
-> > +                       zonedev->trips, thres_count,
-> >                         (thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 :
-> > 0x01,
-> >                         zonedev, &tzone_ops, &pkg_temp_tz_params, 0,
-> > 0);
-> >         if (IS_ERR(zonedev->tzone)) {
-> >                 err = PTR_ERR(zonedev->tzone);
-> > -               kfree(zonedev);
-> > -               return err;
-> > +               goto out_kfree_trips;
-> >         }
-> >         err = thermal_zone_device_enable(zonedev->tzone);
-> > -       if (err) {
-> > -               thermal_zone_device_unregister(zonedev->tzone);
-> > -               kfree(zonedev);
-> > -               return err;
-> > -       }
-> > +       if (err)
-> > +               goto out_unregister_tz;
-> > +
-> >         /* Store MSR value for package thermal interrupt, to restore
-> > at exit */
-> >         rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev-
-> > >msr_pkg_therm_low,
-> >               zonedev->msr_pkg_therm_high);
-> > @@ -379,7 +382,14 @@ static int pkg_temp_thermal_device_add(unsigned
-> > int cpu)
-> >         raw_spin_lock_irq(&pkg_temp_lock);
-> >         zones[id] = zonedev;
-> >         raw_spin_unlock_irq(&pkg_temp_lock);
-> > -       return 0;
-> > +
-> > +out_unregister_tz:     
-> > +       thermal_zone_device_unregister(zonedev->tzone);
-> > +out_kfree_trips:
-> > +       kfree(zonedev->trips);
-> > +out_kfree_zonedev:
-> > +       kfree(zonedev);
-> > +       return err;
-> >   }
-> >   
-> >   static int pkg_thermal_cpu_offline(unsigned int cpu)
-> > @@ -463,8 +473,10 @@ static int pkg_thermal_cpu_offline(unsigned int
-> > cpu)
-> >         raw_spin_unlock_irq(&pkg_temp_lock);
-> >   
-> >         /* Final cleanup if this is the last cpu */
-> > -       if (lastcpu)
-> > +       if (lastcpu) {
-> > +               kfree(zonedev->trips);
-> >                 kfree(zonedev);
-> > +       }
-> >         return 0;
-> >   }
-> >   
-> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  .../bindings/thermal/ls2k-thermal.yaml        | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml
 > 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml: properties:interrupt-parent: False schema does not allow {'maxItems': 1}
+	from schema $id: http://devicetree.org/meta-schemas/interrupts.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml: ignoring, error in schema: properties: interrupt-parent
+Documentation/devicetree/bindings/thermal/ls2k-thermal.example.dtb:0:0: /example-0/tsensor@1fe01500: failed to match any schema with compatible: ['loongson,2k-tsensor']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
