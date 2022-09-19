@@ -2,277 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6BC5BC365
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 09:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA655BC48D
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 10:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiISHLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Sep 2022 03:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S229997AbiISIoq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Sep 2022 04:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiISHLY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 03:11:24 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DF91D327
-        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 00:11:21 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id x27so12231340lfu.0
-        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 00:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=OkybTE66mfrvnk07mJhb8uDsL9ZCbDV0hOsy6isKbWw=;
-        b=D/nRppMBq0YAnoEhINH3Z0P9TRgG1BXuZTIwyQM0dyZDLVwNJwi8aESkUvM73QHl+5
-         F9QYMQK/xtCsTHVDZ19PN2TwvyZXD05vkPJLCzo4Ij2OttCP2NEl2aoqD5jAYDbq3iU+
-         KMUaAnNPVXtKyV3LT4gSDILkBs/SV/ucd3Qn9u0YMqrvozsJ7A3DfDbt+kbzoAgfUtjg
-         p5foBSLRm97TnkizKOVfpI3StsmQB5lQkCbUulHvRy8qRJOEjo9cDhs4oTEK6/38kmbq
-         SNdleQ5QVzc6nSfF+j4drb/f4gEA0xgqkpxOEtIr6BUhfXcP1m3I1Ql11/vwTZUXU6Ri
-         2qnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=OkybTE66mfrvnk07mJhb8uDsL9ZCbDV0hOsy6isKbWw=;
-        b=P/0Dandvk/vMHId5rr7yCFjRPWg/9xsjeZClZ6Zik2sE3XoKJ2cxaxGXQ240fy4NaO
-         Malx5fF1kJ5QQj3gQ21aTF7BSHKtfGSm2WoWZWKM9SrxznCgywbaNeqPQ9/8Ht8bZp3W
-         +UWzG0S2mNJr1c9DLsdf51diwq+JN/R0OuCG/Owb4eAty5BbnYSlVj2no9dbbvBE7KvS
-         lE7xnfHfIaZSL5VO3tRHzEFgJoq46h7sPvxJYDXnuU4UzoiZ0q5WM3KKhv9Q1NytanYq
-         ZkTvOE8B7z/Vg0Z4TZswYBoQ4pXDNio4vDhy3AiWRz2l1ZhMkRIj4aYpXrkWb47FzI8M
-         cR0g==
-X-Gm-Message-State: ACrzQf01NPSzdftAgy7SiS5/o3x2NUdx5WXiKkrTIyqdaXwFNi8vZf5I
-        oLrf9JELS3TD3Q/tF8xM2K4RcA==
-X-Google-Smtp-Source: AMsMyM69FgTlQ/RA3kiV+ul8Cu2ZVr0C81M5qS5BMPwpGr3XxoadcKtBJkR9DBcKrshWMwkdmydh/w==
-X-Received: by 2002:a05:6512:3da9:b0:49f:1742:c692 with SMTP id k41-20020a0565123da900b0049f1742c692mr6275517lfv.313.1663571479878;
-        Mon, 19 Sep 2022 00:11:19 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b20-20020a056512071400b00492b494c4e8sm5049666lfs.298.2022.09.19.00.11.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 00:11:19 -0700 (PDT)
-Message-ID: <b5578e0f-ac41-9889-a6bb-4b1d74197ec0@linaro.org>
-Date:   Mon, 19 Sep 2022 09:11:18 +0200
+        with ESMTP id S229695AbiISIop (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 04:44:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D1E5F5F;
+        Mon, 19 Sep 2022 01:44:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80A31B816B8;
+        Mon, 19 Sep 2022 08:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE61C433C1;
+        Mon, 19 Sep 2022 08:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663577080;
+        bh=Vd83dSwOxxVSmijrL/0T0PlkhSMj1d5PUkUDnXOIUyE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dlSngLTIaXTUHmuHDJgtMdbNwSHKqUJq9SLyDbvIvDthukzpSXHybBsTRhVVyFNJ2
+         1qqCtuHfpcMr/GliCB6rzwJjMLC2MHRH03VKiFCffo41yXNOwwmKRS/fEC1f2Cxj7R
+         DLEvYnlAXyJ2KzF8cFOljKYCXKTJeMmqp7ByoylE=
+Date:   Mon, 19 Sep 2022 10:45:06 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Olof Johansson <olof@lixom.net>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+Message-ID: <YygsEtxKz8dsEstc@kroah.com>
+References: <20220701012647.2007122-1-saravanak@google.com>
+ <YwS5J3effuHQJRZ5@kroah.com>
+ <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 3/3] thermal: ls2k: add thermal management support
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>
-References: <20220919034915.26912-1-zhuyinbo@loongson.cn>
- <20220919034915.26912-3-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919034915.26912-3-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/09/2022 05:49, Yinbo Zhu wrote:
-> This patch adds the support for loongson2k thermal sensor controller,
-> which can support maximum 3 sensors.
+On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
+> On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > > These patches are on top of driver-core-next.
+> > >
+> > > Even if stdout-path isn't set in DT, this patch should take console
+> > > probe times back to how they were before the deferred_probe_timeout
+> > > clean up series[1].
+> >
+> > Now dropped from my queue due to lack of a response to other reviewer's
+> > questions.
 > 
-> It's based on thermal of framework:
->  - Trip points defined in device tree.
->  - Cpufreq as cooling device registered in loongson2k cpufreq driver.
->  - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+> What happened to this patch? I have a 10 second timeout on console
+> probe on my SiFive Unmatched, and I don't see this flag being set for
+> the serial driver. In fact, I don't see it anywhere in-tree. I can't
+> seem to locate another patchset from Saravana around this though, so
+> I'm not sure where to look for a missing piece for the sifive serial
+> driver.
 > 
-> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  drivers/thermal/Kconfig        |  10 ++
->  drivers/thermal/Makefile       |   1 +
->  drivers/thermal/ls2k_thermal.c | 244 +++++++++++++++++++++++++++++++++
->  3 files changed, 255 insertions(+)
->  create mode 100644 drivers/thermal/ls2k_thermal.c
+> This is the second boot time regression (this one not fatal, unlike
+> the Layerscape PCIe one) from the fw_devlink patchset.
 > 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index e052dae614eb..04f5c044bc94 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
->  	  If you say yes here you get support for the FAN controlled
->  	  by the Microcontroller found on the Khadas VIM boards.
->  
-> +config LOONGSON2K_THERMAL
-> +	tristate "Loongson 2K SOC series thermal driver"
-> +	depends on OF
-> +	default m
+> Greg, can you revert the whole set for 6.0, please? It's obviously
+> nowhere near tested enough to go in and I expect we'll see a bunch of
+> -stable fixups due to this if we let it remain in.
 
-Why should it be module by default on x86 or ARM? See how other drivers
-do it.
+What exactly is "the whole set"?  I have the default option fix queued
+up and will send that to Linus later this week (am traveling back from
+Plumbers still), but have not heard any problems about any other issues
+at all other than your report.
 
-> +	help
-> +	  Support for Thermal driver found on Loongson 2K SOC series platforms.
-> +	  It supports one critical trip point and one passive trip point. The
-> +	  cpufreq and the pwm fan is used as the cooling device to throttle CPUs
-> +	  when the passive trip is crossed.
-> +
->  endif
+thnaks,
 
-(...)
-
-> +
-> +static int ls2k_thermal_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
-> +	struct ls2k_thermal_data *data;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->pdev = pdev;
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
-
-There is a helper combining these two.
-
-> +	if (IS_ERR(data->regs)) {
-> +		dev_err(dev, "failed to get io address\n");
-
-I think error msg can be skipped in such case. Core should print it.
-
-> +		return PTR_ERR(data->regs);
-> +	}
-> +
-> +	/* get irq */
-> +	data->irq = platform_get_irq(pdev, 0);
-> +	if (data->irq < 0)
-> +		return data->irq;
-> +
-> +	/* get id */
-> +	if (of_property_read_u32(dev->of_node, "id", &data->id)) {
-> +		dev_err(dev, "not found id property!\n");
-> +		data->id = LS2K_SOC_DEFAULT_SENSOR;
-> +	}
-> +
-> +	if (data->id > LS2K_SOC_MAX_SENSOR_NUM) {
-> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
-> +				LS2K_SOC_MAX_SENSOR_NUM);
-> +		return -EINVAL;
-> +	}
-> +
-> +	writeb(0xff, data->regs + LS2K_TSENSOR_STATUS);
-> +
-> +	ls2k_tsensor_set(data, 0, 0, false);
-> +
-> +	data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
-> +							   data->id, data,
-> +							   &ls2k_of_thermal_ops);
-> +	if (IS_ERR(data->tzd)) {
-> +		ret = PTR_ERR(data->tzd);
-> +		data->tzd = NULL;
-> +		dev_err(&pdev->dev, "failed to register %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_request_threaded_irq(dev, data->irq,
-> +			ls2k_thermal_alarm_irq, ls2k_thermal_irq_thread,
-> +			IRQF_ONESHOT, "ls2k_thermal", data);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to request alarm irq: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Thermal_zone doesn't enable hwmon as default,
-> +	 * enable it here
-> +	 */
-> +	data->tzd->tzp->no_hwmon = false;
-> +	ret = thermal_add_hwmon_sysfs(data->tzd);
-> +	if (ret) {
-> +		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int ls2k_thermal_remove(struct platform_device *pdev)
-> +{
-> +	struct ls2k_thermal_data *data = platform_get_drvdata(pdev);
-> +	int reg_off = data->id * 2;
-> +
-> +	/* disable interrupt */
-> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_ls2k_thermal_match[] = {
-> +	{ .compatible = "loongson,2k-tsensor",},
-> +	{ /* end */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_ls2k_thermal_match);
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int ls2k_thermal_suspend(struct device *dev)
-> +{
-> +	struct ls2k_thermal_data *data = dev_get_drvdata(dev);
-> +	int reg_off = data->id * 2;
-> +
-> +	data->ctrl_low_val = readw(data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-> +	data->ctrl_hi_val = readw(data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ls2k_thermal_resume(struct device *dev)
-> +{
-> +	struct ls2k_thermal_data *data = dev_get_drvdata(dev);
-> +	int reg_off = data->id * 2;
-> +
-> +	writew(data->ctrl_low_val, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-> +	writew(data->ctrl_hi_val, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(ls2k_thermal_pm_ops,
-> +			 ls2k_thermal_suspend, ls2k_thermal_resume);
-> +#endif
-> +
-> +static struct platform_driver ls2k_thermal_driver = {
-> +	.driver = {
-> +		.name		= "ls2k_thermal",
-> +#ifdef CONFIG_PM_SLEEP
-
-pm_ptr() (and use same approach as its users - no need for ifdefs,
-DEFINE_SIMPLE_DEV_PM_OPS)
-
-
-> +		.pm = &ls2k_thermal_pm_ops,
-> +#endif
-> +		.of_match_table = of_ls2k_thermal_match,
-> +	},
-> +	.probe	= ls2k_thermal_probe,
-> +	.remove	= ls2k_thermal_remove,
-> +};
-> +module_platform_driver(ls2k_thermal_driver);
-
-
-Best regards,
-Krzysztof
+greg k-h
