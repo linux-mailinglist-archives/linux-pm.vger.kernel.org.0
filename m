@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676385BC34F
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 09:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6BC5BC365
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 09:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiISHDX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Sep 2022 03:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S229951AbiISHLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Sep 2022 03:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiISHDW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 03:03:22 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559961D0F4
-        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 00:03:20 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id l12so32762638ljg.9
-        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 00:03:20 -0700 (PDT)
+        with ESMTP id S229551AbiISHLY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 03:11:24 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DF91D327
+        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 00:11:21 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id x27so12231340lfu.0
+        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 00:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=9xFTk4OMhZkRlhAaanDFcs7HM/NhpRYI6iz828j2ZeA=;
-        b=wJ7qP0XlQU6l+wwCv1ayWHDuWf6ip3NMJLAJNXT5z7UomUh+jpD6eFLmTPkxo6V5QJ
-         yuNT3vObCNly/555xWdO1u9e9H4wobqR5iNkDDUKCshgxhdlZJOWGwBytHHwQPBdkqfD
-         ik1jdaFy0j70Gms28/12tPl/jTDeexSVoCuM6CrR3uIhDPsuVTQVevE3pTrWHNVsEwcS
-         vsbHyKqnD02gMF1Tmnp9E+17THTx6ohIRmORnSxE1iM77YuY8eRT5yU39BYNiDr4+7WY
-         id+OggelsrRjY6tbJgu59PQBV/ZQ46dtB0cCcu6Es+2vPCSGzmDABBNa5xkrvbFwDGNE
-         FsAg==
+        bh=OkybTE66mfrvnk07mJhb8uDsL9ZCbDV0hOsy6isKbWw=;
+        b=D/nRppMBq0YAnoEhINH3Z0P9TRgG1BXuZTIwyQM0dyZDLVwNJwi8aESkUvM73QHl+5
+         F9QYMQK/xtCsTHVDZ19PN2TwvyZXD05vkPJLCzo4Ij2OttCP2NEl2aoqD5jAYDbq3iU+
+         KMUaAnNPVXtKyV3LT4gSDILkBs/SV/ucd3Qn9u0YMqrvozsJ7A3DfDbt+kbzoAgfUtjg
+         p5foBSLRm97TnkizKOVfpI3StsmQB5lQkCbUulHvRy8qRJOEjo9cDhs4oTEK6/38kmbq
+         SNdleQ5QVzc6nSfF+j4drb/f4gEA0xgqkpxOEtIr6BUhfXcP1m3I1Ql11/vwTZUXU6Ri
+         2qnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=9xFTk4OMhZkRlhAaanDFcs7HM/NhpRYI6iz828j2ZeA=;
-        b=jh2Dv5bxwhbN2rcxKBIzU7WbFii++/9hjOfuUNoQqnuPcv01IHb8Vs+tK0qQW5BHZ0
-         ie3IYuhxNXpT7ugI6v1lGUHGxzN7595vKSkdq4rIaE4LSkrkfGX7XTn+VX2Bqei2aZS/
-         bQR+FxtDTQXe5r9jgVRSNhMRxdFYnO37RcGy2XNMhY6EiIVAlmVbpLCWlvaOMEmcD1yT
-         axVwPKTvU9dUKcTfo8eZTNzXK5gInJqsuMHf+6HuECX/8wC+3nU1fH0B1mjJ2ou1hKym
-         HpvM5Etf5FfYQ9PKOx0XlOYHEsFk0aGWJ9+HK4QIAYJDDEQurdiZT7R7vne4sZxRTeOF
-         PDPA==
-X-Gm-Message-State: ACrzQf1AejcvxJTt9LmnzXy5538X1nlRN1fe0Qa/2lYLZpiSnhuCIcq4
-        DOF6DnsWM5+ONixsSTlDtOcRDA==
-X-Google-Smtp-Source: AMsMyM7LeebYro7ACkENxHGy30ekGSA6BGvSNxYWMK2+W2evg4h1dugZbL9Q6/4Tq74QNm2Jh8U2TA==
-X-Received: by 2002:a2e:9cf:0:b0:26c:3973:ec1f with SMTP id 198-20020a2e09cf000000b0026c3973ec1fmr4624171ljj.322.1663570998645;
-        Mon, 19 Sep 2022 00:03:18 -0700 (PDT)
+        bh=OkybTE66mfrvnk07mJhb8uDsL9ZCbDV0hOsy6isKbWw=;
+        b=P/0Dandvk/vMHId5rr7yCFjRPWg/9xsjeZClZ6Zik2sE3XoKJ2cxaxGXQ240fy4NaO
+         Malx5fF1kJ5QQj3gQ21aTF7BSHKtfGSm2WoWZWKM9SrxznCgywbaNeqPQ9/8Ht8bZp3W
+         +UWzG0S2mNJr1c9DLsdf51diwq+JN/R0OuCG/Owb4eAty5BbnYSlVj2no9dbbvBE7KvS
+         lE7xnfHfIaZSL5VO3tRHzEFgJoq46h7sPvxJYDXnuU4UzoiZ0q5WM3KKhv9Q1NytanYq
+         ZkTvOE8B7z/Vg0Z4TZswYBoQ4pXDNio4vDhy3AiWRz2l1ZhMkRIj4aYpXrkWb47FzI8M
+         cR0g==
+X-Gm-Message-State: ACrzQf01NPSzdftAgy7SiS5/o3x2NUdx5WXiKkrTIyqdaXwFNi8vZf5I
+        oLrf9JELS3TD3Q/tF8xM2K4RcA==
+X-Google-Smtp-Source: AMsMyM69FgTlQ/RA3kiV+ul8Cu2ZVr0C81M5qS5BMPwpGr3XxoadcKtBJkR9DBcKrshWMwkdmydh/w==
+X-Received: by 2002:a05:6512:3da9:b0:49f:1742:c692 with SMTP id k41-20020a0565123da900b0049f1742c692mr6275517lfv.313.1663571479878;
+        Mon, 19 Sep 2022 00:11:19 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id r13-20020a2e994d000000b0026c3b68c8b0sm1443633ljj.74.2022.09.19.00.03.17
+        by smtp.gmail.com with ESMTPSA id b20-20020a056512071400b00492b494c4e8sm5049666lfs.298.2022.09.19.00.11.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 00:03:18 -0700 (PDT)
-Message-ID: <25c6693c-a57f-8ea2-71e8-fda9646fd7f1@linaro.org>
-Date:   Mon, 19 Sep 2022 09:03:17 +0200
+        Mon, 19 Sep 2022 00:11:19 -0700 (PDT)
+Message-ID: <b5578e0f-ac41-9889-a6bb-4b1d74197ec0@linaro.org>
+Date:   Mon, 19 Sep 2022 09:11:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH v1 2/3] dt-bindings: thermal: Convert ls2k to json-schema
+Subject: Re: [PATCH v1 3/3] thermal: ls2k: add thermal management support
 Content-Language: en-US
 To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -67,14 +67,15 @@ To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
         linux-kernel@vger.kernel.org
 Cc:     zhanghongchen <zhanghongchen@loongson.cn>
 References: <20220919034915.26912-1-zhuyinbo@loongson.cn>
- <20220919034915.26912-2-zhuyinbo@loongson.cn>
+ <20220919034915.26912-3-zhuyinbo@loongson.cn>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919034915.26912-2-zhuyinbo@loongson.cn>
+In-Reply-To: <20220919034915.26912-3-zhuyinbo@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,90 +83,195 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 19/09/2022 05:49, Yinbo Zhu wrote:
-> Convert the ls2k thermal binding to DT schema format using json-schema
+> This patch adds the support for loongson2k thermal sensor controller,
+> which can support maximum 3 sensors.
 > 
+> It's based on thermal of framework:
+>  - Trip points defined in device tree.
+>  - Cpufreq as cooling device registered in loongson2k cpufreq driver.
+>  - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+> 
+> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
 > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-
-FYI, All your patches were marked as spam, unfortunately.
-
 > ---
->  .../bindings/thermal/ls2k-thermal.yaml        | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml
+>  drivers/thermal/Kconfig        |  10 ++
+>  drivers/thermal/Makefile       |   1 +
+>  drivers/thermal/ls2k_thermal.c | 244 +++++++++++++++++++++++++++++++++
+>  3 files changed, 255 insertions(+)
+>  create mode 100644 drivers/thermal/ls2k_thermal.c
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml
-> new file mode 100644
-> index 000000000000..44bc5d4626d1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e052dae614eb..04f5c044bc94 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>  	  If you say yes here you get support for the FAN controlled
+>  	  by the Microcontroller found on the Khadas VIM boards.
+>  
+> +config LOONGSON2K_THERMAL
+> +	tristate "Loongson 2K SOC series thermal driver"
+> +	depends on OF
+> +	default m
 
-Filename based on compatible.
+Why should it be module by default on x86 or ARM? See how other drivers
+do it.
 
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/ls2k-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +	help
+> +	  Support for Thermal driver found on Loongson 2K SOC series platforms.
+> +	  It supports one critical trip point and one passive trip point. The
+> +	  cpufreq and the pwm fan is used as the cooling device to throttle CPUs
+> +	  when the passive trip is crossed.
 > +
-> +title: Thermal sensors on loongson 2k SoCs
-> +
-> +maintainers:
-> +  - zhanghongchen <zhanghongchen@loongson.cn>
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,2k-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  id:
-> +    const: 0
+>  endif
 
-Why? What is this? No description, no type (is there such standard
-property?), no vendor prefix... and always equal to 0?
+(...)
 
 > +
-> +  interrupt-parent:
-> +    maxItems: 1
-
-That's not needed, I think.
-
+> +static int ls2k_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	struct ls2k_thermal_data *data;
+> +	int ret;
 > +
-> +  interrupts:
-> +    maxItems: 1
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
 > +
-> +  "#thermal-sensor-cells":
-> +    const: 1
+> +	data->pdev = pdev;
+> +	platform_set_drvdata(pdev, data);
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - id
-> +  - interrupt-parent
-> +  - interrupts
-> +  - '#thermal-sensor-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    tsensor: tsensor@1fe01500 {
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+There is a helper combining these two.
 
-Use names used by other examples.
+> +	if (IS_ERR(data->regs)) {
+> +		dev_err(dev, "failed to get io address\n");
 
-> +        compatible = "loongson,2k-tsensor";
-> +        reg = <0 0x1fe01500 0 0x30>;
-> +        id = <0>;
-> +        interrupt-parent = <&icu>;
-> +        interrupts = <7>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
+I think error msg can be skipped in such case. Core should print it.
+
+> +		return PTR_ERR(data->regs);
+> +	}
+> +
+> +	/* get irq */
+> +	data->irq = platform_get_irq(pdev, 0);
+> +	if (data->irq < 0)
+> +		return data->irq;
+> +
+> +	/* get id */
+> +	if (of_property_read_u32(dev->of_node, "id", &data->id)) {
+> +		dev_err(dev, "not found id property!\n");
+> +		data->id = LS2K_SOC_DEFAULT_SENSOR;
+> +	}
+> +
+> +	if (data->id > LS2K_SOC_MAX_SENSOR_NUM) {
+> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
+> +				LS2K_SOC_MAX_SENSOR_NUM);
+> +		return -EINVAL;
+> +	}
+> +
+> +	writeb(0xff, data->regs + LS2K_TSENSOR_STATUS);
+> +
+> +	ls2k_tsensor_set(data, 0, 0, false);
+> +
+> +	data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+> +							   data->id, data,
+> +							   &ls2k_of_thermal_ops);
+> +	if (IS_ERR(data->tzd)) {
+> +		ret = PTR_ERR(data->tzd);
+> +		data->tzd = NULL;
+> +		dev_err(&pdev->dev, "failed to register %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_request_threaded_irq(dev, data->irq,
+> +			ls2k_thermal_alarm_irq, ls2k_thermal_irq_thread,
+> +			IRQF_ONESHOT, "ls2k_thermal", data);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to request alarm irq: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * Thermal_zone doesn't enable hwmon as default,
+> +	 * enable it here
+> +	 */
+> +	data->tzd->tzp->no_hwmon = false;
+> +	ret = thermal_add_hwmon_sysfs(data->tzd);
+> +	if (ret) {
+> +		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int ls2k_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct ls2k_thermal_data *data = platform_get_drvdata(pdev);
+> +	int reg_off = data->id * 2;
+> +
+> +	/* disable interrupt */
+> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_ls2k_thermal_match[] = {
+> +	{ .compatible = "loongson,2k-tsensor",},
+> +	{ /* end */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_ls2k_thermal_match);
+> +
+> +#ifdef CONFIG_PM_SLEEP
+> +static int ls2k_thermal_suspend(struct device *dev)
+> +{
+> +	struct ls2k_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	data->ctrl_low_val = readw(data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
+> +	data->ctrl_hi_val = readw(data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ls2k_thermal_resume(struct device *dev)
+> +{
+> +	struct ls2k_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	writew(data->ctrl_low_val, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
+> +	writew(data->ctrl_hi_val, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(ls2k_thermal_pm_ops,
+> +			 ls2k_thermal_suspend, ls2k_thermal_resume);
+> +#endif
+> +
+> +static struct platform_driver ls2k_thermal_driver = {
+> +	.driver = {
+> +		.name		= "ls2k_thermal",
+> +#ifdef CONFIG_PM_SLEEP
+
+pm_ptr() (and use same approach as its users - no need for ifdefs,
+DEFINE_SIMPLE_DEV_PM_OPS)
+
+
+> +		.pm = &ls2k_thermal_pm_ops,
+> +#endif
+> +		.of_match_table = of_ls2k_thermal_match,
+> +	},
+> +	.probe	= ls2k_thermal_probe,
+> +	.remove	= ls2k_thermal_remove,
+> +};
+> +module_platform_driver(ls2k_thermal_driver);
 
 
 Best regards,
