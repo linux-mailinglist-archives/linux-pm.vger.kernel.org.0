@@ -2,104 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446D15BCB19
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 13:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0D95BCB40
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 13:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiISLxQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Sep 2022 07:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S230133AbiISL4b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Sep 2022 07:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiISLxN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 07:53:13 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6BC2BB16
-        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 04:53:11 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id w8so46495911lft.12
-        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 04:53:10 -0700 (PDT)
+        with ESMTP id S230129AbiISLzx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 07:55:53 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3288360FB
+        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 04:54:33 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id y15so14654416ilq.4
+        for <linux-pm@vger.kernel.org>; Mon, 19 Sep 2022 04:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=B6qYgq4tZVjjKBdLQA77w07q/sp4ao3eYtkYwlJCGPI=;
-        b=XwquBQPtdvbakJD6j/fG9HvmxdVvgha8hwkeOcfCmTMp3ZCVhS0V35T+dLtI4bvIvZ
-         Cjv7GrzWqO9l51NSVr4/eFeOQ8oobBOXvvZ0INp1IBRtcQUtw3MJOiZTVobzY8fLLHpi
-         RM51l+vvhP2IOku2whKFq7PSlOtDwWbzx1ZTqtFgVPCf5PMxAgzKiIS8bSFWRcuowM53
-         nX+Rv5u46hlPwUaUEfg1kucyCWZenLMR6TnnO+DhkZ5cp/j03bmLPcHgGSHW29xb5NHn
-         dLP7/MjXRh1y5rbhhXwB87sxeLrhB7DE86OZcghtegA5KdLhrAeHR0TTEjoq2ZaCXQwU
-         XSVQ==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=gUsv6szv6dsUeM9asVJnwaGmSGG17UchvxqwxLA3h8g=;
+        b=6l84clV/ev4Ho0Nth4fVfA2YCUlnkvOSgxbqusFUXjXpfQuFFf0cscM9H6JstjQMUy
+         xw7M8POcVaD8G3v3xGng54KrmjSgvwQL7sqhL179TVnFSdqvL9DEfhAXmZU08DpaVB+z
+         zSiunmo3VbmTof1vxAp/v47yQ2WgOGXeXG6GB3Gf7pE1ScGjC0bqV7TAtd/m+fpfq3CI
+         YOLPMuA/GgjNIfHOrOGhD0cM6H3P5LBBOn3aCDWtNVZfJPWoGE1cWKKtEz9Dpfs/6i2d
+         YxcNqnYUQtbiNuONYqqIai1SFElgvUv464Vcz0iTXK3yncl0+rss3soTmcg3IhW6Gf/K
+         H/3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=B6qYgq4tZVjjKBdLQA77w07q/sp4ao3eYtkYwlJCGPI=;
-        b=1f+q0lELtC0wYsHhdhE38Sn6dg8JwrA6VqmIzz6vnUkO4aB8beag61k+rAbZjrmhFt
-         eRU1lpQoSJ7V1lr6z+2NaZwbHfA1MpJ5Ff8QaTMtIgoOHxDIZtQvt0CYpMoqYTXM5Mk0
-         WQwgJbT9t4mFzN6qxtDdHAFAD6BbCh8qO9Hl/u3aNXQ7uT5xLMsi/mZL4FYIafQul0eW
-         Nu3bkLG1qtG9uKQn8uYtRWt+O6PqR+zdgWFu03gAXadiJdLLvzMhoDUwTDFBw+g+hAbb
-         8/2neg+Bhxqb3Fu+/OOXYle+xAHLU3w2tgwWQGWXSR+Sbus6PZiv1irPpU2akwSEVxej
-         JiHQ==
-X-Gm-Message-State: ACrzQf28nM+GoV+ZQ+TqZLMUtdxa/4AnCp231/QsPa0M5x9gQT2IaX8v
-        O7X8amm5c9psGb+TP2MRF+KKcA==
-X-Google-Smtp-Source: AMsMyM6JZ3UfeH6M8omR0Zt1TEDfX5GQ9ftvQ8Y5pDm5vECfEUfq19pM7T0gGok8g7xxQwrbwC22YA==
-X-Received: by 2002:a19:5e50:0:b0:497:a331:91d9 with SMTP id z16-20020a195e50000000b00497a33191d9mr6253444lfi.162.1663588389325;
-        Mon, 19 Sep 2022 04:53:09 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s30-20020a05651c201e00b0026acc9edecdsm4893992ljo.47.2022.09.19.04.53.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 04:53:08 -0700 (PDT)
-Message-ID: <b70df37b-e803-acca-e7e1-5b4526e76776@linaro.org>
-Date:   Mon, 19 Sep 2022 13:53:08 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=gUsv6szv6dsUeM9asVJnwaGmSGG17UchvxqwxLA3h8g=;
+        b=llvdM4LyqDejyEHCfLQD17ILWKMa/7dhUI6z7IF2tmzfzMaf9SrtE1wsVk4/QGNhcQ
+         yyCqePRMihUzZtcjiybYDViYQfG1ZLjxtJowRTVJz2zWIj8CHlLgcqTpbIOgcPLAklaH
+         /NkS6m/kfB5+omoD+5B9dkiuqf7Y4r9wG587+f6W/Zb0mGJHHOVQbFiy4sIQyN0H8Sow
+         LfyXMEmCe8yQyXhHR1JFGomnMQBXze51vm8fePOfpwtAyZNjz8bgb/SdwFYxHGNEE/Lj
+         DtjJAeo/BkyEj2UMyw8Iccs9Dv5flu16jwMReH9rq8yZcWXvnRpfvCozVuGNnb5XPWrK
+         T61A==
+X-Gm-Message-State: ACrzQf2IAO75MsUfoEH+yDTjARFJhp9IhFvoUOfDhZpd5sDvog8tP2a6
+        J7cbou/2IKPT7+e+pTDTnFiRYARj1QaMVuZVmparCQ==
+X-Google-Smtp-Source: AMsMyM5SaQPoV1xlIMZRfmPqKRzR7kAhfhGoUGwZ5KM3JobcN8dh6yNRCyMvHHbKVsfAJAruxygcE1W13IXNCB18i9o=
+X-Received: by 2002:a92:c04d:0:b0:2f5:1175:c7a3 with SMTP id
+ o13-20020a92c04d000000b002f51175c7a3mr5681407ilf.165.1663588472670; Mon, 19
+ Sep 2022 04:54:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-spmi-adc-tm5: add qcom,adc-tm7
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220828081022.96813-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220828081022.96813-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220919095939.761690562@infradead.org> <20220919101520.669962810@infradead.org>
+In-Reply-To: <20220919101520.669962810@infradead.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 19 Sep 2022 17:24:19 +0530
+Message-ID: <CAAhSdy004HaNUNYRD8tcn24LZWdTmOVkF1QN14uLmSw1UXuXqA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/44] cpuidle,riscv: Push RCU-idle into driver
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        rostedt@goodmis.org, pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, fweisbec@gmail.com, ryabinin.a.a@gmail.com,
+        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/08/2022 10:10, Krzysztof Kozlowski wrote:
-> The qcom,adc-tm7 compatible is already used in PMK8350 so add it to the
-> Qualcomm PMIC Thermal Monitoring ADC.  Based on downstream sources, the
-> new compatible for TM7 differs from older TM5 by allowing configuring
-> per sensor decimation, time measurement and number of sample averaging -
-> unlike one configuration per entire device.  This was not reflected in
-> the bindings, therefore comment the new compatible as incomplete as it
-> might change and its ABI is no stable.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Mon, Sep 19, 2022 at 3:47 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again, at least twice, before going idle is daft.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+Looks good to me.
+
+For RISC-V cpuidle:
+Reviewed-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup
+
+
 > ---
->  Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml | 1 +
->  1 file changed, 1 insertion(+)
-
-Bjorn, Daniel,
-
-Anyone picking this patch?
-
-Best regards,
-Krzysztof
+>  drivers/cpuidle/cpuidle-riscv-sbi.c |    9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -116,12 +116,12 @@ static int __sbi_enter_domain_idle_state
+>                 return -1;
+>
+>         /* Do runtime PM to manage a hierarchical CPU toplogy. */
+> -       ct_irq_enter_irqson();
+>         if (s2idle)
+>                 dev_pm_genpd_suspend(pd_dev);
+>         else
+>                 pm_runtime_put_sync_suspend(pd_dev);
+> -       ct_irq_exit_irqson();
+> +
+> +       ct_idle_enter();
+>
+>         if (sbi_is_domain_state_available())
+>                 state = sbi_get_domain_state();
+> @@ -130,12 +130,12 @@ static int __sbi_enter_domain_idle_state
+>
+>         ret = sbi_suspend(state) ? -1 : idx;
+>
+> -       ct_irq_enter_irqson();
+> +       ct_idle_exit();
+> +
+>         if (s2idle)
+>                 dev_pm_genpd_resume(pd_dev);
+>         else
+>                 pm_runtime_get_sync(pd_dev);
+> -       ct_irq_exit_irqson();
+>
+>         cpu_pm_exit();
+>
+> @@ -246,6 +246,7 @@ static int sbi_dt_cpu_init_topology(stru
+>          * of a shared state for the domain, assumes the domain states are all
+>          * deeper states.
+>          */
+> +       drv->states[state_count - 1].flags |= CPUIDLE_FLAG_RCU_IDLE;
+>         drv->states[state_count - 1].enter = sbi_enter_domain_idle_state;
+>         drv->states[state_count - 1].enter_s2idle =
+>                                         sbi_enter_s2idle_domain_idle_state;
+>
+>
