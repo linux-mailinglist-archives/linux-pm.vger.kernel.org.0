@@ -2,116 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53ADB5BC185
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 04:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23FF5BC1D1
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 05:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiISCtZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Sep 2022 22:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
+        id S229658AbiISDor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Sep 2022 23:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiISCtY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Sep 2022 22:49:24 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144FE193EF;
-        Sun, 18 Sep 2022 19:49:24 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so4787832pjh.3;
-        Sun, 18 Sep 2022 19:49:24 -0700 (PDT)
+        with ESMTP id S229682AbiISDoo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Sep 2022 23:44:44 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF4B9FC6
+        for <linux-pm@vger.kernel.org>; Sun, 18 Sep 2022 20:44:40 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id q21so39457945edc.9
+        for <linux-pm@vger.kernel.org>; Sun, 18 Sep 2022 20:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=tnJe4HddJzoTq7U3gvumxaLwIT9PB6AzqhNeMSwvGvQ=;
-        b=hXNIFMt8cNaFei+Hbyb+2wy6gVBxGjly+UvtRVh8dq/muS3GjIHB623FWUUNMd/LNd
-         wWnRByglELN/epUmBzVkz6tlGpOAJGovnm4MaGABP8KvJghMBDITGjjgQDNPpXJJ9W12
-         U0ebWlELapWhVXCXXCOBm8OAxdAYDJ3pqwkaIIM4UKepOGKWwYA7UswzCpnvOE5FNiwp
-         IvXxqqVxUMQHkERErV7FWyksskK35K8Is7ajt9Oo6BBXBFXHOee/4bDmgTghUcgc0WA7
-         dlJ8f/D04CAJ8QrABTpA19CzJLRONiOI1shM1uOfptBALy9Ly4XmM29MtfEYcQlbDjMi
-         rTTA==
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=8wzd/IsQMAz4yliZb1FsJ3OfMRVNZc5tTLnz3lR7QHQ=;
+        b=EuFCJAkszMPKPtxQSyMQ0NoboaeVB7t96eFw9rPXwH9oSHUro5o77bxEeYAtANDzyR
+         I9BMOm4HMiosCb0pcsiSHEAZo2qSCtvZawUq0/zPNIdwAvDvQAPS+8+0uFrWbUJgoTtd
+         ExLo8MeQP7GyQ+rW2rlFvIPPT75kqxCAKPhOGjeDjYZZFhuAOfywggSn5a+jZu6mJGBr
+         cWVHHoToy9UWA6nPxBqZcAZLzmJoxjkbRc1yLhwZYNZgNQEBRnr86m6GI/e/+J8MoRAT
+         suDLw8ILYZpcoPAOh+pvz4Lu/zfiYh6RXQKy+jZAxuRvjXsVxLmt63JqorCueNp9TEEJ
+         9kQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tnJe4HddJzoTq7U3gvumxaLwIT9PB6AzqhNeMSwvGvQ=;
-        b=JdXtYPsCFOBdzelcFZ4WZ8nk6yw5MDAzd2kji/wPeurkJSgtHEY7C4qkq1KE3zJgUI
-         ohJg3VcjkjZYa2fVcnSlWaRmEyuR5N1QiZcdSrCLXqJbkKdx54p2f1ex7FJDgktt+EDP
-         ct6XkzPrsDvRILRiC+IJnSGSsWjZxPxCSaXvPlzGTeflqOHjahW0XZ9oAH8uMqO1TmDd
-         R2RvfSMpC4zEkTimu3NR1PkgwBzizlMXO81+IQDCeMx3UTXxjcVu57yk0wpt7IgAlAYp
-         /7+1yj5xf+mrqqkbJ5W2Wo5gRl3dCN+KtEjKjAVRcjhSZkKz8eJZfCNMSNBCz+ne7tkS
-         H4/g==
-X-Gm-Message-State: ACrzQf1k/+HmUXnm4ijpvXQr6hYVPzIl44GH978+NmYkTouZFEtOjlqc
-        kpwD6QrZXzbfWh0KQqyQbAG+YtfKU1Q=
-X-Google-Smtp-Source: AMsMyM4hP8zTE1h0wXRgHbr7oKN06P6gJrWXoBPCpeGT7rIRWS1SHMHF+ITe/rTpoJBoBg77Rira+g==
-X-Received: by 2002:a17:90a:e7cc:b0:202:f493:6ad1 with SMTP id kb12-20020a17090ae7cc00b00202f4936ad1mr28564021pjb.198.1663555763431;
-        Sun, 18 Sep 2022 19:49:23 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090a020200b0020322204672sm5408572pjc.38.2022.09.18.19.49.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 19:49:22 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] power: supply: use strscpy() is more robust and safer
-Date:   Mon, 19 Sep 2022 02:49:19 +0000
-Message-Id: <20220919024919.211210-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=8wzd/IsQMAz4yliZb1FsJ3OfMRVNZc5tTLnz3lR7QHQ=;
+        b=J5oa/ZJnn+lXTmlbADScH82AHJ4KybSWBB3PT7L1j8VZ6rXK7okAE5xllIdEaJCqug
+         kqeNyy7UPyOWIgb7gkDGxmSHBh/tNUgqBC8HoN0/WxkRFUC3dB91d9dShYs/tCwAJ5Rb
+         uz8WsnYArvxXHIKtJy2dSLIh2NMIe37H3mwovZbzfTFm3bwCuxUj7BGsy2E97fG1P+aH
+         /+XLPKpIOO9qVOMO0RX/NpiCEbiH9yY111stcx5OQzqH/V8w4LCrZiZuTEEC2GRwbIKf
+         iT4iUg90DrmfmVuIsrBbYWYtrQ6DQpslkmJ25lIxZKZhmtyp5FRmydj3MQ8E7OkzQeF9
+         1lqw==
+X-Gm-Message-State: ACrzQf14zAg6s4p7XVR5pXotNEol9RjSRiKCmvJjPvtO3LDAnwz0V6D5
+        15JmgePVv8cZOU40KyJa46G1bXRaWlhpTmO0QXfurg==
+X-Google-Smtp-Source: AMsMyM67X4fHgNHGRzRNZ0AalOVh8oZlYNRkDoycvf7zBAcHx4qOwSpxEraLAwYUCmYCoDnGs0xLR1B5pb/N312tK3I=
+X-Received: by 2002:aa7:cc8a:0:b0:446:7668:2969 with SMTP id
+ p10-20020aa7cc8a000000b0044676682969mr13821510edt.206.1663559079248; Sun, 18
+ Sep 2022 20:44:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701012647.2007122-1-saravanak@google.com> <YwS5J3effuHQJRZ5@kroah.com>
+In-Reply-To: <YwS5J3effuHQJRZ5@kroah.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Sun, 18 Sep 2022 20:44:27 -0700
+Message-ID: <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > These patches are on top of driver-core-next.
+> >
+> > Even if stdout-path isn't set in DT, this patch should take console
+> > probe times back to how they were before the deferred_probe_timeout
+> > clean up series[1].
+>
+> Now dropped from my queue due to lack of a response to other reviewer's
+> questions.
 
-The implementation of strscpy() is more robust and safer.
+What happened to this patch? I have a 10 second timeout on console
+probe on my SiFive Unmatched, and I don't see this flag being set for
+the serial driver. In fact, I don't see it anywhere in-tree. I can't
+seem to locate another patchset from Saravana around this though, so
+I'm not sure where to look for a missing piece for the sifive serial
+driver.
 
-That's now the recommended way to copy NUL terminated strings.
+This is the second boot time regression (this one not fatal, unlike
+the Layerscape PCIe one) from the fw_devlink patchset.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/power/supply/max1721x_battery.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Greg, can you revert the whole set for 6.0, please? It's obviously
+nowhere near tested enough to go in and I expect we'll see a bunch of
+-stable fixups due to this if we let it remain in.
 
-diff --git a/drivers/power/supply/max1721x_battery.c b/drivers/power/supply/max1721x_battery.c
-index 473e53cd2801..0f948db958d5 100644
---- a/drivers/power/supply/max1721x_battery.c
-+++ b/drivers/power/supply/max1721x_battery.c
-@@ -384,7 +384,7 @@ static int devm_w1_max1721x_add_device(struct w1_slave *sl)
- 	}
- 
- 	if (!info->ManufacturerName[0])
--		strncpy(info->ManufacturerName, DEF_MFG_NAME,
-+		strscpy(info->ManufacturerName, DEF_MFG_NAME,
- 			2 * MAX1721X_REG_MFG_NUMB);
- 
- 	if (get_string(info, MAX1721X_REG_DEV_STR,
-@@ -403,15 +403,15 @@ static int devm_w1_max1721x_add_device(struct w1_slave *sl)
- 
- 		switch (dev_name & MAX172XX_DEV_MASK) {
- 		case MAX172X1_DEV:
--			strncpy(info->DeviceName, DEF_DEV_NAME_MAX17211,
-+			strscpy(info->DeviceName, DEF_DEV_NAME_MAX17211,
- 				2 * MAX1721X_REG_DEV_NUMB);
- 			break;
- 		case MAX172X5_DEV:
--			strncpy(info->DeviceName, DEF_DEV_NAME_MAX17215,
-+			strscpy(info->DeviceName, DEF_DEV_NAME_MAX17215,
- 				2 * MAX1721X_REG_DEV_NUMB);
- 			break;
- 		default:
--			strncpy(info->DeviceName, DEF_DEV_NAME_UNKNOWN,
-+			strscpy(info->DeviceName, DEF_DEV_NAME_UNKNOWN,
- 				2 * MAX1721X_REG_DEV_NUMB);
- 		}
- 	}
--- 
-2.25.1
+This seems to be one of the worst releases I've encountered in recent
+years on my hardware here due to this patchset. :-(
+
+
+-Olof
