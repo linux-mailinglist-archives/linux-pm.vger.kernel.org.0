@@ -2,362 +2,303 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D975B5BC1DA
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 05:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAD85BC327
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Sep 2022 08:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiISDth (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Sep 2022 23:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S229863AbiISGzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Sep 2022 02:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiISDte (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Sep 2022 23:49:34 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3338AC1F;
-        Sun, 18 Sep 2022 20:49:32 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxkOC+5idjAnQdAA--.45929S4;
-        Mon, 19 Sep 2022 11:49:28 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        with ESMTP id S229834AbiISGzL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Sep 2022 02:55:11 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC55C13DDD;
+        Sun, 18 Sep 2022 23:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663570509; x=1695106509;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=VOF/tVrPEbyx6JpFuiAUdGzRjWw+ufhb/I1351qHpTs=;
+  b=OH8hpqGrdrWWeA+bwfpDedUi8ydPr555Lz8uGCKweGjSPjAUBYU8cHED
+   PEXdDlFRZi3T0HgMJQuhFFpkbgm98zE65TFJBJTRJ+225HtjactCwK+OQ
+   LgnyBUrWa3UMK/MD9S6X9zOSdExpYHPTFaLG/7hwyI6bdvo19ZG9MulOl
+   owBn+a9ETVpFWv/C7DCfQ7dDJSp2jAW9k6NHfzFAKA2Xx0ki3eqSH+l87
+   /1WsWJPmCw81EkDuUWhpVs91SgDMZnlIujekGcFurYn67F7LuhSxx8f6i
+   mYLXwuhJi585RRNWimczZsRDxsO0nEmYPu+6NbhTIsPi3F1zUFcjil28T
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="385611386"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="385611386"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:54:56 -0700
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="793744150"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:54:56 -0700
+Message-ID: <45a483ff097220ca4bc534ada3c7c5d5fca5b19e.camel@linux.intel.com>
+Subject: Re: [PATCH v3 30/30] thermal/drivers/intel: Use generic
+ thermal_zone_get_trip() function
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v1 3/3] thermal: ls2k: add thermal management support
-Date:   Mon, 19 Sep 2022 11:49:15 +0800
-Message-Id: <20220919034915.26912-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220919034915.26912-1-zhuyinbo@loongson.cn>
-References: <20220919034915.26912-1-zhuyinbo@loongson.cn>
+        Jiang Jian <jiangjian@cdjrlc.com>
+Date:   Sun, 18 Sep 2022 23:54:55 -0700
+In-Reply-To: <0e986fbb-e76b-9663-26c2-b84d887b4c98@linaro.org>
+References: <20220906164720.330701-1-daniel.lezcano@linaro.org>
+         <20220906164720.330701-31-daniel.lezcano@linaro.org>
+         <0e986fbb-e76b-9663-26c2-b84d887b4c98@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxkOC+5idjAnQdAA--.45929S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ww4UCrWUGryfGr4DCr4xXrb_yoW3Kr4kpF
-        WUGFW5Ar4kKF47JwsrAr1DuFs0yrsFva4UZrZ3u34av3yrJry3Wryktr9YqF9akF9rGF45
-        Jrn8tFW5Crs8J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPm14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWl
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
-        Xa7VUbdOz7UUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds the support for loongson2k thermal sensor controller,
-which can support maximum 3 sensors.
+On Fri, 2022-09-16 at 19:06 +0200, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> I've Cc'ed you on this patch in case you have any comment
+> 
+> Thanks
+> 
+>    -- D.
+> 
+> On 06/09/2022 18:47, Daniel Lezcano wrote:
+> > The thermal framework gives the possibility to register the trip
+> > points with the thermal zone. When that is done, no get_trip_* ops
+> > are
+> > needed and they can be removed.
+> > 
+> > Convert ops content logic into generic trip points and register them
+> > with the
+> > thermal zone.
+> > 
+> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-It's based on thermal of framework:
- - Trip points defined in device tree.
- - Cpufreq as cooling device registered in loongson2k cpufreq driver.
- - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- drivers/thermal/Kconfig        |  10 ++
- drivers/thermal/Makefile       |   1 +
- drivers/thermal/ls2k_thermal.c | 244 +++++++++++++++++++++++++++++++++
- 3 files changed, 255 insertions(+)
- create mode 100644 drivers/thermal/ls2k_thermal.c
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index e052dae614eb..04f5c044bc94 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
- 	  If you say yes here you get support for the FAN controlled
- 	  by the Microcontroller found on the Khadas VIM boards.
- 
-+config LOONGSON2K_THERMAL
-+	tristate "Loongson 2K SOC series thermal driver"
-+	depends on OF
-+	default m
-+	help
-+	  Support for Thermal driver found on Loongson 2K SOC series platforms.
-+	  It supports one critical trip point and one passive trip point. The
-+	  cpufreq and the pwm fan is used as the cooling device to throttle CPUs
-+	  when the passive trip is crossed.
-+
- endif
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index def8e1a0399c..5b665b5d7edc 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
- obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
- obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
- obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-+obj-$(CONFIG_LOONGSON2K_THERMAL)	+= ls2k_thermal.o
-diff --git a/drivers/thermal/ls2k_thermal.c b/drivers/thermal/ls2k_thermal.c
-new file mode 100644
-index 000000000000..13d1345d3b06
---- /dev/null
-+++ b/drivers/thermal/ls2k_thermal.c
-@@ -0,0 +1,244 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Author: zhanghongchen <zhanghongchen@loongson.cn>
-+ *         Yinbo Zhu <zhuyinbo@loongson.cn>
-+ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/cpufreq.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/io.h>
-+#include <linux/of_device.h>
-+#include <linux/thermal.h>
-+#include "thermal_hwmon.h"
-+
-+#define LS2K_SOC_DEFAULT_SENSOR			0
-+#define LS2K_SOC_MAX_SENSOR_NUM			3
-+
-+#define LS2K_TSENSOR_CTRL_HI			0x0
-+#define LS2K_TSENSOR_CTRL_LO			0x8
-+#define LS2K_TSENSOR_STATUS			0x10
-+#define LS2K_TSENSOR_OUT			0x14
-+
-+struct ls2k_thermal_data {
-+	struct thermal_zone_device *tzd;
-+	int irq;
-+	int id;
-+	void __iomem *regs;
-+	struct platform_device *pdev;
-+	u16 ctrl_low_val;
-+	u16 ctrl_hi_val;
-+};
-+
-+/**
-+ * @low : temperature in degree
-+ * @high: temperature in degree
-+ */
-+static int ls2k_tsensor_set(struct ls2k_thermal_data *data,
-+					int low, int high, bool enable)
-+{
-+	u64 reg_ctrl = 0;
-+	int reg_off = data->id * 2;
-+
-+	if (low > high)
-+		return -EINVAL;
-+
-+	low = low < -100 ? -100 : low;
-+	high = high > 155 ? 155 : high;
-+
-+	low += 100;
-+	high += 100;
-+
-+	reg_ctrl |= low;
-+	reg_ctrl |= enable ? 0x100 : 0;
-+	writew(reg_ctrl, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-+
-+	reg_ctrl = 0;
-+	reg_ctrl |= high;
-+	reg_ctrl |= enable ? 0x100 : 0;
-+	writew(reg_ctrl, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static int ls2k_thermal_get_temp(void *__data, int *temp)
-+{
-+	struct ls2k_thermal_data *data = __data;
-+	u32 reg_val;
-+
-+	reg_val = readl(data->regs + LS2K_TSENSOR_OUT);
-+	*temp = ((reg_val & 0xff) - 100) * 1000;
-+
-+	return 0;
-+}
-+
-+static irqreturn_t ls2k_thermal_alarm_irq(int irq, void *dev)
-+{
-+	struct ls2k_thermal_data *data = dev;
-+
-+	/* clear interrupt */
-+	writeb(0x3, data->regs + LS2K_TSENSOR_STATUS);
-+
-+	disable_irq_nosync(irq);
-+
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+static irqreturn_t ls2k_thermal_irq_thread(int irq, void *dev)
-+{
-+	struct ls2k_thermal_data *data = dev;
-+
-+	thermal_zone_device_update(data->tzd,
-+				   THERMAL_EVENT_UNSPECIFIED);
-+	enable_irq(data->irq);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ls2k_thermal_set_trips(void *data, int low, int high)
-+{
-+	return ls2k_tsensor_set(data, low/1000, high/1000, true);
-+}
-+
-+static const struct thermal_zone_of_device_ops ls2k_of_thermal_ops = {
-+	.get_temp = ls2k_thermal_get_temp,
-+	.set_trips = ls2k_thermal_set_trips,
-+};
-+
-+static int ls2k_thermal_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	struct ls2k_thermal_data *data;
-+	int ret;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->pdev = pdev;
-+	platform_set_drvdata(pdev, data);
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	data->regs = devm_ioremap(dev, res->start, resource_size(res));
-+	if (IS_ERR(data->regs)) {
-+		dev_err(dev, "failed to get io address\n");
-+		return PTR_ERR(data->regs);
-+	}
-+
-+	/* get irq */
-+	data->irq = platform_get_irq(pdev, 0);
-+	if (data->irq < 0)
-+		return data->irq;
-+
-+	/* get id */
-+	if (of_property_read_u32(dev->of_node, "id", &data->id)) {
-+		dev_err(dev, "not found id property!\n");
-+		data->id = LS2K_SOC_DEFAULT_SENSOR;
-+	}
-+
-+	if (data->id > LS2K_SOC_MAX_SENSOR_NUM) {
-+		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
-+				LS2K_SOC_MAX_SENSOR_NUM);
-+		return -EINVAL;
-+	}
-+
-+	writeb(0xff, data->regs + LS2K_TSENSOR_STATUS);
-+
-+	ls2k_tsensor_set(data, 0, 0, false);
-+
-+	data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
-+							   data->id, data,
-+							   &ls2k_of_thermal_ops);
-+	if (IS_ERR(data->tzd)) {
-+		ret = PTR_ERR(data->tzd);
-+		data->tzd = NULL;
-+		dev_err(&pdev->dev, "failed to register %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = devm_request_threaded_irq(dev, data->irq,
-+			ls2k_thermal_alarm_irq, ls2k_thermal_irq_thread,
-+			IRQF_ONESHOT, "ls2k_thermal", data);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to request alarm irq: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Thermal_zone doesn't enable hwmon as default,
-+	 * enable it here
-+	 */
-+	data->tzd->tzp->no_hwmon = false;
-+	ret = thermal_add_hwmon_sysfs(data->tzd);
-+	if (ret) {
-+		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+int ls2k_thermal_remove(struct platform_device *pdev)
-+{
-+	struct ls2k_thermal_data *data = platform_get_drvdata(pdev);
-+	int reg_off = data->id * 2;
-+
-+	/* disable interrupt */
-+	writew(0, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-+	writew(0, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id of_ls2k_thermal_match[] = {
-+	{ .compatible = "loongson,2k-tsensor",},
-+	{ /* end */ }
-+};
-+MODULE_DEVICE_TABLE(of, of_ls2k_thermal_match);
-+
-+#ifdef CONFIG_PM_SLEEP
-+static int ls2k_thermal_suspend(struct device *dev)
-+{
-+	struct ls2k_thermal_data *data = dev_get_drvdata(dev);
-+	int reg_off = data->id * 2;
-+
-+	data->ctrl_low_val = readw(data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-+	data->ctrl_hi_val = readw(data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-+
-+	writew(0, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-+	writew(0, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static int ls2k_thermal_resume(struct device *dev)
-+{
-+	struct ls2k_thermal_data *data = dev_get_drvdata(dev);
-+	int reg_off = data->id * 2;
-+
-+	writew(data->ctrl_low_val, data->regs + LS2K_TSENSOR_CTRL_LO + reg_off);
-+	writew(data->ctrl_hi_val, data->regs + LS2K_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(ls2k_thermal_pm_ops,
-+			 ls2k_thermal_suspend, ls2k_thermal_resume);
-+#endif
-+
-+static struct platform_driver ls2k_thermal_driver = {
-+	.driver = {
-+		.name		= "ls2k_thermal",
-+#ifdef CONFIG_PM_SLEEP
-+		.pm = &ls2k_thermal_pm_ops,
-+#endif
-+		.of_match_table = of_ls2k_thermal_match,
-+	},
-+	.probe	= ls2k_thermal_probe,
-+	.remove	= ls2k_thermal_remove,
-+};
-+module_platform_driver(ls2k_thermal_driver);
--- 
-2.31.1
+> > ---
+> >   drivers/thermal/intel/x86_pkg_temp_thermal.c | 120 ++++++++++------
+> > ---
+> >   1 file changed, 66 insertions(+), 54 deletions(-)
+> > 
+> > diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> > b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> > index a0e234fce71a..e7c3b78d959c 100644
+> > --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> > +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> > @@ -53,6 +53,7 @@ struct zone_device {
+> >         u32                             msr_pkg_therm_high;
+> >         struct delayed_work             work;
+> >         struct thermal_zone_device      *tzone;
+> > +       struct thermal_trip             *trips;
+> >         struct cpumask                  cpumask;
+> >   };
+> >   
+> > @@ -138,40 +139,6 @@ static int sys_get_curr_temp(struct
+> > thermal_zone_device *tzd, int *temp)
+> >         return -EINVAL;
+> >   }
+> >   
+> > -static int sys_get_trip_temp(struct thermal_zone_device *tzd,
+> > -                            int trip, int *temp)
+> > -{
+> > -       struct zone_device *zonedev = tzd->devdata;
+> > -       unsigned long thres_reg_value;
+> > -       u32 mask, shift, eax, edx;
+> > -       int ret;
+> > -
+> > -       if (trip >= MAX_NUMBER_OF_TRIPS)
+> > -               return -EINVAL;
+> > -
+> > -       if (trip) {
+> > -               mask = THERM_MASK_THRESHOLD1;
+> > -               shift = THERM_SHIFT_THRESHOLD1;
+> > -       } else {
+> > -               mask = THERM_MASK_THRESHOLD0;
+> > -               shift = THERM_SHIFT_THRESHOLD0;
+> > -       }
+> > -
+> > -       ret = rdmsr_on_cpu(zonedev->cpu,
+> > MSR_IA32_PACKAGE_THERM_INTERRUPT,
+> > -                          &eax, &edx);
+> > -       if (ret < 0)
+> > -               return ret;
+> > -
+> > -       thres_reg_value = (eax & mask) >> shift;
+> > -       if (thres_reg_value)
+> > -               *temp = zonedev->tj_max - thres_reg_value * 1000;
+> > -       else
+> > -               *temp = THERMAL_TEMP_INVALID;
+> > -       pr_debug("sys_get_trip_temp %d\n", *temp);
+> > -
+> > -       return 0;
+> > -}
+> > -
+> >   static int
+> >   sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int
+> > temp)
+> >   {
+> > @@ -212,18 +179,9 @@ sys_set_trip_temp(struct thermal_zone_device
+> > *tzd, int trip, int temp)
+> >                         l, h);
+> >   }
+> >   
+> > -static int sys_get_trip_type(struct thermal_zone_device *thermal,
+> > int trip,
+> > -                            enum thermal_trip_type *type)
+> > -{
+> > -       *type = THERMAL_TRIP_PASSIVE;
+> > -       return 0;
+> > -}
+> > -
+> >   /* Thermal zone callback registry */
+> >   static struct thermal_zone_device_ops tzone_ops = {
+> >         .get_temp = sys_get_curr_temp,
+> > -       .get_trip_temp = sys_get_trip_temp,
+> > -       .get_trip_type = sys_get_trip_type,
+> >         .set_trip_temp = sys_set_trip_temp,
+> >   };
+> >   
+> > @@ -328,6 +286,48 @@ static int pkg_thermal_notify(u64 msr_val)
+> >         return 0;
+> >   }
+> >   
+> > +static struct thermal_trip *pkg_temp_thermal_trips_init(int cpu, int
+> > tj_max, int num_trips)
+> > +{
+> > +       struct thermal_trip *trips;
+> > +       unsigned long thres_reg_value;
+> > +       u32 mask, shift, eax, edx;
+> > +       int ret, i;
+> > +
+> > +       trips = kzalloc(sizeof(*trips) * num_trips, GFP_KERNEL);
+> > +       if (!trips)
+> > +               return ERR_PTR(-ENOMEM);
+> > +       
+> > +       for (i = 0; i < num_trips; i++) {
+> > +
+> > +               if (i) {
+> > +                       mask = THERM_MASK_THRESHOLD1;
+> > +                       shift = THERM_SHIFT_THRESHOLD1;
+> > +               } else {
+> > +                       mask = THERM_MASK_THRESHOLD0;
+> > +                       shift = THERM_SHIFT_THRESHOLD0;
+> > +               }
+> > +
+> > +               ret = rdmsr_on_cpu(cpu,
+> > MSR_IA32_PACKAGE_THERM_INTERRUPT,
+> > +                                  &eax, &edx);
+> > +               if (ret < 0) {
+> > +                       kfree(trips);
+> > +                       return ERR_PTR(ret);
+> > +               }
+> > +
+> > +               thres_reg_value = (eax & mask) >> shift;
+> > +
+> > +               trips[i].temperature = thres_reg_value ?
+> > +                       tj_max - thres_reg_value * 1000 :
+> > THERMAL_TEMP_INVALID;
+> > +
+> > +               trips[i].type = THERMAL_TRIP_PASSIVE;
+> > +               
+> > +               pr_debug("%s: cpu=%d, trip=%d, temp=%d\n",
+> > +                        __func__, cpu, i, trips[i].temperature);
+> > +       }
+> > +
+> > +       return trips;
+> > +}
+> > +
+> >   static int pkg_temp_thermal_device_add(unsigned int cpu)
+> >   {
+> >         int id = topology_logical_die_id(cpu);
+> > @@ -353,24 +353,27 @@ static int pkg_temp_thermal_device_add(unsigned
+> > int cpu)
+> >         if (!zonedev)
+> >                 return -ENOMEM;
+> >   
+> > +       zonedev->trips = pkg_temp_thermal_trips_init(cpu, tj_max,
+> > thres_count);
+> > +       if (IS_ERR(zonedev->trips)) {
+> > +               err = PTR_ERR(zonedev->trips);
+> > +               goto out_kfree_zonedev;
+> > +       }
+> > +       
+> >         INIT_DELAYED_WORK(&zonedev->work,
+> > pkg_temp_thermal_threshold_work_fn);
+> >         zonedev->cpu = cpu;
+> >         zonedev->tj_max = tj_max;
+> > -       zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
+> > -                       thres_count,
+> > +       zonedev->tzone =
+> > thermal_zone_device_register_with_trips("x86_pkg_temp",
+> > +                       zonedev->trips, thres_count,
+> >                         (thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 :
+> > 0x01,
+> >                         zonedev, &tzone_ops, &pkg_temp_tz_params, 0,
+> > 0);
+> >         if (IS_ERR(zonedev->tzone)) {
+> >                 err = PTR_ERR(zonedev->tzone);
+> > -               kfree(zonedev);
+> > -               return err;
+> > +               goto out_kfree_trips;
+> >         }
+> >         err = thermal_zone_device_enable(zonedev->tzone);
+> > -       if (err) {
+> > -               thermal_zone_device_unregister(zonedev->tzone);
+> > -               kfree(zonedev);
+> > -               return err;
+> > -       }
+> > +       if (err)
+> > +               goto out_unregister_tz;
+> > +
+> >         /* Store MSR value for package thermal interrupt, to restore
+> > at exit */
+> >         rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev-
+> > >msr_pkg_therm_low,
+> >               zonedev->msr_pkg_therm_high);
+> > @@ -379,7 +382,14 @@ static int pkg_temp_thermal_device_add(unsigned
+> > int cpu)
+> >         raw_spin_lock_irq(&pkg_temp_lock);
+> >         zones[id] = zonedev;
+> >         raw_spin_unlock_irq(&pkg_temp_lock);
+> > -       return 0;
+> > +
+> > +out_unregister_tz:     
+> > +       thermal_zone_device_unregister(zonedev->tzone);
+> > +out_kfree_trips:
+> > +       kfree(zonedev->trips);
+> > +out_kfree_zonedev:
+> > +       kfree(zonedev);
+> > +       return err;
+> >   }
+> >   
+> >   static int pkg_thermal_cpu_offline(unsigned int cpu)
+> > @@ -463,8 +473,10 @@ static int pkg_thermal_cpu_offline(unsigned int
+> > cpu)
+> >         raw_spin_unlock_irq(&pkg_temp_lock);
+> >   
+> >         /* Final cleanup if this is the last cpu */
+> > -       if (lastcpu)
+> > +       if (lastcpu) {
+> > +               kfree(zonedev->trips);
+> >                 kfree(zonedev);
+> > +       }
+> >         return 0;
+> >   }
+> >   
+> 
+> 
+
 
