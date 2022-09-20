@@ -2,130 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF025BE123
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Sep 2022 11:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD63F5BE232
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Sep 2022 11:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiITJCA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Sep 2022 05:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        id S230225AbiITJjB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Sep 2022 05:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiITJBr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 05:01:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B806C758;
-        Tue, 20 Sep 2022 02:01:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0453621BE;
-        Tue, 20 Sep 2022 09:01:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12021C433C1;
-        Tue, 20 Sep 2022 09:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663664493;
-        bh=r3YA3TgrnfQL0+0wV4NaVSy5szGp5VuMs1RW9pHe3lU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AzxE+ep+hNLQJM2Wi0FzFjxB5EPyT0bT1sF+vGvp/qqEsGDiM8Qxgt9HfL5GiqctW
-         ydtwcTF95SErW/3YfT767vlGAIBPRec/9LY/xcROmCrXbpLipwDvonuxfesQbGtW0K
-         3X57xI5xG+bP4GpwbyyVcFAUi7K0jN1trLi5oXpe5rIEW+jy1XgRCTH5RP3Mvq9gku
-         rfLdXPEErWLn4QrMEjOjhbKqcH+8LTinoB+hUyQqojABcfM2uzy0XQr/ZQeGrr1R1B
-         wc6IB4cpjEoOiXRZxqecNrqR6jTHxLhIWd7jd9chmFiCmiZeAdbQsNmvXPK/696igQ
-         C+5aVtXIg3knA==
-Date:   Tue, 20 Sep 2022 11:01:29 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
-Message-ID: <20220920090129.GD69891@lothringen>
-References: <20220919095939.761690562@infradead.org>
- <20220919101520.869531945@infradead.org>
- <20220919142123.GE58444@lothringen>
- <YymA0yJybIWLco/v@hirez.programming.kicks-ass.net>
+        with ESMTP id S231179AbiITJih (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 05:38:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B38A6BD74;
+        Tue, 20 Sep 2022 02:38:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52247139F;
+        Tue, 20 Sep 2022 02:38:42 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C8423F73B;
+        Tue, 20 Sep 2022 02:38:32 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 10:38:17 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Chen Yu <yu.chen.surf@gmail.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>, kajetan.puchalski@arm.com
+Subject: Re: [RFC PATCH 1/1] cpuidle: teo: Add optional util-awareness
+Message-ID: <YymJz1pk5l2oKeAN@e126311.manchester.arm.com>
+References: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
+ <20220915164411.2496380-2-kajetan.puchalski@arm.com>
+ <CADjb_WR9=p=9nX9oJLv5ZCrrSaHt58Yh22K2=S9E71fSdr0+KA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YymA0yJybIWLco/v@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CADjb_WR9=p=9nX9oJLv5ZCrrSaHt58Yh22K2=S9E71fSdr0+KA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:58:59AM +0200, Peter Zijlstra wrote:
-> On Mon, Sep 19, 2022 at 04:21:23PM +0200, Frederic Weisbecker wrote:
-> > On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
-> > > Doing RCU-idle outside the driver, only to then temporarily enable it
-> > > again, at least twice, before going idle is daft.
-> > 
-> > Hmm, what ends up calling RCU_IDLE() here? Also what about
-> > cpu_do_idle()?
+> Not sure if we can use util_avg as schedutil, but it looks interesting.
+> The last time I was trying to propose an idea to leverage util_avg to
+> optimize some
+> codes in the kernel, it was suggested that it would be better to make
+> the stategy
+> gradual rather than 0,1 state. So I was thinking if we could make it
+> something like:
 > 
-> I've ammended patches 5-12 with a comment like:
+> next_idx = cpuidle_select();
+> next_idx = next_idx * (cpu_cap - util_avg) / cpu_cap;
 > 
-> Notably both cpu_pm_enter() and cpu_cluster_pm_enter() implicity
-> re-enable RCU.
-> 
-> (each noting the specific sites for the relevant patch).
+> The lower the util_avg is, the more we honor the choice of the governor,
+> vice versa.
 
-Thanks!
+Would that be in order to still make use of intermediate idle states (ie
+the ones between first and last) or to change how the util threshold
+works? It seems similar to the issue Doug pointed out.
+
+I think there's two scenarios here, the idle landscape on Arm just looks
+really different from the one on x86/Intel and we should probably
+account for that. In our use case "gradual" and 0-1 are the same thing,
+it's just all about how you set the threshold. On x86 on the other hand
+you have the threshold and the approach to state selection to worry about.
+
+This just further makes me think that separating this out into a
+separate governor is preferable as this can work really nicely on
+certain systems like ours and really badly on others like Doug's. We
+probably shouldn't be bundling this with generic solutions like TEO that
+work well across the board.
+
+It might also make sense to have slightly different implementations for
+x86 and arm to account for the hardware differences but that'd also be
+up to Rafael to express a view on.
+
+> > This is now possible since the CPU utilization is exported from the scheduler with the
+> > sched_cpu_util function and already used e.g. in the thermal governor IPA.
+> >
+> > This can provide drastically decreased latency and performance benefits in
+> > certain types of mobile workloads that are sensitive to latency,
+> > such as Geekbench 5.
+> As Doug mentioned in another thread, the impact data to energy consumption would
+> also be interesting.
+
+I included energy consumption plots in the pdf I linked in the cover
+letter, here's the link:
+
+https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc676b942c8e6498fb9bd03/idle_util_aware.pdf
+
+The unit on the plots is gmean mW measurement so they reflect average
+power usage over the course of the benchmark. They also include a column
+with 'shallow' which shows power consumption with only C0 and visualises
+why this works on arm and how different this is compared to x86
+behaviour described by Doug.
+
+> thanks,
+> Chenyu
