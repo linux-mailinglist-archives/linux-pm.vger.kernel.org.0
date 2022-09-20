@@ -2,168 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353915BE06D
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Sep 2022 10:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859BD5BE07D
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Sep 2022 10:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiITIkk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Sep 2022 04:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
+        id S231490AbiITIls (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Sep 2022 04:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiITIkH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 04:40:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C52786B66D;
-        Tue, 20 Sep 2022 01:39:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F334EED1;
-        Tue, 20 Sep 2022 01:39:19 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67B3A3F73B;
-        Tue, 20 Sep 2022 01:39:11 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 09:39:00 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, kajetan.puchalski@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/1] cpuidle: teo: Introduce optional util-awareness
-Message-ID: <Yyl8EdKfvSRULQnc@e126311.manchester.arm.com>
-References: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
- <CAAYoRsXwPmKHJ8m2aex0ddpf+=dr8ceXDSJM9kX=v5JdeRfgiA@mail.gmail.com>
+        with ESMTP id S229905AbiITIlP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 04:41:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5111B29CBC;
+        Tue, 20 Sep 2022 01:39:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E24F6621AA;
+        Tue, 20 Sep 2022 08:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF8AC433D6;
+        Tue, 20 Sep 2022 08:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663663189;
+        bh=QLZ/gLimlgPenm2mvkYzFXUkUzl2sWERNFTd7Lrn/1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AfHPkPepFM7eYC1abChd5HUgbgK6NK5Ayauo2eAkkQ+CyceHVol/FwKHrD0RdQLfO
+         zvLwJIz5hFTcfKysjcDoPWgnwe9DDEKNj2dGeGEO2/kIpq57wb6SpC09LCGTp41BhC
+         qxQ5vAd4G1aZwL9mb4aPm0WIseAcnDPeseRWtIJM6uCN6SGJfOOrvPOzsT+VAJwBNz
+         wiUajd+Ahq99S7H8TFLbbtoaLHF3PS+Az8pt1+z7xkCsVe2mpsMmqYqlwHg5cIBClI
+         ExOjOWmHHdRNPqJTL8pOkUMYH9TCMDUfjtUV19S9P9aYLdb8Rxs1AEAhPOImHVP1XR
+         BbrIzh74M2mzQ==
+Date:   Tue, 20 Sep 2022 10:39:45 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 09/44] cpuidle,omap3: Push RCU-idle into driver
+Message-ID: <20220920083945.GA69891@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.936337959@infradead.org>
+ <20220919143142.GA61009@lothringen>
+ <YyiIaeQY8STLK0d0@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAYoRsXwPmKHJ8m2aex0ddpf+=dr8ceXDSJM9kX=v5JdeRfgiA@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyiIaeQY8STLK0d0@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, thanks for taking a look!
-
-> > This proposed optional extension to TEO would specifically tune it for minimising too deep
-> > sleeps and minimising latency to achieve better performance. To this end, before selecting the next
-> > idle state it uses the avg_util signal of a CPU's runqueue in order to determine to what extent the
-> > CPU is being utilized. This util value is then compared to a threshold defined as a percentage of
-> > the cpu's capacity (capacity >> 6 ie. ~1.5% in the current implementation).
+On Mon, Sep 19, 2022 at 05:19:05PM +0200, Peter Zijlstra wrote:
+> On Mon, Sep 19, 2022 at 04:31:42PM +0200, Frederic Weisbecker wrote:
+> > On Mon, Sep 19, 2022 at 11:59:48AM +0200, Peter Zijlstra wrote:
+> > > Doing RCU-idle outside the driver, only to then teporarily enable it
+> > > again before going idle is daft.
+> > 
+> > That doesn't tell where those calls are.
 > 
-> That seems quite a bit too low to me. However on my processor the
-> energy cost of using
-> idle state 0 verses anything deeper is very high, so I do not have a
-> good way to test.
-
-I suppose it does look low but as I said, at least from my own testing
-higher thresholds result in completely nullifying the potential benefits
-from using this. It could be because with a low-enough threshold like
-this we are able to catch the average util as it starts to rise and then
-we're already in the 'low-latency mode' by the time it gets higer as
-opposed to correcting after the fact. We could also always make it into
-some kind of tunable if need be, I was testing it with a dedicated sysctl
-and it worked all right.
-
+> cpu_pm_enter/exit and the power domain stuff, possibly also the clock
+> domain stuff. It's all over :/
 > 
-> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> On an idle system :
-> with only Idle state 0 enabled, processor package power is ~46 watts.
-> with only idle state 1 enabled, processor package power is ~2.6 watts
-> with all idle states enabled,  processor package power is ~1.4 watts
-> 
+> I suppose I can add a blub and copy/paste it around the various patches
+> if you want.
 
-Ah I see, yeah this definitely won't work on systems with idle power
-usage like above. It was designed for Arm devices like the Pixel 6 where
-C0 is so power efficient that running with only C0 enabled can sometimes
-actually use *less* power than running with all idle states enabled.
-This was for non-intensive workloads like PCMark Web Browsing where
-there were enough too deep sleeps in C1 to offset the entire power
-saving. The entire idea we're relying upon here is C0 being very good to
-begin with but wanting to still use *some* C1 in order to avoid bumping
-into thermal issues.
+Yes please, sorry I don't want to bother but, just for the sake of
+git blame to report something useful in 5 years.
 
-> > If the util is above the
-> > threshold, the governor directly selects the shallowest available idle state. If the util is below
-> > the threshold, the governor defaults to the TEO metrics mechanism to try to select the deepest
-> > available idle state based on the closest timer event and its own past correctness.
-> >
-> > Effectively this functions like a governor that on the fly disables deeper idle states when there
-> > are things happening on the cpu and then immediately reenables them as soon as the cpu isn't
-> > being utilized anymore.
-> >
-> > Initially I am sending this as a patch for TEO to visualize the proposed mechanism and simplify
-> > the review process. An alternative way of implementing it while not interfering
-> > with existing TEO code would be to fork TEO into a separate but mostly identical for the time being
-> > governor (working name 'idleutil') and then implement util-awareness there, so that the two
-> > approaches can coexist and both be available at runtime instead of relying on a compile-time option.
-> > I am happy to send a patchset doing that if you think it's a cleaner approach than doing it this way.
-> 
-> I would prefer the two to coexist for testing, as it makes it easier
-> to manually compare some
-> areas of focus.
-
-That would be my preference as well, it just seems like a cleaner
-approach despite having to copy over some code to begin with. I'm just
-waiting for Rafael to express a view one way or the other :)
-
-> > At the very least this approach seems promising so I wanted to discuss it in RFC form first.
-> > Thank you for taking your time to read this!
-> 
-> There might be a way forward for my type of processor if the algorithm
-> were to just reduce the idle
-> depth by 1 instead of all the way to idle state 0. Not sure. It seems
-> to bypass all that the teo
-> governor is attempting to achieve.
-
-Oh interesting, that could definitely be worth a try. As I said, this
-was designed for Arm CPUs and all of the targeted ones only have 2 idle
-states, C0 and C1. Thus reducing by 1 and going all the way to 0 are the
-same thing for our use case. You're right that this is potentially
-pretty excessive on Intel CPUs where you could be going from state 8/9 to
-0. It would result in some wasted cycles on Arm but I imagine there should
-be some way forward where we could accommodate the two.
-
-> For a single periodic workflow at any work sleep frequency (well, I
-> test 5 hertz to 411 hertz) and very
-> light workload: Processor package powers for 73 hertz work/sleep frequency:
-> 
-> teo: ~1.5 watts
-> menu: ~1.5 watts
-> util: ~19 watts
-> 
-> For 12 periodic workflow threads at 73 hertz work/sleep frequency
-> (well, I test 5 hertz to 411 hertz) and very
-> workload: Processor package powers:
-> 
-> teo: ~2.8watts
-> menu: ~2.8 watts
-> util: ~49 watts
-> 
-> My test computer is a server, with no gui. I started a desktop linux
-> VM guest that isn't doing much:
-> 
-> teo: ~1.8 watts
-> menu: ~1.8 watts
-> util: ~7.8 watts
-
-Ouch that's definitely not great, really good to know what this looks
-like on Intel CPUs though. Thanks a lot for taking your time to test
-this out!
-
-> >
-> > --
-> > Kajetan
-> >
-> > [1] https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc676b942c8e6498fb9bd03/idle_util_aware.pdf
-> >
-> >
-> > Kajetan Puchalski (1):
-> >   cpuidle: teo: Introduce optional util-awareness
-> >
-> >  drivers/cpuidle/Kconfig         | 12 +++++
-> >  drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
-> >  2 files changed, 98 insertions(+)
-> >
-> > --
-> > 2.37.1
-> >
+Thanks.
