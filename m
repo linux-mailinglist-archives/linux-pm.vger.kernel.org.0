@@ -2,93 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74055BDD01
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Sep 2022 08:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353915BE06D
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Sep 2022 10:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiITGTY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Sep 2022 02:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S231209AbiITIkk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Sep 2022 04:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiITGTX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 02:19:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5318E5D11E;
-        Mon, 19 Sep 2022 23:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663654762; x=1695190762;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eOSxHA6iENpubJOOFWN6159mbYl+bwBtFFHrUgRk8N4=;
-  b=a9sE3D+Nslp2dmT9/BAltx3wnIt5/bIKQb+tSm9B0UViCusTyY0XSJlG
-   6jup6X9CrCgMFRNwIIueAms2ztIuyyy3mcewHsjQZvtjMjY/sfTA0Dx74
-   zFU9j8aYzQ0QzLsKQJEvHVhPy+OxNlb5qsr94cIkQnJxL71m41hfcB07J
-   t9/V+mZoUTxaDEV8mgkTHZIQV1T3yM1EINJpK3hb4+tL0GRg5tK7lGnmF
-   7OHCs0yydXvPX1LvdWghtV6x6sv+/BQda5iCprGWVW1ZsMHvfoWYIjRZ0
-   /x122kFUJf//rWIQ9A5yzvEtH9IxHe1PQmRFptxXrfwyNXchfIeNKWZi+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="325909657"
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="325909657"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 23:19:21 -0700
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="794137755"
-Received: from sysdebug.bj.intel.com ([10.240.193.70])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 23:19:19 -0700
-From:   chao.qin@intel.com
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     paul.mei@intel.com, lili.li@intel.com, chao.qin@intel.com
-Subject: [PATCH] powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
-Date:   Tue, 20 Sep 2022 14:08:26 +0800
-Message-Id: <20220920060826.3631210-1-chao.qin@intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231245AbiITIkH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 04:40:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C52786B66D;
+        Tue, 20 Sep 2022 01:39:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F334EED1;
+        Tue, 20 Sep 2022 01:39:19 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67B3A3F73B;
+        Tue, 20 Sep 2022 01:39:11 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 09:39:00 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, kajetan.puchalski@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/1] cpuidle: teo: Introduce optional util-awareness
+Message-ID: <Yyl8EdKfvSRULQnc@e126311.manchester.arm.com>
+References: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
+ <CAAYoRsXwPmKHJ8m2aex0ddpf+=dr8ceXDSJM9kX=v5JdeRfgiA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAYoRsXwPmKHJ8m2aex0ddpf+=dr8ceXDSJM9kX=v5JdeRfgiA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chao Qin <chao.qin@intel.com>
+Hi, thanks for taking a look!
 
-When value < time_unit, the parameter of ilog2() will be zero and
-the return value is -1. u64(-1) is too large for shift exponent
-and then will trigger shift-out-of-bounds:
+> > This proposed optional extension to TEO would specifically tune it for minimising too deep
+> > sleeps and minimising latency to achieve better performance. To this end, before selecting the next
+> > idle state it uses the avg_util signal of a CPU's runqueue in order to determine to what extent the
+> > CPU is being utilized. This util value is then compared to a threshold defined as a percentage of
+> > the cpu's capacity (capacity >> 6 ie. ~1.5% in the current implementation).
+> 
+> That seems quite a bit too low to me. However on my processor the
+> energy cost of using
+> idle state 0 verses anything deeper is very high, so I do not have a
+> good way to test.
 
-shift exponent 18446744073709551615 is too large for 32-bit type 'int'
-Call Trace:
- rapl_compute_time_window_core
- rapl_write_data_raw
- set_time_window
- store_constraint_time_window_us
+I suppose it does look low but as I said, at least from my own testing
+higher thresholds result in completely nullifying the potential benefits
+from using this. It could be because with a low-enough threshold like
+this we are able to catch the average util as it starts to rise and then
+we're already in the 'low-latency mode' by the time it gets higer as
+opposed to correcting after the fact. We could also always make it into
+some kind of tunable if need be, I was testing it with a dedicated sysctl
+and it worked all right.
 
-Signed-off-by: Chao Qin <chao.qin@intel.com>
-Acked-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/powercap/intel_rapl_common.c | 3 +++
- 1 file changed, 3 insertions(+)
+> 
+> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> On an idle system :
+> with only Idle state 0 enabled, processor package power is ~46 watts.
+> with only idle state 1 enabled, processor package power is ~2.6 watts
+> with all idle states enabled,  processor package power is ~1.4 watts
+> 
 
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 21d624f9f5fb..bf91248630c3 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -994,6 +994,9 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
- 		y = value & 0x1f;
- 		value = (1 << y) * (4 + f) * rp->time_unit / 4;
- 	} else {
-+		if (value < rp->time_unit)
-+			return 0;
-+
- 		do_div(value, rp->time_unit);
- 		y = ilog2(value);
- 		f = div64_u64(4 * (value - (1 << y)), 1 << y);
--- 
-2.25.1
+Ah I see, yeah this definitely won't work on systems with idle power
+usage like above. It was designed for Arm devices like the Pixel 6 where
+C0 is so power efficient that running with only C0 enabled can sometimes
+actually use *less* power than running with all idle states enabled.
+This was for non-intensive workloads like PCMark Web Browsing where
+there were enough too deep sleeps in C1 to offset the entire power
+saving. The entire idea we're relying upon here is C0 being very good to
+begin with but wanting to still use *some* C1 in order to avoid bumping
+into thermal issues.
 
+> > If the util is above the
+> > threshold, the governor directly selects the shallowest available idle state. If the util is below
+> > the threshold, the governor defaults to the TEO metrics mechanism to try to select the deepest
+> > available idle state based on the closest timer event and its own past correctness.
+> >
+> > Effectively this functions like a governor that on the fly disables deeper idle states when there
+> > are things happening on the cpu and then immediately reenables them as soon as the cpu isn't
+> > being utilized anymore.
+> >
+> > Initially I am sending this as a patch for TEO to visualize the proposed mechanism and simplify
+> > the review process. An alternative way of implementing it while not interfering
+> > with existing TEO code would be to fork TEO into a separate but mostly identical for the time being
+> > governor (working name 'idleutil') and then implement util-awareness there, so that the two
+> > approaches can coexist and both be available at runtime instead of relying on a compile-time option.
+> > I am happy to send a patchset doing that if you think it's a cleaner approach than doing it this way.
+> 
+> I would prefer the two to coexist for testing, as it makes it easier
+> to manually compare some
+> areas of focus.
+
+That would be my preference as well, it just seems like a cleaner
+approach despite having to copy over some code to begin with. I'm just
+waiting for Rafael to express a view one way or the other :)
+
+> > At the very least this approach seems promising so I wanted to discuss it in RFC form first.
+> > Thank you for taking your time to read this!
+> 
+> There might be a way forward for my type of processor if the algorithm
+> were to just reduce the idle
+> depth by 1 instead of all the way to idle state 0. Not sure. It seems
+> to bypass all that the teo
+> governor is attempting to achieve.
+
+Oh interesting, that could definitely be worth a try. As I said, this
+was designed for Arm CPUs and all of the targeted ones only have 2 idle
+states, C0 and C1. Thus reducing by 1 and going all the way to 0 are the
+same thing for our use case. You're right that this is potentially
+pretty excessive on Intel CPUs where you could be going from state 8/9 to
+0. It would result in some wasted cycles on Arm but I imagine there should
+be some way forward where we could accommodate the two.
+
+> For a single periodic workflow at any work sleep frequency (well, I
+> test 5 hertz to 411 hertz) and very
+> light workload: Processor package powers for 73 hertz work/sleep frequency:
+> 
+> teo: ~1.5 watts
+> menu: ~1.5 watts
+> util: ~19 watts
+> 
+> For 12 periodic workflow threads at 73 hertz work/sleep frequency
+> (well, I test 5 hertz to 411 hertz) and very
+> workload: Processor package powers:
+> 
+> teo: ~2.8watts
+> menu: ~2.8 watts
+> util: ~49 watts
+> 
+> My test computer is a server, with no gui. I started a desktop linux
+> VM guest that isn't doing much:
+> 
+> teo: ~1.8 watts
+> menu: ~1.8 watts
+> util: ~7.8 watts
+
+Ouch that's definitely not great, really good to know what this looks
+like on Intel CPUs though. Thanks a lot for taking your time to test
+this out!
+
+> >
+> > --
+> > Kajetan
+> >
+> > [1] https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc676b942c8e6498fb9bd03/idle_util_aware.pdf
+> >
+> >
+> > Kajetan Puchalski (1):
+> >   cpuidle: teo: Introduce optional util-awareness
+> >
+> >  drivers/cpuidle/Kconfig         | 12 +++++
+> >  drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
+> >  2 files changed, 98 insertions(+)
+> >
+> > --
+> > 2.37.1
+> >
