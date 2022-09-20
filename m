@@ -2,288 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1634F5BE98E
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Sep 2022 17:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEC85BEAD1
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Sep 2022 18:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiITPEB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Sep 2022 11:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S230153AbiITQJD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Sep 2022 12:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbiITPD5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 11:03:57 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109FC386A6
-        for <linux-pm@vger.kernel.org>; Tue, 20 Sep 2022 08:03:56 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id g3so4701909wrq.13
-        for <linux-pm@vger.kernel.org>; Tue, 20 Sep 2022 08:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=lgeGpTBAYoR2IF4IQP47VjInSDUdDHryBKm4+oxNgzo=;
-        b=AwC13zQZ7kpIyEMDTyYtYKqbjeLAubqIrtdYOPfa/uOpnkkYa76Y6RtVfeAAlN/RBH
-         sCyaomhU6F9DV37buweMO6Aw2qK5fsGJDwFR13qkaxxCdC5xqPG94t1lQmuPqI8lnmQn
-         hlYTi7j9LyTiBwjbJ/k07izpQ+PI6w2oGpoKBa9JMt//Mc2dowHh98L5JiQkqjd0OnrG
-         za3xPPPbS+j7n8SobpIdcq6H0m5LBKre9FPpie4aiUbaTOate1rtgKGBSmza5QIdAQ4s
-         m0I3Er5LJgfj3TxKApCDk1qREv6rQZ/rrOZ4V1cNuGA4U3UifcyIkJvKWengp0cHlWzq
-         tghQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=lgeGpTBAYoR2IF4IQP47VjInSDUdDHryBKm4+oxNgzo=;
-        b=TUfkwjdqHRPuDIIMugmj8z/T6XxaPqywKzH1Ywich2ezXFDjYmRS4LAk8/SYqV2+eQ
-         eJlke/WXxYydWmxyJa29H3ApEL2ewRXsmFFh6qATHN/UfELJRqgeEvejpAZJrrjOevQZ
-         SEU+FDpWtWU4gEtcFuXcENA10IVciXP2sUDe7HF6fGCLq4JV/ztK27Kk4OKGkEAnB2+m
-         0AfbIPdZRh1RYpOQK7hVkec+KW0w599Fe8cRfIsB3XsPXbth3RtDzoKZjvGeJMJc+NAI
-         Ro9bYzAWP5+2OVq8aZShnAsIzQ3nFn/kKHudPTbZRBrG/OKpiJiyA3cSSda2l8w8hFyL
-         HIDg==
-X-Gm-Message-State: ACrzQf0fH+Qy15zp5yW4tqVuS3YlGFR6DCtHBmV7W2QfnOkjGe/bIHsI
-        MxbObTC95EsgoxurFpvwpOHDbw==
-X-Google-Smtp-Source: AMsMyM7Se7NW9TRk/0csWrLvSYf0SPYJQHiZVddFEksgD1KIkNLhxiJM/2UQYS3BzgORDTemXsFUaw==
-X-Received: by 2002:a05:6000:69d:b0:22a:fa56:86b9 with SMTP id bo29-20020a056000069d00b0022afa5686b9mr7899787wrb.193.1663686234509;
-        Tue, 20 Sep 2022 08:03:54 -0700 (PDT)
-Received: from [127.0.1.1] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.googlemail.com with ESMTPSA id u3-20020a5d4683000000b00225239d9265sm242056wrq.74.2022.09.20.08.03.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 08:03:53 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Date:   Tue, 20 Sep 2022 17:03:51 +0200
-Subject: [PATCH v5 4/4] thermal: mediatek: add another get_temp ops for thermal
- sensors
+        with ESMTP id S229617AbiITQJC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 12:09:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E0463F29;
+        Tue, 20 Sep 2022 09:09:01 -0700 (PDT)
+Received: from mercury (dyndsl-091-096-056-222.ewe-ip-backbone.de [91.96.56.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6A81C660036C;
+        Tue, 20 Sep 2022 17:08:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663690139;
+        bh=U4MKHkfmJTO9JVdcD4fx4hWzMziGhHQzIgsluqhPYqQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=giHCaviJ3ZXY7p6hA6RH72pU4MNDFjEt787CjL4I/zAeDUKaFDTNQQ7ahcllvt3Zg
+         53pJmkHK78HEJsq5x+eWUQJaji5LCfRpY7RXO29FMn4z0EkFV86z387dKdR/I/U+Kr
+         EBRO+S8PpEnlMOzxi/lNyqgSHPTCvRmZu2kvwT5KK4+bMAqnz1EMiMleWSeau6HH2W
+         QbrBZM0ICXDeNSAgzbUm8ScyhU3CtUJg3Lu9SNj6NfIxGVZlADeo1AoLd3HQk+NG6n
+         jGtpPSgj1LmTkI9cjmUkuhs0bdrYFYmZ7GMYxcB0fa0on+ipNPZQzoCgasQYxub/17
+         bNQRwYFv198kg==
+Received: by mercury (Postfix, from userid 1000)
+        id 7C66D10607CF; Tue, 20 Sep 2022 18:08:57 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 18:08:57 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        jic23@kernel.org, lars@metafoo.de, broonie@kernel.org,
+        mazziesaccount@gmail.com, andriy.shevchenko@linux.intel.com,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        szunichen@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v11 1/8] dt-bindings: power: supply: Add MediaTek MT6370
+ Charger
+Message-ID: <20220920160857.6qfi66gtmgwesq7g@mercury.elektranox.org>
+References: <cover.1663254344.git.chiaen_wu@richtek.com>
+ <9382254831bb6ed8c228398a68896b0e8e61c7c4.1663254344.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-i350-thermal-up-v5-4-123bc852d199@baylibre.com>
-References: <20220920-i350-thermal-up-v5-0-123bc852d199@baylibre.com>
-In-Reply-To: <20220920-i350-thermal-up-v5-0-123bc852d199@baylibre.com>
-To:     Amit Kucheria <amitk@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-X-Mailer: b4 0.10.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1663686228; l=5826;
- i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
- bh=fxjNU673oWyI9k55hJ8TJXejNRUhPRMZg1dfJg2fwYI=;
- b=/WAqzQvGkGzuEAKGTCj1zS0PVtjbWepDWLrysKd1rXCGSExs2zPyqTrv5WTmGzILLsZ2JwGXYouB
- tcIfHt4sBfp0clrszepUhqZ6eMsfkxVgJ6IL1P+CP3BMOzDaiRXx
-X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
- pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lvjs3fe3c77xkyzo"
+Content-Disposition: inline
+In-Reply-To: <9382254831bb6ed8c228398a68896b0e8e61c7c4.1663254344.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Provide thermal zone to read thermal sensor in the SoC. We can read all the
-thermal sensors value in the SoC by the node /sys/class/thermal/
 
-In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-on the first read of sensor that often are bogus values.
-This can avoid following warning on boot:
+--lvjs3fe3c77xkyzo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  thermal thermal_zone6: failed to read out thermal zone (-13)
+Hi,
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Thu, Sep 15, 2022 at 05:47:29PM +0800, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>=20
+> Add MediaTek MT6370 Charger binding documentation.
+>=20
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+> v11
+> - Add more detailed description of irqs.
+> - Adujust the order of irqs
+> ---
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 3a5df1440822..311ad611fdab 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -259,6 +259,11 @@ enum mtk_thermal_version {
- 
- struct mtk_thermal;
- 
-+struct mtk_thermal_zone {
-+	struct mtk_thermal *mt;
-+	int id;
-+};
-+
- struct thermal_bank_cfg {
- 	unsigned int num_sensors;
- 	const int *sensors;
-@@ -307,6 +312,8 @@ struct mtk_thermal {
- 
- 	const struct mtk_thermal_data *conf;
- 	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
-+
-+	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
- };
- 
- /* MT8183 thermal sensor data */
-@@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
- 		mutex_unlock(&mt->lock);
- }
- 
-+static int _get_sensor_temp(struct mtk_thermal *mt, int id)
-+{
-+	u32 raw;
-+	int temp;
-+
-+	const struct mtk_thermal_data *conf = mt->conf;
-+
-+	raw = readl(mt->thermal_base + conf->msr[id]);
-+
-+	temp = mt->raw_to_mcelsius(mt, id, raw);
-+
-+	/*
-+	 * The first read of a sensor often contains very high bogus
-+	 * temperature value. Filter these out so that the system does
-+	 * not immediately shut down.
-+	 */
-+
-+	if (temp > 200000)
-+		return -EAGAIN;
-+	else
-+		return temp;
-+}
-+
- /**
-  * mtk_thermal_bank_temperature - get the temperature of a bank
-  * @bank:	The bank
-@@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	struct mtk_thermal *mt = bank->mt;
- 	const struct mtk_thermal_data *conf = mt->conf;
- 	int i, temp = INT_MIN, max = INT_MIN;
--	u32 raw;
- 
- 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
--		raw = readl(mt->thermal_base + conf->msr[i]);
--
--		if (mt->conf->version == MTK_THERMAL_V1) {
--			temp = raw_to_mcelsius_v1(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		} else {
--			temp = raw_to_mcelsius_v2(
--				mt, conf->bank_data[bank->id].sensors[i], raw);
--		}
--
--		/*
--		 * The first read of a sensor often contains very high bogus
--		 * temperature value. Filter these out so that the system does
--		 * not immediately shut down.
--		 */
--		if (temp > 200000)
--			temp = 0;
-+		temp = _get_sensor_temp(mt, i);
- 
- 		if (temp > max)
- 			max = temp;
-@@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	return max;
- }
- 
--static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
-+static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
- {
--	struct mtk_thermal *mt = tz->devdata;
-+	struct mtk_thermal_zone *tz = tzdev->devdata;
-+	struct mtk_thermal *mt = tz->mt;
- 	int i;
- 	int tempmax = INT_MIN;
- 
-@@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
- 	return 0;
- }
- 
-+static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
-+{
-+	struct mtk_thermal_zone *tz = tzdev->devdata;
-+	struct mtk_thermal *mt = tz->mt;
-+	int id = tz->id - 1;
-+
-+	if (id < 0)
-+		return -EACCES;
-+
-+	*temperature = _get_sensor_temp(mt, id);
-+
-+	return 0;
-+}
-+
- static const struct thermal_zone_device_ops mtk_thermal_ops = {
- 	.get_temp = mtk_read_temp,
- };
- 
-+static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
-+	.get_temp = mtk_read_sensor_temp,
-+};
-+
- static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 				  u32 apmixed_phys_base, u32 auxadc_phys_base,
- 				  int ctrl_id)
-@@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	void __iomem *apmixed_base, *auxadc_base;
-+	struct mtk_thermal_zone *tz;
- 
- 	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
- 	if (!mt)
-@@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	mtk_thermal_turn_on_buffer(mt, apmixed_base);
- 
-+	mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
-+				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
-+
- 	if (mt->conf->version == MTK_THERMAL_V2) {
- 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
- 	}
-@@ -1161,11 +1197,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, mt);
- 
--	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
--					      &mtk_thermal_ops);
--	if (IS_ERR(tzdev)) {
--		ret = PTR_ERR(tzdev);
--		goto err_disable_clk_peri_therm;
-+	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-+		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-+		if (!tz)
-+			return -ENOMEM;
-+
-+		tz->mt = mt;
-+		tz->id = i;
-+
-+		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
-+							     &mtk_thermal_ops :
-+							     &mtk_thermal_sensor_ops);
-+
-+		if (IS_ERR(tzdev)) {
-+			if (PTR_ERR(tzdev) == -ENODEV) {
-+				dev_warn(&pdev->dev,
-+					 "sensor %d not registered in thermal zone in dt\n", i);
-+				continue;
-+			}
-+			if (PTR_ERR(tzdev) == -EACCES) {
-+				ret = PTR_ERR(tzdev);
-+				goto err_disable_clk_peri_therm;
-+			}
-+		}
- 	}
- 
- 	ret = devm_thermal_add_hwmon_sysfs(tzdev);
+Thanks, queued.
 
--- 
-b4 0.10.0
+-- Sebastian
+
+>  .../power/supply/mediatek,mt6370-charger.yaml      | 96 ++++++++++++++++=
+++++++
+>  1 file changed, 96 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/mediat=
+ek,mt6370-charger.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt63=
+70-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,m=
+t6370-charger.yaml
+> new file mode 100644
+> index 0000000..fd491c5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-char=
+ger.yaml
+> @@ -0,0 +1,96 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.=
+yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT6370 Battery Charger
+> +
+> +maintainers:
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> +
+> +description: |
+> +  This module is part of the MT6370 MFD device.
+> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6370-charger
+> +
+> +  interrupts:
+> +    description: |
+> +      Specify what irqs are needed to be handled by MT6370 Charger drive=
+r.
+> +      We need to use the IRQ "MT6370_IRQ_OVPCTRL_UVP_D" to know when USB
+> +      is plugged in, and then the driver will enable BC1.2 detection.
+> +      After the hardware of MT6370 completes the BC1.2 detection,
+> +      IRQ "MT6370_IRQ_ATTACH" will be triggered, and the driver will know
+> +      the result of BC1.2 detection.
+> +      When the IRQ "MT6370_IRQ_CHG_MIVR" is triggered, it means that the
+> +      hardware enters the "Minimum Input Voltage Regulation loop" and
+> +      a workaround needs to be applied at this time.
+> +      In summary, "MT6370_IRQ_OVPCTRL_UVP_D", "MT6370_IRQ_ATTACH" and
+> +      "MT6370_IRQ_CHG_MIVR" are required in this charger driver.
+> +    items:
+> +      - description: irq of "USB is plugged in"
+> +      - description: irq of "BC1.2 is done"
+> +      - description: irq of "Minimum Input Voltage Regulation loop is ac=
+tive"
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: uvp_d_evt
+> +      - const: attach_i
+> +      - const: mivr
+> +
+> +  io-channels:
+> +    description: |
+> +      Use ADC channel to read VBUS, IBUS, IBAT, etc., info.
+> +    minItems: 1
+> +    items:
+> +      - description: |
+> +          VBUS voltage with lower accuracy (+-75mV) but higher measure
+> +          range (1~22V)
+> +      - description: |
+> +          VBUS voltage with higher accuracy (+-30mV) but lower measure
+> +          range (1~9.76V)
+> +      - description: the main system input voltage
+> +      - description: battery voltage
+> +      - description: battery temperature-sense input voltage
+> +      - description: IBUS current (required)
+> +      - description: battery current
+> +      - description: |
+> +          regulated output voltage to supply for the PWM low-side gate d=
+river
+> +          and the bootstrap capacitor
+> +      - description: IC junction temperature
+> +
+> +  io-channel-names:
+> +    minItems: 1
+> +    items:
+> +      - const: vbusdiv5
+> +      - const: vbusdiv2
+> +      - const: vsys
+> +      - const: vbat
+> +      - const: ts_bat
+> +      - const: ibus
+> +      - const: ibat
+> +      - const: chg_vddp
+> +      - const: temp_jc
+> +
+> +  usb-otg-vbus-regulator:
+> +    type: object
+> +    description: OTG boost regulator.
+> +    unevaluatedProperties: false
+> +    $ref: /schemas/regulator/regulator.yaml#
+> +
+> +    properties:
+> +      enable-gpios:
+> +        maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - interrupt-names
+> +  - io-channels
+> +
+> +additionalProperties: false
+> +
+> +...
+> --=20
+> 2.7.4
+>=20
+
+--lvjs3fe3c77xkyzo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMp5YoACgkQ2O7X88g7
++po+exAAjROzmdoA45Q3bZM+ZLlt2yyMZ84hAR7M1vXnsFLzjftqxdNOu+P+lYX6
+j+wUyf8+mINcJP4utRTyxk+O/H1R+fCC6H5Jt/IHMtPD9RcfOgDD6FDdeYVApNch
+canxbBi9AKM9HrntaLu8OVWVuvmj15YwsSjXyTKJiRaVdqvcAwToToNkxeZRD1/p
+LBufMpBnVIvtWIkamOa3p0iEpuAg5p2AHHeTOVdO9xDTOiAFE3y+k2bkt57WE8ye
+s0Ah8LRl/ekhaQjTbDvX4ycHtyw16wUtT8mVu7ZezA8JnSoNrCJm3DAY6qvBc6dL
+IKLzd0gZ5hq4xQzmbUJ3KiP3nwtFaOnOzDXE2aAs3X2m0CQc6nC9o2ZcQVBm12gF
+namJgZ+/YWCQm3KDvc/ipL8hpkf7jti+TWhRs6WWJza6Rghr+NIcET/GmGHYff8G
+HWtp/oOaNwr6Rw8HCxkGD1ew0TUTOrpt6iWhaCcVjKhMsbLvjqYmIR0DSIlOEErT
+quIppiPo9YId/JfDENIGuUJXFyd6ZQsjC8tuCcWYTQJOFG42LSjRW9/mUHCHn1Rz
+6sE/gyCUN5OOfcPWm0j1nHG9Ob/iVHupmWwjfgBJcD/QwV/v7ePz5BxJxgLLCILd
+jnEnmxLe0Rpcdu25YT11/s4lPrf1lPUqCBIsjPlQ5HLvDNTekzQ=
+=TGYa
+-----END PGP SIGNATURE-----
+
+--lvjs3fe3c77xkyzo--
