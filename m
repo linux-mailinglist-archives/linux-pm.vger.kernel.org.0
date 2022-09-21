@@ -2,159 +2,262 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA585E4F88
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 20:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7008F5E537C
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 21:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiIUSgD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Sep 2022 14:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S229819AbiIUTDJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Sep 2022 15:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiIUSgA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 14:36:00 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EB8A346B
-        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 11:35:53 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id y2so4747987qtv.5
-        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 11:35:53 -0700 (PDT)
+        with ESMTP id S229604AbiIUTDI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 15:03:08 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F7B9E0D1
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 12:03:07 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id f20so10111822edf.6
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 12:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=7feVe2Z6rcTKy2SDvo6HS8e1lVg9U6CuFNCTUYVU2Io=;
+        b=Ygs+KqdlIK9gXgIHKkdIxoZzNSz9lQd1DupuCw2DqcE/FqqSKVFya1zK9f6ASyl1C+
+         NO7apJQgQ/KMAAko1i3tt8ym5pqE8JWeFodtcxho07zVR4IzR9GpPzkFuFIcSUFy9uGY
+         FYE9iZM8GoSCasz6Re57hnyu+VL/l71q5JfmE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1aLrfQPrCM99iAn4d4HOtatr6375HpQfIn6b8RN5r4Y=;
-        b=69FLkIbS+dzvm3pmrJJ9/eqOIaY2mFe2d4CHPAwlDd6AjePSiA06FMohyDBAENrB3R
-         nq1XobrvI/WMMecNOM6m5yaN49vyB1Xh2G5H+C/tPtb1LvWlnlQm60v6K4cL3aC3Ay3E
-         EzQ3WDVr1uaR7k68P2jSSJk07UY5q60M4EQ7+4C6mTgzeS8RSd5zbkwfHuBGJ5tKI92L
-         MP0knjYrqqUu/az0AZEqgqOSm5tq8y5G2TlwWwmtojdWU9Jd40RJG23dainlRbAkWu0x
-         iS4H4VyDg2eXGcg1odwI20uJY4CiN1kKOp9Dbe5IVsaOHE8ej32JAPHSo3PZDC4jOu20
-         CGqQ==
-X-Gm-Message-State: ACrzQf1hqoCzC4AEOzOlWNzJFgcYPlGVMQKyI3mFlZN0UJ7ESPmJJ5sb
-        IkZlvpTKhtAVQP1nqoyJiDHJfGSwZ4wrXRWhqNlo57ph
-X-Google-Smtp-Source: AMsMyM5WzbAErhXFqTOQ4JJW3yXU92vwOxAZVfm2Lgmua71A2ABNAgA6IwX9smectq/qEQpQZPJB6CWdcMpldaJ0pq8=
-X-Received: by 2002:a05:622a:1181:b0:35b:b57d:fb14 with SMTP id
- m1-20020a05622a118100b0035bb57dfb14mr24464928qtk.605.1663785352346; Wed, 21
- Sep 2022 11:35:52 -0700 (PDT)
+        bh=7feVe2Z6rcTKy2SDvo6HS8e1lVg9U6CuFNCTUYVU2Io=;
+        b=ufnLaG7iYaH0d/7ywwUyVatyq8YF6ASNNrEkRtCPNm/4JZ7j0Ck4FXerabRAbMAnM8
+         7PKyfSybQhWSqf9XsOPQxCAGE4Ze7Bi2oSWYPBx1cvl8tT5x4KHNsht7Uit+JMqbWPz2
+         o2Z2QJ/rwx1BSzQijfT+QlvMb6kjNuPu5n4zav+yGC55heK0JaXw1Vud6mdif7DUKJjQ
+         9MCo7U180FexwXlrHsQljvM797O2SOT+YTgUpmtgL0ZGaRfbiCHYh9xNMmLbu5y25CCM
+         WbkDCdfHpqZ+7dQgtblKRq+l1jzvBF8ijJ6GAa5AS6bKo8vpOMzvmKwIu1tMOwWtyjxI
+         gz5Q==
+X-Gm-Message-State: ACrzQf0KohrtFA/C7xeereT32BXTabG2/DHXPczcNmzrDI3I77UPr7uu
+        We0LwYP9lMth/it9TYrVR/OO9aUEViSAwg==
+X-Google-Smtp-Source: AMsMyM4/Cr1WqilRtg/CZEezESoa7CNbrPiS4PyYvkadNMe2hPO16ztctADeqcnFxQCHwv0jgzBW3Q==
+X-Received: by 2002:a05:6402:1e8d:b0:441:58db:b6a2 with SMTP id f13-20020a0564021e8d00b0044158dbb6a2mr25777904edf.277.1663786985379;
+        Wed, 21 Sep 2022 12:03:05 -0700 (PDT)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id t20-20020aa7d714000000b0044e91d8ccd2sm2328049edq.50.2022.09.21.12.03.03
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 12:03:04 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so2920516wmb.0
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 12:03:03 -0700 (PDT)
+X-Received: by 2002:a05:600c:524d:b0:3b4:8ad0:6d with SMTP id
+ fc13-20020a05600c524d00b003b48ad0006dmr7135005wmb.194.1663786983431; Wed, 21
+ Sep 2022 12:03:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220920125848.32635-1-rui.zhang@intel.com>
-In-Reply-To: <20220920125848.32635-1-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 21 Sep 2022 20:35:41 +0200
-Message-ID: <CAJZ5v0hEHx=yBdefx7UvtjsHWbOBbBTb_7AQ6UQ5Ec+PtGnORQ@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: Add AlderLake-N support
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>, vinay.kumar@intel.com,
-        baieswara.reddy.sagili@intel.com
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com> <YylGq7eUvaoSyA1u@kernel.org>
+ <CAE=gft4-TLDvjtMH+qRJNppkJb798jpKXKXF8nytW7v9d2euRg@mail.gmail.com>
+ <YytRqguZRuGPVz3G@kernel.org> <YytSgGQrInFGWQzE@kernel.org>
+In-Reply-To: <YytSgGQrInFGWQzE@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 21 Sep 2022 12:02:26 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6CLDb+C9D0NGjzeSokTAbKOtRxutwG-2pMgOnscFdF-A@mail.gmail.com>
+Message-ID: <CAE=gft6CLDb+C9D0NGjzeSokTAbKOtRxutwG-2pMgOnscFdF-A@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 2:56 PM Zhang Rui <rui.zhang@intel.com> wrote:
+On Wed, Sep 21, 2022 at 11:05 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
 >
-> Similar to ther other AlderLake platforms, the C1 and C1E states on
-> ADL-N are mutually exclusive. Only one of them can be enabled at a time.
-> C1E is preferred on ADL-N for better energy efficiency.
+> On Wed, Sep 21, 2022 at 09:02:29PM +0300, Jarkko Sakkinen wrote:
+> > On Wed, Sep 21, 2022 at 08:35:35AM -0700, Evan Green wrote:
+> > > On Mon, Sep 19, 2022 at 9:51 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > >
+> > > > On Tue, Sep 13, 2022 at 08:26:09AM -0400, Stefan Berger wrote:
+> > > > >
+> > > > >
+> > > > > On 8/23/22 18:25, Evan Green wrote:
+> > > > > > From: Matthew Garrett <matthewgarrett@google.com>
+> > > > > >
+> > > > > > Under certain circumstances it might be desirable to enable the creation
+> > > > > > of TPM-backed secrets that are only accessible to the kernel. In an
+> > > > > > ideal world this could be achieved by using TPM localities, but these
+> > > > > > don't appear to be available on consumer systems. An alternative is to
+> > > > > > simply block userland from modifying one of the resettable PCRs, leaving
+> > > > > > it available to the kernel. If the kernel ensures that no userland can
+> > > > > > access the TPM while it is carrying out work, it can reset PCR 23,
+> > > > > > extend it to an arbitrary value, create or load a secret, and then reset
+> > > > > > the PCR again. Even if userland somehow obtains the sealed material, it
+> > > > > > will be unable to unseal it since PCR 23 will never be in the
+> > > > > > appropriate state.
+> > > > > >
+> > > > > > From: Matthew Garrett <mjg59@google.com>
+> > > > > > Signed-off-by: Matthew Garrett <mjg59@google.com>
+> > > > > >
+> > > > > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > > > > > ---
+> > > > > > Matthew's original version of this patch is at:
+> > > > > > https://patchwork.kernel.org/patch/12096491/
+> > > > > >
+> > > > > > Changes in v2:
+> > > > > >   - Fixed sparse warnings
+> > > > > >
+> > > > > >   drivers/char/tpm/Kconfig          | 10 +++++++++
+> > > > > >   drivers/char/tpm/tpm-dev-common.c |  8 +++++++
+> > > > > >   drivers/char/tpm/tpm.h            | 21 +++++++++++++++++++
+> > > > > >   drivers/char/tpm/tpm1-cmd.c       | 35 +++++++++++++++++++++++++++++++
+> > > > > >   drivers/char/tpm/tpm2-cmd.c       | 22 +++++++++++++++++++
+> > > > > >   drivers/char/tpm/tpm2-space.c     |  2 +-
+> > > > > >   6 files changed, 97 insertions(+), 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > > > > > index 927088b2c3d3f2..4483b61a428b11 100644
+> > > > > > --- a/drivers/char/tpm/Kconfig
+> > > > > > +++ b/drivers/char/tpm/Kconfig
+> > > > > > @@ -211,4 +211,14 @@ config TCG_FTPM_TEE
+> > > > > >       This driver proxies for firmware TPM running in TEE.
+> > > > > >   source "drivers/char/tpm/st33zp24/Kconfig"
+> > > > > > +
+> > > > > > +config TCG_TPM_RESTRICT_PCR
+> > > > > > +   bool "Restrict userland access to PCR 23"
+> > > > > > +   depends on TCG_TPM
+> > > > > > +   help
+> > > > > > +     If set, block userland from extending or resetting PCR 23. This
+> > > > > > +     allows it to be restricted to in-kernel use, preventing userland
+> > > > > > +     from being able to make use of data sealed to the TPM by the kernel.
+> > > > > > +     This is required for secure hibernation support, but should be left
+> > > > > > +     disabled if any userland may require access to PCR23.
+> > > > > >   endif # TCG_TPM
+> > > > > > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+> > > > > > index dc4c0a0a512903..7a4e618c7d1942 100644
+> > > > > > --- a/drivers/char/tpm/tpm-dev-common.c
+> > > > > > +++ b/drivers/char/tpm/tpm-dev-common.c
+> > > > > > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+> > > > > >     priv->response_read = false;
+> > > > > >     *off = 0;
+> > > > > > +   if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
+> > > > > > +           ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > > > > > +   else
+> > > > > > +           ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > > > > > +
+> > > > > > +   if (ret)
+> > > > > > +           goto out;
+> > > > > > +
+> > > > > >     /*
+> > > > > >      * If in nonblocking mode schedule an async job to send
+> > > > > >      * the command return the size.
+> > > > > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > > > > index a80b341d38eb8c..077c3ca0a127ba 100644
+> > > > > > --- a/drivers/char/tpm/tpm.h
+> > > > > > +++ b/drivers/char/tpm/tpm.h
+> > > > > > @@ -229,6 +229,8 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+> > > > > >   unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+> > > > > >   int tpm2_probe(struct tpm_chip *chip);
+> > > > > >   int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
+> > > > > > +int tpm_find_and_validate_cc(struct tpm_chip *chip, struct tpm_space *space,
+> > > > > > +                        const void *buf, size_t bufsiz);
+> > > > > >   int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
+> > > > > >   int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
+> > > > > >   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
+> > > > > > @@ -244,4 +246,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
+> > > > > >   void tpm_bios_log_teardown(struct tpm_chip *chip);
+> > > > > >   int tpm_dev_common_init(void);
+> > > > > >   void tpm_dev_common_exit(void);
+> > > > > > +
+> > > > > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > > > > +#define TPM_RESTRICTED_PCR 23
+> > > > > > +
+> > > > > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > > > > > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > > > > > +#else
+> > > > > > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > > > > > +                                 size_t size)
+> > > > > > +{
+> > > > > > +   return 0;
+> > > > > > +}
+> > > > > > +
+> > > > > > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > > > > > +                                 size_t size)
+> > > > > > +{
+> > > > > > +   return 0;
+> > > > > > +}
+> > > > > > +#endif
+> > > > > >   #endif
+> > > > > > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> > > > > > index 8ec743dec26544..318e75ae42fb85 100644
+> > > > > > --- a/drivers/char/tpm/tpm1-cmd.c
+> > > > > > +++ b/drivers/char/tpm/tpm1-cmd.c
+> > > > > > @@ -845,3 +845,38 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
+> > > > > >     return 0;
+> > > > > >   }
+> > > > > > +
+> > > > > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > > > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> > > > > > +{
+> > > > > > +   struct tpm_header *header = (struct tpm_header *)buffer;
+> > > > > > +   char len, offset;
+> > > > > > +   __be32 *pcr;
+> > > > > > +   int pos;
+> > > > > > +
+> > > > > > +   switch (be32_to_cpu(header->ordinal)) {
+> > > > > > +   case TPM_ORD_PCR_EXTEND:
+> > > > > > +           if (size < (TPM_HEADER_SIZE + sizeof(u32)))
+> > > > > > +                   return -EINVAL;
+> > > > > > +           pcr = (__be32 *)&buffer[TPM_HEADER_SIZE];
+> > > > > > +           if (be32_to_cpu(*pcr) == TPM_RESTRICTED_PCR)
+> > > > > > +                   return -EPERM;
+> > > > >
+> > > > > FYI: TPM 1.2 has transport sessions where the command is tunneled in an
+> > > > > encrypted channel and this check could be circumvented...
+> > > >
+> > > > BTW, Why do we want to support TPM 1.2 at all.
+> > > >
+> > > > I would not support it for new features. This could be just TPM2 only
+> > > > feeature.
+> > >
+> > > I didn't know about the TPM1.2 tunnelling thing, thanks Stefan. Yes,
+> > > maybe in light of that and Jarkko's comment we shouldn't bend over
+> > > backwards to make this work on TPM1 and just make it a TPM2-only
+> > > feature.
+> > >
+> > > Downstream of this decision, in the other patch, "Add support for
+> > > in-kernel resetting of PCRs", my instinct is to keep the addition of
+> > > tpm1_pcr_reset() just so the newly introduced generic tpm_pcr_reset()
+> > > is fully implemented. Let me know if instead I should also drop the
+> > > tpm1 side of that as well, in the name of "don't add stuff you're not
+> > > using".
+> > > -Evan
+> >
+> > You should drop TPM 1.2 support.
+> >
+> > General policy with TPM 1.2:
+> >
+> > 1. Support legacy.
+> > 2. Do no extend the functionality.
 >
-> C6S is also supported on this platform. Its latency is far bigger than
-> C6, but really close to C8 (PC8), thus it is not exposed as a separate
-> state.
->
-> Suggested-by: Baieswara Reddy Sagili <baieswara.reddy.sagili@intel.com>
-> Suggested-by: Vinay Kumar <vinay.kumar@intel.com>
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/idle/intel_idle.c | 51 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 3e101719689a..8d56b06ddca4 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -928,6 +928,51 @@ static struct cpuidle_state adl_l_cstates[] __initdata = {
->                 .enter = NULL }
->  };
->
-> +static struct cpuidle_state adl_n_cstates[] __initdata = {
-> +       {
-> +               .name = "C1",
-> +               .desc = "MWAIT 0x00",
-> +               .flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_UNUSABLE,
-> +               .exit_latency = 1,
-> +               .target_residency = 1,
-> +               .enter = &intel_idle,
-> +               .enter_s2idle = intel_idle_s2idle, },
-> +       {
-> +               .name = "C1E",
-> +               .desc = "MWAIT 0x01",
-> +               .flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-> +               .exit_latency = 2,
-> +               .target_residency = 4,
-> +               .enter = &intel_idle,
-> +               .enter_s2idle = intel_idle_s2idle, },
-> +       {
-> +               .name = "C6",
-> +               .desc = "MWAIT 0x20",
-> +               .flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-> +               .exit_latency = 195,
-> +               .target_residency = 585,
-> +               .enter = &intel_idle,
-> +               .enter_s2idle = intel_idle_s2idle, },
-> +       {
-> +               .name = "C8",
-> +               .desc = "MWAIT 0x40",
-> +               .flags = MWAIT2flg(0x40) | CPUIDLE_FLAG_TLB_FLUSHED,
-> +               .exit_latency = 260,
-> +               .target_residency = 1040,
-> +               .enter = &intel_idle,
-> +               .enter_s2idle = intel_idle_s2idle, },
-> +       {
-> +               .name = "C10",
-> +               .desc = "MWAIT 0x60",
-> +               .flags = MWAIT2flg(0x60) | CPUIDLE_FLAG_TLB_FLUSHED,
-> +               .exit_latency = 660,
-> +               .target_residency = 1980,
-> +               .enter = &intel_idle,
-> +               .enter_s2idle = intel_idle_s2idle, },
-> +       {
-> +               .enter = NULL }
-> +};
-> +
->  static struct cpuidle_state spr_cstates[] __initdata = {
->         {
->                 .name = "C1",
-> @@ -1309,6 +1354,10 @@ static const struct idle_cpu idle_cpu_adl_l __initconst = {
->         .state_table = adl_l_cstates,
->  };
->
-> +static const struct idle_cpu idle_cpu_adl_n __initconst = {
-> +       .state_table = adl_n_cstates,
-> +};
-> +
->  static const struct idle_cpu idle_cpu_spr __initconst = {
->         .state_table = spr_cstates,
->         .disable_promotion_to_c1e = true,
-> @@ -1379,6 +1428,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
->         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,           &idle_cpu_icx),
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,           &idle_cpu_adl),
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,         &idle_cpu_adl_l),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,         &idle_cpu_adl_n),
->         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &idle_cpu_spr),
->         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &idle_cpu_knl),
->         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &idle_cpu_knl),
-> @@ -1816,6 +1866,7 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
->                 break;
->         case INTEL_FAM6_ALDERLAKE:
->         case INTEL_FAM6_ALDERLAKE_L:
-> +       case INTEL_FAM6_ALDERLAKE_N:
->                 adl_idle_state_table_update();
->                 break;
->         }
-> --
+> Why? Because we do not want to add legacy to something that is dying.
 
-Applied (with some minor changelog edits) as 6.1 material, thanks!
+Sounds good, I'll drop the TPM1 stuff from the next spin. Thanks!
+-Evan
