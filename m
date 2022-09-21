@@ -2,139 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9828B5BF798
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 09:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6335BF879
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 10:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiIUHZH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Sep 2022 03:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
+        id S230251AbiIUIAx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Sep 2022 04:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiIUHZE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 03:25:04 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2474943321
-        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 00:25:03 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so13301035pjq.3
-        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 00:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=1v5EPGQat5Z+jf2gG8XAit2s3FgVQMVuinEhzqXFGSo=;
-        b=cmH7YSyEUbBgIUgBiCNYZKqsx/QPe1rJJYtGbrSLSvu1pqW4RIlhtkJ+ocl2NUPx8A
-         Lsifq9X5SyOQ75HFeY6XsRayQgR8vXEfPPl0QhAvp2GXhB2vvNGGB5UYvJzCbgn1Qfu2
-         rgp2hDJYGrQ5DKnX37yUZIx3Nopa4ixdfmPMEhpRLdyIvbetxf2XIMJP+JEY96wbuxMW
-         IcZg1ylIANMlzPgS8A8/rQbulCJf3gXejGFY4H8mLTNocMsYSXIEJ9YN0OYUaltCdvPy
-         NTjM9RsBxKhluBkTIt5iXj1GCCVt3P/cmhV6XJZ7nQ32eHO8xRQYDaTVfCmc4/K/rCmR
-         8q2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1v5EPGQat5Z+jf2gG8XAit2s3FgVQMVuinEhzqXFGSo=;
-        b=WtBHUa57I5vBYoNUThlbh7MUJSkWiAP8F7mWE+Ba8t0yIITt6HmSngjgFqhJUdvEN3
-         I3SGIO4zoJ4j07m6d2nGANOz9Khdo+3KDYKGALSlTWBQwxWKRuzJsnu7vWjgoeiGQPnz
-         b0pgzVBoqSE0rncLrxE8jnmLjnNsmD01Hn8AcftL3RyA0PWOF7xHjkuFQyFBKy1rG3hv
-         5x9MyqDCGueSKJp88ZeIU7oWhBLp/rNle20b/w7I3ya+qRF0Toagc3qtf0RXUECl8c83
-         MO1np+jb5OWKj83Z23zpt95o7DF+i+J1muXoE1NuUoxdsuCvWJIOh5fkXYjQUl+unvX8
-         SFYQ==
-X-Gm-Message-State: ACrzQf1DqRzshJlqfSiOFdIN2OfTOArQ9EQQ+iBc1P0j30Qn75skUkID
-        iRmfohdwEyDd6tBNkwDpugHxng==
-X-Google-Smtp-Source: AMsMyM7teaAK3gjGJS1o3OsMo9NQFi1LT7D6LKMJ5hZX6cYLXk3NyjpOZLfJxXcs02GwP9IMEOm6uQ==
-X-Received: by 2002:a17:90a:d3c2:b0:202:acc2:1686 with SMTP id d2-20020a17090ad3c200b00202acc21686mr7991353pjw.126.1663745102521;
-        Wed, 21 Sep 2022 00:25:02 -0700 (PDT)
-Received: from localhost ([122.171.20.238])
-        by smtp.gmail.com with ESMTPSA id f9-20020a63f749000000b00434e57bfc6csm1174367pgk.56.2022.09.21.00.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 00:25:01 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 12:54:59 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xuewen Yan <xuewen.yan@unisoc.com>, mani@kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     agross@kernel.org, konrad.dybcio@somainline.org, rafael@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, di.shen@unisoc.com
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
-Message-ID: <20220921072459.tkjxjil6okkcpl2g@vireshk-i7>
-References: <20220915090515.1660-1-xuewen.yan@unisoc.com>
+        with ESMTP id S229693AbiIUIAu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 04:00:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECC82847;
+        Wed, 21 Sep 2022 01:00:49 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A2926601F3F;
+        Wed, 21 Sep 2022 09:00:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663747248;
+        bh=+67XwHwwwVr9Zy9Tqbi6F11v6db9RC2DSdJJb+2KAFg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dpDnNOEO+DMIu1yXKQmnHpntygMwx1e12LaxutdYdaimetWWIwy7foz7wDU40z3vM
+         Nd3lG58+67iMOvxcchRHkDSstgnRgy1JPghhFsNNCP5XWH0YLwJZ/NJrJcM5wln0KE
+         Fwqf9Hyx8WX0301IWn670STkn+waoXjhec1qNgnKimhxbTwOAIMcdkjkRRpex1wSbh
+         qr4/n7LWVig9ZommdUMWzieQGpzMJQLgCDbNinI34cuS4kKZTRzQ2jWXtea+zokkrx
+         3EcQCYKBwOjZ6/VR9LALPixyXTfon+fXR28vkjdGGIjqBusyOXjREvBdgralwVQfJi
+         W59s+B3omIdaw==
+Message-ID: <66aa53cf-25ed-fc08-f92f-6a0aae48f2e7@collabora.com>
+Date:   Wed, 21 Sep 2022 10:00:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915090515.1660-1-xuewen.yan@unisoc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v5 2/4] thermal: mediatek: control buffer enablement
+ tweaks
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-pm@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Kao <michael.kao@mediatek.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220920-i350-thermal-up-v5-0-123bc852d199@baylibre.com>
+ <20220920-i350-thermal-up-v5-2-123bc852d199@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220920-i350-thermal-up-v5-2-123bc852d199@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Can someone familiar with the code please review this ?
-
-On 15-09-22, 17:05, Xuewen Yan wrote:
-> Before update thermal pressure, the max cpufreq should be limited.
-> Add QOS control for Lmh throttle cpufreq.
+Il 20/09/22 17:03, Amjad Ouled-Ameur ha scritto:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> Add logic in order to be able to turn on the control buffer on MT8365.
+> This change now allows to have control buffer support for MTK_THERMAL_V1,
+> and it allows to define the register offset, and mask used to enable it.
 > 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index d5ef3c66c762..deb1219435a5 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -13,6 +13,7 @@
->  #include <linux/of_address.h>
->  #include <linux/of_platform.h>
->  #include <linux/pm_opp.h>
-> +#include <linux/pm_qos.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/units.h>
-> @@ -56,6 +57,8 @@ struct qcom_cpufreq_data {
->  	struct cpufreq_policy *policy;
->  
->  	bool per_core_dcvs;
-> +
-> +	struct freq_qos_request throttle_freq_req;
->  };
->  
->  static unsigned long cpu_hw_rate, xo_rate;
-> @@ -318,6 +321,8 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
->  	} else {
->  		throttled_freq = freq_hz / HZ_PER_KHZ;
->  
-> +		freq_qos_update_request(&data->throttle_freq_req, throttled_freq);
-> +
->  		/* Update thermal pressure (the boost frequencies are accepted) */
->  		arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
->  
-> @@ -413,6 +418,14 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
->  	if (data->throttle_irq < 0)
->  		return data->throttle_irq;
->  
-> +	ret = freq_qos_add_request(&policy->constraints,
-> +				   &data->throttle_freq_req, FREQ_QOS_MAX,
-> +				   FREQ_QOS_MAX_DEFAULT_VALUE);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "Failed to add freq constraint (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
->  	data->cancel_throttle = false;
->  	data->policy = policy;
->  
-> @@ -479,6 +492,7 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
->  	if (data->throttle_irq <= 0)
->  		return;
->  
-> +	freq_qos_remove_request(&data->throttle_freq_req);
->  	free_irq(data->throttle_irq, data);
->  }
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
--- 
-viresh
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
