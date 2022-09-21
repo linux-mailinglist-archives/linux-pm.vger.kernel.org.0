@@ -2,133 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862955BF314
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 03:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA575BF329
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 03:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiIUBtB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Sep 2022 21:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S231479AbiIUB4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Sep 2022 21:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiIUBs7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 21:48:59 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE797C1D3;
-        Tue, 20 Sep 2022 18:48:57 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id ay9so3206024qtb.0;
-        Tue, 20 Sep 2022 18:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=30wLobZRnFv5zggcZVF2u6wy/96nEdpY/Ifl53dhDFM=;
-        b=KPvreMS9cTD4YrMaMm0W35RXTuEm5G6cH9FqS5KKO/LdRVMrIzDCLbnnVsrr0aTF+M
-         N637xD82AWRAKw0fe2ZZFejrBD5iZfaLPj7akR8TDl8QqRK0Yc5StwWzkJAPUv82OBe5
-         /c2X2yf41KWii3ok0Kn/9kOU36HeBguY2Dz/Nekfnnij3EQIY9nBLl/PaKGQDi4oi4Pv
-         sFFueSJMtV98szCHTj+aEUPa7E9SkqEuBaE5mBsjXhajCK1zmtmoHLWetEldHrvED/r1
-         niPKxhRbwuOMZGoYphFO68twpl4C32uW7DWmlFLSVhE+W8Kl2AE0vv97jtpm6LZp1X+0
-         OkuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=30wLobZRnFv5zggcZVF2u6wy/96nEdpY/Ifl53dhDFM=;
-        b=4MXmWQ8o6VB7a7PHM66oXmBJE7SyE4b8MhskixzkslgKDYI9gVaujUjD+kceTgFJsX
-         3FMSWvly2HZOPTxP1YxOpQHtS1xv0BW+9Q45ET8gspfWBcnD9YJ8iiMt4X/pD/NsttyG
-         5fVoAKozHSX6BM4AKnTkVevrYPFu5oepYFdUur4m4O6j/bqucRn4Vw3eqDSLsVLMyAZn
-         S9qq3GnYLZ1TY+Ag1ekEmaEBDzoYaIoLvMFE6bJ/51XbOLqgNA5tagY3Iw5EE/dicpvE
-         1ijm4ArWEKiijXZple/mYW/WrsTFoIfROmgurK3bJdZU+P4LKxo/N7SGNwxvV8/NtmLF
-         XPDw==
-X-Gm-Message-State: ACrzQf2G9o9MmC1j8yGLRU8ULiWDQfFWm1hS953zimbK4J6G5UYNtsGA
-        d0vYI1oGPMCNLZFOd+c/b6OlUjtSPqrR1U9sbkA=
-X-Google-Smtp-Source: AMsMyM7bBhxaQAfT+rCoAiTyYG/eF3l1J9PoSVv3K9nIjI5BkzQczZAqbJin74KiibXz/4K0z0LmAcynXI+rqdfngVA=
-X-Received: by 2002:a05:622a:48c:b0:35c:d99a:3002 with SMTP id
- p12-20020a05622a048c00b0035cd99a3002mr17703201qtx.564.1663724937128; Tue, 20
- Sep 2022 18:48:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220830034042.9354-2-peterwu.pub@gmail.com> <20220830034042.9354-10-peterwu.pub@gmail.com>
- <CAPOBaE7rz2F-sij-LbYau6TRxFoOfmoUc=R__Z7iUrFWmZPgrg@mail.gmail.com>
-In-Reply-To: <CAPOBaE7rz2F-sij-LbYau6TRxFoOfmoUc=R__Z7iUrFWmZPgrg@mail.gmail.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Wed, 21 Sep 2022 09:48:21 +0800
-Message-ID: <CABtFH5+PuK4vptVNmpn4h2FCxNFp3wWvhUrOxgqArx4YxCY99w@mail.gmail.com>
-Subject: Re: [PATCH v9 09/10] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-To:     Han Jingoo <jingoohan1@gmail.com>
-Cc:     lee@kernel.org, Daniel Thompson <daniel.thompson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229993AbiIUB4U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 21:56:20 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3C0879631;
+        Tue, 20 Sep 2022 18:56:17 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxReI3bypj2yYfAA--.51844S2;
+        Wed, 21 Sep 2022 09:56:13 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        mazziesaccount@gmail.com, andriy.shevchenko@linux.intel.com,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v2 1/3] MAINTAINERS: add maintainer for thermal driver for loongson2 SoCs
+Date:   Wed, 21 Sep 2022 09:56:03 +0800
+Message-Id: <20220921015605.17078-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxReI3bypj2yYfAA--.51844S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1kAFWxZryrXF1kAw15XFb_yoWDJFb_AF
+        1Iqa18Za18AF1ak3ykZryxJ343Zr4xGF13A3Zrt39rA34Dtay3AFyDJwnxuw18Cr4UuryS
+        ya97Gr1xur12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 18, 2022 at 3:22 AM Han Jingoo <jingoohan1@gmail.com> wrote:
->
-> On Mon, Aug 29, 2022 ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+Add zhanghongchen and myself as maintainer of the loongson2 SoC
+series thermal driver.
 
-...
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v2:
+		1. Update file name.
 
-> > +#define MT6370_ITORCH_MIN_uA           25000
-> > +#define MT6370_ITORCH_STEP_uA          12500
-> > +#define MT6370_ITORCH_MAX_uA           400000
-> > +#define MT6370_ITORCH_DOUBLE_MAX_uA    800000
-> > +#define MT6370_ISTRB_MIN_uA            50000
-> > +#define MT6370_ISTRB_STEP_uA           12500
-> > +#define MT6370_ISTRB_MAX_uA            1500000
-> > +#define MT6370_ISTRB_DOUBLE_MAX_uA     3000000
->
-> Use upper letters as below:
->
-> #define MT6370_ITORCH_MIN_UA           25000
-> #define MT6370_ITORCH_STEP_UA          12500
-> #define MT6370_ITORCH_MAX_UA           400000
-> #define MT6370_ITORCH_DOUBLE_MAX_UA    800000
-> #define MT6370_ISTRB_MIN_UA            50000
-> #define MT6370_ISTRB_STEP_UA           12500
-> #define MT6370_ISTRB_MAX_UA            1500000
-> #define MT6370_ISTRB_DOUBLE_MAX_UA     3000000
->
->
-> > +#define MT6370_STRBTO_MIN_US           64000
-> > +#define MT6370_STRBTO_STEP_US          32000
-> > +#define MT6370_STRBTO_MAX_US           2432000
-> > +
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Hi Jingoo,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..63076e12c91a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+-- 
+2.31.1
 
-This coding style is in accordance with Andy's opinion in this mail:
-https://lore.kernel.org/linux-arm-kernel/CAHp75Vciq4M4kVrabNV9vTLLcd1vR=bMe8JLEdAF9MkRTpcB5g@mail.gmail.com/
-
-And I will revise other parts in v12.
-Thanks for your review!
-
---
-Best Regards,
-ChiaEn Wu
