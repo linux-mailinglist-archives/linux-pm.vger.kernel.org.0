@@ -2,118 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0C65BF6DD
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 08:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232085BF6EE
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 09:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiIUG7Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Sep 2022 02:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
+        id S229803AbiIUHFH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Sep 2022 03:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiIUG7V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 02:59:21 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92648169C
-        for <linux-pm@vger.kernel.org>; Tue, 20 Sep 2022 23:59:18 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a10so5890958ljq.0
-        for <linux-pm@vger.kernel.org>; Tue, 20 Sep 2022 23:59:18 -0700 (PDT)
+        with ESMTP id S229611AbiIUHFF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 03:05:05 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9281C286F8
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 00:05:03 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id w8so7621725lft.12
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 00:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=NmJ1ky94R3TydWshdEnT7QkhQ55Opa2pbsWIWb/PLzU=;
-        b=HhNHKhYTz5ALtyqiXfUOHtKrrko2VcWHyahB3IZyhU+pGovf+Px5ox5tDcszKkebuW
-         uLxlzDq0VY9I7JFg5+iZ4yHABGNgVM0RsWEHH6s55s6tMsHKv4UUa014BPj1blI63sGa
-         4XhBKkPRX+bTyW7unTw7E5xsjr85aJCLVdra1RGqewk0CMvXMB2Sauu/AchjyL3cdaLH
-         mHlBeRUQMMsUMPRfFwTt8RSLHphN6/2uM/KBhtlvOlWTydFGkvE/38NtgXm3xIya9cPR
-         oQ+Dhj+TOk42XKizmI334nAXG05yhcPmYEPUsi0oshLFMBxOCfZuKCiAcZZoRxaMh0Sj
-         M2RQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=sx/lrSth5nujqjHlbG4gs9XUHweVDL0pqpPRXfUkt5A=;
+        b=XPcKtyGyUjf2RRoiutLMnHiMqd5AUH19sxuidJt/2qc5pLMDNDASfB6fPPJIldseMd
+         p4PjEwovWFLPd5z0jUrCIrkqYk46fz32k1pFt0Uz8UXhXfBJrBgtizGMGc76kDu5Te+s
+         YH4FxBVLxlk3ITyMEtvkRIl9HWd3FWn6UKDRSyRSfSi6pBV1qhY0uTS5fDY5Zn6leIg9
+         Y6zL9VTSjE7Xnpmmqt9EH8vf7sepL+AS6Zzn8a93XiaYbSQvh9YVYxCnaPYevv7cD2YD
+         eFIzprDnZGD1yqMP9g3JasLYVVEeUTJqR+9xjKm+s+fXBKdIkjRxgs/j/QfolUNOquzC
+         I75g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=NmJ1ky94R3TydWshdEnT7QkhQ55Opa2pbsWIWb/PLzU=;
-        b=4HJ/R/hpjKsbATTW9lmyWCE79CwyLZ01NZTBPxrN9cN+5uuU6UlDlXUIiIOJgGUz7Z
-         0xQGttinnIXyNxK5fsjBcafFiAH1Kn/QbmcfAAXLw3v98hgiygsDk7wE4FWC55tief9y
-         Xz+uI9wZsHpjvcNqPb6BRS+hMGnxeOM7jwUWS0qCu1Cmc4JVCq3lDe9HKCQEocExp7dh
-         DrouTG2dV2flpwu4J2Ie32PCrevifzFrxIcSiUlJ3kW76YTSSaKy28Qou34wcKnsXhuc
-         Q3JgHJn30JHt6CmVJgObFi+IYO2d7Fh0XaYsD2Hxj6vxSm7i6gzNDtLhsHwAn62z2ux/
-         rOiQ==
-X-Gm-Message-State: ACrzQf0vLcbbCCL9R3O7Pk4QrWnXULHVSCr194uwUM1JsZPK8zooLqk+
-        Pbgst4Ul7dBt2ePJMaNhJMJOwA==
-X-Google-Smtp-Source: AMsMyM67+W3xcMYvbfC92MP7UbXJppeQ+yXtwC3sCdPRGsLIkYI+reN4Vwxfb2fdjEwwiptxfRSJYQ==
-X-Received: by 2002:a2e:a887:0:b0:26a:871b:a16d with SMTP id m7-20020a2ea887000000b0026a871ba16dmr8815200ljq.482.1663743557201;
-        Tue, 20 Sep 2022 23:59:17 -0700 (PDT)
-Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z2-20020a2e7e02000000b00267232d0652sm308120ljc.46.2022.09.20.23.59.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 23:59:16 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 08:59:14 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=sx/lrSth5nujqjHlbG4gs9XUHweVDL0pqpPRXfUkt5A=;
+        b=QUliaqTIblwoHT+tZgESP5pbP7A/7ZtHb6Th/0FFSndT84fymwR9/+2aeRmu9RCPJi
+         YqFl9uE8RMSQE+e8M4H2xcYCYh7UfXn2l+WjpgEvxNnbfjIHJ6b05lzWUTmLlWV/Ykzv
+         Yz+oaD4vN3d02UdvuWlWqmKOX4cTcg4/3u8Z13eNjt67BwSciEuFQ/4EZG6HSgOdffMi
+         /uGzwwWErZA/MvukRtIelgRQNJlpo2sc8dePQtPs/9LHsz4uFRpxhP/G0gggq5LNDc4y
+         t3x/5k9RAI2fILLx73aNsLnAgXCEbo9QuQgmUQf9+HVEf23waE1LfbBiR2kCkvmJhBoX
+         /i9w==
+X-Gm-Message-State: ACrzQf3Ej/Sq2btG2r8M3wIgyN+kiB93dxaGTho5OmnNxY/KPmIltTw6
+        qi5+mf3hAFrZHXtHUqaoMDZU5w==
+X-Google-Smtp-Source: AMsMyM69Jrp+m5vAD9HV9L/xj1HYJRmo29oV2zG6Ek0RJIXp7T9Z1DalUlYmUOiGpJgjupV7fVUDzQ==
+X-Received: by 2002:a05:6512:261f:b0:49f:eb39:4762 with SMTP id bt31-20020a056512261f00b0049feb394762mr2140806lfb.670.1663743901905;
+        Wed, 21 Sep 2022 00:05:01 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 5-20020a2e1445000000b0026be23f24efsm314442lju.18.2022.09.21.00.05.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 00:05:01 -0700 (PDT)
+Message-ID: <fb901889-d769-ba56-d4cb-2d9d8b50f74f@linaro.org>
+Date:   Wed, 21 Sep 2022 09:05:00 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
 Subject: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to
  json-schema
-Message-ID: <20220921065914.xvsj664dgwmd3vcr@krzk-bin>
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>
 References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
  <20220921015605.17078-2-zhuyinbo@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 In-Reply-To: <20220921015605.17078-2-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 21 Sep 2022 09:56:04 +0800, Yinbo Zhu wrote:
+On 21/09/2022 03:56, Yinbo Zhu wrote:
 > Convert the loongson2 thermal binding to DT schema format using
 > json-schema.
+
+Incorrect subject and incorrect commit msg. There is no conversion here.
+
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Signed-off-by: Yinbo Zhu <c>
 > ---
 > Change in v2:
-> 		1. Add description and type about the "id".
+> 		1. Add description and type about the "id".	
 > 		2. Make the filename was based on compatible.
 > 
 >  .../bindings/thermal/loongson2-thermal.yaml   | 52 +++++++++++++++++++
 >  1 file changed, 52 insertions(+)
 >  create mode 100644 Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
+> new file mode 100644
+> index 000000000000..2994ae3a56aa
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-yamllint warnings/errors:
+No improvements here. You ignore my comments, so I am going to NAK it.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml: properties:id:$ref: '//schemas/types.yaml#/definitions/uint32' does not match '^(/schemas/|\\.\\./|#(/|$)|[a-zA-Z0-9]+)'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-./Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml: <urlopen error [Errno -2] Name or service not known>
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml: ignoring, error in schema: properties: id: $ref
-Documentation/devicetree/bindings/thermal/loongson2-thermal.example.dtb:0:0: /example-0/thermal@1fe01500: failed to match any schema with compatible: ['loongson,loongson2-thermal']
 
-doc reference errors (make refcheckdocs):
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/loongson2-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Thermal sensors on loongson2 SoCs
+> +
+> +maintainers:
+> +  - zhanghongchen <zhanghongchen@loongson.cn>
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,loongson2-thermal
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  id:
+> +    $ref: '//schemas/types.yaml#/definitions/uint32'
 
-See https://patchwork.ozlabs.org/patch/
+No improvements here, so let me be specific - you need to really justify
+such property or it cannot go to schema.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+> +    description: |
+> +      Specify the thermal sensor id.
+> +    minimum: 0
+> +    maximum: 3
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - id
+> +  - interrupt-parent
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Why?
 
-pip3 install dtschema --upgrade
+> +  - interrupts
+> +  - '#thermal-sensor-cells'
 
-Please check and re-submit.
+Use the same style of quote: ' or ".
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    thermal: thermal@1fe01500 {
+
+How other similar nodes are named (in other DTS files)?
+
+
+
+Best regards,
+Krzysztof
