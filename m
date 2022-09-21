@@ -2,116 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0545D2CA3
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 20:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CC45DDB72
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 20:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiIUSJL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Sep 2022 14:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S230471AbiIUSNn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Sep 2022 14:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiIUSJK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 14:09:10 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30B7A2861
-        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 11:09:07 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id y2so4535300qkl.11
-        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 11:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2KAjKe3iq+QwXIwjpYW0v2WCVk5payTUoCJDsQmbzI8=;
-        b=fHDduti3CxdhlR7cTOA3bHhFjSsFgLzHd7cyUqMp7cDXRqkMCXpLOCc22ysE/u6Kh2
-         HIGYwvhJxEZfTaOngML/3hnx0h432B4fP7654sKJhbc5rtbz36iNUhGVxIJi+7ZkpwJK
-         Hjm/3CgbuCWlweV9iNYNfgs81GLrkku0T+vBnkfB6J2jO02uzYEZ3hQ0SfGKaqtZL6v1
-         TyJGu1wof5Q41gchlf9KraJgvFxDWjGIzqspgvV9PCaNgCxTeXJuBXQlqrVf41ZO3v41
-         l0igml8T46Gi/I4N/N2ciB7wX2RNoBfMYAPi5C86mv/+8zmytwTakT45ZHsr8oD2zbaV
-         YSuw==
+        with ESMTP id S230452AbiIUSNm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 14:13:42 -0400
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63967EFE4;
+        Wed, 21 Sep 2022 11:13:41 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id h28so4607783qka.0;
+        Wed, 21 Sep 2022 11:13:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2KAjKe3iq+QwXIwjpYW0v2WCVk5payTUoCJDsQmbzI8=;
-        b=k1tw2TPuqgS2AckirEQMNbcSffycWj33e+wsf/M70wfVwX0M6fj0M1AT6TXpD/rlYU
-         3bgy71GCG9XEjg9wgNCYXp7/EJU2hGZzk22OSFbCzKQxUpL7PF0jm1i4wOFFjtFdl1Fw
-         xJ8vGN18/Z/LBGXFI9LnWYIR4ZHYpjGVfWUfG/ZxZPaJearfsUYTD18j/yp4C6sG16GM
-         6H5DkpqJ/jjnfR5nEJBT6ZcrsMYDbzuBnFGgJFre9bE79x6BHuGChdwB/0gkV/jUtflp
-         6G1mjJ0DA15Z/gVgRfJhn9ucCjLinfD42prLF358dnRghwbGBsOsu7beuN2OJ5pnY1db
-         4pLA==
-X-Gm-Message-State: ACrzQf376N6CqbvAiLTtlUUtE/C3+vZqSwNX02ldXah4lXUyu22FmFM9
-        fAmMoTQCxNMS2SI9sqz76vAP3g==
-X-Google-Smtp-Source: AMsMyM4UCVkUuJlIWCzIoLcjoOrjvEbZNm7U4braBDAIgp5TxPj0szTxk92o8GSPD6WK1CcXL2nSfg==
-X-Received: by 2002:ae9:eb04:0:b0:6cb:d287:d6d4 with SMTP id b4-20020ae9eb04000000b006cbd287d6d4mr20476883qkg.310.1663783746781;
-        Wed, 21 Sep 2022 11:09:06 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id o10-20020ac841ca000000b00339163a06fcsm2075049qtm.6.2022.09.21.11.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 11:09:05 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ob49g-001Gq7-T9;
-        Wed, 21 Sep 2022 15:09:04 -0300
-Date:   Wed, 21 Sep 2022 15:09:04 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org,
-        gwendal@chromium.org, Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        apronin@chromium.org, dlunev@google.com, rjw@rjwysocki.net,
-        linux-pm@vger.kernel.org, corbet@lwn.net, jejb@linux.ibm.com,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] Encrypted Hibernation
-Message-ID: <YytTQPOlAC58Bk7W@ziepe.ca>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220920084648.GA17087@duo.ucw.cz>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mInsceIHKGpEA4Fy20VkkW8wh0vIm2v2E7BS4tpCcY0=;
+        b=Km82qcvQWGOD45vqFeIn6v0yx/OuO3secDt6hD5s+UWZKrnP1kNhNMYpR1rxTJddeG
+         9xvbSH2EY1SF43gsvpYoM2c9DePvK9NMSAPuU/Cl8+6gbjb/Mh7sl0gjL7S1i3joI5AG
+         1ynEvKwh528kzHmEyL9m2WyYdSyZC41EYBa6sC42K97lwciqFRDa7rsNo8M0hF/Wn5Ry
+         x9FtBBVLeN1orilKAlfKKyqQfgZRKRKcg/MZNAVaqMPtkNop4o2hd7KusjwFMATzJnDN
+         WUhKDej9JJrPw1IcYSEM3Dml+LgIzndUuBOwBgkW//Q+i/ZwPoPaN5SpkFEtOb1GeE5v
+         g4rQ==
+X-Gm-Message-State: ACrzQf3mgehJ8CeO4B0kaACV6/8rZCEIh+bF23g7dCyzpu2SiBjQE8ud
+        hZL+NScl5N46DzotydqBSROfrkgAAHKqWdWZyJA=
+X-Google-Smtp-Source: AMsMyM50ZihtgJl2kvb/GbiZ4Hptr3ZKNo+2Ha+UPaVH8kR9KCSkJeSdze5aVzpABgPv7+HBBQ/HPmsbKcs+tj2DALU=
+X-Received: by 2002:a05:620a:4008:b0:6ce:8725:cb7 with SMTP id
+ h8-20020a05620a400800b006ce87250cb7mr21224231qko.480.1663784020888; Wed, 21
+ Sep 2022 11:13:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920084648.GA17087@duo.ucw.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <1663294501-6377-1-git-send-email-u0084500@gmail.com>
+In-Reply-To: <1663294501-6377-1-git-send-email-u0084500@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 21 Sep 2022 20:13:29 +0200
+Message-ID: <CAJZ5v0gL_U=FwY8W-A2pGSif6wbvyFUL7WQ2jcqHFgT2ucqY6Q@mail.gmail.com>
+Subject: Re: [RFC] PM: core: Add pm_wakeup_pending check in device suspend_noirq
+To:     cy_huang <u0084500@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, cy_huang@richtek.com,
+        gene_chen@richtek.com, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:46:48AM +0200, Pavel Machek wrote:
-> Hi!
-> 
-> > We are exploring enabling hibernation in some new scenarios. However,
-> > our security team has a few requirements, listed below:
-> > 1. The hibernate image must be encrypted with protection derived from
-> >    both the platform (eg TPM) and user authentication data (eg
-> >    password).
-> > 2. Hibernation must not be a vector by which a malicious userspace can
-> >    escalate to the kernel.
-> 
-> Why is #2 reasonable requirement?
+On Fri, Sep 16, 2022 at 4:15 AM cy_huang <u0084500@gmail.com> wrote:
+>
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> In 'dpm_suspend_noirq', it will do the sychronized_irq to guarantee all
+> irqs are all done, and then do any wakeup flag set.
+>
+> For some peripherial deivces like as I2C/SPI, to speed up the irq handling,
+> it may use 'pm_stay_awake' and really handle in another thread context like
+> as workqueue.
+>
+> But in mem suspend flow, after 'dpm_suspend_noirq" stage, the next
+> 'pm_wakeup_pending' check will be at 'syscore_suspend'.
+>
+> The checkpoint seems too late and cause I2C/SPI fail during 'noirq' to
+> 'syscore_suspend'
 
-These days with kernel lockdown we don't allow userspace to enter the
-kernel
+What exactly do you mean by "fail" here?
 
-> We normally allow userspace with appropriate permissions to update the
-> kernel, for example.
-
-And in a lockdown secure boot environment only a signed kernel can be
-booted in the first place.
-
-A series like this is effectively carrying the secure boot trust
-across the hibernation
-
-Jason
-
+>. But some adapter was already be marked as 'suspended'
+> at 'noirq' callback, any I2C/SPI xfer will return the error flag '-ESHUTDOWN'.
+>
+> After the code trace, it seems all device callback will do 'pm_wakeup_pending'
+> check, except 'noirq'.
+>
+> This patch is to add 'pm_wakeup_pending' check in 'noirq' sage to prevent this
+> kind of usage.
+>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Hi,
+>
+> Is there any rule to define when I2C/SPI host controller need to mark adapter as
+> 'suspended'?
+>
+> I trace 'drivers/i2c/buses'.It seems there's no common rule, Some are 'suspend',
+> others may did it at 'suspend_noirq'.
+>
+> ---
+>  drivers/base/power/main.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index c501392..7cd7dc5 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1210,6 +1210,11 @@ static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool a
+>         if (async_error)
+>                 goto Complete;
+>
+> +       if (pm_wakeup_pending()) {
+> +               async_error = -EBUSY;
+> +               goto Complete;
+> +       }
+> +
+>         if (dev->power.syscore || dev->power.direct_complete)
+>                 goto Complete;
+>
+> --
+> 2.7.4
+>
