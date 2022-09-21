@@ -2,86 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6335BF879
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 10:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CF65BF9A4
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 10:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiIUIAx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Sep 2022 04:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S231302AbiIUIqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Sep 2022 04:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiIUIAu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 04:00:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECC82847;
-        Wed, 21 Sep 2022 01:00:49 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A2926601F3F;
-        Wed, 21 Sep 2022 09:00:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663747248;
-        bh=+67XwHwwwVr9Zy9Tqbi6F11v6db9RC2DSdJJb+2KAFg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dpDnNOEO+DMIu1yXKQmnHpntygMwx1e12LaxutdYdaimetWWIwy7foz7wDU40z3vM
-         Nd3lG58+67iMOvxcchRHkDSstgnRgy1JPghhFsNNCP5XWH0YLwJZ/NJrJcM5wln0KE
-         Fwqf9Hyx8WX0301IWn670STkn+waoXjhec1qNgnKimhxbTwOAIMcdkjkRRpex1wSbh
-         qr4/n7LWVig9ZommdUMWzieQGpzMJQLgCDbNinI34cuS4kKZTRzQ2jWXtea+zokkrx
-         3EcQCYKBwOjZ6/VR9LALPixyXTfon+fXR28vkjdGGIjqBusyOXjREvBdgralwVQfJi
-         W59s+B3omIdaw==
-Message-ID: <66aa53cf-25ed-fc08-f92f-6a0aae48f2e7@collabora.com>
-Date:   Wed, 21 Sep 2022 10:00:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v5 2/4] thermal: mediatek: control buffer enablement
- tweaks
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        with ESMTP id S231466AbiIUIqX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 04:46:23 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9DE8A1FE;
+        Wed, 21 Sep 2022 01:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663749977; x=1695285977;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WBh2EVZ4QSU9Dq3/ASp3Wt8vZVQtrj4URFPR++R12AM=;
+  b=C5z+id/WnD40LUksP0avuExMuGnjDk23BQ40N22KfuXK/dnnK7yg5715
+   xdKm3IwcxLzfTkWR+vdQfAMeLHj1hH3wg1qSQSmaftT+V5ZtKf109FMBi
+   8dlx5hCKqUxwc4uSel0ggjLFprifeC5t04aq0q+cQNLuhvr6XBH46zeVP
+   NRyj3K0jsnfVef3igm6WjvYY/PWf/Znic/Xjxo6+PftdXmHWehwYmXkin
+   HA12Byv+4DvGjI+qJ/r0mbf+s+xwBMcYtaB0otCrF1jlIDKmswOU272TB
+   8CHtwShp4WUZ2CKHJ7S8RWWcs9k24fSB06/lo6mRiukNBRvuDR914V1+H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="363918096"
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="363918096"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:46:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="570447933"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Sep 2022 01:46:13 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oavMy-0003Qb-0t;
+        Wed, 21 Sep 2022 08:46:12 +0000
+Date:   Wed, 21 Sep 2022 16:45:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220920-i350-thermal-up-v5-0-123bc852d199@baylibre.com>
- <20220920-i350-thermal-up-v5-2-123bc852d199@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220920-i350-thermal-up-v5-2-123bc852d199@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v2 3/3] thermal: loongson2: add thermal management support
+Message-ID: <202209211644.16Ox1qeg-lkp@intel.com>
+References: <20220921015605.17078-3-zhuyinbo@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921015605.17078-3-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 20/09/22 17:03, Amjad Ouled-Ameur ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> Add logic in order to be able to turn on the control buffer on MT8365.
-> This change now allows to have control buffer support for MTK_THERMAL_V1,
-> and it allows to define the register offset, and mask used to enable it.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Hi Yinbo,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v6.0-rc6 next-20220920]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/MAINTAINERS-add-maintainer-for-thermal-driver-for-loongson2-SoCs/20220921-095737
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220921/202209211644.16Ox1qeg-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c21dcaa77e2e7514efdb4c97c805b14c9a05ec35
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yinbo-Zhu/MAINTAINERS-add-maintainer-for-thermal-driver-for-loongson2-SoCs/20220921-095737
+        git checkout c21dcaa77e2e7514efdb4c97c805b14c9a05ec35
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thermal/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/loongson2_thermal.c:183:5: warning: no previous prototype for 'loongson2_thermal_remove' [-Wmissing-prototypes]
+     183 | int loongson2_thermal_remove(struct platform_device *pdev)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
 
 
+vim +/loongson2_thermal_remove +183 drivers/thermal/loongson2_thermal.c
+
+   182	
+ > 183	int loongson2_thermal_remove(struct platform_device *pdev)
+   184	{
+   185		struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
+   186		int reg_off = data->id * 2;
+   187	
+   188		/* disable interrupt */
+   189		writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+   190		writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+   191	
+   192		return 0;
+   193	}
+   194	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
