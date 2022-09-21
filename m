@@ -2,54 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CC45DDB72
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 20:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CCD5DEA92
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 20:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiIUSNn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Sep 2022 14:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S230424AbiIUSRu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Sep 2022 14:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiIUSNm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 14:13:42 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63967EFE4;
-        Wed, 21 Sep 2022 11:13:41 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id h28so4607783qka.0;
-        Wed, 21 Sep 2022 11:13:41 -0700 (PDT)
+        with ESMTP id S229727AbiIUSRt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 14:17:49 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E90A3450;
+        Wed, 21 Sep 2022 11:17:46 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id d17so4541708qko.13;
+        Wed, 21 Sep 2022 11:17:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mInsceIHKGpEA4Fy20VkkW8wh0vIm2v2E7BS4tpCcY0=;
-        b=Km82qcvQWGOD45vqFeIn6v0yx/OuO3secDt6hD5s+UWZKrnP1kNhNMYpR1rxTJddeG
-         9xvbSH2EY1SF43gsvpYoM2c9DePvK9NMSAPuU/Cl8+6gbjb/Mh7sl0gjL7S1i3joI5AG
-         1ynEvKwh528kzHmEyL9m2WyYdSyZC41EYBa6sC42K97lwciqFRDa7rsNo8M0hF/Wn5Ry
-         x9FtBBVLeN1orilKAlfKKyqQfgZRKRKcg/MZNAVaqMPtkNop4o2hd7KusjwFMATzJnDN
-         WUhKDej9JJrPw1IcYSEM3Dml+LgIzndUuBOwBgkW//Q+i/ZwPoPaN5SpkFEtOb1GeE5v
-         g4rQ==
-X-Gm-Message-State: ACrzQf3mgehJ8CeO4B0kaACV6/8rZCEIh+bF23g7dCyzpu2SiBjQE8ud
-        hZL+NScl5N46DzotydqBSROfrkgAAHKqWdWZyJA=
-X-Google-Smtp-Source: AMsMyM50ZihtgJl2kvb/GbiZ4Hptr3ZKNo+2Ha+UPaVH8kR9KCSkJeSdze5aVzpABgPv7+HBBQ/HPmsbKcs+tj2DALU=
-X-Received: by 2002:a05:620a:4008:b0:6ce:8725:cb7 with SMTP id
- h8-20020a05620a400800b006ce87250cb7mr21224231qko.480.1663784020888; Wed, 21
- Sep 2022 11:13:40 -0700 (PDT)
+        bh=MgICOmEndpQv6u1SEkzGGT0sq5VCPnzIGdnf/Sw5Y8Q=;
+        b=26kC/16qaKHqFmtgD2QweCEeP9LL8EyK5I/8XqMpuhB9pmzFgh/xJ8qx4vAC4Kmrl+
+         4RmC/w1D+RVwvo7+I0aflnQUFu9f+mkKexZNgq9Sjru2huITMZqZZONi9i5dGPDJoAEO
+         ob3ml7WKgkh9ogIGt8eGtqGd8a43TdzSp5xNT5aljFbJGA/9kWxEDAmulaET8YYvo98b
+         jhVzfRGqXtadzGoLO3s7Fp+8DCbenKboct0Wx5ql+STy/vWlrX26Kt7aUe4oT+zWrrsy
+         LzvP1GZStwOvKpldCPuzayUvsYouLtHRCFYBsL/MWDrhPoshABaFUich9sdBcHeG04g/
+         eZEg==
+X-Gm-Message-State: ACrzQf0pTxnvrAY5DF4akETBKcL09nlSaODE6bVrkfC5zhSvDfED/byM
+        1aQjo8p/r01e0WAde6Kf5uXZrJntgmdFMrs2RMEEnV6t
+X-Google-Smtp-Source: AMsMyM4VKFt4WAhZKQ6jLHvXP5jNyNMgK5uPfn0ipO5XDCuHbBOr9JesQlnyxanLUcnCOJUZ2+W+50iJurgPQFXFyTg=
+X-Received: by 2002:a37:a907:0:b0:6cb:be29:ac72 with SMTP id
+ s7-20020a37a907000000b006cbbe29ac72mr20929641qke.505.1663784265716; Wed, 21
+ Sep 2022 11:17:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <1663294501-6377-1-git-send-email-u0084500@gmail.com>
-In-Reply-To: <1663294501-6377-1-git-send-email-u0084500@gmail.com>
+References: <20220920060826.3631210-1-chao.qin@intel.com>
+In-Reply-To: <20220920060826.3631210-1-chao.qin@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 21 Sep 2022 20:13:29 +0200
-Message-ID: <CAJZ5v0gL_U=FwY8W-A2pGSif6wbvyFUL7WQ2jcqHFgT2ucqY6Q@mail.gmail.com>
-Subject: Re: [RFC] PM: core: Add pm_wakeup_pending check in device suspend_noirq
-To:     cy_huang <u0084500@gmail.com>
+Date:   Wed, 21 Sep 2022 20:17:34 +0200
+Message-ID: <CAJZ5v0jmt7BTkmJZad9-7cC4xCc1W3iw1vb2CfOq1rUz-P6tOw@mail.gmail.com>
+Subject: Re: [PATCH] powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
+To:     chao.qin@intel.com
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, cy_huang@richtek.com,
-        gene_chen@richtek.com, Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        paul.mei@intel.com, lili.li@intel.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -61,64 +56,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 4:15 AM cy_huang <u0084500@gmail.com> wrote:
+On Tue, Sep 20, 2022 at 8:19 AM <chao.qin@intel.com> wrote:
 >
-> From: ChiYuan Huang <cy_huang@richtek.com>
+> From: Chao Qin <chao.qin@intel.com>
 >
-> In 'dpm_suspend_noirq', it will do the sychronized_irq to guarantee all
-> irqs are all done, and then do any wakeup flag set.
+> When value < time_unit, the parameter of ilog2() will be zero and
+> the return value is -1. u64(-1) is too large for shift exponent
+> and then will trigger shift-out-of-bounds:
 >
-> For some peripherial deivces like as I2C/SPI, to speed up the irq handling,
-> it may use 'pm_stay_awake' and really handle in another thread context like
-> as workqueue.
+> shift exponent 18446744073709551615 is too large for 32-bit type 'int'
+> Call Trace:
+>  rapl_compute_time_window_core
+>  rapl_write_data_raw
+>  set_time_window
+>  store_constraint_time_window_us
 >
-> But in mem suspend flow, after 'dpm_suspend_noirq" stage, the next
-> 'pm_wakeup_pending' check will be at 'syscore_suspend'.
->
-> The checkpoint seems too late and cause I2C/SPI fail during 'noirq' to
-> 'syscore_suspend'
-
-What exactly do you mean by "fail" here?
-
->. But some adapter was already be marked as 'suspended'
-> at 'noirq' callback, any I2C/SPI xfer will return the error flag '-ESHUTDOWN'.
->
-> After the code trace, it seems all device callback will do 'pm_wakeup_pending'
-> check, except 'noirq'.
->
-> This patch is to add 'pm_wakeup_pending' check in 'noirq' sage to prevent this
-> kind of usage.
->
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: Chao Qin <chao.qin@intel.com>
+> Acked-by: Zhang Rui <rui.zhang@intel.com>
 > ---
-> Hi,
+>  drivers/powercap/intel_rapl_common.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> Is there any rule to define when I2C/SPI host controller need to mark adapter as
-> 'suspended'?
->
-> I trace 'drivers/i2c/buses'.It seems there's no common rule, Some are 'suspend',
-> others may did it at 'suspend_noirq'.
->
-> ---
->  drivers/base/power/main.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index c501392..7cd7dc5 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -1210,6 +1210,11 @@ static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool a
->         if (async_error)
->                 goto Complete;
->
-> +       if (pm_wakeup_pending()) {
-> +               async_error = -EBUSY;
-> +               goto Complete;
-> +       }
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 21d624f9f5fb..bf91248630c3 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -994,6 +994,9 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
+>                 y = value & 0x1f;
+>                 value = (1 << y) * (4 + f) * rp->time_unit / 4;
+>         } else {
+> +               if (value < rp->time_unit)
+> +                       return 0;
 > +
->         if (dev->power.syscore || dev->power.direct_complete)
->                 goto Complete;
->
+>                 do_div(value, rp->time_unit);
+>                 y = ilog2(value);
+>                 f = div64_u64(4 * (value - (1 << y)), 1 << y);
 > --
-> 2.7.4
->
+
+Applied as 6.1 material, thanks!
