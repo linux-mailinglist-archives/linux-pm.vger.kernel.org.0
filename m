@@ -2,106 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863465BF108
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 01:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A7E5BF2ED
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 03:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiITXY1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Sep 2022 19:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S231428AbiIUB2L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Sep 2022 21:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiITXY0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 19:24:26 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B516575482
-        for <linux-pm@vger.kernel.org>; Tue, 20 Sep 2022 16:24:24 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id c198so4147838pfc.13
-        for <linux-pm@vger.kernel.org>; Tue, 20 Sep 2022 16:24:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=YBxKYtku/8oBqXa6wknfhjy5g8vzVr4YX5LTwcm1bbI=;
-        b=gD+f9UOZYo3ekJbZUpFYgJ/HfGJ3fd5gvcLeDrzeVaBYB8VWTCKUuiMS0S396sBJ6X
-         KpDzMKtkwKRdJNS6Fbjyx6EOV6BmQStq678NppE46oVHcCnQ2pGndSnsbyZDK+Ejy+Qj
-         EtfxzfsAymKrFf4r4Wv/XpQ48uxJNUbG/MkkM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=YBxKYtku/8oBqXa6wknfhjy5g8vzVr4YX5LTwcm1bbI=;
-        b=xSet6ywCdEqXYo66HCoUbxW6yAWWIACC70IAG2Bwbb8Wf6vAXmq33XD7VtPwVtnWdo
-         Pm0v3ufjkxgyz6qEgKNAmyj7hXJLt2gGr3GVrTLigWbmzC4Mqm48cg5V4PIvPUfcLdZ8
-         GgAVJx6QupUshdYg/P4ff2KEbKY92doCNMRtSl/75tzZzJpeSndKt0d2V1V+sw9uLjP5
-         dF5h3sgAIsix0AUKLNhwMwOuogGUi7rnV/rNeurnED8bppRNwJ2+nMkwuyvApBbVjYEK
-         fGws3TddlMljqf6d4gVgMvHnoD6KL/m2VdUYXHy0dCTjGpDnmlytsueljNcEe3gKeTln
-         XUsQ==
-X-Gm-Message-State: ACrzQf0ywqhnubCZOM7XjgqM4Sye1y8oyUcvWvML3KuIVhk0vVR8/5dM
-        6YmkY7H98uDH1VJ9qSbwf+adJg==
-X-Google-Smtp-Source: AMsMyM5uBrWLdMDVSDXHfRBiUgynAOmM97uKnPLCvt5fOVHCz/I7t0Kb31PyQDclJDkq7Bc00gKLmw==
-X-Received: by 2002:a65:6742:0:b0:43a:827d:c0 with SMTP id c2-20020a656742000000b0043a827d00c0mr7944368pgu.537.1663716264218;
-        Tue, 20 Sep 2022 16:24:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b20-20020a6567d4000000b0042b291a89bfsm536149pgs.11.2022.09.20.16.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 16:24:23 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 16:24:22 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, apronin@chromium.org,
-        dlunev@google.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        corbet@lwn.net, jejb@linux.ibm.com, Hao Wu <hao.wu@rubrik.com>,
-        Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, axelj <axelj@axis.com>
-Subject: Re: [PATCH v2 10/10] PM: hibernate: seal the encryption key with a
- PCR policy
-Message-ID: <202209201620.A886373@keescook>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.10.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
+        with ESMTP id S231411AbiIUB1W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Sep 2022 21:27:22 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5018165A2
+        for <linux-pm@vger.kernel.org>; Tue, 20 Sep 2022 18:27:05 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXLKp48FwzpStB;
+        Wed, 21 Sep 2022 09:24:14 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by dggpeml500024.china.huawei.com
+ (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
+ 2022 09:27:02 +0800
+From:   Yuan Can <yuancan@huawei.com>
+To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>, <rui.zhang@intel.com>,
+        <linux-pm@vger.kernel.org>
+CC:     <yuancan@huawei.com>
+Subject: [PATCH] thermal/drivers/hisilicon: Use dev_err_probe() helper
+Date:   Wed, 21 Sep 2022 01:24:37 +0000
+Message-ID: <20220921012437.20695-1-yuancan@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823152108.v2.10.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:25:26PM -0700, Evan Green wrote:
-> The key blob is not secret, and by default the TPM will happily unseal
-> it regardless of system state. We can protect against that by sealing
-> the secret with a PCR policy - if the current PCR state doesn't match,
-> the TPM will refuse to release the secret. For now let's just seal it to
-> PCR 23. In the long term we may want a more flexible policy around this,
-> such as including PCR 7 for PCs or 0 for Chrome OS.
-> 
-> Sourced-from: Matthew Garrett <mjg59@google.com>
+dev_err() can be replace with dev_err_probe() which will check if error
+code is -EPROBE_DEFER.
 
-If it's a total rewrite, I'd say use:
+Signed-off-by: Yuan Can <yuancan@huawei.com>
+---
+ drivers/thermal/hisi_thermal.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Suggested-by: Matthew Garrett <...>
-Link: https://lore.kernel.org/of/what/it/was/based/on
-
-If it's built on an existing patch, I'd say use:
-
-Co-developed-by: Matthew Garrett <...>
-Signed-off-by: Matthew Garrett <...>
-
-But I defer to what Matthew thinks. :)
-
-Also, if you don't hear from Matthew, maybe ping his mjg59@srcf.ucam.org
-address.
-
--Kees
-
+diff --git a/drivers/thermal/hisi_thermal.c b/drivers/thermal/hisi_thermal.c
+index d6974db7aaf7..e44f4d9ae7b8 100644
+--- a/drivers/thermal/hisi_thermal.c
++++ b/drivers/thermal/hisi_thermal.c
+@@ -394,9 +394,8 @@ static int hi6220_thermal_probe(struct hisi_thermal_data *data)
+ 	data->clk = devm_clk_get(dev, "thermal_clk");
+ 	if (IS_ERR(data->clk)) {
+ 		ret = PTR_ERR(data->clk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "failed to get thermal clk: %d\n", ret);
+-		return ret;
++		return dev_err_probe(dev, ret,
++				     "failed to get thermal clk: %d\n", ret);
+ 	}
+ 
+ 	data->sensor = devm_kzalloc(dev, sizeof(*data->sensor), GFP_KERNEL);
 -- 
-Kees Cook
+2.17.1
+
