@@ -2,49 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CCD5DEA92
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 20:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4338F5E4F69
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 20:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbiIUSRu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Sep 2022 14:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
+        id S229581AbiIUS27 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Sep 2022 14:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiIUSRt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 14:17:49 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E90A3450;
-        Wed, 21 Sep 2022 11:17:46 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id d17so4541708qko.13;
-        Wed, 21 Sep 2022 11:17:46 -0700 (PDT)
+        with ESMTP id S229437AbiIUS26 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 14:28:58 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0547A1D58;
+        Wed, 21 Sep 2022 11:28:57 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id cj27so4720892qtb.7;
+        Wed, 21 Sep 2022 11:28:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=MgICOmEndpQv6u1SEkzGGT0sq5VCPnzIGdnf/Sw5Y8Q=;
-        b=26kC/16qaKHqFmtgD2QweCEeP9LL8EyK5I/8XqMpuhB9pmzFgh/xJ8qx4vAC4Kmrl+
-         4RmC/w1D+RVwvo7+I0aflnQUFu9f+mkKexZNgq9Sjru2huITMZqZZONi9i5dGPDJoAEO
-         ob3ml7WKgkh9ogIGt8eGtqGd8a43TdzSp5xNT5aljFbJGA/9kWxEDAmulaET8YYvo98b
-         jhVzfRGqXtadzGoLO3s7Fp+8DCbenKboct0Wx5ql+STy/vWlrX26Kt7aUe4oT+zWrrsy
-         LzvP1GZStwOvKpldCPuzayUvsYouLtHRCFYBsL/MWDrhPoshABaFUich9sdBcHeG04g/
-         eZEg==
-X-Gm-Message-State: ACrzQf0pTxnvrAY5DF4akETBKcL09nlSaODE6bVrkfC5zhSvDfED/byM
-        1aQjo8p/r01e0WAde6Kf5uXZrJntgmdFMrs2RMEEnV6t
-X-Google-Smtp-Source: AMsMyM4VKFt4WAhZKQ6jLHvXP5jNyNMgK5uPfn0ipO5XDCuHbBOr9JesQlnyxanLUcnCOJUZ2+W+50iJurgPQFXFyTg=
-X-Received: by 2002:a37:a907:0:b0:6cb:be29:ac72 with SMTP id
- s7-20020a37a907000000b006cbbe29ac72mr20929641qke.505.1663784265716; Wed, 21
- Sep 2022 11:17:45 -0700 (PDT)
+        bh=O9UTDnRHflfsX+CFhFUlYBP0gI2mmaMDwE85Cy4YTjc=;
+        b=TwD3KXA9MaN9HL/v8qJDLpdwuz9xNt1KgB6EzcaDsufdhrqN51n6jcubQzawrqCkUn
+         LBXwij/Qb/54t51XYXQyVmSxrp8GLr84za5bE6obS1DWGbbw1O7NamHcKOFNsDEiNh/L
+         S0h58Chhv74HXS5O8wDab3/eswwDMn/bnGz7L0/DPBgsl6BMrOsHF+lHO1jRmoDhOYJW
+         Pj1sqdCHLw+dZ6AbCmEY10VS0ODp2ammReDx6f350w8ltb35dUAlMq/gQmjkp/qaclou
+         BlljJNx5KY3KwR+6m7/LZdacH1T4st1jJ5aLWMa2dSFrHl+MTWK75IHGHQOxtVvv9p8k
+         MZsQ==
+X-Gm-Message-State: ACrzQf3QF6wn+7cAg/P4fE6Lxx53VncunlSTiZxhKqjcfHe0qy8G3aHn
+        ruvYJRX6AW7BQC12VBhRFLSkk9vN3alMx+Vhe/xarkH3
+X-Google-Smtp-Source: AMsMyM6gZl77XOFOJuPFhAH/SoYbIKYFNO163WyNcm1yzR1Ck0AopH+l5c0bpp7dPIqwSMZ6WqjH+0oK954Q5XQ3zj4=
+X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
+ hj10-20020a05622a620a00b0035cbf9e8748mr24946021qtb.494.1663784936806; Wed, 21
+ Sep 2022 11:28:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220920060826.3631210-1-chao.qin@intel.com>
-In-Reply-To: <20220920060826.3631210-1-chao.qin@intel.com>
+References: <20220920110657.1948320-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20220920110657.1948320-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 21 Sep 2022 20:17:34 +0200
-Message-ID: <CAJZ5v0jmt7BTkmJZad9-7cC4xCc1W3iw1vb2CfOq1rUz-P6tOw@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
-To:     chao.qin@intel.com
+Date:   Wed, 21 Sep 2022 20:28:45 +0200
+Message-ID: <CAJZ5v0gWxtm195_SC+Ak+CYRng0GLU4JOfRjiuFtPyVxA-fBVQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/intel_powerclamp: Fix bug for smp_processor_id
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        paul.mei@intel.com, lili.li@intel.com
+        Chen Yu <yu.c.chen@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,41 +58,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 8:19 AM <chao.qin@intel.com> wrote:
+On Tue, Sep 20, 2022 at 1:07 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> From: Chao Qin <chao.qin@intel.com>
+> When CPU 0 is offline and intel_powerclamp is used to inject
+> idle, it generates kernel BUG:
 >
-> When value < time_unit, the parameter of ilog2() will be zero and
-> the return value is -1. u64(-1) is too large for shift exponent
-> and then will trigger shift-out-of-bounds:
->
-> shift exponent 18446744073709551615 is too large for 32-bit type 'int'
+> BUG: using smp_processor_id() in preemptible [00000000] code: bash/15687
+> caller is debug_smp_processor_id+0x17/0x20
+> CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
 > Call Trace:
->  rapl_compute_time_window_core
->  rapl_write_data_raw
->  set_time_window
->  store_constraint_time_window_us
+> <TASK>
+> dump_stack_lvl+0x49/0x63
+> dump_stack+0x10/0x16
+> check_preemption_disabled+0xdd/0xe0
+> debug_smp_processor_id+0x17/0x20
+> powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
+> ...
+> ...
 >
-> Signed-off-by: Chao Qin <chao.qin@intel.com>
-> Acked-by: Zhang Rui <rui.zhang@intel.com>
+> Here CPU 0 is the control CPU by default and changed to the current CPU,
+> if CPU 0 offlined. This check has to be performed under cpus_read_lock(),
+> hence the above warning.
+>
+> Use get_cpu() instead of smp_processor_id() to avoid this BUG.
+>
+> Suggested-by: Chen Yu <yu.c.chen@intel.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
->  drivers/powercap/intel_rapl_common.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/thermal/intel/intel_powerclamp.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 21d624f9f5fb..bf91248630c3 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -994,6 +994,9 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
->                 y = value & 0x1f;
->                 value = (1 << y) * (4 + f) * rp->time_unit / 4;
->         } else {
-> +               if (value < rp->time_unit)
-> +                       return 0;
-> +
->                 do_div(value, rp->time_unit);
->                 y = ilog2(value);
->                 f = div64_u64(4 * (value - (1 << y)), 1 << y);
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index c841ab37e7c6..46cd799af148 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -532,8 +532,10 @@ static int start_power_clamp(void)
+>
+>         /* prefer BSP */
+>         control_cpu = 0;
+> -       if (!cpu_online(control_cpu))
+> -               control_cpu = smp_processor_id();
+> +       if (!cpu_online(control_cpu)) {
+> +               control_cpu = get_cpu();
+> +               put_cpu();
+> +       }
+>
+>         clamping = true;
+>         schedule_delayed_work(&poll_pkg_cstate_work, 0);
 > --
 
-Applied as 6.1 material, thanks!
+Applied as 6.1 material with modified subject, thanks!
