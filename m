@@ -2,276 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAB95BFB91
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 11:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0345BFB9C
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Sep 2022 11:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbiIUJqU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Sep 2022 05:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S231812AbiIUJs0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Sep 2022 05:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiIUJod (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 05:44:33 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2F693238
-        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 02:44:08 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso3407634wmq.2
-        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 02:44:07 -0700 (PDT)
+        with ESMTP id S231845AbiIUJsN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Sep 2022 05:48:13 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7447895E52
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 02:45:31 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id sd10so3940719ejc.2
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 02:45:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=jLn+zEfCM4URHe7bMSEwNlD2QENA2eAivlgbUdbannc=;
-        b=xG1f2CQif+pNWsZ405kq05pJzbYuR72YhBpkdKF14wo+WNlpGgHtvYODC97eKDjwmS
-         iTdViefZEBDvMcMOBNOt9/J++cfbbTM3a3XTkEuIYKdfuf/2DaA2onmVhAJTPDwvqgdg
-         0HXVy2IV3J/LIp92miRAq7h7BtSfl2iQtOSStYHYeWWyRVzdTufFWcICuNYrftOE8nrb
-         ZXHvVWKPnOibLPMeeSzJC2H1FdkhX2lydpq8P/bt24rR2fLb0u2QJD1z3CKOKqRUSRTs
-         LuDQlCfhUZAyJLQfnpbjlJ4N67o2s8gvsOd67vfNjPZ/kGTqBRLr8hxu3D9DvMHSlPfO
-         ki8g==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=qcQnQhLaO6fGinlzAYyFGlxrfQHdXifdne2D0+nwBo8=;
+        b=BtZBIL1KHuomtHqRQXk7130LxJRBG6iEPPC108i/uUc1zv4vtgKCRLoo92bcByFpIF
+         vI0ROss4+TZ0r+d44NYvZKCBsnoPZuAaj06CgUJ7JbIbTHS5sVUVr4LxWDMIW18cS9Bl
+         pieAUjljj9sMT9Hasg62luiSjPpBOsazARnp17BOwJkZeYBc6tUKcrI+m7W7QL2jDWhp
+         nIJDgX1yQ527pxCDbpF1FQo+d5dPY+mc/sTH5NJtyfswXR39RJ+Snip4BC2SultPg1cT
+         pcqBmuDE3fTWldjF7WFhFQPW2KMdJTYPj+AwyAWjg0M1DT25+IKfP54wYaJJpaTXj8ph
+         E+dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=jLn+zEfCM4URHe7bMSEwNlD2QENA2eAivlgbUdbannc=;
-        b=GzS/vxr3orDGxmok+0I7lx4luoYpF15XCgVtPRM16zu+jeZLQgfVB0quF/YwnNr0qX
-         3XXLRdwW3v/hLNKal/Y8KvATGGTjuvHzIDkIrWJ24vt3XnMjB2T6KRRmrpTynrAYJP8h
-         3bb7s56MHdBy8lTr+cii1xdyqHY5pTbOkf9Knh/iHz9t8gxFUe90ZenRJStB2jizxzhf
-         Kftjkqh7wlGio9Ys2EcYevsCJ0/6qkJJVLBIi2zQfXrEint5ldJpVba1HCVrt8+r7Bhi
-         SyOu1w7palEO4au/OTfhJFuPEXLekFk+zEg+941NCUOzZ7BQRo3E4dv9GBAs6f2vn0cv
-         MvPQ==
-X-Gm-Message-State: ACrzQf1asPQM2276JNq560blS70SGkQOL9QIx1CLNqKag7oBpTQsLmq1
-        wlmdpGWvVv+1IIBEh6kwd6Ee2Q==
-X-Google-Smtp-Source: AMsMyM60i+9Xvh/4CXGn8V/CfG288kD+DUyA5IRHPsj4urHE8ej8o9H5Ln7Ma7h6DzKUZ6Z09dQg4w==
-X-Received: by 2002:a05:600c:3d8e:b0:3b4:a61c:52cc with SMTP id bi14-20020a05600c3d8e00b003b4a61c52ccmr5472880wmb.7.1663753446060;
-        Wed, 21 Sep 2022 02:44:06 -0700 (PDT)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id r123-20020a1c2b81000000b003a62052053csm2763917wmr.18.2022.09.21.02.44.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 02:44:05 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH v4 30/30] thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-Date:   Wed, 21 Sep 2022 11:42:43 +0200
-Message-Id: <20220921094244.606948-31-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220921094244.606948-1-daniel.lezcano@linaro.org>
-References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=qcQnQhLaO6fGinlzAYyFGlxrfQHdXifdne2D0+nwBo8=;
+        b=mlfC+jYn7AwdtRqgsWm173oltLXvcsBdldHCZyV6llD2WVaKIUD9xatvMJFzDXk1/B
+         qrAir9cCDYLvDanjZox4ZslJc5xz6Nrkk/x0hx1i4bq0gmdPvtl5oMiy5dkHINetsqf9
+         +PWveKlQdiegTCfxMxhC9PhwXRqa4g+m4RZgvvHp4KGP/m7JB9uhcvRlwQ22LWJm98WY
+         C1PzkYspQnba73DmPFjZO/Bij/oUXFLo+zVh/qnB4JyNLTlyLaLj1uB9GKZMWb2MymGA
+         xuIu2yLmF9vkJvD506plyU/7AsDXkjagPEtoAl12YdN6dgQ/z/6hDudRXyVVKCu7DRG+
+         JGzw==
+X-Gm-Message-State: ACrzQf3+8ipFnWiBHtZs7OqHP1FEWk8d7hNCEycvVf9TbqLfHzTFv8rN
+        4hqShPQCS+m6Wk4jA8oCFBU++fWOOpbnV9cqbsNfsQ==
+X-Google-Smtp-Source: AMsMyM5SFTgTYiX8ufQU/7T9uAxbJb2nQtH8wwq24aVCveMh7Phf3u4mkG9wFMawfgPj/2o3XFsj+LE+O93wVevFl1c=
+X-Received: by 2002:a17:906:fd8b:b0:779:dcbe:3a9d with SMTP id
+ xa11-20020a170906fd8b00b00779dcbe3a9dmr20557155ejb.235.1663753505689; Wed, 21
+ Sep 2022 02:45:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-3-bchihi@baylibre.com>
+ <716d6471-f0e2-489e-5f9e-9e38e9e7953a@collabora.com> <CAGuA+orxfcycwcUMpLe+dkjnXPQkELQsz0vBggGKTQ04XRGc+g@mail.gmail.com>
+ <2073b6bd-a4bd-4ab5-300d-2ce989e25d5f@linaro.org>
+In-Reply-To: <2073b6bd-a4bd-4ab5-300d-2ce989e25d5f@linaro.org>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 21 Sep 2022 11:44:29 +0200
+Message-ID: <CAGuA+or40GSH2QvVw033+KsGC-B9D6nRYj8zXvTs91iNDqgr8Q@mail.gmail.com>
+Subject: Re: [PATCH v9,2/7] dt-bindings: thermal: Add dt-binding document for
+ LVTS thermal controllers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, rafael@kernel.org,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
+Hi Krzysztof, Angelo,
 
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
+Thank you for the suggestions.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 120 ++++++++++---------
- 1 file changed, 66 insertions(+), 54 deletions(-)
+I tested this (below) and it worked without any problem.
+"make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml"
+"make dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml"
+Should I keep it like this and submit it in v10?
 
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index a0e234fce71a..e7c3b78d959c 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -53,6 +53,7 @@ struct zone_device {
- 	u32				msr_pkg_therm_high;
- 	struct delayed_work		work;
- 	struct thermal_zone_device	*tzone;
-+	struct thermal_trip		*trips;
- 	struct cpumask			cpumask;
- };
- 
-@@ -138,40 +139,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
- 	return -EINVAL;
- }
- 
--static int sys_get_trip_temp(struct thermal_zone_device *tzd,
--			     int trip, int *temp)
--{
--	struct zone_device *zonedev = tzd->devdata;
--	unsigned long thres_reg_value;
--	u32 mask, shift, eax, edx;
--	int ret;
--
--	if (trip >= MAX_NUMBER_OF_TRIPS)
--		return -EINVAL;
--
--	if (trip) {
--		mask = THERM_MASK_THRESHOLD1;
--		shift = THERM_SHIFT_THRESHOLD1;
--	} else {
--		mask = THERM_MASK_THRESHOLD0;
--		shift = THERM_SHIFT_THRESHOLD0;
--	}
--
--	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
--			   &eax, &edx);
--	if (ret < 0)
--		return ret;
--
--	thres_reg_value = (eax & mask) >> shift;
--	if (thres_reg_value)
--		*temp = zonedev->tj_max - thres_reg_value * 1000;
--	else
--		*temp = THERMAL_TEMP_INVALID;
--	pr_debug("sys_get_trip_temp %d\n", *temp);
--
--	return 0;
--}
--
- static int
- sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- {
-@@ -212,18 +179,9 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- 			l, h);
- }
- 
--static int sys_get_trip_type(struct thermal_zone_device *thermal, int trip,
--			     enum thermal_trip_type *type)
--{
--	*type = THERMAL_TRIP_PASSIVE;
--	return 0;
--}
--
- /* Thermal zone callback registry */
- static struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
--	.get_trip_temp = sys_get_trip_temp,
--	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
- };
- 
-@@ -328,6 +286,48 @@ static int pkg_thermal_notify(u64 msr_val)
- 	return 0;
- }
- 
-+static struct thermal_trip *pkg_temp_thermal_trips_init(int cpu, int tj_max, int num_trips)
-+{
-+	struct thermal_trip *trips;
-+	unsigned long thres_reg_value;
-+	u32 mask, shift, eax, edx;
-+	int ret, i;
-+
-+	trips = kzalloc(sizeof(*trips) * num_trips, GFP_KERNEL);
-+	if (!trips)
-+		return ERR_PTR(-ENOMEM);
-+	
-+	for (i = 0; i < num_trips; i++) {
-+
-+		if (i) {
-+			mask = THERM_MASK_THRESHOLD1;
-+			shift = THERM_SHIFT_THRESHOLD1;
-+		} else {
-+			mask = THERM_MASK_THRESHOLD0;
-+			shift = THERM_SHIFT_THRESHOLD0;
-+		}
-+
-+		ret = rdmsr_on_cpu(cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
-+				   &eax, &edx);
-+		if (ret < 0) {
-+			kfree(trips);
-+			return ERR_PTR(ret);
-+		}
-+
-+		thres_reg_value = (eax & mask) >> shift;
-+
-+		trips[i].temperature = thres_reg_value ?
-+			tj_max - thres_reg_value * 1000 : THERMAL_TEMP_INVALID;
-+
-+		trips[i].type = THERMAL_TRIP_PASSIVE;
-+		
-+		pr_debug("%s: cpu=%d, trip=%d, temp=%d\n",
-+			 __func__, cpu, i, trips[i].temperature);
-+	}
-+
-+	return trips;
-+}
-+
- static int pkg_temp_thermal_device_add(unsigned int cpu)
- {
- 	int id = topology_logical_die_id(cpu);
-@@ -353,24 +353,27 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	if (!zonedev)
- 		return -ENOMEM;
- 
-+	zonedev->trips = pkg_temp_thermal_trips_init(cpu, tj_max, thres_count);
-+	if (IS_ERR(zonedev->trips)) {
-+		err = PTR_ERR(zonedev->trips);
-+		goto out_kfree_zonedev;
-+	}
-+	
- 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
- 	zonedev->cpu = cpu;
- 	zonedev->tj_max = tj_max;
--	zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
--			thres_count,
-+	zonedev->tzone = thermal_zone_device_register_with_trips("x86_pkg_temp",
-+			zonedev->trips, thres_count,
- 			(thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
- 			zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
- 	if (IS_ERR(zonedev->tzone)) {
- 		err = PTR_ERR(zonedev->tzone);
--		kfree(zonedev);
--		return err;
-+		goto out_kfree_trips;
- 	}
- 	err = thermal_zone_device_enable(zonedev->tzone);
--	if (err) {
--		thermal_zone_device_unregister(zonedev->tzone);
--		kfree(zonedev);
--		return err;
--	}
-+	if (err)
-+		goto out_unregister_tz;
-+
- 	/* Store MSR value for package thermal interrupt, to restore at exit */
- 	rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev->msr_pkg_therm_low,
- 	      zonedev->msr_pkg_therm_high);
-@@ -379,7 +382,14 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	raw_spin_lock_irq(&pkg_temp_lock);
- 	zones[id] = zonedev;
- 	raw_spin_unlock_irq(&pkg_temp_lock);
--	return 0;
-+
-+out_unregister_tz:	
-+	thermal_zone_device_unregister(zonedev->tzone);
-+out_kfree_trips:
-+	kfree(zonedev->trips);
-+out_kfree_zonedev:
-+	kfree(zonedev);
-+	return err;
- }
- 
- static int pkg_thermal_cpu_offline(unsigned int cpu)
-@@ -463,8 +473,10 @@ static int pkg_thermal_cpu_offline(unsigned int cpu)
- 	raw_spin_unlock_irq(&pkg_temp_lock);
- 
- 	/* Final cleanup if this is the last cpu */
--	if (lastcpu)
-+	if (lastcpu) {
-+		kfree(zonedev->trips);
- 		kfree(zonedev);
-+	}
- 	return 0;
- }
- 
--- 
-2.34.1
+[...]
+nvmem-cells:
+  minItems: 1
+  items:
+    - description: Calibration eFuse data 1 for LVTS
+    - description: Calibration eFuse data 2 for LVTS
 
+nvmem-cell-names:
+  minItems: 1
+  items:
+    - const: lvts-calib-data-1
+    - const: lvts-calib-data-2
+
+"#thermal-sensor-cells":
+  const: 1
+
+allOf:
+  - $ref: thermal-sensor.yaml#
+
+- if:
+  properties:
+    compatible:
+      contains:
+        enum:
+          - mediatek,mt8192-lvts-ap
+          - mediatek,mt8192-lvts-mcu
+  then:
+    properties:
+      nvmem-cells:
+        maxItems: 1
+
+     nvmem-cell-names:
+       maxItems: 1
+
+  - if:
+    properties:
+      compatible:
+        contains:
+          enum:
+           - mediatek,mt8195-lvts-ap
+           - mediatek,mt8195-lvts-mcu
+  then:
+    properties:
+      nvmem-cells:
+        maxItems: 2
+
+     nvmem-cell-names:
+       maxItems: 2
+[...]
+
+Best regards,
+Balsam
