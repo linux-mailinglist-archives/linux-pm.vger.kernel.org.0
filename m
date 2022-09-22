@@ -2,87 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBA35E5D42
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 10:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2775E5F26
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 11:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiIVISC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 04:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        id S229972AbiIVJ61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 05:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiIVIR4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 04:17:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC503CD1F6;
-        Thu, 22 Sep 2022 01:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qFznKR8LE1hs5qx50v8ZXbR+2FR7aIXxVNAOIFHaJP0=; b=YrrcmJKNHKRAJseBmsEUuL5P3G
-        tfTSPLqLeBO5/WHziL3uhgDlFMhOTjewoCtJnvnm6bdXdgbH0xr1d+fTXzDrom99AjhX+LT0V+AcL
-        0xZC/tXBVWZmm+0O3PAC+Piucm3c27rkwOYeiRXVsa9gIxoL0JcOI5iVr0/uHa28/Gtovc3QLM/Wp
-        GWT1bUpF3x/83YfLRs4nZW9i6azPMdGfQy+gNAoBsr/RQ2jBi7V7R9+vBfo4jt+qm+mq9apy5OORX
-        7RBPsus6LHbfNubhkk64o8Xtw+Y1YCjdrXjA3mq5T5NCoDdGA+4a4T2bJHHrU8T1vxXguuxsEXk4I
-        iOuArs4g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1obHOP-006s1C-U4; Thu, 22 Sep 2022 08:17:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8C4413001FD;
-        Thu, 22 Sep 2022 10:17:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3A529200FBDFB; Thu, 22 Sep 2022 10:17:05 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 10:17:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, andi@lisas.de,
-        puwen@hygon.cn, mario.limonciello@amd.com, rui.zhang@intel.com,
-        gpiccoli@igalia.com, daniel.lezcano@linaro.org,
-        ananth.narayan@amd.com, gautham.shenoy@amd.com,
-        Calvin Ong <calvin.ong@amd.com>, stable@vger.kernel.org,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Message-ID: <YywaAcTdLSuDlRfl@hirez.programming.kicks-ass.net>
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
- <YysnE8rcZAOOj28A@hirez.programming.kicks-ass.net>
- <YytqfVUCWfv0XyZO@zn.tnic>
+        with ESMTP id S230514AbiIVJ6S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 05:58:18 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABAFBF52;
+        Thu, 22 Sep 2022 02:58:17 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id t70so8636777pgc.5;
+        Thu, 22 Sep 2022 02:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=mlVUe7l2F/vn3OtB4sD70BapoKrCHXhr5Co6S55gUs8=;
+        b=phU2ntpVCueSAj/8cPKMMPYoxyT8QvvZCsKgV3NaB8AVN7BkMyanpoyrZRgE1ygMxm
+         qFmHtayg4CItXpNclyrKGQOm+N7qztt6yV4uWepO6aO1XZjhdi2aaNPGBM9ba4IZxjfv
+         MbdUPLd90T8FXlJCHhagU4F9E7U9mhisnWvDVerMGtRQ1jlcghh8D1GGYJUGLjsAPohD
+         8IwPssVUARhnt+j9Je4FsVIt24yG/GlD9N4wYgh2I3WkA2/AuzZ92Fs2lYw47c1jicSi
+         tEjqxibJ317gu0zgvM7uwkJqZXIyFqniecKVjUBK+4r9Ja1exDtGdRX7hlSCDyjPbjRO
+         otlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=mlVUe7l2F/vn3OtB4sD70BapoKrCHXhr5Co6S55gUs8=;
+        b=ShIO5q4vmQaMyEcbnxjqBXAnAz70cYoE080ygcgoB2+e7+N5/Ox3MXwU0h7cDqBWUo
+         JhU5CCfH6DL2MgZ5mWmpv94Urd5p5s3rfPjUZUhAbT/HE3iSSl21HXe62CJnslJgsRNC
+         HVpuZubCJZIy2AhLMDPoi8KBfAiS1GyzTPBGUpJE2SnC0mryhcUMHb2L8RLNNyRSwtYQ
+         cxUqiFURaIfk1LPkenTHH5e5sUPqxf016i4dWMtP7PCoSqRkQLnTAnjcVAuSxFKLBuSi
+         lAN0/NqnRUc+vX6dkFGnpChiWQqw/xOaw+qobPmDIELrGCqog5p5c5yTg3O5rSL9t0Lk
+         u0KQ==
+X-Gm-Message-State: ACrzQf2YSjI0wa0HJm+cvici9rmjXz7f0Sly7gFp9WWuinl+AH5/CSUX
+        8s2Lpc/MzjEr+P6FoCkySd693eYnEyo=
+X-Google-Smtp-Source: AMsMyM4+MlOo982tTNcMFbOk5Y11Q+6T2ezdcAOx8BwSoMhbWYb6/PYAObZL9a2t8WfICQow2nwvVA==
+X-Received: by 2002:a62:1bc8:0:b0:546:c62e:e84 with SMTP id b191-20020a621bc8000000b00546c62e0e84mr2622551pfb.45.1663840696649;
+        Thu, 22 Sep 2022 02:58:16 -0700 (PDT)
+Received: from ?IPV6:2001:b400:e404:66d5:563:faf0:1fe2:f8cc? (2001-b400-e404-66d5-0563-faf0-1fe2-f8cc.emome-ip6.hinet.net. [2001:b400:e404:66d5:563:faf0:1fe2:f8cc])
+        by smtp.gmail.com with ESMTPSA id w22-20020aa79556000000b0053e0d6f353esm3988642pfq.27.2022.09.22.02.58.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 02:58:16 -0700 (PDT)
+Message-ID: <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
+Date:   Thu, 22 Sep 2022 17:58:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YytqfVUCWfv0XyZO@zn.tnic>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next] power: supply: mt6370: Fix Kconfig dependency
+To:     Ren Zhijie <renzhijie2@huawei.com>, sre@kernel.org,
+        andy.shevchenko@gmail.com, chiaen_wu@richtek.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220922023337.15609-1-renzhijie2@huawei.com>
+Content-Language: en-US
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+In-Reply-To: <20220922023337.15609-1-renzhijie2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 09:48:13PM +0200, Borislav Petkov wrote:
-> On Wed, Sep 21, 2022 at 05:00:35PM +0200, Peter Zijlstra wrote:
-> > On Wed, Sep 21, 2022 at 12:06:38PM +0530, K Prateek Nayak wrote:
-> > > Processors based on the Zen microarchitecture support IOPORT based deeper
-> > > C-states. 
-> > 
-> > I've just gotta ask; why the heck are you using IO port based idle
-> > states in 2022 ?!?! You have have MWAIT, right?
+On 9/22/2022 10:33 AM, Ren Zhijie wrote:
+> If CONFIG_IIO is not set,
+> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
+> will be failed, like this:
 > 
-> They have both. And both is Intel technology. And as I'm sure you
-> know AMD can't do their own thing - they kinda have to follow Intel.
-> Unfortunately.
+> drivers/power/supply/mt6370-charger.o: In function `mt6370_chg_mivr_dwork_func':
+> mt6370-charger.c:(.text+0x670): undefined reference to `iio_read_channel_processed'
+> drivers/power/supply/mt6370-charger.o: In function `mt6370_chg_probe':
+> mt6370-charger.c:(.text+0xb43): undefined reference to `devm_iio_channel_get_all'
+> make: *** [vmlinux] Error 1
 > 
-> Are you saying modern Intel chipsets don't do IO-based C-states anymore?
+> To fix this build error, add depends on IIO to config CHARGER_MT6370 dependency.
+> 
+> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> ---
+>   drivers/power/supply/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 591deb82e2c6..62111f4bb093 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -623,6 +623,7 @@ config CHARGER_MT6370
+>   	tristate "MediaTek MT6370 Charger Driver"
+>   	depends on MFD_MT6370
+>   	depends on REGULATOR
+> +	depends on IIO
+>   	select LINEAR_RANGES
+>   	help
+>   	  Say Y here to enable MT6370 Charger Part.
 
-I've no idea what they do, but Linux exclusively uses MWAIT on Intel as
-per intel_idle.c.
+Hi Ren,
 
-MWAIT also cuts down on IPIs because it wakes from the TIF write.
+Thanks for catching this!
 
+Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
+
+-- 
+Best Regards,
+ChiaEn Wu
