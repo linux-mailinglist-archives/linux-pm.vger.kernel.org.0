@@ -2,91 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C32E5E6CC6
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 22:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529795E6E27
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 23:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiIVUK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 16:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S230520AbiIVVTS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 17:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiIVUK1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 16:10:27 -0400
-X-Greylist: delayed 1684 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Sep 2022 13:10:23 PDT
-Received: from rhlx01.hs-esslingen.de (rhlx01.hs-esslingen.de [129.143.116.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF1BC995D;
-        Thu, 22 Sep 2022 13:10:22 -0700 (PDT)
-Received: by rhlx01.hs-esslingen.de (Postfix, from userid 102)
-        id 17836277FBA8; Thu, 22 Sep 2022 22:10:21 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 22:10:21 +0200
-From:   Andreas Mohr <andi@lisas.de>
-To:     Andreas Mohr <andi@lisas.de>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
-        puwen@hygon.cn, mario.limonciello@amd.com, peterz@infradead.org,
-        rui.zhang@intel.com, gpiccoli@igalia.com,
-        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
-        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
-        stable@vger.kernel.org, regressions@lists.linux.dev
-Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Message-ID: <YyzBLc+OFIN2BMz5@rhlx01.hs-esslingen.de>
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
- <20e78a49-25df-c83d-842e-1d624655cfd7@intel.com>
- <0885eecb-042f-3b74-2965-7d657de59953@amd.com>
- <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
- <Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de>
+        with ESMTP id S230517AbiIVVTQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 17:19:16 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4296F110B21
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 14:19:15 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id u132so10518514pfc.6
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 14:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=1TPEKw6ZfZxcb8OW9aQyQDFvakhQrH+jPbGOfotODj8=;
+        b=KhuQv1RlE5pzhaW2Ncp6oBIPecXlXGSFNtn6DBktCsSr5GPX9VKESG1uMfTxlILqzu
+         IqDd2Xik6SSw8k6Z46JnVXkRAUpvG1QxwzLaH6lulE2cccjex0siS8xDsk7hhIL/KPLY
+         JcSK/6Uz+LO8yi4QEr6UG3H3jKj0zn+PgtYV0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=1TPEKw6ZfZxcb8OW9aQyQDFvakhQrH+jPbGOfotODj8=;
+        b=k82L3qZzhnaM1s39Eu/g8cKmGHRy5x88T6DV6Hs0k/BuHqFLHJeSq15tZlsH9IBT2p
+         1C2PgZl49vu4iVRihIGH9EA7MjwVUrFQD0TFlGsRx6/GdZ+K7W0uGKkEc9SWBX0cafDl
+         bS2blIxoH/Gkbc9oIKZU3BT+AdxWAbaeoDTbChwNyAMI0tHjFmECD31606juKI2rO6RQ
+         LK0+9o1LQyxnelaTDnBwY4QK0A8fMWGY1nrO1da2oug5o0H6fNXoycfmgu1QZV6IiHK3
+         gu/RbH9RpUqBFFkCVVfduMJr/3+XcTxEdd9cAQJObpjouVTBF/eX+d3MXbIlEtySGL1S
+         uXHg==
+X-Gm-Message-State: ACrzQf0Ab1ISNvCIsXy5G2XH4477OT4v6FBC1TzsdOO3JgAIbveRHm2O
+        2RP7E+KToWrFI8ayEfc9WpKpMQ==
+X-Google-Smtp-Source: AMsMyM6FtVEeH1ZubQUxEbxyq00UIUEPr3QFAZezIGRjNY1VCOqbP9csB0lrQZyDQ6RjLgknmW/sDQ==
+X-Received: by 2002:a63:6c01:0:b0:429:ea6e:486d with SMTP id h1-20020a636c01000000b00429ea6e486dmr4643809pgc.247.1663881554644;
+        Thu, 22 Sep 2022 14:19:14 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:5321:6ad9:3932:13d8])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902710700b00176ae5c0f38sm4549579pll.178.2022.09.22.14.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 14:19:14 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     stable@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     Alex Elder <elder@linaro.org>, swboyd@chromium.org,
+        Mike Tipton <mdtipton@codeaurora.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [5.10 PATCH] interconnect: qcom: icc-rpmh: Add BCMs to commit list in pre_aggregate
+Date:   Thu, 22 Sep 2022 14:18:03 -0700
+Message-Id: <20220922141725.5.10.1.I791715539cae1355e21827ca738b0b523a4a0f53@changeid>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de>
-X-Priority: none
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 09:42:15PM +0200, Andreas Mohr wrote:
-> So one can see where my profiling effort went
-> (*optimizing* things, not degrading them)
-> --> hints that current Zen3-originating effort is not
-> about a regression in the "regression bug" sense -
-> merely a (albeit rather appreciable/sizeable... congrats!)
-> performance deterioration vs.
-> an optimal (currently non-achieved) software implementation state
-> (also: of PORT-based handling [vs. MWAIT], mind you!).
+From: Mike Tipton <mdtipton@codeaurora.org>
 
-I'd like to add a word of caution here:
+commit b95b668eaaa2574e8ee72f143c52075e9955177e upstream.
 
-AFAIK power management (here: ACPI Cx) handling generally is
-about a painful *tradeoff* between
-achieving best-possible performance (that's
-the respectable Zen3 32MB/s vs. 33MB/s argument) and
-achieving maximum power savings.
-We all know that one can configure the system for
-non-idle mode (idle=poll cmdline?) and
-achieve record numbers in performance (...*and* power consumption - ouch!).
+We're only adding BCMs to the commit list in aggregate(), but there are
+cases where pre_aggregate() is called without subsequently calling
+aggregate(). In particular, in icc_sync_state() when a node with initial
+BW has zero requests. Since BCMs aren't added to the commit list in
+these cases, we don't actually send the zero BW request to HW. So the
+resources remain on unnecessarily.
 
-Current decision/implementation aspects AFAICS:
-- why is the Zen3 config used here choosing
-  less-favourable(?) PORT-based operation mode?
-- Zen3 is said to not have the STPCLK# issue
-  (- but then what about other more modern chipsets?)
+Add BCMs to the commit list in pre_aggregate() instead, which is always
+called even when there are no requests.
 
---> we need to achieve (hopefully sufficiently precisely) a solution which
-takes into account Zen3 STPCLK# improvements while
-preserving "accepted" behaviour/requirements on *all* STPCLK#-hampered chipsets
-("STPCLK# I/O wait is default/traditional handling"?).
+Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+[georgi: remove icc_sync_state for platforms with incomplete support]
+Link: https://lore.kernel.org/r/20211125174751.25317-1-djakov@kernel.org
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+[dianders: dropped sm8350.c which isn't present in 5.10]
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+This should have been included in Alex Elder's request for patches
+picked to 5.10 [1] but it was missed. Let's finally pick it up.
 
-Greetings
+[1] https://lore.kernel.org/r/20220608205415.185248-3-elder@linaro.org
 
-Andreas Mohr
+ drivers/interconnect/qcom/icc-rpmh.c | 10 +++++-----
+ drivers/interconnect/qcom/sm8150.c   |  1 -
+ drivers/interconnect/qcom/sm8250.c   |  1 -
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index f6fae64861ce..27cc5f03611c 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -20,13 +20,18 @@ void qcom_icc_pre_aggregate(struct icc_node *node)
+ {
+ 	size_t i;
+ 	struct qcom_icc_node *qn;
++	struct qcom_icc_provider *qp;
+ 
+ 	qn = node->data;
++	qp = to_qcom_provider(node->provider);
+ 
+ 	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+ 		qn->sum_avg[i] = 0;
+ 		qn->max_peak[i] = 0;
+ 	}
++
++	for (i = 0; i < qn->num_bcms; i++)
++		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+ }
+ EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate);
+ 
+@@ -44,10 +49,8 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+ {
+ 	size_t i;
+ 	struct qcom_icc_node *qn;
+-	struct qcom_icc_provider *qp;
+ 
+ 	qn = node->data;
+-	qp = to_qcom_provider(node->provider);
+ 
+ 	if (!tag)
+ 		tag = QCOM_ICC_TAG_ALWAYS;
+@@ -67,9 +70,6 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+ 	*agg_avg += avg_bw;
+ 	*agg_peak = max_t(u32, *agg_peak, peak_bw);
+ 
+-	for (i = 0; i < qn->num_bcms; i++)
+-		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+-
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(qcom_icc_aggregate);
+diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
+index c76b2c7f9b10..b936196c229c 100644
+--- a/drivers/interconnect/qcom/sm8150.c
++++ b/drivers/interconnect/qcom/sm8150.c
+@@ -627,7 +627,6 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8150",
+ 		.of_match_table = qnoc_of_match,
+-		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
+index cc558fec74e3..40820043c8d3 100644
+--- a/drivers/interconnect/qcom/sm8250.c
++++ b/drivers/interconnect/qcom/sm8250.c
+@@ -643,7 +643,6 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8250",
+ 		.of_match_table = qnoc_of_match,
+-		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
 -- 
-GNU/Linux. It's not the software that's free, it's you.
+2.37.3.998.g577e59143f-goog
+
