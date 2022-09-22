@@ -2,232 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5A85E678B
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 17:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945F85E679D
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 17:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbiIVPu3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 11:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
+        id S231875AbiIVPxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 11:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbiIVPuS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 11:50:18 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB3F95ADD
-        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id q3so10194242pjg.3
-        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=+K8j+06amGtBzqeg3LNqPUQmrr7rn1eOJcYvflTHpZU=;
-        b=lOHQ8lKwbjZvnvS3yQLZcUqXmMeEsdLz6FNSdk+7PMZ7YY/m+r2qhSSiySViGuXDpS
-         cIX5pBPGnOBnVHl2Tor8dhRbEHujEh3n5/qotF3PiI4uiApxJQQuQ43eP64gPDGTDhej
-         2lqiXVbf0UDSzN+d/1zaVyg5z3hsrKD44qJHM=
+        with ESMTP id S231713AbiIVPxa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 11:53:30 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963AD45F6C;
+        Thu, 22 Sep 2022 08:53:29 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id g4so7106536qvo.3;
+        Thu, 22 Sep 2022 08:53:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=+K8j+06amGtBzqeg3LNqPUQmrr7rn1eOJcYvflTHpZU=;
-        b=ulpbzynIQosW1jqc4Bm4ejIHIMmmWpsUaoN+9slKIs6Tz3LGzsyq4YlKkUTeQGSgQI
-         WO/8HnFpHyS0VL3jsgyiT5tVatUxWFFkMs6Fp1GRxzxBLjCBbbGZMsmZTKEi0oq/KioX
-         g1wuMi7g0gUX4vygKZabtJeVNRQkBq62MXNm95qwElt5WoGOv8rEGQ58rUWKLUuZ8yZU
-         6yeB1Ds+M/Uv1HkVjw9PAfuNFUJC/1F/9oA0XDukOnM4PEjga9X0z3Vos56LLNbQ2MAr
-         nj4uZxlhexDIc9pgwlQyKCjB7CbiIUuvnl/FQsXWb6FK69Wh9DgBOD1lOfR2DDWdxCK3
-         AusA==
-X-Gm-Message-State: ACrzQf1yIPL83u93+RURqgNZjYOSt9xKHJXNCm4Kz5dAP/lcA2L6XqGA
-        peWbwyQzA3etrzezoZNW0EMFhQ==
-X-Google-Smtp-Source: AMsMyM5+8V2TbVOIhMKjrSqfuProxMDRnSuL6sl56sCUeKf7dIX/0qlV5tFaFwUmF1ejQN105A0zzQ==
-X-Received: by 2002:a17:902:8307:b0:172:e611:491f with SMTP id bd7-20020a170902830700b00172e611491fmr3831261plb.111.1663861810112;
-        Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:5321:6ad9:3932:13d8])
-        by smtp.gmail.com with ESMTPSA id 145-20020a630097000000b00439c1e13112sm4049425pga.22.2022.09.22.08.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 08:50:09 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     rafael@kernel.org, sboyd@kernel.org
-Cc:     linux-pm@vger.kernel.org, len.brown@intel.com,
-        gregkh@linuxfoundation.org, pavel@ucw.cz,
-        linux-clk@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] PM: clk: Avoid lockdep warning between prepare lock and &psd->lock
-Date:   Thu, 22 Sep 2022 08:49:58 -0700
-Message-Id: <20220922084941.RFC.1.I206ec946a190e3de9fd13be806498821e9a6612d@changeid>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vD0+VxiAGurIOKv6AW3dsyvyb0Nd5x0MkeebHLF5GZY=;
+        b=RVo/ccidPJXz4f4vELxxPcPFwgdY/+PUCGKapOiq2qasI7UXtmq6wf848HhuDcyNkA
+         SbKd2mu+LglmnqDAtz8xRM/ajErxU+e7n0U+JqaN3zRnCyy4+DPKTWC+w1QVICKyznkM
+         Oqr+zZPKmDkn1NC2drokHNGRnjIENr0mFMbWxAA4+QXd78vhcxkoq/Q+I6jq+MKb62FS
+         Wv+3n5Xw8JBhvy+ldWX1P4t+0J4v+a/puSJhpDFd/yiu2HvEdYH1szrbveRwd1JJgTqQ
+         TWaDLbdWkckXF9vEWNbqjcZabSCkTQKqrJLiW80LG4CqEBuiYxA09BFJLdvvQ6kh8/N1
+         Stqw==
+X-Gm-Message-State: ACrzQf1zSYXLTRnrX9Tc+gYJKR9Ndx4bN1E4mR06kwvs6O6rFd593Xrh
+        IDRjrFUaP+t9uNSTN2aOgKqFYSm1v6VzFDY2h2w=
+X-Google-Smtp-Source: AMsMyM7uV5oXIb+tahsXXoQim6m4K48OLfD7owDsxQLXf2RDEqng6L3d0fltb2aUF4yFYR35Ezp55+QqlvRaTemITlA=
+X-Received: by 2002:a05:6214:1cc9:b0:496:aa2c:c927 with SMTP id
+ g9-20020a0562141cc900b00496aa2cc927mr3110108qvd.15.1663862008742; Thu, 22 Sep
+ 2022 08:53:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921063638.2489-1-kprateek.nayak@amd.com> <YysnE8rcZAOOj28A@hirez.programming.kicks-ass.net>
+ <YytqfVUCWfv0XyZO@zn.tnic> <YywaAcTdLSuDlRfl@hirez.programming.kicks-ass.net>
+ <CAJZ5v0i9P-srVxrSPZOkXhKVCA2vEQqm5B4ZZifS=ivpwv+A-w@mail.gmail.com> <YyyA9AV9qiPxmmpb@zn.tnic>
+In-Reply-To: <YyyA9AV9qiPxmmpb@zn.tnic>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Sep 2022 17:53:17 +0200
+Message-ID: <CAJZ5v0i0NzJfRuqcuJQC3J5moaEikoRusquCybAz0T8dMy8gCw@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
+ based on the Zen microarchitecture
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, andi@lisas.de,
+        Pu Wen <puwen@hygon.cn>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        ananth.narayan@amd.com, gautham.shenoy@amd.com,
+        Calvin Ong <calvin.ong@amd.com>,
+        Stable <stable@vger.kernel.org>, regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If you get the exact right boot sequence / timing / hardware setup,
-lockdep can complain at bootup about an unsafe locking scenario:
+On Thu, Sep 22, 2022 at 5:36 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Sep 22, 2022 at 05:21:21PM +0200, Rafael J. Wysocki wrote:
+> > Well, it can be forced to use ACPI idle instead.
+>
+> Yeah, I did that earlier. The dummy IO read in question costs ~3K on
+> average on my Coffeelake box here.
 
-       CPU0                    CPU1
-       ----                    ----
-  lock(&psd->clock_mutex);
-                               lock(prepare_lock);
-                               lock(&psd->clock_mutex);
-  lock(prepare_lock);
-
-The case of &psd->clock_mutex being grabbed before the prepare lock is
-illustrated by this stack crawl:
-
-  clk_prepare_lock()
-  clk_unprepare()
-  clk_disable_unprepare()
-  pm_clk_suspend()
-  pm_clk_runtime_suspend()
-
-The critical things to note are:
-- pm_clk_suspend(), in some cases, will grab and hold
-  "&psd->clock_mutex" first before calling the clock prepare/unprepare
-  functions.
-- pm_clk_suspend() can be called in cases where the clock prepare
-  mutex isn't already held.
-
-The reverse case, where the prepare lock is held first and then the
-&psd->clock_mutex is illustrated by:
-
-  pm_clk_op_lock()
-  pm_clk_resume()
-  pm_generic_runtime_resume()
-  ...
-  pm_runtime_resume_and_get()
-  clk_pm_runtime_get()
-  __clk_core_init()
-  __clk_register()
-  clk_hw_register()
-
-In the above:
-- __clk_core_init() grabs the prepare lock and holds it while calling
-  clk_pm_runtime_get().
-- pm_clk_op_lock() grabs &psd->clock_mutex.
-
-Presumably nobody noticed this before because it only happens in one
-specific case of the pm_clk code. It's also possible that it was
-unnoticed before because the clock prepare lock is a funny little
-animal and allows the lock to be acquired more than once in a given
-callchain but lockdep doesn't really track this.
-
-Let's fix this lockdep error by just consistently grabbing the clock
-prepare lock before &psd->clock_mutex. This means adding a private
-interface since the clock's prepare lock isn't exposed. We'll add it
-in a way to discourage anyone else from using it. We're special since
-"pm_clk" is core code and already quite intertwined with the clock
-core anyway.
-
-NOTE: I haven't done any analysis about whether what lockdep complains
-about is really a feasible lockup. I merely confirmed that, indeed, we
-have an ABBA situation and it seems like we should fix it.
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-As you can tell at just a glance, this is a terrible hack. I'm mostly
-throwing it out into the world to try to start a conversation. I'd be
-very happy for someone else to send a better patch or to tell me of a
-better way to solve this. I've still tried to at least make it a
-landable patch, however, in case nobody has any better ideas and we
-want to land this.
-
-I'll note that this lockdep warning showed up on my system at the same
-time as a deadlock. Unfortunately, to the best of my ability to debug
-the two are unrelated. Fixing this lockdep warning doesn't fix the
-deadlock and fixing the deadlock doesn't make lockdep happy. If you
-want to see my fix for the deadlock, feel free to peruse:
-
-https://lore.kernel.org/r/20220922154354.2486595-1-dianders@chromium.org
-
-NOTE: problem was found and debugging was done on a downstream kernel
-(chromeos-5.15), not pure upstream. I see no reason why this won't
-apply to upstream, but if you have some belief that this problem is
-already solved or can't happen upstream then please yell and tell me
-that I should abandon this patch.
-
-If need be, I can also split this into two patches. I figured I'd do
-that on-demand if someone actually told me that would be useful to
-them and that they were considering landing this patch.
-
- drivers/base/power/clock_ops.c | 14 ++++++++++++++
- drivers/clk/clk.c              | 12 ++++++++++++
- 2 files changed, 26 insertions(+)
-
-diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
-index 4110c19c08dc..86066d5a00d9 100644
---- a/drivers/base/power/clock_ops.c
-+++ b/drivers/base/power/clock_ops.c
-@@ -18,6 +18,13 @@
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- 
-+/*
-+ * These are purposely not in any headers since we don't want anyone to use
-+ * them except us.
-+ */
-+void __clk_prepare_lock(void);
-+void __clk_prepare_unlock(void);
-+
- #ifdef CONFIG_PM_CLK
- 
- enum pce_status {
-@@ -108,6 +115,10 @@ static int pm_clk_op_lock(struct pm_subsys_data *psd, unsigned long *flags,
- 
- 	/* we must switch to the mutex */
- 	spin_unlock_irqrestore(&psd->lock, *flags);
-+
-+	/* Manually grab the prepare lock to avoid ABBA w/ psd->clock_mutex */
-+	__clk_prepare_lock();
-+
- 	mutex_lock(&psd->clock_mutex);
- 
- 	/*
-@@ -118,6 +129,8 @@ static int pm_clk_op_lock(struct pm_subsys_data *psd, unsigned long *flags,
- 		return 0;
- 
- 	mutex_unlock(&psd->clock_mutex);
-+	__clk_prepare_unlock();
-+
- 	goto try_again;
- }
- 
-@@ -132,6 +145,7 @@ static void pm_clk_op_unlock(struct pm_subsys_data *psd, unsigned long *flags)
- {
- 	if (psd->clock_op_might_sleep) {
- 		mutex_unlock(&psd->clock_mutex);
-+		__clk_prepare_unlock();
- 	} else {
- 		/* the __acquire is there to work around sparse limitations */
- 		__acquire(&psd->lock);
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index bd0b35cac83e..bf563b3fa5f4 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -149,6 +149,18 @@ static void clk_prepare_unlock(void)
- 	mutex_unlock(&prepare_lock);
- }
- 
-+/* Non-static wrapper of lock function for drivers/base/power/clock_ops.c */
-+void __clk_prepare_lock(void)
-+{
-+	clk_prepare_lock();
-+}
-+
-+/* Non-static wrapper of unlock function for drivers/base/power/clock_ops.c */
-+void __clk_prepare_unlock(void)
-+{
-+	clk_prepare_unlock();
-+}
-+
- static unsigned long clk_enable_lock(void)
- 	__acquires(enable_lock)
- {
--- 
-2.37.3.968.ga6b4b080e4-goog
-
+Well, that's the cost of forcing something non-default.
