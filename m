@@ -2,62 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A275E6772
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 17:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5A85E678B
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 17:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiIVPpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 11:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        id S231743AbiIVPu3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 11:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbiIVPoa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 11:44:30 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F14EEB4F
-        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 08:44:08 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d24so9154607pls.4
-        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 08:44:08 -0700 (PDT)
+        with ESMTP id S231782AbiIVPuS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 11:50:18 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB3F95ADD
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id q3so10194242pjg.3
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=NpyPMjzwtKQ4w+0odjsEFihdg4KtQVQ3rpmkouPDohM=;
-        b=dW37y8AN0pwrvhwV7kSpnkxlH4uRaI3RxfoqrOFjo0/MI8rHPpupF4kVWiGMaefQhB
-         xiq0+5q9QZuKOGxoeTvK9uuwowqAKAR6rZO3AO0FMcvs4poig96f8fZPKYoAIv8tXzPi
-         4FmfMiwHGVRUI2QkHAsu6hDvFX1sfoRdndE0s=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=+K8j+06amGtBzqeg3LNqPUQmrr7rn1eOJcYvflTHpZU=;
+        b=lOHQ8lKwbjZvnvS3yQLZcUqXmMeEsdLz6FNSdk+7PMZ7YY/m+r2qhSSiySViGuXDpS
+         cIX5pBPGnOBnVHl2Tor8dhRbEHujEh3n5/qotF3PiI4uiApxJQQuQ43eP64gPDGTDhej
+         2lqiXVbf0UDSzN+d/1zaVyg5z3hsrKD44qJHM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=NpyPMjzwtKQ4w+0odjsEFihdg4KtQVQ3rpmkouPDohM=;
-        b=L1xo2ZWTVEQX3S8tKO/P0MjS1FNUkvUcv8Foi4AMkjfR/fCOYqaB22ZfoOKSpqEz8f
-         trDACY0ayf96JflwAfayOh3HADIpTn/Wa1+wQVgRh6RqmhMh10sjYal1Hx1qK7tZwffy
-         t4eVgMgtqQnCezD04vIZjPYFNo284KaBbaly7rV3SPLXTP7XC/USnhXvzqPGzRj/AkrO
-         EjCIsKATw6uAqG4GdI5zdG8OctZFtDxwBBRe/aAgImnOh8YedydE8rOgI9uihP/mqyqR
-         Q6Ndml3+ZfZ5xAM0+9gsxWFi0J/IO6O4DiWnBpA9/Oy49GecEL3Be8gypesOo3KJ98ZG
-         0DJQ==
-X-Gm-Message-State: ACrzQf2NVHT6INyk35yPUlWGwx1ErMy/V/NYiWFjayT6QBdXb/XBeRPX
-        mjd5rYs6oOnVjlbZan2G8q4mCQ==
-X-Google-Smtp-Source: AMsMyM4XKRlVx4UCagdXcjE6UiEGv+nHjxsCwSVRGgWYODG1SUSakSsYUykkeMGaIGt0d26WS/9WxA==
-X-Received: by 2002:a17:90b:3b91:b0:202:91d7:6a5d with SMTP id pc17-20020a17090b3b9100b0020291d76a5dmr4277529pjb.101.1663861448468;
-        Thu, 22 Sep 2022 08:44:08 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=+K8j+06amGtBzqeg3LNqPUQmrr7rn1eOJcYvflTHpZU=;
+        b=ulpbzynIQosW1jqc4Bm4ejIHIMmmWpsUaoN+9slKIs6Tz3LGzsyq4YlKkUTeQGSgQI
+         WO/8HnFpHyS0VL3jsgyiT5tVatUxWFFkMs6Fp1GRxzxBLjCBbbGZMsmZTKEi0oq/KioX
+         g1wuMi7g0gUX4vygKZabtJeVNRQkBq62MXNm95qwElt5WoGOv8rEGQ58rUWKLUuZ8yZU
+         6yeB1Ds+M/Uv1HkVjw9PAfuNFUJC/1F/9oA0XDukOnM4PEjga9X0z3Vos56LLNbQ2MAr
+         nj4uZxlhexDIc9pgwlQyKCjB7CbiIUuvnl/FQsXWb6FK69Wh9DgBOD1lOfR2DDWdxCK3
+         AusA==
+X-Gm-Message-State: ACrzQf1yIPL83u93+RURqgNZjYOSt9xKHJXNCm4Kz5dAP/lcA2L6XqGA
+        peWbwyQzA3etrzezoZNW0EMFhQ==
+X-Google-Smtp-Source: AMsMyM5+8V2TbVOIhMKjrSqfuProxMDRnSuL6sl56sCUeKf7dIX/0qlV5tFaFwUmF1ejQN105A0zzQ==
+X-Received: by 2002:a17:902:8307:b0:172:e611:491f with SMTP id bd7-20020a170902830700b00172e611491fmr3831261plb.111.1663861810112;
+        Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:5321:6ad9:3932:13d8])
-        by smtp.gmail.com with ESMTPSA id a19-20020a621a13000000b0053e8fe8a705sm4685492pfa.17.2022.09.22.08.44.06
+        by smtp.gmail.com with ESMTPSA id 145-20020a630097000000b00439c1e13112sm4049425pga.22.2022.09.22.08.50.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 08:44:07 -0700 (PDT)
+        Thu, 22 Sep 2022 08:50:09 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     rafael@kernel.org, sboyd@kernel.org
-Cc:     pavel@ucw.cz, linux-pm@vger.kernel.org, len.brown@intel.com,
-        linux-clk@vger.kernel.org, gregkh@linuxfoundation.org,
+Cc:     linux-pm@vger.kernel.org, len.brown@intel.com,
+        gregkh@linuxfoundation.org, pavel@ucw.cz,
+        linux-clk@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
         Michael Turquette <mturquette@baylibre.com>,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] clk: core: Avoid potential deadlock when disabling unused clocks
-Date:   Thu, 22 Sep 2022 08:43:54 -0700
-Message-Id: <20220922084322.RFC.2.I375b6b9e0a0a5348962f004beb3dafee6a12dfbb@changeid>
+Subject: [RFC PATCH] PM: clk: Avoid lockdep warning between prepare lock and &psd->lock
+Date:   Thu, 22 Sep 2022 08:49:58 -0700
+Message-Id: <20220922084941.RFC.1.I206ec946a190e3de9fd13be806498821e9a6612d@changeid>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220922154354.2486595-1-dianders@chromium.org>
-References: <20220922154354.2486595-1-dianders@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,325 +67,167 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-While booting up my system, I seem to have hit the lucky jackpot and
-my system was consistently deadlocking from an issue that seems to
-have been possible for a long time. Analysis via kgdb made it obvious
-what was happening.
+If you get the exact right boot sequence / timing / hardware setup,
+lockdep can complain at bootup about an unsafe locking scenario:
 
-The quick summary is here (gory details below):
-* Task A:
-  - running clk_disable_unused() which holds the prepare lock.
-  - doing a synchronous runtime resume on a device; blocked waiting
-    for the device which is marked as midway through suspending.
-* Task B:
-  - midway through suspending the same device on a work thread.
-  - trying to unprepare a clock and grab the prepare lock.
+       CPU0                    CPU1
+       ----                    ----
+  lock(&psd->clock_mutex);
+                               lock(prepare_lock);
+                               lock(&psd->clock_mutex);
+  lock(prepare_lock);
 
-That's a pretty clear deadlock.
+The case of &psd->clock_mutex being grabbed before the prepare lock is
+illustrated by this stack crawl:
 
-Fixing the deadlock isn't amazingly straightforward. It should be
-pretty clear that a random device's PM Runtime callbacks should be
-able to prepare/unprepare clocks, so pretty much the only action would
-be to drop the "prepare" lock while disabling unused clocks. That's
-not super safe, though.
+  clk_prepare_lock()
+  clk_unprepare()
+  clk_disable_unprepare()
+  pm_clk_suspend()
+  pm_clk_runtime_suspend()
 
-Instead of rejiggering the locking design of the whole clock
-framework, let's use the following observations to fix this:
-1. Disabling unused clocks is not terribly urgent. It can be delayed
-   for a bit.
-2. Disabling unused clocks can be retried. In other words, at any
-   point in time we can stop, drop the prepare lock, and start all
-   over again from the beginning.
-This means that we can "fix" the problem by just backing off, delaying
-a bit, and trying again.
+The critical things to note are:
+- pm_clk_suspend(), in some cases, will grab and hold
+  "&psd->clock_mutex" first before calling the clock prepare/unprepare
+  functions.
+- pm_clk_suspend() can be called in cases where the clock prepare
+  mutex isn't already held.
 
-At the moment we'll do an exponential type backoff (start at 1 ms and
-double each time) and try at most 10 times. These numbers were picked
-arbitrarily but seem like they'll work.
+The reverse case, where the prepare lock is held first and then the
+&psd->clock_mutex is illustrated by:
 
-Gory detail of the analysis follow. This was from the chromeos-5.15
-kernel, not pure upstream. The race hits as part of a lucky jackpot of
-timings so I had to analyze it on the kernel I was on, but as far as I
-know everything about this analysis applies to upstream:
+  pm_clk_op_lock()
+  pm_clk_resume()
+  pm_generic_runtime_resume()
+  ...
+  pm_runtime_resume_and_get()
+  clk_pm_runtime_get()
+  __clk_core_init()
+  __clk_register()
+  clk_hw_register()
 
-Task A stack crawl (doing the clk_disable_unused()):
-  task:swapper/0 state:D stack: 0 pid: 1 ppid: 0 flags:0x00000008
-  Call trace:
-   schedule()
-   rpm_resume()
-   __pm_runtime_resume()
-   clk_pm_runtime_get()
-   clk_disable_unused_subtree()
-   clk_disable_unused_subtree()
-   clk_disable_unused_subtree()
-   clk_disable_unused_subtree()
-   clk_disable_unused()
-   do_one_initcall()
+In the above:
+- __clk_core_init() grabs the prepare lock and holds it while calling
+  clk_pm_runtime_get().
+- pm_clk_op_lock() grabs &psd->clock_mutex.
 
-In kgdb you can see the "dev" being resumed:
-(gdb) frame 4
-    at .../drivers/base/power/runtime.c:819
-819                             schedule();
-(gdb) print dev->driver
-$2 = (struct device_driver *) 0x... <lpass_aon_cc_sc7280_driver+40>
+Presumably nobody noticed this before because it only happens in one
+specific case of the pm_clk code. It's also possible that it was
+unnoticed before because the clock prepare lock is a funny little
+animal and allows the lock to be acquired more than once in a given
+callchain but lockdep doesn't really track this.
 
-Task B stack crawl
-   schedule()
-   schedule_preempt_disabled()
-   __mutex_lock_common()
-   mutex_lock_nested()
-   clk_prepare_lock()
-   clk_unprepare()
-   pm_clk_suspend()
-   pm_generic_runtime_suspend()
-   __rpm_callback()
-   rpm_callback()
-   rpm_suspend()
-   pm_runtime_work()
-   process_one_work()
-   worker_thread()
-   kthread()
+Let's fix this lockdep error by just consistently grabbing the clock
+prepare lock before &psd->clock_mutex. This means adding a private
+interface since the clock's prepare lock isn't exposed. We'll add it
+in a way to discourage anyone else from using it. We're special since
+"pm_clk" is core code and already quite intertwined with the clock
+core anyway.
 
-In kgdb you can see the "dev" being suspended
-(gdb) frame 15
-    at .../drivers/base/power/runtime.c:522
-522                     retval = __rpm_callback(cb, dev);
-(gdb) print dev->driver
-$3 = (struct device_driver *) 0x... <lpass_aon_cc_sc7280_driver+40>
+NOTE: I haven't done any analysis about whether what lockdep complains
+about is really a feasible lockup. I merely confirmed that, indeed, we
+have an ABBA situation and it seems like we should fix it.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
+As you can tell at just a glance, this is a terrible hack. I'm mostly
+throwing it out into the world to try to start a conversation. I'd be
+very happy for someone else to send a better patch or to tell me of a
+better way to solve this. I've still tried to at least make it a
+landable patch, however, in case nobody has any better ideas and we
+want to land this.
 
- drivers/clk/clk.c | 137 +++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 110 insertions(+), 27 deletions(-)
+I'll note that this lockdep warning showed up on my system at the same
+time as a deadlock. Unfortunately, to the best of my ability to debug
+the two are unrelated. Fixing this lockdep warning doesn't fix the
+deadlock and fixing the deadlock doesn't make lockdep happy. If you
+want to see my fix for the deadlock, feel free to peruse:
 
+https://lore.kernel.org/r/20220922154354.2486595-1-dianders@chromium.org
+
+NOTE: problem was found and debugging was done on a downstream kernel
+(chromeos-5.15), not pure upstream. I see no reason why this won't
+apply to upstream, but if you have some belief that this problem is
+already solved or can't happen upstream then please yell and tell me
+that I should abandon this patch.
+
+If need be, I can also split this into two patches. I figured I'd do
+that on-demand if someone actually told me that would be useful to
+them and that they were considering landing this patch.
+
+ drivers/base/power/clock_ops.c | 14 ++++++++++++++
+ drivers/clk/clk.c              | 12 ++++++++++++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
+index 4110c19c08dc..86066d5a00d9 100644
+--- a/drivers/base/power/clock_ops.c
++++ b/drivers/base/power/clock_ops.c
+@@ -18,6 +18,13 @@
+ #include <linux/pm_domain.h>
+ #include <linux/pm_runtime.h>
+ 
++/*
++ * These are purposely not in any headers since we don't want anyone to use
++ * them except us.
++ */
++void __clk_prepare_lock(void);
++void __clk_prepare_unlock(void);
++
+ #ifdef CONFIG_PM_CLK
+ 
+ enum pce_status {
+@@ -108,6 +115,10 @@ static int pm_clk_op_lock(struct pm_subsys_data *psd, unsigned long *flags,
+ 
+ 	/* we must switch to the mutex */
+ 	spin_unlock_irqrestore(&psd->lock, *flags);
++
++	/* Manually grab the prepare lock to avoid ABBA w/ psd->clock_mutex */
++	__clk_prepare_lock();
++
+ 	mutex_lock(&psd->clock_mutex);
+ 
+ 	/*
+@@ -118,6 +129,8 @@ static int pm_clk_op_lock(struct pm_subsys_data *psd, unsigned long *flags,
+ 		return 0;
+ 
+ 	mutex_unlock(&psd->clock_mutex);
++	__clk_prepare_unlock();
++
+ 	goto try_again;
+ }
+ 
+@@ -132,6 +145,7 @@ static void pm_clk_op_unlock(struct pm_subsys_data *psd, unsigned long *flags)
+ {
+ 	if (psd->clock_op_might_sleep) {
+ 		mutex_unlock(&psd->clock_mutex);
++		__clk_prepare_unlock();
+ 	} else {
+ 		/* the __acquire is there to work around sparse limitations */
+ 		__acquire(&psd->lock);
 diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index bd0b35cac83e..723e57a9d60d 100644
+index bd0b35cac83e..bf563b3fa5f4 100644
 --- a/drivers/clk/clk.c
 +++ b/drivers/clk/clk.c
-@@ -9,6 +9,7 @@
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/clk/clk-conf.h>
-+#include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/spinlock.h>
-@@ -114,6 +115,22 @@ static int clk_pm_runtime_get(struct clk_core *core)
- 	return pm_runtime_resume_and_get(core->dev);
+@@ -149,6 +149,18 @@ static void clk_prepare_unlock(void)
+ 	mutex_unlock(&prepare_lock);
  }
  
-+static int clk_pm_runtime_try_get(struct clk_core *core)
++/* Non-static wrapper of lock function for drivers/base/power/clock_ops.c */
++void __clk_prepare_lock(void)
 +{
-+	int ret;
-+
-+	if (!core->rpm_enabled)
-+		return 0;
-+
-+	ret = pm_runtime_try_get_sync(core->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(core->dev);
-+		return ret;
-+	}
-+
-+	return 0;
++	clk_prepare_lock();
 +}
 +
- static void clk_pm_runtime_put(struct clk_core *core)
- {
- 	if (!core->rpm_enabled)
-@@ -122,6 +139,14 @@ static void clk_pm_runtime_put(struct clk_core *core)
- 	pm_runtime_put_sync(core->dev);
- }
- 
-+static void clk_pm_runtime_put_async(struct clk_core *core)
++/* Non-static wrapper of unlock function for drivers/base/power/clock_ops.c */
++void __clk_prepare_unlock(void)
 +{
-+	if (!core->rpm_enabled)
-+		return;
-+
-+	pm_runtime_put(core->dev);
++	clk_prepare_unlock();
 +}
 +
- /***           locking             ***/
- static void clk_prepare_lock(void)
+ static unsigned long clk_enable_lock(void)
+ 	__acquires(enable_lock)
  {
-@@ -1217,23 +1242,31 @@ static void clk_core_disable_unprepare(struct clk_core *core)
- 	clk_core_unprepare_lock(core);
- }
- 
--static void __init clk_unprepare_unused_subtree(struct clk_core *core)
-+static int __init clk_unprepare_unused_subtree(struct clk_core *core)
- {
- 	struct clk_core *child;
-+	int ret;
- 
- 	lockdep_assert_held(&prepare_lock);
- 
--	hlist_for_each_entry(child, &core->children, child_node)
--		clk_unprepare_unused_subtree(child);
-+	hlist_for_each_entry(child, &core->children, child_node) {
-+		ret = clk_unprepare_unused_subtree(child);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (core->prepare_count)
--		return;
-+		return 0;
- 
- 	if (core->flags & CLK_IGNORE_UNUSED)
--		return;
-+		return 0;
- 
--	if (clk_pm_runtime_get(core))
--		return;
-+	/* Backoff if the device is busy; see clk_disable_unused_subtree() */
-+	ret = clk_pm_runtime_try_get(core);
-+	if (ret == -EINPROGRESS)
-+		return -EAGAIN;
-+	else if (ret)
-+		return ret;
- 
- 	if (clk_core_is_prepared(core)) {
- 		trace_clk_unprepare(core);
-@@ -1244,23 +1277,39 @@ static void __init clk_unprepare_unused_subtree(struct clk_core *core)
- 		trace_clk_unprepare_complete(core);
- 	}
- 
--	clk_pm_runtime_put(core);
-+	clk_pm_runtime_put_async(core);
-+
-+	return 0;
- }
- 
--static void __init clk_disable_unused_subtree(struct clk_core *core)
-+static int __init clk_disable_unused_subtree(struct clk_core *core)
- {
- 	struct clk_core *child;
- 	unsigned long flags;
-+	int ret;
- 
- 	lockdep_assert_held(&prepare_lock);
- 
--	hlist_for_each_entry(child, &core->children, child_node)
--		clk_disable_unused_subtree(child);
-+	hlist_for_each_entry(child, &core->children, child_node) {
-+		ret = clk_disable_unused_subtree(child);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (core->flags & CLK_OPS_PARENT_ENABLE)
- 		clk_core_prepare_enable(core->parent);
- 
--	if (clk_pm_runtime_get(core))
-+	/*
-+	 * If the device is already busy resuming / suspending then we need
-+	 * to back off and try the whole subtree disable again. This is because
-+	 * the resume / suspend may be happening on another CPU. The resume /
-+	 * suspend code on the other CPU might be trying to prepare a clock, but
-+	 * we're already holding the lock. That's deadlock unless we stand down.
-+	 */
-+	ret = clk_pm_runtime_try_get(core);
-+	if (ret == -EINPROGRESS)
-+		ret = -EAGAIN;
-+	if (ret)
- 		goto unprepare_out;
- 
- 	flags = clk_enable_lock();
-@@ -1287,10 +1336,12 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
- 
- unlock_out:
- 	clk_enable_unlock(flags);
--	clk_pm_runtime_put(core);
-+	clk_pm_runtime_put_async(core);
- unprepare_out:
- 	if (core->flags & CLK_OPS_PARENT_ENABLE)
- 		clk_core_disable_unprepare(core->parent);
-+
-+	return ret;
- }
- 
- static bool clk_ignore_unused __initdata;
-@@ -1301,32 +1352,64 @@ static int __init clk_ignore_unused_setup(char *__unused)
- }
- __setup("clk_ignore_unused", clk_ignore_unused_setup);
- 
--static int __init clk_disable_unused(void)
-+static int __init _clk_disable_unused(void)
- {
- 	struct clk_core *core;
-+	int ret;
-+
-+	hlist_for_each_entry(core, &clk_root_list, child_node) {
-+		ret = clk_disable_unused_subtree(core);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	hlist_for_each_entry(core, &clk_orphan_list, child_node) {
-+		ret = clk_disable_unused_subtree(core);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	hlist_for_each_entry(core, &clk_root_list, child_node) {
-+		ret = clk_unprepare_unused_subtree(core);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	hlist_for_each_entry(core, &clk_orphan_list, child_node) {
-+		ret = clk_unprepare_unused_subtree(core);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int __init clk_disable_unused(void)
-+{
-+	int ret;
-+	int backoff_ms = 1;
-+	int tries_left;
- 
- 	if (clk_ignore_unused) {
- 		pr_warn("clk: Not disabling unused clocks\n");
- 		return 0;
- 	}
- 
--	clk_prepare_lock();
-+	for (tries_left = 10; tries_left; tries_left--) {
-+		clk_prepare_lock();
-+		ret = _clk_disable_unused();
-+		clk_prepare_unlock();
- 
--	hlist_for_each_entry(core, &clk_root_list, child_node)
--		clk_disable_unused_subtree(core);
--
--	hlist_for_each_entry(core, &clk_orphan_list, child_node)
--		clk_disable_unused_subtree(core);
--
--	hlist_for_each_entry(core, &clk_root_list, child_node)
--		clk_unprepare_unused_subtree(core);
-+		if (ret != -EAGAIN)
-+			return ret;
- 
--	hlist_for_each_entry(core, &clk_orphan_list, child_node)
--		clk_unprepare_unused_subtree(core);
-+		msleep(backoff_ms);
-+		backoff_ms *= 2;
-+	}
- 
--	clk_prepare_unlock();
-+	pr_warn("clk: Failed to disable unused clocks\n");
- 
--	return 0;
-+	return ret;
- }
- late_initcall_sync(clk_disable_unused);
- 
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
