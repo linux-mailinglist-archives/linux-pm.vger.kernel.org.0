@@ -2,178 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECC55E5ADE
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 07:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFAA5E5B5E
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 08:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiIVFpL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 01:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S230163AbiIVG0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 02:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiIVFpK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 01:45:10 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B923B63F39;
-        Wed, 21 Sep 2022 22:45:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m36+TRDZjF22xnNFHv9aUQgeJdr4xgrjvP7Kgp9Uq04jrsbrFMiEqFmr88OeFOvS3ZPjK/9GuXS+147hYdYE8Xdtt8mYschiY4rInZgNxPWcn0+hCAqGEeyFjSDyAFn2zYUtVmRU1IYawFYRoQLUMvzfPMClRtHjrXZv6AHJ/EqqEl1AP/jtm2XWglVCxyTq1d6Cw4JkMf4Nu2UAAHcHzrF4lUtFDPUZVFkHcevc9HQACl/M7XKBG0is0U8d0g5x1Yyswcm0Ut/q6y6NTSG2Em/IFuXtxAXxhI8ytFR5cBO9gNEvFqODwogrb5YgZiFhn4qJ6Eyg3nduQ0et7g2ILQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kQYRJA64N//FndQqB16YrMfBCnoM9+SjNmvcAslXCYs=;
- b=JyqfXnibupEKOVg5ICUI/bK7ziOHOVrxm6DTpgGu+GCemv3VH7FNmOV76zPmyRt25NyIuldTP8ky/irLyuTxSy2/9nlZqSQsSgLt8I0hCxbpyLjwi19UXUPcnpu/nct1LWYY7KywUH/SW17sf4YxT+c3ynG4AJat1zhTMeSTntkklJ+Q0h3FM+/S9Ado8WJ/LmiRMeU3TT4knEtDBLBJaof8M9f9VJSwtmWUSINmyelBtpg3SDXo+cSVlNM3xff3koHQJpldKsjVfSnq4k2OLiT91YKHlUQSS7ESN+ePbOSupvjVXn4te9UEP4ifBPwBWO/6iW+DmmTbaajG60uocQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kQYRJA64N//FndQqB16YrMfBCnoM9+SjNmvcAslXCYs=;
- b=SJVGWcEdJRP3rHbKFnAoPcxLF+gwixuf1XndDShx8OxpYg7K5XfVJcCg5yAxnRpj1MZI8cH9Z2LwGFXk/0801AuYBz8C2KNIihT5n3SsjmQQsvpfoM7gOY/iD3UgP2s6enXLmOQXO3jeQo28gTKtvMCWDoJCpXdSvl9jqlJtEgE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN1PR12MB2381.namprd12.prod.outlook.com (2603:10b6:802:2f::13)
- by MN0PR12MB5811.namprd12.prod.outlook.com (2603:10b6:208:377::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.16; Thu, 22 Sep
- 2022 05:45:06 +0000
-Received: from SN1PR12MB2381.namprd12.prod.outlook.com
- ([fe80::c534:ae1c:f7a1:1f33]) by SN1PR12MB2381.namprd12.prod.outlook.com
- ([fe80::c534:ae1c:f7a1:1f33%4]) with mapi id 15.20.5632.021; Thu, 22 Sep 2022
- 05:45:06 +0000
-Message-ID: <69a3f699-257a-1579-3ae6-236dd19b5381@amd.com>
-Date:   Thu, 22 Sep 2022 11:14:45 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org
-Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, dave.hansen@linux.intel.com,
-        bp@alien8.de, tglx@linutronix.de, andi@lisas.de, puwen@hygon.cn,
-        mario.limonciello@amd.com, peterz@infradead.org,
-        rui.zhang@intel.com, gpiccoli@igalia.com,
-        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
-        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
-        stable@vger.kernel.org, regressions@lists.linux.dev
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
- <2b6143b6-9db4-05bc-1e8d-c5d129126f99@intel.com>
-From:   K Prateek Nayak <kprateek.nayak@amd.com>
-In-Reply-To: <2b6143b6-9db4-05bc-1e8d-c5d129126f99@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0190.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e8::15) To SN1PR12MB2381.namprd12.prod.outlook.com
- (2603:10b6:802:2f::13)
+        with ESMTP id S230131AbiIVG00 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 02:26:26 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F11B6D03
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 23:26:04 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id k10so13018246lfm.4
+        for <linux-pm@vger.kernel.org>; Wed, 21 Sep 2022 23:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=j9o4S3xAPFpmBmxWsJ5oAgRxe68Y0HDCIkMi/9Ynf0E=;
+        b=KnhHr0NmUiWCiVlkPmJPCSvk/WwvJ/NRpVNv1DrdMycHjYqRCYm3BXiT9WBf1znGww
+         5sw/niP3mcHaSFXVIRl5MFu/wFko0ETxyVO5jBqbZgoMePBChPhCDnxFHkM3oGzc7+Zr
+         uRDRP9r4pGB6A3OPL7caTh9eD+Q1lYzffSZ+DU2zBo95rsi7rC9Vj/8GSjYf9BeXnQpZ
+         gMyZAdlA1qxB2rOGBlYJFuumPOLptcKyXLzFpNMX0GLVSCkZo8P9Sq6FWJHjLDcj+Ogr
+         xMMDg6bw8aSDO7ZMk+0zlw0sCYtw0rksxZChpvaZrGYj1WSC6m7V/ID8aZXyRcBx5k7N
+         AJaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=j9o4S3xAPFpmBmxWsJ5oAgRxe68Y0HDCIkMi/9Ynf0E=;
+        b=lDFFz/61bzD6oq63eV1kzUnZeGiT08gOdWDzR7jSnIaVTLvdix7xoHZSp+x/gEvLHq
+         qouFaQHvjqg7ciliiRdfXDDmDWJQKKBqLXz1NpQya2cRDRZco/Zr0RSy/64WzhNQASqc
+         VeICbfZTcoQsTvhKxrbqXR2ZeGliUjA+c/+FUEC508jd1NNipLLo3+FyshrO1g6u7NNk
+         CMxkzh6MU3TAIrqnakCvbYLQj2wx8f5xkyUeE1s3SkouCBczr/AqWC3eypm85crwq/kD
+         xsWIcqX/QrJpYQBxnz6gsGBSECEVlufozkFS6rtzrR0O+cIX2fvyUml34fq/zyj+MT5q
+         ce4g==
+X-Gm-Message-State: ACrzQf3WaWT0wH40tAm/L/XNUlh8I1ukApv6Nbi9gEdn9jsSR+oSwntV
+        bs8+SXwlIcSUvdDhqLUjD4aVFmG89w8udA==
+X-Google-Smtp-Source: AMsMyM7KiveS5KCOAc2WDOmn5Dl9stufRrBsuoO4rforSU4OhRZ+XqVxTff1BIdobYEfi8fFzuNKQA==
+X-Received: by 2002:a05:6512:224b:b0:49f:9e09:584e with SMTP id i11-20020a056512224b00b0049f9e09584emr654473lfu.524.1663827961590;
+        Wed, 21 Sep 2022 23:26:01 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b24-20020ac24118000000b00497a879e552sm763315lfi.291.2022.09.21.23.26.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 23:26:00 -0700 (PDT)
+Message-ID: <0d2fce98-6744-69af-44a2-702f4927b626@linaro.org>
+Date:   Thu, 22 Sep 2022 08:25:59 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2381:EE_|MN0PR12MB5811:EE_
-X-MS-Office365-Filtering-Correlation-Id: 14fb7e2a-e373-4fa3-e315-08da9c5d9a05
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +RgrltLvlZnJmbP6RIG0cvy5GZEk8Lqkh5ZVywsNfxqkI4WbQ37+IkGLtIh0RMBmumirQyOq1S8xWmMQIKLHHu/PcxBxqm4EcMNlTGnV8REa63/mkJKy7SUVDrIA3H71lrOUj1UQs1YqRMslsOUDuDIlyVV2hKqw6XffT/aVpi1R7gDIoXrcXoKzsf8omblsMUl5np/hfPqlxZjMA/CShNRN/V2fs4xw8AQGgsJLJRFjrY9xvbdPSeMPfCP02O7S7ANL19Ien3l5HvYU8DGyyofdZn8s4/zoKnWJsARmgPT+MunEzShjndn4DAAlwaGaHTkpnZbpm9g+vcocNSIJe24vKfHCMCPomQp7/qn4aTO5M9FGM5aSaPyc6mbfk5uNbJONcT6tOSpMSscSuBoxLBivQ6MSjt8p6alfWt3TQBCMQPdKdIUWlKV5HMtDO0xN4uHNLdr8oTk8HtibVhi48m+qFRtZfKROQzA6Hk5uEAWVpBZtBYP4VUWxWvJivyI3K5XaeYUf1lamhaJgMWRQcEJghblt+9VffQqpS+h6cCs/NzcnddCYU47youlbnhQnYzDll9LDVnYh3KtMWtSnsoAXiZM493rOQdyw6x3XXWPR1U5p0/gVFlFaiMBuRf7HmT2ILWT7SJklgdy8VU21z3Vy+NkgMyPu1qTh1RlSO+afpvtk940NJuhX/D5y3O5w5p0MPyxcS81GzZH+tfdmrzLjFyok00l0RtUJvkHxqehzHqnlqTaq/iNCY7kOHYVIQoa6XECDRK2Ovh0BN/hySNRU3+D9tvUKSLWZBoB7b1U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN1PR12MB2381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(136003)(39860400002)(346002)(376002)(451199015)(186003)(26005)(6512007)(83380400001)(31686004)(7416002)(86362001)(31696002)(316002)(66556008)(66476007)(6506007)(66946007)(4326008)(38100700002)(53546011)(5660300002)(8676002)(41300700001)(8936002)(2616005)(6666004)(6486002)(478600001)(36756003)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OHN1QzZUZHRvYVE1ZnRmWUlBdDhsaytKUmhOdC8rRU8wcllSZ29TeXNBSThn?=
- =?utf-8?B?a1djS0lzYi9jT1hINC9qaGQyUFdFVFdRbmdUZFgzQWUwYnFrVWlTaXNuNlJ6?=
- =?utf-8?B?c0J2NXFaMzhpbHI0b1VxQmFNcUIxYXE2aThXZ0pocWtaWkJCSDJzaXJ5SzRR?=
- =?utf-8?B?SlpGM2E2dkVPZmJ0dVVyS2JTM2F2MFY2Zkx6dVNxWWMyR2tkSkJzdFVNZUxE?=
- =?utf-8?B?Vnc5VElLdlJTVi9oWEZ4ajlUaG14eVRGYlRhbUFFN01DWm4zMHZQaDJ5RDRk?=
- =?utf-8?B?eTM2Zy9KVC8yWGZSNjlXSHdSTnpCTGZmRG9DY094aXhkNDV4UVQyVFF3OFV1?=
- =?utf-8?B?UkxDK29tcmorUDd6YzROVUR6TWk5c3diekZ5aTVHQ0JSOXp6dkhNSTlBL0JO?=
- =?utf-8?B?V1ZsU0dHTHMxUzFDUTdONVBhMWwvaVVwL0FGd2xsdHVuUmdmUHZlWmF4UGhj?=
- =?utf-8?B?YitsNVlnWG1JeFloUWgzdGRMbzFQWThQVGZCaWNrVzByd1BZNTdPUFY5Mml5?=
- =?utf-8?B?MHhLOEE1TEFKdUx1UzFmbUxqM0RzMlZkZHhheFJPNlo0WFBJZnpmejd6RUZk?=
- =?utf-8?B?SHVOR2xlWmFuODdBSE1tUFZJQ1J4d2pqVHova3NuekVVdnV2UEJueU5pWTNZ?=
- =?utf-8?B?cExlSE9KYkF4SDhtdU9mSFlYS3hNTjE1cWJMSi81ZzYxRTNwVloxY1pwbTJh?=
- =?utf-8?B?WmhJcVlabW1qOWZlLzZMeExHK2xsRFlpNXhYWjUyZmRjZHFZMWRCSC9qaE1L?=
- =?utf-8?B?NmlkVm5YdFc0QzBURmN2N2F3YUNwWW8wOHM4OE5sT29jL3ZJOVkrekdWRURB?=
- =?utf-8?B?U2tSbStpRVpqK0NydmJ0VWdXMW9sVE44YzVQSWQ2VHZxaXdocEYvZk9RU1Fr?=
- =?utf-8?B?K3QrTjZHNmd4NlFybklXbmpKbkgwT1l2MWRYeFJRaEZhVGtiZVRjZTEvSXp6?=
- =?utf-8?B?d1lydmgxVlYvVWlZNEZJcjN5RzZ3YW1mOVhySElYaHFucDBIamxuZXFraE13?=
- =?utf-8?B?NWh5LzZwVFkzUkVnWGxVNE9qK3JyQ3M1QjNubURWenI5NXFCUkhDd0s0VmpY?=
- =?utf-8?B?dk5XMnVOS0gwOC9mVk1XMzFydFgyQnpzUzRCUjBWWndqVVVXVTV3akZaQ3M1?=
- =?utf-8?B?dDVWejhPNHQzb2FBeS84d3BvWnNtTUNlYWdVdzNJWk1IN3F0bzJSR0FmSmNI?=
- =?utf-8?B?ZnNtN1NCSkpSWitOREdzbUdlWUp1VnlueUlzc1hmU3M1R0QvckNSendNOWpv?=
- =?utf-8?B?TGE1WldMSUpSLzlzaG5FQmM4SFdsWlZHVmJIb0JqbkZWamRLbG54NWUyU2JU?=
- =?utf-8?B?My91cWVjeG1laVlQa0hkdFFKY21Md2Q5WG9NclRzTUtZSm1GNG1rTVg4ZCsx?=
- =?utf-8?B?Vkc4aDY5OE53MXpvbzYwbHB0TWIzS0xsRjBZb3hGNlBEYUFQUU0xNmNTdmtO?=
- =?utf-8?B?NTE0bHZHQlN1amlQQkdyaWRvZG1qQndoUzdKM1BEL0pwWHZVRVg2YnJlMjFF?=
- =?utf-8?B?YW1aYmJsZ2U3Q0xnQkZpUitoREtycXVoQ0ZpSnhnNnlQQWNzeW15YzJUei9x?=
- =?utf-8?B?V0R1YUJpdlRWanhOaEhhNng5S3RMcmdBVGt6WUtHUWJVLzJ5QkRma3VkeUlG?=
- =?utf-8?B?MVh5cnN1TzBsMHYxQnA0TnJWQ1U4dlg2UjFUbVo0azhXS0o4OThtekNVcjVm?=
- =?utf-8?B?R05oN3d3ZzdZdDEyRW4xSERsK1Rwaldwa0ZjZC9UMTlIMVg2R3Q1TmdRalUw?=
- =?utf-8?B?MkQxLzZHSDVCelFIQ1VUYzI2SHlyMkNNcElCeVF0bnRmR3Z6N1hxU28rd3Rn?=
- =?utf-8?B?aitUOUpUU1p0U09GdzZtcWdzT0U5cFdiU3pheExpU3dVT1J5WHhReU1nVnpr?=
- =?utf-8?B?MGJHMG5Tc084MzZxa1NuTmhKMEJueFJjK3ZEZnNjT3owYTZJOW1tcm9JWk1x?=
- =?utf-8?B?OEo0cmhJMElwa3NJVURlcUxoeUZidnVDbjFrTFpkeTdNMlMwbXdwQW1yaktI?=
- =?utf-8?B?SEp5VEVjMUw5NzBKa1lQYUpXdWp5MWJVY09zci9Vd1l2UDNXL0Q5RXpvWmQx?=
- =?utf-8?B?YlZQZkF1NE40KzBHNWo2SWIyWC95UzYxYVM2UUxNM2QwcEtjU3JBWk9WUTkz?=
- =?utf-8?Q?0ale68ecDzeYkhOdhAZDuds1S?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14fb7e2a-e373-4fa3-e315-08da9c5d9a05
-X-MS-Exchange-CrossTenant-AuthSource: SN1PR12MB2381.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2022 05:45:06.1002
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MS71s26Lq5RuAtQ1IxnK/Nb+/zk7edwJYQjLqr8B6tPwIVs1ZiaRDJoEcyUiO0mRnUlVWVIonVwzL2YJ4fahcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5811
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to
+ json-schema
+Content-Language: en-US
+To:     =?UTF-8?B?5pyx6ZO25rOi?= <zhuyinbo@loongson.cn>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>
+References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
+ <20220921015605.17078-2-zhuyinbo@loongson.cn>
+ <fb901889-d769-ba56-d4cb-2d9d8b50f74f@linaro.org>
+ <28a78a10.a7dd.1835f5aaf90.Coremail.zhuyinbo@loongson.cn>
+ <a44244f2-fb96-0483-b529-d0f2b0b7e5d8@linaro.org>
+ <4febe7e4.a96c.18362d997e3.Coremail.zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4febe7e4.a96c.18362d997e3.Coremail.zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Dave,
-
-On 9/21/2022 7:45 PM, Dave Hansen wrote:
-> On 9/20/22 23:36, K Prateek Nayak wrote:
->> +	/*
->> +	 * No delay is needed if we are in guest or on a processor
->> +	 * based on the Zen microarchitecture.
->> +	 */
->> +	if (boot_cpu_has(X86_FEATURE_HYPERVISOR) || boot_cpu_has(X86_FEATURE_ZEN))
->>  		return;
+On 22/09/2022 03:39, 朱银波 wrote:
 > 
-> In the end, the delay is because of buggy, circa 2006 chipsets?  So, we
-> use a CPU vendor specific check to approximate that the chipset is
-> recent and not affected by the bug?  If so, is there no better way to
-> check for a newer chipset than this?
-
-Elsewhere in the thread, people have noted that the faulty chipsets seem to
-go all the way back to pre-2002. Andreas's comment was added in 2006 but we
-have no way of knowing if it is limited only to chipsets prior to 2006. If
-anyone can confirm a clean cut-off point when this was no longer required,
-perhaps we can limit this dummy wait to the older chipsets by annotating
-them with a X86_BUG_STPCLK quirk.
-
 > 
-> Do X86_FEATURE_ZEN CPUs just have unusually painful
-> inl(acpi_fadt.xpm_tmr_blk.address) implementations?
-
-Yes. The issue becomes more pronounced with increased core counts when many
-cores exit from C2 simultaneously. The core density is especially high on
-X86_FEATURE_ZEN chipsets, none of which require a dummy wait op to ensure
-correct behavior. Hence, we used the feature check to skip it.
-
-> Is that why we
-> noticed all of a sudden?
 > 
+>> -----原始邮件-----
+>> 发件人: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+>> 发送时间:2022-09-21 17:31:11 (星期三)
+>> 收件人: "朱银波" <zhuyinbo@loongson.cn>
+>> 抄送: "Rafael J . Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Zhang Rui" <rui.zhang@intel.com>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, zhanghongchen <zhanghongchen@loongson.cn>
+>> 主题: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to json-schema
+>>
+>> On 21/09/2022 11:22, 朱银波 wrote:
+>>>> -----原始邮件-----
+>>>> 发件人: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+>>>> 发送时间:2022-09-21 15:05:00 (星期三)
+>>>> 收件人: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rafael J . Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Zhang Rui" <rui.zhang@intel.com>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+>>>> 抄送: zhanghongchen <zhanghongchen@loongson.cn>
+>>>> 主题: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to json-schema
+>>>>
+>>>> On 21/09/2022 03:56, Yinbo Zhu wrote:
+>>>>> Convert the loongson2 thermal binding to DT schema format using
+>>>>> json-schema.
+>>>>
+>>>> Incorrect subject and incorrect commit msg. There is no conversion here.
+>>> Our soc architecture is the loongson2 series, so we will modify it accordingly.
+>>
+>> How the soc architecture is related to my comment that you do not
+>> perform conversion?
+> I got it, and I will aad a conversion.
+>>
+>>>
+>>>>
+>>>>>
+>>>>> Signed-off-by: Yinbo Zhu <c>
+>>>>> ---
+>>>>> Change in v2:
+>>>>> 		1. Add description and type about the "id".	
+>>>>> 		2. Make the filename was based on compatible.
+>>>>>
+>>>>>  .../bindings/thermal/loongson2-thermal.yaml   | 52 +++++++++++++++++++
+>>>>>  1 file changed, 52 insertions(+)
+>>>>>  create mode 100644 Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..2994ae3a56aa
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
+>>>>
+>>>>
+>>>> No improvements here. You ignore my comments, so I am going to NAK it.
+>>> I don't get your point, that dts compatible is "loongson,loongson2-thermal", so this driver file name is named
+>>> loongson2-thermal that according what you said about "Filename based on compatible."
+>>> If what I understand is not what you expect, please tell me how to modify it.
+>>
+>>
+>> Filename must match the compatible, so: loongson,loongson2-thermal.yaml
+> I got it, and I will add a conversion.
+>>
+>>>>
+>>>>
+>>>>> @@ -0,0 +1,52 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/thermal/loongson2-thermal.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: Thermal sensors on loongson2 SoCs
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - zhanghongchen <zhanghongchen@loongson.cn>
+>>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: loongson,loongson2-thermal
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  id:
+>>>>> +    $ref: '//schemas/types.yaml#/definitions/uint32'
+>>>>
+>>>> No improvements here, so let me be specific - you need to really justify
+>>>> such property or it cannot go to schema.
+>>> The loongson2_thermal.c driver need parse this "id" property.
+>>
+>> This is not reason to add properties to DT. DT describes the hardware,
+>> not driver behavior.
+>>
+>> Why hardware needs arbitrary, additional addressing number instead of
+>> standard unit address?
+> The loongson2 series soc supports up to four sensors, but the 2K1000 has only one sensor, so the ID must be 0. 
+> For the 2K1000, in order to distinguish the differences between different hardware in the Loongson2 SoC series,
+> the ID is added to the dts
 
-We saw run-to-run variance in tbench with 128 clients as a part of our
-scheduler regression runs. Originally we attributed it to the tbench
-threads not being spread around uniformly, but the problem persisted even
-when we ensured that the initial task placement spreads them out. Further
-analysis showed that significant time was spent in exit from C2 in the
-bad runs.
+That's not an explanation at all. All other SoCs have multiple sensors
+and we do not have such "id" fields.
 
---
-Thanks and Regards,
-Prateek
+>>
+>>>>
+>>>>> +    description: |
+>>>>> +      Specify the thermal sensor id.
+>>>>> +    minimum: 0
+>>>>> +    maximum: 3
+>>>>> +
+>>>>> +  interrupts:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  "#thermal-sensor-cells":
+>>>>> +    const: 1
+>>>>> +
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +  - reg
+>>>>> +  - id
+>>>>> +  - interrupt-parent
+>>>>
+>>>> Why?
+>>> The interrupts of our dts do not specify an interrupt parent,
+>>> eg. interrupts = <7 IRQ_TYPE_LEVEL_LOW>
+>>> so we need to add an interrupt parent property.
+>>
+>> You can add but I am asking why is it required?
+> Since there is more than one interrupt controller in the Loongson2 series soc, that need to specify the interrupt 
+> controller in the dts, that is, the interrupt parent.   If different interrupt parents are used in dts, the interrupt 
+> numbers are different.
+
+You describe now the overall SoC, but this is a schema for a device, not
+entire SoC. I still do not see why interrupt-parent is necessary for
+this device.
+
+> This email and its attachments contain confidential information from Loongson Technology , which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this email in error, please notify the sender by phone or email immediately and delete it. 
+
+You keep ignoring this one.
+
+Best regards,
+Krzysztof
+
