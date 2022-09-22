@@ -2,116 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2775E5F26
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 11:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EAC5E61D5
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 13:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiIVJ61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 05:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S229718AbiIVL52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 07:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiIVJ6S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 05:58:18 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABAFBF52;
-        Thu, 22 Sep 2022 02:58:17 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id t70so8636777pgc.5;
-        Thu, 22 Sep 2022 02:58:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=mlVUe7l2F/vn3OtB4sD70BapoKrCHXhr5Co6S55gUs8=;
-        b=phU2ntpVCueSAj/8cPKMMPYoxyT8QvvZCsKgV3NaB8AVN7BkMyanpoyrZRgE1ygMxm
-         qFmHtayg4CItXpNclyrKGQOm+N7qztt6yV4uWepO6aO1XZjhdi2aaNPGBM9ba4IZxjfv
-         MbdUPLd90T8FXlJCHhagU4F9E7U9mhisnWvDVerMGtRQ1jlcghh8D1GGYJUGLjsAPohD
-         8IwPssVUARhnt+j9Je4FsVIt24yG/GlD9N4wYgh2I3WkA2/AuzZ92Fs2lYw47c1jicSi
-         tEjqxibJ317gu0zgvM7uwkJqZXIyFqniecKVjUBK+4r9Ja1exDtGdRX7hlSCDyjPbjRO
-         otlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=mlVUe7l2F/vn3OtB4sD70BapoKrCHXhr5Co6S55gUs8=;
-        b=ShIO5q4vmQaMyEcbnxjqBXAnAz70cYoE080ygcgoB2+e7+N5/Ox3MXwU0h7cDqBWUo
-         JhU5CCfH6DL2MgZ5mWmpv94Urd5p5s3rfPjUZUhAbT/HE3iSSl21HXe62CJnslJgsRNC
-         HVpuZubCJZIy2AhLMDPoi8KBfAiS1GyzTPBGUpJE2SnC0mryhcUMHb2L8RLNNyRSwtYQ
-         cxUqiFURaIfk1LPkenTHH5e5sUPqxf016i4dWMtP7PCoSqRkQLnTAnjcVAuSxFKLBuSi
-         lAN0/NqnRUc+vX6dkFGnpChiWQqw/xOaw+qobPmDIELrGCqog5p5c5yTg3O5rSL9t0Lk
-         u0KQ==
-X-Gm-Message-State: ACrzQf2YSjI0wa0HJm+cvici9rmjXz7f0Sly7gFp9WWuinl+AH5/CSUX
-        8s2Lpc/MzjEr+P6FoCkySd693eYnEyo=
-X-Google-Smtp-Source: AMsMyM4+MlOo982tTNcMFbOk5Y11Q+6T2ezdcAOx8BwSoMhbWYb6/PYAObZL9a2t8WfICQow2nwvVA==
-X-Received: by 2002:a62:1bc8:0:b0:546:c62e:e84 with SMTP id b191-20020a621bc8000000b00546c62e0e84mr2622551pfb.45.1663840696649;
-        Thu, 22 Sep 2022 02:58:16 -0700 (PDT)
-Received: from ?IPV6:2001:b400:e404:66d5:563:faf0:1fe2:f8cc? (2001-b400-e404-66d5-0563-faf0-1fe2-f8cc.emome-ip6.hinet.net. [2001:b400:e404:66d5:563:faf0:1fe2:f8cc])
-        by smtp.gmail.com with ESMTPSA id w22-20020aa79556000000b0053e0d6f353esm3988642pfq.27.2022.09.22.02.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 02:58:16 -0700 (PDT)
-Message-ID: <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
-Date:   Thu, 22 Sep 2022 17:58:12 +0800
+        with ESMTP id S229488AbiIVL52 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 07:57:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C66A5735
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 04:57:27 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYDDV61svzMn6Q;
+        Thu, 22 Sep 2022 19:52:42 +0800 (CST)
+Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 19:57:25 +0800
+Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
+ (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 19:57:24 +0800
+From:   Shang XiaoJing <shangxiaojing@huawei.com>
+To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>, <rui.zhang@intel.com>,
+        <srinivas.pandruvada@linux.intel.com>, <atenart@kernel.org>,
+        <sumeet.r.pawnikar@intel.com>, <linux-pm@vger.kernel.org>
+CC:     <shangxiaojing@huawei.com>
+Subject: [PATCH -next] thermal/drivers/int340x/processor_thermal: Switch to use module_pci_driver() macro
+Date:   Thu, 22 Sep 2022 20:31:41 +0800
+Message-ID: <20220922123141.24042-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH -next] power: supply: mt6370: Fix Kconfig dependency
-To:     Ren Zhijie <renzhijie2@huawei.com>, sre@kernel.org,
-        andy.shevchenko@gmail.com, chiaen_wu@richtek.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220922023337.15609-1-renzhijie2@huawei.com>
-Content-Language: en-US
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-In-Reply-To: <20220922023337.15609-1-renzhijie2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600008.china.huawei.com (7.193.23.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/22/2022 10:33 AM, Ren Zhijie wrote:
-> If CONFIG_IIO is not set,
-> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
-> will be failed, like this:
-> 
-> drivers/power/supply/mt6370-charger.o: In function `mt6370_chg_mivr_dwork_func':
-> mt6370-charger.c:(.text+0x670): undefined reference to `iio_read_channel_processed'
-> drivers/power/supply/mt6370-charger.o: In function `mt6370_chg_probe':
-> mt6370-charger.c:(.text+0xb43): undefined reference to `devm_iio_channel_get_all'
-> make: *** [vmlinux] Error 1
-> 
-> To fix this build error, add depends on IIO to config CHARGER_MT6370 dependency.
-> 
-> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-> ---
->   drivers/power/supply/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 591deb82e2c6..62111f4bb093 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -623,6 +623,7 @@ config CHARGER_MT6370
->   	tristate "MediaTek MT6370 Charger Driver"
->   	depends on MFD_MT6370
->   	depends on REGULATOR
-> +	depends on IIO
->   	select LINEAR_RANGES
->   	help
->   	  Say Y here to enable MT6370 Charger Part.
+Since pci provides the helper macro module_pci_driver(), we may replace
+the module_init/exit with it.
 
-Hi Ren,
+Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+---
+ .../int340x_thermal/processor_thermal_device_pci.c  | 13 +------------
+ .../processor_thermal_device_pci_legacy.c           | 13 +------------
+ 2 files changed, 2 insertions(+), 24 deletions(-)
 
-Thanks for catching this!
-
-Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
-
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index c2dc4c158b9d..bf1b1cdfade4 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -373,18 +373,7 @@ static struct pci_driver proc_thermal_pci_driver = {
+ 	.driver.pm	= &proc_thermal_pci_pm,
+ };
+ 
+-static int __init proc_thermal_init(void)
+-{
+-	return pci_register_driver(&proc_thermal_pci_driver);
+-}
+-
+-static void __exit proc_thermal_exit(void)
+-{
+-	pci_unregister_driver(&proc_thermal_pci_driver);
+-}
+-
+-module_init(proc_thermal_init);
+-module_exit(proc_thermal_exit);
++module_pci_driver(proc_thermal_pci_driver);
+ 
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
+ MODULE_DESCRIPTION("Processor Thermal Reporting Device Driver");
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
+index 4571a1a53b84..09e032f822f3 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
+@@ -151,18 +151,7 @@ static struct pci_driver proc_thermal_pci_driver = {
+ 	.driver.pm	= &proc_thermal_pci_pm,
+ };
+ 
+-static int __init proc_thermal_init(void)
+-{
+-	return pci_register_driver(&proc_thermal_pci_driver);
+-}
+-
+-static void __exit proc_thermal_exit(void)
+-{
+-	pci_unregister_driver(&proc_thermal_pci_driver);
+-}
+-
+-module_init(proc_thermal_init);
+-module_exit(proc_thermal_exit);
++module_pci_driver(proc_thermal_pci_driver);
+ 
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
+ MODULE_DESCRIPTION("Processor Thermal Reporting Device Driver");
 -- 
-Best Regards,
-ChiaEn Wu
+2.17.1
+
