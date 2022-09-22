@@ -2,54 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6737F5E5C54
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 09:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B4A5E5CD6
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 10:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiIVHZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 03:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S229646AbiIVIEW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 04:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiIVHZP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 03:25:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0BB5D0F1
-        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 00:25:11 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 29EB96601A43;
-        Thu, 22 Sep 2022 08:25:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663831510;
-        bh=KWphtaFojHC1LO0kVmsxuJ57Y28jan/tm0HeYuklWDE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MV/qHivnH6SHgT2+yfCnLT+HI3kYQMDRRfyUQAXm/Bq2woN6g3mIKo4FBd1vsjmVc
-         D4bB9ZzHUp89cCQilxkA7fU8v/lYvQpFH424iOziuOYlFp4qFponusugn8raUhrCyl
-         38FHuM/egLkUiuM0QglIbgIEYIIDhzXiYJ0sIrnXbH6TrjqZqeIcvkW1ygTRH4C1Uj
-         ioOvGqbz9LeOz9iJJHbK2HJvfT01ZRwm14QVQj+nazOsJJeu28qTf1X4Sh9I3Xil//
-         J4BK0V0Oji6YpLXoxtttI/jT+Pv7C/YsG1nWVmiLyFCoQ18E2IWXzJIeo3bF31ie7K
-         1NS85lFoXjdvQ==
-Message-ID: <eb797605-0310-1c8b-28ae-eabc17901e65@collabora.com>
-Date:   Thu, 22 Sep 2022 09:25:07 +0200
+        with ESMTP id S229788AbiIVIEV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 04:04:21 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED32B0895;
+        Thu, 22 Sep 2022 01:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1663833860;
+  x=1695369860;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y7PksKknbCBSfoeFeaMHMaUOZcKfqwkfUuwxPKFRFE4=;
+  b=oFtMewDYQpVirNgGhMHzzJP4qlNVGCDkYYirx5Fo8MpQi3W2fu6sejDn
+   5+3CC9NXjomtoptH8ooSzno+wYl4DJi5dNAttrYWYZccXkjJaX2LDOH0q
+   O7xs8IbYz/9wQk9kac7GhaHoxA6pYMgX+fjYknm2WPyQwmi2QXEBbJaft
+   TZQf9X0+rc6IH4M5yzoQy9g+d8bfhQMahllH9gGe21wCK2bVUXVmEeEEu
+   nqTu8E7gP9COCqY1CTVJXbRd3jjbldrhWA8YmBc1UE0GOfFhqcVWLg9h7
+   tm4SXncMVSTsd2QgyhYYym70BkAfIkVFUhrCX5PVVk1cTMaRz3iFGv3jj
+   w==;
+From:   Hermes Zhang <chenhuiz@axis.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <kernel@axis.com>, Hermes Zhang <chenhuiz@axis.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] power: supply: bq256xx: Support enter ship mode
+Date:   Thu, 22 Sep 2022 15:38:23 +0800
+Message-ID: <20220922073823.1175772-1-chenhuiz@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH -next] power: supply: mt6370: Fix return value check in
- mt6370_chg_probe()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
-Cc:     sre@kernel.org, chiaen_wu@richtek.com
-References: <20220921152915.1506767-1-yangyingliang@huawei.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220921152915.1506767-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,14 +47,160 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 21/09/22 17:29, Yang Yingliang ha scritto:
-> If create_singlethread_workqueue() fails, it returns a null pointer,
-> replace IS_ERR() check with NULL pointer check.
-> 
-> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
+Support to enter ship mode by setting value to POWER_SUPPLY_PROP_ONLINE
+which is same way as in bq24296.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+---
+ drivers/power/supply/bq256xx_charger.c | 35 +++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
+index 01ad84fd147c..35b9e1b733fe 100644
+--- a/drivers/power/supply/bq256xx_charger.c
++++ b/drivers/power/supply/bq256xx_charger.c
+@@ -141,6 +141,9 @@
+ #define BQ256XX_WATCHDOG_DIS	0
+ #define BQ256XX_WDT_BIT_SHIFT	4
+ 
++#define BQ256XX_BATFET_DISABLE_MASK		BIT(5)
++#define BQ256XX_BATFET_DISABLE_BIT_SHIFT	5
++
+ #define BQ256XX_REG_RST		BIT(7)
+ 
+ /**
+@@ -259,6 +262,7 @@ struct bq256xx_device {
+  * @bq256xx_set_iterm: pointer to instance specific set_iterm function
+  * @bq256xx_set_iprechg: pointer to instance specific set_iprechg function
+  * @bq256xx_set_vindpm: pointer to instance specific set_vindpm function
++ * @bq256xx_set_online: pointer to instance specific set_online function
+  *
+  * @bq256xx_def_ichg: default ichg value in microamps
+  * @bq256xx_def_iindpm: default iindpm value in microamps
+@@ -290,6 +294,7 @@ struct bq256xx_chip_info {
+ 	int (*bq256xx_set_iterm)(struct bq256xx_device *bq, int iterm);
+ 	int (*bq256xx_set_iprechg)(struct bq256xx_device *bq, int iprechg);
+ 	int (*bq256xx_set_vindpm)(struct bq256xx_device *bq, int vindpm);
++	int (*bq256xx_set_online)(struct bq256xx_device *bq, bool online);
+ 
+ 	int bq256xx_def_ichg;
+ 	int bq256xx_def_iindpm;
+@@ -425,6 +430,7 @@ static int bq256xx_get_state(struct bq256xx_device *bq,
+ {
+ 	unsigned int charger_status_0;
+ 	unsigned int charger_status_1;
++	unsigned int charger_control_3;
+ 	int ret;
+ 
+ 	ret = regmap_read(bq->regmap, BQ256XX_CHARGER_STATUS_0,
+@@ -437,9 +443,15 @@ static int bq256xx_get_state(struct bq256xx_device *bq,
+ 	if (ret)
+ 		return ret;
+ 
++	ret = regmap_read(bq->regmap, BQ256XX_CHARGER_CONTROL_3,
++						&charger_control_3);
++	if (ret)
++		return ret;
++
+ 	state->vbus_stat = charger_status_0 & BQ256XX_VBUS_STAT_MASK;
+ 	state->chrg_stat = charger_status_0 & BQ256XX_CHRG_STAT_MASK;
+-	state->online = charger_status_0 & BQ256XX_PG_STAT_MASK;
++	state->online = (charger_status_0 & BQ256XX_PG_STAT_MASK)
++			&& !(charger_control_3 & BQ256XX_BATFET_DISABLE_MASK);
+ 
+ 	state->wdt_fault = charger_status_1 & BQ256XX_WDT_FAULT_MASK;
+ 	state->bat_fault = charger_status_1 & BQ256XX_BAT_FAULT_MASK;
+@@ -702,6 +714,13 @@ static int bq256xx_set_prechrg_curr(struct bq256xx_device *bq, int iprechg)
+ 				BQ256XX_IPRECHG_MASK, iprechg_reg_code);
+ }
+ 
++static int bq256xx_set_online(struct bq256xx_device *bq, bool online)
++{
++	return regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_3,
++				BQ256XX_BATFET_DISABLE_MASK,
++				(online ? 0 : 1) << BQ256XX_BATFET_DISABLE_BIT_SHIFT);
++}
++
+ static int bq25618_619_get_prechrg_curr(struct bq256xx_device *bq)
+ {
+ 	unsigned int prechg_and_term_curr_lim;
+@@ -915,6 +934,12 @@ static int bq256xx_set_charger_property(struct power_supply *psy,
+ 			return ret;
+ 		break;
+ 
++	case POWER_SUPPLY_PROP_ONLINE:
++		ret = bq->chip_info->bq256xx_set_online(bq, val->intval);
++		if (ret)
++			return ret;
++		break;
++
+ 	default:
+ 		break;
+ 	}
+@@ -1197,6 +1222,7 @@ static int bq256xx_property_is_writeable(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+ 	case POWER_SUPPLY_PROP_STATUS:
+ 	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
++	case POWER_SUPPLY_PROP_ONLINE:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -1286,6 +1312,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1316,6 +1343,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1346,6 +1374,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1376,6 +1405,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ2560X_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1406,6 +1436,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq256xx_set_term_curr,
+ 		.bq256xx_set_iprechg = bq256xx_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ25611D_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1436,6 +1467,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq25618_619_set_term_curr,
+ 		.bq256xx_set_iprechg = bq25618_619_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ25618_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+@@ -1466,6 +1498,7 @@ static const struct bq256xx_chip_info bq256xx_chip_info_tbl[] = {
+ 		.bq256xx_set_iterm = bq25618_619_set_term_curr,
+ 		.bq256xx_set_iprechg = bq25618_619_set_prechrg_curr,
+ 		.bq256xx_set_vindpm = bq256xx_set_input_volt_lim,
++		.bq256xx_set_online = bq256xx_set_online,
+ 
+ 		.bq256xx_def_ichg = BQ25618_ICHG_DEF_uA,
+ 		.bq256xx_def_iindpm = BQ256XX_IINDPM_DEF_uA,
+-- 
+2.30.2
 
