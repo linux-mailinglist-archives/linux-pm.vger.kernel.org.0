@@ -2,48 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D005E6C8E
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 22:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59245E6BEE
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 21:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbiIVUBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 16:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        id S232452AbiIVTnz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 15:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiIVUBW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 16:01:22 -0400
-X-Greylist: delayed 604 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Sep 2022 13:00:30 PDT
-Received: from rhlx01.hs-esslingen.de (rhlx01.hs-esslingen.DE [IPv6:2001:7c0:700::10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA0836781;
-        Thu, 22 Sep 2022 13:00:30 -0700 (PDT)
-Received: by rhlx01.hs-esslingen.de (Postfix, from userid 102)
-        id A8BA6277FBA8; Thu, 22 Sep 2022 21:42:15 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 21:42:15 +0200
-From:   Andreas Mohr <andi@lisas.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
-        andi@lisas.de, puwen@hygon.cn, mario.limonciello@amd.com,
-        peterz@infradead.org, rui.zhang@intel.com, gpiccoli@igalia.com,
-        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
-        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
-        stable@vger.kernel.org, regressions@lists.linux.dev
-Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Message-ID: <Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de>
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
- <20e78a49-25df-c83d-842e-1d624655cfd7@intel.com>
- <0885eecb-042f-3b74-2965-7d657de59953@amd.com>
- <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
+        with ESMTP id S229865AbiIVTnz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 15:43:55 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E012D10B583
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 12:43:53 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id sd10so14999927ejc.2
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 12:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=/QKOwekVmpIN1iELZeeAaMGxiIyfBaqOqMFigiI0UNg=;
+        b=RrgQ++2W9ZlzvN2o0ReqZrP46rzCUJJS+f/Ky8rCAFxfn0B7wLR79CaWsJoP6YTUF3
+         gF8wuO8ik8e7CraRROmztE4xYaK5rBgOCWyz+11p+qhGYZ+K1VrBYyKYZQsoh3Va+OG0
+         Urp/FnUsSrDZeR7u+SOSgXqrxA/ynh1+eOG9g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=/QKOwekVmpIN1iELZeeAaMGxiIyfBaqOqMFigiI0UNg=;
+        b=e2pqnH/+Eo6eGOBUQJCpvUdcJi5ME7oLVFMisTSrlYem36WLq+4OZzGXUvfIgw61bQ
+         qteHT5kXzR1HDSEgxtD9YqvtHJHzDoAd4K1BAFiBMHf3s8E0XM6FZ83JPvwHRNP/elZC
+         QLFy7ENK6dgqqoZ5WoHK4MXkswVIOUBJcf6786iTZ0dzCdos+ubSxVPBHLquzGX5gceq
+         LUePAdgy7uKgsr/yh8v1qKkWE7hw3wwVgX65gG3ZrcfPufYBxqVg3QL7QI/UK52vglNa
+         wVNw6bYhrWve1uSpwez4sQyzMqXNBjVnOOONSR14KJJbycwH8llbWyfEiupK/Bl5myyX
+         JCbA==
+X-Gm-Message-State: ACrzQf2Cq9lPH8FdBjyQYLdZ0LPvWklrASWbog6hMtbgK45nRgkUXLly
+        dtr01Hf5xhIVsZlE4WxDNM7h7Qy0GYnJyJ8G
+X-Google-Smtp-Source: AMsMyM4yApGLqbCPphLDckI5ko2aSd0qUuu69B1Pd/urFiI27MfeKO6GNZIi/sw+NSXB8xVhDdjjTg==
+X-Received: by 2002:a17:906:8473:b0:77b:efa8:50e4 with SMTP id hx19-20020a170906847300b0077befa850e4mr4175664ejc.250.1663875832330;
+        Thu, 22 Sep 2022 12:43:52 -0700 (PDT)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id f14-20020a17090631ce00b0074ae59d85a4sm3097273ejf.20.2022.09.22.12.43.51
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 12:43:51 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so2029134wmb.0
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 12:43:51 -0700 (PDT)
+X-Received: by 2002:a05:600c:5488:b0:3b5:634:731 with SMTP id
+ iv8-20020a05600c548800b003b506340731mr2225058wmb.188.1663875831036; Thu, 22
+ Sep 2022 12:43:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
-X-Priority: none
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <12079576.O9o76ZdvQC@kreacher>
+In-Reply-To: <12079576.O9o76ZdvQC@kreacher>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 22 Sep 2022 12:43:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XtrDvMOHz2=LADEiQC4oh6Yz7Z5qopcg0r2xCYT6XELw@mail.gmail.com>
+Message-ID: <CAD=FV=XtrDvMOHz2=LADEiQC4oh6Yz7Z5qopcg0r2xCYT6XELw@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Return -EINPROGRESS from rpm_resume() in the
+ RPM_NOWAIT case
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,62 +77,24 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-On Thu, Sep 22, 2022 at 10:01:46AM -0700, Dave Hansen wrote:
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> index 16a1663d02d4..9f40917c49ef 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -531,10 +531,27 @@ static void wait_for_freeze(void)
->  	/* No delay is needed if we are in guest */
->  	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
->  		return;
-> +	/*
-> +	 * Modern (>=Nehalem) Intel systems use ACPI via intel_idle,
-> +	 * not this code.  Assume that any Intel systems using this
-> +	 * are ancient and may need the dummy wait.  This also assumes
-> +	 * that the motivating chipset issue was Intel-only.
-> +	 */
-> +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-> +		return;
->  #endif
-> -	/* Dummy wait op - must do something useless after P_LVL2 read
-> -	   because chipsets cannot guarantee that STPCLK# signal
-> -	   gets asserted in time to freeze execution properly. */
+On Thu, Sep 22, 2022 at 11:04 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> The prospective callers of rpm_resume() passing RPM_NOWAIT to it may
+> be confused when it returns 0 without actually resuming the device
+> which may happen if the device is suspending at the given time and it
+> will only resume when the suspend in progress has completed.  To avoid
+> that confusion, return -EINPROGRESS from rpm_resume() in that case.
+>
+> Since none of the current callers passing RPM_NOWAIT to rpm_resume()
+> check its return value, this change has no functional impact.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/power/runtime.c |    7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-16 years ago,
-I did my testing on a VIA 8233/8235 chipset (AMD Athlon/Duron) system......
-(plus reading VIA spec PDFs which mentioned "STPCLK#" etc.).
+Seems reasonable to me.
 
-
-
-
-AFAIR I was doing kernel profiling (via oprofile, IIRC)
-for painful performance hotspots (read: I/O accesses etc.), and
-this was one resulting place which I stumbled over.
-And if I'm not completely mistaken,
-that dummy wait I/O op *was* needed (else "nice" effects)
-on my system (put loud and clear: *non*-Intel).
-
-
-
-So one can see where my profiling effort went
-(*optimizing* things, not degrading them)
---> hints that current Zen3-originating effort is not
-about a regression in the "regression bug" sense -
-merely a (albeit rather appreciable/sizeable... congrats!)
-performance deterioration vs.
-an optimal (currently non-achieved) software implementation state
-(also: of PORT-based handling [vs. MWAIT], mind you!).
-
-
-I still have that VIA hardware, but inactive
-(had the oh-so-usual capacitors issue :( ).
-
-
-Sorry for sabotaging your current fix efforts ;-) -
-but thank you very much for your work/discussion
-in this very central/hotpath area! (this extends to all of you...)
-
-Greetings
-
-Andreas Mohr
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
