@@ -2,139 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B194F5E5C0B
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 09:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6737F5E5C54
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Sep 2022 09:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbiIVHMz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 03:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S229921AbiIVHZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 03:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiIVHMW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 03:12:22 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567F1B7EDA;
-        Thu, 22 Sep 2022 00:12:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663830733; x=1695366733;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hrFEGOOTR5E0lv2UWJquhx4Tlo3vC0i+tTZYOkAGxZo=;
-  b=WaObvi+/G2uKU5NtyJS7rkaRc0+LiaR1bHqjJOq5rnXq8oHVlapGgRaH
-   Qgxzk2vLg7+g75S+1OEBCY5NUTMgTs5UEMTvJckDeGywD0AeDmBwNRXU/
-   Uni90UoZCEUonB7HI/ryBltLy1t0QJsYIFdnOqWxb/wh0HxYufVxmYfsK
-   s7gSYY6fK44QDsNIwHwhWMLr4d8R4sJXNIpzc4fSTIn8FUFgb137/FvPX
-   0LUVA2NpU/HHSKW5ErNb16oF4T8ARtP52Z5TdEbQ4eYPaGjXlTGB9Trck
-   JChT8rIMAmdZh3ZRYWWH6NZ/G6QAhdpTk8c2sdjkRjUAFeSjCBDswcG5w
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="364199443"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="364199443"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 00:12:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="652855234"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Sep 2022 00:12:05 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obGNQ-0004Pi-1h;
-        Thu, 22 Sep 2022 07:12:04 +0000
-Date:   Thu, 22 Sep 2022 15:11:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 65dc2656226949bc594ef5367dd29b7cb8ca27eb
-Message-ID: <632c0a9b.Uy4+mGNx8fBFsycG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229712AbiIVHZP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 03:25:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0BB5D0F1
+        for <linux-pm@vger.kernel.org>; Thu, 22 Sep 2022 00:25:11 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 29EB96601A43;
+        Thu, 22 Sep 2022 08:25:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663831510;
+        bh=KWphtaFojHC1LO0kVmsxuJ57Y28jan/tm0HeYuklWDE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MV/qHivnH6SHgT2+yfCnLT+HI3kYQMDRRfyUQAXm/Bq2woN6g3mIKo4FBd1vsjmVc
+         D4bB9ZzHUp89cCQilxkA7fU8v/lYvQpFH424iOziuOYlFp4qFponusugn8raUhrCyl
+         38FHuM/egLkUiuM0QglIbgIEYIIDhzXiYJ0sIrnXbH6TrjqZqeIcvkW1ygTRH4C1Uj
+         ioOvGqbz9LeOz9iJJHbK2HJvfT01ZRwm14QVQj+nazOsJJeu28qTf1X4Sh9I3Xil//
+         J4BK0V0Oji6YpLXoxtttI/jT+Pv7C/YsG1nWVmiLyFCoQ18E2IWXzJIeo3bF31ie7K
+         1NS85lFoXjdvQ==
+Message-ID: <eb797605-0310-1c8b-28ae-eabc17901e65@collabora.com>
+Date:   Thu, 22 Sep 2022 09:25:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH -next] power: supply: mt6370: Fix return value check in
+ mt6370_chg_probe()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+Cc:     sre@kernel.org, chiaen_wu@richtek.com
+References: <20220921152915.1506767-1-yangyingliang@huawei.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220921152915.1506767-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 65dc2656226949bc594ef5367dd29b7cb8ca27eb  Merge branch 'pm-cpuidle' into bleeding-edge
+Il 21/09/22 17:29, Yang Yingliang ha scritto:
+> If create_singlethread_workqueue() fails, it returns a null pointer,
+> replace IS_ERR() check with NULL pointer check.
+> 
+> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
 
-elapsed time: 721m
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-configs tested: 58
-configs skipped: 2
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allmodconfig
-s390                                defconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-arc                  randconfig-r043-20220921
-m68k                             allyesconfig
-riscv                randconfig-r042-20220921
-m68k                             allmodconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-i386                                defconfig
-powerpc                          allmodconfig
-s390                 randconfig-r044-20220921
-sh                               allmodconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a013
-i386                          randconfig-a001
-x86_64                        randconfig-a011
-x86_64                              defconfig
-arm                                 defconfig
-i386                             allyesconfig
-i386                          randconfig-a003
-x86_64                        randconfig-a015
-x86_64                               rhel-8.3
-i386                          randconfig-a014
-x86_64                           allyesconfig
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a016
-arm64                            allyesconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-
-clang tested configs:
-hexagon              randconfig-r041-20220921
-hexagon              randconfig-r045-20220921
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a002
-i386                          randconfig-a013
-i386                          randconfig-a004
-i386                          randconfig-a011
-i386                          randconfig-a006
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
