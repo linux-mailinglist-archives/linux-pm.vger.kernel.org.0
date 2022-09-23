@@ -2,251 +2,264 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C4A5E7C63
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Sep 2022 15:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3995E7C84
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Sep 2022 16:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiIWN4D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Sep 2022 09:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
+        id S231666AbiIWOJK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Sep 2022 10:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbiIWN4D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Sep 2022 09:56:03 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086F513D1F7
-        for <linux-pm@vger.kernel.org>; Fri, 23 Sep 2022 06:56:00 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id s14so214548wro.0
-        for <linux-pm@vger.kernel.org>; Fri, 23 Sep 2022 06:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=S/p8TvXlsMGXG51CkXeBekBV47MmYMaNjH+nwQik6mo=;
-        b=pesQIkJa1x9mg8LE7c1BamUwx4uzYPg0MQOvF7vkEfvtp0xDXdNWK4UsxwdeYxqP1G
-         f5lXAOWWPOITHbY2gdNkFN7/IsH5pu+axiN8GES5mepjN+IAWBGkMYSkXFG9h2d3hgME
-         T+UOpQi4Vvp9qxmkK3+IXptPL8pBBH782k8y6fTghfF7kPK2muCQfKu9ox11hKgvVm8j
-         vBOqaOiTKtiiE0ekdqBpg6AB407tl+GtSV30SyWW7CsJBiYWtGtGKitpIu8NG7tZ7gHW
-         O1a2s8TQS1Tc4zC7PaGuTjDzgY2V3EWfF14CTgQb6abAp9h2DDbR7Z00ljb01PAm8n11
-         LDeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=S/p8TvXlsMGXG51CkXeBekBV47MmYMaNjH+nwQik6mo=;
-        b=MRpEp6ZIDlJnRNo17HTl9tnJmV2U8uFIuOccG5adfo5iXshOtLyCMFpqRIuDAQlWnc
-         a7fioalwAzhCUlGe6TLWsfrk9VfhStaxFbv/X/yGFW1kzaS4PAebcNIARaHvheRRqI6i
-         TreUJewHb4vgJNgvqBjAqcvbl4JZPxnGPu2xaXYKhPeVJaWWTFnUox7e4dCGgQwVXyHE
-         cGi2nFHaREnvbr50PSJ6nlVPoEQ6Tdw30K5wfsVMWsXCK56YuiOlFnFPdlX1Yjp45lo2
-         J8b9iLcUcpTYwAwBWG9BIaR4tnTbs+xKTEP5i/r//Eid6PfjIZ/qDjILok8RAMNYhUqM
-         8LJA==
-X-Gm-Message-State: ACrzQf3vt6ttTu+IIFdTQb/qbT7AhpG9xxjlrumJacJAwGxj5XLtApaB
-        Xg5wBVbTYbdRf2tyC3Z4F4qO793Yab001CCH60rhHQ==
-X-Google-Smtp-Source: AMsMyM5JD0LHLzdgiPuW93f49BMsTWiW6nyvuGbZbM+xrf5PUIHPYMm+BgwIrZTLBwTvkItjALXG7xZhx/Y05gOiULI=
-X-Received: by 2002:a5d:588f:0:b0:22b:5cc:e1d3 with SMTP id
- n15-20020a5d588f000000b0022b05cce1d3mr5073130wrf.142.1663941358489; Fri, 23
- Sep 2022 06:55:58 -0700 (PDT)
+        with ESMTP id S230025AbiIWOJI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Sep 2022 10:09:08 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9C813F281
+        for <linux-pm@vger.kernel.org>; Fri, 23 Sep 2022 07:09:05 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220923140904euoutp01981364070d55a78cce89ce64ba1c1ef9~XgpBy7Qqd2615926159euoutp01R
+        for <linux-pm@vger.kernel.org>; Fri, 23 Sep 2022 14:09:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220923140904euoutp01981364070d55a78cce89ce64ba1c1ef9~XgpBy7Qqd2615926159euoutp01R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663942144;
+        bh=lQSn8l24IYNJD7eLxVdJcmUxxS+Un9kRAvFcHMkoUME=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=pg6Ri2+UXwO3+0wou8ftnFe0/nVMqXskBWi0wI0vVv0OLOcScPQSgnoz4st6v06ji
+         eBGoyjXAoIQVrmTfvm2eLol+b7UGzU/WLvHj2KH94mkZcyouFktWdzk9RuQY6XvwBI
+         KvC1NBYuIgUPSKOnCQfKWnL4XXEhWCfLkYKeOoEA=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220923140903eucas1p1e34813b42ffdb039d6bf577873312b00~XgpBes59x0569105691eucas1p1e;
+        Fri, 23 Sep 2022 14:09:03 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id A8.5E.19378.FFDBD236; Fri, 23
+        Sep 2022 15:09:03 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220923140903eucas1p180002df0deb308d5148cc6004aef7efe~XgpA86H5Y1614516145eucas1p1p;
+        Fri, 23 Sep 2022 14:09:03 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220923140903eusmtrp16c73bcfd918e5d9631e10148c3479bfc~XgpA8EQ-P1053310533eusmtrp1Z;
+        Fri, 23 Sep 2022 14:09:03 +0000 (GMT)
+X-AuditID: cbfec7f5-a4dff70000014bb2-30-632dbdffafc7
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F5.57.07473.FFDBD236; Fri, 23
+        Sep 2022 15:09:03 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220923140902eusmtip26fc602160856b219e347381b00729c0d~XgpASuhRb0777607776eusmtip2B;
+        Fri, 23 Sep 2022 14:09:02 +0000 (GMT)
+Message-ID: <bc3a5137-b2be-0bfe-003a-db201a7a50e8@samsung.com>
+Date:   Fri, 23 Sep 2022 16:09:02 +0200
 MIME-Version: 1.0
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
- <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
- <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm> <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
- <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm> <CAPDyKFoS=E3c9XWWCaG2byMm-3nvvW5jXS0X7Bh-NK_msTUykQ@mail.gmail.com>
- <3bbba64dc4fd9ef37fb937f5176b1ef50b8b2d73.camel@puri.sm>
-In-Reply-To: <3bbba64dc4fd9ef37fb937f5176b1ef50b8b2d73.camel@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 23 Sep 2022 15:55:21 +0200
-Message-ID: <CAPDyKFqRAo+r0kW3H1ipu0trX0FC6EnG-PpFvXD7c1WmfPhtSA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v4 10/30] thermal/drivers/exynos: Replace
+ of_thermal_is_trip_valid() by thermal_zone_get_trip()
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220921094244.606948-11-daniel.lezcano@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFKsWRmVeSWpSXmKPExsWy7djP87r/9+omGxzdbWzxYN42NovD8yss
+        vm+5zmQx77Osxd7XW9ktNj2+xmpxedccNovPvUcYLWac38dkMffLVGaLJw/72By4PXbOusvu
+        sXjPSyaPTas62TzuXNvD5rF5Sb1H35ZVjB6fN8kFsEdx2aSk5mSWpRbp2yVwZazd3sZasEmj
+        Yv3pVYwNjPcUuxg5OSQETCRW7frO3MXIxSEksIJRom3FZhYI5wujxIdv+6Aynxklnt3YyQrT
+        cvjnCqiq5YwSjZfeMUE4Hxklpm+fxARSxStgJ7Hr3m4WEJtFQFXiyLwb7BBxQYmTM5+AxUUF
+        kiVmHTvGCGILC5RKzL24mhnEZhYQl7j1ZD7YHBEBR4kvfxexgyxgFtjLLHGg/wJYM5uAoUTX
+        2y62LkYODk6gopdPtCB65SWat84GO1tCoJ1TYu+BecwQZ7tINK7uZoKwhSVeHd/CDmHLSJye
+        3MMC1cAoseD3fSYIZwKjRMPzW4wQVdYSd879AtvGLKApsX6XPkTYUWLynvnsIGEJAT6JG28F
+        IY7gk5i0bTozRJhXoqNNCKJaTWLW8XVwaw9euMQ8gVFpFlKwzELy/iwk78xC2LuAkWUVo3hq
+        aXFuemqxcV5quV5xYm5xaV66XnJ+7iZGYPI6/e/41x2MK1591DvEyMTBeIhRgoNZSYR39h3N
+        ZCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8bDO0koUE0hNLUrNTUwtSi2CyTBycUg1Mm0/senO2
+        peROcvjMPqmAvpoHlXe3vvAsVd/mWZg1yfZRS7b02/O1NfW/SxYHqLM9mT8/RXJHwIrzf+J3
+        Wq2eeMdtqdu9jdseSp5aGsqgXjXbWss08e1yN3VhgfJ8oeRZWfoT/utX+cROmzr77b2GMuPE
+        PZcvLKx2uvDoR6/0p3j3xYW3OqbePs2dv3CDoz+3uc32kiw+DpvP9dIhf5mat0k2NB30/S//
+        4fjk2eI/wl5mLWE5v+/27DsRfi/XXe+6zrrzxe6K4IsGM2c33VrD/3s57/dX2Qyiu9j2itba
+        fHeOePWKeZt+sejamU2906+2X9imovVU0l702m6Wyvpzx0X2O4XbcsdffKzHHXrmkBJLcUai
+        oRZzUXEiAPluUezNAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFIsWRmVeSWpSXmKPExsVy+t/xe7r/9+omGzy4z23xYN42NovD8yss
+        vm+5zmQx77Osxd7XW9ktNj2+xmpxedccNovPvUcYLWac38dkMffLVGaLJw/72By4PXbOusvu
+        sXjPSyaPTas62TzuXNvD5rF5Sb1H35ZVjB6fN8kFsEfp2RTll5akKmTkF5fYKkUbWhjpGVpa
+        6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZazd3sZasEmjYv3pVYwNjPcUuxg5OSQETCQO
+        /1zB0sXIxSEksJRRouXLAyaIhIzEyWkNrBC2sMSfa11sEEXvGSXeNp9hB0nwCthJ7Lq3mwXE
+        ZhFQlTgy7wZUXFDi5MwnYHFRgWSJJQ33wQYJC5RKzL24mhnEZhYQl7j1ZD7YMhEBR4kvfxex
+        gyxgFtjLLNHzvB2oiANoW5nE9E8yIDVsAoYSXW9BjuDg4ASqf/lEC2KMmUTX1i5GCFteonnr
+        bOYJjEKzkFwxC8m2WUhaZiFpWcDIsopRJLW0ODc9t9hQrzgxt7g0L10vOT93EyMwUrcd+7l5
+        B+O8Vx/1DjEycTAeYpTgYFYS4Z19RzNZiDclsbIqtSg/vqg0J7X4EKMpMCgmMkuJJucDU0Ve
+        SbyhmYGpoYmZpYGppZmxkjivZ0FHopBAemJJanZqakFqEUwfEwenVAOTcd79b0aCFk5VU73e
+        3JGYGuy8UTPt9CkTlWslFwT/KFytvNtpeML/pstl/YNbt5YtY7dp/Xq5cO5c9R0uXJPZU+cn
+        PXu3sULfvdtTeV0dD29BVUfVGWmGeslV7qWH2PUOeuv9nTn7tlyU0Yq8yAytX79Niu69nrxR
+        N2FnC29hj8DTkvKlBgK/S8Xv/e75e/p22wO5n2uX+C4MCHKf7xxZ2szn5vm5ndcjsu6bTdBN
+        qZ/3U45wnnmiHPGpPPvs3dJGrrln/hfM3rmo7VWE5buK3J15QVEHFHbJPJ1n1VnQ+De/c0lc
+        N2/ZIh02Hd7CpNz7S8sfygi8ecm3stO69utcRTVGzqxvrt1th/fuM1RiKc5INNRiLipOBAD2
+        1GJkXQMAAA==
+X-CMS-MailID: 20220923140903eucas1p180002df0deb308d5148cc6004aef7efe
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220923140903eucas1p180002df0deb308d5148cc6004aef7efe
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220923140903eucas1p180002df0deb308d5148cc6004aef7efe
+References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
+        <20220921094244.606948-11-daniel.lezcano@linaro.org>
+        <CGME20220923140903eucas1p180002df0deb308d5148cc6004aef7efe@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 25 Aug 2022 at 09:06, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Am Mittwoch, dem 24.08.2022 um 15:30 +0200 schrieb Ulf Hansson:
-> > On Mon, 22 Aug 2022 at 10:38, Martin Kepplinger
-> > <martin.kepplinger@puri.sm> wrote:
-> > >
-> > > Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
-> > > > On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
-> > > > <martin.kepplinger@puri.sm> wrote:
-> > > > >
-> > > > > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf Hansson:
-> > > > > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
-> > > > > > <martin.kepplinger@puri.sm> wrote:
-> > > > > > >
-> > > > > > > If for example the power-domains' power-supply node
-> > > > > > > (regulator)
-> > > > > > > needs
-> > > > > > > interrupts to work, the current setup with noirq callbacks
-> > > > > > > cannot
-> > > > > > > work; for example a pmic regulator on i2c, when suspending,
-> > > > > > > usually
-> > > > > > > already
-> > > > > > > times out during suspend_noirq:
-> > > > > > >
-> > > > > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > > > > > >
-> > > > > > > So fix system suspend and resume for these power-domains by
-> > > > > > > using
-> > > > > > > the
-> > > > > > > "outer" suspend/resume callbacks instead. Tested on the
-> > > > > > > imx8mq-
-> > > > > > > librem5 board,
-> > > > > > > but by looking at the dts, this will fix imx8mq-evk and
-> > > > > > > possibly
-> > > > > > > many other
-> > > > > > > boards too.
-> > > > > > >
-> > > > > > > This is designed so that genpd providers just say "this
-> > > > > > > genpd
-> > > > > > > needs
-> > > > > > > interrupts" (by setting the flag) - without implying an
-> > > > > > > implementation.
-> > > > > > >
-> > > > > > > Initially system suspend problems had been discussed at
-> > > > > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > > > > > > which led to discussing the pmic that contains the
-> > > > > > > regulators
-> > > > > > > which
-> > > > > > > serve as power-domain power-supplies:
-> > > > > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > > > > > >
-> > > > > > > Signed-off-by: Martin Kepplinger
-> > > > > > > <martin.kepplinger@puri.sm>
-> > > > > > > ---
-> > > > > > >  drivers/base/power/domain.c | 13 +++++++++++--
-> > > > > > >  include/linux/pm_domain.h   |  5 +++++
-> > > > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/base/power/domain.c
-> > > > > > > b/drivers/base/power/domain.c
-> > > > > > > index 5a2e0232862e..58376752a4de 100644
-> > > > > > > --- a/drivers/base/power/domain.c
-> > > > > > > +++ b/drivers/base/power/domain.c
-> > > > > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
-> > > > > > > genpd_spin_ops = {
-> > > > > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
-> > > > > > > GENPD_FLAG_ACTIVE_WAKEUP)
-> > > > > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
-> > > > > > > GENPD_FLAG_CPU_DOMAIN)
-> > > > > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
-> > > > > > > GENPD_FLAG_RPM_ALWAYS_ON)
-> > > > > > > +#define genpd_irq_on(genpd)            (genpd->flags &
-> > > > > > > GENPD_FLAG_IRQ_ON)
-> > > > > > >
-> > > > > > >  static inline bool irq_safe_dev_in_sleep_domain(struct
-> > > > > > > device
-> > > > > > > *dev,
-> > > > > > >                 const struct generic_pm_domain *genpd)
-> > > > > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
-> > > > > > > generic_pm_domain
-> > > > > > > *genpd,
-> > > > > > >         genpd->domain.ops.runtime_suspend =
-> > > > > > > genpd_runtime_suspend;
-> > > > > > >         genpd->domain.ops.runtime_resume =
-> > > > > > > genpd_runtime_resume;
-> > > > > > >         genpd->domain.ops.prepare = genpd_prepare;
-> > > > > > > -       genpd->domain.ops.suspend_noirq =
-> > > > > > > genpd_suspend_noirq;
-> > > > > > > -       genpd->domain.ops.resume_noirq =
-> > > > > > > genpd_resume_noirq;
-> > > > > > > +
-> > > > > > > +       if (genpd_irq_on(genpd)) {
-> > > > > > > +               genpd->domain.ops.suspend =
-> > > > > > > genpd_suspend_noirq;
-> > > > > > > +               genpd->domain.ops.resume =
-> > > > > > > genpd_resume_noirq;
-> > > > > > > +       } else {
-> > > > > > > +               genpd->domain.ops.suspend_noirq =
-> > > > > > > genpd_suspend_noirq;
-> > > > > > > +               genpd->domain.ops.resume_noirq =
-> > > > > > > genpd_resume_noirq;
-> > > > > >
-> > > > > > As we discussed previously, I am thinking that it may be
-> > > > > > better
-> > > > > > to
-> > > > > > move to using genpd->domain.ops.suspend_late and
-> > > > > > genpd->domain.ops.resume_early instead.
-> > > > >
-> > > > > Wouldn't that better be a separate patch (on top)? Do you
-> > > > > really
-> > > > > want
-> > > > > me to change the current behaviour (default case) to from noirq
-> > > > > to
-> > > > > late? Then I'll resend this series with such a patch added.
-> > > >
-> > > > Sorry, I wasn't clear enough, the default behaviour should remain
-> > > > as
-> > > > is.
-> > > >
-> > > > What I meant was, when genpd_irq_on() is true, we should use the
-> > > > genpd->domain.ops.suspend_late and genpd-
-> > > > >domain.ops.resume_early.
-> > >
-> > > Testing that shows that this isn't working. I can provide the logs
-> > > later, but suspend fails and I think it makes sense: "suspend_late"
-> > > is
-> > > simply already too late when i2c (or any needed driver) uses
-> > > "suspend".
-> >
-> > Okay, I see.
-> >
-> > The reason why I suggested moving the callbacks to "suspend_late",
-> > was
-> > that I was worried that some of the attached devices to genpd could
-> > use "suspend_late" themselves. This is the case for some drivers for
-> > DMA/clock/gpio/pinctrl-controllers, for example. That said, I am
-> > curious to look at the DT files for the platform you are running,
-> > would you mind giving me a pointer?
->
-> I'm running
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-> with these (small) patches on top:
-> https://source.puri.sm/martin.kepplinger/linux-next/-/commits/5.19.3/librem5
+Hi Daniel,
 
-Thanks for sharing the information!
-
+On 21.09.2022 11:42, Daniel Lezcano wrote:
+> The thermal_zone_get_trip() does the same check as
+> of_thermal_is_trip_valid(). Replace the call to
+> of_thermal_is_trip_valid() by thermal_zone_get_trip().
 >
-> >
-> > So, this made me think about this a bit more. In the end, just using
-> > different levels (suspend, suspend_late, suspend_noirq) of callbacks
-> > are just papering over the real *dependency* problem.
->
-> true, it doesn't feel like a stable solution.
->
-> >
-> > What we need for the genpd provider driver, is to be asked to be
-> > suspended under the following conditions:
-> > 1. All consumer devices (and child-domains) for its corresponding PM
-> > domain have been suspended.
-> > 2. All its supplier devices supplies must remain resumed, until the
-> > genpd provider has been suspended.
-> >
-> > Please allow me a few more days to think in more detail about this.
->
-> Thanks a lot for thinking about this!
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
 
-I have made some more thinking, but it's been a busy period for me, so
-unfortunately I need some additional time (another week). It seems
-like I also need to do some prototyping, to convince myself about the
-approach.
+This patch landed in linux next-20220923 as commit 4a71bb8005ba 
+("thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by 
+thermal_zone_get_trip()"). Unfortunately it causes deadlock on all 
+Exynos based board:
 
-So, my apologies for the delay!
+============================================
+WARNING: possible recursive locking detected
+6.0.0-rc1-00062-g4a71bb8005ba #12855 Not tainted
+--------------------------------------------
+swapper/0/1 is trying to acquire lock:
+c263c394 (&tz->lock){+.+.}-{3:3}, at: 
+thermal_zone_device_update.part.0+0x114/0x538
 
-Kind regards
-Uffe
+but task is already holding lock:
+c263c394 (&tz->lock){+.+.}-{3:3}, at: 
+thermal_zone_device_update.part.0+0x3c/0x538
+
+other info that might help us debug this:
+  Possible unsafe locking scenario:
+
+        CPU0
+        ----
+   lock(&tz->lock);
+   lock(&tz->lock);
+
+  *** DEADLOCK ***
+
+  May be due to missing lock nesting notation
+
+2 locks held by swapper/0/1:
+  #0: c1d5248c (&dev->mutex){....}-{3:3}, at: __driver_attach+0xe4/0x1f0
+  #1: c263c394 (&tz->lock){+.+.}-{3:3}, at: 
+thermal_zone_device_update.part.0+0x3c/0x538
+
+stack backtrace:
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-00062-g4a71bb8005ba 
+#12855
+Hardware name: Samsung Exynos (Flattened Device Tree)
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x58/0x70
+  dump_stack_lvl from __lock_acquire+0x146c/0x2a7c
+  __lock_acquire from lock_acquire+0x124/0x3e4
+  lock_acquire from __mutex_lock+0x90/0x948
+  __mutex_lock from mutex_lock_nested+0x1c/0x24
+  mutex_lock_nested from thermal_zone_device_update.part.0+0x114/0x538
+  thermal_zone_device_update.part.0 from 
+thermal_zone_device_set_mode+0x70/0x98
+  thermal_zone_device_set_mode from thermal_of_zone_register+0x424/0x69c
+  thermal_of_zone_register from devm_thermal_of_zone_register+0x58/0x94
+  devm_thermal_of_zone_register from exynos_tmu_probe+0x29c/0x728
+  exynos_tmu_probe from platform_probe+0x5c/0xb8
+  platform_probe from really_probe+0xe0/0x414
+  really_probe from __driver_probe_device+0xa0/0x208
+  __driver_probe_device from driver_probe_device+0x30/0xc0
+  driver_probe_device from __driver_attach+0xf0/0x1f0
+  __driver_attach from bus_for_each_dev+0x70/0xb0
+  bus_for_each_dev from bus_add_driver+0x174/0x218
+  bus_add_driver from driver_register+0x88/0x11c
+  driver_register from do_one_initcall+0x64/0x380
+  do_one_initcall from kernel_init_freeable+0x1c0/0x224
+  kernel_init_freeable from kernel_init+0x18/0x12c
+  kernel_init from ret_from_fork+0x14/0x2c
+Exception stack(0xf082dfb0 to 0xf082dff8)
+
+[deadlock]
+
+Something is wrong in locking in the functions from the above stacktrace.
+
+
+>   drivers/thermal/samsung/exynos_tmu.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index 91e6860b5ec4..34b460092308 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -554,13 +554,14 @@ static void exynos4210_tmu_control(struct platform_device *pdev, bool on)
+>   {
+>   	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+>   	struct thermal_zone_device *tz = data->tzd;
+> +	struct thermal_trip trip;
+>   	unsigned int con, interrupt_en = 0, i;
+>   
+>   	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
+>   
+>   	if (on) {
+>   		for (i = 0; i < data->ntrip; i++) {
+> -			if (!of_thermal_is_trip_valid(tz, i))
+> +			if (thermal_zone_get_trip(tz, i, &trip))
+>   				continue;
+>   
+>   			interrupt_en |=
+> @@ -584,13 +585,14 @@ static void exynos5433_tmu_control(struct platform_device *pdev, bool on)
+>   {
+>   	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+>   	struct thermal_zone_device *tz = data->tzd;
+> +	struct thermal_trip trip;
+>   	unsigned int con, interrupt_en = 0, pd_det_en, i;
+>   
+>   	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
+>   
+>   	if (on) {
+>   		for (i = 0; i < data->ntrip; i++) {
+> -			if (!of_thermal_is_trip_valid(tz, i))
+> +			if (thermal_zone_get_trip(tz, i, &trip))
+>   				continue;
+>   
+>   			interrupt_en |=
+> @@ -615,13 +617,14 @@ static void exynos7_tmu_control(struct platform_device *pdev, bool on)
+>   {
+>   	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+>   	struct thermal_zone_device *tz = data->tzd;
+> +	struct thermal_trip trip;
+>   	unsigned int con, interrupt_en = 0, i;
+>   
+>   	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
+>   
+>   	if (on) {
+>   		for (i = 0; i < data->ntrip; i++) {
+> -			if (!of_thermal_is_trip_valid(tz, i))
+> +			if (thermal_zone_get_trip(tz, i, &trip))
+>   				continue;
+>   
+>   			interrupt_en |=
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
