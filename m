@@ -2,45 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD195E7D70
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Sep 2022 16:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6ABC5E7E22
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Sep 2022 17:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbiIWOn2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Sep 2022 10:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S231562AbiIWPUj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Sep 2022 11:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232398AbiIWOnW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Sep 2022 10:43:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006F8140F03;
-        Fri, 23 Sep 2022 07:43:21 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYvsS2wQGzMpPd;
-        Fri, 23 Sep 2022 22:38:36 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 22:43:19 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 23 Sep
- 2022 22:43:19 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>
-CC:     <viresh.kumar@linaro.org>, <sumitg@nvidia.com>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH -next] cpufreq: tegra194: change tegra239_cpufreq_soc to static
-Date:   Fri, 23 Sep 2022 22:50:16 +0800
-Message-ID: <20220923145016.109173-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231601AbiIWPUa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Sep 2022 11:20:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442AFE6A00;
+        Fri, 23 Sep 2022 08:20:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED4B8B838C3;
+        Fri, 23 Sep 2022 15:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B72C43142;
+        Fri, 23 Sep 2022 15:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663946426;
+        bh=zo7rFZiPS4WyTBZk4VHnI8cDdMwygNZyE43ol0e2o2A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h5A9XThDA/5s0nOAX9forsdLayrzgXUza7l79K6258CeVyLTGUt6X96ZBEPlttNp5
+         ElY629wCutz4/DSMBngmRLN37ymIDXCrKV/Z2J6jov2aGTDZS4bkyZbVrUsPgnnbig
+         yqDUPOVPVI82nAtprBZMueiVWOHOBWkCOsQi3r/9/PBuhqMgwsKjbhOa0KFz5Ia5ga
+         FesASNFIjqev89LM8TbV6f0uz9NdHPJ6XfW7MlY5FZbM7WXYQZK/8HegplFfsL3tOO
+         9djqqHdCD9lVmJpKW6oZAbuByK69CJ3xUbSxMjXmvykRA9FiAOhnIFGmLKDGuYyXRw
+         uNUmczkVos0qg==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        "kernelci.org bot" <bot@kernelci.org>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Subject: [PATCH -next] thermal/intel/int340x: Initialized ret in error path in int340x_thermal_zone_add()
+Date:   Fri, 23 Sep 2022 08:20:09 -0700
+Message-Id: <20220923152009.1721739-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,28 +57,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tegra239_cpufreq_soc is only used in tegra194-cpufreq.c now, change it
-to static.
+Clang warns:
 
-Fixes: 676886010707 ("cpufreq: tegra194: Add support for Tegra239")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+          if (!int34x_thermal_zone->ops)
+              ^~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:279:17: note: uninitialized use occurs here
+          return ERR_PTR(ret);
+                        ^~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:2: note: remove the 'if' if its condition is always false
+          if (!int34x_thermal_zone->ops)
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:211:9: note: initialize the variable 'ret' to silence this warning
+          int ret;
+                ^
+                  = 0
+  1 error generated.
+
+If kmemdup() fails, -ENOMEM should be returned.
+
+Fixes: f6f6f9a01374 ("thermal/intel/int340x: Replace parameter to simplify")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1717
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- drivers/cpufreq/tegra194-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-index cfc1b225f811..c2004cae3f02 100644
---- a/drivers/cpufreq/tegra194-cpufreq.c
-+++ b/drivers/cpufreq/tegra194-cpufreq.c
-@@ -161,7 +161,7 @@ static const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
- 	.num_clusters = 3,
- };
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+index ea05be8c2834..228f44260b27 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+@@ -219,8 +219,10 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
  
--const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
-+static const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
- 	.ops = &tegra234_cpufreq_ops,
- 	.actmon_cntr_base = 0x4000,
- 	.maxcpus_per_cluster = 8,
+ 	int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
+ 					   sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
+-	if (!int34x_thermal_zone->ops)
++	if (!int34x_thermal_zone->ops) {
++		ret = -ENOMEM;
+ 		goto err_ops_alloc;
++	}
+ 
+ 	if (get_temp)
+ 		int34x_thermal_zone->ops->get_temp = get_temp;
+
+base-commit: 2b109cffe6836f0bb464639cdcc59fc537e3ba41
 -- 
-2.25.1
+2.37.3
 
