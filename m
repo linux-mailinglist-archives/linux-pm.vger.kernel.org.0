@@ -2,126 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEFA5E7CF1
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Sep 2022 16:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270F35E7D8B
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Sep 2022 16:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbiIWO0z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Sep 2022 10:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S232322AbiIWOtu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Sep 2022 10:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbiIWO0V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Sep 2022 10:26:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A2CFA0C9;
-        Fri, 23 Sep 2022 07:26:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC2B9B80B4C;
-        Fri, 23 Sep 2022 14:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16133C433C1;
-        Fri, 23 Sep 2022 14:26:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663943173;
-        bh=ObX6HvLa+ySlFwmEmsOrRGpPJYrz/yfFRnE1KqoIX0Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=USLuatUTEmyIgU2Aq8Log9JG+qRZjgZycPj46CoYsjOhO4Te9M5o1aWKI7BRmtvdM
-         LyiAxh1zM59V+a30u/L29IL83ASv7/MpyUBJ1dUkVUoCow7vY0l9DwpQLnl7OQgIs4
-         hH9ZIj7n3hqXQ18xEzrBjkvdSqrS1V6blwsmBdncB5zO4ilhg7qkvQvi5Wp8o1B/pH
-         gGGjEaDgeqLprAybZHo222IH1RDwVCfG8pfbPKCyNCPlEBXwhvaZmYcF9Zu2whk5P/
-         EOUP+dFAym2QbbsPwtrVan5NXxW2KedOrHlQsk/LP1GOo3OHsZT8B72oIIbVPOyl/0
-         cH+Vj2uh2VlJw==
-Date:   Fri, 23 Sep 2022 09:26:11 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        svarbanov@mm-sol.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-phy@lists.infradead.org, vkoul@kernel.org, kishon@ti.com,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
-Message-ID: <20220923142611.GA1389970@bhelgaas>
+        with ESMTP id S232245AbiIWOtl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Sep 2022 10:49:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E67C7220E3;
+        Fri, 23 Sep 2022 07:49:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE9A6113E;
+        Fri, 23 Sep 2022 07:49:44 -0700 (PDT)
+Received: from [10.57.3.23] (unknown [10.57.3.23])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CBAE3F73B;
+        Fri, 23 Sep 2022 07:49:37 -0700 (PDT)
+Message-ID: <564e6fc6-4734-a60e-d578-a15247a32c5f@arm.com>
+Date:   Fri, 23 Sep 2022 15:49:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <95e4e9d9-3f39-6cf4-0739-967c7e568697@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 05/30] thermal/core/governors: Use
+ thermal_zone_get_trip() instead of ops functions
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
+        rafael@kernel.org
+References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
+ <20220921094244.606948-6-daniel.lezcano@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220921094244.606948-6-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 07:29:31AM +0530, Krishna Chaitanya Chundru wrote:
+Hi Daniel,
+
+
+On 9/21/22 10:42, Daniel Lezcano wrote:
+> The governors are using the ops->get_trip_* functions, Replace these
+> calls with thermal_zone_get_trip().
 > 
-> On 9/23/2022 12:12 AM, Bjorn Helgaas wrote:
-> > On Thu, Sep 22, 2022 at 09:09:28PM +0530, Krishna Chaitanya Chundru wrote:
-> > > On 9/21/2022 10:26 PM, Bjorn Helgaas wrote:
-> > > > On Wed, Sep 21, 2022 at 03:23:35PM +0530, Krishna Chaitanya Chundru wrote:
-> > > > > On 9/20/2022 11:46 PM, Bjorn Helgaas wrote:
-> > > > > > On Tue, Sep 20, 2022 at 03:52:23PM +0530, Krishna chaitanya chundru wrote:
-
-> > > > > > > In qcom platform PCIe resources( clocks, phy etc..) can
-> > > > > > > released when the link is in L1ss to reduce the power
-> > > > > > > consumption. So if the link is in L1ss, release the PCIe
-> > > > > > > resources. And when the system resumes, enable the PCIe
-> > > > > > > resources if they released in the suspend path.
-> > > > > > What's the connection with L1.x?  Links enter L1.x based on
-> > > > > > activity and timing.  That doesn't seem like a reliable
-> > > > > > indicator to turn PHYs off and disable clocks.
-> > > > >
-> > > > > This is a Qcom PHY-specific feature (retaining the link state in
-> > > > > L1.x with clocks turned off).  It is possible only with the link
-> > > > > being in l1.x. PHY can't retain the link state in L0 with the
-> > > > > clocks turned off and we need to re-train the link if it's in L2
-> > > > > or L3. So we can support this feature only with L1.x.  That is
-> > > > > the reason we are taking l1.x as the trigger to turn off clocks
-> > > > > (in only suspend path).
-> > > >
-> > > > This doesn't address my question.  L1.x is an ASPM feature, which
-> > > > means hardware may enter or leave L1.x autonomously at any time
-> > > > without software intervention.  Therefore, I don't think reading the
-> > > > current state is a reliable way to decide anything.
-> > >
-> > > After the link enters the L1.x it will come out only if there is
-> > > some activity on the link.  AS system is suspended and NVMe driver
-> > > is also suspended( queues will  freeze in suspend) who else can
-> > > initiate any data.
-> >
-> > I don't think we can assume that nothing will happen to cause exit
-> > from L1.x.  For instance, PCIe Messages for INTx signaling, LTR, OBFF,
-> > PTM, etc., may be sent even though we think the device is idle and
-> > there should be no link activity.
->
-> I don't think after the link enters into L1.x there will some
-> activity on the link as you mentioned, except for PCIe messages like
-> INTx/MSI/MSIX. These messages also will not come because the client
-> drivers like NVMe will keep their device in the lowest power mode.
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/thermal/gov_bang_bang.c       | 23 +++++-------
+>   drivers/thermal/gov_fair_share.c      | 18 ++++------
+>   drivers/thermal/gov_power_allocator.c | 51 ++++++++++++---------------
+>   drivers/thermal/gov_step_wise.c       | 22 ++++++------
+>   4 files changed, 47 insertions(+), 67 deletions(-)
 > 
-> The link will come out of L1.x only when there is config or memory
-> access or some messages to trigger the interrupts from the devices.
-> We are already making sure this access will not be there in S3.  If
-> the link is in L0 or L0s what you said is expected but not in L1.x
 
-Forgive me for being skeptical, but we just spent a few months
-untangling the fact that some switches send PTM request messages even
-when they're in a non-D0 state.  We expected that devices in D3hot
-would not send such messages because "why would they?"  But it turns
-out the spec allows that, and they actually *do*.
+[snip]
 
-I don't think it's robust interoperable design for a PCI controller
-driver like qcom to assume anything about PCI devices unless it's
-required by the spec.
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 2d1aeaba38a8..2ef86ced4c7c 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -125,16 +125,15 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+>   				   u32 sustainable_power, int trip_switch_on,
+>   				   int control_temp)
+>   {
+> +	struct thermal_trip trip;
+> +	u32 temperature_threshold = control_temp;
+>   	int ret;
+> -	int switch_on_temp;
+> -	u32 temperature_threshold;
+>   	s32 k_i;
+>   
+> -	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
+> -	if (ret)
+> -		switch_on_temp = 0;
+> +	ret = thermal_zone_get_trip(tz, trip_switch_on, &trip);
+> +	if (!ret)
+> +		temperature_threshold -= trip.temperature;
+>   
+> -	temperature_threshold = control_temp - switch_on_temp;
+>   	/*
+>   	 * estimate_pid_constants() tries to find appropriate default
+>   	 * values for thermal zones that don't provide them. If a
+> @@ -520,10 +519,10 @@ static void get_governor_trips(struct thermal_zone_device *tz,
+>   	last_passive = INVALID_TRIP;
+>   
+>   	for (i = 0; i < tz->num_trips; i++) {
+> -		enum thermal_trip_type type;
+> +		struct thermal_trip trip;
+>   		int ret;
+>   
+> -		ret = tz->ops->get_trip_type(tz, i, &type);
+> +		ret = thermal_zone_get_trip(tz, i, &trip);
+>   		if (ret) {
+>   			dev_warn(&tz->device,
+>   				 "Failed to get trip point %d type: %d\n", i,
+> @@ -531,14 +530,14 @@ static void get_governor_trips(struct thermal_zone_device *tz,
+>   			continue;
+>   		}
+>   
+> -		if (type == THERMAL_TRIP_PASSIVE) {
+> +		if (trip.type == THERMAL_TRIP_PASSIVE) {
+>   			if (!found_first_passive) {
+>   				params->trip_switch_on = i;
+>   				found_first_passive = true;
+>   			} else  {
+>   				last_passive = i;
+>   			}
+> -		} else if (type == THERMAL_TRIP_ACTIVE) {
+> +		} else if (trip.type == THERMAL_TRIP_ACTIVE) {
+>   			last_active = i;
+>   		} else {
+>   			break;
+> @@ -633,7 +632,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+>   {
+>   	int ret;
+>   	struct power_allocator_params *params;
+> -	int control_temp;
+> +	struct thermal_trip trip;
+>   
+>   	ret = check_power_actors(tz);
+>   	if (ret)
+> @@ -659,13 +658,12 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+>   	get_governor_trips(tz, params);
+>   
+>   	if (tz->num_trips > 0) {
+> -		ret = tz->ops->get_trip_temp(tz,
+> -					params->trip_max_desired_temperature,
+> -					&control_temp);
+> +		ret = thermal_zone_get_trip(tz, params->trip_max_desired_temperature,
+> +					    &trip);
+>   		if (!ret)
+>   			estimate_pid_constants(tz, tz->tzp->sustainable_power,
+>   					       params->trip_switch_on,
+> -					       control_temp);
+> +					       trip.temperature);
+>   	}
+>   
+>   	reset_pid_controller(params);
+> @@ -695,11 +693,11 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
+>   	tz->governor_data = NULL;
+>   }
+>   
+> -static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
+> +static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+>   {
+> -	int ret;
+> -	int switch_on_temp, control_temp;
+>   	struct power_allocator_params *params = tz->governor_data;
+> +	struct thermal_trip trip;
+> +	int ret;
+>   	bool update;
+>   
+>   	lockdep_assert_held(&tz->lock);
+> @@ -708,13 +706,12 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
+>   	 * We get called for every trip point but we only need to do
+>   	 * our calculations once
+>   	 */
+> -	if (trip != params->trip_max_desired_temperature)
+> +	if (trip_id != params->trip_max_desired_temperature)
+>   		return 0;
+>   
+> -	ret = tz->ops->get_trip_temp(tz, params->trip_switch_on,
+> -				     &switch_on_temp);
+> -	if (!ret && (tz->temperature < switch_on_temp)) {
+> -		update = (tz->last_temperature >= switch_on_temp);
+> +	ret = thermal_zone_get_trip(tz, params->trip_switch_on, &trip);
+> +	if (!ret && (tz->temperature < trip.temperature)) {
+> +		update = (tz->last_temperature >= trip.temperature);
+>   		tz->passive = 0;
+>   		reset_pid_controller(params);
+>   		allow_maximum_power(tz, update);
+> @@ -723,16 +720,14 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
+>   
+>   	tz->passive = 1;
+>   
+> -	ret = tz->ops->get_trip_temp(tz, params->trip_max_desired_temperature,
+> -				&control_temp);
+> +	ret = thermal_zone_get_trip(tz, params->trip_max_desired_temperature, &trip);
+>   	if (ret) {
+> -		dev_warn(&tz->device,
+> -			 "Failed to get the maximum desired temperature: %d\n",
+> +		dev_warn(&tz->device, "Failed to get the maximum desired temperature: %d\n",
+>   			 ret);
+>   		return ret;
+>   	}
+>   
+> -	return allocate_power(tz, control_temp);
+> +	return allocate_power(tz, trip.temperature);
+>   }
+>   
+>   static struct thermal_governor thermal_gov_power_allocator = {
 
-Bjorn
+this part of IPA LGTM
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
