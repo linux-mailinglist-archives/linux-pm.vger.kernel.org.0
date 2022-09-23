@@ -2,226 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6017D5E6F5A
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Sep 2022 00:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2715E71AD
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Sep 2022 04:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiIVWHQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Sep 2022 18:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S231854AbiIWCAP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Sep 2022 22:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiIVWHO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 18:07:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46D9C11264F;
-        Thu, 22 Sep 2022 15:07:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1180B1595;
-        Thu, 22 Sep 2022 15:07:19 -0700 (PDT)
-Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.29])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 520143F73B;
-        Thu, 22 Sep 2022 15:07:12 -0700 (PDT)
-Message-ID: <6936c836-03e7-ea15-e7ed-2a213458f872@arm.com>
-Date:   Thu, 22 Sep 2022 17:07:11 -0500
+        with ESMTP id S231177AbiIWCAO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Sep 2022 22:00:14 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34D9DDDB6;
+        Thu, 22 Sep 2022 19:00:10 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28N1cIVJ029694;
+        Fri, 23 Sep 2022 01:59:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=fIilf/Rdf+6cocDi7rtmOOlCg2Um91x3yLyfyYicYSY=;
+ b=IxJXlYElg+LOlhzG4iYqzlY6srE1u3FXL7Sf/z+uQ3E9cI05gOYriaKgiPy7tiq6ghnE
+ duskBrqQcPtSqkYwuQWbAutEA2ql7WZ36SSLxT7tOteuf6x3jBN0ymhYZSVoVd4K4qWY
+ Q8oRLxDTrmxp7M0B3dNYzXnJsMyuP0qo81GywR9/CzqsHWETEk46UTYKEIZXMlP++5OB
+ O/eDoj3/VC4G14kMsLoRHDKfEN5zYSBlq7AFmXoOhtL/nvuZHqdQAfwBdsGsk/whkSzc
+ AXFcl4rVK72VNW/WV4th2q1CwXfMMiefHSmcqgiLjml9/KfbubfhBVxjA+oyztUqGe5z FQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jrmnf2gjn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Sep 2022 01:59:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28N1xlfA019261
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Sep 2022 01:59:47 GMT
+Received: from [10.216.47.110] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
+ 2022 18:59:36 -0700
+Message-ID: <95e4e9d9-3f39-6cf4-0739-967c7e568697@quicinc.com>
+Date:   Fri, 23 Sep 2022 07:29:31 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 1/1] ACPI: CPPC: Disable FIE if registers in PCC
- regions
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
 Content-Language: en-US
-To:     linux-acpi@vger.kernel.org
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, punit.agrawal@bytedance.com,
-        lukasz.luba@arm.com, ionela.voinescu@arm.com,
-        pierre.gondois@arm.com, linux-kernel@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org
-References: <20220912203722.205185-1-jeremy.linton@arm.com>
- <20220912203722.205185-2-jeremy.linton@arm.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <20220912203722.205185-2-jeremy.linton@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mka@chromium.org>,
+        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
+        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
+        <svarbanov@mm-sol.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
+        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <linux-phy@lists.infradead.org>,
+        <vkoul@kernel.org>, <kishon@ti.com>, <mturquette@baylibre.com>,
+        <linux-clk@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>
+References: <20220922184240.GA1326211@bhelgaas>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <20220922184240.GA1326211@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WwJCSZEJnh-0vScMQvg7cP251S8Gru8D
+X-Proofpoint-ORIG-GUID: WwJCSZEJnh-0vScMQvg7cP251S8Gru8D
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_16,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 adultscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209230011
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Raphael,
 
-Ping, are we good here?
+On 9/23/2022 12:12 AM, Bjorn Helgaas wrote:
+> On Thu, Sep 22, 2022 at 09:09:28PM +0530, Krishna Chaitanya Chundru wrote:
+>> On 9/21/2022 10:26 PM, Bjorn Helgaas wrote:
+>>> [+cc Rafael, linux-pm since this is real power management magic,
+>>> beginning of thread:
+>>> https://lore.kernel.org/all/1663669347-29308-1-git-send-email-quic_krichai@quicinc.com/
+>>> full patch since I trimmed too much of it:
+>>> https://lore.kernel.org/all/1663669347-29308-2-git-send-email-quic_krichai@quicinc.com/]
+>>>
+>>> On Wed, Sep 21, 2022 at 03:23:35PM +0530, Krishna Chaitanya Chundru wrote:
+>>>> On 9/20/2022 11:46 PM, Bjorn Helgaas wrote:
+>>>>> On Tue, Sep 20, 2022 at 03:52:23PM +0530, Krishna chaitanya chundru wrote:
+>>>>>> Add suspend and resume syscore ops.
+>>>>>>
+>>>>>> Few PCIe endpoints like NVMe and WLANs are always expecting the device
+>>>>>> to be in D0 state and the link to be active (or in l1ss) all the time
+>>>>>> (including in S3 state).
+>>>>> What does this have to do with the patch?  I don't see any NVMe or
+>>>>> WLAN patches here.
+>>>> Existing NVMe driver expecting NVMe device to be in D0 during S3 also. If we
+>>>> turn off the link in
+>>>> suspend, the NVMe resume path is broken as the state machine is getting
+>>>> reset in the NVMe device.
+>>>> Due to this, the host driver state machine and the device state machine are
+>>>> going out of sync, and all NVMe commands
+>>>> after resumes are getting timed out.
+>>>>
+>>>> IIRC, Tegra is also facing this issue with NVMe.
+>>>>
+>>>> This issue has been discussed below threads:
+>>>>
+>>>> https://lore.kernel.org/all/Yl+6V3pWuyRYuVV8@infradead.org/T/
+>>>>
+>>>> https://lore.kernel.org/linux-nvme/20220201165006.3074615-1-kbusch@kernel.org/
+>>> The problem is that this commit log doesn't explain the problem and
+>>> doesn't give us anything to connect the NVMe and WLAN assumptions with
+>>> this special driver behavior.  There needs to be some explicit
+>>> property of NVMe and WLAN that the PM core or drivers like qcom can
+>>> use to tell whether the clocks can be turned off.
+>> Not only that NVMe is expecting the device state to be always in D0.
+>> So any PCIe drivers should not turn off the link in suspend and do
+>> link retraining in the resume.  As this is considered a power cycle
+>> by the NVMe device and eventually increases the wear of the NVMe
+>> flash.
+> I can't quite parse this.  Are you saying that all PCI devices should
+> stay in D0 when the system is in S3?
+Not all PCI devices  some PCI devices like NVMe. The NVMe driver is 
+expecting the device to stay in D0 only.
+>
+>> We are trying to keep the device in D0 and also reduce the power
+>> consumption when the system is in S3 by turning off clocks and phy
+>> with this patch series.
+> The decision to keep a device in D0 is not up to qcom or any other PCI
+> controller driver.
+Yes, it is the NVMe driver who is deciding to keep the device in D0. Our 
+QCOM
+PCI Controller driver is trying to keep the device in the same state as 
+the client driver is
+expecting and also trying to reduce power consumption.
+>
+>>>>>> In qcom platform PCIe resources( clocks, phy etc..) can
+>>>>>> released when the link is in L1ss to reduce the power
+>>>>>> consumption. So if the link is in L1ss, release the PCIe
+>>>>>> resources. And when the system resumes, enable the PCIe
+>>>>>> resources if they released in the suspend path.
+>>>>> What's the connection with L1.x?  Links enter L1.x based on
+>>>>> activity and timing.  That doesn't seem like a reliable
+>>>>> indicator to turn PHYs off and disable clocks.
+>>>> This is a Qcom PHY-specific feature (retaining the link state in
+>>>> L1.x with clocks turned off).  It is possible only with the link
+>>>> being in l1.x. PHY can't retain the link state in L0 with the
+>>>> clocks turned off and we need to re-train the link if it's in L2
+>>>> or L3. So we can support this feature only with L1.x.  That is
+>>>> the reason we are taking l1.x as the trigger to turn off clocks
+>>>> (in only suspend path).
+>>> This doesn't address my question.  L1.x is an ASPM feature, which
+>>> means hardware may enter or leave L1.x autonomously at any time
+>>> without software intervention.  Therefore, I don't think reading the
+>>> current state is a reliable way to decide anything.
+>> After the link enters the L1.x it will come out only if there is
+>> some activity on the link.  AS system is suspended and NVMe driver
+>> is also suspended( queues will  freeze in suspend) who else can
+>> initiate any data.
+> I don't think we can assume that nothing will happen to cause exit
+> from L1.x.  For instance, PCIe Messages for INTx signaling, LTR, OBFF,
+> PTM, etc., may be sent even though we think the device is idle and
+> there should be no link activity.
+>
+> Bjorn
+I don't think after the link enters into L1.x there will some activity 
+on the link as you mentioned,
+except for PCIe messages like INTx/MSI/MSIX. These messages also will 
+not come because the
+client drivers like NVMe will keep their device in the lowest power mode.
 
-Thanks,
-
-
-On 9/12/22 15:37, Jeremy Linton wrote:
-> PCC regions utilize a mailbox to set/retrieve register values used by
-> the CPPC code. This is fine as long as the operations are
-> infrequent. With the FIE code enabled though the overhead can range
-> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-> based machines.
-> 
-> So, before enabling FIE assure none of the registers used by
-> cppc_get_perf_ctrs() are in the PCC region. Finally, add a module
-> parameter which can override the PCC region detection at boot or
-> module reload.
-> 
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/acpi/cppc_acpi.c       | 42 ++++++++++++++++++++++++++++++++++
->   drivers/cpufreq/cppc_cpufreq.c | 25 ++++++++++++++++----
->   include/acpi/cppc_acpi.h       |  5 ++++
->   3 files changed, 68 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 1e15a9f25ae9..55693e6f7153 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1240,6 +1240,48 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
->   }
->   EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
->   
-> +/**
-> + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
-> + *
-> + * CPPC has flexibility about how CPU performance counters are accessed.
-> + * One of the choices is PCC regions, which can have a high access latency. This
-> + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
-> + *
-> + * Return: true if any of the counters are in PCC regions, false otherwise
-> + */
-> +bool cppc_perf_ctrs_in_pcc(void)
-> +{
-> +	int cpu;
-> +
-> +	for_each_present_cpu(cpu) {
-> +		struct cpc_register_resource *ref_perf_reg;
-> +		struct cpc_desc *cpc_desc;
-> +
-> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +
-> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> +			return true;
-> +
-> +
-> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-> +
-> +		/*
-> +		 * If reference perf register is not supported then we should
-> +		 * use the nominal perf value
-> +		 */
-> +		if (!CPC_SUPPORTED(ref_perf_reg))
-> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-> +
-> +		if (CPC_IN_PCC(ref_perf_reg))
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-> +
->   /**
->    * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->    * @cpunum: CPU from which to read counters.
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 24eaf0ec344d..9e2a48ac5830 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
->   
->   static struct cpufreq_driver cppc_cpufreq_driver;
->   
-> +static enum {
-> +	FIE_UNSET = -1,
-> +	FIE_ENABLED,
-> +	FIE_DISABLED
-> +} fie_disabled = FIE_UNSET;
-> +
->   #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-> +module_param(fie_disabled, int, 0444);
-> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
->   
->   /* Frequency invariance support */
->   struct cppc_freq_invariance {
-> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->   	struct cppc_freq_invariance *cppc_fi;
->   	int cpu, ret;
->   
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->   		return;
->   
->   	for_each_cpu(cpu, policy->cpus) {
-> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
->   	struct cppc_freq_invariance *cppc_fi;
->   	int cpu;
->   
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->   		return;
->   
->   	/* policy->cpus will be empty here, use related_cpus instead */
-> @@ -229,7 +237,15 @@ static void __init cppc_freq_invariance_init(void)
->   	};
->   	int ret;
->   
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
-> +		fie_disabled = FIE_ENABLED;
-> +		if (cppc_perf_ctrs_in_pcc()) {
-> +			pr_info("FIE not enabled on systems with registers in PCC\n");
-> +			fie_disabled = FIE_DISABLED;
-> +		}
-> +	}
-> +
-> +	if (fie_disabled)
->   		return;
->   
->   	kworker_fie = kthread_create_worker(0, "cppc_fie");
-> @@ -247,7 +263,7 @@ static void __init cppc_freq_invariance_init(void)
->   
->   static void cppc_freq_invariance_exit(void)
->   {
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->   		return;
->   
->   	kthread_destroy_worker(kworker_fie);
-> @@ -936,6 +952,7 @@ static void cppc_check_hisi_workaround(void)
->   		    wa_info[i].oem_revision == tbl->oem_revision) {
->   			/* Overwrite the get() callback */
->   			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
-> +			fie_disabled = FIE_DISABLED;
->   			break;
->   		}
->   	}
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index f73d357ecdf5..c5614444031f 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
->   extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->   extern int cppc_set_enable(int cpu, bool enable);
->   extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-> +extern bool cppc_perf_ctrs_in_pcc(void);
->   extern bool acpi_cpc_valid(void);
->   extern bool cppc_allow_fast_switch(void);
->   extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-> @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
->   {
->   	return -ENOTSUPP;
->   }
-> +static inline bool cppc_perf_ctrs_in_pcc(void)
-> +{
-> +	return false;
-> +}
->   static inline bool acpi_cpc_valid(void)
->   {
->   	return false;
-
+The link will come out of L1.x only when there is config or memory 
+access or some messages
+to trigger the interrupts from the devices. We are already making sure 
+this access will not be there in S3.
+If the link is in L0 or L0s what you said is expected but not in L1.x
