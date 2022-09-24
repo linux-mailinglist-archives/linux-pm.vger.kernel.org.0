@@ -2,74 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82A85E8A0E
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 10:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99495E8ABE
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 11:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbiIXISn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 04:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S233484AbiIXJ0H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 05:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbiIXISK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 04:18:10 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5721E4E
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 01:16:54 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id c11so3077774wrp.11
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 01:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=8GifTQpufEs54QBDY2QjRoLxAtLfrQ9yFBESAjAvqEk=;
-        b=h/AwTcB8RNdgxSnuBMHtYHGPzYnQiaTUTro3fTmKcqsqCNShPhhIqHus7fL08MOTFn
-         5uE/x6RMgo8e4HduYiGCEoMhwQN9gdO0ygvFqdbiUwkUXofinJTYR6NQ4qFwKrEklaLi
-         p/BImwKzsSlipbXk98O+PCMjB8Y9evuHRmzDZVO0Sqqlcs24wjPxiU2HI5fQP/73vYo4
-         g7cDwt+1PXMABycZZ0JCjNhPLtN3kmvS/Y8nklzxMqkTdLAjzt08k58GmP8xSEyqhR65
-         XsxWhPF9fp5eTf7S4B/BxJSoO3TiNdBcnuMuSNZWEihCIbO1CJ3qIlgL1VhNtr6EIBRL
-         ZhXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8GifTQpufEs54QBDY2QjRoLxAtLfrQ9yFBESAjAvqEk=;
-        b=TPG91q1nlOH5pn5XmIXToepxpQBydu92ocIBNLYizGx4bFpFTMTKsXjNFI+bLo9ZS1
-         SmDUKtfdstJBdysllMz4ymcOrAVwAzPntJrybuIg7YKT4TjoVtLsAUEFz2Y4RUZXicqA
-         050XnKulvR6b5by3fDy3dR9pGWGnPysxBaCTlCeFDfUxeEWBgs0roubJjNdi8GF0aS7e
-         IhAgp0/zjZhT7mj3zorhxfzCzXdooeGxcxHuKPgzuUn/DU6umcjKnhOhAT+M+5DqHl4b
-         vLd85eSQWrEzt592p9ZTGBENFf9YbYmTKYp/W9fyYo9FiKsa6fZ32bsRXkVzQIj2VjGR
-         jp2A==
-X-Gm-Message-State: ACrzQf0sdg3NjmB0zNTvxi4Zjmyi4Oop8hv6t14E7eQKo88IhMYeYT4s
-        IiM70AbzlLx2KLNNtTPtXjMNBg==
-X-Google-Smtp-Source: AMsMyM5F0qUy/QeECubzkPRKLgAndKmjI3IYfKkwCm3Uj9Ho44uoMxaJ4kbx1IKywhv3NhYmZnzXnQ==
-X-Received: by 2002:a05:6000:15c5:b0:22a:49be:8000 with SMTP id y5-20020a05600015c500b0022a49be8000mr7395090wry.664.1664007413262;
-        Sat, 24 Sep 2022 01:16:53 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id iv14-20020a05600c548e00b003a6a3595edasm4763338wmb.27.2022.09.24.01.16.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 01:16:52 -0700 (PDT)
-Message-ID: <607cab94-ca0b-c7ea-b603-12d933e42ced@linaro.org>
-Date:   Sat, 24 Sep 2022 10:16:51 +0200
+        with ESMTP id S233550AbiIXJZr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 05:25:47 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C6D41D2D;
+        Sat, 24 Sep 2022 02:25:45 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZNn82HCYzlXKk;
+        Sat, 24 Sep 2022 17:21:32 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 17:25:43 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <patrice.chotard@foss.st.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH] cpufreq: Add __init annotation to module init funcs
+Date:   Sat, 24 Sep 2022 17:21:59 +0800
+Message-ID: <20220924092159.56594-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: INFO: task systemd-udevd:94 blocked for more than 120 seconds.
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <Yy4B+9yH8oT0F8nQ@zn.tnic>
- <Yy4GoMMwiBaq3oJf@dev-arch.thelio-3990X> <Yy4MNp6yiRTJxeXa@zn.tnic>
- <28d03f8d-ed70-cdc8-70d3-7b1723e5715@google.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <28d03f8d-ed70-cdc8-70d3-7b1723e5715@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,51 +44,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add missing __init annotation to module init funcs.
 
-Hi Hugh,
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ drivers/cpufreq/highbank-cpufreq.c | 2 +-
+ drivers/cpufreq/sti-cpufreq.c      | 2 +-
+ drivers/cpufreq/ti-cpufreq.c       | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-On 24/09/2022 09:40, Hugh Dickins wrote:
-> On Fri, 23 Sep 2022, Borislav Petkov wrote:
->> On Fri, Sep 23, 2022 at 12:18:56PM -0700, Nathan Chancellor wrote:
->>> I have not seen a stacktrace like this on my machines (although I
->>> suspect that is because I don't have CONFIG_DETECT_HUNG_TASK enabled in
->>> my configs) but my Honeycomb LX2 hangs while booting after commit
->>> 78ffa3e58d93 ("thermal/core: Add a generic thermal_zone_get_trip()
->>> function") according to my bisect, which certainly seems like it could
->>> be related to the trace you are seeing.
->>
->> Don't you just love how well our community works - one reports a bug and
->> someone else has already bisected it and thus saves one the work?!
->>
->> :-)))
->>
->> Thanks Nathan, I can confirm your bisection. The commit above doesn't
->> revert cleanly ontop of linux-next so I tried it and the patch before
->> it:
->>
->> 78ffa3e58d93 ("thermal/core: Add a generic thermal_zone_get_trip() function")	<- BAD
->> 62022c15f627 ("Merge branch 'pm-opp' into linux-next")				<- GOOD
->>
->> so it looks like that one is somehow b0rked.
-> 
-> Yes, Nathan was alert, and saved me too from bisecting failure to boot
-> linux-next in another thread.
-> 
-> And I see from
-> https://lore.kernel.org/lkml/c85a77a3-409b-3e83-08a7-ac7e1888790d@samsung.com/
-> that Marek also found it: and tried to fix it, but found it goes too wide.
-> 
-> I made a patch of the offending series with
-> git diff 78ffa3e58d93^ 2b109cffe683
-> and then reverted that cleanly from next-20220923: works for me.
-
-Thanks for investigating. I believe I found from where is coming the 
-deadlock. I'll send a fix for that.
-
-
+diff --git a/drivers/cpufreq/highbank-cpufreq.c b/drivers/cpufreq/highbank-cpufreq.c
+index ac57cddc5f2f..a45864701143 100644
+--- a/drivers/cpufreq/highbank-cpufreq.c
++++ b/drivers/cpufreq/highbank-cpufreq.c
+@@ -55,7 +55,7 @@ static struct notifier_block hb_cpufreq_clk_nb = {
+ 	.notifier_call = hb_cpufreq_clk_notify,
+ };
+ 
+-static int hb_cpufreq_driver_init(void)
++static int __init hb_cpufreq_driver_init(void)
+ {
+ 	struct platform_device_info devinfo = { .name = "cpufreq-dt", };
+ 	struct device *cpu_dev;
+diff --git a/drivers/cpufreq/sti-cpufreq.c b/drivers/cpufreq/sti-cpufreq.c
+index a67df90848c2..1a63aeea8711 100644
+--- a/drivers/cpufreq/sti-cpufreq.c
++++ b/drivers/cpufreq/sti-cpufreq.c
+@@ -252,7 +252,7 @@ static int sti_cpufreq_fetch_syscon_registers(void)
+ 	return 0;
+ }
+ 
+-static int sti_cpufreq_init(void)
++static int __init sti_cpufreq_init(void)
+ {
+ 	int ret;
+ 
+diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+index df85a77d476b..f64180dd2005 100644
+--- a/drivers/cpufreq/ti-cpufreq.c
++++ b/drivers/cpufreq/ti-cpufreq.c
+@@ -398,7 +398,7 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static int ti_cpufreq_init(void)
++static int __init ti_cpufreq_init(void)
+ {
+ 	const struct of_device_id *match;
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
