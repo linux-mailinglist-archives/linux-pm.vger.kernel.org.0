@@ -2,147 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB9D5E8F08
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 19:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A515E8F0A
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 19:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbiIXRqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 13:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
+        id S234006AbiIXRrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 13:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbiIXRqh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 13:46:37 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F0F36DF2
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 10:46:36 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id s14so4514356wro.0
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 10:46:36 -0700 (PDT)
+        with ESMTP id S234019AbiIXRqz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 13:46:55 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2613463F11
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 10:46:51 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id c24so2827953plo.3
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 10:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=PidL8HbvElJbEheoeeqV1s6FcqDGhf+ZLhoJ9e+vloM=;
-        b=w0y7zlp+XcgXymTTBZ4AduZUGhju7PQibuzTDEj004ms2dM35faUfrLgfWXqMST/EC
-         x9/cA+bXsFLyFaTaJG/bOTg2WZ+VMXM+TX1RYK+USt7bF7R1pIz0CNqGfhzcvhArE6Jb
-         Jmrcto2FYttlMWjXXMYX0CbFwyOJLAUJGbmyK1/59NPdaeDK0a5gd9xN34QHDpIYrrp7
-         RKJnnMxO9RFFrDG9sM1BftBfS6NOrazulwok4BfKmAvWU21Ns2Jx0LTg0sXw3nkt5dGZ
-         kHCn7WrH2qeFAIjvvnZWhhl4moJ+uj6yZyI4P58wBnW41JE2xaySovoDvhVdLpWyr+KM
-         /3SQ==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=xY/ucOteS/CE3dObBNJYlsqyYXh8wVQKpEdC6EgPDR0=;
+        b=NdoJPgPsj+Pq+s2Vmd74sJl9OXquPDeGadssU6xXdTLMFJO5veORFuWbUWuwimcak6
+         5GNvt9X8y5Qqvqv3EvAcgNNjIyuo9Ml6ZTuAmmpwMv3ZuSf7Nu/AvY19/1c6ggpBpG+N
+         SaM2TO6p7JEkvxHnSq47decLJQ/zQqqKiX6KTLQ7u4kJUdbBs+yuCm5K9OrVJjHKTDSn
+         tup2ql4sXkMEgCmVYtGUeGOxTjyK5hPcI4sQt6YBKPG1NdRtLnWJbR0zH2ewEVlcGrbN
+         hfr6I8IdGDaX+tZVD7aEA1XDQRTYisdPPm+7jk+bCG0tszdJse3y27m3tRgHmGHuyDcn
+         Dy3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=PidL8HbvElJbEheoeeqV1s6FcqDGhf+ZLhoJ9e+vloM=;
-        b=fh6oIlK5cyYUmsaadFE9N9Pr0kPlmSJVCd1qLswkvkfneU0CXyGKvDc0wvAycwmDD4
-         e7rmTT4d5U6dAlkGFNPyxiWHAxyGDJdJ7ziUzSDC+vvDqT8z8oAgDnejkj3l9odO3P4f
-         IG8FC2XiNFSRRAh9hJfnVrrlsyzIT2IEMYSxgbFj74NAueuZ6C7rJyaxNr4UuO10Aw0n
-         77gHVzT4lX5A6eTeTdZDisL6vckczccIkP4l++wdSy0S7obPekzZ/bb0zIC1fDMYBQLE
-         Kbjt90nHksFYRIWeDZE4RLeE/XYtxjA5pwoiwH4Zr04WB6vT+3fCA46rUwr6fRw+uC/n
-         39pg==
-X-Gm-Message-State: ACrzQf3HWNcwbpXwNxnxbrLKqLAFPXyu6w4y1EEYvhJaWMm8bIzx5rzE
-        AZH3LA9tVXmkyoL813vVZ811fQ==
-X-Google-Smtp-Source: AMsMyM5bWGkLKNdckHybLoiG2loxjttxjGyyj60loFc/uATd5PTV/gjegR8pjVbCyts7z7wIB2hovQ==
-X-Received: by 2002:adf:f8ca:0:b0:226:e456:1896 with SMTP id f10-20020adff8ca000000b00226e4561896mr8771897wrq.177.1664041594583;
-        Sat, 24 Sep 2022 10:46:34 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id az41-20020a05600c602900b003b492b30822sm5983227wmb.2.2022.09.24.10.46.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 10:46:34 -0700 (PDT)
-Message-ID: <ca5090c2-35d6-c507-7fb2-c293712cd53f@linaro.org>
-Date:   Sat, 24 Sep 2022 19:46:33 +0200
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=xY/ucOteS/CE3dObBNJYlsqyYXh8wVQKpEdC6EgPDR0=;
+        b=NWI4ijSh92RLvEED39dvptf1MV3kS8RglQx3OeN1aXGYqFauNg7djEg25+igMJn3ul
+         IGy/SKAcvGslFfrAs+Q2EOsbWIfoN1uQn70YTvGHwSo2Cw3/9wSisWL8sv7UEu/3quDe
+         iscSbvsvtZe0eAAhwJvotd279d54fxeaHj2YEgJZVAiZCveEuRc6bQoklAfEEphFzNkg
+         vgdrR34mzl0IUW9BvXJPTuBJSfIwfYlzs/WHZUGJ+4AaoUr93InZb3vIyjV1909lsPOq
+         vyra+xV+XxdCmLE2nAeEIhedmn0GnzQG4c61858c0TcQVw6Z+jAFLgo/OoyJKbWDDOUr
+         Wr8g==
+X-Gm-Message-State: ACrzQf3y+mA3+jnfW2YOOMUBXdjM0R3gxPINkoITKWGZBCEymyAASZCJ
+        nDCrf03u3kG+DSxQ5VkJVcHmzg==
+X-Google-Smtp-Source: AMsMyM4aTgareTa2+y4E/oAPys8A+Imc21HaqcsutaYVnrqbYDo9gcFcrtixj5zRqhBvgK0ebv9/VQ==
+X-Received: by 2002:a17:903:2451:b0:178:4423:af32 with SMTP id l17-20020a170903245100b001784423af32mr14711568pls.51.1664041610620;
+        Sat, 24 Sep 2022 10:46:50 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id f17-20020a170902ce9100b001786b712bf7sm8161859plg.151.2022.09.24.10.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 10:46:50 -0700 (PDT)
+Message-ID: <632f428a.170a0220.db9d3.fd05@mx.google.com>
+Date:   Sat, 24 Sep 2022 10:46:50 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 01/30] thermal/core: Add a generic
- thermal_zone_get_trip() function
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>
-References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
- <20220921094244.606948-2-daniel.lezcano@linaro.org>
- <CGME20220923221936eucas1p1e01148605c9aaf27d8d71969feb99144@eucas1p1.samsung.com>
- <c85a77a3-409b-3e83-08a7-ac7e1888790d@samsung.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <c85a77a3-409b-3e83-08a7-ac7e1888790d@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: pm-6.0-rc7-143-g00674ddf1b594
+Subject: pm/testing baseline: 86 runs,
+ 2 regressions (pm-6.0-rc7-143-g00674ddf1b594)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/09/2022 00:19, Marek Szyprowski wrote:
-> Hi Daniel,
-> 
-> On 21.09.2022 11:42, Daniel Lezcano wrote:
->> The thermal_zone_device_ops structure defines a set of ops family,
->> get_trip_temp(), get_trip_hyst(), get_trip_type(). Each of them is
->> returning a property of a trip point.
->>
->> The result is the code is calling the ops everywhere to get a trip
->> point which is supposed to be defined in the backend driver. It is a
->> non-sense as a thermal trip can be generic and used by the backend
->> driver to declare its trip points.
->>
->> Part of the thermal framework has been changed and all the OF thermal
->> drivers are using the same definition for the trip point and use a
->> thermal zone registration variant to pass those trip points which are
->> part of the thermal zone device structure.
->>
->> Consequently, we can use a generic function to get the trip points
->> when they are stored in the thermal zone device structure.
->>
->> This approach can be generalized to all the drivers and we can get rid
->> of the ops->get_trip_*. That will result to a much more simpler code
->> and make possible to rework how the thermal trip are handled in the
->> thermal core framework as discussed previously.
->>
->> This change adds a function thermal_zone_get_trip() where we get the
->> thermal trip point structure which contains all the properties (type,
->> temp, hyst) instead of doing multiple calls to ops->get_trip_*.
->>
->> That opens the door for trip point extension with more attributes. For
->> instance, replacing the trip points disabled bitmask with a 'disabled'
->> field in the structure.
->>
->> Here we replace all the calls to ops->get_trip_* in the thermal core
->> code with a call to the thermal_zone_get_trip() function.
->>
->> While at it, add the thermal_zone_get_num_trips() to encapsulate the
->> code more and reduce the grip with the thermal framework internals.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> 
-> This patch landed in linux next-20220923 as commit 78ffa3e58d93
-> ("thermal/core: Add a generic thermal_zone_get_trip() function").
-> Unfortunately it introduces a deadlock:
-> 
-> thermal_zone_device_update() calls handle_thermal_trip() under the
-> tz->lock, which in turn calls thermal_zone_get_trip(), which gathers
-> again tz->lock. I've tried to fix this by switching
-> handle_thermal_trip() to call __thermal_zone_get_trip().
-> 
-> This helps for fixing the issue in this change, but then I've tried to
-> apply it on top of linux next-20220923. Unfortunately it fails again. It
-> looks that the other changes also assumes that calling
-> thermal_zone_get_trip() is possible under the tz->lock, because in my
-> case it turned out that handle_non_critical_trips() called
-> step_wise_throttle(), which in turn called thermal_zone_get_trip(). I
-> gave up fixing this. Please re-check possible call paths and adjust
-> locking to them.
+pm/testing baseline: 86 runs, 2 regressions (pm-6.0-rc7-143-g00674ddf1b594)
 
-Yes, you are correct. Those paths have the lock held. I'm fixing this
+Regressions Summary
+-------------------
+
+platform              | arch  | lab          | compiler | defconfig | regre=
+ssions
+----------------------+-------+--------------+----------+-----------+------=
+------
+hifive-unleashed-a00  | riscv | lab-baylibre | gcc-10   | defconfig | 1    =
+      =
+
+kontron-kbox-a-230-ls | arm64 | lab-kontron  | gcc-10   | defconfig | 1    =
+      =
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/pm-6.0-r=
+c7-143-g00674ddf1b594/plan/baseline/
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: pm-6.0-rc7-143-g00674ddf1b594
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      00674ddf1b5943bf978927923f3a8f00e2cad255 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch  | lab          | compiler | defconfig | regre=
+ssions
+----------------------+-------+--------------+----------+-----------+------=
+------
+hifive-unleashed-a00  | riscv | lab-baylibre | gcc-10   | defconfig | 1    =
+      =
+
+
+  Details:     https://kernelci.org/test/plan/id/632f366a7a42f56298355674
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/pm-6.0-rc7-143-g006=
+74ddf1b594/riscv/defconfig/gcc-10/lab-baylibre/baseline-hifive-unleashed-a0=
+0.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/pm-6.0-rc7-143-g006=
+74ddf1b594/riscv/defconfig/gcc-10/lab-baylibre/baseline-hifive-unleashed-a0=
+0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/riscv/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/632f366a7a42f56298355=
+675
+        new failure (last pass: v6.0-rc3-85-gf6f4c123bfbc) =
+
+ =
+
+
+
+platform              | arch  | lab          | compiler | defconfig | regre=
+ssions
+----------------------+-------+--------------+----------+-----------+------=
+------
+kontron-kbox-a-230-ls | arm64 | lab-kontron  | gcc-10   | defconfig | 1    =
+      =
+
+
+  Details:     https://kernelci.org/test/plan/id/632f37cc41c45c78fb355656
+
+  Results:     94 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/pm-6.0-rc7-143-g006=
+74ddf1b594/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-l=
+s.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/pm-6.0-rc7-143-g006=
+74ddf1b594/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-l=
+s.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+2f37cc41c45c78fb35565f
+        failing since 109 days (last pass: v5.18-rc7-183-g45785e0ed597, fir=
+st fail: v5.19-rc1-2-g6a8964e282382)
+
+    2022-09-24T17:00:44.287098  /lava-172958/1/../bin/lava-test-case
+    2022-09-24T17:00:44.287695  <8>[   18.008666] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2022-09-24T17:00:44.287965  /lava-172958/1/../bin/lava-test-case
+    2022-09-24T17:00:44.288209  <8>[   18.024705] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
+    2022-09-24T17:00:44.288450  /lava-172958/1/../bin/lava-test-case
+    2022-09-24T17:00:44.288683  <8>[   18.040230] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
+    2022-09-24T17:00:44.288920  /lava-172958/1/../bin/lava-test-case   =
+
+ =20
