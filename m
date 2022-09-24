@@ -2,126 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB925E8EE6
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 19:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664F15E8EFA
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 19:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiIXRXx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 13:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33530 "EHLO
+        id S229660AbiIXRea (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 13:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiIXRXw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 13:23:52 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE21C3E755
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 10:23:50 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id g23so1874386qtu.2
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 10:23:50 -0700 (PDT)
+        with ESMTP id S229837AbiIXRe3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 13:34:29 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8ED5F13D;
+        Sat, 24 Sep 2022 10:34:28 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id g4so1953543qvo.3;
+        Sat, 24 Sep 2022 10:34:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yqicIqWDpeeInCnso5PD6oJsWT84ABOKo3l/Ic9+2uE=;
-        b=HIwiWeInfTQArc2hY/CsNQLtM2VTTmqRq3jiRE6qGjB4PVEcHXpIBiv4/1eDGAE83r
-         nvtFsJsmeoYef6df+Pwdz7dgeULDWI2Sc9J5j15p2OUtFGwt59nsNUEyu437MXb175S6
-         5aQS1+NMLPxMqKEF1sI3I0FRF3EWLN2Zo8lp2PcRljbYeF/RyrpKkIMyiQuZxM6Fq5LM
-         9ClbQ/y2C1jpDC6F1sg6E4itYteZU66g3Sy+EA23LzgbJZJXgq2p6tag6bcfJOW0vK+w
-         dL45ZjTU/zX3UomHjVv4YL5wuSHRnpu47P8HprMwg/t/vGlAYDZ8Vk6T4ogxL+fX39rv
-         08vQ==
-X-Gm-Message-State: ACrzQf0yhTTb3H+FA0ABV/r1F6oIz4izLXKXeeVu8XElGLSIp96u+wbt
-        uu/ijDDZrfgvJs3h1mHloypwdZrCyMD6NcqLoK6cplYT
-X-Google-Smtp-Source: AMsMyM4zwPMuHP0vvZPqzHq9MdaBuYijE6ShNmJzj+kR//KehjFlhDgkSth9RgMapl7/XrBoZu2A2SPH7lQfKvrMGDU=
-X-Received: by 2002:a05:622a:11c8:b0:35c:e912:a8ea with SMTP id
- n8-20020a05622a11c800b0035ce912a8eamr11937657qtk.17.1664040230065; Sat, 24
- Sep 2022 10:23:50 -0700 (PDT)
+        bh=4NKVQm5+gPk97+fTxA5IogZyj0x078QM4McdZgTzSus=;
+        b=FoPM+2pFtHF/swIAvtU2jVg8m0rUrZf88rBBSpP36irONk0FKkTUHddfpseC8m7HcW
+         1LGIxAr5G3sg7bKabiQibzg1ffS9bed8ZGPBLuUyVPFyDVby6vZsHgaX72F4uOJ4JOkh
+         XNx8i7eP+jES5SvJJ3AQwrOQJUDNr0EIog/L962uu7qkO9tQj/eCRcm2SMNfb42nQ0ms
+         aeyaUXY8BUUqorit3NG5VDTdkWhIYfwLq+N3ZxPGkypzANmQk9BNXszVzR9lIMUBbYZI
+         oacHg4Pjtid+GwXLENlBMnxcTV8L6Ttaly9OJsyGN3xG/0PP5NO6NoiW/cykCgO0dv+5
+         FFNQ==
+X-Gm-Message-State: ACrzQf2B+TzlxqsgBzg8Z34BY9eWbCu1poyJU9bNKAzhmksKKCTlslRr
+        24TI0M7701qGf1WaD3ccw3vy0MY+124BuBw7nGM=
+X-Google-Smtp-Source: AMsMyM7rjAEH5MFY6rzj6ABQ2aeHnRXAUZ3VKJTzUS/hx0hQe+AhmaDLkivzhofaw85caCHDKcDTSlldTyc3t72cg4E=
+X-Received: by 2002:a05:6214:d8d:b0:4ad:5d9d:bda8 with SMTP id
+ e13-20020a0562140d8d00b004ad5d9dbda8mr11450858qve.85.1664040867821; Sat, 24
+ Sep 2022 10:34:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220922123141.24042-1-shangxiaojing@huawei.com>
-In-Reply-To: <20220922123141.24042-1-shangxiaojing@huawei.com>
+References: <20220924054738.12076-1-rui.zhang@intel.com> <20220924054738.12076-2-rui.zhang@intel.com>
+In-Reply-To: <20220924054738.12076-2-rui.zhang@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 24 Sep 2022 19:23:38 +0200
-Message-ID: <CAJZ5v0ha0LbxsnBcDcpLZSGDVokBBSLqsPQewMTu4BiLBYR0Dg@mail.gmail.com>
-Subject: Re: [PATCH -next] thermal/drivers/int340x/processor_thermal: Switch
- to use module_pci_driver() macro
-To:     Shang XiaoJing <shangxiaojing@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Sat, 24 Sep 2022 19:34:17 +0200
+Message-ID: <CAJZ5v0gQpdoSPwCeuM3eDHB_rs63GN9_24iM3tCvzhSR99tj4g@mail.gmail.com>
+Subject: Re: [PATCH 1/3] powercap: intel_rapl: Use standard Energy Unit for
+ SPR Dram RAPL domain
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 1:57 PM Shang XiaoJing <shangxiaojing@huawei.com> wrote:
+On Sat, Sep 24, 2022 at 7:45 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> Since pci provides the helper macro module_pci_driver(), we may replace
-> the module_init/exit with it.
+> Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
+> Dram RAPL domain. But on SPR, Dram RAPL domain follows the standard
+> energy resolution as described in MSR_RAPL_POWER_UNIT.
 >
-> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+> Remove the SPR dram_domain_energy_unit quirk.
+>
+> Fixes: 2d798d9f5967 ("powercap: intel_rapl: add support for Sapphire Rapids")
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Tested-by: Wang Wendy <wendy.wang@intel.com>
 > ---
->  .../int340x_thermal/processor_thermal_device_pci.c  | 13 +------------
->  .../processor_thermal_device_pci_legacy.c           | 13 +------------
->  2 files changed, 2 insertions(+), 24 deletions(-)
+>  drivers/powercap/intel_rapl_common.c | 1 -
+>  1 file changed, 1 deletion(-)
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> index c2dc4c158b9d..bf1b1cdfade4 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> @@ -373,18 +373,7 @@ static struct pci_driver proc_thermal_pci_driver = {
->         .driver.pm      = &proc_thermal_pci_pm,
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 949eb90f5733..d8eaa04bf2af 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -1035,7 +1035,6 @@ static const struct rapl_defaults rapl_defaults_spr_server = {
+>         .check_unit = rapl_check_unit_core,
+>         .set_floor_freq = set_floor_freq_default,
+>         .compute_time_window = rapl_compute_time_window_core,
+> -       .dram_domain_energy_unit = 15300,
+>         .psys_domain_energy_unit = 1000000000,
+>         .spr_psys_bits = true,
 >  };
->
-> -static int __init proc_thermal_init(void)
-> -{
-> -       return pci_register_driver(&proc_thermal_pci_driver);
-> -}
-> -
-> -static void __exit proc_thermal_exit(void)
-> -{
-> -       pci_unregister_driver(&proc_thermal_pci_driver);
-> -}
-> -
-> -module_init(proc_thermal_init);
-> -module_exit(proc_thermal_exit);
-> +module_pci_driver(proc_thermal_pci_driver);
->
->  MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
->  MODULE_DESCRIPTION("Processor Thermal Reporting Device Driver");
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
-> index 4571a1a53b84..09e032f822f3 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
-> @@ -151,18 +151,7 @@ static struct pci_driver proc_thermal_pci_driver = {
->         .driver.pm      = &proc_thermal_pci_pm,
->  };
->
-> -static int __init proc_thermal_init(void)
-> -{
-> -       return pci_register_driver(&proc_thermal_pci_driver);
-> -}
-> -
-> -static void __exit proc_thermal_exit(void)
-> -{
-> -       pci_unregister_driver(&proc_thermal_pci_driver);
-> -}
-> -
-> -module_init(proc_thermal_init);
-> -module_exit(proc_thermal_exit);
-> +module_pci_driver(proc_thermal_pci_driver);
->
->  MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
->  MODULE_DESCRIPTION("Processor Thermal Reporting Device Driver");
 > --
 
-Applied as 6.1 material with some edits in the subject and changelog.
-
-Thanks!
+Applied as 6.1 material, thanks!
