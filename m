@@ -2,87 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE085E889B
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 07:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D938C5E893C
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 09:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbiIXFpH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 01:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S233387AbiIXHkL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 03:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiIXFo7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 01:44:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B501F3BC79;
-        Fri, 23 Sep 2022 22:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663998285; x=1695534285;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=aktu51+28FaoJRxOu94f10+s9e/A7ngnX7byejD6d3s=;
-  b=RG9cFJmIH+/DoOYn3J7gULp7D3lf29qWNkJgxSm8Op91MCsxmwGEWgaP
-   feSYJRDGJpWPPdqGyP8bM5g+U7FWJagvKt/5+d0Iqupq/nJZXBzW1welX
-   kXwytf6+QBPSOfn+h4bHEiC0wG1KwHMi8i1HCwJ38hI9IontS/W7tmDz4
-   PJUP4xVRR2bQ3QGjh202Md0YUjrHQ/JHNyxIuQY2wC9M7c4ycES61P0lK
-   l/5eqqD/hN/6LPpe3n4vOZOUnlnRcTMSNfPKRhSwm95ictJWgQK3GMzG8
-   zViBOIIHuzaGNSquQDxR1FoYQ9wYg3Y5v8FC3NmKNG5U5wZMvTJ0d4NL9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="299470293"
-X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="299470293"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 22:44:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="651207779"
-Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2022 22:44:42 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     peterz@infradead.org, rjw@rjwysocki.net, len.brown@intel.com
-Cc:     mingo@redhat.com, linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, kan.liang@linux.intel.com,
-        artem.bityutskiy@linux.intel.com
-Subject: [PATCH 3/3] tools/power turbostat: Use standard Energy Unit for SPR Dram RAPL domain
-Date:   Sat, 24 Sep 2022 13:47:38 +0800
-Message-Id: <20220924054738.12076-4-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220924054738.12076-1-rui.zhang@intel.com>
-References: <20220924054738.12076-1-rui.zhang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233368AbiIXHkI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 03:40:08 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E61E56B8E
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 00:40:07 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id y2so1362012qtv.5
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 00:40:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=LwRw4I7ys8LuierT/yOkLB8imLHYXeUA/oaMPxfDLwQ=;
+        b=Sh5AR2Zm3S2Y0FZ38wwlF6Hh4AwwDQ7NSGkLuBD+8aFe9/tQN3JoXHMjbkDiaGysAQ
+         y7uwEvpNHJ/7tH4YCwal9cQPc059Qz+sB9nQVQnhIvLsLN5aSh85pl7J9vMgYHYNl586
+         vL2kEo/vi0jD0dgMxjyLpmolpPgtJwYsUFvSV29n67MbpC0AIZtOa+g4aCXsQRw7Rf6+
+         yYSDGR0PVbSsy+I4W/cDCHxi2vIPy57CBWD6QjkgsOawfPA8F56RzrNjvClQkEs6hsRL
+         Pz85faVqWZLs2/Z0jGy0l6yWmvzApdH0VJ8agMm2Jpt2jQDXylUDCilyANuoF5DfiKQH
+         6SxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=LwRw4I7ys8LuierT/yOkLB8imLHYXeUA/oaMPxfDLwQ=;
+        b=Q0/lao+zbM4V4NWbKemsIg5/2B13RP6vvKUPBTJhxFqU+lu3WUGxN8VAHuUTMFIEfh
+         +pANn3UO2+eIJNdhuGntP+x+EJK4vr0kIknnYY9+Vec2pTrV1XqKN1P8X2cqEoADKTyX
+         htOvo2jaOz1xUm9p7LZJfVpRH5TfE9Qxh4B0kgTOEEbSQRA6rupGKspFJMeMEmioa1GW
+         snCXcmgCWT3RVmmna0k97VIcp97N2pOJ1EZEqU+ZOlSTiBjeIP4YJoqvBX3ljATwIgXJ
+         jrQ9uF6Z3ONUKWml0u3ZIlJUZxVL5/CjFkNiC9d/otWTJtcWJGeOckua7bRVyff7xAVi
+         3emw==
+X-Gm-Message-State: ACrzQf3BCBMsx/I7CRgEUM/Ep7EdqcGqfcOqjHhZKl2QKc2IzBW1Mic2
+        mqh3OhDUHcTLaHhFFyqGKCg5Ig==
+X-Google-Smtp-Source: AMsMyM5eH3KoXCCdC3I9tQ677imJ9vsalaonClnjV8QJ6jv0XBWsKRt7/OSSIQYaz/u1AQ9pT19UVA==
+X-Received: by 2002:a05:622a:1991:b0:35b:a3d3:4b0f with SMTP id u17-20020a05622a199100b0035ba3d34b0fmr10179530qtc.358.1664005206574;
+        Sat, 24 Sep 2022 00:40:06 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id bp36-20020a05620a45a400b006bb78d095c5sm7583393qkb.79.2022.09.24.00.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Sep 2022 00:40:06 -0700 (PDT)
+Date:   Sat, 24 Sep 2022 00:40:04 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Borislav Petkov <bp@alien8.de>
+cc:     Nathan Chancellor <nathan@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: INFO: task systemd-udevd:94 blocked for more than 120 seconds.
+In-Reply-To: <Yy4MNp6yiRTJxeXa@zn.tnic>
+Message-ID: <28d03f8d-ed70-cdc8-70d3-7b1723e5715@google.com>
+References: <Yy4B+9yH8oT0F8nQ@zn.tnic> <Yy4GoMMwiBaq3oJf@dev-arch.thelio-3990X> <Yy4MNp6yiRTJxeXa@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
-Dram RAPL domain. But on SPR, Dram RAPL domain follows the standard
-energy resolution as described in MSR_RAPL_POWER_UNIT.
+On Fri, 23 Sep 2022, Borislav Petkov wrote:
+> On Fri, Sep 23, 2022 at 12:18:56PM -0700, Nathan Chancellor wrote:
+> > I have not seen a stacktrace like this on my machines (although I
+> > suspect that is because I don't have CONFIG_DETECT_HUNG_TASK enabled in
+> > my configs) but my Honeycomb LX2 hangs while booting after commit
+> > 78ffa3e58d93 ("thermal/core: Add a generic thermal_zone_get_trip()
+> > function") according to my bisect, which certainly seems like it could
+> > be related to the trace you are seeing.
+> 
+> Don't you just love how well our community works - one reports a bug and
+> someone else has already bisected it and thus saves one the work?!
+> 
+> :-)))
+> 
+> Thanks Nathan, I can confirm your bisection. The commit above doesn't
+> revert cleanly ontop of linux-next so I tried it and the patch before
+> it:
+> 
+> 78ffa3e58d93 ("thermal/core: Add a generic thermal_zone_get_trip() function")	<- BAD
+> 62022c15f627 ("Merge branch 'pm-opp' into linux-next")				<- GOOD
+> 
+> so it looks like that one is somehow b0rked.
 
-Remove the SPR rapl_dram_energy_units quirk.
+Yes, Nathan was alert, and saved me too from bisecting failure to boot
+linux-next in another thread.
 
-Fixes: e7af1ed3fa47 ("tools/power turbostat: Support additional CPU model numbers")
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Tested-by: Wang Wendy <wendy.wang@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 1 -
- 1 file changed, 1 deletion(-)
+And I see from
+https://lore.kernel.org/lkml/c85a77a3-409b-3e83-08a7-ac7e1888790d@samsung.com/
+that Marek also found it: and tried to fix it, but found it goes too wide.
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 597cc2dbc456..e3e357df2a51 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -4560,7 +4560,6 @@ static double rapl_dram_energy_units_probe(int model, double rapl_energy_units)
- 	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
- 	case INTEL_FAM6_XEON_PHI_KNL:	/* KNL */
- 	case INTEL_FAM6_ICELAKE_X:	/* ICX */
--	case INTEL_FAM6_SAPPHIRERAPIDS_X:	/* SPR */
- 		return (rapl_dram_energy_units = 15.3 / 1000000);
- 	default:
- 		return (rapl_energy_units);
--- 
-2.25.1
+I made a patch of the offending series with
+git diff 78ffa3e58d93^ 2b109cffe683
+and then reverted that cleanly from next-20220923: works for me.
 
+Hugh
