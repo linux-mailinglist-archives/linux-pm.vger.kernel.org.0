@@ -2,99 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A505E8E25
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 17:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D375E8E84
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 18:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiIXPs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 11:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S231178AbiIXQjE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 12:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233839AbiIXPs2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 11:48:28 -0400
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B6037FAB;
-        Sat, 24 Sep 2022 08:48:27 -0700 (PDT)
-Received: by mail-qv1-f53.google.com with SMTP id i15so1829115qvp.5;
-        Sat, 24 Sep 2022 08:48:27 -0700 (PDT)
+        with ESMTP id S229946AbiIXQjD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 12:39:03 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8274B7CB65
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 09:39:02 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id o2so4693199lfc.10
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 09:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=UN7dIy5bKqPGCHAvZ6RCx2KKfneFm8jKTHL6ecufoDA=;
+        b=mVderDBC0HH08MVkJlNWWaMuX9Uy+dZ09IDw5z/QycijWXh4HJdYAakyKlkZVqZltK
+         ib+yGSQXrCRHVF24k8Z8r1/6/BwogwRVz0y3Nn6aNO/suC0R+PpAY/bw2edm1EHOd4EX
+         fDakEc4Mjb9wd4T3ew3OebRtfB96/0TfQUeilsx+P5AF0Re0F6i3vYBR2Tw8EYnjNnNL
+         WDq3Bzzr6oioNdAe2h3GzgIai4NZ8W0Hogj/uj1iM4zIfraw6GrHxANDdXJq6evs1d5k
+         ZIr6dHheJABrNzwiIyUjmzkh1GsbnzBf1M4PTh0wiveN8bZRoLHYS98q2uUgnKksh2iw
+         WiAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=WX8TwZF8c8gXM19UKc28n63m7yNqYx0bJDzrwuTWqoU=;
-        b=j/6SN4VEvMJ5drZBKQqjQJCbQHY2zwYdrR4VTf/XsBj4h8t/qbdgzM9A1f2b/gz4Qr
-         F8H205uIECWQChQlNbzqVMVuxVumlxuIJJbTw0CkoeAwmw5qn05YgEzNECPcAGRFVd/s
-         Ete6SSS1C+WvdZA5Hffp6aMxrj6h1I3sVWAYPu6lx0+nH3W+cPfE8r2LdmzajmPAYAmp
-         k4IcqqhgNWgw9bFbx9y21aKd4D0HYhCHXYq63umHgvvoQaMzvKwkR9HazMk5R/7F3sXj
-         NaeHRJV2Zt3kqD3WNArQ88MANSIHC7u7D6TqrWVS8Kxi6EeXEnpZ3jX2Nrm2Jow83exx
-         0Qag==
-X-Gm-Message-State: ACrzQf2+CYlCS2Y1nj7hyu08AmUa1SbwXUZbnhQJSoXVj7Z/9Zc2W17B
-        yp0GWcAX1YVeorwPgjtUBHuAvkLgSsfXEbplS3/TbyOjJBU=
-X-Google-Smtp-Source: AMsMyM7uDbDiGPeWBvAxhHEIDR5roDNZ07cN6rpyUA/pt/vgzYu+Th6NwQSj84p2W9QABxAFpLz3nMEwWs5GJ98UZOI=
-X-Received: by 2002:a0c:da14:0:b0:4aa:aad9:e450 with SMTP id
- x20-20020a0cda14000000b004aaaad9e450mr11425212qvj.130.1664034506580; Sat, 24
- Sep 2022 08:48:26 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UN7dIy5bKqPGCHAvZ6RCx2KKfneFm8jKTHL6ecufoDA=;
+        b=4Ir7v2n7vSsQm/YGbLxFN0j7ka8z8N/fmhE0CBct059jAp1wOnkjloumnBazNe6Xrg
+         lZO8cWrXHgPWJSv+SujVVU0uU96R/QbfjaIua3mFxe5/qa4IcuCXFPydJLPpoi2FVJsL
+         0iCcgU0HuEGFKNKZL2PN9SKz9/EnKBm926TNlgVOVvjnr4THbBnARHSeO5nK1HyTXM6D
+         OXwoSFMrywKUOMWcLd9G2meSTSq/YpoRZsHGuBnPEFze7tBRSdyhgcM+X4AiE7DQ1wX0
+         cNV8ZivETLeCoY/+mMTIcaa9jthO7K670KRE9ftzHbmIsaOSy+wA17G+90hNUKNl3K/6
+         dq/Q==
+X-Gm-Message-State: ACrzQf0qNNFZUuCk3wLhLaPk9Ey5sneNTkGXXknV2WtRMdhHyyDow01B
+        BqRNQRxBje32y/LQNnEcGmHEVg==
+X-Google-Smtp-Source: AMsMyM4LUkwxRtPvLlV/99Vshl39R68/lx1p+A7GnsUxLlQYo5FCnzw6uQgxz4o7vtVVbIQ7nmPieg==
+X-Received: by 2002:a05:6512:308f:b0:49a:5a59:aa25 with SMTP id z15-20020a056512308f00b0049a5a59aa25mr5220074lfd.44.1664037540847;
+        Sat, 24 Sep 2022 09:39:00 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id j12-20020a056512344c00b00494a1b242dasm1946332lfr.14.2022.09.24.09.38.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Sep 2022 09:39:00 -0700 (PDT)
+Message-ID: <9ef673f2-4296-8761-4d7a-dca323ba272e@linaro.org>
+Date:   Sat, 24 Sep 2022 19:38:58 +0300
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 24 Sep 2022 17:48:15 +0200
-Message-ID: <CAJZ5v0gwRVKR+4neD7xH+CCpnr6HQyvdJ14vjj7S4nMTAabRAA@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.0-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] thermal: qcom: tsens-v0_1: Fix MSM8939 fourth sensor
+ hw_id
+Content-Language: en-GB
+To:     Vincent Knecht <vincent.knecht@mailoo.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     bryan.odonoghue@linaro.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org
+References: <20220811105014.7194-1-vincent.knecht@mailoo.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220811105014.7194-1-vincent.knecht@mailoo.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On 11/08/2022 13:50, Vincent Knecht wrote:
+> Reading temperature from this sensor fails with 'Invalid argument'.
+> 
+> Looking at old vendor dts [1], its hw_id should be 3 instead of 4.
+> Change this hw_id accordingly.
+> 
+> [1] https://github.com/msm8916-mainline/android_kernel_qcom_msm8916/blob/master/arch/arm/boot/dts/qcom/msm8939-common.dtsi#L511
+> 
+> Fixes: 332bc8ebab2c ("thermal: qcom: tsens-v0_1: Add support for MSM8939")
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 
-Please pull from the tag
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.0-rc7
+Daniel, gracious ping for getting this patch into 6.1.
 
-with top-most commit 9614369a042a3a345ef7e2997c277aa8a271b8a0
+> ---
+> Fixes reading GPU temperature on msm8939 idol3 with current WIP dtsi
+> ---
+>   drivers/thermal/qcom/tsens-v0_1.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index f136cb350238..327f37202c69 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -604,7 +604,7 @@ static const struct tsens_ops ops_8939 = {
+>   struct tsens_plat_data data_8939 = {
+>   	.num_sensors	= 10,
+>   	.ops		= &ops_8939,
+> -	.hw_ids		= (unsigned int []){ 0, 1, 2, 4, 5, 6, 7, 8, 9, 10 },
+> +	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 5, 6, 7, 8, 9, 10 },
+>   
+>   	.feat		= &tsens_v0_1_feat,
+>   	.fields	= tsens_v0_1_regfields,
 
- Merge tag 'opp-fixes-6.0' of
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
+-- 
+With best wishes
+Dmitry
 
-on top of commit 521a547ced6477c54b4b0cc206000406c221b4d6
-
- Linux 6.0-rc6
-
-to receive power management fixes for 6.0-rc7.
-
-These fix an uninitialized variable usage in the operating performance
-points code and add missing DT bindings for it.
-
-Specifics:
-
- - Fix uninitialized variable usage in dev_pm_opp_config_clks_simple()
-   (Christophe JAILLET).
-
- - Add missing OPP DT properties (Rob Herring).
-
-Thanks!
-
-
----------------
-
-Christophe JAILLET (1):
-      OPP: Fix an un-initialized variable usage
-
-Rob Herring (1):
-      dt-bindings: opp: Add missing (unevaluated|additional)Properties
-on child nodes
-
----------------
-
- Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 1 +
- Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 1 +
- drivers/opp/core.c                                           | 2 +-
- 3 files changed, 3 insertions(+), 1 deletion(-)
