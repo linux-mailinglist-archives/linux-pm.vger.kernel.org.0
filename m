@@ -2,41 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99495E8ABE
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 11:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46B45E8AF4
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 11:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233484AbiIXJ0H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 05:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S233608AbiIXJeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 05:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiIXJZr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 05:25:47 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C6D41D2D;
-        Sat, 24 Sep 2022 02:25:45 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZNn82HCYzlXKk;
-        Sat, 24 Sep 2022 17:21:32 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 17:25:43 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <patrice.chotard@foss.st.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH] cpufreq: Add __init annotation to module init funcs
-Date:   Sat, 24 Sep 2022 17:21:59 +0800
-Message-ID: <20220924092159.56594-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S233204AbiIXJeS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 05:34:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D546112E429;
+        Sat, 24 Sep 2022 02:34:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70CA3608C3;
+        Sat, 24 Sep 2022 09:34:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542DBC433C1;
+        Sat, 24 Sep 2022 09:34:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664012056;
+        bh=3mobUcHXtIiwJ/IgBy0YxctGCTuEvcBls7FCY9NGx94=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WwI4czSd+PC2k+Gv5uUc0PfQbDuMvfCng+HMUKtnB711hP7bxapr7iMQBnl8KUtev
+         GJPt8x3FUhpAgWK2k2xNMhyhiIVvrMUPYzmGcHPTPKCKYrkKosNqQMAkyx4V0NtKj8
+         pEgW219IWo2sqggtMPPfTq+vFrA9EleWzOkE7FwY=
+Date:   Sat, 24 Sep 2022 11:34:13 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     Douglas Anderson <dianders@chromium.org>, stable@vger.kernel.org,
+        swboyd@chromium.org, Mike Tipton <mdtipton@codeaurora.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [5.10 PATCH] interconnect: qcom: icc-rpmh: Add BCMs to commit
+ list in pre_aggregate
+Message-ID: <Yy7PFenCa0Sa3B3n@kroah.com>
+References: <20220922141725.5.10.1.I791715539cae1355e21827ca738b0b523a4a0f53@changeid>
+ <00eb82ca-8bf6-c744-d04d-96b97ce06b17@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00eb82ca-8bf6-c744-d04d-96b97ce06b17@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,54 +57,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add missing __init annotation to module init funcs.
+On Thu, Sep 22, 2022 at 04:28:25PM -0500, Alex Elder wrote:
+> On 9/22/22 4:18 PM, Douglas Anderson wrote:
+> > From: Mike Tipton <mdtipton@codeaurora.org>
+> > 
+> > commit b95b668eaaa2574e8ee72f143c52075e9955177e upstream.
+> > 
+> > We're only adding BCMs to the commit list in aggregate(), but there are
+> > cases where pre_aggregate() is called without subsequently calling
+> > aggregate(). In particular, in icc_sync_state() when a node with initial
+> > BW has zero requests. Since BCMs aren't added to the commit list in
+> > these cases, we don't actually send the zero BW request to HW. So the
+> > resources remain on unnecessarily.
+> > 
+> > Add BCMs to the commit list in pre_aggregate() instead, which is always
+> > called even when there are no requests.
+> > 
+> > Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+> > [georgi: remove icc_sync_state for platforms with incomplete support]
+> > Link: https://lore.kernel.org/r/20211125174751.25317-1-djakov@kernel.org
+> > Signed-off-by: Georgi Djakov <djakov@kernel.org>
+> > [dianders: dropped sm8350.c which isn't present in 5.10]
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> 
+> Whoops, sorry about that.
+> 
+> Acked-by: Alex Elder <elder@linaro.org>
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- drivers/cpufreq/highbank-cpufreq.c | 2 +-
- drivers/cpufreq/sti-cpufreq.c      | 2 +-
- drivers/cpufreq/ti-cpufreq.c       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Now queued up, thanks.
 
-diff --git a/drivers/cpufreq/highbank-cpufreq.c b/drivers/cpufreq/highbank-cpufreq.c
-index ac57cddc5f2f..a45864701143 100644
---- a/drivers/cpufreq/highbank-cpufreq.c
-+++ b/drivers/cpufreq/highbank-cpufreq.c
-@@ -55,7 +55,7 @@ static struct notifier_block hb_cpufreq_clk_nb = {
- 	.notifier_call = hb_cpufreq_clk_notify,
- };
- 
--static int hb_cpufreq_driver_init(void)
-+static int __init hb_cpufreq_driver_init(void)
- {
- 	struct platform_device_info devinfo = { .name = "cpufreq-dt", };
- 	struct device *cpu_dev;
-diff --git a/drivers/cpufreq/sti-cpufreq.c b/drivers/cpufreq/sti-cpufreq.c
-index a67df90848c2..1a63aeea8711 100644
---- a/drivers/cpufreq/sti-cpufreq.c
-+++ b/drivers/cpufreq/sti-cpufreq.c
-@@ -252,7 +252,7 @@ static int sti_cpufreq_fetch_syscon_registers(void)
- 	return 0;
- }
- 
--static int sti_cpufreq_init(void)
-+static int __init sti_cpufreq_init(void)
- {
- 	int ret;
- 
-diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-index df85a77d476b..f64180dd2005 100644
---- a/drivers/cpufreq/ti-cpufreq.c
-+++ b/drivers/cpufreq/ti-cpufreq.c
-@@ -398,7 +398,7 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int ti_cpufreq_init(void)
-+static int __init ti_cpufreq_init(void)
- {
- 	const struct of_device_id *match;
- 
--- 
-2.17.1
-
+greg k-h
