@@ -2,180 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A515E8F0A
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 19:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24EF5E8F70
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 20:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbiIXRrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 13:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
+        id S230370AbiIXS7C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 14:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234019AbiIXRqz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 13:46:55 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2613463F11
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 10:46:51 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c24so2827953plo.3
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 10:46:51 -0700 (PDT)
+        with ESMTP id S232987AbiIXS7B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 14:59:01 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B99E4D154
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 11:58:59 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id z20so3438157ljq.3
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 11:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=xY/ucOteS/CE3dObBNJYlsqyYXh8wVQKpEdC6EgPDR0=;
-        b=NdoJPgPsj+Pq+s2Vmd74sJl9OXquPDeGadssU6xXdTLMFJO5veORFuWbUWuwimcak6
-         5GNvt9X8y5Qqvqv3EvAcgNNjIyuo9Ml6ZTuAmmpwMv3ZuSf7Nu/AvY19/1c6ggpBpG+N
-         SaM2TO6p7JEkvxHnSq47decLJQ/zQqqKiX6KTLQ7u4kJUdbBs+yuCm5K9OrVJjHKTDSn
-         tup2ql4sXkMEgCmVYtGUeGOxTjyK5hPcI4sQt6YBKPG1NdRtLnWJbR0zH2ewEVlcGrbN
-         hfr6I8IdGDaX+tZVD7aEA1XDQRTYisdPPm+7jk+bCG0tszdJse3y27m3tRgHmGHuyDcn
-         Dy3A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=YIW3vTRVXsuTcD11RiZoOeP6j7SOFSgAsNn7hMGMgbY=;
+        b=sSSFPkuXvSYtGG6t6dyEfy9byoHF+HB+rsJ+ZnT5aiRhvxC0DgaO5uOyM4pNnQOuDW
+         Ci52znBsyWrWFNMhRKisYK7h4URCV+IlzJUjWWSDxH2yvSrPILJqcIN7s76XUIaeXyGf
+         srw0yBGp/5w1HfuPVM72eRvMj8vDWeaFllHv3w4mOLsb5zKVkJejqFn26QLg+uA7DMM5
+         L7SRRCM+nU6QE3kyLu4tXKab4hfhyYqTakDihUFO8QSIJnEBII6+wTm4sa664L7467Cm
+         ynIsGAkxa1KTS+9KnyYhU0mNxTYgB+pEx9ccnitPujpXv9BvTY5tACj5X74flsXLx9/g
+         +gHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=xY/ucOteS/CE3dObBNJYlsqyYXh8wVQKpEdC6EgPDR0=;
-        b=NWI4ijSh92RLvEED39dvptf1MV3kS8RglQx3OeN1aXGYqFauNg7djEg25+igMJn3ul
-         IGy/SKAcvGslFfrAs+Q2EOsbWIfoN1uQn70YTvGHwSo2Cw3/9wSisWL8sv7UEu/3quDe
-         iscSbvsvtZe0eAAhwJvotd279d54fxeaHj2YEgJZVAiZCveEuRc6bQoklAfEEphFzNkg
-         vgdrR34mzl0IUW9BvXJPTuBJSfIwfYlzs/WHZUGJ+4AaoUr93InZb3vIyjV1909lsPOq
-         vyra+xV+XxdCmLE2nAeEIhedmn0GnzQG4c61858c0TcQVw6Z+jAFLgo/OoyJKbWDDOUr
-         Wr8g==
-X-Gm-Message-State: ACrzQf3y+mA3+jnfW2YOOMUBXdjM0R3gxPINkoITKWGZBCEymyAASZCJ
-        nDCrf03u3kG+DSxQ5VkJVcHmzg==
-X-Google-Smtp-Source: AMsMyM4aTgareTa2+y4E/oAPys8A+Imc21HaqcsutaYVnrqbYDo9gcFcrtixj5zRqhBvgK0ebv9/VQ==
-X-Received: by 2002:a17:903:2451:b0:178:4423:af32 with SMTP id l17-20020a170903245100b001784423af32mr14711568pls.51.1664041610620;
-        Sat, 24 Sep 2022 10:46:50 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f17-20020a170902ce9100b001786b712bf7sm8161859plg.151.2022.09.24.10.46.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 10:46:50 -0700 (PDT)
-Message-ID: <632f428a.170a0220.db9d3.fd05@mx.google.com>
-Date:   Sat, 24 Sep 2022 10:46:50 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=YIW3vTRVXsuTcD11RiZoOeP6j7SOFSgAsNn7hMGMgbY=;
+        b=TTEtu3nv1Y3CXGlVgI8P8ePJl5DsvZn40WWxxYZ/NSdHS7SrqkK+U2RmKbMYIk/73e
+         ei3A1eZoYf8Qn3HgZOEs5/YXTH2GWLZGJp+hx1o3BAmdIlQtgdLaK11SV6nJjAR+lKvO
+         6Uz2TJvSzxjZ1kZOjQOZkTXi/OREDNxGgFPXKg2puEgxEO8PwMskzf01tDcers1pCUjt
+         7vyiizRgqNTvEtvNFSpIW/8W1c8I1LnAgNQmHw94KHKVPMmI2KM2/b/g7aTLX+TR72m+
+         zfbq2pWtaNpopHDZOVyRGNL2SqIZBg9TTrB00F2Rm3plH5ZYKczCUTnLZB+i6NsJ13dV
+         mKSA==
+X-Gm-Message-State: ACrzQf0xb298AqcMONHIiebbLASvb6qhU1sO/ezhKYmHtjn84OCTahuE
+        9nuAi5V/+K/IMXrLZbISBJQ5Zw==
+X-Google-Smtp-Source: AMsMyM5RXdMxotovE2D7bZQJ6DTIQzxiMq2tSkXPLbItuXnX8MnAxMcaV5bzumt9nVjHNKuTXqaiug==
+X-Received: by 2002:a05:651c:499:b0:26c:677a:a531 with SMTP id s25-20020a05651c049900b0026c677aa531mr5209188ljc.319.1664045937527;
+        Sat, 24 Sep 2022 11:58:57 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id j21-20020a05651231d500b004946e72711bsm1965982lfe.76.2022.09.24.11.58.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Sep 2022 11:58:57 -0700 (PDT)
+Message-ID: <93a790fb-20dc-0f31-2eed-09f5b538bea9@linaro.org>
+Date:   Sat, 24 Sep 2022 21:58:56 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: pm-6.0-rc7-143-g00674ddf1b594
-Subject: pm/testing baseline: 86 runs,
- 2 regressions (pm-6.0-rc7-143-g00674ddf1b594)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC PATCH 00/10] thermal/drivers/tsens: specify nvmem cells in
+ DT rather than parsing them manually
+Content-Language: en-GB
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220910124701.4060321-1-dmitry.baryshkov@linaro.org>
+ <YyyaH1ZXF9IvLpwd@gerhold.net>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <YyyaH1ZXF9IvLpwd@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 86 runs, 2 regressions (pm-6.0-rc7-143-g00674ddf1b594)
+Hi,
 
-Regressions Summary
--------------------
+On 22/09/2022 20:23, Stephan Gerhold wrote:
+> Hi Dmitry,
+> 
+> On Sat, Sep 10, 2022 at 03:46:51PM +0300, Dmitry Baryshkov wrote:
+>> Historically the tsens driver fetches the calibration data as a blob and
+>> then parses the blob on its own. This results in semi-duplicated code
+>> spreading over the platform-specific functions.
+>>
+>> This patch series changes tsens calibration code to use pre-parsed nvmem
+>> cells rather than parsing the blob in the driver. For backwards
+>> compatibility the old code is left in place for msm8916 and qcs404, two
+>> platforms which have in-tree DT files. For msm8974 the original function
+>> is left intact, since it differs significantly (and I can not test the
+>> code on msm8974). For all other affected platforms the old parsing code
+>> has been dropped as a part of this RFC.
+>>
+>> The code was tested on msm8916 and qcs404 only, thus it is being sent as
+>> an RFC.
+>>
+> 
+> Thanks a lot for working on this!
+> 
+> After thinking about this for a while I wonder if we can go even a step
+> further: Can we drop SoC-specific code entirely for 8939 and 9607 and
+> match the generic compatible (qcom,tsens-v0_1)? This would allow most
+> v0.1 plaforms to use generic code like for qcom,tsens-v2.
 
-platform              | arch  | lab          | compiler | defconfig | regre=
-ssions
-----------------------+-------+--------------+----------+-----------+------=
-------
-hifive-unleashed-a00  | riscv | lab-baylibre | gcc-10   | defconfig | 1    =
-      =
+While this idea looks appealing, I think it's a bit against our custom 
+to put hardware details into the driver rather than putting them into 
+the DT. So, I think, the 8939 will have to stay as is, while for the 
+9607 and maybe several other devices it should be possible to create a 
+fallback entry.
 
-kontron-kbox-a-230-ls | arm64 | lab-kontron  | gcc-10   | defconfig | 1    =
-      =
+> 
+> AFAICT with your changes only the following remains SoC-specific:
+> 
+>    - hw_ids (actually only needed for 8939 since 9607 has standard IDs)
 
+As I wrote, I wouldn't put this into DT.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/pm-6.0-r=
-c7-143-g00674ddf1b594/plan/baseline/
+> 
+> While two other things are already handled:
+> 
+>    - num_sensors (the driver supports "#qcom,sensors" in DT already)
+>    - tsens_calibrate_nvmem() shift (AFAICT in downstream msm-tsens.c
+>      everything except 8916 uses shift = 2. 8916 needs special handling
+>      anyway for the backwards compatibility)
+> 
+> Having the generic compatible would allow me to add MSM8909 without any
+> code changes at all (just DT schema addition).
+> 
+> For 8939 we could read the hw_ids from the DT with something like:
+> 
+> 	qcom,sensors = <0 1 2 3 5 6 7 8 9 10>;
+> 
+> And actually there are two revisions of 8939, the older one has one
+> sensor less (msm-3.10: msm8939-common.dtsi vs msm8939-v3.0.dtsi).
+> This could also be easily handled from the DT without any code changes:
+> 
+> 	qcom,sensors = <0 1 2 3 5 6 7 8 9>;
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: pm-6.0-rc7-143-g00674ddf1b594
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      00674ddf1b5943bf978927923f3a8f00e2cad255 =
+Usually we only care about the latest revision of the chip, earlier 
+revisions typically correspond to engineering samples, never hitting the 
+actual consumer devices.
 
+> 
+> The diff could be something like the following (I did not test it yet).
+> 
+> What do you think?
+I'd like to sort the calibration data for 8976 first. At this moment I'm 
+waiting for the 8976 data to be tested. Also it would be nice to be able 
+to cleanup the 8976 calibration code.
 
+-- 
+With best wishes
+Dmitry
 
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab          | compiler | defconfig | regre=
-ssions
-----------------------+-------+--------------+----------+-----------+------=
-------
-hifive-unleashed-a00  | riscv | lab-baylibre | gcc-10   | defconfig | 1    =
-      =
-
-
-  Details:     https://kernelci.org/test/plan/id/632f366a7a42f56298355674
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/pm-6.0-rc7-143-g006=
-74ddf1b594/riscv/defconfig/gcc-10/lab-baylibre/baseline-hifive-unleashed-a0=
-0.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pm-6.0-rc7-143-g006=
-74ddf1b594/riscv/defconfig/gcc-10/lab-baylibre/baseline-hifive-unleashed-a0=
-0.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220919.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/632f366a7a42f56298355=
-675
-        new failure (last pass: v6.0-rc3-85-gf6f4c123bfbc) =
-
- =
-
-
-
-platform              | arch  | lab          | compiler | defconfig | regre=
-ssions
-----------------------+-------+--------------+----------+-----------+------=
-------
-kontron-kbox-a-230-ls | arm64 | lab-kontron  | gcc-10   | defconfig | 1    =
-      =
-
-
-  Details:     https://kernelci.org/test/plan/id/632f37cc41c45c78fb355656
-
-  Results:     94 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/pm-6.0-rc7-143-g006=
-74ddf1b594/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-l=
-s.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pm-6.0-rc7-143-g006=
-74ddf1b594/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-l=
-s.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220919.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
-2f37cc41c45c78fb35565f
-        failing since 109 days (last pass: v5.18-rc7-183-g45785e0ed597, fir=
-st fail: v5.19-rc1-2-g6a8964e282382)
-
-    2022-09-24T17:00:44.287098  /lava-172958/1/../bin/lava-test-case
-    2022-09-24T17:00:44.287695  <8>[   18.008666] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
-    2022-09-24T17:00:44.287965  /lava-172958/1/../bin/lava-test-case
-    2022-09-24T17:00:44.288209  <8>[   18.024705] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
-    2022-09-24T17:00:44.288450  /lava-172958/1/../bin/lava-test-case
-    2022-09-24T17:00:44.288683  <8>[   18.040230] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
-    2022-09-24T17:00:44.288920  /lava-172958/1/../bin/lava-test-case   =
-
- =20
