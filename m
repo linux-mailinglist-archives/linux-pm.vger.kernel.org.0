@@ -2,107 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752475E885A
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 06:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82FA5E8897
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 07:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiIXEcA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 00:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
+        id S233410AbiIXFpB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 01:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233180AbiIXEb7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 00:31:59 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763E8120BE3
-        for <linux-pm@vger.kernel.org>; Fri, 23 Sep 2022 21:31:58 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id a29so1876488pfk.5
-        for <linux-pm@vger.kernel.org>; Fri, 23 Sep 2022 21:31:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GnuhqFcO+fe0wjKJOsEuT4koguWc3h3nlcYn9yXR1Zw=;
-        b=ilf0THC+aUYPZwJdPDqccBQqqkMoBov963Qzs4Dr2+tuAPSs/AcMmzfsh15hy6+fH7
-         YTnwBOSMof5NP3YfRHg6bn185tlwhU0tn7acrCMKbYVD+djexbMzul59+Q5oft9TjqHj
-         mg9uLJXPb8EqhgT1u1YSKzol9b6AhlL1VCSIg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GnuhqFcO+fe0wjKJOsEuT4koguWc3h3nlcYn9yXR1Zw=;
-        b=QkLogTSqHVYYCxh19oy30jMTpTopX3DIePtLxPsyjQ+2sz5ZMnIgdKQqM+/DNk3kTW
-         q9vcKWSyfexqf7fbVE5mvWJnF5KZjoFvq6DfK6QMEqYX0ILeNNalRRMupdrh7rqTcVzi
-         vScuUmg0FP+swi0jYR0Sk3G4XPbtULRuxWUQUvDIMUIDsy23lvcqNyvccQASqOvAM1yL
-         UMhnwfBtyJdcyfaB+MYIx0DS+MWVttGClUOh4L0AW6kx2YGBkfnJy6zz3gUwGTsNOgRN
-         4OecuaYSHNvQcgcvS8PFRMllSW3yt/eKWCZkA4+SiwAdSOHHpuJhVc1PfTqGk8lvG5AZ
-         M1lA==
-X-Gm-Message-State: ACrzQf2dvIg09NxPcCrPs74g4o82Sy32tFTxZoqkgy1AbTHDEC8qm/e4
-        9kgPv9OK7zY/bKxIpDLFl0C6wg==
-X-Google-Smtp-Source: AMsMyM5aWgHQQgsKm67s9bNvFG2Josu1kMqGEZ4X0ajZCrpuwU5ilSO8WEOZTkJiSG0xeUURu/VHNQ==
-X-Received: by 2002:a63:91c7:0:b0:438:36c9:9022 with SMTP id l190-20020a6391c7000000b0043836c99022mr10756123pge.573.1663993917905;
-        Fri, 23 Sep 2022 21:31:57 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m2-20020a170902d18200b001728ac8af94sm6677144plb.248.2022.09.23.21.31.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 21:31:56 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 21:31:56 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 07/10] PM: hibernate: Use TPM-backed keys to encrypt
- image
-Message-ID: <202209232130.ED110D8F7D@keescook>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.7.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid>
- <202209201610.C06F8CA@keescook>
- <CAE=gft4twDMw8zpp1o0hv+SFFQtGNxkAivBg0VC2Pax1ez7qzg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE=gft4twDMw8zpp1o0hv+SFFQtGNxkAivBg0VC2Pax1ez7qzg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S233390AbiIXFo6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 01:44:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360881F9F1;
+        Fri, 23 Sep 2022 22:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663998278; x=1695534278;
+  h=from:to:cc:subject:date:message-id;
+  bh=90ic6Xwsrn9o/rFQdPQwmjtmJExTdJ/6twfK18KNT38=;
+  b=FsTQYwCETtHvurkPABgBWArkUR2N+jx6ofsOxOLjVEmehZduDuSgF5+h
+   lxZqeh4gSW2aEXKS74idIRt7Nlq5T74qZSFG0jI9TCPfnYKaPwA07QS21
+   c3pUeCCB5cFw1gWCmAbKPiZOUKwARzWvhKCI5FYrywzzhJyG5YqC8blnc
+   HUI1t6KXB2w7+FmZP4MDkXnJg+t7MQaeMnGGij4HzB2LLYUJ120H4wZXg
+   SWEm1zkDJ36WArwyJhOcK3Whn7V6KHVycXy9kcq+qCOutmXKFCPbTxLY7
+   D3WtYKp40fM4bZHtt+qHKyAau9MoQTbSI6sc8LOD+Uq1urFYUVnu31zVf
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="299470282"
+X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
+   d="scan'208";a="299470282"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 22:44:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
+   d="scan'208";a="651207759"
+Received: from power-sh.sh.intel.com ([10.239.183.122])
+  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2022 22:44:33 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     peterz@infradead.org, rjw@rjwysocki.net, len.brown@intel.com
+Cc:     mingo@redhat.com, linux-pm@vger.kernel.org, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ak@linux.intel.com, kan.liang@linux.intel.com,
+        artem.bityutskiy@linux.intel.com
+Subject: [PATCH 0/3] driver/tool fix for SPR Dram RAPL Domain
+Date:   Sat, 24 Sep 2022 13:47:35 +0800
+Message-Id: <20220924054738.12076-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 03:23:43PM -0700, Evan Green wrote:
-> On Tue, Sep 20, 2022 at 4:16 PM Kees Cook <keescook@chromium.org> wrote:
-> > On Tue, Aug 23, 2022 at 03:25:23PM -0700, Evan Green wrote:
-> > > [...]
-> > > +     ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
-> > > +                                    NULL);
-> >
-> > You want to keep the trailing NUL byte here so it's easier to read back
-> > later? Reading it back will need to verify the trailing NUL regardless.
-> > (Does this get read back?)
-> 
-> Are you referring to the trailing nul on keyinfo? The keyinfo string
-> is only used within this function, as key_instantiate_and_link()
-> receives it as a parameter string. I can see that
-> trusted_instantiate() also null-terminates the buffer defensively for
-> itself, but it still seemed prudent to hand in a terminated string. I
-> can remove the + 1 if you think it's better.
+Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
+Dram RAPL domain, starting from HasWell-X.
 
-No, I like having the trailing NUL byte -- it seems more robust that
-way. I just wanted to understand who the consumer was going to be. I'm
-clear now; thank you! :)
+But on SPR, this changes.
+The Dram RAPL domain uses 61uj energy resolution, which follows the
+standard energy resolution as described in MSR_RAPL_POWER_UNIT.
 
--- 
-Kees Cook
+There are a couple of places that have implemented the energy unit quirk
+for SPR Dram RAPL domain, including intel-rapl driver, rapl perf pmu and
+the turbostat tool.
+
+This patch series fixes them all, although they belong to different
+components.
+
+thanks,
+rui
