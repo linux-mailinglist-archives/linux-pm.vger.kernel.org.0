@@ -2,89 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD955E89FE
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 10:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82A85E8A0E
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 10:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbiIXIRf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 04:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S233743AbiIXISn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 04:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233918AbiIXIRF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 04:17:05 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305951A81A
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 01:14:42 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id j24so2335586lja.4
-        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 01:14:41 -0700 (PDT)
+        with ESMTP id S233922AbiIXISK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 04:18:10 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5721E4E
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 01:16:54 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id c11so3077774wrp.11
+        for <linux-pm@vger.kernel.org>; Sat, 24 Sep 2022 01:16:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date;
-        bh=nKMztXRCuk/jyIVPD9sdwwGa292FT0FAg9FBWO41Kkk=;
-        b=hR7H+Mz6827Te/atYIVJCEH8jVZlO7f7PJtz0MQUKMHFK0GQlKZUYeYvCAs6G3N2eS
-         6kmDq46NS/1q1ZUtejb+LHtL2yiMQWqRgC9YcHQc3vEkv+jSngxjud/vJz+ViLqb4Ye6
-         WAu7T0lUS56awHPnGa5hYZZm5N+C8/6Et1/nLOLb1x/BF7ICd8bNa0CizxdErQ1KBQK3
-         A6gZrhEc+CuHouPUc91MJCb1GHuImGPz7NpsjgNbFW5WZUbARcjuFyAbtQtkZqPPQJKw
-         XD0WxZLoHZAbtPdlS/tyEAcIV9BiKl+3l9gnQnl6wPPHFusHSVK++taxjb+zfHxfFVtG
-         uPxQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=8GifTQpufEs54QBDY2QjRoLxAtLfrQ9yFBESAjAvqEk=;
+        b=h/AwTcB8RNdgxSnuBMHtYHGPzYnQiaTUTro3fTmKcqsqCNShPhhIqHus7fL08MOTFn
+         5uE/x6RMgo8e4HduYiGCEoMhwQN9gdO0ygvFqdbiUwkUXofinJTYR6NQ4qFwKrEklaLi
+         p/BImwKzsSlipbXk98O+PCMjB8Y9evuHRmzDZVO0Sqqlcs24wjPxiU2HI5fQP/73vYo4
+         g7cDwt+1PXMABycZZ0JCjNhPLtN3kmvS/Y8nklzxMqkTdLAjzt08k58GmP8xSEyqhR65
+         XsxWhPF9fp5eTf7S4B/BxJSoO3TiNdBcnuMuSNZWEihCIbO1CJ3qIlgL1VhNtr6EIBRL
+         ZhXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=nKMztXRCuk/jyIVPD9sdwwGa292FT0FAg9FBWO41Kkk=;
-        b=WZlHry7Bb9MSscy9Ke1VFBZQ6GV9QLNMPnpgk1c0MXWi0I49vuscIcVjcI6Bk6VoAW
-         tZo5Eu7T7k3FinrPYTyBUcUDxDyWMBDOIyBH9XSOv+kyDwf4Ny0oTZwNf3OowafP0Ivt
-         5DbyJJU/JyeKdldgBEDmq4bBJ8QIMI5pv+oEJYU7paFGAp8Xzx+E38pW7pn5ghJ5Bhe9
-         CeYG5VQUrxGP2RFhZ5VQ62iYB2e8bbyRwtGosQm+8LV3u9phn720mDcKkkJJTrfms6Dx
-         YElsHfhDZMah8X6peq7Y6EjUvm8k+F2MximS3ammKHXpUz78COdYh3Ixy0rm1vFGac+3
-         cgrg==
-X-Gm-Message-State: ACrzQf13KMn5CtVPKIkc9fnWuPjZ+aPC/SVvfXY92J0EwEpUCzVoVge7
-        7rcyyKELb42Qg4x9pskQpsj7fA==
-X-Google-Smtp-Source: AMsMyM6aeLPi2q90UoV1/L7V2+8UoUbEnvHv1+DVByviDLMdvGtfXCInh0lMddvxdgV+JyIMSCptyQ==
-X-Received: by 2002:a2e:9cce:0:b0:26b:e2a8:d137 with SMTP id g14-20020a2e9cce000000b0026be2a8d137mr4478272ljj.356.1664007280364;
-        Sat, 24 Sep 2022 01:14:40 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f8-20020a193808000000b0049473593f2csm1805301lfa.182.2022.09.24.01.14.39
+        bh=8GifTQpufEs54QBDY2QjRoLxAtLfrQ9yFBESAjAvqEk=;
+        b=TPG91q1nlOH5pn5XmIXToepxpQBydu92ocIBNLYizGx4bFpFTMTKsXjNFI+bLo9ZS1
+         SmDUKtfdstJBdysllMz4ymcOrAVwAzPntJrybuIg7YKT4TjoVtLsAUEFz2Y4RUZXicqA
+         050XnKulvR6b5by3fDy3dR9pGWGnPysxBaCTlCeFDfUxeEWBgs0roubJjNdi8GF0aS7e
+         IhAgp0/zjZhT7mj3zorhxfzCzXdooeGxcxHuKPgzuUn/DU6umcjKnhOhAT+M+5DqHl4b
+         vLd85eSQWrEzt592p9ZTGBENFf9YbYmTKYp/W9fyYo9FiKsa6fZ32bsRXkVzQIj2VjGR
+         jp2A==
+X-Gm-Message-State: ACrzQf0sdg3NjmB0zNTvxi4Zjmyi4Oop8hv6t14E7eQKo88IhMYeYT4s
+        IiM70AbzlLx2KLNNtTPtXjMNBg==
+X-Google-Smtp-Source: AMsMyM5F0qUy/QeECubzkPRKLgAndKmjI3IYfKkwCm3Uj9Ho44uoMxaJ4kbx1IKywhv3NhYmZnzXnQ==
+X-Received: by 2002:a05:6000:15c5:b0:22a:49be:8000 with SMTP id y5-20020a05600015c500b0022a49be8000mr7395090wry.664.1664007413262;
+        Sat, 24 Sep 2022 01:16:53 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id iv14-20020a05600c548e00b003a6a3595edasm4763338wmb.27.2022.09.24.01.16.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 01:14:39 -0700 (PDT)
-Message-ID: <e2fdf757-5ce4-72a3-534e-03db941ae75d@linaro.org>
-Date:   Sat, 24 Sep 2022 10:14:39 +0200
+        Sat, 24 Sep 2022 01:16:52 -0700 (PDT)
+Message-ID: <607cab94-ca0b-c7ea-b603-12d933e42ced@linaro.org>
+Date:   Sat, 24 Sep 2022 10:16:51 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH -next v2] interconnect: qcom: icc-rpm: Remove redundant
- dev_err call
-To:     Shang XiaoJing <shangxiaojing@huawei.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        djakov@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220924015043.25130-1-shangxiaojing@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: INFO: task systemd-udevd:94 blocked for more than 120 seconds.
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220924015043.25130-1-shangxiaojing@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Hugh Dickins <hughd@google.com>, Borislav Petkov <bp@alien8.de>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <Yy4B+9yH8oT0F8nQ@zn.tnic>
+ <Yy4GoMMwiBaq3oJf@dev-arch.thelio-3990X> <Yy4MNp6yiRTJxeXa@zn.tnic>
+ <28d03f8d-ed70-cdc8-70d3-7b1723e5715@google.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <28d03f8d-ed70-cdc8-70d3-7b1723e5715@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/09/2022 03:50, Shang XiaoJing wrote:
-> devm_ioremap_resource() prints error message in itself. Remove the
-> dev_err call to avoid redundant error message.
+
+Hi Hugh,
+
+On 24/09/2022 09:40, Hugh Dickins wrote:
+> On Fri, 23 Sep 2022, Borislav Petkov wrote:
+>> On Fri, Sep 23, 2022 at 12:18:56PM -0700, Nathan Chancellor wrote:
+>>> I have not seen a stacktrace like this on my machines (although I
+>>> suspect that is because I don't have CONFIG_DETECT_HUNG_TASK enabled in
+>>> my configs) but my Honeycomb LX2 hangs while booting after commit
+>>> 78ffa3e58d93 ("thermal/core: Add a generic thermal_zone_get_trip()
+>>> function") according to my bisect, which certainly seems like it could
+>>> be related to the trace you are seeing.
+>>
+>> Don't you just love how well our community works - one reports a bug and
+>> someone else has already bisected it and thus saves one the work?!
+>>
+>> :-)))
+>>
+>> Thanks Nathan, I can confirm your bisection. The commit above doesn't
+>> revert cleanly ontop of linux-next so I tried it and the patch before
+>> it:
+>>
+>> 78ffa3e58d93 ("thermal/core: Add a generic thermal_zone_get_trip() function")	<- BAD
+>> 62022c15f627 ("Merge branch 'pm-opp' into linux-next")				<- GOOD
+>>
+>> so it looks like that one is somehow b0rked.
 > 
-> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+> Yes, Nathan was alert, and saved me too from bisecting failure to boot
+> linux-next in another thread.
+> 
+> And I see from
+> https://lore.kernel.org/lkml/c85a77a3-409b-3e83-08a7-ac7e1888790d@samsung.com/
+> that Marek also found it: and tried to fix it, but found it goes too wide.
+> 
+> I made a patch of the offending series with
+> git diff 78ffa3e58d93^ 2b109cffe683
+> and then reverted that cleanly from next-20220923: works for me.
+
+Thanks for investigating. I believe I found from where is coming the 
+deadlock. I'll send a fix for that.
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Best regards,
-Krzysztof
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
