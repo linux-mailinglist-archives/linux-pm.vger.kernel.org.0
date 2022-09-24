@@ -2,88 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46B45E8AF4
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 11:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A505E8E25
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Sep 2022 17:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbiIXJeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Sep 2022 05:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
+        id S233863AbiIXPs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Sep 2022 11:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbiIXJeS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 05:34:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D546112E429;
-        Sat, 24 Sep 2022 02:34:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70CA3608C3;
-        Sat, 24 Sep 2022 09:34:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542DBC433C1;
-        Sat, 24 Sep 2022 09:34:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664012056;
-        bh=3mobUcHXtIiwJ/IgBy0YxctGCTuEvcBls7FCY9NGx94=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WwI4czSd+PC2k+Gv5uUc0PfQbDuMvfCng+HMUKtnB711hP7bxapr7iMQBnl8KUtev
-         GJPt8x3FUhpAgWK2k2xNMhyhiIVvrMUPYzmGcHPTPKCKYrkKosNqQMAkyx4V0NtKj8
-         pEgW219IWo2sqggtMPPfTq+vFrA9EleWzOkE7FwY=
-Date:   Sat, 24 Sep 2022 11:34:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>, stable@vger.kernel.org,
-        swboyd@chromium.org, Mike Tipton <mdtipton@codeaurora.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [5.10 PATCH] interconnect: qcom: icc-rpmh: Add BCMs to commit
- list in pre_aggregate
-Message-ID: <Yy7PFenCa0Sa3B3n@kroah.com>
-References: <20220922141725.5.10.1.I791715539cae1355e21827ca738b0b523a4a0f53@changeid>
- <00eb82ca-8bf6-c744-d04d-96b97ce06b17@linaro.org>
+        with ESMTP id S233839AbiIXPs2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Sep 2022 11:48:28 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B6037FAB;
+        Sat, 24 Sep 2022 08:48:27 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id i15so1829115qvp.5;
+        Sat, 24 Sep 2022 08:48:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=WX8TwZF8c8gXM19UKc28n63m7yNqYx0bJDzrwuTWqoU=;
+        b=j/6SN4VEvMJ5drZBKQqjQJCbQHY2zwYdrR4VTf/XsBj4h8t/qbdgzM9A1f2b/gz4Qr
+         F8H205uIECWQChQlNbzqVMVuxVumlxuIJJbTw0CkoeAwmw5qn05YgEzNECPcAGRFVd/s
+         Ete6SSS1C+WvdZA5Hffp6aMxrj6h1I3sVWAYPu6lx0+nH3W+cPfE8r2LdmzajmPAYAmp
+         k4IcqqhgNWgw9bFbx9y21aKd4D0HYhCHXYq63umHgvvoQaMzvKwkR9HazMk5R/7F3sXj
+         NaeHRJV2Zt3kqD3WNArQ88MANSIHC7u7D6TqrWVS8Kxi6EeXEnpZ3jX2Nrm2Jow83exx
+         0Qag==
+X-Gm-Message-State: ACrzQf2+CYlCS2Y1nj7hyu08AmUa1SbwXUZbnhQJSoXVj7Z/9Zc2W17B
+        yp0GWcAX1YVeorwPgjtUBHuAvkLgSsfXEbplS3/TbyOjJBU=
+X-Google-Smtp-Source: AMsMyM7uDbDiGPeWBvAxhHEIDR5roDNZ07cN6rpyUA/pt/vgzYu+Th6NwQSj84p2W9QABxAFpLz3nMEwWs5GJ98UZOI=
+X-Received: by 2002:a0c:da14:0:b0:4aa:aad9:e450 with SMTP id
+ x20-20020a0cda14000000b004aaaad9e450mr11425212qvj.130.1664034506580; Sat, 24
+ Sep 2022 08:48:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00eb82ca-8bf6-c744-d04d-96b97ce06b17@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 24 Sep 2022 17:48:15 +0200
+Message-ID: <CAJZ5v0gwRVKR+4neD7xH+CCpnr6HQyvdJ14vjj7S4nMTAabRAA@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.0-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 04:28:25PM -0500, Alex Elder wrote:
-> On 9/22/22 4:18 PM, Douglas Anderson wrote:
-> > From: Mike Tipton <mdtipton@codeaurora.org>
-> > 
-> > commit b95b668eaaa2574e8ee72f143c52075e9955177e upstream.
-> > 
-> > We're only adding BCMs to the commit list in aggregate(), but there are
-> > cases where pre_aggregate() is called without subsequently calling
-> > aggregate(). In particular, in icc_sync_state() when a node with initial
-> > BW has zero requests. Since BCMs aren't added to the commit list in
-> > these cases, we don't actually send the zero BW request to HW. So the
-> > resources remain on unnecessarily.
-> > 
-> > Add BCMs to the commit list in pre_aggregate() instead, which is always
-> > called even when there are no requests.
-> > 
-> > Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
-> > [georgi: remove icc_sync_state for platforms with incomplete support]
-> > Link: https://lore.kernel.org/r/20211125174751.25317-1-djakov@kernel.org
-> > Signed-off-by: Georgi Djakov <djakov@kernel.org>
-> > [dianders: dropped sm8350.c which isn't present in 5.10]
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> 
-> Whoops, sorry about that.
-> 
-> Acked-by: Alex Elder <elder@linaro.org>
+Hi Linus,
 
-Now queued up, thanks.
+Please pull from the tag
 
-greg k-h
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.0-rc7
+
+with top-most commit 9614369a042a3a345ef7e2997c277aa8a271b8a0
+
+ Merge tag 'opp-fixes-6.0' of
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
+
+on top of commit 521a547ced6477c54b4b0cc206000406c221b4d6
+
+ Linux 6.0-rc6
+
+to receive power management fixes for 6.0-rc7.
+
+These fix an uninitialized variable usage in the operating performance
+points code and add missing DT bindings for it.
+
+Specifics:
+
+ - Fix uninitialized variable usage in dev_pm_opp_config_clks_simple()
+   (Christophe JAILLET).
+
+ - Add missing OPP DT properties (Rob Herring).
+
+Thanks!
+
+
+---------------
+
+Christophe JAILLET (1):
+      OPP: Fix an un-initialized variable usage
+
+Rob Herring (1):
+      dt-bindings: opp: Add missing (unevaluated|additional)Properties
+on child nodes
+
+---------------
+
+ Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 1 +
+ Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 1 +
+ drivers/opp/core.c                                           | 2 +-
+ 3 files changed, 3 insertions(+), 1 deletion(-)
