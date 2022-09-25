@@ -2,126 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6655E91DD
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Sep 2022 11:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F695E920B
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Sep 2022 12:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiIYJ0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Sep 2022 05:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        id S231447AbiIYKUW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Sep 2022 06:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiIYJ03 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Sep 2022 05:26:29 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E992B25E;
-        Sun, 25 Sep 2022 02:26:28 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z97so5369353ede.8;
-        Sun, 25 Sep 2022 02:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9HEGS3PUFvGV+HPDSQ5VcrO8+DrrZLZMGdpKd60CwSQ=;
-        b=JKANrpNmC+nYToDhol9EgMolC67MLzASGIwBej5K+NGToivKgGlbXHSnv5yc3R6dpp
-         rnK1b6FBMmwcNTqlwyu1gDrQI+ffh15IRi0d17a0QSHQi2nblDn02rE9l7VoV0K15JI3
-         Qa5swFjSmxOg//T76Pdh4zgD1bA2//vN2IytMHmTbtj3QeW1MBmsA36IR54AxMn30DM9
-         0wqllinAwiNDygpHg5yTT1F855IprOF9ROECurrk0Wwj9eFmtBvKFjcIvjsBUTRmS72p
-         +PiwcQsHOVOD5czV5A7owZMqNzoEU5NgzdQPftoIkth52F2Oc+xNxoey8t2L3u7r//Az
-         vzTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9HEGS3PUFvGV+HPDSQ5VcrO8+DrrZLZMGdpKd60CwSQ=;
-        b=hL3MxAgb9UOKihrWNVClu+3NZaKZC722GAt0V/twcsxMkK5dhIK6Z2lwGLjG1V4AeA
-         r55+Fo8tPPSwSdvgKowl4yYs4+n6k7FOvdvEIMUaIMrz6GggjE6OdVHgVjIDYXtAqUFb
-         gnPzpo1ytnmcw0CwOGA8PFa145VcJfWo2fJkVoUv6LYPPHh9o2F+DkoiJkeBbkTCT4j8
-         Qs5T83bo1mN0dRAz+N7o8MTC7KE/Le5r7wG+CXMa7YLfH8n0nC8OxYeqhSYcQA4AL/O3
-         zrldNuL3B3tkWguSjQZlH6EizMkNewBdpsb5SyUs0xBGBSDRwflHXKFvuP0FHWuzp8PV
-         8whg==
-X-Gm-Message-State: ACrzQf0pcydzkMq+FzRaUpaA1ZG+sKCAVTojRjq+iEflj1eCoys74miq
-        MGV8n08tzsseEWOYwmsw7uo=
-X-Google-Smtp-Source: AMsMyM5dSh6EO0qDpp05cBzOj4tUUphzaMN5hv5+rFj+/125d0U44sIY5PDkmFSRMpyy6kVoFuAvtg==
-X-Received: by 2002:aa7:c9cf:0:b0:452:e416:644d with SMTP id i15-20020aa7c9cf000000b00452e416644dmr16623478edt.163.1664097987020;
-        Sun, 25 Sep 2022 02:26:27 -0700 (PDT)
-Received: from [192.168.0.104] (p5b3f7c6d.dip0.t-ipconnect.de. [91.63.124.109])
-        by smtp.gmail.com with ESMTPSA id n16-20020a1709062bd000b00730bfe6adc4sm6678128ejg.37.2022.09.25.02.26.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Sep 2022 02:26:26 -0700 (PDT)
-Message-ID: <77f13cfe-58dc-d150-18a9-cb14c82f222a@gmail.com>
-Date:   Sun, 25 Sep 2022 11:26:24 +0200
+        with ESMTP id S231402AbiIYKUS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Sep 2022 06:20:18 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720F420F79;
+        Sun, 25 Sep 2022 03:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664101211;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=IQNfKZqm3beCbQztu5Q6lry74/HfJzFnCR0wVlHyRjc=;
+    b=BSgxrHsBvAiIoA8U7dgwkS9bJAa5bL7Imy9VYH+2zRXNcOgONXguy+3/NXmnXgViJg
+    NHctICnIByXbPwRCwGWPXGqR7QoTug67o2O8/Tua5weD1MX1QInLOvKrhk5Ve6tDSBh3
+    Xm+3UlA4DaCGxX87YJxH3p/ESd7GjzV0SpPRrYtOaf8+AMvv+MTF+L5ehGIZNAlHiC5d
+    KYtT/pz1flso4n5y5aHB/NfF9QtxtwWEl6Kt3b4yQMJvIRsMrNZ42yTAfLeJ50FuGDvl
+    8+wFusjHq2n5frVkaO/Evh448sgo3ojeIAW1HHaz1l1cdgUjVD4kw/QypnIlyV+RbJ73
+    0syA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK85lg=="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 48.1.1 AUTH)
+    with ESMTPSA id dde14cy8PAKA5A6
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 25 Sep 2022 12:20:10 +0200 (CEST)
+Date:   Sun, 25 Sep 2022 12:20:09 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [RFC PATCH 00/10] thermal/drivers/tsens: specify nvmem cells in
+ DT rather than parsing them manually
+Message-ID: <YzArWZ1+OKvCNM7d@gerhold.net>
+References: <20220910124701.4060321-1-dmitry.baryshkov@linaro.org>
+ <YyyaH1ZXF9IvLpwd@gerhold.net>
+ <93a790fb-20dc-0f31-2eed-09f5b538bea9@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 5/6] power: supply: Add support for mp2733 battery
- charger
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     lee.jones@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
-        lars@metafoo.de, andy.shevchenko@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org
-References: <20220615145357.2370044-1-sravanhome@gmail.com>
- <20220615145357.2370044-6-sravanhome@gmail.com>
- <20220911133101.7g6hnwp3dnnqrmgb@mercury.elektranox.org>
-From:   saravanan sekar <sravanhome@gmail.com>
-In-Reply-To: <20220911133101.7g6hnwp3dnnqrmgb@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93a790fb-20dc-0f31-2eed-09f5b538bea9@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
-
-On 11/09/22 15:31, Sebastian Reichel wrote:
-> Hi,
+On Sat, Sep 24, 2022 at 09:58:56PM +0300, Dmitry Baryshkov wrote:
+> On 22/09/2022 20:23, Stephan Gerhold wrote:
+> > On Sat, Sep 10, 2022 at 03:46:51PM +0300, Dmitry Baryshkov wrote:
+> > > Historically the tsens driver fetches the calibration data as a blob and
+> > > then parses the blob on its own. This results in semi-duplicated code
+> > > spreading over the platform-specific functions.
+> > > 
+> > > This patch series changes tsens calibration code to use pre-parsed nvmem
+> > > cells rather than parsing the blob in the driver. For backwards
+> > > compatibility the old code is left in place for msm8916 and qcs404, two
+> > > platforms which have in-tree DT files. For msm8974 the original function
+> > > is left intact, since it differs significantly (and I can not test the
+> > > code on msm8974). For all other affected platforms the old parsing code
+> > > has been dropped as a part of this RFC.
+> > > 
+> > > The code was tested on msm8916 and qcs404 only, thus it is being sent as
+> > > an RFC.
+> > > 
+> > 
+> > Thanks a lot for working on this!
+> > 
+> > After thinking about this for a while I wonder if we can go even a step
+> > further: Can we drop SoC-specific code entirely for 8939 and 9607 and
+> > match the generic compatible (qcom,tsens-v0_1)? This would allow most
+> > v0.1 plaforms to use generic code like for qcom,tsens-v2.
 > 
-> On Wed, Jun 15, 2022 at 04:53:56PM +0200, Saravanan Sekar wrote:
->> mp2733 is updated version of mp2629 battery charge management
->> which supports USB fast-charge and higher range of input voltage.
->>
->> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
->> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->> ---
->> [...]
->>   	psy_cfg.drv_data = charger;
->> -	psy_cfg.attr_grp = mp2629_charger_sysfs_groups;
->> +	if (charger->chip_info->has_impedance)
->> +		psy_cfg.attr_grp = mp2629_charger_sysfs_groups;
->> +
->> +	if (charger->chip_info->has_fast_charge)
->> +		psy_cfg.attr_grp = mp2733_charger_sysfs_groups;
->> +
->>   	charger->battery = devm_power_supply_register(dev,
->>   					 &mp2629_battery_desc, &psy_cfg);
->>   	if (IS_ERR(charger->battery)) {
+> While this idea looks appealing, I think it's a bit against our custom to
+> put hardware details into the driver rather than putting them into the DT.
+> So, I think, the 8939 will have to stay as is, while for the 9607 and maybe
+> several other devices it should be possible to create a fallback entry.
 > 
-> Instead of having has_impedance and has_fast_charge feature
-> flag that are mutual exclusive, store the device type and
-> use if/else or switch statement to chose the correct attr_grp.
 
-these flags are not really mutual exclusive, limitation only for 
-application between mp2629 and mp2629. In future another chipset on
-same series shall have both or none, so I would consider to control 
-flags with functionality rather than chipset !
+IMHO the existing tsens-v2 support is a good example that it's sometimes
+better to have some minor hardware details in the DT so the driver does
+not have to be changed for every single platform. Extending from
+specifying the number of sensors in the DT to the exact set of sensors
+is not a very big step.
 
-Please feedback if still I have to consider your proposal.
+Also, aren't you also going against the custom here by moving the fuse
+hardware details to the DT? :)
 
-> Other than that:
+> [...]
+> > And actually there are two revisions of 8939, the older one has one
+> > sensor less (msm-3.10: msm8939-common.dtsi vs msm8939-v3.0.dtsi).
+> > This could also be easily handled from the DT without any code changes:
+> > 
+> > 	qcom,sensors = <0 1 2 3 5 6 7 8 9>;
 > 
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Usually we only care about the latest revision of the chip, earlier
+> revisions typically correspond to engineering samples, never hitting the
+> actual consumer devices.
 > 
-> -- Sebastian
+
+I'm afraid we might have to care about both revisions here - I recently
+checked a couple of MSM8939 devices in postmarketOS and there are
+definitely two different revisions used in production - they are easily
+identifiable since they have different CPU revisions in the "lscpu"
+output (Cortex-A53 r0p1 vs r0p4).
 
 Thanks,
-Saravanan
-
+Stephan
