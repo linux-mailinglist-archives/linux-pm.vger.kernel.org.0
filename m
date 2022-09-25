@@ -2,155 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519E65E9315
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Sep 2022 14:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8D95E93C3
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Sep 2022 16:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiIYM2q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Sep 2022 08:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S229574AbiIYOwf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Sep 2022 10:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIYM2p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Sep 2022 08:28:45 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85C131DE1;
-        Sun, 25 Sep 2022 05:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664108922;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=MMXh4VTc9xyRIFnGJgzfy6w+wQpMT4xlRlxlji+Xdao=;
-    b=Y4q6GvkU2iQuKCvfXQxk/nGezlDmYqnuiJyCgJF6xSe4lesPQSnOfAf84rF31tiweS
-    5i/tCXTz/7TZJMqIOFmMGkhhANhA1bCpW0SlQhik9MAMDsaNIIsVErvjDPyJZ/HZOqCH
-    ceDTM2Y83yLHU0J7HuoJWqoNtAC6YmqBPK4CgpK6b+l1U7rtgcsCXMBmFCPA9lDwPIcC
-    uutkVqLoI2FAwnFoKbhPfzn/9E1xgMmTq8msdYzyW27KHo7YMDFT8NyG7H4Lqb1pBvAp
-    lU6L4SvO6DfD/6L9zaFvoKBiG5mSSgtPPzc4DLYq3RUQY8wSKtOh1FQmDjVybv1Hjq0D
-    CvZw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK85lg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.1.1 AUTH)
-    with ESMTPSA id dde14cy8PCSf5O9
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 25 Sep 2022 14:28:41 +0200 (CEST)
-Date:   Sun, 25 Sep 2022 14:28:36 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [RFC PATCH 00/10] thermal/drivers/tsens: specify nvmem cells in
- DT rather than parsing them manually
-Message-ID: <YzBJdG0niOotj9K1@gerhold.net>
-References: <20220910124701.4060321-1-dmitry.baryshkov@linaro.org>
- <YyyaH1ZXF9IvLpwd@gerhold.net>
- <93a790fb-20dc-0f31-2eed-09f5b538bea9@linaro.org>
- <YzArWZ1+OKvCNM7d@gerhold.net>
- <722E6DEE-BD57-4573-A151-508917961D1B@linaro.org>
+        with ESMTP id S229608AbiIYOwf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Sep 2022 10:52:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950602A96F;
+        Sun, 25 Sep 2022 07:52:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EFF5B80835;
+        Sun, 25 Sep 2022 14:52:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7C98C433C1;
+        Sun, 25 Sep 2022 14:52:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664117551;
+        bh=Yhn8m8vu6o3GJhZpvX1jvtjYr+7gCNqPBJc0o3j9P/s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DLgUmkdVRB8CqOV+f6iWna/DUtjvYsT6AqLj2Vtwdta2lYXGpnfS3BYuke8/Fng+t
+         rSwoR/GLJBELkbU6bEMttZwt2n0Rhd23GDQOQ6VAGZ8/WyFwvRCB+lYwr3Y7wRC8L3
+         VQlO/TUiOtv68aR6DPdrlBW8NxDyW6jSFYbkmWsugJPmHz3JzFHCPBxMNQpU7+Odw5
+         d4BymBEns7vkSWERQP9xsNkp0s7vFZbp6W2FpDB5kEK5KSaKkGjKAAPpVxiY1Z0zCq
+         VdHEl6GxQHg2QXREHHvGeLd7+dLVUeeuNxWxbUgsYjyesVF1pMHkeAfsRdSDjzTd3T
+         I0ye4qb1B7ftQ==
+Date:   Sun, 25 Sep 2022 15:52:39 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 01/30] pm: Improve EXPORT_*_DEV_PM_OPS macros
+Message-ID: <20220925155239.7a37c19a@jic23-huawei>
+In-Reply-To: <HF07HR.3A0DTIDT17IF1@crapouillou.net>
+References: <20220808174107.38676-1-paul@crapouillou.net>
+        <20220808174107.38676-2-paul@crapouillou.net>
+        <CAJZ5v0h3hf06xQsJGOfOyGbD470jyxkPNuaHP+E-pvXbS6Egxg@mail.gmail.com>
+        <HF07HR.3A0DTIDT17IF1@crapouillou.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <722E6DEE-BD57-4573-A151-508917961D1B@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 02:21:11PM +0300, Dmitry Baryshkov wrote:
-> On 25 September 2022 13:20:09 GMT+03:00, Stephan Gerhold <stephan@gerhold.net> wrote:
-> >On Sat, Sep 24, 2022 at 09:58:56PM +0300, Dmitry Baryshkov wrote:
-> >> On 22/09/2022 20:23, Stephan Gerhold wrote:
-> >> > On Sat, Sep 10, 2022 at 03:46:51PM +0300, Dmitry Baryshkov wrote:
-> >> > > Historically the tsens driver fetches the calibration data as a blob and
-> >> > > then parses the blob on its own. This results in semi-duplicated code
-> >> > > spreading over the platform-specific functions.
-> >> > > 
-> >> > > This patch series changes tsens calibration code to use pre-parsed nvmem
-> >> > > cells rather than parsing the blob in the driver. For backwards
-> >> > > compatibility the old code is left in place for msm8916 and qcs404, two
-> >> > > platforms which have in-tree DT files. For msm8974 the original function
-> >> > > is left intact, since it differs significantly (and I can not test the
-> >> > > code on msm8974). For all other affected platforms the old parsing code
-> >> > > has been dropped as a part of this RFC.
-> >> > > 
-> >> > > The code was tested on msm8916 and qcs404 only, thus it is being sent as
-> >> > > an RFC.
-> >> > > 
-> >> > 
-> >> > Thanks a lot for working on this!
-> >> > 
-> >> > After thinking about this for a while I wonder if we can go even a step
-> >> > further: Can we drop SoC-specific code entirely for 8939 and 9607 and
-> >> > match the generic compatible (qcom,tsens-v0_1)? This would allow most
-> >> > v0.1 plaforms to use generic code like for qcom,tsens-v2.
-> >> 
-> >> While this idea looks appealing, I think it's a bit against our custom to
-> >> put hardware details into the driver rather than putting them into the DT.
-> >> So, I think, the 8939 will have to stay as is, while for the 9607 and maybe
-> >> several other devices it should be possible to create a fallback entry.
-> >> 
-> >
-> >IMHO the existing tsens-v2 support is a good example that it's sometimes
-> >better to have some minor hardware details in the DT so the driver does
-> >not have to be changed for every single platform. Extending from
-> >specifying the number of sensors in the DT to the exact set of sensors
-> >is not a very big step.
-> 
-> Fine, I will take a look.
-> 
+On Thu, 25 Aug 2022 23:42:53 +0100
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-Thanks!
+> Hi Rafael,
+>=20
+> Le mar., ao=C3=BBt 23 2022 at 19:47:57 +0200, Rafael J. Wysocki=20
+> <rafael@kernel.org> a =C3=A9crit :
+> > On Mon, Aug 8, 2022 at 7:41 PM Paul Cercueil <paul@crapouillou.net>=20
+> > wrote: =20
+> >>=20
+> >>  Update the _EXPORT_DEV_PM_OPS() internal macro. It was not used=20
+> >> anywhere
+> >>  outside pm.h and pm_runtime.h, so it is safe to update it.
+> >>=20
+> >>  Before, this macro would take a few parameters to be used as sleep=20
+> >> and
+> >>  runtime callbacks. This made it unsuitable to use with different
+> >>  callbacks, for instance the "noirq" ones.
+> >>=20
+> >>  It is now semantically different: instead of creating a=20
+> >> conditionally
+> >>  exported dev_pm_ops structure, it only contains part of the=20
+> >> definition.
+> >>=20
+> >>  This macro should however never be used directly (hence the trailing
+> >>  underscore). Instead, the following four macros are provided:
+> >>  - EXPORT_DEV_PM_OPS(name)
+> >>  - EXPORT_GPL_DEV_PM_OPS(name)
+> >>  - EXPORT_NS_DEV_PM_OPS(name, ns)
+> >>  - EXPORT_NS_GPL_DEV_PM_OPS(name, ns)
+> >>=20
+> >>  For instance, it is now possible to conditionally export noirq
+> >>  suspend/resume PM functions like this:
+> >>=20
+> >>  EXPORT_GPL_DEV_PM_OPS(foo_pm_ops) =3D {
+> >>      NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+> >>  };
+> >>=20
+> >>  The existing helper macros EXPORT_*_SIMPLE_DEV_PM_OPS() and
+> >>  EXPORT_*_RUNTIME_DEV_PM_OPS() have been updated to use these new=20
+> >> macros.
+> >>=20
+> >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net> =20
+> >=20
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >=20
+> > or please let me know if you need me to pick up this one. =20
+>=20
+> Could you pick this one up then, and make a branch for Jonathan?
 
-> >
-> >Also, aren't you also going against the custom here by moving the fuse
-> >hardware details to the DT? :)
-> 
-> Not quite. Fuses are completely software thing. 
-> 
+Hi Paul, Rafael,
 
-Good point, but this depends on the point of view: Since those fuses are
-likely "burned in" at the factory I would consider them to be part of
-"hardware" like everything else. Even if I wanted to I probably couldn't
-change anything about the layout, at least as a user (and probably even
-as a customer). :-)
+What happened to this in the end?  I can't immediately find it on=20
+any of the pm git tree branches.
 
-> >
-> >> [...]
-> >> > And actually there are two revisions of 8939, the older one has one
-> >> > sensor less (msm-3.10: msm8939-common.dtsi vs msm8939-v3.0.dtsi).
-> >> > This could also be easily handled from the DT without any code changes:
-> >> > 
-> >> > 	qcom,sensors = <0 1 2 3 5 6 7 8 9>;
-> >> 
-> >> Usually we only care about the latest revision of the chip, earlier
-> >> revisions typically correspond to engineering samples, never hitting the
-> >> actual consumer devices.
-> >> 
-> >
-> >I'm afraid we might have to care about both revisions here - I recently
-> >checked a couple of MSM8939 devices in postmarketOS and there are
-> >definitely two different revisions used in production - they are easily
-> >identifiable since they have different CPU revisions in the "lscpu"
-> >output (Cortex-A53 r0p1 vs r0p4).
-> 
-> Ugh. 
-> 
-
-Indeed.
+At this stage in the cycle it would be great if this patch at least
+makes the merge window, so we can make use of it next cycle.
 
 Thanks,
-Stephan
+
+Jonathan
