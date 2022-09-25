@@ -2,222 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0A95E9176
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Sep 2022 09:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6655E91DD
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Sep 2022 11:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiIYHhn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Sep 2022 03:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S230248AbiIYJ0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Sep 2022 05:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiIYHhm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Sep 2022 03:37:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1D03BC4E;
-        Sun, 25 Sep 2022 00:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664091461; x=1695627461;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rQNy2xgvmhhAdYWJ2bjD8oJFB1DlxIHW7xpHRLF75zo=;
-  b=KgPzjHg/6xV0HZ8C593PRLJXnfu5/o1tAPsDmHLzJlhAlwGo7jbFe3Ph
-   2BsUSG6lLviizBMdD3L+Yg9By27Dej2ubetkOAqdKpiy4bsJjBaWcaVB5
-   V/qSBlaDe7SmsH7HeygxwKt3x4Fz1fV9M1MH8I2DB1hTa4KGDtlv6nOjP
-   w5qGOSDaa1HAfb34qlthw09GIZSBrhRhf3sDlr07L8OeLTPfAWQurPzI+
-   qDghuiwNytOVov6xVZql10A0bAjIKmJOYeh8voWyUDio7zXUhw4I6366B
-   gZuIR8yFJ76YzFBISTnAabOqH7a2rSScciusJ7BiBI/1ka5WfTjp2ttc8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="364871369"
-X-IronPort-AV: E=Sophos;i="5.93,343,1654585200"; 
-   d="scan'208";a="364871369"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2022 00:37:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,343,1654585200"; 
-   d="scan'208";a="763080918"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Sep 2022 00:37:37 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ocMCn-0007dz-0u;
-        Sun, 25 Sep 2022 07:37:37 +0000
-Date:   Sun, 25 Sep 2022 15:37:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD REGRESSION
- ecfa396ef37aea5cf4b20db57585af16b110ac6b
-Message-ID: <6330051e.S6XR1bK2uaiN/0Gq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229525AbiIYJ03 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Sep 2022 05:26:29 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E992B25E;
+        Sun, 25 Sep 2022 02:26:28 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z97so5369353ede.8;
+        Sun, 25 Sep 2022 02:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=9HEGS3PUFvGV+HPDSQ5VcrO8+DrrZLZMGdpKd60CwSQ=;
+        b=JKANrpNmC+nYToDhol9EgMolC67MLzASGIwBej5K+NGToivKgGlbXHSnv5yc3R6dpp
+         rnK1b6FBMmwcNTqlwyu1gDrQI+ffh15IRi0d17a0QSHQi2nblDn02rE9l7VoV0K15JI3
+         Qa5swFjSmxOg//T76Pdh4zgD1bA2//vN2IytMHmTbtj3QeW1MBmsA36IR54AxMn30DM9
+         0wqllinAwiNDygpHg5yTT1F855IprOF9ROECurrk0Wwj9eFmtBvKFjcIvjsBUTRmS72p
+         +PiwcQsHOVOD5czV5A7owZMqNzoEU5NgzdQPftoIkth52F2Oc+xNxoey8t2L3u7r//Az
+         vzTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=9HEGS3PUFvGV+HPDSQ5VcrO8+DrrZLZMGdpKd60CwSQ=;
+        b=hL3MxAgb9UOKihrWNVClu+3NZaKZC722GAt0V/twcsxMkK5dhIK6Z2lwGLjG1V4AeA
+         r55+Fo8tPPSwSdvgKowl4yYs4+n6k7FOvdvEIMUaIMrz6GggjE6OdVHgVjIDYXtAqUFb
+         gnPzpo1ytnmcw0CwOGA8PFa145VcJfWo2fJkVoUv6LYPPHh9o2F+DkoiJkeBbkTCT4j8
+         Qs5T83bo1mN0dRAz+N7o8MTC7KE/Le5r7wG+CXMa7YLfH8n0nC8OxYeqhSYcQA4AL/O3
+         zrldNuL3B3tkWguSjQZlH6EizMkNewBdpsb5SyUs0xBGBSDRwflHXKFvuP0FHWuzp8PV
+         8whg==
+X-Gm-Message-State: ACrzQf0pcydzkMq+FzRaUpaA1ZG+sKCAVTojRjq+iEflj1eCoys74miq
+        MGV8n08tzsseEWOYwmsw7uo=
+X-Google-Smtp-Source: AMsMyM5dSh6EO0qDpp05cBzOj4tUUphzaMN5hv5+rFj+/125d0U44sIY5PDkmFSRMpyy6kVoFuAvtg==
+X-Received: by 2002:aa7:c9cf:0:b0:452:e416:644d with SMTP id i15-20020aa7c9cf000000b00452e416644dmr16623478edt.163.1664097987020;
+        Sun, 25 Sep 2022 02:26:27 -0700 (PDT)
+Received: from [192.168.0.104] (p5b3f7c6d.dip0.t-ipconnect.de. [91.63.124.109])
+        by smtp.gmail.com with ESMTPSA id n16-20020a1709062bd000b00730bfe6adc4sm6678128ejg.37.2022.09.25.02.26.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Sep 2022 02:26:26 -0700 (PDT)
+Message-ID: <77f13cfe-58dc-d150-18a9-cb14c82f222a@gmail.com>
+Date:   Sun, 25 Sep 2022 11:26:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 5/6] power: supply: Add support for mp2733 battery
+ charger
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, andy.shevchenko@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20220615145357.2370044-1-sravanhome@gmail.com>
+ <20220615145357.2370044-6-sravanhome@gmail.com>
+ <20220911133101.7g6hnwp3dnnqrmgb@mercury.elektranox.org>
+From:   saravanan sekar <sravanhome@gmail.com>
+In-Reply-To: <20220911133101.7g6hnwp3dnnqrmgb@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: ecfa396ef37aea5cf4b20db57585af16b110ac6b  Merge branch 'powercap' into bleeding-edge
+Hi Sebastian,
 
-Error/Warning reports:
+On 11/09/22 15:31, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Wed, Jun 15, 2022 at 04:53:56PM +0200, Saravanan Sekar wrote:
+>> mp2733 is updated version of mp2629 battery charge management
+>> which supports USB fast-charge and higher range of input voltage.
+>>
+>> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> ---
+>> [...]
+>>   	psy_cfg.drv_data = charger;
+>> -	psy_cfg.attr_grp = mp2629_charger_sysfs_groups;
+>> +	if (charger->chip_info->has_impedance)
+>> +		psy_cfg.attr_grp = mp2629_charger_sysfs_groups;
+>> +
+>> +	if (charger->chip_info->has_fast_charge)
+>> +		psy_cfg.attr_grp = mp2733_charger_sysfs_groups;
+>> +
+>>   	charger->battery = devm_power_supply_register(dev,
+>>   					 &mp2629_battery_desc, &psy_cfg);
+>>   	if (IS_ERR(charger->battery)) {
+> 
+> Instead of having has_impedance and has_fast_charge feature
+> flag that are mutual exclusive, store the device type and
+> use if/else or switch statement to chose the correct attr_grp.
 
-https://lore.kernel.org/linux-acpi/202209250438.1vajrE1K-lkp@intel.com
+these flags are not really mutual exclusive, limitation only for 
+application between mp2629 and mp2629. In future another chipset on
+same series shall have both or none, so I would consider to control 
+flags with functionality rather than chipset !
 
-Error/Warning: (recently discovered and may have been fixed)
+Please feedback if still I have to consider your proposal.
 
-drivers/acpi/sleep.c:1096:28: error: use of undeclared identifier 'SYS_OFF_MODE_RESTART_PREPARE'
-drivers/acpi/sleep.c:1096:42: error: 'SYS_OFF_MODE_RESTART_PREPARE' undeclared (first use in this function); did you mean 'SYS_OFF_MODE_RESTART'?
+> Other than that:
+> 
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> 
+> -- Sebastian
 
-Error/Warning ids grouped by kconfigs:
+Thanks,
+Saravanan
 
-gcc_recent_errors
-|-- i386-allyesconfig
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- i386-defconfig
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a001
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a003
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a005
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a012
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a014
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a016
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- ia64-allmodconfig
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- ia64-randconfig-r014-20220925
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- loongarch-allyesconfig
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-allmodconfig
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-allyesconfig
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-defconfig
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-a002
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-a004
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-a006
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-a011
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-a013
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-a015
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-rhel-8.3
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-rhel-8.3-kunit
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-|-- x86_64-rhel-8.3-kvm
-|   `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-`-- x86_64-rhel-8.3-syz
-    `-- drivers-acpi-sleep.c:error:SYS_OFF_MODE_RESTART_PREPARE-undeclared-(first-use-in-this-function)
-clang_recent_errors
-|-- i386-randconfig-a002
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- i386-randconfig-a004
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- i386-randconfig-a006
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- i386-randconfig-a011
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- i386-randconfig-a013
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- i386-randconfig-a015
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- x86_64-randconfig-a001
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- x86_64-randconfig-a003
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- x86_64-randconfig-a005
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- x86_64-randconfig-a012
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-|-- x86_64-randconfig-a014
-|   `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-`-- x86_64-randconfig-a016
-    `-- drivers-acpi-sleep.c:error:use-of-undeclared-identifier-SYS_OFF_MODE_RESTART_PREPARE
-
-elapsed time: 725m
-
-configs tested: 58
-configs skipped: 2
-
-gcc tested configs:
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-arm                                 defconfig
-arm64                            allyesconfig
-arc                  randconfig-r043-20220925
-arm                              allyesconfig
-riscv                randconfig-r042-20220925
-s390                 randconfig-r044-20220925
-i386                                defconfig
-i386                             allyesconfig
-arc                                 defconfig
-s390                             allmodconfig
-um                             i386_defconfig
-alpha                               defconfig
-um                           x86_64_defconfig
-s390                                defconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                              defconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a006
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                               rhel-8.3
-x86_64                        randconfig-a013
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                           allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20220925
-hexagon              randconfig-r041-20220925
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a013
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
