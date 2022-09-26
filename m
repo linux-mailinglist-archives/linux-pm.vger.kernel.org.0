@@ -2,201 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94A55E9858
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 06:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50315E98E2
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 07:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiIZEAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 00:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        id S230439AbiIZFn6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 01:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiIZEAs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 00:00:48 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E2011D321;
-        Sun, 25 Sep 2022 21:00:45 -0700 (PDT)
-Received: from zhuyinbo$loongson.cn ( [10.180.13.64] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Mon, 26 Sep 2022 12:00:39
- +0800 (GMT+08:00)
-X-Originating-IP: [10.180.13.64]
-Date:   Mon, 26 Sep 2022 12:00:39 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Yinbo Zhu" <zhuyinbo@loongson.cn>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        "Amit Kucheria" <amitk@kernel.org>,
-        "Zhang Rui" <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
-        =?UTF-8?B?5YiY5L2p5a6d?= <liupeibao@loongson.cn>
-Subject: Re: Re: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2
- to json-schema
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
-In-Reply-To: <20220924174258.GA1011284-robh@kernel.org>
-References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
- <20220921015605.17078-2-zhuyinbo@loongson.cn>
- <fb901889-d769-ba56-d4cb-2d9d8b50f74f@linaro.org>
- <28a78a10.a7dd.1835f5aaf90.Coremail.zhuyinbo@loongson.cn>
- <a44244f2-fb96-0483-b529-d0f2b0b7e5d8@linaro.org>
- <4febe7e4.a96c.18362d997e3.Coremail.zhuyinbo@loongson.cn>
- <20220924174258.GA1011284-robh@kernel.org>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: AkbSGGZvb3Rlcl90eHQ9NjgwMTo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S229561AbiIZFn5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 01:43:57 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E12426AEB
+        for <linux-pm@vger.kernel.org>; Sun, 25 Sep 2022 22:43:56 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so5688684pjk.2
+        for <linux-pm@vger.kernel.org>; Sun, 25 Sep 2022 22:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Ri7TwNCRikYOFJCOJ2U33t5fpVfVJydiUpCZraJpkmE=;
+        b=nZOMbgrw/Tj2GrKBSZU9OXZ7ofMPVwyWZFHStMWjyAg0sOY/53mcyIbWQsoenhZ3aL
+         zOyRYtGRtcRmomRYbQO4PvAuHrwcvhQ5kRCKC4qV0/3meB245Puq4ymuOrCqKPFm12cr
+         +iLTGxQcydwAvwVOa8w3TTBbbMjTa6xR6wfWW7WRaCcRE7yr2pz5B6Oh7sQ6h7r6N2uo
+         DwYsz2/Px5cgVMTZwrLxaBa04aQWTP3PEUujGSTwpEQbKGKjH4AlelvzWbWau4Bv84me
+         YUXbNi83InC4PUKi+xdPc1O9gy2VkD+7wf9aGShuv25KAIbipnxgj9Mr670+8opI1OdU
+         Kn9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ri7TwNCRikYOFJCOJ2U33t5fpVfVJydiUpCZraJpkmE=;
+        b=geaSOBN+HIkT3MSxSm/+C0La58uFwVNTLlxbm7YXkvQxBVpEokR+vKhonlewKYTxOd
+         W1alD2q3wn4UR41ho28uJWaETPXbAQwIC5UkpjItIvcXCcQ7/xGTzKrJ+QTCHt7Nte8o
+         dSdzw40LTSIxK0NdgnxeUwXbwkfGYxZHDN4gBjo+v71rPRgn5QUk7+n4ZrmBppjeVmrp
+         xLnf9ofKr1BuDwFOMHhTt7CvTMrH/cleHTodc57HpqNi2RyOpUWQtjIsFNEDB3MSyUSN
+         Q+dKC/MuN9uTuKSV42itjP1tdii0oAs5+6eyyWhJVk+CPgcZKSgV3lNyVwl8xNY+l8Yg
+         iaYA==
+X-Gm-Message-State: ACrzQf1fhbm5/rUJ0dptkg8oHPKLlANjHFlm2JafP4djJUPAqb7VKKhO
+        fbk3ni1ZW2VOZzUB85sXPS8UPPdzweNqRw==
+X-Google-Smtp-Source: AMsMyM6UfKe0WU4gMJYzRgEshfKbG5wD06UYly8j7f9+J8oDBhQI0cX8CePZ2iFdXNKtTDS2EM+T/Q==
+X-Received: by 2002:a17:90b:180e:b0:202:a0c3:6da with SMTP id lw14-20020a17090b180e00b00202a0c306damr22352248pjb.94.1664171035592;
+        Sun, 25 Sep 2022 22:43:55 -0700 (PDT)
+Received: from localhost ([122.172.85.153])
+        by smtp.gmail.com with ESMTPSA id i3-20020a170902c94300b00176acd80f69sm10249899pla.102.2022.09.25.22.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 22:43:54 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 11:13:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        sumitg@nvidia.com
+Subject: Re: [PATCH -next] cpufreq: tegra194: change tegra239_cpufreq_soc to
+ static
+Message-ID: <20220926054352.lnmffxyaer4j3vt7@vireshk-i7>
+References: <20220923145016.109173-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Message-ID: <4ce14e3c.bf79.18377f44118.Coremail.zhuyinbo@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8Ax1OHnIzFj7QgiAA--.7003W
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/1tbiAQABDGMwRN0HxwAAsG
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220923145016.109173-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiUm9iIEhlcnJpbmciIDxy
-b2JoQGtlcm5lbC5vcmc+Cj4g5Y+R6YCB5pe26Ze0OjIwMjItMDktMjUgMDE6NDI6NTggKOaYn+ac
-n+aXpSkKPiDmlLbku7bkuro6ICLmnLHpk7bms6IiIDx6aHV5aW5ib0Bsb29uZ3Nvbi5jbj4KPiDm
-ioTpgIE6ICJLcnp5c3p0b2YgS296bG93c2tpIiA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8u
-b3JnPiwgIlJhZmFlbCBKIC4gV3lzb2NraSIgPHJhZmFlbEBrZXJuZWwub3JnPiwgIkRhbmllbCBM
-ZXpjYW5vIiA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz4sICJBbWl0IEt1Y2hlcmlhIiA8YW1p
-dGtAa2VybmVsLm9yZz4sICJaaGFuZyBSdWkiIDxydWkuemhhbmdAaW50ZWwuY29tPiwgbGludXgt
-cG1Admdlci5rZXJuZWwub3JnLCBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZywgbGludXgta2Vy
-bmVsQHZnZXIua2VybmVsLm9yZywgemhhbmdob25nY2hlbiA8emhhbmdob25nY2hlbkBsb29uZ3Nv
-bi5jbj4KPiDkuLvpopg6IFJlOiBSZTogW1BBVENIIHYyIDIvM10gZHQtYmluZGluZ3M6IHRoZXJt
-YWw6IENvbnZlcnQgbG9vbmdzb24yIHRvIGpzb24tc2NoZW1hCj4gCj4gT24gVGh1LCBTZXAgMjIs
-IDIwMjIgYXQgMDk6Mzk6MzBBTSArMDgwMCwg5pyx6ZO25rOiIHdyb3RlOgo+ID4gCj4gPiAKPiA+
-IAo+ID4gPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4gPiA+IOWPkeS7tuS6ujogIktyenlzenRv
-ZiBLb3psb3dza2kiIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+Cj4gPiA+IOWPkemA
-geaXtumXtDoyMDIyLTA5LTIxIDE3OjMxOjExICjmmJ/mnJ/kuIkpCj4gPiA+IOaUtuS7tuS6ujog
-IuacsemTtuazoiIgPHpodXlpbmJvQGxvb25nc29uLmNuPgo+ID4gPiDmioTpgIE6ICJSYWZhZWwg
-SiAuIFd5c29ja2kiIDxyYWZhZWxAa2VybmVsLm9yZz4sICJEYW5pZWwgTGV6Y2FubyIgPGRhbmll
-bC5sZXpjYW5vQGxpbmFyby5vcmc+LCAiQW1pdCBLdWNoZXJpYSIgPGFtaXRrQGtlcm5lbC5vcmc+
-LCAiWmhhbmcgUnVpIiA8cnVpLnpoYW5nQGludGVsLmNvbT4sIGxpbnV4LXBtQHZnZXIua2VybmVs
-Lm9yZywgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5l
-bC5vcmcsIHpoYW5naG9uZ2NoZW4gPHpoYW5naG9uZ2NoZW5AbG9vbmdzb24uY24+Cj4gPiA+IOS4
-u+mimDogUmU6IFtQQVRDSCB2MiAyLzNdIGR0LWJpbmRpbmdzOiB0aGVybWFsOiBDb252ZXJ0IGxv
-b25nc29uMiB0byBqc29uLXNjaGVtYQo+ID4gPiAKPiA+ID4gT24gMjEvMDkvMjAyMiAxMToyMiwg
-5pyx6ZO25rOiIHdyb3RlOgo+ID4gPiA+PiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4gPiA+ID4+
-IOWPkeS7tuS6ujogIktyenlzenRvZiBLb3psb3dza2kiIDxrcnp5c3p0b2Yua296bG93c2tpQGxp
-bmFyby5vcmc+Cj4gPiA+ID4+IOWPkemAgeaXtumXtDoyMDIyLTA5LTIxIDE1OjA1OjAwICjmmJ/m
-nJ/kuIkpCj4gPiA+ID4+IOaUtuS7tuS6ujogIllpbmJvIFpodSIgPHpodXlpbmJvQGxvb25nc29u
-LmNuPiwgIlJhZmFlbCBKIC4gV3lzb2NraSIgPHJhZmFlbEBrZXJuZWwub3JnPiwgIkRhbmllbCBM
-ZXpjYW5vIiA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz4sICJBbWl0IEt1Y2hlcmlhIiA8YW1p
-dGtAa2VybmVsLm9yZz4sICJaaGFuZyBSdWkiIDxydWkuemhhbmdAaW50ZWwuY29tPiwgIlJvYiBI
-ZXJyaW5nIiA8cm9iaCtkdEBrZXJuZWwub3JnPiwgIktyenlzenRvZiBLb3psb3dza2kiIDxrcnp5
-c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+LCBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmcs
-IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
-Cj4gPiA+ID4+IOaKhOmAgTogemhhbmdob25nY2hlbiA8emhhbmdob25nY2hlbkBsb29uZ3Nvbi5j
-bj4KPiA+ID4gPj4g5Li76aKYOiBSZTogW1BBVENIIHYyIDIvM10gZHQtYmluZGluZ3M6IHRoZXJt
-YWw6IENvbnZlcnQgbG9vbmdzb24yIHRvIGpzb24tc2NoZW1hCj4gPiA+ID4+Cj4gPiA+ID4+IE9u
-IDIxLzA5LzIwMjIgMDM6NTYsIFlpbmJvIFpodSB3cm90ZToKPiA+ID4gPj4+IENvbnZlcnQgdGhl
-IGxvb25nc29uMiB0aGVybWFsIGJpbmRpbmcgdG8gRFQgc2NoZW1hIGZvcm1hdCB1c2luZwo+ID4g
-PiA+Pj4ganNvbi1zY2hlbWEuCj4gPiA+ID4+Cj4gPiA+ID4+IEluY29ycmVjdCBzdWJqZWN0IGFu
-ZCBpbmNvcnJlY3QgY29tbWl0IG1zZy4gVGhlcmUgaXMgbm8gY29udmVyc2lvbiBoZXJlLgo+ID4g
-PiA+IE91ciBzb2MgYXJjaGl0ZWN0dXJlIGlzIHRoZSBsb29uZ3NvbjIgc2VyaWVzLCBzbyB3ZSB3
-aWxsIG1vZGlmeSBpdCBhY2NvcmRpbmdseS4KPiA+ID4gCj4gPiA+IEhvdyB0aGUgc29jIGFyY2hp
-dGVjdHVyZSBpcyByZWxhdGVkIHRvIG15IGNvbW1lbnQgdGhhdCB5b3UgZG8gbm90Cj4gPiA+IHBl
-cmZvcm0gY29udmVyc2lvbj8KPiA+IEkgZ290IGl0LCBhbmQgSSB3aWxsIGFhZCBhIGNvbnZlcnNp
-b24uCj4gPiA+IAo+ID4gPiA+IAo+ID4gPiA+Pgo+ID4gPiA+Pj4KPiA+ID4gPj4+IFNpZ25lZC1v
-ZmYtYnk6IFlpbmJvIFpodSA8Yz4KPiA+ID4gPj4+IC0tLQo+ID4gPiA+Pj4gQ2hhbmdlIGluIHYy
-Ogo+ID4gPiA+Pj4gCQkxLiBBZGQgZGVzY3JpcHRpb24gYW5kIHR5cGUgYWJvdXQgdGhlICJpZCIu
-CQo+ID4gPiA+Pj4gCQkyLiBNYWtlIHRoZSBmaWxlbmFtZSB3YXMgYmFzZWQgb24gY29tcGF0aWJs
-ZS4KPiA+ID4gPj4+Cj4gPiA+ID4+PiAgLi4uL2JpbmRpbmdzL3RoZXJtYWwvbG9vbmdzb24yLXRo
-ZXJtYWwueWFtbCAgIHwgNTIgKysrKysrKysrKysrKysrKysrKwo+ID4gPiA+Pj4gIDEgZmlsZSBj
-aGFuZ2VkLCA1MiBpbnNlcnRpb25zKCspCj4gPiA+ID4+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL2xvb25nc29uMi10aGVybWFs
-LnlhbWwKPiA+ID4gPj4+Cj4gPiA+ID4+PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL3RoZXJtYWwvbG9vbmdzb24yLXRoZXJtYWwueWFtbCBiL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL2xvb25nc29uMi10aGVybWFsLnlhbWwK
-PiA+ID4gPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiA+ID4+PiBpbmRleCAwMDAwMDAwMDAw
-MDAuLjI5OTRhZTNhNTZhYQo+ID4gPiA+Pj4gLS0tIC9kZXYvbnVsbAo+ID4gPiA+Pj4gKysrIGIv
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3RoZXJtYWwvbG9vbmdzb24yLXRoZXJt
-YWwueWFtbAo+ID4gPiA+Pgo+ID4gPiA+Pgo+ID4gPiA+PiBObyBpbXByb3ZlbWVudHMgaGVyZS4g
-WW91IGlnbm9yZSBteSBjb21tZW50cywgc28gSSBhbSBnb2luZyB0byBOQUsgaXQuCj4gPiA+ID4g
-SSBkb24ndCBnZXQgeW91ciBwb2ludCwgdGhhdCBkdHMgY29tcGF0aWJsZSBpcyAibG9vbmdzb24s
-bG9vbmdzb24yLXRoZXJtYWwiLCBzbyB0aGlzIGRyaXZlciBmaWxlIG5hbWUgaXMgbmFtZWQKPiA+
-ID4gPiBsb29uZ3NvbjItdGhlcm1hbCB0aGF0IGFjY29yZGluZyB3aGF0IHlvdSBzYWlkIGFib3V0
-ICJGaWxlbmFtZSBiYXNlZCBvbiBjb21wYXRpYmxlLiIKPiA+ID4gPiBJZiB3aGF0IEkgdW5kZXJz
-dGFuZCBpcyBub3Qgd2hhdCB5b3UgZXhwZWN0LCBwbGVhc2UgdGVsbCBtZSBob3cgdG8gbW9kaWZ5
-IGl0Lgo+ID4gPiAKPiA+ID4gCj4gPiA+IEZpbGVuYW1lIG11c3QgbWF0Y2ggdGhlIGNvbXBhdGli
-bGUsIHNvOiBsb29uZ3Nvbixsb29uZ3NvbjItdGhlcm1hbC55YW1sCj4gPiBJIGdvdCBpdCwgYW5k
-IEkgd2lsbCBhZGQgYSBjb252ZXJzaW9uLgo+ID4gPiAKPiA+ID4gPj4KPiA+ID4gPj4KPiA+ID4g
-Pj4+IEBAIC0wLDAgKzEsNTIgQEAKPiA+ID4gPj4+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVy
-OiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkKPiA+ID4gPj4+ICslWUFNTCAxLjIKPiA+
-ID4gPj4+ICstLS0KPiA+ID4gPj4+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFz
-L3RoZXJtYWwvbG9vbmdzb24yLXRoZXJtYWwueWFtbCMKPiA+ID4gPj4+ICskc2NoZW1hOiBodHRw
-Oi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMKPiA+ID4gPj4+ICsKPiA+
-ID4gPj4+ICt0aXRsZTogVGhlcm1hbCBzZW5zb3JzIG9uIGxvb25nc29uMiBTb0NzCj4gPiA+ID4+
-PiArCj4gPiA+ID4+PiArbWFpbnRhaW5lcnM6Cj4gPiA+ID4+PiArICAtIHpoYW5naG9uZ2NoZW4g
-PHpoYW5naG9uZ2NoZW5AbG9vbmdzb24uY24+Cj4gPiA+ID4+PiArICAtIFlpbmJvIFpodSA8emh1
-eWluYm9AbG9vbmdzb24uY24+Cj4gPiA+ID4+PiArCj4gPiA+ID4+PiArcHJvcGVydGllczoKPiA+
-ID4gPj4+ICsgIGNvbXBhdGlibGU6Cj4gPiA+ID4+PiArICAgIGNvbnN0OiBsb29uZ3Nvbixsb29u
-Z3NvbjItdGhlcm1hbAo+ID4gPiA+Pj4gKwo+ID4gPiA+Pj4gKyAgcmVnOgo+ID4gPiA+Pj4gKyAg
-ICBtYXhJdGVtczogMQo+ID4gPiA+Pj4gKwo+ID4gPiA+Pj4gKyAgaWQ6Cj4gPiA+ID4+PiArICAg
-ICRyZWY6ICcvL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyJwo+ID4gPiA+
-Pgo+ID4gPiA+PiBObyBpbXByb3ZlbWVudHMgaGVyZSwgc28gbGV0IG1lIGJlIHNwZWNpZmljIC0g
-eW91IG5lZWQgdG8gcmVhbGx5IGp1c3RpZnkKPiA+ID4gPj4gc3VjaCBwcm9wZXJ0eSBvciBpdCBj
-YW5ub3QgZ28gdG8gc2NoZW1hLgo+ID4gPiA+IFRoZSBsb29uZ3NvbjJfdGhlcm1hbC5jIGRyaXZl
-ciBuZWVkIHBhcnNlIHRoaXMgImlkIiBwcm9wZXJ0eS4KPiA+ID4gCj4gPiA+IFRoaXMgaXMgbm90
-IHJlYXNvbiB0byBhZGQgcHJvcGVydGllcyB0byBEVC4gRFQgZGVzY3JpYmVzIHRoZSBoYXJkd2Fy
-ZSwKPiA+ID4gbm90IGRyaXZlciBiZWhhdmlvci4KPiA+ID4gCj4gPiA+IFdoeSBoYXJkd2FyZSBu
-ZWVkcyBhcmJpdHJhcnksIGFkZGl0aW9uYWwgYWRkcmVzc2luZyBudW1iZXIgaW5zdGVhZCBvZgo+
-ID4gPiBzdGFuZGFyZCB1bml0IGFkZHJlc3M/Cj4gPiBUaGUgbG9vbmdzb24yIHNlcmllcyBzb2Mg
-c3VwcG9ydHMgdXAgdG8gZm91ciBzZW5zb3JzLCBidXQgdGhlIDJLMTAwMCBoYXMgb25seSBvbmUg
-c2Vuc29yLCBzbyB0aGUgSUQgbXVzdCBiZSAwLiAKPiA+IEZvciB0aGUgMksxMDAwLCBpbiBvcmRl
-ciB0byBkaXN0aW5ndWlzaCB0aGUgZGlmZmVyZW5jZXMgYmV0d2VlbiBkaWZmZXJlbnQgaGFyZHdh
-cmUgaW4gdGhlIExvb25nc29uMiBTb0Mgc2VyaWVzLAo+ID4gdGhlIElEIGlzIGFkZGVkIHRvIHRo
-ZSBkdHMKPiAKPiBEaWZmZXJlbmNlcyBpbiBTb0NzIGlzIHdoYXQgJ2NvbXBhdGlibGUnIGlzIGZv
-ci4gSWYgJ2xvb25nc29uMicgaXMgbm90IGEgCj4gc3BlY2lmaWMgU29DLCB0aGVuIHlvdXIgY29t
-cGF0aWJsZSBzdHJpbmcgaXMgbm90IHNwZWNpZmljIGVub3VnaC4KSWYgb3RoZXIgbG9vbmdzb24y
-IHBsYXRmb3JtcyBhcmUgZGlmZmVyZW50IGZyb20gdGhlIHRoZXJtYWwgc2Vuc29yLCBJIHdpbGwg
-YWRkIGNvbXBhdGlibGUKImxvb25nc29uLGxvb25nc29uMi10aGVybWFsLXh4eCIsIHBsZWFzZSB5
-b3Ugbm90ZS4KCj4gCj4gPiA+IAo+ID4gPiA+Pgo+ID4gPiA+Pj4gKyAgICBkZXNjcmlwdGlvbjog
-fAo+ID4gPiA+Pj4gKyAgICAgIFNwZWNpZnkgdGhlIHRoZXJtYWwgc2Vuc29yIGlkLgo+ID4gPiA+
-Pj4gKyAgICBtaW5pbXVtOiAwCj4gPiA+ID4+PiArICAgIG1heGltdW06IDMKPiA+ID4gPj4+ICsK
-PiA+ID4gPj4+ICsgIGludGVycnVwdHM6Cj4gPiA+ID4+PiArICAgIG1heEl0ZW1zOiAxCj4gPiA+
-ID4+PiArCj4gPiA+ID4+PiArICAiI3RoZXJtYWwtc2Vuc29yLWNlbGxzIjoKPiA+ID4gPj4+ICsg
-ICAgY29uc3Q6IDEKPiAKPiBJZiBvbmUgU29DIG9ubHkgaGFzIDEgc2Vuc29yLCB0aGVuIHRoaXMg
-Y291bGQgYmUgMC4gSG93ZXZlciwgeW91IGRvbid0IAo+IGhhdmUgdG8gZG8gdGhhdCwgYnV0IGl0
-J3MgYW5vdGhlciB3YXkgdG8gZGlzdGluZ3Vpc2ggZGlmZmVyZW5jZXMuCm9rYXkgLEkgZ290IGl0
-Lgo+IAo+ID4gPiA+Pj4gKwo+ID4gPiA+Pj4gK3JlcXVpcmVkOgo+ID4gPiA+Pj4gKyAgLSBjb21w
-YXRpYmxlCj4gPiA+ID4+PiArICAtIHJlZwo+ID4gPiA+Pj4gKyAgLSBpZAo+ID4gPiA+Pj4gKyAg
-LSBpbnRlcnJ1cHQtcGFyZW50Cj4gPiA+ID4+Cj4gPiA+ID4+IFdoeT8KPiA+ID4gPiBUaGUgaW50
-ZXJydXB0cyBvZiBvdXIgZHRzIGRvIG5vdCBzcGVjaWZ5IGFuIGludGVycnVwdCBwYXJlbnQsCj4g
-PiA+ID4gZWcuIGludGVycnVwdHMgPSA8NyBJUlFfVFlQRV9MRVZFTF9MT1c+Cj4gPiA+ID4gc28g
-d2UgbmVlZCB0byBhZGQgYW4gaW50ZXJydXB0IHBhcmVudCBwcm9wZXJ0eS4KPiA+ID4gCj4gPiA+
-IFlvdSBjYW4gYWRkIGJ1dCBJIGFtIGFza2luZyB3aHkgaXMgaXQgcmVxdWlyZWQ/Cj4gPiBTaW5j
-ZSB0aGVyZSBpcyBtb3JlIHRoYW4gb25lIGludGVycnVwdCBjb250cm9sbGVyIGluIHRoZSBMb29u
-Z3NvbjIgc2VyaWVzIHNvYywgdGhhdCBuZWVkIHRvIHNwZWNpZnkgdGhlIGludGVycnVwdCAKPiA+
-IGNvbnRyb2xsZXIgaW4gdGhlIGR0cywgdGhhdCBpcywgdGhlIGludGVycnVwdCBwYXJlbnQuICAg
-SWYgZGlmZmVyZW50IGludGVycnVwdCBwYXJlbnRzIGFyZSB1c2VkIGluIGR0cywgdGhlIGludGVy
-cnVwdCAKPiA+IG51bWJlcnMgYXJlIGRpZmZlcmVudC4KPiAKPiBJdCBpcyBwZXJmZWN0bHkgdmFs
-aWQgZm9yIHRoZSAnaW50ZXJydXB0LXBhcmVudCcgdG8gYmUgaW4gKmFueSogcGFyZW50IAo+IG5v
-ZGUuIFNvIGl0IGlzIG5ldmVyIHJlcXVpcmVkIGJ5IGFueSBiaW5kaW5nLgpJIGRvbid0IGdldCB5
-b3VyIG1lYW5pbmcsIFlvdSBtZWFuIEkgY2FuIGFkZCBpdCBpbiB0aGUgZHRzLCBidXQgSSBkb24n
-dCBuZWVkIHRvIGFkZCBpdCBpbiB0aGUgYmluZGluZyBmaWxlLCByaWdodD8KPiAKPiBSb2IKDQoN
-CuacrOmCruS7tuWPiuWFtumZhOS7tuWQq+aciem+meiKr+S4reenkeeahOWVhuS4muenmOWvhuS/
-oeaBr++8jOS7hemZkOS6juWPkemAgee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaI
-lue+pOe7hOOAguemgeatouS7u+S9leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWM
-heaLrOS9huS4jemZkOS6juWFqOmDqOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuaIluaVo+WP
-ke+8ieacrOmCruS7tuWPiuWFtumZhOS7tuS4reeahOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuac
-rOmCruS7tu+8jOivt+aCqOeri+WNs+eUteivneaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWI
-oOmZpOacrOmCruS7tuOAgiANClRoaXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWlu
-IGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tIExvb25nc29uIFRlY2hub2xvZ3kgLCB3aGlj
-aCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNz
-IGlzIGxpc3RlZCBhYm92ZS4gQW55IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhl
-cmVpbiBpbiBhbnkgd2F5IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3Ig
-cGFydGlhbCBkaXNjbG9zdXJlLCByZXByb2R1Y3Rpb24gb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVy
-c29ucyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4g
-SWYgeW91IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2Vu
-ZGVyIGJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuIA==
+On 23-09-22, 22:50, Yang Yingliang wrote:
+> tegra239_cpufreq_soc is only used in tegra194-cpufreq.c now, change it
+> to static.
+> 
+> Fixes: 676886010707 ("cpufreq: tegra194: Add support for Tegra239")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/cpufreq/tegra194-cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+> index cfc1b225f811..c2004cae3f02 100644
+> --- a/drivers/cpufreq/tegra194-cpufreq.c
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -161,7 +161,7 @@ static const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
+>  	.num_clusters = 3,
+>  };
+>  
+> -const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
+> +static const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
+>  	.ops = &tegra234_cpufreq_ops,
+>  	.actmon_cntr_base = 0x4000,
+>  	.maxcpus_per_cluster = 8,
+
+Applied. Thanks.
+
+-- 
+viresh
