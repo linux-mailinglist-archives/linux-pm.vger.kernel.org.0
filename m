@@ -2,128 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387155EA30B
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 13:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA3B5EA5A9
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 14:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237692AbiIZLS2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 07:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S239286AbiIZMKb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 08:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237697AbiIZLRX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 07:17:23 -0400
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51C352DCA
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 03:38:01 -0700 (PDT)
-Received: by mail-pf1-f182.google.com with SMTP id w2so6303293pfb.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 03:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=ozeuGbffsz9VQevD2B7TcMavPkcWty6jR/2LRd7H8vw=;
-        b=lJgPhFPUPQjQ2ti8YYiid1h5Jb3k7iBflRxGlCCLArhtmHWm55vQN1q7UX/Nu0pIyY
-         R67THD5pH/vLT4mvGEZesOBBZKGgorzPret55d+1jtlLU8qfh06B3Vp5yIMjlgWSzSrH
-         KcQVvcxCzsL0nWMOoDLHY/Qf6ggjH5I7R4MCu9YgRG1t6P6+0RAlYjnrX5spbH384G7I
-         WgQZSYNmkovF/J/NzKFffb+FMXCRncxMakXhYcK8gHLn6qfwoOIUVevwnfc2PFIBnUUs
-         VQw0DA4PJ3PcdZnk6r26u2kRoE9+dGBJAHMxiHzj7m7licmkn7wp/tcwWQLKAlIwx1K3
-         4tVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ozeuGbffsz9VQevD2B7TcMavPkcWty6jR/2LRd7H8vw=;
-        b=H8tS/fqw6+VIhHOy7/lRmQUCaYq6j/tfM+bj+boyrZJVLii0M+j2O2+QgQMjzCdjC9
-         4EEpynBBmAK92VuhEFuONt1zQmPwPYpLEJ/w4OrIFlRL0yzT8cVPxyGqmgl8heiiF/2T
-         SrGA9zCuD254+EsZQRImCZpNjrFH2KEj8q9FSY+haQVskQ9G5mpkTj4gFSA2yplGPtSk
-         1pp0UZK4n4JLoyTAEKyEcRZMcyt3pIN6gtuq07foNcwEwS7IyZLGyCUQRfv1x2JyQRu3
-         4rggcuQf3vR6GYxJN84chtLQOx/WGbj+Jr31c2vv0YPzlDmj23/JPkLcDF1QaxTR7Q4A
-         Nqnw==
-X-Gm-Message-State: ACrzQf27mrC5Y5jZ3Ar1Nnu4a7fZBkQBrv14Hqj1mE71+CWv5viSiuTP
-        gL6VDoVSG3CRXalDFrKWwA737BdtdRM/pQ==
-X-Google-Smtp-Source: AMsMyM5zateHP75Xx1ifp+770Xw0K/UfJL3WwnIQVTUmBjCcXCn/ErTqyuy46ofZYexhuHin8+mf6A==
-X-Received: by 2002:a05:6a00:168e:b0:53b:3f2c:3213 with SMTP id k14-20020a056a00168e00b0053b3f2c3213mr23173920pfc.56.1664188523618;
-        Mon, 26 Sep 2022 03:35:23 -0700 (PDT)
-Received: from localhost ([122.172.85.153])
-        by smtp.gmail.com with ESMTPSA id y72-20020a62ce4b000000b00540c8ed61ddsm11598545pfg.150.2022.09.26.03.35.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 03:35:22 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 16:05:20 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm updates for 6.1
-Message-ID: <20220926103520.jzqzjijbnfrr24yt@vireshk-i7>
+        with ESMTP id S239283AbiIZMJi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 08:09:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9590780536;
+        Mon, 26 Sep 2022 03:56:42 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QAhbYw005070;
+        Mon, 26 Sep 2022 10:55:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=OGJKSlqoXKxoA/uCnsq1KdUnfrdyKrqCAxO0X7OqO6g=;
+ b=brgd3d4QC5mZEdjULZPHjchuKI38BKW6xFci0oN11Kx8WEIbfwgZURmy/3cbD+l5qjCB
+ bJqur8uYh1peHvCY8pfrqk3p9epK58S6DlsEziCryolsR4qIHEiRLgqitgEjIVrld1z3
+ 5SpV0wc3qgrpIZN40YFlXBb+D6q4WA2njsLamFijJRhbSPaEBaW2p9O3OKOmIXB78vTN
+ 8ReDjSJkHKKMx0t/kiFbhG48BJvPzHWce7JiCxP9gjSeVPCuy4U0UdLVz04xezSGmo70
+ Yl17EHZYDTqPt+B/a3y2Fa7l8KBZsx5l7H7XHtIYV7K41rG/4J/pO4gBsI5+qCZ5gaqa RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3juak088yh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 10:55:27 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28QAjQ4N012595;
+        Mon, 26 Sep 2022 10:55:27 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3juak088xy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 10:55:26 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28QAotgF004185;
+        Mon, 26 Sep 2022 10:55:25 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3jssh91qdn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 10:55:24 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28QAtMNK48562464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Sep 2022 10:55:22 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C7C5A404D;
+        Mon, 26 Sep 2022 10:55:22 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CB2BBA4055;
+        Mon, 26 Sep 2022 10:55:21 +0000 (GMT)
+Received: from [9.171.20.172] (unknown [9.171.20.172])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 26 Sep 2022 10:55:21 +0000 (GMT)
+Message-ID: <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
+Date:   Mon, 26 Sep 2022 12:55:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
+Content-Language: en-US
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+To:     peterz@infradead.org
+Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
+        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
+        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
+        Marc Hartmayer <mhartmay@linux.ibm.com>
+References: <20220822114649.055452969@infradead.org>
+ <20220923072104.2013212-1-borntraeger@linux.ibm.com>
+ <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
+ <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
+In-Reply-To: <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HzaczBsYMJGf_VysS-3qYL8JHjQ_2EYG
+X-Proofpoint-ORIG-GUID: vHIBNoK6fiYBzfNDEGQjdW0OoGLEWa3T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ impostorscore=0 mlxlogscore=999 adultscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209260067
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+Am 26.09.22 um 10:06 schrieb Christian Borntraeger:
+> 
+> 
+> Am 23.09.22 um 09:53 schrieb Christian Borntraeger:
+>> Am 23.09.22 um 09:21 schrieb Christian Borntraeger:
+>>> Peter,
+>>>
+>>> as a heads-up. This commit (bisected and verified) triggers a
+>>> regression in our KVM on s390x CI. The symptom is that a specific
+>>> testcase (start a guest with next kernel and a poky ramdisk,
+>>> then ssh via vsock into the guest and run the reboot command) now
+>>> takes much longer (300 instead of 20 seconds). From a first look
+>>> it seems that the sshd takes very long to end during shutdown
+>>> but I have not looked into that yet.
+>>> Any quick idea?
+>>>
+>>> Christian
+>>
+>> the sshd seems to hang in virtio-serial (not vsock).
+> 
+> FWIW, sshd does not seem to hang, instead it seems to busy loop in
+> wait_port_writable calling into the scheduler over and over again.
 
-are available in the Git repository at:
+-#define TASK_FREEZABLE                 0x00002000
++#define TASK_FREEZABLE                 0x00000000
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.1
-
-for you to fetch changes up to c4c0efb06f17fa4a37ad99e7752b18a5405c76dc:
-
-  cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh (2022-09-26 14:05:45 +0530)
-
-----------------------------------------------------------------
-cpufreq/arm updates for 6.1-rc1
-
-- Add SM6115 to cpufreq-dt blocklist (Adam Skladowski).
-- Add support for Tegra239 and minor cleanups (Sumit Gupta, ye xingchen,
-  and Yang Yingliang).
-- Add freq qos for qcom cpufreq driver and minor cleanups (Xuewen Yan,
-  and Viresh Kumar).
-- Minor cleanups around functions called at module_init() (Xiu Jianfeng).
-- Use module_init and add module_exit for bmips driver (Zhang Jianhua).
-
-----------------------------------------------------------------
-Adam Skladowski (1):
-      cpufreq: Add SM6115 to cpufreq-dt-platdev blocklist
-
-Sumit Gupta (1):
-      cpufreq: tegra194: Add support for Tegra239
-
-Viresh Kumar (1):
-      cpufreq: qcom-cpufreq-hw: Fix uninitialized throttled_freq warning
-
-Xiu Jianfeng (1):
-      cpufreq: Add __init annotation to module init funcs
-
-Xuewen Yan (1):
-      cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
-
-Yang Yingliang (1):
-      cpufreq: tegra194: change tegra239_cpufreq_soc to static
-
-Zhang Jianhua (1):
-      cpufreq: bmips-cpufreq: Use module_init and add module_exit
-
-ye xingchen (1):
-      cpufreq: tegra194: Remove the unneeded result variable
-
- drivers/cpufreq/bmips-cpufreq.c      | 10 ++++++++--
- drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
- drivers/cpufreq/highbank-cpufreq.c   |  2 +-
- drivers/cpufreq/qcom-cpufreq-hw.c    | 24 +++++++++++++++++++-----
- drivers/cpufreq/sti-cpufreq.c        |  2 +-
- drivers/cpufreq/tegra194-cpufreq.c   | 35 ++++++++++++++++-------------------
- drivers/cpufreq/ti-cpufreq.c         |  2 +-
- 7 files changed, 47 insertions(+), 29 deletions(-)
-
--- 
-viresh
+"Fixes" the issue. Just have to find out which of users is responsible.
