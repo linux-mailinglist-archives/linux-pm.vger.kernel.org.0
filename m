@@ -2,137 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C20F5EAFBA
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 20:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332B45EAFCC
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 20:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiIZSZF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 14:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        id S230189AbiIZS1N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 14:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiIZSYm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 14:24:42 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1464D356CB;
-        Mon, 26 Sep 2022 11:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MWYFxbe3wzFoZ0mxwRrcCalNF6gTjbmRt3HqAYvT5I8=; b=hoGUiHOCMuaus9O2rKHpbNA99R
-        qw2Nyg8YDAm1FkArR8BGVkiF+VazAjl5vfO5wPLpcaUK2oWZiu7SKKr6ZcRAcyTxA2OKfDw1jJ52X
-        X3AFxmrY3gOtghd0gh2JfXQAkD0B8JwKRb5LkZCNcyxyfa8n1RYe4cIG4h2cevAKK31mB8VGlDWi3
-        oandx0jGog+b6S+nwaDdQPDhY1+Y2d/09sX03h6Lv/PDTgIqtXgpHcjx34OtcdP/t9v9XCSKX159u
-        WTeCeErXTK3ZwRCGRsPcnYufPIsuVrMUjeFzVezfcFFdgDNih1gyfSqxrYdvt9XIKngtihGwxbije
-        Nls7j6Ww==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocskG-00G5DZ-25; Mon, 26 Sep 2022 18:22:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 09D7C3001D6;
-        Mon, 26 Sep 2022 20:22:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B86FC2B6B2F7B; Mon, 26 Sep 2022 20:22:18 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 20:22:18 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
-        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
-        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
-        Marc Hartmayer <mhartmay@linux.ibm.com>,
-        Amit Shah <amit@kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <YzHt2nG0Hb7xLlNj@hirez.programming.kicks-ass.net>
-References: <20220923072104.2013212-1-borntraeger@linux.ibm.com>
- <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
- <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
- <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
- <39dfc425-deff-2469-7bcb-4a0e177b31d1@linux.ibm.com>
- <YzGhUZJKV3pKJL3Z@hirez.programming.kicks-ass.net>
- <66463973-923f-624d-3041-72ce76147b3e@linux.ibm.com>
- <YzGrJSLXpocpGIha@hirez.programming.kicks-ass.net>
- <9ec643f3-b935-0119-d8bc-1fbe46c36356@linux.ibm.com>
- <YzHqNiRj2Q5vxdCV@hirez.programming.kicks-ass.net>
+        with ESMTP id S229830AbiIZS0y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 14:26:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B210B53038;
+        Mon, 26 Sep 2022 11:25:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EA96611FE;
+        Mon, 26 Sep 2022 18:25:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A194C43141;
+        Mon, 26 Sep 2022 18:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664216728;
+        bh=Y5qLzRGdsOCwx5ouHFiN9SCKtz+YXlGNMDHQ/+qU8uw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kqWfLDMVQE1v+BdTxETwBYr6RTduIuEN9ZhkSh7vUXPSDzXB2F+slGOrt2kqlzxEx
+         /zVFIziJ3HUzYkfuUMbxsLj8h28WG9e9bRCvIcfWMRN377I9MXqHmagFAclo1QY4nl
+         QGu85R6bAd/4fCPjPl4w/HQbCZxvqIVln0uh7YtLv5FLV8XdBYSKzmyfLOw5I8dLZN
+         pjVLxNFXkY1KdFuzJdoDsnADsrTBvxD9+1r5a2dismbZo9JeXq76luOIRnf3txmoR1
+         IcSe1p+0EGqnliT8SYUV061yQstm3OtueYceF/9B6zUAouuaKzAVHQCxW4mTQ+uhHA
+         y4k90bJv/SWTQ==
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-351630b1728so8496877b3.1;
+        Mon, 26 Sep 2022 11:25:28 -0700 (PDT)
+X-Gm-Message-State: ACrzQf31pUUO5DH7itwV3LK7uY9YZM/sU080iiPL0FObNKDxbXZidwHA
+        tqqKLfRImyDzHrHGb8ByNaYOMgKFaFYfEX9YDg==
+X-Google-Smtp-Source: AMsMyM5WOL0fZfHYzWaw2DdaPSr6kh7DGRI2ScO+UdVg2zStt3aJXG4qtOOC5FFK87yV5Mi/AUvaSMeil9/+6K1KBfA=
+X-Received: by 2002:a81:6608:0:b0:351:4cd2:d59a with SMTP id
+ a8-20020a816608000000b003514cd2d59amr1485347ywc.432.1664216717388; Mon, 26
+ Sep 2022 11:25:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzHqNiRj2Q5vxdCV@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220701012647.2007122-1-saravanak@google.com>
+ <YwS5J3effuHQJRZ5@kroah.com> <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+ <YygsEtxKz8dsEstc@kroah.com> <CAOesGMh5GHCONTQ9M1Ro7zW-hkL_1F7Xt=xRV0vYSfPY=7LYkQ@mail.gmail.com>
+In-Reply-To: <CAOesGMh5GHCONTQ9M1Ro7zW-hkL_1F7Xt=xRV0vYSfPY=7LYkQ@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 26 Sep 2022 13:25:05 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqK7auA8coB3DCqSDKw1ept_yQihVs-Me3bvU923os23xg@mail.gmail.com>
+Message-ID: <CAL_JsqK7auA8coB3DCqSDKw1ept_yQihVs-Me3bvU923os23xg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+To:     Olof Johansson <olof@lixom.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 08:06:46PM +0200, Peter Zijlstra wrote:
+On Mon, Sep 19, 2022 at 5:56 PM Olof Johansson <olof@lixom.net> wrote:
+>
+> On Mon, Sep 19, 2022 at 1:44 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
+> > > On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > > > > These patches are on top of driver-core-next.
+> > > > >
+> > > > > Even if stdout-path isn't set in DT, this patch should take console
+> > > > > probe times back to how they were before the deferred_probe_timeout
+> > > > > clean up series[1].
+> > > >
+> > > > Now dropped from my queue due to lack of a response to other reviewer's
+> > > > questions.
+> > >
+> > > What happened to this patch? I have a 10 second timeout on console
+> > > probe on my SiFive Unmatched, and I don't see this flag being set for
+> > > the serial driver. In fact, I don't see it anywhere in-tree. I can't
+> > > seem to locate another patchset from Saravana around this though, so
+> > > I'm not sure where to look for a missing piece for the sifive serial
+> > > driver.
+> > >
+> > > This is the second boot time regression (this one not fatal, unlike
+> > > the Layerscape PCIe one) from the fw_devlink patchset.
+> > >
+> > > Greg, can you revert the whole set for 6.0, please? It's obviously
+> > > nowhere near tested enough to go in and I expect we'll see a bunch of
+> > > -stable fixups due to this if we let it remain in.
+> >
+> > What exactly is "the whole set"?  I have the default option fix queued
+> > up and will send that to Linus later this week (am traveling back from
+> > Plumbers still), but have not heard any problems about any other issues
+> > at all other than your report.
+>
+> I stand corrected in this case, the issue on the Hifive Unmatched was
+> a regression due to a PWM clock change -- I just sent a patch for that
+> (serial driver fix).
+>
+> So it seems like as long as the fw_devlink.strict=1 patch is reverted,
+> things are back to a working state here.
+>
+> I still struggle with how the fw_devlink patchset is expected to work
+> though, since DT is expected to describe the hardware configuration,
+> and it has no knowledge of whether there are drivers that will be
+> bound to any referenced supplier devnodes. It's not going to work well
+> to assume that they will always be bound, and to add 10 second
+> timeouts for those cases isn't a good solution. Seems like the number
+> of special cases will keep adding up.
 
-> Let me go git-grep some to see if there's more similar fail.
+Since the introduction of deferred probe, the kernel has always
+assumed if there is a device described, then there is or will be a
+driver for it. The result is you can't use new DTs (if they add
+providers) with older kernels.
 
-I've ended up with the below...
+We've ended up with a timeout because no one has come up with a better
+way to handle it. What the kernel needs is userspace saying "I'm done
+loading modules", but it's debatable whether that's a good solution
+too.
 
----
- include/linux/wait.h | 2 +-
- kernel/hung_task.c   | 8 ++++++--
- kernel/sched/core.c  | 2 +-
- 3 files changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/wait.h b/include/linux/wait.h
-index 14ad8a0e9fac..7f5a51aae0a7 100644
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -281,7 +281,7 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
- 
- #define ___wait_is_interruptible(state)						\
- 	(!__builtin_constant_p(state) ||					\
--		state == TASK_INTERRUPTIBLE || state == TASK_KILLABLE)		\
-+	 (state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)))
- 
- extern void init_wait_entry(struct wait_queue_entry *wq_entry, int flags);
- 
-diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-index f1321c03c32a..4a8a713fd67b 100644
---- a/kernel/hung_task.c
-+++ b/kernel/hung_task.c
-@@ -191,6 +191,8 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
- 	hung_task_show_lock = false;
- 	rcu_read_lock();
- 	for_each_process_thread(g, t) {
-+		unsigned int state;
-+
- 		if (!max_count--)
- 			goto unlock;
- 		if (time_after(jiffies, last_break + HUNG_TASK_LOCK_BREAK)) {
-@@ -198,8 +200,10 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
- 				goto unlock;
- 			last_break = jiffies;
- 		}
--		/* use "==" to skip the TASK_KILLABLE tasks waiting on NFS */
--		if (READ_ONCE(t->__state) == TASK_UNINTERRUPTIBLE)
-+		/* skip the TASK_KILLABLE tasks -- these can be killed */
-+		state == READ_ONCE(t->__state);
-+		if ((state & TASK_UNINTERRUPTIBLE) &&
-+		    !(state & TASK_WAKEKILL))
- 			check_hung_task(t, timeout);
- 	}
-  unlock:
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 1095917ed048..12ee5b98e2c4 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8885,7 +8885,7 @@ state_filter_match(unsigned long state_filter, struct task_struct *p)
- 	 * When looking for TASK_UNINTERRUPTIBLE skip TASK_IDLE (allows
- 	 * TASK_KILLABLE).
- 	 */
--	if (state_filter == TASK_UNINTERRUPTIBLE && state == TASK_IDLE)
-+	if (state_filter == TASK_UNINTERRUPTIBLE && state & TASK_NOLOAD)
- 		return false;
- 
- 	return true;
+Rob
