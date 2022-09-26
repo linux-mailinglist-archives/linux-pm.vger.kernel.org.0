@@ -2,171 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFAD5EB46D
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 00:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0BC5EB4FB
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 01:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiIZWRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 18:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S229789AbiIZXCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 19:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiIZWQt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 18:16:49 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9F96DF96
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 15:16:28 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id n15so12296898wrq.5
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 15:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=fu+0FjwhprIPgO5a09eqxMNYO/LQ8KcDzL4zS2a4sK8=;
-        b=Tq/7QkShfKXWHaZSmDsBhK/uJ4YYoO0VCSfWimwhNYm9WkW/g1gGGs2C0RHUu2IJHf
-         UpnWtXOXkJi6jASZKKmu5qjRJ3InB5RPcxCAVBc/4P9LSNmijosQau6xoTtl2Gl50JOp
-         dDryl9aU5WWVM2r/ilKVlD1vMEeN1uPtQ9yBVIajmg8LK3Gcv/OcJjGmD+rXXx7QZQvw
-         8XTOPCAEm1zzxqEZr9737HLrPJ3sGn+I7TsRCi77LwOY4O+1EY7+gDnOJ654xmlc+4jI
-         QfqXvCwLqfQiaqrT/jS08UZ9aIfi2OqjqtgDW7GDnhwU5mLHz8yWkjgIIP6Q7PwEF9RA
-         MS1A==
+        with ESMTP id S229615AbiIZXCl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 19:02:41 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1629A720A;
+        Mon, 26 Sep 2022 16:02:39 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso5388421otb.6;
+        Mon, 26 Sep 2022 16:02:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=fu+0FjwhprIPgO5a09eqxMNYO/LQ8KcDzL4zS2a4sK8=;
-        b=BfRWu3uezMWd6A64IXeG/z0LKYUXhsXFya26w28GHXJio61azEdJZRyOuv9Wohn+57
-         33NyofJ6UR3C+qZYIU3snNTEO0+arBEN1jFKnt3u5kuZj64l89qXAzc5UkcmgkmGPFqu
-         f/gKF5N1tMTBxA8BW2+Gw4gEPAJMNcynbbdScZxSVUyUbSLszDixAWX8vvc44h4iI5ss
-         BguXZY61k1xlyZEEfu7kymfD5Z1dZGKzGI1KGSskBn5otySMHF9k6+LwmAeV0O70aetI
-         XULxHMZw+3Cuq9NfKYv3cPzkoSkdtAUsvU5coEVAgjEhs5fJqJC1NAL6i9I9fWUu91j5
-         x/EQ==
-X-Gm-Message-State: ACrzQf0UhBSr26H9Poq61P0czizJG2mD/NQKKU/0Hkm+aT1zDT/n8fON
-        kHHcOecVUdRKtHLfoL+vgv03d6faC9XCFQ==
-X-Google-Smtp-Source: AMsMyM7DvjO1hO1qpGdV7d5GQ2qO7Qur0PM0zGux4SpKnA7GS0Gl/KlMGqoPENBcTdhfL4lv4TRuJw==
-X-Received: by 2002:adf:ff85:0:b0:228:c365:de29 with SMTP id j5-20020adfff85000000b00228c365de29mr14305477wrr.415.1664230547654;
-        Mon, 26 Sep 2022 15:15:47 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id a10-20020a05600c068a00b003b483000583sm11577253wmn.48.2022.09.26.15.15.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 15:15:47 -0700 (PDT)
-Message-ID: <657008be-34e3-e2de-a9bd-41d2dc804e51@linaro.org>
-Date:   Tue, 27 Sep 2022 00:15:46 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=TmS5+X4pLYVYH89RFG+N2VbfzYq4t5hSiusvv4Jlq5I=;
+        b=QR7l/2MmHkaT0SUzKijCLrD9ngRyW/htGUD1Kg5lZGTZFkYoSP2GA83+nxcHeWgHYF
+         SMVCVsTtqC232kJGq6aAwBzKsUQ6U8UVxs+XpdCtvFF9OQeu1d4szJG5zZtXXDmUlmGv
+         j0vsgqZPU2jZX8wsYbxXDwRsNqH2rK8xodHPS/JKJ2po0FyR2QSM9/t+zfLKHL9h1iQl
+         /8YtD5LEJTE6ZNg/C10o5K2LUAZHKWR+NpuNz06wUemdh2CYLminvddi+U5DQdOdOhXE
+         PKn87KOzC5kAjh1Z4NMSnGFiJ0mLLE7AuSOy9AQHLGvomVfFQlHwp5JOfAGQMNi+F/Ub
+         rBsg==
+X-Gm-Message-State: ACrzQf3BnBFD3cfDz4ay+2uHEvTQwliyuii1GLjamhkeji3kQ5QSPNea
+        vjm/leSDuQrxs5UcV0LkIA==
+X-Google-Smtp-Source: AMsMyM64gmuEGrnM1z+5TQNLgzvx4Cn9fhx9QC2j1LdnTPhHdfqmycio7t54+hj8gvjrM9lGXLXWAg==
+X-Received: by 2002:a05:6830:13d0:b0:655:cad8:e57 with SMTP id e16-20020a05683013d000b00655cad80e57mr11115841otq.156.1664233358887;
+        Mon, 26 Sep 2022 16:02:38 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k67-20020a9d19c9000000b006396521c804sm8382105otk.55.2022.09.26.16.02.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 16:02:38 -0700 (PDT)
+Received: (nullmailer pid 3128731 invoked by uid 1000);
+        Mon, 26 Sep 2022 23:02:37 -0000
+Date:   Mon, 26 Sep 2022 18:02:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2] dt-bindings: power: reset: restart-handler: add
+ common schema
+Message-ID: <20220926230237.GA3128685-robh@kernel.org>
+References: <20220923203603.515714-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 05/30] thermal/core/governors: Use
- thermal_zone_get_trip() instead of ops functions
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>
-References: <20220926140604.4173723-1-daniel.lezcano@linaro.org>
- <20220926140604.4173723-6-daniel.lezcano@linaro.org>
- <CAJZ5v0ibt6nj6+E3onu4Ri74gX84VBob-hOWQPZiusGKb_Apjw@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0ibt6nj6+E3onu4Ri74gX84VBob-hOWQPZiusGKb_Apjw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220923203603.515714-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/09/2022 21:34, Rafael J. Wysocki wrote:
-> On Mon, Sep 26, 2022 at 4:06 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> The governors are using the ops->get_trip_* functions, Replace these
->> calls with thermal_zone_get_trip().
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Reviewed-by: Zhang Rui <rui.zhang@intel.com>
->> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com> # IPA
->> ---
->>   drivers/thermal/gov_bang_bang.c       | 29 ++++++++-------
->>   drivers/thermal/gov_fair_share.c      | 18 ++++------
->>   drivers/thermal/gov_power_allocator.c | 51 ++++++++++++---------------
->>   drivers/thermal/gov_step_wise.c       | 22 ++++++------
->>   4 files changed, 53 insertions(+), 67 deletions(-)
->>
->> diff --git a/drivers/thermal/gov_bang_bang.c b/drivers/thermal/gov_bang_bang.c
->> index a08bbe33be96..f5b85e5ea707 100644
->> --- a/drivers/thermal/gov_bang_bang.c
->> +++ b/drivers/thermal/gov_bang_bang.c
->> @@ -13,26 +13,25 @@
->>
->>   #include "thermal_core.h"
->>
->> -static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
->> +static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip_id)
->>   {
->> -       int trip_temp, trip_hyst;
->> +       struct thermal_trip trip;
->>          struct thermal_instance *instance;
->> +       int ret;
->>
->> -       tz->ops->get_trip_temp(tz, trip, &trip_temp);
->> -
->> -       if (!tz->ops->get_trip_hyst) {
->> -               pr_warn_once("Undefined get_trip_hyst for thermal zone %s - "
->> -                               "running with default hysteresis zero\n", tz->type);
->> -               trip_hyst = 0;
->> -       } else
->> -               tz->ops->get_trip_hyst(tz, trip, &trip_hyst);
->> +       ret = __thermal_zone_get_trip(tz, trip_id, &trip);
->> +       if (ret)
->> +               pr_warn_once("Failed to retrieve trip point %d\n", trip_id);
+On Fri, 23 Sep 2022 22:36:03 +0200, Krzysztof Kozlowski wrote:
+> Add common schema for restart and shutdown handlers, so they all use
+> same meaning of "priority" field.  The Linux drivers already have this
+> property and some systems want to customize it per-board in DTS.
 > 
-> Does it even make sense to continue beyond this point if ret is nonzero?
-
-No, I think we can bail out from here
-
-> All of the contents of trip can be garbage then AFAICS.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
->> +
->> +       if (!trip.hysteresis)
->> +               pr_warn_once("Zero hysteresis value for thermal zone %s\n", tz->type);
+> ---
 > 
-> Why do you want to warn about this?  Haven't we declared already that
-> zero hysteresis is valid and normal?
+> Changes since v1:
+> 1. Use double ':'
+> 
+> v1 was marked as changes-requested in Rob's patchwork, but I think there
+> was not actual consensus on any other changes to make.
+> 
+> v1:
+> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220907123630.57383-1-krzysztof.kozlowski@linaro.org/
+> 
+> See also:
+> https://lore.kernel.org/all/8fe93da3-f768-16ae-7025-1cfa97a42b27@linaro.org/
+> https://lore.kernel.org/all/20220831081715.14673-1-pali@kernel.org/
+> ---
+>  .../bindings/power/reset/gpio-restart.yaml    | 13 ++------
+>  .../bindings/power/reset/restart-handler.yaml | 30 +++++++++++++++++++
+>  2 files changed, 33 insertions(+), 10 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> 
 
-Apparently the bang-bang governor is expecting a hysteresis value as the 
-check is expecting:
-
- >> -       if (!tz->ops->get_trip_hyst) {
- >> -               pr_warn_once("Undefined get_trip_hyst for thermal 
-zone %s - "
- >> -                               "running with default hysteresis 
-zero\n", tz->type);
- >> -               trip_hyst = 0;
-
-It is just to keep a warning as before.
-
->>
->>          dev_dbg(&tz->device, "Trip%d[temp=%d]:temp=%d:hyst=%d\n",
->> -                               trip, trip_temp, tz->temperature,
->> -                               trip_hyst);
->> +                               trip_id, trip.temperature, tz->temperature,
->> +                               trip.hysteresis);
->>
->>          list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
->> -               if (instance->trip != trip)
->> +               if (instance->trip != trip_id)
->>                          continue;
->>
->>                  /* in case fan is in initial state, switch the fan off */
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Reviewed-by: Rob Herring <robh@kernel.org>
