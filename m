@@ -2,107 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D795E9CCF
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 11:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 659955E9E3D
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 11:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbiIZJDD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 05:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S231175AbiIZJs7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 05:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234694AbiIZJCi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 05:02:38 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B8293ED45;
-        Mon, 26 Sep 2022 02:02:30 -0700 (PDT)
-Received: from zhuyinbo$loongson.cn ( [10.180.13.64] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Mon, 26 Sep 2022 17:02:24
- +0800 (GMT+08:00)
-X-Originating-IP: [10.180.13.64]
-Date:   Mon, 26 Sep 2022 17:02:24 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Yinbo Zhu" <zhuyinbo@loongson.cn>
-To:     "Joe Perches" <joe@perches.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        "Amit Kucheria" <amitk@kernel.org>,
-        "Zhang Rui" <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        "Yinbo Zhu" <zhuyinbo@loongson.cn>
-Subject: Re: Re: [PATCH v2 1/3] MAINTAINERS: add maintainer for thermal
- driver for loongson2 SoCs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
-In-Reply-To: <19451295e1563de5e6628e51fa8222b843f55eed.camel@perches.com>
-References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
- <19451295e1563de5e6628e51fa8222b843f55eed.camel@perches.com>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: aczo4GZvb3Rlcl90eHQ9MTk1NTo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S233907AbiIZJs0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 05:48:26 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613122314A
+        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 02:48:21 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id s14so9404015wro.0
+        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 02:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=rhaVxqhRFD4ReD1YmvEfA36I59kgV9ycJURpgQIgPAY=;
+        b=O0TGduRGFfxCPs1TNKBUjv2K0TRM3DSlGM8hGNEn2FmYLBYNJjuttfVFcSFBjmuxk4
+         WDFfaWg9OIrIvgA+2Ck+eOg6SPcFURWT2Lev/2Bdr04NH0V7VsIQPW7IM3L+9/mlcUxo
+         0npnBC7t9nP049u8cNYgRTEOkm/BZ2KXMTizB/vqAzwwbniRxnGmzOtLD2OmbIE5CDkJ
+         bsDrHghNyiZ/NtxVazztuz03LTIP20/Epo79GFR2XSkjJ+AEUUKmQFCb9ndAcZ0+vg51
+         DoeqtFuetskqORqVry16CF7xCqKcBP4GidFrt4dMgV5m8xOFQKOChoX/TMVtQgynNExZ
+         1U8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=rhaVxqhRFD4ReD1YmvEfA36I59kgV9ycJURpgQIgPAY=;
+        b=csFRER7qyC8hCtP0C0B5M48p6Y82jY5ZOQAJkeuw6E8jvSvpY8NuH3aCUfW8wYkgwA
+         XlbUjtiBk3WMTfVsgtDSv62P38fFMGg2ofYxXY9xA8uD0v+n94AgYTHrk3l7iSQd17Tz
+         nU89IELwo5mpuFngiKykEmUZAEZL77s5ChKad53Y9kV6Oh15VTSvFp5agVq3MAS3/3dd
+         nMUcOhiSI3lJJfZtW09SteF7JWMUOBzaXcZfdXPdjOpuo+eFamEeUi08BrhWVjYXL60/
+         l9cq4Oxk4gKyWMEGQ3xLdgg9oMmgKP6zItGL7jVeZVMSIjLr76VCidEXfJZXgstaPkBi
+         zbgg==
+X-Gm-Message-State: ACrzQf1Q/ESKZh9s3Q59YY0zSWXsdBAD36b1nvDS5+Tp1zanVd5kxvpQ
+        E3RoumvPkiPS3eUiDU2fU5t93kizsJ0Gdnj/OGKh2Q==
+X-Google-Smtp-Source: AMsMyM46OMAue6ANY6uKjUMLZ396C0tIlTP6O/tQDkCtKtz22djgrgFLtwMsWgsbQcn7gFiaSD5bYrZQs48d9+kRHSU=
+X-Received: by 2002:a5d:6c6f:0:b0:22a:7778:6ea2 with SMTP id
+ r15-20020a5d6c6f000000b0022a77786ea2mr13171324wrz.15.1664185699688; Mon, 26
+ Sep 2022 02:48:19 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <58fd6600.c0e4.1837908822e.Coremail.zhuyinbo@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8BxP+CgajFjqSMiAA--.7158W
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/1tbiAQABDGMwRN0PLgAAsn
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220923124904.1373936-1-victor.liu@nxp.com> <CAPDyKFqdHX=o4V4K8GdCr4wQ5sjr=JMG6CFAy1849=CtfoSgRQ@mail.gmail.com>
+ <75366bfac9fcd4f8c35309193705f0277a164ae4.camel@nxp.com>
+In-Reply-To: <75366bfac9fcd4f8c35309193705f0277a164ae4.camel@nxp.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 26 Sep 2022 11:47:42 +0200
+Message-ID: <CAPDyKFr0XjrU_udKoUKQ_q8RWaUkyqL+8fV-7s1CTMqi7u3-Rg@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: runtime: Return properly from rpm_resume() if
+ dev->power.needs_force_resume flag is set
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-imx@nxp.com,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiSm9lIFBlcmNoZXMiIDxq
-b2VAcGVyY2hlcy5jb20+Cj4g5Y+R6YCB5pe26Ze0OjIwMjItMDktMjEgMTA6MDY6NTUgKOaYn+ac
-n+S4iSkKPiDmlLbku7bkuro6ICJZaW5ibyBaaHUiIDx6aHV5aW5ib0Bsb29uZ3Nvbi5jbj4sICJS
-YWZhZWwgSiAuIFd5c29ja2kiIDxyYWZhZWxAa2VybmVsLm9yZz4sICJEYW5pZWwgTGV6Y2FubyIg
-PGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc+LCAiQW1pdAo+ICBLdWNoZXJpYSIgPGFtaXRrQGtl
-cm5lbC5vcmc+LCAiWmhhbmcgUnVpIiA8cnVpLnpoYW5nQGludGVsLmNvbT4sICJSb2IgSGVycmlu
-ZyIgPHJvYmgrZHRAa2VybmVsLm9yZz4sICJLcnp5c3p0b2YgS296bG93c2tpIiA8a3J6eXN6dG9m
-Lmtvemxvd3NraStkdEBsaW5hcm8ub3JnPiwgbGludXgtcG1Admdlci5rZXJuZWwub3JnLCBkZXZp
-Y2V0cmVlQHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZwo+IOaK
-hOmAgTogemhhbmdob25nY2hlbiA8emhhbmdob25nY2hlbkBsb29uZ3Nvbi5jbj4KPiDkuLvpopg6
-IFJlOiBbUEFUQ0ggdjIgMS8zXSBNQUlOVEFJTkVSUzogYWRkIG1haW50YWluZXIgZm9yIHRoZXJt
-YWwgZHJpdmVyIGZvciBsb29uZ3NvbjIgU29Dcwo+IAo+IE9uIFdlZCwgMjAyMi0wOS0yMSBhdCAw
-OTo1NiArMDgwMCwgWWluYm8gWmh1IHdyb3RlOgo+ID4gQWRkIHpoYW5naG9uZ2NoZW4gYW5kIG15
-c2VsZiBhcyBtYWludGFpbmVyIG9mIHRoZSBsb29uZ3NvbjIgU29DCj4gPiBzZXJpZXMgdGhlcm1h
-bCBkcml2ZXIuCj4gW10KPiA+IGRpZmYgLS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJT
-Cj4gW10KPiA+IEBAIC0xMTg5OSw2ICsxMTg5OSwxNCBAQCBGOglkcml2ZXJzLyovKmxvb25nYXJj
-aCoKPiA+ICBGOglEb2N1bWVudGF0aW9uL2xvb25nYXJjaC8KPiA+ICBGOglEb2N1bWVudGF0aW9u
-L3RyYW5zbGF0aW9ucy96aF9DTi9sb29uZ2FyY2gvCj4gPiAgCj4gPiArTE9PTkdTT04yIFNPQyBT
-RVJJRVMgVEhFUk1BTCBEUklWRVIKPiA+ICtNOgl6aGFuZ2hvbmdjaGVuIDx6aGFuZ2hvbmdjaGVu
-QGxvb25nc29uLmNuPgo+ID4gK006CVlpbmJvIFpodSA8emh1eWluYm9AbG9vbmdzb24uY24+Cj4g
-PiArTDoJbGludXgtcG1Admdlci5rZXJuZWwub3JnCj4gPiArUzoJTWFpbnRhaW5lZAo+ID4gK0Y6
-CURvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL2xvb25nc29uMi10aGVy
-bWFsLnlhbWwKPiA+ICtGOglkcml2ZXJzL3RoZXJtYWwvbG9vbmdzb24yX3RoZXJtYWwuYwo+ID4g
-Kwo+ID4gIExTSUxPR0lDIE1QVCBGVVNJT04gRFJJVkVSUyAoRkMvU0FTL1NQSSkKPiA+ICBNOglT
-YXRoeWEgUHJha2FzaCA8c2F0aHlhLnByYWthc2hAYnJvYWRjb20uY29tPgo+ID4gIE06CVNyZWVr
-YW50aCBSZWRkeSA8c3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbT4KPiAKPiBGcm9tIHRoZSBN
-QUlOVEFJTkVSUyBoZWFkZXJzOgo+IAo+IAlTOiAqU3RhdHVzKiwgb25lIG9mIHRoZSBmb2xsb3dp
-bmc6Cj4gCSAgIFN1cHBvcnRlZDoJU29tZW9uZSBpcyBhY3R1YWxseSBwYWlkIHRvIGxvb2sgYWZ0
-ZXIgdGhpcy4KPiAJICAgTWFpbnRhaW5lZDoJU29tZW9uZSBhY3R1YWxseSBsb29rcyBhZnRlciBp
-dC4KPiAKPiBJZiB5b3UgYm90aCBhcmUgYmVpbmcgcGFpZCB0byBtYWludGFpbiB0aGlzIGRyaXZl
-ciwKPiB0aGlzIFM6IGVudHJ5IHNob3VsZCBiZSBTdXBwb3J0ZWQuClNvcnJ5IGZvciByZXBseWlu
-ZyB0byB5b3Ugc28gbGF0ZSwgYmVjYXVzZSB0aGlzIGVtYWlsIGhhcyBlbnRlcmVkIHRoZSBzcGFt
-IGxpc3QuCkkgd2l0aCB6aGFuZ2hvbmdjaGVuIHdpbGwgZm9jdXMgb24gdGhlcm1hbCBkcml2ZXIg
-YW5kIGxvb2tzIGFmdGVyIGl0IGFjdHVhbGx5LgpzbyBhZGQgemhhbmdob25nY2hlbiB3aXRoIG1l
-IGFzIGxvb25nc29uMiB0aGVybWFsIG1haW50YWluZXIuCgpUS3MsCkJScywKWWluYm8gWmh1Lgo+
-IAoNCg0K5pys6YKu5Lu25Y+K5YW26ZmE5Lu25ZCr5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY
-5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq
-5Lq65oiW576k57uE44CC56aB5q2i5Lu75L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So
-77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi25oiW
-5pWj5Y+R77yJ5pys6YKu5Lu25Y+K5YW26ZmE5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ
-5pS25pys6YKu5Lu277yM6K+35oKo56uL5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq6
-5bm25Yig6Zmk5pys6YKu5Lu244CCIA0KVGhpcyBlbWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNv
-bnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGZyb20gTG9vbmdzb24gVGVjaG5vbG9neSAs
-IHdoaWNoIGlzIGludGVuZGVkIG9ubHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFk
-ZHJlc3MgaXMgbGlzdGVkIGFib3ZlLiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWlu
-ZWQgaGVyZWluIGluIGFueSB3YXkgKGluY2x1ZGluZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3Rh
-bCBvciBwYXJ0aWFsIGRpc2Nsb3N1cmUsIHJlcHJvZHVjdGlvbiBvciBkaXNzZW1pbmF0aW9uKSBi
-eSBwZXJzb25zIG90aGVyIHRoYW4gdGhlIGludGVuZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJp
-dGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRo
-ZSBzZW5kZXIgYnkgcGhvbmUgb3IgZW1haWwgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdC4g
+On Fri, 23 Sept 2022 at 17:23, Liu Ying <victor.liu@nxp.com> wrote:
+>
+> On Fri, 2022-09-23 at 15:48 +0200, Ulf Hansson wrote:
+> > On Fri, 23 Sept 2022 at 14:47, Liu Ying <victor.liu@nxp.com> wrote:
+> > >
+> > > After a device transitions to sleep state through it's system
+> > > suspend
+> > > callback pm_runtime_force_suspend(), the device's driver may still
+> > > try
+> > > to do runtime PM for the device(runtime suspend first and then
+> > > runtime
+> > > resume) although runtime PM is disabled by that callback.  The
+> > > runtime
+> > > PM operations would not touch the device effectively and the device
+> > > is
+> > > assumed to be resumed through it's system resume callback
+> > > pm_runtime_force_resume().
+> >
+> > This sounds like a fragile use case to me. In principle you want to
+> > allow the device to be runtime resumed/suspended, after the device
+> > has
+> > already been put into a low power state through the regular system
+> > suspend callback. Normally it seems better to prevent this from
+> > happening, completely.
+>
+> Not sure if we really may prevent this from happening completely.
+>
+> >
+> > That said, in this case, I wonder if a better option would be to
+> > point
+> > ->suspend_late() to pm_runtime_force_suspend() and ->resume_early()
+> > to
+> > pm_runtime_force_resume(), rather than using the regular
+> > ->suspend|resume() callbacks. This should avoid the problem, I think,
+> > no?
+>
+> I thought about this and it actually works for my particular
+> panel-simple case.  What worries me is that the device(DRM device in my
+> case) which triggers the runtime PM operations may also use
+> ->suspend_late/resume_early() callbacks for whatever reasons, hence no
+> fixed order to suspend/resume the two devices(like panel device and DRM
+> device).
+>
+> Also, not sure if there is any sequence issue by using the
+> ->suspend_late/resume_early() callbacks in the panel-simple driver,
+> since it's written for quite a few display panels which may work with
+> various DRM devices - don't want to break any of them.
+
+What you are describing here, is the classical problem we have with
+suspend/resume ordering of devices.
+
+There are in principle two ways to solve this.
+1. If it makes sense, the devices might be assigned as parent/child.
+2. If it's more a consumer/supplier thing, we can add a device-link
+between them.
+
+In this way, the PM core can guarantee that the order becomes correct.
+
+Kind regards
+Uffe
