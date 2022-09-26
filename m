@@ -2,59 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BD25EA7B3
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 15:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA585EA7D5
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 16:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbiIZNzE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 09:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S234232AbiIZOBW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 10:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbiIZNyd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 09:54:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786A580519;
-        Mon, 26 Sep 2022 05:10:23 -0700 (PDT)
+        with ESMTP id S234707AbiIZOBD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 10:01:03 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8278146DAC;
+        Mon, 26 Sep 2022 05:14:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jOpbznQq1TexzS0cQB6vYt4+4yFj1cmjMb21VcAwnhk=; b=o/sYytLUDM+Vd1vccnhn2XqfHV
-        f6OSdgpiDrbeBWn8ZBEegKKdGzSsdwYXq/KS4EW87EJEVH6wuwN43+curv1WaQ0azzbam0Dr2VfVN
-        YhAtSfbpdw1CQ+SzSUULHaUQuwDS6IC3C/y5016A986PdHReO8D/CxioWTwqR0J+zBlHQOq+2YfNG
-        ck+0O9CPWYGxjYlABBytMWWeBPmD05YWVZsD4PtSA0be5/ZOwBQ4mtwpz6viZn/g8qM3vlUx6NN9y
-        2vG+hDLF/JkAntNvRO8SbIoPSZfGrysx+j61m5RbpTw1aNkY9W6K+5HfeovazTCiUrD8XZIu6Hivg
-        kAonF4JA==;
+        bh=1ejE6IXHMsmMDdxnD5959e9TnKubLT7CerN02Zwf5J4=; b=XAuv0lr+RMSckyM/dkw/5MaDON
+        FMJCrB6/V+FQ3BqSRYEqeeVy8wdHqGIOxPoVKxbX0Z6/6uoY0cH60CZIlzhhsLrg5gJr8jC2Em9Jr
+        eM8UJlBgmVKtEuo4C8z9FrXz26NPzz8CGlxcQx5wHc/PDFP7q3vgdCasd/Tf5cPFA0AKxkG0Jb1lM
+        egkGw8v+3tKOvL/gSlHwmrynTxfGPc4/E4nJcrv6AE7udvyvB13zXxZ6JR2AWB6RTJ8RgY+v2rbep
+        wdMPpSf7YH+J7QGhsjFvM0UGCR3Z6KxQTIzj/GvzaqJlvsqhoMbO4a9Z+N2Ke/I2sqVmyd3JenIbg
+        s3VZPxaw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ocmu1-00AQi8-8Q; Mon, 26 Sep 2022 12:08:01 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ocmzj-00G1GD-7d; Mon, 26 Sep 2022 12:13:55 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A6FEE3015B5;
-        Mon, 26 Sep 2022 14:07:56 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9C9813002F1;
+        Mon, 26 Sep 2022 14:13:53 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8FC5429A13691; Mon, 26 Sep 2022 14:07:56 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 14:07:56 +0200
+        id 8261D29A13691; Mon, 26 Sep 2022 14:13:53 +0200 (CEST)
+Date:   Mon, 26 Sep 2022 14:13:53 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
-        andi@lisas.de, puwen@hygon.cn, mario.limonciello@amd.com,
-        rui.zhang@intel.com, gpiccoli@igalia.com,
-        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
-        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] x86,acpi: Limit "Dummy wait" workaround to older AMD
- and Intel processors
-Message-ID: <YzGWHMIsD7RBhEP+@hirez.programming.kicks-ass.net>
-References: <20220923153801.9167-1-kprateek.nayak@amd.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
+        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
+        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
+        Marc Hartmayer <mhartmay@linux.ibm.com>, amit@kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
+Message-ID: <YzGXgbfRngNfDhoC@hirez.programming.kicks-ass.net>
+References: <20220822114649.055452969@infradead.org>
+ <20220923072104.2013212-1-borntraeger@linux.ibm.com>
+ <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
+ <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
+ <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923153801.9167-1-kprateek.nayak@amd.com>
+In-Reply-To: <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -64,81 +65,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 09:08:01PM +0530, K Prateek Nayak wrote:
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index ef4775c6db01..fcd3617ed315 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -460,5 +460,6 @@
->  #define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO Stale Data status is unknown */
->  #define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
->  #define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
-> +#define X86_BUG_STPCLK			X86_BUG(29) /* STPCLK# signal does not get asserted in time during IOPORT based C-state entry */
->  
->  #endif /* _ASM_X86_CPUFEATURES_H */
-> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-> index 48276c0e479d..8cb5887a53a3 100644
-> --- a/arch/x86/kernel/cpu/amd.c
-> +++ b/arch/x86/kernel/cpu/amd.c
-> @@ -988,6 +988,18 @@ static void init_amd(struct cpuinfo_x86 *c)
->  	if (!cpu_has(c, X86_FEATURE_XENPV))
->  		set_cpu_bug(c, X86_BUG_SYSRET_SS_ATTRS);
->  
-> +	/*
-> +	 * CPUs based on the Zen microarchitecture (Fam 17h onward) can
-> +	 * guarantee that STPCLK# signal is asserted in time after the
-> +	 * P_LVL2 read to freeze execution after an IOPORT based C-state
-> +	 * entry. Among the older AMD processors, there has been at least
-> +	 * one report of an AMD Athlon processor on a VIA chipset
-> +	 * (circa 2006) having this issue. Mark all these older AMD
-> +	 * processor families as being affected.
-> +	 */
-> +	if (c->x86 < 0x17)
-> +		set_cpu_bug(c, X86_BUG_STPCLK);
-> +
->  	/*
->  	 * Turn on the Instructions Retired free counter on machines not
->  	 * susceptible to erratum #1054 "Instructions Retired Performance
-> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> index 2d7ea5480ec3..96fe1320c238 100644
-> --- a/arch/x86/kernel/cpu/intel.c
-> +++ b/arch/x86/kernel/cpu/intel.c
-> @@ -696,6 +696,18 @@ static void init_intel(struct cpuinfo_x86 *c)
->  		((c->x86_model == INTEL_FAM6_ATOM_GOLDMONT)))
->  		set_cpu_bug(c, X86_BUG_MONITOR);
->  
-> +	/*
-> +	 * Intel chipsets prior to Nehalem used the ACPI processor_idle
-> +	 * driver for C-state management. Some of these processors that
-> +	 * used IOPORT based C-states could not guarantee that STPCLK#
-> +	 * signal gets asserted in time after P_LVL2 read to freeze
-> +	 * execution properly. Since a clear cut-off point is not known
-> +	 * as to when this bug was solved, mark all the chipsets as
-> +	 * being affected. Only the ones that use IOPORT based C-state
-> +	 * transitions via the acpi_idle driver will be impacted.
-> +	 */
-> +	set_cpu_bug(c, X86_BUG_STPCLK);
-> +
->  #ifdef CONFIG_X86_64
->  	if (c->x86 == 15)
->  		c->x86_cache_alignment = c->x86_clflush_size * 2;
+On Mon, Sep 26, 2022 at 12:55:21PM +0200, Christian Borntraeger wrote:
+> 
+> 
+> Am 26.09.22 um 10:06 schrieb Christian Borntraeger:
+> > 
+> > 
+> > Am 23.09.22 um 09:53 schrieb Christian Borntraeger:
+> > > Am 23.09.22 um 09:21 schrieb Christian Borntraeger:
+> > > > Peter,
+> > > > 
+> > > > as a heads-up. This commit (bisected and verified) triggers a
+> > > > regression in our KVM on s390x CI. The symptom is that a specific
+> > > > testcase (start a guest with next kernel and a poky ramdisk,
+> > > > then ssh via vsock into the guest and run the reboot command) now
+> > > > takes much longer (300 instead of 20 seconds). From a first look
+> > > > it seems that the sshd takes very long to end during shutdown
+> > > > but I have not looked into that yet.
+> > > > Any quick idea?
+> > > > 
+> > > > Christian
+> > > 
+> > > the sshd seems to hang in virtio-serial (not vsock).
+> > 
+> > FWIW, sshd does not seem to hang, instead it seems to busy loop in
+> > wait_port_writable calling into the scheduler over and over again.
+> 
+> -#define TASK_FREEZABLE                 0x00002000
+> +#define TASK_FREEZABLE                 0x00000000
+> 
+> "Fixes" the issue. Just have to find out which of users is responsible.
 
-Quiz time:
+Since it's not the wait_port_writable() one -- we already tested that by
+virtue of 's/wait_event_freezable/wait_event/' there, it must be on the
+producing side of that port. But I'm having a wee bit of trouble
+following that code.
 
-  #define X86_VENDOR_INTEL       0
-  #define X86_VENDOR_CYRIX       1
-  #define X86_VENDOR_AMD         2
-  #define X86_VENDOR_UMC         3
-  #define X86_VENDOR_CENTAUR     5
-  #define X86_VENDOR_TRANSMETA   7
-  #define X86_VENDOR_NSC         8
-  #define X86_VENDOR_HYGON       9
-  #define X86_VENDOR_ZHAOXIN     10
-  #define X86_VENDOR_VORTEX      11
-  #define X86_VENDOR_NUM         12
-  #define X86_VENDOR_UNKNOWN     0xff
+Is there a task stuck in FROZEN state? -- then again, I thought you said
+there was no actual suspend involved, so that should not be it either.
 
-For how many of the above have you changed behaviour?
-
-Not to mention that this is the gazillion-th time AMD has failed to
-change HYGON in lock-step. That's Zen too -- deal with it.
+I'm curious though -- how far does it get into the scheduler? It should
+call schedule() with __state == TASK_INTERRUPTIBLE|TASK_FREEZABLE, which
+is quite sufficient to get it off the runqueue, who then puts it back?
+Or is it bailing early in the wait_event loop?
