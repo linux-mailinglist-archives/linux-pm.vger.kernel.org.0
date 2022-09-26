@@ -2,97 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50315E98E2
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 07:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F715E98F0
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 07:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiIZFn6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 01:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S233328AbiIZFpv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 01:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIZFn5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 01:43:57 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E12426AEB
-        for <linux-pm@vger.kernel.org>; Sun, 25 Sep 2022 22:43:56 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so5688684pjk.2
-        for <linux-pm@vger.kernel.org>; Sun, 25 Sep 2022 22:43:56 -0700 (PDT)
+        with ESMTP id S229881AbiIZFpu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 01:45:50 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B6B12ABC
+        for <linux-pm@vger.kernel.org>; Sun, 25 Sep 2022 22:45:46 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so12101319pjb.0
+        for <linux-pm@vger.kernel.org>; Sun, 25 Sep 2022 22:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Ri7TwNCRikYOFJCOJ2U33t5fpVfVJydiUpCZraJpkmE=;
-        b=nZOMbgrw/Tj2GrKBSZU9OXZ7ofMPVwyWZFHStMWjyAg0sOY/53mcyIbWQsoenhZ3aL
-         zOyRYtGRtcRmomRYbQO4PvAuHrwcvhQ5kRCKC4qV0/3meB245Puq4ymuOrCqKPFm12cr
-         +iLTGxQcydwAvwVOa8w3TTBbbMjTa6xR6wfWW7WRaCcRE7yr2pz5B6Oh7sQ6h7r6N2uo
-         DwYsz2/Px5cgVMTZwrLxaBa04aQWTP3PEUujGSTwpEQbKGKjH4AlelvzWbWau4Bv84me
-         YUXbNi83InC4PUKi+xdPc1O9gy2VkD+7wf9aGShuv25KAIbipnxgj9Mr670+8opI1OdU
-         Kn9Q==
+        bh=q1MkQ8ILhoEBa3u1R8RbxKh8BDLbaCvY9GtJu4Q7z6E=;
+        b=pH3stremd391//HLMBQ6qdN1AET98BpBGv3XILzIY/Hl/oZflhErlSKsjuR9byiu9o
+         cEBtihHrT/fG5C46XWwABpAjX9X6ixT7n5lpNFsZkTC+cJoynrySf7VrH6/gyTg3xV/m
+         XZ3u2aL4TndEo1Qi72ouHsK8qrwPJ8KzMHyTolDhA/nBIi1zp6i/RIixclo14k2XeLUK
+         Od11mvdChBk2ufHxXixPx+OAKz2V7FBkmGZjbcWpJNqoWn0jXGMPPRcFXqxhPGje5ucH
+         xjyrvwe6JYxVDMkseDWQq3OFMJvBE0jeKPhp3M6+4GOG1avixqNyuYcwBeU9BeEatcOt
+         w+Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ri7TwNCRikYOFJCOJ2U33t5fpVfVJydiUpCZraJpkmE=;
-        b=geaSOBN+HIkT3MSxSm/+C0La58uFwVNTLlxbm7YXkvQxBVpEokR+vKhonlewKYTxOd
-         W1alD2q3wn4UR41ho28uJWaETPXbAQwIC5UkpjItIvcXCcQ7/xGTzKrJ+QTCHt7Nte8o
-         dSdzw40LTSIxK0NdgnxeUwXbwkfGYxZHDN4gBjo+v71rPRgn5QUk7+n4ZrmBppjeVmrp
-         xLnf9ofKr1BuDwFOMHhTt7CvTMrH/cleHTodc57HpqNi2RyOpUWQtjIsFNEDB3MSyUSN
-         Q+dKC/MuN9uTuKSV42itjP1tdii0oAs5+6eyyWhJVk+CPgcZKSgV3lNyVwl8xNY+l8Yg
-         iaYA==
-X-Gm-Message-State: ACrzQf1fhbm5/rUJ0dptkg8oHPKLlANjHFlm2JafP4djJUPAqb7VKKhO
-        fbk3ni1ZW2VOZzUB85sXPS8UPPdzweNqRw==
-X-Google-Smtp-Source: AMsMyM6UfKe0WU4gMJYzRgEshfKbG5wD06UYly8j7f9+J8oDBhQI0cX8CePZ2iFdXNKtTDS2EM+T/Q==
-X-Received: by 2002:a17:90b:180e:b0:202:a0c3:6da with SMTP id lw14-20020a17090b180e00b00202a0c306damr22352248pjb.94.1664171035592;
-        Sun, 25 Sep 2022 22:43:55 -0700 (PDT)
+        bh=q1MkQ8ILhoEBa3u1R8RbxKh8BDLbaCvY9GtJu4Q7z6E=;
+        b=oDjxgSxbYbSEzPV8UZgPp9XG3RnsR5fcBuBzeB+3suy+v5YVfb8ijF6gWJhczSvBKL
+         WsOPr69sfP8h5wn6NM7+YQPLlWDIDUMrFTSLuK0YThWK8DgNncdg0QQhrvoPdUrB2UPm
+         4ZQNS9ZCOIrt068Xy7kLPRd1pkkbo3eJOJl6NRAY076YUew0zizrfuqNKGTgbXlyLdoP
+         CA0PrUzNICRlMX1wBGTMEnalmsIK5+K0iDBv/trLcpVjJoDGctAZzBVPqzG7DuhcpNb+
+         FBr3+uyRoeGdfRKBhjYajmmiSmFqyw1iPivGM7twuM2LpslSldv70xcy5nSAmivWoOV0
+         TQFw==
+X-Gm-Message-State: ACrzQf135yy2sVvSGMTwonaKWBECfo1oStoxLLk2mXmheGdxQLaEcsE+
+        Z554KwbatXZOE8AjswwBuVuAEw==
+X-Google-Smtp-Source: AMsMyM7jNgN+M3Y6uOG2CZwy4tq7fVnAS5x8F1fF+IwsiWhduBp2jm8ADVQIVrG+l1FDBWbIYYwTIQ==
+X-Received: by 2002:a17:903:120d:b0:178:ab0a:19a1 with SMTP id l13-20020a170903120d00b00178ab0a19a1mr20382501plh.11.1664171145698;
+        Sun, 25 Sep 2022 22:45:45 -0700 (PDT)
 Received: from localhost ([122.172.85.153])
-        by smtp.gmail.com with ESMTPSA id i3-20020a170902c94300b00176acd80f69sm10249899pla.102.2022.09.25.22.43.54
+        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b002026423d79asm5762961pjb.46.2022.09.25.22.45.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 22:43:54 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 11:13:52 +0530
+        Sun, 25 Sep 2022 22:45:45 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 11:15:42 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        sumitg@nvidia.com
-Subject: Re: [PATCH -next] cpufreq: tegra194: change tegra239_cpufreq_soc to
- static
-Message-ID: <20220926054352.lnmffxyaer4j3vt7@vireshk-i7>
-References: <20220923145016.109173-1-yangyingliang@huawei.com>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     rafael@kernel.org, patrice.chotard@foss.st.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: Add __init annotation to module init funcs
+Message-ID: <20220926054542.7lioabuunsdoeqqy@vireshk-i7>
+References: <20220924092159.56594-1-xiujianfeng@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923145016.109173-1-yangyingliang@huawei.com>
+In-Reply-To: <20220924092159.56594-1-xiujianfeng@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-09-22, 22:50, Yang Yingliang wrote:
-> tegra239_cpufreq_soc is only used in tegra194-cpufreq.c now, change it
-> to static.
+On 24-09-22, 17:21, Xiu Jianfeng wrote:
+> Add missing __init annotation to module init funcs.
 > 
-> Fixes: 676886010707 ("cpufreq: tegra194: Add support for Tegra239")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 > ---
->  drivers/cpufreq/tegra194-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpufreq/highbank-cpufreq.c | 2 +-
+>  drivers/cpufreq/sti-cpufreq.c      | 2 +-
+>  drivers/cpufreq/ti-cpufreq.c       | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-> index cfc1b225f811..c2004cae3f02 100644
-> --- a/drivers/cpufreq/tegra194-cpufreq.c
-> +++ b/drivers/cpufreq/tegra194-cpufreq.c
-> @@ -161,7 +161,7 @@ static const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
->  	.num_clusters = 3,
+> diff --git a/drivers/cpufreq/highbank-cpufreq.c b/drivers/cpufreq/highbank-cpufreq.c
+> index ac57cddc5f2f..a45864701143 100644
+> --- a/drivers/cpufreq/highbank-cpufreq.c
+> +++ b/drivers/cpufreq/highbank-cpufreq.c
+> @@ -55,7 +55,7 @@ static struct notifier_block hb_cpufreq_clk_nb = {
+>  	.notifier_call = hb_cpufreq_clk_notify,
 >  };
 >  
-> -const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
-> +static const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
->  	.ops = &tegra234_cpufreq_ops,
->  	.actmon_cntr_base = 0x4000,
->  	.maxcpus_per_cluster = 8,
+> -static int hb_cpufreq_driver_init(void)
+> +static int __init hb_cpufreq_driver_init(void)
+>  {
+>  	struct platform_device_info devinfo = { .name = "cpufreq-dt", };
+>  	struct device *cpu_dev;
+> diff --git a/drivers/cpufreq/sti-cpufreq.c b/drivers/cpufreq/sti-cpufreq.c
+> index a67df90848c2..1a63aeea8711 100644
+> --- a/drivers/cpufreq/sti-cpufreq.c
+> +++ b/drivers/cpufreq/sti-cpufreq.c
+> @@ -252,7 +252,7 @@ static int sti_cpufreq_fetch_syscon_registers(void)
+>  	return 0;
+>  }
+>  
+> -static int sti_cpufreq_init(void)
+> +static int __init sti_cpufreq_init(void)
+>  {
+>  	int ret;
+>  
+> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+> index df85a77d476b..f64180dd2005 100644
+> --- a/drivers/cpufreq/ti-cpufreq.c
+> +++ b/drivers/cpufreq/ti-cpufreq.c
+> @@ -398,7 +398,7 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -static int ti_cpufreq_init(void)
+> +static int __init ti_cpufreq_init(void)
+>  {
+>  	const struct of_device_id *match;
 
 Applied. Thanks.
 
