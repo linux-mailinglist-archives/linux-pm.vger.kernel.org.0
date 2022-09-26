@@ -2,126 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FF05EB32B
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 23:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F1D5EB390
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 23:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiIZVdH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 17:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S229920AbiIZVtv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 17:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiIZVdF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 17:33:05 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703166C110
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 14:33:04 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r10-20020a1c440a000000b003b494ffc00bso166820wma.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 14:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=wIOOd0HRNKGuFy10Kz+AtlMUTzbAEKpZO8kvMRpugCM=;
-        b=UDvIan2q9SCga0+Tn9DToxUhPulwHLSdXL+ydIL8Y5q51FUPUqRERQ0f5enFkrJebm
-         4rF2zvx++aDiEfwBqHo5blTiPoh3MEWp3/8Ex5qHdS+mIFsXxczC87pXEczovaTwI7Bo
-         Yi7+AOtiy6NJN53nDMBdXpxqv9w15RjfQbdm6/8NFeEgDTpr4th7Yktc7/ohwzx0UE/k
-         Au2cf/Bhxd1cDU6CXGllSR0R1s/4dibBbk2LTu+UD/q04RWYm2+W2daWEEq+D4NbuNK/
-         NQKCRaO0ujzZZSmCPZfXSTrLfzSA7IU1Q6rbXOc1u4iv41KA/WVhZEWiT+4KpXEbyx+0
-         /g7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=wIOOd0HRNKGuFy10Kz+AtlMUTzbAEKpZO8kvMRpugCM=;
-        b=tpUOQJBus4U5j+rxlrLqhTDHmHN3yQCdC8M9OX2Y+iTgQAnymCfRaQVyvzM/Vtg18a
-         wK+NdyhEncpXNNSZr/n2dBwla4Ce+cyRs46ogb95jv80LWCNl05W5WSbGlD5AV7PoZQ0
-         R1cbSkXOgtfnTFX0ryD1YUrU7NcaxERrE0BkUSJsWThaeHL8DRg6Csh3FOhrVS4+H1dm
-         xZm+VGASY1v4UGKNmiQ7fUClWiDl9TYmmXq2LRc66QPoM7B/pUT/dUKhoFtBK9wNtRIT
-         COJpBrQ1AR7rrgeZmIQYqpa+4w+V05v3c5RCaCmzNV9M+8q8F7FksFO8DNfIPaJ031Mr
-         JvMA==
-X-Gm-Message-State: ACrzQf3Aps0VZW8Kq0+gdoxu6brcqFbo4DHfA4Byz5Uut3AjuQi5z+d6
-        nAtI568RJY5Rz5M/YACybn1ipA==
-X-Google-Smtp-Source: AMsMyM6ynLkyoLOffipxKToiPzu+oKh9f/efArYITucPEwH3m3+s4ATbNos1kl8XmDwRpGhqZWDtGg==
-X-Received: by 2002:a05:600c:2241:b0:3b4:88aa:dcba with SMTP id a1-20020a05600c224100b003b488aadcbamr416386wmm.203.1664227982899;
-        Mon, 26 Sep 2022 14:33:02 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id g19-20020a05600c4ed300b003b4868eb71bsm13686989wmq.25.2022.09.26.14.33.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 14:33:02 -0700 (PDT)
-Message-ID: <228f2d97-4816-bb37-f834-f9a2db59054a@linaro.org>
-Date:   Mon, 26 Sep 2022 23:33:01 +0200
+        with ESMTP id S229580AbiIZVtu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 17:49:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA299792C4;
+        Mon, 26 Sep 2022 14:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664228989; x=1695764989;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7TT080Crbah1HOhPKORs2ZNGlgRDfHlqPppfwXjOuaw=;
+  b=WC3tPOJEDMDsF2094BX8hZxagInet2gwyRd6qMxv46VJILgnRvo3XjYv
+   zKXaurPI/mooTVTFrlhOMPqXn5aAWyVR1ceRRRuKY5LgRMY6ofUteuMWr
+   eR68jX0a8x7XliyoeTjTfhEkSQZiUSM9Z69L3yhE03P8Kg4rfnZhA4ppS
+   HcsbUUx0aM9saKbQIvmQvsyStuU4plxhwBALd2ycJpkdVRLL6o29DRrlo
+   BKo9ojGsmzPHtUeWPMjl8lkn3JQNr4akIk9sXhWMGzRqJL9rVLc01YlrI
+   7l9JZjaAnn3uN7rvkVkkmGJbHYsMB1btkAtTOFG+YrNcHA+bMcDqDp+tK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="362982005"
+X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
+   d="scan'208";a="362982005"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:49:48 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="763611668"
+X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
+   d="scan'208";a="763611668"
+Received: from yzhou16-mobl.amr.corp.intel.com (HELO [10.209.44.81]) ([10.209.44.81])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 14:49:47 -0700
+Message-ID: <faa01372-07b0-3438-9305-123a3de9cc47@intel.com>
+Date:   Mon, 26 Sep 2022 14:49:46 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v5 29/30] thermal/intel/int340x: Replace parameter to
- simplify
+Subject: Re: [PATCH] ACPI: processor idle: Practically limit "Dummy wait"
+ workaround to old Intel systems
 Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>
-References: <20220926140604.4173723-1-daniel.lezcano@linaro.org>
- <20220926140604.4173723-30-daniel.lezcano@linaro.org>
- <YzHb50/4njPa1TR1@dev-arch.thelio-3990X>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <YzHb50/4njPa1TR1@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Kim Phillips <kim.phillips@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Mario Limonciello <Mario.Limonciello@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        linux-acpi@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        stable@vger.kernel.org
+References: <20220922184745.3252932-1-dave.hansen@intel.com>
+ <78d13a19-2806-c8af-573e-7f2625edfab8@intel.com>
+ <54572271-d5ca-820f-911e-19fd9d80ae2c@intel.com>
+ <edfe5f4c-70fa-5fcc-868f-497c428445f1@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <edfe5f4c-70fa-5fcc-868f-497c428445f1@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 9/23/22 11:36, Kim Phillips wrote:
+> Can it be cc:stable@vger.kernel.org, since it applies cleanly as far
+> back as this v5.4 commit?:
 
-Hi Nathan,
+I just sent the pull request to Linus for this fix.  I realized that I
+didn't tag it for stable@.  If it gets applied, I'll send a request for
+it to be picked up for stable@, via "Option 2":
 
-On 26/09/2022 19:05, Nathan Chancellor wrote:
-
-[ ... ]
-
->> +	int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
->> +					   sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
->> +	if (!int34x_thermal_zone->ops)
->> +		goto err_ops_alloc;
+> Option 2
+> ********
 > 
-> I assume I was cc'd on this change due to my fix up patch:
+> After the patch has been merged to Linus' tree, send an email to
+> stable@vger.kernel.org containing the subject of the patch, the commit ID,
+> why you think it should be applied, and what kernel version you wish it to
+> be applied to.
 
-> https://lore.kernel.org/20220923152009.1721739-1-nathan@kernel.org/
-
-Yes, right, thanks for sending the fix.
-
-> However, I don't see that applied here. I don't mind it being squashed
-> in to keep the build as clean as possible through bisects.
-
-Ok, that makes sense, I will merge with the change it fixes
-
-> Additionally, I did a diff of v4 to v5 to apply on top of next-20220923
-> and I noticed there were a significant number of places where there was
-> whitespace added where it probably should not have been. 
-
-Yeah, my git configuration does always trim the extra whitespaces when 
-applying so I usually don't pay attention to that, but thanks for 
-letting me know. I've probably something wrong with my emacs indentation 
-setup
-
-> Other than
-> that, v5 works on all the machines that had issues so thank you for the
-> quick fix!
-
-Thanks for testing
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Sorry about that.
