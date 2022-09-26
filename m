@@ -2,96 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679665E9E54
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 11:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31B65E9E5E
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbiIZJvF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 05:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
+        id S234132AbiIZJxL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 05:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234596AbiIZJur (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 05:50:47 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8548620348
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 02:50:41 -0700 (PDT)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220926095035epoutp04efa74f51f1f70a2df2f03f84399c172c~YYDM6t3Bz0539805398epoutp04V
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 09:50:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220926095035epoutp04efa74f51f1f70a2df2f03f84399c172c~YYDM6t3Bz0539805398epoutp04V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1664185835;
-        bh=/zr1yAK/VTTBVfo8kZ27scvqM4BRisVBYSwUlTHgzrE=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=F2aq/RgehZ1aFYLLpICKKv9Z3sOcxtz/gMeHlRaJhRgejbdu+b33Kb9xCOz2jBwzw
-         aexTQG15nYigO5LwWy0UITBoAxFzbJkU6ANIzZ0gdtsMQBegjQSapRsKQjW/PaF+2P
-         YSaj6yp4qxKd6LSN4Bx57Cua4LORXISTYpkEigDg=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220926095035epcas1p4faacef45711294c23bbca978f7ae87b5~YYDMjXOe70141201412epcas1p4_;
-        Mon, 26 Sep 2022 09:50:35 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.145]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4MbdKk165cz4x9Q5; Mon, 26 Sep
-        2022 09:50:34 +0000 (GMT)
-X-AuditID: b6c32a38-31ffb70000021e0b-b0-633175eae032
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EB.9F.07691.AE571336; Mon, 26 Sep 2022 18:50:34 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: Re: [RESEND] devfreq: governor: Save void *data in the governor
- userspace
-Reply-To: myungjoo.ham@samsung.com
-Sender: MyungJoo Ham <myungjoo.ham@samsung.com>
-From:   MyungJoo Ham <myungjoo.ham@samsung.com>
-To:     Kant Fan <kant@allwinnertech.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "allwinner-opensource-support@allwinnertech.com" 
-        <allwinner-opensource-support@allwinnertech.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <ff876f76-85c8-15d6-4f55-831722608edd@allwinnertech.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220926095033epcms1p831e2cb7acfcdd9f9dc360deb6738b37c@epcms1p8>
-Date:   Mon, 26 Sep 2022 18:50:33 +0900
-X-CMS-MailID: 20220926095033epcms1p831e2cb7acfcdd9f9dc360deb6738b37c
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDKsWRmVeSWpSXmKPExsWy7bCmnu6rUsNkg5YrbBan/vYyWlz/8pzV
-        4snGR8wWZ5vesFtc3jWHzeJz7xFGBzaPV23PmDz6tqxi9Pi8SS6AOSrbJiM1MSW1SCE1Lzk/
-        JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwdor5JCWWJOKVAoILG4WEnfzqYo
-        v7QkVSEjv7jEVim1ICWnwLRArzgxt7g0L10vL7XEytDAwMgUqDAhO2PbtJ8sBculKpqOXmFs
-        YNwq3MXIySEhYCJxunUKI4gtJLCDUWLtDLEuRg4OXgFBib87wEqEBSIkdn87yAZRoiTRcHMf
-        M0RcX6LjwTawVjYBXYmtG+6ygNgiAhUSf+41s4LYzAIPGSWmLHSDWMUrMaP9KQuELS2xfflW
-        sF5OAVeJBwvvs0LERSVurn7LDmO/PzafEcIWkWi9d5YZwhaUePBzNyPImSBzfl7R72LkAjIn
-        M0qcPHGcEcKZwygxbcM7NogGfYkzc0+C2bwCvhLzzh0Gs1kEVCX2rFoLtcBF4su/R8wQR8tL
-        bH87hxlkAbOApsT6XfoQYT6Jd197WGF+2THvCROErSZxaPcSqJtlJE5PXwh1p4fEhCcLWEHu
-        ERL4ySSx4Pta1gmM8rMQwTsLybZZCNsWMDKvYhRLLSjOTU8tNiwwgUdocn7uJkZwstOy2ME4
-        9+0HvUOMTByMhxglOJiVRHhTLuomC/GmJFZWpRblxxeV5qQWH2I0BfpzIrOUaHI+MN3mlcQb
-        mlgamJgZGZtYGJoZKonzNszQShYSSE8sSc1OTS1ILYLpY+LglGpgiknKenvZdz3Pk30mCg8f
-        ua1l3Hhk6jfljn1LEt/cdp9h+EtVLqJ097Nd05qnrteeq1J+KSui8lfwxxyRM/drpyafnrR4
-        m/HJYxKzHUvf99y5VKE/g/fFxFq1hVOEduwK9l8puTXx0KrVkRwnF3nKCM9ffEZr0R+N9N0i
-        8hPOSm2uZHdy3/asYa9QZeuv9AIeocaUH1Wm/BXqWTqPr3dO4HFR3dY1fR57zynti0/Yn6uz
-        GE2bea7uQLCNYQbfiW182+6o7Hl/Z9acpTJm8UvdMqZ/cTizay73xc6GcP/5qaY7EvdEnXqZ
-        FP0z5oTr73nxM28aZhpc/Tg9ddeLz0e5Pq6MmPhm5V/VB9O8V/deM72jxFKckWioxVxUnAgA
-        x0bo4/8DAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220914091525epcas1p31c8a9b11ba7a36da4678e3254b0ea962
-References: <ff876f76-85c8-15d6-4f55-831722608edd@allwinnertech.com>
-        <a040e16c-e8e9-f550-7251-99ec1d18f508@allwinnertech.com>
-        <20220329091449.105308-1-kant@allwinnertech.com>
-        <20220914094355epcms1p8d6eeb0834e2d7c782d49558fac0ce6c4@epcms1p8>
-        <8599d9df-3f56-1762-959d-01ee8c753a5b@allwinnertech.com>
-        <CGME20220914091525epcas1p31c8a9b11ba7a36da4678e3254b0ea962@epcms1p8>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        with ESMTP id S234453AbiIZJxH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 05:53:07 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81951F2E3;
+        Mon, 26 Sep 2022 02:53:05 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 09D89E03F9;
+        Mon, 26 Sep 2022 02:52:35 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GBHXsaVkm0io; Mon, 26 Sep 2022 02:52:33 -0700 (PDT)
+Message-ID: <cfcaa044665f090d1c7e6730fbcf7747ffed2825.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1664185953; bh=tHnbpm86SqrhSddT2K+iBdzS9yMTxzHffPkC9dIaM30=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=f+2FC31oHHkYfsU99dJu3DYgx4bL+y/O8+E3iu7HdQ5ou7ckdPn+UHoCmupn7VfkG
+         ewxvp+fxcssbgk627KuAFXwzRLEUh7B5xwDGK+aOd0Af/vir6RhE2bCgT3pFonADtK
+         SNMx2o7B6WHKOzuRdUd3P4cJWUJjKIMxFskYd6Tt2LPRQeQPnMl+GiGPFykhq0MrfC
+         vaPGbLnSh4LKtHyT/WB/1/wgjxUt0DiuzwpyusKviAge/xROSy2Pb7zsVfGph0fZsZ
+         NSWL1PQt4n7Pf9wGJ5zAmLnZrK2YwktyZTV8bjaSOnZHD85PScvkD7hhouWNPUemWS
+         qFmTYU2qNORWg==
+Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when
+ needing interrupts
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
+        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Mon, 26 Sep 2022 11:52:27 +0200
+In-Reply-To: <CAPDyKFqRAo+r0kW3H1ipu0trX0FC6EnG-PpFvXD7c1WmfPhtSA@mail.gmail.com>
+References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
+         <20220726083257.1730630-2-martin.kepplinger@puri.sm>
+         <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
+         <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm>
+         <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
+         <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm>
+         <CAPDyKFoS=E3c9XWWCaG2byMm-3nvvW5jXS0X7Bh-NK_msTUykQ@mail.gmail.com>
+         <3bbba64dc4fd9ef37fb937f5176b1ef50b8b2d73.camel@puri.sm>
+         <CAPDyKFqRAo+r0kW3H1ipu0trX0FC6EnG-PpFvXD7c1WmfPhtSA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,104 +65,206 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> On 9/15/2022 3:41 PM, Kant Fan wrote:
+Am Freitag, dem 23.09.2022 um 15:55 +0200 schrieb Ulf Hansson:
+> On Thu, 25 Aug 2022 at 09:06, Martin Kepplinger
+> <martin.kepplinger@puri.sm> wrote:
 > > 
-> > diff --git a/drivers/devfreq/governor_userspace.c 
-> > b/drivers/devfreq/governor_userspace.c
-> > index ab9db7a..d69672c 100644
-> > --- a/drivers/devfreq/governor_userspace.c
-> > +++ b/drivers/devfreq/governor_userspace.c
-> > @@ -21,7 +21,7 @@
+> > Am Mittwoch, dem 24.08.2022 um 15:30 +0200 schrieb Ulf Hansson:
+> > > On Mon, 22 Aug 2022 at 10:38, Martin Kepplinger
+> > > <martin.kepplinger@puri.sm> wrote:
+> > > > 
+> > > > Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
+> > > > > On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
+> > > > > <martin.kepplinger@puri.sm> wrote:
+> > > > > > 
+> > > > > > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf
+> > > > > > Hansson:
+> > > > > > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
+> > > > > > > <martin.kepplinger@puri.sm> wrote:
+> > > > > > > > 
+> > > > > > > > If for example the power-domains' power-supply node
+> > > > > > > > (regulator)
+> > > > > > > > needs
+> > > > > > > > interrupts to work, the current setup with noirq
+> > > > > > > > callbacks
+> > > > > > > > cannot
+> > > > > > > > work; for example a pmic regulator on i2c, when
+> > > > > > > > suspending,
+> > > > > > > > usually
+> > > > > > > > already
+> > > > > > > > times out during suspend_noirq:
+> > > > > > > > 
+> > > > > > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
+> > > > > > > > 
+> > > > > > > > So fix system suspend and resume for these power-
+> > > > > > > > domains by
+> > > > > > > > using
+> > > > > > > > the
+> > > > > > > > "outer" suspend/resume callbacks instead. Tested on the
+> > > > > > > > imx8mq-
+> > > > > > > > librem5 board,
+> > > > > > > > but by looking at the dts, this will fix imx8mq-evk and
+> > > > > > > > possibly
+> > > > > > > > many other
+> > > > > > > > boards too.
+> > > > > > > > 
+> > > > > > > > This is designed so that genpd providers just say "this
+> > > > > > > > genpd
+> > > > > > > > needs
+> > > > > > > > interrupts" (by setting the flag) - without implying an
+> > > > > > > > implementation.
+> > > > > > > > 
+> > > > > > > > Initially system suspend problems had been discussed at
+> > > > > > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+> > > > > > > > which led to discussing the pmic that contains the
+> > > > > > > > regulators
+> > > > > > > > which
+> > > > > > > > serve as power-domain power-supplies:
+> > > > > > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+> > > > > > > > 
+> > > > > > > > Signed-off-by: Martin Kepplinger
+> > > > > > > > <martin.kepplinger@puri.sm>
+> > > > > > > > ---
+> > > > > > > >  drivers/base/power/domain.c | 13 +++++++++++--
+> > > > > > > >  include/linux/pm_domain.h   |  5 +++++
+> > > > > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
+> > > > > > > > 
+> > > > > > > > diff --git a/drivers/base/power/domain.c
+> > > > > > > > b/drivers/base/power/domain.c
+> > > > > > > > index 5a2e0232862e..58376752a4de 100644
+> > > > > > > > --- a/drivers/base/power/domain.c
+> > > > > > > > +++ b/drivers/base/power/domain.c
+> > > > > > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
+> > > > > > > > genpd_spin_ops = {
+> > > > > > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
+> > > > > > > > GENPD_FLAG_ACTIVE_WAKEUP)
+> > > > > > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
+> > > > > > > > GENPD_FLAG_CPU_DOMAIN)
+> > > > > > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
+> > > > > > > > GENPD_FLAG_RPM_ALWAYS_ON)
+> > > > > > > > +#define genpd_irq_on(genpd)            (genpd->flags &
+> > > > > > > > GENPD_FLAG_IRQ_ON)
+> > > > > > > > 
+> > > > > > > >  static inline bool irq_safe_dev_in_sleep_domain(struct
+> > > > > > > > device
+> > > > > > > > *dev,
+> > > > > > > >                 const struct generic_pm_domain *genpd)
+> > > > > > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
+> > > > > > > > generic_pm_domain
+> > > > > > > > *genpd,
+> > > > > > > >         genpd->domain.ops.runtime_suspend =
+> > > > > > > > genpd_runtime_suspend;
+> > > > > > > >         genpd->domain.ops.runtime_resume =
+> > > > > > > > genpd_runtime_resume;
+> > > > > > > >         genpd->domain.ops.prepare = genpd_prepare;
+> > > > > > > > -       genpd->domain.ops.suspend_noirq =
+> > > > > > > > genpd_suspend_noirq;
+> > > > > > > > -       genpd->domain.ops.resume_noirq =
+> > > > > > > > genpd_resume_noirq;
+> > > > > > > > +
+> > > > > > > > +       if (genpd_irq_on(genpd)) {
+> > > > > > > > +               genpd->domain.ops.suspend =
+> > > > > > > > genpd_suspend_noirq;
+> > > > > > > > +               genpd->domain.ops.resume =
+> > > > > > > > genpd_resume_noirq;
+> > > > > > > > +       } else {
+> > > > > > > > +               genpd->domain.ops.suspend_noirq =
+> > > > > > > > genpd_suspend_noirq;
+> > > > > > > > +               genpd->domain.ops.resume_noirq =
+> > > > > > > > genpd_resume_noirq;
+> > > > > > > 
+> > > > > > > As we discussed previously, I am thinking that it may be
+> > > > > > > better
+> > > > > > > to
+> > > > > > > move to using genpd->domain.ops.suspend_late and
+> > > > > > > genpd->domain.ops.resume_early instead.
+> > > > > > 
+> > > > > > Wouldn't that better be a separate patch (on top)? Do you
+> > > > > > really
+> > > > > > want
+> > > > > > me to change the current behaviour (default case) to from
+> > > > > > noirq
+> > > > > > to
+> > > > > > late? Then I'll resend this series with such a patch added.
+> > > > > 
+> > > > > Sorry, I wasn't clear enough, the default behaviour should
+> > > > > remain
+> > > > > as
+> > > > > is.
+> > > > > 
+> > > > > What I meant was, when genpd_irq_on() is true, we should use
+> > > > > the
+> > > > > genpd->domain.ops.suspend_late and genpd-
+> > > > > > domain.ops.resume_early.
+> > > > 
+> > > > Testing that shows that this isn't working. I can provide the
+> > > > logs
+> > > > later, but suspend fails and I think it makes sense:
+> > > > "suspend_late"
+> > > > is
+> > > > simply already too late when i2c (or any needed driver) uses
+> > > > "suspend".
+> > > 
+> > > Okay, I see.
+> > > 
+> > > The reason why I suggested moving the callbacks to
+> > > "suspend_late",
+> > > was
+> > > that I was worried that some of the attached devices to genpd
+> > > could
+> > > use "suspend_late" themselves. This is the case for some drivers
+> > > for
+> > > DMA/clock/gpio/pinctrl-controllers, for example. That said, I am
+> > > curious to look at the DT files for the platform you are running,
+> > > would you mind giving me a pointer?
 > > 
-> >   static int devfreq_userspace_func(struct devfreq *df, unsigned long 
-> > *freq)
-> >   {
-> > -    struct userspace_data *data = df->data;
-> > +    struct userspace_data *data = df->governor_data;
-> > 
-> >       if (data->valid)
-> >           *freq = data->user_frequency;
-> > @@ -40,7 +40,7 @@
-> >       int err = 0;
-> > 
-> >       mutex_lock(&devfreq->lock);
-> > -    data = devfreq->data;
-> > +    data = devfreq->governor_data;
-> > 
-> >       sscanf(buf, "%lu", &wanted);
-> >       data->user_frequency = wanted;
-> > @@ -60,7 +60,7 @@
-> >       int err = 0;
-> > 
-> >       mutex_lock(&devfreq->lock);
-> > -    data = devfreq->data;
-> > +    data = devfreq->governor_data;
-> > 
-> >       if (data->valid)
-> >           err = sprintf(buf, "%lu\n", data->user_frequency);
-> > @@ -91,7 +91,7 @@
-> >           goto out;
-> >       }
-> >       data->valid = false;
-> > -    devfreq->data = data;
-> > +    devfreq->governor_data = data;
-> > 
-> >       err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
-> >   out:
-> > @@ -107,8 +107,8 @@
-> >       if (devfreq->dev.kobj.sd)
-> >           sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
-> > 
-> > -    kfree(devfreq->data);
-> > -    devfreq->data = NULL;
-> > +    kfree(devfreq->governor_data);
-> > +    devfreq->governor_data = NULL;
-> >   }
-> > 
-> >   static int devfreq_userspace_handler(struct devfreq *devfreq,
-> > diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> > index 34aab4d..d265af3 100644
-> > --- a/include/linux/devfreq.h
-> > +++ b/include/linux/devfreq.h
-> > @@ -152,8 +152,8 @@
-> >    * @max_state:        count of entry present in the frequency table.
-> >    * @previous_freq:    previously configured frequency value.
-> >    * @last_status:    devfreq user device info, performance statistics
-> > - * @data:    Private data of the governor. The devfreq framework does not
-> > - *        touch this.
-> > + * @data:    devfreq core pass to governors, governor should not change 
-> > it.
-> > + * @governor_data:    private data for governors, devfreq core doesn't 
-> > touch it.
-> >    * @user_min_freq_req:    PM QoS minimum frequency request from user 
-> > (via sysfs)
-> >    * @user_max_freq_req:    PM QoS maximum frequency request from user 
-> > (via sysfs)
-> >    * @scaling_min_freq:    Limit minimum frequency requested by OPP 
-> > interface
-> > @@ -193,7 +193,8 @@
-> >       unsigned long previous_freq;
-> >       struct devfreq_dev_status last_status;
-> > 
-> > -    void *data; /* private data for governors */
-> > +    void *data;
-> > +    void *governor_data;
-> > 
-> >       struct dev_pm_qos_request user_min_freq_req;
-> >       struct dev_pm_qos_request user_max_freq_req;
-> > 
+> > I'm running
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
+> > with these (small) patches on top:
+> > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/5.19.3/librem5
 > 
-> Hi MyungJoo,
-> Sorry to disturb. Just want to say that I'm looking forward to your 
-> advice on this patch. Thank you :>
+> Thanks for sharing the information!
 > 
+> > 
+> > > 
+> > > So, this made me think about this a bit more. In the end, just
+> > > using
+> > > different levels (suspend, suspend_late, suspend_noirq) of
+> > > callbacks
+> > > are just papering over the real *dependency* problem.
+> > 
+> > true, it doesn't feel like a stable solution.
+> > 
+> > > 
+> > > What we need for the genpd provider driver, is to be asked to be
+> > > suspended under the following conditions:
+> > > 1. All consumer devices (and child-domains) for its corresponding
+> > > PM
+> > > domain have been suspended.
+> > > 2. All its supplier devices supplies must remain resumed, until
+> > > the
+> > > genpd provider has been suspended.
+> > > 
+> > > Please allow me a few more days to think in more detail about
+> > > this.
+> > 
+> > Thanks a lot for thinking about this!
+> 
+> I have made some more thinking, but it's been a busy period for me,
+> so
+> unfortunately I need some additional time (another week). It seems
+> like I also need to do some prototyping, to convince myself about the
+> approach.
+> 
+> So, my apologies for the delay!
 
-This new code looks good to me.
-Anyway, Chanwoo, how do you think of this?
+to be honest, I'm happy as long as you don't forget about the bug. The
+workaround I got (these patches) is solid enough for me to be able to
+wait. And I'm happy to always answer specific questions or test a patch
+of course.
+
+thanks for the update!
+
+                              martin
 
 
-Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-
-
-Cheers,
-MyungJoo.
