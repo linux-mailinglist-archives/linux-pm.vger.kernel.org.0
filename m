@@ -2,67 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CDA5EA61F
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 14:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EEF5EA6C8
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Sep 2022 15:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234100AbiIZMax (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 08:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S233901AbiIZNDt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 09:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235215AbiIZMaS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 08:30:18 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F4962DD
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 04:09:37 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id j24so7013091lja.4
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 04:09:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Rtba/8ZlIVkRxeLWCcD3DntGviEHsU0OZhUgFoCj31I=;
-        b=vPmVloGpyRYmat4PA6d+gB2v+5RY4EWTEhP/YUlx6cm+aJAsMRg1eR6GjDoHqxsdqv
-         1YqNa/zb9zM2hXwulrB8ivy5SQRGnBS7pKFv6YBfDnyLZ1r525G1nv9kfhvA9fDPe9Mu
-         YFA44CdVTtdbfS7V9eBD2THDBoD1ONN6N/ShnScDa6yRgCWBYK3AWPSWCHNxIWRc+lru
-         uhnAel7ktjlWWXjdaFLLMXIoBIyJdC3OuD0NhPx+g424M+Myv91UnwLa0PYwEOr1IAZn
-         ISbh1M8ubpLN5ar1NR8+GP10G0qmkqCpp/+8gUeWwQiMka5MmzdFO6SBENkuIbgFJxJe
-         VwMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Rtba/8ZlIVkRxeLWCcD3DntGviEHsU0OZhUgFoCj31I=;
-        b=BALnxsq1C92JsNhN23Y+p4+DzXEukD4RiN8WAlE9dS9dB5Ljd1N1Eiv0hexoWwO6NS
-         gk9l3DHbmjIxHI79qZ57c6974906qHiu/GGHaldydWZ1PfSXqYC9iHFiEKFwmlPU4VX0
-         Z4tVznIdNlLbZr6VR3iqbnx/4qsYSiSH8sfNaJCF2XL4vT/Y0C4z0ND88eFVyq0XUiw9
-         HuruM1h9zFmvElxHHyhhJxgPIuHC12eqjzZ1kYpqDuj+ejZUfu2h5cWBCISXbOZCaPOp
-         qOi9R1lVZhvVO2BA7eTC6Rf/Qe0QLYyWb5rYjeNpO06j+2LzGrR7XUezfXhjdztFSbyi
-         12sA==
-X-Gm-Message-State: ACrzQf0LpOwM6+IkvA8pcAXQSIEkiAO+UQ8CwO9pdCJGHgCEB8LRF6yE
-        smP25wSaoDopMYxMfjBToZN5OQ==
-X-Google-Smtp-Source: AMsMyM6YBs5IdTpDYtGuCaX7wFsCohJTHQUM0kURNSBXbrX6SFK3DaigorrLC6WvrA3zBU2TRsHFiQ==
-X-Received: by 2002:a05:651c:146:b0:26d:9eb6:7f35 with SMTP id c6-20020a05651c014600b0026d9eb67f35mr822745ljd.311.1664190480106;
-        Mon, 26 Sep 2022 04:08:00 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id d25-20020ac25459000000b0048af4dc964asm2506587lfn.73.2022.09.26.04.07.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 04:07:59 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        with ESMTP id S235074AbiIZNDQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 09:03:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C0D6D575;
+        Mon, 26 Sep 2022 04:35:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 734EC60B3E;
+        Mon, 26 Sep 2022 11:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D99C433C1;
+        Mon, 26 Sep 2022 11:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664192070;
+        bh=82aV2qPqY36TnHAg7AkDtAtRTa2uq3BR98lyZXCd7IU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ThwsgDAcAz6Q90uRwxjGIFNqd8lFoGjUokSe9GNMnw8pALNPfbdtoME9tMsLaFR8/
+         5wPOC5ukpYr8Qe74PnXuA2J4FJC4inrxNKmriM4vW2IAc+9T6xaUHaH0VXIg5Q4B9B
+         N+kDF3ANbInAsqsaD4Nhj/f+9NG/NrC1hQpNq//7uGgzH7UTBsGpimnhP8LGg8JqqF
+         M+NFcyj18h+8ByrpgQ78atj6tAQTYWigRH/WrD6sHYkra2GV39GzSTx7GD9HO0pzJH
+         H15FAJkmUQL2mUW7Z5nT4ayxkqyp5AUJRRhr4/96UYjrZu5IrJZR8LVLZMhsWuIW4Q
+         fJJDxG2I+wyag==
+Date:   Mon, 26 Sep 2022 17:04:22 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, soc@kernel.org,
-        linux-pm@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [RESEND PATCH v2] firmware/psci: Add debugfs support to ease debugging
-Date:   Mon, 26 Sep 2022 14:07:58 +0300
-Message-Id: <20220926110758.666922-1-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Rob Herring <robh+dt@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
+Message-ID: <20220926113422.GA101994@thinkpad>
+References: <cover.1657695140.git.viresh.kumar@linaro.org>
+ <20220715160933.GD12197@workstation>
+ <20220718015742.uwskqo55qd67jx2w@vireshk-i7>
+ <20220801023756.76jswkbwivuntqof@vireshk-i7>
+ <20220830032456.z4olnogsyg32vhiz@builder.lan>
+ <20220830054042.akj7pf366inelvpo@vireshk-i7>
+ <20220830062050.GA7066@workstation>
+ <20220920102803.rqj44xrz2szj3tqi@vireshk-i7>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220920102803.rqj44xrz2szj3tqi@vireshk-i7>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,202 +69,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To ease debugging of PSCI supported features, add debugfs file called
-'psci' describing PSCI and SMC CC versions, enabled features and
-options.
+On Tue, Sep 20, 2022 at 03:58:03PM +0530, Viresh Kumar wrote:
+> On 30-08-22, 11:50, Manivannan Sadhasivam wrote:
+> > On Tue, Aug 30, 2022 at 11:10:42AM +0530, Viresh Kumar wrote:
+> > > On 29-08-22, 22:24, Bjorn Andersson wrote:
+> > > > Conceptually, it sounds like a good idea to express the clock feeding
+> > > > the CPU clusters, which is controlled by the OSM/EPSS.  But do you
+> > > > expect the OPP framework to actually do something with the clock, or
+> > > > just to ensure that the relationship is properly described?
+> > > 
+> > > No, the OPP core will never try to set the clock rate in your case,
+> > > though it will do clk_get().
+> > > 
+> > 
+> > Okay. Then I think it is a fair argument to make qcom-cpufreq-hw as the
+> > clock provider for CPUs.
+> > 
+> > I will send the RFC soon.
+> 
+> Ping.
+> 
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
-I sketched this while trying to narrow down the particular issue on
-the Qualcomm platform (which started as an attempt to implement PSCI
-domains, but then led to understanding that while the platform claims
-supports OSI, it doesn't support SET_SUSPEND). We were going to use
-this to help to narrow down issues with the PSCI support on other
-platforms as well.
+Didn't get time so far. Will get to this once I'm back from vacation.
 
-Changes since v1:
-- Extended the table to include MEM_PROTECT functions (noted by Mark
-  Brown)
-- Switched to seq_puts where possible
-- Changed S_IRUGO to 0444
+Thanks,
+Mani
 
-The patch is resent to include soc@kernel.org
----
- drivers/firmware/psci/psci.c | 116 ++++++++++++++++++++++++++++++++++-
- include/uapi/linux/psci.h    |  14 +++++
- 2 files changed, 129 insertions(+), 1 deletion(-)
+> -- 
+> viresh
 
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index cfb448eabdaa..9fdcb6bff403 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -9,6 +9,7 @@
- #include <linux/acpi.h>
- #include <linux/arm-smccc.h>
- #include <linux/cpuidle.h>
-+#include <linux/debugfs.h>
- #include <linux/errno.h>
- #include <linux/linkage.h>
- #include <linux/of.h>
-@@ -324,12 +325,125 @@ static void psci_sys_poweroff(void)
- 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
- }
- 
--static int __init psci_features(u32 psci_func_id)
-+static int psci_features(u32 psci_func_id)
- {
- 	return invoke_psci_fn(PSCI_1_0_FN_PSCI_FEATURES,
- 			      psci_func_id, 0, 0);
- }
- 
-+#ifdef CONFIG_DEBUG_FS
-+
-+#define PSCI_ID(ver, _name) \
-+	{ .fn = PSCI_##ver##_FN_##_name, .name = #_name, }
-+#define PSCI_ID_NATIVE(ver, _name) \
-+	{ .fn = PSCI_FN_NATIVE(ver, _name), .name = #_name, }
-+
-+/* A table of all optional functions */
-+static const struct {
-+	u32 fn;
-+	const char *name;
-+} psci_fn_ids[] = {
-+	PSCI_ID_NATIVE(0_2, MIGRATE),
-+	PSCI_ID(0_2, MIGRATE_INFO_TYPE),
-+	PSCI_ID_NATIVE(0_2, MIGRATE_INFO_UP_CPU),
-+	PSCI_ID(1_0, CPU_FREEZE),
-+	PSCI_ID_NATIVE(1_0, CPU_DEFAULT_SUSPEND),
-+	PSCI_ID_NATIVE(1_0, NODE_HW_STATE),
-+	PSCI_ID_NATIVE(1_0, SYSTEM_SUSPEND),
-+	PSCI_ID(1_0, SET_SUSPEND_MODE),
-+	PSCI_ID_NATIVE(1_0, STAT_RESIDENCY),
-+	PSCI_ID_NATIVE(1_0, STAT_COUNT),
-+	PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
-+	PSCI_ID(1_1, MEM_PROTECT),
-+	PSCI_ID_NATIVE(1_1, MEM_PROTECT_CHECK_RANGE),
-+};
-+
-+static int psci_debugfs_read(struct seq_file *s, void *data)
-+{
-+	int feature, type, i;
-+	u32 ver;
-+
-+	ver = psci_ops.get_version();
-+	seq_printf(s, "PSCIv%d.%d\n",
-+		   PSCI_VERSION_MAJOR(ver),
-+		   PSCI_VERSION_MINOR(ver));
-+
-+	/* PSCI_FEATURES is available only starting from 1.0 */
-+	if (PSCI_VERSION_MAJOR(ver) < 1)
-+		return 0;
-+
-+	feature = psci_features(ARM_SMCCC_VERSION_FUNC_ID);
-+	if (feature != PSCI_RET_NOT_SUPPORTED) {
-+		ver = invoke_psci_fn(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0);
-+		seq_printf(s, "SMC Calling Convention v%d.%d\n",
-+			   PSCI_VERSION_MAJOR(ver),
-+			   PSCI_VERSION_MINOR(ver));
-+	} else {
-+		seq_puts(s, "SMC Calling Convention v1.0 is assumed\n");
-+	}
-+
-+	feature = psci_features(PSCI_FN_NATIVE(0_2, CPU_SUSPEND));
-+	if (feature < 0) {
-+		seq_printf(s, "PSCI_FEATURES(CPU_SUSPEND) error (%d)\n", feature);
-+	} else {
-+		seq_printf(s, "OSI is %ssupported\n",
-+			   (feature & BIT(0)) ? "" : "not ");
-+		seq_printf(s, "%s StateID format is used\n",
-+			   (feature & BIT(1)) ? "Extended" : "Original");
-+	}
-+
-+	type = psci_ops.migrate_info_type();
-+	if (type == PSCI_0_2_TOS_UP_MIGRATE ||
-+	    type == PSCI_0_2_TOS_UP_NO_MIGRATE) {
-+		unsigned long cpuid;
-+
-+		seq_printf(s, "Trusted OS %smigrate capable\n",
-+			   type == PSCI_0_2_TOS_UP_NO_MIGRATE ? "not " : "");
-+		cpuid = psci_migrate_info_up_cpu();
-+		seq_printf(s, "Trusted OS resident on physical CPU 0x%lx (#%d)\n",
-+			   cpuid, resident_cpu);
-+	} else if (type == PSCI_0_2_TOS_MP) {
-+		seq_puts(s, "Trusted OS migration not required\n");
-+	} else {
-+		if (type != PSCI_RET_NOT_SUPPORTED)
-+			seq_printf(s, "MIGRATE_INFO_TYPE returned unknown type (%d)\n", type);
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(psci_fn_ids); i++) {
-+		feature = psci_features(psci_fn_ids[i].fn);
-+		if (feature == PSCI_RET_NOT_SUPPORTED)
-+			continue;
-+		if (feature < 0)
-+			seq_printf(s, "PSCI_FEATURES(%s) error (%d)\n",
-+				   psci_fn_ids[i].name, feature);
-+		else
-+			seq_printf(s, "%s is supported\n", psci_fn_ids[i].name);
-+	}
-+
-+	return 0;
-+}
-+
-+static int psci_debugfs_open(struct inode *inode, struct file *f)
-+{
-+	return single_open(f, psci_debugfs_read, NULL);
-+}
-+
-+static const struct file_operations psci_debugfs_ops = {
-+	.owner = THIS_MODULE,
-+	.open = psci_debugfs_open,
-+	.release = single_release,
-+	.read = seq_read,
-+	.llseek = seq_lseek
-+};
-+
-+static int __init psci_debugfs_init(void)
-+{
-+	return PTR_ERR_OR_ZERO(debugfs_create_file("psci", 0444, NULL, NULL,
-+						   &psci_debugfs_ops));
-+}
-+late_initcall(psci_debugfs_init)
-+#endif
-+
- #ifdef CONFIG_CPU_IDLE
- static int psci_suspend_finisher(unsigned long state)
- {
-diff --git a/include/uapi/linux/psci.h b/include/uapi/linux/psci.h
-index 2bf93c0d6354..3511095c2702 100644
---- a/include/uapi/linux/psci.h
-+++ b/include/uapi/linux/psci.h
-@@ -48,12 +48,26 @@
- #define PSCI_0_2_FN64_MIGRATE_INFO_UP_CPU	PSCI_0_2_FN64(7)
- 
- #define PSCI_1_0_FN_PSCI_FEATURES		PSCI_0_2_FN(10)
-+#define PSCI_1_0_FN_CPU_FREEZE			PSCI_0_2_FN(11)
-+#define PSCI_1_0_FN_CPU_DEFAULT_SUSPEND		PSCI_0_2_FN(12)
-+#define PSCI_1_0_FN_NODE_HW_STATE		PSCI_0_2_FN(13)
- #define PSCI_1_0_FN_SYSTEM_SUSPEND		PSCI_0_2_FN(14)
- #define PSCI_1_0_FN_SET_SUSPEND_MODE		PSCI_0_2_FN(15)
-+#define PSCI_1_0_FN_STAT_RESIDENCY		PSCI_0_2_FN(16)
-+#define PSCI_1_0_FN_STAT_COUNT			PSCI_0_2_FN(17)
-+
- #define PSCI_1_1_FN_SYSTEM_RESET2		PSCI_0_2_FN(18)
-+#define PSCI_1_1_FN_MEM_PROTECT			PSCI_0_2_FN(19)
-+#define PSCI_1_1_FN_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN(19)
- 
-+#define PSCI_1_0_FN64_CPU_DEFAULT_SUSPEND	PSCI_0_2_FN64(12)
-+#define PSCI_1_0_FN64_NODE_HW_STATE		PSCI_0_2_FN64(13)
- #define PSCI_1_0_FN64_SYSTEM_SUSPEND		PSCI_0_2_FN64(14)
-+#define PSCI_1_0_FN64_STAT_RESIDENCY		PSCI_0_2_FN64(16)
-+#define PSCI_1_0_FN64_STAT_COUNT		PSCI_0_2_FN64(17)
-+
- #define PSCI_1_1_FN64_SYSTEM_RESET2		PSCI_0_2_FN64(18)
-+#define PSCI_1_1_FN64_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN64(19)
- 
- /* PSCI v0.2 power state encoding for CPU_SUSPEND function */
- #define PSCI_0_2_POWER_STATE_ID_MASK		0xffff
 -- 
-2.35.1
-
+மணிவண்ணன் சதாசிவம்
