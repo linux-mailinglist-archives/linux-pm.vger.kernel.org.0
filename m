@@ -2,240 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F79C5EC2F9
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 14:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080CB5EC347
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 14:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbiI0MkF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 08:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S231848AbiI0MtZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 08:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbiI0MkB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 08:40:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C167269F;
-        Tue, 27 Sep 2022 05:39:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2890F61932;
-        Tue, 27 Sep 2022 12:39:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15663C433C1;
-        Tue, 27 Sep 2022 12:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664282397;
-        bh=37yDCTtTXKSMe/LNxUNskIHnOhgXH3MxP0BfzMXipSc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oDLkAAZAK9fwuZt7LKXM8ftnzMYuqEX16TQ7tEzyFmrIv30ofSaafC4Y6LcrceyD7
-         V+zHm07PGvSaenwVeBW7ozfKT0qc6eaS4RIQDezd00apiD/wzViERNkpjWxNMuSu3T
-         TKNCo/J23ajBzpoO84jGyHvI9aryn0jwbsbvfsIQ=
-Date:   Tue, 27 Sep 2022 14:39:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Olof Johansson <olof@lixom.net>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Pali Rohar <pali@kernel.org>,
-        Andreas Farber <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Timur Tabi <timur@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-actions@lists.infradead.org,
-        linux-unisoc@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        sparclinux@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
-Message-ID: <YzLvGXjP8+W0X/1s@kroah.com>
-References: <20220701012647.2007122-1-saravanak@google.com>
- <YwS5J3effuHQJRZ5@kroah.com>
- <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
- <YygsEtxKz8dsEstc@kroah.com>
- <CAOesGMh5GHCONTQ9M1Ro7zW-hkL_1F7Xt=xRV0vYSfPY=7LYkQ@mail.gmail.com>
- <CAL_JsqK7auA8coB3DCqSDKw1ept_yQihVs-Me3bvU923os23xg@mail.gmail.com>
- <YzLp9yXgoJmy5YU8@smile.fi.intel.com>
+        with ESMTP id S231445AbiI0MtT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 08:49:19 -0400
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CC4167066;
+        Tue, 27 Sep 2022 05:49:17 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id x18so5911004qkn.6;
+        Tue, 27 Sep 2022 05:49:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kxKNS5DDyDVwQYf8SSh+Z282XSXl8OO2BaUjOfJxTOs=;
+        b=xb6AyPT0DL1frZJ//0cOhbZdCmM8J0lIRf1W6Pmx9QR/wzkQOLYzooofyE033sdQT4
+         BVhg9ssWXT74uSFLT0DM+441DkrbYQJIigzv9desA8Poa3mDemECt//lO0IJGHgpA0Cq
+         V57BkUfYvtC8vIfogrIvouNHfZch3XwNYKM5jRoq1EYvbSGe9PPcfCYehdRQnZIfQViH
+         J/xMC2dAHAapwcBxP9KrV/0CKaXCkpsLIeVMGMiGT9+ex7qXXVogKizDA5HZryJPa0sq
+         i8/A03XLyzBvMIwMGW2CBuH9I0IgPEjUUoKUK3G1bZNDGypbgsh7M8guQdinP969h/J9
+         SZ6Q==
+X-Gm-Message-State: ACrzQf3rQ0d/VHEdO7GWNciJu+Az6WGZGnJeAkUJFId1thvI8UEsOBmi
+        /UPL+gM79Ns3/SPmDvi2lNIoEH5hWr5JUQ==
+X-Google-Smtp-Source: AMsMyM4CyBLabq0ZbBgwCR3Gqlzbn0bg99UnLwPevLhtmzH5TJDJkERMQLybGBIbqSfb1g5ZxmyyPA==
+X-Received: by 2002:a37:852:0:b0:6cf:7510:3c91 with SMTP id 79-20020a370852000000b006cf75103c91mr14259370qki.657.1664282956686;
+        Tue, 27 Sep 2022 05:49:16 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id c25-20020a05620a269900b006cea2984c9bsm939654qkp.100.2022.09.27.05.49.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 05:49:16 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 4so3923511ybe.2;
+        Tue, 27 Sep 2022 05:49:15 -0700 (PDT)
+X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
+ q4-20020a258e84000000b00696466c0baamr24148017ybl.604.1664282955514; Tue, 27
+ Sep 2022 05:49:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzLp9yXgoJmy5YU8@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+ <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
+ <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
+ <20220726160337.GA41736@francesco-nb.int.toradex.com> <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
+ <20220728112146.GA97654@francesco-nb.int.toradex.com> <CAPDyKFqtCxrjALeCmhuqQ2VmmUHhi-DjXO30uHChTPFeDbp+JQ@mail.gmail.com>
+ <20220909142247.GA238001@francesco-nb.int.toradex.com> <CAPDyKFrwpz=gi3iY5YsO6k4o33eLQRp-wXvBx3nQ0q=G9YrqHA@mail.gmail.com>
+ <70ee4f8e-7529-307e-656c-2a65d0187af6@linaro.org> <CAPDyKFoyNWZvT+QPdX4sQuS3DL8mepfnLraHLusMi9K8MOfLgg@mail.gmail.com>
+ <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org> <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
+In-Reply-To: <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 27 Sep 2022 14:49:02 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com>
+Message-ID: <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Max Krummenacher <max.oss.09@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:17:59PM +0300, Andy Shevchenko wrote:
-> On Mon, Sep 26, 2022 at 01:25:05PM -0500, Rob Herring wrote:
-> > On Mon, Sep 19, 2022 at 5:56 PM Olof Johansson <olof@lixom.net> wrote:
+Hi Ulf,
+
+On Tue, Sep 27, 2022 at 11:49 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >>>> The main concern that was raised on this topic was that we have to
+> > >>>> somehow link the power-domain to the specific peripherals (the power
+> > >>>> domain consumer) in the device tree.
+> > >>>
+> > >>> Yes, that is needed. Although, I don't see how that is a concern?
+> > >>>
+> > >>> We already have the valid bindings to use for this, see more below.
+> > >>>
+> > >>>>
+> > >>>> Adding the power-domain property there will trigger validation errors
+> > >>>> unless we do explicitly add the power-domains to the schema for each
+> > >>>> peripheral we need this. To me this does not really work, but maybe I'm
+> > >>>> not understanding something.
+> > >>>>
+> > >>>> This is what Rob wrote on the topic [1]:
+> > >>>>   > No. For 'power-domains' bindings have to define how many there are and
+> > >>>>   > what each one is.
+> > >>>>
+> > >>>> Just as an example from patch [2]:
+> > >>>>
+> > >>>>   can1: can@0 {
+> > >>>>     compatible = "microchip,mcp251xfd";
+> > >>>>     power-domains = <&pd_sleep_moci>;
+> > >>>>   };
+> > >>>>
+> > >>>> leads to:
+> > >>>>
+> > >>>>   imx8mm-verdin-nonwifi-dahlia.dtb: can@0: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
+> > >>>>           From schema: .../bindings/net/can/microchip,mcp251xfd.yaml
+> > >>>
+> > >>> I think it should be fine to just add the below line to the DT
+> > >>> bindings, for each peripheral device to fix the above problem.
+> > >>>
+> > >>> power-domains: true
+> > >>
+> > >> Again, as Rob said, no, because it must be strictly defined. So for
+> > >> example: "maxItems: 1" for simple cases. But what if device is then part
+> > >> of two power domains?
+> > >>
+> > >>>
+> > >>> That should be okay, right?
+> > >>
+> > >> Adding it to each peripheral scales poorly. Especially that literally
+> > >> any device can be part of such power domain.
 > > >
-> > > On Mon, Sep 19, 2022 at 1:44 AM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
-> > > > > On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
-> > > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
-> > > > > > > These patches are on top of driver-core-next.
-> > > > > > >
-> > > > > > > Even if stdout-path isn't set in DT, this patch should take console
-> > > > > > > probe times back to how they were before the deferred_probe_timeout
-> > > > > > > clean up series[1].
-> > > > > >
-> > > > > > Now dropped from my queue due to lack of a response to other reviewer's
-> > > > > > questions.
-> > > > >
-> > > > > What happened to this patch? I have a 10 second timeout on console
-> > > > > probe on my SiFive Unmatched, and I don't see this flag being set for
-> > > > > the serial driver. In fact, I don't see it anywhere in-tree. I can't
-> > > > > seem to locate another patchset from Saravana around this though, so
-> > > > > I'm not sure where to look for a missing piece for the sifive serial
-> > > > > driver.
-> > > > >
-> > > > > This is the second boot time regression (this one not fatal, unlike
-> > > > > the Layerscape PCIe one) from the fw_devlink patchset.
-> > > > >
-> > > > > Greg, can you revert the whole set for 6.0, please? It's obviously
-> > > > > nowhere near tested enough to go in and I expect we'll see a bunch of
-> > > > > -stable fixups due to this if we let it remain in.
-> > > >
-> > > > What exactly is "the whole set"?  I have the default option fix queued
-> > > > up and will send that to Linus later this week (am traveling back from
-> > > > Plumbers still), but have not heard any problems about any other issues
-> > > > at all other than your report.
+> > > Right.
 > > >
-> > > I stand corrected in this case, the issue on the Hifive Unmatched was
-> > > a regression due to a PWM clock change -- I just sent a patch for that
-> > > (serial driver fix).
+> > >>
+> > >> If we are going with power domain approach, then it should be applicable
+> > >> basically to every device or to every device of some class (e.g. I2C,
+> > >> SPI). This means it should be added to respective core schema in
+> > >> dtschema repo, in a way it does not interfere with other power-domains
+> > >> properties (existing ones).
 > > >
-> > > So it seems like as long as the fw_devlink.strict=1 patch is reverted,
-> > > things are back to a working state here.
+> > > Isn't that already taken care of [1]?
+> >
+> > No, because it does not define the items (what are the power domains and
+> > how many). This binding expects that any device has maxItems restricting it.
+>
+> Right, apologize for my ignorance.
+>
+> >
 > > >
-> > > I still struggle with how the fw_devlink patchset is expected to work
-> > > though, since DT is expected to describe the hardware configuration,
-> > > and it has no knowledge of whether there are drivers that will be
-> > > bound to any referenced supplier devnodes. It's not going to work well
-> > > to assume that they will always be bound, and to add 10 second
-> > > timeouts for those cases isn't a good solution. Seems like the number
-> > > of special cases will keep adding up.
-> > 
-> > Since the introduction of deferred probe, the kernel has always
-> > assumed if there is a device described, then there is or will be a
-> > driver for it. The result is you can't use new DTs (if they add
-> > providers) with older kernels.
-> > 
-> > We've ended up with a timeout because no one has come up with a better
-> > way to handle it. What the kernel needs is userspace saying "I'm done
-> > loading modules", but it's debatable whether that's a good solution
-> > too.
-> 
-> In my opinion the deferred probe is a big hack and that is the root
-> cause of the issues we have here and there. It has to be redesigned
-> to be mathematically robust. It was an attempt by Andrzej Hajda to
-> solve this [1].
-> 
-> [1]: https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Deferred-Problem-Issues-With-Complex-Dependencies-Between-Devices-in-Linux-Kernel-Andrzej-Hajda-Samsung.pdf
+> > > If there is more than one power domain per device, perhaps we may need
+> > > to extend it with a more strict binding? But, that doesn't seem to be
+> > > the case here - and if it turns out to be needed later on, we can
+> > > always extend the bindings, no?
+> > >
+> > > Note also that we already have DT bindings specifying "power-domains:
+> > > true" to deal with the above. Isn't that what we want?
+> >
+> > You mentioned it before and both me and Rob already responded - no,
+> > because it does not restrict the number of items.
+>
+> Okay, so maxItems need to be specified for each peripheral. It's not a
+> big deal, right?
+>
+> Of course, it would be even easier if the core schema would use a
+> default "maxItems: 1" for power domain consumers, which of course must
+> be possible to be overridden for those consumers that need something
+> else. But perhaps it's not that simple. :-)
 
-deferred probe has _ALWAYS_ been known to be a hack, way back when we
-accepted it, but it was the best hack we had to solve a real problem
-that we had, so it was accepted.
+It's not that simple: being part of a PM Domain is not a property of the
+device being described, but a property of the integration into the SoC.
 
-It's been polished over the years, but yes, it does break down at times,
-due to the crazy complexity of hardware systems that we have no control
-over.
+All synchronous hardware needs power (single/multiple), clock(s), and
+reset(s).  But the granularity of control over power(s), clocks, and resets
+depends on the integration.  So the related properties can appear
+anywhere.
 
-If you have concrete solutions for how to solve the issue, wonderful,
-please submit patches :)
+Gr{oetje,eeting}s,
 
-thanks,
+                        Geert
 
-greg k-h
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
