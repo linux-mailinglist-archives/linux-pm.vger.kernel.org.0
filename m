@@ -2,72 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6FC5EC4B2
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 15:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851DE5EC590
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 16:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiI0Nkm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 09:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        id S231790AbiI0OKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 10:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbiI0Nkj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 09:40:39 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB46751A15
-        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 06:40:37 -0700 (PDT)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4McLH90VcFzHthJ;
-        Tue, 27 Sep 2022 21:35:49 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by dggpeml500024.china.huawei.com
- (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
- 2022 21:40:35 +0800
-From:   Yuan Can <yuancan@huawei.com>
-To:     <linus.walleij@linaro.org>, <sre@kernel.org>,
-        <linux-pm@vger.kernel.org>
-CC:     <yuancan@huawei.com>
-Subject: [PATCH] power: supply: ab8500: Remove unused struct ab8500_chargalg_sysfs_entry
-Date:   Tue, 27 Sep 2022 13:37:58 +0000
-Message-ID: <20220927133758.98745-1-yuancan@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S232400AbiI0OKf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 10:10:35 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011ADA1D6B;
+        Tue, 27 Sep 2022 07:10:33 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id a065437a81f90f48; Tue, 27 Sep 2022 16:10:32 +0200
+Received: from kreacher.localnet (public-gprs524514.centertel.pl [31.61.168.35])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id C4F8866D732;
+        Tue, 27 Sep 2022 16:10:31 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: [PATCH] ACPI: DPTF: Drop stale link from Kconfig help
+Date:   Tue, 27 Sep 2022 16:10:31 +0200
+Message-ID: <4783608.31r3eYUQgx@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500024.china.huawei.com (7.185.36.10)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 31.61.168.35
+X-CLIENT-HOSTNAME: public-gprs524514.centertel.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegiedggeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdeuueevhfegffefjeejueeuuedtgfdtffdthfffhefgveeuhfetffdtueehueeknecuffhomhgrihhnpedtuddrohhrghenucfkphepfedurdeiuddrudeikedrfeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepfedurdeiuddrudeikedrfeehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdhp
+ mhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-After commit 75ee3f6f0c1a("power: supply: ab8500_chargalg: Drop enable/disable
-sysfs"), no one use struct ab8500_chargalg_sysfs_entry, so remove it.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Yuan Can <yuancan@huawei.com>
+The web site pointed to from the DPTF Kconfig help is not accessible
+any more, so drop the link to it from there.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/power/supply/ab8500_chargalg.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/acpi/dptf/Kconfig |    3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
-index 05146d436a6a..ea4ad61d4c7e 100644
---- a/drivers/power/supply/ab8500_chargalg.c
-+++ b/drivers/power/supply/ab8500_chargalg.c
-@@ -252,12 +252,6 @@ static enum power_supply_property ab8500_chargalg_props[] = {
- 	POWER_SUPPLY_PROP_HEALTH,
- };
+Index: linux-pm/drivers/acpi/dptf/Kconfig
+===================================================================
+--- linux-pm.orig/drivers/acpi/dptf/Kconfig
++++ linux-pm/drivers/acpi/dptf/Kconfig
+@@ -11,9 +11,6 @@ menuconfig ACPI_DPTF
+ 	  a coordinated approach for different policies to effect the hardware
+ 	  state of a system.
  
--struct ab8500_chargalg_sysfs_entry {
--	struct attribute attr;
--	ssize_t (*show)(struct ab8500_chargalg *di, char *buf);
--	ssize_t (*store)(struct ab8500_chargalg *di, const char *buf, size_t length);
--};
+-	  For more information see:
+-	  <https://01.org/intel%C2%AE-dynamic-platform-and-thermal-framework-dptf-chromium-os/overview>
 -
- /**
-  * ab8500_chargalg_safety_timer_expired() - Expiration of the safety timer
-  * @timer:     pointer to the hrtimer structure
--- 
-2.17.1
+ if ACPI_DPTF
+ 
+ config DPTF_POWER
+
+
 
