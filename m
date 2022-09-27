@@ -2,244 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AE15EC263
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 14:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5845EC27E
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 14:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiI0MUQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 08:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S232346AbiI0MVo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 08:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbiI0MTv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 08:19:51 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB0812FF07;
-        Tue, 27 Sep 2022 05:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664281126; x=1695817126;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OFIxxBkiaCDaU7hdmWCgva7sjv3x1WGTNlqGM1oQtNQ=;
-  b=QjkNRJ9JABpK5KuGM6vW13ifDgF1zvv2NkXQaswwpopi4XOrqXvNEW0a
-   zpn3E9p4vm/ehX8quUW0x0BcZv29fvHaAW/CgJ7m0T7qXQe0amKRrEDAS
-   EzB9PNHcvJpz0v5O31ewC6zMNtvXzKqa8GeDCBYoV0lCNy6b/2IZB1DBT
-   Id0ypUSxa2I1GHDoKY+PdTwG9seHh2aJKRcz1VEVKBPDv0rkhfFI2ij6M
-   HzvJcvXyiqAF0KmEO1wuXT7fF/4llRwNNO0kHo3UcyfJOgYiuwzhcscEj
-   KvJSp43ftV8CWZlWWf9OWIxVC5CY0jzHRUjgnkJrYa+TZkir+NeUE9ezV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302782109"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="302782109"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:18:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="599160114"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="599160114"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 27 Sep 2022 05:18:06 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1od9XD-008RHv-1p;
-        Tue, 27 Sep 2022 15:17:59 +0300
-Date:   Tue, 27 Sep 2022 15:17:59 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Olof Johansson <olof@lixom.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Pali Rohar <pali@kernel.org>,
-        Andreas Farber <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Timur Tabi <timur@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-actions@lists.infradead.org,
-        linux-unisoc@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        sparclinux@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
-Message-ID: <YzLp9yXgoJmy5YU8@smile.fi.intel.com>
-References: <20220701012647.2007122-1-saravanak@google.com>
- <YwS5J3effuHQJRZ5@kroah.com>
- <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
- <YygsEtxKz8dsEstc@kroah.com>
- <CAOesGMh5GHCONTQ9M1Ro7zW-hkL_1F7Xt=xRV0vYSfPY=7LYkQ@mail.gmail.com>
- <CAL_JsqK7auA8coB3DCqSDKw1ept_yQihVs-Me3bvU923os23xg@mail.gmail.com>
+        with ESMTP id S232361AbiI0MVT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 08:21:19 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006AD4DF0E
+        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 05:20:42 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso9305964wmq.4
+        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 05:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=T+ARObPy1nMVAT61WPcL0dvL1PZL65X6x/55j6kdsgc=;
+        b=sFaS3F7F3vuNqMrAh/Zi5jvAh9ijl3kCoru45JWtKFJ9Mau9yHsU9keVhOfbWCUfus
+         v5cB/hLj4eNzgkaSPK235aWJmhQX7fq9ogz5U901Hev6LBqAl/aAqBo1Xth3U4/BceJq
+         3bX3C32p5uisNrRq6G+eFUQMSaVGfA4SNgL08rMKAbKHOBfAa+lbkOtI21T1/u786Ov7
+         +UqDeSircO387aVyiCOTO1z/YBCBFzompYhR8diU4DaXdEzNACXROkh00qfr3/v8sScX
+         0NXIxp/IctPk4gjzWHjSYESpIWdNNTylceRHtly6+qrUxZkbewNj74czv+rplmOwG1I3
+         fBJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=T+ARObPy1nMVAT61WPcL0dvL1PZL65X6x/55j6kdsgc=;
+        b=DLc7OSTc3T/cbRfuD156VdeVnkl1gBwn//P81AvVkVskk1Si+sd6v+YaN2WvZNXP6v
+         g0bB4U8VXYauZXwrr0UcIGwvA1XpRFEus36y9jGkjlMCYm0OMxY/08GTJTHh9fSfBS9B
+         pe1fhnDjvSXVZNHsrPSr9sGNA54eK+ZExoTZKfwerbGFE9RBRnI8EIKm4pbtvvFGC6xi
+         v0XzfUZH9rGazm0ny5KgqXAJmUnarmQvSXuvlsoeQKuE1zZMqlK3NVP/zp8zIiY9qYMy
+         1yfamDJxnnFuQdJ9Huf53DVxIrOSmY9TPK2+x2LLiOVmuD6FfcFJZ6Cd4eKj4o51uEvu
+         qXag==
+X-Gm-Message-State: ACrzQf0M14UPA6856zwE58d2hrINHvLdFYu6x5ML4E2d4PMzz7nZdTdo
+        +z4pzI6pFGZJ/XmQx7vUAOSTig==
+X-Google-Smtp-Source: AMsMyM44pyU5NnK7fltYQjgzFEnzcSrdXIfn/dUPyZr94SqaIOrtdnp23P1NhpV4o5cfXXwUq/z2Bg==
+X-Received: by 2002:a05:600c:6003:b0:3b5:aef:d8d7 with SMTP id az3-20020a05600c600300b003b50aefd8d7mr2456240wmb.50.1664281241417;
+        Tue, 27 Sep 2022 05:20:41 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id s14-20020a5d6a8e000000b002252ec781f7sm1788723wru.8.2022.09.27.05.20.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 05:20:40 -0700 (PDT)
+Message-ID: <584a1927-0713-4a6d-a7a6-94bdda30dc0d@linaro.org>
+Date:   Tue, 27 Sep 2022 14:20:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqK7auA8coB3DCqSDKw1ept_yQihVs-Me3bvU923os23xg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 03/30] thermal/core: Add a generic
+ thermal_zone_set_trip() function
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+References: <20220926140604.4173723-1-daniel.lezcano@linaro.org>
+ <20220926140604.4173723-4-daniel.lezcano@linaro.org>
+ <CAJZ5v0hJ7Tq1pU1hSqswPF_+KZOt1jNKvmqTeF5=1npReqmA3A@mail.gmail.com>
+ <ee9ea160-ae77-112b-5302-74179e372387@linaro.org>
+ <CAJZ5v0gATxtX5RW0oHbhT_hjUoEC3V39tQpJi74eg8iXhrwZKg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gATxtX5RW0oHbhT_hjUoEC3V39tQpJi74eg8iXhrwZKg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 01:25:05PM -0500, Rob Herring wrote:
-> On Mon, Sep 19, 2022 at 5:56 PM Olof Johansson <olof@lixom.net> wrote:
-> >
-> > On Mon, Sep 19, 2022 at 1:44 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
-> > > > On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > > > >
-> > > > > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
-> > > > > > These patches are on top of driver-core-next.
-> > > > > >
-> > > > > > Even if stdout-path isn't set in DT, this patch should take console
-> > > > > > probe times back to how they were before the deferred_probe_timeout
-> > > > > > clean up series[1].
-> > > > >
-> > > > > Now dropped from my queue due to lack of a response to other reviewer's
-> > > > > questions.
-> > > >
-> > > > What happened to this patch? I have a 10 second timeout on console
-> > > > probe on my SiFive Unmatched, and I don't see this flag being set for
-> > > > the serial driver. In fact, I don't see it anywhere in-tree. I can't
-> > > > seem to locate another patchset from Saravana around this though, so
-> > > > I'm not sure where to look for a missing piece for the sifive serial
-> > > > driver.
-> > > >
-> > > > This is the second boot time regression (this one not fatal, unlike
-> > > > the Layerscape PCIe one) from the fw_devlink patchset.
-> > > >
-> > > > Greg, can you revert the whole set for 6.0, please? It's obviously
-> > > > nowhere near tested enough to go in and I expect we'll see a bunch of
-> > > > -stable fixups due to this if we let it remain in.
-> > >
-> > > What exactly is "the whole set"?  I have the default option fix queued
-> > > up and will send that to Linus later this week (am traveling back from
-> > > Plumbers still), but have not heard any problems about any other issues
-> > > at all other than your report.
-> >
-> > I stand corrected in this case, the issue on the Hifive Unmatched was
-> > a regression due to a PWM clock change -- I just sent a patch for that
-> > (serial driver fix).
-> >
-> > So it seems like as long as the fw_devlink.strict=1 patch is reverted,
-> > things are back to a working state here.
-> >
-> > I still struggle with how the fw_devlink patchset is expected to work
-> > though, since DT is expected to describe the hardware configuration,
-> > and it has no knowledge of whether there are drivers that will be
-> > bound to any referenced supplier devnodes. It's not going to work well
-> > to assume that they will always be bound, and to add 10 second
-> > timeouts for those cases isn't a good solution. Seems like the number
-> > of special cases will keep adding up.
+On 27/09/2022 12:38, Rafael J. Wysocki wrote:
+> On Tue, Sep 27, 2022 at 12:11 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 26/09/2022 21:25, Rafael J. Wysocki wrote:
+>>
+>> [ ... ]
+>>
+>>>> +       if ((t.temperature != trip->temperature) && tz->ops->set_trip_temp) {
+>>>
+>>> The inner parens are not needed here and below.
+>>>
+>>>> +
+>>>
+>>> And the extra empty line is not needed here (and below) too IMO.
+>>>
+>>>> +               ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
+>>>> +               if (ret)
+>>>> +                       goto out;
+>>>> +       }
+>>>
+>>
+>> Without the parens, the following happens:
+>>
+>>
+>> warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+>>    1229 |         if ((t.temperature != trip->temperature) &&
+>> tz->ops->set_trip_temp)
+>>         |         ^~
+>> note: ...this statement, but the latter is misleadingly indented as if
+>> it were guarded by the ‘if’
+>>    1231 |                 if (ret)
+>>         |                 ^~
 > 
-> Since the introduction of deferred probe, the kernel has always
-> assumed if there is a device described, then there is or will be a
-> driver for it. The result is you can't use new DTs (if they add
-> providers) with older kernels.
+> This is about indentation, though, so it looks like white space is
+> mangled somehow.
 > 
-> We've ended up with a timeout because no one has come up with a better
-> way to handle it. What the kernel needs is userspace saying "I'm done
-> loading modules", but it's debatable whether that's a good solution
-> too.
+> As a matter of correctness, the inner parens are not needed.
 
-In my opinion the deferred probe is a big hack and that is the root
-cause of the issues we have here and there. It has to be redesigned
-to be mathematically robust. It was an attempt by Andrzej Hajda to
-solve this [1].
+Oh, actually I did a confusion with the 'brackets', you meant:
 
-[1]: https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Deferred-Problem-Issues-With-Complex-Dependencies-Between-Devices-in-Linux-Kernel-Andrzej-Hajda-Samsung.pdf
+(t.temperature != trip->temperature && tz->ops->set_trip_temp)
+
+right ?
+
+>>>> +       if ((t.hysteresis != trip->hysteresis) && tz->ops->set_trip_hyst) {
+>>>> +
+>>>> +               ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
+>>>> +               if (ret)
+>>>> +                       goto out;
+>>>> +       }
+>>>> +
+>>>> +       if (((t.temperature != trip->temperature) ||
+>>>> +            (t.hysteresis != trip->hysteresis)) && tz->trips)
+>>>> +               tz->trips[trip_id] = *trip;
+>>>
+>>> I would write this as
+>>>
+>>> if (tz->trips && (t.temperature != trip->temperature || t.hysteresis
+>>> != trip->hysteresis))
+>>>           tz->trips[trip_id] = *trip;
+>>
+>> Ok, sure
+>>
+>>> But
+>>>
+>>> 1. Do we want to copy the trip type here too?
+>>
+>> The function thermal_zone_set_trip() is called from thermal_sysfs.c, it
+>> is the unique call site. However, I think it is a good idea to check the
+>> type of the trip point is not changed, even if it is not possible with
+>> the actual code.
+>>
+>>> 2. If tz->trips is set, do we still want to invoke ->set_trip_temp()
+>>> or ->set_trip_hyst() if they are present?
+>>
+>> No but there are bogus drivers setting the interrupt with these ops
+>> instead of using the set_trips ops (eg. [1][2][3]). So in order to keep
+>> those working ATM, I'm keeping them and when all the drivers will be
+>> changed, I'll wipe out the set_trip_* ops from everywhere.
+> 
+> Do those drivers set tz->trips?  If not, the tz->trips check can go
+> before the ops ones.
+
+Unfortunately some are doing that, like the tegra's soctherm driver
+
+
+>> [1] drivers/thermal/samsung/exynos_tmu.c
+>> [2] drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+>> [3] drivers/thermal/imx_thermal.c
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
