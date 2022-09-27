@@ -2,175 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC105EB8C9
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 05:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC6B5EB9BB
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 07:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiI0DaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 23:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
+        id S229540AbiI0Ffu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 01:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiI0D3T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 23:29:19 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10068.outbound.protection.outlook.com [40.107.1.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997EDF8FA6
-        for <linux-pm@vger.kernel.org>; Mon, 26 Sep 2022 20:27:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JsqoJnzYjK+XwWfKuxtb5JtWjLv12SPXOzPAoz1ZPdSi1u8QGl1vI452xF1vamhjXeEkjNUbUn8OlykYI/VE/BCPKWxWLYOXA3W4yQtn3pxZCIpu4qC3WUGsK5vDXhOoFf/dFwxJ8h8Hg30pB4jVIknT7dXMRxLnHuykkAqVHODPd/zeSKqLo1P6HtVxAezlikdJxA0Z/9dzZViJb8gE4kLMo4LDgqoM7AEfu9hHZO9tlvTiaIutEWLwPpj5kF/m1g2hGRJuupp9OPI+ftL2GWD5JByQZx2tS/nLqG50q5XhX27D8GgmxfYayd89aG7RCE7JRIPbMwZ3ZMp3Aa/Hxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A7AlyJffvMCSQHSEy3wLFFhn8em6npQVNx4izTypNMI=;
- b=jDWSnOGodmRzz7H1XSUTpMLMFLggcVC/k0OEIeS6rLiHkakUzY4i7efoDYw3ls1Z3Edop4yjZWcSGjL1d+nzbVAMfD0OUJjqfBo0bzWf1xYOFtgKazMvbCjzqky0x+Yc6bJnk16EXMd7bA0cGn22YQ9WZ433dKFj0IwJjc3qs/I+JzkeBWqLl9kUO2Ynd1YLNT8wL89zs+Mi1kULWc+4lYmaL+L2FjpPW+WasmgDe5jyGJboOpLItejgeqYs0RJyvnE8aHY0aLUaa2vfkWHEkLPc6KlsNh7v+PlS/tohlQvo6iXpBlQDNtp7NLqGa5gJyDWMalNltGAn22RJt4IBdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A7AlyJffvMCSQHSEy3wLFFhn8em6npQVNx4izTypNMI=;
- b=G4sv4RX0aZdlPH8S4CrmR1c4MBYyrC3flHCe8B7KEzAAoWtCHQ2POiIQHBYwWbksfDYOWJ9+QzL3iMJ3/O7HRtwoa0RhkxwHOIjM5x5BCL9rl7ukN8m6yKWvRkHX9FRwdZRcLz3BxGYcFe8yq7dMdwwuyJLJJpudDgNymUlmSIM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS1PR04MB9632.eurprd04.prod.outlook.com (2603:10a6:20b:477::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 03:27:02 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867%5]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 03:27:02 +0000
-Message-ID: <f00f97e1-5779-0700-f325-965a65ae1425@oss.nxp.com>
-Date:   Tue, 27 Sep 2022 11:26:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: Help: i.MX8MP AUDIOMIX BLK-CTRL CLK driver support
+        with ESMTP id S229728AbiI0Ffs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 01:35:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B1575CE0;
+        Mon, 26 Sep 2022 22:35:47 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28R4FDTZ003052;
+        Tue, 27 Sep 2022 05:35:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=8rSZifAt0/8sDAV2os4E9EEjO3mjK/L6/fG0BOQhOTQ=;
+ b=Pmc7VYNQrBh3hIv0xQxgmsV5IMqPyh6pmbv39rBr9h9t0XkdOiY9eB6IfLGQ5vJq36hz
+ RzxrqvtEZXmJusnG5TifJLLWQICgHGqs/UCuGjOFAVzv1n3/KZB78XE8kqIoBG7d/hXe
+ w8ZQh2Gzk6aknyyEhpfIxkg35Oy/T6kNcudGoMBXSyDfOHfwxDRKPr7CO+GjFBKyoP82
+ nS4r+Q7OYkN1ROkOFZeIdmkwU0YXT3TLCdDTRhuAYBGfqdddGV0m9u7SDSuuTKL7iSgD
+ 84rDBPje5cMsMAGSaF8s1V+ghw62vdfUdv7PQhV3YNYbngrl6pll/oaDPMnDI1E1J5pw oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jut03hupv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 05:35:21 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28R5Xn0P016843;
+        Tue, 27 Sep 2022 05:35:20 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jut03hunt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 05:35:20 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28R5MEq1005843;
+        Tue, 27 Sep 2022 05:35:18 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3jssh9bbd5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 05:35:18 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28R5ZFhC8585752
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Sep 2022 05:35:16 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE4F111C050;
+        Tue, 27 Sep 2022 05:35:15 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3941D11C04C;
+        Tue, 27 Sep 2022 05:35:15 +0000 (GMT)
+Received: from [9.171.17.43] (unknown [9.171.17.43])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Sep 2022 05:35:15 +0000 (GMT)
+Message-ID: <985463a3-5e33-95d2-b2bb-824707a2f819@linux.ibm.com>
+Date:   Tue, 27 Sep 2022 07:35:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
 Content-Language: en-US
-To:     Marek Vasut <marex@denx.de>, abelvesa@kernel.org,
-        Lucas Stach <l.stach@pengutronix.de>, ulf.hansson@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        aisheng.dong@nxp.com, kernel@pengutronix.de,
-        Shawn Guo <shawnguo@kernel.org>, s.hauer@pengutronix.de,
-        festevam@gmail.com, Stephen Boyd <sboyd@kernel.org>
-References: <d23cacb6-4914-7eba-ed6e-c8490b9b771a@oss.nxp.com>
- <09bb716b-1f6b-c422-8469-fd2a0ac9f946@denx.de>
-From:   Peng Fan <peng.fan@oss.nxp.com>
-In-Reply-To: <09bb716b-1f6b-c422-8469-fd2a0ac9f946@denx.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
+        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
+        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
+        Marc Hartmayer <mhartmay@linux.ibm.com>,
+        Amit Shah <amit@kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+References: <20220923072104.2013212-1-borntraeger@linux.ibm.com>
+ <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
+ <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
+ <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
+ <39dfc425-deff-2469-7bcb-4a0e177b31d1@linux.ibm.com>
+ <YzGhUZJKV3pKJL3Z@hirez.programming.kicks-ass.net>
+ <66463973-923f-624d-3041-72ce76147b3e@linux.ibm.com>
+ <YzGrJSLXpocpGIha@hirez.programming.kicks-ass.net>
+ <9ec643f3-b935-0119-d8bc-1fbe46c36356@linux.ibm.com>
+ <YzHqNiRj2Q5vxdCV@hirez.programming.kicks-ass.net>
+ <YzHt2nG0Hb7xLlNj@hirez.programming.kicks-ass.net>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <YzHt2nG0Hb7xLlNj@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI1PR02CA0005.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::13) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS1PR04MB9632:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ab4acb9-a3a4-43ec-1fe1-08daa03824a7
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: u+/V/y9t6aqCABLogDA76oPvsIHP+IfH1qivKuWKZoPOV8phD1mVOEXcD/BgFXIo0h+l+q1DwfRV4bGn7uhKlujXOuOx9gr35EvWYVQl2U1RlRcQNZte5g2U0hSOfouvqqw528fK65O0OARDw7Mr5ZeWrYXIayi6KS4QTLmSnDf17hYrp3Ow9NB8IWH1IeG3ZL+tJZ4iBy19ea+i0Yb1IpUf014YCXJYLd7bbnnRJ9PavIfp8WQtWY+bBbhq2J8nvcCY5FprYKltYms1ruZh5IEIw6Z12qam4nR0a1RIjvxZH4o+VJ2f6lG7Y5sIARp751nL9RXK9C5Oj5US3FxNERMUNe9dFN0PAc8+hiIHxhRltwtKpNw4dhXI4xxs/QrdUDuouHchF0YlLVfpuHzIjSEddf/lsnSFlPnG+mhdsJCczuxYxo6nat29apu162zocK/zzBwzj+/Yz2nsCPLFSr19Qv3LeQfGWLB2ztFwoz7KOb3c2CO8apvDmS3QErK5WbvjQfc/Z+Cn95rN1YD5Ees0XC+AY5i/dJcHVIYMogbnTYg2PMOI6fRQ9CzpTip72G07HIMnlnQE5PxmtK5F4BQ3HhzUpipFdu+O6conq3+bAnacSLNyx7c8l/+/i5nOQYXi9KJyZkM6jPIJd6p4Lv9Ve0Yw6EY/GJ21I22F26tt5+02I/mGXePS78piRiww1plWwens0pNJxZWy6CwlJs8z3p+OxIvuH/HORyWy4MRoSBS+fzey0Vpmq2+zKVKVsGEofY07a8HOgHQc59AfCZttCWqf2ocUsSHq+fF8NdwYtbnjqWnQMULe1iKhigjCL+59dBG7jI1n2BoASiT6njE8aOJAod4xI0c9qDTEDRC+D82IRiUEmYhzLhD/z8VL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(366004)(376002)(39860400002)(451199015)(6486002)(966005)(478600001)(31686004)(66476007)(66556008)(186003)(8676002)(53546011)(52116002)(66946007)(6512007)(2906002)(7416002)(921005)(5660300002)(6506007)(26005)(316002)(110136005)(6666004)(8936002)(83380400001)(86362001)(44832011)(2616005)(31696002)(38350700002)(41300700001)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MWpxOHpuU3FwcmV1R2QxMEVZSXZPazRtRjhXRndlSlBHYkRwYWZTRWVzejdO?=
- =?utf-8?B?L3R1dFFHZWx2UlhUNHdUNllBMmZMQnRvV2xucWYwR2h4emF4YjVlak1GUk5q?=
- =?utf-8?B?K2dHTjFhZG5TTVpVc2ptbUxSajd6aU80QmRnajJuWU4wMDFMZGlOc0lzTkIx?=
- =?utf-8?B?dmtyWnJpdEJ1WG14SjRRV3NLZzM2czZYN2ZNMXdRNDMrQXlGeDI5eXExK3By?=
- =?utf-8?B?MytGT0Fpa3UrUmNyaHM0d092VGdRWEs3TGhzSXhBSmNrYlFQaWlFZEZ3TmlH?=
- =?utf-8?B?ZS95N1NBUmFvdG8xSlhXdFRwc3FuVFRYOVRBODlmQ3AyeDQ2WURrSWdwcGJT?=
- =?utf-8?B?am8xbFEvSHdiNGt6bDdOemtsemRQdkxuNEt0STYxOUNwQU41ajNjUUhRZGM1?=
- =?utf-8?B?czhpRGk3eDRJRWtUZVNMQkVlK2ZUSnM3R2d0UnZlRktWaFZiaitUUis3YjlV?=
- =?utf-8?B?VmFodCtPM1FialRCY0Q1R0dQWlhOYitCZEY3TFpNT0VHc0NyQWRIbVBWYlFz?=
- =?utf-8?B?UXBuaWhkZGFMcnA0TGNLNW83bGpXa1Q3WnRCNWw5Y0xrdUxjRzJrNVZIbkh3?=
- =?utf-8?B?TTFuMFJBN2djNk9zQ1oxNm9iK0Q3aExoT1lyK09OMTVLalpLQjdSQVU5VjNv?=
- =?utf-8?B?YzZhMjB3eE5WSG16QnduNkprdTlwL3VmU1RncDZNL2YxSUt5cENqSzZObkxU?=
- =?utf-8?B?akhUK2hmRTBUQjRSckh4WDVKTUtIbm4yUlBCYVBVSWl1MDI1d3E4Skl0cERV?=
- =?utf-8?B?NjYrQ2ZzcjAyWW1JamJtSU0rUUg0ZnpMK2V4WUk3TEZwbk1Dc1dxL05IS0kw?=
- =?utf-8?B?ZVNQQlFPdDdiREI2TEVCZEtoMGdIcmlDMW04eVhNYnQzZkdRcUdJdXZ2K0JJ?=
- =?utf-8?B?ZWwxVFcydGdqZVVnTEpCL01FSGZ5VHJHSFpEb2s0UjMvRk5iRUJlU0UwZTho?=
- =?utf-8?B?eWJjN1dtUVpaSGd0RzlMRlVFRnR2aDN6U3lQdkRySStCRlpkb0VuWWlWWGZ4?=
- =?utf-8?B?d2cybTMrMzUxYktYU285SUxnQWVHSUFxdzFzeWVxSkFtOWl5elh6VTJCUjNI?=
- =?utf-8?B?SDUrK1FYUGZQMlJZMEpjanUxbHVFVEFtWjY5dWxHSjlWbUdIMk5YakdENENL?=
- =?utf-8?B?YnpGZjlqM25QeXJ4Rllxb1dRYUJwbkdHTFYxbytFWkFSZEdya0FFUldSOE1T?=
- =?utf-8?B?aEJ6bFdSU2llekJLWnF0alRPZDNrcm50VzhWTzVIRjBTUTBJeDVFMzNBUHpS?=
- =?utf-8?B?ZTNkZ0FkZFZRQjJxQW1kT0Q1b3dkMXZ0L0JPNkVDSTUvVnkrMHo5d1dIbktR?=
- =?utf-8?B?K1EvZWxwOHV3eC9RTDVRZjlKcTVmaGhXZGI3RkVpUlh3Nkd4dktYOWxJSkVj?=
- =?utf-8?B?ZXc2N0Y1YUlxYjhBdU9CL3E4azh2OWNVcThsdWtKUXAxOGQxMnQ2SGJDWHZJ?=
- =?utf-8?B?SlQvcm5xb1BnQ0IwY2RQVWcwWGljWW5yODNCYUJYYURsZytCMU5tZklzdWNI?=
- =?utf-8?B?Rmo2Y1Q3VFE1V3VOR1JpL2Fnb0ZQWFZJenc5TURXMzlTK1J2blMyWlBBSkxw?=
- =?utf-8?B?c2JLNExWZGl2ZU03YUlOL3U4NEc5V0hNRFBJUXZ1WjBtaGwxQUgvamJlR2F3?=
- =?utf-8?B?QStqVS8yV0lpOFE0T3NSaSt5d252bjM3aFkyREJnMkwvS0pNZHdIN2Uwc2Qy?=
- =?utf-8?B?ZjlCOVM2SisvazJmekwyYzRDYVZyOHNyTzk0RlUwNU5SdXNLUVI5cVgyeHBy?=
- =?utf-8?B?bmxnY3JjbXhzZVFJWmUvdHpJZnJkZXp0RDdyRXgwK1ZVWkRJNlRhbFNuWnNX?=
- =?utf-8?B?d3J6UVN5RHJsNjlJL2dFM25hM3EyNjN1ZDNBSTNKQUFBK3lkV2pYYmpRTTNz?=
- =?utf-8?B?dk0vc2xyYmxyZzdPdHZXc295ZWFQdDZYMlczWEtJZGFxTHFERWNoZ0s0Z3Z3?=
- =?utf-8?B?RVFWWWUrcUhuNUtVTE9DUkliOEhBSWo0ZE00WmNJOTM2NCt5MmRSVEYzampj?=
- =?utf-8?B?TFJDUEtpZmQrOGFlU0V2SUJWbnd5OGFnNHhYaFB5ZGJ4Z0FWWGVSc1RIVTk4?=
- =?utf-8?B?NTBUcEIrNFZXYjJRaERHMDJZYkN5dlRadGlIanBNeFNkbWZUeFdLd1FuMXB3?=
- =?utf-8?Q?KLW7h5JM63OssXthjp4ywgZzP?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ab4acb9-a3a4-43ec-1fe1-08daa03824a7
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 03:27:02.4281
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tLrshCmSeJESD3JB/uBLXsEQORtep58LoE/+GSEWFNXGlLcQnAnY3asWmaS6ZuOx5vM9bcLjkgwWFqwhiXVx4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9632
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Mi6-W2vGd5VnXJkrLCPMIWSPcqU47Tpg
+X-Proofpoint-GUID: Pe_cc4-P2ayaCtxwviYRD4z4w247SsYZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_11,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0 suspectscore=0
+ impostorscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209270031
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Marek,
 
-On 9/26/2022 8:04 AM, Marek Vasut wrote:
-> On 9/23/22 05:41, Peng Fan wrote:
->> Hi All,
-> 
-> Hi,
-> 
->> I would start a discussion about the A/B B/A lock issue when make 
->> audiomix blk ctrl function as clk provider.
->>
->> I not have good idea on this, hope you have any suggestions.
->>
->> major issue is: the blk ctrl clk has a power domain supplier
->> The power domain supplier also use clk API to prepare_enable clks.
->> The blk ctrl clk driver has runtime pm enabled.
->>
->> The NXP downstream:
->> The dts:
->> https://github.com/nxp-imx/linux-imx/blob/lf-5.15.y/arch/arm64/boot/dts/freescale/imx8mp.dtsi#L1872
->>
->> The driver:
->> https://github.com/nxp-imx/linux-imx/blob/lf-5.15.y/drivers/clk/imx/clk-imx8mp.c
->> https://github.com/nxp-imx/linux-imx/blob/lf-5.15.y/drivers/clk/imx/clk-blk-ctrl.c
->>
->> Note: The following log was reproduced with NXP downstream. For upstream
->> I think we have similar issue if we still take audiomix blk ctrl as clk
->> driver. Because the gpcv2 also use clk prepare enable API.
->> 1. deadlock 1:
->> Callchain after enable some lock debug:
->> clk_ignore_unused will use lock seq: take prepare lock, take blk-ctrl 
->> parent power domain genpd lock
->> genpd_power_off_work_fun will use lock seq: take the power domain 
->> genpd lock, take prepare lock.
-> 
-> There is also this driver which does not suffer from the problem, at 
-> least I didn't trigger it while using it for months:
-> 
-> https://patchwork.kernel.org/project/linux-clk/patch/20220625013235.710346-3-marex@denx.de/
 
-yes, I see that, I thought Abel picked up, but seems still not land in.
-I'll use your patches and need apply to nxp 5.15 tree for some test.
+Am 26.09.22 um 20:22 schrieb Peter Zijlstra:
+> On Mon, Sep 26, 2022 at 08:06:46PM +0200, Peter Zijlstra wrote:
+> 
+>> Let me go git-grep some to see if there's more similar fail.
+> 
+> I've ended up with the below...
 
-Thanks,
-Peng.
+Tested-by: Christian Borntraeger <borntraeger@de.ibm.com>
+
+Kind of scary that nobody else has reported any regression. I guess the freezable variant is just not used widely.
+> 
+> ---
+>   include/linux/wait.h | 2 +-
+>   kernel/hung_task.c   | 8 ++++++--
+>   kernel/sched/core.c  | 2 +-
+>   3 files changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/wait.h b/include/linux/wait.h
+> index 14ad8a0e9fac..7f5a51aae0a7 100644
+> --- a/include/linux/wait.h
+> +++ b/include/linux/wait.h
+> @@ -281,7 +281,7 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
+>   
+>   #define ___wait_is_interruptible(state)						\
+>   	(!__builtin_constant_p(state) ||					\
+> -		state == TASK_INTERRUPTIBLE || state == TASK_KILLABLE)		\
+> +	 (state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)))
+>   
+>   extern void init_wait_entry(struct wait_queue_entry *wq_entry, int flags);
+>   
+> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+> index f1321c03c32a..4a8a713fd67b 100644
+> --- a/kernel/hung_task.c
+> +++ b/kernel/hung_task.c
+> @@ -191,6 +191,8 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+>   	hung_task_show_lock = false;
+>   	rcu_read_lock();
+>   	for_each_process_thread(g, t) {
+> +		unsigned int state;
+> +
+>   		if (!max_count--)
+>   			goto unlock;
+>   		if (time_after(jiffies, last_break + HUNG_TASK_LOCK_BREAK)) {
+> @@ -198,8 +200,10 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+>   				goto unlock;
+>   			last_break = jiffies;
+>   		}
+> -		/* use "==" to skip the TASK_KILLABLE tasks waiting on NFS */
+> -		if (READ_ONCE(t->__state) == TASK_UNINTERRUPTIBLE)
+> +		/* skip the TASK_KILLABLE tasks -- these can be killed */
+> +		state == READ_ONCE(t->__state);
+> +		if ((state & TASK_UNINTERRUPTIBLE) &&
+> +		    !(state & TASK_WAKEKILL))
+>   			check_hung_task(t, timeout);
+>   	}
+>    unlock:
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 1095917ed048..12ee5b98e2c4 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -8885,7 +8885,7 @@ state_filter_match(unsigned long state_filter, struct task_struct *p)
+>   	 * When looking for TASK_UNINTERRUPTIBLE skip TASK_IDLE (allows
+>   	 * TASK_KILLABLE).
+>   	 */
+> -	if (state_filter == TASK_UNINTERRUPTIBLE && state == TASK_IDLE)
+> +	if (state_filter == TASK_UNINTERRUPTIBLE && state & TASK_NOLOAD)
+>   		return false;
+>   
+>   	return true;
