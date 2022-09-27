@@ -2,166 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B2C5EC6A6
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 16:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372B65EC6C0
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 16:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbiI0Ojk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 10:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
+        id S231897AbiI0Opp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 10:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbiI0OjQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 10:39:16 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B601D5FAF9
-        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 07:35:23 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id h3so11187439lja.1
-        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 07:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/clpfezaOe8mLPrQfl3pX+kpaqNYyTiLhiE5Y1A/Axg=;
-        b=ZyxJ0VAXz3Yx6wVEKSkMktMdGFJ+xOEWNqSzclwgt627nnfNxbSWBkdUOdDVZIdPeO
-         ztKr1AfIi1u6h4wPXg0FlTTwg/AM2jMJONWfS9196v7E7IgYRPzJ/YrgMBsmiV4AGi9E
-         BZtY7qdtZg80u0PwB1t3FI+gH9HiiKMDR+3fhvMlpQyVAM74KbmRPelfIgKkO5/eRmIe
-         WQf37Y2jfiKxOBPKiXsa/rTdHymfI3YNyXBi8U3BLwu6w0/Q9bF0gsmUdr9B01p8PSGW
-         sbBayxucHNKPWzlzFqQi0sB/QK0yX49GQwHuULeeybmD+opaRa0BiJ7ZQ7WIosw7tFch
-         UDSQ==
+        with ESMTP id S231993AbiI0Oo7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 10:44:59 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB44B3ED73;
+        Tue, 27 Sep 2022 07:39:45 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id r22-20020a9d7516000000b00659ef017e34so6421590otk.13;
+        Tue, 27 Sep 2022 07:39:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=/clpfezaOe8mLPrQfl3pX+kpaqNYyTiLhiE5Y1A/Axg=;
-        b=MgANOX1gcXbucpspBnt748mBgaeMoYlK5fccCgOXjm3GtNB9vzuorHb6PW78YHuqrW
-         04YRm5gsSfbmvmdfSQMGoSUpZmrvpdISSkQeevH0e5A3TgTk8sMWiE+Pe1GCgXgEwel7
-         oeaU1SxTG/PwC2kL+h1O0xioKm8iXquuIsOpaV2ZeP50Iwz+8EMmYWwVvx/dHPXkqF+Z
-         36Ma1iDLbedCWZLG2YyOxM8ouUyh+roYr3kPlBZ7rsGX5xw+erJFvI+PeER0RPqUDz65
-         hem8Daqoe+IcS6453zGX4mHowpzraPAkf2zxqDI3h8TEvs2ZIP6zCU37Hg8lWWEIyns6
-         fD7w==
-X-Gm-Message-State: ACrzQf3Ry7tIYzqX/3QH3mVQDCOpcXLQ/RGpLoaX6WBOEr5CLPBwpJG2
-        9EE2ezldCth1WHQSmlqNJDlu/A==
-X-Google-Smtp-Source: AMsMyM6PT4U1pTFDQtF2QivAJie+RqkxW7ZZSiD2PM7A3oNR4iAzYYKKhCpfzt7mx7GPKsQjtnSovA==
-X-Received: by 2002:a05:651c:23a1:b0:26d:9eb6:7b60 with SMTP id bk33-20020a05651c23a100b0026d9eb67b60mr3329748ljb.208.1664289321468;
-        Tue, 27 Sep 2022 07:35:21 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k4-20020a05651239c400b0048b143c09c2sm178450lfu.259.2022.09.27.07.35.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 07:35:20 -0700 (PDT)
-Message-ID: <5e269e1a-8819-a326-90e0-a020cb2c0d73@linaro.org>
-Date:   Tue, 27 Sep 2022 17:35:19 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v5 00/30] Rework the trip points creation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org
-References: <20220927143239.376737-1-daniel.lezcano@linaro.org>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220927143239.376737-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        bh=Wv/lnq7etpZZ5IqM9sVONW3uciXaLX/bTWFj3PI4Hqs=;
+        b=Otk7yvZgaw1WEcE5RLzJGG8khErxaAeRbgpgxezhBpnrxoN9N/+drjcnGIIuLEId7u
+         BVwo4p38YjN+DqMOf/2clqJ+6tvdJcJDpbqL1X1abNPBprNY2tinYnfR8eT8ds7/xIyr
+         WlwfsfsjzfOygiEsZmXvABhV4uJxeYXQ6mUwlQ6NvAzbklMtavN9JEiEro4Yy7fMFF/H
+         a+AxjyemXt3c/4N1EGC5PfBnZjg+SBJEpL9HYPmikh9ox9koFJphwysIJ+zJbi7NXnic
+         GRqmE9kUxPyBwJ0ihuxXmesW7ePPmuo1FQqpp7rUqvPbsOmc1/MDqWhkNz8hKRXv8WOX
+         k+Yg==
+X-Gm-Message-State: ACrzQf2Z6QKAVNox60zs8EXKB5dLmJZZcor0TULimnrb9PVka+fYDWOx
+        rH0h8Hl7YvQouxZVgox26A==
+X-Google-Smtp-Source: AMsMyM6fjL9ALpn8MexY1CA6Xq24UB81fooaiMYfvSnydXMdkXNLt9Fetdr7y+XHi5xu6r+dcYwV+Q==
+X-Received: by 2002:a05:6830:3985:b0:65c:34f7:6bb8 with SMTP id bs5-20020a056830398500b0065c34f76bb8mr2946708otb.122.1664289562323;
+        Tue, 27 Sep 2022 07:39:22 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p10-20020a0568708a0a00b0012d939eb0bfsm849916oaq.34.2022.09.27.07.39.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 07:39:21 -0700 (PDT)
+Received: (nullmailer pid 943213 invoked by uid 1000);
+        Tue, 27 Sep 2022 14:39:18 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Zhang Rui <rui.zhang@intel.com>
+In-Reply-To: <20220927013951.12833-2-zhuyinbo@loongson.cn>
+References: <20220927013951.12833-1-zhuyinbo@loongson.cn> <20220927013951.12833-2-zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: add loongson2 thermal binding
+Date:   Tue, 27 Sep 2022 09:39:18 -0500
+Message-Id: <1664289558.346744.943212.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Tue, 27 Sep 2022 09:39:50 +0800, Yinbo Zhu wrote:
+> Add the loongson2 thermal binding with DT schema format using
+> json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v3:
+> 		1. Remove the sensor id.
+> 		2. Remove the interrupt-parent in thermal required property.
+> 		3. Update the thermal binding file name.
+> 		4. Fixup the commit log information.
+> 
+>  .../thermal/loongson,loongson2-thermal.yaml   | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/loongson,loongson2-thermal.yaml
+> 
 
-On 27/09/2022 17:32, Daniel Lezcano wrote:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-[skipped]
+yamllint warnings/errors:
 
->   drivers/net/ethernet/chelsio/cxgb4/cxgb4.h    |   2 -
->   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  41 +----
->   drivers/platform/x86/acerhdf.c                |  73 +++-----
->   drivers/thermal/armada_thermal.c              |  39 ++---
->   drivers/thermal/broadcom/bcm2835_thermal.c    |   8 +-
->   drivers/thermal/da9062-thermal.c              |  52 +-----
->   drivers/thermal/gov_bang_bang.c               |  39 +++--
->   drivers/thermal/gov_fair_share.c              |  18 +-
->   drivers/thermal/gov_power_allocator.c         |  51 +++---
->   drivers/thermal/gov_step_wise.c               |  22 ++-
->   drivers/thermal/hisi_thermal.c                |  11 +-
->   drivers/thermal/imx_thermal.c                 |  72 +++-----
->   .../int340x_thermal/int340x_thermal_zone.c    |  33 ++--
->   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
->   .../processor_thermal_device.c                |  10 +-
->   drivers/thermal/intel/x86_pkg_temp_thermal.c  | 120 +++++++------
->   drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  39 ++---
->   drivers/thermal/rcar_gen3_thermal.c           |   2 +-
->   drivers/thermal/rcar_thermal.c                |  53 +-----
->   drivers/thermal/samsung/exynos_tmu.c          |  57 +++----
->   drivers/thermal/st/st_thermal.c               |  47 +----
->   drivers/thermal/tegra/soctherm.c              |  33 ++--
->   drivers/thermal/tegra/tegra30-tsensor.c       |  17 +-
->   drivers/thermal/thermal_core.c                | 161 +++++++++++++++---
->   drivers/thermal/thermal_core.h                |  24 +--
->   drivers/thermal/thermal_helpers.c             |  28 +--
->   drivers/thermal/thermal_netlink.c             |  21 +--
->   drivers/thermal/thermal_of.c                  | 116 -------------
->   drivers/thermal/thermal_sysfs.c               | 133 +++++----------
->   drivers/thermal/ti-soc-thermal/ti-thermal.h   |  15 --
->   drivers/thermal/uniphier_thermal.c            |  27 ++-
->   include/linux/thermal.h                       |  10 ++
->   32 files changed, 559 insertions(+), 819 deletions(-)
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/thermal/loongson,loongson2-thermal.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/thermal/loongson,loongson2-thermal.yaml#
+Error: Documentation/devicetree/bindings/thermal/loongson,loongson2-thermal.example.dts:25.29-30 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/thermal/loongson,loongson2-thermal.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1420: dt_binding_check] Error 2
 
+doc reference errors (make refcheckdocs):
 
-Could you please cc mailing lists on all patches? It's really hard to 
-determine whether qcom changes are correct without seeing other patches.
+See https://patchwork.ozlabs.org/patch/
 
--- 
-With best wishes
-Dmitry
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
