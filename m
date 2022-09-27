@@ -2,94 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0BC5EB4FB
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 01:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607465EB704
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 03:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiIZXCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Sep 2022 19:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
+        id S229699AbiI0BlU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Sep 2022 21:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiIZXCl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 19:02:41 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1629A720A;
-        Mon, 26 Sep 2022 16:02:39 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso5388421otb.6;
-        Mon, 26 Sep 2022 16:02:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=TmS5+X4pLYVYH89RFG+N2VbfzYq4t5hSiusvv4Jlq5I=;
-        b=QR7l/2MmHkaT0SUzKijCLrD9ngRyW/htGUD1Kg5lZGTZFkYoSP2GA83+nxcHeWgHYF
-         SMVCVsTtqC232kJGq6aAwBzKsUQ6U8UVxs+XpdCtvFF9OQeu1d4szJG5zZtXXDmUlmGv
-         j0vsgqZPU2jZX8wsYbxXDwRsNqH2rK8xodHPS/JKJ2po0FyR2QSM9/t+zfLKHL9h1iQl
-         /8YtD5LEJTE6ZNg/C10o5K2LUAZHKWR+NpuNz06wUemdh2CYLminvddi+U5DQdOdOhXE
-         PKn87KOzC5kAjh1Z4NMSnGFiJ0mLLE7AuSOy9AQHLGvomVfFQlHwp5JOfAGQMNi+F/Ub
-         rBsg==
-X-Gm-Message-State: ACrzQf3BnBFD3cfDz4ay+2uHEvTQwliyuii1GLjamhkeji3kQ5QSPNea
-        vjm/leSDuQrxs5UcV0LkIA==
-X-Google-Smtp-Source: AMsMyM64gmuEGrnM1z+5TQNLgzvx4Cn9fhx9QC2j1LdnTPhHdfqmycio7t54+hj8gvjrM9lGXLXWAg==
-X-Received: by 2002:a05:6830:13d0:b0:655:cad8:e57 with SMTP id e16-20020a05683013d000b00655cad80e57mr11115841otq.156.1664233358887;
-        Mon, 26 Sep 2022 16:02:38 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k67-20020a9d19c9000000b006396521c804sm8382105otk.55.2022.09.26.16.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 16:02:38 -0700 (PDT)
-Received: (nullmailer pid 3128731 invoked by uid 1000);
-        Mon, 26 Sep 2022 23:02:37 -0000
-Date:   Mon, 26 Sep 2022 18:02:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org,
+        with ESMTP id S229684AbiI0BlU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Sep 2022 21:41:20 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A616D7C765;
+        Mon, 26 Sep 2022 18:41:17 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxT+BqVDJjmYUiAA--.64486S2;
+        Tue, 27 Sep 2022 09:40:00 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: power: reset: restart-handler: add
- common schema
-Message-ID: <20220926230237.GA3128685-robh@kernel.org>
-References: <20220923203603.515714-1-krzysztof.kozlowski@linaro.org>
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v3 1/3] MAINTAINERS: add maintainer for thermal driver for loongson2 SoCs
+Date:   Tue, 27 Sep 2022 09:39:49 +0800
+Message-Id: <20220927013951.12833-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923203603.515714-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxT+BqVDJjmYUiAA--.64486S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1kZry7Cw47Ary8KrW3ZFb_yoWDXrX_CF
+        1Iqw4xZa18AF1ak3ykZFyxJ343Z397t3W5A3Zrt397A34Dta43AFyDAwnxuw18Cr45uFyf
+        GaykGr1I9r12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbVkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 23 Sep 2022 22:36:03 +0200, Krzysztof Kozlowski wrote:
-> Add common schema for restart and shutdown handlers, so they all use
-> same meaning of "priority" field.  The Linux drivers already have this
-> property and some systems want to customize it per-board in DTS.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Use double ':'
-> 
-> v1 was marked as changes-requested in Rob's patchwork, but I think there
-> was not actual consensus on any other changes to make.
-> 
-> v1:
-> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220907123630.57383-1-krzysztof.kozlowski@linaro.org/
-> 
-> See also:
-> https://lore.kernel.org/all/8fe93da3-f768-16ae-7025-1cfa97a42b27@linaro.org/
-> https://lore.kernel.org/all/20220831081715.14673-1-pali@kernel.org/
-> ---
->  .../bindings/power/reset/gpio-restart.yaml    | 13 ++------
->  .../bindings/power/reset/restart-handler.yaml | 30 +++++++++++++++++++
->  2 files changed, 33 insertions(+), 10 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> 
+Add zhanghongchen and myself as maintainer of the loongson2 SoC
+series thermal driver.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v3:
+		1. Update the binding file name.
+
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..fe7890508f3c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/thermal/loongson,loongson2-thermal.yaml
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+-- 
+2.31.1
+
