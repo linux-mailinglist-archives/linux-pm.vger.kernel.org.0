@@ -2,235 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF44D5EC0A4
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 13:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5095EC0E3
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 13:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbiI0LLG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 07:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S231815AbiI0LRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 07:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiI0LKl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 07:10:41 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D17B551A0C;
-        Tue, 27 Sep 2022 04:08:31 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOKo2TJjNbsiAA--.63954S2;
-        Tue, 27 Sep 2022 19:08:25 +0800 (CST)
-Subject: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to
- json-schema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        =?UTF-8?B?5YiY5L2p5a6d?= <liupeibao@loongson.cn>,
-        zhuyinbo@loongson.cn, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        =?UTF-8?B?5YiY5L2p5a6d?= <liupeibao@loongson.cn>
-References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
- <20220921015605.17078-2-zhuyinbo@loongson.cn>
- <fb901889-d769-ba56-d4cb-2d9d8b50f74f@linaro.org>
- <28a78a10.a7dd.1835f5aaf90.Coremail.zhuyinbo@loongson.cn>
- <a44244f2-fb96-0483-b529-d0f2b0b7e5d8@linaro.org>
- <4febe7e4.a96c.18362d997e3.Coremail.zhuyinbo@loongson.cn>
- <20220924174258.GA1011284-robh@kernel.org>
- <4ce14e3c.bf79.18377f44118.Coremail.zhuyinbo@loongson.cn>
- <1f3e153b-da8a-43fa-162f-9bea2ed3ef78@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <08dd2ab1-552f-d139-ce01-5d82f6c05a6a@loongson.cn>
-Date:   Tue, 27 Sep 2022 19:08:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S231448AbiI0LR1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 07:17:27 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693EA647E4;
+        Tue, 27 Sep 2022 04:16:44 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id r20so5739559qtn.12;
+        Tue, 27 Sep 2022 04:16:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FUKUzwHmRfNLiY0NPzyc3tn/CTu6dcDHzrfQc+oavds=;
+        b=P2vwIehLml7xk7K4P9Br5smkdU2acViSAl+noQlc+mmgw89+/DjLCTomPRlzgu0M3Z
+         YMPROhrZq6XO8IoRUvhZ7a9yp34foYGmrM+K6pILJvRgn2bt1rAaEemInVbq6OLkPJrE
+         8EB4gPPnIchZ/2q2MB2wbDk9JTYbw1Z8Llkr4F6h4UjL8ioSvZpkuc2c8YPMD0+NmhkI
+         KEDhM2H60N9lUOTtQTFcZFxvaU+yYjhCMJFoZR6BeYxhQGlD6DCd+E2KRyF8gngbVtHR
+         y36LRFTqOtvMPwzYKzSMJubrm9O6PKQ4gyu7gR876Pp+YtnPcYQvJ1KAVQJUs3VVMMal
+         7onA==
+X-Gm-Message-State: ACrzQf2IhiMVZB3Kn5URJs/3KO5kxRBBHVhaUB6IrBUbSN97s28esMJ0
+        RYVjhZlky1NWcRQTYKkbXIKAXGlAYgbdhcD7F4JBiB6q
+X-Google-Smtp-Source: AMsMyM6HMoSLOX4Lvk9BLQik33C2AjzXW7h8RVkQaDoddt90sH7XB+BEPu0c759hiIS9Jv8KUBvOO+ji7/0ajjVuDpQ=
+X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
+ hj10-20020a05622a620a00b0035cbf9e8748mr22068048qtb.494.1664277402949; Tue, 27
+ Sep 2022 04:16:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1f3e153b-da8a-43fa-162f-9bea2ed3ef78@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8DxBOKo2TJjNbsiAA--.63954S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtF4UGF4UtrWrJw4rAry5Jwb_yoWfJw4kpF
-        47CayUCr4kJr1UZw1xK3WUCFn0q3s8tr4DXrnxGw18Jryqqw13XF42qr15uryxGr1jqFWU
-        ZrWvgw12gFyDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220923124904.1373936-1-victor.liu@nxp.com> <CAPDyKFqdHX=o4V4K8GdCr4wQ5sjr=JMG6CFAy1849=CtfoSgRQ@mail.gmail.com>
+ <75366bfac9fcd4f8c35309193705f0277a164ae4.camel@nxp.com> <CAPDyKFr0XjrU_udKoUKQ_q8RWaUkyqL+8fV-7s1CTMqi7u3-Rg@mail.gmail.com>
+ <1b1aa20aa3b8f8255fa05d61c7fa094650dee319.camel@nxp.com>
+In-Reply-To: <1b1aa20aa3b8f8255fa05d61c7fa094650dee319.camel@nxp.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 27 Sep 2022 13:16:31 +0200
+Message-ID: <CAJZ5v0ikbkJofVta_8E+653XPLMQCiqRAZOxVtZLRN3t0KkCwQ@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: runtime: Return properly from rpm_resume() if
+ dev->power.needs_force_resume flag is set
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-imx@nxp.com, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-在 2022/9/26 下午2:21, Krzysztof Kozlowski 写道:
-> On 26/09/2022 06:00, Yinbo Zhu wrote:
->>
->>
->>> -----原始邮件-----
->>> 发件人: "Rob Herring" <robh@kernel.org>
->>> 发送时间:2022-09-25 01:42:58 (星期日)
->>> 收件人: "朱银波" <zhuyinbo@loongson.cn>
->>> 抄送: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rafael J . Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Zhang Rui" <rui.zhang@intel.com>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, zhanghongchen <zhanghongchen@loongson.cn>
->>> 主题: Re: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to json-schema
->>>
->>> On Thu, Sep 22, 2022 at 09:39:30AM +0800, 朱银波 wrote:
->>>>
->>>>
->>>>> -----原始邮件-----
->>>>> 发件人: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
->>>>> 发送时间:2022-09-21 17:31:11 (星期三)
->>>>> 收件人: "朱银波" <zhuyinbo@loongson.cn>
->>>>> 抄送: "Rafael J . Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Zhang Rui" <rui.zhang@intel.com>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, zhanghongchen <zhanghongchen@loongson.cn>
->>>>> 主题: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to json-schema
->>>>>
->>>>> On 21/09/2022 11:22, 朱银波 wrote:
->>>>>>> -----原始邮件-----
->>>>>>> 发件人: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
->>>>>>> 发送时间:2022-09-21 15:05:00 (星期三)
->>>>>>> 收件人: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rafael J . Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Zhang Rui" <rui.zhang@intel.com>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
->>>>>>> 抄送: zhanghongchen <zhanghongchen@loongson.cn>
->>>>>>> 主题: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to json-schema
->>>>>>>
->>>>>>> On 21/09/2022 03:56, Yinbo Zhu wrote:
->>>>>>>> Convert the loongson2 thermal binding to DT schema format using
->>>>>>>> json-schema.
->>>>>>> Incorrect subject and incorrect commit msg. There is no conversion here.
->>>>>> Our soc architecture is the loongson2 series, so we will modify it accordingly.
->>>>> How the soc architecture is related to my comment that you do not
->>>>> perform conversion?
->>>> I got it, and I will aad a conversion.
->>>>>>>> Signed-off-by: Yinbo Zhu <c>
->>>>>>>> ---
->>>>>>>> Change in v2:
->>>>>>>> 		1. Add description and type about the "id".	
->>>>>>>> 		2. Make the filename was based on compatible.
->>>>>>>>
->>>>>>>>   .../bindings/thermal/loongson2-thermal.yaml   | 52 +++++++++++++++++++
->>>>>>>>   1 file changed, 52 insertions(+)
->>>>>>>>   create mode 100644 Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
->>>>>>>>
->>>>>>>> diff --git a/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
->>>>>>>> new file mode 100644
->>>>>>>> index 000000000000..2994ae3a56aa
->>>>>>>> --- /dev/null
->>>>>>>> +++ b/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
->>>>>>>
->>>>>>> No improvements here. You ignore my comments, so I am going to NAK it.
->>>>>> I don't get your point, that dts compatible is "loongson,loongson2-thermal", so this driver file name is named
->>>>>> loongson2-thermal that according what you said about "Filename based on compatible."
->>>>>> If what I understand is not what you expect, please tell me how to modify it.
->>>>>
->>>>> Filename must match the compatible, so: loongson,loongson2-thermal.yaml
->>>> I got it, and I will add a conversion.
->>>>>>>
->>>>>>>> @@ -0,0 +1,52 @@
->>>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>>>> +%YAML 1.2
->>>>>>>> +---
->>>>>>>> +$id: http://devicetree.org/schemas/thermal/loongson2-thermal.yaml#
->>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>>> +
->>>>>>>> +title: Thermal sensors on loongson2 SoCs
->>>>>>>> +
->>>>>>>> +maintainers:
->>>>>>>> +  - zhanghongchen <zhanghongchen@loongson.cn>
->>>>>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>>>>> +
->>>>>>>> +properties:
->>>>>>>> +  compatible:
->>>>>>>> +    const: loongson,loongson2-thermal
->>>>>>>> +
->>>>>>>> +  reg:
->>>>>>>> +    maxItems: 1
->>>>>>>> +
->>>>>>>> +  id:
->>>>>>>> +    $ref: '//schemas/types.yaml#/definitions/uint32'
->>>>>>> No improvements here, so let me be specific - you need to really justify
->>>>>>> such property or it cannot go to schema.
->>>>>> The loongson2_thermal.c driver need parse this "id" property.
->>>>> This is not reason to add properties to DT. DT describes the hardware,
->>>>> not driver behavior.
->>>>>
->>>>> Why hardware needs arbitrary, additional addressing number instead of
->>>>> standard unit address?
->>>> The loongson2 series soc supports up to four sensors, but the 2K1000 has only one sensor, so the ID must be 0.
->>>> For the 2K1000, in order to distinguish the differences between different hardware in the Loongson2 SoC series,
->>>> the ID is added to the dts
->>> Differences in SoCs is what 'compatible' is for. If 'loongson2' is not a
->>> specific SoC, then your compatible string is not specific enough.
->> If other loongson2 platforms are different from the thermal sensor, I will add compatible
->> "loongson,loongson2-thermal-xxx", please you note.
-> No, this compatible looks wrong then. What is your SoC model number? You
-> called loongson2 a "series", so that's not appropriate. Compatible
-> should be specific.
-okay, I got it. I will add this change in v4.
+On Tue, Sep 27, 2022 at 9:47 AM Liu Ying <victor.liu@nxp.com> wrote:
 >
->>>>>>>> +    description: |
->>>>>>>> +      Specify the thermal sensor id.
->>>>>>>> +    minimum: 0
->>>>>>>> +    maximum: 3
->>>>>>>> +
->>>>>>>> +  interrupts:
->>>>>>>> +    maxItems: 1
->>>>>>>> +
->>>>>>>> +  "#thermal-sensor-cells":
->>>>>>>> +    const: 1
->>> If one SoC only has 1 sensor, then this could be 0. However, you don't
->>> have to do that, but it's another way to distinguish differences.
->> okay ,I got it.
->>>>>>>> +
->>>>>>>> +required:
->>>>>>>> +  - compatible
->>>>>>>> +  - reg
->>>>>>>> +  - id
->>>>>>>> +  - interrupt-parent
->>>>>>> Why?
->>>>>> The interrupts of our dts do not specify an interrupt parent,
->>>>>> eg. interrupts = <7 IRQ_TYPE_LEVEL_LOW>
->>>>>> so we need to add an interrupt parent property.
->>>>> You can add but I am asking why is it required?
->>>> Since there is more than one interrupt controller in the Loongson2 series soc, that need to specify the interrupt
->>>> controller in the dts, that is, the interrupt parent.   If different interrupt parents are used in dts, the interrupt
->>>> numbers are different.
->>> It is perfectly valid for the 'interrupt-parent' to be in *any* parent
->>> node. So it is never required by any binding.
->> I don't get your meaning, You mean I can add it in the dts, but I don't need to add it in the binding file, right?
-> You should not add it to the binding because it is not related to the
-> device itself.
-okay, I got it.
+> On Mon, 2022-09-26 at 11:47 +0200, Ulf Hansson wrote:
+> > On Fri, 23 Sept 2022 at 17:23, Liu Ying <victor.liu@nxp.com> wrote:
+> > > On Fri, 2022-09-23 at 15:48 +0200, Ulf Hansson wrote:
+> > > > On Fri, 23 Sept 2022 at 14:47, Liu Ying <victor.liu@nxp.com> wrote:
+> > > > > After a device transitions to sleep state through it's system
+> > > > > suspend
+> > > > > callback pm_runtime_force_suspend(), the device's driver may still
+> > > > > try
+> > > > > to do runtime PM for the device(runtime suspend first and then
+> > > > > runtime
+> > > > > resume) although runtime PM is disabled by that callback.  The
+> > > > > runtime
+> > > > > PM operations would not touch the device effectively and the device
+> > > > > is
+> > > > > assumed to be resumed through it's system resume callback
+> > > > > pm_runtime_force_resume().
+> > > >
+> > > > This sounds like a fragile use case to me. In principle you want to
+> > > > allow the device to be runtime resumed/suspended, after the device
+> > > > has
+> > > > already been put into a low power state through the regular system
+> > > > suspend callback. Normally it seems better to prevent this from
+> > > > happening, completely.
+> > >
+> > > Not sure if we really may prevent this from happening completely.
+> > >
+> > > > That said, in this case, I wonder if a better option would be to
+> > > > point
+> > > > ->suspend_late() to pm_runtime_force_suspend() and ->resume_early()
+> > > > to
+> > > > pm_runtime_force_resume(), rather than using the regular
+> > > > ->suspend|resume() callbacks. This should avoid the problem, I think,
+> > > > no?
+> > >
+> > > I thought about this and it actually works for my particular
+> > > panel-simple case.  What worries me is that the device(DRM device in my
+> > > case) which triggers the runtime PM operations may also use
+> > > ->suspend_late/resume_early() callbacks for whatever reasons, hence no
+> > > fixed order to suspend/resume the two devices(like panel device and DRM
+> > > device).
+> > >
+> > > Also, not sure if there is any sequence issue by using the
+> > > ->suspend_late/resume_early() callbacks in the panel-simple driver,
+> > > since it's written for quite a few display panels which may work with
+> > > various DRM devices - don't want to break any of them.
+> >
+> > What you are describing here, is the classical problem we have with
+> > suspend/resume ordering of devices.
+> >
+> > There are in principle two ways to solve this.
+> > 1. If it makes sense, the devices might be assigned as parent/child.
+> > 2. If it's more a consumer/supplier thing, we can add a device-link
+> > between them.
 >
->>> Rob
->>
->> 本邮件及其附件含有龙芯中科的商业秘密信息，仅限于发送给上面地址中列出的个人或群组。禁止任何其他人以任何形式使用（包括但不限于全部或部分地泄露、复制或散发）本邮件及其附件中的信息。如果您错收本邮件，请您立即电话或邮件通知发件人并删除本邮件。
->> This email and its attachments contain confidential information from Loongson Technology , which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this email in error, please notify the sender by phone or email immediately and delete it.
-> Don't include such footers. We cannot talk over confidential emails and
-> you clearly state that here.
->
-> Best regards,
-> Krzysztof
+> I thought about the two ways for my particular panel-simple case and
+> the first impression is that it's not straightforward to use them. For
+> DSI panels(with DRM_MODE_CONNECTOR_DSI connector type), it looks like
+> panel device's parent is DSI host device(set in mipi_dsi_device_alloc()
+> ). For other types of panels, like DPI panels, many show up in device
+> tree as child-node of root node and connect a display controller or a
+> display bridge through OF graph.  Seems that DRM architecture level
+> lacks some sort of glue code to use the two ways.
 
-sorry, I will remove it.
-
-
-TKs,
-
-Yinbo Zhu
-
+Well, apparently, the ordering of power management operations
+regarding the components in question cannot be arbitrary, but without
+any information on the correct ordering in place, there is no way to
+guarantee that ordering in every possible code path.  Addressing one
+of them is generally insufficient and you will see problems sooner or
+later.
