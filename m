@@ -2,186 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D2D5EBEFC
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 11:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0535EBFE5
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 12:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiI0Jtk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 05:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S230088AbiI0Ki5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 27 Sep 2022 06:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbiI0Jtg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 05:49:36 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DD2B5E69
-        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 02:49:27 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso9092407wma.1
-        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 02:49:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nq3WBeYXhCQSWiPmtePyjnaCUywGX1VqNE4Hjgy4wjc=;
-        b=V1VJQbmw0izIU2rdeQJcqVR9AbM0sVv89CHIhahpjyv/i2me2zCtcOSEedttm9j6oi
-         yw5ZlpSIa4yNFOqdKS3PuHnydhDiLPoID6JNCjkN+rf0DNcf2b8OsnGCNIXaO0eZgoq5
-         EvbSlUY1ImqxreH0IC2/Q72qf2492665axweX4Ct5v+lpwu89vI8KtC8Vlg5uKIna00W
-         7Ci+yz+V25R2JNkTGiyfuLL64YdICh0lthZUb81d6IIBGt5+eubvJi6FsP6W+SopJ24q
-         1rx7ByHMathFUSgxMuV0Fvh0n0BLvwQBL1AflIa9PfhLBLpoL6PIiBxFSXDPHnADWT7v
-         CxIA==
+        with ESMTP id S229472AbiI0Ki4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 06:38:56 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C161498D16;
+        Tue, 27 Sep 2022 03:38:54 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id l14so5941812qvq.8;
+        Tue, 27 Sep 2022 03:38:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nq3WBeYXhCQSWiPmtePyjnaCUywGX1VqNE4Hjgy4wjc=;
-        b=yrKz//wEpafI/ThlRhvoJw/KQ0J/2lKeTyzbg5uCNwUgsNh2g/4L8NBMIE4k4a7k9M
-         kP17WSID4Bdaipj7hooj1XCzrejgrIfVu0/vxoVrXt6RmM9Cr/ETKwWgPV9BfAMAx1om
-         WL37dtCJj6qLLikxzBFKeO5osKWqcTEegpK0EBJG5DOtMfyNtqnwspweyFiFBFHnqQ6o
-         FYN8zfHNcmMZ0ggtz9+9pQiKQG6iLWJiy/CPPTY9AqRfX505BK9RRtO56u5aydhOkctO
-         /IFG1vRZplQ9Yefx0/UnKQ/bUTPl8i9V1/MSiYHZHPVu2GdlWtlasPxz9yxIT9GtLQMs
-         B9FQ==
-X-Gm-Message-State: ACrzQf1O+JVvYyLr0HA8aYk7Ql7g1a6Dxs5tF4f57NaC4pL74ZWaV/63
-        VMT8qPzl2Y/KeuxNirA/m6mgdz74u7rRVzHZrAKdLg==
-X-Google-Smtp-Source: AMsMyM6M89HqlD5eusQam02W5+l7q/StJRn0ZBEpd8Lzpy2VnGizkYIrEvsUOghaHY6iPZwXzF5II8l8+QwOJ/BFmAM=
-X-Received: by 2002:a1c:f311:0:b0:3b5:18ca:fc5e with SMTP id
- q17-20020a1cf311000000b003b518cafc5emr1955721wmq.70.1664272165913; Tue, 27
- Sep 2022 02:49:25 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=kX5SsvItwtik0crXdwEH89DQ7N/9bD9yRLz11HcdMMU=;
+        b=GwUiR/oWg15X4N0IBsv9qBqliFaiRJfuKgPMw+uJ9fZ8Gxx0qyCwOwxvReE63FMq6F
+         ml1CscVxDuYH8IVDVC8bgL3mtZnHZAQ4NEqj3dRM3OqqyeBW3s/7HKIxILDee/glGrGg
+         JK5sI+0N6mVHeKFDhE2qrYSvu9oiWM3TJy1fJhD2GULNl2Z57NISmqH2GZxoNbUT4Jkf
+         AgLY33yuvW/eZ264frsNH4pOMhw9JWxivCnqC9qeokV7eyVu6MliJ/bD5rC064kIWbpM
+         PKd1W5gf7hVv7Pvj1zBagr1ezyhLl6BpJqp3gH4RpbDxeOPFID3SoBYuX7A7cf59ZRGt
+         9lHA==
+X-Gm-Message-State: ACrzQf2c6RlN74KWDx6OO+dxKkIPNE0+JnSAqnwVtTPDnEXYuUCTNBtC
+        g0G7JsFiXScQs8wBnhQnk5XYIyRy8/+kKmrPgJU=
+X-Google-Smtp-Source: AMsMyM6eXHvorHWyd2/8T2irhrU9CXmww7UFYFSubiezFPNtHm2+hLnikXbndyicr9ou7FEbzzDmee3HAOqSvbJQ7BE=
+X-Received: by 2002:ad4:4ea3:0:b0:4af:646a:9787 with SMTP id
+ ed3-20020ad44ea3000000b004af646a9787mr9686646qvb.15.1664275133856; Tue, 27
+ Sep 2022 03:38:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
- <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
- <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
- <20220726160337.GA41736@francesco-nb.int.toradex.com> <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
- <20220728112146.GA97654@francesco-nb.int.toradex.com> <CAPDyKFqtCxrjALeCmhuqQ2VmmUHhi-DjXO30uHChTPFeDbp+JQ@mail.gmail.com>
- <20220909142247.GA238001@francesco-nb.int.toradex.com> <CAPDyKFrwpz=gi3iY5YsO6k4o33eLQRp-wXvBx3nQ0q=G9YrqHA@mail.gmail.com>
- <70ee4f8e-7529-307e-656c-2a65d0187af6@linaro.org> <CAPDyKFoyNWZvT+QPdX4sQuS3DL8mepfnLraHLusMi9K8MOfLgg@mail.gmail.com>
- <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org>
-In-Reply-To: <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 27 Sep 2022 11:48:48 +0200
-Message-ID: <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220926140604.4173723-1-daniel.lezcano@linaro.org>
+ <20220926140604.4173723-4-daniel.lezcano@linaro.org> <CAJZ5v0hJ7Tq1pU1hSqswPF_+KZOt1jNKvmqTeF5=1npReqmA3A@mail.gmail.com>
+ <ee9ea160-ae77-112b-5302-74179e372387@linaro.org>
+In-Reply-To: <ee9ea160-ae77-112b-5302-74179e372387@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 27 Sep 2022 12:38:42 +0200
+Message-ID: <CAJZ5v0gATxtX5RW0oHbhT_hjUoEC3V39tQpJi74eg8iXhrwZKg@mail.gmail.com>
+Subject: Re: [PATCH v5 03/30] thermal/core: Add a generic thermal_zone_set_trip()
+ function
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[...]
-
-> >>>>
-> >>>> The main concern that was raised on this topic was that we have to
-> >>>> somehow link the power-domain to the specific peripherals (the power
-> >>>> domain consumer) in the device tree.
-> >>>
-> >>> Yes, that is needed. Although, I don't see how that is a concern?
-> >>>
-> >>> We already have the valid bindings to use for this, see more below.
-> >>>
-> >>>>
-> >>>> Adding the power-domain property there will trigger validation errors
-> >>>> unless we do explicitly add the power-domains to the schema for each
-> >>>> peripheral we need this. To me this does not really work, but maybe I'm
-> >>>> not understanding something.
-> >>>>
-> >>>> This is what Rob wrote on the topic [1]:
-> >>>>   > No. For 'power-domains' bindings have to define how many there are and
-> >>>>   > what each one is.
-> >>>>
-> >>>> Just as an example from patch [2]:
-> >>>>
-> >>>>   can1: can@0 {
-> >>>>     compatible = "microchip,mcp251xfd";
-> >>>>     power-domains = <&pd_sleep_moci>;
-> >>>>   };
-> >>>>
-> >>>> leads to:
-> >>>>
-> >>>>   imx8mm-verdin-nonwifi-dahlia.dtb: can@0: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
-> >>>>           From schema: .../bindings/net/can/microchip,mcp251xfd.yaml
-> >>>
-> >>> I think it should be fine to just add the below line to the DT
-> >>> bindings, for each peripheral device to fix the above problem.
-> >>>
-> >>> power-domains: true
-> >>
-> >> Again, as Rob said, no, because it must be strictly defined. So for
-> >> example: "maxItems: 1" for simple cases. But what if device is then part
-> >> of two power domains?
-> >>
-> >>>
-> >>> That should be okay, right?
-> >>
-> >> Adding it to each peripheral scales poorly. Especially that literally
-> >> any device can be part of such power domain.
-> >
-> > Right.
-> >
-> >>
-> >> If we are going with power domain approach, then it should be applicable
-> >> basically to every device or to every device of some class (e.g. I2C,
-> >> SPI). This means it should be added to respective core schema in
-> >> dtschema repo, in a way it does not interfere with other power-domains
-> >> properties (existing ones).
-> >
-> > Isn't that already taken care of [1]?
+On Tue, Sep 27, 2022 at 12:11 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> No, because it does not define the items (what are the power domains and
-> how many). This binding expects that any device has maxItems restricting it.
-
-Right, apologize for my ignorance.
-
+> On 26/09/2022 21:25, Rafael J. Wysocki wrote:
 >
-> >
-> > If there is more than one power domain per device, perhaps we may need
-> > to extend it with a more strict binding? But, that doesn't seem to be
-> > the case here - and if it turns out to be needed later on, we can
-> > always extend the bindings, no?
-> >
-> > Note also that we already have DT bindings specifying "power-domains:
-> > true" to deal with the above. Isn't that what we want?
+> [ ... ]
 >
-> You mentioned it before and both me and Rob already responded - no,
-> because it does not restrict the number of items.
+> >> +       if ((t.temperature != trip->temperature) && tz->ops->set_trip_temp) {
+> >
+> > The inner parens are not needed here and below.
+> >
+> >> +
+> >
+> > And the extra empty line is not needed here (and below) too IMO.
+> >
+> >> +               ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
+> >> +               if (ret)
+> >> +                       goto out;
+> >> +       }
+> >
+>
+> Without the parens, the following happens:
+>
+>
+> warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+>   1229 |         if ((t.temperature != trip->temperature) &&
+> tz->ops->set_trip_temp)
+>        |         ^~
+> note: ...this statement, but the latter is misleadingly indented as if
+> it were guarded by the ‘if’
+>   1231 |                 if (ret)
+>        |                 ^~
 
-Okay, so maxItems need to be specified for each peripheral. It's not a
-big deal, right?
+This is about indentation, though, so it looks like white space is
+mangled somehow.
 
-Of course, it would be even easier if the core schema would use a
-default "maxItems: 1" for power domain consumers, which of course must
-be possible to be overridden for those consumers that need something
-else. But perhaps it's not that simple. :-)
+As a matter of correctness, the inner parens are not needed.
 
-Kind regards
-Uffe
+> >> +       if ((t.hysteresis != trip->hysteresis) && tz->ops->set_trip_hyst) {
+> >> +
+> >> +               ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
+> >> +               if (ret)
+> >> +                       goto out;
+> >> +       }
+> >> +
+> >> +       if (((t.temperature != trip->temperature) ||
+> >> +            (t.hysteresis != trip->hysteresis)) && tz->trips)
+> >> +               tz->trips[trip_id] = *trip;
+> >
+> > I would write this as
+> >
+> > if (tz->trips && (t.temperature != trip->temperature || t.hysteresis
+> > != trip->hysteresis))
+> >          tz->trips[trip_id] = *trip;
+>
+> Ok, sure
+>
+> > But
+> >
+> > 1. Do we want to copy the trip type here too?
+>
+> The function thermal_zone_set_trip() is called from thermal_sysfs.c, it
+> is the unique call site. However, I think it is a good idea to check the
+> type of the trip point is not changed, even if it is not possible with
+> the actual code.
+>
+> > 2. If tz->trips is set, do we still want to invoke ->set_trip_temp()
+> > or ->set_trip_hyst() if they are present?
+>
+> No but there are bogus drivers setting the interrupt with these ops
+> instead of using the set_trips ops (eg. [1][2][3]). So in order to keep
+> those working ATM, I'm keeping them and when all the drivers will be
+> changed, I'll wipe out the set_trip_* ops from everywhere.
+
+Do those drivers set tz->trips?  If not, the tz->trips check can go
+before the ops ones.
+
+> [1] drivers/thermal/samsung/exynos_tmu.c
+> [2] drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> [3] drivers/thermal/imx_thermal.c
