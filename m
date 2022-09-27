@@ -2,77 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3832B5EBEC1
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 11:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D2D5EBEFC
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 11:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiI0JgY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 05:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S229596AbiI0Jtk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 05:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiI0JgU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 05:36:20 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DF3B2762
-        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 02:36:19 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id cc5so14077740wrb.6
-        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 02:36:19 -0700 (PDT)
+        with ESMTP id S231556AbiI0Jtg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 05:49:36 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DD2B5E69
+        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 02:49:27 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso9092407wma.1
+        for <linux-pm@vger.kernel.org>; Tue, 27 Sep 2022 02:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/PlTLjGPSzswYlkSsTRBa4iX8iTXJTu7JK2WCLTfMVI=;
-        b=zwOCiH829H9W0MajrUip+/i4V00nILbmKLrgsGXRXIs/H3acOnp1T8Retrgw/XuQnk
-         WGAUlUaNiAHW0q1vdy31YzcqavfVoEH4yRocF2uitfJcL3lHXsl6m5keoyqFr3wFIYKb
-         4quqBuNZGY8cNnRoPJLx9VgOXPvXosnH/zEQSyQpsXODFOaqfIKqOZRdKXqbZBmyEG4R
-         PqeXHMNqDpdjlWJN9tKSDwfcpXT1A9b4mzMpHEdDyTVoVAGBHlc0ILCKTdSQ9yapXD2f
-         mTdkn6fVZZcWCWX1hhr0I6Xz6EaaADoMqimQJNW+VoZvzJ0xZyBtnNKYnpeAddTHF2ct
-         jplg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=nq3WBeYXhCQSWiPmtePyjnaCUywGX1VqNE4Hjgy4wjc=;
+        b=V1VJQbmw0izIU2rdeQJcqVR9AbM0sVv89CHIhahpjyv/i2me2zCtcOSEedttm9j6oi
+         yw5ZlpSIa4yNFOqdKS3PuHnydhDiLPoID6JNCjkN+rf0DNcf2b8OsnGCNIXaO0eZgoq5
+         EvbSlUY1ImqxreH0IC2/Q72qf2492665axweX4Ct5v+lpwu89vI8KtC8Vlg5uKIna00W
+         7Ci+yz+V25R2JNkTGiyfuLL64YdICh0lthZUb81d6IIBGt5+eubvJi6FsP6W+SopJ24q
+         1rx7ByHMathFUSgxMuV0Fvh0n0BLvwQBL1AflIa9PfhLBLpoL6PIiBxFSXDPHnADWT7v
+         CxIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/PlTLjGPSzswYlkSsTRBa4iX8iTXJTu7JK2WCLTfMVI=;
-        b=Eg05glw5B4+atDIDZOFkaBSOpY4l1j5aL28d+2rr94kP78Jc/cPcjE/HXdR8XLpwMt
-         Ou9OXsyBeDKNjgLzCThRhGvuYvbVXxyD5D2ztKxzW6ZKR/dIsowFICQZl8N9vKttim92
-         V27YhmmnFLb3wd01Kav9k4PlOXhwMr1M4MyD6oqPNkUfrIzdgxSLa7TOGNjyhOGLfufE
-         aa/YAQgX/msWQ9yK4uJzlRP/aoMySmGoK+1LwsmXZZXTxHmzhlwRgQqbFcb3i61ozDu+
-         vqQOuMWF24oIJSMEZIl0TzVqVPfvKAkg4pClNX2VASqf8cnwuNR8Mdq40Ku/6IuI3jNW
-         Y0yQ==
-X-Gm-Message-State: ACrzQf1NIiMAplldjiEclbUabKt0t0h+A9lpmRef7YkoTX0vW+0vws1p
-        o7+PnFvLGISnTQ9f1nLAzj+QCA==
-X-Google-Smtp-Source: AMsMyM7Sbp3KGS9RYk/ygpLZfdjsNmCuCMpLpfCLcKHXR7Gpm06yHTH40B2WCmC9hs7behpb1hhprA==
-X-Received: by 2002:adf:de11:0:b0:22c:b5f0:272e with SMTP id b17-20020adfde11000000b0022cb5f0272emr2003308wrm.224.1664271377909;
-        Tue, 27 Sep 2022 02:36:17 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 14-20020a05600c028e00b003b3307fb98fsm1180132wmk.24.2022.09.27.02.36.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 02:36:17 -0700 (PDT)
-Message-ID: <29cc25fb-0196-d80d-e3c7-b6aa22d32b1b@linaro.org>
-Date:   Tue, 27 Sep 2022 11:36:16 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nq3WBeYXhCQSWiPmtePyjnaCUywGX1VqNE4Hjgy4wjc=;
+        b=yrKz//wEpafI/ThlRhvoJw/KQ0J/2lKeTyzbg5uCNwUgsNh2g/4L8NBMIE4k4a7k9M
+         kP17WSID4Bdaipj7hooj1XCzrejgrIfVu0/vxoVrXt6RmM9Cr/ETKwWgPV9BfAMAx1om
+         WL37dtCJj6qLLikxzBFKeO5osKWqcTEegpK0EBJG5DOtMfyNtqnwspweyFiFBFHnqQ6o
+         FYN8zfHNcmMZ0ggtz9+9pQiKQG6iLWJiy/CPPTY9AqRfX505BK9RRtO56u5aydhOkctO
+         /IFG1vRZplQ9Yefx0/UnKQ/bUTPl8i9V1/MSiYHZHPVu2GdlWtlasPxz9yxIT9GtLQMs
+         B9FQ==
+X-Gm-Message-State: ACrzQf1O+JVvYyLr0HA8aYk7Ql7g1a6Dxs5tF4f57NaC4pL74ZWaV/63
+        VMT8qPzl2Y/KeuxNirA/m6mgdz74u7rRVzHZrAKdLg==
+X-Google-Smtp-Source: AMsMyM6M89HqlD5eusQam02W5+l7q/StJRn0ZBEpd8Lzpy2VnGizkYIrEvsUOghaHY6iPZwXzF5II8l8+QwOJ/BFmAM=
+X-Received: by 2002:a1c:f311:0:b0:3b5:18ca:fc5e with SMTP id
+ q17-20020a1cf311000000b003b518cafc5emr1955721wmq.70.1664272165913; Tue, 27
+ Sep 2022 02:49:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next] thermal/intel/int340x: Initialized ret in error
- path in int340x_thermal_zone_add()
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "kernelci.org bot" <bot@kernelci.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-References: <20220923152009.1721739-1-nathan@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220923152009.1721739-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+ <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
+ <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
+ <20220726160337.GA41736@francesco-nb.int.toradex.com> <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
+ <20220728112146.GA97654@francesco-nb.int.toradex.com> <CAPDyKFqtCxrjALeCmhuqQ2VmmUHhi-DjXO30uHChTPFeDbp+JQ@mail.gmail.com>
+ <20220909142247.GA238001@francesco-nb.int.toradex.com> <CAPDyKFrwpz=gi3iY5YsO6k4o33eLQRp-wXvBx3nQ0q=G9YrqHA@mail.gmail.com>
+ <70ee4f8e-7529-307e-656c-2a65d0187af6@linaro.org> <CAPDyKFoyNWZvT+QPdX4sQuS3DL8mepfnLraHLusMi9K8MOfLgg@mail.gmail.com>
+ <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org>
+In-Reply-To: <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 27 Sep 2022 11:48:48 +0200
+Message-ID: <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Max Krummenacher <max.oss.09@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,41 +98,90 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/09/2022 17:20, Nathan Chancellor wrote:
-> Clang warns:
-> 
->    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->            if (!int34x_thermal_zone->ops)
->                ^~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:279:17: note: uninitialized use occurs here
->            return ERR_PTR(ret);
->                          ^~~
->    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:2: note: remove the 'if' if its condition is always false
->            if (!int34x_thermal_zone->ops)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:211:9: note: initialize the variable 'ret' to silence this warning
->            int ret;
->                  ^
->                    = 0
->    1 error generated.
-> 
-> If kmemdup() fails, -ENOMEM should be returned.
-> 
-> Fixes: f6f6f9a01374 ("thermal/intel/int340x: Replace parameter to simplify")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1717
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+[...]
 
-I've folded this patch with the changes introducing the issue
+> >>>>
+> >>>> The main concern that was raised on this topic was that we have to
+> >>>> somehow link the power-domain to the specific peripherals (the power
+> >>>> domain consumer) in the device tree.
+> >>>
+> >>> Yes, that is needed. Although, I don't see how that is a concern?
+> >>>
+> >>> We already have the valid bindings to use for this, see more below.
+> >>>
+> >>>>
+> >>>> Adding the power-domain property there will trigger validation errors
+> >>>> unless we do explicitly add the power-domains to the schema for each
+> >>>> peripheral we need this. To me this does not really work, but maybe I'm
+> >>>> not understanding something.
+> >>>>
+> >>>> This is what Rob wrote on the topic [1]:
+> >>>>   > No. For 'power-domains' bindings have to define how many there are and
+> >>>>   > what each one is.
+> >>>>
+> >>>> Just as an example from patch [2]:
+> >>>>
+> >>>>   can1: can@0 {
+> >>>>     compatible = "microchip,mcp251xfd";
+> >>>>     power-domains = <&pd_sleep_moci>;
+> >>>>   };
+> >>>>
+> >>>> leads to:
+> >>>>
+> >>>>   imx8mm-verdin-nonwifi-dahlia.dtb: can@0: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
+> >>>>           From schema: .../bindings/net/can/microchip,mcp251xfd.yaml
+> >>>
+> >>> I think it should be fine to just add the below line to the DT
+> >>> bindings, for each peripheral device to fix the above problem.
+> >>>
+> >>> power-domains: true
+> >>
+> >> Again, as Rob said, no, because it must be strictly defined. So for
+> >> example: "maxItems: 1" for simple cases. But what if device is then part
+> >> of two power domains?
+> >>
+> >>>
+> >>> That should be okay, right?
+> >>
+> >> Adding it to each peripheral scales poorly. Especially that literally
+> >> any device can be part of such power domain.
+> >
+> > Right.
+> >
+> >>
+> >> If we are going with power domain approach, then it should be applicable
+> >> basically to every device or to every device of some class (e.g. I2C,
+> >> SPI). This means it should be added to respective core schema in
+> >> dtschema repo, in a way it does not interfere with other power-domains
+> >> properties (existing ones).
+> >
+> > Isn't that already taken care of [1]?
+>
+> No, because it does not define the items (what are the power domains and
+> how many). This binding expects that any device has maxItems restricting it.
 
-Thanks for the fix
+Right, apologize for my ignorance.
 
+>
+> >
+> > If there is more than one power domain per device, perhaps we may need
+> > to extend it with a more strict binding? But, that doesn't seem to be
+> > the case here - and if it turns out to be needed later on, we can
+> > always extend the bindings, no?
+> >
+> > Note also that we already have DT bindings specifying "power-domains:
+> > true" to deal with the above. Isn't that what we want?
+>
+> You mentioned it before and both me and Rob already responded - no,
+> because it does not restrict the number of items.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Okay, so maxItems need to be specified for each peripheral. It's not a
+big deal, right?
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Of course, it would be even easier if the core schema would use a
+default "maxItems: 1" for power domain consumers, which of course must
+be possible to be overridden for those consumers that need something
+else. But perhaps it's not that simple. :-)
+
+Kind regards
+Uffe
