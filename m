@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0535EBFE5
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 12:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1686A5EC0A2
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 13:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiI0Ki5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 27 Sep 2022 06:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
+        id S230328AbiI0LKs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 07:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiI0Ki4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 06:38:56 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C161498D16;
-        Tue, 27 Sep 2022 03:38:54 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id l14so5941812qvq.8;
-        Tue, 27 Sep 2022 03:38:54 -0700 (PDT)
+        with ESMTP id S230354AbiI0LKP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 07:10:15 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CA24A108;
+        Tue, 27 Sep 2022 04:08:13 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id u8so360280qvv.9;
+        Tue, 27 Sep 2022 04:08:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=kX5SsvItwtik0crXdwEH89DQ7N/9bD9yRLz11HcdMMU=;
-        b=GwUiR/oWg15X4N0IBsv9qBqliFaiRJfuKgPMw+uJ9fZ8Gxx0qyCwOwxvReE63FMq6F
-         ml1CscVxDuYH8IVDVC8bgL3mtZnHZAQ4NEqj3dRM3OqqyeBW3s/7HKIxILDee/glGrGg
-         JK5sI+0N6mVHeKFDhE2qrYSvu9oiWM3TJy1fJhD2GULNl2Z57NISmqH2GZxoNbUT4Jkf
-         AgLY33yuvW/eZ264frsNH4pOMhw9JWxivCnqC9qeokV7eyVu6MliJ/bD5rC064kIWbpM
-         PKd1W5gf7hVv7Pvj1zBagr1ezyhLl6BpJqp3gH4RpbDxeOPFID3SoBYuX7A7cf59ZRGt
-         9lHA==
-X-Gm-Message-State: ACrzQf2c6RlN74KWDx6OO+dxKkIPNE0+JnSAqnwVtTPDnEXYuUCTNBtC
-        g0G7JsFiXScQs8wBnhQnk5XYIyRy8/+kKmrPgJU=
-X-Google-Smtp-Source: AMsMyM6eXHvorHWyd2/8T2irhrU9CXmww7UFYFSubiezFPNtHm2+hLnikXbndyicr9ou7FEbzzDmee3HAOqSvbJQ7BE=
-X-Received: by 2002:ad4:4ea3:0:b0:4af:646a:9787 with SMTP id
- ed3-20020ad44ea3000000b004af646a9787mr9686646qvb.15.1664275133856; Tue, 27
- Sep 2022 03:38:53 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=fgbzzrwFzK76UVC6zcQ2bGACHn1NP4bULsk7xBLan/Y=;
+        b=vc4ed+jWn8eOevOuzN+23Mvcg0x7mAfdyYBfWd3mFm7DpXhnSKixUejupYX6JHJYtA
+         AMGWjMuq3L/r1vYosYf9N7oe0UQGflDD3WaLuhNN+UFQJ9NN4aX6VmUSijmiLOH3BtMf
+         umux+Xrj/PGV7CW8P+co/jwDUayAVWAvWycXPrLZwnvz1n5Ij78eeIk4o8vcoxNlBUsH
+         xAMhpx1ZZqOyhJJhFhJK9PsajrLAF+eyDX9eL64gMJ4da7osjKFLnm/gfVnAwWfPhMci
+         otpteNkwZg4spMeTD7JiQrNqMI5HsScOBo1iqVfCSsNeHZXTfGHytlILX8GVq5hP5JQe
+         1OIA==
+X-Gm-Message-State: ACrzQf0C6mG+I/f7vkjNIntJnYCfr3SSHdUWEF4LyAzdLUHA8qIJ5cfU
+        fwdONQbvE2c0mKHlOHs/BBUVu0ErxRJESGudbLI=
+X-Google-Smtp-Source: AMsMyM74WiwyLlZRApInfeO9G29yEy52/pGbpi9H0bOJY9lJcLwpzA/sHZeblwlE6Tii2JTb/XkoWwTPNLwFRiPtuP8=
+X-Received: by 2002:a0c:da14:0:b0:4aa:aad9:e450 with SMTP id
+ x20-20020a0cda14000000b004aaaad9e450mr21087440qvj.130.1664276892157; Tue, 27
+ Sep 2022 04:08:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220926140604.4173723-1-daniel.lezcano@linaro.org>
- <20220926140604.4173723-4-daniel.lezcano@linaro.org> <CAJZ5v0hJ7Tq1pU1hSqswPF_+KZOt1jNKvmqTeF5=1npReqmA3A@mail.gmail.com>
- <ee9ea160-ae77-112b-5302-74179e372387@linaro.org>
-In-Reply-To: <ee9ea160-ae77-112b-5302-74179e372387@linaro.org>
+ <20220926140604.4173723-6-daniel.lezcano@linaro.org> <CAJZ5v0ibt6nj6+E3onu4Ri74gX84VBob-hOWQPZiusGKb_Apjw@mail.gmail.com>
+ <657008be-34e3-e2de-a9bd-41d2dc804e51@linaro.org>
+In-Reply-To: <657008be-34e3-e2de-a9bd-41d2dc804e51@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 27 Sep 2022 12:38:42 +0200
-Message-ID: <CAJZ5v0gATxtX5RW0oHbhT_hjUoEC3V39tQpJi74eg8iXhrwZKg@mail.gmail.com>
-Subject: Re: [PATCH v5 03/30] thermal/core: Add a generic thermal_zone_set_trip()
- function
+Date:   Tue, 27 Sep 2022 13:08:00 +0200
+Message-ID: <CAJZ5v0hiofXuEHqX1sMXdyTqaDu85viL69neJo=QvDa47aHaFg@mail.gmail.com>
+Subject: Re: [PATCH v5 05/30] thermal/core/governors: Use thermal_zone_get_trip()
+ instead of ops functions
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         "Zhang, Rui" <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
         Amit Kucheria <amitk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -62,83 +61,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 12:11 AM Daniel Lezcano
+On Tue, Sep 27, 2022 at 12:15 AM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> On 26/09/2022 21:25, Rafael J. Wysocki wrote:
->
-> [ ... ]
->
-> >> +       if ((t.temperature != trip->temperature) && tz->ops->set_trip_temp) {
+> On 26/09/2022 21:34, Rafael J. Wysocki wrote:
+> > On Mon, Sep 26, 2022 at 4:06 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> The governors are using the ops->get_trip_* functions, Replace these
+> >> calls with thermal_zone_get_trip().
+> >>
+> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >> Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+> >> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com> # IPA
+> >> ---
+> >>   drivers/thermal/gov_bang_bang.c       | 29 ++++++++-------
+> >>   drivers/thermal/gov_fair_share.c      | 18 ++++------
+> >>   drivers/thermal/gov_power_allocator.c | 51 ++++++++++++---------------
+> >>   drivers/thermal/gov_step_wise.c       | 22 ++++++------
+> >>   4 files changed, 53 insertions(+), 67 deletions(-)
+> >>
+> >> diff --git a/drivers/thermal/gov_bang_bang.c b/drivers/thermal/gov_bang_bang.c
+> >> index a08bbe33be96..f5b85e5ea707 100644
+> >> --- a/drivers/thermal/gov_bang_bang.c
+> >> +++ b/drivers/thermal/gov_bang_bang.c
+> >> @@ -13,26 +13,25 @@
+> >>
+> >>   #include "thermal_core.h"
+> >>
+> >> -static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+> >> +static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip_id)
+> >>   {
+> >> -       int trip_temp, trip_hyst;
+> >> +       struct thermal_trip trip;
+> >>          struct thermal_instance *instance;
+> >> +       int ret;
+> >>
+> >> -       tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> >> -
+> >> -       if (!tz->ops->get_trip_hyst) {
+> >> -               pr_warn_once("Undefined get_trip_hyst for thermal zone %s - "
+> >> -                               "running with default hysteresis zero\n", tz->type);
+> >> -               trip_hyst = 0;
+> >> -       } else
+> >> -               tz->ops->get_trip_hyst(tz, trip, &trip_hyst);
+> >> +       ret = __thermal_zone_get_trip(tz, trip_id, &trip);
+> >> +       if (ret)
+> >> +               pr_warn_once("Failed to retrieve trip point %d\n", trip_id);
 > >
-> > The inner parens are not needed here and below.
+> > Does it even make sense to continue beyond this point if ret is nonzero?
+>
+> No, I think we can bail out from here
+>
+> > All of the contents of trip can be garbage then AFAICS.
 > >
 > >> +
+> >> +       if (!trip.hysteresis)
+> >> +               pr_warn_once("Zero hysteresis value for thermal zone %s\n", tz->type);
 > >
-> > And the extra empty line is not needed here (and below) too IMO.
-> >
-> >> +               ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
-> >> +               if (ret)
-> >> +                       goto out;
-> >> +       }
-> >
+> > Why do you want to warn about this?  Haven't we declared already that
+> > zero hysteresis is valid and normal?
 >
-> Without the parens, the following happens:
+> Apparently the bang-bang governor is expecting a hysteresis value as the
+> check is expecting:
 >
+>  >> -       if (!tz->ops->get_trip_hyst) {
+>  >> -               pr_warn_once("Undefined get_trip_hyst for thermal
+> zone %s - "
+>  >> -                               "running with default hysteresis
+> zero\n", tz->type);
+>  >> -               trip_hyst = 0;
 >
-> warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
->   1229 |         if ((t.temperature != trip->temperature) &&
-> tz->ops->set_trip_temp)
->        |         ^~
-> note: ...this statement, but the latter is misleadingly indented as if
-> it were guarded by the ‘if’
->   1231 |                 if (ret)
->        |                 ^~
+> It is just to keep a warning as before.
 
-This is about indentation, though, so it looks like white space is
-mangled somehow.
+The new message will be different, though.
 
-As a matter of correctness, the inner parens are not needed.
-
-> >> +       if ((t.hysteresis != trip->hysteresis) && tz->ops->set_trip_hyst) {
-> >> +
-> >> +               ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
-> >> +               if (ret)
-> >> +                       goto out;
-> >> +       }
-> >> +
-> >> +       if (((t.temperature != trip->temperature) ||
-> >> +            (t.hysteresis != trip->hysteresis)) && tz->trips)
-> >> +               tz->trips[trip_id] = *trip;
-> >
-> > I would write this as
-> >
-> > if (tz->trips && (t.temperature != trip->temperature || t.hysteresis
-> > != trip->hysteresis))
-> >          tz->trips[trip_id] = *trip;
->
-> Ok, sure
->
-> > But
-> >
-> > 1. Do we want to copy the trip type here too?
->
-> The function thermal_zone_set_trip() is called from thermal_sysfs.c, it
-> is the unique call site. However, I think it is a good idea to check the
-> type of the trip point is not changed, even if it is not possible with
-> the actual code.
->
-> > 2. If tz->trips is set, do we still want to invoke ->set_trip_temp()
-> > or ->set_trip_hyst() if they are present?
->
-> No but there are bogus drivers setting the interrupt with these ops
-> instead of using the set_trips ops (eg. [1][2][3]). So in order to keep
-> those working ATM, I'm keeping them and when all the drivers will be
-> changed, I'll wipe out the set_trip_* ops from everywhere.
-
-Do those drivers set tz->trips?  If not, the tz->trips check can go
-before the ops ones.
-
-> [1] drivers/thermal/samsung/exynos_tmu.c
-> [2] drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> [3] drivers/thermal/imx_thermal.c
+I think it should be per-tz and the "info" level should be sufficient,
+and because thermal_zone_device is based on struct device,
+dev_info_once(&tz->dev, ...) should work.
