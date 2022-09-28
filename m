@@ -2,104 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF245ED801
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 10:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674CB5EDB30
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 13:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232810AbiI1Iim (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 04:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S233711AbiI1LH6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 07:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbiI1IiC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 04:38:02 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE9BA3D46
-        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 01:37:53 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id g20so13539262ljg.7
-        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 01:37:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=62Eoklyt/D9YICCu7HqYVZqvNE1CJufCEW7h9Tv64so=;
-        b=vkpzReO0KQzEk/YOvT5M1oXJQW9u+9JQ+eEqmpGzLdU2fmYY+yW3eHLRVtQMjhDRdn
-         V6wt3ZR5FeGO+6TimfqDyyuKw0pIqrDhFXggf4SMgwqPoVLvAJVGVKX8KF5mLY5+FpUz
-         bP5f4IsKnBn8XTa2aPh3FdR8tE5RmllT7rS7iSc4akCTGzZIaDpjZ/JjucVv3J6pheIF
-         ELVJWnwzQAnVIbV5fr01Z0oldpNikPywadH+gPBOTP0Hr+F/ZY0gAWhSOyA1wduNa7tR
-         1sQsy74ff9fm6FhRG+a2pIZop1XVDZq0RFyn2Xpo56mhyrfbIBf/Ig/M3PioDg2G9hHj
-         sv4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=62Eoklyt/D9YICCu7HqYVZqvNE1CJufCEW7h9Tv64so=;
-        b=QKLtl7t+eKsjUfC7Tvx9WnBWHIrIZs5aRv1x7SyunMy8NbB49+4J2gVr+Uwu4FL0Z7
-         rA8U3WuolvpjqpJ0cI4IFZeQPvAxIveHPoy4Xp3sypNuYbB0cAB0ZUTG+96USiqdwF34
-         JEYahTvrRSsHRaeZPXqhxz/9SfFjynEQL452XzqbnlkW+A4uQhiqJPkh6uxdof0FVWgk
-         8BDSRdkDQh3UL0xiL2t4n0hXbe6xuSfWSgGhSRiELa23qtpA0PzBOiGbP+9fVVqaqgax
-         2RwGQfdtrt7N1v8BtJ5FyVMoRQWmHhKw6CvWohxH4dTl/+0Uj0k9w5Di0JJnlxh5JqLY
-         axwg==
-X-Gm-Message-State: ACrzQf1K2+ri5qa+KJktOTrFybtOhQ1rTF0DB9scYr5RpNnyEMbppwl0
-        nkwCQIPVLxXTZs7ZDuTYKVK6eA==
-X-Google-Smtp-Source: AMsMyM7KmT+Blx4/udVJvmQmTtAk3QqtyL9qew6LvYoEkmqaGbUMoY64pgryHZ1fIouAZZ1S64YKKA==
-X-Received: by 2002:a2e:bc11:0:b0:26c:565:12f6 with SMTP id b17-20020a2ebc11000000b0026c056512f6mr10948162ljf.91.1664354271840;
-        Wed, 28 Sep 2022 01:37:51 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 23-20020a2e0917000000b0026c35c4720esm375585ljj.24.2022.09.28.01.37.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 01:37:50 -0700 (PDT)
-Message-ID: <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
-Date:   Wed, 28 Sep 2022 10:37:49 +0200
+        with ESMTP id S233404AbiI1LHi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 07:07:38 -0400
+X-Greylist: delayed 1799 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 04:04:54 PDT
+Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C446857E5
+        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 04:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=K8E0FzdNDrn2vBMjfp3h2KajM+B36hLnkhE+pnW7Lb8=; b=tCA2PesD4/l8yPuyvQFPWi3nUi
+        WDiKR+zssEkSliDYZ2hVjvPR+Szf1TApxTmnbwAMxTf915JhbObbstSRCUc3Lic1QeEwgzYvP6EUh
+        E+HrV3DixfeX4F/TNF1TquUoGGA7VNn4gpom38VrTloH1m/goBh/WB+YNyX0rzeKf4R7ZOmEuRTQq
+        lxlpOgRJ9U+4WI4L3QATPubbUcrIrhQwb8gpqlPOzRG+HOU3PdSCpGjYJYaw9s2blFvl7wHvDk+oK
+        d2JJV692QJh++TV62L7H/y3y9vcbNIISAmJth+4tutxt0bYuboCfAsbkpf0eT1Ca0q8XXzh87UJ/D
+        yV6o44QQ==;
+Received: from noodles by the.earth.li with local (Exim 4.94.2)
+        (envelope-from <noodles@earth.li>)
+        id 1odTaO-00Gcuf-D2; Wed, 28 Sep 2022 10:42:36 +0100
+Date:   Wed, 28 Sep 2022 10:42:36 +0100
+From:   Jonathan McDowell <noodles@earth.li>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniil Lunev <dlunev@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: TPM: hibernate with IMA PCR 10
+Message-ID: <YzQXDPtDisogYNzo@earth.li>
+References: <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
+ <Yw7L+X2cHf9qprxl@kernel.org>
+ <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
+ <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
+ <Yxl8tbJERqrmsgpU@kernel.org>
+ <96cfd1f3f084f6d145bd22e0989dc046fe15b66a.camel@linux.ibm.com>
+ <YylDYU+KTX/KJpqU@kernel.org>
+ <2bc656bf67af52e0b9a68e91c5b574e0ab4ffa8e.camel@linux.ibm.com>
+ <Yy21B4EGumiI9XsU@kernel.org>
+ <CAE=gft7CnUVPqKpCHKPSpa3z-NR9pimhUJbz+qTkVV0E6WeoPw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
- binding
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
- <20220928083702.17309-2-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928083702.17309-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE=gft7CnUVPqKpCHKPSpa3z-NR9pimhUJbz+qTkVV0E6WeoPw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/09/2022 10:37, Yinbo Zhu wrote:
-> Add the loongson2k thermal binding with DT schema format using
-> json-schema.
+On Tue, Sep 27, 2022 at 09:03:21AM -0700, Evan Green wrote:
+> On Fri, Sep 23, 2022 at 6:30 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Wed, Sep 21, 2022 at 04:15:20PM -0400, Mimi Zohar wrote:
+> >
+> > > Enabling hibernate or IMA shouldn't be an either-or decision, if at all
+> > > possible.  The main concern is that attestation servers be able to
+> > > detect hibernation and possibly the loss of measurement
+> > > history.  Luckily, although the PCRs are reset, the TPM
+> > > pcrUpdateCounter is not.
+> > >
+> > > I would appreciate including a "hibernate" marker, similar to the
+> > > "boot_aggregate".
+> >
+> > Yeah, I guess that would not do harm.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> I think I understand it. It's pretty much exactly a boot_aggregate
+> marker that we want, correct?
+> 
+> Should it have its own name, or is it sufficient to simply infer that
+> a boot_aggregate marker that isn't the first item in the list must
+> come from hibernate resume?
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+I think it should have its own name, because a subsequent boot_aggregate
+is inserted when we kexec into a new kernel.
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
-If a tag was not added on purpose, please state why and what changed.
+J.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+"Why? - because it's f***ing there!" -- Edmund Hilary
+This .sig brought to you by the letter I and the number 30
+Product of the Republic of HuggieTag
