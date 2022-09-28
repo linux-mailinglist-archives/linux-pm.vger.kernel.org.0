@@ -2,61 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE735ED364
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 05:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B765ED450
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 07:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiI1DQ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 23:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
+        id S231703AbiI1Fph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 01:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbiI1DQq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 23:16:46 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D34CE422D6;
-        Tue, 27 Sep 2022 20:16:41 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx9OGOvDNjuxAjAA--.64292S4;
-        Wed, 28 Sep 2022 11:16:38 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v4 3/3] thermal: loongson2: add thermal management support
-Date:   Wed, 28 Sep 2022 11:16:28 +0800
-Message-Id: <20220928031628.6463-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220928031628.6463-1-zhuyinbo@loongson.cn>
-References: <20220928031628.6463-1-zhuyinbo@loongson.cn>
+        with ESMTP id S230185AbiI1Fpg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 01:45:36 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6099B67C83;
+        Tue, 27 Sep 2022 22:45:34 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28S56DgB008399;
+        Wed, 28 Sep 2022 05:44:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=TRI7XAqpRChSCmHrdGbn7ZcUW1chuyOMvMEZsO5iOfM=;
+ b=kkMKeB6gM2XwbxUMQI6Dv4jFR10HYXMzO3uNZUjeFiLyIeggvPCbsdNO4Lwxw5Bu01AE
+ +EQVf4LVLLj1UANVQpC7TALUvhrNmdmAIx64zSLDzvc7gYnQn1jrOQ8I4DeqQeEQ85zR
+ 2VIuO06lwEosEi2uT1mCNZHXFyWDQ15yaarnwC6e2XAt7BO0odmij51xlFo9AQXpugwG
+ Pd9XPydgTIrBIoLRGkfvp1sD2aVQHR2RPxPhrgLYxViKOeOV9/e2ZDlk+mEeqj1XFlyI
+ OqcZN3XYr5S+NUr9Jk9WO1uF2m1Ez3HsASc7TnrZcf0HgSbewr2AkYl4qJGvNTOnc1vQ vQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jv8wpt8dv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 05:44:57 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28S56IV0009087;
+        Wed, 28 Sep 2022 05:44:56 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jv8wpt8ct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 05:44:55 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28S5ZeV8005426;
+        Wed, 28 Sep 2022 05:44:53 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3jssh9cr0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 05:44:53 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28S5ipT02490880
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Sep 2022 05:44:51 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F09514C040;
+        Wed, 28 Sep 2022 05:44:50 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 31A494C044;
+        Wed, 28 Sep 2022 05:44:50 +0000 (GMT)
+Received: from [9.171.2.29] (unknown [9.171.2.29])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Sep 2022 05:44:50 +0000 (GMT)
+Message-ID: <0e1259a7-a99d-ceb6-d73d-a3e3cf32d003@linux.ibm.com>
+Date:   Wed, 28 Sep 2022 07:44:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx9OGOvDNjuxAjAA--.64292S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ww4UCrWUGrWxJr4ruFy5CFg_yoWfuF45pF
-        W3J3y5GrsrGFsrZwnrAr1UCFs0vwnIyFy3ZFZ7Gw1S9rZ3J343Wry8JFy8ZrySkryDCF15
-        ZrZ8KFWUCFWDX3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPG14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0D
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
-        IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC2
-        0s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI
-        0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv2
-        0xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
-        yTuYvjfUFrcTDUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
+Content-Language: en-US
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
+        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
+        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
+        Marc Hartmayer <mhartmay@linux.ibm.com>,
+        Amit Shah <amit@kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+References: <20220923072104.2013212-1-borntraeger@linux.ibm.com>
+ <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
+ <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
+ <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
+ <39dfc425-deff-2469-7bcb-4a0e177b31d1@linux.ibm.com>
+ <YzGhUZJKV3pKJL3Z@hirez.programming.kicks-ass.net>
+ <66463973-923f-624d-3041-72ce76147b3e@linux.ibm.com>
+ <YzGrJSLXpocpGIha@hirez.programming.kicks-ass.net>
+ <9ec643f3-b935-0119-d8bc-1fbe46c36356@linux.ibm.com>
+ <YzHqNiRj2Q5vxdCV@hirez.programming.kicks-ass.net>
+ <YzHt2nG0Hb7xLlNj@hirez.programming.kicks-ass.net>
+ <985463a3-5e33-95d2-b2bb-824707a2f819@linux.ibm.com>
+In-Reply-To: <985463a3-5e33-95d2-b2bb-824707a2f819@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: C-iwwDbwObm8zSqeg3LDefvtdRzOtnJb
+X-Proofpoint-GUID: 0cHj6lZcSCFBnzr0oV2OOul8RCx0NzuU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_02,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 mlxlogscore=999 impostorscore=0 adultscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280032
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,328 +110,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds the support for loongson2 thermal sensor controller,
-which can support maximum 4 sensors.
 
-It's based on thermal of framework:
- - Trip points defined in device tree.
- - Cpufreq as cooling device registered in loongson2 cpufreq driver.
- - Pwm fan as cooling device registered in hwmon pwm-fan driver.
 
-Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v4:
-		1. Fixup the compatible.
+Am 27.09.22 um 07:35 schrieb Christian Borntraeger:
+> 
+> 
+> Am 26.09.22 um 20:22 schrieb Peter Zijlstra:
+>> On Mon, Sep 26, 2022 at 08:06:46PM +0200, Peter Zijlstra wrote:
+>>
+>>> Let me go git-grep some to see if there's more similar fail.
+>>
+>> I've ended up with the below...
+> 
+> Tested-by: Christian Borntraeger <borntraeger@de.ibm.com>
+> 
+> Kind of scary that nobody else has reported any regression. I guess the freezable variant is just not used widely.
 
- drivers/thermal/Kconfig             |  10 ++
- drivers/thermal/Makefile            |   1 +
- drivers/thermal/loongson2_thermal.c | 268 ++++++++++++++++++++++++++++
- 3 files changed, 279 insertions(+)
- create mode 100644 drivers/thermal/loongson2_thermal.c
-
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index e052dae614eb..6b60397e96a1 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
- 	  If you say yes here you get support for the FAN controlled
- 	  by the Microcontroller found on the Khadas VIM boards.
- 
-+config LOONGSON2_THERMAL
-+	tristate "Loongson2 SOC series thermal driver"
-+	depends on OF
-+	default y
-+	help
-+	  Support for Thermal driver found on Loongson2 SOC series platforms.
-+	  It supports one critical trip point and one passive trip point. The
-+	  cpufreq and the pwm fan is used as the cooling device to throttle
-+	  CPUs when the passive trip is crossed.
-+
- endif
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index def8e1a0399c..e99f839126fa 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
- obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
- obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
- obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-+obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
-diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
-new file mode 100644
-index 000000000000..0f9dadbd4a07
---- /dev/null
-+++ b/drivers/thermal/loongson2_thermal.c
-@@ -0,0 +1,268 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Author: zhanghongchen <zhanghongchen@loongson.cn>
-+ *         Yinbo Zhu <zhuyinbo@loongson.cn>
-+ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/cpufreq.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/io.h>
-+#include <linux/of_device.h>
-+#include <linux/thermal.h>
-+#include "thermal_hwmon.h"
-+
-+#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
-+
-+#define LOONGSON2_TSENSOR_CTRL_HI			0x0
-+#define LOONGSON2_TSENSOR_CTRL_LO			0x8
-+#define LOONGSON2_TSENSOR_STATUS			0x10
-+#define LOONGSON2_TSENSOR_OUT				0x14
-+
-+struct loongson2_thermal_data {
-+	struct thermal_zone_device *tzd;
-+	int irq;
-+	int id;
-+	void __iomem *regs;
-+	struct platform_device *pdev;
-+	u16 ctrl_low_val;
-+	u16 ctrl_hi_val;
-+};
-+
-+/**
-+ * @low : temperature in degree
-+ * @high: temperature in degree
-+ */
-+static int loongson2_thermal_set(struct loongson2_thermal_data *data,
-+					int low, int high, bool enable)
-+{
-+	u64 reg_ctrl = 0;
-+	int reg_off = data->id * 2;
-+
-+	if (low > high)
-+		return -EINVAL;
-+
-+	low = low < -100 ? -100 : low;
-+	high = high > 155 ? 155 : high;
-+
-+	low += 100;
-+	high += 100;
-+
-+	reg_ctrl |= low;
-+	reg_ctrl |= enable ? 0x100 : 0;
-+	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+
-+	reg_ctrl = 0;
-+	reg_ctrl |= high;
-+	reg_ctrl |= enable ? 0x100 : 0;
-+	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_get_temp(void *__data, int *temp)
-+{
-+	struct loongson2_thermal_data *data = __data;
-+	u32 reg_val;
-+
-+	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
-+	*temp = ((reg_val & 0xff) - 100) * 1000;
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_get_sensor_id(void)
-+{
-+	int ret, id;
-+	struct of_phandle_args sensor_specs;
-+	struct device_node *np, *sensor_np;
-+
-+	np = of_find_node_by_name(NULL, "thermal-zones");
-+	if (!np)
-+		return -ENODEV;
-+
-+	sensor_np = of_get_next_child(np, NULL);
-+	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
-+			"#thermal-sensor-cells",
-+			0, &sensor_specs);
-+	if (ret) {
-+		of_node_put(np);
-+		of_node_put(sensor_np);
-+		return ret;
-+	}
-+
-+	if (sensor_specs.args_count >= 1) {
-+		id = sensor_specs.args[0];
-+		WARN(sensor_specs.args_count > 1,
-+				"%s: too many cells in sensor specifier %d\n",
-+				sensor_specs.np->name, sensor_specs.args_count);
-+	} else {
-+		id = 0;
-+	}
-+
-+	of_node_put(np);
-+	of_node_put(sensor_np);
-+
-+	return id;
-+}
-+
-+static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
-+{
-+	struct loongson2_thermal_data *data = dev;
-+
-+	/* clear interrupt */
-+	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
-+
-+	disable_irq_nosync(irq);
-+
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
-+{
-+	struct loongson2_thermal_data *data = dev;
-+
-+	thermal_zone_device_update(data->tzd,
-+				   THERMAL_EVENT_UNSPECIFIED);
-+	enable_irq(data->irq);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int loongson2_thermal_set_trips(void *data, int low, int high)
-+{
-+	return loongson2_thermal_set(data, low/1000, high/1000, true);
-+}
-+
-+static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
-+	.get_temp = loongson2_thermal_get_temp,
-+	.set_trips = loongson2_thermal_set_trips,
-+};
-+
-+static int loongson2_thermal_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	struct loongson2_thermal_data *data;
-+	int ret;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->pdev = pdev;
-+	platform_set_drvdata(pdev, data);
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	data->regs = devm_ioremap(dev, res->start, resource_size(res));
-+	if (IS_ERR(data->regs))
-+		return PTR_ERR(data->regs);
-+
-+	/* get irq */
-+	data->irq = platform_get_irq(pdev, 0);
-+	if (data->irq < 0)
-+		return data->irq;
-+
-+	/* get id */
-+	data->id = loongson2_thermal_get_sensor_id();
-+	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
-+		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
-+				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
-+		return -EINVAL;
-+	}
-+
-+	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
-+
-+	loongson2_thermal_set(data, 0, 0, false);
-+
-+	data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
-+							   data->id, data,
-+							   &loongson2_of_thermal_ops);
-+	if (IS_ERR(data->tzd)) {
-+		ret = PTR_ERR(data->tzd);
-+		data->tzd = NULL;
-+		dev_err(&pdev->dev, "failed to register %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = devm_request_threaded_irq(dev, data->irq,
-+			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
-+			IRQF_ONESHOT, "loongson2_thermal", data);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to request alarm irq: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Thermal_zone doesn't enable hwmon as default,
-+	 * enable it here
-+	 */
-+	data->tzd->tzp->no_hwmon = false;
-+	ret = thermal_add_hwmon_sysfs(data->tzd);
-+	if (ret) {
-+		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_remove(struct platform_device *pdev)
-+{
-+	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
-+	int reg_off = data->id * 2;
-+
-+	/* disable interrupt */
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id of_loongson2_thermal_match[] = {
-+	{ .compatible = "loongson,ls2k-thermal",},
-+	{ /* end */ }
-+};
-+MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
-+
-+static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
-+{
-+	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
-+	int reg_off = data->id * 2;
-+
-+	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused loongson2_thermal_resume(struct device *dev)
-+{
-+	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
-+	int reg_off = data->id * 2;
-+
-+	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
-+			 loongson2_thermal_suspend, loongson2_thermal_resume);
-+
-+static struct platform_driver loongson2_thermal_driver = {
-+	.driver = {
-+		.name		= "loongson2_thermal",
-+		.pm = &loongson2_thermal_pm_ops,
-+		.of_match_table = of_loongson2_thermal_match,
-+	},
-+	.probe	= loongson2_thermal_probe,
-+	.remove	= loongson2_thermal_remove,
-+};
-+module_platform_driver(loongson2_thermal_driver);
--- 
-2.31.1
-
+Will you queue this fix for next soon?
