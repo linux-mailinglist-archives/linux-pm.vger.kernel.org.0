@@ -2,25 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2C55ED7AA
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 10:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2605ED7F8
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 10:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbiI1I0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 04:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        id S232616AbiI1Ihh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 04:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiI1I0p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 04:26:45 -0400
+        with ESMTP id S232937AbiI1IhY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 04:37:24 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A74B671BFF;
-        Wed, 28 Sep 2022 01:26:43 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOI9BTRjKzIjAA--.1292S2;
-        Wed, 28 Sep 2022 16:26:37 +0800 (CST)
-Subject: Re: [PATCH v4 2/3] dt-bindings: thermal: add loongson2k thermal
- binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A1719DFA4;
+        Wed, 28 Sep 2022 01:37:14 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbWuwBzRjdjMjAA--.18971S2;
+        Wed, 28 Sep 2022 16:37:10 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
@@ -29,94 +27,67 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20220928031628.6463-1-zhuyinbo@loongson.cn>
- <20220928031628.6463-2-zhuyinbo@loongson.cn>
- <1b2d1e4f-6b95-cf20-8c2d-f87a91ae599c@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <c6b15f31-06e1-81e8-9e4f-5a2b8a704096@loongson.cn>
-Date:   Wed, 28 Sep 2022 16:26:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Liu Peibao <liupeibao@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v5 1/3] MAINTAINERS: add maintainer for thermal driver for loongson2 SoCs
+Date:   Wed, 28 Sep 2022 16:37:00 +0800
+Message-Id: <20220928083702.17309-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <1b2d1e4f-6b95-cf20-8c2d-f87a91ae599c@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxYOI9BTRjKzIjAA--.1292S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF4kAry8ZrWrAF18Xw45trb_yoWkCrb_AF
-        129wn7Zwn7ArsIgwn3Zr1fK3s3Kay8Xw15JFWkt34xZ34FvayUuF10yr1SqayfJw4kCF43
-        CryrWw1Ykw4UWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+X-CM-TRANSID: AQAAf8CxbWuwBzRjdjMjAA--.18971S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw1DCw17Cr4ruF1rXry3twb_yoWftrb_CF
+        1Iqa1xZw48AF13K3ykuryxJ343Zrs7JF15A3Z7t397A34Dta43AF98A3Zxu348Cr4UuFyf
+        taykGr1S9r12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbskFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
         6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
         A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
         Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
         Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+        IFyTuYvjfUF9a9DUUUU
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add zhanghongchen and myself as maintainer of the loongson2 SoC
+series thermal driver.
 
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-在 2022/9/28 下午4:01, Krzysztof Kozlowski 写道:
-> On 28/09/2022 05:16, Yinbo Zhu wrote:
->> Add the loongson2k thermal binding with DT schema format using
->> json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
->> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Thermal sensors on loongson2k SoCs
->> +
->> +maintainers:
->> +  - zhanghongchen <zhanghongchen@loongson.cn>
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    const: loongson,ls2k-thermal
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  "#thermal-sensor-cells":
-> 
-> Use same quotes in all places - either ' or "
-Thanks for reminding me, I will fix it.
-> 
->> +    const: 1> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - '#thermal-sensor-cells'
-> 
-> With quotes fixed:
-I will use "'" uniformly.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Best regards,
-> Krzysztof
-> 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..0be0f520c032 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+-- 
+2.31.1
 
