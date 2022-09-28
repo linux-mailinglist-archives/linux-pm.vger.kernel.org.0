@@ -2,119 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629AB5ECA3C
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Sep 2022 18:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70E15ED357
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 05:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiI0Q6S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 12:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
+        id S232201AbiI1DPY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 23:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbiI0Q6C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 12:58:02 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559ECADCEA;
-        Tue, 27 Sep 2022 09:57:53 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 967875809C1;
-        Tue, 27 Sep 2022 12:57:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 27 Sep 2022 12:57:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1664297870; x=1664305070; bh=gk
-        fETQGOUkN/p+KkeVW4lZaExlmLKRZn8wJCWXZOXRI=; b=sl/KntKinPRXzDDFxY
-        luTWeO/SAjzn6ocbPDU+4KC12/bVB6ccIpBzxeskfUvDq2NgfLfP3ltMZX4+xa6X
-        BhM0uzytzQN2YmEsxfOPgepG40v0MKaXtnPL3fujQWOK7fsXRv+lLYXEfTf8Ex6y
-        LW+YRy64iVE2l+jp4KNKtXCxHGQRYUkmhkb6+tZrgjVrLfa5UlTvyQ8GWbNDMBSe
-        iTpYp2NbuxpA4SC0WuhpORxMR7exRrXmD1CI+rCPyDCT5v0Bd4UykGSrpEdbDlTN
-        pW6LoTYLKUq9Y057QwyPJdKta6TKAwUs+8WTuIuIPki55EHVRFtUq3rZF1mUWqF2
-        sSMA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664297870; x=1664305070; bh=gkfETQGOUkN/p+KkeVW4lZaExlmL
-        KRZn8wJCWXZOXRI=; b=q6PBxVsB6TAiVJKjj7grNbonKK2ajkzvu/Dzd2TH3CFA
-        hnLfkasV7cvf9QZxfOLarnnYK4fGDO+k/0vjt3ORJi3AYKxeDF2cHfdTtzgkZOA/
-        bVWzsJkB/rtVBcG17iWEeLE/B16IzohQIu4UGywnXvxCXy0G3oVEs2Tu8U6fYPGt
-        2F1d6esauHi1hMziOUxsKaOKag/bzfMP3IqBrCogwrG73VGlF+jc9EB9QKkBZVCo
-        E6s8ewS0UBSQvkPpmfsqmmIFjuX2ddnMMMQXsV0J2jiUexlrYdBAiq0dfWhQ4D7V
-        5X1QklITrS/WgLhZpKhKtd8fejhParaszKfQhyWxvA==
-X-ME-Sender: <xms:jCszY4DySiXJMko8aH6ARcnYUKhk1nQi75b_4TxTydAkX-i5tBjsHQ>
-    <xme:jCszY6hcvgxD2NlospONkVCWUqCc3PiXfrpm_LanOFkBoMSm7flrlvr4SDlb21x_l
-    JQy-Yf_ouczQM4S9pQ>
-X-ME-Received: <xmr:jCszY7m7jIY0Xy2HazcDIdh3ZA0Eo72olKfXUhzEFnmyCVMfBpkYLWaYlbg900Ic2HboBLBaREjLPih9_uSZNXwAkw9grUotXmJC>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegiedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujggfsehttdertddtreejnecuhfhrohhmpeeuvghn
-    uceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrfgrth
-    htvghrnheptefgvefgfffhveeltefhfeettdefgfelteefheetgfejfefgfeeigfeutedv
-    ffefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmvgessggvnhgsohgvtghkvghlrdhnvght
-X-ME-Proxy: <xmx:jCszY-yPA3xV8oQtg5ZtGJXt4TmA6x6rX1ngeAi_022fFsS3t8EEsg>
-    <xmx:jCszY9QTppKQQ1N4lpPLZeDhBloVWFiXZ7EFUFrSGLpGxl6ntHpOvg>
-    <xmx:jCszY5aF3UZCKkuN0OUZuydwsb0cgRuNUjIFsfCqkoEmX372jSuqmw>
-    <xmx:jiszY6DAdqedfCLj4PUBmMx1pjlY_6_JFeLFpGgiurvmFr5Us6WkyA>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 27 Sep 2022 12:57:48 -0400 (EDT)
-Date:   Tue, 27 Sep 2022 12:58:43 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        apronin@chromium.org, dlunev@google.com, jarkko@kernel.org,
-        Pavel Machek <pavel@ucw.cz>, rjw@rjwysocki.net, corbet@lwn.net,
-        linux-pm@vger.kernel.org, zohar@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
-        gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 05/11] security: keys: trusted: Allow storage of PCR
- values in creation data
-Message-ID: <YzMrw3TASWemgRTh@megas.dev.benboeckel.internal>
-References: <20220927164922.3383711-1-evgreen@chromium.org>
- <20220927094559.v3.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
+        with ESMTP id S232646AbiI1DPV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 23:15:21 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 960FBFF;
+        Tue, 27 Sep 2022 20:15:18 -0700 (PDT)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxrmtAvDNjlBAjAA--.51149S2;
+        Wed, 28 Sep 2022 11:15:13 +0800 (CST)
+Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: add loongson2 thermal
+ binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Zhang Rui <rui.zhang@intel.com>, zhuyinbo@loongson.cn,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <20220927013951.12833-1-zhuyinbo@loongson.cn>
+ <20220927013951.12833-2-zhuyinbo@loongson.cn>
+ <1664289558.346744.943212.nullmailer@robh.at.kernel.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <7542c99d-31d1-621b-6564-d6db762947d2@loongson.cn>
+Date:   Wed, 28 Sep 2022 11:15:12 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220927094559.v3.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1664289558.346744.943212.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8CxrmtAvDNjlBAjAA--.51149S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYd7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwAC
+        I402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04
+        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 09:49:16 -0700, Evan Green wrote:
-> From: Matthew Garrett <matthewgarrett@google.com>
-> 
-> When TPMs generate keys, they can also generate some information
-> describing the state of the PCRs at creation time. This data can then
-> later be certified by the TPM, allowing verification of the PCR values.
-> This allows us to determine the state of the system at the time a key
-> was generated. Add an additional argument to the trusted key creation
-> options, allowing the user to provide the set of PCRs that should have
-> their values incorporated into the creation data.
-> 
-> Link: https://lore.kernel.org/lkml/20210220013255.1083202-6-matthewgarrett@google.com/
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> Signed-off-by: Evan Green <evgreen@chromium.org>
-> ---
 
-Reviewed-by: Ben Boeckel <linux@me.benboeckel.net>
+ÔÚ 2022/9/27 ÏÂÎç10:39, Rob Herring Ð´µÀ:
+> make DT_CHECKER_FLAGS=-m dt_binding_check
 
-Thanks!
+Hi Rob,
 
---Ben
+this issue had been fix in v4 version.
+
+TKs,
+
+Yinbo.
+
+
+
