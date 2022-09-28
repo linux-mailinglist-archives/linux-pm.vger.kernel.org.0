@@ -2,108 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CB45EDE9E
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 16:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA3B5EDED5
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 16:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiI1OS0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 10:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S234395AbiI1OdQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 10:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbiI1OSZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 10:18:25 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5CEA6C21
-        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 07:18:23 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 10so20607933lfy.5
-        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 07:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=1YTPEs2grmzd8FfasAPccFml/qOKmBaeOYlbAL2/Wvo=;
-        b=hEeRxnQ8aIgTaPN2jPgNpHFkdpZ/TOoWu0jXE2jk1LZZy1nvYG4DzBs8Ow8G5LCV70
-         Vy8ViykKw3YsPCOC0g/RuVeBZOSEghW76CupRv0bVJyY/adyiNyeCTcHU5s/l5AReYwf
-         rTbsPlm/Ly9OdK2HK+AZE2cqu/D0l8NhHLm4EVcyrBso2LXNYHJz3PvEtnjwkGxXcXYS
-         2odGgP4D7l3X1Kt25PVhKrobvVEk8S2o/JyCAqv5MDYN5oLFOwWSdRGPQyIHkfCnsJsJ
-         QFj80xDHdCwoUmMnTCB9d4l6kwqh6bOFAfm1OhF2PSAFl0F9B3hY1nyMYzbT5pt/4BhW
-         GFgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=1YTPEs2grmzd8FfasAPccFml/qOKmBaeOYlbAL2/Wvo=;
-        b=LZJrkNQwbtZK/QVYtiDnMdG6LdKa+DGPZb0kYhl3XUPCZ90xasQRlQ4eC1NzZH/UHP
-         hHnUYUijp0ZpZ686rZZRTClglMTZWTQpJ7oodTBnun4FGisb8zdN9xQgbALiCZkvMwmr
-         fdN/WnQv+v+EOxgQU23QDCbo7WLy8LoUDhl67pVJzg6hUob0QIUWKFNbGd9VUwEAacX/
-         Rhc9BO6lSz6P/dxcLoMl81eJbWF/1YfkHsW2m4f+6cQKp0NSH2H1tAzqls1CpjNt7fjG
-         98S9XU599kZ4SwqV7+BLT/PjJ+Ctq+Fe92t5qOtqW8nobS7y+SasZMNCmsob3NUMOtXI
-         9BsQ==
-X-Gm-Message-State: ACrzQf1mWT3KMPFsRMZzpntqLkyYelv1ypsCni6YK5IVH4LAcS3JMlta
-        W/FK0FU2PXHLZe/FzYvAlz91jA==
-X-Google-Smtp-Source: AMsMyM4Bc4KIMAmbgDB0KdFkipqTgkuVUPDPRiqpPqk9UR5ow83xb4fJOlEf8jtxYz9Oq2nIdPBJlA==
-X-Received: by 2002:ac2:5493:0:b0:498:f55c:7fc7 with SMTP id t19-20020ac25493000000b00498f55c7fc7mr12876584lfk.381.1664374701152;
-        Wed, 28 Sep 2022 07:18:21 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g19-20020ac25393000000b0049482adb3basm487642lfh.63.2022.09.28.07.18.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 07:18:19 -0700 (PDT)
-Message-ID: <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
-Date:   Wed, 28 Sep 2022 16:18:18 +0200
+        with ESMTP id S229940AbiI1OdP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 10:33:15 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0BAACA2B;
+        Wed, 28 Sep 2022 07:33:14 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SCvNcj010676;
+        Wed, 28 Sep 2022 14:32:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=+7FsEsmSzmHPrpkQKjyZG1T0NwZSFVJVfMS6Ktray90=;
+ b=g5727hPnuJs6+VZIk7PC03ipq3r7aJXPWXiz4cYyxTy2TD72TrRTioJLUshP8eb5S3jp
+ T/e0fZoTLEzHT5M7GUKckHSY5ee44pZUXUNNeP7oDqVSfjHIxGiG3XzZefJ7i66qLI3U
+ s2EBfRfyATRcknRkTmdhxeZNSaPnn3YW7dBgPT9IhvPK8qbxZHH47hL0xTo18F9W7hBS
+ MMBx83dYnOiX4XqzRwN7rDwrf5OLq0/WNsFehkfKv0rzSWHdfbGDdpZ0Z8CfRJFKrn4i
+ mfY447+fcki8BQ5o5SzXxZKErWjDJjI/Xs9gczGhxH9y7BRmqFdQcl/gOxLTkNVLSusG CA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvm758g4d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 14:32:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28SEWj0V029305
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 14:32:45 GMT
+Received: from [10.216.15.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
+ 2022 07:32:35 -0700
+Message-ID: <35e82a1b-7a36-d460-5a98-1378175836f1@quicinc.com>
+Date:   Wed, 28 Sep 2022 20:02:32 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
- binding
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
- <20220928083702.17309-2-zhuyinbo@loongson.cn>
- <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
-In-Reply-To: <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mka@chromium.org>,
+        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
+        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
+        <svarbanov@mm-sol.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
+        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <linux-phy@lists.infradead.org>,
+        <vkoul@kernel.org>, <kishon@ti.com>, <mturquette@baylibre.com>,
+        <linux-clk@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>
+References: <20220923142611.GA1389970@bhelgaas>
+ <5fb1e6d9-00c0-33f2-753e-2338010da352@quicinc.com>
+In-Reply-To: <5fb1e6d9-00c0-33f2-753e-2338010da352@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: LAKEQkVTk4y8zDCqOoNMJY_kDv9VaNpk
+X-Proofpoint-GUID: LAKEQkVTk4y8zDCqOoNMJY_kDv9VaNpk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_06,2022-09-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ phishscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=474 adultscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280086
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
-> On 28/09/2022 10:37, Yinbo Zhu wrote:
->> Add the loongson2k thermal binding with DT schema format using
->> json-schema.
+
+On 9/25/2022 7:23 AM, Krishna Chaitanya Chundru wrote:
+>
+> On 9/23/2022 7:56 PM, Bjorn Helgaas wrote:
+>> On Fri, Sep 23, 2022 at 07:29:31AM +0530, Krishna Chaitanya Chundru 
+>> wrote:
+>>> On 9/23/2022 12:12 AM, Bjorn Helgaas wrote:
+>>>> On Thu, Sep 22, 2022 at 09:09:28PM +0530, Krishna Chaitanya Chundru 
+>>>> wrote:
+>>>>> On 9/21/2022 10:26 PM, Bjorn Helgaas wrote:
+>>>>>> On Wed, Sep 21, 2022 at 03:23:35PM +0530, Krishna Chaitanya 
+>>>>>> Chundru wrote:
+>>>>>>> On 9/20/2022 11:46 PM, Bjorn Helgaas wrote:
+>>>>>>>> On Tue, Sep 20, 2022 at 03:52:23PM +0530, Krishna chaitanya 
+>>>>>>>> chundru wrote:
+>>>>>>>>> In qcom platform PCIe resources( clocks, phy etc..) can
+>>>>>>>>> released when the link is in L1ss to reduce the power
+>>>>>>>>> consumption. So if the link is in L1ss, release the PCIe
+>>>>>>>>> resources. And when the system resumes, enable the PCIe
+>>>>>>>>> resources if they released in the suspend path.
+>>>>>>>> What's the connection with L1.x?  Links enter L1.x based on
+>>>>>>>> activity and timing.  That doesn't seem like a reliable
+>>>>>>>> indicator to turn PHYs off and disable clocks.
+>>>>>>> This is a Qcom PHY-specific feature (retaining the link state in
+>>>>>>> L1.x with clocks turned off).  It is possible only with the link
+>>>>>>> being in l1.x. PHY can't retain the link state in L0 with the
+>>>>>>> clocks turned off and we need to re-train the link if it's in L2
+>>>>>>> or L3. So we can support this feature only with L1.x. That is
+>>>>>>> the reason we are taking l1.x as the trigger to turn off clocks
+>>>>>>> (in only suspend path).
+>>>>>> This doesn't address my question.  L1.x is an ASPM feature, which
+>>>>>> means hardware may enter or leave L1.x autonomously at any time
+>>>>>> without software intervention.  Therefore, I don't think reading the
+>>>>>> current state is a reliable way to decide anything.
+>>>>> After the link enters the L1.x it will come out only if there is
+>>>>> some activity on the link.  AS system is suspended and NVMe driver
+>>>>> is also suspended( queues will  freeze in suspend) who else can
+>>>>> initiate any data.
+>>>> I don't think we can assume that nothing will happen to cause exit
+>>>> from L1.x.  For instance, PCIe Messages for INTx signaling, LTR, OBFF,
+>>>> PTM, etc., may be sent even though we think the device is idle and
+>>>> there should be no link activity.
+>>> I don't think after the link enters into L1.x there will some
+>>> activity on the link as you mentioned, except for PCIe messages like
+>>> INTx/MSI/MSIX. These messages also will not come because the client
+>>> drivers like NVMe will keep their device in the lowest power mode.
+>>>
+>>> The link will come out of L1.x only when there is config or memory
+>>> access or some messages to trigger the interrupts from the devices.
+>>> We are already making sure this access will not be there in S3.  If
+>>> the link is in L0 or L0s what you said is expected but not in L1.x
+>> Forgive me for being skeptical, but we just spent a few months
+>> untangling the fact that some switches send PTM request messages even
+>> when they're in a non-D0 state.  We expected that devices in D3hot
+>> would not send such messages because "why would they?"  But it turns
+>> out the spec allows that, and they actually *do*.
 >>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> 
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
-> 
-> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-> 
-> If a tag was not added on purpose, please state why and what changed.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> I don't think it's robust interoperable design for a PCI controller
+>> driver like qcom to assume anything about PCI devices unless it's
+>> required by the spec.
+>>
+>> Bjorn
+> We will check the spec once and will come back to you,
+ From pci spec 4, in sec 5.5
+"Ports that support L1 PM Substates must not require a reference clock 
+while in L1 PM Substates
+other than L1.0".
+If there is no reference clk we can say there is no activity on the link.
+If anything needs to be sent (such as LTR, or some messages ), the link 
+needs to be back in L0 before it
+sends the packet to the link partner.
 
-... and please test your patches before sending :(
+To exit from L1.x clkreq pin should be asserted.
 
-Best regards,
-Krzysztof
+In suspend after turning off clocks and phy we can enable to trigger an 
+interrupt whenever the clk req pin asserts.
+In that interrupt handler, we can enable the pcie resources back.
 
+What are your thoughts on this?
