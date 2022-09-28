@@ -2,62 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1AC5ED704
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 10:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2C55ED7AA
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 10:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbiI1IBm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 04:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S233315AbiI1I0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 04:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbiI1IBk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 04:01:40 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCD01EE755
-        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 01:01:36 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 10so19194229lfy.5
-        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 01:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/tJFSKHI3KE+2w8Mp5fH7AqdtUfhsF9MOlEfNhHwM7I=;
-        b=sZNK31UuiHEMJfT8TgQ1DF3bkj2FDYT+XYHsuJ5D7t/0VNkyDCF4GMpRWhZZf4/wGo
-         ZD2kE+L5ISVXseZzlL7xBjh0tWnXSqTV8tYwhOPhEDO3pIvXIjQ7F53Sh6+QCL8aFJno
-         YRswSUWfxeP/80mumiLIqa4GXxA5Y/MyQ+hZ7IEO7qFhyopNrKkTWgr9FW9Yt9yCZT9o
-         LCbWTfmzYwJ7wXIzDNdSK9EaMHYqPGIT1dQDrHnCyn6xviu8HM1o+mSIJs4EgVR+iqfw
-         819Y9ZTIB2LSwCHSFCAmyGaiDYHeXx0jLZSezFb/fb49/2EPqLU/dhoa3E8ozPCtgoio
-         CVOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/tJFSKHI3KE+2w8Mp5fH7AqdtUfhsF9MOlEfNhHwM7I=;
-        b=zl3nM+qxtDg86ZntimkRNXg6PNvxPRYLcLzT93FhQRAfxzjPLK7VTF2p8lNI5BMpDS
-         aFXtY4sOUmkQZkMXmoGI9biWym8RgjcK79zOM2CuIrxT2TsIwCFF1bEAI7d5HbwkCNVL
-         1opLYU6oHEPpLj4tJXEA/4mPl9rZIk9INU0JzEeIZYm0RxqZp0SPlaDZct6kYtT+WF/a
-         4Mla5mwYqLQfkt4+5GiSFW/D3usqC0OGG1xiEB2sKNCOK22fZMRi/610rVRpdW6khcj0
-         fMO39i+RMTXW42Ym9jd9Vsq8wqNeVAkllcJa/BjmhH7YypNhVNlZgy89xMegJ9675zlg
-         0VzQ==
-X-Gm-Message-State: ACrzQf2Y2jhQE7NQWcol4yeQG0KzcOi/QpgEsyl3nyOyf6adOw0HX3iw
-        9oG/cG8gxA8bVGR2jqTcuYv2cg==
-X-Google-Smtp-Source: AMsMyM5+OHfsYNiw9519Tq7XbP5R9nzBpq18Ms24ne3Ny6o05PjkBLEQZWX4oKBVghzP7qhGQV+ADA==
-X-Received: by 2002:a05:6512:10c8:b0:49c:14c5:e081 with SMTP id k8-20020a05651210c800b0049c14c5e081mr13054391lfg.615.1664352094458;
-        Wed, 28 Sep 2022 01:01:34 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id cf32-20020a056512282000b0048a934168c0sm403159lfb.35.2022.09.28.01.01.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 01:01:33 -0700 (PDT)
-Message-ID: <1b2d1e4f-6b95-cf20-8c2d-f87a91ae599c@linaro.org>
-Date:   Wed, 28 Sep 2022 10:01:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
+        with ESMTP id S229862AbiI1I0p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 04:26:45 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A74B671BFF;
+        Wed, 28 Sep 2022 01:26:43 -0700 (PDT)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOI9BTRjKzIjAA--.1292S2;
+        Wed, 28 Sep 2022 16:26:37 +0800 (CST)
 Subject: Re: [PATCH v4 2/3] dt-bindings: thermal: add loongson2k thermal
  binding
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
@@ -67,64 +29,94 @@ To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
+        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
 References: <20220928031628.6463-1-zhuyinbo@loongson.cn>
  <20220928031628.6463-2-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928031628.6463-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <1b2d1e4f-6b95-cf20-8c2d-f87a91ae599c@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <c6b15f31-06e1-81e8-9e4f-5a2b8a704096@loongson.cn>
+Date:   Wed, 28 Sep 2022 16:26:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <1b2d1e4f-6b95-cf20-8c2d-f87a91ae599c@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxYOI9BTRjKzIjAA--.1292S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF4kAry8ZrWrAF18Xw45trb_yoWkCrb_AF
+        129wn7Zwn7ArsIgwn3Zr1fK3s3Kay8Xw15JFWkt34xZ34FvayUuF10yr1SqayfJw4kCF43
+        CryrWw1Ykw4UWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb-AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/09/2022 05:16, Yinbo Zhu wrote:
-> Add the loongson2k thermal binding with DT schema format using
-> json-schema.
+
+
+在 2022/9/28 下午4:01, Krzysztof Kozlowski 写道:
+> On 28/09/2022 05:16, Yinbo Zhu wrote:
+>> Add the loongson2k thermal binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-
-Thank you for your patch. There is something to discuss/improve.
-
-> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Thermal sensors on loongson2k SoCs
-> +
-> +maintainers:
-> +  - zhanghongchen <zhanghongchen@loongson.cn>
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  "#thermal-sensor-cells":
-
-Use same quotes in all places - either ' or "
-
-> +    const: 1> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - '#thermal-sensor-cells'
-
-With quotes fixed:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+> Thank you for your patch. There is something to discuss/improve.
+> 
+>> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Thermal sensors on loongson2k SoCs
+>> +
+>> +maintainers:
+>> +  - zhanghongchen <zhanghongchen@loongson.cn>
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: loongson,ls2k-thermal
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  "#thermal-sensor-cells":
+> 
+> Use same quotes in all places - either ' or "
+Thanks for reminding me, I will fix it.
+> 
+>> +    const: 1> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - '#thermal-sensor-cells'
+> 
+> With quotes fixed:
+I will use "'" uniformly.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Best regards,
+> Krzysztof
+> 
 
