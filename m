@@ -2,108 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506395EE4A7
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 20:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024945EE59D
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 21:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiI1Syz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 14:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S232380AbiI1TYz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 15:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbiI1Syx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 14:54:53 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0552FFE6;
-        Wed, 28 Sep 2022 11:54:50 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id i12so3775932qvs.2;
-        Wed, 28 Sep 2022 11:54:50 -0700 (PDT)
+        with ESMTP id S234032AbiI1TYg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 15:24:36 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B6841984
+        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 12:22:42 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id y20so2486247plb.2
+        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 12:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=IATbB+mTuldm9DEGTU9Ku/OShkHX1AvIMasBRffFmUE=;
+        b=uFptoWOo+d89TNFCQfB+zTNtVPgtwpdZvI6kyXS3MY5nYTBZYxYDgFJ9rYzOv+qLNm
+         Cp1CJU3B4btumwpb/KBOKROtPBecadIAlnWa/4M0xxcMbTMVnZASmHlivkydgGTk3qdy
+         /cieThSu9kPS5upng3kR8t33iho79eACYrl3jdD2ySnkwqY1OaTFWjKFyT/cNhJw5baT
+         RVIjl0X6g3RuMXvEibio8ZNuiwk3RCzv4cskrXqjQUVcjT8LhL4UMaebFqItbxTDyKdA
+         shnRn5DHHlTScJ8MWTVBSBrWgX/aPF9G/dvLhOJZeauNMm738pg9FcFJgYqaaWsRQpq7
+         lU1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9819DIn5cz+DhTm0obBSo3ryJjp2/XGyvfjqokkY82w=;
-        b=jeYmgn29b77/vVeyCTHdY6ntxpWPNknjR/wUWFc8YbRfkIG/PB39U9lKSXftn/B80b
-         OkjZA9Xlbc48xv0u+51wKzk5HALU0KW4GWkBhBfyZYaWl+A5lAePMYzrn3Wl/aDolZry
-         Oum2O3pMEe2sCUQ6uckNxiIwVJJghAR1FL/ujfj00ydZkMa4FkYH46yTBCOM9Mhk2tML
-         mogmWRaqW5FcSJMehb/9e6SIk6hVnSB7NK9cLRD63plOwjzaIEpJV3fCQkLmCLLGQEM+
-         W2XAekM13ZuZboIMcwP5C7ugiPHuBqag+lS6hR1RyC/GLi05aC2lX2vPETZrV7XPc91y
-         mcsg==
-X-Gm-Message-State: ACrzQf3CXWfZSKUtiZ036gS2Vsv+CbVB9N/taJ2o2LlDtecJNE8JLoQp
-        AlNWJH6M6V9coX/mGyi405HPDyImw3kodkvqR4Q=
-X-Google-Smtp-Source: AMsMyM5WCwldeJpfldUvSKKJnSka4+LWf8/LXSQcfG2XP7MWG0Rjl0WKbeGo6U1xTJ0W7yvseYzvdiQNTVz8pgAPh4o=
-X-Received: by 2002:a0c:f3cb:0:b0:4af:a435:2c1b with SMTP id
- f11-20020a0cf3cb000000b004afa4352c1bmr318835qvm.130.1664391289840; Wed, 28
- Sep 2022 11:54:49 -0700 (PDT)
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=IATbB+mTuldm9DEGTU9Ku/OShkHX1AvIMasBRffFmUE=;
+        b=BJG0ClPkriU95xM5jXewdH/c/ZQzcZ8MGUZBUTX6PCa3Ui0IhjJNKItUFF1mL/uWmE
+         a8ySlFe65Pemeqd+DxpiVPmGA9u/NTWNd+gR19pR8F8k/ftYrrf1nBoiHf3l2ORyI35E
+         L1g7YGpqKIxNG6koyjHgcRnArxu/CuGkm2b2KP9XKXhb3yFDMuk07KEt+TNV2dLEiHMY
+         4DmhYESfb2YQ8PkUvKNGn4uEnniPZM9ateOdwTVEtsdvKh1b32PN753yZAaCzON7JOyi
+         y8B/r7ISXRJ5mYFgBQxvJN6UFZDSLfl7Pau8txLkLmj/stog6jrbGQdmgD52t9ZRmv6L
+         GnLA==
+X-Gm-Message-State: ACrzQf3w74uqjZlmKMtdADfftTAjwkbA8yldD7sFJCjIJ3ErUQXybxxC
+        biUozAcl8AcmGof3k3IxTpk/gg==
+X-Google-Smtp-Source: AMsMyM6biu2Vp5Q4UfWhvxDXvktdzAeeAqRY2BZzwqY8RUWylYAm0ookZ83sylzUpK0JcM5lbMcVTg==
+X-Received: by 2002:a17:903:40c9:b0:176:e58c:f082 with SMTP id t9-20020a17090340c900b00176e58cf082mr1326266pld.60.1664392955179;
+        Wed, 28 Sep 2022 12:22:35 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id gi9-20020a17090b110900b001fb47692333sm1939387pjb.23.2022.09.28.12.22.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 12:22:34 -0700 (PDT)
+Message-ID: <63349efa.170a0220.da0b6.3581@mx.google.com>
+Date:   Wed, 28 Sep 2022 12:22:34 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220915164411.2496380-1-kajetan.puchalski@arm.com> <YzRBLiHByw5xPaU3@e126311.manchester.arm.com>
-In-Reply-To: <YzRBLiHByw5xPaU3@e126311.manchester.arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 28 Sep 2022 20:54:38 +0200
-Message-ID: <CAJZ5v0g8=mqiBC9LwQYOw15UZujaV8XoWoor8z=H+nG_aFc_3g@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/1] cpuidle: teo: Introduce optional util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.0-rc7-179-g530bc2b3f53f3
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.0-rc7-179-g530bc2b3f53f3)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.0-rc7-179-g5=
+30bc2b3f53f3)
 
-On Wed, Sep 28, 2022 at 2:42 PM Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
->
-> Hi Rafael,
->
-> Just a gentle ping here. Could you please take a look at this
-> discussion?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+0-rc7-179-g530bc2b3f53f3/
 
-I have seen it, but I haven't thought it through yet.
+Tree: pm
+Branch: testing
+Git Describe: v6.0-rc7-179-g530bc2b3f53f3
+Git Commit: 530bc2b3f53f310b78938352fa32d7c1b364d2dd
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Overall, this is quite subtle and requires quite a bit of consideration IMV.
+Warnings Detected:
 
-> I'd like to address some comments I received, especially on the subject
-> of making it reduce the state by one as opposed to going all the way to
-> 0 to account for different hardware and how we can accomodate different
-> architectures in the implementation of that mechanism.
+arc:
 
-I need to think more about that.
+arm64:
 
-> Before I send a v2 it'd be great to know your opinions on this and
-> whether I should still send it as a TEO patch or fork it into a separate
-> governor and make the changes there as both Doug and I seem to prefer.
+arm:
 
-Well, it is not a super-large patch against TEO, so I'm not sure if
-adding a new governor just for this one bit is a good idea.
+i386:
 
-I surely don't like the #ifdeffery there, so if it can be made part of
-the default TEO behavior, it will be much more appealing to me.
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
 
-Thanks!
+riscv:
 
-> On Thu, Sep 15, 2022 at 05:44:10PM +0100, Kajetan Puchalski wrote:
-> > At the very least this approach seems promising so I wanted to discuss it in RFC form first.
-> > Thank you for taking your time to read this!
-> >
-> > [1] https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc676b942c8e6498fb9bd03/idle_util_aware.pdf
-> >
-> > Kajetan Puchalski (1):
-> >   cpuidle: teo: Introduce optional util-awareness
-> >
-> >  drivers/cpuidle/Kconfig         | 12 +++++
-> >  drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
-> >  2 files changed, 98 insertions(+)
-> >
-> > --
-> > 2.37.1
-> >
+sparc:
+    sparc64_defconfig (gcc-10): 3 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    1    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
