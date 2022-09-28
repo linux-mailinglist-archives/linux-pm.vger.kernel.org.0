@@ -2,81 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FB45EDEE8
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 16:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506395EE4A7
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 20:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234407AbiI1OhB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 10:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S230076AbiI1Syz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 14:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbiI1OhA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 10:37:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCCCAB419;
-        Wed, 28 Sep 2022 07:36:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2760261EC2;
-        Wed, 28 Sep 2022 14:36:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B6AC433D6;
-        Wed, 28 Sep 2022 14:36:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664375818;
-        bh=AKYUXMSFyJEZ3MGh7qhq3oHM1Mb/mSjFZvL+qW4J4Xw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cilv0RnWY6aMcLrOusXlX2smuNnfveULRAIwVCDtx9cP9A+F7KiyS9pnTLXK8GoFN
-         iYNGFqn1cI5XffnO+PzjmkI4o2+hNjz6eyHFR9heN6HD4HrkItuvqggRHRN1jFglRA
-         o2FZCXXxFyGIXzlacxBkMPz4Aoh1Gb91/fQfMjBe6FoasNyEUEzk8sL2vgcA6hdtR8
-         336BaQCy71O1WY4us+f4/JcBHSCeBsavWWoISeUu7R87yHPm7A8jYTc5xI5l4n9m75
-         V+0upk/xVcP4CotURW7XiVT+TRuDVmSDmoH92HBcUEmlPPjmujUpt2z9SDpEHftDmN
-         7H/T/XXYM3GUg==
-Date:   Wed, 28 Sep 2022 15:36:52 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, zhangqing@rock-chips.com,
-        zyw@rock-chips.com, jon.lin@rock-chips.com,
-        maccraft123mc@gmail.com, sre@kernel.org, heiko@sntech.de,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        philip@pscan.uk, mazziesaccount@gmail.com,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH V10 3/4] power: supply: Add charger driver for Rockchip
- RK817
-Message-ID: <YzRcBJ7HHstO49Eq@google.com>
-References: <20220827021623.23829-1-macroalpha82@gmail.com>
- <20220827021623.23829-4-macroalpha82@gmail.com>
+        with ESMTP id S232346AbiI1Syx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 14:54:53 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0552FFE6;
+        Wed, 28 Sep 2022 11:54:50 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id i12so3775932qvs.2;
+        Wed, 28 Sep 2022 11:54:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=9819DIn5cz+DhTm0obBSo3ryJjp2/XGyvfjqokkY82w=;
+        b=jeYmgn29b77/vVeyCTHdY6ntxpWPNknjR/wUWFc8YbRfkIG/PB39U9lKSXftn/B80b
+         OkjZA9Xlbc48xv0u+51wKzk5HALU0KW4GWkBhBfyZYaWl+A5lAePMYzrn3Wl/aDolZry
+         Oum2O3pMEe2sCUQ6uckNxiIwVJJghAR1FL/ujfj00ydZkMa4FkYH46yTBCOM9Mhk2tML
+         mogmWRaqW5FcSJMehb/9e6SIk6hVnSB7NK9cLRD63plOwjzaIEpJV3fCQkLmCLLGQEM+
+         W2XAekM13ZuZboIMcwP5C7ugiPHuBqag+lS6hR1RyC/GLi05aC2lX2vPETZrV7XPc91y
+         mcsg==
+X-Gm-Message-State: ACrzQf3CXWfZSKUtiZ036gS2Vsv+CbVB9N/taJ2o2LlDtecJNE8JLoQp
+        AlNWJH6M6V9coX/mGyi405HPDyImw3kodkvqR4Q=
+X-Google-Smtp-Source: AMsMyM5WCwldeJpfldUvSKKJnSka4+LWf8/LXSQcfG2XP7MWG0Rjl0WKbeGo6U1xTJ0W7yvseYzvdiQNTVz8pgAPh4o=
+X-Received: by 2002:a0c:f3cb:0:b0:4af:a435:2c1b with SMTP id
+ f11-20020a0cf3cb000000b004afa4352c1bmr318835qvm.130.1664391289840; Wed, 28
+ Sep 2022 11:54:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220827021623.23829-4-macroalpha82@gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915164411.2496380-1-kajetan.puchalski@arm.com> <YzRBLiHByw5xPaU3@e126311.manchester.arm.com>
+In-Reply-To: <YzRBLiHByw5xPaU3@e126311.manchester.arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 28 Sep 2022 20:54:38 +0200
+Message-ID: <CAJZ5v0g8=mqiBC9LwQYOw15UZujaV8XoWoor8z=H+nG_aFc_3g@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] cpuidle: teo: Introduce optional util-awareness
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 26 Aug 2022, Chris Morgan wrote:
+Hi,
 
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> Add support for the Rockchip rk817 battery charger integrated into the
-> rk817 PMIC.
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-> ---
->  drivers/power/supply/Kconfig         |    6 +
->  drivers/power/supply/Makefile        |    1 +
->  drivers/power/supply/rk817_charger.c | 1211 ++++++++++++++++++++++++++
->  3 files changed, 1218 insertions(+)
->  create mode 100644 drivers/power/supply/rk817_charger.c
+On Wed, Sep 28, 2022 at 2:42 PM Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
+>
+> Hi Rafael,
+>
+> Just a gentle ping here. Could you please take a look at this
+> discussion?
 
-Applied, thanks.
+I have seen it, but I haven't thought it through yet.
 
--- 
-Lee Jones [李琼斯]
+Overall, this is quite subtle and requires quite a bit of consideration IMV.
+
+> I'd like to address some comments I received, especially on the subject
+> of making it reduce the state by one as opposed to going all the way to
+> 0 to account for different hardware and how we can accomodate different
+> architectures in the implementation of that mechanism.
+
+I need to think more about that.
+
+> Before I send a v2 it'd be great to know your opinions on this and
+> whether I should still send it as a TEO patch or fork it into a separate
+> governor and make the changes there as both Doug and I seem to prefer.
+
+Well, it is not a super-large patch against TEO, so I'm not sure if
+adding a new governor just for this one bit is a good idea.
+
+I surely don't like the #ifdeffery there, so if it can be made part of
+the default TEO behavior, it will be much more appealing to me.
+
+Thanks!
+
+> On Thu, Sep 15, 2022 at 05:44:10PM +0100, Kajetan Puchalski wrote:
+> > At the very least this approach seems promising so I wanted to discuss it in RFC form first.
+> > Thank you for taking your time to read this!
+> >
+> > [1] https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc676b942c8e6498fb9bd03/idle_util_aware.pdf
+> >
+> > Kajetan Puchalski (1):
+> >   cpuidle: teo: Introduce optional util-awareness
+> >
+> >  drivers/cpuidle/Kconfig         | 12 +++++
+> >  drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
+> >  2 files changed, 98 insertions(+)
+> >
+> > --
+> > 2.37.1
+> >
