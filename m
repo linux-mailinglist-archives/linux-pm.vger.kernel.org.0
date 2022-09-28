@@ -2,317 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDAF35EE7F6
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 23:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A37875EE838
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 23:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234858AbiI1VIS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 17:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        id S234744AbiI1VVM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 17:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234348AbiI1VH0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 17:07:26 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CF0E8DB2
-        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 14:02:49 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso2054054wmq.4
-        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 14:02:49 -0700 (PDT)
+        with ESMTP id S233533AbiI1VUv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 17:20:51 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36852218;
+        Wed, 28 Sep 2022 14:19:29 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id n40-20020a05600c3ba800b003b49aefc35fso1674445wms.5;
+        Wed, 28 Sep 2022 14:19:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=8pE/zvW6S2HkLQ2nl2eyAsUouKTzMht2lN2QByjtNa0=;
-        b=HXgRA9xl5RtEEpQ5/9Hq1X1TOVu6+5Dvikau2PJ8VMeDHLrc4OSRAgVq//EZ48s8q5
-         lDmlvj3F8CY47RTSGFLxjUvZADzBtXslmokGMTKuqFodZJ+Zl1QG9Ub9a/JSC2+JQ2Td
-         Y313IR+CtM5NwQ+St6ezsiZXV4Pckcd6eQJMBCT0zVedq+RBNCvCtSB7/OEP4t+v08OB
-         HbUUnJsUtuAWBjALk+KkkIY2SwUi9InwQhBx/gK2+pSoH+1jgxRFchL4xAA1pi1L3Mrt
-         ur2x0CX+ziGq1Ob5Bu5cR9jloA1h2sodrdmQQAU5+R8fhDeGi0+Bey1/uHrH0yPwzC0G
-         fSVw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=CPte1r662FSAR+yNfyqva9K9yTvoMCulNZWy04//xXs=;
+        b=PB2nPPYfPxZ3iRr4GAhBgSpcqBWvn062jN+FyVCMHXHEkWtyzHA28vjt8Q+fLmSGJS
+         fF6Nv3Ea3pCHOG+U+K3QssGeSZX6LvhSbkRFYW6w/oOHq5k3CHoVEwA+KmonB8WvzBOH
+         R1bUdvbzM8UkOO0RoBznf6/yhoiqcviSKVlGFMlFLGtpL1icdMgkhetE6FDI61bt8BNV
+         b3rKsBicgqHKbvij/jLFk7/f+cvAvwAK9jz1nF85d4IVqfRa5kRRIj/RoGCsEhw50SMO
+         ktthZ8eZlmVmkVEURoIBkx14Z/OYay8Z22EEwAv663CYeb5HiR8I7oKTlXabRg6dj+Nk
+         YPUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=8pE/zvW6S2HkLQ2nl2eyAsUouKTzMht2lN2QByjtNa0=;
-        b=imfMR9JU3xDIPBu9KkKF9OLSuY5ICgKV7mKqUn/1cYcegvDEr5/0uRSCfnnK1AWWPF
-         1SEdSd5hxvzmMZj5P1zfCayA+6DFWopfINZXZsFCxbgdccvtJ7h1r6TBoHzbkXOUQ4oy
-         xiaKl2oo+XpUzNvX2LB4VSslzFFzN/OsOW5jHKrBHud4djcrcI2Nqdf77K0Rn7Tdx/Er
-         flZZUwoDcn6LXGTGTqC4MQefc2ogPZqDu1hm5epi4OJI7tv0CQBXYw1xyyiRm+AYB4Oz
-         9o+F7LEFp6CxCGyOKXp8+hQa3NJG89h63uO3WbQBz1o8Q1WXicZh9v/+0mP6EDSoqnrl
-         TsgQ==
-X-Gm-Message-State: ACrzQf2i1X+yz71J4YeNwamOWWYUuTBzayXJn5U22s2qzsf3wpNUpVow
-        9AAatBrgsS45+9OFi4LrL8nMSA==
-X-Google-Smtp-Source: AMsMyM53Cgbe2M2piI5xT5mM6XcJ8yzolBHl+XMtiR3Xq3RzX8Yn8x7ONN7QPSwi29vVBxqLfLohWw==
-X-Received: by 2002:a1c:2743:0:b0:3b3:4066:fa61 with SMTP id n64-20020a1c2743000000b003b34066fa61mr8362048wmn.79.1664398968373;
-        Wed, 28 Sep 2022 14:02:48 -0700 (PDT)
-Received: from mai.. ([2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d])
-        by smtp.gmail.com with ESMTPSA id g20-20020a05600c4ed400b003b4931eb435sm2874300wmq.26.2022.09.28.14.02.44
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=CPte1r662FSAR+yNfyqva9K9yTvoMCulNZWy04//xXs=;
+        b=70IZpiUGl+KiwMPWz7TsDt0x7MlmdRJ4I93FobxcS95KL08CrJU0C9S0gVDQeDc8Zk
+         gXwKUaFVQfTx2RDZFH7Q3MPG7ANgT0OoyHFK8lbw+IzhJxmybWDn65d8O8eaXmDBcG10
+         KnQSRqcMh8huU0H80cSqlKakZe4CDsvAkRcJyLVNZrnC4Kq3XBWDOg9hPQjmGeaodSFH
+         inYhzroPBNoVLdzQL9KXHj9qBRfv6WkHoMRyNm/5N0QnqEYvI0U+M2AqBQSlHFK35eTq
+         K6kGSW8PQmNVsW9HdT7cXlBijkx/YKKdqctsBGiKsiKIQb7k6cnxN0drAByMfrxFK4i8
+         nBkA==
+X-Gm-Message-State: ACrzQf25NysJa8gOiSw73rQJAhoq6qpscATMu7GmhFA3CtPg8spC71+X
+        aBOp9kZdUYWc6AJ8HUygOAIdlt12UwfQ4Q==
+X-Google-Smtp-Source: AMsMyM5EyUUYxudsQehbIig3JI/bjqhSCkf6zlKdYtXAqaNI1tOhPuwgz+noi69xqIVuAB6aIVE2GQ==
+X-Received: by 2002:a05:600c:154d:b0:3b4:aae6:4bd7 with SMTP id f13-20020a05600c154d00b003b4aae64bd7mr18916wmg.63.1664399967732;
+        Wed, 28 Sep 2022 14:19:27 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a16-20020adfed10000000b00228de351fc0sm5052933wro.38.2022.09.28.14.19.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 14:02:46 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH v7 29/29] thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-Date:   Wed, 28 Sep 2022 23:00:59 +0200
-Message-Id: <20220928210059.891387-30-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220928210059.891387-1-daniel.lezcano@linaro.org>
-References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
+        Wed, 28 Sep 2022 14:19:27 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: max1721x: Fix spelling mistake "Gauage" -> "Gauge"
+Date:   Wed, 28 Sep 2022 22:19:26 +0100
+Message-Id: <20220928211926.62818-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
+There is a spelling mistake in the module description. Fix it.
 
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 120 +++++++++++--------
- 1 file changed, 67 insertions(+), 53 deletions(-)
+ drivers/power/supply/max1721x_battery.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index a0e234fce71a..40a9355207e7 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -53,6 +53,7 @@ struct zone_device {
- 	u32				msr_pkg_therm_high;
- 	struct delayed_work		work;
- 	struct thermal_zone_device	*tzone;
-+	struct thermal_trip		*trips;
- 	struct cpumask			cpumask;
- };
+diff --git a/drivers/power/supply/max1721x_battery.c b/drivers/power/supply/max1721x_battery.c
+index 473e53cd2801..d8d52e09da7b 100644
+--- a/drivers/power/supply/max1721x_battery.c
++++ b/drivers/power/supply/max1721x_battery.c
+@@ -444,5 +444,5 @@ module_w1_family(w1_max1721x_family);
  
-@@ -138,40 +139,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
- 	return -EINVAL;
- }
- 
--static int sys_get_trip_temp(struct thermal_zone_device *tzd,
--			     int trip, int *temp)
--{
--	struct zone_device *zonedev = tzd->devdata;
--	unsigned long thres_reg_value;
--	u32 mask, shift, eax, edx;
--	int ret;
--
--	if (trip >= MAX_NUMBER_OF_TRIPS)
--		return -EINVAL;
--
--	if (trip) {
--		mask = THERM_MASK_THRESHOLD1;
--		shift = THERM_SHIFT_THRESHOLD1;
--	} else {
--		mask = THERM_MASK_THRESHOLD0;
--		shift = THERM_SHIFT_THRESHOLD0;
--	}
--
--	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
--			   &eax, &edx);
--	if (ret < 0)
--		return ret;
--
--	thres_reg_value = (eax & mask) >> shift;
--	if (thres_reg_value)
--		*temp = zonedev->tj_max - thres_reg_value * 1000;
--	else
--		*temp = THERMAL_TEMP_INVALID;
--	pr_debug("sys_get_trip_temp %d\n", *temp);
--
--	return 0;
--}
--
- static int
- sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- {
-@@ -212,18 +179,9 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- 			l, h);
- }
- 
--static int sys_get_trip_type(struct thermal_zone_device *thermal, int trip,
--			     enum thermal_trip_type *type)
--{
--	*type = THERMAL_TRIP_PASSIVE;
--	return 0;
--}
--
- /* Thermal zone callback registry */
- static struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
--	.get_trip_temp = sys_get_trip_temp,
--	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
- };
- 
-@@ -328,6 +286,48 @@ static int pkg_thermal_notify(u64 msr_val)
- 	return 0;
- }
- 
-+static struct thermal_trip *pkg_temp_thermal_trips_init(int cpu, int tj_max, int num_trips)
-+{
-+	struct thermal_trip *trips;
-+	unsigned long thres_reg_value;
-+	u32 mask, shift, eax, edx;
-+	int ret, i;
-+
-+	trips = kzalloc(sizeof(*trips) * num_trips, GFP_KERNEL);
-+	if (!trips)
-+		return ERR_PTR(-ENOMEM);
-+	
-+	for (i = 0; i < num_trips; i++) {
-+
-+		if (i) {
-+			mask = THERM_MASK_THRESHOLD1;
-+			shift = THERM_SHIFT_THRESHOLD1;
-+		} else {
-+			mask = THERM_MASK_THRESHOLD0;
-+			shift = THERM_SHIFT_THRESHOLD0;
-+		}
-+
-+		ret = rdmsr_on_cpu(cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
-+				   &eax, &edx);
-+		if (ret < 0) {
-+			kfree(trips);
-+			return ERR_PTR(ret);
-+		}
-+
-+		thres_reg_value = (eax & mask) >> shift;
-+
-+		trips[i].temperature = thres_reg_value ?
-+			tj_max - thres_reg_value * 1000 : THERMAL_TEMP_INVALID;
-+
-+		trips[i].type = THERMAL_TRIP_PASSIVE;
-+		
-+		pr_debug("%s: cpu=%d, trip=%d, temp=%d\n",
-+			 __func__, cpu, i, trips[i].temperature);
-+	}
-+
-+	return trips;
-+}
-+
- static int pkg_temp_thermal_device_add(unsigned int cpu)
- {
- 	int id = topology_logical_die_id(cpu);
-@@ -353,24 +353,27 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	if (!zonedev)
- 		return -ENOMEM;
- 
-+	zonedev->trips = pkg_temp_thermal_trips_init(cpu, tj_max, thres_count);
-+	if (IS_ERR(zonedev->trips)) {
-+		err = PTR_ERR(zonedev->trips);
-+		goto out_kfree_zonedev;
-+	}
-+	
- 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
- 	zonedev->cpu = cpu;
- 	zonedev->tj_max = tj_max;
--	zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
--			thres_count,
-+	zonedev->tzone = thermal_zone_device_register_with_trips("x86_pkg_temp",
-+			zonedev->trips, thres_count,
- 			(thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
- 			zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
- 	if (IS_ERR(zonedev->tzone)) {
- 		err = PTR_ERR(zonedev->tzone);
--		kfree(zonedev);
--		return err;
-+		goto out_kfree_trips;
- 	}
- 	err = thermal_zone_device_enable(zonedev->tzone);
--	if (err) {
--		thermal_zone_device_unregister(zonedev->tzone);
--		kfree(zonedev);
--		return err;
--	}
-+	if (err)
-+		goto out_unregister_tz;
-+
- 	/* Store MSR value for package thermal interrupt, to restore at exit */
- 	rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev->msr_pkg_therm_low,
- 	      zonedev->msr_pkg_therm_high);
-@@ -379,7 +382,16 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 	raw_spin_lock_irq(&pkg_temp_lock);
- 	zones[id] = zonedev;
- 	raw_spin_unlock_irq(&pkg_temp_lock);
-+
- 	return 0;
-+
-+out_unregister_tz:	
-+	thermal_zone_device_unregister(zonedev->tzone);
-+out_kfree_trips:
-+	kfree(zonedev->trips);
-+out_kfree_zonedev:
-+	kfree(zonedev);
-+	return err;
- }
- 
- static int pkg_thermal_cpu_offline(unsigned int cpu)
-@@ -463,8 +475,10 @@ static int pkg_thermal_cpu_offline(unsigned int cpu)
- 	raw_spin_unlock_irq(&pkg_temp_lock);
- 
- 	/* Final cleanup if this is the last cpu */
--	if (lastcpu)
-+	if (lastcpu) {
-+		kfree(zonedev->trips);
- 		kfree(zonedev);
-+	}
- 	return 0;
- }
- 
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Alex A. Mihaylov <minimumlaw@rambler.ru>");
+-MODULE_DESCRIPTION("Maxim MAX17211/MAX17215 Fuel Gauage IC driver");
++MODULE_DESCRIPTION("Maxim MAX17211/MAX17215 Fuel Gauge IC driver");
+ MODULE_ALIAS("w1-family-" __stringify(W1_MAX1721X_FAMILY_ID));
 -- 
-2.34.1
+2.37.1
 
