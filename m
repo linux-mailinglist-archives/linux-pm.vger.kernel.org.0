@@ -2,84 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70E15ED357
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 05:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479E35ED35F
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 05:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbiI1DPY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Sep 2022 23:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        id S232936AbiI1DQx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Sep 2022 23:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbiI1DPV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 23:15:21 -0400
+        with ESMTP id S232994AbiI1DQl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Sep 2022 23:16:41 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 960FBFF;
-        Tue, 27 Sep 2022 20:15:18 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxrmtAvDNjlBAjAA--.51149S2;
-        Wed, 28 Sep 2022 11:15:13 +0800 (CST)
-Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: add loongson2 thermal
- binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        devicetree@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Zhang Rui <rui.zhang@intel.com>, zhuyinbo@loongson.cn,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        devicetree@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <20220927013951.12833-1-zhuyinbo@loongson.cn>
- <20220927013951.12833-2-zhuyinbo@loongson.cn>
- <1664289558.346744.943212.nullmailer@robh.at.kernel.org>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6EFD48C8A;
+        Tue, 27 Sep 2022 20:16:38 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx9OGOvDNjuxAjAA--.64292S2;
+        Wed, 28 Sep 2022 11:16:35 +0800 (CST)
 From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <7542c99d-31d1-621b-6564-d6db762947d2@loongson.cn>
-Date:   Wed, 28 Sep 2022 11:15:12 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v4 1/3] MAINTAINERS: add maintainer for thermal driver for loongson2 SoCs
+Date:   Wed, 28 Sep 2022 11:16:26 +0800
+Message-Id: <20220928031628.6463-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <1664289558.346744.943212.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8CxrmtAvDNjlBAjAA--.51149S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYd7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z2
-        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
-        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
-        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwAC
-        I402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04
-        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-TRANSID: AQAAf8Cx9OGOvDNjuxAjAA--.64292S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1kWFWxtw45Jr1UKF47twb_yoWDGFg_GF
+        yIqa1xZw48AF13K3ykuryxJ343Zw4xGF15A3Z7t397Z34Dta47AFykJwnxuw1xCr45uFyf
+        taykGr1I9r12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUZa9-UUUUU=
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add zhanghongchen and myself as maintainer of the loongson2 SoC
+series thermal driver.
 
-ÔÚ 2022/9/27 ÏÂÎç10:39, Rob Herring Ð´µÀ:
-> make DT_CHECKER_FLAGS=-m dt_binding_check
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v4:
+		Update the binding file name.
 
-Hi Rob,
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-this issue had been fix in v4 version.
-
-TKs,
-
-Yinbo.
-
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..0be0f520c032 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+-- 
+2.31.1
 
