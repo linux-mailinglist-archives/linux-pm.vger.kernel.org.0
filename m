@@ -2,128 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B765ED450
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 07:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9495ED700
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 10:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiI1Fph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 01:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S233830AbiI1IAa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 04:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiI1Fpg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 01:45:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6099B67C83;
-        Tue, 27 Sep 2022 22:45:34 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28S56DgB008399;
-        Wed, 28 Sep 2022 05:44:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=TRI7XAqpRChSCmHrdGbn7ZcUW1chuyOMvMEZsO5iOfM=;
- b=kkMKeB6gM2XwbxUMQI6Dv4jFR10HYXMzO3uNZUjeFiLyIeggvPCbsdNO4Lwxw5Bu01AE
- +EQVf4LVLLj1UANVQpC7TALUvhrNmdmAIx64zSLDzvc7gYnQn1jrOQ8I4DeqQeEQ85zR
- 2VIuO06lwEosEi2uT1mCNZHXFyWDQ15yaarnwC6e2XAt7BO0odmij51xlFo9AQXpugwG
- Pd9XPydgTIrBIoLRGkfvp1sD2aVQHR2RPxPhrgLYxViKOeOV9/e2ZDlk+mEeqj1XFlyI
- OqcZN3XYr5S+NUr9Jk9WO1uF2m1Ez3HsASc7TnrZcf0HgSbewr2AkYl4qJGvNTOnc1vQ vQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jv8wpt8dv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 05:44:57 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28S56IV0009087;
-        Wed, 28 Sep 2022 05:44:56 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jv8wpt8ct-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 05:44:55 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28S5ZeV8005426;
-        Wed, 28 Sep 2022 05:44:53 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3jssh9cr0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 05:44:53 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28S5ipT02490880
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Sep 2022 05:44:51 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F09514C040;
-        Wed, 28 Sep 2022 05:44:50 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 31A494C044;
-        Wed, 28 Sep 2022 05:44:50 +0000 (GMT)
-Received: from [9.171.2.29] (unknown [9.171.2.29])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 28 Sep 2022 05:44:50 +0000 (GMT)
-Message-ID: <0e1259a7-a99d-ceb6-d73d-a3e3cf32d003@linux.ibm.com>
-Date:   Wed, 28 Sep 2022 07:44:49 +0200
+        with ESMTP id S233746AbiI1IA1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 04:00:27 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C593ECD9
+        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 01:00:24 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so1007817pjk.2
+        for <linux-pm@vger.kernel.org>; Wed, 28 Sep 2022 01:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=lZABSm1MI5ZlgjTgFMO1+1NygwzeGaWl5MgvQA5quIY=;
+        b=EbPTGC/2CFOGZdWxCZerJBIVQYHm8YqogP+f28KIdCJMXvNJKO91f7SN0E3tHB5UZK
+         hGsTY+WAlShyt4kXWnofCNb+Mh1ZAgVSklBPMZ2x8IES5nIMGhvN2oBiBTfiMTblmzp5
+         Jr7LRh0ZRy8rs7uR4BzYmV1j0XU8N8E/X2s1EnsgQQmF06MdAtP+3ItwD2BZIFVmya31
+         kEgfsf1CLGmpyIgzy/clcIIaFTQZu0NAxbNdhQLKuYzWgpsOpmBm61mstf44Hr7d/eNE
+         pbA0Sz/W2c1J3RIs7rn4uKdOS8n8jDgM+gsn/TEafOYR70qoRcEoj3et5hANEvMbLn0t
+         VKXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=lZABSm1MI5ZlgjTgFMO1+1NygwzeGaWl5MgvQA5quIY=;
+        b=eSCg4SVN23o3HFizHT9/qXeXQqoX0jQ4vWySY8k4DGDWlCu8FDnuC3iY8QerZHgHC9
+         zwiciMAApRdWguayJvxndnnUl0Wwxr18BHJvUbastGCTcKIgQcSWrAnwe6TLIdQMQw0T
+         4RRs+yPGLMnXoq3HlmIXGeH6jmrmAGJw6kQfz1JqYdCAy4axfgIHtIctT928clfbmoJA
+         Z4gojRoJy+5LEYjcaV9sOeeVkraw9WMLLkIy1Bh2hnxUxMEeUqi3l6Cs/alnNKmY+ANH
+         UrBStANOp9qgajijE5hWlGSXI1QztQuFfFdVHM4/oy264lj0+UBJPhbGIPgbksQlY3RB
+         S+CQ==
+X-Gm-Message-State: ACrzQf2hYTY1i6K6QzzPaKg61M1JOHfBLGCcehZnZ+ii4D7VXr7cECjc
+        +OyM7idVc6hLrf11rNAyMSRNGq9Tzb+5uxC7ciW9Zw==
+X-Google-Smtp-Source: AMsMyM5VvJq1nejmsS3ZKBBVTymO5kxUE6cwcbfDmLaB8CqM3/lls2eZb2mNaWYAjaYbYgasYZdl3z5DuN8XnCDLvl0=
+X-Received: by 2002:a17:90a:aa96:b0:205:bb67:a85f with SMTP id
+ l22-20020a17090aaa9600b00205bb67a85fmr9025181pjq.202.1664352024285; Wed, 28
+ Sep 2022 01:00:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Content-Language: en-US
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     bigeasy@linutronix.de, dietmar.eggemann@arm.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, mgorman@suse.de, mingo@kernel.org,
-        oleg@redhat.com, rjw@rjwysocki.net, rostedt@goodmis.org,
-        tj@kernel.org, vincent.guittot@linaro.org, will@kernel.org,
-        Marc Hartmayer <mhartmay@linux.ibm.com>,
-        Amit Shah <amit@kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-References: <20220923072104.2013212-1-borntraeger@linux.ibm.com>
- <56576c3c-fe9b-59cf-95b8-158734320f24@linux.ibm.com>
- <b1d41989-7f4f-eb1d-db35-07a6f6b7a7f5@linux.ibm.com>
- <436fa401-e113-0393-f47a-ed23890364d7@linux.ibm.com>
- <39dfc425-deff-2469-7bcb-4a0e177b31d1@linux.ibm.com>
- <YzGhUZJKV3pKJL3Z@hirez.programming.kicks-ass.net>
- <66463973-923f-624d-3041-72ce76147b3e@linux.ibm.com>
- <YzGrJSLXpocpGIha@hirez.programming.kicks-ass.net>
- <9ec643f3-b935-0119-d8bc-1fbe46c36356@linux.ibm.com>
- <YzHqNiRj2Q5vxdCV@hirez.programming.kicks-ass.net>
- <YzHt2nG0Hb7xLlNj@hirez.programming.kicks-ass.net>
- <985463a3-5e33-95d2-b2bb-824707a2f819@linux.ibm.com>
-In-Reply-To: <985463a3-5e33-95d2-b2bb-824707a2f819@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: C-iwwDbwObm8zSqeg3LDefvtdRzOtnJb
-X-Proofpoint-GUID: 0cHj6lZcSCFBnzr0oV2OOul8RCx0NzuU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_02,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- clxscore=1015 mlxscore=0 lowpriorityscore=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 impostorscore=0 adultscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209280032
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+ <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
+ <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
+ <20220726160337.GA41736@francesco-nb.int.toradex.com> <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
+ <20220728112146.GA97654@francesco-nb.int.toradex.com> <CAPDyKFqtCxrjALeCmhuqQ2VmmUHhi-DjXO30uHChTPFeDbp+JQ@mail.gmail.com>
+ <20220909142247.GA238001@francesco-nb.int.toradex.com> <CAPDyKFrwpz=gi3iY5YsO6k4o33eLQRp-wXvBx3nQ0q=G9YrqHA@mail.gmail.com>
+ <70ee4f8e-7529-307e-656c-2a65d0187af6@linaro.org> <CAPDyKFoyNWZvT+QPdX4sQuS3DL8mepfnLraHLusMi9K8MOfLgg@mail.gmail.com>
+ <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org> <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
+ <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com> <a88274ce-279e-3a36-d929-1901d6b760cf@linaro.org>
+In-Reply-To: <a88274ce-279e-3a36-d929-1901d6b760cf@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 28 Sep 2022 09:59:46 +0200
+Message-ID: <CAPDyKFpqsQRE7o=bupxFm0KCUCDm0=YwBgGUwq8RoFJi4V86Xg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Max Krummenacher <max.oss.09@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, 27 Sept 2022 at 16:27, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 27/09/2022 14:49, Geert Uytterhoeven wrote:
+> > Hi Ulf,
+> >
+> > On Tue, Sep 27, 2022 at 11:49 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >>>>>>> The main concern that was raised on this topic was that we have to
+> >>>>>>> somehow link the power-domain to the specific peripherals (the power
+> >>>>>>> domain consumer) in the device tree.
+> >>>>>>
+> >>>>>> Yes, that is needed. Although, I don't see how that is a concern?
+> >>>>>>
+> >>>>>> We already have the valid bindings to use for this, see more below.
+> >>>>>>
+> >>>>>>>
+> >>>>>>> Adding the power-domain property there will trigger validation errors
+> >>>>>>> unless we do explicitly add the power-domains to the schema for each
+> >>>>>>> peripheral we need this. To me this does not really work, but maybe I'm
+> >>>>>>> not understanding something.
+> >>>>>>>
+> >>>>>>> This is what Rob wrote on the topic [1]:
+> >>>>>>>   > No. For 'power-domains' bindings have to define how many there are and
+> >>>>>>>   > what each one is.
+> >>>>>>>
+> >>>>>>> Just as an example from patch [2]:
+> >>>>>>>
+> >>>>>>>   can1: can@0 {
+> >>>>>>>     compatible = "microchip,mcp251xfd";
+> >>>>>>>     power-domains = <&pd_sleep_moci>;
+> >>>>>>>   };
+> >>>>>>>
+> >>>>>>> leads to:
+> >>>>>>>
+> >>>>>>>   imx8mm-verdin-nonwifi-dahlia.dtb: can@0: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
+> >>>>>>>           From schema: .../bindings/net/can/microchip,mcp251xfd.yaml
+> >>>>>>
+> >>>>>> I think it should be fine to just add the below line to the DT
+> >>>>>> bindings, for each peripheral device to fix the above problem.
+> >>>>>>
+> >>>>>> power-domains: true
+> >>>>>
+> >>>>> Again, as Rob said, no, because it must be strictly defined. So for
+> >>>>> example: "maxItems: 1" for simple cases. But what if device is then part
+> >>>>> of two power domains?
+> >>>>>
+> >>>>>>
+> >>>>>> That should be okay, right?
+> >>>>>
+> >>>>> Adding it to each peripheral scales poorly. Especially that literally
+> >>>>> any device can be part of such power domain.
+> >>>>
+> >>>> Right.
+> >>>>
+> >>>>>
+> >>>>> If we are going with power domain approach, then it should be applicable
+> >>>>> basically to every device or to every device of some class (e.g. I2C,
+> >>>>> SPI). This means it should be added to respective core schema in
+> >>>>> dtschema repo, in a way it does not interfere with other power-domains
+> >>>>> properties (existing ones).
+> >>>>
+> >>>> Isn't that already taken care of [1]?
+> >>>
+> >>> No, because it does not define the items (what are the power domains and
+> >>> how many). This binding expects that any device has maxItems restricting it.
+> >>
+> >> Right, apologize for my ignorance.
+> >>
+> >>>
+> >>>>
+> >>>> If there is more than one power domain per device, perhaps we may need
+> >>>> to extend it with a more strict binding? But, that doesn't seem to be
+> >>>> the case here - and if it turns out to be needed later on, we can
+> >>>> always extend the bindings, no?
+> >>>>
+> >>>> Note also that we already have DT bindings specifying "power-domains:
+> >>>> true" to deal with the above. Isn't that what we want?
+> >>>
+> >>> You mentioned it before and both me and Rob already responded - no,
+> >>> because it does not restrict the number of items.
+> >>
+> >> Okay, so maxItems need to be specified for each peripheral. It's not a
+> >> big deal, right?
+>
+> It's a bit of effort to add it manually to each device binding. It just
+> does not scale well.
 
+Whether it scales or not, that's how the power-domain bindings for
+consumers look like. It's the similar situation for clocks, regulators
+and other resources too.
 
-Am 27.09.22 um 07:35 schrieb Christian Borntraeger:
-> 
-> 
-> Am 26.09.22 um 20:22 schrieb Peter Zijlstra:
->> On Mon, Sep 26, 2022 at 08:06:46PM +0200, Peter Zijlstra wrote:
->>
->>> Let me go git-grep some to see if there's more similar fail.
->>
->> I've ended up with the below...
-> 
-> Tested-by: Christian Borntraeger <borntraeger@de.ibm.com>
-> 
-> Kind of scary that nobody else has reported any regression. I guess the freezable variant is just not used widely.
+My point is, for the discussion around $subject patch, it doesn't
+really matter what option we pick. The DT docs for each peripheral
+need to be updated anyway.
 
-Will you queue this fix for next soon?
+>
+> >>
+> >> Of course, it would be even easier if the core schema would use a
+> >> default "maxItems: 1" for power domain consumers, which of course must
+> >> be possible to be overridden for those consumers that need something
+> >> else. But perhaps it's not that simple. :-)
+>
+> I think this would be the way to do it properly.
+>
+> >
+> > It's not that simple: being part of a PM Domain is not a property of the
+> > device being described, but a property of the integration into the SoC.
+>
+> I agree.
+>
+> This concept of power domains for every device does not look like really
+> describing the hardware. The hardware itself, e.g. some camera sensor or
+> I2C device, might have power supply and reset pin. It does not have
+> something like power-domain.
+>
+> Although one could also argue that it is the same case with SoC blocks -
+> being part of power domain is a property of a SoC and its power domain
+> controller.
+
+Yes. DT describes the platform too, not only the SoC and its IP blocks.
+
+Moreover, as the power domain bindings were added back in kernel
+v3.18, that's what we have to describe these kinds of platforms.
+
+[...]
+
+Kind regards
+Uffe
