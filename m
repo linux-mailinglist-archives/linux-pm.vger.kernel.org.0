@@ -2,89 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37875EE838
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Sep 2022 23:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804565EEC82
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 05:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234744AbiI1VVM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 17:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
+        id S232494AbiI2Dmb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 23:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbiI1VUv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 17:20:51 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36852218;
-        Wed, 28 Sep 2022 14:19:29 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id n40-20020a05600c3ba800b003b49aefc35fso1674445wms.5;
-        Wed, 28 Sep 2022 14:19:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=CPte1r662FSAR+yNfyqva9K9yTvoMCulNZWy04//xXs=;
-        b=PB2nPPYfPxZ3iRr4GAhBgSpcqBWvn062jN+FyVCMHXHEkWtyzHA28vjt8Q+fLmSGJS
-         fF6Nv3Ea3pCHOG+U+K3QssGeSZX6LvhSbkRFYW6w/oOHq5k3CHoVEwA+KmonB8WvzBOH
-         R1bUdvbzM8UkOO0RoBznf6/yhoiqcviSKVlGFMlFLGtpL1icdMgkhetE6FDI61bt8BNV
-         b3rKsBicgqHKbvij/jLFk7/f+cvAvwAK9jz1nF85d4IVqfRa5kRRIj/RoGCsEhw50SMO
-         ktthZ8eZlmVmkVEURoIBkx14Z/OYay8Z22EEwAv663CYeb5HiR8I7oKTlXabRg6dj+Nk
-         YPUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=CPte1r662FSAR+yNfyqva9K9yTvoMCulNZWy04//xXs=;
-        b=70IZpiUGl+KiwMPWz7TsDt0x7MlmdRJ4I93FobxcS95KL08CrJU0C9S0gVDQeDc8Zk
-         gXwKUaFVQfTx2RDZFH7Q3MPG7ANgT0OoyHFK8lbw+IzhJxmybWDn65d8O8eaXmDBcG10
-         KnQSRqcMh8huU0H80cSqlKakZe4CDsvAkRcJyLVNZrnC4Kq3XBWDOg9hPQjmGeaodSFH
-         inYhzroPBNoVLdzQL9KXHj9qBRfv6WkHoMRyNm/5N0QnqEYvI0U+M2AqBQSlHFK35eTq
-         K6kGSW8PQmNVsW9HdT7cXlBijkx/YKKdqctsBGiKsiKIQb7k6cnxN0drAByMfrxFK4i8
-         nBkA==
-X-Gm-Message-State: ACrzQf25NysJa8gOiSw73rQJAhoq6qpscATMu7GmhFA3CtPg8spC71+X
-        aBOp9kZdUYWc6AJ8HUygOAIdlt12UwfQ4Q==
-X-Google-Smtp-Source: AMsMyM5EyUUYxudsQehbIig3JI/bjqhSCkf6zlKdYtXAqaNI1tOhPuwgz+noi69xqIVuAB6aIVE2GQ==
-X-Received: by 2002:a05:600c:154d:b0:3b4:aae6:4bd7 with SMTP id f13-20020a05600c154d00b003b4aae64bd7mr18916wmg.63.1664399967732;
-        Wed, 28 Sep 2022 14:19:27 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a16-20020adfed10000000b00228de351fc0sm5052933wro.38.2022.09.28.14.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 14:19:27 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: max1721x: Fix spelling mistake "Gauage" -> "Gauge"
-Date:   Wed, 28 Sep 2022 22:19:26 +0100
-Message-Id: <20220928211926.62818-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S229940AbiI2Dm3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 23:42:29 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A720124775;
+        Wed, 28 Sep 2022 20:42:26 -0700 (PDT)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmsMFDVj754jAA--.52949S2;
+        Thu, 29 Sep 2022 11:42:19 +0800 (CST)
+Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
+ binding
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
+References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
+ <20220928083702.17309-2-zhuyinbo@loongson.cn>
+ <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
+ <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
+Date:   Thu, 29 Sep 2022 11:42:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxnmsMFDVj754jAA--.52949S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrZw18CrW8CFy7Aw48JF48Crg_yoW8Jr4xpa
+        4xA3Z8KayDArya9w4xKa4xAF1F9wsIyFZrJr18KF48AFWDZwnxtF9Yyr1j9r1kurWFqFWx
+        Zay5urZxJw4DZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a spelling mistake in the module description. Fix it.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/power/supply/max1721x_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/max1721x_battery.c b/drivers/power/supply/max1721x_battery.c
-index 473e53cd2801..d8d52e09da7b 100644
---- a/drivers/power/supply/max1721x_battery.c
-+++ b/drivers/power/supply/max1721x_battery.c
-@@ -444,5 +444,5 @@ module_w1_family(w1_max1721x_family);
- 
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Alex A. Mihaylov <minimumlaw@rambler.ru>");
--MODULE_DESCRIPTION("Maxim MAX17211/MAX17215 Fuel Gauage IC driver");
-+MODULE_DESCRIPTION("Maxim MAX17211/MAX17215 Fuel Gauge IC driver");
- MODULE_ALIAS("w1-family-" __stringify(W1_MAX1721X_FAMILY_ID));
--- 
-2.37.1
+在 2022/9/28 下午10:18, Krzysztof Kozlowski 写道:
+> On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
+>> On 28/09/2022 10:37, Yinbo Zhu wrote:
+>>> Add the loongson2k thermal binding with DT schema format using
+>>> json-schema.
+>>>
+>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>
+>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+>> there's no need to repost patches *only* to add the tags. The upstream
+>> maintainer will do that for acks received on the version they apply.
+>>
+>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>>
+>> If a tag was not added on purpose, please state why and what changed.
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ... and please test your patches before sending :(
+> 
+> Best regards,
+> Krzysztof
+Hi Krzysztof,
+
+I have a function test for these three patch, that it's okay.
+for binding patch I have a compile test, as follow, it is okay.
+root@m-pc:/home/m/workspace/test/code/upstream# make DT_CHECKER_FLAGS=-m 
+dt_binding_check 
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml
+
+BRs,
+Yinbo Zhu.
+> 
 
