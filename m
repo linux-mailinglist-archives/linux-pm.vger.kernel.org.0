@@ -2,155 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BA85EFE06
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 21:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48805EFF5B
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 23:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiI2TgC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Sep 2022 15:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S229482AbiI2Vlp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 17:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiI2TgB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 15:36:01 -0400
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2D75F9A6;
-        Thu, 29 Sep 2022 12:35:59 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id k12so1517246qkj.8;
-        Thu, 29 Sep 2022 12:35:59 -0700 (PDT)
+        with ESMTP id S229729AbiI2Vlo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 17:41:44 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E4E127C9B
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 14:41:42 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id z3so1395027plb.10
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 14:41:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=+tmmVMQIEvaUOyHizHHbvmGvhWUsKswCgzvDR2aTDBw=;
+        b=WiFLoBtIO+noJncOLfpyox7S5UkLqA10l3QuicSn5JTGpRk73RDKQFpAE9rRvsEzHl
+         f94Vlsfftcg7AMtKWitHm/V0uhm0HpYxaRWBlEpYllSQgPOOoTYqkNBFAQLf57F4QXar
+         foUattrqgan6XVWqR1BY/BPUFwdjooYyVLIQ5ULTj5QtypcryVV/3sDBf+o/VeWICq3B
+         mUcVNwQPLXQCwwnKH538Lx0vyHIrEGcmHeKNZLWCmL5gU6hRoB6APm08yGj7jeitPq83
+         aASTJFmxjJqapLmYL1aXARaMVAh2V15cZELcyBeNgep9Mprs8v6AqLgZilBuZGRdaZgt
+         4u+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mTAlcKpePLUmoa2PPlLgnnpbbR37vsLCkLJsK3FMOMM=;
-        b=zonwpLQcKQG+p2EU8QstcgW8hyoj+hCye+Gp+61vVgzBiB56Aubi5H1NSfomPzhVsA
-         Zxro0mDXhF9BDRkdtR1Pjgrbo4vANCoeGbndss/IRw3qq7TuNlMTkIFbLBpswp13mvtt
-         kK0gYEwokxJPlqpr8FAG+t1LaEBKxdxmrIyVkxLdwrUP37mG2ZwwFbmHMKt+pBFXdOst
-         8MzsJniTYqeFtIxm7e3sVgZANp37M5v4hSQ53mh56YUzN+IIh/nWd4TVba9h0mi2KyoV
-         Dz77r5JHBkMVnjEMWaVVfOGIzHc+UKx8evxnRkHK6tmgi9gMZiA/TWPpPMQhq4MrvDdV
-         BGHQ==
-X-Gm-Message-State: ACrzQf11s1ZFzyh6D7Auax7/3wMtv0laiaSaLNiEljkKcUcGwuUC/8YT
-        jThOBetiYo28V+NwTDT0xA0kKbSCujtI9zLOQkA=
-X-Google-Smtp-Source: AMsMyM6nwPbbMnzN+TFVkeFoMqPTRrzMun/9SaGI62vQ28n3j95zFU2xk6dTQ3pv+9rh/XRcMovC6IXcuteR1RYwINI=
-X-Received: by 2002:a05:620a:290d:b0:6b6:1a92:d88a with SMTP id
- m13-20020a05620a290d00b006b61a92d88amr3634308qkp.58.1664480158981; Thu, 29
- Sep 2022 12:35:58 -0700 (PDT)
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=+tmmVMQIEvaUOyHizHHbvmGvhWUsKswCgzvDR2aTDBw=;
+        b=7z2SVNlp9tyrOw62GGeRTdeljoo/cRpnQBAfw6J4DRv1ImZUDOyFrTCH+Y36YY1GEQ
+         d3FBKeCQDapoNKWAGGkUhQwwTOHNuXnFhmOZUCKrPz+5wuEA3RwoZuMtPeR8oxcxXOEC
+         GyGuP8hsVW4b7kmahc0h/hXYLpkTXtHcUCMvSkoHywwX+9KrS3JDqQ5ozyTH38VikwyZ
+         GwtiZJSYX+oE1lqgu0aJK54VOvaqKdx55/lojM1BZHlGxhBss9g4yjnT88bTLKs4c6WM
+         oth8dUyBKXjfpPPHVlelqIYEBslC7LK0SEJGnIVVszN4HunS8XKd1HKZYZAdDQkzxpTp
+         epvg==
+X-Gm-Message-State: ACrzQf3SAQCPnoH+7ItWsjgpOBQgEhb8nWAcQiWBfbHciM5TeFLKnHGF
+        TXnVoye7GS7OLBK2+3LywZCIMw==
+X-Google-Smtp-Source: AMsMyM5NAGWvW5StSYLgOkg8LMBjveehpA8BRA24eYpOb43ob+BdISSBsZfdDiMr32JRRAAJcpDCjA==
+X-Received: by 2002:a17:902:6bc8:b0:178:81db:c6d9 with SMTP id m8-20020a1709026bc800b0017881dbc6d9mr5561802plt.56.1664487702366;
+        Thu, 29 Sep 2022 14:41:42 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id g14-20020aa79dce000000b00536097dd45bsm141551pfq.134.2022.09.29.14.41.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 14:41:42 -0700 (PDT)
+Message-ID: <63361116.a70a0220.7f9bf.0588@mx.google.com>
+Date:   Thu, 29 Sep 2022 14:41:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
- <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org> <CAJZ5v0hOFoe0KqEimFv9pgmiAOzuRoLjdqoScr53ErNFU4AAPA@mail.gmail.com>
- <ae86fc5a-0521-3dde-c2ea-8679c0ec4831@linaro.org>
-In-Reply-To: <ae86fc5a-0521-3dde-c2ea-8679c0ec4831@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Sep 2022 21:35:48 +0200
-Message-ID: <CAJZ5v0jrWamTTXcHabSk=6cmm4pEx0_ebiECKZRfrX_vS85YYg@mail.gmail.com>
-Subject: Re: [PATCH v7 00/29] Rework the trip points creation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        netdev <netdev@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.0-rc7-186-gfa11712315997
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.0-rc7-186-gfa11712315997)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 4:57 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 29/09/2022 15:58, Rafael J. Wysocki wrote:
-> > On Thu, Sep 29, 2022 at 2:26 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >>
-> >> Hi Rafael,
-> >>
-> >> are you happy with the changes?
-> >
-> > I'll have a look and let you know.
->
-> Great, thanks
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.0-rc7-186-gf=
+a11712315997)
 
-Well, because you have not added the history of changes to the
-patches, that will take more time than it would otherwise.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+0-rc7-186-gfa11712315997/
 
-Generally, please always add information on what has changed in the
-patch between different versions of it.
+Tree: pm
+Branch: testing
+Git Describe: v6.0-rc7-186-gfa11712315997
+Git Commit: fa117123159976b3799c5738677e0489f8537abc
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> >> I would like to integrate those changes with the thermal pull request
-> >
-> > Sure, but it looks like you've got only a few ACKs for these patches
-> > from the driver people.
-> >
-> > Wouldn't it be prudent to give them some more time to review the changes?
->
-> Well I would say I received the ACKs from the drivers which are actively
-> maintained. Others are either not with a dedicated maintainer or not a
-> reactive one. The first iteration of the series is from August 5th. So
-> it has been 2 months.
->
-> I pinged for imx, armada and tegra two weeks ago.
+Warnings Detected:
 
-OK
+arc:
 
-> The st, hisilicon drivers fall under the thermal maintainers umbrella
->
-> There are three series coming after this series to be posted. I would
-> like to go forward in the process of cleaning up the framework. IMO two
-> months is enough to let the maintainers pay attention to the changes,
-> especially if we do a gentle ping and there are seven versions.
->
-> And after that comes the thermal_zone_device_register() parameters
-> simplification :)
+arm64:
 
-Well, that's all fine, but I don't want people to get surprised by
-significant changes they haven't expected and I want to avoid missing
-anything subtle.
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 3 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    1    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
