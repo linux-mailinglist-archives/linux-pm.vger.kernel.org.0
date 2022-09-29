@@ -2,24 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044135EF0EB
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 10:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C760B5EF13D
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 11:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235039AbiI2IyL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Sep 2022 04:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S235223AbiI2JE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 05:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbiI2Ixw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 04:53:52 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB363139F4E;
-        Thu, 29 Sep 2022 01:53:49 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOIVXTVjjrIjAA--.1808S2;
-        Thu, 29 Sep 2022 16:53:41 +0800 (CST)
-Subject: Re: [PATCH v6 1/3] MAINTAINERS: add maintainer for thermal driver for
- loongson2 SoCs
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S235400AbiI2JEs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 05:04:48 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC584DF25
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 02:04:44 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bu25so1290293lfb.3
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 02:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=S2099XaXfCuuAEa+EkneFK7QD5CrN3fKCdlOcqsOw18=;
+        b=hbhdVoTcAXobyz/snHuBU9Vq2yj5nx2bcdbw6NcumzV1mpq7WaUx5JOCt5wBPiBZxS
+         TXqJl1ac4r3n8/utB87fHGhysDkma8nyB4BdlUVom3ScbeNpdDvxlQCs0eMFy5kE19h/
+         KE3hxCNj3V4bOhP+zE0tD9+psDhbYTOQTUd2QwwkB8JLMNlAgvws6XGBi4gela39OD/S
+         8+p5E2gb9gWTdwrsKjzKwVBxlS8Jo9vVpHlD7LjVIDdO21Gosu++yaPOpqKAJE5WkV+3
+         juQdb33sDtuEX70lVch0XaQnEYGdrmxJaQNQ2qWofWn0ZuZrKpG18u1kuWCwpUXJciHl
+         Td3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=S2099XaXfCuuAEa+EkneFK7QD5CrN3fKCdlOcqsOw18=;
+        b=yXrByu1/4FnL0fYngUOFOoYhZJ45NpAy6HCTRPB52ZYH8aOPDbXD/3xpF46SJ80UAa
+         5xGBfd2f0nB8pBaavMjIeSyxr8RrSaCtNs+KvtW6LNEvElc3xIGe3v1LJiyk8fNMhkHX
+         AVQzT2BoVnEfLVRzCfXPHoRBVBYi3v10EpX4TfIwhIaiZLQVdiJOYf7dwhQ+2VRX615k
+         LUgKq5Ylxqqn5jiId0mlFoIfEsx1c+VQKzBuad9oSeHJ59ckMBkJz2RRJqEB31shTc9p
+         EYimEsuXCkCW4lznJGO+0V8E00nm2JOQkpYoIbdx48QR3tRfBCC2B2czPJPzAkOpwrvT
+         ktRw==
+X-Gm-Message-State: ACrzQf2b3Zdm/Km00SjRWvM3fK9CY2h1jIyjjvAkYHANpYEMGa9vRDLQ
+        3d/q1kcZiXaWpyV6ogWgrI7hYQ==
+X-Google-Smtp-Source: AMsMyM7UcjZPLFuyJE1sHm95uLmVltxGRI/vS4Co/MQ3JaN8fHbz4H6ktZMf2y/YUd6Dm+KqXUlPYw==
+X-Received: by 2002:a05:6512:3983:b0:49e:2ef9:8375 with SMTP id j3-20020a056512398300b0049e2ef98375mr976538lfu.678.1664442282493;
+        Thu, 29 Sep 2022 02:04:42 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id t3-20020a056512208300b0049486c66140sm728740lfr.119.2022.09.29.02.04.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 02:04:42 -0700 (PDT)
+Message-ID: <06fa0bd2-c447-d705-01be-791207a4be8a@linaro.org>
+Date:   Thu, 29 Sep 2022 11:04:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
+ binding
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
@@ -29,82 +67,58 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20220929071312.29536-1-zhuyinbo@loongson.cn>
- <d6880b08-e370-5fa1-b4f0-a6cc2f13a8f5@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <505d42e3-f069-2bf4-a554-60a4d7e8424f@loongson.cn>
-Date:   Thu, 29 Sep 2022 16:53:41 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <d6880b08-e370-5fa1-b4f0-a6cc2f13a8f5@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
+ <20220928083702.17309-2-zhuyinbo@loongson.cn>
+ <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
+ <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
+ <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
+ <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
+ <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
+ <abaf9b69-487c-0f1e-7a94-201155f5e3d2@loongson.cn>
+ <f54a40ea-99bf-e341-3bbd-851b250cc9cd@linaro.org>
+ <a205592c-9e5b-0cf2-88d7-aabe0bdcc2ae@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a205592c-9e5b-0cf2-88d7-aabe0bdcc2ae@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxBOIVXTVjjrIjAA--.1808S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrurWUKF1DWryxtw47Zw48tFb_yoWkCwb_CF
-        42k3s7Za18AFn7KayvqF9ay3yjgw4kA3WrAas2qwsrX34Uta43AFn5Jwn7uw18Ar4rCFs5
-        CFWktr1S9r1aqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbTxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-在 2022/9/29 下午3:49, Krzysztof Kozlowski 写道:
-> On 29/09/2022 09:13, Yinbo Zhu wrote:
->> Add zhanghongchen and myself as maintainer of the loongson2 SoC
->> series thermal driver.
+On 29/09/2022 10:23, Yinbo Zhu wrote:
+> 
+> 
+> 在 2022/9/29 下午3:45, Krzysztof Kozlowski 写道:
+>> On 29/09/2022 09:07, Yinbo Zhu wrote:
+>>>>>>>
+>>>>>>> ... and please test your patches before sending :(
+>>>>> You said is refer that "reg: [[0, 534779136], [0, 48]] is too long" ?
+>>>>> Need fix that warning, right?
+>>>>
+>>>> Yes. You said you tested it but then sent with an error... so it's not
+>>>> really a testing.
+>>> sorry, I did do some testing. but I think It is okay that can generate a
+>>> dtb  without reporting an error when compile yaml file, in fact, I
+>>> ignore the warning,  I will fix it in v6.
 >>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   MAINTAINERS | 8 ++++++++
->>   1 file changed, 8 insertions(+)
 >>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 589517372408..0be0f520c032 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
->>   F:	Documentation/loongarch/
->>   F:	Documentation/translations/zh_CN/loongarch/
->>   
->> +LOONGSON2 SOC SERIES THERMAL DRIVER
->> +M:	zhanghongchen <zhanghongchen@loongson.cn>
->> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->> +L:	linux-pm@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> 
-> This cannot be a first patch. It is not bisectable and causes (again)
-> warnings. Either this should be squashed with last patch (driver change)
-> or just be a last patch in the series.
-> 
-> Best regards,
-> Krzysztof
-okay, I got it. Thank you for reminding me!
+>> Do you also send the code with warnings reported by GCC? Judging by
+>> number of kernel test robot reports, it could be. So just to be very,
+>> very clear: do not send any code which generates any warning. For GCC
+>> this means W=1 builds.
+> I don't find about the warning about GCC when compile yaml file.
+> and I dont't know the meaning about W=1, you said about "W=1" is to execute
+> following command to compile the yaml, right?
 
-BRs,
-Yinbo Zhu.
+GCC is about your C code. You were sending patches knowing that they
+have warnings. It's not good. All warnings must be fixed.
 
-> 
+Best regards,
+Krzysztof
 
