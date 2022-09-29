@@ -2,136 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69C85EF2E7
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 12:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C125EF394
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 12:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235105AbiI2KAv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Sep 2022 06:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
+        id S235018AbiI2Khm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 06:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235011AbiI2KAp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 06:00:45 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C61AEC54B;
-        Thu, 29 Sep 2022 03:00:41 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOLDbDVjMrsjAA--.1941S2;
-        Thu, 29 Sep 2022 18:00:36 +0800 (CST)
-Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
- binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
- <20220928083702.17309-2-zhuyinbo@loongson.cn>
- <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
- <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
- <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
- <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
- <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
- <abaf9b69-487c-0f1e-7a94-201155f5e3d2@loongson.cn>
- <f54a40ea-99bf-e341-3bbd-851b250cc9cd@linaro.org>
- <a205592c-9e5b-0cf2-88d7-aabe0bdcc2ae@loongson.cn>
- <06fa0bd2-c447-d705-01be-791207a4be8a@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <550a852b-0ee4-8179-48a2-6cb11a3dd800@loongson.cn>
-Date:   Thu, 29 Sep 2022 18:00:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S232007AbiI2Khl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 06:37:41 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6346A13D1DC;
+        Thu, 29 Sep 2022 03:37:41 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so5539108pjh.2;
+        Thu, 29 Sep 2022 03:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=VVaJ2WvZLMburg2aIHfT+C0+FDmiDT6jJc/acM+nMq0=;
+        b=drW2YEOywaDzYsNVrPwnW7g8e2Yrl+NdE4q8o7pU/qEMabkWBS6deJ2LxhBoxfMjdh
+         Maxj+d/WUnaKRWiiYe9W1dvC+DrqDd/VVhI1z+w90t2hkWRqEg4cl55VHrb7irt+YI2l
+         /d1QfW5JQt+hn2Mm7UvXb4lqitpJ19krNN/TGERxcGsURkyANaoRzG8lR594UJISRyRd
+         nRCzT0Nw15KzcC2swKnoqYKvre99VDKxzeaq/2IDLNwJSzOsjUL6xq6pg7luGFPFiJs3
+         QQHyedLjRxDxXYUzHBNcsdrvQul/OfVdSHMRYVKI1WP5fPSsZ0MNA4/HwwxmJ4gO+Y5x
+         rm+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=VVaJ2WvZLMburg2aIHfT+C0+FDmiDT6jJc/acM+nMq0=;
+        b=jUP09V49L7fhg5h86E31HjbO9J+bI6jOLkFessjtCmb6NSOb+2CVsztd+HZo+bYHly
+         +qEkTw1eDSfWOK7opN33/gKBP3l8umO/RyEmZDaXnJU5WdZQbK6XzHxoEy6YVUwI4xSi
+         CCS9uwHxom28UupjHmac39PFoc7sNiVeDPhKO+5wKvkPL+npWeK/WFTmDlBGnadwH0YU
+         SLezhRB3mjPu5fRtx8ra58kHimkt6fdtKSedWp+0RgwIYHIWj0eN2ZvXxp7TifDeIAiV
+         t040F/Q+aJ2HNf/iSos/0bCsJg18FXuHNw4E+vQ0tv02/2KykG3F4PepNT/4UXm1qIDs
+         0eiQ==
+X-Gm-Message-State: ACrzQf0yy7BJmqE50zMi40Fitw7SO+sxoGFrxuz+sbQ6h22sv6wofoSE
+        0l8ObLieRyvvwrKfm+VJz1o=
+X-Google-Smtp-Source: AMsMyM4bvI8f8h6erzxSMgCphGbmfyqiiwBZb9eLfhOmAyvxOuiT93idYWlxYjxB6SeKN4lnBLdlPw==
+X-Received: by 2002:a17:90a:d908:b0:206:122:35d1 with SMTP id c8-20020a17090ad90800b00206012235d1mr2874543pjv.245.1664447860821;
+        Thu, 29 Sep 2022 03:37:40 -0700 (PDT)
+Received: from RD-3580-24288.rt.l (42-73-73-54.emome-ip.hinet.net. [42.73.73.54])
+        by smtp.gmail.com with ESMTPSA id k31-20020a17090a4ca200b001ef81574355sm3145861pjh.12.2022.09.29.03.37.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 03:37:40 -0700 (PDT)
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+To:     sre@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 0/2] Add Richtek RT9467 5A Battery Charger support
+Date:   Thu, 29 Sep 2022 18:37:17 +0800
+Message-Id: <cover.1664475743.git.chiaen_wu@richtek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <06fa0bd2-c447-d705-01be-791207a4be8a@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxBOLDbDVjMrsjAA--.1941S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF43AryxKF1Uuw4DuFW3Wrg_yoW8tF1xpF
-        yDK3WDKF45ZFn29w10ya1SqF1jywn3t3y5XryfWr17K3yqvasxXFy7tr4UurZ0ga1IqFW0
-        q345trWxuF4qv37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: ChiaEn Wu <chiaen_wu@richtek.com>
 
+This patch set is to add Richtek RT9467 5A Battery Charger support.
 
-在 2022/9/29 下午5:04, Krzysztof Kozlowski 写道:
-> On 29/09/2022 10:23, Yinbo Zhu wrote:
->>
->>
->> 在 2022/9/29 下午3:45, Krzysztof Kozlowski 写道:
->>> On 29/09/2022 09:07, Yinbo Zhu wrote:
->>>>>>>>
->>>>>>>> ... and please test your patches before sending :(
->>>>>> You said is refer that "reg: [[0, 534779136], [0, 48]] is too long" ?
->>>>>> Need fix that warning, right?
->>>>>
->>>>> Yes. You said you tested it but then sent with an error... so it's not
->>>>> really a testing.
->>>> sorry, I did do some testing. but I think It is okay that can generate a
->>>> dtb  without reporting an error when compile yaml file, in fact, I
->>>> ignore the warning,  I will fix it in v6.
->>>
->>>
->>> Do you also send the code with warnings reported by GCC? Judging by
->>> number of kernel test robot reports, it could be. So just to be very,
->>> very clear: do not send any code which generates any warning. For GCC
->>> this means W=1 builds.
->> I don't find about the warning about GCC when compile yaml file.
->> and I dont't know the meaning about W=1, you said about "W=1" is to execute
->> following command to compile the yaml, right?
-> 
-> GCC is about your C code. You were sending patches knowing that they
-> have warnings. It's not good. All warnings must be fixed.
-what you said about C code warning whether is follows ? If is it, and I 
-had add a static for loongson2_thermal_remove in v3 version code, I
-think it shoud be fixed  about the warning.
- >> drivers/thermal/loongson2_thermal.c:183:5: warning: no previous 
-prototype for function 'loongson2_thermal_remove' [-Wmissing-prototypes]
-    int loongson2_thermal_remove(struct platform_device *pdev)
-        ^
-    drivers/thermal/loongson2_thermal.c:183:1: note: declare 'static' if 
-the function is not intended to be used outside of this translation unit
-    int loongson2_thermal_remove(struct platform_device *pdev)
-    ^
-    static
-    1 warning generated.
+RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger
+for portable applications.
 
-If you said about C code warning isn't about about 
-"loongson2_thermal_remove" and I may be loss a mail about that C code 
-warning, Could you foward a mail about that C code warning. because I 
-don't find any C code warning when compile C code.
+It integrates a synchronous PWM controller, power MOSFETs,
+input current sensing and regulation, high-accuracy voltage regulation,
+and charge termination. The charge current is regulated through
+integrated sensing resistors.
 
-About the C code warning, it was base on v6 code?
+The RT9467 also features USB On-The-Go (OTG) support. It also integrates
+D+/D- pin for USB host/charging port detection.
 
-TKs,
-Yinbo Zhu.
-> 
-> Best regards,
-> Krzysztof
-> 
+This charger driver is based on a 'linear_ranger' queued patch which adds
+'LINEAR_RANGE_IDX' macro for declaring the linear_range struct simply.
+https://lore.kernel.org/all/20220920161218.dkkfvfomrruebahi@mercury.elektranox.org/
+
+Thank you,
+ChiaEn Wu
+
+ChiaEn Wu (2):
+  dt-bindings: power: supply: Add Richtek RT9467 battery charger
+  power: supply: rt9467: Add Richtek RT9467 charger driver
+
+ .../power/supply/richtek,rt9467-charger.yaml       |   83 ++
+ drivers/power/supply/Kconfig                       |   19 +
+ drivers/power/supply/Makefile                      |    1 +
+ drivers/power/supply/rt9467-charger.c              | 1239 ++++++++++++++++++++
+ 4 files changed, 1342 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+ create mode 100644 drivers/power/supply/rt9467-charger.c
+
+-- 
+2.7.4
 
